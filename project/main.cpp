@@ -1,6 +1,13 @@
-#include <Windows.h>
+#include "engine/Windows/WindowManager.h"
+
+#include <memory>
 
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
-	OutputDebugStringA("poop\n");
+	std::unique_ptr<NoEngine::WindowManager> windowManager;
+	windowManager->Initialize(L"NoEngine");
+
+	while (windowManager->ProcessMessage() == 0) {
+
+	}
 	return 0;
 }
