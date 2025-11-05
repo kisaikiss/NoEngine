@@ -53,7 +53,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
@@ -61,6 +61,10 @@
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <AdditionalIncludeDirectories>$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>stdafx.h</ForcedIncludeFiles>
+      <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -80,6 +84,9 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <TreatWarningAsError>true</TreatWarningAsError>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <AdditionalIncludeDirectories>$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>stdafx.h</ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -90,11 +97,46 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="engine\Windows\WindowManager.cpp" />
+    <ClCompile Include="engine\Debug\Logger\Log.cpp" />
+    <ClCompile Include="engine\Math\Types\Matrix4x4.cpp" />
+    <ClCompile Include="engine\Math\Types\Quaternion.cpp" />
+    <ClCompile Include="engine\Math\Types\Vector2.cpp" />
+    <ClCompile Include="engine\Math\Types\Vector3.cpp" />
+    <ClCompile Include="engine\Utilities\Conversion\ConvertString.cpp" />
+    <ClCompile Include="engine\Window\Event\Default\CloseEvent.cpp" />
+    <ClCompile Include="engine\Window\Event\Default\EnterSizeMoveEvent.cpp" />
+    <ClCompile Include="engine\Window\Event\Default\GetMinMaxInfoEvent.cpp" />
+    <ClCompile Include="engine\Window\Event\Default\SizeEvent.cpp" />
+    <ClCompile Include="engine\Window\Event\Default\SizingEvent.cpp" />
+    <ClCompile Include="engine\Window\Event\MainEditor\MainEditorWindowCloseEvent.cpp" />
+    <ClCompile Include="engine\Window\Window.cpp" />
+    <ClCompile Include="engine\Window\WindowManager.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="engine\Windows\WindowManager.h" />
+    <ClInclude Include="engine\Debug\Logger\Log.h" />
+    <ClInclude Include="engine\Math\Types\Matrix4x4.h" />
+    <ClInclude Include="engine\Math\Types\Quaternion.h" />
+    <ClInclude Include="engine\Math\Types\Vector2.h" />
+    <ClInclude Include="engine\Math\Types\Vector3.h" />
+    <ClInclude Include="engine\Math\Types\Vector4.h" />
+    <ClInclude Include="engine\Utilities\Conversion\ConvertString.h" />
+    <ClInclude Include="engine\Window\Event\Default\CloseEvent.h" />
+    <ClInclude Include="engine\Window\Event\Default\EnterSizeMoveEvent.h" />
+    <ClInclude Include="engine\Window\Event\Default\GetMinMaxInfoEvent.h" />
+    <ClInclude Include="engine\Window\Event\Default\SizeEvent.h" />
+    <ClInclude Include="engine\Window\Event\Default\SizingEvent.h" />
+    <ClInclude Include="engine\Window\Event\IWindowEvent.h" />
+    <ClInclude Include="engine\Window\Event\MainEditor\MainEditorWindowCloseEvent.h" />
+    <ClInclude Include="engine\Window\Window.h" />
+    <ClInclude Include="engine\Window\WindowCore.h" />
+    <ClInclude Include="engine\Window\WindowManager.h" />
+    <ClInclude Include="engine\Window\WindowSize.h" />
+    <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

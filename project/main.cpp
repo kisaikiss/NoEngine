@@ -1,11 +1,16 @@
-#include "engine/Windows/WindowManager.h"
-
-#include <memory>
+#include "engine/Window/WindowManager.h"
+#include "engine/Window/Event/MainEditor/MainEditorWindowCloseEvent.h"
+#include "engine/Window/Event/IWindowEvent.h"
+#include "engine/Debug/Logger/Log.h"
 
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
+	NoEngine::Log::Initialize();
+	NoEngine::Log::SetVerbosityLevel(NoEngine::VerbosityLevel::kDebug);
 	std::unique_ptr<NoEngine::WindowManager> windowManager;
-	windowManager->Initialize(L"NoEngine");
-
+	windowManager = std::make_unique<NoEngine::WindowManager>();
+	auto* window = windowManager->Create(L"NoEngine", 1280, 720);
+	windowManager->SetMainWindowName(L"NoEngine");
+	window->RegisterWindowEvent(std::make_unique<NoEngine::MainEditorWindowCloseEvent>());
 	while (windowManager->ProcessMessage() == 0) {
 
 	}
