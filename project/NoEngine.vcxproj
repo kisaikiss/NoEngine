@@ -97,7 +97,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="engine\Debug\CrashHandler\ExportDump.cpp" />
     <ClCompile Include="engine\Debug\Logger\Log.cpp" />
+    <ClCompile Include="engine\GameCore\GraphicsCore.cpp" />
     <ClCompile Include="engine\Math\Types\Calculations\MatrixCalculations.cpp" />
     <ClCompile Include="engine\Math\Types\Calculations\QuaternionCalculations.cpp" />
     <ClCompile Include="engine\Math\Types\Calculations\Vector3Calculations.cpp" />
@@ -121,7 +123,9 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="engine\Debug\CrashHandler\ExportDump.h" />
     <ClInclude Include="engine\Debug\Logger\Log.h" />
+    <ClInclude Include="engine\GameCore\GraphicsCore.h" />
     <ClInclude Include="engine\Math\Types\Calculations\MatrixCalculations.h" />
     <ClInclude Include="engine\Math\Types\Calculations\QuaternionCalculations.h" />
     <ClInclude Include="engine\Math\Types\Calculations\Vector3Calculations.h" />
