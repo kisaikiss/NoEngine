@@ -1,4 +1,5 @@
 #include "Vector3.h"
+#include "Calculations/Vector3Calculations.h"
 
 namespace NoEngine {
 
@@ -56,6 +57,26 @@ Vector3& Vector3::operator/=(const float s) {
 	y /= s;
 	z /= s;
 	return *this;
+}
+
+float Vector3::Dot(const Vector3& other) const noexcept {
+	return MathCalculations::Dot(*this, other);
+}
+
+Vector3 Vector3::Cross(const Vector3& other) const noexcept {
+	return MathCalculations::Cross(*this, other);
+}
+
+float Vector3::Length() const noexcept {
+	return MathCalculations::Length(*this);
+}
+
+float Vector3::LengthSquared() const noexcept {
+	return MathCalculations::LengthSquared(*this);
+}
+
+Vector3 Vector3::Normalize() const {
+	return MathCalculations::Normalize(*this);
 }
 
 }
