@@ -1,0 +1,17 @@
+#pragma once
+namespace NoEngine {
+namespace Graphics {
+/// <summary>
+/// ID3D12Deviceを所有するクラス
+/// </summary>
+class GraphicsDevice {
+public:
+	GraphicsDevice(IDXGIAdapter4* adapter);
+	~GraphicsDevice() = default;
+
+	ID3D12Device* GetDevice() const { return device_.Get(); }
+private:
+	Microsoft::WRL::ComPtr<ID3D12Device> device_;
+};
+}
+}

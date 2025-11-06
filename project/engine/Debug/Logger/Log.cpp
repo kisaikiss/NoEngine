@@ -36,7 +36,7 @@ void Log::DebugPrint(const std::string& message, VerbosityLevel verbosityLevel) 
 	if (sVerbosityLevel >= verbosityLevel) {
 		std::ofstream logStream(sFilePath, std::ios::app);
 		if (sVerbosityLevel >= VerbosityLevel::kDebug) {
-			std::string logMessage = message + "		verbosityLevel:" + std::to_string(static_cast<int>(verbosityLevel));
+			std::string logMessage = message + "\nverbosityLevel:" + std::to_string(static_cast<int>(verbosityLevel)) + "\n";
 			logStream << logMessage << std::endl;
 			OutputDebugStringA(logMessage.c_str());
 		} else {

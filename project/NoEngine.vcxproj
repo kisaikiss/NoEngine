@@ -99,6 +99,9 @@
   <ItemGroup>
     <ClCompile Include="engine\Debug\CrashHandler\ExportDump.cpp" />
     <ClCompile Include="engine\Debug\Logger\Log.cpp" />
+    <ClCompile Include="engine\GameCore\GameCore.cpp" />
+    <ClCompile Include="engine\GameCore\Graphics\GraphicsDevice.cpp" />
+    <ClCompile Include="engine\GameCore\Graphics\GraphicsInfrastructures.cpp" />
     <ClCompile Include="engine\GameCore\GraphicsCore.cpp" />
     <ClCompile Include="engine\Math\Types\Calculations\MatrixCalculations.cpp" />
     <ClCompile Include="engine\Math\Types\Calculations\QuaternionCalculations.cpp" />
@@ -125,6 +128,9 @@
   <ItemGroup>
     <ClInclude Include="engine\Debug\CrashHandler\ExportDump.h" />
     <ClInclude Include="engine\Debug\Logger\Log.h" />
+    <ClInclude Include="engine\GameCore\GameCore.h" />
+    <ClInclude Include="engine\GameCore\Graphics\GraphicsDevice.h" />
+    <ClInclude Include="engine\GameCore\Graphics\GraphicsInfrastructures.h" />
     <ClInclude Include="engine\GameCore\GraphicsCore.h" />
     <ClInclude Include="engine\Math\Types\Calculations\MatrixCalculations.h" />
     <ClInclude Include="engine\Math\Types\Calculations\QuaternionCalculations.h" />
@@ -135,6 +141,7 @@
     <ClInclude Include="engine\Math\Types\Vector3.h" />
     <ClInclude Include="engine\Math\Types\Vector4.h" />
     <ClInclude Include="engine\Utilities\Conversion\ConvertString.h" />
+    <ClInclude Include="engine\Utilities\PassKey\PassKeys.h" />
     <ClInclude Include="engine\Window\Event\Default\CloseEvent.h" />
     <ClInclude Include="engine\Window\Event\Default\EnterSizeMoveEvent.h" />
     <ClInclude Include="engine\Window\Event\Default\GetMinMaxInfoEvent.h" />
