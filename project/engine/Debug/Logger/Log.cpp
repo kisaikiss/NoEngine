@@ -13,6 +13,24 @@ std::string sFilePath = "";
 void Log::Initialize() {
 	//ログのディレクトリを用意
 	std::filesystem::create_directory("logs");
+	//ログ保存ディレクトリの監視
+	std::vector<std::filesystem::directory_entry> logFiles;
+	for (const auto& entry : std::filesystem::directory_iterator("logs")) {
+		if (entry.is_regular_file() && entry.path().extension() == ".log") {
+			logFiles.push_back(entry);
+		}
+	}
+	//古い順にソート
+	std::sort(logFiles.begin(), logFiles.end(), [](const auto& a, const auto& b) {
+		return std::filesystem::last_write_time(a) < std::filesystem::last_write_time(b);
+		});
+	//最大保存数を超えたら削除
+	const size_t maxLogFiles = 10;
+	if (logFiles.size() > maxLogFiles) {
+		for (size_t i = 0; i < logFiles.size() - maxLogFiles; ++i) {
+			std::filesystem::remove(logFiles[i]);
+		}
+	}
 	//現在時刻を取得
 	std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
 	//ログファイルの名前にコンマ何秒はいらないので、削って秒にする

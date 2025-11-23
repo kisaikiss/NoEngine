@@ -68,25 +68,25 @@ void WindowManager::SetMainWindowName(std::wstring title) {
 }
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
-	//ImGuiにメッセージを渡す。ImGuiが処理中なら後続の処理を打ち切る
+	// ImGuiにメッセージを渡します。ImGuiが処理中なら後続の処理を打ち切ります。
 	/*if (ImGui_ImplWin32_WndProcHandler(hwnd, msg, wpram, lparam)) {
 		return true;
 	}*/
-	//ウィンドウのインスタンスを取得
+	// ウィンドウのインスタンスを取得します。
 	auto it = sWindowMap.find(hwnd);
 	if (it == sWindowMap.end()) {
 		return DefWindowProc(hwnd, msg, wparam, lparam);
 	}
 	Window* window = it->second.get();
 	assert(window);
-	//ウィンドウにイベントの処理をさせる
+	// ウィンドウにイベントの処理をさせます。
 	auto result =  window->HandleEvent(msg, wparam, lparam);
 	if (result.has_value()) {
 		return result.value();
 	}
 
 	
-	//標準のメッセージ処理を行う
+	// 標準のメッセージ処理を行います。
 	return DefWindowProc(hwnd, msg, wparam, lparam);
 }
 }
