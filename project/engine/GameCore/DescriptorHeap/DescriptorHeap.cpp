@@ -11,7 +11,10 @@ void DescriptorHeap::Create(const std::wstring& debugHeapName, D3D12_DESCRIPTOR_
     heapDesc_.NodeMask = 1;
 
     HRESULT hr = GraphicsCore::gGraphicsDevice->GetDevice()->CreateDescriptorHeap(&heapDesc_, IID_PPV_ARGS(heap_.ReleaseAndGetAddressOf()));
-    assert(SUCCEEDED(hr));
+    if (FAILED(hr)) {
+        assert(false);
+    }
+    
 
 #ifdef RELEASE_BUILD
     (void)debugHeapName;

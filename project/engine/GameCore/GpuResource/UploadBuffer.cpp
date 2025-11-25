@@ -35,7 +35,9 @@ void UploadBuffer::Create(const std::wstring& name, size_t BufferSize) {
     HRESULT hr = GraphicsCore::gGraphicsDevice->GetDevice()->CreateCommittedResource(&heapProps, D3D12_HEAP_FLAG_NONE, &resourceDesc,
         D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&resource_));
 
-    assert(SUCCEEDED(hr));
+    if (FAILED(hr)) {
+        assert(false);
+    }
 
     gpuVirtualAddress_ = resource_->GetGPUVirtualAddress();
 

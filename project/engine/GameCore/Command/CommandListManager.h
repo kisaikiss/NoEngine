@@ -10,7 +10,7 @@ public:
 	CommandListManager();
 	~CommandListManager();
 
-	void Create(ID3D12Device* device);
+	void Create();
 	void Shutdown();
 
 	CommandQueue& GetGraphicsQueue(void) { return graphicsQueue_; }
@@ -46,13 +46,9 @@ public:
 	/// <param name="Allocator">コマンドアロケータのダブルポインタ</param>
 	void CreateNewCommandList(
 		D3D12_COMMAND_LIST_TYPE type,
-		Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>* list,
+		ID3D12GraphicsCommandList** list,
 		ID3D12CommandAllocator** allocator);
-
-
 private:
-	ID3D12Device* device_;
-
 	CommandQueue graphicsQueue_;
 	CommandQueue computeQueue_;
 	CommandQueue copyQueue_;

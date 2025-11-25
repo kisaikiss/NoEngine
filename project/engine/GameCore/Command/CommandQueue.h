@@ -12,7 +12,7 @@ public:
 	CommandQueue(D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT);
 	~CommandQueue();
 
-	void Create(ID3D12Device* device);
+	void Create();
 	void Shutdown();
 
 	inline bool IsReady() {

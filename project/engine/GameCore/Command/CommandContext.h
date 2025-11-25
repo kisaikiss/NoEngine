@@ -2,8 +2,10 @@
 #include "engine/Utilities/NonCopyable.h"
 #include "../GpuResource/GpuBuffer.h"
 #include "../ContextManager.h"
-
+#include "../GpuResource/LinearAllocator/LinearAllocator.h"
 #include "CommandListManager.h"
+
+
 
 
 class ColorBuffer;
@@ -41,7 +43,7 @@ public:
 	/// </summary>
 	/// <param name="WaitForCompletion">完了まで待機するかどうかを示すフラグ。true の場合、関数は処理が完了するまでブロッキングします。デフォルトは false。</param>
 	/// <returns>処理の結果を表す uint64_t 値。</returns>
-	uint64_t Flush(bool WaitForCompletion = false);
+	//uint64_t Flush(bool WaitForCompletion = false);
 
 	// Flush existing commands and release the current context
 
@@ -50,7 +52,7 @@ public:
 	/// </summary>
 	/// <param name="WaitForCompletion">完了まで待機するかどうかを示すフラグ。true の場合、関数は処理が完了するまでブロッキングします。デフォルトは false。</param>
 	/// <returns>処理の結果を表す uint64_t 値。</returns>
-	uint64_t Finish(bool WaitForCompletion = false);
+	//uint64_t Finish(bool WaitForCompletion = false);
 
 	// Prepare to render by reserving a command list and command allocator
 	void Initialize(void);
@@ -83,7 +85,7 @@ public:
 	//    return m_CpuLinearAllocator.Allocate(SizeInBytes);
 	//}
 
-	static void InitializeTexture(GpuResource& Dest, UINT NumSubresources, D3D12_SUBRESOURCE_DATA SubData[]);
+	//static void InitializeTexture(GpuResource& Dest, UINT NumSubresources, D3D12_SUBRESOURCE_DATA SubData[]);
 
 	/// <summary>
 	/// GPUバッファを初期化します。指定したバイト数をソースデータから宛先バッファの指定オフセットにコピーします。
@@ -92,7 +94,7 @@ public:
 	/// <param name="data">コピー元のデータへのポインタ。numBytesバイト分を読み取ります。</param>
 	/// <param name="numBytes">コピーするバイト数。</param>
 	/// <param name="destOffset">宛先バッファ内の書き込み開始オフセット（バイト単位）。既定値は0。</param>
-	static void InitializeBuffer(GpuBuffer& dest, const void* data, size_t numBytes, size_t destOffset = 0);
+	//static void InitializeBuffer(GpuBuffer& dest, const void* data, size_t numBytes, size_t destOffset = 0);
 
 	/// <summary>
 	/// UploadBufferからGpuBufferへデータをコピーして初期化します。
@@ -102,8 +104,8 @@ public:
 	/// <param name="srcOffset">src内で読み取りを開始するオフセット（バイト単位）。</param>
 	/// <param name="numBytes">コピーするバイト数。省略またはデフォルト値（-1 → size_tの最大値）の場合はsrcの残り全てをコピーします。</param>
 	/// <param name="destOffset">dest内で書き込みを開始するオフセット（バイト単位）。デフォルトは0。</param>
-	static void InitializeBuffer(GpuBuffer& dest, const UploadBuffer& src, size_t srcOffset, size_t numBytes = -1, size_t destOffset = 0);
-	static void InitializeTextureArraySlice(GpuResource& Dest, UINT SliceIndex, GpuResource& Src);
+	//static void InitializeBuffer(GpuBuffer& dest, const UploadBuffer& src, size_t srcOffset, size_t numBytes = -1, size_t destOffset = 0);
+	//static void InitializeTextureArraySlice(GpuResource& Dest, UINT SliceIndex, GpuResource& Src);
 	//
 	//    void WriteBuffer(GpuResource& Dest, size_t DestOffset, const void* Data, size_t NumBytes);
 	//    void FillBuffer(GpuResource& Dest, size_t DestOffset, DWParam Value, size_t NumBytes);
@@ -128,7 +130,7 @@ public:
 	//
 protected:
 
-	void BindDescriptorHeaps(void);
+	//void BindDescriptorHeaps(void);
 
 	std::unique_ptr<CommandListManager> owningManager_;
 	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList_;
@@ -138,16 +140,16 @@ protected:
 	ID3D12RootSignature* m_CurComputeRootSignature;
 	ID3D12PipelineState* m_CurPipelineState;
 
-	DynamicDescriptorHeap m_DynamicViewDescriptorHeap;		// HEAP_TYPE_CBV_SRV_UAV
-	DynamicDescriptorHeap m_DynamicSamplerDescriptorHeap;	// HEAP_TYPE_SAMPLER
+	//DynamicDescriptorHeap m_DynamicViewDescriptorHeap;		// HEAP_TYPE_CBV_SRV_UAV
+	//DynamicDescriptorHeap m_DynamicSamplerDescriptorHeap;	// HEAP_TYPE_SAMPLER
 
 	D3D12_RESOURCE_BARRIER m_ResourceBarrierBuffer[16];
 	UINT m_NumBarriersToFlush;
 
 	ID3D12DescriptorHeap* m_CurrentDescriptorHeaps[D3D12_DESCRIPTOR_HEAP_TYPE_NUM_TYPES];
 
-	LinearAllocator m_CpuLinearAllocator;
-	LinearAllocator m_GpuLinearAllocator;
+	//LinearAllocator m_CpuLinearAllocator;
+	//LinearAllocator m_GpuLinearAllocator;
 
 	std::wstring id_;
 	void SetID(const std::wstring& id) { id_ = id; }

@@ -25,11 +25,13 @@ void GpuBuffer::Create(const std::wstring& name, uint32_t numElements, uint32_t 
 
     HRESULT hr = GraphicsCore::gGraphicsDevice->GetDevice()->CreateCommittedResource(&HeapProps, D3D12_HEAP_FLAG_NONE,
         &ResourceDesc, usageState_, nullptr, IID_PPV_ARGS(&resource_));
-    assert(SUCCEEDED(hr));
+    if (FAILED(hr)) {
+        assert(false);
+    }
     gpuVirtualAddress_ = resource_->GetGPUVirtualAddress();
 
     if (initialData) {
-        CommandContext::InitializeBuffer(*this, initialData, bufferSize_);
+       // CommandContext::InitializeBuffer(*this, initialData, bufferSize_);
     }
 
 

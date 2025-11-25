@@ -89,6 +89,8 @@ void Window::Create(WNDPROC windowProc, std::wstring title, uint32_t width, uint
 	RegisterWindowEvent(make_unique<SizeEvent>());
 	RegisterWindowEvent(make_unique<SizingEvent>());
 
+	swapChain_ = std::make_unique<Graphics::GraphicsSwapChain>(core_.hwnd, width, height);
+
 	//ウィンドウを表示する
 	ShowWindow(core_.hwnd, SW_SHOW);
 

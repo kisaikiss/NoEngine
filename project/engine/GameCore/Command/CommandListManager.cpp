@@ -1,8 +1,10 @@
 #include "CommandListManager.h"
 
+#include "engine/Debug/Logger/Log.h"
+#include "../GraphicsCore.h"
+
 namespace NoEngine {
 CommandListManager::CommandListManager() :
-	device_(nullptr),
 	graphicsQueue_(D3D12_COMMAND_LIST_TYPE_DIRECT),
 	computeQueue_(D3D12_COMMAND_LIST_TYPE_COMPUTE),
 	copyQueue_(D3D12_COMMAND_LIST_TYPE_COPY)
@@ -12,14 +14,13 @@ CommandListManager::~CommandListManager() {
 	Shutdown();
 }
 
-void CommandListManager::Create(ID3D12Device* device) {
-	assert(device != nullptr);
+void CommandListManager::Create() {
+	Log::DebugPrint("CommandListManager Create Start");
 
-	device_ = device;
-
-	graphicsQueue_.Create(device);
-	computeQueue_.Create(device);
-	copyQueue_.Create(device);
+	graphicsQueue_.Create();
+	computeQueue_.Create();
+	copyQueue_.Create();
+	Log::DebugPrint("CommandListManager Created!");
 }
 
 void CommandListManager::Shutdown() {
@@ -27,7 +28,7 @@ void CommandListManager::Shutdown() {
 	computeQueue_.Shutdown();
 	copyQueue_.Shutdown();
 }
-void CommandListManager::CreateNewCommandList(D3D12_COMMAND_LIST_TYPE type, Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>* list, ID3D12CommandAllocator** allocator) {
+void CommandListManager::CreateNewCommandList(D3D12_COMMAND_LIST_TYPE type, ID3D12GraphicsCommandList** list, ID3D12CommandAllocator** allocator) {
 	assert(type != D3D12_COMMAND_LIST_TYPE_BUNDLE);
 	switch (type) {
 	case D3D12_COMMAND_LIST_TYPE_DIRECT: *allocator = graphicsQueue_.RequestAllocator(); break;
@@ -36,8 +37,10 @@ void CommandListManager::CreateNewCommandList(D3D12_COMMAND_LIST_TYPE type, Micr
 	case D3D12_COMMAND_LIST_TYPE_COPY: *allocator = copyQueue_.RequestAllocator(); break;
 	}
 
-	HRESULT hr =device_->CreateCommandList(1, type, *allocator, nullptr, IID_PPV_ARGS(&list));
-	assert(SUCCEEDED(hr));
+	HRESULT hr = GraphicsCore::gGraphicsDevice->GetDevice()->CreateCommandList(1, type, *allocator, nullptr, IID_PPV_ARGS(list));
+	if (FAILED(hr)) {
+		assert(false);
+	}
 	(*list)->SetName(L"CommandList");
 }
 }

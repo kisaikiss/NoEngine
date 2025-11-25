@@ -33,7 +33,9 @@ ID3D12CommandAllocator* CommandAllocatorPool::RequestAllocator(uint64_t complete
         if (AllocatorPair.first <= completedFenceValue) {
             allocator = AllocatorPair.second;
             HRESULT hr = allocator->Reset();
-            assert(SUCCEEDED(hr));
+            if (FAILED(hr)) {
+                assert(false);
+            }
             readyAllocators_.pop();
         }
     }

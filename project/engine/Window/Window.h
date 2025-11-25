@@ -3,6 +3,8 @@
 #include "WindowCore.h"
 #include "WindowSize.h"
 
+#include "../GameCore/Graphics/GraphicsSwapChain.h"
+
 namespace NoEngine {
 
 class Window {
@@ -76,7 +78,7 @@ public:
 
 private:
 	std::unordered_map<UINT,std::unique_ptr<IWindowEvent>> eventMap_;
-
+	std::unique_ptr<Graphics::GraphicsSwapChain> swapChain_;
 	
 	SizeChangeMode sizeChangeMode_ = SizeChangeMode::kNormal;
 	WindowMode windowMode_ = WindowMode::kWindow;

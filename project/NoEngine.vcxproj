@@ -98,6 +98,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="engine\Debug\CrashHandler\ExportDump.cpp" />
+    <ClCompile Include="engine\Debug\GraphicsResourceLeakChecker.cpp" />
     <ClCompile Include="engine\Debug\Logger\Log.cpp" />
     <ClCompile Include="engine\GameCore\Command\CommandAllocator.cpp" />
     <ClCompile Include="engine\GameCore\Command\CommandAllocatorPool.cpp" />
@@ -114,10 +115,14 @@
     <ClCompile Include="engine\GameCore\GameCore.cpp" />
     <ClCompile Include="engine\GameCore\GpuResource\GpuBuffer.cpp" />
     <ClCompile Include="engine\GameCore\GpuResource\GpuResource.cpp" />
+    <ClCompile Include="engine\GameCore\GpuResource\LinearAllocator\LinearAllocationPage.cpp" />
+    <ClCompile Include="engine\GameCore\GpuResource\LinearAllocator\LinearAllocator.cpp" />
+    <ClCompile Include="engine\GameCore\GpuResource\LinearAllocator\LinearAllocatorPageManager.cpp" />
     <ClCompile Include="engine\GameCore\GpuResource\UploadBuffer.cpp" />
     <ClCompile Include="engine\GameCore\Graphics\GraphicsDevice.cpp" />
     <ClCompile Include="engine\GameCore\Graphics\GraphicsInfrastructures.cpp" />
     <ClCompile Include="engine\GameCore\GraphicsCore.cpp" />
+    <ClCompile Include="engine\GameCore\Graphics\GraphicsSwapChain.cpp" />
     <ClCompile Include="engine\GameCore\PipelineStateObject\RootSignature.cpp" />
     <ClCompile Include="engine\Math\Types\Calculations\MatrixCalculations.cpp" />
     <ClCompile Include="engine\Math\Types\Calculations\QuaternionCalculations.cpp" />
@@ -143,6 +148,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Debug\CrashHandler\ExportDump.h" />
+    <ClInclude Include="engine\Debug\GraphicsResourceLeakChecker.h" />
     <ClInclude Include="engine\Debug\Logger\Log.h" />
     <ClInclude Include="engine\GameCore\Command\CommandAllocator.h" />
     <ClInclude Include="engine\GameCore\Command\CommandAllocatorPool.h" />
@@ -160,10 +166,15 @@
     <ClInclude Include="engine\GameCore\GameCore.h" />
     <ClInclude Include="engine\GameCore\GpuResource\GpuBuffer.h" />
     <ClInclude Include="engine\GameCore\GpuResource\GpuResource.h" />
+    <ClInclude Include="engine\GameCore\GpuResource\LinearAllocator\LinearAllocationPage.h" />
+    <ClInclude Include="engine\GameCore\GpuResource\LinearAllocator\LinearAllocator.h" />
+    <ClInclude Include="engine\GameCore\GpuResource\LinearAllocator\LinearAllocatorPageManager.h" />
+    <ClInclude Include="engine\GameCore\GpuResource\LinearAllocator\LinearAllocatorType.h" />
     <ClInclude Include="engine\GameCore\GpuResource\UploadBuffer.h" />
     <ClInclude Include="engine\GameCore\Graphics\GraphicsDevice.h" />
     <ClInclude Include="engine\GameCore\Graphics\GraphicsInfrastructures.h" />
     <ClInclude Include="engine\GameCore\GraphicsCore.h" />
+    <ClInclude Include="engine\GameCore\Graphics\GraphicsSwapChain.h" />
     <ClInclude Include="engine\GameCore\PipelineStateObject\RootParameter.h" />
     <ClInclude Include="engine\GameCore\PipelineStateObject\RootSignature.h" />
     <ClInclude Include="engine\Math\Types\Calculations\MatrixCalculations.h" />

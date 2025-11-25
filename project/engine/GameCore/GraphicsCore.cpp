@@ -18,6 +18,7 @@ void Initialize() {
 	EnableDebugLayer();
 	gGraphicsInfrastructures = make_unique<Graphics::GraphicsInfrastructures>();
 	gGraphicsDevice = make_unique<Graphics::GraphicsDevice>(gGraphicsInfrastructures->GetDXGIAdapter());
+	gCommandListManager.Create();
 	SettingDebugLayer();
 }
 

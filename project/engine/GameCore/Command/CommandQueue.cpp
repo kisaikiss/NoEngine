@@ -1,5 +1,6 @@
 #include "CommandQueue.h"
 #include "CommandListManager.h"
+#include "../GraphicsCore.h"
 namespace NoEngine {
 CommandQueue::CommandQueue(D3D12_COMMAND_LIST_TYPE type) :
 	type_(type) ,
@@ -10,19 +11,19 @@ CommandQueue::~CommandQueue() {
 	Shutdown();
 }
 
-void CommandQueue::Create(ID3D12Device* device) {
+void CommandQueue::Create() {
 	// コマンドキュー(コマンドリストをGPUに投げて実行させる物)を生成します。
 	D3D12_COMMAND_QUEUE_DESC commandQueueDesc{};
 	commandQueueDesc.Type = type_;
 	commandQueueDesc.NodeMask = 1;
-	HRESULT hr = device->CreateCommandQueue(&commandQueueDesc, IID_PPV_ARGS(&commandQueue_));
+	HRESULT hr = GraphicsCore::gGraphicsDevice->GetDevice()->CreateCommandQueue(&commandQueueDesc, IID_PPV_ARGS(&commandQueue_));
 	// コマンドキューの生成がうまくいかなかった場合は起動できないので、assertで止めます。
 	assert(SUCCEEDED(hr));
 	// PIXなどのデバッグ用に名前を付けます。
 	commandQueue_.Get()->SetName(L"CommandListManager::commandQueue_");
 
 	// フェンスを生成します。
-	hr = device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence_));
+	hr = GraphicsCore::gGraphicsDevice->GetDevice()->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence_));
 	assert(SUCCEEDED(hr));
 	fence_.Get()->SetName(L"CommandListManager::fence_");
 
@@ -34,11 +35,20 @@ void CommandQueue::Create(ID3D12Device* device) {
 	fenceEventHandle_ = CreateEvent(nullptr, false, false, nullptr);
 	assert(fenceEventHandle_ != nullptr);
 
-	// m_AllocatorPool.Create(pDevice);
+	allocatorPool_.Create(GraphicsCore::gGraphicsDevice->GetDevice());
 }
 
 void CommandQueue::Shutdown() {
+	if (commandQueue_ == nullptr)
+		return;
 
+	allocatorPool_.Shutdown();
+
+	CloseHandle(fenceEventHandle_);
+
+	fence_.Reset();
+
+	commandQueue_.Reset();
 }
 
 uint64_t CommandQueue::IncrementFence(void) {
