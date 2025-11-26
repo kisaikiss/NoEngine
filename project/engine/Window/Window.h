@@ -4,6 +4,7 @@
 #include "WindowSize.h"
 
 #include "../GameCore/Graphics/GraphicsSwapChain.h"
+#include "engine/GameCore/GpuResource/PixelBuffer/ColorBuffer.h"
 
 namespace NoEngine {
 
@@ -78,7 +79,11 @@ public:
 
 private:
 	std::unordered_map<UINT,std::unique_ptr<IWindowEvent>> eventMap_;
+
+	static inline const uint32_t sSwapChainBufferCount = 2;
+
 	std::unique_ptr<Graphics::GraphicsSwapChain> swapChain_;
+	std::array<ColorBuffer,sSwapChainBufferCount> colorBuffers_;
 	
 	SizeChangeMode sizeChangeMode_ = SizeChangeMode::kNormal;
 	WindowMode windowMode_ = WindowMode::kWindow;

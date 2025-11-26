@@ -118,6 +118,8 @@
     <ClCompile Include="engine\GameCore\GpuResource\LinearAllocator\LinearAllocationPage.cpp" />
     <ClCompile Include="engine\GameCore\GpuResource\LinearAllocator\LinearAllocator.cpp" />
     <ClCompile Include="engine\GameCore\GpuResource\LinearAllocator\LinearAllocatorPageManager.cpp" />
+    <ClCompile Include="engine\GameCore\GpuResource\PixelBuffer\ColorBuffer.cpp" />
+    <ClCompile Include="engine\GameCore\GpuResource\PixelBuffer\PixelBuffer.cpp" />
     <ClCompile Include="engine\GameCore\GpuResource\UploadBuffer.cpp" />
     <ClCompile Include="engine\GameCore\Graphics\GraphicsDevice.cpp" />
     <ClCompile Include="engine\GameCore\Graphics\GraphicsInfrastructures.cpp" />
@@ -170,6 +172,8 @@
     <ClInclude Include="engine\GameCore\GpuResource\LinearAllocator\LinearAllocator.h" />
     <ClInclude Include="engine\GameCore\GpuResource\LinearAllocator\LinearAllocatorPageManager.h" />
     <ClInclude Include="engine\GameCore\GpuResource\LinearAllocator\LinearAllocatorType.h" />
+    <ClInclude Include="engine\GameCore\GpuResource\PixelBuffer\ColorBuffer.h" />
+    <ClInclude Include="engine\GameCore\GpuResource\PixelBuffer\PixelBuffer.h" />
     <ClInclude Include="engine\GameCore\GpuResource\UploadBuffer.h" />
     <ClInclude Include="engine\GameCore\Graphics\GraphicsDevice.h" />
     <ClInclude Include="engine\GameCore\Graphics\GraphicsInfrastructures.h" />

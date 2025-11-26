@@ -14,6 +14,14 @@ std::unique_ptr<Graphics::GraphicsDevice> gGraphicsDevice;
 CommandListManager gCommandListManager;
 ContextManager gContextManager;
 
+DescriptorAllocator gDescriptorAllocator[D3D12_DESCRIPTOR_HEAP_TYPE_NUM_TYPES] =
+{
+	D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
+	D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER,
+	D3D12_DESCRIPTOR_HEAP_TYPE_RTV,
+	D3D12_DESCRIPTOR_HEAP_TYPE_DSV
+};
+
 void Initialize() {
 	EnableDebugLayer();
 	gGraphicsInfrastructures = make_unique<Graphics::GraphicsInfrastructures>();
@@ -23,6 +31,11 @@ void Initialize() {
 }
 
 void Shutdown(void) {
+	for (auto& descriptorAllocator : gDescriptorAllocator) {
+		descriptorAllocator.DestroyAll();
+	}
+
+
 	gCommandListManager.Shutdown();
 
 	gGraphicsDevice.reset();
@@ -72,6 +85,13 @@ void SettingDebugLayer() {
 
 		// 指定したメッセージの表示を抑制する
 		infoQueue->PushStorageFilter(&filter);
+
+		// 謎の警告を一旦無視するようにする。
+		D3D12_MESSAGE_ID hide[] = { D3D12_MESSAGE_ID_FENCE_ZERO_WAIT };
+		D3D12_INFO_QUEUE_FILTER filterFenceZero = {};
+		filterFenceZero.DenyList.NumIDs = _countof(hide);
+		filterFenceZero.DenyList.pIDList = hide;
+		infoQueue->AddStorageFilterEntries(&filterFenceZero);
 
 		// 解放
 		infoQueue->Release();

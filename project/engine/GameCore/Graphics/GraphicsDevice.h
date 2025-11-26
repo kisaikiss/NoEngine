@@ -7,7 +7,7 @@ namespace Graphics {
 class GraphicsDevice {
 public:
 	GraphicsDevice(IDXGIAdapter4* adapter);
-	~GraphicsDevice() = default;
+	~GraphicsDevice();
 
 	ID3D12Device* GetDevice() const { return device_.Get(); }
 private:

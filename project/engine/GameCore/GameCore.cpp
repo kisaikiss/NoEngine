@@ -58,9 +58,10 @@ void EngineInitialize() {
 
 void EngineFinalize() {
 	
-	GraphicsCore::Shutdown();
+	
 	sWindowManager->Shutdown();
 	sWindowManager.reset();
+	GraphicsCore::Shutdown();
 }
 }
 }

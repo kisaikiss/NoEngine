@@ -25,5 +25,8 @@ GraphicsDevice::GraphicsDevice(IDXGIAdapter4* adapter) {
 	assert(device_ != nullptr);
 	Log::DebugPrint("Complete create D3D12Device!!!");// 初期化完了のログをだす
 }
+GraphicsDevice::~GraphicsDevice() {
+	device_.Reset();
+}
 }
 }

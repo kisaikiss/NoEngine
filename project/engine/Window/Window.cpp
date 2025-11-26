@@ -89,9 +89,21 @@ void Window::Create(WNDPROC windowProc, std::wstring title, uint32_t width, uint
 	RegisterWindowEvent(make_unique<SizeEvent>());
 	RegisterWindowEvent(make_unique<SizingEvent>());
 
-	swapChain_ = std::make_unique<Graphics::GraphicsSwapChain>(core_.hwnd, width, height);
+	// ウィンドウ専用のスワップチェーンを生成します。
+	swapChain_ = std::make_unique<Graphics::GraphicsSwapChain>(core_.hwnd, width, height, sSwapChainBufferCount);
 
-	//ウィンドウを表示する
+	// ウィンドウ専用のカラーバッファを生成します。
+	for (uint32_t i = 0; i < sSwapChainBufferCount;i++) {
+		Microsoft::WRL::ComPtr<ID3D12Resource> displayPlane;
+		HRESULT hr = swapChain_->GetSwapChain()->GetBuffer(i, IID_PPV_ARGS(&displayPlane));
+		if (FAILED(hr)) {
+			Log::DebugPrint("swap chain GetBuffer() failed", VerbosityLevel::kCritical);
+			assert(false);
+		}
+		colorBuffers_[i].CreateFromSwapChain(L"Primary SwapChain Buffer", displayPlane.Detach());
+	}
+
+	// ウィンドウを表示します。
 	ShowWindow(core_.hwnd, SW_SHOW);
 
 	Log::DebugPrint("Window_WindowCreated title : " + ConvertString(title), VerbosityLevel::kInfo);
@@ -100,6 +112,9 @@ void Window::Create(WNDPROC windowProc, std::wstring title, uint32_t width, uint
 void Window::Destroy() {
 	if (core_.hwnd) {
 		DestroyWindow(core_.hwnd);
+	}
+	for (auto& colorBuffer : colorBuffers_) {
+		colorBuffer.Destroy();
 	}
 	isDead_ = true;
 }

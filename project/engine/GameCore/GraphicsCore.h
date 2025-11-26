@@ -1,6 +1,7 @@
 #pragma once
 #include "Graphics/GraphicsInfrastructures.h"
 #include "Graphics/GraphicsDevice.h"
+#include "DescriptorHeap/DescriptorAllocator.h"
 
 namespace NoEngine {
 class CommandListManager;
@@ -18,6 +19,9 @@ namespace GraphicsCore {
 	extern CommandListManager gCommandListManager;
 	extern ContextManager gContextManager;
 
+	// ディスクリプタアロケータ(ディスクリプタのメモリ管理)配列。数はD3D12_DESCRIPTOR_HEAP_TYPE
+	extern DescriptorAllocator gDescriptorAllocator[];
+
 	/// <summary>
 	/// デバッグレイヤーを有効化
 	/// </summary>
@@ -27,5 +31,15 @@ namespace GraphicsCore {
 	/// デバッグレイヤーの設定
 	/// </summary>
 	void SettingDebugLayer();
+
+	/// <summary>
+	/// ディスクリプタを割り当てます。
+	/// </summary>
+	/// <param name="Type">ディスクリプタヒープのタイプ</param>
+	/// <param name="Count">割り当てる数</param>
+	/// <returns>割り当てたディスクリプタのハンドル</returns>
+	inline D3D12_CPU_DESCRIPTOR_HANDLE AllocateDescriptor(D3D12_DESCRIPTOR_HEAP_TYPE Type, UINT Count = 1) {
+		return gDescriptorAllocator[Type].Allocate(Count);
+	}
 }
 }

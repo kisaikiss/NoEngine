@@ -12,12 +12,12 @@ namespace {
 DXGI_FORMAT SwapChainFormat = DXGI_FORMAT_B8G8R8A8_UNORM;
 }
 
-GraphicsSwapChain::GraphicsSwapChain(HWND hwnd, float windowWidth, float windowHeight) {
-	Initialize(hwnd, static_cast<UINT>(windowWidth), static_cast<UINT>(windowHeight));
+GraphicsSwapChain::GraphicsSwapChain(HWND hwnd, float windowWidth, float windowHeight, uint32_t bufferCount) {
+	Initialize(hwnd, static_cast<UINT>(windowWidth), static_cast<UINT>(windowHeight), static_cast<UINT>(bufferCount));
 }
 
-GraphicsSwapChain::GraphicsSwapChain(HWND hwnd, uint32_t windowWidth, uint32_t windowHeight) {
-	Initialize(hwnd, static_cast<UINT>(windowWidth), static_cast<UINT>(windowHeight));
+GraphicsSwapChain::GraphicsSwapChain(HWND hwnd, uint32_t windowWidth, uint32_t windowHeight, uint32_t bufferCount) {
+	Initialize(hwnd, static_cast<UINT>(windowWidth), static_cast<UINT>(windowHeight), static_cast<UINT>(bufferCount));
 }
 
 GraphicsSwapChain::~GraphicsSwapChain() {
@@ -47,13 +47,13 @@ void GraphicsSwapChain::Destroy() {
 	swapChain_.Reset();
 }
 
-void GraphicsSwapChain::Initialize(HWND hwnd, UINT windowWidth, UINT windowHeight) {
+void GraphicsSwapChain::Initialize(HWND hwnd, UINT windowWidth, UINT windowHeight, UINT bufferCount) {
 	DXGI_SWAP_CHAIN_DESC1 swapChainDesc = {};
 	swapChainDesc.Width = windowWidth;
 	swapChainDesc.Height = windowHeight;
 	swapChainDesc.Format = SwapChainFormat;
 	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-	swapChainDesc.BufferCount = 2;
+	swapChainDesc.BufferCount = bufferCount;
 	swapChainDesc.SampleDesc.Count = 1;
 	swapChainDesc.SampleDesc.Quality = 0;
 	swapChainDesc.Scaling = DXGI_SCALING_STRETCH;
