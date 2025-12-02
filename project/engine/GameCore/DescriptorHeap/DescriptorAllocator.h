@@ -41,6 +41,8 @@ protected:
     ID3D12DescriptorHeap* currentHeap_;
     D3D12_CPU_DESCRIPTOR_HANDLE currentHandle_;
     uint32_t descriptorSize_;
+
+    // 残っているフリーのハンドル
     uint32_t remainingFreeHandles_;
 };
 

@@ -35,7 +35,7 @@ void Shutdown(void) {
 		descriptorAllocator.DestroyAll();
 	}
 
-
+	gContextManager.DestroyAllContexts();
 	gCommandListManager.Shutdown();
 
 	gGraphicsDevice.reset();
@@ -85,13 +85,6 @@ void SettingDebugLayer() {
 
 		// 指定したメッセージの表示を抑制する
 		infoQueue->PushStorageFilter(&filter);
-
-		// 謎の警告を一旦無視するようにする。
-		D3D12_MESSAGE_ID hide[] = { D3D12_MESSAGE_ID_FENCE_ZERO_WAIT };
-		D3D12_INFO_QUEUE_FILTER filterFenceZero = {};
-		filterFenceZero.DenyList.NumIDs = _countof(hide);
-		filterFenceZero.DenyList.pIDList = hide;
-		infoQueue->AddStorageFilterEntries(&filterFenceZero);
 
 		// 解放
 		infoQueue->Release();

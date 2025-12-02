@@ -38,8 +38,9 @@ public:
 
 	ID3D12CommandQueue* GetCommandQueue() { return commandQueue_.Get(); }
 private:
-
+	uint64_t ExecuteCommandList(ID3D12CommandList* list);
 	ID3D12CommandAllocator* RequestAllocator(void);
+	void DiscardAllocator(uint64_t fenceValueForReset, ID3D12CommandAllocator* allocator);
 
 	// コマンドキュー(コマンドリストをGPUに投げて実行させる物)
 	Microsoft::WRL::ComPtr<ID3D12CommandQueue> commandQueue_;
@@ -52,8 +53,8 @@ private:
 
 	// これらのオブジェクトの存続期間は記述子キャッシュによって管理されます
 	Microsoft::WRL::ComPtr<ID3D12Fence> fence_;
-	uint64_t nextFenceValue_;
-	uint64_t lastCompletedFenceValue_;
-	HANDLE fenceEventHandle_;
+	uint64_t nextFenceValue_ = 0;
+	uint64_t lastCompletedFenceValue_ = 0;
+	HANDLE fenceEventHandle_ = nullptr;
 };
 }

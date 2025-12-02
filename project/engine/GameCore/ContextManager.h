@@ -33,6 +33,7 @@ public:
     void DestroyAllContexts();
 
 private:
+    // コマンドリストタイプの数
     static inline const uint32_t kContextNum = 4;
     std::vector<std::unique_ptr<CommandContext> > contextPool_[kContextNum];
     std::queue<CommandContext*> availableContexts_[kContextNum];

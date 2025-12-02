@@ -6,14 +6,14 @@ namespace NoEngine {
 GpuResource::GpuResource() : 
 gpuVirtualAddress_(D3D12_GPU_VIRTUAL_ADDRESS_NULL),
 usageState_(D3D12_RESOURCE_STATE_COMMON),
-transitionState_((D3D12_RESOURCE_STATES)-1) {
+transitioningState_((D3D12_RESOURCE_STATES)-1) {
 }
 
 GpuResource::GpuResource(ID3D12Resource* resource, D3D12_RESOURCE_STATES CurrentState) :
 	gpuVirtualAddress_(D3D12_GPU_VIRTUAL_ADDRESS_NULL),
 	resource_(resource),
 	usageState_(CurrentState),
-	transitionState_((D3D12_RESOURCE_STATES)-1) {
+	transitioningState_((D3D12_RESOURCE_STATES)-1) {
 }
 
 

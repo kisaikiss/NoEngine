@@ -10,6 +10,9 @@ namespace NoEngine {
 
 class Window {
 public:
+
+	~Window();
+
 	/// <summary>
 	/// サイズ変更モード
 	/// </summary>
@@ -27,7 +30,20 @@ public:
 		kFullScreen,     // フルスクリーン
 	};
 
+	/// <summary>
+	/// ウィンドウを生成します。
+	/// </summary>
+	/// <param name="windowProc">ウィンドウプロシージャ</param>
+	/// <param name="title">ウィンドウタイトル</param>
+	/// <param name="width">ウィンドウの幅</param>
+	/// <param name="height">ウィンドウの高さ</param>
+	/// <param name="iconPath">アイコンパス</param>
 	void Create(WNDPROC windowProc, std::wstring title, uint32_t width, uint32_t height, const std::wstring& iconPath = L"");
+
+	/// <summary>
+	/// ウィンドウに表示されている画面をクリアします。
+	/// </summary>
+	void Clear();
 
 	/// <summary>
 	/// ウィンドウハンドルを取得
@@ -68,14 +84,15 @@ public:
 	/// 死んでるかどうか
 	/// </summary>
 	/// <returns></returns>
-	bool IsDead() { return isDead_; }
+	bool IsDead() const { return isDead_; }
 
-	std::wstring GetTitleName() { return core_.title; }
+	std::wstring GetTitleName() const { return core_.title; }
 	float GetAspectRatio() const noexcept { return size_.aspectRatio; }
 	SizeChangeMode GetSizeChangeMode() const noexcept { return sizeChangeMode_; }
 	WindowSize& GetWindowSize()noexcept { return size_; }
 	void SetSizeChangeMode(SizeChangeMode sizeChangeMode);
 	void SetWindowMode(WindowMode windowMode);
+	void SetWindowSize(UINT width, UINT height);
 
 private:
 	std::unordered_map<UINT,std::unique_ptr<IWindowEvent>> eventMap_;
@@ -83,7 +100,7 @@ private:
 	static inline const uint32_t sSwapChainBufferCount = 2;
 
 	std::unique_ptr<Graphics::GraphicsSwapChain> swapChain_;
-	std::array<ColorBuffer,sSwapChainBufferCount> colorBuffers_;
+	std::array<std::unique_ptr<ColorBuffer>,sSwapChainBufferCount> colorBuffers_;
 	
 	SizeChangeMode sizeChangeMode_ = SizeChangeMode::kNormal;
 	WindowMode windowMode_ = WindowMode::kWindow;
@@ -91,8 +108,13 @@ private:
 
 	WindowCore core_;
 	bool isDead_;
+	bool isResize_;
 
 	void AdjustWindowSize();
+	void CreateColorBuffer();
+	void DestroyColorBuffer();
+	void ResizeSignal();
+	void Resize();
 };
 }
 

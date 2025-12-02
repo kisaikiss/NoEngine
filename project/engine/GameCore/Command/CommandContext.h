@@ -5,9 +5,7 @@
 #include "../GpuResource/LinearAllocator/LinearAllocator.h"
 #include "CommandListManager.h"
 
-
-
-
+namespace NoEngine {
 class ColorBuffer;
 class DepthBuffer;
 class Texture;
@@ -16,7 +14,6 @@ class ComputeContext;
 class UploadBuffer;
 class ReadbackBuffer;
 
-namespace NoEngine {
 /// <summary>
 /// 描画・計算・リソース操作を抽象化するクラス
 /// </summary>
@@ -26,9 +23,9 @@ private:
 
 	CommandContext(D3D12_COMMAND_LIST_TYPE type);
 
-	void Reset(void);
 
 public:
+	void Reset(void);
 
 	~CommandContext(void);
 
@@ -52,15 +49,12 @@ public:
 	/// </summary>
 	/// <param name="WaitForCompletion">完了まで待機するかどうかを示すフラグ。true の場合、関数は処理が完了するまでブロッキングします。デフォルトは false。</param>
 	/// <returns>処理の結果を表す uint64_t 値。</returns>
-	//uint64_t Finish(bool WaitForCompletion = false);
+	uint64_t Finish(bool WaitForCompletion = false);
 
 	// Prepare to render by reserving a command list and command allocator
 	void Initialize(void);
 
-	//GraphicsContext& GetGraphicsContext() {
-	//    ASSERT(m_Type != D3D12_COMMAND_LIST_TYPE_COMPUTE, "Cannot convert async compute context to graphics");
-	//    return reinterpret_cast<GraphicsContext&>(*this);
-	//}
+	GraphicsContext& GetGraphicsContext();
 
 	//ComputeContext& GetComputeContext() {
 	//    return reinterpret_cast<ComputeContext&>(*this);
@@ -114,7 +108,19 @@ public:
 	//    void BeginResourceTransition(GpuResource& Resource, D3D12_RESOURCE_STATES NewState, bool FlushImmediate = false);
 	//    void InsertUAVBarrier(GpuResource& Resource, bool FlushImmediate = false);
 	//    void InsertAliasBarrier(GpuResource& Before, GpuResource& After, bool FlushImmediate = false);
-	//    inline void FlushResourceBarriers(void);
+	
+	/// <summary>
+	/// リソースの状態遷移を行います。
+	/// </summary>
+	/// <param name="resource">状態遷移したいリソース</param>
+	/// <param name="newState">リソースの新しい状態</param>
+	/// <param name="flushImmediate">即座に状態遷移するかどうか(true : 遷移する, false : 遷移しない)。遷移しない場合はFlushResourceBarriers()を呼び出す必要があります。</param>
+	void TransitionResource(GpuResource& resource, D3D12_RESOURCE_STATES newState, bool flushImmediate = false);
+
+	/// <summary>
+	/// 溜めていた状態遷移要求をまとめて発行します。
+	/// </summary>
+	void FlushResourceBarriers(void);
 	//
 	//    void InsertTimeStamp(ID3D12QueryHeap* pQueryHeap, uint32_t QueryIdx);
 	//    void ResolveTimeStamps(ID3D12Resource* pReadbackHeap, ID3D12QueryHeap* pQueryHeap, uint32_t NumQueries);
@@ -130,10 +136,10 @@ public:
 	//
 protected:
 
-	//void BindDescriptorHeaps(void);
+	void BindDescriptorHeaps(void);
 
 	std::unique_ptr<CommandListManager> owningManager_;
-	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList_;
+	ID3D12GraphicsCommandList* commandList_;
 	ID3D12CommandAllocator* currentAllocator_;
 
 	ID3D12RootSignature* m_CurGraphicsRootSignature;
@@ -143,10 +149,10 @@ protected:
 	//DynamicDescriptorHeap m_DynamicViewDescriptorHeap;		// HEAP_TYPE_CBV_SRV_UAV
 	//DynamicDescriptorHeap m_DynamicSamplerDescriptorHeap;	// HEAP_TYPE_SAMPLER
 
-	D3D12_RESOURCE_BARRIER m_ResourceBarrierBuffer[16];
-	UINT m_NumBarriersToFlush;
+	D3D12_RESOURCE_BARRIER resourceBarrierBuffer_[16];
+	UINT numBarriersToFlush_;
 
-	ID3D12DescriptorHeap* m_CurrentDescriptorHeaps[D3D12_DESCRIPTOR_HEAP_TYPE_NUM_TYPES];
+	ID3D12DescriptorHeap* currentDescriptorHeaps_[D3D12_DESCRIPTOR_HEAP_TYPE_NUM_TYPES];
 
 	//LinearAllocator m_CpuLinearAllocator;
 	//LinearAllocator m_GpuLinearAllocator;

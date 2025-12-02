@@ -1,10 +1,16 @@
 #include "CommandQueue.h"
 #include "CommandListManager.h"
 #include "../GraphicsCore.h"
+
+#include "engine/Debug/Logger/Log.h"
+
 namespace NoEngine {
 CommandQueue::CommandQueue(D3D12_COMMAND_LIST_TYPE type) :
 	type_(type) ,
-	allocatorPool_(type){
+	allocatorPool_(type),
+	nextFenceValue_(0),
+	lastCompletedFenceValue_(0),
+	fenceEventHandle_(nullptr) {
 }
 
 CommandQueue::~CommandQueue() {
@@ -27,9 +33,12 @@ void CommandQueue::Create() {
 	assert(SUCCEEDED(hr));
 	fence_.Get()->SetName(L"CommandListManager::fence_");
 
-	// << 56によって64bit整数の上位8bitにキュー識別を埋め込みます。
-	// これでフェンス値の上位8bitでキューの種類を識別し、下位56bitで通常のカウントに使います。
-	fence_.Get()->Signal((uint64_t)type_ << 56);
+	// フェンスの初期値を明示的に設定しておく（上位8bitにキュー種別を埋める意図を保持）
+	uint64_t initialFence = ((uint64_t)type_ << 56);
+	// CPU側でフェンス値を進めておき、メンバを正しく初期化する
+	fence_.Get()->Signal(initialFence);
+	nextFenceValue_ = initialFence + 1;
+	lastCompletedFenceValue_ = fence_->GetCompletedValue();
 
 	// fenceのSignalを待つためのイベントを作成します。
 	fenceEventHandle_ = CreateEvent(nullptr, false, false, nullptr);
@@ -44,7 +53,10 @@ void CommandQueue::Shutdown() {
 
 	allocatorPool_.Shutdown();
 
-	CloseHandle(fenceEventHandle_);
+	if (fenceEventHandle_) {
+		CloseHandle(fenceEventHandle_);
+		fenceEventHandle_ = nullptr;
+	}
 
 	fence_.Reset();
 
@@ -59,7 +71,7 @@ uint64_t CommandQueue::IncrementFence(void) {
 
 bool CommandQueue::IsFenceComplete(uint64_t fenceValue) {
 	// 最後に確認したフェンス値と比較することで、フェンス値のクエリを回避します。
-	// max() は、最後に完了したフェンス値が後退する可能性のある、起こりそうにない競合状態から保護するためのものです。
+	// max() は、最後に完了したフェンス値が後退する可能性のある、起こりそうにない競合状態から保護するためのもの。
 	if (fenceValue > lastCompletedFenceValue_)
 		lastCompletedFenceValue_ = std::max(lastCompletedFenceValue_, fence_->GetCompletedValue());
 
@@ -84,10 +96,31 @@ void CommandQueue::WaitForFence(uint64_t fenceValue) {
 	{
 		std::lock_guard<std::mutex> LockGuard(eventMutex_);
 
+		// Safety: 0 を渡さないようにする（D3D12は 0 を待つと常に満たされる -> デバッグ警告の原因）
+		if (fenceValue == 0) {
+			lastCompletedFenceValue_ = fence_->GetCompletedValue();
+			return;
+		}
+
 		fence_->SetEventOnCompletion(fenceValue, fenceEventHandle_);
 		WaitForSingleObject(fenceEventHandle_, INFINITE);
 		lastCompletedFenceValue_ = fenceValue;
 	}
+}
+
+uint64_t CommandQueue::ExecuteCommandList(ID3D12CommandList* list) {
+	std::lock_guard<std::mutex> lockGuard(fenceMutex_);
+
+	HRESULT hr = ((ID3D12GraphicsCommandList*)list)->Close();
+	if (FAILED(hr)) {
+		Log::DebugPrint("commandList close failed", VerbosityLevel::kCritical);
+	}
+
+	commandQueue_->ExecuteCommandLists(1, &list);
+
+	commandQueue_->Signal(fence_.Get(), nextFenceValue_);
+
+	return nextFenceValue_++;
 }
 
 ID3D12CommandAllocator* CommandQueue::RequestAllocator(void) {
@@ -96,4 +129,7 @@ ID3D12CommandAllocator* CommandQueue::RequestAllocator(void) {
 	return allocatorPool_.RequestAllocator(CompletedFence);
 }
 
+void CommandQueue::DiscardAllocator(uint64_t fenceValueForReset, ID3D12CommandAllocator* allocator) {
+	allocatorPool_.DiscardAllocator(fenceValueForReset, allocator);
+}
 }

@@ -105,6 +105,7 @@
     <ClCompile Include="engine\GameCore\Command\CommandContext.cpp" />
     <ClCompile Include="engine\GameCore\Command\CommandListManager.cpp" />
     <ClCompile Include="engine\GameCore\Command\CommandQueue.cpp" />
+    <ClCompile Include="engine\GameCore\Command\GraphicsContext.cpp" />
     <ClCompile Include="engine\GameCore\ContextManager.cpp" />
     <ClCompile Include="engine\GameCore\DescriptorHeap\DescriptorAllocator.cpp" />
     <ClCompile Include="engine\GameCore\DescriptorHeap\DescriptorHeap.cpp" />
@@ -133,6 +134,7 @@
     <ClCompile Include="engine\Math\Types\Quaternion.cpp" />
     <ClCompile Include="engine\Math\Types\Vector2.cpp" />
     <ClCompile Include="engine\Math\Types\Vector3.cpp" />
+    <ClCompile Include="engine\Math\Types\Vector4.cpp" />
     <ClCompile Include="engine\Utilities\Conversion\ConvertString.cpp" />
     <ClCompile Include="engine\Window\Event\Default\CloseEvent.cpp" />
     <ClCompile Include="engine\Window\Event\Default\EnterSizeMoveEvent.cpp" />
@@ -157,6 +159,7 @@
     <ClInclude Include="engine\GameCore\Command\CommandContext.h" />
     <ClInclude Include="engine\GameCore\Command\CommandListManager.h" />
     <ClInclude Include="engine\GameCore\Command\CommandQueue.h" />
+    <ClInclude Include="engine\GameCore\Command\GraphicsContext.h" />
     <ClInclude Include="engine\GameCore\ContextManager.h" />
     <ClInclude Include="engine\GameCore\DescriptorHeap\DescriptorAllocator.h" />
     <ClInclude Include="engine\GameCore\DescriptorHeap\DescriptorHandle.h" />
@@ -181,6 +184,7 @@
     <ClInclude Include="engine\GameCore\Graphics\GraphicsSwapChain.h" />
     <ClInclude Include="engine\GameCore\PipelineStateObject\RootParameter.h" />
     <ClInclude Include="engine\GameCore\PipelineStateObject\RootSignature.h" />
+    <ClInclude Include="engine\Math\Color\Color.h" />
     <ClInclude Include="engine\Math\Types\Calculations\MatrixCalculations.h" />
     <ClInclude Include="engine\Math\Types\Calculations\QuaternionCalculations.h" />
     <ClInclude Include="engine\Math\Types\Calculations\Vector3Calculations.h" />

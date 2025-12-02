@@ -16,6 +16,8 @@ public:
 
 	void SetMainWindowName(std::wstring title);
 
+	void Clear();
+
 private:
 	bool isDead_ = false;
 };

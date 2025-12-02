@@ -6,6 +6,9 @@ namespace NoEngine {
 /// GpuResource管理の基底クラス
 /// </summary>
 class GpuResource {
+	friend class CommandContext;
+	friend class GraphicsContext;
+	friend class ComputeContext;
 public:
 	/// <summary>
 	/// コンストラクタ
@@ -33,7 +36,7 @@ public:
 protected:
 	Microsoft::WRL::ComPtr<ID3D12Resource> resource_;
 	D3D12_RESOURCE_STATES usageState_;
-	D3D12_RESOURCE_STATES transitionState_;
+	D3D12_RESOURCE_STATES transitioningState_;
 	D3D12_GPU_VIRTUAL_ADDRESS gpuVirtualAddress_;
 	std::wstring name_;
 

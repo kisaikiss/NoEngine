@@ -1,13 +1,13 @@
 #pragma once
 #include "PixelBuffer.h"
-#include "engine/Math/Types/Vector4.h"
+#include "engine/Math/Color/Color.h"
 namespace NoEngine {
 /// <summary>
 /// バックバッファやオフスクリーン用のリソース
 /// </summary>
 class ColorBuffer : public PixelBuffer{
 public:
-    ColorBuffer(Vector4 clearColor = Vector4(0.f, 0.f, 0.f, 1.f)) :
+    ColorBuffer(Color clearColor = Color(0x66cdaaff)) :
         clearColor_(clearColor), numMipMaps_(0), fragmentCount_(1), sampleCount_(1) {
         srvHandle_.ptr = D3D12_GPU_VIRTUAL_ADDRESS_UNKNOWN;
         rtvHandle_.ptr = D3D12_GPU_VIRTUAL_ADDRESS_UNKNOWN;
@@ -23,8 +23,13 @@ public:
     /// <param name="baseResource">スワップチェーンのGetBuffer()より取得できるリソース</param>
     void CreateFromSwapChain(const std::wstring& name, ID3D12Resource* baseResource);
 
+    const Color& GetClearColor() { return clearColor_; }
+
+    const D3D12_CPU_DESCRIPTOR_HANDLE& GetSRV(void) const { return srvHandle_; }
+    const D3D12_CPU_DESCRIPTOR_HANDLE& GetRTV(void) const { return rtvHandle_; }
+    const D3D12_CPU_DESCRIPTOR_HANDLE& GetUAV(void) const { return uavHandle_[0]; }
 private:
-    Vector4 clearColor_;
+    Color clearColor_;
     D3D12_CPU_DESCRIPTOR_HANDLE srvHandle_;
     D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle_;
     std::array<D3D12_CPU_DESCRIPTOR_HANDLE, 12> uavHandle_;

@@ -3,7 +3,9 @@
 
 
 namespace NoEngine {
-
+/// <summary>
+/// コマンドリストの取得やコマンドキューの保有を行うクラスです。
+/// </summary>
 class CommandListManager {
 	friend class CommandContext;
 public:
@@ -48,6 +50,14 @@ public:
 		D3D12_COMMAND_LIST_TYPE type,
 		ID3D12GraphicsCommandList** list,
 		ID3D12CommandAllocator** allocator);
+
+	void WaitForFence(uint64_t FenceValue);
+
+	void IdleGPU(void) {
+		graphicsQueue_.WaitForIdle();
+		computeQueue_.WaitForIdle();
+		copyQueue_.WaitForIdle();
+	}
 private:
 	CommandQueue graphicsQueue_;
 	CommandQueue computeQueue_;

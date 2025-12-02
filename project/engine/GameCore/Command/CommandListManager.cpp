@@ -43,4 +43,10 @@ void CommandListManager::CreateNewCommandList(D3D12_COMMAND_LIST_TYPE type, ID3D
 	}
 	(*list)->SetName(L"CommandList");
 }
+
+void CommandListManager::WaitForFence(uint64_t FenceValue) {
+	CommandQueue& producer = GraphicsCore::gCommandListManager.GetQueue((D3D12_COMMAND_LIST_TYPE)(FenceValue >> 56));
+	producer.WaitForFence(FenceValue);
+}
+
 }

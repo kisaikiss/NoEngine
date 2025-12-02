@@ -22,8 +22,8 @@ Window* WindowManager::Create(std::wstring title, uint32_t width, uint32_t heigh
 }
 
 void WindowManager::Shutdown() {
-	Log::DebugPrint("WindowManager is Dead", VerbosityLevel::kInfo);
-	isDead_ = true;
+	Log::DebugPrint("WindowManager Shutdown", VerbosityLevel::kInfo);
+	sWindowMap.clear();
 }
 
 bool WindowManager::ProcessMessage() {
@@ -34,7 +34,7 @@ bool WindowManager::ProcessMessage() {
 			Log::DebugPrint("Window is dead");
 			if (window->GetTitleName() == sMainWindowName) {
 				Log::DebugPrint("MainWindow is dead", VerbosityLevel::kInfo);
-				Shutdown();
+				isDead_ = true;
 			}
 			it = sWindowMap.erase(it);
 			Log::DebugPrint("Window is erase");
@@ -55,7 +55,7 @@ bool WindowManager::ProcessMessage() {
 		}
 	}
 
-	if(isDead_ == true){
+	if (isDead_ == true) {
 		return true;
 	}
 
@@ -65,6 +65,14 @@ bool WindowManager::ProcessMessage() {
 void WindowManager::SetMainWindowName(std::wstring title) {
 	sMainWindowName = title;
 	Log::DebugPrint("SetMainWindowName : " + ConvertString(title), VerbosityLevel::kInfo);
+}
+
+void WindowManager::Clear() {
+	for (auto& window : sWindowMap) {
+		if (!window.second->IsDead()) {
+			window.second->Clear();
+		}
+	}
 }
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
@@ -80,12 +88,12 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
 	Window* window = it->second.get();
 	assert(window);
 	// ウィンドウにイベントの処理をさせます。
-	auto result =  window->HandleEvent(msg, wparam, lparam);
+	auto result = window->HandleEvent(msg, wparam, lparam);
 	if (result.has_value()) {
 		return result.value();
 	}
 
-	
+
 	// 標準のメッセージ処理を行います。
 	return DefWindowProc(hwnd, msg, wparam, lparam);
 }

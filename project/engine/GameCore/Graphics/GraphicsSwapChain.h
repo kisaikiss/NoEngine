@@ -12,8 +12,8 @@ public:
 
 	IDXGISwapChain4* GetSwapChain() { return swapChain_.Get(); }
 
-	void Resize(float windowWidth, float windowHeight);
-	void Resize(UINT windowWidth, UINT windowHegiht);
+	void ResizeSignal(UINT newWidth, UINT newHeight);
+	void Resize();
 
 	void Destroy();
 
@@ -21,6 +21,9 @@ private:
 	void Initialize(HWND hwnd, UINT windowWidth, UINT windowHeight, UINT bufferCount);
 
 	Microsoft::WRL::ComPtr<IDXGISwapChain4> swapChain_;
+	bool isResize_;
+	UINT newWidth_;
+	UINT newHeight_;
 };
 }
 }

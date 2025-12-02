@@ -9,12 +9,20 @@
 #include "Event/Default/SizeEvent.h"
 #include "Event/Default/SizingEvent.h"
 
+#include "engine/GameCore/Command/GraphicsContext.h"
+#include "engine/GameCore/GraphicsCore.h"
+
 namespace NoEngine {
 using namespace std;
+Window::~Window() {
+	Destroy();
+}
+
 void Window::Create(WNDPROC windowProc, std::wstring title, uint32_t width, uint32_t height, const std::wstring& iconPath) {
 	Log::DebugPrint("Window_WindowCreateStart title : " + ConvertString(title),VerbosityLevel::kInfo);
 	core_.title = title;
 	isDead_ = false;
+	isResize_ = false;
 	core_.hwnd = nullptr;	//ウィンドウハンドル
 
 	size_.clientWidth = width;
@@ -39,6 +47,7 @@ void Window::Create(WNDPROC windowProc, std::wstring title, uint32_t width, uint
 	core_.wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
 	core_.wcex.lpszMenuName = nullptr;
 	core_.wcex.lpszClassName = title.c_str();
+	core_.windowStyle = 0;
 	//core_.wcex.hIconSm = LoadIcon(nullptr, IDI_APPLICATION);
 
 	 // アイコンのカスタマイズが必要ならここで読み込む
@@ -92,16 +101,7 @@ void Window::Create(WNDPROC windowProc, std::wstring title, uint32_t width, uint
 	// ウィンドウ専用のスワップチェーンを生成します。
 	swapChain_ = std::make_unique<Graphics::GraphicsSwapChain>(core_.hwnd, width, height, sSwapChainBufferCount);
 
-	// ウィンドウ専用のカラーバッファを生成します。
-	for (uint32_t i = 0; i < sSwapChainBufferCount;i++) {
-		Microsoft::WRL::ComPtr<ID3D12Resource> displayPlane;
-		HRESULT hr = swapChain_->GetSwapChain()->GetBuffer(i, IID_PPV_ARGS(&displayPlane));
-		if (FAILED(hr)) {
-			Log::DebugPrint("swap chain GetBuffer() failed", VerbosityLevel::kCritical);
-			assert(false);
-		}
-		colorBuffers_[i].CreateFromSwapChain(L"Primary SwapChain Buffer", displayPlane.Detach());
-	}
+	CreateColorBuffer();
 
 	// ウィンドウを表示します。
 	ShowWindow(core_.hwnd, SW_SHOW);
@@ -109,13 +109,25 @@ void Window::Create(WNDPROC windowProc, std::wstring title, uint32_t width, uint
 	Log::DebugPrint("Window_WindowCreated title : " + ConvertString(title), VerbosityLevel::kInfo);
 }
 
+void Window::Clear() {
+	UINT backBufferIndex = swapChain_->GetSwapChain()->GetCurrentBackBufferIndex();
+	GraphicsContext& context = GraphicsContext::Begin(L"Clear");
+	context.TransitionResource(*colorBuffers_[backBufferIndex].get(), D3D12_RESOURCE_STATE_RENDER_TARGET);
+	context.SetRenderTarget(colorBuffers_[backBufferIndex]->GetRTV());
+	
+	context.ClearColor(*colorBuffers_[backBufferIndex].get());
+
+	context.TransitionResource(*colorBuffers_[backBufferIndex].get(), D3D12_RESOURCE_STATE_PRESENT);
+	context.Finish();
+	swapChain_->GetSwapChain()->Present(1, 0);
+	Resize();
+}
+
 void Window::Destroy() {
 	if (core_.hwnd) {
 		DestroyWindow(core_.hwnd);
 	}
-	for (auto& colorBuffer : colorBuffers_) {
-		colorBuffer.Destroy();
-	}
+	GraphicsCore::gCommandListManager.IdleGPU();
 	isDead_ = true;
 }
 
@@ -224,19 +236,63 @@ void Window::SetWindowMode(WindowMode windowMode) {
 	}
 }
 
+void Window::SetWindowSize(UINT width, UINT height) {
+	size_.clientWidth = width;
+	size_.clientHeight = height;
+	CalculateAspectRatio();
+	AdjustWindowSize();
+}
+
 void Window::AdjustWindowSize() {
 	if (!core_.hwnd) {
 		return;
 	}
 	Log::DebugPrint("AdjustWindowSize", VerbosityLevel::kInfo);
-	// クライアント領域のサイズからウィンドウサイズを計算
-	RECT rect = { 0, 0, LONG(size_.clientWidth), LONG(size_.clientHeight) };
-	AdjustWindowRect(&rect, core_.windowStyle, FALSE);
 
-	// ウィンドウサイズを更新
-	SetWindowPos(core_.hwnd, nullptr, 0, 0,
-		rect.right - rect.left, rect.bottom - rect.top,
-		SWP_NOMOVE | SWP_NOZORDER);
+	// SwapChainを更新します。
+	if (swapChain_) {
+		if (size_.clientWidth <= 0) size_.clientWidth = 1;
+		if (size_.clientHeight <= 0) size_.clientHeight = 1;
+		
+		ResizeSignal();
+	}
+}
+
+void Window::CreateColorBuffer() {
+	if (colorBuffers_[0]) return;
+
+	// ウィンドウ専用のカラーバッファを生成します。
+	for (uint32_t i = 0; i < sSwapChainBufferCount; i++) {
+		Microsoft::WRL::ComPtr<ID3D12Resource> displayPlane;
+		HRESULT hr = swapChain_->GetSwapChain()->GetBuffer(i, IID_PPV_ARGS(&displayPlane));
+		if (FAILED(hr)) {
+			Log::DebugPrint("swap chain GetBuffer() failed", VerbosityLevel::kCritical);
+			assert(false);
+		}
+		colorBuffers_[i] = std::make_unique<ColorBuffer>();
+		colorBuffers_[i]->CreateFromSwapChain(L"Primary SwapChain Buffer", displayPlane.Detach());
+	}
+	Log::DebugPrint("create color buffers");
+}
+
+void Window::DestroyColorBuffer() {
+	GraphicsCore::gCommandListManager.IdleGPU();
+	for (auto& colorBuffer : colorBuffers_) {
+		colorBuffer.reset();
+	}
+	Log::DebugPrint("destroy color buffers");
+}
+void Window::ResizeSignal() {
+	isResize_ = true;
+	swapChain_->ResizeSignal(size_.clientWidth, size_.clientHeight);
+}
+
+void Window::Resize() {
+	if (!isResize_) return;
+	DestroyColorBuffer();
+	swapChain_->Resize();
+	CreateColorBuffer();
+	isResize_ = false;
 }
 }
 
