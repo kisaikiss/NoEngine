@@ -37,14 +37,14 @@ public:
     }
 
     // Upload any new descriptors in the cache to the shader-visible heap.
-    inline void CommitGraphicsRootDescriptorTables(ID3D12GraphicsCommandList* CmdList) {
+    inline void CommitGraphicsRootDescriptorTables(ID3D12GraphicsCommandList4* CmdList) {
         if (m_GraphicsHandleCache.m_StaleRootParamsBitMap != 0)
-            CopyAndBindStagedTables(m_GraphicsHandleCache, CmdList, &ID3D12GraphicsCommandList::SetGraphicsRootDescriptorTable);
+            CopyAndBindStagedTables(m_GraphicsHandleCache, CmdList, &ID3D12GraphicsCommandList4::SetGraphicsRootDescriptorTable);
     }
 
-    inline void CommitComputeRootDescriptorTables(ID3D12GraphicsCommandList* CmdList) {
+    inline void CommitComputeRootDescriptorTables(ID3D12GraphicsCommandList4* CmdList) {
         if (m_ComputeHandleCache.m_StaleRootParamsBitMap != 0)
-            CopyAndBindStagedTables(m_ComputeHandleCache, CmdList, &ID3D12GraphicsCommandList::SetComputeRootDescriptorTable);
+            CopyAndBindStagedTables(m_ComputeHandleCache, CmdList, &ID3D12GraphicsCommandList4::SetComputeRootDescriptorTable);
     }
 
 private:
@@ -96,8 +96,8 @@ private:
         static const uint32_t kMaxNumDescriptorTables = 16;
 
         uint32_t ComputeStagedSize();
-        void CopyAndBindStaleTables(D3D12_DESCRIPTOR_HEAP_TYPE Type, uint32_t DescriptorSize, DescriptorHandle DestHandleStart, ID3D12GraphicsCommandList* CmdList,
-            void (STDMETHODCALLTYPE ID3D12GraphicsCommandList::* SetFunc)(UINT, D3D12_GPU_DESCRIPTOR_HANDLE));
+        void CopyAndBindStaleTables(D3D12_DESCRIPTOR_HEAP_TYPE Type, uint32_t DescriptorSize, DescriptorHandle DestHandleStart, ID3D12GraphicsCommandList4* CmdList,
+            void (STDMETHODCALLTYPE ID3D12GraphicsCommandList4::* SetFunc)(UINT, D3D12_GPU_DESCRIPTOR_HANDLE));
 
         DescriptorTableCache m_RootDescriptorTable[kMaxNumDescriptorTables];
         D3D12_CPU_DESCRIPTOR_HANDLE m_HandleCache[kMaxNumDescriptors];
@@ -124,8 +124,8 @@ private:
         return ret;
     }
 
-    void CopyAndBindStagedTables(DescriptorHandleCache& HandleCache, ID3D12GraphicsCommandList* CmdList,
-        void (STDMETHODCALLTYPE ID3D12GraphicsCommandList::* SetFunc)(UINT, D3D12_GPU_DESCRIPTOR_HANDLE));
+    void CopyAndBindStagedTables(DescriptorHandleCache& HandleCache, ID3D12GraphicsCommandList4* CmdList,
+        void (STDMETHODCALLTYPE ID3D12GraphicsCommandList4::* SetFunc)(UINT, D3D12_GPU_DESCRIPTOR_HANDLE));
 
     // Mark all descriptors in the cache as stale and in need of re-uploading.
     void UnbindAllValid(void);

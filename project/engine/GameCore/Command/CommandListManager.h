@@ -48,7 +48,7 @@ public:
 	/// <param name="Allocator">コマンドアロケータのダブルポインタ</param>
 	void CreateNewCommandList(
 		D3D12_COMMAND_LIST_TYPE type,
-		ID3D12GraphicsCommandList** list,
+		ID3D12GraphicsCommandList4** list,
 		ID3D12CommandAllocator** allocator);
 
 	void WaitForFence(uint64_t FenceValue);

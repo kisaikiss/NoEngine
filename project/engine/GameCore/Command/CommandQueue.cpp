@@ -111,7 +111,7 @@ void CommandQueue::WaitForFence(uint64_t fenceValue) {
 uint64_t CommandQueue::ExecuteCommandList(ID3D12CommandList* list) {
 	std::lock_guard<std::mutex> lockGuard(fenceMutex_);
 
-	HRESULT hr = ((ID3D12GraphicsCommandList*)list)->Close();
+	HRESULT hr = ((ID3D12GraphicsCommandList4*)list)->Close();
 	if (FAILED(hr)) {
 		Log::DebugPrint("commandList close failed", VerbosityLevel::kCritical);
 	}

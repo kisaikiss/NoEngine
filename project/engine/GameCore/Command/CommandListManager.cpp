@@ -28,7 +28,7 @@ void CommandListManager::Shutdown() {
 	computeQueue_.Shutdown();
 	copyQueue_.Shutdown();
 }
-void CommandListManager::CreateNewCommandList(D3D12_COMMAND_LIST_TYPE type, ID3D12GraphicsCommandList** list, ID3D12CommandAllocator** allocator) {
+void CommandListManager::CreateNewCommandList(D3D12_COMMAND_LIST_TYPE type, ID3D12GraphicsCommandList4** list, ID3D12CommandAllocator** allocator) {
 	assert(type != D3D12_COMMAND_LIST_TYPE_BUNDLE);
 	switch (type) {
 	case D3D12_COMMAND_LIST_TYPE_DIRECT: *allocator = graphicsQueue_.RequestAllocator(); break;

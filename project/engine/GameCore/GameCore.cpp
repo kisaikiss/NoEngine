@@ -52,7 +52,7 @@ void EngineInitialize() {
 	auto* window = sWindowManager->Create(L"NoEngine", 1280, 720);
 	sWindowManager->SetMainWindowName(L"NoEngine");
 	window->RegisterWindowEvent(std::make_unique<MainEditorWindowCloseEvent>());
-	sWindowManager->Create(L"NoWindow", 1280, 720);
+	//sWindowManager->Create(L"NoWindow", 1280, 720);
 	
 }
 

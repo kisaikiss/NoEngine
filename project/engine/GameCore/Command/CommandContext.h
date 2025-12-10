@@ -60,7 +60,7 @@ public:
 	//    return reinterpret_cast<ComputeContext&>(*this);
 	//}
 
-	//ID3D12GraphicsCommandList* GetCommandList() {
+	//ID3D12GraphicsCommandList4* GetCommandList() {
 	//    return m_CommandList;
 	//}
 
@@ -139,7 +139,7 @@ protected:
 	void BindDescriptorHeaps(void);
 
 	std::unique_ptr<CommandListManager> owningManager_;
-	ID3D12GraphicsCommandList* commandList_;
+	ID3D12GraphicsCommandList4* commandList_;
 	ID3D12CommandAllocator* currentAllocator_;
 
 	ID3D12RootSignature* m_CurGraphicsRootSignature;

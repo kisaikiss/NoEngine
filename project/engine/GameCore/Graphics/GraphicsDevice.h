@@ -9,9 +9,9 @@ public:
 	GraphicsDevice(IDXGIAdapter4* adapter);
 	~GraphicsDevice();
 
-	ID3D12Device* GetDevice() const { return device_.Get(); }
+	ID3D12Device5* GetDevice() const { return device_.Get(); }
 private:
-	Microsoft::WRL::ComPtr<ID3D12Device> device_;
+	Microsoft::WRL::ComPtr<ID3D12Device5> device_;
 };
 }
 }

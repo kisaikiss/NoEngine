@@ -126,6 +126,8 @@
     <ClCompile Include="engine\GameCore\Graphics\GraphicsInfrastructures.cpp" />
     <ClCompile Include="engine\GameCore\GraphicsCore.cpp" />
     <ClCompile Include="engine\GameCore\Graphics\GraphicsSwapChain.cpp" />
+    <ClCompile Include="engine\GameCore\PipelineStateObject\GraphicsPSO.cpp" />
+    <ClCompile Include="engine\GameCore\PipelineStateObject\PSO.cpp" />
     <ClCompile Include="engine\GameCore\PipelineStateObject\RootSignature.cpp" />
     <ClCompile Include="engine\Math\Types\Calculations\MatrixCalculations.cpp" />
     <ClCompile Include="engine\Math\Types\Calculations\QuaternionCalculations.cpp" />
@@ -182,9 +184,12 @@
     <ClInclude Include="engine\GameCore\Graphics\GraphicsInfrastructures.h" />
     <ClInclude Include="engine\GameCore\GraphicsCore.h" />
     <ClInclude Include="engine\GameCore\Graphics\GraphicsSwapChain.h" />
+    <ClInclude Include="engine\GameCore\PipelineStateObject\GraphicsPSO.h" />
+    <ClInclude Include="engine\GameCore\PipelineStateObject\PSO.h" />
     <ClInclude Include="engine\GameCore\PipelineStateObject\RootParameter.h" />
     <ClInclude Include="engine\GameCore\PipelineStateObject\RootSignature.h" />
     <ClInclude Include="engine\Math\Color\Color.h" />
+    <ClInclude Include="engine\Math\Size.h" />
     <ClInclude Include="engine\Math\Types\Calculations\MatrixCalculations.h" />
     <ClInclude Include="engine\Math\Types\Calculations\QuaternionCalculations.h" />
     <ClInclude Include="engine\Math\Types\Calculations\Vector3Calculations.h" />
@@ -194,6 +199,7 @@
     <ClInclude Include="engine\Math\Types\Vector3.h" />
     <ClInclude Include="engine\Math\Types\Vector4.h" />
     <ClInclude Include="engine\Utilities\Conversion\ConvertString.h" />
+    <ClInclude Include="engine\Utilities\Hash.h" />
     <ClInclude Include="engine\Utilities\NonCopyable.h" />
     <ClInclude Include="engine\Utilities\PassKey\PassKeys.h" />
     <ClInclude Include="engine\Window\Event\Default\CloseEvent.h" />
