@@ -29,4 +29,14 @@ std::string ConvertString(const std::wstring& str) {
     return result;
 }
 
+std::string FormatToString(DXGI_FORMAT fmt) {
+    switch (fmt) {
+    case DXGI_FORMAT_R32_FLOAT: return "R32_FLOAT";
+    case DXGI_FORMAT_R32G32_FLOAT: return "R32G32_FLOAT";
+    case DXGI_FORMAT_R32G32B32_FLOAT: return "R32G32B32_FLOAT";
+    case DXGI_FORMAT_R32G32B32A32_FLOAT: return "R32G32B32A32_FLOAT";
+    default: return "UNKNOWN";
+    }
+}
+
 }

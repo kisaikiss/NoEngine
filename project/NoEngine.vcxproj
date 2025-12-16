@@ -70,6 +70,10 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PostBuildEvent>
+      <Command>copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxcompiler.dll" "$(TargetDir)dxcompiler.dll"
+copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dxil.dll"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -95,6 +99,10 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
     </Link>
+    <PostBuildEvent>
+      <Command>copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxcompiler.dll" "$(TargetDir)dxcompiler.dll"
+copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dxil.dll"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="engine\Debug\CrashHandler\ExportDump.cpp" />
@@ -110,8 +118,8 @@
     <ClCompile Include="engine\GameCore\DescriptorHeap\DescriptorAllocator.cpp" />
     <ClCompile Include="engine\GameCore\DescriptorHeap\DescriptorHeap.cpp" />
     <ClCompile Include="engine\GameCore\DescriptorHeap\DynamicDescriptorHeap.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="engine\GameCore\GameCore.cpp" />
     <ClCompile Include="engine\GameCore\GpuResource\GpuBuffer.cpp" />
@@ -129,6 +137,8 @@
     <ClCompile Include="engine\GameCore\PipelineStateObject\GraphicsPSO.cpp" />
     <ClCompile Include="engine\GameCore\PipelineStateObject\PSO.cpp" />
     <ClCompile Include="engine\GameCore\PipelineStateObject\RootSignature.cpp" />
+    <ClCompile Include="engine\GameCore\Shader\ShaderModule.cpp" />
+    <ClCompile Include="engine\GameCore\Shader\ShaderReflection.cpp" />
     <ClCompile Include="engine\Math\Types\Calculations\MatrixCalculations.cpp" />
     <ClCompile Include="engine\Math\Types\Calculations\QuaternionCalculations.cpp" />
     <ClCompile Include="engine\Math\Types\Calculations\Vector3Calculations.cpp" />
@@ -138,6 +148,7 @@
     <ClCompile Include="engine\Math\Types\Vector3.cpp" />
     <ClCompile Include="engine\Math\Types\Vector4.cpp" />
     <ClCompile Include="engine\Utilities\Conversion\ConvertString.cpp" />
+    <ClCompile Include="engine\Utilities\FileUtilities.cpp" />
     <ClCompile Include="engine\Window\Event\Default\CloseEvent.cpp" />
     <ClCompile Include="engine\Window\Event\Default\EnterSizeMoveEvent.cpp" />
     <ClCompile Include="engine\Window\Event\Default\GetMinMaxInfoEvent.cpp" />
@@ -167,8 +178,8 @@
     <ClInclude Include="engine\GameCore\DescriptorHeap\DescriptorHandle.h" />
     <ClInclude Include="engine\GameCore\DescriptorHeap\DescriptorHeap.h" />
     <ClInclude Include="engine\GameCore\DescriptorHeap\DynamicDescriptorHeap.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="engine\GameCore\GameCore.h" />
     <ClInclude Include="engine\GameCore\GpuResource\GpuBuffer.h" />
@@ -188,6 +199,8 @@
     <ClInclude Include="engine\GameCore\PipelineStateObject\PSO.h" />
     <ClInclude Include="engine\GameCore\PipelineStateObject\RootParameter.h" />
     <ClInclude Include="engine\GameCore\PipelineStateObject\RootSignature.h" />
+    <ClInclude Include="engine\GameCore\Shader\ShaderModule.h" />
+    <ClInclude Include="engine\GameCore\Shader\ShaderReflection.h" />
     <ClInclude Include="engine\Math\Color\Color.h" />
     <ClInclude Include="engine\Math\Size.h" />
     <ClInclude Include="engine\Math\Types\Calculations\MatrixCalculations.h" />
@@ -199,6 +212,7 @@
     <ClInclude Include="engine\Math\Types\Vector3.h" />
     <ClInclude Include="engine\Math\Types\Vector4.h" />
     <ClInclude Include="engine\Utilities\Conversion\ConvertString.h" />
+    <ClInclude Include="engine\Utilities\FileUtilities.h" />
     <ClInclude Include="engine\Utilities\Hash.h" />
     <ClInclude Include="engine\Utilities\NonCopyable.h" />
     <ClInclude Include="engine\Utilities\PassKey\PassKeys.h" />
