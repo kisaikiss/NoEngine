@@ -3,8 +3,8 @@
 #include "WindowCore.h"
 #include "WindowSize.h"
 
-#include "../GameCore/Graphics/GraphicsSwapChain.h"
-#include "engine/GameCore/GpuResource/PixelBuffer/ColorBuffer.h"
+#include "../Runtime/Graphics/GraphicsSwapChain.h"
+#include "engine/Runtime/GpuResource/PixelBuffer/ColorBuffer.h"
 
 namespace NoEngine {
 

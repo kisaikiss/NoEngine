@@ -1,3 +1,3 @@
-#include "engine/GameCore/GameCore.h"
+#include "engine/Runtime/GameCore.h"
 
-int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) { return NoEngine::GameCore::RunApplication({}); }
+int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) { return NoEngine::Runtime::RunApplication({}); }

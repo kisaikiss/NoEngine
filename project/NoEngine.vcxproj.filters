@@ -72,100 +72,100 @@
     <ClCompile Include="engine\Math\Types\Calculations\Vector3Calculations.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="engine\GameCore\GraphicsCore.cpp">
+    <ClCompile Include="engine\Runtime\GraphicsCore.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="engine\Debug\CrashHandler\ExportDump.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="engine\GameCore\Graphics\GraphicsInfrastructures.cpp">
+    <ClCompile Include="engine\Runtime\Graphics\GraphicsInfrastructures.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="engine\GameCore\GameCore.cpp">
+    <ClCompile Include="engine\Runtime\GameCore.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="engine\GameCore\Graphics\GraphicsDevice.cpp">
+    <ClCompile Include="engine\Runtime\Graphics\GraphicsDevice.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="engine\GameCore\Command\CommandListManager.cpp">
+    <ClCompile Include="engine\Runtime\Command\CommandListManager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="engine\GameCore\Command\CommandQueue.cpp">
+    <ClCompile Include="engine\Runtime\Command\CommandQueue.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="engine\GameCore\GpuResource\GpuResource.cpp">
+    <ClCompile Include="engine\Runtime\GpuResource\GpuResource.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="engine\GameCore\GpuResource\GpuBuffer.cpp">
+    <ClCompile Include="engine\Runtime\GpuResource\GpuBuffer.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="engine\GameCore\GpuResource\UploadBuffer.cpp">
+    <ClCompile Include="engine\Runtime\GpuResource\UploadBuffer.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="engine\GameCore\Command\CommandContext.cpp">
+    <ClCompile Include="engine\Runtime\Command\CommandContext.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="engine\GameCore\Command\CommandAllocatorPool.cpp">
+    <ClCompile Include="engine\Runtime\Command\CommandAllocatorPool.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="engine\GameCore\Command\CommandAllocator.cpp">
+    <ClCompile Include="engine\Runtime\Command\CommandAllocator.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="engine\GameCore\ContextManager.cpp">
+    <ClCompile Include="engine\Runtime\ContextManager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="engine\GameCore\DescriptorHeap\DescriptorAllocator.cpp">
+    <ClCompile Include="engine\Runtime\DescriptorHeap\DescriptorAllocator.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="engine\GameCore\DescriptorHeap\DescriptorHeap.cpp">
+    <ClCompile Include="engine\Runtime\DescriptorHeap\DescriptorHeap.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="engine\GameCore\PipelineStateObject\RootSignature.cpp">
+    <ClCompile Include="engine\Runtime\PipelineStateObject\RootSignature.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="engine\GameCore\DescriptorHeap\DynamicDescriptorHeap.cpp">
+    <ClCompile Include="engine\Runtime\DescriptorHeap\DynamicDescriptorHeap.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="engine\GameCore\GpuResource\LinearAllocator\LinearAllocator.cpp">
+    <ClCompile Include="engine\Runtime\GpuResource\LinearAllocator\LinearAllocator.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="engine\GameCore\GpuResource\LinearAllocator\LinearAllocationPage.cpp">
+    <ClCompile Include="engine\Runtime\GpuResource\LinearAllocator\LinearAllocationPage.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="engine\GameCore\GpuResource\LinearAllocator\LinearAllocatorPageManager.cpp">
+    <ClCompile Include="engine\Runtime\GpuResource\LinearAllocator\LinearAllocatorPageManager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="engine\Debug\GraphicsResourceLeakChecker.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="engine\GameCore\Graphics\GraphicsSwapChain.cpp">
+    <ClCompile Include="engine\Runtime\Graphics\GraphicsSwapChain.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="engine\GameCore\GpuResource\PixelBuffer\PixelBuffer.cpp">
+    <ClCompile Include="engine\Runtime\GpuResource\PixelBuffer\PixelBuffer.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="engine\GameCore\GpuResource\PixelBuffer\ColorBuffer.cpp">
+    <ClCompile Include="engine\Runtime\GpuResource\PixelBuffer\ColorBuffer.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="engine\GameCore\Command\GraphicsContext.cpp">
+    <ClCompile Include="engine\Runtime\Command\GraphicsContext.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="engine\Math\Types\Vector4.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="engine\GameCore\PipelineStateObject\PSO.cpp">
+    <ClCompile Include="engine\Runtime\PipelineStateObject\PSO.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="engine\GameCore\PipelineStateObject\GraphicsPSO.cpp">
+    <ClCompile Include="engine\Runtime\PipelineStateObject\GraphicsPSO.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="engine\GameCore\Shader\ShaderModule.cpp">
+    <ClCompile Include="engine\Runtime\Shader\ShaderModule.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="engine\Utilities\FileUtilities.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="engine\GameCore\Shader\ShaderReflection.cpp">
+    <ClCompile Include="engine\Runtime\Shader\ShaderReflection.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -236,106 +236,106 @@
     <ClInclude Include="engine\Math\Types\Calculations\Vector3Calculations.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="engine\GameCore\GraphicsCore.h">
+    <ClInclude Include="engine\Runtime\GraphicsCore.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="engine\Debug\CrashHandler\ExportDump.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="engine\GameCore\Graphics\GraphicsInfrastructures.h">
+    <ClInclude Include="engine\Runtime\Graphics\GraphicsInfrastructures.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="engine\Utilities\PassKey\PassKeys.h">
+    <ClInclude Include="engine\Utilities\PassKeys.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="engine\GameCore\GameCore.h">
+    <ClInclude Include="engine\Runtime\GameCore.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="engine\GameCore\Graphics\GraphicsDevice.h">
+    <ClInclude Include="engine\Runtime\Graphics\GraphicsDevice.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="engine\GameCore\Command\CommandListManager.h">
+    <ClInclude Include="engine\Runtime\Command\CommandListManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="engine\GameCore\Command\CommandQueue.h">
+    <ClInclude Include="engine\Runtime\Command\CommandQueue.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="engine\GameCore\GpuResource\GpuResource.h">
+    <ClInclude Include="engine\Runtime\GpuResource\GpuResource.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="engine\GameCore\GpuResource\GpuBuffer.h">
+    <ClInclude Include="engine\Runtime\GpuResource\GpuBuffer.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="engine\GameCore\GpuResource\UploadBuffer.h">
+    <ClInclude Include="engine\Runtime\GpuResource\UploadBuffer.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="engine\Utilities\NonCopyable.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="engine\GameCore\Command\CommandContext.h">
+    <ClInclude Include="engine\Runtime\Command\CommandContext.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="engine\GameCore\Command\CommandAllocatorPool.h">
+    <ClInclude Include="engine\Runtime\Command\CommandAllocatorPool.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="engine\GameCore\Command\CommandAllocator.h">
+    <ClInclude Include="engine\Runtime\Command\CommandAllocator.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="engine\GameCore\ContextManager.h">
+    <ClInclude Include="engine\Runtime\ContextManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="engine\GameCore\DescriptorHeap\DescriptorHeap.h">
+    <ClInclude Include="engine\Runtime\DescriptorHeap\DescriptorHeap.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="engine\GameCore\DescriptorHeap\DescriptorAllocator.h">
+    <ClInclude Include="engine\Runtime\DescriptorHeap\DescriptorAllocator.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="engine\GameCore\DescriptorHeap\DescriptorHandle.h">
+    <ClInclude Include="engine\Runtime\DescriptorHeap\DescriptorHandle.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="engine\GameCore\PipelineStateObject\RootParameter.h">
+    <ClInclude Include="engine\Runtime\PipelineStateObject\RootParameter.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="engine\GameCore\PipelineStateObject\RootSignature.h">
+    <ClInclude Include="engine\Runtime\PipelineStateObject\RootSignature.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="engine\GameCore\DescriptorHeap\DynamicDescriptorHeap.h">
+    <ClInclude Include="engine\Runtime\DescriptorHeap\DynamicDescriptorHeap.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="engine\GameCore\GpuResource\LinearAllocator\LinearAllocator.h">
+    <ClInclude Include="engine\Runtime\GpuResource\LinearAllocator\LinearAllocator.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="engine\GameCore\GpuResource\LinearAllocator\LinearAllocatorType.h">
+    <ClInclude Include="engine\Runtime\GpuResource\LinearAllocator\LinearAllocatorType.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="engine\GameCore\GpuResource\LinearAllocator\LinearAllocationPage.h">
+    <ClInclude Include="engine\Runtime\GpuResource\LinearAllocator\LinearAllocationPage.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="engine\GameCore\GpuResource\LinearAllocator\LinearAllocatorPageManager.h">
+    <ClInclude Include="engine\Runtime\GpuResource\LinearAllocator\LinearAllocatorPageManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="engine\Debug\GraphicsResourceLeakChecker.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="engine\GameCore\Graphics\GraphicsSwapChain.h">
+    <ClInclude Include="engine\Runtime\Graphics\GraphicsSwapChain.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="engine\GameCore\GpuResource\PixelBuffer\PixelBuffer.h">
+    <ClInclude Include="engine\Runtime\GpuResource\PixelBuffer\PixelBuffer.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="engine\GameCore\GpuResource\PixelBuffer\ColorBuffer.h">
+    <ClInclude Include="engine\Runtime\GpuResource\PixelBuffer\ColorBuffer.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="engine\GameCore\Command\GraphicsContext.h">
+    <ClInclude Include="engine\Runtime\Command\GraphicsContext.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="engine\Math\Color\Color.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="engine\GameCore\PipelineStateObject\PSO.h">
+    <ClInclude Include="engine\Runtime\PipelineStateObject\PSO.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="engine\GameCore\PipelineStateObject\GraphicsPSO.h">
+    <ClInclude Include="engine\Runtime\PipelineStateObject\GraphicsPSO.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="engine\Utilities\Hash.h">
@@ -344,13 +344,13 @@
     <ClInclude Include="engine\Math\Size.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="engine\GameCore\Shader\ShaderModule.h">
+    <ClInclude Include="engine\Runtime\Shader\ShaderModule.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="engine\Utilities\FileUtilities.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="engine\GameCore\Shader\ShaderReflection.h">
+    <ClInclude Include="engine\Runtime\Shader\ShaderReflection.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

@@ -9,8 +9,8 @@
 #include "Event/Default/SizeEvent.h"
 #include "Event/Default/SizingEvent.h"
 
-#include "engine/GameCore/Command/GraphicsContext.h"
-#include "engine/GameCore/GraphicsCore.h"
+#include "engine/Runtime/Command/GraphicsContext.h"
+#include "engine/Runtime/GraphicsCore.h"
 
 namespace NoEngine {
 using namespace std;

@@ -5,11 +5,11 @@
 #include "engine/Debug/Logger/Log.h"
 #include "engine/Debug/CrashHandler/ExportDump.h"
 #include "engine/Debug/GraphicsResourceLeakChecker.h"
-#include "engine/GameCore/GraphicsCore.h"
-#include "engine/GameCore/GpuResource/GpuResource.h"
+#include "engine/Runtime/GraphicsCore.h"
+#include "engine/Runtime/GpuResource/GpuResource.h"
 
 namespace NoEngine {
-namespace GameCore {
+namespace Runtime {
 
 namespace {
 std::unique_ptr<WindowManager> sWindowManager;

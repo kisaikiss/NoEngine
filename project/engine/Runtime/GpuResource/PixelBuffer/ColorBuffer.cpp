@@ -1,6 +1,6 @@
 #include "ColorBuffer.h"
 
-#include "engine/GameCore/GraphicsCore.h"
+#include "engine/Runtime/GraphicsCore.h"
 
 namespace NoEngine {
 void ColorBuffer::CreateFromSwapChain(const std::wstring& name, ID3D12Resource* baseResource) {

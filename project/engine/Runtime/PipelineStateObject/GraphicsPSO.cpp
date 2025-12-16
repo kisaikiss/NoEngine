@@ -3,7 +3,7 @@
 #include "RootSignature.h"
 #include "engine/Debug/Logger/Log.h"
 #include "engine/Utilities/Hash.h"
-#include "engine/GameCore/GraphicsCore.h"
+#include "engine/Runtime/GraphicsCore.h"
 
 namespace NoEngine {
 GraphicsPSO::GraphicsPSO(std::wstring name) : PSO(name) {
