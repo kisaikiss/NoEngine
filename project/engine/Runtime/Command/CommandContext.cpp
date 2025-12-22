@@ -3,23 +3,39 @@
 
 #include "../GraphicsCore.h"
 #include "engine/Debug/Logger/Log.h"
+#include "engine/Math/Common.h"
+
+#include "../GpuResource/UploadBuffer.h"
 
 namespace NoEngine {
 CommandContext::CommandContext(D3D12_COMMAND_LIST_TYPE type) :
-type_(type)
-{
+	type_(type),
+	dynamicViewDescriptorHeap_(*this, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV),
+	dynamicSamplerDescriptorHeap_(*this, D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER),
+	cpuLinearAllocator_(LinearAllocatorType::kCpuWritable),
+	gpuLinearAllocator_(LinearAllocatorType::kGpuExclusive) {
+
+	owningManager_ = nullptr;
+	commandList_ = nullptr;
+	currentAllocator_ = nullptr;
+	ZeroMemory(currentDescriptorHeaps_, sizeof(currentDescriptorHeaps_));
+
+	curGraphicsRootSignature_ = nullptr;
+	curComputeRootSignature_ = nullptr;
+	curPipelineState_ = nullptr;
+	numBarriersToFlush_ = 0;
 }
 
-void CommandContext::Reset(void){
+void CommandContext::Reset(void) {
 	// Reset() は、以前に解放されたコンテキストに対してのみ呼び出します。コマンドリストは保持されますが、
 	// 新しいアロケータを要求する必要があります。
 	assert(commandList_ != nullptr && currentAllocator_ == nullptr);
 	currentAllocator_ = GraphicsCore::gCommandListManager.GetQueue(type_).RequestAllocator();
 	commandList_->Reset(currentAllocator_, nullptr);
 
-	m_CurGraphicsRootSignature = nullptr;
-	m_CurComputeRootSignature = nullptr;
-	m_CurPipelineState = nullptr;
+	curGraphicsRootSignature_ = nullptr;
+	curComputeRootSignature_ = nullptr;
+	curPipelineState_ = nullptr;
 	numBarriersToFlush_ = 0;
 
 	BindDescriptorHeaps();
@@ -43,7 +59,7 @@ CommandContext& CommandContext::Begin(const std::wstring id) {
 
 uint64_t CommandContext::Finish(bool WaitForCompletion) {
 	assert(type_ == D3D12_COMMAND_LIST_TYPE_DIRECT || type_ == D3D12_COMMAND_LIST_TYPE_COMPUTE);
-	
+
 	FlushResourceBarriers();
 
 	assert(currentAllocator_ != nullptr);
@@ -76,6 +92,37 @@ GraphicsContext& CommandContext::GetGraphicsContext() {
 	return reinterpret_cast<GraphicsContext&>(*this);
 }
 
+void CommandContext::InitializeBuffer(GpuBuffer& dest, const void* bufferData, size_t numBytes, size_t destOffset) {
+	CommandContext& InitContext = CommandContext::Begin();
+
+	DynAlloc mem = InitContext.ReserveUploadMemory(numBytes);
+	// ToDo : エンジン設計の元にしたMicrosoft MiniEngineではSIMDを利用したより高速なmemcpy()を使用しているので、std::memcpyでは速度に多少問題があると思われます。
+	std::memcpy(mem.DataPtr, bufferData, Math::DivideByMultiple(numBytes, 16));
+
+	// データを中間アップロードヒープにコピーし、アップロードヒープからデフォルトテクスチャへのコピーをスケジュールします。
+	InitContext.TransitionResource(dest, D3D12_RESOURCE_STATE_COPY_DEST, true);
+	InitContext.commandList_->CopyBufferRegion(dest.GetResource(), destOffset, mem.Buffer.GetResource(), 0, numBytes);
+	InitContext.TransitionResource(dest, D3D12_RESOURCE_STATE_GENERIC_READ, true);
+
+	// コマンドリストを実行し、アップロードバッファを解放できるように完了するまで待ちます。
+	InitContext.Finish(true);
+}
+
+void CommandContext::InitializeBuffer(GpuBuffer& dest, const UploadBuffer& src, size_t srcOffset, size_t numBytes, size_t destOffset) {
+	CommandContext& InitContext = CommandContext::Begin();
+
+	size_t maxBytes = std::min<size_t>(dest.GetBufferSize() - destOffset, src.GetBufferSize() - srcOffset);
+	numBytes = std::min<size_t>(maxBytes, numBytes);
+
+	// データを中間アップロードヒープにコピーし、アップロードヒープからデフォルトテクスチャへのコピーをスケジュールします。
+	InitContext.TransitionResource(dest, D3D12_RESOURCE_STATE_COPY_DEST, true);
+	InitContext.commandList_->CopyBufferRegion(dest.GetResource(), destOffset, (ID3D12Resource*)src.GetResource(), srcOffset, numBytes);
+	InitContext.TransitionResource(dest, D3D12_RESOURCE_STATE_GENERIC_READ, true);
+
+	// コマンドリストを実行し、アップロードバッファを解放できるように完了するまで待ちます。
+	InitContext.Finish(true);
+}
+
 void CommandContext::TransitionResource(GpuResource& resource, D3D12_RESOURCE_STATES newState, bool flushImmediate) {
 	D3D12_RESOURCE_STATES oldState = resource.usageState_;
 
@@ -100,14 +147,14 @@ void CommandContext::TransitionResource(GpuResource& resource, D3D12_RESOURCE_ST
 		} else {
 			barrierDesc.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
 		}
-			
+
 		resource.usageState_ = newState;
 	} else {
 		if (newState == D3D12_RESOURCE_STATE_UNORDERED_ACCESS) {
 			//InsertUAVBarrier(Resource, FlushImmediate);
 		}
 	}
-	
+
 	if (flushImmediate || numBarriersToFlush_ == 16) {
 		FlushResourceBarriers();
 	}

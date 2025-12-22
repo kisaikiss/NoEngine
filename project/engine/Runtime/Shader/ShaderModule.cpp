@@ -45,7 +45,7 @@ ShaderModule::ShaderModule(Stage stage, const std::wstring& filePath, const std:
 	// キャッシュバイナリが存在すれば読み込みます。
 	if (LoadBinary(cachePath_)) {
 		// 読み込んだバイナリからReflectionを構築
-		// reflection = ReflectShader(bytecode);
+		reflection_.ReflectShader(bytecode_);
 	} else {
 		// キャッシュがなければコンパイルを試みます。
 		CompileIfNeeded();
@@ -129,6 +129,7 @@ bool ShaderModule::CompileIfNeeded() {
 		(uint8_t*)compiled->GetBufferPointer() + compiled->GetBufferSize());
 
 	// リフレクションを実行
+	reflection_.ReflectShader(bytecode_);
 
 	// キャッシュ保存
 	SaveBinary(cachePath_);
@@ -169,7 +170,7 @@ bool ShaderModule::LoadBinary(const std::wstring& path) {
 	ifs.read((char*)bytecode_.data(), size);
 
 	// リフレクションも再構築
-	//reflection = ReflectShader(bytecode);
+	reflection_.ReflectShader(bytecode_);
 
 	return true;
 
@@ -180,6 +181,10 @@ D3D12_SHADER_BYTECODE ShaderModule::GetBytecode() const {
 	bc.pShaderBytecode = bytecode_.data();
 	bc.BytecodeLength = bytecode_.size();
 	return bc;
+}
+
+const ShaderReflection& ShaderModule::GetReflection() const {
+	return reflection_;
 }
 
 bool ShaderModule::CheckForSourceUpdate() {

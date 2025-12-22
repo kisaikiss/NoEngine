@@ -1,7 +1,7 @@
 #pragma once
 #include "../Utilities/PassKeys.h"
 namespace NoEngine {
-namespace Runtime {
+namespace GameCore {
 /// <summary>
 /// ゲームアプリケーションを作成する際はこのクラスを継承してアプリケーションクラスを作成します。
 /// </summary>

@@ -101,6 +101,20 @@ void Window::Create(WNDPROC windowProc, std::wstring title, uint32_t width, uint
 	// ウィンドウ専用のスワップチェーンを生成します。
 	swapChain_ = std::make_unique<Graphics::GraphicsSwapChain>(core_.hwnd, width, height, sSwapChainBufferCount);
 
+	// viewportをウィンドウサイズと同じにします。
+	viewport_.Width = static_cast<FLOAT>(width);
+	viewport_.Height = static_cast<FLOAT>(height);
+	viewport_.TopLeftX = 0.f;
+	viewport_.TopLeftY = 0.f;
+	viewport_.MinDepth = 0.f;
+	viewport_.MaxDepth = 1.f;
+
+	// シザー矩形はビューポートと同じ大きさにします。
+	scissorRect_.left = 0;
+	scissorRect_.right = width;
+	scissorRect_.top = 0;
+	scissorRect_.bottom = height;
+
 	CreateColorBuffer();
 
 	// ウィンドウを表示します。
@@ -109,15 +123,22 @@ void Window::Create(WNDPROC windowProc, std::wstring title, uint32_t width, uint
 	Log::DebugPrint("Window_WindowCreated title : " + ConvertString(title), VerbosityLevel::kInfo);
 }
 
-void Window::Clear() {
-	UINT backBufferIndex = swapChain_->GetSwapChain()->GetCurrentBackBufferIndex();
-	GraphicsContext& context = GraphicsContext::Begin(L"Clear");
-	context.TransitionResource(*colorBuffers_[backBufferIndex].get(), D3D12_RESOURCE_STATE_RENDER_TARGET);
-	context.SetRenderTarget(colorBuffers_[backBufferIndex]->GetRTV());
-	
-	context.ClearColor(*colorBuffers_[backBufferIndex].get());
+void Window::Clear(GraphicsContext& context) {
+	backBufferIndex_ = swapChain_->GetSwapChain()->GetCurrentBackBufferIndex();
+	context.TransitionResource(*colorBuffers_[backBufferIndex_].get(), D3D12_RESOURCE_STATE_RENDER_TARGET);
+	context.SetRenderTarget(colorBuffers_[backBufferIndex_]->GetRTV());
 
-	context.TransitionResource(*colorBuffers_[backBufferIndex].get(), D3D12_RESOURCE_STATE_PRESENT);
+
+	context.SetViewportAndScissor(viewport_, scissorRect_);
+	context.ClearColor(*colorBuffers_[backBufferIndex_].get());
+
+
+	
+	
+}
+
+void Window::EndFrame(GraphicsContext& context) {
+	context.TransitionResource(*colorBuffers_[backBufferIndex_].get(), D3D12_RESOURCE_STATE_PRESENT);
 	context.Finish();
 	swapChain_->GetSwapChain()->Present(1, 0);
 	Resize();

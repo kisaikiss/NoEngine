@@ -22,5 +22,5 @@ void GpuResource::Destroy() {
 	gpuVirtualAddress_ = D3D12_GPU_VIRTUAL_ADDRESS_NULL;
 	++versionID_;
 	Log::DebugPrint("GpuResource Destroyed", VerbosityLevel::kDebug);
-	}
+}
 }

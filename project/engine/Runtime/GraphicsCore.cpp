@@ -2,6 +2,8 @@
 
 #include "Command/CommandListManager.h"
 #include "ContextManager.h"
+#include "Renderer/MeshRenderer.h"
+#include "engine/Runtime/GpuResource/LinearAllocator/LinearAllocator.h"
 
 #include "../Debug/Logger/Log.h"
 
@@ -13,6 +15,7 @@ std::unique_ptr<Graphics::GraphicsInfrastructures> gGraphicsInfrastructures;
 std::unique_ptr<Graphics::GraphicsDevice> gGraphicsDevice;
 CommandListManager gCommandListManager;
 ContextManager gContextManager;
+WindowManager gWindowManager;
 
 DescriptorAllocator gDescriptorAllocator[D3D12_DESCRIPTOR_HEAP_TYPE_NUM_TYPES] =
 {
@@ -28,9 +31,15 @@ void Initialize() {
 	gGraphicsDevice = make_unique<Graphics::GraphicsDevice>(gGraphicsInfrastructures->GetDXGIAdapter());
 	gCommandListManager.Create();
 	SettingDebugLayer();
+
+	MeshRenderer::Initialize();
 }
 
 void Shutdown(void) {
+	gWindowManager.Shutdown();
+	MeshRenderer::Shutdown();
+	LinearAllocator::DestroyAll();
+
 	for (auto& descriptorAllocator : gDescriptorAllocator) {
 		descriptorAllocator.DestroyAll();
 	}

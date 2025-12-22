@@ -6,6 +6,7 @@ namespace NoEngine {
 using namespace std;
 namespace {
 unordered_map<HWND, unique_ptr<Window>> sWindowMap;
+unordered_map<std::wstring, HWND> sHWNDMap;
 wstring sMainWindowName;
 }
 
@@ -17,6 +18,7 @@ Window* WindowManager::Create(std::wstring title, uint32_t width, uint32_t heigh
 	window->Create(WindowProc, title, width, height, iconPath);
 	HWND hwnd = window->GetWindowHandle();
 	sWindowMap[hwnd] = move(window);
+	sHWNDMap[title] = hwnd;
 	Log::DebugPrint("WindowManager_WindowCreated title : " + ConvertString(title));
 	return sWindowMap[hwnd].get();
 }
@@ -36,6 +38,7 @@ bool WindowManager::ProcessMessage() {
 				Log::DebugPrint("MainWindow is dead", VerbosityLevel::kInfo);
 				isDead_ = true;
 			}
+			// ToDo : sHWNDMapもsWindowMapの要素削除と同時に削除すべきです。
 			it = sWindowMap.erase(it);
 			Log::DebugPrint("Window is erase");
 		} else {
@@ -67,10 +70,22 @@ void WindowManager::SetMainWindowName(std::wstring title) {
 	Log::DebugPrint("SetMainWindowName : " + ConvertString(title), VerbosityLevel::kInfo);
 }
 
-void WindowManager::Clear() {
+Window* WindowManager::GetWindow(const std::wstring& windowTitle) {
+	return sWindowMap[sHWNDMap[windowTitle]].get();
+}
+
+void WindowManager::Clear(GraphicsContext& context) {
 	for (auto& window : sWindowMap) {
 		if (!window.second->IsDead()) {
-			window.second->Clear();
+			window.second->Clear(context);
+		}
+	}
+}
+
+void WindowManager::EndFrame(GraphicsContext& context){
+	for (auto& window : sWindowMap) {
+		if (!window.second->IsDead()) {
+			window.second->EndFrame(context);
 		}
 	}
 }

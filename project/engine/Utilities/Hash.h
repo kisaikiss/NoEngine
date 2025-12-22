@@ -1,5 +1,5 @@
 #pragma once
-#include "../Math/Size.h"
+#include "../Math/Common.h"
 
 // pragma intrinsicで強制的に_mm_crc32_u32と_mm_crc32_u64をintrinsic化します(cpu命令に直接展開するようにする)。
 #pragma intrinsic(_mm_crc32_u32)

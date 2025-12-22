@@ -26,9 +26,9 @@ public:
     void InitStaticSampler(UINT Register, const D3D12_SAMPLER_DESC& NonStaticSamplerDesc,
         D3D12_SHADER_VISIBILITY Visibility = D3D12_SHADER_VISIBILITY_ALL);
 
-    void Finalize(/*const std::wstring& name, D3D12_ROOT_SIGNATURE_FLAGS Flags = D3D12_ROOT_SIGNATURE_FLAG_NONE*/);
+    void Finalize(const std::wstring& name, D3D12_ROOT_SIGNATURE_FLAGS Flags = D3D12_ROOT_SIGNATURE_FLAG_NONE);
 
-    ID3D12RootSignature* GetSignature() const { return signature_.Get(); }
+    ID3D12RootSignature* GetSignature() const { return signature_; }
 
 protected:
 
@@ -41,7 +41,7 @@ protected:
     uint32_t descriptorTableSize_[16];		// 非サンプラディスクリプタテーブルはディスクリプタの数を知る必要があります
     std::unique_ptr<RootParameter[]> paramArray_;
     std::unique_ptr<D3D12_STATIC_SAMPLER_DESC[]> samplerArray_;
-    Microsoft::WRL::ComPtr<ID3D12RootSignature> signature_;
+    ID3D12RootSignature* signature_;
 
 };
 

@@ -50,5 +50,15 @@ namespace Math {
 	__forceinline T AlignDown(T value, size_t alignment) {
 		return AlignDownWithMask(value, alignment - 1);
 	}
+
+	template <typename T>
+	__forceinline bool IsAligned(T value, size_t alignment) {
+		return 0 == ((size_t)value & (alignment - 1));
+	}
+
+	template <typename T>
+	__forceinline T DivideByMultiple(T value, size_t alignment) {
+		return (T)((value + alignment - 1) / alignment);
+	}
 }
 }

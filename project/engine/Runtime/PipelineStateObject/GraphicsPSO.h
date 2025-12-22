@@ -38,8 +38,10 @@ public:
     /// 検証を実行し、高速な状態ブロック比較のためのハッシュ値を計算します。
     /// </summary>
     void Finalize();
+
+    D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc_;
 private:
-	D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc_;
+	
 	std::shared_ptr<const D3D12_INPUT_ELEMENT_DESC> inputLayouts_;
 };
 }

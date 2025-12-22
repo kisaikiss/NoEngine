@@ -1,5 +1,8 @@
 #pragma once
 #include <dxcapi.h>
+
+#include "engine/Runtime/PipelineStateObject/RootSignature.h"
+
 namespace NoEngine {
 /// <summary>
 /// シェーダーリフレクションクラス。このクラスがシェーダーリフレクションを元にルートシグネチャの自動生成などを行います。
@@ -105,4 +108,26 @@ private:
     /// <returns></returns>
     std::string ResourceTypeToString(ShaderReflection::ResourceType t);
 };
+
+namespace InputLayoutBuilder {
+D3D12_INPUT_LAYOUT_DESC BuildFromReflection(const ShaderReflection& refl);
+}
+
+namespace RootSignatureBuilder {
+struct RangeInfo {
+    D3D12_DESCRIPTOR_RANGE_TYPE type;
+    UINT baseRegister;
+    UINT count;
+    UINT space;
+
+};
+
+/// <summary>
+/// ルートシグネチャ自動生成関数
+/// </summary>
+/// <param name="refl">シェーダーリフレクション</param>
+/// <param name="rootSig">生成先ルートシグネチャ</param>
+void BuildFromReflection(const ShaderReflection& refl, RootSignature& rootSig);
+}
+
 }

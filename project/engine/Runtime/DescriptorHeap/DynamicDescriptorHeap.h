@@ -1,9 +1,10 @@
 #pragma once
 #include "DescriptorHeap.h"
 #include "../PipelineStateObject/RootSignature.h"
-#include "../Command/CommandContext.h"
 
 namespace NoEngine {
+class CommandContext;
+
 /// <summary>
 /// 動的に生成されるディスクリプタテーブルのための線形割り当てシステム
 /// </summary>
@@ -20,7 +21,7 @@ public:
 
     void CleanupUsedHeaps(uint64_t fenceValue);
 
-    // Copy multiple handles into the cache area reserved for the specified root parameter.
+    // 指定されたルート パラメータ用に予約されたキャッシュ領域に複数のハンドルをコピーします。
     void SetGraphicsDescriptorHandles(UINT rootIndex, UINT offset, UINT numHandles, const D3D12_CPU_DESCRIPTOR_HANDLE handles[]) {
         graphicsHandleCache_.StageDescriptorHandles(rootIndex, offset, numHandles, handles);
     }
@@ -29,10 +30,10 @@ public:
         computeHandleCache_.StageDescriptorHandles(rootIndex, offset, numHandles, handles);
     }
 
-    // Bypass the cache and upload directly to the shader-visible heap
+    // キャッシュをバイパスし、シェーダーが認識できるヒープに直接アップロードする
     D3D12_GPU_DESCRIPTOR_HANDLE UploadDirect(D3D12_CPU_DESCRIPTOR_HANDLE handles);
 
-    // Deduce cache layout needed to support the descriptor tables needed by the root signature.
+    // ルート署名に必要な記述子テーブルをサポートするために必要なキャッシュ レイアウトを推測します。
     void ParseGraphicsRootSignature(const RootSignature& rootSignature) {
         graphicsHandleCache_.ParseRootSignature(descriptorType_, rootSignature);
     }
@@ -41,7 +42,7 @@ public:
         computeHandleCache_.ParseRootSignature(descriptorType_, rootSignature);
     }
 
-    // Upload any new descriptors in the cache to the shader-visible heap.
+    // キャッシュ内の新しい記述子をシェーダーが認識できるヒープにアップロードします。
     inline void CommitGraphicsRootDescriptorTables(ID3D12GraphicsCommandList4* commandList) {
         if (graphicsHandleCache_.staleRootParamsBitMap_ != 0)
             CopyAndBindStagedTables(graphicsHandleCache_, commandList, &ID3D12GraphicsCommandList4::SetGraphicsRootDescriptorTable);
@@ -58,8 +59,8 @@ private:
     static const uint32_t kNumDescriptorsPerHeap = 1024;
     static std::vector<Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>> sDescriptorHeapPool[2];
     // Static methods
-    static ID3D12DescriptorHeap* RequestDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE HeapType);
-    static void DiscardDescriptorHeaps(D3D12_DESCRIPTOR_HEAP_TYPE HeapType, uint64_t FenceValueForReset, const std::vector<ID3D12DescriptorHeap*>& UsedHeaps);
+    static ID3D12DescriptorHeap* RequestDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE heapType);
+    static void DiscardDescriptorHeaps(D3D12_DESCRIPTOR_HEAP_TYPE heapType, uint64_t fenceValueForReset, const std::vector<ID3D12DescriptorHeap*>& usedHeaps);
 
     // Non-static members
     CommandContext& owningContext_;
@@ -100,12 +101,12 @@ private:
         void CopyAndBindStaleTables(D3D12_DESCRIPTOR_HEAP_TYPE Type, uint32_t DescriptorSize, DescriptorHandle DestHandleStart, ID3D12GraphicsCommandList4* CmdList,
             void (STDMETHODCALLTYPE ID3D12GraphicsCommandList4::* SetFunc)(UINT, D3D12_GPU_DESCRIPTOR_HANDLE));
 
-        DescriptorTableCache m_RootDescriptorTable[kMaxNumDescriptorTables];
-        D3D12_CPU_DESCRIPTOR_HANDLE m_HandleCache[kMaxNumDescriptors];
+        DescriptorTableCache rootDescriptorTable_[kMaxNumDescriptorTables];
+        D3D12_CPU_DESCRIPTOR_HANDLE handleCache_[kMaxNumDescriptors];
 
         void UnbindAllValid();
         void StageDescriptorHandles(UINT RootIndex, UINT Offset, UINT NumHandles, const D3D12_CPU_DESCRIPTOR_HANDLE Handles[]);
-        void ParseRootSignature(D3D12_DESCRIPTOR_HEAP_TYPE Type, const RootSignature& RootSig);
+        void ParseRootSignature(D3D12_DESCRIPTOR_HEAP_TYPE type, const RootSignature& rootSig);
     };
 
     DescriptorHandleCache graphicsHandleCache_;

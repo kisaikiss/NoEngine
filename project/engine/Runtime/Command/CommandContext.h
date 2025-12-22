@@ -4,6 +4,8 @@
 #include "../ContextManager.h"
 #include "../GpuResource/LinearAllocator/LinearAllocator.h"
 #include "CommandListManager.h"
+#include "../DescriptorHeap/DynamicDescriptorHeap.h"
+#include "engine/Runtime/PipelineStateObject/PSO.h"
 
 namespace NoEngine {
 class ColorBuffer;
@@ -75,9 +77,9 @@ public:
 	//// and returns row pitch in bytes.
 	//uint32_t ReadbackTexture(ReadbackBuffer& DstBuffer, PixelBuffer& SrcBuffer);
 
-	//DynAlloc ReserveUploadMemory(size_t SizeInBytes) {
-	//    return m_CpuLinearAllocator.Allocate(SizeInBytes);
-	//}
+	DynAlloc ReserveUploadMemory(size_t SizeInBytes) {
+	    return cpuLinearAllocator_.Allocate(SizeInBytes);
+	}
 
 	//static void InitializeTexture(GpuResource& Dest, UINT NumSubresources, D3D12_SUBRESOURCE_DATA SubData[]);
 
@@ -88,7 +90,7 @@ public:
 	/// <param name="data">コピー元のデータへのポインタ。numBytesバイト分を読み取ります。</param>
 	/// <param name="numBytes">コピーするバイト数。</param>
 	/// <param name="destOffset">宛先バッファ内の書き込み開始オフセット（バイト単位）。既定値は0。</param>
-	//static void InitializeBuffer(GpuBuffer& dest, const void* data, size_t numBytes, size_t destOffset = 0);
+	static void InitializeBuffer(GpuBuffer& dest, const void* data, size_t numBytes, size_t destOffset = 0);
 
 	/// <summary>
 	/// UploadBufferからGpuBufferへデータをコピーして初期化します。
@@ -98,7 +100,8 @@ public:
 	/// <param name="srcOffset">src内で読み取りを開始するオフセット（バイト単位）。</param>
 	/// <param name="numBytes">コピーするバイト数。省略またはデフォルト値（-1 → size_tの最大値）の場合はsrcの残り全てをコピーします。</param>
 	/// <param name="destOffset">dest内で書き込みを開始するオフセット（バイト単位）。デフォルトは0。</param>
-	//static void InitializeBuffer(GpuBuffer& dest, const UploadBuffer& src, size_t srcOffset, size_t numBytes = -1, size_t destOffset = 0);
+	static void InitializeBuffer(GpuBuffer& dest, const UploadBuffer& src, size_t srcOffset, size_t numBytes = -1, size_t destOffset = 0);
+	
 	//static void InitializeTextureArraySlice(GpuResource& Dest, UINT SliceIndex, GpuResource& Src);
 	//
 	//    void WriteBuffer(GpuResource& Dest, size_t DestOffset, const void* Data, size_t NumBytes);
@@ -128,9 +131,9 @@ public:
 	//    void PIXEndEvent(void);
 	//    void PIXSetMarker(const wchar_t* label);
 	//
-	//    void SetDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE Type, ID3D12DescriptorHeap* HeapPtr);
-	//    void SetDescriptorHeaps(UINT HeapCount, D3D12_DESCRIPTOR_HEAP_TYPE Type[], ID3D12DescriptorHeap* HeapPtrs[]);
-	//    void SetPipelineState(const PSO& PSO);
+	void SetDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE type, ID3D12DescriptorHeap* heapPtr);
+	void SetDescriptorHeaps(UINT heapCount, D3D12_DESCRIPTOR_HEAP_TYPE type[], ID3D12DescriptorHeap* heapPtrs[]);
+	void SetPipelineState(const PSO& PSO);
 	//
 	//    void SetPredication(ID3D12Resource* Buffer, UINT64 BufferOffset, D3D12_PREDICATION_OP Op);
 	//
@@ -142,25 +145,58 @@ protected:
 	ID3D12GraphicsCommandList4* commandList_;
 	ID3D12CommandAllocator* currentAllocator_;
 
-	ID3D12RootSignature* m_CurGraphicsRootSignature;
-	ID3D12RootSignature* m_CurComputeRootSignature;
-	ID3D12PipelineState* m_CurPipelineState;
+	ID3D12RootSignature* curGraphicsRootSignature_;
+	ID3D12RootSignature* curComputeRootSignature_;
+	ID3D12PipelineState* curPipelineState_;
 
-	//DynamicDescriptorHeap m_DynamicViewDescriptorHeap;		// HEAP_TYPE_CBV_SRV_UAV
-	//DynamicDescriptorHeap m_DynamicSamplerDescriptorHeap;	// HEAP_TYPE_SAMPLER
+	DynamicDescriptorHeap dynamicViewDescriptorHeap_;		// HEAP_TYPE_CBV_SRV_UAV
+	DynamicDescriptorHeap dynamicSamplerDescriptorHeap_;	// HEAP_TYPE_SAMPLER
 
 	D3D12_RESOURCE_BARRIER resourceBarrierBuffer_[16];
 	UINT numBarriersToFlush_;
 
 	ID3D12DescriptorHeap* currentDescriptorHeaps_[D3D12_DESCRIPTOR_HEAP_TYPE_NUM_TYPES];
 
-	//LinearAllocator m_CpuLinearAllocator;
-	//LinearAllocator m_GpuLinearAllocator;
+	LinearAllocator cpuLinearAllocator_;
+	LinearAllocator gpuLinearAllocator_;
 
 	std::wstring id_;
 	void SetID(const std::wstring& id) { id_ = id; }
 	//
 	D3D12_COMMAND_LIST_TYPE type_;
 };
+
+
+inline void CommandContext::SetDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE type, ID3D12DescriptorHeap* heapPtr) {
+	if (currentDescriptorHeaps_[type] != heapPtr) {
+		currentDescriptorHeaps_[type] = heapPtr;
+		BindDescriptorHeaps();
+	}
+}
+
+
+inline void CommandContext::SetDescriptorHeaps(UINT heapCount, D3D12_DESCRIPTOR_HEAP_TYPE type[], ID3D12DescriptorHeap* heapPtrs[]) {
+	bool anyChanged = false;
+
+	for (UINT i = 0; i < heapCount; ++i) {
+		if (currentDescriptorHeaps_[type[i]] != heapPtrs[i]) {
+			currentDescriptorHeaps_[type[i]] = heapPtrs[i];
+			anyChanged = true;
+		}
+	}
+
+	if (anyChanged)
+		BindDescriptorHeaps();
+}
+
+inline void CommandContext::SetPipelineState(const PSO& PSO) {
+	ID3D12PipelineState* PipelineState = PSO.GetPipelineStateObject();
+	if (PipelineState == curPipelineState_)
+		return;
+
+	commandList_->SetPipelineState(PipelineState);
+	curPipelineState_ = PipelineState;
+}
+
 }
 

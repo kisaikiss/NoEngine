@@ -137,6 +137,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="engine\Runtime\PipelineStateObject\GraphicsPSO.cpp" />
     <ClCompile Include="engine\Runtime\PipelineStateObject\PSO.cpp" />
     <ClCompile Include="engine\Runtime\PipelineStateObject\RootSignature.cpp" />
+    <ClCompile Include="engine\Runtime\Renderer\MeshRenderer.cpp" />
     <ClCompile Include="engine\Runtime\Shader\ShaderModule.cpp" />
     <ClCompile Include="engine\Runtime\Shader\ShaderReflection.cpp" />
     <ClCompile Include="engine\Math\Types\Calculations\MatrixCalculations.cpp" />
@@ -199,10 +200,11 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="engine\Runtime\PipelineStateObject\PSO.h" />
     <ClInclude Include="engine\Runtime\PipelineStateObject\RootParameter.h" />
     <ClInclude Include="engine\Runtime\PipelineStateObject\RootSignature.h" />
+    <ClInclude Include="engine\Runtime\Renderer\MeshRenderer.h" />
     <ClInclude Include="engine\Runtime\Shader\ShaderModule.h" />
     <ClInclude Include="engine\Runtime\Shader\ShaderReflection.h" />
     <ClInclude Include="engine\Math\Color\Color.h" />
-    <ClInclude Include="engine\Math\Size.h" />
+    <ClInclude Include="engine\Math\Common.h" />
     <ClInclude Include="engine\Math\Types\Calculations\MatrixCalculations.h" />
     <ClInclude Include="engine\Math\Types\Calculations\QuaternionCalculations.h" />
     <ClInclude Include="engine\Math\Types\Calculations\Vector3Calculations.h" />
@@ -233,6 +235,20 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ProjectReference Include="externals\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">
       <Project>{371b9fa9-4c90-4ac6-a123-aced756d6c77}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="resources\engine\Shaders\Default.PS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="resources\engine\Shaders\Default.VS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

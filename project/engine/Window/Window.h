@@ -43,7 +43,12 @@ public:
 	/// <summary>
 	/// ウィンドウに表示されている画面をクリアします。
 	/// </summary>
-	void Clear();
+	void Clear(GraphicsContext& context);
+
+	/// <summary>
+	/// ウィンドウ
+	/// </summary>
+	void EndFrame(GraphicsContext& context);
 
 	/// <summary>
 	/// ウィンドウハンドルを取得
@@ -109,6 +114,13 @@ private:
 	WindowCore core_;
 	bool isDead_;
 	bool isResize_;
+
+	// ビューポート
+	D3D12_VIEWPORT viewport_;
+	// シザー矩形
+	D3D12_RECT scissorRect_;
+
+	UINT backBufferIndex_;
 
 	void AdjustWindowSize();
 	void CreateColorBuffer();

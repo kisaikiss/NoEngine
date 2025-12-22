@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Window.h"
+#include "engine/Runtime/Command/GraphicsContext.h"
 
 namespace NoEngine {
 /// <summary>
@@ -16,8 +17,11 @@ public:
 
 	void SetMainWindowName(std::wstring title);
 
-	void Clear();
+	Window* GetWindow(const std::wstring& windowTitle);
 
+	void Clear(GraphicsContext& context);
+
+	void EndFrame(GraphicsContext& context);
 private:
 	bool isDead_ = false;
 };

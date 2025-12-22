@@ -51,6 +51,15 @@ public:
 		ID3D12GraphicsCommandList4** list,
 		ID3D12CommandAllocator** allocator);
 
+	/// <summary>
+	/// フェンスにすでに到達しているかどうかを確認するテストを行います。
+	/// </summary>
+	/// <param name="FenceValue">フェンスの値</param>
+	/// <returns>true : 到達している、false : 到達していない</returns>
+	bool IsFenceComplete(uint64_t FenceValue) {
+		return GetQueue(D3D12_COMMAND_LIST_TYPE(FenceValue >> 56)).IsFenceComplete(FenceValue);
+	}
+
 	void WaitForFence(uint64_t FenceValue);
 
 	void IdleGPU(void) {

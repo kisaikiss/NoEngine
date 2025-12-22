@@ -11,7 +11,18 @@ class LinearAllocatorPageManager {
 public:
 
     LinearAllocatorPageManager();
+
+    /// <summary>
+    /// 利用可能なページをリクエストします。
+    /// </summary>
+    /// <returns> 利用可能なリニアアロケーションページ</returns>
     LinearAllocationPage* RequestPage(void);
+
+    /// <summary>
+    /// 新しいページを作成します。
+    /// </summary>
+    /// <param name="pageSize">ページサイズ</param>
+    /// <returns>新たなリニアアロケーションページ</returns>
     LinearAllocationPage* CreateNewPage(size_t pageSize = 0);
 
     // 破棄されたページはリサイクルされます。これは固定サイズのページに適用されます。

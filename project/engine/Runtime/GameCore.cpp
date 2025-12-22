@@ -7,13 +7,11 @@
 #include "engine/Debug/GraphicsResourceLeakChecker.h"
 #include "engine/Runtime/GraphicsCore.h"
 #include "engine/Runtime/GpuResource/GpuResource.h"
+#include "engine/Runtime/Renderer/MeshRenderer.h"
+#include "engine/Runtime/Command/GraphicsContext.h"
 
 namespace NoEngine {
-namespace Runtime {
-
-namespace {
-std::unique_ptr<WindowManager> sWindowManager;
-}
+namespace GameCore {
 
 int RunApplication(AllowAccessOnlyFromWinMain) {
 	//リソースリークチェッカー
@@ -21,8 +19,11 @@ int RunApplication(AllowAccessOnlyFromWinMain) {
 
 	EngineInitialize();
 
-	while (sWindowManager->ProcessMessage() == 0) {
-		sWindowManager->Clear();
+	while (GraphicsCore::gWindowManager.ProcessMessage() == 0) {
+		GraphicsContext& context = GraphicsContext::Begin();
+		GraphicsCore::gWindowManager.Clear(context);
+		MeshRenderer::Render(context);
+		GraphicsCore::gWindowManager.EndFrame(context);
 	}
 
 	EngineFinalize();
@@ -48,19 +49,14 @@ void EngineInitialize() {
 	GraphicsCore::Initialize();
 
 	// ウィンドウの生成、初期化を行います。
-	sWindowManager = std::make_unique<WindowManager>();
-	auto* window = sWindowManager->Create(L"NoEngine", 1280, 720);
-	sWindowManager->SetMainWindowName(L"NoEngine");
+	auto* window = GraphicsCore::gWindowManager.Create(L"NoEngine", 1280, 720);
+	GraphicsCore::gWindowManager.SetMainWindowName(L"NoEngine");
 	window->RegisterWindowEvent(std::make_unique<MainEditorWindowCloseEvent>());
 	//sWindowManager->Create(L"NoWindow", 1280, 720);
 	
 }
 
 void EngineFinalize() {
-	
-	
-	sWindowManager->Shutdown();
-	sWindowManager.reset();
 	GraphicsCore::Shutdown();
 }
 }

@@ -20,8 +20,8 @@ public:
 	/// コンストラクタ
 	/// </summary>
 	/// <param name="stage">シェーダーの種類</param>
-	/// <param name="filePath">シェーダーのprofile</param>
-	/// <param name="options">コンパイル設定</param>
+	/// <param name="filePath">シェーダーのfilePath</param>
+	/// <param name="profile">シェーダーのprofile</param>
 	ShaderModule(Stage stage, const std::wstring& filePath, const std::wstring& profile);
 	~ShaderModule();
 
@@ -54,7 +54,7 @@ public:
 	D3D12_SHADER_BYTECODE GetBytecode() const;
 
 	// リフレクション情報
-   // const ShaderReflection& GetReflection() const;
+   const ShaderReflection& GetReflection() const;
 
 	/// <summary>
 	/// ソースが更新されているかチェックします。
@@ -70,7 +70,7 @@ private:
 	std::wstring cachePath_;
 
 	std::vector<uint8_t> bytecode_;
-	// ShaderReflection reflection;
+	ShaderReflection reflection_;
 
 	std::time_t sourceTimestamp_ = 0;
 	size_t compileHash_ = 0;

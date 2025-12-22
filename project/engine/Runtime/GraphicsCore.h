@@ -2,11 +2,11 @@
 #include "Graphics/GraphicsInfrastructures.h"
 #include "Graphics/GraphicsDevice.h"
 #include "DescriptorHeap/DescriptorAllocator.h"
+#include "Command/CommandListManager.h"
+#include "../Window/WindowManager.h"
+#include "ContextManager.h"
 
 namespace NoEngine {
-class CommandListManager;
-class ContextManager;
-
 /// <summary>
 /// Direct3D 12のグラフィックス関連の基盤
 /// </summary>
@@ -18,6 +18,7 @@ namespace GraphicsCore {
 	extern std::unique_ptr<Graphics::GraphicsDevice> gGraphicsDevice;
 	extern CommandListManager gCommandListManager;
 	extern ContextManager gContextManager;
+	extern WindowManager gWindowManager;
 
 	// ディスクリプタアロケータ(ディスクリプタのメモリ管理)配列。数はD3D12_DESCRIPTOR_HEAP_TYPE
 	extern DescriptorAllocator gDescriptorAllocator[];

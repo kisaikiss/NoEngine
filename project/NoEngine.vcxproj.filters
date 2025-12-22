@@ -168,6 +168,9 @@
     <ClCompile Include="engine\Runtime\Shader\ShaderReflection.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="engine\Runtime\Renderer\MeshRenderer.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Window\WindowManager.h">
@@ -341,7 +344,7 @@
     <ClInclude Include="engine\Utilities\Hash.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="engine\Math\Size.h">
+    <ClInclude Include="engine\Math\Common.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="engine\Runtime\Shader\ShaderModule.h">
@@ -353,5 +356,12 @@
     <ClInclude Include="engine\Runtime\Shader\ShaderReflection.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="engine\Runtime\Renderer\MeshRenderer.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="resources\engine\Shaders\Default.VS.hlsl" />
+    <FxCompile Include="resources\engine\Shaders\Default.PS.hlsl" />
   </ItemGroup>
 </Project>
