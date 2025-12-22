@@ -8,6 +8,8 @@ namespace NoEngine {
 /// シェーダーリフレクションクラス。このクラスがシェーダーリフレクションを元にルートシグネチャの自動生成などを行います。
 /// </summary>
 class ShaderReflection final {
+    friend class InputLayoutBuilder;
+    friend class RootSignatureBuilder;
 public:
     /// <summary>
    /// 入力レイアウト
@@ -19,8 +21,7 @@ public:
         uint32_t inputSlot = 0;
         uint32_t alignedByteOffset = 0;
     };
-    std::vector<InputParameter> inputs_;
-
+  
     /// <summary>
     /// リソースタイプ
     /// </summary>
@@ -46,6 +47,31 @@ public:
         uint32_t space = 0;          // register(b0, space1)
         uint32_t bindCount = 1;      // 配列対応
     };
+
+ 
+    /// <summary>
+    /// ルートシグネチャ自動生成用
+    /// </summary>
+    struct RootParameterInfo {
+        ResourceType type;
+        uint32_t bindPoint;
+        uint32_t space;
+    };
+ 
+    ShaderReflection() = default;
+    ~ShaderReflection() = default;
+
+    void ReflectShader(const std::vector<uint8_t>& bytecode);
+
+   
+    const std::string& GetDebugDump() { return debugDump_; }
+private:
+
+    // デバッグ / Inspector用
+    std::string debugDump_;
+
+    std::vector<InputParameter> inputs_;
+
     std::vector<ResourceBinding> resources_;
 
     // コンピュートシェーダーに使用します。
@@ -59,27 +85,7 @@ public:
     uint32_t shaderModelMajor_ = 0;
     uint32_t shaderModelMinor_ = 0;
 
-    /// <summary>
-    /// ルートシグネチャ自動生成用
-    /// </summary>
-    struct RootParameterInfo {
-        ResourceType type;
-        uint32_t bindPoint;
-        uint32_t space;
-    };
     std::vector<RootParameterInfo> rootParams_;
-
-    ShaderReflection() = default;
-    ~ShaderReflection() = default;
-
-    void ReflectShader(const std::vector<uint8_t>& bytecode);
-
-   
-    const std::string& GetDebugDump() { return debugDump_; }
-private:
-
-    // デバッグ / Inspector用
-    std::string debugDump_;
 
     /// <summary>
     /// リフレクションで取得したインプットレイアウトの情報からフォーマットを推定します。
@@ -109,25 +115,27 @@ private:
     std::string ResourceTypeToString(ShaderReflection::ResourceType t);
 };
 
-namespace InputLayoutBuilder {
-D3D12_INPUT_LAYOUT_DESC BuildFromReflection(const ShaderReflection& refl);
-}
-
-namespace RootSignatureBuilder {
-struct RangeInfo {
-    D3D12_DESCRIPTOR_RANGE_TYPE type;
-    UINT baseRegister;
-    UINT count;
-    UINT space;
-
+class InputLayoutBuilder {
+public:
+    static D3D12_INPUT_LAYOUT_DESC BuildFromReflection(const ShaderReflection& refl);
 };
 
-/// <summary>
-/// ルートシグネチャ自動生成関数
-/// </summary>
-/// <param name="refl">シェーダーリフレクション</param>
-/// <param name="rootSig">生成先ルートシグネチャ</param>
-void BuildFromReflection(const ShaderReflection& refl, RootSignature& rootSig);
-}
+class RootSignatureBuilder {
+public:
+    struct RangeInfo {
+        D3D12_DESCRIPTOR_RANGE_TYPE type;
+        UINT baseRegister;
+        UINT count;
+        UINT space;
+
+    };
+
+    /// <summary>
+    /// ルートシグネチャ自動生成関数
+    /// </summary>
+    /// <param name="refl">シェーダーリフレクション</param>
+    /// <param name="rootSig">生成先ルートシグネチャ</param>
+    static void BuildFromReflection(const ShaderReflection& refl, RootSignature& rootSig);
+};
 
 }

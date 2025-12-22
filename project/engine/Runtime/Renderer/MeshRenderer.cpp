@@ -5,6 +5,7 @@
 #include "engine/Runtime/Shader/ShaderModule.h"
 #include "engine/Runtime/GpuResource/GpuBuffer.h"
 #include "engine/Math/Types/Vector4.h"
+#include "engine/Assets/Material.h"
 
 
 namespace NoEngine {
@@ -15,7 +16,9 @@ namespace {
 vector<GraphicsPSO> sGraphicsPSOs;
 RootSignature sRootSig;
 
+// 描画テスト用
 unique_ptr<ByteAddressBuffer> vertexResource;
+unique_ptr<ByteAddressBuffer> materialResource;
 D3D12_VERTEX_BUFFER_VIEW vbv{};
 Vector4 triangle[] =
 {
@@ -23,6 +26,7 @@ Vector4 triangle[] =
 	{0.0f,0.5f,0.0f,1.f},
 	{0.5f,-0.5f,0.0f,1.f}
 };
+Material material{};
 }
 
 void MeshRenderer::Initialize() {
@@ -31,16 +35,17 @@ void MeshRenderer::Initialize() {
 	ShaderModule defaultVS(ShaderModule::Stage::Vertex, L"resources/engine/Shaders/Default.VS.hlsl", L"vs_6_0");
 	ShaderModule defaultPS(ShaderModule::Stage::Pixel, L"resources/engine/Shaders/Default.PS.hlsl", L"ps_6_0");
 
-	const ShaderReflection& reflection = defaultVS.GetReflection();
+	const ShaderReflection& reflection = defaultPS.GetReflection();
 	RootSignatureBuilder::BuildFromReflection(reflection, sRootSig);
 
 	D3D12_RASTERIZER_DESC rasterizerDesc{};
-	rasterizerDesc.CullMode = D3D12_CULL_MODE_NONE;
+	rasterizerDesc.CullMode = D3D12_CULL_MODE_BACK;
 	rasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
 
 	D3D12_BLEND_DESC blendDesc{};
 	blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
 
+	// ToDo : InputLayoutもシェーダーリフレクションで作成できるようにすべきです。
 	D3D12_INPUT_ELEMENT_DESC inputElementDescs[1] = {};
 	inputElementDescs[0].SemanticName = "POSITION";
 	inputElementDescs[0].SemanticIndex = 0;
@@ -66,11 +71,8 @@ void MeshRenderer::Initialize() {
 	// 三角形の描画テスト用初期化を行います。
 	vertexResource = make_unique<ByteAddressBuffer>();
 	vertexResource->Create(L"vertex", sizeof(triangle), sizeof(Vector4), triangle);
-	//vbv = vertexResource.VertexBufferView();
-	vbv.BufferLocation = vertexResource->GetGpuVirtualAddress();
-	vbv.SizeInBytes = sizeof(triangle);
-	vbv.StrideInBytes = sizeof(Vector4);
-
+	vbv = vertexResource->VertexBufferView(0,sizeof(triangle),sizeof(Vector4));
+	material.color = { 1.f,1.f,0.f,1.f };
 }
 
 void MeshRenderer::Shutdown() {
@@ -88,7 +90,7 @@ void MeshRenderer::Render(GraphicsContext& context) {
 
 	context.SetVertexBuffer(0, vbv);
 	context.SetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
+	context.SetDynamicConstantBufferView(0, sizeof(Material), &material);
 	context.Draw(3);
 
 }

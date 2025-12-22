@@ -232,21 +232,16 @@ D3D12_INPUT_LAYOUT_DESC InputLayoutBuilder::BuildFromReflection(const ShaderRefl
 }
 
 void RootSignatureBuilder::BuildFromReflection(const ShaderReflection& refl, RootSignature& rootSig) {
-	std::vector<RangeInfo> cbvRanges;
 	std::vector<RangeInfo> srvRanges;
 	std::vector<RangeInfo> uavRanges;
 	std::vector<const ShaderReflection::ResourceBinding*> samplers;
+	std::vector<const ShaderReflection::ResourceBinding*> cbvBindings;
 
 	// リソースタイプごとに仕分けします。
 	for (const auto& r : refl.resources_) {
 		switch (r.type) {
 		case ShaderReflection::ResourceType::kConstantBuffer:
-			cbvRanges.push_back({
-				D3D12_DESCRIPTOR_RANGE_TYPE_CBV,
-				r.bindPoint,
-				r.bindCount,
-				r.space
-				});
+			cbvBindings.push_back(&r);
 			break;
 
 		case ShaderReflection::ResourceType::kTexture:
@@ -282,7 +277,7 @@ void RootSignatureBuilder::BuildFromReflection(const ShaderReflection& refl, Roo
 
 	// ルートパラメータの数をテーブルの必要数に合わせてインクリメントします。
 	UINT numRootParams = 0;
-	if (!cbvRanges.empty()) numRootParams++;
+	if (!cbvBindings.empty()) numRootParams++;
 	if (!srvRanges.empty()) numRootParams++;
 	if (!uavRanges.empty()) numRootParams++;
 
@@ -294,20 +289,14 @@ void RootSignatureBuilder::BuildFromReflection(const ShaderReflection& refl, Roo
 	UINT paramIndex = 0;
 
 	// CBV テーブル
-	if (!cbvRanges.empty()) {
+	if (!cbvBindings.empty()) {
 		RootParameter& param = rootSig[paramIndex++];
-		param.InitAsDescriptorTable(
-			static_cast<UINT>(cbvRanges.size()),
-			D3D12_SHADER_VISIBILITY_ALL);
-
-		for (UINT i = 0; i < cbvRanges.size(); ++i) {
-			const auto& ri = cbvRanges[i];
-			param.SetTableRange(
-				i,
-				ri.type,
-				ri.baseRegister,
-				ri.count,
-				ri.space
+		for (auto* r : cbvBindings) {
+			
+			param.InitAsConstantBuffer(
+				r->bindPoint,   // bN
+				D3D12_SHADER_VISIBILITY_ALL,
+				r->space       // space
 			);
 		}
 	}

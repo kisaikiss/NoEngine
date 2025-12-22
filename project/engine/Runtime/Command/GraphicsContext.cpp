@@ -1,6 +1,7 @@
 #include "GraphicsContext.h"
 
 #include "../GpuResource/PixelBuffer/ColorBuffer.h"
+#include "engine/Math/Common.h"
 
 namespace NoEngine {
 void GraphicsContext::ClearColor(ColorBuffer& target) {
@@ -63,6 +64,18 @@ void GraphicsContext::SetViewportAndScissor(UINT x, UINT y, UINT w, UINT h) {
 
 void GraphicsContext::SetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY Topology) {
 	commandList_->IASetPrimitiveTopology(Topology);
+}
+
+void GraphicsContext::SetConstantBuffer(UINT rootIndex, D3D12_GPU_VIRTUAL_ADDRESS cbv) {
+	commandList_->SetGraphicsRootConstantBufferView(rootIndex, cbv);
+}
+
+void GraphicsContext::SetDynamicConstantBufferView(UINT RootIndex, size_t BufferSize, const void* BufferData) {
+	assert(BufferData != nullptr && Math::IsAligned(BufferData, 16));
+	DynAlloc cb = cpuLinearAllocator_.Allocate(BufferSize);
+	//SIMDMemCopy(cb.DataPtr, BufferData, Math::AlignUp(BufferSize, 16) >> 4);
+	memcpy(cb.DataPtr, BufferData, BufferSize);
+	commandList_->SetGraphicsRootConstantBufferView(RootIndex, cb.GpuAddress);
 }
 
 void GraphicsContext::SetIndexBuffer(const D3D12_INDEX_BUFFER_VIEW& ibview) {

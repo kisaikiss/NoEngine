@@ -165,6 +165,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="engine\Assets\Material.h" />
     <ClInclude Include="engine\Debug\CrashHandler\ExportDump.h" />
     <ClInclude Include="engine\Debug\GraphicsResourceLeakChecker.h" />
     <ClInclude Include="engine\Debug\Logger\Log.h" />

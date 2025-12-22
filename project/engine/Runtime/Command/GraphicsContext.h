@@ -26,6 +26,9 @@ public:
     void SetViewportAndScissor(UINT x, UINT y, UINT w, UINT h);
     void SetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY Topology);
 
+    void SetConstantBuffer(UINT rootIndex, D3D12_GPU_VIRTUAL_ADDRESS cbv);
+    void SetDynamicConstantBufferView(UINT RootIndex, size_t BufferSize, const void* BufferData);
+
     void SetIndexBuffer(const D3D12_INDEX_BUFFER_VIEW& ibview);
     void SetVertexBuffer(UINT slot, const D3D12_VERTEX_BUFFER_VIEW& vbview);
     void SetVertexBuffers(UINT startSlot, UINT count, const D3D12_VERTEX_BUFFER_VIEW vbviews[]);
