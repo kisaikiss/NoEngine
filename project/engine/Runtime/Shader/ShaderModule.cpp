@@ -43,14 +43,10 @@ ShaderModule::ShaderModule(Stage stage, const std::wstring& filePath, const std:
 	cachePath_ = cacheDir + L"/" + stem + L"_" + hashStr + L".dxil";
 
 	// キャッシュバイナリが存在すれば読み込みます。
-	if (LoadBinary(cachePath_)) {
-		// 読み込んだバイナリからReflectionを構築
-		reflection_.ReflectShader(bytecode_);
-	} else {
+	if (!LoadBinary(cachePath_)) {
 		// キャッシュがなければコンパイルを試みます。
 		CompileIfNeeded();
 	}
-
 
 }
 

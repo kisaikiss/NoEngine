@@ -35,8 +35,9 @@ void MeshRenderer::Initialize() {
 	ShaderModule defaultVS(ShaderModule::Stage::Vertex, L"resources/engine/Shaders/Default.VS.hlsl", L"vs_6_0");
 	ShaderModule defaultPS(ShaderModule::Stage::Pixel, L"resources/engine/Shaders/Default.PS.hlsl", L"ps_6_0");
 
-	const ShaderReflection& reflection = defaultPS.GetReflection();
-	RootSignatureBuilder::BuildFromReflection(reflection, sRootSig);
+	const ShaderReflection& vsReflection = defaultVS.GetReflection();
+	const ShaderReflection& psReflection = defaultPS.GetReflection();
+	RootSignatureBuilder::BuildFromReflection(psReflection, sRootSig);
 
 	D3D12_RASTERIZER_DESC rasterizerDesc{};
 	rasterizerDesc.CullMode = D3D12_CULL_MODE_BACK;
@@ -45,20 +46,13 @@ void MeshRenderer::Initialize() {
 	D3D12_BLEND_DESC blendDesc{};
 	blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
 
-	// ToDo : InputLayoutもシェーダーリフレクションで作成できるようにすべきです。
-	D3D12_INPUT_ELEMENT_DESC inputElementDescs[1] = {};
-	inputElementDescs[0].SemanticName = "POSITION";
-	inputElementDescs[0].SemanticIndex = 0;
-	inputElementDescs[0].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
-	inputElementDescs[0].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
-
-	//D3D12_INPUT_LAYOUT_DESC inputLayout = InputLayoutBuilder::BuildFromReflection(reflection);
+	std::vector<D3D12_INPUT_ELEMENT_DESC> inputLayout = InputLayoutBuilder::BuildFromReflection(vsReflection);
 
 	GraphicsPSO defaultPSO(L"Renderer : Default PSO");
 	defaultPSO.SetRootSignature(sRootSig);
 	defaultPSO.SetRasterizerState(rasterizerDesc);
 	defaultPSO.SetBlendState(blendDesc);
-	defaultPSO.SetInputLayout(_countof(inputElementDescs), inputElementDescs);
+	defaultPSO.SetInputLayout(inputLayout);
 	defaultPSO.SetPrimitiveTopologyType(D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
 	DXGI_FORMAT rtvFormat[] = { DXGI_FORMAT_R8G8B8A8_UNORM_SRGB };
 	defaultPSO.SetRenderTargetFormats(1, rtvFormat , DXGI_FORMAT_UNKNOWN);

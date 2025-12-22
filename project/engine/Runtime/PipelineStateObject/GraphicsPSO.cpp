@@ -61,6 +61,9 @@ void GraphicsPSO::SetRenderTargetFormats(UINT numRTVs, const DXGI_FORMAT* rtvFor
 	psoDesc_.SampleDesc.Count = msaaCount;
 	psoDesc_.SampleDesc.Quality = msaaQuality;
 }
+void GraphicsPSO::SetInputLayout(const std::vector<D3D12_INPUT_ELEMENT_DESC>& inputElements) {
+	SetInputLayout(static_cast<UINT>(inputElements.size()), inputElements.data());
+}
 void GraphicsPSO::SetInputLayout(UINT numElements, const D3D12_INPUT_ELEMENT_DESC* inputElementDescs) {
 	psoDesc_.InputLayout.NumElements = numElements;
 	if (numElements > 0) {

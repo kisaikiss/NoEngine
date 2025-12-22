@@ -209,13 +209,13 @@ std::string ShaderReflection::ResourceTypeToString(ShaderReflection::ResourceTyp
 
 }
 
-D3D12_INPUT_LAYOUT_DESC InputLayoutBuilder::BuildFromReflection(const ShaderReflection& refl) {
+std::vector<D3D12_INPUT_ELEMENT_DESC> InputLayoutBuilder::BuildFromReflection(const ShaderReflection& refl) {
 	std::vector<D3D12_INPUT_ELEMENT_DESC> layout;
 	layout.reserve(refl.inputs_.size());
-
+	
 	for (const auto& input : refl.inputs_) {
+		
 		D3D12_INPUT_ELEMENT_DESC desc = {};
-
 		desc.SemanticName = input.semanticName.c_str();
 		desc.SemanticIndex = input.semanticIndex;
 		desc.Format = input.format;
@@ -226,8 +226,8 @@ D3D12_INPUT_LAYOUT_DESC InputLayoutBuilder::BuildFromReflection(const ShaderRefl
 
 		layout.push_back(desc);
 	}
-	D3D12_INPUT_LAYOUT_DESC result = { layout.data(), (UINT)layout.size() };
-	return result;
+
+	return layout;
 
 }
 

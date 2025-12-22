@@ -117,7 +117,7 @@ private:
 
 class InputLayoutBuilder {
 public:
-    static D3D12_INPUT_LAYOUT_DESC BuildFromReflection(const ShaderReflection& refl);
+    static std::vector<D3D12_INPUT_ELEMENT_DESC> BuildFromReflection(const ShaderReflection& refl);
 };
 
 class RootSignatureBuilder {
