@@ -32,12 +32,15 @@ Material material{};
 void MeshRenderer::Initialize() {
 	// ToDo : 現在はシェーダーコンパイル、PSO生成をここで行っていますが、アプリケーション側で動的に行えるようにするべきです。
 	ShaderModule::Initialize();
-	ShaderModule defaultVS(ShaderModule::Stage::Vertex, L"resources/engine/Shaders/Default.VS.hlsl", L"vs_6_0");
-	ShaderModule defaultPS(ShaderModule::Stage::Pixel, L"resources/engine/Shaders/Default.PS.hlsl", L"ps_6_0");
+	ShaderModule defaultVS(ShaderStage::Vertex, L"resources/engine/Shaders/Default.VS.hlsl", L"vs_6_0");
+	ShaderModule defaultPS(ShaderStage::Pixel, L"resources/engine/Shaders/Default.PS.hlsl", L"ps_6_0");
 
 	const ShaderReflection& vsReflection = defaultVS.GetReflection();
 	const ShaderReflection& psReflection = defaultPS.GetReflection();
-	RootSignatureBuilder::BuildFromReflection(psReflection, sRootSig);
+	std::vector<ShaderReflection> refls;
+	refls.push_back(vsReflection);
+	refls.push_back(psReflection);
+	RootSignatureBuilder::BuildFromReflection(refls, sRootSig);
 
 	D3D12_RASTERIZER_DESC rasterizerDesc{};
 	rasterizerDesc.CullMode = D3D12_CULL_MODE_BACK;

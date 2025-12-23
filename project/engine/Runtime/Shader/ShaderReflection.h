@@ -2,6 +2,7 @@
 #include <dxcapi.h>
 
 #include "engine/Runtime/PipelineStateObject/RootSignature.h"
+#include "ShaderStage.h"
 
 namespace NoEngine {
 /// <summary>
@@ -61,7 +62,7 @@ public:
     ShaderReflection() = default;
     ~ShaderReflection() = default;
 
-    void ReflectShader(const std::vector<uint8_t>& bytecode);
+    void ReflectShader(const std::vector<uint8_t>& bytecode, ShaderStage stage);
 
    
     const std::string& GetDebugDump() { return debugDump_; }
@@ -82,6 +83,7 @@ private:
     // メタ情報
     std::string entryPoint_;
     std::string targetProfile_;
+    ShaderStage stage_;
     uint32_t shaderModelMajor_ = 0;
     uint32_t shaderModelMinor_ = 0;
 
@@ -122,20 +124,12 @@ public:
 
 class RootSignatureBuilder {
 public:
-    struct RangeInfo {
-        D3D12_DESCRIPTOR_RANGE_TYPE type;
-        UINT baseRegister;
-        UINT count;
-        UINT space;
-
-    };
-
     /// <summary>
     /// ルートシグネチャ自動生成関数
     /// </summary>
     /// <param name="refl">シェーダーリフレクション</param>
     /// <param name="rootSig">生成先ルートシグネチャ</param>
-    static void BuildFromReflection(const ShaderReflection& refl, RootSignature& rootSig);
+    static void BuildFromReflection(const std::vector<ShaderReflection>& reflections, RootSignature& rootSig);
 };
 
 }

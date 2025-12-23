@@ -14,7 +14,7 @@ Microsoft::WRL::ComPtr <IDxcIncludeHandler> sIncludeHandler;
 bool isInitialized = false;
 }
 
-ShaderModule::ShaderModule(Stage stage, const std::wstring& filePath, const std::wstring& profile) :
+ShaderModule::ShaderModule(ShaderStage stage, const std::wstring& filePath, const std::wstring& profile) :
 	stage_(stage),
 	filePath_(filePath),
 	profile_(profile) {
@@ -125,7 +125,7 @@ bool ShaderModule::CompileIfNeeded() {
 		(uint8_t*)compiled->GetBufferPointer() + compiled->GetBufferSize());
 
 	// リフレクションを実行
-	reflection_.ReflectShader(bytecode_);
+	reflection_.ReflectShader(bytecode_, stage_);
 
 	// キャッシュ保存
 	SaveBinary(cachePath_);
@@ -166,7 +166,7 @@ bool ShaderModule::LoadBinary(const std::wstring& path) {
 	ifs.read((char*)bytecode_.data(), size);
 
 	// リフレクションも再構築
-	reflection_.ReflectShader(bytecode_);
+	reflection_.ReflectShader(bytecode_, stage_);
 
 	return true;
 

@@ -1,5 +1,6 @@
 #pragma once
 #include "ShaderReflection.h"
+#include "ShaderStage.h"
 
 namespace NoEngine {
 /// <summary>
@@ -7,14 +8,6 @@ namespace NoEngine {
 /// </summary>
 class ShaderModule final {
 public:
-	enum class Stage {
-		Vertex,
-		Pixel,
-		Compute,
-		Geometry,
-		Hull,
-		Domain
-	};
 
 	/// <summary>
 	/// コンストラクタ
@@ -22,7 +15,7 @@ public:
 	/// <param name="stage">シェーダーの種類</param>
 	/// <param name="filePath">シェーダーのfilePath</param>
 	/// <param name="profile">シェーダーのprofile</param>
-	ShaderModule(Stage stage, const std::wstring& filePath, const std::wstring& profile);
+	ShaderModule(ShaderStage stage, const std::wstring& filePath, const std::wstring& profile);
 	~ShaderModule();
 
 	static void Initialize();
@@ -63,7 +56,7 @@ public:
 	bool CheckForSourceUpdate();
 
 private:
-	Stage stage_;
+	ShaderStage stage_;
 	std::wstring filePath_;
 	std::wstring profile_;
 

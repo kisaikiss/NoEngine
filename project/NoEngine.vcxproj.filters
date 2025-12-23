@@ -362,6 +362,9 @@
     <ClInclude Include="engine\Assets\Material.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="engine\Runtime\Shader\ShaderStage.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\engine\Shaders\Default.VS.hlsl" />

@@ -214,6 +214,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="engine\Math\Types\Vector2.h" />
     <ClInclude Include="engine\Math\Types\Vector3.h" />
     <ClInclude Include="engine\Math\Types\Vector4.h" />
+    <ClInclude Include="engine\Runtime\Shader\ShaderStage.h" />
     <ClInclude Include="engine\Utilities\Conversion\ConvertString.h" />
     <ClInclude Include="engine\Utilities\FileUtilities.h" />
     <ClInclude Include="engine\Utilities\Hash.h" />
