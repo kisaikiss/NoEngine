@@ -1,5 +1,6 @@
 #pragma once
 #include "Matrix3x3.h"
+#include "Vector3.h"
 
 namespace NoEngine {
 struct Matrix4x4;
@@ -17,6 +18,7 @@ public:
 
 	void FromRotationMatrix(const Matrix3x3& rotation);
 	void FromRotationMatrix(const Matrix4x4& rotation);
+	void FromAxisAngle(const Vector3& axis, float angle);
 
 	static const Quaternion ZERO;
 	static const Quaternion IDENTITY;

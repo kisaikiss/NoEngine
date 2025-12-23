@@ -129,7 +129,14 @@ public:
     /// </summary>
     /// <param name="refl">シェーダーリフレクション</param>
     /// <param name="rootSig">生成先ルートシグネチャ</param>
-    static void BuildFromReflection(const std::vector<ShaderReflection>& reflections, RootSignature& rootSig);
+    static void BuildFromReflection(const std::vector<ShaderReflection>& reflections, RootSignature& rootSig, const std::string& rootSigName);
+
+    /// <summary>
+    /// ルートパラメータのインデックスマップを取得します。
+    /// </summary>
+    /// <param name="rootSigName">生成時に指定したルートシグネチャ名</param>
+    /// <returns>インデックスマップ</returns>
+    static std::unordered_map<std::string, uint32_t>& GetRootIndexMap(std::string rootSigName);
 };
 
 }

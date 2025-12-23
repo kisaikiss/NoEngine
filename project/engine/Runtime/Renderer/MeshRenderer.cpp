@@ -6,7 +6,8 @@
 #include "engine/Runtime/GpuResource/GpuBuffer.h"
 #include "engine/Math/Types/Vector4.h"
 #include "engine/Assets/Material.h"
-
+#include "engine/Math/Types/Matrix4x4.h"
+#include "engine/Math/Types/Transform.h"
 
 namespace NoEngine {
 
@@ -27,6 +28,9 @@ Vector4 triangle[] =
 	{0.5f,-0.5f,0.0f,1.f}
 };
 Material material{};
+Matrix4x4 wvpData{};
+Transform transform;
+float angle;
 }
 
 void MeshRenderer::Initialize() {
@@ -40,7 +44,7 @@ void MeshRenderer::Initialize() {
 	std::vector<ShaderReflection> refls;
 	refls.push_back(vsReflection);
 	refls.push_back(psReflection);
-	RootSignatureBuilder::BuildFromReflection(refls, sRootSig);
+	RootSignatureBuilder::BuildFromReflection(refls, sRootSig, "defaultRootSig");
 
 	D3D12_RASTERIZER_DESC rasterizerDesc{};
 	rasterizerDesc.CullMode = D3D12_CULL_MODE_BACK;
@@ -70,6 +74,9 @@ void MeshRenderer::Initialize() {
 	vertexResource->Create(L"vertex", sizeof(triangle), sizeof(Vector4), triangle);
 	vbv = vertexResource->VertexBufferView(0,sizeof(triangle),sizeof(Vector4));
 	material.color = { 1.f,1.f,0.f,1.f };
+	wvpData = Matrix4x4::IDENTITY;
+	transform = Transform();
+	angle = 0.f;
 }
 
 void MeshRenderer::Shutdown() {
@@ -87,7 +94,12 @@ void MeshRenderer::Render(GraphicsContext& context) {
 
 	context.SetVertexBuffer(0, vbv);
 	context.SetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	context.SetDynamicConstantBufferView(0, sizeof(Material), &material);
+	std::unordered_map<std::string, uint32_t>& rootIndex = RootSignatureBuilder::GetRootIndexMap("defaultRootSig");
+	context.SetDynamicConstantBufferView(rootIndex["gMaterial"], sizeof(Material), &material);
+	angle += 0.01f;
+	transform.rotation.FromAxisAngle(Vector3(0.f, 1.f, 0.f), angle);
+	wvpData = transform.MakeAffineMatrix4x4();
+	context.SetDynamicConstantBufferView(rootIndex["gTransformationMatrix"], sizeof(Matrix4x4), &wvpData);
 	context.Draw(3);
 
 }

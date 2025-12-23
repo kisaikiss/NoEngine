@@ -22,6 +22,8 @@ public:
 		rotation = temp.GetRotation();
 		transition = temp.GetTranslate();
 	}
+
+	Matrix4x4 MakeAffineMatrix4x4();
 };
 
 

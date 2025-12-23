@@ -109,6 +109,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="engine\Debug\GraphicsResourceLeakChecker.cpp" />
     <ClCompile Include="engine\Debug\Logger\Log.cpp" />
     <ClCompile Include="engine\Math\Types\Matrix3x3.cpp" />
+    <ClCompile Include="engine\Math\Types\Transform.cpp" />
     <ClCompile Include="engine\Runtime\Command\CommandAllocator.cpp" />
     <ClCompile Include="engine\Runtime\Command\CommandAllocatorPool.cpp" />
     <ClCompile Include="engine\Runtime\Command\CommandContext.cpp" />

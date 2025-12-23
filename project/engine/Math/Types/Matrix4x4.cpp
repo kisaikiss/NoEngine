@@ -3,7 +3,11 @@
 namespace NoEngine {
 const Matrix4x4 Matrix4x4::ZERO(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 const Matrix4x4 Matrix4x4::ZEROAFFINE(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
-const Matrix4x4 Matrix4x4::IDENTITY(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+const Matrix4x4 Matrix4x4::IDENTITY(
+	1, 0, 0, 0,
+	0, 1, 0, 0, 
+	0, 0, 1, 0,
+	0, 0, 0, 1);
 
 Matrix4x4 operator*(const Matrix4x4& matrix1, const Matrix4x4& matrix2) {
 	return MathCalculations::Multiply(matrix1, matrix2);
@@ -55,6 +59,10 @@ Matrix4x4::Matrix4x4(float m00, float m01, float m02, float m03,
 	m[1][0] = m10; m[1][1] = m11; m[1][2] = m12; m[1][3] = m13;
 	m[2][0] = m20; m[2][1] = m21; m[2][2] = m22; m[2][3] = m23;
 	m[3][0] = m30; m[3][1] = m31; m[3][2] = m32; m[3][3] = m33;
+}
+
+void Matrix4x4::MakeAffine(const Vector3& scale, const Quaternion& rotate, const Vector3& translate) {
+	*this = MathCalculations::MakeAffineMatrix(scale, rotate, translate);
 }
 
 }

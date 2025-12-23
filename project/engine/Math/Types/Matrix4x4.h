@@ -30,6 +30,8 @@ public:
 
 	Vector3 GetTranslate() const { return Vector3(m[3][0], m[3][1], m[3][2]); }
 
+	void MakeAffine(const Vector3& scale, const Quaternion& rotate, const Vector3& translate);
+
 	static const Matrix4x4 ZERO;
 	static const Matrix4x4 ZEROAFFINE;
 	static const Matrix4x4 IDENTITY;

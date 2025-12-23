@@ -19,6 +19,7 @@ Matrix4x4 Multiply(Matrix4x4 const& matrix1, Matrix4x4 const& matrix2) {
 
 	for (int i = 0; i < 4; i++) {
 		for (int j = 0; j < 4; j++) {
+			result.m[i][j] = 0;
 			for (int k = 0; k < 4; k++) {
 				result.m[i][j] += matrix1.m[i][k] * matrix2.m[k][j];
 			}

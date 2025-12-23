@@ -149,6 +149,7 @@ void RootSignature::Finalize(const std::wstring& name, D3D12_ROOT_SIGNATURE_FLAG
 
         HRESULT hr = D3D12SerializeRootSignature(&RootDesc, D3D_ROOT_SIGNATURE_VERSION_1, pOutBlob.GetAddressOf(), pErrorBlob.GetAddressOf());
         if (FAILED(hr)) {
+            NoEngine::Log::DebugPrint((char*)pErrorBlob->GetBufferPointer(), VerbosityLevel::kCritical);
             assert(false);
         }
 

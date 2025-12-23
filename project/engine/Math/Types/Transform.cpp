@@ -1,0 +1,14 @@
+#include "Transform.h"
+
+namespace NoEngine {
+
+Matrix4x4 Transform::MakeAffineMatrix4x4() {
+    Matrix4x4 result;
+    result.MakeAffine(scale, rotation, transition);
+    if (parent) {
+        return result * parent->MakeAffineMatrix4x4();
+    }
+    return result;
+}
+}
+
