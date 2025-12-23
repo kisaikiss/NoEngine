@@ -4,20 +4,18 @@
 namespace NoEngine {
 namespace MathCalculations {
 Matrix4x4 MakeIdentity4x4() {
-	Matrix4x4 result = {
-		{
-			1.0f,0.0f,0.0f,0.0f,
-			0.0f,1.0f,0.0f,0.0f,
-			0.0f,0.0f,1.0f,0.0f,
-			0.0f,0.0f,0.0f,1.0f
-		}
-	};
+	Matrix4x4 result(
+		1.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 1.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f
+		);
 	return result;
 }
 
 
 Matrix4x4 Multiply(Matrix4x4 const& matrix1, Matrix4x4 const& matrix2) {
-	Matrix4x4 result{};
+	Matrix4x4 result;
 
 	for (int i = 0; i < 4; i++) {
 		for (int j = 0; j < 4; j++) {

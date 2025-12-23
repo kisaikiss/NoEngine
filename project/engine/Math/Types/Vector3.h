@@ -15,6 +15,12 @@ public:
 	[[nodiscard]] float Length() const noexcept;
 	[[nodiscard]] float LengthSquared() const noexcept;
 	[[nodiscard]] Vector3 Normalize() const;
+
+	static const Vector3 ZERO;
+	static const Vector3 RIGHT;
+	static const Vector3 UP;
+	static const Vector3 FORWARD;
+	static const Vector3 UNIT_SCALE;
 };
 
 Vector3 operator+(const Vector3& v1, const Vector3& v2);

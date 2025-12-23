@@ -88,12 +88,11 @@ Matrix4x4 MakeRotateMatrix(const Quaternion& quaternion) {
 	float wz = q.w * q.z;
 
 
-	Matrix4x4 result = {
-		{ww + xx - yy - zz, 2.0f * (xy + wz), 2.0f * (xz - wy),0.0f,
-		 2.0f * (xy - wz), ww - xx + yy - zz, 2.0f * (yz + wx), 0.0f,
-		 2.0f * (xz + wy), 2.0f * (yz - wx),ww - xx - yy + zz,0.0f,
-		0.0f,0.0f,0.0f,1.0f}
-	};
+	Matrix4x4 result (
+		ww + xx - yy - zz, 2.0f * (xy + wz), 2.0f * (xz - wy),0.0f,
+		2.0f * (xy - wz), ww - xx + yy - zz, 2.0f * (yz + wx), 0.0f,
+		2.0f * (xz + wy), 2.0f * (yz - wx),ww - xx - yy + zz,0.0f,
+		0.0f,0.0f,0.0f,1.0f);
 
 	return result;
 }

@@ -108,6 +108,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="engine\Debug\CrashHandler\ExportDump.cpp" />
     <ClCompile Include="engine\Debug\GraphicsResourceLeakChecker.cpp" />
     <ClCompile Include="engine\Debug\Logger\Log.cpp" />
+    <ClCompile Include="engine\Math\Types\Matrix3x3.cpp" />
     <ClCompile Include="engine\Runtime\Command\CommandAllocator.cpp" />
     <ClCompile Include="engine\Runtime\Command\CommandAllocatorPool.cpp" />
     <ClCompile Include="engine\Runtime\Command\CommandContext.cpp" />
@@ -169,6 +170,8 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="engine\Debug\CrashHandler\ExportDump.h" />
     <ClInclude Include="engine\Debug\GraphicsResourceLeakChecker.h" />
     <ClInclude Include="engine\Debug\Logger\Log.h" />
+    <ClInclude Include="engine\Math\Types\Matrix3x3.h" />
+    <ClInclude Include="engine\Math\Types\Transform.h" />
     <ClInclude Include="engine\Runtime\Command\CommandAllocator.h" />
     <ClInclude Include="engine\Runtime\Command\CommandAllocatorPool.h" />
     <ClInclude Include="engine\Runtime\Command\CommandContext.h" />

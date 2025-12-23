@@ -3,6 +3,12 @@
 
 namespace NoEngine {
 
+const Vector3 Vector3::ZERO(0.f, 0.f, 0.f);
+const Vector3 Vector3::RIGHT(1.f, 0.f, 0.f);
+const Vector3 Vector3::UP(0.f, 1.f, 0.f);
+const Vector3 Vector3::FORWARD(0.f, 0.f, 1.f);
+const Vector3 Vector3::UNIT_SCALE(1.f, 1.f, 1.f);
+
 Vector3 operator+(const Vector3& v1, const Vector3& v2) {
 	return Vector3(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z);
 }

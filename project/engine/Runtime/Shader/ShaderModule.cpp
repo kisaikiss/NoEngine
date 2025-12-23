@@ -3,6 +3,7 @@
 #include "../../Utilities/FileUtilities.h"
 #include "engine/Debug/Logger/Log.h"
 
+
 #pragma comment(lib, "dxcompiler.lib")
 
 namespace NoEngine {
