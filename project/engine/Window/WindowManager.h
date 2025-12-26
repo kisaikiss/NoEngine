@@ -3,6 +3,7 @@
 #include "Window.h"
 #include "engine/Runtime/Command/GraphicsContext.h"
 
+
 namespace NoEngine {
 /// <summary>
 /// ウィンドウを管理するクラス
@@ -18,6 +19,8 @@ public:
 	void SetMainWindowName(std::wstring title);
 
 	Window* GetWindow(const std::wstring& windowTitle);
+
+	Window* GetMainWindow();
 
 	void Clear(GraphicsContext& context);
 

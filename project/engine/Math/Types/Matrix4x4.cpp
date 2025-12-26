@@ -65,4 +65,8 @@ void Matrix4x4::MakeAffine(const Vector3& scale, const Quaternion& rotate, const
 	*this = MathCalculations::MakeAffineMatrix(scale, rotate, translate);
 }
 
+void Matrix4x4::Inverse() {
+	*this = MathCalculations::Inverse(*this);
+}
+
 }

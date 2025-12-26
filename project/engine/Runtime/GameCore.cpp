@@ -9,9 +9,16 @@
 #include "engine/Runtime/GpuResource/GpuResource.h"
 #include "engine/Runtime/Renderer/MeshRenderer.h"
 #include "engine/Runtime/Command/GraphicsContext.h"
-
+#ifdef USE_IMGUI
+#include "engine/Editor/ImGuiManager.h"
+namespace {
+NoEngine::Editor::ImGuiManager imguiManager;
+}
+#endif // USE_IMGUI
 namespace NoEngine {
 namespace GameCore {
+
+
 
 int RunApplication(AllowAccessOnlyFromWinMain) {
 	//リソースリークチェッカー
@@ -20,9 +27,19 @@ int RunApplication(AllowAccessOnlyFromWinMain) {
 	EngineInitialize();
 
 	while (GraphicsCore::gWindowManager.ProcessMessage() == 0) {
+#ifdef USE_IMGUI
+		imguiManager.BeginFrame();
+#endif // USE_IMGUI
+
+		
 		GraphicsContext& context = GraphicsContext::Begin();
 		GraphicsCore::gWindowManager.Clear(context);
 		MeshRenderer::Render(context);
+#ifdef USE_IMGUI
+		imguiManager.Render(context);
+#endif // USE_IMGUI
+
+		
 		GraphicsCore::gWindowManager.EndFrame(context);
 	}
 
@@ -53,10 +70,17 @@ void EngineInitialize() {
 	GraphicsCore::gWindowManager.SetMainWindowName(L"NoEngine");
 	window->RegisterWindowEvent(std::make_unique<MainEditorWindowCloseEvent>());
 	//sWindowManager->Create(L"NoWindow", 1280, 720);
+#ifdef USE_IMGUI
+	imguiManager.Initialize();
+#endif // USE_IMGUI
+
 	
 }
 
 void EngineFinalize() {
+#ifdef USE_IMGUI
+	imguiManager.Shutdown();
+#endif // USE_IMGUI
 	GraphicsCore::Shutdown();
 }
 }

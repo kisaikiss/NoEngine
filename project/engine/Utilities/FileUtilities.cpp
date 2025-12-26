@@ -4,6 +4,8 @@
 
 namespace NoEngine {
 namespace Utilities {
+ByteArray NullFile = make_shared<vector<uint8_t> >(vector<uint8_t>());
+
 std::wstring LoadFileAsString(const std::wstring& path) {
     // ファイルを開きます。（バイナリモード + 位置移動可能）
     std::ifstream ifs(path, std::ios::binary);

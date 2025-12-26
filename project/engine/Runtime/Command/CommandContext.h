@@ -81,7 +81,13 @@ public:
 	    return cpuLinearAllocator_.Allocate(SizeInBytes);
 	}
 
-	//static void InitializeTexture(GpuResource& Dest, UINT NumSubresources, D3D12_SUBRESOURCE_DATA SubData[]);
+	/// <summary>
+	/// テクスチャを初期化します。
+	/// </summary>
+	/// <param name="Dest">初期化先のGPUバッファへの参照</param>
+	/// <param name="NumSubresources"></param>
+	/// <param name="SubData"></param>
+	static void InitializeTexture(GpuResource& dest, UINT numSubresources, D3D12_SUBRESOURCE_DATA subData[]);
 
 	/// <summary>
 	/// GPUバッファを初期化します。指定したバイト数をソースデータから宛先バッファの指定オフセットにコピーします。
@@ -137,6 +143,8 @@ public:
 	//
 	//    void SetPredication(ID3D12Resource* Buffer, UINT64 BufferOffset, D3D12_PREDICATION_OP Op);
 	//
+
+	ID3D12GraphicsCommandList4* GetCommandList() const { return commandList_; }
 protected:
 
 	void BindDescriptorHeaps(void);

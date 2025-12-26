@@ -2,6 +2,13 @@
 #include "engine/Debug/Logger/Log.h"
 #include "engine/Utilities/Conversion/ConvertString.h"
 
+#ifdef USE_IMGUI
+#include "externals/imgui/imgui.h"
+#include "externals/imgui/imgui_impl_dx12.h"
+#include "externals/imgui/imgui_impl_win32.h"
+IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+#endif // USE_IMGUI
+
 namespace NoEngine {
 using namespace std;
 namespace {
@@ -74,6 +81,10 @@ Window* WindowManager::GetWindow(const std::wstring& windowTitle) {
 	return sWindowMap[sHWNDMap[windowTitle]].get();
 }
 
+Window* WindowManager::GetMainWindow() {
+	return sWindowMap[sHWNDMap[sMainWindowName]].get();
+}
+
 void WindowManager::Clear(GraphicsContext& context) {
 	for (auto& window : sWindowMap) {
 		if (!window.second->IsDead()) {
@@ -91,10 +102,10 @@ void WindowManager::EndFrame(GraphicsContext& context){
 }
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
+#ifdef USE_IMGUI
 	// ImGuiにメッセージを渡します。ImGuiが処理中なら後続の処理を打ち切ります。
-	/*if (ImGui_ImplWin32_WndProcHandler(hwnd, msg, wpram, lparam)) {
-		return true;
-	}*/
+	if (ImGui_ImplWin32_WndProcHandler(hwnd, msg, wparam, lparam)) return true;
+#endif // USE_IMGUI
 	// ウィンドウのインスタンスを取得します。
 	auto it = sWindowMap.find(hwnd);
 	if (it == sWindowMap.end()) {

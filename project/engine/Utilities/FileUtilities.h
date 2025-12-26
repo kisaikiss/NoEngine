@@ -1,6 +1,12 @@
 #pragma once
+
 namespace NoEngine {
 namespace Utilities {
+using namespace std;
+
+typedef shared_ptr<vector<uint8_t> > ByteArray;
+extern ByteArray NullFile;
+
 /// <summary>
 /// ファイルの中身をwstring型で返します。
 /// </summary>

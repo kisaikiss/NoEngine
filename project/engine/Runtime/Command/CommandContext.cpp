@@ -92,6 +92,20 @@ GraphicsContext& CommandContext::GetGraphicsContext() {
 	return reinterpret_cast<GraphicsContext&>(*this);
 }
 
+void CommandContext::InitializeTexture(GpuResource& dest, UINT numSubresources, D3D12_SUBRESOURCE_DATA subData[]) {
+	UINT64 uploadBufferSize = GetRequiredIntermediateSize(dest.GetResource(), 0, numSubresources);
+
+	CommandContext& InitContext = CommandContext::Begin();
+
+	// データを中間アップロードヒープにコピーし、アップロードヒープからデフォルトテクスチャへのコピーをスケジュールします。
+	DynAlloc mem = InitContext.ReserveUploadMemory(uploadBufferSize);
+	UpdateSubresources(InitContext.commandList_, dest.GetResource(), mem.Buffer.GetResource(), 0, 0, numSubresources, subData);
+	InitContext.TransitionResource(dest, D3D12_RESOURCE_STATE_GENERIC_READ);
+
+	// コマンドリストを実行し、アップロードバッファを解放できるように完了するまで待ちます。
+	InitContext.Finish(true);
+}
+
 void CommandContext::InitializeBuffer(GpuBuffer& dest, const void* bufferData, size_t numBytes, size_t destOffset) {
 	CommandContext& InitContext = CommandContext::Begin();
 

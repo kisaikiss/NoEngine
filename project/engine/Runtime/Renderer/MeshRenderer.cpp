@@ -8,6 +8,7 @@
 #include "engine/Assets/Material.h"
 #include "engine/Math/Types/Matrix4x4.h"
 #include "engine/Math/Types/Transform.h"
+#include "engine/Functions/Camera/Camera.h"
 
 namespace NoEngine {
 
@@ -31,7 +32,10 @@ Material material{};
 Matrix4x4 wvpData{};
 Transform transform;
 float angle;
+std::unique_ptr<Camera> camera;
 }
+
+DescriptorHeap MeshRenderer::gTextureHeap;
 
 void MeshRenderer::Initialize() {
 	// ToDo : 現在はシェーダーコンパイル、PSO生成をここで行っていますが、アプリケーション側で動的に行えるようにするべきです。
@@ -69,6 +73,8 @@ void MeshRenderer::Initialize() {
 	defaultPSO.Finalize();
 	sGraphicsPSOs.push_back(defaultPSO);
 
+	gTextureHeap.Create(L"Scene Texture Descriptors", D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 4096);
+
 	// 三角形の描画テスト用初期化を行います。
 	vertexResource = make_unique<ByteAddressBuffer>();
 	vertexResource->Create(L"vertex", sizeof(triangle), sizeof(Vector4), triangle);
@@ -77,9 +83,11 @@ void MeshRenderer::Initialize() {
 	wvpData = Matrix4x4::IDENTITY;
 	transform = Transform();
 	angle = 0.f;
+	
 }
 
 void MeshRenderer::Shutdown() {
+	gTextureHeap.Destroy();
 	vertexResource->Destroy();
 	vertexResource.reset();
 	PSO::DestroyAll();
@@ -88,6 +96,14 @@ void MeshRenderer::Shutdown() {
 }
 
 void MeshRenderer::Render(GraphicsContext& context) {
+	if (!camera) {
+		camera = std::make_unique<Camera>();
+		Transform ct;
+		ct.rotation = { 0.f,0.f,0.f,1.f };
+		ct.scale = { 1.f,1.f,1.f };
+		ct.translate = { 0.f,0.f,-5.f };
+		camera->SetTransform(ct);
+	}
 
 	context.SetRootSignature(sRootSig);
 	context.SetPipelineState(sGraphicsPSOs.back());
@@ -96,9 +112,11 @@ void MeshRenderer::Render(GraphicsContext& context) {
 	context.SetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	std::unordered_map<std::string, uint32_t>& rootIndex = RootSignatureBuilder::GetRootIndexMap("defaultRootSig");
 	context.SetDynamicConstantBufferView(rootIndex["gMaterial"], sizeof(Material), &material);
-	angle += 0.01f;
+	angle += 0.05f;
 	transform.rotation.FromAxisAngle(Vector3(0.f, 1.f, 0.f), angle);
 	wvpData = transform.MakeAffineMatrix4x4();
+	camera->Update();
+	wvpData = wvpData * camera->GetViewProjMatrix();
 	context.SetDynamicConstantBufferView(rootIndex["gTransformationMatrix"], sizeof(Matrix4x4), &wvpData);
 	context.Draw(3);
 

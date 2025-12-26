@@ -1,5 +1,6 @@
 #pragma once
 #include "engine/Runtime/Command/GraphicsContext.h"
+#include "engine/Runtime/DescriptorHeap/DescriptorHeap.h"
 namespace NoEngine {
 
 
@@ -15,17 +16,17 @@ enum class RootBindings {
     kNumRootBindings
 };
 
-class MeshRenderer {
-public:
+namespace MeshRenderer {
 	/// <summary>
 	/// レンダラーのイニシャライズ関数。シェーダーコンパイルやPSO生成などを行います。
 	/// </summary>
-	static void Initialize(void);
+	void Initialize(void);
 
-    static void Shutdown(void);
+    void Shutdown(void);
 
-    static void Render(GraphicsContext& context);
-private:
+    void Render(GraphicsContext& context);
+
+    extern DescriptorHeap gTextureHeap;
 };
 }
 

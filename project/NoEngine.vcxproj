@@ -55,7 +55,7 @@
     <ClCompile>
       <WarningLevel>Level4</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_WINDOWS;DEBUG_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_WINDOWS;DEBUG_BUILD;USE_IMGUI;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp23</LanguageStandard>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
@@ -105,6 +105,9 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="engine\Assets\Texture\TextureManager.cpp" />
+    <ClCompile Include="engine\Functions\Camera\Camera.cpp" />
+    <ClCompile Include="engine\Functions\Camera\CameraBase.cpp" />
     <ClCompile Include="engine\Debug\CrashHandler\ExportDump.cpp" />
     <ClCompile Include="engine\Debug\GraphicsResourceLeakChecker.cpp" />
     <ClCompile Include="engine\Debug\Logger\Log.cpp" />
@@ -132,6 +135,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="engine\Runtime\GpuResource\PixelBuffer\ColorBuffer.cpp" />
     <ClCompile Include="engine\Runtime\GpuResource\PixelBuffer\PixelBuffer.cpp" />
     <ClCompile Include="engine\Runtime\GpuResource\UploadBuffer.cpp" />
+    <ClCompile Include="engine\Runtime\Graphics\GraphicsCommon.cpp" />
     <ClCompile Include="engine\Runtime\Graphics\GraphicsDevice.cpp" />
     <ClCompile Include="engine\Runtime\Graphics\GraphicsInfrastructures.cpp" />
     <ClCompile Include="engine\Runtime\GraphicsCore.cpp" />
@@ -160,13 +164,41 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="engine\Window\Event\MainEditor\MainEditorWindowCloseEvent.cpp" />
     <ClCompile Include="engine\Window\Window.cpp" />
     <ClCompile Include="engine\Window\WindowManager.cpp" />
+    <ClCompile Include="externals\imgui\imgui.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="externals\imgui\imgui_demo.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="externals\imgui\imgui_draw.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="externals\imgui\imgui_impl_dx12.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="externals\imgui\imgui_impl_win32.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="externals\imgui\imgui_tables.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="externals\imgui\imgui_widgets.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="engine\Editor\ImGuiManager.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="engine\Assets\Texture\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="engine\Assets\Texture\TextureManager.h" />
+    <ClInclude Include="engine\Functions\Camera\Camera.h" />
+    <ClInclude Include="engine\Functions\Camera\CameraBase.h" />
     <ClInclude Include="engine\Assets\Material.h" />
     <ClInclude Include="engine\Debug\CrashHandler\ExportDump.h" />
     <ClInclude Include="engine\Debug\GraphicsResourceLeakChecker.h" />
@@ -197,6 +229,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="engine\Runtime\GpuResource\PixelBuffer\ColorBuffer.h" />
     <ClInclude Include="engine\Runtime\GpuResource\PixelBuffer\PixelBuffer.h" />
     <ClInclude Include="engine\Runtime\GpuResource\UploadBuffer.h" />
+    <ClInclude Include="engine\Runtime\Graphics\GraphicsCommon.h" />
     <ClInclude Include="engine\Runtime\Graphics\GraphicsDevice.h" />
     <ClInclude Include="engine\Runtime\Graphics\GraphicsInfrastructures.h" />
     <ClInclude Include="engine\Runtime\GraphicsCore.h" />
@@ -235,7 +268,35 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="engine\Window\WindowCore.h" />
     <ClInclude Include="engine\Window\WindowManager.h" />
     <ClInclude Include="engine\Window\WindowSize.h" />
+    <ClInclude Include="externals\imgui\imconfig.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="externals\imgui\imgui.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="externals\imgui\imgui_impl_dx12.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="externals\imgui\imgui_impl_win32.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="externals\imgui\imgui_internal.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="externals\imgui\imstb_rectpack.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="externals\imgui\imstb_textedit.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="externals\imgui\imstb_truetype.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="engine\Editor\ImGuiManager.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="engine\Assets\Texture\Texture.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="externals\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">
