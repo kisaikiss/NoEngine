@@ -2,12 +2,18 @@
 #include "engine/Runtime/GraphicsCore.h"
 #include "engine/Runtime/Renderer/MeshRenderer.h"
 
+// ToDo : ImGuiは現在NoEngine.sln内に配置しています。専用のImGui.slnを作成し、そこに配置すべきです。
+#include "externals/imgui/imgui.h"
+#include "externals/imgui/imgui_impl_dx12.h"
+#include "externals/imgui/imgui_impl_win32.h"
+
 namespace NoEngine {
 namespace Editor {
 void ImGuiManager::Initialize() {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO();
+	// ToDo : ImGuiウィンドウを画面外に出せるように設定しましょう。
 	//io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 

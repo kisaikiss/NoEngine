@@ -25,5 +25,26 @@ std::wstring LoadFileAsString(const std::wstring& path) {
     
     return ConvertString(buffer);
 }
+
+ByteArray ReadFileHelper(const std::wstring& fileName) {
+    if (!std::filesystem::exists(fileName))
+        return NullFile;
+
+    std::ifstream file(fileName, std::ios::in | std::ios::binary);
+    if (!file)
+        return NullFile;
+
+    auto fileSize = std::filesystem::file_size(fileName);
+
+    ByteArray byteArray = std::make_shared<std::vector<uint8_t>>(fileSize);
+    file.read((char*)byteArray->data(), byteArray->size());
+    file.close();
+
+    return byteArray;
+}
+
+ByteArray ReadFileSync(const std::wstring& fileName) {
+    return ReadFileHelper(*(std::make_shared<std::wstring>(fileName)));
+}
 }
 }

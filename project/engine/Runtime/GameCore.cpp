@@ -82,6 +82,7 @@ void EngineFinalize() {
 	imguiManager.Shutdown();
 #endif // USE_IMGUI
 	GraphicsCore::Shutdown();
+	CoUninitialize();
 }
 }
 }

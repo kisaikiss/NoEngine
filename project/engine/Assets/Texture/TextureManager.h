@@ -1,10 +1,12 @@
 #pragma once
 #include "externals/DirectXTex/DirectXTex.h"
 #include "Texture.h"
+#include "engine/Runtime/Graphics/GraphicsCommon.h"
 
 namespace NoEngine {
-
+// ToDo : Texture周りはコピペが多く、理解が薄い部分が多いです。全体的に理解し、リファクタリングをすべきです。
 class ManagedTexture;
+class TextureRef;
 
 class TextureManager {
 public:
@@ -12,6 +14,9 @@ public:
 	static void Initialize(const std::wstring& TextureRoot);
 	static void Shutdown(void);
     static void DestroyTexture(std::wstring mapKey);
+    static TextureRef LoadTextureFile(const std::wstring& filePath, Graphics::eDefaultTexture fallback = Graphics::eDefaultTexture::kMagenta2D, bool sRGB = false);
+    static TextureRef LoadTextureFile(const std::string& filePath, Graphics::eDefaultTexture fallback = Graphics::eDefaultTexture::kMagenta2D, bool sRGB = false);
+    static ManagedTexture* FindOrLoadTexture(const std::wstring& fileName, Graphics::eDefaultTexture fallback, bool forceSRGB = false);
 private:
 	static DirectX::ScratchImage LordTexture(const std::string& filePath);
 };
@@ -25,16 +30,17 @@ public:
 
     void operator= (std::nullptr_t);
     void operator= (TextureRef& rhs);
+    TextureRef& operator=(const TextureRef& rhs);
+    TextureRef& operator=(TextureRef&& rhs) noexcept;
 
-    // Check that this points to a valid texture (which loaded successfully)
+    // これが有効なテクスチャ（正常にロードされたもの）を指していることを確認します。
     bool IsValid() const;
 
-    // Gets the SRV descriptor handle.  If the reference is invalid,
-    // returns a valid descriptor handle (specified by the fallback)
+    // SRV記述子ハンドルを取得します。参照が無効な場合、
+    // 有効な記述子ハンドル（フォールバックで指定）を返します。
     D3D12_CPU_DESCRIPTOR_HANDLE GetSRV() const;
 
-    // Get the texture pointer.  Client is responsible to not dereference
-    // null pointers.
+    // テクスチャポインタを取得します。クライアントは null ポインタを参照しない責任があります。
     const Texture* Get(void) const;
 
     const Texture* operator->(void) const;

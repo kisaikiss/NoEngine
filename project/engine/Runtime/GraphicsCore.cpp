@@ -4,6 +4,7 @@
 #include "ContextManager.h"
 #include "Renderer/MeshRenderer.h"
 #include "engine/Runtime/GpuResource/LinearAllocator/LinearAllocator.h"
+#include "Graphics/GraphicsCommon.h"
 
 #include "../Debug/Logger/Log.h"
 
@@ -32,19 +33,21 @@ void Initialize() {
 	gCommandListManager.Create();
 	SettingDebugLayer();
 
+	// Graphics::InitializeCommonState();
 	MeshRenderer::Initialize();
 }
 
 void Shutdown(void) {
 	gWindowManager.Shutdown();
 	MeshRenderer::Shutdown();
-	LinearAllocator::DestroyAll();
+	// Graphics::DestroyCommonState();
+	CommandContext::DestroyAllContexts();
 
 	for (auto& descriptorAllocator : gDescriptorAllocator) {
 		descriptorAllocator.DestroyAll();
 	}
 
-	gContextManager.DestroyAllContexts();
+
 	gCommandListManager.Shutdown();
 
 	gGraphicsDevice.reset();

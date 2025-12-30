@@ -14,5 +14,6 @@ extern ByteArray NullFile;
 /// <returns>ファイルの中身</returns>
 std::wstring LoadFileAsString(const std::wstring& path);
 
+ByteArray ReadFileSync(const std::wstring& fileName);
 }
 }

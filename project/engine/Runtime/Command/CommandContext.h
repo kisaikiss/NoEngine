@@ -31,7 +31,7 @@ public:
 
 	~CommandContext(void);
 
-	//static void DestroyAllContexts(void);
+	static void DestroyAllContexts(void);
 
 	static CommandContext& Begin(const std::wstring id = L"");
 

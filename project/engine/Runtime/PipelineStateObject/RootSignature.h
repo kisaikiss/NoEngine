@@ -30,6 +30,8 @@ public:
 
     ID3D12RootSignature* GetSignature() const { return signature_; }
 
+    void Dump() const;
+
 protected:
 
     BOOL finalized_;

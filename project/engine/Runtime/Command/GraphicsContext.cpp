@@ -78,6 +78,23 @@ void GraphicsContext::SetDynamicConstantBufferView(UINT RootIndex, size_t Buffer
 	commandList_->SetGraphicsRootConstantBufferView(RootIndex, cb.GpuAddress);
 }
 
+void GraphicsContext::SetBufferSRV(UINT RootIndex, const GpuBuffer& SRV, UINT64 Offset) {
+	assert((SRV.usageState_ & (D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE | D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE)) != 0);
+	commandList_->SetGraphicsRootShaderResourceView(RootIndex, SRV.GetGpuVirtualAddress() + Offset);
+}
+
+void GraphicsContext::SetDescriptorTable(UINT RootIndex, D3D12_GPU_DESCRIPTOR_HANDLE FirstHandle) {
+	commandList_->SetGraphicsRootDescriptorTable(RootIndex, FirstHandle);
+}
+
+void GraphicsContext::SetDynamicDescriptor(UINT RootIndex, UINT Offset, D3D12_CPU_DESCRIPTOR_HANDLE Handle) {
+	SetDynamicDescriptors(RootIndex, Offset, 1, &Handle);
+}
+
+void GraphicsContext::SetDynamicDescriptors(UINT RootIndex, UINT Offset, UINT Count, const D3D12_CPU_DESCRIPTOR_HANDLE Handles[]) {
+	dynamicViewDescriptorHeap_.SetGraphicsDescriptorHandles(RootIndex, Offset, Count, Handles);
+}
+
 void GraphicsContext::SetIndexBuffer(const D3D12_INDEX_BUFFER_VIEW& ibview) {
 	commandList_->IASetIndexBuffer(&ibview);
 }
@@ -86,6 +103,13 @@ void GraphicsContext::SetVertexBuffer(UINT slot, const D3D12_VERTEX_BUFFER_VIEW&
 }
 void GraphicsContext::SetVertexBuffers(UINT startSlot, UINT count, const D3D12_VERTEX_BUFFER_VIEW vbviews[]) {
 	commandList_->IASetVertexBuffers(startSlot, count, vbviews);
+}
+
+void GraphicsContext::SetDynamicSRV(UINT RootIndex, size_t BufferSize, const void* BufferData) {
+	assert(BufferData != nullptr && Math::IsAligned(BufferData, 16));
+	DynAlloc cb = cpuLinearAllocator_.Allocate(BufferSize);
+	std::memcpy(cb.DataPtr, BufferData, Math::AlignUp(BufferSize, 16) >> 4);
+	commandList_->SetGraphicsRootShaderResourceView(RootIndex, cb.GpuAddress);
 }
 
 void GraphicsContext::Draw(UINT vertexCount, UINT vertexStartOffset) {

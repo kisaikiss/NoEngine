@@ -254,6 +254,19 @@ void DynamicDescriptorHeap::DescriptorHandleCache::UnbindAllValid() {
     }
 }
 
+void DynamicDescriptorHeap::DescriptorHandleCache::StageDescriptorHandles(UINT RootIndex, UINT Offset, UINT NumHandles, const D3D12_CPU_DESCRIPTOR_HANDLE Handles[]) {
+    assert(((1 << RootIndex) & rootDescriptorTablesBitMap_) != 0 && "Root parameter is not a CBV_SRV_UAV descriptor table");
+    assert(Offset + NumHandles <= rootDescriptorTable_[RootIndex].TableSize);
+
+    DescriptorTableCache& TableCache = rootDescriptorTable_[RootIndex];
+    D3D12_CPU_DESCRIPTOR_HANDLE* CopyDest = TableCache.TableStart + Offset;
+    for (UINT i = 0; i < NumHandles; ++i)
+        CopyDest[i] = Handles[i];
+    TableCache.AssignedHandlesBitMap |= ((1 << NumHandles) - 1) << Offset;
+    staleRootParamsBitMap_ |= (1 << RootIndex);
+
+}
+
 void DynamicDescriptorHeap::DescriptorHandleCache::ParseRootSignature(D3D12_DESCRIPTOR_HEAP_TYPE type, const RootSignature& rootSig) {
     UINT CurrentOffset = 0;
 

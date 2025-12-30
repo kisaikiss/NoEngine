@@ -117,7 +117,7 @@ void RootSignature::Finalize(const std::wstring& name, D3D12_ROOT_SIGNATURE_FLAG
             HashCode = Utility::HashState(RootParam.DescriptorTable.pDescriptorRanges,
                 RootParam.DescriptorTable.NumDescriptorRanges, HashCode);
 
-            // We keep track of sampler descriptor tables separately from CBV_SRV_UAV descriptor tables
+            // サンプラー記述子テーブルはCBV_SRV_UAV記述子テーブルとは別に管理します。
             if (RootParam.DescriptorTable.pDescriptorRanges->RangeType == D3D12_DESCRIPTOR_RANGE_TYPE_SAMPLER)
                 samplerTableBitMap_ |= (1 << Param);
             else
@@ -170,5 +170,78 @@ void RootSignature::Finalize(const std::wstring& name, D3D12_ROOT_SIGNATURE_FLAG
     }
 
     finalized_ = true;
+}
+void RootSignature::Dump() const {
+    std::string dump;
+    dump += ("==== RootSignature Dump ====\n");
+
+    for (UINT i = 0; i < numParameters_; ++i) {
+        const auto& p = paramArray_[i];
+
+        dump += "RootParam[" + std::to_string(i) + "]:";
+     
+        switch (p.rootParameter_.ParameterType) {
+        case D3D12_ROOT_PARAMETER_TYPE_CBV:
+            dump += ("CBV\n");
+            dump += ("  Register: " + std::to_string(p.rootParameter_.Descriptor.ShaderRegister));
+            dump += "\n";
+            dump += ("  Space   : " + std::to_string(p.rootParameter_.Descriptor.RegisterSpace));
+            dump += "\n";
+            break;
+
+        case D3D12_ROOT_PARAMETER_TYPE_SRV:
+            dump += ("SRV\n");
+            dump += ("  Register: " + std::to_string(p.rootParameter_.Descriptor.ShaderRegister));
+            dump += "\n";
+            dump += ("  Space   : " + std::to_string(p.rootParameter_.Descriptor.RegisterSpace));
+            dump += "\n";
+            break;
+
+        case D3D12_ROOT_PARAMETER_TYPE_UAV:
+            dump += ("UAV\n");
+            dump += ("  Register: " + std::to_string(p.rootParameter_.Descriptor.ShaderRegister));
+            dump += "\n";
+            dump += ("  Space   : " + std::to_string(p.rootParameter_.Descriptor.RegisterSpace));
+            dump += "\n";
+            break;
+
+        case D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS:
+            dump += ("32BIT_CONSTANTS\n");
+            dump += ("  Register: " + std::to_string(p.rootParameter_.Constants.ShaderRegister));
+            dump += "\n";
+            dump += ("  Space   : " + std::to_string(p.rootParameter_.Constants.RegisterSpace));
+            dump += "\n";
+            dump += ("  Num32BitValues" + std::to_string(p.rootParameter_.Constants.Num32BitValues));
+            dump += "\n";
+            break;
+
+        case D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE:
+            dump += ("DESCRIPTOR_TABLE\n");
+            dump += ("  NumRanges: " + std::to_string(p.rootParameter_.DescriptorTable.NumDescriptorRanges));
+            dump += "\n";
+
+            for (UINT r = 0; r < p.rootParameter_.DescriptorTable.NumDescriptorRanges; ++r) {
+                const auto& range = p.rootParameter_.DescriptorTable.pDescriptorRanges[r];
+                dump += ("    Range[" + std::to_string(r) + "]\n");
+                dump += ("      Type       : " + std::to_string(range.RangeType));
+                dump += "\n";
+                dump += ("      BaseReg    : " + std::to_string(range.BaseShaderRegister));
+                dump += "\n";
+                dump += ("      Count      : " + std::to_string(range.NumDescriptors));
+                dump += "\n";
+                dump += ("      Space      : " + std::to_string(range.RegisterSpace));
+                dump += "\n";
+            }
+            break;
+
+        default:
+            dump += ("UNKNOWN\n");
+            break;
+        }
+    }
+
+    dump += ("==== End RootSignature Dump ====");
+    Log::DebugPrint(dump);
+
 }
 }

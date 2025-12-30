@@ -464,9 +464,18 @@
     <ClInclude Include="engine\Runtime\Graphics\GraphicsCommon.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="engine\Assets\Mesh.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\Math\MathInclude.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\engine\Shaders\Default.VS.hlsl" />
     <FxCompile Include="resources\engine\Shaders\Default.PS.hlsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\engine\Shaders\Default.hlsli" />
   </ItemGroup>
 </Project>

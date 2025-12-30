@@ -196,6 +196,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="engine\Assets\Texture\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="engine\Assets\Mesh.h" />
     <ClInclude Include="engine\Assets\Texture\TextureManager.h" />
     <ClInclude Include="engine\Functions\Camera\Camera.h" />
     <ClInclude Include="engine\Functions\Camera\CameraBase.h" />
@@ -203,6 +204,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="engine\Debug\CrashHandler\ExportDump.h" />
     <ClInclude Include="engine\Debug\GraphicsResourceLeakChecker.h" />
     <ClInclude Include="engine\Debug\Logger\Log.h" />
+    <ClInclude Include="engine\Math\MathInclude.h" />
     <ClInclude Include="engine\Math\Types\Matrix3x3.h" />
     <ClInclude Include="engine\Math\Types\Transform.h" />
     <ClInclude Include="engine\Runtime\Command\CommandAllocator.h" />
@@ -316,6 +318,9 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\engine\Shaders\Default.hlsli" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

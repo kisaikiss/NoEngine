@@ -9,6 +9,8 @@
 #include "engine/Math/Types/Matrix4x4.h"
 #include "engine/Math/Types/Transform.h"
 #include "engine/Functions/Camera/Camera.h"
+#include "engine/Assets/Texture/TextureManager.h"
+#include "engine/Assets/Mesh.h"
 
 namespace NoEngine {
 
@@ -22,17 +24,18 @@ RootSignature sRootSig;
 unique_ptr<ByteAddressBuffer> vertexResource;
 unique_ptr<ByteAddressBuffer> materialResource;
 D3D12_VERTEX_BUFFER_VIEW vbv{};
-Vector4 triangle[] =
+Vertex triangle[] =
 {
-	{-0.5f,-0.5f,0.0f,1.f},
-	{0.0f,0.5f,0.0f,1.f},
-	{0.5f,-0.5f,0.0f,1.f}
+	{{-0.5f,-0.5f,0.0f,1.f},{0.f,1.f}},
+	{{0.0f,0.5f,0.0f,1.f},{0.5f,0.f}},
+	{{0.5f,-0.5f,0.0f,1.f},{1.f,1.f}}
 };
 Material material{};
 Matrix4x4 wvpData{};
 Transform transform;
 float angle;
 std::unique_ptr<Camera> camera;
+TextureRef texRf;
 }
 
 DescriptorHeap MeshRenderer::gTextureHeap;
@@ -66,7 +69,7 @@ void MeshRenderer::Initialize() {
 	defaultPSO.SetInputLayout(inputLayout);
 	defaultPSO.SetPrimitiveTopologyType(D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
 	DXGI_FORMAT rtvFormat[] = { DXGI_FORMAT_R8G8B8A8_UNORM_SRGB };
-	defaultPSO.SetRenderTargetFormats(1, rtvFormat , DXGI_FORMAT_UNKNOWN);
+	defaultPSO.SetRenderTargetFormats(1, rtvFormat, DXGI_FORMAT_UNKNOWN);
 	defaultPSO.SetVertexShader(defaultVS.GetBytecode());
 	defaultPSO.SetPixelShader(defaultPS.GetBytecode());
 	defaultPSO.SetSampleMask(D3D12_DEFAULT_SAMPLE_MASK);
@@ -77,16 +80,17 @@ void MeshRenderer::Initialize() {
 
 	// 三角形の描画テスト用初期化を行います。
 	vertexResource = make_unique<ByteAddressBuffer>();
-	vertexResource->Create(L"vertex", sizeof(triangle), sizeof(Vector4), triangle);
-	vbv = vertexResource->VertexBufferView(0,sizeof(triangle),sizeof(Vector4));
+	vertexResource->Create(L"vertex", sizeof(triangle), sizeof(Vertex), triangle);
+	vbv = vertexResource->VertexBufferView(0, sizeof(triangle), sizeof(Vertex));
 	material.color = { 1.f,1.f,0.f,1.f };
 	wvpData = Matrix4x4::IDENTITY;
 	transform = Transform();
 	angle = 0.f;
-	
+	texRf = TextureManager::LoadTextureFile("resources/engine/uvChecker.dds");
 }
 
 void MeshRenderer::Shutdown() {
+	texRf.~TextureRef();
 	gTextureHeap.Destroy();
 	vertexResource->Destroy();
 	vertexResource.reset();
@@ -108,9 +112,11 @@ void MeshRenderer::Render(GraphicsContext& context) {
 	context.SetRootSignature(sRootSig);
 	context.SetPipelineState(sGraphicsPSOs.back());
 
+
 	context.SetVertexBuffer(0, vbv);
 	context.SetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	std::unordered_map<std::string, uint32_t>& rootIndex = RootSignatureBuilder::GetRootIndexMap("defaultRootSig");
+	
 	context.SetDynamicConstantBufferView(rootIndex["gMaterial"], sizeof(Material), &material);
 	angle += 0.05f;
 	transform.rotation.FromAxisAngle(Vector3(0.f, 1.f, 0.f), angle);
@@ -118,6 +124,8 @@ void MeshRenderer::Render(GraphicsContext& context) {
 	camera->Update();
 	wvpData = wvpData * camera->GetViewProjMatrix();
 	context.SetDynamicConstantBufferView(rootIndex["gTransformationMatrix"], sizeof(Matrix4x4), &wvpData);
+	context.SetDynamicDescriptor(rootIndex["gTexture"], 0, texRf->GetSRV());
+
 	context.Draw(3);
 
 }

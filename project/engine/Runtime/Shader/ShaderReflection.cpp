@@ -235,8 +235,10 @@ std::vector<D3D12_INPUT_ELEMENT_DESC> InputLayoutBuilder::BuildFromReflection(co
 namespace {
 std::unordered_map<std::string, std::unordered_map<std::string, uint32_t>> rootPramIndexMapMap;
 }
-
-void RootSignatureBuilder::BuildFromReflection(const std::vector<ShaderReflection>& reflections, RootSignature& rootSig, const std::string& rootSigName) {
+void RootSignatureBuilder::BuildFromReflection(
+	const std::vector<ShaderReflection>& reflections,
+	RootSignature& rootSig,
+	const std::string& rootSigName) {
 	struct ResourceKey {
 		ShaderReflection::ResourceType type;
 		uint32_t bindPoint;
@@ -262,15 +264,13 @@ void RootSignatureBuilder::BuildFromReflection(const std::vector<ShaderReflectio
 		uint32_t bindPoint;
 		uint32_t space;
 		uint32_t bindCount;
-
-		// このレジスタを使うすべての名前（VS側・PS側など）
-		std::vector<std::string> names;
-
+		std::vector<std::string> names; // このレジスタを使う全シェーダ名
 	};
 
 	std::unordered_map<ResourceKey, MergedResource, ResourceKeyHasher> merged;
 	bool hasVS = false;
 
+	// まずはステージごとのリフレクション結果をマージ
 	for (auto& refl : reflections) {
 		if (refl.stage_ == ShaderStage::Vertex) {
 			hasVS = true;
@@ -280,7 +280,6 @@ void RootSignatureBuilder::BuildFromReflection(const std::vector<ShaderReflectio
 			ResourceKey key{ r.type, r.bindPoint, r.space };
 
 			auto it = merged.find(key);
-
 			if (it == merged.end()) {
 				MergedResource m;
 				m.type = r.type;
@@ -290,43 +289,141 @@ void RootSignatureBuilder::BuildFromReflection(const std::vector<ShaderReflectio
 				m.names.push_back(r.name);
 				merged.emplace(key, std::move(m));
 			} else {
-				// bindCount の最大値を使う（配列の場合など）
 				it->second.bindCount = std::max(it->second.bindCount, std::max(r.bindCount, 1u));
 				it->second.names.push_back(r.name);
 			}
-
 		}
 	}
 
-	rootSig.Reset(static_cast<UINT>(merged.size()));
+	// Sampler の数だけ先に数える
+	uint32_t samplerCount = 0;
+	for (auto& [key, r] : merged) {
+		if (r.type == ShaderReflection::ResourceType::kSampler) {
+			samplerCount++;
+		}
+	}
+
+	// RootParameter 数 = 全リソース - サンプラー
+	rootSig.Reset(static_cast<UINT>(merged.size()) - samplerCount, samplerCount);
+
+	// サンプラー共通設定
+	D3D12_SAMPLER_DESC defaultSampler = {};
+	defaultSampler.Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
+	defaultSampler.AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+	defaultSampler.AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+	defaultSampler.AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+	defaultSampler.MinLOD = 0.0f;
+	defaultSampler.MaxLOD = D3D12_FLOAT32_MAX;
+	defaultSampler.MipLODBias = 0.0f;
+	defaultSampler.MaxAnisotropy = 1;
+	defaultSampler.ComparisonFunc = D3D12_COMPARISON_FUNC_ALWAYS;
+
+	// ここからが重要：
+	// unordered_map だと順序がバラバラなので、一度 vector に集めてソートする
+	std::vector<MergedResource> nonSamplerResources;
+	nonSamplerResources.reserve(merged.size() - samplerCount);
+
+	std::vector<MergedResource> samplerResources;
+	samplerResources.reserve(samplerCount);
+
+	for (auto& [key, r] : merged) {
+		if (r.type == ShaderReflection::ResourceType::kSampler) {
+			samplerResources.push_back(r);
+		} else {
+			nonSamplerResources.push_back(r);
+		}
+	}
+
+	// RootParameter の並び順を決めるソート
+	// 1. CBV
+	// 2. SRV（テクスチャなど）
+	// 3. UAV（必要になったら追加）
+	// その中で space → bindPoint の順に並べる
+	std::sort(nonSamplerResources.begin(), nonSamplerResources.end(),
+		[](const MergedResource& a, const MergedResource& b) {
+			// 型の優先順位
+			auto order = [](ShaderReflection::ResourceType t) {
+				switch (t) {
+				case ShaderReflection::ResourceType::kConstantBuffer:   return 0; // CBV
+				case ShaderReflection::ResourceType::kTexture:
+				case ShaderReflection::ResourceType::kStructuredBuffer:
+				case ShaderReflection::ResourceType::kByteAddressBuffer: return 1; // SRV
+				case ShaderReflection::ResourceType::kRWTexture:
+				case ShaderReflection::ResourceType::kRWStructuredBuffer:
+				case ShaderReflection::ResourceType::kRWByteAddressBuffer: return 2; // UAV
+				default: return 3;
+				}
+				};
+
+			int oa = order(a.type);
+			int ob = order(b.type);
+			if (oa != ob) return oa < ob;
+
+			if (a.space != b.space) return a.space < b.space;
+			return a.bindPoint < b.bindPoint;
+		});
 
 	uint32_t rootIndex = 0;
-	for (auto& [key, r] : merged) {
+	uint32_t samplerIndex = 0;
 
+	// まず Static Sampler を登録
+	for (auto& r : samplerResources) {
+		rootSig.InitStaticSampler(
+			r.bindPoint,
+			defaultSampler,
+			D3D12_SHADER_VISIBILITY_ALL
+		);
+
+		for (auto& name : r.names) {
+			rootPramIndexMapMap[rootSigName][name] = samplerIndex;
+		}
+		samplerIndex++;
+	}
+
+	// 次にソート済みのリソースから RootParameter を構築
+	for (auto& r : nonSamplerResources) {
 		RootParameter& param = rootSig[rootIndex];
 
 		switch (r.type) {
 		case ShaderReflection::ResourceType::kConstantBuffer:
-			param.InitAsConstantBuffer(r.bindPoint, D3D12_SHADER_VISIBILITY_ALL, r.space);
+			// register(bN, spaceM)
+			param.InitAsConstantBuffer(
+				r.bindPoint,                 // bN
+				D3D12_SHADER_VISIBILITY_ALL,
+				r.space                      // space
+			);
 			break;
 
 		case ShaderReflection::ResourceType::kTexture:
+		case ShaderReflection::ResourceType::kStructuredBuffer:
+		case ShaderReflection::ResourceType::kByteAddressBuffer:
+			// SRV (tN, spaceM) を必要数だけ
 			param.InitAsDescriptorRange(
 				D3D12_DESCRIPTOR_RANGE_TYPE_SRV,
-				r.bindPoint,
+				r.bindPoint,                 // tN
 				r.bindCount,
 				D3D12_SHADER_VISIBILITY_ALL,
 				r.space
 			);
 			break;
 
-		case ShaderReflection::ResourceType::kSampler:
-			// StaticSampler を使うならここ
+		case ShaderReflection::ResourceType::kRWTexture:
+		case ShaderReflection::ResourceType::kRWStructuredBuffer:
+		case ShaderReflection::ResourceType::kRWByteAddressBuffer:
+			// 将来 UAV を入れたくなったとき用
+			param.InitAsDescriptorRange(
+				D3D12_DESCRIPTOR_RANGE_TYPE_UAV,
+				r.bindPoint,                 // uN
+				r.bindCount,
+				D3D12_SHADER_VISIBILITY_ALL,
+				r.space
+			);
 			break;
 
 		default:
 			break;
 		}
+
 		// このレジスタを使うすべての名前を同じ RootIndex にマップ
 		for (auto& name : r.names) {
 			rootPramIndexMapMap[rootSigName][name] = rootIndex;
@@ -334,12 +431,13 @@ void RootSignatureBuilder::BuildFromReflection(const std::vector<ShaderReflectio
 
 		rootIndex++;
 	}
+
 	D3D12_ROOT_SIGNATURE_FLAGS flags =
 		hasVS ? D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT
 		: D3D12_ROOT_SIGNATURE_FLAG_NONE;
 
 	rootSig.Finalize(L"AutoGeneratedRootSignature", flags);
-
+	rootSig.Dump();
 }
 
 std::unordered_map<std::string, uint32_t>& RootSignatureBuilder::GetRootIndexMap(std::string rootSigName) {

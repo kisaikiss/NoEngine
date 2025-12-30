@@ -28,10 +28,16 @@ public:
 
     void SetConstantBuffer(UINT rootIndex, D3D12_GPU_VIRTUAL_ADDRESS cbv);
     void SetDynamicConstantBufferView(UINT RootIndex, size_t BufferSize, const void* BufferData);
+    void SetBufferSRV(UINT RootIndex, const GpuBuffer& SRV, UINT64 Offset = 0);
+    void SetDescriptorTable(UINT RootIndex, D3D12_GPU_DESCRIPTOR_HANDLE FirstHandle);
+
+    void SetDynamicDescriptor(UINT RootIndex, UINT Offset, D3D12_CPU_DESCRIPTOR_HANDLE Handle);
+    void SetDynamicDescriptors(UINT RootIndex, UINT Offset, UINT Count, const D3D12_CPU_DESCRIPTOR_HANDLE Handles[]);
 
     void SetIndexBuffer(const D3D12_INDEX_BUFFER_VIEW& ibview);
     void SetVertexBuffer(UINT slot, const D3D12_VERTEX_BUFFER_VIEW& vbview);
     void SetVertexBuffers(UINT startSlot, UINT count, const D3D12_VERTEX_BUFFER_VIEW vbviews[]);
+    void SetDynamicSRV(UINT RootIndex, size_t BufferSize, const void* BufferData);
 
     void Draw(UINT vertexCount, UINT vertexStartOffset = 0);
     void DrawIndexed(UINT indexCount, UINT startIndexLocation = 0, INT baseVertexLocation = 0);

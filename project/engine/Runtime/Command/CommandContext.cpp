@@ -47,6 +47,12 @@ CommandContext::~CommandContext(void) {
 	}
 }
 
+void CommandContext::DestroyAllContexts(void) {
+	LinearAllocator::DestroyAll();
+	DynamicDescriptorHeap::DestroyAll();
+	GraphicsCore::gContextManager.DestroyAllContexts();
+}
+
 CommandContext& CommandContext::Begin(const std::wstring id) {
 	CommandContext* newContext = GraphicsCore::gContextManager.AllocateContext(D3D12_COMMAND_LIST_TYPE_DIRECT);
 	newContext->SetID(id);
@@ -69,6 +75,10 @@ uint64_t CommandContext::Finish(bool WaitForCompletion) {
 
 	queue.DiscardAllocator(fenceValue, currentAllocator_);
 	currentAllocator_ = nullptr;
+	cpuLinearAllocator_.CleanupUsedPages(fenceValue);
+	gpuLinearAllocator_.CleanupUsedPages(fenceValue);
+	dynamicViewDescriptorHeap_.CleanupUsedHeaps(fenceValue);
+	dynamicSamplerDescriptorHeap_.CleanupUsedHeaps(fenceValue);
 
 	if (WaitForCompletion) {
 		GraphicsCore::gCommandListManager.WaitForFence(fenceValue);
@@ -193,21 +203,5 @@ void CommandContext::BindDescriptorHeaps(void) {
 	if (NonNullHeaps > 0)
 		commandList_->SetDescriptorHeaps(NonNullHeaps, HeapsToBind);
 }
-
-//
-//void CommandContext::InitializeBuffer(GpuBuffer& dest, const void* data, size_t numBytes, size_t destOffset) {
-//	CommandContext& initContext = CommandContext::Begin();
-//
-//	DynAlloc mem = InitContext.ReserveUploadMemory(NumBytes);
-//	SIMDMemCopy(mem.DataPtr, BufferData, Math::DivideByMultiple(NumBytes, 16));
-//
-//	// copy data to the intermediate upload heap and then schedule a copy from the upload heap to the default texture
-//	InitContext.TransitionResource(dest, D3D12_RESOURCE_STATE_COPY_DEST, true);
-//	InitContext.m_CommandList->CopyBufferRegion(dest.GetResource(), destOffset, mem.Buffer.GetResource(), 0, NumBytes);
-//	InitContext.TransitionResource(dest, D3D12_RESOURCE_STATE_GENERIC_READ, true);
-//
-//	// Execute the command list and wait for it to finish so we can release the upload buffer
-//	InitContext.Finish(true);
-//}
 
 }
