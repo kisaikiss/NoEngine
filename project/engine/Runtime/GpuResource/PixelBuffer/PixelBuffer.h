@@ -38,12 +38,23 @@ protected:
     void AssociateWithResource(const std::wstring& name, ID3D12Resource* resource, D3D12_RESOURCE_STATES currentState);
 
     /// <summary>
+    /// テクスチャリソースを作成します。
+    /// </summary>
+    /// <param name="device">デバイス</param>
+    /// <param name="name">デバッグ用の名前</param>
+    /// <param name="resourceDesc">リソースの設定</param>
+    /// <param name="clearValue">クリアする値</param>
+    void CreateTextureResource(ID3D12Device* device, const std::wstring& name, const D3D12_RESOURCE_DESC& resourceDesc, D3D12_CLEAR_VALUE clearValue);
+
+    /// <summary>
     /// 指定したDXGI_FORMATのTYPELESS版を返します。
     /// </summary>
     /// <param name="format">TYPELESS版が欲しいDXGI_FORMAT</param>
     /// <returns>DXGI_FORMAT_TYPELESS</returns>
     static DXGI_FORMAT GetBaseFormat(DXGI_FORMAT format);
-
+    static DXGI_FORMAT GetDSVFormat(DXGI_FORMAT format);
+    static DXGI_FORMAT GetDepthFormat(DXGI_FORMAT format);
+    static DXGI_FORMAT GetStencilFormat(DXGI_FORMAT format);
     uint32_t width_;
     uint32_t height_;
     uint32_t arraySize_;

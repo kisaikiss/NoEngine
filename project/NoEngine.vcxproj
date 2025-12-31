@@ -105,6 +105,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="engine\Runtime\GpuResource\PixelBuffer\DepthBuffer.cpp" />
     <ClCompile Include="engine\Assets\Texture\TextureManager.cpp" />
     <ClCompile Include="engine\Functions\Camera\Camera.cpp" />
     <ClCompile Include="engine\Functions\Camera\CameraBase.cpp" />
@@ -196,6 +197,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="engine\Assets\Texture\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="engine\Runtime\GpuResource\PixelBuffer\DepthBuffer.h" />
     <ClInclude Include="engine\Assets\Mesh.h" />
     <ClInclude Include="engine\Assets\Texture\TextureManager.h" />
     <ClInclude Include="engine\Functions\Camera\Camera.h" />

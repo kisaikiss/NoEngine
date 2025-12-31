@@ -115,7 +115,7 @@ void Window::Create(WNDPROC windowProc, std::wstring title, uint32_t width, uint
 	scissorRect_.top = 0;
 	scissorRect_.bottom = height;
 
-	CreateColorBuffer();
+	CreatePixelBuffer();
 
 	// ウィンドウを表示します。
 	ShowWindow(core_.hwnd, SW_SHOW);
@@ -126,12 +126,13 @@ void Window::Create(WNDPROC windowProc, std::wstring title, uint32_t width, uint
 void Window::Clear(GraphicsContext& context) {
 	backBufferIndex_ = swapChain_->GetSwapChain()->GetCurrentBackBufferIndex();
 	context.TransitionResource(*colorBuffers_[backBufferIndex_].get(), D3D12_RESOURCE_STATE_RENDER_TARGET);
-	context.SetRenderTarget(colorBuffers_[backBufferIndex_]->GetRTV());
+	context.TransitionResource(*depthBuffer_, D3D12_RESOURCE_STATE_DEPTH_WRITE);
+	context.SetRenderTarget(colorBuffers_[backBufferIndex_]->GetRTV(),depthBuffer_->GetDSV());
 
 
 	context.SetViewportAndScissor(viewport_, scissorRect_);
 	context.ClearColor(*colorBuffers_[backBufferIndex_].get());
-
+	context.ClearDepthAndStencil(*depthBuffer_);
 
 	
 	
@@ -279,7 +280,7 @@ void Window::AdjustWindowSize() {
 	}
 }
 
-void Window::CreateColorBuffer() {
+void Window::CreatePixelBuffer() {
 	if (colorBuffers_[0]) return;
 
 	// ウィンドウ専用のカラーバッファを生成します。
@@ -293,15 +294,19 @@ void Window::CreateColorBuffer() {
 		colorBuffers_[i] = std::make_unique<ColorBuffer>();
 		colorBuffers_[i]->CreateFromSwapChain(L"Primary SwapChain Buffer", displayPlane.Detach());
 	}
-	Log::DebugPrint("create color buffers");
+	depthBuffer_ = std::make_unique<DepthBuffer>(1.f);
+	depthBuffer_->Create(L"Window Depth Buffer", static_cast<uint32_t>(size_.clientWidth), static_cast<uint32_t>(size_.clientHeight), DXGI_FORMAT_D24_UNORM_S8_UINT);
+
+	Log::DebugPrint("create pixel buffers");
 }
 
-void Window::DestroyColorBuffer() {
+void Window::DestroyPixelBuffer() {
 	GraphicsCore::gCommandListManager.IdleGPU();
 	for (auto& colorBuffer : colorBuffers_) {
 		colorBuffer.reset();
 	}
-	Log::DebugPrint("destroy color buffers");
+	depthBuffer_.reset();
+	Log::DebugPrint("destroy pixel buffers");
 }
 void Window::ResizeSignal() {
 	isResize_ = true;
@@ -310,9 +315,9 @@ void Window::ResizeSignal() {
 
 void Window::Resize() {
 	if (!isResize_) return;
-	DestroyColorBuffer();
+	DestroyPixelBuffer();
 	swapChain_->Resize();
-	CreateColorBuffer();
+	CreatePixelBuffer();
 	isResize_ = false;
 }
 }

@@ -14,34 +14,36 @@ GraphicsPSO::GraphicsPSO(std::wstring name) : PSO(name) {
 	psoDesc_.SampleMask = 0xFFFFFFFFu;
 	psoDesc_.SampleDesc.Count = 1;
 	psoDesc_.InputLayout.NumElements = 0;
-
-
-	/*psoDesc_.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
-	psoDesc_.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
-	psoDesc_.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
-	psoDesc_.DepthStencilState.DepthEnable = FALSE;*/
 }
+
 void GraphicsPSO::SetBlendState(const D3D12_BLEND_DESC& blendDesc) {
 	psoDesc_.BlendState = blendDesc;
 }
+
 void GraphicsPSO::SetRasterizerState(const D3D12_RASTERIZER_DESC& rasterizerDesc) {
 	psoDesc_.RasterizerState = rasterizerDesc;
 }
+
 void GraphicsPSO::SetDepthStencilState(const D3D12_DEPTH_STENCIL_DESC& depthStencilDesc) {
 	psoDesc_.DepthStencilState = depthStencilDesc;
 }
+
 void GraphicsPSO::SetSampleMask(UINT sampleMask) {
 	psoDesc_.SampleMask = sampleMask;
 }
+
 void GraphicsPSO::SetPrimitiveTopologyType(D3D12_PRIMITIVE_TOPOLOGY_TYPE topologyType) {
 	psoDesc_.PrimitiveTopologyType = topologyType;
 }
+
 void GraphicsPSO::SetDepthTargetFormat(DXGI_FORMAT dsvFormat, UINT msaaCount, UINT msaaQuality) {
 	SetRenderTargetFormats(0, nullptr, dsvFormat, msaaCount, msaaQuality);
 }
+
 void GraphicsPSO::SetRenderTargetFormat(DXGI_FORMAT rtvFormat, DXGI_FORMAT dsvFormat, UINT msaaCount, UINT msaaQuality) {
 	SetRenderTargetFormats(1, &rtvFormat, dsvFormat, msaaCount, msaaQuality);
 }
+
 void GraphicsPSO::SetRenderTargetFormats(UINT numRTVs, const DXGI_FORMAT* rtvFormats, DXGI_FORMAT dsvFormat, UINT msaaCount, UINT msaaQuality) {
 	if (numRTVs != 0 && rtvFormats == nullptr) {
 		Log::DebugPrint("Null format array conflicts with non-zero length", VerbosityLevel::kCritical);
@@ -61,9 +63,11 @@ void GraphicsPSO::SetRenderTargetFormats(UINT numRTVs, const DXGI_FORMAT* rtvFor
 	psoDesc_.SampleDesc.Count = msaaCount;
 	psoDesc_.SampleDesc.Quality = msaaQuality;
 }
+
 void GraphicsPSO::SetInputLayout(const std::vector<D3D12_INPUT_ELEMENT_DESC>& inputElements) {
 	SetInputLayout(static_cast<UINT>(inputElements.size()), inputElements.data());
 }
+
 void GraphicsPSO::SetInputLayout(UINT numElements, const D3D12_INPUT_ELEMENT_DESC* inputElementDescs) {
 	psoDesc_.InputLayout.NumElements = numElements;
 	if (numElements > 0) {
@@ -75,6 +79,7 @@ void GraphicsPSO::SetInputLayout(UINT numElements, const D3D12_INPUT_ELEMENT_DES
 	}
 
 }
+
 void GraphicsPSO::SetPrimitiveRestart(D3D12_INDEX_BUFFER_STRIP_CUT_VALUE ibProps) {
 	psoDesc_.IBStripCutValue = ibProps;
 }

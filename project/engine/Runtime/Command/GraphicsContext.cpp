@@ -1,6 +1,7 @@
 #include "GraphicsContext.h"
 
-#include "../GpuResource/PixelBuffer/ColorBuffer.h"
+#include "engine/Runtime/GpuResource/PixelBuffer/ColorBuffer.h"
+#include "engine/Runtime/GpuResource/PixelBuffer/DepthBuffer.h"
 #include "engine/Math/Common.h"
 
 namespace NoEngine {
@@ -13,6 +14,21 @@ void GraphicsContext::ClearColor(ColorBuffer& target) {
 void GraphicsContext::ClearColor(ColorBuffer& target, float color[4]) {
 	FlushResourceBarriers();
 	commandList_->ClearRenderTargetView(target.GetRTV(), color, 0, nullptr);
+}
+
+void GraphicsContext::ClearDepth(DepthBuffer& target) {
+	FlushResourceBarriers();
+	commandList_->ClearDepthStencilView(target.GetDSV(), D3D12_CLEAR_FLAG_DEPTH, target.GetClearDepth(), target.GetClearStencil(), 0, nullptr);
+}
+
+void GraphicsContext::ClearStencil(DepthBuffer& target) {
+	FlushResourceBarriers();
+	commandList_->ClearDepthStencilView(target.GetDSV(), D3D12_CLEAR_FLAG_STENCIL, target.GetClearDepth(), target.GetClearStencil(), 0, nullptr);
+}
+
+void GraphicsContext::ClearDepthAndStencil(DepthBuffer& target) {
+	FlushResourceBarriers();
+	commandList_->ClearDepthStencilView(target.GetDSV(), D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, target.GetClearDepth(), target.GetClearStencil(), 0, nullptr);
 }
 
 void GraphicsContext::SetRootSignature(const RootSignature& rootSig) {
@@ -73,7 +89,6 @@ void GraphicsContext::SetConstantBuffer(UINT rootIndex, D3D12_GPU_VIRTUAL_ADDRES
 void GraphicsContext::SetDynamicConstantBufferView(UINT RootIndex, size_t BufferSize, const void* BufferData) {
 	assert(BufferData != nullptr && Math::IsAligned(BufferData, 16));
 	DynAlloc cb = cpuLinearAllocator_.Allocate(BufferSize);
-	//SIMDMemCopy(cb.DataPtr, BufferData, Math::AlignUp(BufferSize, 16) >> 4);
 	memcpy(cb.DataPtr, BufferData, BufferSize);
 	commandList_->SetGraphicsRootConstantBufferView(RootIndex, cb.GpuAddress);
 }

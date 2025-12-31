@@ -28,14 +28,18 @@ Vertex triangle[] =
 {
 	{{-0.5f,-0.5f,0.0f,1.f},{0.f,1.f}},
 	{{0.0f,0.5f,0.0f,1.f},{0.5f,0.f}},
-	{{0.5f,-0.5f,0.0f,1.f},{1.f,1.f}}
+	{{0.5f,-0.5f,0.0f,1.f},{1.f,1.f}},
+
+	{{-0.5f,-0.5f,0.5f,1.f},{0.f,1.f}},
+	{{0.0f,0.0f,0.0f,1.f},{0.5f,0.f}},
+	{{0.5f,-0.5f,-0.5f,1.f},{1.f,1.f}}
 };
 Material material{};
 Matrix4x4 wvpData{};
 Transform transform;
 float angle;
 std::unique_ptr<Camera> camera;
-TextureRef texRf;
+std::unique_ptr <TextureRef> texRf;
 }
 
 DescriptorHeap MeshRenderer::gTextureHeap;
@@ -60,16 +64,22 @@ void MeshRenderer::Initialize() {
 	D3D12_BLEND_DESC blendDesc{};
 	blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
 
+	D3D12_DEPTH_STENCIL_DESC depthStencilDesc{};
+	depthStencilDesc.DepthEnable = true;
+	depthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
+	depthStencilDesc.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
+
 	std::vector<D3D12_INPUT_ELEMENT_DESC> inputLayout = InputLayoutBuilder::BuildFromReflection(vsReflection);
 
 	GraphicsPSO defaultPSO(L"Renderer : Default PSO");
 	defaultPSO.SetRootSignature(sRootSig);
 	defaultPSO.SetRasterizerState(rasterizerDesc);
 	defaultPSO.SetBlendState(blendDesc);
+	defaultPSO.SetDepthStencilState(depthStencilDesc);
 	defaultPSO.SetInputLayout(inputLayout);
 	defaultPSO.SetPrimitiveTopologyType(D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
 	DXGI_FORMAT rtvFormat[] = { DXGI_FORMAT_R8G8B8A8_UNORM_SRGB };
-	defaultPSO.SetRenderTargetFormats(1, rtvFormat, DXGI_FORMAT_UNKNOWN);
+	defaultPSO.SetRenderTargetFormats(1, rtvFormat, DXGI_FORMAT_D24_UNORM_S8_UINT);
 	defaultPSO.SetVertexShader(defaultVS.GetBytecode());
 	defaultPSO.SetPixelShader(defaultPS.GetBytecode());
 	defaultPSO.SetSampleMask(D3D12_DEFAULT_SAMPLE_MASK);
@@ -86,11 +96,12 @@ void MeshRenderer::Initialize() {
 	wvpData = Matrix4x4::IDENTITY;
 	transform = Transform();
 	angle = 0.f;
-	texRf = TextureManager::LoadTextureFile("resources/engine/uvChecker.dds");
+	
+	texRf = std::make_unique<TextureRef>(TextureManager::LoadTextureFile("resources/engine/uvChecker.dds"));
 }
 
 void MeshRenderer::Shutdown() {
-	texRf.~TextureRef();
+	texRf.reset();
 	gTextureHeap.Destroy();
 	vertexResource->Destroy();
 	vertexResource.reset();
@@ -126,7 +137,7 @@ void MeshRenderer::Render(GraphicsContext& context) {
 	context.SetDynamicConstantBufferView(rootIndex["gTransformationMatrix"], sizeof(Matrix4x4), &wvpData);
 	context.SetDynamicDescriptor(rootIndex["gTexture"], 0, texRf->GetSRV());
 
-	context.Draw(3);
+	context.Draw(6);
 
 }
 }

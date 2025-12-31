@@ -11,12 +11,17 @@ public:
 
     void ClearColor(ColorBuffer& target);
     void ClearColor(ColorBuffer& target, float color[4]);
+    void ClearDepth(DepthBuffer& target);
+    void ClearStencil(DepthBuffer& target);
+    void ClearDepthAndStencil(DepthBuffer& target);
 
     void SetRootSignature(const RootSignature& rootSig);
 
     void SetRenderTargets(UINT NumRTVs, const D3D12_CPU_DESCRIPTOR_HANDLE RTVs[]);
     void SetRenderTargets(UINT NumRTVs, const D3D12_CPU_DESCRIPTOR_HANDLE RTVs[], D3D12_CPU_DESCRIPTOR_HANDLE DSV);
     void SetRenderTarget(D3D12_CPU_DESCRIPTOR_HANDLE RTV) { SetRenderTargets(1, &RTV); }
+    void SetRenderTarget(D3D12_CPU_DESCRIPTOR_HANDLE RTV, D3D12_CPU_DESCRIPTOR_HANDLE DSV) { SetRenderTargets(1, &RTV, DSV); }
+    void SetDepthStencilTarget(D3D12_CPU_DESCRIPTOR_HANDLE DSV) { SetRenderTargets(0, nullptr, DSV); }
 
     void SetViewport(const D3D12_VIEWPORT& vp);
     void SetViewport(FLOAT x, FLOAT y, FLOAT w, FLOAT h, FLOAT minDepth = 0.0f, FLOAT maxDepth = 1.0f);

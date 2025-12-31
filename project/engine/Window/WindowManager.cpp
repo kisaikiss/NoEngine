@@ -36,6 +36,20 @@ void WindowManager::Shutdown() {
 }
 
 bool WindowManager::ProcessMessage() {
+	
+
+	if (!sWindowMap.empty()) {
+		for (auto& pair : sWindowMap) {
+
+			bool isFailure = pair.second->ProcessMessage();
+
+			if (isFailure) {
+				Log::DebugPrint("ProcessMessage is failure", VerbosityLevel::kCritical);
+				return true;
+			}
+		}
+	}
+
 	for (auto it = sWindowMap.begin(); it != sWindowMap.end();) {
 		Window* window = it->second.get();
 
@@ -50,18 +64,6 @@ bool WindowManager::ProcessMessage() {
 			Log::DebugPrint("Window is erase");
 		} else {
 			++it;
-		}
-	}
-
-	if (!sWindowMap.empty()) {
-		for (auto& pair : sWindowMap) {
-
-			bool isFailure = pair.second->ProcessMessage();
-
-			if (isFailure) {
-				Log::DebugPrint("ProcessMessage is failure", VerbosityLevel::kCritical);
-				return true;
-			}
 		}
 	}
 

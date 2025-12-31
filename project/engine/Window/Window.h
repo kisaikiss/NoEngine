@@ -5,6 +5,7 @@
 
 #include "../Runtime/Graphics/GraphicsSwapChain.h"
 #include "engine/Runtime/GpuResource/PixelBuffer/ColorBuffer.h"
+#include "engine/Runtime/GpuResource/PixelBuffer/DepthBuffer.h"
 
 namespace NoEngine {
 
@@ -106,6 +107,7 @@ private:
 
 	std::unique_ptr<Graphics::GraphicsSwapChain> swapChain_;
 	std::array<std::unique_ptr<ColorBuffer>,sSwapChainBufferCount> colorBuffers_;
+	std::unique_ptr<DepthBuffer> depthBuffer_;
 	
 	SizeChangeMode sizeChangeMode_ = SizeChangeMode::kNormal;
 	WindowMode windowMode_ = WindowMode::kWindow;
@@ -123,8 +125,8 @@ private:
 	UINT backBufferIndex_;
 
 	void AdjustWindowSize();
-	void CreateColorBuffer();
-	void DestroyColorBuffer();
+	void CreatePixelBuffer();
+	void DestroyPixelBuffer();
 	void ResizeSignal();
 	void Resize();
 };
