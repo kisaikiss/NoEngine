@@ -9,14 +9,14 @@ Microsoft MiniEngineのリソース管理やDirectX12の初期化部分などを
 
 ### NoEngine独自の機能
 #### ECS(Entity Component System)  
-ECS(Entity Component System)を採用しています。  
+NoEngineでは効率的なデータ配置が出来るECSを採用しています。  
 namespace ECS内にあるクラス群がECSに必要なクラスです。そのうちのRegistryクラスがEntityとComponentの管理を行っています。
 Registryのメンバ関数であるGetQuery()を使用してSystemを構築します。
   
 * 以下の様に使用。指定した複数のコンポーネントを持ったエンティティだけを取得できます。  
 auto view = registry.GetQuery<Transform, Velocity>();  
 for(auto entity : view) {  
-  　 　auto* transform = registry.GetComponent<Transform>(entity);  
- 　　 auto* velocity = registry.GetComponent<Velocity>(entity);  
+  　 　auto* transform = registry.GetComponent< Transform >(entity);  
+ 　　 auto* velocity = registry.GetComponent< Velocity >(entity);  
 　 　 transform->translate += velocity->v;  
 }
