@@ -5,7 +5,7 @@
 namespace NoEngine {
 namespace ECS {
 /// <summary>
-/// Enttyの発行とコンポーネントとの紐づけを行うクラス
+/// Entityの発行とコンポーネントとの紐づけを行うクラス
 /// </summary>
 class Registry final {
 public:
@@ -129,7 +129,7 @@ public:
 
 private:
 	// エンティティと有効フラグを紐づけするコンテナ
-	std::vector<bool> entitiyToActive_;
+	std::vector<bool> entityToActive_;
 	// 再利用待ちのエンティティ
 	std::vector<Entity> freeEntities_;
 

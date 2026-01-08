@@ -107,6 +107,9 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   <ItemGroup>
     <ClCompile Include="engine\Assets\Texture\TexUtil.cpp" />
     <ClCompile Include="engine\ECS\Registry.cpp" />
+    <ClCompile Include="engine\Math\Color\Color.cpp" />
+    <ClCompile Include="engine\Math\Types\Calculations\Matrix3x3Calculations.cpp" />
+    <ClCompile Include="engine\Math\Types\Transform2D.cpp" />
     <ClCompile Include="engine\Runtime\GpuResource\PixelBuffer\DepthBuffer.cpp" />
     <ClCompile Include="engine\Assets\Texture\TextureManager.cpp" />
     <ClCompile Include="engine\Functions\Camera\Camera.cpp" />
@@ -149,7 +152,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="engine\Runtime\Renderer\MeshRenderer.cpp" />
     <ClCompile Include="engine\Runtime\Shader\ShaderModule.cpp" />
     <ClCompile Include="engine\Runtime\Shader\ShaderReflection.cpp" />
-    <ClCompile Include="engine\Math\Types\Calculations\MatrixCalculations.cpp" />
+    <ClCompile Include="engine\Math\Types\Calculations\Matrix4x4Calculations.cpp" />
     <ClCompile Include="engine\Math\Types\Calculations\QuaternionCalculations.cpp" />
     <ClCompile Include="engine\Math\Types\Calculations\Vector3Calculations.cpp" />
     <ClCompile Include="engine\Math\Types\Matrix4x4.cpp" />
@@ -199,10 +202,14 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="engine\Assets\Texture\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="engine\Component\SpriteComponent.h" />
     <ClInclude Include="engine\Assets\Texture\TexUtil.h" />
     <ClInclude Include="engine\ECS\ComponentPool.h" />
     <ClInclude Include="engine\ECS\Entity.h" />
     <ClInclude Include="engine\ECS\Registry.h" />
+    <ClInclude Include="engine\Math\Types\Calculations\Matrix3x3Calculations.h" />
+    <ClInclude Include="engine\Math\Types\Rect.h" />
+    <ClInclude Include="engine\Math\Types\Transform2D.h" />
     <ClInclude Include="engine\Runtime\GpuResource\PixelBuffer\DepthBuffer.h" />
     <ClInclude Include="engine\Assets\Mesh.h" />
     <ClInclude Include="engine\Assets\Texture\TextureManager.h" />
@@ -253,7 +260,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="engine\Runtime\Shader\ShaderReflection.h" />
     <ClInclude Include="engine\Math\Color\Color.h" />
     <ClInclude Include="engine\Math\Common.h" />
-    <ClInclude Include="engine\Math\Types\Calculations\MatrixCalculations.h" />
+    <ClInclude Include="engine\Math\Types\Calculations\Matrix4x4Calculations.h" />
     <ClInclude Include="engine\Math\Types\Calculations\QuaternionCalculations.h" />
     <ClInclude Include="engine\Math\Types\Calculations\Vector3Calculations.h" />
     <ClInclude Include="engine\Math\Types\Matrix4x4.h" />

@@ -1,6 +1,9 @@
 #include "Vector2.h"
 
 namespace NoEngine {
+const Vector2 Vector2::ZERO(0.f, 0.f);
+const Vector2 Vector2::RIGHT(1.f, 0.f);
+const Vector2 Vector2::UNIT_SCALE(1.f, 1.f);
 
 Vector2& Vector2::operator+=(const Vector2& other) {
     x += other.x;
