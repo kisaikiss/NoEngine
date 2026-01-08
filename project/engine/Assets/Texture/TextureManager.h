@@ -16,9 +16,13 @@ public:
     static void DestroyTexture(std::wstring mapKey);
     static TextureRef LoadTextureFile(const std::wstring& filePath, Graphics::eDefaultTexture fallback = Graphics::eDefaultTexture::kMagenta2D, bool sRGB = false);
     static TextureRef LoadTextureFile(const std::string& filePath, Graphics::eDefaultTexture fallback = Graphics::eDefaultTexture::kMagenta2D, bool sRGB = false);
-    static ManagedTexture* FindOrLoadTexture(const std::wstring& fileName, Graphics::eDefaultTexture fallback, bool forceSRGB = false);
+
+    static TextureRef LoadCovertTexture(const std::wstring& filePath, Graphics::eDefaultTexture fallback = Graphics::kMagenta2D, bool sRGB = false);
+    static TextureRef LoadCovertTexture(const std::string& filePath, Graphics::eDefaultTexture fallback = Graphics::kMagenta2D, bool sRGB = false);
+
 private:
 	static DirectX::ScratchImage LordTexture(const std::string& filePath);
+    static ManagedTexture* FindOrLoadTexture(const std::wstring& fileName, Graphics::eDefaultTexture fallback, bool forceSRGB = false);
 };
 
 class TextureRef {

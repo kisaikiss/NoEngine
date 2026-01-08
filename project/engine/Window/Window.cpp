@@ -11,6 +11,7 @@
 
 #include "engine/Runtime/Command/GraphicsContext.h"
 #include "engine/Runtime/GraphicsCore.h"
+#include "externals/imgui/imgui.h"
 
 namespace NoEngine {
 using namespace std;
@@ -123,24 +124,27 @@ void Window::Create(WNDPROC windowProc, std::wstring title, uint32_t width, uint
 	Log::DebugPrint("Window_WindowCreated title : " + ConvertString(title), VerbosityLevel::kInfo);
 }
 
-void Window::Clear(GraphicsContext& context) {
+void Window::Clear(GraphicsContext& context) {	
 	backBufferIndex_ = swapChain_->GetSwapChain()->GetCurrentBackBufferIndex();
 	context.TransitionResource(*colorBuffers_[backBufferIndex_].get(), D3D12_RESOURCE_STATE_RENDER_TARGET);
 	context.TransitionResource(*depthBuffer_, D3D12_RESOURCE_STATE_DEPTH_WRITE);
 	context.SetRenderTarget(colorBuffers_[backBufferIndex_]->GetRTV(),depthBuffer_->GetDSV());
 
-
 	context.SetViewportAndScissor(viewport_, scissorRect_);
 	context.ClearColor(*colorBuffers_[backBufferIndex_].get());
 	context.ClearDepthAndStencil(*depthBuffer_);
-
-	
-	
 }
 
 void Window::EndFrame(GraphicsContext& context) {
 	context.TransitionResource(*colorBuffers_[backBufferIndex_].get(), D3D12_RESOURCE_STATE_PRESENT);
-	context.Finish();
+	context.Finish(true);
+#ifdef USE_IMGUI
+	if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+	{
+		ImGui::UpdatePlatformWindows();
+		ImGui::RenderPlatformWindowsDefault();
+	}
+#endif
 	swapChain_->GetSwapChain()->Present(1, 0);
 	Resize();
 }

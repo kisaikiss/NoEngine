@@ -85,7 +85,7 @@ void ImGuiManager::Initialize() {
 	ImGui_ImplDX12_InitInfo initInfo = {};
 	initInfo.Device = GraphicsCore::gGraphicsDevice->GetDevice();
 	initInfo.CommandQueue = GraphicsCore::gCommandListManager.GetGraphicsQueue().GetCommandQueue();
-	initInfo.NumFramesInFlight = 3;
+	initInfo.NumFramesInFlight = 2;
 	initInfo.RTVFormat = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
 	initInfo.DSVFormat = DXGI_FORMAT_UNKNOWN;
 	initInfo.SrvDescriptorHeap = MeshRenderer::gTextureHeap.GetHeapPointer();
@@ -128,14 +128,13 @@ void ImGuiManager::BeginFrame() {
 	ImGui::End();
 
 	ImGui::ShowDemoWindow();
+	ImGui::ShowMetricsWindow();
 }
 
 void ImGuiManager::Render(GraphicsContext& context) {
 	ImGui::Render();
 	context.SetDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, MeshRenderer::gTextureHeap.GetHeapPointer());
 	ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), context.GetCommandList());
-	ImGui::UpdatePlatformWindows();
-	ImGui::RenderPlatformWindowsDefault();
 }
 
 void ImGuiManager::Shutdown() {

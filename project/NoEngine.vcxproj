@@ -105,6 +105,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="engine\Assets\Texture\TexUtil.cpp" />
     <ClCompile Include="engine\ECS\Registry.cpp" />
     <ClCompile Include="engine\Runtime\GpuResource\PixelBuffer\DepthBuffer.cpp" />
     <ClCompile Include="engine\Assets\Texture\TextureManager.cpp" />
@@ -198,6 +199,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="engine\Assets\Texture\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="engine\Assets\Texture\TexUtil.h" />
     <ClInclude Include="engine\ECS\ComponentPool.h" />
     <ClInclude Include="engine\ECS\Entity.h" />
     <ClInclude Include="engine\ECS\Registry.h" />

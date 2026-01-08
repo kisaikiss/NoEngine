@@ -15,5 +15,16 @@ extern ByteArray NullFile;
 std::wstring LoadFileAsString(const std::wstring& path);
 
 ByteArray ReadFileSync(const std::wstring& fileName);
+std::string ToLower(const std::string& str);
+std::wstring ToLower(const std::wstring& str);
+std::string RemoveBasePath(const std::string& str);
+std::wstring RemoveBasePath(const std::wstring& str);
+std::string GetFileExtension(const std::string& str);
+std::wstring GetFileExtension(const std::wstring& str);
+std::string GetBasePath(const std::string& filePath);
+std::wstring GetBasePath(const std::wstring& filePath);
+std::string RemoveExtension(const std::string& str);
+std::wstring RemoveExtension(const std::wstring& str);
+std::wstring GetDirectoryFromPath(const std::wstring& fullPath);
 }
 }

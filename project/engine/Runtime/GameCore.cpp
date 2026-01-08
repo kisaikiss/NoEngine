@@ -27,13 +27,16 @@ int RunApplication(AllowAccessOnlyFromWinMain) {
 	EngineInitialize();
 
 	while (GraphicsCore::gWindowManager.ProcessMessage() == 0) {
+
+		GraphicsContext& context = GraphicsContext::Begin();
+		GraphicsCore::gWindowManager.Clear(context);
+
 #ifdef USE_IMGUI
 		imguiManager.BeginFrame();
 #endif // USE_IMGUI
 
 		
-		GraphicsContext& context = GraphicsContext::Begin();
-		GraphicsCore::gWindowManager.Clear(context);
+
 		MeshRenderer::Render(context);
 #ifdef USE_IMGUI
 		imguiManager.Render(context);

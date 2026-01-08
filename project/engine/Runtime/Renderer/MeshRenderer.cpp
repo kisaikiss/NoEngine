@@ -97,7 +97,7 @@ void MeshRenderer::Initialize() {
 	transform = Transform();
 	angle = 0.f;
 	
-	texRf = std::make_unique<TextureRef>(TextureManager::LoadTextureFile("resources/engine/uvChecker.dds"));
+	texRf = std::make_unique<TextureRef>(TextureManager::LoadCovertTexture("resources/engine/uvChecker.png"));
 }
 
 void MeshRenderer::Shutdown() {

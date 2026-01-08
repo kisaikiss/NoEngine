@@ -228,6 +228,9 @@
     <ClCompile Include="engine\ECS\Registry.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="engine\Assets\Texture\TexUtil.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Window\WindowManager.h">
@@ -490,6 +493,9 @@
     </ClInclude>
     <ClInclude Include="engine\ECS\Registry.hpp" />
     <ClInclude Include="engine\Utilities\TypeIndex.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\Assets\Texture\TexUtil.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

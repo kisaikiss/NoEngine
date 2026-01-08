@@ -3,6 +3,7 @@
 #include "engine/Utilities/Conversion/ConvertString.h"
 #include "engine/Utilities/FileUtilities.h"
 #include "engine/Runtime/GraphicsCore.h"
+#include "TexUtil.h"
 
 namespace NoEngine {
 using namespace Utilities;
@@ -149,6 +150,20 @@ TextureRef TextureManager::LoadTextureFile(const std::wstring& filePath, eDefaul
 TextureRef TextureManager::LoadTextureFile(const std::string& filePath, eDefaultTexture fallback, bool sRGB) {
 	return LoadTextureFile(ConvertString(filePath), fallback, sRGB);
 }
+TextureRef TextureManager::LoadCovertTexture(const std::wstring& filePath, eDefaultTexture fallback, bool forceSRGB)
+{
+	std::wstring originalFile = filePath;
+	CompileTextureOnDemand(originalFile, TextureOptions(true));
+
+	std::wstring ddsFile = RemoveExtension(originalFile) + L".dds";
+	return FindOrLoadTexture(ddsFile, fallback, forceSRGB);
+}
+
+TextureRef TextureManager::LoadCovertTexture(const std::string& filePath, eDefaultTexture fallback, bool forceSRGB)
+{
+	return LoadCovertTexture(ConvertString(filePath), fallback, forceSRGB);
+}
+
 ManagedTexture* TextureManager::FindOrLoadTexture(const std::wstring& fileName, eDefaultTexture fallback, bool forceSRGB) {
 	ManagedTexture* tex = nullptr;
 
