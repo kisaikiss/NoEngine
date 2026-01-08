@@ -1,5 +1,7 @@
 #include "Matrix3x3.h"
 #include "Matrix4x4.h"
+#include "Calculations/Matrix3x3Calculations.h"
+
 namespace NoEngine {
 
 const Matrix3x3 Matrix3x3::ZERO(0, 0, 0, 0, 0, 0, 0, 0, 0);
@@ -23,6 +25,18 @@ Matrix3x3::Matrix3x3(float entry00, float entry01, float entry02,
 	m[0][0] = entry00; m[0][1] = entry01; m[0][2] = entry02;
 	m[1][0] = entry10; m[1][1] = entry11; m[1][2] = entry12;
 	m[2][0] = entry20; m[2][1] = entry21; m[2][2] = entry22;
+}
+
+void Matrix3x3::MakeAffine(const Vector2& scale, const float& rotate, const Vector2& translate) {
+    *this = MathCalculations::MakeAffineMatrix(scale, rotate, translate);
+}
+
+void Matrix3x3::Inverse() {
+    *this = MathCalculations::Inverse(*this);
+}
+
+Matrix3x3 operator*(const Matrix3x3& matrix1, const Matrix3x3& matrix2) {
+    return  MathCalculations::Multiply(matrix1, matrix2);
 }
 
 }

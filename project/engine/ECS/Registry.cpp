@@ -12,16 +12,16 @@ Entity Registry::GenerateEntity() {
 		newEntity = ++nextID_;
 	}
 	// エンティティを有効にする
-	if (entitiyToActive_.size() <= newEntity) {
-		entitiyToActive_.resize(newEntity + 1, false);
+	if (entityToActive_.size() <= newEntity) {
+		entityToActive_.resize(newEntity + 1, false);
 	}
-	entitiyToActive_[newEntity] = true;
+	entityToActive_[newEntity] = true;
 	// 生成したエンティティを返す
 	return newEntity;
 }
 
 void Registry::DestroyEntity(Entity entity) {
-	entitiyToActive_[entity] = false;
+	entityToActive_[entity] = false;
 	freeEntities_.emplace_back(entity);
 	for (auto& pool : componentPools_) {
 		pool.second->RemoveIfExists(entity);

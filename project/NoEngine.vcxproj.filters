@@ -69,7 +69,7 @@
     <ClCompile Include="engine\Math\Types\Vector3.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="engine\Math\Types\Calculations\MatrixCalculations.cpp">
+    <ClCompile Include="engine\Math\Types\Calculations\Matrix4x4Calculations.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="engine\Math\Types\Calculations\QuaternionCalculations.cpp">
@@ -228,6 +228,15 @@
     <ClCompile Include="engine\ECS\Registry.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="engine\Math\Types\Calculations\Matrix3x3Calculations.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\Math\Types\Transform2D.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\Math\Color\Color.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Window\WindowManager.h">
@@ -287,7 +296,7 @@
     <ClInclude Include="engine\Math\Types\Vector4.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="engine\Math\Types\Calculations\MatrixCalculations.h">
+    <ClInclude Include="engine\Math\Types\Calculations\Matrix4x4Calculations.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="engine\Math\Types\Calculations\QuaternionCalculations.h">
@@ -490,6 +499,18 @@
     </ClInclude>
     <ClInclude Include="engine\ECS\Registry.hpp" />
     <ClInclude Include="engine\Utilities\TypeIndex.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\Math\Types\Transform2D.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\Math\Types\Calculations\Matrix3x3Calculations.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\Component\SpriteComponent.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\Math\Types\Rect.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
