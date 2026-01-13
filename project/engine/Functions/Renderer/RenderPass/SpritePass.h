@@ -9,7 +9,7 @@
 namespace NoEngine {
 namespace Render {
 
-class SpritePass :
+class SpritePass final :
     public RenderPass {
 public:
     SpritePass();
