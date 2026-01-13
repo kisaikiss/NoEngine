@@ -14,6 +14,7 @@
 #include "RenderPass/SpritePass.h"
 #include "engine/Assets/ModelLoader.h"
 #include "engine/Functions/ECS/Registry.h"
+#include "engine/Functions/Renderer/RenderPass/MeshPass.h"
 
 #ifdef USE_IMGUI
 #include "externals/imgui/imgui.h"
@@ -51,8 +52,9 @@ std::unique_ptr<Camera> camera;
 std::unique_ptr <TextureRef> texRf;
 std::unique_ptr <ECS::Registry> registry;
 ECS::Entity en;
+ECS::Entity en2;
 Transform ct;
-
+std::unique_ptr<Render::MeshPass> meshPass;
 }
 
 DescriptorHeap MeshRenderer::gTextureHeap;
@@ -111,19 +113,37 @@ void MeshRenderer::Initialize() {
 	angle = 0.f;
 	
 	texRf = std::make_unique<TextureRef>(TextureManager::LoadCovertTexture("resources/engine/Model/enemy.png"));
-
+	meshPass = std::make_unique<Render::MeshPass>();
 	Renderer::Initialize();
 	registry = std::make_unique<ECS::Registry>();
 	en = registry->GenerateEntity();
-	registry->AddComponent<Component::Transform2DComponent>(en);
-	registry->AddComponent<Component::SpriteComponent>(en);
+	en2 = registry->GenerateEntity();
+	registry->AddComponent<Component::TransformComponent>(en);
+	auto* model = registry->AddComponent<Component::MeshComponent>(en);
+	model->mesh = ModelLoader::LoadModel("enemy", "resources/engine/Model/enemy.obj");
+
 	auto m = registry->AddComponent<Component::MaterialComponent>(en);
-	m->textureHandle = TextureManager::LoadCovertTexture("resources/engine/flower.png");
+	m->textureHandle = TextureManager::LoadCovertTexture("resources/engine/Model/enemy.png");
+	m->pso = &sGraphicsPSOs.back();
+
+	
+	auto* model2 = registry->AddComponent<Component::MeshComponent>(en2);
+	model2->mesh = ModelLoader::LoadModel("enemy", "resources/engine/Model/enemy.obj"); 
+	
+	auto* trans2 = registry->AddComponent<Component::TransformComponent>(en2);
+	trans2->translate.x = 1.f;
+
+
+	auto m2 = registry->AddComponent<Component::MaterialComponent>(en2);
+	m2->textureHandle = TextureManager::LoadCovertTexture("resources/engine/Model/enemy.png");
+	m2->pso = &sGraphicsPSOs.back();
 }
 
 void MeshRenderer::Shutdown() {
 	registry.reset();
+	meshPass.reset();
 	texRf.reset();
+	ModelLoader::DeleteAll();
 	gTextureHeap.Destroy();
 	vertexResource->Destroy();
 	vertexResource.reset();
@@ -141,48 +161,29 @@ void MeshRenderer::Render(GraphicsContext& context) {
 		ct.translate = { 0.f,0.f,-5.f };
 		camera->SetTransform(ct);
 	}
-
+	camera->Update();
 #ifdef USE_IMGUI
 	ImGui::Begin("camera");
 	ImGui::DragFloat3("pos", &ct.translate.x,0.1f);
 	ImGui::End();
 	camera->SetTransform(ct);
-	auto* a = registry->GetComponent<Component::Transform2DComponent>(en);
+	auto* a = registry->GetComponent<Component::TransformComponent>(en);
 	auto* b = registry->GetComponent<Component::MaterialComponent>(en);
-	auto* c = registry->GetComponent<Component::SpriteComponent>(en);
-	ImGui::Begin("sprite");
-	ImGui::DragFloat2("transform", &a->translate.x, 0.05f);
-	ImGui::DragFloat2("scale", &a->scale.x, 0.05f);
-	ImGui::DragFloat("rotate", &a->rotation, 0.04f);
+	angle += 0.01f;
+	a->rotation.FromAxisAngle(Vector3(0.f, 1.f, 0.f), angle);
+	ImGui::Begin("model");
+	ImGui::DragFloat3("translate", &a->translate.x, 0.05f);
+	ImGui::DragFloat3("scale", &a->scale.x, 0.05f);
+	ImGui::DragFloat4("rotate", &a->rotation.x, 0.04f);
 	ImGui::DragFloat4("uv", &b->uv.x, 0.01f);
-	ImGui::Checkbox("flipX", &c->flipX);
-	ImGui::Checkbox("flipY", &c->flipY);
 	ImGui::End();
 #endif // USE_IMGUI
-
+	meshPass->SetCamera(camera.get());
 
 	context.SetRootSignature(sRootSig);
 	context.SetPipelineState(sGraphicsPSOs.back());
 
-	Mesh& model = Asset::ModelLoader::LoadModel("enemy", "resources/engine/Model/enemy.obj");
-	vertexResource->Create(L"model", sizeof(Vertex) * static_cast<uint32_t>(model.vertices.size()), sizeof(Vertex), model.vertices.data());
-	vbv = vertexResource->VertexBufferView(0, sizeof(Vertex) * static_cast<uint32_t>(model.vertices.size()), sizeof(Vertex));
+	meshPass->Execute(context, *registry);
 
-	context.SetVertexBuffer(0, vbv);
-	context.SetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	std::unordered_map<std::string, uint32_t>& rootIndex = RootSignatureBuilder::GetRootIndexMap("defaultRootSig");
-	
-	context.SetDynamicConstantBufferView(rootIndex["gMaterial"], sizeof(Material), &material);
-	angle += 0.05f;
-	transform.rotation.FromAxisAngle(Vector3(0.f, 1.f, 0.f), angle);
-	worldData = transform.MakeAffineMatrix4x4();
-	camera->Update();
-	
-	context.SetDynamicConstantBufferView(rootIndex["gWorldMatrix"], sizeof(Matrix4x4), &worldData);
-	context.SetDynamicConstantBufferView(rootIndex["gCameraMatrix"], sizeof(Matrix4x4), &camera->GetViewProjMatrix());
-	context.SetDynamicDescriptor(rootIndex["gTexture"], 0, texRf->GetSRV());
-
-	context.Draw(UINT(model.vertices.size()));
-	
 }
 }

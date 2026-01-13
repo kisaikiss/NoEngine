@@ -32,7 +32,7 @@ public:
 	/// <param name="entity">コンポーネントを追加したいエンティティ</param>
 	/// <returns>追加したコンポーネントのポインタ</returns>
 	inline CompType* AddComponent(const Entity entity) {
-		if (entityToIndex_.size() < entity) {
+		if (entityToIndex_.size() <= entity) {
 			entityToIndex_.resize(entity + 1, -1);
 		}
 		entityToIndex_[entity] = static_cast<int32_t>(components_.size());

@@ -214,6 +214,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   <ItemGroup>
     <ClInclude Include="engine\Assets\ModelLoader.h" />
     <ClInclude Include="engine\Functions\ECS\Component\MaterialComponent.h" />
+    <ClInclude Include="engine\Functions\ECS\Component\MeshComponent.h" />
     <ClInclude Include="engine\Functions\ECS\Component\SpriteComponent.h" />
     <ClInclude Include="engine\Assets\Texture\TexUtil.h" />
     <ClInclude Include="engine\Functions\ECS\Component\TransformComponent.h" />

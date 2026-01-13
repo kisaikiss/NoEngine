@@ -16,6 +16,7 @@ struct Node {
 
 struct Mesh {
 	std::vector<Vertex> vertices;
+	ByteAddressBuffer vertexBuffer;
 	Node rootNode;
 };
 }

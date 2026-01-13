@@ -1,5 +1,9 @@
 #pragma once
 #include "RenderPass.h"
+#include "engine/Functions/ECS/Component/MeshComponent.h"
+#include "engine/Functions/ECS/Component/MaterialComponent.h"
+#include "engine/Functions/ECS/Component/TransformComponent.h"
+
 namespace NoEngine {
 namespace Render {
 class MeshPass :
@@ -7,6 +11,19 @@ class MeshPass :
 public:
     void Execute(GraphicsContext& gfx, ECS::Registry& registry) override;
 private:
+
+    struct DrawItem {
+        Component::MeshComponent* mesh;
+        Component::MaterialComponent* material;
+        Component::TransformComponent* transform;
+        float distanceToCamera;
+    };
+
+    std::vector<DrawItem> items_;
+
+    void Collect(ECS::Registry& registry);
+    void Sort();
+    void Render(GraphicsContext& gfx);
 };
 }
 }

@@ -2,15 +2,14 @@
 #include "engine/Math/Types/Transform.h"
 
 namespace NoEngine {
-namespace Asset {
 namespace {
 std::unordered_map<std::string, Mesh> sMeshes;
 }
 
 
-Mesh& ModelLoader::LoadModel(const std::string& name, const std::string& filePath) {
+Mesh* ModelLoader::LoadModel(const std::string& name, const std::string& filePath) {
 	if (sMeshes.contains(name)) {
-		return sMeshes[name];
+		return &sMeshes[name];
 	}
 
 	Assimp::Importer importer;
@@ -41,9 +40,19 @@ Mesh& ModelLoader::LoadModel(const std::string& name, const std::string& filePat
 
 	sMeshes[name].rootNode =  ReadNode(scene->mRootNode);
 
+	sMeshes[name].vertexBuffer.Create(L"Model vertex", sizeof(Vertex) * static_cast<uint32_t>(sMeshes[name].vertices.size()), sizeof(Vertex), sMeshes[name].vertices.data());
+
 	// ToDo : Material読み込みもできるようにすべきです。
 
-	return sMeshes[name];
+	return &sMeshes[name];
+}
+
+Mesh* ModelLoader::GetModel(const std::string& name) {
+	return &sMeshes[name];
+}
+
+void ModelLoader::DeleteAll() {
+	sMeshes.clear();
 }
 
 Node ModelLoader::ReadNode(aiNode* node) {
@@ -65,5 +74,4 @@ Node ModelLoader::ReadNode(aiNode* node) {
 	return result;
 }
 
-}
 }

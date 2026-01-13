@@ -10,6 +10,7 @@ public:
 
 	void SetTransform(const Transform& transform);
 
+	[[nodiscard]] const Transform& GetTransform() const noexcept { return transform_; }
 	[[nodiscard]] const Matrix4x4& GetViewMatrix() const noexcept { return viewMatrix_; }
 	[[nodiscard]] const Matrix4x4& GetProjMatrix() const noexcept { return projectionMatrix_; }
 	[[nodiscard]] const Matrix4x4& GetViewProjMatrix() const noexcept { return viewProjectionMatrix_; }
