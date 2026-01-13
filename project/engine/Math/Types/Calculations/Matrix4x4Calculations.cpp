@@ -97,7 +97,7 @@ Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Ve
 }
 
 Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Quaternion& rotate, const Vector3& translate) {
-	Matrix4x4 result{};
+	Matrix4x4 result;
 	result = Multiply(MakeScaleMatrix(scale), MakeRotateMatrix(rotate));
 	result = Multiply(result, MakeTranslateMatrix(translate));
 	return result;

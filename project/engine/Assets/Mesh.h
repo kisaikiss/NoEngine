@@ -1,5 +1,6 @@
 #pragma once
 #include "engine/Math/MathInclude.h"
+#include "engine/Runtime/GpuResource/GpuBuffer.h"
 
 namespace NoEngine {
 struct Vertex {
@@ -7,4 +8,14 @@ struct Vertex {
 	Vector2 texcoord;
 };
 
+struct Node {
+	Matrix4x4 localMatrix;
+	std::string name;
+	std::vector<Node> children;
+};
+
+struct Mesh {
+	std::vector<Vertex> vertices;
+	Node rootNode;
+};
 }

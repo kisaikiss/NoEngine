@@ -9,6 +9,5 @@ void RenderPassScheduler::Initialize() {
 void RenderPassScheduler::Render(GraphicsContext& gfx, ECS::Registry& registry) {
 	for (auto& pass : passes_) pass->Execute(gfx, registry);
 }
-
 }
 }

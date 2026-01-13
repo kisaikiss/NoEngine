@@ -12,6 +12,7 @@
 #include "engine/Math/MathInclude.h"
 #include "RenderSystem.h"
 #include "RenderPass/SpritePass.h"
+#include "engine/Assets/ModelLoader.h"
 #include "engine/Functions/ECS/Registry.h"
 
 #ifdef USE_IMGUI
@@ -48,7 +49,6 @@ Transform transform;
 float angle;
 std::unique_ptr<Camera> camera;
 std::unique_ptr <TextureRef> texRf;
-std::unique_ptr<Render::SpritePass> spritePass;
 std::unique_ptr <ECS::Registry> registry;
 ECS::Entity en;
 Transform ct;
@@ -104,16 +104,15 @@ void MeshRenderer::Initialize() {
 	// 三角形の描画テスト用初期化を行います。
 	vertexResource = make_unique<ByteAddressBuffer>();
 	
-	material.color = { 1.f,1.f,0.f,1.f };
+	material.color = { 1.f,1.f,1.f,1.f };
 	worldData = Matrix4x4::IDENTITY;
 	CameraData = Matrix4x4::IDENTITY;
 	transform = Transform();
 	angle = 0.f;
 	
-	texRf = std::make_unique<TextureRef>(TextureManager::LoadCovertTexture("resources/engine/flower.png"));
+	texRf = std::make_unique<TextureRef>(TextureManager::LoadCovertTexture("resources/engine/Model/enemy.png"));
 
 	Renderer::Initialize();
-	spritePass = std::make_unique<Render::SpritePass>();
 	registry = std::make_unique<ECS::Registry>();
 	en = registry->GenerateEntity();
 	registry->AddComponent<Component::Transform2DComponent>(en);
@@ -125,7 +124,6 @@ void MeshRenderer::Initialize() {
 void MeshRenderer::Shutdown() {
 	registry.reset();
 	texRf.reset();
-	spritePass.reset();
 	gTextureHeap.Destroy();
 	vertexResource->Destroy();
 	vertexResource.reset();
@@ -165,8 +163,10 @@ void MeshRenderer::Render(GraphicsContext& context) {
 
 	context.SetRootSignature(sRootSig);
 	context.SetPipelineState(sGraphicsPSOs.back());
-	vertexResource->Create(L"vertex", sizeof(triangle), sizeof(Vertex), triangle);
-	vbv = vertexResource->VertexBufferView(0, sizeof(triangle), sizeof(Vertex));
+
+	Mesh& model = Asset::ModelLoader::LoadModel("enemy", "resources/engine/Model/enemy.obj");
+	vertexResource->Create(L"model", sizeof(Vertex) * static_cast<uint32_t>(model.vertices.size()), sizeof(Vertex), model.vertices.data());
+	vbv = vertexResource->VertexBufferView(0, sizeof(Vertex) * static_cast<uint32_t>(model.vertices.size()), sizeof(Vertex));
 
 	context.SetVertexBuffer(0, vbv);
 	context.SetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -182,8 +182,7 @@ void MeshRenderer::Render(GraphicsContext& context) {
 	context.SetDynamicConstantBufferView(rootIndex["gCameraMatrix"], sizeof(Matrix4x4), &camera->GetViewProjMatrix());
 	context.SetDynamicDescriptor(rootIndex["gTexture"], 0, texRf->GetSRV());
 
-	context.Draw(6);
+	context.Draw(UINT(model.vertices.size()));
 	
-	spritePass->Execute(context, *registry);
 }
 }
