@@ -52,7 +52,7 @@ protected:
         srv_.ptr = D3D12_GPU_VIRTUAL_ADDRESS_UNKNOWN;
     }
 
-    D3D12_RESOURCE_DESC DescribeBuffer(void);
+    D3D12_RESOURCE_DESC DescribeBuffer(void) const;
 
     /// <summary>
     /// 派生ビューの作成を行います。

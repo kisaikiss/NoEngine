@@ -3,7 +3,7 @@
 #include "../GraphicsCore.h"
 #include "../Command/CommandListManager.h"
 
-#include "../../Debug/Logger/Log.h"
+#include "engine/Functions/Debug/Logger/Log.h"
 
 namespace NoEngine {
 namespace Graphics {

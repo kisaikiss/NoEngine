@@ -51,7 +51,7 @@
     <ClCompile Include="engine\Window\Event\Default\SizingEvent.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="engine\Debug\Logger\Log.cpp">
+    <ClCompile Include="engine\Functions\Debug\Logger\Log.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="engine\Utilities\Conversion\ConvertString.cpp">
@@ -81,7 +81,7 @@
     <ClCompile Include="engine\Runtime\GraphicsCore.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="engine\Debug\CrashHandler\ExportDump.cpp">
+    <ClCompile Include="engine\Functions\Debug\CrashHandler\ExportDump.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="engine\Runtime\Graphics\GraphicsInfrastructures.cpp">
@@ -141,7 +141,7 @@
     <ClCompile Include="engine\Runtime\GpuResource\LinearAllocator\LinearAllocatorPageManager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="engine\Debug\GraphicsResourceLeakChecker.cpp">
+    <ClCompile Include="engine\Functions\Debug\GraphicsResourceLeakChecker.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="engine\Runtime\Graphics\GraphicsSwapChain.cpp">
@@ -165,16 +165,16 @@
     <ClCompile Include="engine\Runtime\PipelineStateObject\GraphicsPSO.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="engine\Runtime\Shader\ShaderModule.cpp">
+    <ClCompile Include="engine\Functions\Shader\ShaderModule.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="engine\Utilities\FileUtilities.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="engine\Runtime\Shader\ShaderReflection.cpp">
+    <ClCompile Include="engine\Functions\Shader\ShaderReflection.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="engine\Runtime\Renderer\MeshRenderer.cpp">
+    <ClCompile Include="engine\Functions\Renderer\MeshRenderer.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="engine\Math\Types\Matrix3x3.cpp">
@@ -225,7 +225,7 @@
     <ClCompile Include="engine\Runtime\GpuResource\PixelBuffer\DepthBuffer.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="engine\ECS\Registry.cpp">
+    <ClCompile Include="engine\Functions\ECS\Registry.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="engine\Math\Types\Calculations\Matrix3x3Calculations.cpp">
@@ -238,6 +238,15 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="engine\Assets\Texture\TexUtil.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\Functions\Renderer\RenderPass\SpritePass.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\Math\Types\Calculations\Vector2Calculations.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\Functions\Renderer\RenderSystem.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -278,7 +287,7 @@
     <ClInclude Include="engine\Window\Event\Default\SizingEvent.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="engine\Debug\Logger\Log.h">
+    <ClInclude Include="engine\Functions\Debug\Logger\Log.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="engine\Utilities\Conversion\ConvertString.h">
@@ -311,7 +320,7 @@
     <ClInclude Include="engine\Runtime\GraphicsCore.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="engine\Debug\CrashHandler\ExportDump.h">
+    <ClInclude Include="engine\Functions\Debug\CrashHandler\ExportDump.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="engine\Runtime\Graphics\GraphicsInfrastructures.h">
@@ -386,7 +395,7 @@
     <ClInclude Include="engine\Runtime\GpuResource\LinearAllocator\LinearAllocatorPageManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="engine\Debug\GraphicsResourceLeakChecker.h">
+    <ClInclude Include="engine\Functions\Debug\GraphicsResourceLeakChecker.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="engine\Runtime\Graphics\GraphicsSwapChain.h">
@@ -416,22 +425,22 @@
     <ClInclude Include="engine\Math\Common.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="engine\Runtime\Shader\ShaderModule.h">
+    <ClInclude Include="engine\Functions\Shader\ShaderModule.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="engine\Utilities\FileUtilities.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="engine\Runtime\Shader\ShaderReflection.h">
+    <ClInclude Include="engine\Functions\Shader\ShaderReflection.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="engine\Runtime\Renderer\MeshRenderer.h">
+    <ClInclude Include="engine\Functions\Renderer\MeshRenderer.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="engine\Assets\Material.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="engine\Runtime\Shader\ShaderStage.h">
+    <ClInclude Include="engine\Functions\Shader\ShaderStage.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="engine\Math\Types\Transform.h">
@@ -491,16 +500,16 @@
     <ClInclude Include="engine\Runtime\GpuResource\PixelBuffer\DepthBuffer.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="engine\ECS\Entity.h">
+    <ClInclude Include="engine\Functions\ECS\Entity.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="engine\ECS\Registry.h">
+    <ClInclude Include="engine\Functions\ECS\Registry.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="engine\ECS\ComponentPool.h">
+    <ClInclude Include="engine\Functions\ECS\ComponentPool.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="engine\ECS\Registry.hpp" />
+    <ClInclude Include="engine\Functions\ECS\Registry.hpp" />
     <ClInclude Include="engine\Utilities\TypeIndex.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -510,7 +519,7 @@
     <ClInclude Include="engine\Math\Types\Calculations\Matrix3x3Calculations.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="engine\Component\SpriteComponent.h">
+    <ClInclude Include="engine\Functions\ECS\Component\SpriteComponent.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="engine\Math\Types\Rect.h">
@@ -519,10 +528,39 @@
     <ClInclude Include="engine\Assets\Texture\TexUtil.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="engine\Functions\ECS\Component\TransformComponent.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\Functions\ECS\Component\Transfrom2DComponent.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\Functions\ECS\System\ISystem.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\Functions\ECS\System\SystemManager.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\Functions\ECS\Component\MaterialComponent.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\Functions\Renderer\RenderPass\RenderPass.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\Functions\Renderer\RenderPass\SpritePass.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\Math\Types\Calculations\Vector2Calculations.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\Functions\Renderer\RenderSystem.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\engine\Shaders\Default.VS.hlsl" />
     <FxCompile Include="resources\engine\Shaders\Default.PS.hlsl" />
+    <FxCompile Include="resources\engine\Shaders\DefaultSprite.VS.hlsl" />
+    <FxCompile Include="resources\engine\Shaders\DefaultSprite.PS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\engine\Shaders\Default.hlsli" />

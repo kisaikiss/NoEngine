@@ -1,5 +1,5 @@
 #include "WindowManager.h"
-#include "engine/Debug/Logger/Log.h"
+#include "engine/Functions/Debug/Logger/Log.h"
 #include "engine/Utilities/Conversion/ConvertString.h"
 
 #ifdef USE_IMGUI

@@ -122,7 +122,7 @@ public:
 	/// <typeparam name="...Components">複数のコンポーネント</typeparam>
 	/// <returns>クエリ</returns>
 	template<typename... Components>
-	auto GetQuery() {
+	auto View() {
 		return Query<Components...>(*this);
 	}
 

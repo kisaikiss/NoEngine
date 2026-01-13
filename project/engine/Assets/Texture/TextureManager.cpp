@@ -150,8 +150,7 @@ TextureRef TextureManager::LoadTextureFile(const std::wstring& filePath, eDefaul
 TextureRef TextureManager::LoadTextureFile(const std::string& filePath, eDefaultTexture fallback, bool sRGB) {
 	return LoadTextureFile(ConvertString(filePath), fallback, sRGB);
 }
-TextureRef TextureManager::LoadCovertTexture(const std::wstring& filePath, eDefaultTexture fallback, bool forceSRGB)
-{
+TextureRef TextureManager::LoadCovertTexture(const std::wstring& filePath, eDefaultTexture fallback, bool forceSRGB) {
 	std::wstring originalFile = filePath;
 	CompileTextureOnDemand(originalFile, TextureOptions(true));
 
@@ -159,8 +158,7 @@ TextureRef TextureManager::LoadCovertTexture(const std::wstring& filePath, eDefa
 	return FindOrLoadTexture(ddsFile, fallback, forceSRGB);
 }
 
-TextureRef TextureManager::LoadCovertTexture(const std::string& filePath, eDefaultTexture fallback, bool forceSRGB)
-{
+TextureRef TextureManager::LoadCovertTexture(const std::string& filePath, eDefaultTexture fallback, bool forceSRGB) {
 	return LoadCovertTexture(ConvertString(filePath), fallback, forceSRGB);
 }
 

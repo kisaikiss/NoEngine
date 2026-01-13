@@ -75,6 +75,6 @@ Matrix3x3 MakeAffineMatrix(Vector2 const& scale, float const& rotate, Vector2 co
 /// <param name="vector">デカルト座標</param>
 /// <param name="matrix">同次座標</param>
 /// <returns>デカルト座標</returns>
-Vector2 Transform(Vector2 const& vector, Matrix3x3 const& matrix);
+Vector2 TransformPoint(Vector2 const& vector, Matrix3x3 const& matrix);
 }
 }

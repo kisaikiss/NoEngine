@@ -2,11 +2,11 @@
 
 #include "Command/CommandListManager.h"
 #include "ContextManager.h"
-#include "Renderer/MeshRenderer.h"
+#include "engine/Functions/Renderer/MeshRenderer.h"
 #include "engine/Runtime/GpuResource/LinearAllocator/LinearAllocator.h"
 #include "Graphics/GraphicsCommon.h"
 
-#include "../Debug/Logger/Log.h"
+#include "engine/Functions/Debug/Logger/Log.h"
 
 namespace NoEngine {
 using namespace std;

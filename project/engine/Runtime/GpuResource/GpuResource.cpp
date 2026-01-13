@@ -1,6 +1,6 @@
 #include "GpuResource.h"
 
-#include "engine/Debug/Logger/Log.h"
+#include "engine/Functions/Debug/Logger/Log.h"
 
 namespace NoEngine {
 GpuResource::GpuResource() : 

@@ -131,10 +131,21 @@ void GraphicsContext::Draw(UINT vertexCount, UINT vertexStartOffset) {
 	DrawInstanced(vertexCount, 1, vertexStartOffset, 0);
 }
 
+void GraphicsContext::DrawIndexed(UINT indexCount, UINT startIndexLocation, INT baseVertexLocation) {
+	DrawIndexedInstanced(indexCount, 1, startIndexLocation, baseVertexLocation, 0);
+}
+
 void GraphicsContext::DrawInstanced(UINT vertexCountPerInstance, UINT instanceCount, UINT StartVertexLocation, UINT startInstanceLocation) {
 	FlushResourceBarriers();
 	dynamicViewDescriptorHeap_.CommitGraphicsRootDescriptorTables(commandList_);
 	dynamicSamplerDescriptorHeap_.CommitGraphicsRootDescriptorTables(commandList_);
 	commandList_->DrawInstanced(vertexCountPerInstance, instanceCount, StartVertexLocation, startInstanceLocation);
+}
+
+void GraphicsContext::DrawIndexedInstanced(UINT indexCountPerInstance, UINT instanceCount, UINT startIndexLocation, INT baseVertexLocation, UINT startInstanceLocation) {
+	FlushResourceBarriers();
+	dynamicViewDescriptorHeap_.CommitGraphicsRootDescriptorTables(commandList_);
+	dynamicSamplerDescriptorHeap_.CommitGraphicsRootDescriptorTables(commandList_);
+	commandList_->DrawIndexedInstanced(indexCountPerInstance, instanceCount, startIndexLocation, baseVertexLocation, startInstanceLocation);
 }
 }

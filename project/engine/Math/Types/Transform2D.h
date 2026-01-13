@@ -12,10 +12,10 @@ struct Transform2D {
 
 	Transform2D() = default;
 
-	Transform2D(const Vector2& position, const float& rotation, const Vector2& scale)
+	Transform2D(const Vector2& position, float rotation, const Vector2& scale)
 		: translate(position), rotation(rotation), scale(scale) {
 	}
 
-	Matrix3x3 MakeAffineMatrix3x3();
+	Matrix3x3 MakeAffineMatrix3x3() const;
 };
 }

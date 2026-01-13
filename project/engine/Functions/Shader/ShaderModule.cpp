@@ -1,7 +1,7 @@
 #include "ShaderModule.h"
 #include "../../Utilities/Conversion/ConvertString.h"
 #include "../../Utilities/FileUtilities.h"
-#include "engine/Debug/Logger/Log.h"
+#include "engine/Functions/Debug/Logger/Log.h"
 
 
 #pragma comment(lib, "dxcompiler.lib")
@@ -62,7 +62,7 @@ void ShaderModule::Initialize() {
 	// DXCはDirectX12とは別のものなので、別で初期化する
 	HRESULT hr = DxcCreateInstance(CLSID_DxcUtils, IID_PPV_ARGS(&sDxcUtils));
 	if (FAILED(hr)) {
-		Log::DebugPrint("DxcUtiles Create failed", VerbosityLevel::kCritical);
+		Log::DebugPrint("DxcUtils Create failed", VerbosityLevel::kCritical);
 		assert(false);
 	}
 	hr = DxcCreateInstance(CLSID_DxcCompiler, IID_PPV_ARGS(&sDxcCompiler));
@@ -202,7 +202,7 @@ bool ShaderModule::CheckForSourceUpdate() {
 }
 
 
-size_t ShaderModule::ComputeCompileHash() {
+size_t ShaderModule::ComputeCompileHash() const {
 	// ハッシュ用の文字列を構築
 	std::wstring data;
 
@@ -276,7 +276,7 @@ bool ShaderModule::CompileShader(Microsoft::WRL::ComPtr<IDxcBlob>& outBlob) {
 #pragma endregion
 
 #pragma region 4.Compile結果を受け取り それが成功したかどうか返します
-	// BLOBとはBinaryLargeOBjectの略で、大きなバイナリデータの塊を表します。
+	// BLOBとはBinaryLargeObjectの略で、大きなバイナリデータの塊を表します。
 	// コンパイル結果から実行用のバイナリ部分を取得します。
 	hr = shaderResult->GetOutput(DXC_OUT_OBJECT, IID_PPV_ARGS(&outBlob), nullptr);
 	assert(SUCCEEDED(hr));

@@ -127,7 +127,7 @@ public:
     /// <summary>
     /// ルートシグネチャ自動生成関数
     /// </summary>
-    /// <param name="refl">シェーダーリフレクション</param>
+    /// <param name="reflections">シェーダーリフレクション</param>
     /// <param name="rootSig">生成先ルートシグネチャ</param>
     static void BuildFromReflection(const std::vector<ShaderReflection>& reflections, RootSignature& rootSig, const std::string& rootSigName);
 

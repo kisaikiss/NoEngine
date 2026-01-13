@@ -1,4 +1,5 @@
 #include "Vector2.h"
+#include "Calculations/Vector2Calculations.h"
 
 namespace NoEngine {
 const Vector2 Vector2::ZERO(0.f, 0.f);
@@ -47,6 +48,26 @@ Vector2 operator*(const Vector2& v, float s) {
 
 Vector2 operator/(const Vector2& v, float s) {
     return Vector2(v.x / s, v.y / s);
+}
+
+float Vector2::Closs(const Vector2& other) const noexcept {
+    return  MathCalculations::Closs(*this, other);
+}
+
+float Vector2::Dot(const Vector2& other) const noexcept {
+    return MathCalculations::Dot(*this, other);
+}
+
+float Vector2::Length() const noexcept {
+    return MathCalculations::Length(*this);
+}
+
+float Vector2::LengthSquared() const noexcept {
+    return MathCalculations::LengthSquared(*this);
+}
+
+Vector2 Vector2::Normalize() const {
+    return MathCalculations::Normalize(*this);
 }
 
 }

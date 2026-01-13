@@ -1,4 +1,7 @@
 #pragma once
+#include "engine/Math/Types/Vector3.h"
+#include "engine/Math/Types/Vector4.h"
+
 namespace NoEngine {
 /// <summary>
 /// 色を表すクラス
@@ -16,6 +19,16 @@ public:
 		b = ((rgba >> 8) & 0xFF) / 255.0f;
 		a = ((rgba >> 0) & 0xFF) / 255.0f;
 	}
+
+	Vector3 ToVector3() const {
+		return Vector3(r, g, b);
+	}
+	Vector4 ToVector4() const {
+		return Vector4(r, g, b, a);
+	}
+
+	// 十六進数へ変換
+	uint32_t ToRGBA8() const;
 
 	float* ptr(void) { return reinterpret_cast<float*>(this); }
 	float& operator[](int index) { return ptr()[index]; }

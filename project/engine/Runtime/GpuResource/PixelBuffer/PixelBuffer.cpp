@@ -61,7 +61,7 @@ void PixelBuffer::CreateTextureResource(ID3D12Device* device, const std::wstring
 #ifndef RELEASE
     resource_->SetName(name.c_str());
 #else
-    (Name);
+    (name);
 #endif
 }
 

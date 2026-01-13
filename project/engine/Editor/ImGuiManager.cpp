@@ -1,6 +1,6 @@
 #include "ImGuiManager.h"
 #include "engine/Runtime/GraphicsCore.h"
-#include "engine/Runtime/Renderer/MeshRenderer.h"
+#include "engine/Functions/Renderer/MeshRenderer.h"
 
 // ToDo : ImGuiは現在NoEngine.sln内に配置しています。専用のImGui.slnを作成し、そこに配置すべきです。
 #include "externals/imgui/imgui.h"

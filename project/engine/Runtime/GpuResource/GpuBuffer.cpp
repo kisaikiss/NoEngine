@@ -11,13 +11,13 @@ void GpuBuffer::Create(const std::wstring& name, uint32_t numElements, uint32_t 
 
     elementCount_ = numElements;
     elementSize_ = elementSize;
-    bufferSize_ = numElements * elementSize;
+    bufferSize_ = static_cast<size_t>(numElements) * elementSize;
 
     D3D12_RESOURCE_DESC ResourceDesc = DescribeBuffer();
 
     usageState_ = D3D12_RESOURCE_STATE_COMMON;
 
-    D3D12_HEAP_PROPERTIES HeapProps;
+    D3D12_HEAP_PROPERTIES HeapProps{};
     HeapProps.Type = D3D12_HEAP_TYPE_DEFAULT;
     HeapProps.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
     HeapProps.MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN;
@@ -49,7 +49,7 @@ D3D12_CPU_DESCRIPTOR_HANDLE GpuBuffer::CreateConstantBufferView(uint32_t offset,
     assert(offset + size <= bufferSize_);
     size = Math::AlignUp(size, 16);
 
-    D3D12_CONSTANT_BUFFER_VIEW_DESC cbvDesc;
+    D3D12_CONSTANT_BUFFER_VIEW_DESC cbvDesc{};
     cbvDesc.BufferLocation = gpuVirtualAddress_ + static_cast<size_t>(offset);
     cbvDesc.SizeInBytes = size;
 
@@ -59,23 +59,23 @@ D3D12_CPU_DESCRIPTOR_HANDLE GpuBuffer::CreateConstantBufferView(uint32_t offset,
 }
 
 D3D12_VERTEX_BUFFER_VIEW GpuBuffer::VertexBufferView(size_t offset, uint32_t size, uint32_t stride) const {
-    D3D12_VERTEX_BUFFER_VIEW vbview;
-    vbview.BufferLocation = gpuVirtualAddress_ + offset;
-    vbview.SizeInBytes = size;
-    vbview.StrideInBytes = stride;
-    return vbview;
+    D3D12_VERTEX_BUFFER_VIEW vbView{};
+    vbView.BufferLocation = gpuVirtualAddress_ + offset;
+    vbView.SizeInBytes = size;
+    vbView.StrideInBytes = stride;
+    return vbView;
 }
 
 D3D12_INDEX_BUFFER_VIEW GpuBuffer::IndexBufferView(size_t offset, uint32_t size, bool b32Bit) const {
-    D3D12_INDEX_BUFFER_VIEW ibview;
-    ibview.BufferLocation = gpuVirtualAddress_ + offset;
-    ibview.Format = b32Bit ? DXGI_FORMAT_R32_UINT : DXGI_FORMAT_R16_UINT;
-    ibview.SizeInBytes = size;
-    return ibview;
+    D3D12_INDEX_BUFFER_VIEW ibView{};
+    ibView.BufferLocation = gpuVirtualAddress_ + offset;
+    ibView.Format = b32Bit ? DXGI_FORMAT_R32_UINT : DXGI_FORMAT_R16_UINT;
+    ibView.SizeInBytes = size;
+    return ibView;
 }
 
 
-D3D12_RESOURCE_DESC GpuBuffer::DescribeBuffer(void) {
+D3D12_RESOURCE_DESC GpuBuffer::DescribeBuffer(void) const {
     assert(bufferSize_ != 0);
 
     D3D12_RESOURCE_DESC desc = {};

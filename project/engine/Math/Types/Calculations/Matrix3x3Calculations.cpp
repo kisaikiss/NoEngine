@@ -104,7 +104,7 @@ Matrix3x3 MakeAffineMatrix(Vector2 const& scale, float const& rotate, Vector2 co
 	return result;
 }
 
-Vector2 Transform(Vector2 const& vector, Matrix3x3 const& matrix) {
+Vector2 TransformPoint(Vector2 const& vector, Matrix3x3 const& matrix) {
 	Vector2 result{};
 	result.x = vector.x * matrix.m[0][0] + vector.y * matrix.m[1][0] + 1.0f * matrix.m[2][0];
 	result.y = vector.x * matrix.m[0][1] + vector.y * matrix.m[1][1] + 1.0f * matrix.m[2][1];

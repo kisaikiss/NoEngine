@@ -2,15 +2,22 @@
 
 #include "engine/Runtime/PipelineStateObject/GraphicsPSO.h"
 #include "engine/Runtime/PipelineStateObject/RootSignature.h"
-#include "engine/Runtime/Shader/ShaderModule.h"
+#include "engine/Functions/Shader/ShaderModule.h"
 #include "engine/Runtime/GpuResource/GpuBuffer.h"
-#include "engine/Math/Types/Vector4.h"
 #include "engine/Assets/Material.h"
-#include "engine/Math/Types/Matrix4x4.h"
 #include "engine/Math/Types/Transform.h"
 #include "engine/Functions/Camera/Camera.h"
 #include "engine/Assets/Texture/TextureManager.h"
 #include "engine/Assets/Mesh.h"
+#include "engine/Math/MathInclude.h"
+#include "RenderSystem.h"
+#include "RenderPass/SpritePass.h"
+#include "engine/Functions/ECS/Registry.h"
+
+#ifdef USE_IMGUI
+#include "externals/imgui/imgui.h"
+#endif // USE_IMGUI
+
 
 namespace NoEngine {
 
@@ -35,11 +42,17 @@ Vertex triangle[] =
 	{{0.5f,-0.5f,-0.5f,1.f},{1.f,1.f}}
 };
 Material material{};
-Matrix4x4 wvpData{};
+Matrix4x4 worldData{};
+Matrix4x4 CameraData{};
 Transform transform;
 float angle;
 std::unique_ptr<Camera> camera;
 std::unique_ptr <TextureRef> texRf;
+std::unique_ptr<Render::SpritePass> spritePass;
+std::unique_ptr <ECS::Registry> registry;
+ECS::Entity en;
+Transform ct;
+
 }
 
 DescriptorHeap MeshRenderer::gTextureHeap;
@@ -49,7 +62,7 @@ void MeshRenderer::Initialize() {
 	ShaderModule::Initialize();
 	ShaderModule defaultVS(ShaderStage::Vertex, L"resources/engine/Shaders/Default.VS.hlsl", L"vs_6_0");
 	ShaderModule defaultPS(ShaderStage::Pixel, L"resources/engine/Shaders/Default.PS.hlsl", L"ps_6_0");
-
+	
 	const ShaderReflection& vsReflection = defaultVS.GetReflection();
 	const ShaderReflection& psReflection = defaultPS.GetReflection();
 	std::vector<ShaderReflection> refls;
@@ -90,18 +103,29 @@ void MeshRenderer::Initialize() {
 
 	// 三角形の描画テスト用初期化を行います。
 	vertexResource = make_unique<ByteAddressBuffer>();
-	vertexResource->Create(L"vertex", sizeof(triangle), sizeof(Vertex), triangle);
-	vbv = vertexResource->VertexBufferView(0, sizeof(triangle), sizeof(Vertex));
+	
 	material.color = { 1.f,1.f,0.f,1.f };
-	wvpData = Matrix4x4::IDENTITY;
+	worldData = Matrix4x4::IDENTITY;
+	CameraData = Matrix4x4::IDENTITY;
 	transform = Transform();
 	angle = 0.f;
 	
-	texRf = std::make_unique<TextureRef>(TextureManager::LoadCovertTexture("resources/engine/uvChecker.png"));
+	texRf = std::make_unique<TextureRef>(TextureManager::LoadCovertTexture("resources/engine/flower.png"));
+
+	Renderer::Initialize();
+	spritePass = std::make_unique<Render::SpritePass>();
+	registry = std::make_unique<ECS::Registry>();
+	en = registry->GenerateEntity();
+	registry->AddComponent<Component::Transform2DComponent>(en);
+	registry->AddComponent<Component::SpriteComponent>(en);
+	auto m = registry->AddComponent<Component::MaterialComponent>(en);
+	m->textureHandle = TextureManager::LoadCovertTexture("resources/engine/flower.png");
 }
 
 void MeshRenderer::Shutdown() {
+	registry.reset();
 	texRf.reset();
+	spritePass.reset();
 	gTextureHeap.Destroy();
 	vertexResource->Destroy();
 	vertexResource.reset();
@@ -113,16 +137,36 @@ void MeshRenderer::Shutdown() {
 void MeshRenderer::Render(GraphicsContext& context) {
 	if (!camera) {
 		camera = std::make_unique<Camera>();
-		Transform ct;
+		
 		ct.rotation = { 0.f,0.f,0.f,1.f };
 		ct.scale = { 1.f,1.f,1.f };
 		ct.translate = { 0.f,0.f,-5.f };
 		camera->SetTransform(ct);
 	}
 
+#ifdef USE_IMGUI
+	ImGui::Begin("camera");
+	ImGui::DragFloat3("pos", &ct.translate.x,0.1f);
+	ImGui::End();
+	camera->SetTransform(ct);
+	auto* a = registry->GetComponent<Component::Transform2DComponent>(en);
+	auto* b = registry->GetComponent<Component::MaterialComponent>(en);
+	auto* c = registry->GetComponent<Component::SpriteComponent>(en);
+	ImGui::Begin("sprite");
+	ImGui::DragFloat2("transform", &a->translate.x, 0.05f);
+	ImGui::DragFloat2("scale", &a->scale.x, 0.05f);
+	ImGui::DragFloat("rotate", &a->rotation, 0.04f);
+	ImGui::DragFloat4("uv", &b->uv.x, 0.01f);
+	ImGui::Checkbox("flipX", &c->flipX);
+	ImGui::Checkbox("flipY", &c->flipY);
+	ImGui::End();
+#endif // USE_IMGUI
+
+
 	context.SetRootSignature(sRootSig);
 	context.SetPipelineState(sGraphicsPSOs.back());
-
+	vertexResource->Create(L"vertex", sizeof(triangle), sizeof(Vertex), triangle);
+	vbv = vertexResource->VertexBufferView(0, sizeof(triangle), sizeof(Vertex));
 
 	context.SetVertexBuffer(0, vbv);
 	context.SetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -131,13 +175,15 @@ void MeshRenderer::Render(GraphicsContext& context) {
 	context.SetDynamicConstantBufferView(rootIndex["gMaterial"], sizeof(Material), &material);
 	angle += 0.05f;
 	transform.rotation.FromAxisAngle(Vector3(0.f, 1.f, 0.f), angle);
-	wvpData = transform.MakeAffineMatrix4x4();
+	worldData = transform.MakeAffineMatrix4x4();
 	camera->Update();
-	wvpData = wvpData * camera->GetViewProjMatrix();
-	context.SetDynamicConstantBufferView(rootIndex["gTransformationMatrix"], sizeof(Matrix4x4), &wvpData);
+	
+	context.SetDynamicConstantBufferView(rootIndex["gWorldMatrix"], sizeof(Matrix4x4), &worldData);
+	context.SetDynamicConstantBufferView(rootIndex["gCameraMatrix"], sizeof(Matrix4x4), &camera->GetViewProjMatrix());
 	context.SetDynamicDescriptor(rootIndex["gTexture"], 0, texRf->GetSRV());
 
 	context.Draw(6);
-
+	
+	spritePass->Execute(context, *registry);
 }
 }

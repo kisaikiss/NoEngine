@@ -1,10 +1,10 @@
 #include "Default.hlsli"
 
-struct TransformationMatrix
+struct WorldMatrix
 {
-    float4x4 WVP;
+    float4x4 world;
 };
-ConstantBuffer<TransformationMatrix> gTransformationMatrix : register(b1);
+ConstantBuffer<WorldMatrix> gWorldMatrix : register(b1);
 
 struct VertexShaderInput
 {
@@ -15,7 +15,8 @@ struct VertexShaderInput
 VertexShaderOutput main(VertexShaderInput input)
 {
     VertexShaderOutput output;
-    output.position = mul(input.position, gTransformationMatrix.WVP);
+    float4 worldPos = mul(input.position, gWorldMatrix.world);
+    output.position = mul(worldPos, gCameraMatrix.viewProjection);
     output.texcoord = input.texcoord;
     return output;
 }

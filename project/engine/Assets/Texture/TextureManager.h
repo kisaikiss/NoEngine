@@ -49,6 +49,11 @@ public:
 
     const Texture* operator->(void) const;
 
+    bool operator<(const TextureRef& other) const {
+        return ref_ < other.ref_; // SpritePassでテクスチャをまとめて描画するために使用します。
+    }
+
+
 private:
     ManagedTexture* ref_;
 };

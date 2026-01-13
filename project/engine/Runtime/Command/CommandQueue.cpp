@@ -2,7 +2,7 @@
 #include "CommandListManager.h"
 #include "../GraphicsCore.h"
 
-#include "engine/Debug/Logger/Log.h"
+#include "engine/Functions/Debug/Logger/Log.h"
 
 namespace NoEngine {
 CommandQueue::CommandQueue(D3D12_COMMAND_LIST_TYPE type) :

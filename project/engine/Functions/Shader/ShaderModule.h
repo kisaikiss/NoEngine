@@ -72,7 +72,7 @@ private:
 	/// シェーダーのキャッシュ判定に使うハッシュを生成します。
 	/// </summary>
 	/// <returns></returns>
-	size_t ComputeCompileHash();
+	size_t ComputeCompileHash() const;
 
 	/// <summary>
 	/// シェーダーをコンパイルします。
