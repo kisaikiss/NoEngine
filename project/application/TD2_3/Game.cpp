@@ -4,6 +4,7 @@
 #include "engine/Functions/ECS/Component/MaterialComponent.h"
 #include "engine/Assets/ModelLoader.h"
 #include "engine/Functions/Renderer/RenderSystem.h"
+#include "engine/Functions/Input/Keyboard.h"
 
 #include <externals/imgui/imgui.h>
 
@@ -31,11 +32,18 @@ void Game::Update(float deltaT) {
 	auto* b = registry.GetComponent<NoEngine::Component::MaterialComponent>(entity_);
 	angle += 0.1f * deltaT;
 	a->rotation.FromAxisAngle(NoEngine::Vector3(0.f, 1.f, 0.f), angle);
+
+
 	ImGui::Begin("model");
 	ImGui::DragFloat3("translate", &a->translate.x, 0.05f);
 	ImGui::DragFloat3("scale", &a->scale.x, 0.05f);
 	ImGui::DragFloat4("rotate", &a->rotation.x, 0.04f);
 	ImGui::DragFloat4("uv", &b->uv.x, 0.01f);
+	ImGui::End();
+
+	bool isPress = NoEngine::Input::Keyboard::IsPress('A');
+	ImGui::Begin("InputKeys");
+	ImGui::Checkbox("isPressA", &isPress);
 	ImGui::End();
 #endif // USE_IMGUI
 
