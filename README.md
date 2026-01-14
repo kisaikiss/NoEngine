@@ -11,12 +11,27 @@ Microsoft MiniEngineのリソース管理やDirectX12の初期化部分などを
 #### ECS(Entity Component System)  
 NoEngineでは効率的なデータ配置が出来るECSを採用しています。  
 namespace ECS内にあるクラス群がECSに必要なクラスです。そのうちのRegistryクラスがEntityとComponentの管理を行っています。
-Registryのメンバ関数であるGetQuery()を使用してSystemを構築します。
+Registryのメンバ関数であるView()を使用してSystemを構築します。
   
 * 以下の様に使用。指定した複数のコンポーネントを持ったエンティティだけを取得できます。  
-auto view = registry.GetQuery<Transform, Velocity>();  
+auto view = registry.View<Transform, Velocity>();  
 for(auto entity : view) {  
   　 　auto* transform = registry.GetComponent< Transform >(entity);  
  　　 auto* velocity = registry.GetComponent< Velocity >(entity);  
 　 　 transform->translate += velocity->v;  
 }
+
+* システムの適応方法  
+システムの適応はシーンごとに行います。  
+ISceneを継承したクラスのSetup()内でAddSystem(std::make_unique<TestSystem>());のように書くことでシステムが適応されます。  
+  
+#### ゲームアプリケーション
+新たなゲームはIGameAppを継承して作成します。  
+IGameApp::Startup()をオーバーライドした関数内でシーンの登録と初期シーンの生成を行います。  
+  
+// シーンの登録  
+RegisterScene("TestScene", []() {
+	return std::make_unique< TestScene >();
+	});   
+// 初期シーンの生成  
+ChangeScene("TestScene");
