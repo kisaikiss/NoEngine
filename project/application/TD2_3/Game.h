@@ -1,7 +1,7 @@
 #pragma once
-#include "engine/Runtime/GameCore.h"
+#include "engine/NoEngine.h"
 
-class Game : public NoEngine::GameCore::IGameApp {
+class Game : public No::IGameApp {
 public:
 	/// <summary>
 	/// ゲームアプリケーションの初期化を行います。
@@ -20,6 +20,6 @@ public:
 	/// <param name="deltaT">経過時間</param>
 	void Update(float deltaT) override;
 private:
-	NoEngine::ECS::Entity entity_;
+	No::Entity entity_;
 };
 

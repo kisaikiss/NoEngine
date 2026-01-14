@@ -236,6 +236,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="engine\Math\Types\Calculations\Vector2Calculations.h" />
     <ClInclude Include="engine\Math\Types\Rect.h" />
     <ClInclude Include="engine\Math\Types\Transform2D.h" />
+    <ClInclude Include="engine\NoEngine.h" />
     <ClInclude Include="engine\Runtime\GpuResource\PixelBuffer\DepthBuffer.h" />
     <ClInclude Include="engine\Assets\Mesh.h" />
     <ClInclude Include="engine\Assets\Texture\TextureManager.h" />

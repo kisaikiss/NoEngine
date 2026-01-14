@@ -582,6 +582,9 @@
     <ClInclude Include="engine\Functions\Input\Keyboard.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="engine\NoEngine.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\engine\Shaders\Default.VS.hlsl" />
