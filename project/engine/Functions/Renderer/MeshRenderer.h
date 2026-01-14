@@ -26,7 +26,7 @@ namespace MeshRenderer {
 
     void Render(GraphicsContext& context);
 
-    extern DescriptorHeap gTextureHeap;
+   
 };
 }
 

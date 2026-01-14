@@ -1,6 +1,6 @@
 #include "ImGuiManager.h"
 #include "engine/Runtime/GraphicsCore.h"
-#include "engine/Functions/Renderer/MeshRenderer.h"
+#include "engine/Functions/Renderer/RenderSystem.h"
 
 // ToDo : ImGuiは現在NoEngine.sln内に配置しています。専用のImGui.slnを作成し、そこに配置すべきです。
 #include "externals/imgui/imgui.h"
@@ -88,9 +88,9 @@ void ImGuiManager::Initialize() {
 	initInfo.NumFramesInFlight = 2;
 	initInfo.RTVFormat = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
 	initInfo.DSVFormat = DXGI_FORMAT_UNKNOWN;
-	initInfo.SrvDescriptorHeap = MeshRenderer::gTextureHeap.GetHeapPointer();
+	initInfo.SrvDescriptorHeap = Render::gTextureHeap.GetHeapPointer();
 	initInfo.SrvDescriptorAllocFn = [](ImGui_ImplDX12_InitInfo*, D3D12_CPU_DESCRIPTOR_HANDLE* out_cpu_handle, D3D12_GPU_DESCRIPTOR_HANDLE* out_gpu_handle) {
-		auto& textureHeap = MeshRenderer::gTextureHeap;
+		auto& textureHeap = Render::gTextureHeap;
 		DescriptorHandle handle = textureHeap.Alloc();
 
 		*out_cpu_handle = D3D12_CPU_DESCRIPTOR_HANDLE(handle);
@@ -133,7 +133,7 @@ void ImGuiManager::BeginFrame() {
 
 void ImGuiManager::Render(GraphicsContext& context) {
 	ImGui::Render();
-	context.SetDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, MeshRenderer::gTextureHeap.GetHeapPointer());
+	context.SetDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, Render::gTextureHeap.GetHeapPointer());
 	ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), context.GetCommandList());
 }
 

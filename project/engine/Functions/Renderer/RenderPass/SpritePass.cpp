@@ -135,8 +135,8 @@ void SpritePass::Render(GraphicsContext& gfx) {
 		if (batch.vertexCount == 0) continue;
 
 		if (batch.pso == nullptr) {
-			gfx.SetRootSignature(Renderer::gDefaultSpriteRootSignature);
-			gfx.SetPipelineState(Renderer::gDefaultSpritePSO);
+			gfx.SetRootSignature(Render::GetRootSignature("defaultSpriteRootSignature"));
+			gfx.SetPipelineState(Render::GetPSO(L"Renderer : Default Sprite PSO"));
 		} else if (batch.pso != currentPSO) {
 			gfx.SetPipelineState(*batch.pso);
 			currentPSO = batch.pso;

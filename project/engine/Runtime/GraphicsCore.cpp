@@ -2,7 +2,7 @@
 
 #include "Command/CommandListManager.h"
 #include "ContextManager.h"
-#include "engine/Functions/Renderer/MeshRenderer.h"
+#include "engine/Functions/Renderer/RenderSystem.h"
 #include "engine/Runtime/GpuResource/LinearAllocator/LinearAllocator.h"
 #include "Graphics/GraphicsCommon.h"
 
@@ -32,15 +32,12 @@ void Initialize() {
 	gGraphicsDevice = make_unique<Graphics::GraphicsDevice>(gGraphicsInfrastructures->GetDXGIAdapter());
 	gCommandListManager.Create();
 	SettingDebugLayer();
-
-	// Graphics::InitializeCommonState();
-	MeshRenderer::Initialize();
+	Render::Initialize();
 }
 
 void Shutdown(void) {
 	gWindowManager.Shutdown();
-	MeshRenderer::Shutdown();
-	// Graphics::DestroyCommonState();
+	Render::Shutdown();
 	CommandContext::DestroyAllContexts();
 
 	for (auto& descriptorAllocator : gDescriptorAllocator) {

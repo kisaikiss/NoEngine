@@ -7,7 +7,7 @@ class RenderPassScheduler {
 public:
 	void Initialize();
 	void Render(GraphicsContext& gfx, ECS::Registry& registry);
-
+	void SetCamera(CameraBase* camera);
 private:
 	std::vector<std::unique_ptr<RenderPass>> passes_;
 };

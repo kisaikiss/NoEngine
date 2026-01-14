@@ -1,6 +1,7 @@
 #include "MeshPass.h"
 #include "engine/Math/Types/Calculations/Vector3Calculations.h"
 #include "engine/Functions/Shader/ShaderReflection.h"
+#include "engine/Functions/Renderer/RenderSystem.h"
 
 namespace NoEngine {
 namespace Render {
@@ -47,11 +48,12 @@ void MeshPass::Render(GraphicsContext& context) {
 	MaterialComponent* currentMaterial = nullptr;
 	
 	// ToDo : これでは一つの特定のルートシグネチャしか利用できません。pso切り替え時に別のルートシグネチャをセットする場合は別のrootIndexMapを取得できるようにすべきです。
-	std::unordered_map<std::string, uint32_t>& rootIndex = RootSignatureBuilder::GetRootIndexMap("defaultRootSig");
+	std::unordered_map<std::string, uint32_t>& rootIndex = RootSignatureBuilder::GetRootIndexMap("defaultRootSignature");
 	for (auto& item : items_) {
 
 		if (item.material->pso != currentPSO) {
 			context.SetPipelineState(*item.material->pso);
+			context.SetRootSignature(GetRootSignature("defaultRootSignature"));
 			context.SetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 			currentPSO = item.material->pso;
 		}

@@ -57,8 +57,6 @@ Transform ct;
 std::unique_ptr<Render::MeshPass> meshPass;
 }
 
-DescriptorHeap MeshRenderer::gTextureHeap;
-
 void MeshRenderer::Initialize() {
 	// ToDo : 現在はシェーダーコンパイル、PSO生成をここで行っていますが、アプリケーション側で動的に行えるようにするべきです。
 	ShaderModule::Initialize();
@@ -101,7 +99,7 @@ void MeshRenderer::Initialize() {
 	defaultPSO.Finalize();
 	sGraphicsPSOs.push_back(defaultPSO);
 
-	gTextureHeap.Create(L"Scene Texture Descriptors", D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 4096);
+	
 
 	// 三角形の描画テスト用初期化を行います。
 	vertexResource = make_unique<ByteAddressBuffer>();
@@ -114,7 +112,6 @@ void MeshRenderer::Initialize() {
 	
 	texRf = std::make_unique<TextureRef>(TextureManager::LoadCovertTexture("resources/engine/Model/enemy.png"));
 	meshPass = std::make_unique<Render::MeshPass>();
-	Renderer::Initialize();
 	registry = std::make_unique<ECS::Registry>();
 	en = registry->GenerateEntity();
 	en2 = registry->GenerateEntity();
@@ -143,13 +140,7 @@ void MeshRenderer::Shutdown() {
 	registry.reset();
 	meshPass.reset();
 	texRf.reset();
-	ModelLoader::DeleteAll();
-	gTextureHeap.Destroy();
-	vertexResource->Destroy();
-	vertexResource.reset();
-	PSO::DestroyAll();
-	RootSignature::DestroyAll();
-	ShaderModule::Shutdown();
+
 }
 
 void MeshRenderer::Render(GraphicsContext& context) {

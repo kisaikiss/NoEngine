@@ -126,7 +126,7 @@ public:
 		return Query<Components...>(*this);
 	}
 
-
+	bool Empty();
 private:
 	// エンティティと有効フラグを紐づけするコンテナ
 	std::vector<bool> entityToActive_;

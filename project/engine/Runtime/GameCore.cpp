@@ -9,23 +9,49 @@
 #include "engine/Runtime/GpuResource/GpuResource.h"
 #include "engine/Functions/Renderer/MeshRenderer.h"
 #include "engine/Runtime/Command/GraphicsContext.h"
+#include "engine/Functions/Renderer/RenderPass/RenderPassScheduler.h"
+#include "engine/Functions/Camera/Camera.h"
+
 #ifdef USE_IMGUI
 #include "engine/Editor/ImGuiManager.h"
+#include "externals/imgui/imgui.h"
 namespace {
 NoEngine::Editor::ImGuiManager imguiManager;
 }
 #endif // USE_IMGUI
+
 namespace NoEngine {
 namespace GameCore {
 
+namespace {
+std::chrono::steady_clock::time_point sLastTickTime{ std::chrono::steady_clock::now() };
+}
 
-
-int RunApplication(AllowAccessOnlyFromWinMain) {
-	//リソースリークチェッカー
+int RunApplication(std::unique_ptr<IGameApp> game) {
+	// リソースリークチェッカー
 	GraphicsResourceLeakChecker leakCheck;
 
 	EngineInitialize();
 
+	std::unique_ptr<Render::RenderPassScheduler> renderPassScheduler = std::make_unique<Render::RenderPassScheduler>();
+	renderPassScheduler->Initialize();
+
+	// ECSのレジストリを生成します。
+	std::unique_ptr<ECS::Registry> registry = std::make_unique<ECS::Registry>();
+	
+	// ゲームアプリケーションの初期化を行います。
+	game->SetRegistry(registry.get());
+	game->Startup();
+
+	// カメラテスト
+	std::unique_ptr<Camera> camera = std::make_unique<Camera>();
+	Transform cameraTransform{};
+	cameraTransform.rotation = { 0.f,0.f,0.f,1.f };
+	cameraTransform.scale = { 1.f,1.f,1.f };
+	cameraTransform.translate = { 0.f,0.f,-5.f };
+	camera->SetTransform(cameraTransform);
+
+	// メインループ
 	while (GraphicsCore::gWindowManager.ProcessMessage() == 0) {
 
 		GraphicsContext& context = GraphicsContext::Begin();
@@ -33,11 +59,21 @@ int RunApplication(AllowAccessOnlyFromWinMain) {
 
 #ifdef USE_IMGUI
 		imguiManager.BeginFrame();
+
+		ImGui::Begin("camera");
+		ImGui::DragFloat3("pos", &cameraTransform.translate.x, 0.1f);
+		ImGui::End();
+		camera->SetTransform(cameraTransform);
 #endif // USE_IMGUI
 
-		
+		const float deltaTime = CalculateDeltaTime();
+		game->Update(deltaTime);
 
-		MeshRenderer::Render(context);
+		camera->Update();
+
+		renderPassScheduler->SetCamera(camera.get());
+		renderPassScheduler->Render(context, *registry);
+
 #ifdef USE_IMGUI
 		imguiManager.Render(context);
 #endif // USE_IMGUI
@@ -46,6 +82,7 @@ int RunApplication(AllowAccessOnlyFromWinMain) {
 		GraphicsCore::gWindowManager.EndFrame(context);
 	}
 
+	game->Cleanup();
 	EngineFinalize();
 
 	return 0;
@@ -77,7 +114,6 @@ void EngineInitialize() {
 	imguiManager.Initialize();
 #endif // USE_IMGUI
 
-	
 }
 
 void EngineFinalize() {
@@ -87,5 +123,20 @@ void EngineFinalize() {
 	GraphicsCore::Shutdown();
 	CoUninitialize();
 }
+
+float CalculateDeltaTime() {
+	float deltaTime;
+	{
+		using namespace std::chrono;
+
+		steady_clock::time_point tickTimePoint = steady_clock::now();
+		duration<float> time_span = tickTimePoint - sLastTickTime;
+		deltaTime = time_span.count();
+
+		sLastTickTime = tickTimePoint;
+	}
+	return deltaTime;
+}
+
 }
 }

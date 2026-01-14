@@ -27,5 +27,10 @@ void Registry::DestroyEntity(Entity entity) {
 		pool.second->RemoveIfExists(entity);
 	}
 }
+
+bool Registry::Empty() {
+	return entityToActive_.empty();
+}
+
 }
 }
