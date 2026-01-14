@@ -21,4 +21,5 @@ using namespace NoEngine::GameCore;
 using namespace NoEngine::ECS;
 using namespace NoEngine::Input;
 using namespace NoEngine::Component;
+using namespace NoEngine::Scene;
 }

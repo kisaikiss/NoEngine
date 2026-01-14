@@ -1,7 +1,7 @@
 #pragma once
 #include "../Registry.h"
 namespace NoEngine {
-namespace System {
+namespace ECS {
 class ISystem {
 public:
 	virtual ~ISystem() = default;

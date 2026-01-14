@@ -9,7 +9,6 @@
 #include "engine/Runtime/GpuResource/GpuResource.h"
 #include "engine/Runtime/Command/GraphicsContext.h"
 #include "engine/Functions/Renderer/RenderPass/RenderPassScheduler.h"
-#include "engine/Functions/Camera/Camera.h"
 #include "engine/Functions/Input/Keyboard.h"
 
 #ifdef USE_IMGUI
@@ -36,20 +35,8 @@ int RunApplication(std::unique_ptr<IGameApp> game) {
 	std::unique_ptr<Render::RenderPassScheduler> renderPassScheduler = std::make_unique<Render::RenderPassScheduler>();
 	renderPassScheduler->Initialize();
 
-	// ECSのレジストリを生成します。
-	std::unique_ptr<ECS::Registry> registry = std::make_unique<ECS::Registry>();
-	
 	// ゲームアプリケーションの初期化を行います。
-	game->SetRegistry(registry.get());
 	game->Startup();
-
-	// カメラテスト
-	std::unique_ptr<Camera> camera = std::make_unique<Camera>();
-	Transform cameraTransform{};
-	cameraTransform.rotation = { 0.f,0.f,0.f,1.f };
-	cameraTransform.scale = { 1.f,1.f,1.f };
-	cameraTransform.translate = { 0.f,0.f,-5.f };
-	camera->SetTransform(cameraTransform);
 
 	// メインループ
 	while (GraphicsCore::gWindowManager.ProcessMessage() == 0) {
@@ -61,20 +48,13 @@ int RunApplication(std::unique_ptr<IGameApp> game) {
 
 #ifdef USE_IMGUI
 		imguiManager.BeginFrame();
-
-		ImGui::Begin("camera");
-		ImGui::DragFloat3("pos", &cameraTransform.translate.x, 0.1f);
-		ImGui::End();
-		camera->SetTransform(cameraTransform);
 #endif // USE_IMGUI
 
 		const float deltaTime = CalculateDeltaTime();
 		game->Update(deltaTime);
 
-		camera->Update();
-
-		renderPassScheduler->SetCamera(camera.get());
-		renderPassScheduler->Render(context, *registry);
+		renderPassScheduler->SetCamera(game->GetCamera());
+		renderPassScheduler->Render(context, game->GetRegistry());
 
 #ifdef USE_IMGUI
 		imguiManager.Render(context);

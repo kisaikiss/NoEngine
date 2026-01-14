@@ -1,13 +1,13 @@
 #pragma once
-#include "engine/Functions/ECS/Registry.h"
+#include "engine/Functions/Scene/SceneManager.h"
 namespace NoEngine {
 namespace GameCore {
 /// <summary>
 /// ゲームアプリケーションを作成する際はこのクラスを継承してアプリケーションクラスを作成します。
 /// </summary>
 class IGameApp {
-	friend int RunApplication(std::unique_ptr<IGameApp> game);
 public:
+	IGameApp() : sceneManager_(std::make_unique<Scene::SceneManager>()){}
 	virtual ~IGameApp() = default;
 
 	/// <summary>
@@ -29,11 +29,21 @@ public:
 
 	virtual void RenderScene(void) {};
 
+	ECS::Registry& GetRegistry() { return *sceneManager_->GetRegistry(); }
+
+	CameraBase* GetCamera() { return sceneManager_->GetCamera(); }
+
 protected:
-	ECS::Registry& GetRegistry() { return *registry_; }
+	void RegisterScene(const std::string& name, Scene::SceneManager::SceneFactory factory) { sceneManager_->RegisterScene(name, factory); }
+
+	void ChangeScene(const std::string& name) { sceneManager_->ChangeScene(name); }
+
+	void UpdateScene(float deltaTime) { sceneManager_->Update(deltaTime); }
+
+	void ShutdownSceneManager() { sceneManager_.reset(); }
+
 private:
-	ECS::Registry* registry_;
-	void SetRegistry(ECS::Registry* registry) { registry_ = registry; }
+	std::unique_ptr<Scene::SceneManager> sceneManager_;
 };
 
 /// <summary>
