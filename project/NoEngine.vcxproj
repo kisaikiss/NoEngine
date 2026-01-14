@@ -160,7 +160,6 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="engine\Runtime\PipelineStateObject\GraphicsPSO.cpp" />
     <ClCompile Include="engine\Runtime\PipelineStateObject\PSO.cpp" />
     <ClCompile Include="engine\Runtime\PipelineStateObject\RootSignature.cpp" />
-    <ClCompile Include="engine\Functions\Renderer\MeshRenderer.cpp" />
     <ClCompile Include="engine\Functions\Shader\ShaderModule.cpp" />
     <ClCompile Include="engine\Functions\Shader\ShaderReflection.cpp" />
     <ClCompile Include="engine\Math\Types\Calculations\Matrix4x4Calculations.cpp" />
@@ -280,7 +279,6 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="engine\Runtime\PipelineStateObject\PSO.h" />
     <ClInclude Include="engine\Runtime\PipelineStateObject\RootParameter.h" />
     <ClInclude Include="engine\Runtime\PipelineStateObject\RootSignature.h" />
-    <ClInclude Include="engine\Functions\Renderer\MeshRenderer.h" />
     <ClInclude Include="engine\Functions\Shader\ShaderModule.h" />
     <ClInclude Include="engine\Functions\Shader\ShaderReflection.h" />
     <ClInclude Include="engine\Math\Color\Color.h" />

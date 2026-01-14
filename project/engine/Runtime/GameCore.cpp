@@ -7,7 +7,6 @@
 #include "engine/Functions/Debug/GraphicsResourceLeakChecker.h"
 #include "engine/Runtime/GraphicsCore.h"
 #include "engine/Runtime/GpuResource/GpuResource.h"
-#include "engine/Functions/Renderer/MeshRenderer.h"
 #include "engine/Runtime/Command/GraphicsContext.h"
 #include "engine/Functions/Renderer/RenderPass/RenderPassScheduler.h"
 #include "engine/Functions/Camera/Camera.h"
