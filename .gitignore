@@ -436,3 +436,4 @@ FodyWeavers.xsd
 project/logs
 project/Dumps
 project/externals/DirectXTex/Bin/
+/generated/outputs/Development
