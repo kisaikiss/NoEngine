@@ -42,7 +42,10 @@ public:
     void SetIndexBuffer(const D3D12_INDEX_BUFFER_VIEW& ibview);
     void SetVertexBuffer(UINT slot, const D3D12_VERTEX_BUFFER_VIEW& vbview);
     void SetVertexBuffers(UINT startSlot, UINT count, const D3D12_VERTEX_BUFFER_VIEW vbviews[]);
+    void SetDynamicVB(UINT Slot, size_t NumVertices, size_t VertexStride, const void* VBData);
+    void SetDynamicIB(size_t IndexCount, const uint16_t* IBData);
     void SetDynamicSRV(UINT RootIndex, size_t BufferSize, const void* BufferData);
+    
 
     void Draw(UINT vertexCount, UINT vertexStartOffset = 0);
     void DrawIndexed(UINT indexCount, UINT startIndexLocation = 0, INT baseVertexLocation = 0);

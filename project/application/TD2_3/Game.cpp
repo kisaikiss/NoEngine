@@ -1,6 +1,6 @@
 #include "Game.h"
 #include "Scene/TestScene.h"
-
+#include "Scene/GameScene.h"
 namespace {
 float angle = 0.f;
 }
@@ -9,7 +9,10 @@ void Game::Startup(void) {
 	RegisterScene("TestScene", []() {
 		return std::make_unique<TestScene>();
 		});
-	ChangeScene("TestScene");
+	RegisterScene("GameScene", []() {
+		return std::make_unique<GameScene>();
+		});
+	ChangeScene("GameScene");
 }
 
 void Game::Cleanup(void) {
