@@ -20,27 +20,42 @@ Mesh* ModelLoader::LoadModel(const std::string& name, const std::string& filePat
 		aiMesh* mesh = scene->mMeshes[meshIndex];
 		assert(mesh->HasNormals());
 		assert(mesh->HasTextureCoords(0));
+		auto vertexCount = mesh->mNumVertices;
+		auto indexCount = mesh->mNumFaces * 3;
+		
+		uint32_t vertexBase = static_cast<uint32_t>(sMeshes[name].vertices.size());
+		uint32_t indexBase = static_cast<uint32_t>(sMeshes[name].indices.size());
+		sMeshes[name].vertices.reserve(vertexBase + vertexCount);
+		sMeshes[name].indices.reserve(indexBase + indexCount);
+
+		// Vertex読み込み
+		for (uint32_t vertexIndex = 0; vertexIndex < mesh->mNumVertices; ++vertexIndex) {
+			aiVector3D& position = mesh->mVertices[vertexIndex];
+			aiVector3D& texcoord = mesh->mTextureCoords[0][vertexIndex];
+			// ToDo : ライト未実装のためノーマル読み込み部分がありません。ライト実装次第早急に読み込むべきです。
+
+			Vertex vertex;
+			vertex.position = { -position.x, position.y, position.z, 1.0f };
+			vertex.texcoord = { texcoord.x, texcoord.y };
+			sMeshes[name].vertices.push_back(vertex);
+		}
+		// Index読み込み
 		for (uint32_t faceIndex = 0; faceIndex < mesh->mNumFaces; ++faceIndex) {
 			aiFace& face = mesh->mFaces[faceIndex];
 			assert(face.mNumIndices == 3);
+
 			for (uint32_t element = 0; element < face.mNumIndices; ++element) {
-				// ToDo : ライトがないため、ノーマル読み込み処理がありません。ライトを実装し次第早急に読み込み処理を追加すべきです。
 				uint32_t vertexIndex = face.mIndices[element];
-				aiVector3D& position = mesh->mVertices[vertexIndex];
-				aiVector3D& texcoord = mesh->mTextureCoords[0][vertexIndex];
-				Vertex vertex;
-				vertex.position = { position.x, position.y, position.z, 1.0f };
-				vertex.texcoord = { texcoord.x, texcoord.y };
-				// aiProcess_MakeLeft Handedはz*=-1で、右手->左手に変換するので手動で対処
-				vertex.position.x *= -1.0f;
-				sMeshes[name].vertices.push_back(vertex);
+				sMeshes[name].indices.push_back(vertexIndex);
 			}
+
 		}
 	}
 
 	sMeshes[name].rootNode =  ReadNode(scene->mRootNode);
 
-	sMeshes[name].vertexBuffer.Create(L"Model vertex", sizeof(Vertex) * static_cast<uint32_t>(sMeshes[name].vertices.size()), sizeof(Vertex), sMeshes[name].vertices.data());
+	sMeshes[name].vertexBuffer.Create(L"Model vertex", static_cast<uint32_t>(sMeshes[name].vertices.size()), sizeof(Vertex), sMeshes[name].vertices.data());
+	sMeshes[name].indexBuffer.Create(L"Model index",static_cast<uint32_t>(sMeshes[name].indices.size()), sizeof(uint32_t), sMeshes[name].indices.data());
 
 	// ToDo : Material読み込みもできるようにすべきです。
 

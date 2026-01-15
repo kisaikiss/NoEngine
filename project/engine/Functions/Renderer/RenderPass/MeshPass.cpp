@@ -67,9 +67,10 @@ void MeshPass::Render(GraphicsContext& context) {
 		Matrix4x4 worldData = item.transform->MakeAffineMatrix4x4();
 		context.SetDynamicConstantBufferView(rootIndex["gWorldMatrix"], sizeof(Matrix4x4), &worldData);
 		context.SetDynamicConstantBufferView(rootIndex["gCameraMatrix"], sizeof(Matrix4x4), &GetCamera()->GetViewProjMatrix());
-		context.SetVertexBuffer(0, item.mesh->mesh->vertexBuffer.VertexBufferView(0, sizeof(Vertex) * static_cast<uint32_t>(item.mesh->mesh->vertices.size()), sizeof(Vertex)));
+		context.SetVertexBuffer(0, item.mesh->mesh->vertexBuffer.VertexBufferView());
+		context.SetIndexBuffer(item.mesh->mesh->indexBuffer.IndexBufferView());
 
-		context.Draw(UINT(item.mesh->mesh->vertices.size()));
+		context.DrawIndexed(UINT(item.mesh->mesh->indices.size()));
 	}
 }
 
