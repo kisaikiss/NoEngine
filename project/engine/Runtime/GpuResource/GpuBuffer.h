@@ -14,8 +14,8 @@ public:
     void Create(const std::wstring& name, uint32_t numElements, uint32_t elementSize,
         const void* initialData = nullptr);
 
-   /* void Create(const std::wstring& name, uint32_t NumElements, uint32_t ElementSize,
-        const UploadBuffer& srcData, uint32_t srcOffset = 0);*/
+    void Create(const std::wstring& name, uint32_t NumElements, uint32_t ElementSize,
+        const UploadBuffer& srcData, uint32_t srcOffset = 0);
 
     // 事前に割り当てられたヒープからバッファをサブ割り当てします。初期データが指定されている場合は、デフォルトのコマンドコンテキストを使用してバッファにコピーされます。
    /* void CreatePlaced(const std::wstring& name, ID3D12Heap* pBackingHeap, uint32_t HeapOffset, uint32_t NumElements, uint32_t ElementSize,
@@ -31,7 +31,7 @@ public:
     D3D12_VERTEX_BUFFER_VIEW VertexBufferView(size_t offset, uint32_t size, uint32_t stride) const;
     D3D12_VERTEX_BUFFER_VIEW VertexBufferView(size_t baseVertexIndex = 0) const {
         size_t offset = baseVertexIndex * elementSize_;
-        return VertexBufferView(offset, (uint32_t)(elementSize_ - offset), elementSize_);
+        return VertexBufferView(offset, (uint32_t)(bufferSize_ - offset), elementSize_);
     }
 
     D3D12_INDEX_BUFFER_VIEW IndexBufferView(size_t offset, uint32_t size, bool b32Bit = false) const;

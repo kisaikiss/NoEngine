@@ -45,6 +45,44 @@ void GpuBuffer::Create(const std::wstring& name, uint32_t numElements, uint32_t 
     CreateDerivedViews();
 }
 
+void GpuBuffer::Create(const std::wstring& name, uint32_t NumElements, uint32_t ElementSize, const UploadBuffer& srcData, uint32_t srcOffset)
+{
+    Destroy();
+
+    elementCount_ = NumElements;
+    elementSize_ = ElementSize;
+    bufferSize_ = NumElements * ElementSize;
+
+    D3D12_RESOURCE_DESC ResourceDesc = DescribeBuffer();
+
+    usageState_ = D3D12_RESOURCE_STATE_COMMON;
+
+    D3D12_HEAP_PROPERTIES HeapProps;
+    HeapProps.Type = D3D12_HEAP_TYPE_DEFAULT;
+    HeapProps.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
+    HeapProps.MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN;
+    HeapProps.CreationNodeMask = 1;
+    HeapProps.VisibleNodeMask = 1;
+
+    HRESULT hr = GraphicsCore::gGraphicsDevice->GetDevice()->CreateCommittedResource(&HeapProps, D3D12_HEAP_FLAG_NONE,
+            &ResourceDesc, usageState_, nullptr, IID_PPV_ARGS(&resource_));
+    if (FAILED(hr))
+    {
+        assert(false);
+    }
+    gpuVirtualAddress_ = resource_->GetGPUVirtualAddress();
+
+    CommandContext::InitializeBuffer(*this, srcData, srcOffset);
+
+#ifdef _DEBUG
+    resource_->SetName(name.c_str());
+#else
+    (name);
+#endif
+
+    CreateDerivedViews();
+}
+
 D3D12_CPU_DESCRIPTOR_HANDLE GpuBuffer::CreateConstantBufferView(uint32_t offset, uint32_t size) const {
     assert(offset + size <= bufferSize_);
     size = Math::AlignUp(size, 16);
