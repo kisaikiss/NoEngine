@@ -1,5 +1,6 @@
 #include "ModelLoader.h"
 #include "engine/Math/Types/Transform.h"
+#include "engine/Runtime/GpuResource/UploadBuffer.h"
 
 namespace NoEngine {
 namespace {
@@ -22,9 +23,10 @@ Mesh* ModelLoader::LoadModel(const std::string& name, const std::string& filePat
 		assert(mesh->HasTextureCoords(0));
 		auto vertexCount = mesh->mNumVertices;
 		auto indexCount = mesh->mNumFaces * 3;
-		
+
 		uint32_t vertexBase = static_cast<uint32_t>(sMeshes[name].vertices.size());
 		uint32_t indexBase = static_cast<uint32_t>(sMeshes[name].indices.size());
+
 		sMeshes[name].vertices.reserve(vertexBase + vertexCount);
 		sMeshes[name].indices.reserve(indexBase + indexCount);
 
@@ -46,16 +48,47 @@ Mesh* ModelLoader::LoadModel(const std::string& name, const std::string& filePat
 
 			for (uint32_t element = 0; element < face.mNumIndices; ++element) {
 				uint32_t vertexIndex = face.mIndices[element];
-				sMeshes[name].indices.push_back(vertexIndex);
+				// 各メッシュの頂点配列を結合しているため、インデックスには現在の頂点ベースを加算する
+				sMeshes[name].indices.push_back(vertexBase + vertexIndex);
 			}
 
 		}
 	}
 
 	sMeshes[name].rootNode =  ReadNode(scene->mRootNode);
+	//vertex
+	{
+		size_t vertexBufferSize = sMeshes[name].vertices.size() * sizeof(Vertex);
 
-	sMeshes[name].vertexBuffer.Create(L"Model vertex", static_cast<uint32_t>(sMeshes[name].vertices.size()), sizeof(Vertex), sMeshes[name].vertices.data());
-	sMeshes[name].indexBuffer.Create(L"Model index",static_cast<uint32_t>(sMeshes[name].indices.size()), sizeof(uint32_t), sMeshes[name].indices.data());
+		UploadBuffer vertexUpload;
+		vertexUpload.Create(L"VertexUpload", vertexBufferSize);
+		memcpy(vertexUpload.Map(), sMeshes[name].vertices.data(), vertexBufferSize);
+		vertexUpload.Unmap();
+
+		sMeshes[name].vertexBuffer.Create(
+			L"Model vertex",
+			static_cast<uint32_t>(sMeshes[name].vertices.size()),
+			sizeof(Vertex),
+			vertexUpload
+		);
+	}
+	 
+	//index
+	{
+		size_t indexBufferSize = sMeshes[name].indices.size() * sizeof(uint32_t);
+
+		UploadBuffer indexUpload;
+		indexUpload.Create(L"IndexUpload", indexBufferSize);
+		memcpy(indexUpload.Map(), sMeshes[name].indices.data(), indexBufferSize);
+		indexUpload.Unmap();
+
+		sMeshes[name].indexBuffer.Create(
+			L"Model index",
+			static_cast<uint32_t>(sMeshes[name].indices.size()),
+			sizeof(uint32_t),
+			indexUpload
+		);
+	}
 
 	// ToDo : Material読み込みもできるようにすべきです。
 

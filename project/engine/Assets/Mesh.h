@@ -14,11 +14,19 @@ struct Node {
 	std::vector<Node> children;
 };
 
+struct SubMesh {
+	uint32_t vertexStart =0;
+	uint32_t vertexCount =0;
+	uint32_t indexStart =0;
+	uint32_t indexCount =0;
+};
+
 struct Mesh {
 	std::vector<Vertex> vertices;
 	std::vector<uint32_t> indices;
 	ByteAddressBuffer vertexBuffer;
 	ByteAddressBuffer indexBuffer;
 	Node rootNode;
+	std::vector<SubMesh> submeshes; // per-aiMesh ranges when model contains multiple meshes
 };
 }
