@@ -36,5 +36,9 @@ Vector3 MakeOrthographicVector(Vector3& v1, Vector3& v2) {
 	result.z = (v2.z * Dot(v1, v2));
 	return result;
 }
+float Distance(const Vector3& v1, const Vector3& v2)
+{
+	return Length(v1 - v2);
+}
 }
 }

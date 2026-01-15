@@ -120,6 +120,40 @@ void GraphicsContext::SetVertexBuffers(UINT startSlot, UINT count, const D3D12_V
 	commandList_->IASetVertexBuffers(startSlot, count, vbviews);
 }
 
+void GraphicsContext::SetDynamicVB(UINT Slot, size_t NumVertices, size_t VertexStride, const void* VertexData)
+{
+	assert(VertexData != nullptr && Math::IsAligned(VertexData, 16));
+
+	size_t BufferSize = Math::AlignUp(NumVertices * VertexStride, 16);
+	DynAlloc vb = cpuLinearAllocator_.Allocate(BufferSize);
+
+	std::memcpy(vb.DataPtr, VertexData, BufferSize >> 4);
+
+	D3D12_VERTEX_BUFFER_VIEW VBView;
+	VBView.BufferLocation = vb.GpuAddress;
+	VBView.SizeInBytes = (UINT)BufferSize;
+	VBView.StrideInBytes = (UINT)VertexStride;
+
+	commandList_->IASetVertexBuffers(Slot, 1, &VBView);
+}
+
+inline void GraphicsContext::SetDynamicIB(size_t IndexCount, const uint16_t* IndexData)
+{
+	assert(IndexData != nullptr && Math::IsAligned(IndexData, 16));
+
+	size_t BufferSize = Math::AlignUp(IndexCount * sizeof(uint16_t), 16);
+	DynAlloc ib = cpuLinearAllocator_.Allocate(BufferSize);
+
+	std::memcpy(ib.DataPtr, IndexData, BufferSize >> 4);
+
+	D3D12_INDEX_BUFFER_VIEW IBView;
+	IBView.BufferLocation = ib.GpuAddress;
+	IBView.SizeInBytes = (UINT)(IndexCount * sizeof(uint16_t));
+	IBView.Format = DXGI_FORMAT_R16_UINT;
+
+	commandList_->IASetIndexBuffer(&IBView);
+}
+
 void GraphicsContext::SetDynamicSRV(UINT RootIndex, size_t BufferSize, const void* BufferData) {
 	assert(BufferData != nullptr && Math::IsAligned(BufferData, 16));
 	DynAlloc cb = cpuLinearAllocator_.Allocate(BufferSize);

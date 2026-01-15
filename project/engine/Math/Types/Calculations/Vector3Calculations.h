@@ -43,5 +43,13 @@ Vector3 Normalize(const Vector3& vector3);
 /// <param name="v2"></param>
 /// <returns></returns>
 Vector3 MakeOrthographicVector(Vector3& v1, Vector3& v2);
+
+/// <summary>
+/// ベクトルの距離
+/// </summary>
+/// <param name="v1"></param>
+/// <param name="v2"></param>
+/// <returns></returns>
+float Distance(const Vector3& v1,const Vector3& v2);
 }
 }

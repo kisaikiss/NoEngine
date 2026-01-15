@@ -8,7 +8,6 @@ namespace Input {
 
 namespace {
 Microsoft::WRL::ComPtr<IGameInput> input;
-GameInputKeyState keyState;
 
 const size_t kKeyNum = 256;
 std::array<bool, kKeyNum> keys;
@@ -37,10 +36,12 @@ void Keyboard::Update() {
 		// 押すキーの数
 		uint32_t keyCount = reading->GetKeyCount();
 		if (keyCount > 0) {
+			GameInputKeyState keyState[16];
+
 			// 押すキー状態
-			reading->GetKeyState(keyCount, &keyState);
+			reading->GetKeyState(_countof(keyState), keyState);
 			for (uint32_t i = 0; i < keyCount; i++) {
-				uint8_t virtualKey = keyState.virtualKey;
+				uint8_t virtualKey = keyState[i].virtualKey;
 				keys[virtualKey] = true;
 			}
 		}
