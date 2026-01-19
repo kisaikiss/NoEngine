@@ -3,6 +3,7 @@
 #include "engine/Runtime/GpuResource/PixelBuffer/ColorBuffer.h"
 #include "engine/Runtime/GpuResource/PixelBuffer/DepthBuffer.h"
 #include "engine/Math/Common.h"
+#include "engine/Utilities/FileUtilities.h"
 
 namespace NoEngine {
 void GraphicsContext::ClearColor(ColorBuffer& target) {
@@ -127,7 +128,7 @@ void GraphicsContext::SetDynamicVB(UINT Slot, size_t NumVertices, size_t VertexS
 	size_t BufferSize = Math::AlignUp(NumVertices * VertexStride, 16);
 	DynAlloc vb = cpuLinearAllocator_.Allocate(BufferSize);
 
-	std::memcpy(vb.DataPtr, VertexData, BufferSize >> 4);
+	Utilities::SIMDMemCopy(vb.DataPtr, VertexData, BufferSize >> 4);
 
 	D3D12_VERTEX_BUFFER_VIEW VBView;
 	VBView.BufferLocation = vb.GpuAddress;
@@ -144,7 +145,7 @@ inline void GraphicsContext::SetDynamicIB(size_t IndexCount, const uint16_t* Ind
 	size_t BufferSize = Math::AlignUp(IndexCount * sizeof(uint16_t), 16);
 	DynAlloc ib = cpuLinearAllocator_.Allocate(BufferSize);
 
-	std::memcpy(ib.DataPtr, IndexData, BufferSize >> 4);
+	Utilities::SIMDMemCopy(ib.DataPtr, IndexData, BufferSize >> 4);
 
 	D3D12_INDEX_BUFFER_VIEW IBView;
 	IBView.BufferLocation = ib.GpuAddress;

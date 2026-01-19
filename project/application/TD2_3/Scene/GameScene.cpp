@@ -5,6 +5,8 @@
 #include "../System/PlayerControlSystem.h"
 #include "../tag.h"
 
+#include "engine/Functions/Renderer/Primitive.h"
+
 void GameScene::Setup()
 {
 	AddSystem(std::make_unique<PlayerControlSystem>());
@@ -20,7 +22,6 @@ void GameScene::Setup()
 	cameraTransform_.translate.z = -10.f;
 	camera_->SetTransform(cameraTransform_);
 	SetCamera(camera_.get());
-
 }
 
 void GameScene::NotSystemUpdate()
