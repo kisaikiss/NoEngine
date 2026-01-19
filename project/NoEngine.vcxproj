@@ -168,6 +168,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\TD2_3\System\CollisionSystem.cpp" />
     <ClCompile Include="application\TD2_3\System\PlayerControlSystem.cpp" />
     <ClCompile Include="application\TD2_3\System\TestSystem.cpp" />
+    <ClCompile Include="application\TD2_3\System\Enemy\BossControlSystem.cpp" />
     <ClCompile Include="engine\Assets\ModelLoader.cpp" />
     <ClCompile Include="engine\Assets\Texture\TexUtil.cpp" />
     <ClCompile Include="engine\Functions\ECS\Registry.cpp" />
@@ -275,6 +276,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="application\TD2_3\System\Enemy\NormalEnemyControlSystem.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -292,6 +294,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\TD2_3\System\PlayerControlSystem.h" />
     <ClInclude Include="application\TD2_3\System\TestSystem.h" />
     <ClInclude Include="application\TD2_3\tag.h" />
+    <ClInclude Include="application\TD2_3\System\Enemy\BossControlSystem.h" />
     <ClInclude Include="engine\Assets\ModelLoader.h" />
     <ClInclude Include="engine\Functions\ECS\Component\MaterialComponent.h" />
     <ClInclude Include="engine\Functions\ECS\Component\MeshComponent.h" />
@@ -430,6 +433,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">false</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="application\TD2_3\System\Enemy\NormalEnemyControlSystem.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="engine\Assets\Texture\Texture.h" />
   </ItemGroup>

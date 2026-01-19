@@ -12,4 +12,5 @@ private:
 
 	void InitPlayer(No::Registry& registry);
 	void InitEnemy(No::Registry& registry);
+	void InitBoss(No::Registry& registry);
 };
