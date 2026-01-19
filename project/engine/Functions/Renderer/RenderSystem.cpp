@@ -109,6 +109,65 @@ void Initialize() {
 	sGraphicsPSOIndexMap[defaultSpritePSOName] = sGraphicsPSOs.size() - 1;
 	sRootSignatures.push_back(std::move(defaultSpriteRootSignature));
 	sRootSignatureIndexMap[defaultSpriteRootSignatureName] = sRootSignatures.size() - 1;
+
+	//primitive
+	{
+		ShaderModule primitiveVS(ShaderStage::Vertex, L"resources/engine/Shaders/Primitive.VS.hlsl", L"vs_6_0");
+		ShaderModule primitivePS(ShaderStage::Pixel, L"resources/engine/Shaders/Primitive.PS.hlsl", L"ps_6_0");
+
+		const ShaderReflection& PrimitiveVsReflection = primitiveVS.GetReflection();
+		const ShaderReflection& PrimitivePsReflection = primitivePS.GetReflection();
+
+		std::vector<ShaderReflection> primitiveRefls;
+		primitiveRefls.push_back(PrimitiveVsReflection);
+		primitiveRefls.push_back(PrimitivePsReflection);
+
+		std::unique_ptr<RootSignature> primitiveRootSignature = std::make_unique<RootSignature>();
+		std::string primitiveRootSignatureName = "primitiveRootSignature";
+		RootSignatureBuilder::BuildFromReflection(primitiveRefls, *primitiveRootSignature, primitiveRootSignatureName);
+
+		D3D12_RASTERIZER_DESC primitiveRasterizerDesc{};
+		primitiveRasterizerDesc.CullMode = D3D12_CULL_MODE_NONE;
+		primitiveRasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
+
+		D3D12_BLEND_DESC blendPrimitiveDesc = {};
+		blendPrimitiveDesc.IndependentBlendEnable = FALSE;
+		blendPrimitiveDesc.RenderTarget[0].BlendEnable = TRUE;
+		blendPrimitiveDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
+		blendPrimitiveDesc.RenderTarget[0].DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
+		blendPrimitiveDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
+		blendPrimitiveDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
+		blendPrimitiveDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_INV_SRC_ALPHA;
+		blendPrimitiveDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
+		blendPrimitiveDesc.RenderTarget[0].RenderTargetWriteMask = 0;
+
+		D3D12_DEPTH_STENCIL_DESC primitiveDepthStencilDesc{};
+		primitiveDepthStencilDesc.DepthEnable = TRUE;
+		primitiveDepthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;
+		primitiveDepthStencilDesc.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
+
+		std::vector<D3D12_INPUT_ELEMENT_DESC> primitiveInputLayout = InputLayoutBuilder::BuildFromReflection(PrimitiveVsReflection);
+
+		std::wstring defaultPrimitivePSOName = L"Renderer : Primitive PSO";
+		GraphicsPSO defaultPrimitivePSO(defaultPrimitivePSOName);
+
+		defaultPrimitivePSO.SetRootSignature(*primitiveRootSignature);
+		defaultPrimitivePSO.SetRasterizerState(primitiveRasterizerDesc);
+		defaultPrimitivePSO.SetBlendState(blendPrimitiveDesc);
+		defaultPrimitivePSO.SetDepthStencilState(primitiveDepthStencilDesc);
+		defaultPrimitivePSO.SetInputLayout(primitiveInputLayout);
+		defaultPrimitivePSO.SetPrimitiveTopologyType(D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
+		defaultPrimitivePSO.SetRenderTargetFormats(1, rtvFormat, DXGI_FORMAT_D24_UNORM_S8_UINT);
+		defaultPrimitivePSO.SetVertexShader(primitiveVS.GetBytecode());
+		defaultPrimitivePSO.SetPixelShader(primitivePS.GetBytecode());
+		defaultPrimitivePSO.SetSampleMask(D3D12_DEFAULT_SAMPLE_MASK);
+		defaultPrimitivePSO.Finalize();
+		sGraphicsPSOs.push_back(defaultPrimitivePSO);
+		sGraphicsPSOIndexMap[defaultPrimitivePSOName] = sGraphicsPSOs.size() - 1;
+		sRootSignatures.push_back(std::move(primitiveRootSignature));
+		sRootSignatureIndexMap[primitiveRootSignatureName] = sRootSignatures.size() - 1;
+
+	}
 	
 }
 

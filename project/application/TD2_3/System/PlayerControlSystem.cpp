@@ -1,6 +1,7 @@
 #include "PlayerControlSystem.h"
 #include "../Component/ColliderComponent.h"
 #include "../tag.h"
+#include "../Render/Primitive.h"
 
 void PlayerControlSystem::Update(No::Registry& registry, float deltaTime)
 {
@@ -31,5 +32,6 @@ void PlayerControlSystem::Update(No::Registry& registry, float deltaTime)
 		{
             material->color = NoEngine::Color(1.0f,1.0f,1.0f,1.0f);
 		}
+		Primitive::DrawSphere(transform->translate, collider->worldRadius, material->color);
 	}
 }
