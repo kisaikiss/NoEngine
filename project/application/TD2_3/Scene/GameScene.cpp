@@ -4,7 +4,8 @@
 #include "../System/CollisionSystem.h"
 #include "../System/PlayerControlSystem.h"
 #include "../tag.h"
-#include "../Render/Primitive.h"
+
+#include "engine/Functions/Renderer/Primitive.h"
 
 void GameScene::Setup()
 {
@@ -21,8 +22,6 @@ void GameScene::Setup()
 	cameraTransform_.translate.z = -10.f;
 	camera_->SetTransform(cameraTransform_);
 	SetCamera(camera_.get());
-	Primitive::Initialize();
-	Primitive::SetViewProj(camera_->GetViewProjMatrix());
 }
 
 void GameScene::NotSystemUpdate()

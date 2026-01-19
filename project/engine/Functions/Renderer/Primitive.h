@@ -51,9 +51,8 @@ public:
 	/// <summary>
 	/// 描画
 	/// </summary>
-	static void Render(NoEngine::GraphicsContext& ctx);
+	static void Render(NoEngine::GraphicsContext& ctx,const NoEngine::Matrix4x4& ViewProj);
 
-	static void SetViewProj(const NoEngine::Matrix4x4& viewProj);
 private:
 	static void AddLineInternal(const NoEngine::Vector3& a, const NoEngine::Vector3& b, const NoEngine::Color& color);
 };

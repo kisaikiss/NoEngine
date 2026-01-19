@@ -16,8 +16,6 @@ namespace
 	RootSignature sRootSig;
 	GraphicsPSO* pPSO = nullptr;
 
-	Matrix4x4 sViewProj;
-
 	std::vector<PrimitiveVertex> sVertices;
 }
 
@@ -128,26 +126,21 @@ void Primitive::DrawTriangle(
 	AddLineInternal(c, a, color);
 }
 
-void Primitive::Render(GraphicsContext& ctx)
+void Primitive::Render(NoEngine::GraphicsContext& ctx, const NoEngine::Matrix4x4& ViewProj)
 {
 	if (sVertices.empty() || !pPSO) return;
 
-	ctx.SetRootSignature(sRootSig);
+	ctx.SetRootSignature(NoEngine::Render::GetRootSignature("primitiveRootSignature"));
 	ctx.SetPipelineState(*pPSO);
 	ctx.SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINELIST);
 
 	ctx.SetDynamicVB(0, sVertices.size(), sizeof(PrimitiveVertex), sVertices.data());
 
-	ctx.SetDynamicConstantBufferView(0, sizeof(sViewProj), &sViewProj);
+	ctx.SetDynamicConstantBufferView(0, sizeof(ViewProj), &ViewProj);
 
 	ctx.DrawInstanced((uint32_t)sVertices.size(), 1, 0, 0);
 
 	sVertices.clear();
-}
-
-void Primitive::SetViewProj(const NoEngine::Matrix4x4& viewProj)
-{
-	sViewProj = viewProj;
 }
 
 void Primitive::AddLineInternal(const NoEngine::Vector3& a, const NoEngine::Vector3& b, const NoEngine::Color& color)

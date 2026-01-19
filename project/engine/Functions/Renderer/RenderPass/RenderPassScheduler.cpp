@@ -1,10 +1,14 @@
 #include "RenderPassScheduler.h"
 #include "SpritePass.h"
 #include "MeshPass.h"
+#include "PrimitivePass.h"
+
 namespace NoEngine {
 namespace Render {
 void RenderPassScheduler::Initialize() {
 	passes_.push_back(std::make_unique<MeshPass>());
+    passes_.push_back(std::make_unique<SpritePass>());
+	passes_.push_back(std::make_unique<PrimitivePass>());
 }
 
 void RenderPassScheduler::Render(GraphicsContext& gfx, ECS::Registry& registry) {

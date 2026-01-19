@@ -139,12 +139,12 @@ void Initialize() {
 		blendPrimitiveDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
 		blendPrimitiveDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_INV_SRC_ALPHA;
 		blendPrimitiveDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
-		blendPrimitiveDesc.RenderTarget[0].RenderTargetWriteMask = 0;
+		blendPrimitiveDesc.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
 
 		D3D12_DEPTH_STENCIL_DESC primitiveDepthStencilDesc{};
-		primitiveDepthStencilDesc.DepthEnable = TRUE;
+		primitiveDepthStencilDesc.DepthEnable = false;
+		primitiveDepthStencilDesc.DepthFunc = D3D12_COMPARISON_FUNC_ALWAYS;
 		primitiveDepthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;
-		primitiveDepthStencilDesc.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
 
 		std::vector<D3D12_INPUT_ELEMENT_DESC> primitiveInputLayout = InputLayoutBuilder::BuildFromReflection(PrimitiveVsReflection);
 
@@ -156,8 +156,8 @@ void Initialize() {
 		defaultPrimitivePSO.SetBlendState(blendPrimitiveDesc);
 		defaultPrimitivePSO.SetDepthStencilState(primitiveDepthStencilDesc);
 		defaultPrimitivePSO.SetInputLayout(primitiveInputLayout);
-		defaultPrimitivePSO.SetPrimitiveTopologyType(D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
-		defaultPrimitivePSO.SetRenderTargetFormats(1, rtvFormat, DXGI_FORMAT_D24_UNORM_S8_UINT);
+		defaultPrimitivePSO.SetPrimitiveTopologyType(D3D12_PRIMITIVE_TOPOLOGY_TYPE_LINE);
+		defaultPrimitivePSO.SetRenderTargetFormats(1, rtvFormat, DXGI_FORMAT_UNKNOWN);
 		defaultPrimitivePSO.SetVertexShader(primitiveVS.GetBytecode());
 		defaultPrimitivePSO.SetPixelShader(primitivePS.GetBytecode());
 		defaultPrimitivePSO.SetSampleMask(D3D12_DEFAULT_SAMPLE_MASK);
