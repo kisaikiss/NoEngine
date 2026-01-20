@@ -9,16 +9,17 @@ struct Vertex {
 };
 
 struct Node {
+	Transform transform;
 	Matrix4x4 localMatrix;
 	std::string name;
 	std::vector<Node> children;
 };
 
 struct SubMesh {
-	uint32_t vertexStart =0;
-	uint32_t vertexCount =0;
-	uint32_t indexStart =0;
-	uint32_t indexCount =0;
+	uint32_t vertexStart = 0;
+	uint32_t vertexCount = 0;
+	uint32_t indexStart = 0;
+	uint32_t indexCount = 0;
 };
 
 struct Mesh {
@@ -27,6 +28,6 @@ struct Mesh {
 	ByteAddressBuffer vertexBuffer;
 	ByteAddressBuffer indexBuffer;
 	Node rootNode;
-	std::vector<SubMesh> submeshes; // per-aiMesh ranges when model contains multiple meshes
+	std::vector<SubMesh> subMeshes; // モデルに複数のメッシュが含まれている場合のaiMeshごとの範囲
 };
 }
