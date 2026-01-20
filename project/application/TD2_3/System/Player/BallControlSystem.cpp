@@ -1,21 +1,22 @@
-#include "PlayerControlSystem.h"
-#include "../Component/ColliderComponent.h"
-#include "../tag.h"
+#include "BallControlSystem.h"
+#include "../../Component/ColliderComponent.h"
+#include "../../tag.h"
 #include "engine/Functions/Renderer/Primitive.h"
 
-void PlayerControlSystem::Update(No::Registry& registry, float deltaTime)
+void BallControlSystem::Update(No::Registry& registry, float deltaTime)
 {
 	auto view = registry.View<
 		No::TransformComponent,
 		No::MaterialComponent,
 		SphereColliderComponent,
-		PlayerTag>();
+		BallTag,DeathFlag>();
 
 	for (auto entity : view)
 	{
 		auto* transform = registry.GetComponent<No::TransformComponent>(entity);
 		auto* material = registry.GetComponent<No::MaterialComponent>(entity);
 		auto* collider = registry.GetComponent<SphereColliderComponent>(entity);
+		auto* flag = registry.GetComponent<DeathFlag>(entity);
 
 		if (No::Keyboard::IsPress('A'))transform->translate.x -= 8.0f * deltaTime;
 		if (No::Keyboard::IsPress('D'))transform->translate.x += 8.0f * deltaTime;
@@ -27,11 +28,12 @@ void PlayerControlSystem::Update(No::Registry& registry, float deltaTime)
 		if (collider->isCollied)
 		{
 			material->color = NoEngine::Color(1.0f,0.0f,0.0f,1.0f);
+			flag->isDead = true;
 		}
 		else
 		{
             material->color = NoEngine::Color(1.0f,1.0f,1.0f,1.0f);
 		}
-		Primitive::DrawSphere(transform->translate, 1.5f, NoEngine::Color(1.0f,1.f,1.f));
+		Primitive::DrawSphere(transform->translate, collider->radius, NoEngine::Color(1.0f,0.7f,0.f));
 	}
 }
