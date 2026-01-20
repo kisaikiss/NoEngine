@@ -687,6 +687,12 @@
     <ClInclude Include="application\TD2_3\Component\BallStateComponent.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="application\TD2_3\Component\RingAnimationComponent.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="application\TD2_3\Component\VausStateComponent.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\engine\Shaders\Default.VS.hlsl" />

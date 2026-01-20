@@ -2,5 +2,5 @@
 
 struct BallStateComponent
 {
- bool attached = true;
+	bool attached = true;
 };

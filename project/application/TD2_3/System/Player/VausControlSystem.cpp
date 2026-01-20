@@ -1,20 +1,20 @@
 #include "VausControlSystem.h"
 #include "../../tag.h"
 #include "../../Component/PhysicsComponent.h"
+#include "../../Component/RingAnimationComponent.h"
+#include "../../Component/VausStateComponent.h"
+
 #include "engine/Functions/Renderer/Primitive.h"
 #include "engine/Math/Types/Calculations/Vector3Calculations.h"
 #include "engine/Math/Types/Calculations/QuaternionCalculations.h"
 #include "engine/Runtime/GraphicsCore.h"
+#include "engine/Math/Easing.h"
 
 using namespace NoEngine;
 
 constexpr float kRingRadius = 4.85f;
-constexpr float kChargeSpeed = 2.5f; // charge per second
-constexpr float kMaxCharge = 8.0f; // max launch speed
-
 void VausControlSystem::Update(No::Registry& registry, float deltaTime)
 {
-	(void)deltaTime;
 	auto vausView = registry.View<
 		VausTag,
 		No::TransformComponent,
@@ -28,39 +28,43 @@ void VausControlSystem::Update(No::Registry& registry, float deltaTime)
 	auto ringView = registry.View<
 		RingTag,
 		No::TransformComponent,
-		No::MaterialComponent>();
+		No::MaterialComponent,
+		RingAnimationComponent>();
 
 	float angle = CalculateMouseAngle();
 	static float currentCharge = 0.0f;
 	bool isPress = (GetAsyncKeyState(VK_LBUTTON) & 0x8000) != 0;
 	static bool wasPress = false;
 
+	for (auto entity : ringView)
+	{
+		auto* transform = registry.GetComponent<No::TransformComponent>(entity);
+		auto* ringAnimation = registry.GetComponent<RingAnimationComponent>(entity);
+		if (isPress)
+		{
+			ringAnimation->releaseTime = 0.0f;
+			ringAnimation->pressedTime += deltaTime * 2.0f;
+			ringAnimation->pressedTime = std::clamp(ringAnimation->pressedTime, 0.0f, 1.0f);
+			transform->scale = Easing::Lerp(ringAnimation->baseScale, ringAnimation->targetScale, ringAnimation->pressedTime);
+		}
+		else
+		{
+			ringAnimation->pressedTime = 0.0f;
+			ringAnimation->releaseTime += deltaTime;
+			ringAnimation->releaseTime = std::clamp(ringAnimation->releaseTime, 0.0f, 1.0f);
+			transform->scale = Easing::EaseOutElastic(ringAnimation->targetScale, ringAnimation->baseScale, ringAnimation->releaseTime);
+		}
+	}
+
 	for (auto entity : vausView)
 	{
 		auto* transform = registry.GetComponent<No::TransformComponent>(entity);
 
-		// リングの円周上にXY平面の角度で配置
-		Vector3 ringPos{ kRingRadius * std::cos(angle), kRingRadius * std::sin(angle),-0.25f };
+		Vector3 ringPos{ kRingRadius * std::cos(angle), kRingRadius * std::sin(angle), -0.25f };
 		transform->translate = ringPos;
-
 		transform->rotation = MathCalculations::MakeRotateAxisAngleQuaternion(Vector3::FORWARD, angle + PI * 0.5f);
 
-		//リングの中心からデバッグラインを描画
-#ifdef _DEBUG
-		auto normal = MathCalculations::Normalize(Vector3::ZERO - ringPos);
-		Primitive::DrawLine((ringPos + normal), ringPos, Color(0.2f, 0.2f, 0.8f, 1.0f));
-#endif
-
-
-
 	}
-	for (auto entity : ringView)
-	{
-		auto* transform = registry.GetComponent<No::TransformComponent>(entity);
-
-
-	}
-
 
 	wasPress = isPress;
 }

@@ -2,6 +2,8 @@
 #include "../Component/ColliderComponent.h"
 #include "../Component/PhysicsComponent.h"
 #include "../Component/BallStateComponent.h"
+#include "../Component/RingAnimationComponent.h"
+#include "../Component/VausStateComponent.h"
 
 #include "../System/CollisionSystem.h"
 //player
@@ -74,6 +76,7 @@ void GameScene::InitRing(No::Registry& registry)
 {
 	No::Entity ringEntity = registry.GenerateEntity();
 	registry.AddComponent<RingTag>(ringEntity);
+	registry.AddComponent< RingAnimationComponent>(ringEntity)->targetScale = Vector3(1.2f, 1.2f, 1.2f);
 	registry.AddComponent<No::TransformComponent>(ringEntity);
 	auto* model = registry.AddComponent<No::MeshComponent>(ringEntity);
 	model->mesh = NoEngine::ModelLoader::LoadModel("ring", "resources/engine/Model/testRing.obj");
