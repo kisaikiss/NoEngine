@@ -56,6 +56,9 @@ Mesh* ModelLoader::LoadModel(const std::string& name, const std::string& filePat
 	}
 
 	sMeshes[name].rootNode =  ReadNode(scene->mRootNode);
+
+
+
 	//vertex
 	{
 		size_t vertexBufferSize = sMeshes[name].vertices.size() * sizeof(Vertex);
@@ -108,18 +111,87 @@ Node ModelLoader::ReadNode(aiNode* node) {
 	Transform transform;
 	aiVector3D scale, translate;
 	aiQuaternion rotate;
-	node->mTransformation.Decompose(scale, rotate, translate); // assimpの行列からSRTを抽出する間数を利用
+	node->mTransformation.Decompose(scale, rotate, translate); // assimpの行列からSRTを抽出する間数を利用します。
 	transform.scale = { scale.x, scale.y, scale.z }; // Scaleはそのまま
-	transform.rotation = { rotate.x, -rotate.y, -rotate.z, rotate.w };//x軸を反転、さらに回転方向が逆なので軸を反転させる
-	transform.translate = { -translate.x, translate.y, translate.z };//x軸を反転
+	transform.rotation = { rotate.x, -rotate.y, -rotate.z, rotate.w };// x軸を反転、さらに回転方向が逆なので軸を反転させます。
+	transform.translate = { -translate.x, translate.y, translate.z };// x軸を反転
 	result.localMatrix = transform.MakeAffineMatrix4x4();
 	result.name = node->mName.C_Str(); // Node名を格納
 	result.children.resize(node->mNumChildren); // 子供の数だけ確保
 	for (uint32_t childIndex = 0; childIndex < node->mNumChildren; ++childIndex) {
-		// 再帰的に読んで階層構造を作っていく
+		// 再帰的に読んで階層構造を作っていきます。
 		result.children[childIndex] = ReadNode(node->mChildren[childIndex]);
 	}
 	return result;
+}
+
+Animation ModelLoader::LoadAnimation(const std::string& filePath) {
+	Assimp::Importer importer;
+	const aiScene* scene = importer.ReadFile(filePath.c_str(), 0);
+
+	aiAnimation* animationAssimp = scene->mAnimations[0]; // 最初のアニメーションだけ採用
+	Animation animation;
+	animation.duration = float(animationAssimp->mDuration / animationAssimp->mTicksPerSecond); // 時間単位を秒へ変換
+
+	// assimpでは個々のNodeのAnimationをchannelと呼んでいるのでchannelを回してNodeAnimationの情報をとってくる
+	for (uint32_t channelIndex = 0; channelIndex < animationAssimp->mNumChannels; ++channelIndex) {
+		aiNodeAnim* nodeAnimationAssimp = animationAssimp->mChannels[channelIndex];
+		NodeAnimation& nodeAnimation = animation.nodeAnimations[nodeAnimationAssimp->mNodeName.C_Str()];
+		for (uint32_t keyIndex = 0; keyIndex < nodeAnimationAssimp->mNumPositionKeys; ++keyIndex) {
+			aiVectorKey& keyAssimp = nodeAnimationAssimp->mPositionKeys[keyIndex];
+			KeyframeVector3 keyframe;
+			keyframe.time = float(keyAssimp.mTime / animationAssimp->mTicksPerSecond); // ここも秒に変換
+			keyframe.value = { -keyAssimp.mValue.x, keyAssimp.mValue.y, keyAssimp.mValue.z };//右手->左手
+			nodeAnimation.translate.keyframes.push_back(keyframe);
+		}
+
+		for (uint32_t keyIndex = 0; keyIndex < nodeAnimationAssimp->mNumRotationKeys; ++keyIndex) {
+			aiQuatKey& keyAssimp = nodeAnimationAssimp->mRotationKeys[keyIndex];
+			KeyframeQuaternion keyframe;
+			keyframe.time = float(keyAssimp.mTime / animationAssimp->mTicksPerSecond); // ここも秒に変換
+			keyframe.value = { keyAssimp.mValue.x, -keyAssimp.mValue.y, -keyAssimp.mValue.z, keyAssimp.mValue.w };// 右手->左手
+			nodeAnimation.rotation.keyframes.push_back(keyframe);
+		}
+
+		for (uint32_t keyIndex = 0; keyIndex < nodeAnimationAssimp->mNumScalingKeys; ++keyIndex) {
+			aiVectorKey& keyAssimp = nodeAnimationAssimp->mScalingKeys[keyIndex];
+			KeyframeVector3 keyframe;
+			keyframe.time = float(keyAssimp.mTime / animationAssimp->mTicksPerSecond); // ここも秒に変換
+			keyframe.value = { keyAssimp.mValue.x, keyAssimp.mValue.y, keyAssimp.mValue.z };
+			nodeAnimation.scale.keyframes.push_back(keyframe);
+		}
+	}
+	return animation;
+}
+
+Skeleton ModelLoader::CreateSkeleton(const Node& rootNode) {
+	Skeleton skeleton;
+	skeleton.root = CreateJoint(rootNode, {}, skeleton.joints);
+
+	//名前とindexのマッピングを行いアクセスしやすくする
+	for (const Joint& joint : skeleton.joints) {
+		skeleton.jointMap.emplace(joint.name, joint.index);
+	}
+
+	return skeleton;
+}
+
+int32_t ModelLoader::CreateJoint(const Node& node, const std::optional<int32_t>& parent, std::vector<Joint>& joints) {
+	Joint joint;
+	joint.name = node.name;
+	joint.localMatrix = node.localMatrix;
+	joint.skeletonSpaceMatrix = { Matrix4x4::IDENTITY };
+	joint.transform = node.transform;
+	joint.index = int32_t(joints.size()); // 現在登録されてる数をIndexに
+	joint.parent = parent;
+	joints.push_back(joint); // SkeletonのJoint列に追加します。
+	for (const Node& child : node.children) {
+		// 子Jointを作成し、そのIndexを登録します。
+		int32_t childIndex = CreateJoint(child, joint.index, joints);
+		joints[joint.index].children.push_back(childIndex);
+	}
+	// 自身のIndexを返します。
+	return joint.index;
 }
 
 }
