@@ -171,6 +171,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="engine\Assets\ModelLoader.cpp" />
     <ClCompile Include="engine\Assets\Texture\TexUtil.cpp" />
     <ClCompile Include="engine\Functions\ECS\Registry.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\AnimationSystem.cpp" />
     <ClCompile Include="engine\Functions\Input\Keyboard.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\MeshPass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\RenderPassScheduler.cpp" />
@@ -178,6 +179,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="engine\Functions\Renderer\RenderPass\SpritePass.cpp" />
     <ClCompile Include="engine\Functions\Scene\SceneManager.cpp" />
     <ClCompile Include="engine\Math\Color\Color.cpp" />
+    <ClCompile Include="engine\Math\Easing.cpp" />
     <ClCompile Include="engine\Math\Types\Calculations\Matrix3x3Calculations.cpp" />
     <ClCompile Include="engine\Math\Types\Calculations\Vector2Calculations.cpp" />
     <ClCompile Include="engine\Math\Types\Transform2D.cpp" />
@@ -291,7 +293,10 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\TD2_3\System\PlayerControlSystem.h" />
     <ClInclude Include="application\TD2_3\System\TestSystem.h" />
     <ClInclude Include="application\TD2_3\tag.h" />
+    <ClInclude Include="engine\Assets\Animation.h" />
     <ClInclude Include="engine\Assets\ModelLoader.h" />
+    <ClInclude Include="engine\Assets\Skeleton.h" />
+    <ClInclude Include="engine\Functions\ECS\Component\AnimationComponent.h" />
     <ClInclude Include="engine\Functions\ECS\Component\MaterialComponent.h" />
     <ClInclude Include="engine\Functions\ECS\Component\MeshComponent.h" />
     <ClInclude Include="engine\Functions\ECS\Component\SpriteComponent.h" />
@@ -301,6 +306,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="engine\Functions\ECS\ComponentPool.h" />
     <ClInclude Include="engine\Functions\ECS\Entity.h" />
     <ClInclude Include="engine\Functions\ECS\Registry.h" />
+    <ClInclude Include="engine\Functions\ECS\System\AnimationSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\ISystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\SystemManager.h" />
     <ClInclude Include="engine\Functions\Input\Keyboard.h" />
@@ -311,6 +317,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="engine\Functions\Renderer\RenderSystem.h" />
     <ClInclude Include="engine\Functions\Scene\IScene.h" />
     <ClInclude Include="engine\Functions\Scene\SceneManager.h" />
+    <ClInclude Include="engine\Math\Easing.h" />
     <ClInclude Include="engine\Math\Types\Calculations\Matrix3x3Calculations.h" />
     <ClInclude Include="engine\Math\Types\Calculations\Vector2Calculations.h" />
     <ClInclude Include="engine\Math\Types\Rect.h" />

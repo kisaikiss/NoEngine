@@ -5,6 +5,8 @@
 #include "Functions/ECS/Component/TransformComponent.h"
 #include "Functions/ECS/Component/MaterialComponent.h"
 
+#include "Functions/ECS/System/AnimationSystem.h"
+
 #include "Assets/ModelLoader.h"
 #include "Functions/Renderer/RenderSystem.h"
 #include "Functions/Input/Keyboard.h"
