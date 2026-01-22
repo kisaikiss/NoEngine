@@ -34,9 +34,9 @@ void BallControlSystem::Update(No::Registry& registry, float deltaTime)
 	for (auto entityBall : ballView)
 	{
 		auto* ballTransform = registry.GetComponent<No::TransformComponent>(entityBall);
-		auto* ballMaterial = registry.GetComponent<No::MaterialComponent>(entityBall);
+		//auto* ballMaterial = registry.GetComponent<No::MaterialComponent>(entityBall);
 		auto* ballCollider = registry.GetComponent<SphereColliderComponent>(entityBall);
-		auto* ballDeathFlag = registry.GetComponent<DeathFlag>(entityBall);
+		//auto* ballDeathFlag = registry.GetComponent<DeathFlag>(entityBall);
 		auto* ballPhysics = registry.GetComponent<PhysicsComponent>(entityBall);
 		auto* ballState = registry.GetComponent<BallStateComponent>(entityBall);
 		
@@ -104,18 +104,22 @@ void BallControlSystem::Update(No::Registry& registry, float deltaTime)
 			}
 		}
 
+		if (ballCollider->isCollied && (ballCollider->colliderType & ColliderMask::kEnemy) == 0)
+		{
+			auto* enemyTransform = registry.GetComponent<No::TransformComponent>(ballCollider->colliedEntity);
+			auto normal = MathCalculations::Normalize(ballTransform->translate - enemyTransform->translate);
+			float dot = MathCalculations::Dot(ballPhysics->velocity, normal);
+			auto reflected = ballPhysics->velocity - 2 * dot * normal;
+			float speed = MathCalculations::Length(ballPhysics->velocity);
+			reflected = MathCalculations::Normalize(reflected) * speed;
+
+			ballPhysics->velocity = reflected;
+		}
+
 		// 移動更新
 		ballTransform->translate += ballPhysics->velocity * deltaTime;
 
-		if (ballCollider->isCollied)
-		{
-			ballMaterial->color = NoEngine::Color(1.0f,0.0f,0.0f,1.0f);
-			ballDeathFlag->isDead = true;
-		}
-		else
-		{
-            ballMaterial->color = NoEngine::Color(1.0f,1.0f,1.0f,1.0f);
-		}
+
 		Primitive::DrawSphere(ballTransform->translate, ballCollider->radius, NoEngine::Color(1.0f,0.7f,0.f));
 	}
 }
