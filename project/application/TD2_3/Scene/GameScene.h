@@ -10,6 +10,11 @@ private:
 	NoEngine::Transform cameraTransform_{};
 	void NotSystemUpdate() override;
 
-	void InitPlayer(No::Registry& registry);
+	void InitVaus(No::Registry& registry);
+	void InitRing(No::Registry& registry);
+	void InitBall(No::Registry& registry);
 	void InitEnemy(No::Registry& registry);
+	void InitBoss(No::Registry& registry);
+
+	void DestroyGameObject();
 };

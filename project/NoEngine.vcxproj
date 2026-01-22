@@ -166,8 +166,9 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\TD2_3\Scene\GameScene.cpp" />
     <ClCompile Include="application\TD2_3\Scene\TestScene.cpp" />
     <ClCompile Include="application\TD2_3\System\CollisionSystem.cpp" />
-    <ClCompile Include="application\TD2_3\System\PlayerControlSystem.cpp" />
+    <ClCompile Include="application\TD2_3\System\Player\BallControlSystem.cpp" />
     <ClCompile Include="application\TD2_3\System\TestSystem.cpp" />
+    <ClCompile Include="application\TD2_3\System\Enemy\BossControlSystem.cpp" />
     <ClCompile Include="engine\Assets\ModelLoader.cpp" />
     <ClCompile Include="engine\Assets\Texture\TexUtil.cpp" />
     <ClCompile Include="engine\Functions\ECS\Registry.cpp" />
@@ -277,23 +278,30 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="application\TD2_3\System\Enemy\NormalEnemyControlSystem.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Development|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="engine\Assets\Texture\Texture.cpp" />
+    <ClCompile Include="application\TD2_3\System\Player\VausControlSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="application\TD2_3\Component\BallStateComponent.h" />
     <ClInclude Include="application\TD2_3\Component\ColliderComponent.h" />
+    <ClInclude Include="application\TD2_3\Component\PhysicsComponent.h" />
+    <ClInclude Include="application\TD2_3\Component\RingAnimationComponent.h" />
+    <ClInclude Include="application\TD2_3\Component\VausStateComponent.h" />
     <ClInclude Include="application\TD2_3\Game.h" />
     <ClInclude Include="engine\Functions\Renderer\Primitive.h" />
     <ClInclude Include="application\TD2_3\Scene\GameScene.h" />
     <ClInclude Include="application\TD2_3\Scene\TestScene.h" />
     <ClInclude Include="application\TD2_3\System\CollisionSystem.h" />
-    <ClInclude Include="application\TD2_3\System\PlayerControlSystem.h" />
+    <ClInclude Include="application\TD2_3\System\Player\BallControlSystem.h" />
     <ClInclude Include="application\TD2_3\System\TestSystem.h" />
     <ClInclude Include="application\TD2_3\tag.h" />
+    <ClInclude Include="application\TD2_3\System\Enemy\BossControlSystem.h" />
     <ClInclude Include="engine\Assets\Animation.h" />
     <ClInclude Include="engine\Assets\ModelLoader.h" />
     <ClInclude Include="engine\Assets\Skeleton.h" />
@@ -437,8 +445,10 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">false</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="application\TD2_3\System\Enemy\NormalEnemyControlSystem.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="engine\Assets\Texture\Texture.h" />
+    <ClInclude Include="application\TD2_3\System\Player\VausControlSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="externals\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">
