@@ -30,6 +30,8 @@ void CollisionSystem::Update(No::Registry& registry, float deltaTime)
 				b->isCollied = true;
 				a->colliedWith = static_cast<ColliderMask>(b->colliderType);
 				b->colliedWith = static_cast<ColliderMask>(a->colliderType);
+				a->colliedEntity = entity2;
+				b->colliedEntity = entity1;
 			}
 		}
 	}

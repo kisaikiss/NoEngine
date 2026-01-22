@@ -16,6 +16,7 @@ struct SphereColliderComponent
     uint32_t colliderType = 0xffffffff;
 	uint32_t collideMask = 0xffffffff;
 	ColliderMask colliedWith = static_cast<ColliderMask>(0);
+	NoEngine::ECS::Entity colliedEntity;
 };
 
 struct BoxColliderComponent
