@@ -22,6 +22,7 @@ void CollisionSystem::Update(No::Registry& registry, float deltaTime)
 		{
 			if (entity1 == entity2)continue;
 			auto* b = registry.GetComponent<SphereColliderComponent>(entity2);
+			b->isCollied = false;
 			if ((a->colliderType & b->collideMask) == 0 || (b->colliderType & a->collideMask) == 0) continue;
 
 			if (CheckSphereToSphere(a->center, b->center, a->worldRadius, b->worldRadius))

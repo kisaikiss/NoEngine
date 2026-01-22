@@ -87,6 +87,7 @@ void BallControlSystem::Update(No::Registry& registry, float deltaTime)
 						// 反射
 						float dot = MathCalculations::Dot(ballPhysics->velocity, normal);
 						auto reflected = ballPhysics->velocity - 2 * dot * normal;
+						reflected *= ballPhysics->coefficient;
 						// 接線方向（円弧方向）を計算します。
 						auto tangent = MathCalculations::Normalize(Vector3(-normal.y, normal.x, 0.0f));
 						//接触点はバウンス角に影響します: -1 ~ 1
@@ -97,6 +98,9 @@ void BallControlSystem::Update(No::Registry& registry, float deltaTime)
 						//速度更新（速度大きさは維持）
 						float speed = MathCalculations::Length(ballPhysics->velocity);
 						reflected = MathCalculations::Normalize(reflected) * speed;
+						float impulse =
+							vausState->chargePower * VausStateComponent::kPower;
+						reflected += normal * impulse;
 
 						ballPhysics->velocity = reflected;
 					}
@@ -112,6 +116,7 @@ void BallControlSystem::Update(No::Registry& registry, float deltaTime)
 			auto reflected = ballPhysics->velocity - 2 * dot * normal;
 			float speed = MathCalculations::Length(ballPhysics->velocity);
 			reflected = MathCalculations::Normalize(reflected) * speed;
+			reflected *= ballPhysics->coefficient;
 
 			ballPhysics->velocity = reflected;
 		}
