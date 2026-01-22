@@ -3,6 +3,7 @@
 #include "../../Component/PhysicsComponent.h"
 #include "../../Component/RingAnimationComponent.h"
 #include "../../Component/VausStateComponent.h"
+#include "../../Component/BallStateComponent.h"
 
 #include "engine/Functions/Renderer/Primitive.h"
 #include "engine/Math/Types/Calculations/Vector3Calculations.h"
@@ -12,13 +13,18 @@
 
 using namespace NoEngine;
 
-constexpr float kRingRadius = 4.85f;
+namespace
+{
+	constexpr float kRingInitialRadius = 4.85f;
+	float sRingRadius = kRingInitialRadius;
+}
+
 void VausControlSystem::Update(No::Registry& registry, float deltaTime)
 {
 	auto vausView = registry.View<
-		VausTag,
 		No::TransformComponent,
-		No::MaterialComponent>();
+		No::MaterialComponent,
+		VausStateComponent>();
 
 	auto ballView = registry.View<
 		BallTag,
@@ -35,7 +41,8 @@ void VausControlSystem::Update(No::Registry& registry, float deltaTime)
 	static float currentCharge = 0.0f;
 	bool isPress = (GetAsyncKeyState(VK_LBUTTON) & 0x8000) != 0;
 	static bool wasPress = false;
-
+	static float chargeTime = 0.0f;
+	static float chargeTemp = 0.0f;
 	for (auto entity : ringView)
 	{
 		auto* transform = registry.GetComponent<No::TransformComponent>(entity);
@@ -45,25 +52,46 @@ void VausControlSystem::Update(No::Registry& registry, float deltaTime)
 			ringAnimation->releaseTime = 0.0f;
 			ringAnimation->pressedTime += deltaTime * 2.0f;
 			ringAnimation->pressedTime = std::clamp(ringAnimation->pressedTime, 0.0f, 1.0f);
-			transform->scale = Easing::Lerp(ringAnimation->baseScale, ringAnimation->targetScale, ringAnimation->pressedTime);
+			chargeTime = chargeTemp = Easing::Lerp(0.0f, 1.0f, ringAnimation->pressedTime);
+			ringAnimation->tTemp = chargeTime;
 		}
 		else
 		{
 			ringAnimation->pressedTime = 0.0f;
 			ringAnimation->releaseTime += deltaTime;
 			ringAnimation->releaseTime = std::clamp(ringAnimation->releaseTime, 0.0f, 1.0f);
-			transform->scale = Easing::EaseOutElastic(ringAnimation->targetScale, ringAnimation->baseScale, ringAnimation->releaseTime);
+			chargeTime = Easing::EaseOutElastic(ringAnimation->tTemp, 0.0f, ringAnimation->releaseTime);
+		}
+		transform->scale = Vector3::UNIT_SCALE * (1.0f + ringAnimation->kChargeScale * chargeTime);
+		sRingRadius = kRingInitialRadius + chargeTime;
+	}
+	if (!wasPress && isPress)
+	{
+		for (auto entity : ballView)
+		{
+			auto* ballState = registry.GetComponent<BallStateComponent>(entity);
+			auto* ballPhysics = registry.GetComponent<PhysicsComponent>(entity);
+			if (ballState)
+			{
+				ballState->landed = false;
+			}
+			if (ballPhysics)
+			{
+				ballPhysics->useGravity = true;
+			}
 		}
 	}
-
 	for (auto entity : vausView)
 	{
 		auto* transform = registry.GetComponent<No::TransformComponent>(entity);
-
-		Vector3 ringPos{ kRingRadius * std::cos(angle), kRingRadius * std::sin(angle), -0.25f };
+		auto* state = registry.GetComponent<VausStateComponent>(entity);
+		state->currentRingRadius = sRingRadius;
+		state->chargePower = chargeTime;
+		Vector3 ringPos{ sRingRadius * std::cos(angle), sRingRadius * std::sin(angle), -0.25f };
 		transform->translate = ringPos;
 		transform->rotation = MathCalculations::MakeRotateAxisAngleQuaternion(Vector3::FORWARD, angle + PI * 0.5f);
-
+		transform->scale = Vector3::UNIT_SCALE * (1.0f + 0.2f * chargeTime);
+		state->theta = angle;
 	}
 
 	wasPress = isPress;

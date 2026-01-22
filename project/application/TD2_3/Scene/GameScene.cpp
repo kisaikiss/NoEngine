@@ -22,8 +22,8 @@ using namespace NoEngine;
 void GameScene::Setup()
 {
 	//player用システム
-	AddSystem(std::make_unique<BallControlSystem>());
 	AddSystem(std::make_unique<VausControlSystem>());
+	AddSystem(std::make_unique<BallControlSystem>());
 
 	AddSystem(std::make_unique<BossControlSystem>());
 	//衝突判定用システム
@@ -59,7 +59,7 @@ void GameScene::NotSystemUpdate()
 void GameScene::InitVaus(No::Registry& registry)
 {
 	No::Entity vausEntity = registry.GenerateEntity();
-	registry.AddComponent<VausTag>(vausEntity);
+	registry.AddComponent<VausStateComponent>(vausEntity);
 	auto* transform = registry.AddComponent<No::TransformComponent>(vausEntity);
 	transform->translate = { 0.f, -4.85f, 0.f };
 
@@ -76,7 +76,7 @@ void GameScene::InitRing(No::Registry& registry)
 {
 	No::Entity ringEntity = registry.GenerateEntity();
 	registry.AddComponent<RingTag>(ringEntity);
-	registry.AddComponent< RingAnimationComponent>(ringEntity)->targetScale = Vector3(1.2f, 1.2f, 1.2f);
+	registry.AddComponent< RingAnimationComponent>(ringEntity);
 	registry.AddComponent<No::TransformComponent>(ringEntity);
 	auto* model = registry.AddComponent<No::MeshComponent>(ringEntity);
 	model->mesh = NoEngine::ModelLoader::LoadModel("ring", "resources/engine/Model/testRing.obj");
@@ -94,6 +94,8 @@ void GameScene::InitBall(No::Registry& registry)
 	registry.AddComponent<BallStateComponent>(ballEntity);
 	auto* collider = registry.AddComponent<SphereColliderComponent>(ballEntity);
 	collider->radius = 0.25f;
+	collider->colliderType = ColliderMask::kBall;
+	collider->collideMask = ColliderMask::kEnemy;
 
 	registry.AddComponent<DeathFlag>(ballEntity);
 	auto* transform = registry.AddComponent<No::TransformComponent>(ballEntity);
@@ -112,7 +114,10 @@ void GameScene::InitEnemy(No::Registry& registry)
 {
 	No::Entity enemyEntity = registry.GenerateEntity();
 	registry.AddComponent<EnemyTag>(enemyEntity);
-	registry.AddComponent<SphereColliderComponent>(enemyEntity);
+	auto* collider = registry.AddComponent<SphereColliderComponent>(enemyEntity);
+	collider->colliderType = ColliderMask::kEnemy;
+	collider->collideMask = ColliderMask::kBall;
+
 	registry.AddComponent<No::TransformComponent>(enemyEntity);
 	auto* model = registry.AddComponent<No::MeshComponent>(enemyEntity);
 	model->mesh = NoEngine::ModelLoader::LoadModel("enemy", "resources/engine/Model/enemy.obj");

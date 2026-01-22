@@ -5,8 +5,7 @@ struct RingAnimationComponent
 { 
 	float pressedTime = 0.0f;
 	float releaseTime = 0.0f;
-	NoEngine::Vector3 baseScale = NoEngine::Vector3::UNIT_SCALE;
-	NoEngine::Vector3 targetScale = NoEngine::Vector3::UNIT_SCALE;
-	NoEngine::Vector3 currentScale = NoEngine::Vector3::UNIT_SCALE;
-
+	float tTemp = 0.0f;
+	static constexpr float kChargeScale = 0.2f;
+	static constexpr float pressedSpeed = 2.0f;
 };

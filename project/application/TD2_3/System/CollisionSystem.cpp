@@ -22,11 +22,14 @@ void CollisionSystem::Update(No::Registry& registry, float deltaTime)
 		{
 			if (entity1 == entity2)continue;
 			auto* b = registry.GetComponent<SphereColliderComponent>(entity2);
+			if ((a->colliderType & b->collideMask) == 0 || (b->colliderType & a->collideMask) == 0) continue;
 
 			if (CheckSphereToSphere(a->center, b->center, a->worldRadius, b->worldRadius))
 			{
 				a->isCollied = true;
 				b->isCollied = true;
+				a->colliedWith = static_cast<ColliderMask>(b->colliderType);
+				b->colliedWith = static_cast<ColliderMask>(a->colliderType);
 			}
 		}
 	}

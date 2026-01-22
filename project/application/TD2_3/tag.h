@@ -1,6 +1,5 @@
 #pragma once
 
-struct VausTag {};
 struct BallTag {};
 struct RingTag {};
 struct EnemyTag {};
