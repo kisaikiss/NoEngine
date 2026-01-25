@@ -1,5 +1,6 @@
 #include "RenderSystem.h"
 #include "engine/Assets/ModelLoader.h"
+#include "engine/Utilities/Conversion/ConvertString.h"
 
 namespace NoEngine {
 namespace Render {
@@ -7,10 +8,10 @@ DescriptorHeap gTextureHeap;
 
 namespace {
 std::vector<GraphicsPSO> sGraphicsPSOs;
-std::unordered_map<std::wstring, size_t> sGraphicsPSOIndexMap;
+std::unordered_map<std::wstring, uint32_t> sGraphicsPSOIndexMap;
 
 std::vector<std::unique_ptr<RootSignature>> sRootSignatures;
-std::unordered_map<std::string, size_t> sRootSignatureIndexMap;
+std::unordered_map<std::wstring, uint32_t> sRootSignatureIndexMap;
 }
 
 void Initialize() {
@@ -27,8 +28,8 @@ void Initialize() {
 	refls.push_back(psReflection);
 
 	std::unique_ptr<RootSignature> defaultRootSignature = std::make_unique<RootSignature>();
-	std::string defaultRootSignatureName = "defaultRootSignature";
-	RootSignatureBuilder::BuildFromReflection(refls, *defaultRootSignature, defaultRootSignatureName);
+	std::wstring defaultPSOName = L"Renderer : Default PSO";
+	RootSignatureBuilder::BuildFromReflection(refls, *defaultRootSignature, ConvertString(defaultPSOName));
 
 	D3D12_RASTERIZER_DESC rasterizerDesc{};
 	rasterizerDesc.CullMode = D3D12_CULL_MODE_BACK;
@@ -44,7 +45,7 @@ void Initialize() {
 
 	std::vector<D3D12_INPUT_ELEMENT_DESC> inputLayout = InputLayoutBuilder::BuildFromReflection(vsReflection);
 
-	std::wstring defaultPSOName = L"Renderer : Default PSO";
+	
 	GraphicsPSO defaultPSO(defaultPSOName);
 	defaultPSO.SetRootSignature(*defaultRootSignature);
 	defaultPSO.SetRasterizerState(rasterizerDesc);
@@ -59,11 +60,42 @@ void Initialize() {
 	defaultPSO.SetSampleMask(D3D12_DEFAULT_SAMPLE_MASK);
 	defaultPSO.Finalize();
 	sGraphicsPSOs.push_back(defaultPSO);
-	sGraphicsPSOIndexMap[defaultPSOName] = sGraphicsPSOs.size() - 1;
+	sGraphicsPSOIndexMap[defaultPSOName] = static_cast<uint32_t>(sGraphicsPSOs.size()) - 1;
 	sRootSignatures.push_back(std::move(defaultRootSignature));
-	sRootSignatureIndexMap[defaultRootSignatureName] = sRootSignatures.size() - 1;
+	sRootSignatureIndexMap[defaultPSOName] = static_cast<uint32_t>(sRootSignatures.size()) - 1;
 
+	ShaderModule defaultSkinnedVS(ShaderStage::Vertex, L"resources/engine/Shaders/DefaultSkinned.VS.hlsl", L"vs_6_0");
 
+	const ShaderReflection& vsSkinnedReflection = defaultSkinnedVS.GetReflection();
+	std::vector<ShaderReflection> skinnedRefls;
+	skinnedRefls.push_back(vsSkinnedReflection);
+	skinnedRefls.push_back(psReflection);
+
+	std::unique_ptr<RootSignature> defaultSkinnedRootSignature = std::make_unique<RootSignature>();
+	std::wstring defaultSkinnedPSOName = L"Renderer : DefaultSkinned PSO";
+	RootSignatureBuilder::BuildFromReflection(skinnedRefls, *defaultSkinnedRootSignature, ConvertString(defaultSkinnedPSOName));
+
+	std::vector<D3D12_INPUT_ELEMENT_DESC> skinnedInputLayout = InputLayoutBuilder::BuildFromReflection(vsSkinnedReflection);
+	// ToDo : inputLayoutのReflectionがUINT型のインプットが対応できていないので、このように後から入れる形になってしまっています。UINT型に対応すべきです。
+	skinnedInputLayout[3].Format = DXGI_FORMAT_R32G32B32A32_UINT;
+
+	
+	GraphicsPSO defaultSkinnedPSO(defaultSkinnedPSOName);
+	defaultSkinnedPSO.SetRootSignature(*defaultSkinnedRootSignature);
+	defaultSkinnedPSO.SetRasterizerState(rasterizerDesc);
+	defaultSkinnedPSO.SetBlendState(blendDesc);
+	defaultSkinnedPSO.SetDepthStencilState(depthStencilDesc);
+	defaultSkinnedPSO.SetInputLayout(skinnedInputLayout);
+	defaultSkinnedPSO.SetPrimitiveTopologyType(D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
+	defaultSkinnedPSO.SetRenderTargetFormats(1, rtvFormat, DXGI_FORMAT_D24_UNORM_S8_UINT);
+	defaultSkinnedPSO.SetVertexShader(defaultSkinnedVS.GetBytecode());
+	defaultSkinnedPSO.SetPixelShader(defaultPS.GetBytecode());
+	defaultSkinnedPSO.SetSampleMask(D3D12_DEFAULT_SAMPLE_MASK);
+	defaultSkinnedPSO.Finalize();
+	sGraphicsPSOs.push_back(defaultSkinnedPSO);
+	sGraphicsPSOIndexMap[defaultSkinnedPSOName] = static_cast<uint32_t>(sGraphicsPSOs.size()) - 1;
+	sRootSignatures.push_back(std::move(defaultSkinnedRootSignature));
+	sRootSignatureIndexMap[defaultSkinnedPSOName] = static_cast<uint32_t>(sRootSignatures.size()) - 1;
 
 
 	ShaderModule defaultSpriteVS(ShaderStage::Vertex, L"resources/engine/Shaders/DefaultSprite.VS.hlsl", L"vs_6_0");
@@ -74,8 +106,8 @@ void Initialize() {
 	reflectionSprite.push_back(spriteVsReflection);
 	reflectionSprite.push_back(psReflection);
 	std::unique_ptr<RootSignature> defaultSpriteRootSignature = std::make_unique<RootSignature>();
-	std::string defaultSpriteRootSignatureName = "defaultSpriteRootSignature";
-	RootSignatureBuilder::BuildFromReflection(reflectionSprite, *defaultSpriteRootSignature, defaultSpriteRootSignatureName);
+	std::wstring defaultSpritePSOName = L"Renderer : Default Sprite PSO";
+	RootSignatureBuilder::BuildFromReflection(reflectionSprite, *defaultSpriteRootSignature, ConvertString(defaultSpritePSOName));
 	
 	D3D12_RASTERIZER_DESC rasterizerSpriteDesc{};
 	rasterizerSpriteDesc.CullMode = D3D12_CULL_MODE_NONE;
@@ -91,7 +123,7 @@ void Initialize() {
 
 	std::vector<D3D12_INPUT_ELEMENT_DESC> spriteInputLayout = InputLayoutBuilder::BuildFromReflection(spriteVsReflection);
 
-	std::wstring defaultSpritePSOName = L"Renderer : Default Sprite PSO";
+	
 	GraphicsPSO defaultSpritePSO(defaultSpritePSOName);
 
 	defaultSpritePSO.SetRootSignature(*defaultSpriteRootSignature);
@@ -106,9 +138,9 @@ void Initialize() {
 	defaultSpritePSO.SetSampleMask(D3D12_DEFAULT_SAMPLE_MASK);
 	defaultSpritePSO.Finalize();
 	sGraphicsPSOs.push_back(defaultSpritePSO);
-	sGraphicsPSOIndexMap[defaultSpritePSOName] = sGraphicsPSOs.size() - 1;
+	sGraphicsPSOIndexMap[defaultSpritePSOName] = static_cast<uint32_t>(sGraphicsPSOs.size()) - 1;
 	sRootSignatures.push_back(std::move(defaultSpriteRootSignature));
-	sRootSignatureIndexMap[defaultSpriteRootSignatureName] = sRootSignatures.size() - 1;
+	sRootSignatureIndexMap[defaultSpritePSOName] = static_cast<uint32_t>(sRootSignatures.size()) - 1;
 
 	//primitive
 	{
@@ -123,8 +155,8 @@ void Initialize() {
 		primitiveRefls.push_back(PrimitivePsReflection);
 
 		std::unique_ptr<RootSignature> primitiveRootSignature = std::make_unique<RootSignature>();
-		std::string primitiveRootSignatureName = "primitiveRootSignature";
-		RootSignatureBuilder::BuildFromReflection(primitiveRefls, *primitiveRootSignature, primitiveRootSignatureName);
+		std::wstring defaultPrimitivePSOName = L"Renderer : Primitive PSO";
+		RootSignatureBuilder::BuildFromReflection(primitiveRefls, *primitiveRootSignature, ConvertString(defaultPrimitivePSOName));
 
 		D3D12_RASTERIZER_DESC primitiveRasterizerDesc{};
 		primitiveRasterizerDesc.CullMode = D3D12_CULL_MODE_NONE;
@@ -148,7 +180,7 @@ void Initialize() {
 
 		std::vector<D3D12_INPUT_ELEMENT_DESC> primitiveInputLayout = InputLayoutBuilder::BuildFromReflection(PrimitiveVsReflection);
 
-		std::wstring defaultPrimitivePSOName = L"Renderer : Primitive PSO";
+		
 		GraphicsPSO defaultPrimitivePSO(defaultPrimitivePSOName);
 
 		defaultPrimitivePSO.SetRootSignature(*primitiveRootSignature);
@@ -163,9 +195,9 @@ void Initialize() {
 		defaultPrimitivePSO.SetSampleMask(D3D12_DEFAULT_SAMPLE_MASK);
 		defaultPrimitivePSO.Finalize();
 		sGraphicsPSOs.push_back(defaultPrimitivePSO);
-		sGraphicsPSOIndexMap[defaultPrimitivePSOName] = sGraphicsPSOs.size() - 1;
+		sGraphicsPSOIndexMap[defaultPrimitivePSOName] = static_cast<uint32_t>(sGraphicsPSOs.size()) - 1;
 		sRootSignatures.push_back(std::move(primitiveRootSignature));
-		sRootSignatureIndexMap[primitiveRootSignatureName] = sRootSignatures.size() - 1;
+		sRootSignatureIndexMap[defaultPrimitivePSOName] = static_cast<uint32_t>(sRootSignatures.size()) - 1;
 
 	}
 	
@@ -179,12 +211,20 @@ void Shutdown() {
 	ShaderModule::Shutdown();
 }
 
-GraphicsPSO& GetPSO(std::wstring psoName) {
-	return sGraphicsPSOs[sGraphicsPSOIndexMap[psoName]];
+GraphicsPSO& GetPSO(uint32_t psoId) {
+	return sGraphicsPSOs[psoId];
 }
 
-RootSignature& GetRootSignature(std::string rootSigName) {
-	return *sRootSignatures[sRootSignatureIndexMap[rootSigName]];
+RootSignature& GetRootSignature(uint32_t rootSigId) {
+	return *sRootSignatures[rootSigId];
+}
+
+uint32_t GetPSOID(std::wstring psoName) {
+	return sGraphicsPSOIndexMap[psoName];
+}
+
+uint32_t GetRootSignatureID(std::wstring rootSigName) {
+	return sRootSignatureIndexMap[rootSigName];
 }
 
 }

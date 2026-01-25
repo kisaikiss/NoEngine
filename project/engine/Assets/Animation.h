@@ -23,6 +23,8 @@ struct NodeAnimation {
 	AnimationCurve<KeyframeVector3> scale;
 };
 
+
+
 struct Animation {
 	float duration;
 	std::map<std::string, NodeAnimation> nodeAnimations;

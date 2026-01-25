@@ -3,6 +3,7 @@
 
 namespace NoEngine {
 namespace Component {
+
 struct MeshComponent {
 	Mesh* mesh;
 };

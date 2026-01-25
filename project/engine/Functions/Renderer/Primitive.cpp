@@ -21,7 +21,7 @@ namespace
 
 void Primitive::Initialize()
 {
-	pPSO = &Render::GetPSO(L"Renderer : Primitive PSO");
+	pPSO = &Render::GetPSO(Render::GetPSOID(L"Renderer : Primitive PSO"));
 }
 
 void Primitive::Shutdown()
@@ -130,7 +130,7 @@ void Primitive::Render(NoEngine::GraphicsContext& ctx, const NoEngine::Matrix4x4
 {
 	if (sVertices.empty() || !pPSO) return;
 
-	ctx.SetRootSignature(NoEngine::Render::GetRootSignature("primitiveRootSignature"));
+	ctx.SetRootSignature(NoEngine::Render::GetRootSignature(Render::GetRootSignatureID(L"Renderer : Primitive PSO")));
 	ctx.SetPipelineState(*pPSO);
 	ctx.SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINELIST);
 

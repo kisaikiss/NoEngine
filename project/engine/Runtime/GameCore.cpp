@@ -88,11 +88,9 @@ void EngineInitialize() {
 	GraphicsCore::Initialize();
 
 	// ウィンドウの生成、初期化を行います。
-	auto* window = GraphicsCore::gWindowManager.Create(L"NoEngine", 1280, 720);
+	GraphicsCore::gWindowManager.Create(L"NoEngine", 1280, 720);
 	GraphicsCore::gWindowManager.SetMainWindowName(L"NoEngine");
-	window->RegisterWindowEvent(std::make_unique<MainEditorWindowCloseEvent>());
-	//sWindowManager->Create(L"NoWindow", 1280, 720);
-
+	
 	Input::Keyboard::Initialize();
 
 #ifdef USE_IMGUI

@@ -66,8 +66,8 @@ public:
 	//    return m_CommandList;
 	//}
 
-	//void CopyBuffer(GpuResource& Dest, GpuResource& Src);
-	//void CopyBufferRegion(GpuResource& Dest, size_t DestOffset, GpuResource& Src, size_t SrcOffset, size_t NumBytes);
+	void CopyBuffer(GpuResource& Dest, GpuResource& Src);
+	void CopyBufferRegion(GpuResource& Dest, size_t DestOffset, GpuResource& Src, size_t SrcOffset, size_t NumBytes);
 	//void CopySubresource(GpuResource& Dest, UINT DestSubIndex, GpuResource& Src, UINT SrcSubIndex);
 	//void CopyCounter(GpuResource& Dest, size_t DestOffset, StructuredBuffer& Src);
 	//void CopyTextureRegion(GpuResource& Dest, UINT x, UINT y, UINT z, GpuResource& Source, RECT& rect);
