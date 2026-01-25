@@ -3,16 +3,22 @@
 
 void TestScene::Setup() {
 	AddSystem(std::make_unique<TestSystem>());
+	AddSystem(std::make_unique<No::AnimationSystem>());
 
 	No::Registry& registry = *GetRegistry();
 	No::Entity entity = registry.GenerateEntity();
-	registry.AddComponent<No::TransformComponent>(entity);
+	auto* t = registry.AddComponent<No::TransformComponent>(entity);
 	auto* model = registry.AddComponent<No::MeshComponent>(entity);
-	model->mesh = NoEngine::ModelLoader::LoadModel("enemy", "resources/engine/Model/enemy.obj");
-
-	auto m = registry.AddComponent<No::MaterialComponent>(entity);
-	m->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/engine/Model/enemy.png");
-	m->pso = &NoEngine::Render::GetPSO(L"Renderer : Default PSO");
+	t->rotation.FromAxisAngle(NoEngine::Vector3(0.f, 1.f, 0.f), PI);
+	auto* m = registry.AddComponent<No::MaterialComponent>(entity);
+	auto* a = registry.AddComponent<No::AnimatorComponent>(entity);
+	NoEngine::ModelLoader::LoadModel("magiclash", "resources/engine/Model/test/TD_girl/test7.gltf");
+	NoEngine::ModelLoader::GetModel("magiclash", model, a);
+	m->materials = NoEngine::ModelLoader::GetMaterial("magiclash");
+	
+	m->psoName = L"Renderer : DefaultSkinned PSO";
+	m->psoId = NoEngine::Render::GetPSOID(m->psoName);
+	m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
 
 	camera_ = std::make_unique<NoEngine::Camera>();
 	cameraTransform_.translate.z = -5.f;

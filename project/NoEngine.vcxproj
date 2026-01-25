@@ -305,7 +305,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="engine\Assets\Animation.h" />
     <ClInclude Include="engine\Assets\ModelLoader.h" />
     <ClInclude Include="engine\Assets\Skeleton.h" />
-    <ClInclude Include="engine\Functions\ECS\Component\AnimationComponent.h" />
+    <ClInclude Include="engine\Functions\ECS\Component\AnimatorComponent.h" />
     <ClInclude Include="engine\Functions\ECS\Component\MaterialComponent.h" />
     <ClInclude Include="engine\Functions\ECS\Component\MeshComponent.h" />
     <ClInclude Include="engine\Functions\ECS\Component\SpriteComponent.h" />
@@ -471,6 +471,12 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="resources\engine\Shaders\DefaultSkinned.VS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Development|x64'">Vertex</ShaderType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="resources\engine\Shaders\DefaultSprite.PS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>

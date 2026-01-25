@@ -1,6 +1,7 @@
 #pragma once
 #include "ISystem.h"
-#include "../Component/AnimationComponent.h" 
+#include "../Component/AnimatorComponent.h"
+#include "../Component/MeshComponent.h" 
 
 namespace NoEngine {
 namespace ECS {
@@ -11,8 +12,9 @@ public:
 	void Update(Registry& registry, float deltaTime) override;
 private:
 	void AnimationUpdate(Registry& registry, float deltaTime);
-	void SkeletonUpdate(Component::AnimationComponent* animeComp);
-
+	void SkeletonUpdate(Component::AnimatorComponent* animeComp);
+	void SkeletonDraw(Component::AnimatorComponent* animeComp);
+	void SKinUpdate(Component::AnimatorComponent* animeComp, Component::MeshComponent* meshComp);
 
 	void CalculateValue(const NodeAnimation& keyframes, Transform& transform, float time);
 	Vector3 CalculateValue(const std::vector<KeyframeVector3>& keyframes, float time);

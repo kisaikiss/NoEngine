@@ -1,8 +1,13 @@
 #pragma once
-#include "engine/Math/Color/Color.h"
+#include "engine/Runtime/PipelineStateObject/GraphicsPSO.h"
+#include "engine/Math/MathInclude.h"
+#include "engine/Assets/Texture/TextureManager.h"
 
 namespace NoEngine {
 struct Material {
-	Color color;
+	Rect uv{};
+	Color color{ Color::WHITE };
+	TextureRef textureHandle;
+	
 };
 }

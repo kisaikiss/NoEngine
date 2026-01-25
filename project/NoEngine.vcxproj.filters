@@ -663,7 +663,7 @@
     <ClInclude Include="engine\Functions\ECS\System\AnimationSystem.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="engine\Functions\ECS\Component\AnimationComponent.h">
+    <ClInclude Include="engine\Functions\ECS\Component\AnimatorComponent.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="engine\Assets\Animation.h">
@@ -701,6 +701,7 @@
     <FxCompile Include="resources\engine\Shaders\DefaultSprite.PS.hlsl" />
     <FxCompile Include="resources\engine\Shaders\Primitive.VS.hlsl" />
     <FxCompile Include="resources\engine\Shaders\Primitive.PS.hlsl" />
+    <FxCompile Include="resources\engine\Shaders\DefaultSkinned.VS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\engine\Shaders\Default.hlsli" />

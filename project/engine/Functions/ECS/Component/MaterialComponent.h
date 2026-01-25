@@ -1,15 +1,13 @@
 #pragma once
-#include "engine/Runtime/PipelineStateObject/GraphicsPSO.h"
-#include "engine/Math/MathInclude.h"
-#include "engine/Assets/Texture/TextureManager.h"
+#include "engine/Assets/Material.h"
 
 namespace NoEngine {
 namespace Component {
 struct MaterialComponent {
-	Rect uv;
-	Color color{ Color::WHITE };
-	TextureRef textureHandle;
-	GraphicsPSO* pso = nullptr;
+	std::span<Material> materials;
+	uint32_t psoId = 0;
+	uint32_t rootSigId = 0;
+	std::wstring psoName;
 };
 }
 }

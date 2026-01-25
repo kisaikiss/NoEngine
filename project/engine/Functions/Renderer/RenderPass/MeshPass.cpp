@@ -2,6 +2,7 @@
 #include "engine/Math/Types/Calculations/Vector3Calculations.h"
 #include "engine/Functions/Shader/ShaderReflection.h"
 #include "engine/Functions/Renderer/RenderSystem.h"
+#include "engine/Utilities/Conversion/ConvertString.h"
 
 namespace NoEngine {
 namespace Render {
@@ -28,40 +29,36 @@ void MeshPass::Collect(ECS::Registry& registry) {
 		auto* mesh = registry.GetComponent<MeshComponent>(entity);
 		auto* material = registry.GetComponent<MaterialComponent>(entity);
 		auto* transform = registry.GetComponent<TransformComponent>(entity);
+		auto pso = material->psoId;
+		auto rootSig = material->rootSigId;
+		auto name = material->psoName;
 		float distance = MathCalculations::LengthSquared(transform->translate - cameraPos);
 
-		items_.push_back({ mesh,material,transform, distance });
+		items_.push_back({ mesh,material,transform, pso, rootSig, ConvertString(name), distance});
 	}
 }
 
 void MeshPass::Sort() {
 	std::sort(items_.begin(), items_.end(),
 		[](const DrawItem& a, const DrawItem& b) {
-			if(a.material->pso != b.material->pso) return a.material->pso < b.material->pso;
-			if (a.material->textureHandle.Get() != b.material->textureHandle.Get()) return a.material->textureHandle < b.material->textureHandle;
+			if (a.psoId != b.psoId) return a.psoId < b.psoId;
 			return a.distanceToCamera < b.distanceToCamera;
 		});
 }
 
 void MeshPass::Render(GraphicsContext& context) {
-	GraphicsPSO* currentPSO = nullptr;
+	// ToDo : currentPsoの値は被りえない値にすべきです。
+	uint32_t currentPSO = 110;
 	MaterialComponent* currentMaterial = nullptr;
+
 	
-	// ToDo : これでは一つの特定のルートシグネチャしか利用できません。pso切り替え時に別のルートシグネチャをセットする場合は別のrootIndexMapを取得できるようにすべきです。
-	std::unordered_map<std::string, uint32_t>& rootIndex = RootSignatureBuilder::GetRootIndexMap("defaultRootSignature");
 	for (auto& item : items_) {
-
-		if (item.material->pso != currentPSO) {
-			context.SetPipelineState(*item.material->pso);
-			context.SetRootSignature(GetRootSignature("defaultRootSignature"));
+		std::unordered_map<std::string, uint32_t>& rootIndex = RootSignatureBuilder::GetRootIndexMap(item.psoName);
+		if (item.psoId != currentPSO) {
+			context.SetPipelineState(GetPSO(item.psoId));
+			context.SetRootSignature(GetRootSignature(item.rootSigId));
 			context.SetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-			currentPSO = item.material->pso;
-		}
-
-		if (item.material != currentMaterial) {
-			context.SetDynamicDescriptor(rootIndex["gTexture"], 0, item.material->textureHandle->GetSRV());
-			context.SetDynamicConstantBufferView(rootIndex["gMaterial"], sizeof(Color), &item.material->color);
-			currentMaterial = item.material;
+			currentPSO = item.psoId;
 		}
 
 		Matrix4x4 worldData = item.transform->MakeAffineMatrix4x4();
@@ -69,8 +66,27 @@ void MeshPass::Render(GraphicsContext& context) {
 		context.SetDynamicConstantBufferView(rootIndex["gCameraMatrix"], sizeof(Matrix4x4), &GetCamera()->GetViewProjMatrix());
 		context.SetVertexBuffer(0, item.mesh->mesh->vertexBuffer.VertexBufferView());
 		context.SetIndexBuffer(item.mesh->mesh->indexBuffer.IndexBufferView());
+		
+		if (item.mesh->mesh->numJoints) {
 
-		context.DrawIndexed(UINT(item.mesh->mesh->indices.size()));
+			context.CopyBufferRegion(item.mesh->mesh->paletteResource, 0, item.mesh->mesh->paletteUpload, 0, sizeof(SkeletonWell) * item.mesh->mesh->mappedPalette.size());
+			
+			context.SetDynamicDescriptor(rootIndex["gJoints"], 0, item.mesh->mesh->paletteResource.GetSRV());
+		}
+
+		for (const auto& subMesh : item.mesh->mesh->subMeshes) {
+	
+			_declspec(align(16)) struct {
+				Vector4 color;
+			}constants;
+			constants.color = item.material->materials[subMesh.materialIndex].color.ToVector4();
+			context.SetDynamicConstantBufferView(rootIndex["gMaterial"], sizeof(Color), &constants);
+			context.SetDynamicDescriptor(rootIndex["gTexture"], 0, item.material->materials[subMesh.materialIndex].textureHandle.GetSRV());
+
+			currentMaterial = item.material;
+
+			context.DrawIndexedInstanced(subMesh.indexCount, 1, subMesh.indexStart, subMesh.vertexStart, 0);
+		}
 	}
 }
 
