@@ -26,10 +26,10 @@ void BossControlSystem::Update(No::Registry& registry, float deltaTime)
 
         if (collider->isCollied)
         {
-            material->color = NoEngine::Color(1.0f, 0.0f, 0.0f, 1.0f);
+            material->materials[0].color = NoEngine::Color(1.0f, 0.0f, 0.0f, 1.0f);
         } else
         {
-            material->color = NoEngine::Color(1.0f, 1.0f, 1.0f, 1.0f);
+            material->materials[0].color = NoEngine::Color(1.0f, 1.0f, 1.0f, 1.0f);
         }
 
 
@@ -40,7 +40,6 @@ void BossControlSystem::Update(No::Registry& registry, float deltaTime)
             ImGui::DragFloat3("translate", &transform->translate.x, 0.05f);
             ImGui::DragFloat3("scale", &transform->scale.x, 0.05f);
             ImGui::DragFloat4("rotate", &transform->rotation.x, 0.04f);
-            ImGui::DragFloat4("uv", &material->uv.x, 0.01f);
             ImGui::End();
         
 #endif // USE_IMGUI

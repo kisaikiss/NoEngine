@@ -64,12 +64,14 @@ void GameScene::InitVaus(No::Registry& registry)
 	transform->translate = { 0.f, -4.85f, 0.f };
 
 	auto* model = registry.AddComponent<No::MeshComponent>(vausEntity);
-	model->mesh = NoEngine::ModelLoader::LoadModel("Vaus", "resources/engine/Model/testVaus.obj");
+	NoEngine::ModelLoader::LoadModel("Vaus", "resources/engine/Model/testVaus.obj",model);
 
 	auto* m = registry.AddComponent<No::MaterialComponent>(vausEntity);
-	m->color = Color(0xcc0000ff);
-	m->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/engine/white1x1.png");
-	m->pso = &NoEngine::Render::GetPSO(L"Renderer : Default PSO");
+	m->materials = NoEngine::ModelLoader::GetMaterial("Vaus");
+
+	m->psoName = L"Renderer : Default PSO";
+	m->psoId = NoEngine::Render::GetPSOID(m->psoName);
+	m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
 }
 
 void GameScene::InitRing(No::Registry& registry)
@@ -79,11 +81,14 @@ void GameScene::InitRing(No::Registry& registry)
 	registry.AddComponent< RingAnimationComponent>(ringEntity);
 	registry.AddComponent<No::TransformComponent>(ringEntity);
 	auto* model = registry.AddComponent<No::MeshComponent>(ringEntity);
-	model->mesh = NoEngine::ModelLoader::LoadModel("ring", "resources/engine/Model/testRing.obj");
+	NoEngine::ModelLoader::LoadModel("ring", "resources/engine/Model/testRing.obj", model);
 
 	auto m = registry.AddComponent<No::MaterialComponent>(ringEntity);
-	m->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/engine/white1x1.png");
-	m->pso = &NoEngine::Render::GetPSO(L"Renderer : Default PSO");
+	m->materials = NoEngine::ModelLoader::GetMaterial("ring");
+
+	m->psoName = L"Renderer : Default PSO";
+	m->psoId = NoEngine::Render::GetPSOID(m->psoName);
+	m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
 }
 
 void GameScene::InitBall(No::Registry& registry)
@@ -102,12 +107,14 @@ void GameScene::InitBall(No::Registry& registry)
 	transform->translate = { 0.0f, -4.35f, 0.f };
 
 	auto* model = registry.AddComponent<No::MeshComponent>(ballEntity);
-	model->mesh = NoEngine::ModelLoader::LoadModel("ball", "resources/engine/Model/ball.obj");
+	NoEngine::ModelLoader::LoadModel("ball", "resources/engine/Model/ball.obj", model);
 
 	auto m = registry.AddComponent<No::MaterialComponent>(ballEntity);
-	m->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/engine/white1x1.png");
-	m->pso = &NoEngine::Render::GetPSO(L"Renderer : Default PSO");
+	m->materials = NoEngine::ModelLoader::GetMaterial("ball");
 
+	m->psoName = L"Renderer : Default PSO";
+	m->psoId = NoEngine::Render::GetPSOID(m->psoName);
+	m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
 }
 
 void GameScene::InitEnemy(No::Registry& registry)
@@ -120,11 +127,13 @@ void GameScene::InitEnemy(No::Registry& registry)
 
 	registry.AddComponent<No::TransformComponent>(enemyEntity);
 	auto* model = registry.AddComponent<No::MeshComponent>(enemyEntity);
-	model->mesh = NoEngine::ModelLoader::LoadModel("enemy", "resources/engine/Model/enemy.obj");
-
+	NoEngine::ModelLoader::LoadModel("enemy", "resources/engine/Model/enemy.obj", model);
 	auto m = registry.AddComponent<No::MaterialComponent>(enemyEntity);
-	m->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/engine/uvChecker.png");
-	m->pso = &NoEngine::Render::GetPSO(L"Renderer : Default PSO");
+	m->materials = NoEngine::ModelLoader::GetMaterial("enemy");
+	
+	m->psoName = L"Renderer : Default PSO";
+	m->psoId = NoEngine::Render::GetPSOID(m->psoName);
+	m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
 }
 
 void GameScene::InitBoss(No::Registry& registry)
@@ -134,11 +143,14 @@ void GameScene::InitBoss(No::Registry& registry)
 	registry.AddComponent<SphereColliderComponent>(bossEntity);
 	registry.AddComponent<No::TransformComponent>(bossEntity);
 	auto* model = registry.AddComponent<No::MeshComponent>(bossEntity);
-	model->mesh = NoEngine::ModelLoader::LoadModel("enemy", "resources/engine/Model/enemy.obj");
+	NoEngine::ModelLoader::LoadModel("enemy", "resources/engine/Model/enemy.obj", model);
 
 	auto m = registry.AddComponent<No::MaterialComponent>(bossEntity);
-	m->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/engine/uvChecker.png");
-	m->pso = &NoEngine::Render::GetPSO(L"Renderer : Default PSO");
+	m->materials = NoEngine::ModelLoader::GetMaterial("enemy");
+
+	m->psoName = L"Renderer : Default PSO";
+	m->psoId = NoEngine::Render::GetPSOID(m->psoName);
+	m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
 }
 
 void GameScene::DestroyGameObject()
