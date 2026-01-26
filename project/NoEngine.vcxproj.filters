@@ -701,7 +701,6 @@
     <FxCompile Include="resources\engine\Shaders\DefaultSprite.PS.hlsl" />
     <FxCompile Include="resources\engine\Shaders\Primitive.VS.hlsl" />
     <FxCompile Include="resources\engine\Shaders\Primitive.PS.hlsl" />
-    <FxCompile Include="resources\engine\Shaders\DefaultSkinned.VS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\engine\Shaders\Default.hlsli" />

@@ -125,12 +125,14 @@ void GameScene::InitEnemy(No::Registry& registry)
 	collider->colliderType = ColliderMask::kEnemy;
 	collider->collideMask = ColliderMask::kBall;
 
-	registry.AddComponent<No::TransformComponent>(enemyEntity);
+	auto* transform = registry.AddComponent<No::TransformComponent>(enemyEntity);
+	transform->rotation.FromAxisAngle(Vector3::UP, 3.14f);
 	auto* model = registry.AddComponent<No::MeshComponent>(enemyEntity);
-	NoEngine::ModelLoader::LoadModel("enemy", "resources/engine/Model/enemy.obj", model);
+	NoEngine::ModelLoader::LoadModel("bat", "resources/engine/Model/bat/bat.obj", model);
+
 	auto m = registry.AddComponent<No::MaterialComponent>(enemyEntity);
-	m->materials = NoEngine::ModelLoader::GetMaterial("enemy");
-	
+	m->materials = NoEngine::ModelLoader::GetMaterial("bat");
+	m->materials[0].textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/engine/Model/bat/bat2.png");
 	m->psoName = L"Renderer : Default PSO";
 	m->psoId = NoEngine::Render::GetPSOID(m->psoName);
 	m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
