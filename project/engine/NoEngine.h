@@ -9,7 +9,7 @@
 
 #include "Assets/ModelLoader.h"
 #include "Functions/Renderer/RenderSystem.h"
-#include "Functions/Input/Keyboard.h"
+#include "Functions/Input/Input.h"
 
 #include "Math/MathInclude.h"
 
