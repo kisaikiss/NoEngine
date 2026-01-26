@@ -21,6 +21,8 @@ using namespace NoEngine;
 
 void GameScene::Setup()
 {
+	//アニメーションシステム
+	AddSystem(std::make_unique<No::AnimationSystem>());
 	//player用システム
 	AddSystem(std::make_unique<VausControlSystem>());
 	AddSystem(std::make_unique<BallControlSystem>());
@@ -34,7 +36,7 @@ void GameScene::Setup()
 	InitEnemy(registry);
 	InitRing(registry);
 	InitBall(registry);
-
+	InitBoss(registry);
 	constexpr Vector3 kStartCameraPosition = Vector3{ 0.0f, 0.0f, -28.0f };
 	//カメラ初期化
 	camera_ = std::make_unique<NoEngine::Camera>();
@@ -128,11 +130,11 @@ void GameScene::InitEnemy(No::Registry& registry)
 	auto* transform = registry.AddComponent<No::TransformComponent>(enemyEntity);
 	transform->rotation.FromAxisAngle(Vector3::UP, 3.14f);
 	auto* model = registry.AddComponent<No::MeshComponent>(enemyEntity);
-	NoEngine::ModelLoader::LoadModel("bat", "resources/engine/Model/bat/bat.obj", model);
+	NoEngine::ModelLoader::LoadModel("bat", "resources/game/td_2304/Model/bat/bat.obj", model);
 
 	auto m = registry.AddComponent<No::MaterialComponent>(enemyEntity);
 	m->materials = NoEngine::ModelLoader::GetMaterial("bat");
-	m->materials[0].textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/engine/Model/bat/bat2.png");
+	m->materials[0].textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Model/bat/bat2.png");
 	m->psoName = L"Renderer : Default PSO";
 	m->psoId = NoEngine::Render::GetPSOID(m->psoName);
 	m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
@@ -140,19 +142,24 @@ void GameScene::InitEnemy(No::Registry& registry)
 
 void GameScene::InitBoss(No::Registry& registry)
 {
+
+
 	No::Entity bossEntity = registry.GenerateEntity();
 	registry.AddComponent<Boss1Tag>(bossEntity);
 	registry.AddComponent<SphereColliderComponent>(bossEntity);
 	registry.AddComponent<No::TransformComponent>(bossEntity);
 	auto* model = registry.AddComponent<No::MeshComponent>(bossEntity);
-	NoEngine::ModelLoader::LoadModel("enemy", "resources/engine/Model/enemy.obj", model);
+	auto* animationComp = registry.AddComponent<No::AnimatorComponent> (bossEntity);
+	NoEngine::ModelLoader::LoadModel("batBoss", "resources/game/td_2304/Model/batBoss/batBoss.gltf", model, animationComp);
 
 	auto m = registry.AddComponent<No::MaterialComponent>(bossEntity);
-	m->materials = NoEngine::ModelLoader::GetMaterial("enemy");
+	m->materials = NoEngine::ModelLoader::GetMaterial("batBoss");
 
-	m->psoName = L"Renderer : Default PSO";
+	m->psoName = L"Renderer : DefaultSkinned PSO";
 	m->psoId = NoEngine::Render::GetPSOID(m->psoName);
 	m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
+
+
 }
 
 void GameScene::DestroyGameObject()

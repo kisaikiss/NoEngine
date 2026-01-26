@@ -11,6 +11,7 @@ void BossControlSystem::Update(No::Registry& registry, float deltaTime)
         SphereColliderComponent,
         Boss1Tag>();
 
+
     (void)deltaTime;
 
     for (auto entity : view)
