@@ -102,6 +102,20 @@ GraphicsContext& CommandContext::GetGraphicsContext() {
 	return reinterpret_cast<GraphicsContext&>(*this);
 }
 
+void CommandContext::CopyBuffer(GpuResource& Dest, GpuResource& Src) {
+	TransitionResource(Dest, D3D12_RESOURCE_STATE_COPY_DEST);
+	TransitionResource(Src, D3D12_RESOURCE_STATE_COPY_SOURCE);
+	FlushResourceBarriers();
+	commandList_->CopyResource(Dest.GetResource(), Src.GetResource());
+}
+
+void CommandContext::CopyBufferRegion(GpuResource& Dest, size_t DestOffset, GpuResource& Src, size_t SrcOffset, size_t NumBytes) {
+	TransitionResource(Dest, D3D12_RESOURCE_STATE_COPY_DEST);
+	//TransitionResource(Src, D3D12_RESOURCE_STATE_COPY_SOURCE);
+	FlushResourceBarriers();
+	commandList_->CopyBufferRegion(Dest.GetResource(), DestOffset, Src.GetResource(), SrcOffset, NumBytes);
+}
+
 void CommandContext::InitializeTexture(GpuResource& dest, UINT numSubresources, D3D12_SUBRESOURCE_DATA subData[]) {
 	UINT64 uploadBufferSize = GetRequiredIntermediateSize(dest.GetResource(), 0, numSubresources);
 

@@ -174,7 +174,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="engine\Assets\Texture\TexUtil.cpp" />
     <ClCompile Include="engine\Functions\ECS\Registry.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\AnimationSystem.cpp" />
-    <ClCompile Include="engine\Functions\Input\Keyboard.cpp" />
+    <ClCompile Include="engine\Functions\Input\Input.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\MeshPass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PrimitivePass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\RenderPassScheduler.cpp" />
@@ -309,7 +309,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="engine\Assets\Animation.h" />
     <ClInclude Include="engine\Assets\ModelLoader.h" />
     <ClInclude Include="engine\Assets\Skeleton.h" />
-    <ClInclude Include="engine\Functions\ECS\Component\AnimationComponent.h" />
+    <ClInclude Include="engine\Functions\ECS\Component\AnimatorComponent.h" />
     <ClInclude Include="engine\Functions\ECS\Component\MaterialComponent.h" />
     <ClInclude Include="engine\Functions\ECS\Component\MeshComponent.h" />
     <ClInclude Include="engine\Functions\ECS\Component\SpriteComponent.h" />
@@ -322,7 +322,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="engine\Functions\ECS\System\AnimationSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\ISystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\SystemManager.h" />
-    <ClInclude Include="engine\Functions\Input\Keyboard.h" />
+    <ClInclude Include="engine\Functions\Input\Input.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\MeshPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PrimitivePass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\RenderPass.h" />

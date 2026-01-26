@@ -1,5 +1,6 @@
 #include "AnimationSystem.h"
-#include "../Component/MeshComponent.h"
+#include "engine/Functions/Renderer/Primitive.h"
+#include "engine/Math/Types/Calculations/Matrix4x4Calculations.h"
 
 namespace NoEngine {
 namespace ECS {
@@ -9,21 +10,23 @@ void AnimationSystem::Update(Registry& registry, float deltaTime) {
 }
 
 void AnimationSystem::AnimationUpdate(Registry& registry, float deltaTime) {
-	auto view = registry.View<Component::AnimationComponent, Component::MeshComponent>();
+	auto view = registry.View<Component::AnimatorComponent, Component::MeshComponent>();
 
 	for (auto entity : view) {
-		auto* animeComp = registry.GetComponent<Component::AnimationComponent>(entity);
-		//auto* meshComp = registry.GetComponent<Component::MeshComponent>(entity);
+		auto* animeComp = registry.GetComponent<Component::AnimatorComponent>(entity);
+		auto* meshComp = registry.GetComponent<Component::MeshComponent>(entity);
+		if (!animeComp->animation || !meshComp->mesh) break;
 		animeComp->time += deltaTime;
 		animeComp->time = std::fmod(animeComp->time, animeComp->animation->duration);
 		if (animeComp->skeleton) {
 			SkeletonUpdate(animeComp);
+			SkeletonDraw(animeComp);
+			SKinUpdate(animeComp, meshComp);
 		}
-
 	}
 }
 
-void AnimationSystem::SkeletonUpdate(Component::AnimationComponent* animeComp) {
+void AnimationSystem::SkeletonUpdate(Component::AnimatorComponent* animeComp) {
 
 	for (Joint& joint : animeComp->skeleton->joints) {
 
@@ -38,6 +41,36 @@ void AnimationSystem::SkeletonUpdate(Component::AnimationComponent* animeComp) {
 		} else {
 			joint.skeletonSpaceMatrix = joint.localMatrix;
 		}
+
+	}
+}
+
+void AnimationSystem::SkeletonDraw(Component::AnimatorComponent* animeComp) {
+
+	if (!animeComp->drawSkeleton) return;
+
+	std::vector<Joint>& joints = animeComp->skeleton->joints;
+	for (Joint& joint : joints) {
+		if (joint.parent.has_value()) {
+			const Joint& parentJoint = joints[joint.parent.value()];
+
+			Vector3 start = parentJoint.skeletonSpaceMatrix.GetTranslate();
+			Vector3 end = joint.skeletonSpaceMatrix.GetTranslate();
+
+			Primitive::DrawLine(start, end, Color::WHITE);
+		}
+	}
+}
+
+void AnimationSystem::SKinUpdate(Component::AnimatorComponent* animeComp, Component::MeshComponent* meshComp) {
+	for (size_t jointIndex = 0; jointIndex < animeComp->skeleton->joints.size(); jointIndex++) {
+		meshComp->mesh->mappedPalette[jointIndex].skeletonSpaceMatrix =
+			animeComp->skeleton->inverseBindPoseMatrices[jointIndex] * animeComp->skeleton->joints[jointIndex].skeletonSpaceMatrix;
+		meshComp->mesh->mappedPalette[jointIndex].skeletonSpaceInverseTransposeMatrix =
+			MathCalculations::Transpose(MathCalculations::Inverse(meshComp->mesh->mappedPalette[jointIndex].skeletonSpaceMatrix));
+
+		memcpy(meshComp->mesh->paletteUpload.Map(), meshComp->mesh->mappedPalette.data(), sizeof(SkeletonWell) * meshComp->mesh->mappedPalette.size());
+		
 	}
 }
 

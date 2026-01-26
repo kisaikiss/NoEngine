@@ -258,7 +258,7 @@
     <ClCompile Include="application\TD2_3\Game.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="engine\Functions\Input\Keyboard.cpp">
+    <ClCompile Include="engine\Functions\Input\Input.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="engine\Functions\Scene\SceneManager.cpp">
@@ -621,7 +621,7 @@
     <ClInclude Include="application\TD2_3\Game.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="engine\Functions\Input\Keyboard.h">
+    <ClInclude Include="engine\Functions\Input\Input.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="engine\NoEngine.h">
@@ -666,7 +666,7 @@
     <ClInclude Include="engine\Functions\ECS\System\AnimationSystem.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="engine\Functions\ECS\Component\AnimationComponent.h">
+    <ClInclude Include="engine\Functions\ECS\Component\AnimatorComponent.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="engine\Assets\Animation.h">

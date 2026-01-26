@@ -9,7 +9,7 @@
 #include "engine/Runtime/GpuResource/GpuResource.h"
 #include "engine/Runtime/Command/GraphicsContext.h"
 #include "engine/Functions/Renderer/RenderPass/RenderPassScheduler.h"
-#include "engine/Functions/Input/Keyboard.h"
+#include "engine/Functions/Input/input.h"
 
 #ifdef USE_IMGUI
 #include "engine/Editor/ImGuiManager.h"
@@ -44,7 +44,7 @@ int RunApplication(std::unique_ptr<IGameApp> game) {
 		GraphicsContext& context = GraphicsContext::Begin();
 		GraphicsCore::gWindowManager.Clear(context);
 
-		Input::Keyboard::Update();
+		InputUpdate();
 
 #ifdef USE_IMGUI
 		imguiManager.BeginFrame();
@@ -88,12 +88,10 @@ void EngineInitialize() {
 	GraphicsCore::Initialize();
 
 	// ウィンドウの生成、初期化を行います。
-	auto* window = GraphicsCore::gWindowManager.Create(L"NoEngine", 1280, 720);
+	GraphicsCore::gWindowManager.Create(L"NoEngine", 1280, 720);
 	GraphicsCore::gWindowManager.SetMainWindowName(L"NoEngine");
-	window->RegisterWindowEvent(std::make_unique<MainEditorWindowCloseEvent>());
-	//sWindowManager->Create(L"NoWindow", 1280, 720);
-
-	Input::Keyboard::Initialize();
+	
+	InputInitialize();
 
 #ifdef USE_IMGUI
 	imguiManager.Initialize();
@@ -105,7 +103,7 @@ void EngineFinalize() {
 #ifdef USE_IMGUI
 	imguiManager.Shutdown();
 #endif // USE_IMGUI
-	Input::Keyboard::Shutdown();
+	InputShutdown();
 	GraphicsCore::Shutdown();
 	CoUninitialize();
 }

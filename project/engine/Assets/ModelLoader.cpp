@@ -2,20 +2,35 @@
 #include "engine/Math/Types/Transform.h"
 #include "engine/Runtime/GpuResource/UploadBuffer.h"
 
+#include "engine/Functions/Debug/Logger/Log.h"
+#include "engine/Utilities/FileUtilities.h"
+
 namespace NoEngine {
+
+using namespace Component;
+
+// ToDo : 現在は読み込んだモデル、アニメーション、マテリアルをここで保存していますが、別クラスで保存すべきです。
 namespace {
 std::unordered_map<std::string, Mesh> sMeshes;
+std::unordered_map<std::string, Animation> sAnimation;
+std::unordered_map<std::string, Skeleton> sSkeletons;
+std::unordered_map<std::string, std::vector<Material>> sMaterials;
 }
 
-
-Mesh* ModelLoader::LoadModel(const std::string& name, const std::string& filePath) {
+void ModelLoader::LoadModel(const std::string& name, const std::string& filePath, MeshComponent* model, AnimatorComponent* animator) {
 	if (sMeshes.contains(name)) {
-		return &sMeshes[name];
+		if (model) model->mesh = &sMeshes[name];
+		if (animator) {
+			if (sAnimation.contains(name))animator->animation = &sAnimation[name];
+			if (sSkeletons.contains(name))animator->skeleton = &sSkeletons[name];
+		}
+		return;
 	}
 
 	Assimp::Importer importer;
 	const aiScene* scene = importer.ReadFile(filePath.c_str(), aiProcess_FlipWindingOrder | aiProcess_FlipUVs);
 	assert(scene->HasMeshes());
+	std::string directoryPath = Utilities::GetBasePath(filePath);
 
 	for (uint32_t meshIndex = 0; meshIndex < scene->mNumMeshes; ++meshIndex) {
 		aiMesh* mesh = scene->mMeshes[meshIndex];
@@ -23,6 +38,8 @@ Mesh* ModelLoader::LoadModel(const std::string& name, const std::string& filePat
 		assert(mesh->HasTextureCoords(0));
 		auto vertexCount = mesh->mNumVertices;
 		auto indexCount = mesh->mNumFaces * 3;
+
+
 
 		uint32_t vertexBase = static_cast<uint32_t>(sMeshes[name].vertices.size());
 		uint32_t indexBase = static_cast<uint32_t>(sMeshes[name].indices.size());
@@ -41,6 +58,7 @@ Mesh* ModelLoader::LoadModel(const std::string& name, const std::string& filePat
 			vertex.texcoord = { texcoord.x, texcoord.y };
 			sMeshes[name].vertices.push_back(vertex);
 		}
+
 		// Index読み込み
 		for (uint32_t faceIndex = 0; faceIndex < mesh->mNumFaces; ++faceIndex) {
 			aiFace& face = mesh->mFaces[faceIndex];
@@ -48,35 +66,148 @@ Mesh* ModelLoader::LoadModel(const std::string& name, const std::string& filePat
 
 			for (uint32_t element = 0; element < face.mNumIndices; ++element) {
 				uint32_t vertexIndex = face.mIndices[element];
-				// 各メッシュの頂点配列を結合しているため、インデックスには現在の頂点ベースを加算する
-				sMeshes[name].indices.push_back(vertexBase + vertexIndex);
+				sMeshes[name].indices.push_back(vertexIndex);
+			}
+		}
+
+		if (mesh->HasBones()) {
+			
+			for (uint32_t boneIndex = 0; boneIndex < mesh->mNumBones; ++boneIndex) {
+				aiBone* bone = mesh->mBones[boneIndex];
+				std::string jointName = bone->mName.C_Str();
+				JointWeightData& jointWeightData = sMeshes[name].skinClusterData[jointName];
+
+				aiMatrix4x4 bindPoseMatrixAssimp = bone->mOffsetMatrix.Inverse();
+				aiVector3D scale, translate;
+				aiQuaternion rotate;
+				bindPoseMatrixAssimp.Decompose(scale, rotate, translate);
+				
+				jointWeightData.inverseBindPoseMatrix.MakeAffine({ scale.x,scale.y,scale.z }, { rotate.x, -rotate.y, -rotate.z, rotate.w }, { -translate.x, translate.y, translate.z });
+				jointWeightData.inverseBindPoseMatrix.Inverse();
+
+				for (uint32_t weightIndex = 0; weightIndex < bone->mNumWeights; ++weightIndex) {
+					uint32_t localId = bone->mWeights[weightIndex].mVertexId;
+					float weight = bone->mWeights[weightIndex].mWeight;
+					// ローカル頂点IDをグローバル頂点IDへ変換
+					uint32_t globalId = vertexBase + localId;
+					jointWeightData.vertexWeights.push_back({ weight, globalId });
+				}
+			}
+		}
+
+		SubMesh sub{};
+		sub.indexStart = indexBase;
+		sub.indexCount = indexCount;
+		sub.vertexStart = vertexBase;
+		sub.vertexCount = vertexCount;
+
+		if (scene->HasMaterials()) {
+			aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+			if (material->GetTextureCount(aiTextureType_DIFFUSE) > 0) {
+				aiString texPath;
+				material->GetTexture(aiTextureType_DIFFUSE, 0, &texPath);
+				Material m{};
+
+				// ToDo : マテリアル読み込みが簡易的すぎます。同じ種類のマテリアルなら読み込まないようにすべきです。
+				m.textureHandle = NoEngine::TextureManager::LoadCovertTexture(directoryPath + "/" + texPath.C_Str());
+				sub.materialIndex = static_cast<uint32_t>(sMaterials[name].size());
+				sMaterials[name].push_back(m);
+			} else {
+				// ToDo : テクスチャがないとwhite1x1.pngをテクスチャとして利用するようになっていますが、
+				// テクスチャのないマテリアルはテクスチャがない状態で管理できるようにすべきです。
+				Material m{};
+				m.textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/engine/white1x1.png");
+				sub.materialIndex = static_cast<uint32_t>(sMaterials[name].size());
+				sMaterials[name].push_back(m);
+			}
+		}
+
+		sMeshes[name].subMeshes.push_back(sub);
+	}
+	
+	sMeshes[name].rootNode = ReadNode(scene->mRootNode);
+
+	if (scene->HasAnimations()) {
+		ProcessAnimation(name, scene);
+		ProcessSkeleton(name, sMeshes[name].rootNode);
+	}
+	if (animator) {
+		if (sAnimation.contains(name))animator->animation = &sAnimation[name];
+		if (sSkeletons.contains(name))animator->skeleton = &sSkeletons[name];
+	}
+
+	// Vertex
+	{
+		if (sMeshes[name].skinClusterData.empty()) {
+			size_t vertexBufferSize = sMeshes[name].vertices.size() * sizeof(Vertex);
+
+			UploadBuffer vertexUpload;
+			vertexUpload.Create(L"VertexUpload", vertexBufferSize);
+			memcpy(vertexUpload.Map(), sMeshes[name].vertices.data(), vertexBufferSize);
+			vertexUpload.Unmap();
+
+			sMeshes[name].vertexBuffer.Create(
+				L"Model vertex",
+				static_cast<uint32_t>(sMeshes[name].vertices.size()),
+				sizeof(Vertex),
+				vertexUpload
+			);
+		} else {
+			std::vector<JointVertex> sortedJointData(sMeshes[name].vertices.size());
+
+
+			for (const auto& [jointName, skinInfo] : sMeshes[name].skinClusterData) {
+				auto it = sSkeletons[name].jointMap.find(jointName);
+				if (it == sSkeletons[name].jointMap.end()) continue;
+
+				int32_t jointIndex = it->second;
+
+				for (const auto& weightInfo : skinInfo.vertexWeights) {
+					uint32_t vertexIdx = weightInfo.vertexIndex;
+					float weightVal = weightInfo.weight;
+
+					if (vertexIdx < sortedJointData.size()) {
+						// 既存のjointIndices/weights配列の空きスロットを探して代入
+						for (int k = 0; k < 4; ++k) {
+							if (sortedJointData[vertexIdx].weights[k] == 0.0f) {
+								sortedJointData[vertexIdx].jointIndices[k] = jointIndex;
+								sortedJointData[vertexIdx].weights[k] = weightVal;
+								break;
+							}
+						}
+					}
+				}
 			}
 
+			size_t vertexSize = sizeof(Vertex);
+			size_t skinSize = sizeof(JointVertex);
+			size_t totalSize = sMeshes[name].vertices.size() * (vertexSize + skinSize);
+
+			UploadBuffer vertexUpload;
+			vertexUpload.Create(L"VertexUpload", totalSize);
+
+			uint8_t* dst = reinterpret_cast<uint8_t*>(vertexUpload.Map());
+			for (size_t i = 0; i < sMeshes[name].vertices.size(); ++i) {
+				memcpy(dst, &sMeshes[name].vertices[i], vertexSize);
+				dst += vertexSize;
+
+				memcpy(dst, &sortedJointData[i], skinSize);
+				dst += skinSize;
+			}
+
+			vertexUpload.Unmap();
+
+			sMeshes[name].vertexBuffer.Create(
+				L"Skin model vertex",
+				static_cast<uint32_t>(sMeshes[name].vertices.size()),
+				static_cast<uint32_t>(vertexSize + skinSize),
+				vertexUpload
+			);
 		}
+		
 	}
 
-	sMeshes[name].rootNode =  ReadNode(scene->mRootNode);
-
-
-
-	//vertex
-	{
-		size_t vertexBufferSize = sMeshes[name].vertices.size() * sizeof(Vertex);
-
-		UploadBuffer vertexUpload;
-		vertexUpload.Create(L"VertexUpload", vertexBufferSize);
-		memcpy(vertexUpload.Map(), sMeshes[name].vertices.data(), vertexBufferSize);
-		vertexUpload.Unmap();
-
-		sMeshes[name].vertexBuffer.Create(
-			L"Model vertex",
-			static_cast<uint32_t>(sMeshes[name].vertices.size()),
-			sizeof(Vertex),
-			vertexUpload
-		);
-	}
-	 
-	//index
+	// Index
 	{
 		size_t indexBufferSize = sMeshes[name].indices.size() * sizeof(uint32_t);
 
@@ -93,17 +224,34 @@ Mesh* ModelLoader::LoadModel(const std::string& name, const std::string& filePat
 		);
 	}
 
+	
+
 	// ToDo : Material読み込みもできるようにすべきです。
 
-	return &sMeshes[name];
+	if (model) model->mesh = &sMeshes[name];
 }
 
-Mesh* ModelLoader::GetModel(const std::string& name) {
-	return &sMeshes[name];
+void ModelLoader::GetModel(const std::string& name, MeshComponent* model, AnimatorComponent* animator) {
+	if (!model) return;
+
+	if (sMeshes.contains(name)) {
+		model->mesh = &sMeshes[name];
+		if (animator) {
+			if (sAnimation.contains(name))animator->animation = &sAnimation[name];
+			if (sSkeletons.contains(name))animator->skeleton = &sSkeletons[name];
+		}
+	}
+}
+
+std::span<Material> ModelLoader::GetMaterial(const std::string& name) {
+	return sMaterials[name];
 }
 
 void ModelLoader::DeleteAll() {
 	sMeshes.clear();
+	sAnimation.clear();
+	sSkeletons.clear();
+	sMaterials.clear();
 }
 
 Node ModelLoader::ReadNode(aiNode* node) {
@@ -125,12 +273,9 @@ Node ModelLoader::ReadNode(aiNode* node) {
 	return result;
 }
 
-Animation ModelLoader::LoadAnimation(const std::string& filePath) {
-	Assimp::Importer importer;
-	const aiScene* scene = importer.ReadFile(filePath.c_str(), 0);
-
+void ModelLoader::ProcessAnimation(const std::string& name, const aiScene* scene) {
 	aiAnimation* animationAssimp = scene->mAnimations[0]; // 最初のアニメーションだけ採用
-	Animation animation;
+	Animation& animation = sAnimation[name];
 	animation.duration = float(animationAssimp->mDuration / animationAssimp->mTicksPerSecond); // 時間単位を秒へ変換
 
 	// assimpでは個々のNodeのAnimationをchannelと呼んでいるのでchannelを回してNodeAnimationの情報をとってくる
@@ -161,19 +306,43 @@ Animation ModelLoader::LoadAnimation(const std::string& filePath) {
 			nodeAnimation.scale.keyframes.push_back(keyframe);
 		}
 	}
-	return animation;
 }
 
-Skeleton ModelLoader::CreateSkeleton(const Node& rootNode) {
-	Skeleton skeleton;
+void ModelLoader::ProcessSkeleton(const std::string& name, const Node& rootNode) {
+	Skeleton& skeleton = sSkeletons[name];
 	skeleton.root = CreateJoint(rootNode, {}, skeleton.joints);
 
 	//名前とindexのマッピングを行いアクセスしやすくする
 	for (const Joint& joint : skeleton.joints) {
 		skeleton.jointMap.emplace(joint.name, joint.index);
 	}
+	
+	// スキニング
+	{
+		sMeshes[name].numJoints = static_cast<uint32_t>(skeleton.joints.size());
+		sMeshes[name].mappedPalette.resize(skeleton.joints.size());
+		sMeshes[name].paletteUpload.Create(L"SkinningUpload", sizeof(SkeletonWell) * sMeshes[name].mappedPalette.size());
+		memcpy(sMeshes[name].paletteUpload.Map(), sMeshes[name].mappedPalette.data(), sizeof(SkeletonWell) * sMeshes[name].mappedPalette.size());
 
-	return skeleton;
+		sMeshes[name].paletteResource.Create(
+			L"Skinning Joints",
+			static_cast<uint32_t>(sMeshes[name].mappedPalette.size()),
+			sizeof(SkeletonWell),
+			sMeshes[name].paletteUpload
+		);
+
+
+		skeleton.inverseBindPoseMatrices.assign(skeleton.joints.size(), Matrix4x4::IDENTITY);
+
+		for (const auto& jointWeight : sMeshes[name].skinClusterData) {
+			auto it = skeleton.jointMap.find(jointWeight.first);
+			if (it == skeleton.jointMap.end()) continue;
+
+			skeleton.inverseBindPoseMatrices[(*it).second] = jointWeight.second.inverseBindPoseMatrix;
+		}
+	}
+	
+
 }
 
 int32_t ModelLoader::CreateJoint(const Node& node, const std::optional<int32_t>& parent, std::vector<Joint>& joints) {

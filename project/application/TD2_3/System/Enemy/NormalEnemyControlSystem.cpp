@@ -20,10 +20,10 @@ void NormalEnemyControlSystem::Update(No::Registry& registry, float deltaTime)
 
         if (collider->isCollied)
         {
-            material->color = NoEngine::Color(1.0f, 0.0f, 0.0f, 1.0f);
+            material->materials[0].color = NoEngine::Color(1.0f, 0.0f, 0.0f, 1.0f);
         } else
         {
-            material->color = NoEngine::Color(1.0f, 1.0f, 1.0f, 1.0f);
+            material->materials[0].color = NoEngine::Color(1.0f, 1.0f, 1.0f, 1.0f);
         }
     }
 }
