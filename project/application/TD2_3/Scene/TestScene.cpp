@@ -28,24 +28,9 @@ void TestScene::Setup() {
 
 	t2d->scale = { 100.f, 100.f };
 	sprite->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/engine/Model/enemy.png");
-	
-	for (uint32_t i = 0; i < 10; i++) {
-		auto e = registry.GenerateEntity();
-		auto* transform = registry.AddComponent<No::Transform2DComponent>(e);
-		transform->translate = { static_cast<float>(i)*100.f, static_cast<float>(i + 1) * 10.f };
-		transform->scale = { 50.f, 50.f };
-		auto* sp = registry.AddComponent<No::SpriteComponent>(e);
-		if (i == 5) {
-			sp->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/engine/uvChecker.png");
-			sp->layer = 2;
-		} else if (i == 7) {
-			sp->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/engine/Model/enemy.png");
-			sp->layer = 0;
-		} else {
-			sp->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/engine/flower.png");
-			sp->layer = 1;
-		}
-	}
+
+	No::SoundLoad(L"resources/engine/Audio/gamePlay.mp3", "test");
+	No::SoundPlay("test", 0.5f, true);
 
 	camera_ = std::make_unique<NoEngine::Camera>();
 	cameraTransform_.translate.z = -5.f;
