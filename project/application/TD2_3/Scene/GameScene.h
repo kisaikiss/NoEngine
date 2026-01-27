@@ -16,5 +16,7 @@ private:
 	void InitEnemy(No::Registry& registry);
 	void InitBoss(No::Registry& registry);
 	void InitBackGround(No::Registry& registry);
+	void InitBatGirl(No::Registry& registry);
+	void InitPlayerGirl(No::Registry& registry);
 	void DestroyGameObject();
 };
