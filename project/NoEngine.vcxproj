@@ -164,6 +164,8 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\TD2_3\Game.cpp" />
     <ClCompile Include="application\TD2_3\Render\BackGroundEffect.cpp" />
     <ClCompile Include="application\TD2_3\System\BackGroundEffectSystem.cpp" />
+    <ClCompile Include="application\TD2_3\System\Enemy\BaseEnemyState.cpp" />
+    <ClCompile Include="application\TD2_3\System\Enemy\EnemyStateManager.cpp" />
     <ClCompile Include="application\TD2_3\System\Enemy\TrackEnemyControlSystem.cpp" />
     <ClCompile Include="application\TD2_3\System\Human\BatGirlControlSystem.cpp" />
     <ClCompile Include="engine\Functions\Renderer\Primitive.cpp" />
@@ -304,6 +306,8 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\TD2_3\Game.h" />
     <ClInclude Include="application\TD2_3\Render\BackGroundEffect.h" />
     <ClInclude Include="application\TD2_3\System\BackGroundEffectSystem.h" />
+    <ClInclude Include="application\TD2_3\System\Enemy\BaseEnemyState.h" />
+    <ClInclude Include="application\TD2_3\System\Enemy\EnemyStateManager.h" />
     <ClInclude Include="application\TD2_3\System\Enemy\TrackEnemyControlSystem.h" />
     <ClInclude Include="application\TD2_3\System\Human\BatGirlControlSystem.h" />
     <ClInclude Include="engine\Functions\Renderer\Primitive.h" />

@@ -19,8 +19,6 @@ void BossControlSystem::Update(No::Registry& registry, float deltaTime)
         auto* material = registry.GetComponent<No::MaterialComponent>(entity);
         auto* collider = registry.GetComponent<SphereColliderComponent>(entity);
 
-        //transform->translate.x += speed_ * deltaTime;
-        transform->rotation.FromAxisAngle(NoEngine::Vector3::UP, 3.14f);
 
         if (transform->translate.x <= -5.0f || transform->translate.x >= 5.0f)speed_ *= -1.0f;
 

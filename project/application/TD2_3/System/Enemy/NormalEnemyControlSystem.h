@@ -5,7 +5,7 @@
 class NormalEnemyControlSystem : public No::ISystem
 {
 public:
-    NormalEnemyControlSystem(No::Registry& registry);
+    NormalEnemyControlSystem();
     void Update(No::Registry& registry, float deltaTime) override;
 private:
     //ステートマネージャー
@@ -17,6 +17,7 @@ private:
 class EnemyAppear :public BaseEnemyState<NormalEnemyControlSystem> {
 
 public:
+    EnemyAppear() = default;
     //ステートが始まるときに一度だけ呼ばれる
      void Enter(No::Registry& registry,NormalEnemyControlSystem* ownerType) override;
      //ステートが更新時に呼ばれる

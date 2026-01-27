@@ -1,45 +1,128 @@
 #include "NormalEnemyControlSystem.h"
 #include "../../Component/ColliderComponent.h"
+#include "../../Component/VausStateComponent.h"
+#include"../../Component/NormalEnemyComponent.h"
 #include "../../tag.h"
+#include "engine/Functions/Renderer/Primitive.h"
 
 using namespace No;
 using namespace NoEngine;
 
-NormalEnemyControlSystem::NormalEnemyControlSystem(No::Registry& registry)
+NormalEnemyControlSystem::NormalEnemyControlSystem()
 {
     enemyStateManager_.Start(this);
-    enemyStateManager_.ChangeState<EnemyChase>(registry);
     timer_ = 0.0f;
 }
 
 void NormalEnemyControlSystem::Update(No::Registry& registry, float deltaTime)
 {
+    //auto view = registry.View<
+    //    NormalEnemyTag,
+    //    No::MaterialComponent,
+    //    SphereColliderComponent,
+    //    NormalEnemyComponent,
+    //    No::TransformComponent,
+    //    DeathFlag>();
+
+    if (timer_ >= 5.0f) {
+        enemyStateManager_.ChangeState<EnemyChase>(registry);
+    } else {
+        if (timer_ == 0.0f) { enemyStateManager_.ChangeState<EnemyAppear>(registry); }
+        timer_ += deltaTime;
+    }
+
+    //enemyStateManager_.Update(registry);
+
+    //for (auto entity : view)
+    //{
+    //    auto* material = registry.GetComponent<No::MaterialComponent>(entity);
+    //    auto* collider = registry.GetComponent<SphereColliderComponent>(entity);
+
+    //    if (collider->isCollied) {
+
+    //        material->materials[0].color = NoEngine::Color(1.0f, 0.0f, 0.0f, 1.0f);
+    //        /*          enemy->velocity *= -10.0f;
+    //                  enemy->hp--;*/
+
+    //                  /*       if (enemy->hp <= 0) {
+
+
+    //                         }*/
+    //    } else {
+    //        material->materials[0].color = NoEngine::Color(1.0f, 1.0f, 1.0f, 1.0f);
+    //    }
+
+    //}
     auto view = registry.View<
         No::TransformComponent,
         No::MaterialComponent,
         SphereColliderComponent,
-        NormalEnemyTag>();
+        NormalEnemyTag,
+        NormalEnemyComponent>();
 
-    timer_ += deltaTime;
+    No::TransformComponent* vausTransform = nullptr;
 
-    if (timer_ >= 5.0f) {
-        enemyStateManager_.ChangeState<EnemyChase>(registry);
+    auto vausView = registry.View<
+        No::TransformComponent,
+        VausTag>();
+
+    for (auto vausEntity : vausView) {
+        vausTransform = registry.GetComponent<TransformComponent>(vausEntity);
     }
+
+    if (vausTransform == nullptr) {
+        return;
+    }
+    (void)deltaTime;
 
     for (auto entity : view)
     {
+        auto* transform = registry.GetComponent<No::TransformComponent>(entity);
         auto* material = registry.GetComponent<No::MaterialComponent>(entity);
         auto* collider = registry.GetComponent<SphereColliderComponent>(entity);
+        auto* enemy = registry.GetComponent<NormalEnemyComponent>(entity);
 
-        if (collider->isCollied) {
-            material->materials[0].color = NoEngine::Color(1.0f, 0.0f, 0.0f, 1.0f);
-        } else{
-             material->materials[0].color = NoEngine::Color(1.0f, 1.0f, 1.0f, 1.0f);
+
+        Vector3  direction = vausTransform->translate - transform->translate;
+        direction.z = 0.0f;
+        float length = direction.Length();
+        if (length != 0) {
+            direction /= length;
         }
+        float speed = 2.0f;
+
+        enemy->velocity.x = speed * direction.x;
+        enemy->velocity.y = speed * direction.y;
+
+        transform->translate += enemy->velocity * 0.016f;
+        Primitive::DrawSphere(transform->translate, collider->radius, NoEngine::Color(1.0f, 0.f, 0.f));
+
+
+        if (collider->isCollied)
+        {
+            material->materials[0].color = NoEngine::Color(1.0f, 0.0f, 0.0f, 1.0f);
+        } else
+        {
+            material->materials[0].color = NoEngine::Color(1.0f, 1.0f, 1.0f, 1.0f);
+        }
+
+
+#ifdef USE_IMGUI
+
+        std::string imGuiName = "model" + std::to_string(entity);
+        ImGui::Begin(imGuiName.c_str());
+        ImGui::DragFloat3("translate", &transform->translate.x, 0.05f);
+        ImGui::DragFloat3("scale", &transform->scale.x, 0.05f);
+        ImGui::DragFloat4("rotate", &transform->rotation.x, 0.04f);
+
+        ImGui::End();
+
+#endif // USE_IMGUI
     }
 
-    enemyStateManager_.Update(registry);
 }
+
+
 
 void EnemyAppear::Enter(No::Registry& registry, NormalEnemyControlSystem* ownerType)
 {
@@ -54,7 +137,7 @@ void EnemyAppear::Enter(No::Registry& registry, NormalEnemyControlSystem* ownerT
     //for (auto entity : view)
     //{
     ///*    auto* transform = registry.GetComponent<No::TransformComponent>(entity);*/
-   
+
 
     //}
 
@@ -98,43 +181,51 @@ void EnemyChase::Enter(No::Registry& registry, NormalEnemyControlSystem* ownerTy
 void EnemyChase::Update(No::Registry& registry, NormalEnemyControlSystem* ownerType)
 {
     (void)ownerType;
- 
-    No::TransformComponent* playerTransform = nullptr;
+
+    No::TransformComponent* vausTransform = nullptr;
 
     auto view = registry.View<
         No::TransformComponent,
         No::MaterialComponent,
         SphereColliderComponent,
+        NormalEnemyComponent,
         NormalEnemyTag>();
 
-    auto ballView = registry.View<
+    auto vausView = registry.View<
         No::TransformComponent,
-        No::MaterialComponent,
-        SphereColliderComponent,
-        BallTag>();
+        VausTag>();
 
-    for (auto playerEntity : ballView) {
-        playerTransform = registry.GetComponent<  No::TransformComponent>(playerEntity);
+    for (auto vausEntity : vausView) {
+        vausTransform = registry.GetComponent<TransformComponent>(vausEntity);
     }
 
-    if (playerTransform == nullptr) {
+    if (vausTransform == nullptr) {
         return;
     }
 
 
     for (auto entity : view)
     {
+        //auto* material = registry.GetComponent<No::MaterialComponent>(entity);
         auto* transform = registry.GetComponent<No::TransformComponent>(entity);
-       
-        Vector3 direction = playerTransform->translate - transform->translate;
+        auto* enemy = registry.GetComponent<NormalEnemyComponent>(entity);
+        auto* collider = registry.GetComponent<SphereColliderComponent>(entity);
+        Vector3  direction = vausTransform->translate - transform->translate;
+        direction.z = 0.0f;
         float length = direction.Length();
         if (length != 0) {
             direction /= length;
         }
+        float speed = 2.0f;
 
-        transform->translate += direction*0.016f;
-  
+        enemy->velocity.x = speed * direction.x;
+        enemy->velocity.y = speed * direction.y;
+
+        transform->translate += enemy->velocity * 0.016f;
+        Primitive::DrawSphere(transform->translate, collider->radius, NoEngine::Color(1.0f, 0.f, 0.f));
+
     }
+
 
 }
 

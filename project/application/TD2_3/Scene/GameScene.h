@@ -19,4 +19,7 @@ private:
 	void InitBatGirl(No::Registry& registry);
 	void InitPlayerGirl(No::Registry& registry);
 	void DestroyGameObject();
+	NoEngine::Vector3 GenerateRandomPointInCircle(float radius);
+
 };
+
