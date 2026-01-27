@@ -10,19 +10,17 @@ void CollisionSystem::Update(No::Registry& registry, float deltaTime)
 	(void)deltaTime;
 	UpdateCollider(registry);
 	auto sphereView = registry.View<SphereColliderComponent>();
-	auto boxView = registry.View<BoxColliderComponent>();
+	//auto boxView = registry.View<BoxColliderComponent>();
 	//球
 	for (auto entity1 : sphereView)
 	{
 		if (!registry.Has<SphereColliderComponent>(entity1))continue;
 		auto* a = registry.GetComponent<SphereColliderComponent>(entity1);
-		a->isCollied = false;
 		//球
 		for (auto entity2 : sphereView)
 		{
-			if (entity1 == entity2)continue;
+			if (entity1 == entity2 || !registry.Has<SphereColliderComponent>(entity2))continue;
 			auto* b = registry.GetComponent<SphereColliderComponent>(entity2);
-			b->isCollied = false;
 			if ((a->colliderType & b->collideMask) == 0 || (b->colliderType & a->collideMask) == 0) continue;
 
 			if (CheckSphereToSphere(a->center, b->center, a->worldRadius, b->worldRadius))
@@ -70,7 +68,7 @@ void CollisionSystem::Update(No::Registry& registry, float deltaTime)
 void CollisionSystem::UpdateCollider(No::Registry& registry)
 {
 	auto sphereView = registry.View<SphereColliderComponent, No::TransformComponent>();
-	auto boxView = registry.View<BoxColliderComponent, No::TransformComponent>();
+	//auto boxView = registry.View<BoxColliderComponent, No::TransformComponent>();
 
 	//球状コライダー更新
 	for (auto entity : sphereView)
@@ -84,21 +82,22 @@ void CollisionSystem::UpdateCollider(No::Registry& registry)
 
 		float maxScale = std::max({ std::abs(transformA->scale.x), std::abs(transformA->scale.y), std::abs(transformA->scale.z) });
 		sphereA->worldRadius = sphereA->radius * maxScale;
+		sphereA->isCollied = false;
 	}
 	//ボックスコライダー更新
-	for (auto entity : boxView)
-	{
-		if (!registry.Has<BoxColliderComponent>(entity))continue;
-
-		auto* box = registry.GetComponent<BoxColliderComponent>(entity);
-		auto* transform = registry.GetComponent<No::TransformComponent>(entity);
-
-		box->center = transform->translate;
-
-		box->worldSize.x = std::abs(transform->scale.x) * box->size.x;
-		box->worldSize.y = std::abs(transform->scale.y) * box->size.y;
-		box->worldSize.z = std::abs(transform->scale.z) * box->size.z;
-	}
+	//for (auto entity : boxView)
+	//{
+	//	if (!registry.Has<BoxColliderComponent>(entity))continue;
+	//
+	//	auto* box = registry.GetComponent<BoxColliderComponent>(entity);
+	//	auto* transform = registry.GetComponent<No::TransformComponent>(entity);
+	//
+	//	box->center = transform->translate;
+	//
+	//	box->worldSize.x = std::abs(transform->scale.x) * box->size.x;
+	//	box->worldSize.y = std::abs(transform->scale.y) * box->size.y;
+	//	box->worldSize.z = std::abs(transform->scale.z) * box->size.z;
+	//}
 }
 
 bool CollisionSystem::CheckSphereToSphere(const NoEngine::Vector3& center1, const NoEngine::Vector3& center2, const float radius1, const float radius2)

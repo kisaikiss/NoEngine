@@ -22,9 +22,11 @@ namespace
 void VausControlSystem::Update(No::Registry& registry, float deltaTime)
 {
 	auto vausView = registry.View<
+		VausTag,
 		No::TransformComponent,
 		No::MaterialComponent,
 		VausStateComponent>();
+
 
 	auto ballView = registry.View<
 		BallTag,

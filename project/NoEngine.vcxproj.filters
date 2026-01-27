@@ -1,743 +1,259 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="ソース ファイル">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="ヘッダー ファイル">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="リソース ファイル">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="externals">
-      <UniqueIdentifier>{3e23eac4-fe23-438f-93cd-010ee8dd55a7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="externals\imgui">
-      <UniqueIdentifier>{8250c8c9-14d2-43ad-b17e-ae6f8c070fc9}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Window\WindowManager.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Window\Window.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Window\Event\MainEditor\MainEditorWindowCloseEvent.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Window\Event\Default\CloseEvent.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Window\Event\Default\EnterSizeMoveEvent.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Window\Event\Default\GetMinMaxInfoEvent.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Window\Event\Default\SizeEvent.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Window\Event\Default\SizingEvent.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Functions\Debug\Logger\Log.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Utilities\Conversion\ConvertString.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Math\Types\Matrix4x4.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Math\Types\Quaternion.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Math\Types\Vector2.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Math\Types\Vector3.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Math\Types\Calculations\Matrix4x4Calculations.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Math\Types\Calculations\QuaternionCalculations.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Math\Types\Calculations\Vector3Calculations.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Runtime\GraphicsCore.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Functions\Debug\CrashHandler\ExportDump.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Runtime\Graphics\GraphicsInfrastructures.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Runtime\GameCore.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Runtime\Graphics\GraphicsDevice.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Runtime\Command\CommandListManager.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Runtime\Command\CommandQueue.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Runtime\GpuResource\GpuResource.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Runtime\GpuResource\GpuBuffer.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Runtime\GpuResource\UploadBuffer.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Runtime\Command\CommandContext.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Runtime\Command\CommandAllocatorPool.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Runtime\Command\CommandAllocator.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Runtime\ContextManager.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Runtime\DescriptorHeap\DescriptorAllocator.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Runtime\DescriptorHeap\DescriptorHeap.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Runtime\PipelineStateObject\RootSignature.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Runtime\DescriptorHeap\DynamicDescriptorHeap.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Runtime\GpuResource\LinearAllocator\LinearAllocator.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Runtime\GpuResource\LinearAllocator\LinearAllocationPage.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Runtime\GpuResource\LinearAllocator\LinearAllocatorPageManager.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Functions\Debug\GraphicsResourceLeakChecker.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Runtime\Graphics\GraphicsSwapChain.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Runtime\GpuResource\PixelBuffer\PixelBuffer.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Runtime\GpuResource\PixelBuffer\ColorBuffer.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Runtime\Command\GraphicsContext.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Math\Types\Vector4.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Runtime\PipelineStateObject\PSO.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Runtime\PipelineStateObject\GraphicsPSO.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Functions\Shader\ShaderModule.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Utilities\FileUtilities.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Functions\Shader\ShaderReflection.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Math\Types\Matrix3x3.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Math\Types\Transform.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Functions\Camera\CameraBase.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Functions\Camera\Camera.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="externals\imgui\imgui.cpp">
-      <Filter>externals\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="externals\imgui\imgui_demo.cpp">
-      <Filter>externals\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="externals\imgui\imgui_draw.cpp">
-      <Filter>externals\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="externals\imgui\imgui_impl_dx12.cpp">
-      <Filter>externals\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="externals\imgui\imgui_impl_win32.cpp">
-      <Filter>externals\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="externals\imgui\imgui_tables.cpp">
-      <Filter>externals\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="externals\imgui\imgui_widgets.cpp">
-      <Filter>externals\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Editor\ImGuiManager.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Assets\Texture\Texture.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Assets\Texture\TextureManager.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Runtime\Graphics\GraphicsCommon.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Runtime\GpuResource\PixelBuffer\DepthBuffer.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Functions\ECS\Registry.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Math\Types\Calculations\Matrix3x3Calculations.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Math\Types\Transform2D.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Math\Color\Color.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Assets\Texture\TexUtil.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Functions\Renderer\RenderPass\SpritePass.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Math\Types\Calculations\Vector2Calculations.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Functions\Renderer\RenderSystem.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Functions\Renderer\RenderPass\RenderPassScheduler.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Functions\Renderer\RenderPass\MeshPass.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Assets\ModelLoader.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="application\TD2_3\Game.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Functions\Input\Input.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Functions\Scene\SceneManager.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="application\TD2_3\Scene\TestScene.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="application\TD2_3\System\TestSystem.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="application\TD2_3\Scene\GameScene.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="application\TD2_3\System\CollisionSystem.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="application\TD2_3\System\Player\BallControlSystem.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Functions\Renderer\Primitive.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Functions\Renderer\RenderPass\PrimitivePass.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Functions\ECS\System\AnimationSystem.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\Math\Easing.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="application\TD2_3\System\Enemy\BossControlSystem.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="application\TD2_3\System\Enemy\NormalEnemyControlSystem.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="application\TD2_3\System\Player\VausControlSystem.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="application\TD2_3\System\Enemy\TrackEnemyControlSystem.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="application\TD2_3\Render\BackGroundEffect.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="application\TD2_3\System\BackGroundEffectSystem.cpp">
-    <ClCompile Include="application\TD2_3\System\Human\BatGirlControlSystem.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="application\TD2_3\System\Human\PlayerGirlControlSystem.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="engine\Window\WindowManager.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Window\Window.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="stdafx.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Window\WindowCore.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Window\WindowSize.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Window\Event\IWindowEvent.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Window\Event\MainEditor\MainEditorWindowCloseEvent.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Window\Event\Default\CloseEvent.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Window\Event\Default\EnterSizeMoveEvent.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Window\Event\Default\GetMinMaxInfoEvent.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Window\Event\Default\SizeEvent.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Window\Event\Default\SizingEvent.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Functions\Debug\Logger\Log.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Utilities\Conversion\ConvertString.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Math\Types\Matrix4x4.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Math\Types\Quaternion.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Math\Types\Vector2.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Math\Types\Vector3.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Math\Types\Vector4.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Math\Types\Calculations\Matrix4x4Calculations.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Math\Types\Calculations\QuaternionCalculations.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Math\Types\Calculations\Vector3Calculations.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Runtime\GraphicsCore.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Functions\Debug\CrashHandler\ExportDump.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Runtime\Graphics\GraphicsInfrastructures.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Utilities\PassKeys.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Runtime\GameCore.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Runtime\Graphics\GraphicsDevice.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Runtime\Command\CommandListManager.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Runtime\Command\CommandQueue.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Runtime\GpuResource\GpuResource.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Runtime\GpuResource\GpuBuffer.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Runtime\GpuResource\UploadBuffer.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Utilities\NonCopyable.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Runtime\Command\CommandContext.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Runtime\Command\CommandAllocatorPool.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Runtime\Command\CommandAllocator.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Runtime\ContextManager.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Runtime\DescriptorHeap\DescriptorHeap.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Runtime\DescriptorHeap\DescriptorAllocator.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Runtime\DescriptorHeap\DescriptorHandle.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Runtime\PipelineStateObject\RootParameter.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Runtime\PipelineStateObject\RootSignature.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Runtime\DescriptorHeap\DynamicDescriptorHeap.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Runtime\GpuResource\LinearAllocator\LinearAllocator.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Runtime\GpuResource\LinearAllocator\LinearAllocatorType.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Runtime\GpuResource\LinearAllocator\LinearAllocationPage.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Runtime\GpuResource\LinearAllocator\LinearAllocatorPageManager.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Functions\Debug\GraphicsResourceLeakChecker.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Runtime\Graphics\GraphicsSwapChain.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Runtime\GpuResource\PixelBuffer\PixelBuffer.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Runtime\GpuResource\PixelBuffer\ColorBuffer.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Runtime\Command\GraphicsContext.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Math\Color\Color.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Runtime\PipelineStateObject\PSO.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Runtime\PipelineStateObject\GraphicsPSO.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Utilities\Hash.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Math\Common.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Functions\Shader\ShaderModule.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Utilities\FileUtilities.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Functions\Shader\ShaderReflection.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Assets\Material.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Functions\Shader\ShaderStage.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Math\Types\Transform.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Math\Types\Matrix3x3.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Functions\Camera\CameraBase.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Functions\Camera\Camera.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="externals\imgui\imconfig.h">
-      <Filter>externals\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="externals\imgui\imgui.h">
-      <Filter>externals\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="externals\imgui\imgui_impl_dx12.h">
-      <Filter>externals\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="externals\imgui\imgui_impl_win32.h">
-      <Filter>externals\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="externals\imgui\imgui_internal.h">
-      <Filter>externals\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="externals\imgui\imstb_rectpack.h">
-      <Filter>externals\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="externals\imgui\imstb_textedit.h">
-      <Filter>externals\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="externals\imgui\imstb_truetype.h">
-      <Filter>externals\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Editor\ImGuiManager.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Assets\Texture\Texture.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Assets\Texture\TextureManager.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Runtime\Graphics\GraphicsCommon.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Assets\Mesh.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Math\MathInclude.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Runtime\GpuResource\PixelBuffer\DepthBuffer.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Functions\ECS\Entity.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Functions\ECS\Registry.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Functions\ECS\ComponentPool.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Functions\ECS\Registry.hpp" />
-    <ClInclude Include="engine\Utilities\TypeIndex.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Math\Types\Transform2D.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Math\Types\Calculations\Matrix3x3Calculations.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Functions\ECS\Component\SpriteComponent.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Math\Types\Rect.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Assets\Texture\TexUtil.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Functions\ECS\Component\TransformComponent.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Functions\ECS\Component\Transfrom2DComponent.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Functions\ECS\System\ISystem.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Functions\ECS\System\SystemManager.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Functions\ECS\Component\MaterialComponent.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Functions\Renderer\RenderPass\RenderPass.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Functions\Renderer\RenderPass\SpritePass.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Math\Types\Calculations\Vector2Calculations.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Functions\Renderer\RenderSystem.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Functions\Renderer\RenderPass\RenderPassScheduler.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Functions\Renderer\RenderPass\MeshPass.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Assets\ModelLoader.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Functions\ECS\Component\MeshComponent.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="application\TD2_3\Game.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Functions\Input\Input.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\NoEngine.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Functions\Scene\IScene.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Functions\Scene\SceneManager.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="application\TD2_3\Scene\TestScene.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="application\TD2_3\System\TestSystem.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="application\TD2_3\Scene\GameScene.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="application\TD2_3\Component\ColliderComponent.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="application\TD2_3\System\CollisionSystem.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="application\TD2_3\tag.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="application\TD2_3\System\Player\BallControlSystem.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Functions\Renderer\Primitive.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Functions\Renderer\RenderPass\PrimitivePass.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Assets\Skeleton.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Functions\ECS\System\AnimationSystem.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Functions\ECS\Component\AnimatorComponent.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Assets\Animation.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\Math\Easing.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="application\TD2_3\System\Enemy\BossControlSystem.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="application\TD2_3\System\Enemy\NormalEnemyControlSystem.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="application\TD2_3\System\Player\VausControlSystem.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="application\TD2_3\Component\PhysicsComponent.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="application\TD2_3\Component\BallStateComponent.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="application\TD2_3\Component\RingAnimationComponent.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="application\TD2_3\Component\VausStateComponent.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="application\TD2_3\Component\NormalEnemyComponent.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="application\TD2_3\Component\TrackEnemyComponent.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="application\TD2_3\System\Enemy\TrackEnemyControlSystem.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="application\TD2_3\Render\BackGroundEffect.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="application\TD2_3\Component\BackGroundComponent.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="application\TD2_3\System\BackGroundEffectSystem.h">
-    <ClInclude Include="application\TD2_3\System\Human\BatGirlControlSystem.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="application\TD2_3\System\Human\PlayerGirlControlSystem.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="resources\engine\Shaders\Default.VS.hlsl" />
     <FxCompile Include="resources\engine\Shaders\Default.PS.hlsl" />
-    <FxCompile Include="resources\engine\Shaders\DefaultSprite.VS.hlsl" />
+    <FxCompile Include="resources\engine\Shaders\Default.VS.hlsl" />
     <FxCompile Include="resources\engine\Shaders\DefaultSprite.PS.hlsl" />
-    <FxCompile Include="resources\engine\Shaders\Primitive.VS.hlsl" />
+    <FxCompile Include="resources\engine\Shaders\DefaultSprite.VS.hlsl" />
     <FxCompile Include="resources\engine\Shaders\Primitive.PS.hlsl" />
-    <FxCompile Include="resources\game\Shaders\BackGround.VS.hlsl" />
+    <FxCompile Include="resources\engine\Shaders\Primitive.VS.hlsl" />
     <FxCompile Include="resources\game\Shaders\BackGround.PS.hlsl" />
+    <FxCompile Include="resources\game\Shaders\BackGround.VS.hlsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="application\TD2_3\Game.cpp" />
+    <ClCompile Include="application\TD2_3\Render\BackGroundEffect.cpp" />
+    <ClCompile Include="application\TD2_3\System\BackGroundEffectSystem.cpp" />
+    <ClCompile Include="application\TD2_3\System\Enemy\TrackEnemyControlSystem.cpp" />
+    <ClCompile Include="application\TD2_3\System\Human\BatGirlControlSystem.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\Primitive.cpp" />
+    <ClCompile Include="application\TD2_3\Scene\GameScene.cpp" />
+    <ClCompile Include="application\TD2_3\Scene\TestScene.cpp" />
+    <ClCompile Include="application\TD2_3\System\CollisionSystem.cpp" />
+    <ClCompile Include="application\TD2_3\System\Player\BallControlSystem.cpp" />
+    <ClCompile Include="application\TD2_3\System\TestSystem.cpp" />
+    <ClCompile Include="application\TD2_3\System\Enemy\BossControlSystem.cpp" />
+    <ClCompile Include="engine\Assets\ModelLoader.cpp" />
+    <ClCompile Include="engine\Assets\Texture\TexUtil.cpp" />
+    <ClCompile Include="engine\Functions\ECS\Registry.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\AnimationSystem.cpp" />
+    <ClCompile Include="engine\Functions\Input\Input.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\RenderPass\MeshPass.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\RenderPass\PrimitivePass.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\RenderPass\RenderPassScheduler.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\RenderSystem.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\RenderPass\SpritePass.cpp" />
+    <ClCompile Include="engine\Functions\Scene\SceneManager.cpp" />
+    <ClCompile Include="engine\Math\Color\Color.cpp" />
+    <ClCompile Include="engine\Math\Easing.cpp" />
+    <ClCompile Include="engine\Math\Types\Calculations\Matrix3x3Calculations.cpp" />
+    <ClCompile Include="engine\Math\Types\Calculations\Vector2Calculations.cpp" />
+    <ClCompile Include="engine\Math\Types\Transform2D.cpp" />
+    <ClCompile Include="engine\Runtime\GpuResource\PixelBuffer\DepthBuffer.cpp" />
+    <ClCompile Include="engine\Assets\Texture\TextureManager.cpp" />
+    <ClCompile Include="engine\Functions\Camera\Camera.cpp" />
+    <ClCompile Include="engine\Functions\Camera\CameraBase.cpp" />
+    <ClCompile Include="engine\Functions\Debug\CrashHandler\ExportDump.cpp" />
+    <ClCompile Include="engine\Functions\Debug\GraphicsResourceLeakChecker.cpp" />
+    <ClCompile Include="engine\Functions\Debug\Logger\Log.cpp" />
+    <ClCompile Include="engine\Math\Types\Matrix3x3.cpp" />
+    <ClCompile Include="engine\Math\Types\Transform.cpp" />
+    <ClCompile Include="engine\Runtime\Command\CommandAllocator.cpp" />
+    <ClCompile Include="engine\Runtime\Command\CommandAllocatorPool.cpp" />
+    <ClCompile Include="engine\Runtime\Command\CommandContext.cpp" />
+    <ClCompile Include="engine\Runtime\Command\CommandListManager.cpp" />
+    <ClCompile Include="engine\Runtime\Command\CommandQueue.cpp" />
+    <ClCompile Include="engine\Runtime\Command\GraphicsContext.cpp" />
+    <ClCompile Include="engine\Runtime\ContextManager.cpp" />
+    <ClCompile Include="engine\Runtime\DescriptorHeap\DescriptorAllocator.cpp" />
+    <ClCompile Include="engine\Runtime\DescriptorHeap\DescriptorHeap.cpp" />
+    <ClCompile Include="engine\Runtime\DescriptorHeap\DynamicDescriptorHeap.cpp" />
+    <ClCompile Include="engine\Runtime\GameCore.cpp" />
+    <ClCompile Include="engine\Runtime\GpuResource\GpuBuffer.cpp" />
+    <ClCompile Include="engine\Runtime\GpuResource\GpuResource.cpp" />
+    <ClCompile Include="engine\Runtime\GpuResource\LinearAllocator\LinearAllocationPage.cpp" />
+    <ClCompile Include="engine\Runtime\GpuResource\LinearAllocator\LinearAllocator.cpp" />
+    <ClCompile Include="engine\Runtime\GpuResource\LinearAllocator\LinearAllocatorPageManager.cpp" />
+    <ClCompile Include="engine\Runtime\GpuResource\PixelBuffer\ColorBuffer.cpp" />
+    <ClCompile Include="engine\Runtime\GpuResource\PixelBuffer\PixelBuffer.cpp" />
+    <ClCompile Include="engine\Runtime\GpuResource\UploadBuffer.cpp" />
+    <ClCompile Include="engine\Runtime\Graphics\GraphicsCommon.cpp" />
+    <ClCompile Include="engine\Runtime\Graphics\GraphicsDevice.cpp" />
+    <ClCompile Include="engine\Runtime\Graphics\GraphicsInfrastructures.cpp" />
+    <ClCompile Include="engine\Runtime\GraphicsCore.cpp" />
+    <ClCompile Include="engine\Runtime\Graphics\GraphicsSwapChain.cpp" />
+    <ClCompile Include="engine\Runtime\PipelineStateObject\GraphicsPSO.cpp" />
+    <ClCompile Include="engine\Runtime\PipelineStateObject\PSO.cpp" />
+    <ClCompile Include="engine\Runtime\PipelineStateObject\RootSignature.cpp" />
+    <ClCompile Include="engine\Functions\Shader\ShaderModule.cpp" />
+    <ClCompile Include="engine\Functions\Shader\ShaderReflection.cpp" />
+    <ClCompile Include="engine\Math\Types\Calculations\Matrix4x4Calculations.cpp" />
+    <ClCompile Include="engine\Math\Types\Calculations\QuaternionCalculations.cpp" />
+    <ClCompile Include="engine\Math\Types\Calculations\Vector3Calculations.cpp" />
+    <ClCompile Include="engine\Math\Types\Matrix4x4.cpp" />
+    <ClCompile Include="engine\Math\Types\Quaternion.cpp" />
+    <ClCompile Include="engine\Math\Types\Vector2.cpp" />
+    <ClCompile Include="engine\Math\Types\Vector3.cpp" />
+    <ClCompile Include="engine\Math\Types\Vector4.cpp" />
+    <ClCompile Include="engine\Utilities\Conversion\ConvertString.cpp" />
+    <ClCompile Include="engine\Utilities\FileUtilities.cpp" />
+    <ClCompile Include="engine\Window\Event\Default\CloseEvent.cpp" />
+    <ClCompile Include="engine\Window\Event\Default\EnterSizeMoveEvent.cpp" />
+    <ClCompile Include="engine\Window\Event\Default\GetMinMaxInfoEvent.cpp" />
+    <ClCompile Include="engine\Window\Event\Default\SizeEvent.cpp" />
+    <ClCompile Include="engine\Window\Event\Default\SizingEvent.cpp" />
+    <ClCompile Include="engine\Window\Event\MainEditor\MainEditorWindowCloseEvent.cpp" />
+    <ClCompile Include="engine\Window\Window.cpp" />
+    <ClCompile Include="engine\Window\WindowManager.cpp" />
+    <ClCompile Include="externals\imgui\imgui.cpp" />
+    <ClCompile Include="externals\imgui\imgui_demo.cpp" />
+    <ClCompile Include="externals\imgui\imgui_draw.cpp" />
+    <ClCompile Include="externals\imgui\imgui_impl_dx12.cpp" />
+    <ClCompile Include="externals\imgui\imgui_impl_win32.cpp" />
+    <ClCompile Include="externals\imgui\imgui_tables.cpp" />
+    <ClCompile Include="externals\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="engine\Editor\ImGuiManager.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="application\TD2_3\System\Enemy\NormalEnemyControlSystem.cpp" />
+    <ClCompile Include="application\TD2_3\System\Human\PlayerGirlControlSystem.cpp" />
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="engine\Assets\Texture\Texture.cpp" />
+    <ClCompile Include="application\TD2_3\System\Player\VausControlSystem.cpp" />
+    <ClCompile Include="application\TD2_3\System\Enemy\BaseEnemyState.cpp" />
+    <ClCompile Include="application\TD2_3\System\Enemy\EnemyStateManager.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="application\TD2_3\Component\BackGroundComponent.h" />
+    <ClInclude Include="application\TD2_3\Component\BallStateComponent.h" />
+    <ClInclude Include="application\TD2_3\Component\ColliderComponent.h" />
+    <ClInclude Include="application\TD2_3\Component\NormalEnemyComponent.h" />
+    <ClInclude Include="application\TD2_3\Component\PhysicsComponent.h" />
+    <ClInclude Include="application\TD2_3\Component\RingAnimationComponent.h" />
+    <ClInclude Include="application\TD2_3\Component\TrackEnemyComponent.h" />
+    <ClInclude Include="application\TD2_3\Component\VausStateComponent.h" />
+    <ClInclude Include="application\TD2_3\Game.h" />
+    <ClInclude Include="application\TD2_3\Render\BackGroundEffect.h" />
+    <ClInclude Include="application\TD2_3\System\BackGroundEffectSystem.h" />
+    <ClInclude Include="application\TD2_3\System\Enemy\TrackEnemyControlSystem.h" />
+    <ClInclude Include="application\TD2_3\System\Human\BatGirlControlSystem.h" />
+    <ClInclude Include="engine\Functions\Renderer\Primitive.h" />
+    <ClInclude Include="application\TD2_3\Scene\GameScene.h" />
+    <ClInclude Include="application\TD2_3\Scene\TestScene.h" />
+    <ClInclude Include="application\TD2_3\System\CollisionSystem.h" />
+    <ClInclude Include="application\TD2_3\System\Player\BallControlSystem.h" />
+    <ClInclude Include="application\TD2_3\System\TestSystem.h" />
+    <ClInclude Include="application\TD2_3\tag.h" />
+    <ClInclude Include="application\TD2_3\System\Enemy\BossControlSystem.h" />
+    <ClInclude Include="engine\Assets\Animation.h" />
+    <ClInclude Include="engine\Assets\ModelLoader.h" />
+    <ClInclude Include="engine\Assets\Skeleton.h" />
+    <ClInclude Include="engine\Functions\ECS\Component\AnimatorComponent.h" />
+    <ClInclude Include="engine\Functions\ECS\Component\MaterialComponent.h" />
+    <ClInclude Include="engine\Functions\ECS\Component\MeshComponent.h" />
+    <ClInclude Include="engine\Functions\ECS\Component\SpriteComponent.h" />
+    <ClInclude Include="engine\Assets\Texture\TexUtil.h" />
+    <ClInclude Include="engine\Functions\ECS\Component\TransformComponent.h" />
+    <ClInclude Include="engine\Functions\ECS\Component\Transfrom2DComponent.h" />
+    <ClInclude Include="engine\Functions\ECS\ComponentPool.h" />
+    <ClInclude Include="engine\Functions\ECS\Entity.h" />
+    <ClInclude Include="engine\Functions\ECS\Registry.h" />
+    <ClInclude Include="engine\Functions\ECS\System\AnimationSystem.h" />
+    <ClInclude Include="engine\Functions\ECS\System\ISystem.h" />
+    <ClInclude Include="engine\Functions\ECS\System\SystemManager.h" />
+    <ClInclude Include="engine\Functions\Input\Input.h" />
+    <ClInclude Include="engine\Functions\Renderer\RenderPass\MeshPass.h" />
+    <ClInclude Include="engine\Functions\Renderer\RenderPass\PrimitivePass.h" />
+    <ClInclude Include="engine\Functions\Renderer\RenderPass\RenderPass.h" />
+    <ClInclude Include="engine\Functions\Renderer\RenderPass\RenderPassScheduler.h" />
+    <ClInclude Include="engine\Functions\Renderer\RenderPass\SpritePass.h" />
+    <ClInclude Include="engine\Functions\Renderer\RenderSystem.h" />
+    <ClInclude Include="engine\Functions\Scene\IScene.h" />
+    <ClInclude Include="engine\Functions\Scene\SceneManager.h" />
+    <ClInclude Include="engine\Math\Easing.h" />
+    <ClInclude Include="engine\Math\Types\Calculations\Matrix3x3Calculations.h" />
+    <ClInclude Include="engine\Math\Types\Calculations\Vector2Calculations.h" />
+    <ClInclude Include="engine\Math\Types\Rect.h" />
+    <ClInclude Include="engine\Math\Types\Transform2D.h" />
+    <ClInclude Include="engine\NoEngine.h" />
+    <ClInclude Include="engine\Runtime\GpuResource\PixelBuffer\DepthBuffer.h" />
+    <ClInclude Include="engine\Assets\Mesh.h" />
+    <ClInclude Include="engine\Assets\Texture\TextureManager.h" />
+    <ClInclude Include="engine\Functions\Camera\Camera.h" />
+    <ClInclude Include="engine\Functions\Camera\CameraBase.h" />
+    <ClInclude Include="engine\Assets\Material.h" />
+    <ClInclude Include="engine\Functions\Debug\CrashHandler\ExportDump.h" />
+    <ClInclude Include="engine\Functions\Debug\GraphicsResourceLeakChecker.h" />
+    <ClInclude Include="engine\Functions\Debug\Logger\Log.h" />
+    <ClInclude Include="engine\Math\MathInclude.h" />
+    <ClInclude Include="engine\Math\Types\Matrix3x3.h" />
+    <ClInclude Include="engine\Math\Types\Transform.h" />
+    <ClInclude Include="engine\Runtime\Command\CommandAllocator.h" />
+    <ClInclude Include="engine\Runtime\Command\CommandAllocatorPool.h" />
+    <ClInclude Include="engine\Runtime\Command\CommandContext.h" />
+    <ClInclude Include="engine\Runtime\Command\CommandListManager.h" />
+    <ClInclude Include="engine\Runtime\Command\CommandQueue.h" />
+    <ClInclude Include="engine\Runtime\Command\GraphicsContext.h" />
+    <ClInclude Include="engine\Runtime\ContextManager.h" />
+    <ClInclude Include="engine\Runtime\DescriptorHeap\DescriptorAllocator.h" />
+    <ClInclude Include="engine\Runtime\DescriptorHeap\DescriptorHandle.h" />
+    <ClInclude Include="engine\Runtime\DescriptorHeap\DescriptorHeap.h" />
+    <ClInclude Include="engine\Runtime\DescriptorHeap\DynamicDescriptorHeap.h" />
+    <ClInclude Include="engine\Runtime\GameCore.h" />
+    <ClInclude Include="engine\Runtime\GpuResource\GpuBuffer.h" />
+    <ClInclude Include="engine\Runtime\GpuResource\GpuResource.h" />
+    <ClInclude Include="engine\Runtime\GpuResource\LinearAllocator\LinearAllocationPage.h" />
+    <ClInclude Include="engine\Runtime\GpuResource\LinearAllocator\LinearAllocator.h" />
+    <ClInclude Include="engine\Runtime\GpuResource\LinearAllocator\LinearAllocatorPageManager.h" />
+    <ClInclude Include="engine\Runtime\GpuResource\LinearAllocator\LinearAllocatorType.h" />
+    <ClInclude Include="engine\Runtime\GpuResource\PixelBuffer\ColorBuffer.h" />
+    <ClInclude Include="engine\Runtime\GpuResource\PixelBuffer\PixelBuffer.h" />
+    <ClInclude Include="engine\Runtime\GpuResource\UploadBuffer.h" />
+    <ClInclude Include="engine\Runtime\Graphics\GraphicsCommon.h" />
+    <ClInclude Include="engine\Runtime\Graphics\GraphicsDevice.h" />
+    <ClInclude Include="engine\Runtime\Graphics\GraphicsInfrastructures.h" />
+    <ClInclude Include="engine\Runtime\GraphicsCore.h" />
+    <ClInclude Include="engine\Runtime\Graphics\GraphicsSwapChain.h" />
+    <ClInclude Include="engine\Runtime\PipelineStateObject\GraphicsPSO.h" />
+    <ClInclude Include="engine\Runtime\PipelineStateObject\PSO.h" />
+    <ClInclude Include="engine\Runtime\PipelineStateObject\RootParameter.h" />
+    <ClInclude Include="engine\Runtime\PipelineStateObject\RootSignature.h" />
+    <ClInclude Include="engine\Functions\Shader\ShaderModule.h" />
+    <ClInclude Include="engine\Functions\Shader\ShaderReflection.h" />
+    <ClInclude Include="engine\Math\Color\Color.h" />
+    <ClInclude Include="engine\Math\Common.h" />
+    <ClInclude Include="engine\Math\Types\Calculations\Matrix4x4Calculations.h" />
+    <ClInclude Include="engine\Math\Types\Calculations\QuaternionCalculations.h" />
+    <ClInclude Include="engine\Math\Types\Calculations\Vector3Calculations.h" />
+    <ClInclude Include="engine\Math\Types\Matrix4x4.h" />
+    <ClInclude Include="engine\Math\Types\Quaternion.h" />
+    <ClInclude Include="engine\Math\Types\Vector2.h" />
+    <ClInclude Include="engine\Math\Types\Vector3.h" />
+    <ClInclude Include="engine\Math\Types\Vector4.h" />
+    <ClInclude Include="engine\Functions\Shader\ShaderStage.h" />
+    <ClInclude Include="engine\Utilities\Conversion\ConvertString.h" />
+    <ClInclude Include="engine\Utilities\FileUtilities.h" />
+    <ClInclude Include="engine\Utilities\Hash.h" />
+    <ClInclude Include="engine\Utilities\NonCopyable.h" />
+    <ClInclude Include="engine\Utilities\PassKeys.h" />
+    <ClInclude Include="engine\Utilities\TypeIndex.h" />
+    <ClInclude Include="engine\Window\Event\Default\CloseEvent.h" />
+    <ClInclude Include="engine\Window\Event\Default\EnterSizeMoveEvent.h" />
+    <ClInclude Include="engine\Window\Event\Default\GetMinMaxInfoEvent.h" />
+    <ClInclude Include="engine\Window\Event\Default\SizeEvent.h" />
+    <ClInclude Include="engine\Window\Event\Default\SizingEvent.h" />
+    <ClInclude Include="engine\Window\Event\IWindowEvent.h" />
+    <ClInclude Include="engine\Window\Event\MainEditor\MainEditorWindowCloseEvent.h" />
+    <ClInclude Include="engine\Window\Window.h" />
+    <ClInclude Include="engine\Window\WindowCore.h" />
+    <ClInclude Include="engine\Window\WindowManager.h" />
+    <ClInclude Include="engine\Window\WindowSize.h" />
+    <ClInclude Include="externals\imgui\imconfig.h" />
+    <ClInclude Include="externals\imgui\imgui.h" />
+    <ClInclude Include="externals\imgui\imgui_impl_dx12.h" />
+    <ClInclude Include="externals\imgui\imgui_impl_win32.h" />
+    <ClInclude Include="externals\imgui\imgui_internal.h" />
+    <ClInclude Include="externals\imgui\imstb_rectpack.h" />
+    <ClInclude Include="externals\imgui\imstb_textedit.h" />
+    <ClInclude Include="externals\imgui\imstb_truetype.h" />
+    <ClInclude Include="engine\Editor\ImGuiManager.h" />
+    <ClInclude Include="application\TD2_3\System\Enemy\NormalEnemyControlSystem.h" />
+    <ClInclude Include="application\TD2_3\System\Human\PlayerGirlControlSystem.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="engine\Assets\Texture\Texture.h" />
+    <ClInclude Include="application\TD2_3\System\Player\VausControlSystem.h" />
+    <ClInclude Include="engine\Functions\ECS\Registry.hpp" />
+    <ClInclude Include="application\TD2_3\System\Enemy\BaseEnemyState.h" />
+    <ClInclude Include="application\TD2_3\System\Enemy\EnemyStateManager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\engine\Shaders\Default.hlsli" />

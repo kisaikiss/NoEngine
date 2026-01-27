@@ -173,8 +173,7 @@ void BallControlSystem::Update(No::Registry& registry, float deltaTime)
 						ballPhysics->velocity += normal * 0.1f;
 					}
 				}
-			}
-		}
+			}		}
 
 		// 移動更新
 		ballTransform->translate += ballPhysics->velocity * deltaTime;
