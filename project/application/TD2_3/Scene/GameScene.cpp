@@ -189,7 +189,6 @@ void GameScene::InitBackGround(No::Registry& registry)
 	registry.AddComponent<BackGroundComponent>(backGroundEntity);
 }
 
-void GameScene::DestroyGameObject() 
 void GameScene::InitBatGirl(No::Registry& registry)
 {
 	No::Entity batGirlEntity = registry.GenerateEntity();
