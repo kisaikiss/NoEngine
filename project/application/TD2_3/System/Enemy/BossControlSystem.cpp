@@ -11,7 +11,6 @@ void BossControlSystem::Update(No::Registry& registry, float deltaTime)
         SphereColliderComponent,
         Boss1Tag>();
 
-
     (void)deltaTime;
 
     for (auto entity : view)
@@ -20,8 +19,6 @@ void BossControlSystem::Update(No::Registry& registry, float deltaTime)
         auto* material = registry.GetComponent<No::MaterialComponent>(entity);
         auto* collider = registry.GetComponent<SphereColliderComponent>(entity);
 
-        //transform->translate.x += speed_ * deltaTime;
-        transform->rotation.FromAxisAngle(NoEngine::Vector3::UP, 3.14f);
 
         if (collider->isCollied)
         {
@@ -39,6 +36,7 @@ void BossControlSystem::Update(No::Registry& registry, float deltaTime)
             ImGui::DragFloat3("translate", &transform->translate.x, 0.05f);
             ImGui::DragFloat3("scale", &transform->scale.x, 0.05f);
             ImGui::DragFloat4("rotate", &transform->rotation.x, 0.04f);
+    
             ImGui::End();
         
 #endif // USE_IMGUI
