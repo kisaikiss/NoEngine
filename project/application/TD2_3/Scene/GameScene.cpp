@@ -12,6 +12,10 @@
 
 //ヨシダ追加しました。
 #include"../System/Enemy/BossControlSystem.h"
+#include"../System/Human/BatGirlControlSystem.h"
+
+#include"../System/Human/PlayerGirlControlSystem.h"
+
 //ヨシダ追加しました。
 #include "../tag.h"
 
@@ -28,6 +32,11 @@ void GameScene::Setup()
 	AddSystem(std::make_unique<BallControlSystem>());
 
 	AddSystem(std::make_unique<BossControlSystem>());
+	//こうもり少女のシステム
+	AddSystem(std::make_unique<BatGirlControlSystem>());
+	//プレイヤー少女システム
+	AddSystem(std::make_unique<PlayerGirlControlSystem>());
+
 	//衝突判定用システム
 	AddSystem(std::make_unique<CollisionSystem>());
 
@@ -37,6 +46,8 @@ void GameScene::Setup()
 	InitRing(registry);
 	InitBall(registry);
 	InitBoss(registry);
+	InitBatGirl(registry);
+	InitPlayerGirl(registry);
 	constexpr Vector3 kStartCameraPosition = Vector3{ 0.0f, 0.0f, -28.0f };
 	//カメラ初期化
 	camera_ = std::make_unique<NoEngine::Camera>();
@@ -160,6 +171,48 @@ void GameScene::InitBoss(No::Registry& registry)
 	m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
 
 
+}
+
+void GameScene::InitBatGirl(No::Registry& registry)
+{
+	No::Entity batGirlEntity = registry.GenerateEntity();
+	registry.AddComponent<BatGirlTag>(batGirlEntity);
+
+	auto* transform = registry.AddComponent<No::TransformComponent>(batGirlEntity);
+	auto* model = registry.AddComponent<No::MeshComponent>(batGirlEntity);
+	auto* animationComp = registry.AddComponent<No::AnimatorComponent>(batGirlEntity);
+	NoEngine::ModelLoader::LoadModel("batGirl", "resources/game/td_2304/Model/batGirl/batGirl.gltf", model, animationComp);
+
+	transform->translate = { 6.1f,-14.55f,-8.5f };
+	transform->rotation.FromAxisAngle(NoEngine::Vector3::UP, 3.14f);
+
+	auto m = registry.AddComponent<No::MaterialComponent>(batGirlEntity);
+	m->materials = NoEngine::ModelLoader::GetMaterial("batGirl");
+
+	m->psoName = L"Renderer : DefaultSkinned PSO";
+	m->psoId = NoEngine::Render::GetPSOID(m->psoName);
+	m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
+}
+
+void GameScene::InitPlayerGirl(No::Registry& registry)
+{
+	No::Entity playerGirlEntity = registry.GenerateEntity();
+	registry.AddComponent<PlayerGirlTag>(playerGirlEntity);
+
+	auto* transform = registry.AddComponent<No::TransformComponent>(playerGirlEntity);
+	auto* model = registry.AddComponent<No::MeshComponent>(playerGirlEntity);
+	auto* animationComp = registry.AddComponent<No::AnimatorComponent>(playerGirlEntity);
+	NoEngine::ModelLoader::LoadModel("playerGirl", "resources/game/td_2304/Model/playerGirl/playerGirl.gltf", model, animationComp);
+
+	transform->translate = { -6.1f,-14.55f,-8.5f };
+	transform->rotation.FromAxisAngle(NoEngine::Vector3::UP, 3.14f);
+
+	auto m = registry.AddComponent<No::MaterialComponent>(playerGirlEntity);
+	m->materials = NoEngine::ModelLoader::GetMaterial("playerGirl");
+
+	m->psoName = L"Renderer : DefaultSkinned PSO";
+	m->psoId = NoEngine::Render::GetPSOID(m->psoName);
+	m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
 }
 
 void GameScene::DestroyGameObject()

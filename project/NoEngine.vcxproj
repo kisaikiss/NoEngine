@@ -162,6 +162,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="application\TD2_3\Game.cpp" />
+    <ClCompile Include="application\TD2_3\System\Human\BatGirlControlSystem.cpp" />
     <ClCompile Include="engine\Functions\Renderer\Primitive.cpp" />
     <ClCompile Include="application\TD2_3\Scene\GameScene.cpp" />
     <ClCompile Include="application\TD2_3\Scene\TestScene.cpp" />
@@ -279,6 +280,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </ClCompile>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="application\TD2_3\System\Enemy\NormalEnemyControlSystem.cpp" />
+    <ClCompile Include="application\TD2_3\System\Human\PlayerGirlControlSystem.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -294,6 +296,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\TD2_3\Component\RingAnimationComponent.h" />
     <ClInclude Include="application\TD2_3\Component\VausStateComponent.h" />
     <ClInclude Include="application\TD2_3\Game.h" />
+    <ClInclude Include="application\TD2_3\System\Human\BatGirlControlSystem.h" />
     <ClInclude Include="engine\Functions\Renderer\Primitive.h" />
     <ClInclude Include="application\TD2_3\Scene\GameScene.h" />
     <ClInclude Include="application\TD2_3\Scene\TestScene.h" />
@@ -446,6 +449,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="application\TD2_3\System\Enemy\NormalEnemyControlSystem.h" />
+    <ClInclude Include="application\TD2_3\System\Human\PlayerGirlControlSystem.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="engine\Assets\Texture\Texture.h" />
     <ClInclude Include="application\TD2_3\System\Player\VausControlSystem.h" />
