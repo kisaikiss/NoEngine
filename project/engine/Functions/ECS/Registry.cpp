@@ -24,7 +24,7 @@ void Registry::DestroyEntity(Entity entity) {
 	entityToActive_[entity] = false;
 	freeEntities_.emplace_back(entity);
 	for (auto& pool : componentPools_) {
-		pool.second->RemoveIfExists(entity);
+		pool->RemoveIfExists(entity);
 	}
 }
 

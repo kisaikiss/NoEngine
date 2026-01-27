@@ -53,6 +53,9 @@ public:
         return ref_ < other.ref_; // SpritePassでテクスチャをまとめて描画するために使用します。
     }
 
+    bool operator==(const TextureRef& other) const {
+        return ref_ == other.ref_;
+    }
 
 private:
     ManagedTexture* ref_;

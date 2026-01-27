@@ -2,8 +2,11 @@
 #include "Runtime/GameCore.h"
 
 #include "Functions/ECS/Component/MeshComponent.h"
+#include "Functions/ECS/Component/SpriteComponent.h"
 #include "Functions/ECS/Component/TransformComponent.h"
+#include "Functions/ECS/Component/Transfrom2DComponent.h"
 #include "Functions/ECS/Component/MaterialComponent.h"
+
 
 #include "Functions/ECS/System/AnimationSystem.h"
 

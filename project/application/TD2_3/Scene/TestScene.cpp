@@ -20,6 +20,33 @@ void TestScene::Setup() {
 	m->psoId = NoEngine::Render::GetPSOID(m->psoName);
 	m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
 
+
+	auto* t2d = registry.AddComponent<No::Transform2DComponent>(entity);
+	t2d->translate = { 100.f, 200.f };
+	auto* sprite = registry.AddComponent<No::SpriteComponent>(entity);
+	sprite->layer = 1;
+
+	t2d->scale = { 100.f, 100.f };
+	sprite->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/engine/Model/enemy.png");
+	
+	for (uint32_t i = 0; i < 10; i++) {
+		auto e = registry.GenerateEntity();
+		auto* transform = registry.AddComponent<No::Transform2DComponent>(e);
+		transform->translate = { static_cast<float>(i)*100.f, static_cast<float>(i + 1) * 10.f };
+		transform->scale = { 50.f, 50.f };
+		auto* sp = registry.AddComponent<No::SpriteComponent>(e);
+		if (i == 5) {
+			sp->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/engine/uvChecker.png");
+			sp->layer = 2;
+		} else if (i == 7) {
+			sp->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/engine/Model/enemy.png");
+			sp->layer = 0;
+		} else {
+			sp->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/engine/flower.png");
+			sp->layer = 1;
+		}
+	}
+
 	camera_ = std::make_unique<NoEngine::Camera>();
 	cameraTransform_.translate.z = -5.f;
 	camera_->SetTransform(cameraTransform_);

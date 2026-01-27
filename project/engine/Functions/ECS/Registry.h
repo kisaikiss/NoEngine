@@ -110,6 +110,9 @@ public:
 			return { registry_, base_, base_->Size() };
 		}
 
+		bool Empty() {
+			return !base_;
+		}
 
 	private:
 		Registry& registry_;
@@ -137,7 +140,7 @@ private:
 	size_t nextID_ = 0;
 
 	// コンポーネントをタイプ別に管理するコンテナ
-	std::unordered_map<size_t, std::shared_ptr<IComponentPool>> componentPools_;
+	std::vector<std::unique_ptr<IComponentPool>> componentPools_;
 
 	/// <summary>
 	/// 指定した型のコンポーネントプールを取得します。
