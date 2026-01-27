@@ -10,6 +10,7 @@ struct BatGirlTag{};
 struct PlayerGirlTag {};
 
 
+
 struct DeathFlag
 {
 	bool isDead = false;

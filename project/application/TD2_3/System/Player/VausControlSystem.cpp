@@ -42,7 +42,7 @@ void VausControlSystem::Update(No::Registry& registry, float deltaTime)
 	bool isPress = (GetAsyncKeyState(VK_LBUTTON) & 0x8000) != 0;
 	static bool wasPress = false;
 	static float chargeTime = 0.0f;
-	static float chargeTemp = 0.0f;
+	static float power = 0.0f;
 	for (auto entity : ringView)
 	{
 		auto* transform = registry.GetComponent<No::TransformComponent>(entity);
@@ -52,11 +52,12 @@ void VausControlSystem::Update(No::Registry& registry, float deltaTime)
 			ringAnimation->releaseTime = 0.0f;
 			ringAnimation->pressedTime += deltaTime * 2.0f;
 			ringAnimation->pressedTime = std::clamp(ringAnimation->pressedTime, 0.0f, 1.0f);
-			chargeTime = chargeTemp = Easing::Lerp(0.0f, 1.0f, ringAnimation->pressedTime);
+			chargeTime = Easing::Lerp(0.0f, 1.0f, ringAnimation->pressedTime);
 			ringAnimation->tTemp = chargeTime;
 		}
 		else
 		{
+			if (!wasPress)power = chargeTime;
 			ringAnimation->pressedTime = 0.0f;
 			ringAnimation->releaseTime += deltaTime;
 			ringAnimation->releaseTime = std::clamp(ringAnimation->releaseTime, 0.0f, 1.0f);
@@ -86,7 +87,7 @@ void VausControlSystem::Update(No::Registry& registry, float deltaTime)
 		auto* transform = registry.GetComponent<No::TransformComponent>(entity);
 		auto* state = registry.GetComponent<VausStateComponent>(entity);
 		state->currentRingRadius = sRingRadius;
-		state->chargePower = chargeTime;
+		state->chargePower = power;
 		Vector3 ringPos{ sRingRadius * std::cos(angle), sRingRadius * std::sin(angle), -0.25f };
 		transform->translate = ringPos;
 		transform->rotation = MathCalculations::MakeRotateAxisAngleQuaternion(Vector3::FORWARD, angle + PI * 0.5f);

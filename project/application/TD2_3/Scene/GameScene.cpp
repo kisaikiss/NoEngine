@@ -4,12 +4,15 @@
 #include "../Component/BallStateComponent.h"
 #include "../Component/RingAnimationComponent.h"
 #include "../Component/VausStateComponent.h"
-
+#include "../Component/BackGroundComponent.h"
+//collision
 #include "../System/CollisionSystem.h"
 //player
 #include "../System/Player/BallControlSystem.h"
 #include "../System/Player/VausControlSystem.h"
 
+//effect
+#include "../System/BackGroundEffectSystem.h"
 //ヨシダ追加しました。
 #include"../System/Enemy/BossControlSystem.h"
 #include"../System/Human/BatGirlControlSystem.h"
@@ -27,6 +30,8 @@ void GameScene::Setup()
 {
 	//アニメーションシステム
 	AddSystem(std::make_unique<No::AnimationSystem>());
+	//effect
+	AddSystem(std::make_unique<BackGroundEffectSystem>());
 	//player用システム
 	AddSystem(std::make_unique<VausControlSystem>());
 	AddSystem(std::make_unique<BallControlSystem>());
@@ -41,6 +46,7 @@ void GameScene::Setup()
 	AddSystem(std::make_unique<CollisionSystem>());
 
 	No::Registry& registry = *GetRegistry();
+	InitBackGround(registry);
 	InitVaus(registry);
 	InitEnemy(registry);
 	InitRing(registry);
@@ -173,6 +179,17 @@ void GameScene::InitBoss(No::Registry& registry)
 
 }
 
+void GameScene::InitBackGround(No::Registry& registry)
+{
+	No::Entity backGroundEntity = registry.GenerateEntity();
+	auto* transform =  registry.AddComponent<No::TransformComponent>(backGroundEntity);
+	transform->translate.z = 1.0f;
+	transform->scale = { 25,25,25 };
+
+	registry.AddComponent<BackGroundComponent>(backGroundEntity);
+}
+
+void GameScene::DestroyGameObject() 
 void GameScene::InitBatGirl(No::Registry& registry)
 {
 	No::Entity batGirlEntity = registry.GenerateEntity();

@@ -1,6 +1,7 @@
 #include "RenderSystem.h"
 #include "engine/Assets/ModelLoader.h"
 #include "engine/Utilities/Conversion/ConvertString.h"
+#include "engine/Functions/Shader/ShaderModule.h"
 
 namespace NoEngine {
 namespace Render {

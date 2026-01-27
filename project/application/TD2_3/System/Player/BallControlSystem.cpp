@@ -87,6 +87,7 @@ void BallControlSystem::Update(No::Registry& registry, float deltaTime)
 						// 反射
 						float dot = MathCalculations::Dot(ballPhysics->velocity, normal);
 						auto reflected = ballPhysics->velocity - 2 * dot * normal;
+						reflected *= ballPhysics->coefficient;
 						// 接線方向（円弧方向）を計算します。
 						auto tangent = MathCalculations::Normalize(Vector3(-normal.y, normal.x, 0.0f));
 						//接触点はバウンス角に影響します: -1 ~ 1
@@ -97,6 +98,9 @@ void BallControlSystem::Update(No::Registry& registry, float deltaTime)
 						//速度更新（速度大きさは維持）
 						float speed = MathCalculations::Length(ballPhysics->velocity);
 						reflected = MathCalculations::Normalize(reflected) * speed;
+						float impulse =
+							vausState->chargePower * VausStateComponent::kPower * ballPhysics->friction;
+						reflected += normal * impulse;
 
 						ballPhysics->velocity = reflected;
 					}
@@ -104,16 +108,59 @@ void BallControlSystem::Update(No::Registry& registry, float deltaTime)
 			}
 		}
 
-		if (ballCollider->isCollied && (ballCollider->colliderType & ColliderMask::kEnemy) == 0)
+		// 敵との衝突処理（吸着を防ぐために分離→接近している場合のみ反射）
+		if (ballCollider->isCollied && (static_cast<uint32_t>(ballCollider->colliedWith) & static_cast<uint32_t>(ColliderMask::kEnemy)) != 0)
 		{
-			auto* enemyTransform = registry.GetComponent<No::TransformComponent>(ballCollider->colliedEntity);
-			auto normal = MathCalculations::Normalize(ballTransform->translate - enemyTransform->translate);
-			float dot = MathCalculations::Dot(ballPhysics->velocity, normal);
-			auto reflected = ballPhysics->velocity - 2 * dot * normal;
-			float speed = MathCalculations::Length(ballPhysics->velocity);
-			reflected = MathCalculations::Normalize(reflected) * speed;
+			// colliedEntity が有効であることを前提とする
+			if (registry.Has<No::TransformComponent>(ballCollider->colliedEntity) &&
+				registry.Has<SphereColliderComponent>(ballCollider->colliedEntity))
+			{
+				auto* enemyTransform = registry.GetComponent<No::TransformComponent>(ballCollider->colliedEntity);
+				auto* enemyCollider = registry.GetComponent<SphereColliderComponent>(ballCollider->colliedEntity);
 
-			ballPhysics->velocity = reflected;
+				// 法線（球心から敵心へ）
+				Vector3 diff = ballTransform->translate - enemyTransform->translate;
+				float dist = MathCalculations::Length(diff);
+				Vector3 normal;
+				if (dist < 1e-6f)
+				{
+					// 極端に近い場合は中心方向を使う
+					normal = MathCalculations::Normalize(ballTransform->translate);
+				}
+				else
+				{
+					normal = diff / dist;
+				}
+
+				// 重なり解消
+				float penetration = (ballCollider->worldRadius + enemyCollider->worldRadius) - dist;
+				if (penetration > 0.0f)
+				{
+					// 小さく余分に離すことで次フレームで再び吸着するのを防止
+					ballTransform->translate += normal * (penetration + 0.001f);
+				}
+
+				// 相対速度が法線に向かっている（接近中）の場合のみ反射を行う
+				float relVelAlongNormal = MathCalculations::Dot(ballPhysics->velocity, normal);
+				if (relVelAlongNormal < 0.0f)
+				{
+					// 法線成分と接線成分に分けて反射・摩擦を適用
+					float e = ballPhysics->coefficient; // 復元係数
+					Vector3 vNormal = normal * relVelAlongNormal; // 向きは負になる
+					Vector3 vTangent = ballPhysics->velocity - vNormal;
+
+					Vector3 vNormalAfter = -e * vNormal; // 反射（法線成分を反転して復元係数を適用）
+					Vector3 vTangentAfter = vTangent * ballPhysics->friction; // 接線は摩擦係数で減衰
+
+					ballPhysics->velocity = vNormalAfter + vTangentAfter;
+
+					// 速度が非常に小さい場合は小さな分離速度を追加して吸着防止
+					if (MathCalculations::Length(ballPhysics->velocity) < 0.05f)
+					{
+						ballPhysics->velocity += normal * 0.1f;
+					}
+				}
+			}
 		}
 
 		// 移動更新
