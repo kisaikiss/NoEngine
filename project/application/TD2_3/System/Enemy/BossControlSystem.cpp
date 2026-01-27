@@ -11,7 +11,6 @@ void BossControlSystem::Update(No::Registry& registry, float deltaTime)
         SphereColliderComponent,
         Boss1Tag>();
 
-
     (void)deltaTime;
 
     for (auto entity : view)
@@ -41,6 +40,7 @@ void BossControlSystem::Update(No::Registry& registry, float deltaTime)
             ImGui::DragFloat3("translate", &transform->translate.x, 0.05f);
             ImGui::DragFloat3("scale", &transform->scale.x, 0.05f);
             ImGui::DragFloat4("rotate", &transform->rotation.x, 0.04f);
+    
             ImGui::End();
         
 #endif // USE_IMGUI
