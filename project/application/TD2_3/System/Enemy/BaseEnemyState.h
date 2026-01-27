@@ -15,7 +15,7 @@ protected:
     //ステートが始まるときに一度だけ呼ばれる
     virtual void Enter(No::Registry& registry,EnemyOwnerType* ownerType) = 0;
     //ステートの更新時に呼ばれる
-    virtual void Update(No::Registry& registry, EnemyOwnerType* ownerType) = 0;
+    virtual void Update(No::Registry& registry, EnemyOwnerType* ownerType,float deltaTime) = 0;
     //ステートが終了するときに一度だけ呼ばれる
     virtual void Exit(No::Registry& registry, EnemyOwnerType* ownerType) = 0;
 
@@ -34,13 +34,13 @@ private:
         Enter(registry,ownerType);
     }
     // 更新関数をマネージャーから呼ぶための関数
-    void CallUpdate(No::Registry& registry,EnemyOwnerType* ownerType) {
+    void CallUpdate(No::Registry& registry,EnemyOwnerType* ownerType,float deltaTime) {
     
         if (stateManager_ == nullptr || ownerType == nullptr) {
             return;
         }
 
-        Update(registry,ownerType);
+        Update(registry,ownerType, deltaTime);
     }
 
     // 終了関数をマネージャーから呼ぶための関数

@@ -39,7 +39,6 @@ void GameScene::Setup()
 
 	//player用システム
 	AddSystem(std::make_unique<VausControlSystem>());
-	AddSystem(std::make_unique<BallControlSystem>());
     //Enemy
     AddSystem(std::make_unique<NormalEnemyControlSystem>());
 	AddSystem(std::make_unique<BossControlSystem>());
@@ -51,6 +50,7 @@ void GameScene::Setup()
 
 	//衝突判定用システム
 	AddSystem(std::make_unique<CollisionSystem>());
+    AddSystem(std::make_unique<BallControlSystem>());
 
 	No::Registry& registry = *GetRegistry();
 	InitBackGround(registry);

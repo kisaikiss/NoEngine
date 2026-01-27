@@ -57,7 +57,6 @@ void NormalEnemyControlSystem::Update(No::Registry& registry, float deltaTime)
         No::TransformComponent,
         No::MaterialComponent,
         SphereColliderComponent,
-        NormalEnemyTag,
         NormalEnemyComponent>();
 
     No::TransformComponent* vausTransform = nullptr;
@@ -94,7 +93,7 @@ void NormalEnemyControlSystem::Update(No::Registry& registry, float deltaTime)
         enemy->velocity.x = speed * direction.x;
         enemy->velocity.y = speed * direction.y;
 
-        transform->translate += enemy->velocity * 0.016f;
+        transform->translate += enemy->velocity * deltaTime;
         Primitive::DrawSphere(transform->translate, collider->radius, NoEngine::Color(1.0f, 0.f, 0.f));
 
 
@@ -114,7 +113,9 @@ void NormalEnemyControlSystem::Update(No::Registry& registry, float deltaTime)
         ImGui::DragFloat3("translate", &transform->translate.x, 0.05f);
         ImGui::DragFloat3("scale", &transform->scale.x, 0.05f);
         ImGui::DragFloat4("rotate", &transform->rotation.x, 0.04f);
-
+        ImGui::Text("collied %s", collider->isCollied ? "true" : "false");
+		ImGui::Text("colliedWith %u", static_cast<uint32_t>(collider->colliedWith));
+        ImGui::Text("colliedEntity %u", static_cast<uint32_t>(collider->colliedEntity));
         ImGui::End();
 
 #endif // USE_IMGUI
@@ -144,10 +145,10 @@ void EnemyAppear::Enter(No::Registry& registry, NormalEnemyControlSystem* ownerT
 
 }
 
-void EnemyAppear::Update(No::Registry& registry, NormalEnemyControlSystem* ownerType)
+void EnemyAppear::Update(No::Registry& registry, NormalEnemyControlSystem* ownerType, float deltaTime)
 {
     (void)ownerType;
-
+	(void)deltaTime;
     auto view = registry.View<
         No::TransformComponent,
         No::MaterialComponent,
@@ -178,7 +179,7 @@ void EnemyChase::Enter(No::Registry& registry, NormalEnemyControlSystem* ownerTy
 
 }
 
-void EnemyChase::Update(No::Registry& registry, NormalEnemyControlSystem* ownerType)
+void EnemyChase::Update(No::Registry& registry, NormalEnemyControlSystem* ownerType,float deltaTime)
 {
     (void)ownerType;
 
@@ -221,7 +222,7 @@ void EnemyChase::Update(No::Registry& registry, NormalEnemyControlSystem* ownerT
         enemy->velocity.x = speed * direction.x;
         enemy->velocity.y = speed * direction.y;
 
-        transform->translate += enemy->velocity * 0.016f;
+        transform->translate += enemy->velocity * deltaTime;
         Primitive::DrawSphere(transform->translate, collider->radius, NoEngine::Color(1.0f, 0.f, 0.f));
 
     }

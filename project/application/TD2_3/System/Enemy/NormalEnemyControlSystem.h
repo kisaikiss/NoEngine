@@ -21,7 +21,7 @@ public:
     //ステートが始まるときに一度だけ呼ばれる
      void Enter(No::Registry& registry,NormalEnemyControlSystem* ownerType) override;
      //ステートが更新時に呼ばれる
-     void Update(No::Registry& registry, NormalEnemyControlSystem* ownerType)override;
+     void Update(No::Registry& registry, NormalEnemyControlSystem* ownerType,float deltaTime)override;
      //ステートが終了するときに一度だけ呼ばれる
      void Exit(No::Registry& registry, NormalEnemyControlSystem* ownerType)override;
 };
@@ -33,7 +33,7 @@ EnemyChase() = default;
     //ステートが始まるときに一度だけ呼ばれる
     void Enter(No::Registry& registry, NormalEnemyControlSystem* ownerType) override;
     //ステートが更新時に呼ばれる
-    void Update(No::Registry& registry, NormalEnemyControlSystem* ownerType)override;
+    void Update(No::Registry& registry, NormalEnemyControlSystem* ownerType,float deltaTime)override;
     //ステートが終了するときに一度だけ呼ばれる
     void Exit(No::Registry& registry, NormalEnemyControlSystem* ownerType)override;
 
