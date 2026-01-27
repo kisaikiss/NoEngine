@@ -23,8 +23,6 @@ void BossControlSystem::Update(No::Registry& registry, float deltaTime)
         //transform->translate.x += speed_ * deltaTime;
         transform->rotation.FromAxisAngle(NoEngine::Vector3::UP, 3.14f);
 
-        if (transform->translate.x <= -5.0f || transform->translate.x >= 5.0f)speed_ *= -1.0f;
-
         if (collider->isCollied)
         {
             material->materials[0].color = NoEngine::Color(1.0f, 0.0f, 0.0f, 1.0f);

@@ -32,6 +32,8 @@ void GameScene::Setup()
 	AddSystem(std::make_unique<No::AnimationSystem>());
 	//effect
 	AddSystem(std::make_unique<BackGroundEffectSystem>());
+
+
 	//player用システム
 	AddSystem(std::make_unique<VausControlSystem>());
 	AddSystem(std::make_unique<BallControlSystem>());
@@ -41,6 +43,7 @@ void GameScene::Setup()
 	AddSystem(std::make_unique<BatGirlControlSystem>());
 	//プレイヤー少女システム
 	AddSystem(std::make_unique<PlayerGirlControlSystem>());
+
 
 	//衝突判定用システム
 	AddSystem(std::make_unique<CollisionSystem>());
@@ -87,6 +90,7 @@ void GameScene::InitVaus(No::Registry& registry)
 
 	auto* m = registry.AddComponent<No::MaterialComponent>(vausEntity);
 	m->materials = NoEngine::ModelLoader::GetMaterial("Vaus");
+	m->materials.front().color = {0.8f,0.2f,0.2f};
 
 	m->psoName = L"Renderer : Default PSO";
 	m->psoId = NoEngine::Render::GetPSOID(m->psoName);
@@ -104,6 +108,8 @@ void GameScene::InitRing(No::Registry& registry)
 
 	auto m = registry.AddComponent<No::MaterialComponent>(ringEntity);
 	m->materials = NoEngine::ModelLoader::GetMaterial("ring");
+	m->materials.front().color.a = 0.7f;
+	m->materials.front().color.b = 0.5f;
 
 	m->psoName = L"Renderer : Default PSO";
 	m->psoId = NoEngine::Render::GetPSOID(m->psoName);

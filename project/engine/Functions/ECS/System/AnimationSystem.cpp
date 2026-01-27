@@ -1,6 +1,7 @@
 #include "AnimationSystem.h"
 #include "engine/Functions/Renderer/Primitive.h"
 #include "engine/Math/Types/Calculations/Matrix4x4Calculations.h"
+#include "engine/Math/Types/Calculations/QuaternionCalculations.h"
 
 namespace NoEngine {
 namespace ECS {
@@ -114,7 +115,7 @@ Quaternion AnimationSystem::CalculateValue(const std::vector<KeyframeQuaternion>
 		if (keyframes[index].time <= time && time <= keyframes[nextIndex].time) {
 			// 範囲内を補間する
 			float t = (time - keyframes[index].time) / (keyframes[nextIndex].time - keyframes[index].time);
-			return Easing::Lerp(keyframes[index].value, keyframes[nextIndex].value, t);
+			return MathCalculations::Slerp(keyframes[index].value, keyframes[nextIndex].value, t);
 		}
 	}
 	// ここまできた場合は一番後の時刻よりも後ろなので最後の値を返すことにする

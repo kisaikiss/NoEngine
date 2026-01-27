@@ -39,25 +39,37 @@ void VausControlSystem::Update(No::Registry& registry, float deltaTime)
 
 	float angle = CalculateMouseAngle();
 	static float currentCharge = 0.0f;
-	bool isPress = (GetAsyncKeyState(VK_LBUTTON) & 0x8000) != 0;
-	static bool wasPress = false;
+	isPress_ = (GetAsyncKeyState(VK_LBUTTON) & 0x8000) != 0;
 	static float chargeTime = 0.0f;
 	static float power = 0.0f;
 	for (auto entity : ringView)
 	{
 		auto* transform = registry.GetComponent<No::TransformComponent>(entity);
 		auto* ringAnimation = registry.GetComponent<RingAnimationComponent>(entity);
-		if (isPress)
+		if (isPress_)
 		{
+			if (!wasPress_)
+			{
+				power = 0.0f;
+			}
 			ringAnimation->releaseTime = 0.0f;
 			ringAnimation->pressedTime += deltaTime * 2.0f;
 			ringAnimation->pressedTime = std::clamp(ringAnimation->pressedTime, 0.0f, 1.0f);
 			chargeTime = Easing::Lerp(0.0f, 1.0f, ringAnimation->pressedTime);
 			ringAnimation->tTemp = chargeTime;
+			if (chargeTime >= 1.0f)
+			{
+				transform->translate.x += static_cast<float>( rand() % 3 - 1) * deltaTime;
+				transform->translate.y += static_cast<float>(rand() % 3 - 1) * deltaTime;
+			}
 		}
 		else
 		{
-			if (!wasPress)power = chargeTime;
+			transform->translate = Vector3::ZERO;
+			if (wasPress_ && !isPress_)
+			{
+				power = ringAnimation->tTemp;
+			}
 			ringAnimation->pressedTime = 0.0f;
 			ringAnimation->releaseTime += deltaTime;
 			ringAnimation->releaseTime = std::clamp(ringAnimation->releaseTime, 0.0f, 1.0f);
@@ -66,7 +78,7 @@ void VausControlSystem::Update(No::Registry& registry, float deltaTime)
 		transform->scale = Vector3::UNIT_SCALE * (1.0f + ringAnimation->kChargeScale * chargeTime);
 		sRingRadius = kRingInitialRadius + chargeTime;
 	}
-	if (!wasPress && isPress)
+	if (!wasPress_ && isPress_)
 	{
 		for (auto entity : ballView)
 		{
@@ -84,18 +96,33 @@ void VausControlSystem::Update(No::Registry& registry, float deltaTime)
 	}
 	for (auto entity : vausView)
 	{
-		auto* transform = registry.GetComponent<No::TransformComponent>(entity);
-		auto* state = registry.GetComponent<VausStateComponent>(entity);
-		state->currentRingRadius = sRingRadius;
-		state->chargePower = power;
+		auto* vausTransform = registry.GetComponent<No::TransformComponent>(entity);
+		auto* vausState = registry.GetComponent<VausStateComponent>(entity);
+		vausState->currentRingRadius = sRingRadius;
+		vausState->chargePower = power;
+
 		Vector3 ringPos{ sRingRadius * std::cos(angle), sRingRadius * std::sin(angle), -0.25f };
-		transform->translate = ringPos;
-		transform->rotation = MathCalculations::MakeRotateAxisAngleQuaternion(Vector3::FORWARD, angle + PI * 0.5f);
-		transform->scale = Vector3::UNIT_SCALE * (1.0f + 0.2f * chargeTime);
-		state->theta = angle;
+		vausTransform->translate = ringPos;
+		vausTransform->rotation = MathCalculations::MakeRotateAxisAngleQuaternion(Vector3::FORWARD, angle + PI * 0.5f);
+		vausTransform->scale = Vector3::UNIT_SCALE * (1.0f + 0.2f * chargeTime);
+		vausState->theta = angle;
+
+		if (wasPress_ && !isPress_)
+		{
+			vausState->hasReleasedMovement = true;
+		}
+		if (vausState->hasReleasedMovement)
+		{
+			vausState->releaseTime += deltaTime;
+			vausState->releaseVelocityAccum +=
+				(vausTransform->translate - vausState->prevPosition);
+		}
+
+		vausState->prevPosition = vausTransform->translate;
+
 	}
 
-	wasPress = isPress;
+	wasPress_ = isPress_;
 }
 
 float VausControlSystem::CalculateMouseAngle()
