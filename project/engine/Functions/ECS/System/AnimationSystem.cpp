@@ -16,7 +16,7 @@ void AnimationSystem::AnimationUpdate(Registry& registry, float deltaTime) {
 	for (auto entity : view) {
 		auto* animeComp = registry.GetComponent<Component::AnimatorComponent>(entity);
 		auto* meshComp = registry.GetComponent<Component::MeshComponent>(entity);
-		if (!animeComp->animation || !meshComp->mesh) break;
+		if (!animeComp->animation || !meshComp->mesh) continue;
 		animeComp->time += deltaTime;
 		animeComp->time = std::fmod(animeComp->time, animeComp->animation->duration);
 		if (animeComp->skeleton) {
