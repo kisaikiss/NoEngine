@@ -35,6 +35,8 @@ int RunApplication(std::unique_ptr<IGameApp> game) {
 	std::unique_ptr<Render::RenderPassScheduler> renderPassScheduler = std::make_unique<Render::RenderPassScheduler>();
 	renderPassScheduler->Initialize();
 
+	// ゲームアプリケーションにレンダーパススケジューラを設定します。
+	game->SetRenderPassScheduler(renderPassScheduler.get());
 	// ゲームアプリケーションの初期化を行います。
 	game->Startup();
 

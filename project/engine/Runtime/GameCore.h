@@ -1,5 +1,7 @@
 #pragma once
 #include "engine/Functions/Scene/SceneManager.h"
+#include "engine/Functions/Renderer/RenderPass/RenderPassScheduler.h"
+
 namespace NoEngine {
 namespace GameCore {
 /// <summary>
@@ -33,6 +35,20 @@ public:
 
 	CameraBase* GetCamera() { return sceneManager_->GetCamera(); }
 
+	/// <summary>
+	/// カスタム RenderPass を追加します。IGameApp から呼び出してください。
+	/// </summary>
+	void AddRenderPass(std::unique_ptr<Render::RenderPass>&& pass)
+	{
+		if (renderPassScheduler_) 
+			renderPassScheduler_->AddRenderPass(std::move(pass));
+	}
+
+	/// <summary>
+	/// フレームワーク内部用: RunApplication がスケジューラを設定します。
+	/// </summary>
+	void SetRenderPassScheduler(Render::RenderPassScheduler* scheduler) { renderPassScheduler_ = scheduler; }
+
 protected:
 	void RegisterScene(const std::string& name, Scene::SceneManager::SceneFactory factory) { sceneManager_->RegisterScene(name, factory); }
 
@@ -44,6 +60,7 @@ protected:
 
 private:
 	std::unique_ptr<Scene::SceneManager> sceneManager_;
+	Render::RenderPassScheduler* renderPassScheduler_ = nullptr;
 };
 
 /// <summary>

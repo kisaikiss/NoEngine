@@ -18,5 +18,9 @@ void RenderPassScheduler::Render(GraphicsContext& gfx, ECS::Registry& registry) 
 void RenderPassScheduler::SetCamera(CameraBase* camera) {
 	for (auto& pass : passes_) pass->SetCamera(camera);
 }
+void RenderPassScheduler::AddRenderPass(std::unique_ptr<RenderPass>&& pass)
+{
+	passes_.push_back(std::move(pass));
+}
 }
 }

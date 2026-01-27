@@ -15,6 +15,6 @@ private:
 	void InitBall(No::Registry& registry);
 	void InitEnemy(No::Registry& registry);
 	void InitBoss(No::Registry& registry);
-
+	void InitBackGround(No::Registry& registry);
 	void DestroyGameObject();
 };
