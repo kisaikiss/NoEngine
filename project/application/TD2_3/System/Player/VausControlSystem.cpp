@@ -53,6 +53,7 @@ void VausControlSystem::Update(No::Registry& registry, float deltaTime)
 			if (!wasPress_)
 			{
 				power = 0.0f;
+				No::SoundPlay("ballPong2", 0.5f, false);
 			}
 			ringAnimation->releaseTime = 0.0f;
 			ringAnimation->pressedTime += deltaTime * 2.0f;
@@ -70,6 +71,7 @@ void VausControlSystem::Update(No::Registry& registry, float deltaTime)
 			transform->translate = Vector3::ZERO;
 			if (wasPress_ && !isPress_)
 			{
+				No::SoundPlay("chargeEnter", 0.5f, false);
 				power = ringAnimation->tTemp;
 			}
 			ringAnimation->pressedTime = 0.0f;

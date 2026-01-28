@@ -67,6 +67,8 @@ void GameScene::Setup()
 	cameraTransform_.translate = kStartCameraPosition;
 	camera_->SetTransform(cameraTransform_);
 	SetCamera(camera_.get());
+
+    SoundLoad();
 }
 
 void GameScene::NotSystemUpdate()
@@ -312,4 +314,19 @@ NoEngine::Vector3 GameScene::GenerateRandomPointInCircle(float radius)
     float y = r * std::sin(angle);
 
     return Vector3{ x, y, -0.5f }; // Zは0で平面上に配置
+}
+
+void GameScene::SoundLoad()
+{
+    No::SoundLoad(L"resources/game/td_2304//Audio/BGM/batBGM.mp3", "batBGM");
+    No::SoundLoad(L"resources/game/td_2304//Audio/BGM/secondBGM.mp3", "secondBGM");
+    No::SoundLoad(L"resources/game/td_2304//Audio/BGM/titleBGM.mp3", "titleBGM");
+
+    No::SoundLoad(L"resources/game/td_2304//Audio/SE/ballPong.mp3", "ballPong");
+    No::SoundLoad(L"resources/game/td_2304//Audio/SE/ballPong2.mp3", "ballPong2");
+    No::SoundLoad(L"resources/game/td_2304//Audio/SE/chargeEnter.mp3", "chargeEnter");
+
+    No::SoundLoad(L"resources/game/td_2304//Audio/SE/batDie.mp3", "batDie");
+
+    No::SoundPlay("titleBGM", 0.125f, true);
 }
