@@ -20,6 +20,6 @@ private:
 	void InitPlayerGirl(No::Registry& registry);
 	void DestroyGameObject();
 	NoEngine::Vector3 GenerateRandomPointInCircle(float radius);
-
+	void SoundLoad();
 };
 

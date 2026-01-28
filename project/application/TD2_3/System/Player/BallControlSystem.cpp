@@ -74,6 +74,7 @@ void BallControlSystem::Update(No::Registry& registry, float deltaTime)
 				// 判定閾値を定数ではなく球の半径ベースに変更（球表面がリングに当たるタイミング）
 				if (dist >= vausState->currentRingRadius - ballCollider->radius)
 				{
+
 					float theta = std::atan2(ballTransform->translate.y, ballTransform->translate.x);
 					float diff = NormalizeAngle(theta - vausState->theta);
 
@@ -128,6 +129,8 @@ void BallControlSystem::Update(No::Registry& registry, float deltaTime)
 			if (registry.Has<No::TransformComponent>(ballCollider->colliedEntity) &&
 				registry.Has<SphereColliderComponent>(ballCollider->colliedEntity))
 			{
+
+				No::SoundEffectPlay("ballPong", 0.5f);
 				auto* enemyTransform = registry.GetComponent<No::TransformComponent>(ballCollider->colliedEntity);
 				auto* enemyCollider = registry.GetComponent<SphereColliderComponent>(ballCollider->colliedEntity);
 
