@@ -143,7 +143,7 @@ void GameScene::InitBall(No::Registry& registry)
     transform->translate = { 0.0f, -4.35f, 0.f };
 
     auto* model = registry.AddComponent<No::MeshComponent>(ballEntity);
-    NoEngine::ModelLoader::LoadModel("ball", "resources/engine/Model/ball.obj", model);
+    NoEngine::ModelLoader::LoadModel("ball", "resources/game/td_2304/Model/ball/ball.obj", model);
 
     auto m = registry.AddComponent<No::MaterialComponent>(ballEntity);
     m->materials = NoEngine::ModelLoader::GetMaterial("ball");

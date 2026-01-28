@@ -25,7 +25,7 @@ void BossControlSystem::Update(No::Registry& registry, float deltaTime)
 
     for (auto entity : view)
     {
-        auto* transform = registry.GetComponent<No::TransformComponent>(entity);
+       
         auto* material = registry.GetComponent<No::MaterialComponent>(entity);
         auto* collider = registry.GetComponent<SphereColliderComponent>(entity);
         auto* boss = registry.GetComponent<BattBossComponent>(entity);
@@ -42,6 +42,8 @@ void BossControlSystem::Update(No::Registry& registry, float deltaTime)
 
 
 #ifdef USE_IMGUI
+
+        auto* transform = registry.GetComponent<No::TransformComponent>(entity);
 
             std::string imGuiName = "Boss model" + std::to_string(entity);
             ImGui::Begin(imGuiName.c_str());

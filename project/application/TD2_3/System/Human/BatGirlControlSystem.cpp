@@ -13,13 +13,15 @@ void BatGirlControlSystem::Update(No::Registry& registry, float deltaTime)
 
     (void)deltaTime;
 
-    for (auto entity : view)
-    {
-        auto* transform = registry.GetComponent<No::TransformComponent>(entity);
-        auto* material = registry.GetComponent<No::MaterialComponent>(entity);
-
 
 #ifdef USE_IMGUI
+    for (auto entity : view)
+    {
+
+        auto* transform = registry.GetComponent<No::TransformComponent>(entity);
+
+        auto* material = registry.GetComponent<No::MaterialComponent>(entity);
+
 
         std::string imGuiName = "batGirl";
         ImGui::Begin(imGuiName.c_str());
@@ -28,9 +30,9 @@ void BatGirlControlSystem::Update(No::Registry& registry, float deltaTime)
         ImGui::DragFloat4("rotate", &transform->rotation.x, 0.04f);
         ImGui::DragFloat4("faceColor1", &material->materials[1].color.r, 0.04f);
         ImGui::End();
-
-#endif // USE_IMGUI
     }
+#endif // USE_IMGUI
+  
 
 
 }

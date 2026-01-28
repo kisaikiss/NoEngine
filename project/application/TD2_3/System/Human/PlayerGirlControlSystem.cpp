@@ -42,19 +42,16 @@ void PlayerGirlControlSystem::Update(No::Registry& registry, float deltaTime)
 
     for (auto entity : view)
     {
-        auto* transform = registry.GetComponent<No::TransformComponent>(entity);
+      
         auto* material = registry.GetComponent<No::MaterialComponent>(entity);
-
-#ifdef USE_IMGUI
 
         if (timer_ <= 2.5f) {
             material->materials[1].textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Model/playerGirl/face.png");
         } else {
             material->materials[1].textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Model/playerGirl/face2.png");
         }
-
-
-
+#ifdef USE_IMGUI
+        auto* transform = registry.GetComponent<No::TransformComponent>(entity);
         std::string imGuiName = "playerGirlTag";
         ImGui::Begin(imGuiName.c_str());
         ImGui::DragFloat3("translate", &transform->translate.x, 0.05f);
