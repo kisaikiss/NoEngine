@@ -2,6 +2,11 @@
 
 #include "../../tag.h"
 
+BatGirlControlSystem::BatGirlControlSystem()
+{
+    timer_ = 0.0f;
+}
+
 void BatGirlControlSystem::Update(No::Registry& registry, float deltaTime)
 {
     auto view = registry.View<
@@ -22,7 +27,14 @@ void BatGirlControlSystem::Update(No::Registry& registry, float deltaTime)
 
         auto* material = registry.GetComponent<No::MaterialComponent>(entity);
 
+        timer_ += deltaTime;
+        timer_ = fmodf(timer_, 3.0f);
 
+        if (timer_ <= 1.5f|| timer_ >= 2.0f) {
+            material->materials[1].textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Model/batGirl/face.png");
+        } else {
+            material->materials[1].textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Model/batGirl/face2.png");
+        }
         std::string imGuiName = "batGirl";
         ImGui::Begin(imGuiName.c_str());
         ImGui::DragFloat3("translate", &transform->translate.x, 0.05f);
