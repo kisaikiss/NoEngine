@@ -188,7 +188,7 @@ void EnemyChase::Update(No::Registry& registry,float deltaTime)
         auto* transform = registry.GetComponent<No::TransformComponent>(entity);
         Vector3 direction = GatTargetDir(transform->translate, targetTransform->translate);
 
-        float speed = 2.0f;
+        float speed = 1.0f;
         ownerType_->velocity.x = speed * direction.x;
         ownerType_->velocity.y = speed * direction.y;
         transform->translate += ownerType_->velocity * deltaTime;
@@ -290,7 +290,7 @@ void EnemyHit::Update(No::Registry& registry, float deltaTime)
             } else {
                 vel = ballPhysics_->velocity;
                 vel.z = 0.0f;
-                transform->translate += vel * -0.25f * deltaTime;
+                transform->translate += vel * -0.5f * deltaTime;
             }
 
         }
@@ -419,13 +419,13 @@ void EnemyDie::Update(No::Registry& registry,float deltaTime)
             float timer = timer_ / 3.0f;
             transform->scale = EaseInOutBack(Vector3::UNIT_SCALE, Vector3::ZERO, timer);
         } else {
-            //auto* deathFlag = registry.GetComponent<DeathFlag>(entity);
+            auto* deathFlag = registry.GetComponent<DeathFlag>(entity);
 
-            //if (deathFlag->isDead) {
-            //    return;
-            //}
+            if (deathFlag->isDead) {
+                return;
+            }
 
-            //deathFlag->isDead = true;
+            deathFlag->isDead = true;
 
         }
 
