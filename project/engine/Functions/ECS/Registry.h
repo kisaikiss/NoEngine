@@ -16,10 +16,15 @@ public:
 	Entity GenerateEntity();
 
 	/// <summary>
-	/// エンティティを無効化します。
+	/// エンティティを無効化します。内部的には無効化予定のエンティティを追加するだけなので即時無力化されるわけではありません。
 	/// </summary>
 	/// <param name="entity">無効化したいエンティティ</param>
 	void DestroyEntity(Entity entity);
+
+	/// <summary>
+	/// 無効化保留中のエンティティを一斉削除します。
+	/// </summary>
+	void FlushDestroy();
 
 	/// <summary>
 	/// エンティティにコンポーネントを追加します。
@@ -135,6 +140,8 @@ private:
 	std::vector<bool> entityToActive_;
 	// 再利用待ちのエンティティ
 	std::vector<Entity> freeEntities_;
+	// 削除待ちのエンティティ
+	std::vector<Entity> pendingDestroy_;
 
 	// 次に生成するエンティティのID
 	size_t nextID_ = 0;

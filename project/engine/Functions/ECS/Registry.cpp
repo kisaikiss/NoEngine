@@ -21,11 +21,18 @@ Entity Registry::GenerateEntity() {
 }
 
 void Registry::DestroyEntity(Entity entity) {
-	entityToActive_[entity] = false;
-	freeEntities_.emplace_back(entity);
-	for (auto& pool : componentPools_) {
-		pool->RemoveIfExists(entity);
+	pendingDestroy_.push_back(entity);
+}
+
+void Registry::FlushDestroy() {
+	for (auto entity : pendingDestroy_) {
+		entityToActive_[entity] = false;
+		freeEntities_.emplace_back(entity);
+		for (auto& pool : componentPools_) {
+			pool->RemoveIfExists(entity);
+		}
 	}
+	pendingDestroy_.clear();
 }
 
 bool Registry::Empty() {
