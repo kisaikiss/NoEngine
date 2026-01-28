@@ -16,13 +16,6 @@ NormalEnemyControlSystem::NormalEnemyControlSystem()
 
 void NormalEnemyControlSystem::Update(No::Registry& registry, float deltaTime)
 {
-    //auto view = registry.View<
-    //    NormalEnemyTag,
-    //    No::MaterialComponent,
-    //    SphereColliderComponent,
-    //    NormalEnemyComponent,
-    //    No::TransformComponent,
-    //    DeathFlag>();
 
     if (timer_ >= 5.0f) {
         enemyStateManager_.ChangeState<EnemyChase>(registry);
@@ -31,7 +24,6 @@ void NormalEnemyControlSystem::Update(No::Registry& registry, float deltaTime)
         timer_ += deltaTime;
     }
 
-    //enemyStateManager_.Update(registry);
 
     //for (auto entity : view)
     //{
@@ -79,32 +71,17 @@ void NormalEnemyControlSystem::Update(No::Registry& registry, float deltaTime)
         auto* transform = registry.GetComponent<No::TransformComponent>(entity);
         auto* material = registry.GetComponent<No::MaterialComponent>(entity);
         auto* collider = registry.GetComponent<SphereColliderComponent>(entity);
-        auto* enemy = registry.GetComponent<NormalEnemyComponent>(entity);
-
-
-        Vector3  direction = vausTransform->translate - transform->translate;
-        direction.z = 0.0f;
-        float length = direction.Length();
-        if (length != 0) {
-            direction /= length;
-        }
-        float speed = 2.0f;
-
-        enemy->velocity.x = speed * direction.x;
-        enemy->velocity.y = speed * direction.y;
 
         transform->translate += enemy->velocity * deltaTime;
         Primitive::DrawSphere(transform->translate, collider->radius, NoEngine::Color(1.0f, 0.f, 0.f));
 
-
         if (collider->isCollied)
         {
-            material->materials[0].color = NoEngine::Color(1.0f, 0.0f, 0.0f, 1.0f);
+            enemyStateManager_.ChangeState<EnemyHit>(registry);
         } else
         {
             material->materials[0].color = NoEngine::Color(1.0f, 1.0f, 1.0f, 1.0f);
         }
-
 
 #ifdef USE_IMGUI
 
@@ -121,6 +98,7 @@ void NormalEnemyControlSystem::Update(No::Registry& registry, float deltaTime)
 #endif // USE_IMGUI
     }
 
+    enemyStateManager_.Update(registry);
 }
 
 
@@ -129,11 +107,14 @@ void EnemyAppear::Enter(No::Registry& registry, NormalEnemyControlSystem* ownerT
 {
     (void)ownerType;
 
-    auto view = registry.View<
-        No::TransformComponent,
-        No::MaterialComponent,
+    auto view = registry.View <
+        NormalEnemyTag,
+        DeathFlag,
+        NormalEnemyComponent,
         SphereColliderComponent,
-        NormalEnemyTag>();
+        TransformComponent,
+        No::MeshComponent,
+        No::MaterialComponent>();
 
     //for (auto entity : view)
     //{
@@ -153,7 +134,9 @@ void EnemyAppear::Update(No::Registry& registry, NormalEnemyControlSystem* owner
         No::TransformComponent,
         No::MaterialComponent,
         SphereColliderComponent,
-        NormalEnemyTag>();
+        TransformComponent,
+        No::MeshComponent,
+        No::MaterialComponent>();
 
     //for (auto entity : view)
     //{
@@ -185,16 +168,21 @@ void EnemyChase::Update(No::Registry& registry, NormalEnemyControlSystem* ownerT
 
     No::TransformComponent* vausTransform = nullptr;
 
-    auto view = registry.View<
-        No::TransformComponent,
-        No::MaterialComponent,
-        SphereColliderComponent,
+    auto view = registry.View <
+        NormalEnemyTag,
+        DeathFlag,
         NormalEnemyComponent,
-        NormalEnemyTag>();
+        SphereColliderComponent,
+        TransformComponent,
+        No::MeshComponent,
+        No::MaterialComponent>();
 
     auto vausView = registry.View<
+        VausTag,
+        VausStateComponent,
         No::TransformComponent,
-        VausTag>();
+        No::MeshComponent,
+        No::MaterialComponent>();
 
     for (auto vausEntity : vausView) {
         vausTransform = registry.GetComponent<TransformComponent>(vausEntity);
@@ -232,6 +220,66 @@ void EnemyChase::Update(No::Registry& registry, NormalEnemyControlSystem* ownerT
 
 void EnemyChase::Exit(No::Registry& registry, NormalEnemyControlSystem* ownerType)
 {
+
     (void)registry;
     (void)ownerType;
+}
+
+void EnemyHit::Enter(No::Registry& registry, NormalEnemyControlSystem* ownerType)
+{
+    (void)ownerType;
+    auto view = registry.View <
+        NormalEnemyTag,
+        DeathFlag,
+        NormalEnemyComponent,
+        SphereColliderComponent,
+        TransformComponent,
+        No::MeshComponent,
+        No::MaterialComponent>();
+
+    for (auto entity : view)
+    {
+        auto* material = registry.GetComponent<MaterialComponent>(entity);
+        material->materials[0].color = NoEngine::Color(1.0f, 1.0f, 1.0f, 1.0f);
+    }
+}
+
+void EnemyHit::Update(No::Registry& registry, NormalEnemyControlSystem* ownerType)
+{
+    (void)ownerType;
+    auto view = registry.View <
+        NormalEnemyTag,
+        DeathFlag,
+        NormalEnemyComponent,
+        SphereColliderComponent,
+        TransformComponent,
+        No::MeshComponent,
+        No::MaterialComponent>();
+
+    for (auto entity : view)
+    {
+        auto* transform = registry.GetComponent<No::TransformComponent>(entity);
+        auto* enemy = registry.GetComponent<NormalEnemyComponent>(entity);
+        transform->translate -= enemy->velocity;
+    }
+}
+
+void EnemyHit::Exit(No::Registry& registry, NormalEnemyControlSystem* ownerType)
+{
+
+    (void)ownerType;
+    auto view = registry.View <
+        NormalEnemyTag,
+        DeathFlag,
+        NormalEnemyComponent,
+        SphereColliderComponent,
+        TransformComponent,
+        No::MeshComponent,
+        No::MaterialComponent>();
+
+    for (auto entity : view)
+    {
+        auto* material = registry.GetComponent<MaterialComponent>(entity);
+        material->materials[0].color = NoEngine::Color(1.0f, 0.0f, 0.0f, 1.0f);
+    }
 }
