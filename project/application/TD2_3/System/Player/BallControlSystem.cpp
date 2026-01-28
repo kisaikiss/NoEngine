@@ -68,60 +68,51 @@ void BallControlSystem::Update(No::Registry& registry, float deltaTime)
 					ballPhysics->velocity += accel * deltaTime;
 				}
 
-				// 距離がリング半径付近で、パドルに当たる場合は反射処理（既存ロジック）
+				// 距離がリング半径付近で、パドルに当たる場合は反射処理
 				float dist = MathCalculations::Length(ballTransform->translate);
 
-				// 判定閾値を定数ではなく球の半径ベースに変更（球表面がリングに当たるタイミング）
+				// 判定閾値を球の半径
 				if (dist >= vausState->currentRingRadius - ballCollider->radius)
 				{
 					float theta = std::atan2(ballTransform->translate.y, ballTransform->translate.x);
 					float diff = NormalizeAngle(theta - vausState->theta);
+					constexpr float kPaddleLinearWidth = 3.5f;
+					float paddleWidth = kPaddleLinearWidth * vausTransform->scale.x;
+					float sinArg = std::clamp((paddleWidth * 0.5f) / vausState->currentRingRadius, -1.0f, 1.0f);
+					float halfTheta = std::asin(sinArg);
 
-					float halfTheta = 3.5f / vausState->currentRingRadius * 0.5f;
-					if (fabs(diff) <= halfTheta)
+					if (std::fabs(diff) <= halfTheta)
 					{
 						auto normal = MathCalculations::Normalize(Vector3::ZERO - ballTransform->translate);
-
-						Vector3 tangent =
-							MathCalculations::Normalize(
-								Vector3(-normal.y, normal.x, 0)
-							);
-
+						Vector3 tangent = MathCalculations::Normalize(Vector3(-normal.y, normal.x, 0));
 						float hitFactor = diff / halfTheta;
-						constexpr float kAngleBias = 0.1f;
-
-						Vector3 dir = MathCalculations::Normalize(
-							normal + tangent * hitFactor * kAngleBias
-						);
-
-						float baseSpeed = ballPhysics->baseSpeed;
-
-						float platformSpeed = 0.0f;
-						if (vausState->hasReleasedMovement &&
-							vausState->releaseTime > 0.0f)
+						constexpr float kAngleBias = 0.25f;
+						Vector3 dir = MathCalculations::Normalize(normal + tangent * hitFactor * kAngleBias);
+						float finalSpeed = ballPhysics->baseSpeed;
+						if (vausState->isReleasing)
 						{
-							Vector3 avgVel =
-								vausState->releaseVelocityAccum / vausState->releaseTime;
-							platformSpeed = MathCalculations::Length(avgVel);
+							float velocityProjected = MathCalculations::Dot(vausState->currentVelocity, dir);
+
+							if (velocityProjected > 0.0f)
+							{
+								float additionalSpeed = velocityProjected * vausState->kPower;
+								finalSpeed += additionalSpeed;
+							}
 						}
+						constexpr float kMaxSpeed = 20.0f;
+						finalSpeed = std::min(finalSpeed, kMaxSpeed);
 
-						float extraSpeed =
-							platformSpeed + vausState->chargePower * vausState->kPower;
-						extraSpeed = std::min(extraSpeed, 15.0f);
+						ballPhysics->velocity.x = dir.x * finalSpeed;
+						ballPhysics->velocity.y = dir.y * finalSpeed;
 
-						ballPhysics->velocity =
-							dir * (baseSpeed + extraSpeed);
-
-						vausState->hasReleasedMovement = false;
-						vausState->releaseTime = 0.0f;
-						vausState->releaseVelocityAccum = Vector3::ZERO;
+						ballTransform->translate.x += dir.x * 0.05f;
+						ballTransform->translate.y += dir.y * 0.05f;
 					}
 
 				}
 			}
 		}
 
-		// 敵との衝突処理（既存）
 		if (ballCollider->isCollied && (static_cast<uint32_t>(ballCollider->colliedWith) & static_cast<uint32_t>(ColliderMask::kEnemy)) != 0)
 		{
 			// colliedEntity が有効であることを前提とする
@@ -131,53 +122,62 @@ void BallControlSystem::Update(No::Registry& registry, float deltaTime)
 				auto* enemyTransform = registry.GetComponent<No::TransformComponent>(ballCollider->colliedEntity);
 				auto* enemyCollider = registry.GetComponent<SphereColliderComponent>(ballCollider->colliedEntity);
 
-				// 法線（球心から敵心へ）
+				// XY 平面に射影した差分ベクトルを使う（Z 成分は無視）
 				Vector3 diff = ballTransform->translate - enemyTransform->translate;
-				float dist = MathCalculations::Length(diff);
+				diff.z = 0.0f;
+				float distXY = std::sqrt(diff.x * diff.x + diff.y * diff.y);
 				Vector3 normal;
-				if (dist < 1e-6f)
+				if (distXY < 1e-6f)
 				{
 					// 極端に近い場合は中心方向を使う
-					normal = MathCalculations::Normalize(ballTransform->translate);
+					Vector3 center2D = Vector3(ballTransform->translate.x, ballTransform->translate.y, 0.0f);
+					normal = MathCalculations::Normalize(Vector3::ZERO - center2D);
 				}
 				else
 				{
-					normal = diff / dist;
+					normal = diff / distXY;
 				}
 
-				// 重なり解消
-				float penetration = (ballCollider->worldRadius + enemyCollider->worldRadius) - dist;
+				// 重なり解消（XY距離を使う）
+				float penetration = (ballCollider->worldRadius + enemyCollider->worldRadius) - distXY;
 				if (penetration > 0.0f)
 				{
 					// 小さく余分に離すことで次フレームで再び吸着するのを防止
-					ballTransform->translate += normal * (penetration + 0.001f);
+					// Z はそのまま（レンダリング高さは保持）
+					ballTransform->translate.x += normal.x * (penetration + 0.001f);
+					ballTransform->translate.y += normal.y * (penetration + 0.001f);
 				}
 
 				// 相対速度が法線に向かっている（接近中）の場合のみ反射を行う
-				float relVelAlongNormal = MathCalculations::Dot(ballPhysics->velocity, normal);
+				// 法線は XY 射影なので、速度の XY 成分と比較する
+				Vector3 velXY = Vector3(ballPhysics->velocity.x, ballPhysics->velocity.y, 0.0f);
+				float relVelAlongNormal = MathCalculations::Dot(velXY, normal);
 				if (relVelAlongNormal < 0.0f)
 				{
-					// 法線成分と接線成分に分けて反射・摩擦を適用
+					// 法線成分と接線成分に分けて反射・摩擦を適用（XY）
 					float e = ballPhysics->coefficient; // 反発係数
 					Vector3 vNormal = normal * relVelAlongNormal; // 向きは負になる
-					Vector3 vTangent = ballPhysics->velocity - vNormal;
+					Vector3 vTangent = velXY - vNormal;
 
 					Vector3 vNormalAfter = -e * vNormal; // 反射（法線成分を反転して反発係数を適用）
 					Vector3 vTangentAfter = vTangent * ballPhysics->friction; // 接線は摩擦で減衰
 
-					ballPhysics->velocity = vNormalAfter + vTangentAfter;
+					ballPhysics->velocity.x = vNormalAfter.x + vTangentAfter.x;
+					ballPhysics->velocity.y = vNormalAfter.y + vTangentAfter.y;
 
 					// 速度が非常に小さい場合は少しだけ押し返して吸着を防止
-					if (MathCalculations::Length(ballPhysics->velocity) < 0.05f)
+					if (std::sqrt(ballPhysics->velocity.x * ballPhysics->velocity.x + ballPhysics->velocity.y * ballPhysics->velocity.y) < 0.05f)
 					{
-						ballPhysics->velocity += normal * 0.1f;
+						ballPhysics->velocity.x += normal.x * 0.1f;
+						ballPhysics->velocity.y += normal.y * 0.1f;
 					}
 				}
-			}		}
+			}
+		}
 
 		// 移動更新
-		ballTransform->translate += ballPhysics->velocity * deltaTime;
-
+		ballTransform->translate.x += ballPhysics->velocity.x * deltaTime;
+		ballTransform->translate.y += ballPhysics->velocity.y * deltaTime;
 
 		Primitive::DrawSphere(ballTransform->translate, ballCollider->radius, NoEngine::Color(1.0f, 0.7f, 0.f));
 	}

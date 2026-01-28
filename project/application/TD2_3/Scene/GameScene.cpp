@@ -39,6 +39,7 @@ void GameScene::Setup()
 
 	//player用システム
 	AddSystem(std::make_unique<VausControlSystem>());
+    AddSystem(std::make_unique<BallControlSystem>());
     //Enemy
     AddSystem(std::make_unique<NormalEnemyControlSystem>());
 	AddSystem(std::make_unique<BossControlSystem>());
@@ -50,7 +51,6 @@ void GameScene::Setup()
 
 	//衝突判定用システム
 	AddSystem(std::make_unique<CollisionSystem>());
-    AddSystem(std::make_unique<BallControlSystem>());
 
 	No::Registry& registry = *GetRegistry();
 	InitBackGround(registry);
@@ -149,51 +149,26 @@ void GameScene::InitBall(No::Registry& registry)
 
 void GameScene::InitEnemy(No::Registry& registry)
 {
-    //No::Entity enemyEntity = registry.GenerateEntity();
-    //registry.AddComponent<NormalEnemyTag>(enemyEntity);
-    //registry.AddComponent<DeathFlag>(enemyEntity);
-    //auto* enemy = registry.AddComponent<NormalEnemyComponent>(enemyEntity);
-    //enemy->velocity = { 0.5f,0.5f,0.0f };
-    //enemy->hp = 100;
-    //auto* collider = registry.AddComponent<SphereColliderComponent>(enemyEntity);
-    //collider->colliderType = ColliderMask::kEnemy;
-    //collider->collideMask = ColliderMask::kBall;
-    //collider->radius = 0.5f;
-    //auto* transform = registry.AddComponent<No::TransformComponent>(enemyEntity);
-    //transform->rotation.FromAxisAngle(Vector3::UP, 3.14f);
-    ////transform->translate = GenerateRandomPointInCircle(5.0f); // 半径5の円内に配置
-    //transform->translate = { 0.0f, -4.35f, 0.0f }; // Ballと同じ位置にしてみよう！
-    //auto* model = registry.AddComponent<No::MeshComponent>(enemyEntity);
-    //NoEngine::ModelLoader::LoadModel("bat", "resources/game/td_2304/Model/bat/bat.obj", model);
-
-    //auto m = registry.AddComponent<No::MaterialComponent>(enemyEntity);
-    //m->materials = NoEngine::ModelLoader::GetMaterial("bat");
-    //m->materials[0].textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Model/bat/bat2.png");
-    //m->psoName = L"Renderer : Default PSO";
-    //m->psoId = NoEngine::Render::GetPSOID(m->psoName);
-    //m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
-
-    No::Entity bossEntity = registry.GenerateEntity();
-    registry.AddComponent<NormalEnemyTag>(bossEntity);
-    registry.AddComponent<DeathFlag>(bossEntity);
-    auto* enemy = registry.AddComponent<NormalEnemyComponent>(bossEntity);
+    No::Entity enemyEntity = registry.GenerateEntity();
+    registry.AddComponent<NormalEnemyTag>(enemyEntity);
+    registry.AddComponent<DeathFlag>(enemyEntity);
+    auto* enemy = registry.AddComponent<NormalEnemyComponent>(enemyEntity);
     enemy->velocity = { 0.5f,0.5f,0.0f };
     enemy->hp = 100;
-    auto* collider = registry.AddComponent<SphereColliderComponent>(bossEntity);
+    auto* collider = registry.AddComponent<SphereColliderComponent>(enemyEntity);
     collider->colliderType = ColliderMask::kEnemy;
     collider->collideMask = ColliderMask::kBall;
-
-    auto* transform = registry.AddComponent<No::TransformComponent>(bossEntity);
+    collider->radius = 0.5f;
+    auto* transform = registry.AddComponent<No::TransformComponent>(enemyEntity);
     transform->rotation.FromAxisAngle(Vector3::UP, 3.14f);
+    //transform->translate = GenerateRandomPointInCircle(5.0f); // 半径5の円内に配置
+    transform->translate = { 0.0f, -4.35f, 0.0f }; // Ballと同じ位置にしてみよう！
+    auto* model = registry.AddComponent<No::MeshComponent>(enemyEntity);
+    NoEngine::ModelLoader::LoadModel("bat", "resources/game/td_2304/Model/bat/bat.obj", model);
 
-
-    auto* model = registry.AddComponent<No::MeshComponent>(bossEntity);
-    auto* animationComp = registry.AddComponent<No::AnimatorComponent>(bossEntity);
-    NoEngine::ModelLoader::LoadModel("bat", "resources/game/td_2304/Model/bat/bat.obj", model, animationComp);
-
-    auto m = registry.AddComponent<No::MaterialComponent>(bossEntity);
+    auto m = registry.AddComponent<No::MaterialComponent>(enemyEntity);
     m->materials = NoEngine::ModelLoader::GetMaterial("bat");
-
+    m->materials[0].textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Model/bat/bat2.png");
     m->psoName = L"Renderer : Default PSO";
     m->psoId = NoEngine::Render::GetPSOID(m->psoName);
     m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
@@ -232,8 +207,8 @@ void GameScene::InitBackGround(No::Registry& registry)
 {
     No::Entity backGroundEntity = registry.GenerateEntity();
     auto* transform = registry.AddComponent<No::TransformComponent>(backGroundEntity);
-    transform->translate.z = 1.0f;
-    transform->scale = { 25,25,25 };
+    transform->translate.z = 5;
+    transform->scale = { 30,30,1 };
 
     registry.AddComponent<BackGroundComponent>(backGroundEntity);
 }
