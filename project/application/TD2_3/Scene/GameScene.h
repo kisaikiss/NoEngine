@@ -1,6 +1,6 @@
 #pragma once
 #include "engine/NoEngine.h"
-
+#include"../Loader/EnemyResources.h"
 class GameScene : public No::IScene
 {
 public:
@@ -8,6 +8,9 @@ public:
 private:
 	std::unique_ptr<NoEngine::Camera> camera_;
 	NoEngine::Transform cameraTransform_{};
+
+	EnemyResources enemyResources_;
+
 	void NotSystemUpdate() override;
 
 	void InitVaus(No::Registry& registry);

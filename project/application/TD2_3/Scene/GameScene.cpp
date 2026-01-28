@@ -31,11 +31,13 @@ using namespace NoEngine;
 
 void GameScene::Setup()
 {
+    //乱数の初期化
+    srand(static_cast<unsigned int>(time(nullptr)));
+
 	//アニメーションシステム
 	AddSystem(std::make_unique<No::AnimationSystem>());
 	//effect
 	AddSystem(std::make_unique<BackGroundEffectSystem>());
-
 
 	//player用システム
 	AddSystem(std::make_unique<VausControlSystem>());
@@ -46,7 +48,6 @@ void GameScene::Setup()
 	AddSystem(std::make_unique<BatGirlControlSystem>());
 	//プレイヤー少女システム
 	AddSystem(std::make_unique<PlayerGirlControlSystem>());
-
 
 	//衝突判定用システム
 	AddSystem(std::make_unique<CollisionSystem>());
@@ -61,6 +62,7 @@ void GameScene::Setup()
 	InitBoss(registry);
 	InitBatGirl(registry);
 	InitPlayerGirl(registry);
+
 	constexpr Vector3 kStartCameraPosition = Vector3{ 0.0f, 0.0f, -28.0f };
 	//カメラ初期化
 	camera_ = std::make_unique<NoEngine::Camera>();
@@ -149,33 +151,34 @@ void GameScene::InitBall(No::Registry& registry)
 
 void GameScene::InitEnemy(No::Registry& registry)
 {
+    for (int i = 0; i < 3; ++i) {
+        No::Entity bossEntity = registry.GenerateEntity();
+        registry.AddComponent<NormalEnemyTag>(bossEntity);
+        registry.AddComponent<DeathFlag>(bossEntity);
 
-    No::Entity bossEntity = registry.GenerateEntity();
-    registry.AddComponent<NormalEnemyTag>(bossEntity);
-    registry.AddComponent<DeathFlag>(bossEntity);
+        auto* enemy = registry.AddComponent<NormalEnemyComponent>(bossEntity);
+        enemy->velocity = { 0.5f,0.5f,0.0f };
+        enemy->hp = 4;
 
-    auto* enemy = registry.AddComponent<NormalEnemyComponent>(bossEntity);
-    enemy->velocity = { 0.5f,0.5f,0.0f };
-    enemy->hp = 100;
+        auto* collider = registry.AddComponent<SphereColliderComponent>(bossEntity);
+        collider->colliderType = ColliderMask::kEnemy;
+        collider->collideMask = ColliderMask::kBall;
 
-    auto* collider = registry.AddComponent<SphereColliderComponent>(bossEntity);
-    collider->colliderType = ColliderMask::kEnemy;
-    collider->collideMask = ColliderMask::kBall;
+        auto* transform = registry.AddComponent<No::TransformComponent>(bossEntity);
+        transform->rotation.FromAxisAngle(Vector3::UP, 3.14f);
+        transform->translate = GenerateRandomPointInCircle(3.0f);
 
-    auto* transform = registry.AddComponent<No::TransformComponent>(bossEntity);
-    transform->rotation.FromAxisAngle(Vector3::UP, 3.14f);
+        auto* model = registry.AddComponent<No::MeshComponent>(bossEntity);
+        auto* animationComp = registry.AddComponent<No::AnimatorComponent>(bossEntity);
+        NoEngine::ModelLoader::LoadModel(enemyResources_.modelName, enemyResources_.modelPath, model, animationComp);
 
-    auto* model = registry.AddComponent<No::MeshComponent>(bossEntity);
-    auto* animationComp = registry.AddComponent<No::AnimatorComponent>(bossEntity);
-    NoEngine::ModelLoader::LoadModel("bat", "resources/game/td_2304/Model/bat/bat.obj", model, animationComp);
-
-    auto m = registry.AddComponent<No::MaterialComponent>(bossEntity);
-    m->materials = NoEngine::ModelLoader::GetMaterial("bat");
-    m->materials[0].textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Model/bat/bat2.png");
-    m->psoName = L"Renderer : Default PSO";
-    m->psoId = NoEngine::Render::GetPSOID(m->psoName);
-    m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
-
+        auto m = registry.AddComponent<No::MaterialComponent>(bossEntity);
+        m->materials = NoEngine::ModelLoader::GetMaterial("bat");
+        m->materials[0].textureHandle = NoEngine::TextureManager::LoadCovertTexture(enemyResources_.texturePath);
+        m->psoName = L"Renderer : Default PSO";
+        m->psoId = NoEngine::Render::GetPSOID(m->psoName);
+        m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
+    }
 }
 
 void GameScene::InitBoss(No::Registry& registry)
@@ -202,7 +205,6 @@ void GameScene::InitBoss(No::Registry& registry)
     m->psoName = L"Renderer : DefaultSkinned PSO";
     m->psoId = NoEngine::Render::GetPSOID(m->psoName);
     m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
-
 
 }
 

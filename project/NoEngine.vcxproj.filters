@@ -254,6 +254,7 @@
     <ClInclude Include="engine\Functions\ECS\Registry.hpp" />
     <ClInclude Include="application\TD2_3\System\Enemy\BaseEnemyState.h" />
     <ClInclude Include="application\TD2_3\System\Enemy\EnemyStateManager.h" />
+    <ClInclude Include="application\TD2_3\Loader\EnemyResources.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\engine\Shaders\Default.hlsli" />
