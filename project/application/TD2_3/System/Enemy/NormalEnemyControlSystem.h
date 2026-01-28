@@ -41,19 +41,25 @@ EnemyChase() = default;
 
 };
 
-//class EnemyHit :public BaseEnemyState<NormalEnemyControlSystem> {
-//
-//};
-//
-//class EnemyInvincible :public BaseEnemyState<NormalEnemyControlSystem> {
-//
-//
-//
-//};
-//
-//class EnemyDie :public BaseEnemyState<NormalEnemyControlSystem> {
-//
-//
-//
-//};
-//
+class EnemyHit :public BaseEnemyState<NormalEnemyControlSystem> {
+public:
+    //ステートが始まるときに一度だけ呼ばれる
+    void Enter(No::Registry& registry, NormalEnemyControlSystem* ownerType) override;
+    //ステートが更新時に呼ばれる
+    void Update(No::Registry& registry, NormalEnemyControlSystem* ownerType)override;
+    //ステートが終了するときに一度だけ呼ばれる
+    void Exit(No::Registry& registry, NormalEnemyControlSystem* ownerType)override;
+};
+
+class EnemyInvincible :public BaseEnemyState<NormalEnemyControlSystem> {
+
+
+
+};
+
+class EnemyDie :public BaseEnemyState<NormalEnemyControlSystem> {
+
+
+
+};
+
