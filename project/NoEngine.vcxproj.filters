@@ -256,7 +256,7 @@
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
     <ClInclude Include="application\TD2_3\System\Enemy\BaseEnemyState.h" />
     <ClInclude Include="application\TD2_3\System\Enemy\EnemyStateManager.h" />
-    <ClInclude Include="application\TD2_3\Component\BatBossComponent.h" />
+    <ClInclude Include="engine\Functions\ECS\Component\LightComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\engine\Shaders\Default.hlsli" />
