@@ -30,7 +30,7 @@ void NormalEnemyControlSystem::Update(No::Registry& registry, float deltaTime)
 
     for (auto entity : view)
     {
-        auto* transform = registry.GetComponent<No::TransformComponent>(entity);
+   
         auto* material = registry.GetComponent<No::MaterialComponent>(entity);
         auto* collider = registry.GetComponent<SphereColliderComponent>(entity);
         auto* enemy = registry.GetComponent<NormalEnemyComponent>(entity);
@@ -43,7 +43,6 @@ void NormalEnemyControlSystem::Update(No::Registry& registry, float deltaTime)
             enemy->isStarted_ = true;
         }
 
-        auto* deathFlag = registry.GetComponent<DeathFlag>(entity);
 
         if (collider->isCollied)
         {
@@ -56,6 +55,8 @@ void NormalEnemyControlSystem::Update(No::Registry& registry, float deltaTime)
         enemy->stateManager->Update(registry, deltaTime);
 
 #ifdef USE_IMGUI
+        auto* transform = registry.GetComponent<No::TransformComponent>(entity);
+        auto* deathFlag = registry.GetComponent<DeathFlag>(entity);
 
         std::string imGuiName = "model" + std::to_string(entity);
         ImGui::Begin(imGuiName.c_str());
@@ -181,7 +182,7 @@ void EnemyHit::Enter(No::Registry& registry)
     {
         ballPhysics_ = registry.GetComponent<PhysicsComponent>(entity);
     }
-
+    No::SoundEffectPlay("batDie", 0.5f);
 }
 
 void EnemyHit::Update(No::Registry& registry, float deltaTime)
