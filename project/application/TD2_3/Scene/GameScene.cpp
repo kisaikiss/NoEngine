@@ -6,6 +6,8 @@
 #include "../Component/VausStateComponent.h"
 #include "../Component/BackGroundComponent.h"
 #include"../Component/NormalEnemyComponent.h"
+#include"../Component/BatBossComponent.h"
+
 //collision
 #include "../System/CollisionSystem.h"
 //player
@@ -204,10 +206,11 @@ void GameScene::InitEnemy(No::Registry& registry)
 
 void GameScene::InitBoss(No::Registry& registry)
 {
-
+    
     No::Entity bossEntity = registry.GenerateEntity();
     registry.AddComponent<Boss1Tag>(bossEntity);
     registry.AddComponent<DeathFlag>(bossEntity);
+    registry.AddComponent<BattBossComponent>(bossEntity);
     auto* collider = registry.AddComponent<SphereColliderComponent>(bossEntity);
     collider->colliderType = ColliderMask::kEnemy;
     collider->collideMask = ColliderMask::kBall;

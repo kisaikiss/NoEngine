@@ -2,10 +2,13 @@
 #include "../../tag.h"
 
 PlayerGirlControlSystem::PlayerGirlControlSystem()
-{
+{    //strings_.push_back("voice_checkmate");
     timer_ = 0.0f;
+    voiceTimer_ = 0.0f;
+
     strings_.clear();
-    strings_.push_back("voice_checkmate");
+
+    //ここから下はランダムに呼び出す
     strings_.push_back("voice_aa");
     strings_.push_back("voice_ite");
     strings_.push_back("voice_kuso_high");
@@ -27,10 +30,15 @@ void PlayerGirlControlSystem::Update(No::Registry& registry, float deltaTime)
     timer_ += deltaTime;
     timer_ = fmodf(timer_, 3.0f);
 
+    voiceTimer_ += deltaTime;
+    if (voiceTimer_ >= 5.0f) {
+        voiceTimer_ = 0.0f;
+        int randNum = rand() % strings_.size();
+        No::SoundPlay(strings_[randNum], 1.0f, false);
+    }
+
     //もし敵に当たったら
    // No::SoundPlay("voice_iityoushi", 1.0f, false);
-  
-
 
     for (auto entity : view)
     {
