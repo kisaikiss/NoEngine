@@ -3,15 +3,15 @@
 #include"EnemyStateManager.h"
 #include "../../Component/PhysicsComponent.h"
 #include"../../Component/NormalEnemyComponent.h"
+#include<memory>
 class NormalEnemyControlSystem : public No::ISystem
 {
 public:
     NormalEnemyControlSystem();
     void Update(No::Registry& registry, float deltaTime) override;
 private:
-    EnemyStateManager<NormalEnemyComponent> stateManager_;
     bool isApper_ = false;
-
+    std::unique_ptr< EnemyStateManager<NormalEnemyComponent>>stateManager_ = nullptr;
 };
 
 
@@ -21,11 +21,11 @@ public:
 
     EnemyAppear() = default;
     //ステートが始まるときに一度だけ呼ばれる
-    void Enter(No::Registry& registry, NormalEnemyComponent* ownerType) override;
+    void Enter(No::Registry& registry) override;
     //ステートが更新時に呼ばれる
-    void Update(No::Registry& registry, NormalEnemyComponent* ownerType, float deltaTime)override;
+    void Update(No::Registry& registry, float deltaTime)override;
     //ステートが終了するときに一度だけ呼ばれる
-    void Exit(No::Registry& registry, NormalEnemyComponent* ownerType)override;
+    void Exit(No::Registry& registry)override;
 private:
     float timer_ = 0.0f;
 };
@@ -34,22 +34,22 @@ public:
 
     EnemyChase() = default;
     //ステートが始まるときに一度だけ呼ばれる
-    void Enter(No::Registry& registry, NormalEnemyComponent* ownerType) override;
+    void Enter(No::Registry& registry) override;
     //ステートが更新時に呼ばれる
-    void Update(No::Registry& registry, NormalEnemyComponent* ownerType, float deltaTime)override;
+    void Update(No::Registry& registry, float deltaTime)override;
     //ステートが終了するときに一度だけ呼ばれる
-    void Exit(No::Registry& registry, NormalEnemyComponent* ownerType)override;
+    void Exit(No::Registry& registry)override;
 
 };
 
 class EnemyHit :public BaseEnemyState<NormalEnemyComponent> {
 public:
     //ステートが始まるときに一度だけ呼ばれる
-    void Enter(No::Registry& registry, NormalEnemyComponent* ownerType) override;
+    void Enter(No::Registry& registry) override;
     //ステートが更新時に呼ばれる
-    void Update(No::Registry& registry, NormalEnemyComponent* ownerType, float deltaTime)override;
+    void Update(No::Registry& registry, float deltaTime)override;
     //ステートが終了するときに一度だけ呼ばれる
-    void Exit(No::Registry& registry, NormalEnemyComponent* ownerType)override;
+    void Exit(No::Registry& registry)override;
 private:
     float timer_ = 0.0f;
     PhysicsComponent* ballPhysics_ = nullptr;
@@ -67,11 +67,11 @@ private:
 class EnemyDie :public BaseEnemyState<NormalEnemyComponent> {
 public:
     //ステートが始まるときに一度だけ呼ばれる
-    void Enter(No::Registry& registry, NormalEnemyComponent* ownerType) override;
+    void Enter(No::Registry& registry) override;
     //ステートが更新時に呼ばれる
-    void Update(No::Registry& registry, NormalEnemyComponent* ownerType, float deltaTime)override;
+    void Update(No::Registry& registry, float deltaTime)override;
     //ステートが終了するときに一度だけ呼ばれる
-    void Exit(No::Registry& registry, NormalEnemyComponent* ownerType)override;
+    void Exit(No::Registry& registry)override;
 
 
 private:

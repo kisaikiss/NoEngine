@@ -15,6 +15,7 @@ NormalEnemyControlSystem::NormalEnemyControlSystem()
 {
 
     isApper_ = false;
+    stateManager_ = std::make_unique <EnemyStateManager<NormalEnemyComponent>>();
    
 }
 
@@ -40,8 +41,8 @@ void NormalEnemyControlSystem::Update(No::Registry& registry, float deltaTime)
             
             auto* enemy = registry.GetComponent<NormalEnemyComponent>(entity);
             
-            stateManager_.Start(enemy);
-            stateManager_.ChangeState<EnemyAppear>(registry); isApper_ = true; }
+            stateManager_->Start(enemy);
+            stateManager_->ChangeState<EnemyAppear>(registry); isApper_ = true; }
 
 
         auto* transform = registry.GetComponent<No::TransformComponent>(entity);
@@ -52,13 +53,13 @@ void NormalEnemyControlSystem::Update(No::Registry& registry, float deltaTime)
 
         if (collider->isCollied)
         {
-            stateManager_.ChangeState<EnemyHit>(registry);
+            stateManager_->ChangeState<EnemyHit>(registry);
         } else
         {
             material->materials[0].color = NoEngine::Color(1.0f, 1.0f, 1.0f, 1.0f);
         }
     
-        stateManager_.Update(registry, deltaTime);
+        stateManager_->Update(registry, deltaTime);
 
 #ifdef USE_IMGUI
 
@@ -83,9 +84,9 @@ void NormalEnemyControlSystem::Update(No::Registry& registry, float deltaTime)
 }
 
 
-void EnemyAppear::Enter(No::Registry& registry, NormalEnemyComponent* ownerType)
+void EnemyAppear::Enter(No::Registry& registry)
 {
-    (void)ownerType;
+
 
     auto view = registry.View <
         NormalEnemyTag,
@@ -101,9 +102,7 @@ void EnemyAppear::Enter(No::Registry& registry, NormalEnemyComponent* ownerType)
 
 
 
-void EnemyAppear::Update(No::Registry& registry, NormalEnemyComponent* ownerType, float deltaTime){
-
-    (void)ownerType;
+void EnemyAppear::Update(No::Registry& registry,  float deltaTime){
 
 
     TimerUpdate(timer_, deltaTime);
@@ -135,10 +134,8 @@ void EnemyAppear::Update(No::Registry& registry, NormalEnemyComponent* ownerType
 
 }
 
-void EnemyAppear::Exit(No::Registry& registry, NormalEnemyComponent* ownerType)
+void EnemyAppear::Exit(No::Registry& registry)
 {
-   
-    (void)ownerType;
    
     auto view = registry.View<
         No::MaterialComponent,
@@ -154,16 +151,15 @@ void EnemyAppear::Exit(No::Registry& registry, NormalEnemyComponent* ownerType)
 
 }
 
-void EnemyChase::Enter(No::Registry& registry, NormalEnemyComponent* ownerType)
+void EnemyChase::Enter(No::Registry& registry)
 {
     (void)registry;
-    (void)ownerType;
+
 }
 
 
-void EnemyChase::Update(No::Registry& registry, NormalEnemyComponent* ownerType,float deltaTime)
+void EnemyChase::Update(No::Registry& registry,float deltaTime)
 {
-    (void)ownerType;
 
     No::TransformComponent* targetTransform = nullptr;
 
@@ -195,12 +191,11 @@ void EnemyChase::Update(No::Registry& registry, NormalEnemyComponent* ownerType,
     {
         auto* transform = registry.GetComponent<No::TransformComponent>(entity);
         Vector3 direction = GatTargetDir(transform->translate, targetTransform->translate);
-        auto* enemy = registry.GetComponent<NormalEnemyComponent>(entity);
 
         float speed = 2.0f;
-        enemy->velocity.x = speed * direction.x;
-        enemy->velocity.y = speed * direction.y;
-        transform->translate += enemy->velocity * deltaTime;
+        ownerType_->velocity.x = speed * direction.x;
+        ownerType_->velocity.y = speed * direction.y;
+        transform->translate += ownerType_->velocity * deltaTime;
 
         LookTarget(*transform, targetTransform->translate);
 
@@ -208,15 +203,14 @@ void EnemyChase::Update(No::Registry& registry, NormalEnemyComponent* ownerType,
 
 }
 
-void EnemyChase::Exit(No::Registry& registry, NormalEnemyComponent* ownerType)
+void EnemyChase::Exit(No::Registry& registry)
 {
     (void)registry;
-    (void)ownerType;
+
 }
 
-void EnemyHit::Enter(No::Registry& registry, NormalEnemyComponent* ownerType)
+void EnemyHit::Enter(No::Registry& registry)
 {
-    (void)ownerType;
 
     timer_ = 0.0f;
 
@@ -253,9 +247,8 @@ void EnemyHit::Enter(No::Registry& registry, NormalEnemyComponent* ownerType)
 
 }
 
-void EnemyHit::Update(No::Registry& registry, NormalEnemyComponent* ownerType, float deltaTime)
+void EnemyHit::Update(No::Registry& registry, float deltaTime)
 {
-    (void)ownerType;
 
     TimerUpdate(timer_, deltaTime);
 
@@ -283,7 +276,7 @@ void EnemyHit::Update(No::Registry& registry, NormalEnemyComponent* ownerType, f
     for (auto entity : view)
     {
         auto* transform = registry.GetComponent<No::TransformComponent>(entity);
-        auto* enemy = registry.GetComponent<NormalEnemyComponent>(entity);
+
         PoyoPoyo(*transform, timer_, 10.0f, 0.25f, Vector3::UNIT_SCALE);
 
         if (targetTransform != nullptr) {
@@ -295,7 +288,7 @@ void EnemyHit::Update(No::Registry& registry, NormalEnemyComponent* ownerType, f
         if (timer_ <= 0.5f) {
 
             if (ballPhysics_ == nullptr) {
-                vel = enemy->velocity;
+                vel = ownerType_->velocity;
                 vel.z = 0.0f;
                 transform->translate += vel * -1.0f * deltaTime;
             } else {
@@ -308,7 +301,7 @@ void EnemyHit::Update(No::Registry& registry, NormalEnemyComponent* ownerType, f
 
         if (timer_ >= 1.0f) {
 
-            if (enemy->hp <= 0) {
+            if (ownerType_->hp <= 0) {
                stateManager_->ChangeState<EnemyDie>(registry);
             } else {
                 stateManager_->ChangeState<EnemyChase>(registry);
@@ -322,10 +315,10 @@ void EnemyHit::Update(No::Registry& registry, NormalEnemyComponent* ownerType, f
 
 }
 
-void EnemyHit::Exit(No::Registry& registry, NormalEnemyComponent* ownerType)
+void EnemyHit::Exit(No::Registry& registry)
 {
 
-    (void)ownerType;
+
     auto view = registry.View <
         NormalEnemyTag,
 
@@ -405,16 +398,16 @@ Vector3 EaseInOutBack(const Vector3& start, const Vector3& end, float t) {
     return NoEngine::Easing::Lerp(start, end, time);
 }
 
-void EnemyDie::Enter(No::Registry& registry, NormalEnemyComponent* ownerType)
+void EnemyDie::Enter(No::Registry& registry)
 {
     (void)registry;
-    (void)ownerType;
+
 }
 
-void EnemyDie::Update(No::Registry& registry, NormalEnemyComponent* ownerType, float deltaTime)
+void EnemyDie::Update(No::Registry& registry,float deltaTime)
 {
     TimerUpdate(timer_, deltaTime);
-    (void)ownerType;
+
     auto view = registry.View <
         NormalEnemyTag,
         DeathFlag,
@@ -445,8 +438,8 @@ void EnemyDie::Update(No::Registry& registry, NormalEnemyComponent* ownerType, f
 
 }
 
-void EnemyDie::Exit(No::Registry& registry, NormalEnemyComponent* ownerType)
+void EnemyDie::Exit(No::Registry& registry)
 {
     (void)registry;
-    (void)ownerType;
+  
 }

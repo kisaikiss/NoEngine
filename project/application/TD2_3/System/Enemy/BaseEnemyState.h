@@ -13,44 +13,48 @@ protected:
     BaseEnemyState() = default;
     virtual  ~BaseEnemyState() = default;
     //ステートが始まるときに一度だけ呼ばれる
-    virtual void Enter(No::Registry& registry,EnemyOwnerType* ownerType) = 0;
+    virtual void Enter(No::Registry& registry) = 0;
     //ステートの更新時に呼ばれる
-    virtual void Update(No::Registry& registry, EnemyOwnerType* ownerType,float deltaTime) = 0;
+    virtual void Update(No::Registry& registry,float deltaTime) = 0;
     //ステートが終了するときに一度だけ呼ばれる
-    virtual void Exit(No::Registry& registry, EnemyOwnerType* ownerType) = 0;
+    virtual void Exit(No::Registry& registry) = 0;
 
 private:
     // この状態を管理しているステートマシーンをセット
     void SetEnemyStateManager(EnemyStateManager<EnemyOwnerType>* stateManager) {
         stateManager_ = stateManager;
     }
+
+
+
     // 開始関数をマネージャーから呼ぶための関数
     void CallEnter(No::Registry& registry, EnemyOwnerType* ownerType) {
     
-        if (stateManager_ == nullptr || ownerType == nullptr) {
+        ownerType_ = ownerType;
+        if (stateManager_ == nullptr || ownerType_ == nullptr) {
             return;
         }
     
-        Enter(registry,ownerType);
+        Enter(registry);
     }
     // 更新関数をマネージャーから呼ぶための関数
-    void CallUpdate(No::Registry& registry,EnemyOwnerType* ownerType,float deltaTime) {
-    
-        if (stateManager_ == nullptr || ownerType == nullptr) {
+    void CallUpdate(No::Registry& registry, EnemyOwnerType* ownerType,float deltaTime) {
+        ownerType_ = ownerType;
+        if (stateManager_ == nullptr || ownerType_ == nullptr) {
             return;
         }
 
-        Update(registry,ownerType, deltaTime);
+        Update(registry, deltaTime);
     }
 
     // 終了関数をマネージャーから呼ぶための関数
     void CallExit(No::Registry& registry, EnemyOwnerType* ownerType) {
-
-        if (stateManager_ == nullptr || ownerType == nullptr) {
+        ownerType_ = ownerType;
+        if (stateManager_ == nullptr || ownerType_ == nullptr) {
             return;
         }
 
-        Exit(registry,ownerType);
+        Exit(registry);
     }
 protected:
     //このステートマネージャーのポインタを保存
