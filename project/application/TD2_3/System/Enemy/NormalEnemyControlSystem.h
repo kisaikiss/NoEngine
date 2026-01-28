@@ -10,8 +10,7 @@ public:
     NormalEnemyControlSystem();
     void Update(No::Registry& registry, float deltaTime) override;
 private:
-    bool isApper_ = false;
-    std::unique_ptr< EnemyStateManager<NormalEnemyComponent>>stateManager_ = nullptr;
+
 };
 
 

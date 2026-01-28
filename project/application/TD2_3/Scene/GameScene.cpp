@@ -159,6 +159,7 @@ void GameScene::InitEnemy(No::Registry& registry)
         auto* enemy = registry.AddComponent<NormalEnemyComponent>(bossEntity);
         enemy->velocity = { 0.5f,0.5f,0.0f };
         enemy->hp = 4;
+        enemy->entity = bossEntity; // ★ ここでセット
 
         auto* collider = registry.AddComponent<SphereColliderComponent>(bossEntity);
         collider->colliderType = ColliderMask::kEnemy;

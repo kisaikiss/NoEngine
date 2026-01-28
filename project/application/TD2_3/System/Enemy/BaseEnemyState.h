@@ -25,8 +25,6 @@ private:
         stateManager_ = stateManager;
     }
 
-
-
     // 開始関数をマネージャーから呼ぶための関数
     void CallEnter(No::Registry& registry, EnemyOwnerType* ownerType) {
     
