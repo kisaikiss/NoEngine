@@ -1,6 +1,11 @@
 #include "PlayerGirlControlSystem.h"
 #include "../../tag.h"
 
+PlayerGirlControlSystem::PlayerGirlControlSystem()
+{
+    timer_ = 0.0f;
+}
+
 void PlayerGirlControlSystem::Update(No::Registry& registry, float deltaTime)
 {
     auto view = registry.View<
@@ -8,8 +13,8 @@ void PlayerGirlControlSystem::Update(No::Registry& registry, float deltaTime)
         No::MaterialComponent,
         PlayerGirlTag>();
 
-
-    (void)deltaTime;
+    timer_ += deltaTime;
+    timer_ = fmodf(timer_, 3.0f);
 
     for (auto entity : view)
     {
@@ -17,6 +22,12 @@ void PlayerGirlControlSystem::Update(No::Registry& registry, float deltaTime)
         auto* material = registry.GetComponent<No::MaterialComponent>(entity);
 
 #ifdef USE_IMGUI
+
+        if (timer_ <= 2.5f ) {
+            material->materials[1].textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Model/playerGirl/face.png");
+        } else {
+            material->materials[1].textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Model/playerGirl/face2.png");
+        }
 
         std::string imGuiName = "playerGirlTag";
         ImGui::Begin(imGuiName.c_str());
