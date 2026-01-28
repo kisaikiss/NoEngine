@@ -6,6 +6,8 @@
 #include "../Component/VausStateComponent.h"
 #include "../Component/BackGroundComponent.h"
 #include"../Component/NormalEnemyComponent.h"
+#include"../Component/BatBossComponent.h"
+
 //collision
 #include "../System/CollisionSystem.h"
 //player
@@ -69,6 +71,8 @@ void GameScene::Setup()
 	cameraTransform_.translate = kStartCameraPosition;
 	camera_->SetTransform(cameraTransform_);
 	SetCamera(camera_.get());
+
+    SoundLoad();
 }
 
 void GameScene::NotSystemUpdate()
@@ -184,10 +188,11 @@ void GameScene::InitEnemy(No::Registry& registry)
 
 void GameScene::InitBoss(No::Registry& registry)
 {
-
+    
     No::Entity bossEntity = registry.GenerateEntity();
     registry.AddComponent<Boss1Tag>(bossEntity);
     registry.AddComponent<DeathFlag>(bossEntity);
+    registry.AddComponent<BattBossComponent>(bossEntity);
     auto* collider = registry.AddComponent<SphereColliderComponent>(bossEntity);
     collider->colliderType = ColliderMask::kEnemy;
     collider->collideMask = ColliderMask::kBall;
@@ -293,4 +298,37 @@ NoEngine::Vector3 GameScene::GenerateRandomPointInCircle(float radius)
     float y = r * std::sin(angle);
 
     return Vector3{ x, y, -0.5f }; // Zは0で平面上に配置
+}
+
+void GameScene::SoundLoad()
+{
+    No::SoundLoad(L"resources/game/td_2304//Audio/BGM/batBGM.mp3", "batBGM");
+    No::SoundLoad(L"resources/game/td_2304//Audio/BGM/secondBGM.mp3", "secondBGM");
+    No::SoundLoad(L"resources/game/td_2304//Audio/BGM/titleBGM.mp3", "titleBGM");
+
+    No::SoundLoad(L"resources/game/td_2304//Audio/SE/ballPong.mp3", "ballPong");
+   
+    No::SoundLoad(L"resources/game/td_2304//Audio/SE/ballPong2.mp3", "ballPong2");
+
+    No::SoundLoad(L"resources/game/td_2304//Audio/SE/chargeEnter.mp3", "chargeEnter");
+
+    No::SoundLoad(L"resources/game/td_2304//Audio/SE/batDie.mp3", "batDie");
+    
+    {
+        No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_aa.mp3", "voice_aa");
+        No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_checkmate.mp3", "voice_checkmate");
+        No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_iityoushi.mp3", "voice_iityoushi");
+        No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_iq.mp3", "voice_iq");
+        No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_ite.mp3", "voice_ite");
+        No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_kuso_high.mp3", "voice_kuso_high");
+        No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_kuso_low.mp3", "voice_kuso_low");
+        No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_u.mp3", "voice_u");
+        No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_ugu.mp3", "voice_ugu");
+        No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_uwa.mp3", "voice_uwa");
+
+    }
+
+
+
+    No::SoundPlay("titleBGM", 0.125f, true);
 }

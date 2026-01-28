@@ -33,7 +33,11 @@ public:
 	/// レジストリ内のすべてのシステムを、指定した経過時間で更新します。
 	/// </summary>
 	/// <param name="deltaTime">前フレームからの経過時間。システムの更新に使用されます。</param>
-	void Update(float deltaTime) { NotSystemUpdate(); systemManager_->UpdateAll(*registry_, deltaTime); }
+	void Update(float deltaTime) { 
+		NotSystemUpdate();
+		systemManager_->UpdateAll(*registry_, deltaTime);
+		registry_->FlushDestroy();
+	}
 
 	ECS::Registry* GetRegistry() { return registry_.get(); }
 

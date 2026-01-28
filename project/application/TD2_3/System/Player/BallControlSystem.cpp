@@ -54,6 +54,7 @@ void BallControlSystem::Update(No::Registry& registry, float deltaTime)
 
 				// 追従中は速度をリセット
 				ballPhysics->velocity = Vector3::ZERO;
+
 			}
 			else
 			{
@@ -74,6 +75,8 @@ void BallControlSystem::Update(No::Registry& registry, float deltaTime)
 				// 判定閾値を定数ではなく球の半径ベースに変更（球表面がリングに当たるタイミング）
 				if (dist >= vausState->currentRingRadius - ballCollider->radius)
 				{
+					/*No::SoundPlay("ballPong", 0.5f,false);*/
+
 					float theta = std::atan2(ballTransform->translate.y, ballTransform->translate.x);
 					float diff = NormalizeAngle(theta - vausState->theta);
 
@@ -81,7 +84,7 @@ void BallControlSystem::Update(No::Registry& registry, float deltaTime)
 					if (fabs(diff) <= halfTheta)
 					{
 						auto normal = MathCalculations::Normalize(Vector3::ZERO - ballTransform->translate);
-
+			
 						Vector3 tangent =
 							MathCalculations::Normalize(
 								Vector3(-normal.y, normal.x, 0)
@@ -128,6 +131,8 @@ void BallControlSystem::Update(No::Registry& registry, float deltaTime)
 			if (registry.Has<No::TransformComponent>(ballCollider->colliedEntity) &&
 				registry.Has<SphereColliderComponent>(ballCollider->colliedEntity))
 			{
+	
+				No::SoundEffectPlay("ballPong", 0.5f);
 				auto* enemyTransform = registry.GetComponent<No::TransformComponent>(ballCollider->colliedEntity);
 				auto* enemyCollider = registry.GetComponent<SphereColliderComponent>(ballCollider->colliedEntity);
 

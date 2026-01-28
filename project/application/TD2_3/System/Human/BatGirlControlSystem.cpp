@@ -1,4 +1,5 @@
 #include "BatGirlControlSystem.h"
+
 #include "../../tag.h"
 
 void BatGirlControlSystem::Update(No::Registry& registry, float deltaTime)
@@ -6,6 +7,7 @@ void BatGirlControlSystem::Update(No::Registry& registry, float deltaTime)
     auto view = registry.View<
         No::TransformComponent,
         No::MaterialComponent,
+
         BatGirlTag>();
 
 
@@ -15,6 +17,7 @@ void BatGirlControlSystem::Update(No::Registry& registry, float deltaTime)
     {
         auto* transform = registry.GetComponent<No::TransformComponent>(entity);
         auto* material = registry.GetComponent<No::MaterialComponent>(entity);
+
 
 #ifdef USE_IMGUI
 

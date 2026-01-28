@@ -10,6 +10,7 @@
 #include "engine/Runtime/Command/GraphicsContext.h"
 #include "engine/Functions/Renderer/RenderPass/RenderPassScheduler.h"
 #include "engine/Functions/Input/input.h"
+#include "engine/Assets/Audio/Audio.h"
 
 #ifdef USE_IMGUI
 #include "engine/Editor/ImGuiManager.h"
@@ -94,6 +95,7 @@ void EngineInitialize() {
 	GraphicsCore::gWindowManager.SetMainWindowName(L"NoEngine");
 	
 	InputInitialize();
+	AudioInitialize();
 
 #ifdef USE_IMGUI
 	imguiManager.Initialize();
@@ -105,6 +107,7 @@ void EngineFinalize() {
 #ifdef USE_IMGUI
 	imguiManager.Shutdown();
 #endif // USE_IMGUI
+	AudioShutdown();
 	InputShutdown();
 	GraphicsCore::Shutdown();
 	CoUninitialize();
