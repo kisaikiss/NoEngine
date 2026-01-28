@@ -22,10 +22,6 @@ NormalEnemyControlSystem::NormalEnemyControlSystem()
 void NormalEnemyControlSystem::Update(No::Registry& registry, float deltaTime)
 {
 
-    (void)deltaTime;
-
-
-
     auto view = registry.View <
         NormalEnemyTag,
         DeathFlag,
