@@ -138,7 +138,7 @@ void GraphicsContext::SetDynamicVB(UINT Slot, size_t NumVertices, size_t VertexS
 	commandList_->IASetVertexBuffers(Slot, 1, &VBView);
 }
 
-inline void GraphicsContext::SetDynamicIB(size_t IndexCount, const uint16_t* IndexData)
+void GraphicsContext::SetDynamicIB(size_t IndexCount, const uint16_t* IndexData)
 {
 	assert(IndexData != nullptr && Math::IsAligned(IndexData, 16));
 

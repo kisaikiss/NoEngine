@@ -31,40 +31,42 @@ using namespace NoEngine;
 
 void GameScene::Setup()
 {
+	//アニメーションシステム
+	AddSystem(std::make_unique<No::AnimationSystem>());
+	//effect
+	AddSystem(std::make_unique<BackGroundEffectSystem>());
 
-    //アニメーションシステム
-    AddSystem(std::make_unique<No::AnimationSystem>());
-    //effect
-    AddSystem(std::make_unique<BackGroundEffectSystem>());
-    //player用システム
-    AddSystem(std::make_unique<VausControlSystem>());
-    AddSystem(std::make_unique<BallControlSystem>());
+
+	//player用システム
+	AddSystem(std::make_unique<VausControlSystem>());
     //Enemy
     AddSystem(std::make_unique<NormalEnemyControlSystem>());
-    AddSystem(std::make_unique<BossControlSystem>());
-    //こうもり少女のシステム
-    AddSystem(std::make_unique<BatGirlControlSystem>());
-    //プレイヤー少女システム
-    AddSystem(std::make_unique<PlayerGirlControlSystem>());
+	AddSystem(std::make_unique<BossControlSystem>());
+	//こうもり少女のシステム
+	AddSystem(std::make_unique<BatGirlControlSystem>());
+	//プレイヤー少女システム
+	AddSystem(std::make_unique<PlayerGirlControlSystem>());
 
-    //衝突判定用システム
-    AddSystem(std::make_unique<CollisionSystem>());
-    No::Registry& registry = *GetRegistry();
 
-    InitBackGround(registry);
-    InitVaus(registry);
-    InitEnemy(registry);
-    InitRing(registry);
-    InitBall(registry);
-    InitBoss(registry);
-    InitBatGirl(registry);
-    InitPlayerGirl(registry);
-    constexpr Vector3 kStartCameraPosition = Vector3{ 0.0f, 0.0f, -28.0f };
-    //カメラ初期化
-    camera_ = std::make_unique<NoEngine::Camera>();
-    cameraTransform_.translate = kStartCameraPosition;
-    camera_->SetTransform(cameraTransform_);
-    SetCamera(camera_.get());
+	//衝突判定用システム
+	AddSystem(std::make_unique<CollisionSystem>());
+    AddSystem(std::make_unique<BallControlSystem>());
+
+	No::Registry& registry = *GetRegistry();
+	InitBackGround(registry);
+	InitVaus(registry);
+	InitEnemy(registry);
+	InitRing(registry);
+	InitBall(registry);
+	InitBoss(registry);
+	InitBatGirl(registry);
+	InitPlayerGirl(registry);
+	constexpr Vector3 kStartCameraPosition = Vector3{ 0.0f, 0.0f, -28.0f };
+	//カメラ初期化
+	camera_ = std::make_unique<NoEngine::Camera>();
+	cameraTransform_.translate = kStartCameraPosition;
+	camera_->SetTransform(cameraTransform_);
+	SetCamera(camera_.get());
 }
 
 void GameScene::NotSystemUpdate()
@@ -91,8 +93,9 @@ void GameScene::InitVaus(No::Registry& registry)
     auto* model = registry.AddComponent<No::MeshComponent>(vausEntity);
     NoEngine::ModelLoader::LoadModel("Vaus", "resources/engine/Model/testVaus.obj", model);
 
-    auto* m = registry.AddComponent<No::MaterialComponent>(vausEntity);
-    m->materials = NoEngine::ModelLoader::GetMaterial("Vaus");
+	auto* m = registry.AddComponent<No::MaterialComponent>(vausEntity);
+	m->materials = NoEngine::ModelLoader::GetMaterial("Vaus");
+	m->materials.front().color = {0.8f,0.2f,0.2f};
 
     m->psoName = L"Renderer : Default PSO";
     m->psoId = NoEngine::Render::GetPSOID(m->psoName);
@@ -108,8 +111,10 @@ void GameScene::InitRing(No::Registry& registry)
     auto* model = registry.AddComponent<No::MeshComponent>(ringEntity);
     NoEngine::ModelLoader::LoadModel("ring", "resources/engine/Model/testRing.obj", model);
 
-    auto m = registry.AddComponent<No::MaterialComponent>(ringEntity);
-    m->materials = NoEngine::ModelLoader::GetMaterial("ring");
+	auto m = registry.AddComponent<No::MaterialComponent>(ringEntity);
+	m->materials = NoEngine::ModelLoader::GetMaterial("ring");
+	m->materials.front().color.a = 0.7f;
+	m->materials.front().color.b = 0.5f;
 
     m->psoName = L"Renderer : Default PSO";
     m->psoId = NoEngine::Render::GetPSOID(m->psoName);

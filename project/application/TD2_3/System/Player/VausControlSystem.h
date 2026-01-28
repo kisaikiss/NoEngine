@@ -7,5 +7,8 @@ public:
 	void Update(No::Registry& registry, float deltaTime) override;
 private:
 	float CalculateMouseAngle();
+private:
+	bool wasPress_ = false;
+	bool isPress_ = false;
 };
 

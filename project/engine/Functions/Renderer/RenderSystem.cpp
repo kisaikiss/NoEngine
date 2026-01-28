@@ -98,50 +98,53 @@ void Initialize() {
 	sRootSignatures.push_back(std::move(defaultSkinnedRootSignature));
 	sRootSignatureIndexMap[defaultSkinnedPSOName] = static_cast<uint32_t>(sRootSignatures.size()) - 1;
 
+	// sprite
+	{
 
-	ShaderModule defaultSpriteVS(ShaderStage::Vertex, L"resources/engine/Shaders/DefaultSprite.VS.hlsl", L"vs_6_0");
-	
-	const ShaderReflection& spriteVsReflection = defaultSpriteVS.GetReflection();
+		ShaderModule defaultSpriteVS(ShaderStage::Vertex, L"resources/engine/Shaders/DefaultSprite.VS.hlsl", L"vs_6_0");
 
-	std::vector<ShaderReflection> reflectionSprite;
-	reflectionSprite.push_back(spriteVsReflection);
-	reflectionSprite.push_back(psReflection);
-	std::unique_ptr<RootSignature> defaultSpriteRootSignature = std::make_unique<RootSignature>();
-	std::wstring defaultSpritePSOName = L"Renderer : Default Sprite PSO";
-	RootSignatureBuilder::BuildFromReflection(reflectionSprite, *defaultSpriteRootSignature, ConvertString(defaultSpritePSOName));
-	
-	D3D12_RASTERIZER_DESC rasterizerSpriteDesc{};
-	rasterizerSpriteDesc.CullMode = D3D12_CULL_MODE_NONE;
-	rasterizerSpriteDesc.FillMode = D3D12_FILL_MODE_SOLID;
+		const ShaderReflection& spriteVsReflection = defaultSpriteVS.GetReflection();
 
-	D3D12_BLEND_DESC blendSpriteDesc{};
-	blendSpriteDesc.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
+		std::vector<ShaderReflection> reflectionSprite;
+		reflectionSprite.push_back(spriteVsReflection);
+		reflectionSprite.push_back(psReflection);
+		std::unique_ptr<RootSignature> defaultSpriteRootSignature = std::make_unique<RootSignature>();
+		std::wstring defaultSpritePSOName = L"Renderer : Default Sprite PSO";
+		RootSignatureBuilder::BuildFromReflection(reflectionSprite, *defaultSpriteRootSignature, ConvertString(defaultSpritePSOName));
 
-	D3D12_DEPTH_STENCIL_DESC depthStencilSpriteDesc{};
-	depthStencilSpriteDesc.DepthEnable = false;
-	depthStencilSpriteDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;
-	depthStencilSpriteDesc.DepthFunc = D3D12_COMPARISON_FUNC_NONE;
+		D3D12_RASTERIZER_DESC rasterizerSpriteDesc{};
+		rasterizerSpriteDesc.CullMode = D3D12_CULL_MODE_NONE;
+		rasterizerSpriteDesc.FillMode = D3D12_FILL_MODE_SOLID;
 
-	std::vector<D3D12_INPUT_ELEMENT_DESC> spriteInputLayout = InputLayoutBuilder::BuildFromReflection(spriteVsReflection);
+		D3D12_BLEND_DESC blendSpriteDesc{};
+		blendSpriteDesc.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
 
-	
-	GraphicsPSO defaultSpritePSO(defaultSpritePSOName);
+		D3D12_DEPTH_STENCIL_DESC depthStencilSpriteDesc{};
+		depthStencilSpriteDesc.DepthEnable = false;
+		depthStencilSpriteDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;
+		depthStencilSpriteDesc.DepthFunc = D3D12_COMPARISON_FUNC_NONE;
 
-	defaultSpritePSO.SetRootSignature(*defaultSpriteRootSignature);
-	defaultSpritePSO.SetRasterizerState(rasterizerSpriteDesc);
-	defaultSpritePSO.SetBlendState(blendSpriteDesc);
-	defaultSpritePSO.SetDepthStencilState(depthStencilSpriteDesc);
-	defaultSpritePSO.SetInputLayout(spriteInputLayout);
-	defaultSpritePSO.SetPrimitiveTopologyType(D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
-	defaultSpritePSO.SetRenderTargetFormats(1, rtvFormat, DXGI_FORMAT_UNKNOWN);
-	defaultSpritePSO.SetVertexShader(defaultSpriteVS.GetBytecode());
-	defaultSpritePSO.SetPixelShader(defaultPS.GetBytecode());
-	defaultSpritePSO.SetSampleMask(D3D12_DEFAULT_SAMPLE_MASK);
-	defaultSpritePSO.Finalize();
-	sGraphicsPSOs.push_back(defaultSpritePSO);
-	sGraphicsPSOIndexMap[defaultSpritePSOName] = static_cast<uint32_t>(sGraphicsPSOs.size()) - 1;
-	sRootSignatures.push_back(std::move(defaultSpriteRootSignature));
-	sRootSignatureIndexMap[defaultSpritePSOName] = static_cast<uint32_t>(sRootSignatures.size()) - 1;
+		std::vector<D3D12_INPUT_ELEMENT_DESC> spriteInputLayout = InputLayoutBuilder::BuildFromReflection(spriteVsReflection);
+
+
+		GraphicsPSO defaultSpritePSO(defaultSpritePSOName);
+
+		defaultSpritePSO.SetRootSignature(*defaultSpriteRootSignature);
+		defaultSpritePSO.SetRasterizerState(rasterizerSpriteDesc);
+		defaultSpritePSO.SetBlendState(blendSpriteDesc);
+		defaultSpritePSO.SetDepthStencilState(depthStencilSpriteDesc);
+		defaultSpritePSO.SetInputLayout(spriteInputLayout);
+		defaultSpritePSO.SetPrimitiveTopologyType(D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
+		defaultSpritePSO.SetRenderTargetFormats(1, rtvFormat, DXGI_FORMAT_UNKNOWN);
+		defaultSpritePSO.SetVertexShader(defaultSpriteVS.GetBytecode());
+		defaultSpritePSO.SetPixelShader(defaultPS.GetBytecode());
+		defaultSpritePSO.SetSampleMask(D3D12_DEFAULT_SAMPLE_MASK);
+		defaultSpritePSO.Finalize();
+		sGraphicsPSOs.push_back(defaultSpritePSO);
+		sGraphicsPSOIndexMap[defaultSpritePSOName] = static_cast<uint32_t>(sGraphicsPSOs.size()) - 1;
+		sRootSignatures.push_back(std::move(defaultSpriteRootSignature));
+		sRootSignatureIndexMap[defaultSpritePSOName] = static_cast<uint32_t>(sRootSignatures.size()) - 1;
+	}
 
 	//primitive
 	{

@@ -1,218 +1,166 @@
-//#include "SpritePass.h"
-//#include "engine/Math/Types/Calculations/Matrix3x3Calculations.h"
-//#include "engine/Functions/Shader/ShaderReflection.h"
-//#include "../RenderSystem.h"
-//#include "engine/Math/Types/Calculations/Matrix4x4Calculations.h"
-//
-//namespace NoEngine {
-//namespace Render {
-//
-//using namespace Component;
-//
-//namespace {
-//Matrix4x4 viewProjectionMatrix_;
-//}
-//
-//SpritePass::SpritePass() {
-//	uint32_t indexData[] = { 0, 1, 2, 1, 3, 2 };
-//
-//	indexBuffer_.Create(L"Sprite Index Buffer", sizeof(indexData), sizeof(uint32_t), indexData);
-//	indexBufferView_ = indexBuffer_.IndexBufferView();
-//
-//	viewProjectionMatrix_ = MathCalculations::MakePerspectiveFovMatrix(0.45f, 1.777f, 0.1f, 1000.f);
-//	viewProjectionMatrix_ = MathCalculations::Inverse(MathCalculations::MakeAffineMatrix({ Vector3::UNIT_SCALE }, { Quaternion::IDENTITY }, { Vector3::ZERO })) * viewProjectionMatrix_;
-//}
-//
-//SpritePass::~SpritePass() {}
-//
-//void SpritePass::Execute(GraphicsContext& gfx, ECS::Registry& registry) {
-//	Collect(registry);
-//	Sort();
-//	BuildBatches();
-//	BuildVertexBuffers(gfx);
-//	Render(gfx);
-//}
-//
-//void SpritePass::Collect(ECS::Registry& registry) {
-//	auto view = registry.View<
-//		Transform2DComponent,
-//		SpriteComponent,
-//		MaterialComponent
-//	>();
-//
-//	items_.clear();
-//
-//	for (auto entity : view) {
-//		auto* t = registry.GetComponent<Transform2DComponent>(entity);
-//		auto* s = registry.GetComponent<SpriteComponent>(entity);
-//		auto* m = registry.GetComponent<MaterialComponent>(entity);
-//
-//		items_.push_back({ t, s, m, m->pso });
-//	}
-//}
-//
-//void SpritePass::Sort() {
-//	std::sort(items_.begin(), items_.end(),
-//		[](const DrawItem& a, const DrawItem& b) {
-//			return std::tie(a.material->pso,
-//				
-//				a.sprite->layer,
-//				a.sprite->orderInLayer)
-//				< std::tie(b.material->pso,
-//					
-//					b.sprite->layer,
-//					b.sprite->orderInLayer);
-//		});
-//
-//}
-//
-//void SpritePass::BuildBatches() {
-//	batches_.clear();
-//	if (items_.empty()) return;
-//
-//	Batch current{};
-//	current.pso = items_[0].pso;
-//
-//
-//	size_t batchBegin = 0;
-//
-//	auto flushBatch = [&](size_t batchEnd) {
-//		Batch batch = current;
-//		batch.sprites = std::span<DrawItem>(&items_[batchBegin], batchEnd - batchBegin);
-//		batches_.push_back(std::move(batch));
-//		};
-//
-//	for (size_t i = 1; i < items_.size(); ++i) {
-//		auto& item = items_[i];
-//		if (item.pso != current.pso) {
-//			flushBatch(i);
-//			batchBegin = i;
-//			current.pso = item.pso;
-//		
-//		}
-//	}
-//
-//	flushBatch(items_.size());
-//
-//}
-//
-//
-//void SpritePass::BuildVertexBuffers(GraphicsContext& gfx) {
-//	(void)gfx;
-//	for (auto& batch : batches_) {
-//		const size_t spriteCount = batch.sprites.size();
-//		if (spriteCount == 0) continue;
-//
-//		const size_t vertexCount = spriteCount * 6;
-//		tempVertices_.resize(vertexCount);
-//
-//		size_t cursor = 0;
-//		for (auto& item : batch.sprites) {
-//			BuildQuadVertices(
-//				std::span<SpriteVertex>(tempVertices_.data(), tempVertices_.size()),
-//				cursor,
-//				*item.transform,
-//				*item.sprite,
-//				*item.material
-//			);
-//		}
-//
-//		batch.vertexCount = static_cast<uint32_t>(vertexCount);
-//		batch.vertexBuffer.Create(L"Sprite Vertex Buffer", sizeof(SpriteVertex) * static_cast<uint32_t>(tempVertices_.size()), sizeof(SpriteVertex), tempVertices_.data());
-//	}
-//}
-//
-//void SpritePass::Render(GraphicsContext& gfx) {
-//	if (batches_.empty()) return;
-//
-//	// 共通の IndexBuffer をセットします。
-//	// gfx.SetIndexBuffer(indexBufferView_);
-//
-//	GraphicsPSO* currentPSO = nullptr;
-//	TextureRef currentTexture;
-//	
-//	for (auto& batch : batches_) {
-//		if (batch.vertexCount == 0) continue;
-//
-//		if (batch.pso == nullptr) {
-//			gfx.SetRootSignature(Render::GetRootSignature("defaultSpriteRootSignature"));
-//			gfx.SetPipelineState(Render::GetPSO(L"Renderer : Default Sprite PSO"));
-//		} else if (batch.pso != currentPSO) {
-//			gfx.SetPipelineState(*batch.pso);
-//			currentPSO = batch.pso;
-//		}
-//	
-//		if (!currentTexture.IsValid() ||
-//			batch.texture.Get() != currentTexture.Get()) {
-//			std::unordered_map<std::string, uint32_t>& rootIndex = RootSignatureBuilder::GetRootIndexMap("defaultSpriteRootSignature");
-//			gfx.SetDynamicConstantBufferView(rootIndex["gCamera"], sizeof(Matrix4x4), &viewProjectionMatrix_);
-//			gfx.SetDynamicDescriptor(rootIndex["gTexture"], 0, batch.texture->GetSRV());
-//			currentTexture = batch.texture;
-//		}
-//
-//		D3D12_VERTEX_BUFFER_VIEW vbv = batch.vertexBuffer.VertexBufferView(0, sizeof(SpriteVertex) * static_cast<uint32_t>(tempVertices_.size()), sizeof(SpriteVertex));
-//		gfx.SetVertexBuffer(0, vbv);
-//		gfx.Draw(batch.vertexCount);
-//	}
-//
-//}
-//
-//void SpritePass::BuildQuadVertices(
-//	std::span<SpriteVertex> dst,
-//	size_t& cursor,
-//	const Transform2DComponent& tr,
-//	const SpriteComponent& sprite,
-//	const MaterialComponent& mat) {
-//	(void)mat;
-//	// アンカーポイント反映処理
-//	float left = 0.f - sprite.pivot.x;
-//	float right = 1.f - sprite.pivot.x;
-//	float top = 0.f - sprite.pivot.y;
-//	float bottom = 1.f - sprite.pivot.y;
-//
-//	Vector2 local[4] = {
-//		{ left,      bottom   },
-//		{ left,      top      },
-//		{ right,     bottom   },
-//		{ right,     top      },
-//	};
-//
-//	// flip
-//	if (sprite.flipX) {
-//		for (auto& p : local) p.x = -p.x;
-//	}
-//	if (sprite.flipY) {
-//		for (auto& p : local) p.y = -p.y;
-//	}
-//
-//	// Transform2D を適用（2D の position/rotation/scale → 3D 位置へ）
-//	Matrix3x3 m = tr.MakeAffineMatrix3x3(); // Transform2D に行列生成メソッドがある前提
-//	Vector2 worldPos[4];
-//	for (int i = 0; i < 4; ++i) {
-//		Vector2 p2 = local[i];
-//		worldPos[i] = MathCalculations::TransformPoint(p2, m);
-//	}
-//
-//	// UV（flipX/flipY は UV 側で処理しても良い）
-//	Rect uv = {};
-//	Vector2 uvs[4] = {
-//		{ uv.x,         uv.y + uv.height },
-//		{ uv.x + uv.width,  uv.y + uv.height },
-//		{ uv.x,         uv.y        },
-//		{ uv.x + uv.width,  uv.y        },
-//	};
-//
-//	// 6頂点（0,1,2, 2,1,3）
-//	auto write = [&](int idx) {
-//		auto& v = dst[cursor++];
-//		v.position = Vector4(worldPos[idx].x, worldPos[idx].y, 0.f, 1.f);
-//		v.texcoord = uvs[idx];
-//		};
-//
-//	write(0); write(1); write(2);
-//	write(2); write(1); write(3);
-//
-//}
-//
-//}
-//}
+#include "SpritePass.h"
+#include "engine/Runtime/GpuResource/UploadBuffer.h"
+#include "engine/Functions/Shader/ShaderReflection.h"
+#include "engine/Math/Types/Calculations/Matrix3x3Calculations.h"
+#include "engine/Math/Types/Calculations/Matrix4x4Calculations.h"
+#include "engine/Functions/Renderer/RenderSystem.h"
+#include "engine/Runtime/GraphicsCore.h"
+
+namespace NoEngine {
+namespace Render {
+
+using namespace Component;
+
+NoEngine::Render::SpritePass::SpritePass() {
+
+	auto size = GraphicsCore::gWindowManager.GetMainWindow()->GetWindowSize();
+	orthographicMatrix_ = MathCalculations::MakeOrthographicMatrix(0.f, 0.f, static_cast<float>(size.clientWidth), static_cast<float>(size.clientHeight), 0.1f, 100.f);
+
+}
+
+SpritePass::~SpritePass() {}
+
+void SpritePass::Execute(GraphicsContext& gfx, ECS::Registry& registry) {
+	Collect(registry);
+	Sort();
+	GenerateVertices();
+	Render(gfx);
+}
+
+void SpritePass::Collect(ECS::Registry& registry) {
+	auto view = registry.View<
+		Transform2DComponent,
+		SpriteComponent
+	>();
+
+	items_.clear();
+
+	if (view.Empty()) return;
+
+	for (auto entity : view) {
+		auto* transform = registry.GetComponent<Transform2DComponent>(entity);
+		auto* sprite = registry.GetComponent<SpriteComponent>(entity);
+
+		items_.push_back({ transform, sprite });
+	}
+}
+
+void SpritePass::Sort() {
+	std::sort(items_.begin(), items_.end(), [](const DrawItem& a, const DrawItem& b) {
+		if (a.sprite->layer != b.sprite->layer) return a.sprite->layer < b.sprite->layer;
+		if (a.sprite->orderInLayer != b.sprite->orderInLayer) return a.sprite->orderInLayer < b.sprite->orderInLayer;
+		return a.sprite->textureHandle < b.sprite->textureHandle;
+		});
+	/*
+	std::sort(items_.begin(), items_.end(),
+		[](const DrawItem& a, const DrawItem& b) {
+			if (a.psoId != b.psoId) return a.psoId < b.psoId;
+			return a.distanceToCamera < b.distanceToCamera;
+		});
+	*/
+}
+
+void SpritePass::MakeLocalQuad(const DrawItem& item, Vector2 out[4]) {
+	Vector2 size = { 1.f,1.f };
+
+	// pivot を中心にローカル座標を作る
+	Vector2 origin{ size.x * item.sprite->pivot.x, size.y * item.sprite->pivot.y };
+
+	float left = -origin.x;
+	float right = size.x - origin.x;
+	float top = -origin.y;
+	float bottom = size.y - origin.y;
+
+	if (item.sprite->flipX) std::swap(left, right);
+	if (item.sprite->flipY) std::swap(top, bottom);
+
+	out[0] = { left,  top };
+	out[1] = { right, top };
+	out[2] = { left,  bottom };
+	out[3] = { right, bottom };
+}
+
+void SpritePass::GenerateVertices() {
+	vertices_.clear();
+	indices_.clear();
+	uint16_t indexOffset = 0;
+	for (auto& item : items_) {
+		auto* t = item.transform;
+
+		Vector2 local[4];
+		MakeLocalQuad(item, local);
+		Quaternion rotate;
+		rotate.FromAxisAngle(Vector3(0.f, 0.f, 1.f), t->rotation);
+		Matrix4x4 mat;
+		mat.MakeAffine({ t->scale.x,t->scale.y,0.f }, rotate, { t->translate.x,t->translate.y,0.f });
+
+		Vector3 world[4];
+		for (int i = 0; i < 4; i++) {
+			world[i] = MathCalculations::Transform(Vector3(local[i].x, local[i].y, 0.f), mat);
+		}
+
+		Rect uv = item.sprite->uv;
+		Vector2 uvs[4] = {
+			{ uv.x,			    uv.y			 },
+			{ uv.x + uv.width,  uv.y			 },
+			{ uv.x,			    uv.y + uv.height },
+			{ uv.x + uv.width,  uv.y + uv.height },
+		};
+
+		// 頂点追加
+		for (int i = 0; i < 4; i++) {
+			Vector4 worldVec4 = { world[i].x, world[i].y,0.f,1.f };
+			vertices_.push_back({ worldVec4, uvs[i] });
+		}
+
+		// インデックス追加
+		indices_.push_back(indexOffset + 0);
+		indices_.push_back(indexOffset + 1);
+		indices_.push_back(indexOffset + 2);
+		indices_.push_back(indexOffset + 1);
+		indices_.push_back(indexOffset + 3);
+		indices_.push_back(indexOffset + 2);
+
+		indexOffset += 4;
+	}
+
+}
+
+void SpritePass::Render(GraphicsContext& gfx) {
+	if (vertices_.empty()) return;
+
+	std::unordered_map<std::string, uint32_t>& rootIndex = RootSignatureBuilder::GetRootIndexMap("Renderer : Default Sprite PSO");
+	gfx.SetPipelineState(GetPSO(Render::GetPSOID(L"Renderer : Default Sprite PSO")));
+	gfx.SetRootSignature(GetRootSignature(Render::GetRootSignatureID(L"Renderer : Default Sprite PSO")));
+	gfx.SetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	gfx.SetDynamicConstantBufferView(rootIndex["gCameraMatrix"], sizeof(Matrix4x4), &orthographicMatrix_);
+	gfx.SetDynamicVB(0, vertices_.size(), sizeof(SpriteVertex), vertices_.data());
+	gfx.SetDynamicIB(indices_.size(), indices_.data());
+	size_t start = 0;
+	
+	gfx.SetDynamicConstantBufferView(rootIndex["gMaterial"], sizeof(Color), &Color::WHITE);
+
+	while (start < items_.size()) {
+		TextureRef tex = items_[start].sprite->textureHandle;
+
+		size_t end = start + 1;
+		while (end < items_.size() &&
+			items_[end].sprite->textureHandle == tex) {
+			end++;
+		}
+
+		// この範囲でDrawCall
+		uint32_t indexStart = static_cast<uint32_t>(start) * 6;
+		uint32_t indexCount = static_cast<uint32_t>(end - start) * 6;
+
+
+		gfx.SetDynamicDescriptor(rootIndex["gTexture"], 0, tex.GetSRV());
+		gfx.DrawIndexedInstanced(indexCount, 1, indexStart, 0, 0);
+
+		start = end;
+	}
+
+}
+
+}
+}

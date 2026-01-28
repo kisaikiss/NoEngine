@@ -25,14 +25,46 @@ void NormalEnemyControlSystem::Update(No::Registry& registry, float deltaTime)
     }
 
 
-    auto view = registry.View <
-        NormalEnemyTag,
-        DeathFlag,
-        NormalEnemyComponent,
+    //for (auto entity : view)
+    //{
+    //    auto* material = registry.GetComponent<No::MaterialComponent>(entity);
+    //    auto* collider = registry.GetComponent<SphereColliderComponent>(entity);
+
+    //    if (collider->isCollied) {
+
+    //        material->materials[0].color = NoEngine::Color(1.0f, 0.0f, 0.0f, 1.0f);
+    //        /*          enemy->velocity *= -10.0f;
+    //                  enemy->hp--;*/
+
+    //                  /*       if (enemy->hp <= 0) {
+
+
+    //                         }*/
+    //    } else {
+    //        material->materials[0].color = NoEngine::Color(1.0f, 1.0f, 1.0f, 1.0f);
+    //    }
+
+    //}
+    auto view = registry.View<
+        No::TransformComponent,
+        No::MaterialComponent,
         SphereColliderComponent,
-        TransformComponent,
-        No::MeshComponent,
-        No::MaterialComponent>();
+        NormalEnemyComponent>();
+
+    No::TransformComponent* vausTransform = nullptr;
+
+    auto vausView = registry.View<
+        No::TransformComponent,
+        VausTag>();
+
+    for (auto vausEntity : vausView) {
+        vausTransform = registry.GetComponent<TransformComponent>(vausEntity);
+    }
+
+    if (vausTransform == nullptr) {
+        return;
+    }
+    (void)deltaTime;
 
     for (auto entity : view)
     {
@@ -40,6 +72,7 @@ void NormalEnemyControlSystem::Update(No::Registry& registry, float deltaTime)
         auto* material = registry.GetComponent<No::MaterialComponent>(entity);
         auto* collider = registry.GetComponent<SphereColliderComponent>(entity);
 
+        transform->translate += enemy->velocity * deltaTime;
         Primitive::DrawSphere(transform->translate, collider->radius, NoEngine::Color(1.0f, 0.f, 0.f));
 
         if (collider->isCollied)
@@ -57,7 +90,9 @@ void NormalEnemyControlSystem::Update(No::Registry& registry, float deltaTime)
         ImGui::DragFloat3("translate", &transform->translate.x, 0.05f);
         ImGui::DragFloat3("scale", &transform->scale.x, 0.05f);
         ImGui::DragFloat4("rotate", &transform->rotation.x, 0.04f);
-
+        ImGui::Text("collied %s", collider->isCollied ? "true" : "false");
+		ImGui::Text("colliedWith %u", static_cast<uint32_t>(collider->colliedWith));
+        ImGui::Text("colliedEntity %u", static_cast<uint32_t>(collider->colliedEntity));
         ImGui::End();
 
 #endif // USE_IMGUI
@@ -91,14 +126,13 @@ void EnemyAppear::Enter(No::Registry& registry, NormalEnemyControlSystem* ownerT
 
 }
 
-void EnemyAppear::Update(No::Registry& registry, NormalEnemyControlSystem* ownerType)
+void EnemyAppear::Update(No::Registry& registry, NormalEnemyControlSystem* ownerType, float deltaTime)
 {
     (void)ownerType;
-
-    auto view = registry.View <
-        NormalEnemyTag,
-        DeathFlag,
-        NormalEnemyComponent,
+	(void)deltaTime;
+    auto view = registry.View<
+        No::TransformComponent,
+        No::MaterialComponent,
         SphereColliderComponent,
         TransformComponent,
         No::MeshComponent,
@@ -128,7 +162,7 @@ void EnemyChase::Enter(No::Registry& registry, NormalEnemyControlSystem* ownerTy
 
 }
 
-void EnemyChase::Update(No::Registry& registry, NormalEnemyControlSystem* ownerType)
+void EnemyChase::Update(No::Registry& registry, NormalEnemyControlSystem* ownerType,float deltaTime)
 {
     (void)ownerType;
 
@@ -176,7 +210,7 @@ void EnemyChase::Update(No::Registry& registry, NormalEnemyControlSystem* ownerT
         enemy->velocity.x = speed * direction.x;
         enemy->velocity.y = speed * direction.y;
 
-        transform->translate += enemy->velocity * 0.016f;
+        transform->translate += enemy->velocity * deltaTime;
         Primitive::DrawSphere(transform->translate, collider->radius, NoEngine::Color(1.0f, 0.f, 0.f));
 
     }

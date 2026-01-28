@@ -1,6 +1,7 @@
 #include "AnimationSystem.h"
 #include "engine/Functions/Renderer/Primitive.h"
 #include "engine/Math/Types/Calculations/Matrix4x4Calculations.h"
+#include "engine/Math/Types/Calculations/QuaternionCalculations.h"
 
 namespace NoEngine {
 namespace ECS {
@@ -15,7 +16,7 @@ void AnimationSystem::AnimationUpdate(Registry& registry, float deltaTime) {
 	for (auto entity : view) {
 		auto* animeComp = registry.GetComponent<Component::AnimatorComponent>(entity);
 		auto* meshComp = registry.GetComponent<Component::MeshComponent>(entity);
-		if (!animeComp->animation || !meshComp->mesh) break;
+		if (!animeComp->animation || !meshComp->mesh) continue;
 		animeComp->time += deltaTime;
 		animeComp->time = std::fmod(animeComp->time, animeComp->animation->duration);
 		if (animeComp->skeleton) {
@@ -114,7 +115,7 @@ Quaternion AnimationSystem::CalculateValue(const std::vector<KeyframeQuaternion>
 		if (keyframes[index].time <= time && time <= keyframes[nextIndex].time) {
 			// 範囲内を補間する
 			float t = (time - keyframes[index].time) / (keyframes[nextIndex].time - keyframes[index].time);
-			return Easing::Lerp(keyframes[index].value, keyframes[nextIndex].value, t);
+			return MathCalculations::Slerp(keyframes[index].value, keyframes[nextIndex].value, t);
 		}
 	}
 	// ここまできた場合は一番後の時刻よりも後ろなので最後の値を返すことにする

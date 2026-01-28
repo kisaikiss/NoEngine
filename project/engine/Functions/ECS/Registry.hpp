@@ -5,12 +5,14 @@ namespace ECS{
 template<typename CompType>
 CompType* Registry::AddComponent(const Entity entity) {
 	size_t type = Utilities::TypeID<CompType>();
-	if (!componentPools_[type]) {
-		// コンポーネントプールを実体化します。
-		componentPools_[type] = std::make_shared<ComponentPool<CompType>>();
+	if (componentPools_.size() <= type) {
+		componentPools_.resize(type + 1);
+		componentPools_[type] = std::make_unique<ComponentPool<CompType>>();
 	}
+
+
 	// 追加するコンポーネントを格納するコンテナクラスを取得
-	std::shared_ptr<ComponentPool<CompType>> compPool = std::static_pointer_cast<ComponentPool<CompType>>(componentPools_[type]);
+	ComponentPool<CompType>* compPool = static_cast<ComponentPool<CompType>*>(componentPools_[type].get());
 	// コンポーネントを追加し取得
 	CompType* resultComp = compPool->AddComponent(entity);
 
@@ -21,7 +23,7 @@ CompType* Registry::AddComponent(const Entity entity) {
 template<typename CompType>
 void Registry::RemoveComponent(const Entity entity) {
 	// 削除するコンポーネントを格納するコンテナクラスを取得
-	std::shared_ptr<ComponentPool<CompType>> compPool = std::static_pointer_cast<ComponentPool<CompType>>(componentPools_[Utilities::TypeID<CompType>()]);
+	ComponentPool<CompType>* compPool = static_cast<ComponentPool<CompType>*>(componentPools_[Utilities::TypeID<CompType>()]);
 	// コンポーネントをエンティティから取り外す
 	compPool->RemoveComponent(entity);
 }
@@ -51,10 +53,9 @@ bool Registry::HasAll(Entity e) const {
 
 template<typename CompType>
 ComponentPool<CompType>* Registry::GetPool() const {
-	auto it = componentPools_.find(Utilities::TypeID<CompType>());
-	if (it == componentPools_.end()) return nullptr;
+	if (componentPools_.size() <= Utilities::TypeID<CompType>()) return nullptr;
 
-	return static_cast<ComponentPool<CompType>*>(it->second.get());
+	return static_cast<ComponentPool<CompType>*>(componentPools_[Utilities::TypeID<CompType>()].get());
 }
 
 template<typename... Components>

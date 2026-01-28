@@ -67,4 +67,8 @@ Quaternion operator*(const Quaternion& q, float s) {
 Quaternion operator*(float s, const Quaternion& q) {
 	return operator*(q, s);
 }
+Quaternion operator-(const Quaternion& q0, const Quaternion& q1)
+{
+	return Quaternion(q0.x - q1.x, q0.y - q1.y, q0.z - q1.z, q0.w - q1.w);
+}
 }

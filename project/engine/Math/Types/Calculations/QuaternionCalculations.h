@@ -26,6 +26,6 @@ Vector3 RotateVector(const Vector3& vector, const Quaternion& quaternion);
 
 Matrix4x4 MakeRotateMatrix(const Quaternion& quaternion);
 
-Quaternion Slerp(Quaternion q0, Quaternion q1, float t);
+Quaternion Slerp(const Quaternion& q0,const Quaternion& q1, float t);
 }
 }

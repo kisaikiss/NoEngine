@@ -25,7 +25,7 @@ void BallControlSystem::Update(No::Registry& registry, float deltaTime)
 		SphereColliderComponent,
 		PhysicsComponent,
 		BallStateComponent,
-		BallTag,DeathFlag>();
+		BallTag, DeathFlag>();
 
 	auto vausView = registry.View<
 		No::TransformComponent,
@@ -39,7 +39,7 @@ void BallControlSystem::Update(No::Registry& registry, float deltaTime)
 		//auto* ballDeathFlag = registry.GetComponent<DeathFlag>(entityBall);
 		auto* ballPhysics = registry.GetComponent<PhysicsComponent>(entityBall);
 		auto* ballState = registry.GetComponent<BallStateComponent>(entityBall);
-		
+
 		for (auto entityVaus : vausView)
 		{
 			auto* vausTransform = registry.GetComponent<No::TransformComponent>(entityVaus);
@@ -47,7 +47,7 @@ void BallControlSystem::Update(No::Registry& registry, float deltaTime)
 
 			if (ballState->landed)
 			{
-				// プラットフォームに一貫して追従させる
+				// プラットフォームに一配置して追従させる
 				Vector3 normal = MathCalculations::Normalize(-vausTransform->translate);
 				ballTransform->translate =
 					vausTransform->translate + normal * (ballCollider->radius * 1.75f);
@@ -68,47 +68,60 @@ void BallControlSystem::Update(No::Registry& registry, float deltaTime)
 					ballPhysics->velocity += accel * deltaTime;
 				}
 
-				// 距離がリング半径近傍で、パドルに当たる場合は反射処理（既存ロジック）
+				// 距離がリング半径付近で、パドルに当たる場合は反射処理（既存ロジック）
 				float dist = MathCalculations::Length(ballTransform->translate);
-				if (dist >= vausState->currentRingRadius - 0.25f)
+
+				// 判定閾値を定数ではなく球の半径ベースに変更（球表面がリングに当たるタイミング）
+				if (dist >= vausState->currentRingRadius - ballCollider->radius)
 				{
 					float theta = std::atan2(ballTransform->translate.y, ballTransform->translate.x);
 					float diff = NormalizeAngle(theta - vausState->theta);
 
 					float halfTheta = 3.5f / vausState->currentRingRadius * 0.5f;
-					if (std::fabs(diff) <= halfTheta)
+					if (fabs(diff) <= halfTheta)
 					{
-						constexpr float tangentStrength = 0.8f;
-						// 法線方向（円の中心から球に向かう方向）
-						auto normal = MathCalculations::Normalize(ballTransform->translate);
-						float targetDist = vausState->currentRingRadius - ballCollider->radius;
-						ballTransform->translate = normal * targetDist;
+						auto normal = MathCalculations::Normalize(Vector3::ZERO - ballTransform->translate);
 
-						// 反射
-						float dot = MathCalculations::Dot(ballPhysics->velocity, normal);
-						auto reflected = ballPhysics->velocity - 2 * dot * normal;
-						reflected *= ballPhysics->coefficient;
-						// 接線方向（円弧方向）を計算します。
-						auto tangent = MathCalculations::Normalize(Vector3(-normal.y, normal.x, 0.0f));
-						//接触点はバウンス角に影響します: -1 ~ 1
+						Vector3 tangent =
+							MathCalculations::Normalize(
+								Vector3(-normal.y, normal.x, 0)
+							);
+
 						float hitFactor = diff / halfTheta;
-						// 接線オフセットを追加
-						reflected += tangent * hitFactor * tangentStrength;
+						constexpr float kAngleBias = 0.1f;
 
-						//速度更新（速度大きさは維持）
-						float speed = MathCalculations::Length(ballPhysics->velocity);
-						reflected = MathCalculations::Normalize(reflected) * speed;
-						float impulse =
-							vausState->chargePower * VausStateComponent::kPower * ballPhysics->friction;
-						reflected += normal * impulse;
+						Vector3 dir = MathCalculations::Normalize(
+							normal + tangent * hitFactor * kAngleBias
+						);
 
-						ballPhysics->velocity = reflected;
+						float baseSpeed = ballPhysics->baseSpeed;
+
+						float platformSpeed = 0.0f;
+						if (vausState->hasReleasedMovement &&
+							vausState->releaseTime > 0.0f)
+						{
+							Vector3 avgVel =
+								vausState->releaseVelocityAccum / vausState->releaseTime;
+							platformSpeed = MathCalculations::Length(avgVel);
+						}
+
+						float extraSpeed =
+							platformSpeed + vausState->chargePower * vausState->kPower;
+						extraSpeed = std::min(extraSpeed, 15.0f);
+
+						ballPhysics->velocity =
+							dir * (baseSpeed + extraSpeed);
+
+						vausState->hasReleasedMovement = false;
+						vausState->releaseTime = 0.0f;
+						vausState->releaseVelocityAccum = Vector3::ZERO;
 					}
+
 				}
 			}
 		}
 
-		// 敵との衝突処理（吸着を防ぐために分離→接近している場合のみ反射）
+		// 敵との衝突処理（既存）
 		if (ballCollider->isCollied && (static_cast<uint32_t>(ballCollider->colliedWith) & static_cast<uint32_t>(ColliderMask::kEnemy)) != 0)
 		{
 			// colliedEntity が有効であることを前提とする
@@ -145,29 +158,27 @@ void BallControlSystem::Update(No::Registry& registry, float deltaTime)
 				if (relVelAlongNormal < 0.0f)
 				{
 					// 法線成分と接線成分に分けて反射・摩擦を適用
-					float e = ballPhysics->coefficient; // 復元係数
+					float e = ballPhysics->coefficient; // 反発係数
 					Vector3 vNormal = normal * relVelAlongNormal; // 向きは負になる
 					Vector3 vTangent = ballPhysics->velocity - vNormal;
 
-					Vector3 vNormalAfter = -e * vNormal; // 反射（法線成分を反転して復元係数を適用）
-					Vector3 vTangentAfter = vTangent * ballPhysics->friction; // 接線は摩擦係数で減衰
+					Vector3 vNormalAfter = -e * vNormal; // 反射（法線成分を反転して反発係数を適用）
+					Vector3 vTangentAfter = vTangent * ballPhysics->friction; // 接線は摩擦で減衰
 
 					ballPhysics->velocity = vNormalAfter + vTangentAfter;
 
-					// 速度が非常に小さい場合は小さな分離速度を追加して吸着防止
+					// 速度が非常に小さい場合は少しだけ押し返して吸着を防止
 					if (MathCalculations::Length(ballPhysics->velocity) < 0.05f)
 					{
 						ballPhysics->velocity += normal * 0.1f;
 					}
 				}
-			}
-		}
+			}		}
 
 		// 移動更新
 		ballTransform->translate += ballPhysics->velocity * deltaTime;
 
 
-		Primitive::DrawSphere(ballTransform->translate, ballCollider->radius, NoEngine::Color(1.0f,0.7f,0.f));
+		Primitive::DrawSphere(ballTransform->translate, ballCollider->radius, NoEngine::Color(1.0f, 0.7f, 0.f));
 	}
 }
-

@@ -24,4 +24,25 @@ void TestSystem::Update(No::Registry& registry, float deltaTime) {
 		ImGui::End();	
 #endif // USE_IMGUI
 	}
+
+	auto spriteView = registry.View < No::Transform2DComponent, No::SpriteComponent>();
+
+	for (auto entity : spriteView) {
+#ifdef USE_IMGUI
+		auto* a = registry.GetComponent<No::Transform2DComponent>(entity);
+		auto* sp = registry.GetComponent<No::SpriteComponent>(entity);
+		std::string imGuiName = "sprite" + std::to_string(entity);
+		ImGui::Begin(imGuiName.c_str());
+		ImGui::DragFloat2("translate", &a->translate.x, 1.f);
+		ImGui::DragFloat2("scale", &a->scale.x, 0.1f);
+		ImGui::DragFloat("rotate", &a->rotation, 0.04f);
+		ImGui::DragFloat2("pivot", &sp->pivot.x, 0.05f, 0.f, 1.f);
+		ImGui::Checkbox("flipX", &sp->flipX);
+		ImGui::Checkbox("flipY", &sp->flipY);
+		ImGui::DragFloat4("uv", &sp->uv.x, 0.05f);
+		ImGui::End();
+
+#endif // USE_IMGUI
+	}
+
 }

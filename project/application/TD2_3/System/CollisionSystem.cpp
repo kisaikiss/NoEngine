@@ -12,19 +12,15 @@ void CollisionSystem::Update(No::Registry& registry, float deltaTime)
 	auto sphereView = registry.View<SphereColliderComponent>();
 	//auto boxView = registry.View<BoxColliderComponent>();
 	//球
-	int count = 0;
 	for (auto entity1 : sphereView)
 	{
 		if (!registry.Has<SphereColliderComponent>(entity1))continue;
 		auto* a = registry.GetComponent<SphereColliderComponent>(entity1);
-		a->isCollied = false;
-		count++;
 		//球
 		for (auto entity2 : sphereView)
 		{
-			if (entity1 == entity2)continue;
+			if (entity1 == entity2 || !registry.Has<SphereColliderComponent>(entity2))continue;
 			auto* b = registry.GetComponent<SphereColliderComponent>(entity2);
-			b->isCollied = false;
 			if ((a->colliderType & b->collideMask) == 0 || (b->colliderType & a->collideMask) == 0) continue;
 
 			if (CheckSphereToSphere(a->center, b->center, a->worldRadius, b->worldRadius))
@@ -86,6 +82,7 @@ void CollisionSystem::UpdateCollider(No::Registry& registry)
 
 		float maxScale = std::max({ std::abs(transformA->scale.x), std::abs(transformA->scale.y), std::abs(transformA->scale.z) });
 		sphereA->worldRadius = sphereA->radius * maxScale;
+		sphereA->isCollied = false;
 	}
 	//ボックスコライダー更新
 	//for (auto entity : boxView)
