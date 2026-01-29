@@ -97,10 +97,10 @@ void GameScene::InitVaus(No::Registry& registry)
     transform->translate = { 0.f, -4.85f, 0.f };
 
     auto* model = registry.AddComponent<No::MeshComponent>(vausEntity);
-    NoEngine::ModelLoader::LoadModel("Vaus", "resources/engine/Model/testVaus.obj", model);
+    NoEngine::ModelLoader::LoadModel("bar", "resources/game/td_2304/Model/bar/bar.obj", model);
 
 	auto* m = registry.AddComponent<No::MaterialComponent>(vausEntity);
-	m->materials = NoEngine::ModelLoader::GetMaterial("Vaus");
+	m->materials = NoEngine::ModelLoader::GetMaterial("bar");
 	m->materials.front().color = {0.8f,0.2f,0.2f};
 
     m->psoName = L"Renderer : Default PSO";
@@ -115,10 +115,10 @@ void GameScene::InitRing(No::Registry& registry)
     registry.AddComponent< RingAnimationComponent>(ringEntity);
     registry.AddComponent<No::TransformComponent>(ringEntity);
     auto* model = registry.AddComponent<No::MeshComponent>(ringEntity);
-    NoEngine::ModelLoader::LoadModel("ring", "resources/engine/Model/testRing.obj", model);
+    NoEngine::ModelLoader::LoadModel("circle", "resources/game/td_2304/Model/circle/circle.obj", model);
 
 	auto m = registry.AddComponent<No::MaterialComponent>(ringEntity);
-	m->materials = NoEngine::ModelLoader::GetMaterial("ring");
+	m->materials = NoEngine::ModelLoader::GetMaterial("circle");
 	m->materials.front().color.a = 0.7f;
 	m->materials.front().color.b = 0.5f;
 

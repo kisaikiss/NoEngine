@@ -204,6 +204,7 @@ void SoundStop(std::string name) {
 		return;
 	}
 	HRESULT hr = soundData[name].pSourceVoice->Stop();
+	(void)hr;
 	assert(SUCCEEDED(hr));
 }
 

@@ -4,7 +4,7 @@
 
 namespace NoEngine {
 
-__declspec(align(16))struct Matrix4x4 {
+/*__declspec(align(16))*/struct Matrix4x4 {
 public:
 	float m[4][4];
 
