@@ -5,6 +5,7 @@
 #include "../../Component/BallStateComponent.h"
 #include "../../Component/NormalEnemyComponent.h"
 #include "../../Component/TrackEnemyComponent.h"
+#include "../../Component/BackGroundComponent.h"
 
 #include "../../tag.h"
 #include "engine/Functions/Renderer/Primitive.h"
@@ -32,7 +33,8 @@ void BallControlSystem::Update(No::Registry& registry, float deltaTime)
 	auto vausView = registry.View<
 		No::TransformComponent,
 		VausStateComponent>();
-
+	
+	auto backGroundView = registry.View<BackGroundComponent>();
 	for (auto entityBall : ballView)
 	{
 		auto* ballTransform = registry.GetComponent<No::TransformComponent>(entityBall);

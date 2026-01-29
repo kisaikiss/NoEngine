@@ -92,20 +92,30 @@ void BackGroundEffectPass::Execute(NoEngine::GraphicsContext& gfx, NoEngine::ECS
 
 		auto& rootIndex = RootSignatureBuilder::GetRootIndexMap("BackGround PSO");
 
-		struct
+		struct VSConstants
 		{
 			Matrix4x4 WorldMat;
 			Matrix4x4 UVTransform;
 			Matrix4x4 ViewProjMat;
+		} vsConstants;
+		vsConstants.WorldMat = transform->MakeAffineMatrix4x4();
+		vsConstants.UVTransform = backGround->uvTransform;
+		vsConstants.ViewProjMat = GetCamera()->GetViewProjMatrix();
+
+		_declspec(align(16)) struct PSConstants
+		{
 			float time;
-		} Constants;
-		Constants.WorldMat = transform->MakeAffineMatrix4x4();
-		Constants.UVTransform = backGround->uvTransform;
-		Constants.ViewProjMat = GetCamera()->GetViewProjMatrix();
-		Constants.time = backGround->time;
+			float timeScale;
+			float powerFactor;
+			float pad;
+		} psConstants;
+		psConstants.time = backGround->time;
+		psConstants.timeScale = backGround->timeScale;
+		psConstants.powerFactor = backGround->powerFactor;
 
 		gfx.SetDynamicVB(0, meshData_.vertices.size(), sizeof(vertex), meshData_.vertices.data());
-		gfx.SetDynamicConstantBufferView(rootIndex["gWorld"], sizeof(Constants), &Constants);
+		gfx.SetDynamicConstantBufferView(rootIndex["gWorld"], sizeof(vsConstants), &vsConstants);
+		gfx.SetDynamicConstantBufferView(rootIndex["gControl"], sizeof(psConstants), &psConstants);
 
 		gfx.Draw(static_cast<UINT>(meshData_.vertices.size()), 0);
 	}

@@ -4,13 +4,11 @@
 #include "../../Component/RingAnimationComponent.h"
 #include "../../Component/VausStateComponent.h"
 #include "../../Component/BallStateComponent.h"
+#include "../../Component/BackGroundComponent.h"
 
-#include "engine/Functions/Renderer/Primitive.h"
-#include "engine/Math/Types/Calculations/Vector3Calculations.h"
 #include "engine/Math/Types/Calculations/QuaternionCalculations.h"
 #include "engine/Runtime/GraphicsCore.h"
 #include "engine/Math/Easing.h"
-#include "externals/imgui/imgui.h"
 #include "engine/Functions/Input/Input.h"
 
 using namespace NoEngine;
@@ -50,6 +48,8 @@ void VausControlSystem::Update(No::Registry& registry, float deltaTime)
 		No::MaterialComponent,
 		RingAnimationComponent>();
 	
+	auto backGroundView = registry.View<BackGroundComponent>();
+
 	// 現在のマウス角度（常に取得）
 	float mouseAngle = CalculateMouseAngle();
 
@@ -187,7 +187,7 @@ void VausControlSystem::Update(No::Registry& registry, float deltaTime)
 		vausTransform->rotation = MathCalculations::MakeRotateAxisAngleQuaternion(Vector3::FORWARD, angle + PI * 0.5f);
 		vausTransform->scale = Vector3::UNIT_SCALE * (1.0f + 0.2f * chargeTime_);
 		vausState->isReleasing = false;
-		ImGui::Text("RingRadius: %.3f", vausState->currentRingRadius);
+
 		if (wasPress_ && !isPress_)
 		{
 			vausState->isReleasing = true;
@@ -208,7 +208,12 @@ void VausControlSystem::Update(No::Registry& registry, float deltaTime)
 
 		vausState->prevPosition = vausTransform->translate;
 	}
+	for (auto entity : backGroundView)
+	{
+		auto* backGround = registry.GetComponent<BackGroundComponent>(entity);
+		backGround->powerFactor = Easing::Lerp(0.1f, 0.3f, chargeTime_);
 
+	}
 	wasPress_ = isPress_;
 	prevMouseAngle_ = mouseAngle;
 }
