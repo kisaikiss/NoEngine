@@ -43,6 +43,7 @@ void GameScene::Setup()
 
 	//player用システム
 	AddSystem(std::make_unique<VausControlSystem>());
+    AddSystem(std::make_unique<BallControlSystem>());
     //Enemy
     AddSystem(std::make_unique<NormalEnemyControlSystem>());
 	AddSystem(std::make_unique<BossControlSystem>());
@@ -53,7 +54,6 @@ void GameScene::Setup()
 
 	//衝突判定用システム
 	AddSystem(std::make_unique<CollisionSystem>());
-    AddSystem(std::make_unique<BallControlSystem>());
 
 	No::Registry& registry = *GetRegistry();
 	InitBackGround(registry);
@@ -218,8 +218,8 @@ void GameScene::InitBackGround(No::Registry& registry)
 {
     No::Entity backGroundEntity = registry.GenerateEntity();
     auto* transform = registry.AddComponent<No::TransformComponent>(backGroundEntity);
-    transform->translate.z = 1.0f;
-    transform->scale = { 25,25,25 };
+    transform->translate.z = 5;
+    transform->scale = { 30,30,1 };
 
     registry.AddComponent<BackGroundComponent>(backGroundEntity);
 }
