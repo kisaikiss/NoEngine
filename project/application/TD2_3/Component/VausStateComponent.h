@@ -13,5 +13,5 @@ struct VausStateComponent
 	NoEngine::Vector3 currentVelocity = NoEngine::Vector3::ZERO;
 
 	bool isReleasing = false;
-	static constexpr float kPower = 0.5f;
+	static constexpr float kPower = 150.0f;
 };
