@@ -6,6 +6,8 @@
 #include "../Component/VausStateComponent.h"
 #include "../Component/BackGroundComponent.h"
 #include"../Component/NormalEnemyComponent.h"
+#include"../Component/BatBossComponent.h"
+
 //collision
 #include "../System/CollisionSystem.h"
 //player
@@ -31,11 +33,13 @@ using namespace NoEngine;
 
 void GameScene::Setup()
 {
+    //乱数の初期化
+    srand(static_cast<unsigned int>(time(nullptr)));
+
 	//アニメーションシステム
 	AddSystem(std::make_unique<No::AnimationSystem>());
 	//effect
 	AddSystem(std::make_unique<BackGroundEffectSystem>());
-
 
 	//player用システム
 	AddSystem(std::make_unique<VausControlSystem>());
@@ -47,7 +51,6 @@ void GameScene::Setup()
 	AddSystem(std::make_unique<BatGirlControlSystem>());
 	//プレイヤー少女システム
 	AddSystem(std::make_unique<PlayerGirlControlSystem>());
-
 
 	//衝突判定用システム
 	AddSystem(std::make_unique<CollisionSystem>());
@@ -61,12 +64,15 @@ void GameScene::Setup()
 	InitBoss(registry);
 	InitBatGirl(registry);
 	InitPlayerGirl(registry);
+
 	constexpr Vector3 kStartCameraPosition = Vector3{ 0.0f, 0.0f, -28.0f };
 	//カメラ初期化
 	camera_ = std::make_unique<NoEngine::Camera>();
 	cameraTransform_.translate = kStartCameraPosition;
 	camera_->SetTransform(cameraTransform_);
 	SetCamera(camera_.get());
+
+    SoundLoad();
 }
 
 void GameScene::NotSystemUpdate()
@@ -137,7 +143,7 @@ void GameScene::InitBall(No::Registry& registry)
     transform->translate = { 0.0f, -4.35f, 0.f };
 
     auto* model = registry.AddComponent<No::MeshComponent>(ballEntity);
-    NoEngine::ModelLoader::LoadModel("ball", "resources/engine/Model/ball.obj", model);
+    NoEngine::ModelLoader::LoadModel("ball", "resources/game/td_2304/Model/ball/ball.obj", model);
 
     auto m = registry.AddComponent<No::MaterialComponent>(ballEntity);
     m->materials = NoEngine::ModelLoader::GetMaterial("ball");
@@ -149,38 +155,44 @@ void GameScene::InitBall(No::Registry& registry)
 
 void GameScene::InitEnemy(No::Registry& registry)
 {
-    No::Entity enemyEntity = registry.GenerateEntity();
-    registry.AddComponent<NormalEnemyTag>(enemyEntity);
-    registry.AddComponent<DeathFlag>(enemyEntity);
-    auto* enemy = registry.AddComponent<NormalEnemyComponent>(enemyEntity);
-    enemy->velocity = { 0.5f,0.5f,0.0f };
-    enemy->hp = 100;
-    auto* collider = registry.AddComponent<SphereColliderComponent>(enemyEntity);
-    collider->colliderType = ColliderMask::kEnemy;
-    collider->collideMask = ColliderMask::kBall;
-    collider->radius = 0.5f;
-    auto* transform = registry.AddComponent<No::TransformComponent>(enemyEntity);
-    transform->rotation.FromAxisAngle(Vector3::UP, 3.14f);
-    //transform->translate = GenerateRandomPointInCircle(5.0f); // 半径5の円内に配置
-    transform->translate = { 0.0f, -4.35f, 0.0f }; // Ballと同じ位置にしてみよう！
-    auto* model = registry.AddComponent<No::MeshComponent>(enemyEntity);
-    NoEngine::ModelLoader::LoadModel("bat", "resources/game/td_2304/Model/bat/bat.obj", model);
+    for (int i = 0; i < 3; ++i) {
+        No::Entity bossEntity = registry.GenerateEntity();
+        registry.AddComponent<NormalEnemyTag>(bossEntity);
+        registry.AddComponent<DeathFlag>(bossEntity);
 
-    auto m = registry.AddComponent<No::MaterialComponent>(enemyEntity);
-    m->materials = NoEngine::ModelLoader::GetMaterial("bat");
-    m->materials[0].textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Model/bat/bat2.png");
-    m->psoName = L"Renderer : Default PSO";
-    m->psoId = NoEngine::Render::GetPSOID(m->psoName);
-    m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
+        auto* enemy = registry.AddComponent<NormalEnemyComponent>(bossEntity);
+        enemy->velocity = { 0.5f,0.5f,0.0f };
+        enemy->hp = 4;
+        enemy->entity = bossEntity; // ★ ここでセット
 
+        auto* collider = registry.AddComponent<SphereColliderComponent>(bossEntity);
+        collider->colliderType = ColliderMask::kEnemy;
+        collider->collideMask = ColliderMask::kBall;
+
+        auto* transform = registry.AddComponent<No::TransformComponent>(bossEntity);
+        transform->rotation.FromAxisAngle(Vector3::UP, 3.14f);
+        transform->translate = GenerateRandomPointInCircle(3.0f);
+
+        auto* model = registry.AddComponent<No::MeshComponent>(bossEntity);
+        auto* animationComp = registry.AddComponent<No::AnimatorComponent>(bossEntity);
+        NoEngine::ModelLoader::LoadModel(enemyResources_.modelName, enemyResources_.modelPath, model, animationComp);
+
+        auto m = registry.AddComponent<No::MaterialComponent>(bossEntity);
+        m->materials = NoEngine::ModelLoader::GetMaterial("bat");
+        m->materials[0].textureHandle = NoEngine::TextureManager::LoadCovertTexture(enemyResources_.texturePath);
+        m->psoName = L"Renderer : Default PSO";
+        m->psoId = NoEngine::Render::GetPSOID(m->psoName);
+        m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
+    }
 }
 
 void GameScene::InitBoss(No::Registry& registry)
 {
-
+    
     No::Entity bossEntity = registry.GenerateEntity();
     registry.AddComponent<Boss1Tag>(bossEntity);
     registry.AddComponent<DeathFlag>(bossEntity);
+    registry.AddComponent<BattBossComponent>(bossEntity);
     auto* collider = registry.AddComponent<SphereColliderComponent>(bossEntity);
     collider->colliderType = ColliderMask::kEnemy;
     collider->collideMask = ColliderMask::kBall;
@@ -199,7 +211,6 @@ void GameScene::InitBoss(No::Registry& registry)
     m->psoName = L"Renderer : DefaultSkinned PSO";
     m->psoId = NoEngine::Render::GetPSOID(m->psoName);
     m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
-
 
 }
 
@@ -287,4 +298,37 @@ NoEngine::Vector3 GameScene::GenerateRandomPointInCircle(float radius)
     float y = r * std::sin(angle);
 
     return Vector3{ x, y, -0.5f }; // Zは0で平面上に配置
+}
+
+void GameScene::SoundLoad()
+{
+    No::SoundLoad(L"resources/game/td_2304//Audio/BGM/batBGM.mp3", "batBGM");
+    No::SoundLoad(L"resources/game/td_2304//Audio/BGM/secondBGM.mp3", "secondBGM");
+    No::SoundLoad(L"resources/game/td_2304//Audio/BGM/titleBGM.mp3", "titleBGM");
+
+    No::SoundLoad(L"resources/game/td_2304//Audio/SE/ballPong.mp3", "ballPong");
+   
+    No::SoundLoad(L"resources/game/td_2304//Audio/SE/ballPong2.mp3", "ballPong2");
+
+    No::SoundLoad(L"resources/game/td_2304//Audio/SE/chargeEnter.mp3", "chargeEnter");
+
+    No::SoundLoad(L"resources/game/td_2304//Audio/SE/batDie.mp3", "batDie");
+    
+    {
+        No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_aa.mp3", "voice_aa");
+        No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_checkmate.mp3", "voice_checkmate");
+        No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_iityoushi.mp3", "voice_iityoushi");
+        No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_iq.mp3", "voice_iq");
+        No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_ite.mp3", "voice_ite");
+        No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_kuso_high.mp3", "voice_kuso_high");
+        No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_kuso_low.mp3", "voice_kuso_low");
+        No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_u.mp3", "voice_u");
+        No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_ugu.mp3", "voice_ugu");
+        No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_uwa.mp3", "voice_uwa");
+
+    }
+
+
+
+    No::SoundPlay("titleBGM", 0.125f, true);
 }

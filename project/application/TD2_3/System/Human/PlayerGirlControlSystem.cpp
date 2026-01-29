@@ -1,23 +1,57 @@
 #include "PlayerGirlControlSystem.h"
 #include "../../tag.h"
 
+PlayerGirlControlSystem::PlayerGirlControlSystem()
+{    //strings_.push_back("voice_checkmate");
+    timer_ = 0.0f;
+    voiceTimer_ = 0.0f;
+
+    strings_.clear();
+
+    //ここから下はランダムに呼び出す
+    strings_.push_back("voice_aa");
+    strings_.push_back("voice_ite");
+    strings_.push_back("voice_kuso_high");
+    strings_.push_back("voice_kuso_low");
+    strings_.push_back("voice_u");
+    strings_.push_back("voice_ugu");
+    strings_.push_back("voice_uwa");
+}
+
 void PlayerGirlControlSystem::Update(No::Registry& registry, float deltaTime)
 {
     auto view = registry.View<
         No::TransformComponent,
         No::MaterialComponent,
         PlayerGirlTag>();
+    if (timer_ == 0.0f) {
+        No::SoundPlay("voice_iq", 1.0f, false);
+    }
+    timer_ += deltaTime;
+    timer_ = fmodf(timer_, 3.0f);
 
+    voiceTimer_ += deltaTime;
+    if (voiceTimer_ >= 5.0f) {
+        voiceTimer_ = 0.0f;
+        int randNum = rand() % strings_.size();
+        No::SoundPlay(strings_[randNum], 1.0f, false);
+    }
 
-    (void)deltaTime;
+    //もし敵に当たったら
+   // No::SoundPlay("voice_iityoushi", 1.0f, false);
 
     for (auto entity : view)
     {
-        auto* transform = registry.GetComponent<No::TransformComponent>(entity);
+      
         auto* material = registry.GetComponent<No::MaterialComponent>(entity);
 
+        if (timer_ <= 2.5f) {
+            material->materials[1].textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Model/playerGirl/face.png");
+        } else {
+            material->materials[1].textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Model/playerGirl/face2.png");
+        }
 #ifdef USE_IMGUI
-
+        auto* transform = registry.GetComponent<No::TransformComponent>(entity);
         std::string imGuiName = "playerGirlTag";
         ImGui::Begin(imGuiName.c_str());
         ImGui::DragFloat3("translate", &transform->translate.x, 0.05f);

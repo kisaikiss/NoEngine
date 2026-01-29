@@ -11,6 +11,7 @@
 #include "Functions/ECS/System/AnimationSystem.h"
 
 #include "Assets/ModelLoader.h"
+#include "Assets/Audio/Audio.h"
 #include "Functions/Renderer/RenderSystem.h"
 #include "Functions/Input/Input.h"
 
@@ -27,4 +28,5 @@ using namespace NoEngine::ECS;
 using namespace NoEngine::Input;
 using namespace NoEngine::Component;
 using namespace NoEngine::Scene;
+using namespace NoEngine::Audio;
 }
