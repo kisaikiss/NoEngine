@@ -19,11 +19,11 @@ class EnemyAppear :public BaseEnemyState<EnemyComponent> {
 public:
     EnemyAppear() = default;
     //ステートが始まるときに一度だけ呼ばれる
-    void Enter(No::Registry registry, No::Entity entity) override;
+    void Enter(No::Registry& registry, No::Entity entity) override;
     //ステートが更新時に呼ばれる
-    void Update(No::Registry registry,No::Entity entity,float deltaTime)override;
+    void Update(No::Registry& registry,No::Entity entity,float deltaTime)override;
     //ステートが終了するときに一度だけ呼ばれる
-    void Exit(No::Registry registry, No::Entity entity)override;
+    void Exit(No::Registry& registry, No::Entity entity)override;
 private:
     float timer_ = 0.0f;
 
@@ -33,11 +33,11 @@ public:
 
     EnemyMove() = default;
     //ステートが始まるときに一度だけ呼ばれる
-    void Enter(No::Registry registry, No::Entity entity) override;
+    void Enter(No::Registry& registry, No::Entity entity) override;
     //ステートが更新時に呼ばれる
-    void Update(No::Registry registry,No::Entity entity,float deltaTime)override;
+    void Update(No::Registry& registry,No::Entity entity,float deltaTime)override;
     //ステートが終了するときに一度だけ呼ばれる
-    void Exit(No::Registry registry, No::Entity entity)override;
+    void Exit(No::Registry& registry, No::Entity entity)override;
 private:
     float theta_ = 0.0f;
 };
@@ -47,11 +47,11 @@ class EnemyHit :public BaseEnemyState<EnemyComponent> {
 public:
     EnemyHit() = default;
     //ステートが始まるときに一度だけ呼ばれる
-    void Enter(No::Registry registry, No::Entity entity) override;
+    void Enter(No::Registry& registry, No::Entity entity) override;
     //ステートが更新時に呼ばれる
-    void Update(No::Registry registry,No::Entity entity,float deltaTime)override;
+    void Update(No::Registry& registry,No::Entity entity,float deltaTime)override;
     //ステートが終了するときに一度だけ呼ばれる
-    void Exit(No::Registry registry, No::Entity entity)override;
+    void Exit(No::Registry& registry, No::Entity entity)override;
 private:
     float timer_ = 0.0f;
     PhysicsComponent* ballPhysics_ = nullptr;
@@ -62,11 +62,11 @@ class EnemyDie :public BaseEnemyState<EnemyComponent> {
 public:
     EnemyDie() = default;
     //ステートが始まるときに一度だけ呼ばれる
-    void Enter(No::Registry registry, No::Entity entity) override;
+    void Enter(No::Registry& registry, No::Entity entity) override;
     //ステートが更新時に呼ばれる
-    void Update(No::Registry registry,No::Entity entity,float deltaTime)override;
+    void Update(No::Registry& registry,No::Entity entity,float deltaTime)override;
     //ステートが終了するときに一度だけ呼ばれる
-    void Exit(No::Registry registry, No::Entity entity)override;
+    void Exit(No::Registry& registry, No::Entity entity)override;
 
 
 private:

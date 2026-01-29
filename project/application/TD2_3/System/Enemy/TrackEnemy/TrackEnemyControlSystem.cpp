@@ -1,12 +1,10 @@
 #include "TrackEnemyControlSystem.h"
 #include "../../../Component/ColliderComponent.h"
-#include "../../../Component/VausStateComponent.h"
 #include"../../../Component/TrackEnemyComponent.h"
 #include "../../../Component/BallStateComponent.h"
 #include"engine/Math/Easing.h"
 
 #include "../../../tag.h"
-#include "engine/Functions/Renderer/Primitive.h"
 #include"../../Enemy/EnemyCommonMove.h"
 #include"../NormalEnemy/NormalEnemyControlSystem.h"
 
@@ -37,20 +35,20 @@ void TrackEnemyControlSystem::Update(No::Registry& registry, float deltaTime)
         if (!enemy->isStarted_) {
             enemy->stateManager = std::make_shared<EnemyStateManager<TrackEnemyComponent>>();
             enemy->stateManager->Start(enemy);
-            enemy->stateManager->ChangeState<EnemyAppear<TrackEnemyComponent>>(registry);
+            enemy->stateManager->ChangeState<EnemyAppear<TrackEnemyComponent>>(registry, entity);
             enemy->isStarted_ = true;
         }
 
 
         if (collider->isCollied)
         {
-            enemy->stateManager->ChangeState<EnemyHit<TrackEnemyComponent>>(registry);
+            enemy->stateManager->ChangeState<EnemyHit<TrackEnemyComponent>>(registry,entity);
         } else
         {
             material->materials[0].color = NoEngine::Color(1.0f, 1.0f, 1.0f, 1.0f);
         }
 
-        enemy->stateManager->Update(registry, deltaTime);
+        enemy->stateManager->Update(registry, entity,deltaTime);
 
 #ifdef USE_IMGUI
         auto* transform = registry.GetComponent<No::TransformComponent>(entity);
@@ -77,13 +75,14 @@ void TrackEnemyControlSystem::Update(No::Registry& registry, float deltaTime)
 }
 
 
-void EnemyAppear<TrackEnemyComponent>::Enter(No::Registry registry, No::Entity entity)
+void EnemyAppear<TrackEnemyComponent>::Enter(No::Registry& registry, No::Entity entity)
 {
     (void)registry;
+    (void)entity;
     timer_ = 0.0f;
 }
 
-void EnemyAppear<TrackEnemyComponent>::Update(No::Registry registry, No::Entity entity, float deltaTime) {
+void EnemyAppear<TrackEnemyComponent>::Update(No::Registry& registry, No::Entity entity, float deltaTime) {
 
 
     TimerUpdate(timer_, deltaTime);
@@ -96,25 +95,25 @@ void EnemyAppear<TrackEnemyComponent>::Update(No::Registry registry, No::Entity 
     }
 
     if (timer_ >= 5.0f) {
-        stateManager_->ChangeState<EnemyChase>(registry);
+        stateManager_->ChangeState<EnemyChase>(registry,entity);
     }
 }
 
-void EnemyAppear<TrackEnemyComponent>::Exit(No::Registry registry, No::Entity entity)
+void EnemyAppear<TrackEnemyComponent>::Exit(No::Registry& registry, No::Entity entity)
 {
     auto* transform = registry.GetComponent<TransformComponent>(entity);
     transform->scale = Vector3::UNIT_SCALE;
 
 }
 
-void EnemyChase::Enter(No::Registry registry, No::Entity entity)
+void EnemyChase::Enter(No::Registry& registry, No::Entity entity)
 {
     (void)registry;
-
+    (void)entity;
 }
 
 
-void EnemyChase::Update(No::Registry registry, No::Entity entity, float deltaTime)
+void EnemyChase::Update(No::Registry& registry, No::Entity entity, float deltaTime)
 {
 
     No::TransformComponent* targetTransform = nullptr;
@@ -147,13 +146,13 @@ void EnemyChase::Update(No::Registry registry, No::Entity entity, float deltaTim
 
 }
 
-void EnemyChase::Exit(No::Registry registry, No::Entity entity)
+void EnemyChase::Exit(No::Registry& registry, No::Entity entity)
 {
     (void)registry;
-
+    (void)entity;
 }
 
-void EnemyHit<TrackEnemyComponent>::Enter(No::Registry registry, No::Entity entity)
+void EnemyHit<TrackEnemyComponent>::Enter(No::Registry& registry, No::Entity entity)
 {
 
     timer_ = 0.0f;
@@ -172,14 +171,14 @@ void EnemyHit<TrackEnemyComponent>::Enter(No::Registry registry, No::Entity enti
         BallStateComponent,
         BallTag, DeathFlag>();
 
-    for (auto entity : ballView)
+    for (auto ballEntity : ballView)
     {
-        ballPhysics_ = registry.GetComponent<PhysicsComponent>(entity);
+        ballPhysics_ = registry.GetComponent<PhysicsComponent>(ballEntity);
     }
     No::SoundEffectPlay("batDie", 0.5f);
 }
 
-void EnemyHit<TrackEnemyComponent>::Update(No::Registry registry, No::Entity entity,float deltaTime)
+void EnemyHit<TrackEnemyComponent>::Update(No::Registry& registry, No::Entity entity,float deltaTime)
 {
 
     TimerUpdate(timer_, deltaTime);
@@ -223,20 +222,20 @@ void EnemyHit<TrackEnemyComponent>::Update(No::Registry registry, No::Entity ent
     if (timer_ >= 1.0f) {
 
         if (ownerType_->hp <= 0) {
-            stateManager_->ChangeState<EnemyDie<TrackEnemyComponent>>(registry);
+            stateManager_->ChangeState<EnemyDie<TrackEnemyComponent>>(registry, entity);
         } else {
-            stateManager_->ChangeState<EnemyChase>(registry);
+            stateManager_->ChangeState<EnemyChase>(registry, entity);
         }
     }
 
 
 }
 
-void EnemyHit<TrackEnemyComponent>::Exit(No::Registry registry, No::Entity entity)
+void EnemyHit<TrackEnemyComponent>::Exit(No::Registry& registry, No::Entity entity)
 {
 
     auto* material = registry.GetComponent<MaterialComponent>(entity);
-    material->materials[0].color = NoEngine::Color(1.0f, 0.0f, 0.0f, 1.0f);
+    material->materials[0].color = NoEngine::Color(1.0f, 1.0f, 1.0f, 1.0f);
     auto* transform = registry.GetComponent<No::TransformComponent>(entity);
     transform->scale = Vector3::UNIT_SCALE;
 
@@ -244,36 +243,34 @@ void EnemyHit<TrackEnemyComponent>::Exit(No::Registry registry, No::Entity entit
 
 }
 
-void EnemyDie<TrackEnemyComponent>::Enter(No::Registry registry, No::Entity entity)
+void EnemyDie<TrackEnemyComponent>::Enter(No::Registry& registry, No::Entity entity)
 {
     (void)registry;
-
+    (void)entity;
+    timer_ = 0.0f;
 }
 
-void EnemyDie<TrackEnemyComponent>::Update(No::Registry registry,No::Entity entity ,float deltaTime)
+void EnemyDie<TrackEnemyComponent>::Update(No::Registry& registry,No::Entity entity ,float deltaTime)
 {
     TimerUpdate(timer_, deltaTime);
 
     auto* transform = registry.GetComponent<TransformComponent>(entity);
 
-    if (timer_ <= 3.0f) {
+    if (timer_ <= 3.0f)
+    {
         float timer = timer_ / 3.0f;
         transform->scale = NoEngine::Easing::EaseInOutBack(Vector3::UNIT_SCALE, Vector3::ZERO, timer);
-    } else {
+    }
+    else
+    {
         auto* deathFlag = registry.GetComponent<DeathFlag>(entity);
-
-        if (deathFlag->isDead) {
-            return;
-        }
-
         deathFlag->isDead = true;
-
     }
 
 }
 
-void EnemyDie<TrackEnemyComponent>::Exit(No::Registry registry, No::Entity entity)
+void EnemyDie<TrackEnemyComponent>::Exit(No::Registry& registry, No::Entity entity)
 {
-    (void)registry;
-
+    auto* deathFlag = registry.GetComponent<DeathFlag>(entity);
+    deathFlag->isDead = true;
 }
