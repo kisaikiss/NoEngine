@@ -32,9 +32,9 @@ void NormalEnemyControlSystem::Update(No::Registry& registry, float deltaTime)
 
     for (auto entity : view)
     {
-   
-        auto* material = registry.GetComponent<No::MaterialComponent>(entity);
-        auto* collider = registry.GetComponent<SphereColliderComponent>(entity);
+
+        /*       auto* material = registry.GetComponent<No::MaterialComponent>(entity);*/
+     
         auto* enemy = registry.GetComponent<NormalEnemyComponent>(entity);
 
         // 初回だけ stateManager を作る 
@@ -45,17 +45,12 @@ void NormalEnemyControlSystem::Update(No::Registry& registry, float deltaTime)
             enemy->isStarted_ = true;
         }
 
-        if (collider->isCollied)
-        {
-            enemy->stateManager->ChangeState<EnemyHit<NormalEnemyComponent>>(registry);
-        } else
-        {
-            material->materials[0].color = NoEngine::Color(1.0f, 1.0f, 1.0f, 1.0f);
-        }
-
         enemy->stateManager->Update(registry, deltaTime);
 
 #ifdef USE_IMGUI
+        
+        auto* collider = registry.GetComponent<SphereColliderComponent>(entity);
+
         auto* transform = registry.GetComponent<No::TransformComponent>(entity);
         auto* deathFlag = registry.GetComponent<DeathFlag>(entity);
 
@@ -69,7 +64,7 @@ void NormalEnemyControlSystem::Update(No::Registry& registry, float deltaTime)
         ImGui::Text("colliedEntity %u", static_cast<uint32_t>(collider->colliedEntity));
 
         ImGui::Text("isDead %s", deathFlag->isDead ? "true" : "false");
-
+        ImGui::Text("hp %d", enemy->hp);
         ImGui::End();
 
 #endif // USE_IMGUI
@@ -114,16 +109,28 @@ void EnemyAppear<NormalEnemyComponent>::Exit(No::Registry& registry)
 void EnemyMove::Enter(No::Registry& registry)
 {
     (void)registry;
-    theta_ =rand()%314*0.01f;
+    theta_ = rand() % 314 * 0.01f;
 }
 
 
 void EnemyMove::Update(No::Registry& registry, float deltaTime)
 {
+    auto* material = registry.GetComponent<MaterialComponent>(ownerType_->entity);
 
     auto* transform = registry.GetComponent<No::TransformComponent>(ownerType_->entity);
     theta_ += deltaTime * PI;
-    transform->translate.y = ownerType_->defaultTranslate_.y + sinf(theta_)*0.5f;
+    transform->translate.y = ownerType_->defaultTranslate_.y + sinf(theta_) * 0.5f;
+
+    auto* collider = registry.GetComponent<SphereColliderComponent>(ownerType_->entity);
+
+    if (collider->isCollied)
+    {
+        ownerType_->stateManager->ChangeState<EnemyHit<NormalEnemyComponent>>(registry);
+    } else
+    {
+        material->materials[0].color = NoEngine::Color(1.0f, 1.0f, 1.0f, 1.0f);
+    }
+
 }
 
 void EnemyMove::Exit(No::Registry& registry)
@@ -209,7 +216,7 @@ void EnemyHit<NormalEnemyComponent>::Exit(No::Registry& registry)
 void EnemyDie<NormalEnemyComponent>::Enter(No::Registry& registry)
 {
     (void)registry;
-
+    timer_ = 0.0f;
 }
 
 void EnemyDie<NormalEnemyComponent>::Update(No::Registry& registry, float deltaTime)
@@ -223,19 +230,14 @@ void EnemyDie<NormalEnemyComponent>::Update(No::Registry& registry, float deltaT
         transform->scale = NoEngine::Easing::EaseInOutBack(Vector3::UNIT_SCALE, Vector3::ZERO, timer);
     } else {
         auto* deathFlag = registry.GetComponent<DeathFlag>(ownerType_->entity);
-
-        if (deathFlag->isDead) {
-            return;
-        }
-
         deathFlag->isDead = true;
-
     }
 
 }
 
 void EnemyDie<NormalEnemyComponent>::Exit(No::Registry& registry)
 {
-    (void)registry;
+    auto* deathFlag = registry.GetComponent<DeathFlag>(ownerType_->entity);
+    deathFlag->isDead = true;
 
 }
