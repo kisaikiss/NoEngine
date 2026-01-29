@@ -1,17 +1,16 @@
 #include "ShaderMathUtil.hlsli"
 
-cbuffer gWorld : register(b0)
+cbuffer gControl : register(b1)
 {
-    float4x4 WorldMat;
-    float4x4 UVTransform;
-    float4x4 ViewProjMat;
     float time;
-};
+    float timeScale;
+    float powerFactor;
+}
 
 float3 drawCircle(float2 pos, float radius, float width, float power, float4 color)
 {
     float dist1 = length(pos);
-    dist1 = fract((dist1 * 5.0) - fract(time));
+    dist1 = fract((dist1 * 5.0f) - fract(time * timeScale));
     float dist2 = dist1 - radius;
     float intensity = pow(radius / abs(dist2), width);
     float3 col = color.rgb * intensity * power * max((0.8 - abs(dist2)), 0.0);
@@ -34,15 +33,15 @@ struct VSOutput
 
 float4 main(VSOutput input) : SV_TARGET
 {
-    float2 uv = input.uv * 2.0 - 1.0;;
+    float2 uv = input.uv * 2.0 - 1.0;
     
-    float h = lerp(0.5, 0.65, length(uv));
-    float4 color = float4(hsv2rgb(h, 1.0, 1.0), 1.0);
+    float h = lerp(0.45, 0.7, length(uv));
+    float4 color = float4(hsv2rgb(h, 0.9, 0.9), 1.0);
     float radius = 0.5;
-    float width = 0.5;
-    float power = 0.1;
+    float width = 0.75;
+    float power = powerFactor;
     float3 finalColor = drawCircle(uv, radius, width, power, color);
-    finalColor = pow(finalColor, float3(0.5, 0.5, 0.5));
+    finalColor = pow(finalColor, 0.454545);
     uv = abs(uv);
     
     //return float4(finalColor, 1.0);
