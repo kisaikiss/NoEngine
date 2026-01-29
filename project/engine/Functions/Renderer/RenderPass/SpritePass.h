@@ -4,7 +4,8 @@
 #include "engine/Functions/ECS/Component/Transfrom2DComponent.h"
 #include "engine/Runtime/GpuResource/GpuBuffer.h"
 #include "engine/Math/Types/Matrix4x4.h"
-
+#pragma warning(push)
+#pragma warning(disable: 4324)
 namespace NoEngine {
 namespace Render {
 
@@ -39,3 +40,5 @@ private:
 
 }
 }
+#pragma warning(pop)
+

@@ -197,14 +197,8 @@ void VausControlSystem::Update(No::Registry& registry, float deltaTime)
 			vausState->isReleasing = true;
 		}
 
-		if (deltaTime > 0.0f)
-		{
-			vausState->currentVelocity = (vausTransform->translate - vausState->prevPosition) / deltaTime;
-		}
-		else
-		{
-			vausState->currentVelocity = Vector3::ZERO;
-		}
+		vausState->currentVelocity = (vausTransform->translate - vausState->prevPosition) * VausStateComponent::kPower;
+
 
 		vausState->prevPosition = vausTransform->translate;
 	}
