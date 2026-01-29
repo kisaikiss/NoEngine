@@ -48,6 +48,20 @@ inline T EaseOutElastic(const T& a, const T& b, float t)
 		: powf(2, -10 * t) * sinf((t * 10 - 0.75f) * c4) + 1;
 	return Lerp(a, b, t);
 }
+
+template<typename T>
+inline T EaseInOutBack(const T& a, const T& b, float t) {
+
+	const float c1 = 1.70158f;
+	const float c2 = c1 * 1.525f;
+
+	float  time = t < 0.5f
+		? (powf(2.0f * t, 2.0f) * ((c2 + 1.0f) * 2.0f * t - c2)) / 2.0f
+		: (powf(2.0f * t - 2.0f, 2.0f) * ((c2 + 1.0f) * (t * 2.0f - 2.0f) + c2) + 2.0f) / 2.0f;
+
+	return Lerp(a, b, time);
+}
+
 template<typename T>
 inline T EaseOutCubic(const T& a, const T& b, float t)
 {
@@ -56,3 +70,4 @@ inline T EaseOutCubic(const T& a, const T& b, float t)
 }
 }
 }
+

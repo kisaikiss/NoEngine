@@ -18,8 +18,8 @@
 #include "../System/BackGroundEffectSystem.h"
 //ヨシダ追加しました。
 //Enemy
-#include "../System/Enemy/BossControlSystem.h"
-#include"../System/Enemy/NormalEnemyControlSystem.h"
+#include "../System/Enemy/Boss/BossControlSystem.h"
+#include"../System/Enemy/NormalEnemy/NormalEnemyControlSystem.h"
 //Human
 #include "../System/Human/BatGirlControlSystem.h"
 #include "../System/Human/PlayerGirlControlSystem.h"
@@ -161,9 +161,10 @@ void GameScene::InitEnemy(No::Registry& registry)
         registry.AddComponent<DeathFlag>(bossEntity);
 
         auto* enemy = registry.AddComponent<NormalEnemyComponent>(bossEntity);
-        enemy->velocity = { 0.5f,0.5f,0.0f };
-        enemy->hp = 4;
+        //enemy->velocity = { 0.5f,0.5f,0.0f };
         enemy->entity = bossEntity; // ★ ここでセット
+        //enemy->stateManager->Start(enemy);
+        //enemy->stateManager->ChangeState<EnemyAppear<NormalEnemyComponent>>(registry);
 
         auto* collider = registry.AddComponent<SphereColliderComponent>(bossEntity);
         collider->colliderType = ColliderMask::kEnemy;
@@ -172,6 +173,8 @@ void GameScene::InitEnemy(No::Registry& registry)
         auto* transform = registry.AddComponent<No::TransformComponent>(bossEntity);
         transform->rotation.FromAxisAngle(Vector3::UP, 3.14f);
         transform->translate = GenerateRandomPointInCircle(3.0f);
+
+        enemy->defaultTranslate_ = transform->translate;
 
         auto* model = registry.AddComponent<No::MeshComponent>(bossEntity);
         auto* animationComp = registry.AddComponent<No::AnimatorComponent>(bossEntity);

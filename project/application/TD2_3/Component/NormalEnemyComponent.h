@@ -10,4 +10,5 @@ struct NormalEnemyComponent
 	No::Entity entity = 0;
 	std::shared_ptr<EnemyStateManager<NormalEnemyComponent>> stateManager;
 	 bool isStarted_ = false;
+	 NoEngine::Vector3 defaultTranslate_;
 };

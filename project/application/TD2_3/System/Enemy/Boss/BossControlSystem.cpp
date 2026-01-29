@@ -1,7 +1,7 @@
 #include "BossControlSystem.h"
-#include "../../Component/ColliderComponent.h"
-#include"../../Component/BatBossComponent.h"
-#include "../../tag.h"
+#include "../../../Component/ColliderComponent.h"
+#include"../../../Component/BatBossComponent.h"
+#include "../../../tag.h"
 
 void BossControlSystem::Update(No::Registry& registry, float deltaTime)
 {
@@ -56,11 +56,6 @@ void BossControlSystem::Update(No::Registry& registry, float deltaTime)
         
 #endif // USE_IMGUI
     }
-
-
-
-
-
 
 }
 

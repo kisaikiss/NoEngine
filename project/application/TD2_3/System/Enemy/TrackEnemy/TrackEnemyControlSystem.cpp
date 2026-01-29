@@ -1,28 +1,26 @@
-#include "NormalEnemyControlSystem.h"
-#include "../../Component/ColliderComponent.h"
-#include "../../Component/VausStateComponent.h"
-//#include"../../Component/NormalEnemyComponent.h"
-#include "../../Component/BallStateComponent.h"
+#include "TrackEnemyControlSystem.h"
+#include "../../../Component/ColliderComponent.h"
+#include "../../../Component/VausStateComponent.h"
+#include"../../../Component/TrackEnemyComponent.h"
+#include "../../../Component/BallStateComponent.h"
 #include"engine/Math/Easing.h"
 
-#include "../../tag.h"
+#include "../../../tag.h"
 #include "engine/Functions/Renderer/Primitive.h"
+#include"../../Enemy/EnemyCommonMove.h"
+#include"../NormalEnemy/NormalEnemyControlSystem.h"
 
 using namespace No;
 using namespace NoEngine;
 
-NormalEnemyControlSystem::NormalEnemyControlSystem()
-{
 
-}
-
-void NormalEnemyControlSystem::Update(No::Registry& registry, float deltaTime)
+void TrackEnemyControlSystem::Update(No::Registry& registry, float deltaTime)
 {
 
     auto view = registry.View <
         NormalEnemyTag,
         DeathFlag,
-        NormalEnemyComponent,
+        TrackEnemyComponent,
         SphereColliderComponent,
         TransformComponent,
         No::MeshComponent,
@@ -30,23 +28,23 @@ void NormalEnemyControlSystem::Update(No::Registry& registry, float deltaTime)
 
     for (auto entity : view)
     {
-   
+
         auto* material = registry.GetComponent<No::MaterialComponent>(entity);
         auto* collider = registry.GetComponent<SphereColliderComponent>(entity);
-        auto* enemy = registry.GetComponent<NormalEnemyComponent>(entity);
+        auto* enemy = registry.GetComponent<TrackEnemyComponent>(entity);
 
         // 初回だけ stateManager を作る 
         if (!enemy->isStarted_) {
-            enemy->stateManager = std::make_shared<EnemyStateManager<NormalEnemyComponent>>();
+            enemy->stateManager = std::make_shared<EnemyStateManager<TrackEnemyComponent>>();
             enemy->stateManager->Start(enemy);
-            enemy->stateManager->ChangeState<EnemyAppear>(registry);
+            enemy->stateManager->ChangeState<EnemyAppear<TrackEnemyComponent>>(registry);
             enemy->isStarted_ = true;
         }
 
 
         if (collider->isCollied)
         {
-            enemy->stateManager->ChangeState<EnemyHit>(registry);
+            enemy->stateManager->ChangeState<EnemyHit<TrackEnemyComponent>>(registry);
         } else
         {
             material->materials[0].color = NoEngine::Color(1.0f, 1.0f, 1.0f, 1.0f);
@@ -79,17 +77,13 @@ void NormalEnemyControlSystem::Update(No::Registry& registry, float deltaTime)
 }
 
 
-void EnemyAppear::Enter(No::Registry& registry)
+void EnemyAppear<TrackEnemyComponent>::Enter(No::Registry& registry)
 {
-
     (void)registry;
     timer_ = 0.0f;
 }
 
-
-
-
-void EnemyAppear::Update(No::Registry& registry, float deltaTime) {
+void EnemyAppear<TrackEnemyComponent>::Update(No::Registry& registry, float deltaTime) {
 
 
     TimerUpdate(timer_, deltaTime);
@@ -98,7 +92,7 @@ void EnemyAppear::Update(No::Registry& registry, float deltaTime) {
 
     if (timer_ <= 3.0f) {
         float timer = timer_ / 3.0f;
-        transform->scale = EaseInOutBack(Vector3::ZERO, Vector3::UNIT_SCALE, timer);
+        transform->scale = NoEngine::Easing::EaseInOutBack(Vector3::ZERO, Vector3::UNIT_SCALE, timer);
     }
 
     if (timer_ >= 5.0f) {
@@ -106,7 +100,7 @@ void EnemyAppear::Update(No::Registry& registry, float deltaTime) {
     }
 }
 
-void EnemyAppear::Exit(No::Registry& registry)
+void EnemyAppear<TrackEnemyComponent>::Exit(No::Registry& registry)
 {
     auto* transform = registry.GetComponent<TransformComponent>(ownerType_->entity);
     transform->scale = Vector3::UNIT_SCALE;
@@ -159,14 +153,14 @@ void EnemyChase::Exit(No::Registry& registry)
 
 }
 
-void EnemyHit::Enter(No::Registry& registry)
+void EnemyHit<TrackEnemyComponent>::Enter(No::Registry& registry)
 {
 
     timer_ = 0.0f;
 
     auto* material = registry.GetComponent<MaterialComponent>(ownerType_->entity);
     material->materials[0].color = NoEngine::Color(1.0f, 0.0f, 0.0f, 1.0f);
-    auto* enemy = registry.GetComponent<NormalEnemyComponent>(ownerType_->entity);
+    auto* enemy = registry.GetComponent<TrackEnemyComponent>(ownerType_->entity);
     //HPを減らす
     enemy->hp--;
 
@@ -185,7 +179,7 @@ void EnemyHit::Enter(No::Registry& registry)
     No::SoundEffectPlay("batDie", 0.5f);
 }
 
-void EnemyHit::Update(No::Registry& registry, float deltaTime)
+void EnemyHit<TrackEnemyComponent>::Update(No::Registry& registry, float deltaTime)
 {
 
     TimerUpdate(timer_, deltaTime);
@@ -229,7 +223,7 @@ void EnemyHit::Update(No::Registry& registry, float deltaTime)
     if (timer_ >= 1.0f) {
 
         if (ownerType_->hp <= 0) {
-            stateManager_->ChangeState<EnemyDie>(registry);
+            stateManager_->ChangeState<EnemyDie<TrackEnemyComponent>>(registry);
         } else {
             stateManager_->ChangeState<EnemyChase>(registry);
         }
@@ -238,7 +232,7 @@ void EnemyHit::Update(No::Registry& registry, float deltaTime)
 
 }
 
-void EnemyHit::Exit(No::Registry& registry)
+void EnemyHit<TrackEnemyComponent>::Exit(No::Registry& registry)
 {
 
     auto* material = registry.GetComponent<MaterialComponent>(ownerType_->entity);
@@ -250,71 +244,13 @@ void EnemyHit::Exit(No::Registry& registry)
 
 }
 
-void PoyoPoyo(No::TransformComponent& transform, float timer, float speed, float scaling, const NoEngine::Vector3& defaultScale)
-{
-    float theta = std::numbers::pi_v<float>*speed * timer;
-    transform.scale.x = defaultScale.x + cos(theta) * scaling;
-    transform.scale.y = defaultScale.y + sin(theta) * scaling;
-}
-
-void TimerUpdate(float& timer, float& deltaTime)
-{
-    timer += deltaTime;
-}
-
-void LookTarget(No::TransformComponent& transform, const Vector3& target)
-{
-    Vector3 direction = target - transform.translate;
-    direction.z = 0.0f;
-    // 正規化して方向ベクトルにする
-    direction = direction.Normalize();
-
-    float angle = std::atan2(direction.y, direction.x);
-
-    transform.rotation.FromAxisAngle(Vector3::UP, PI + angle);
-
-}
-
-
-Vector3 GatTargetDir(Vector3& translate, const Vector3& target)
-{
-    Vector3 direction = target - translate;
-
-    direction.z = 0.0f;
-
-    float length = direction.Length();
-
-    if (length != 0) {
-        direction /= length;
-    } else {
-        direction = { Vector3::ZERO };
-    }
-
-    return direction;
-}
-
-float EaseInOutBackT(const float& x) {
-
-    const float c1 = 1.70158f;
-    const float c2 = c1 * 1.525f;
-
-    return x < 0.5f
-        ? (std::powf(2.0f * x, 2.0f) * ((c2 + 1.0f) * 2.0f * x - c2)) / 2.0f
-        : (std::powf(2.0f * x - 2.0f, 2.0f) * ((c2 + 1.0f) * (x * 2.0f - 2.0f) + c2) + 2.0f) / 2.0f;
-}
-
-Vector3 EaseInOutBack(const Vector3& start, const Vector3& end, float t) {
-    float time = EaseInOutBackT(t);
-    return NoEngine::Easing::Lerp(start, end, time);
-}
-
-void EnemyDie::Enter(No::Registry& registry)
+void EnemyDie<TrackEnemyComponent>::Enter(No::Registry& registry)
 {
     (void)registry;
 
 }
 
-void EnemyDie::Update(No::Registry& registry, float deltaTime)
+void EnemyDie<TrackEnemyComponent>::Update(No::Registry& registry, float deltaTime)
 {
     TimerUpdate(timer_, deltaTime);
 
@@ -322,7 +258,7 @@ void EnemyDie::Update(No::Registry& registry, float deltaTime)
 
     if (timer_ <= 3.0f) {
         float timer = timer_ / 3.0f;
-        transform->scale = EaseInOutBack(Vector3::UNIT_SCALE, Vector3::ZERO, timer);
+        transform->scale = NoEngine::Easing::EaseInOutBack(Vector3::UNIT_SCALE, Vector3::ZERO, timer);
     } else {
         auto* deathFlag = registry.GetComponent<DeathFlag>(ownerType_->entity);
 
@@ -336,7 +272,7 @@ void EnemyDie::Update(No::Registry& registry, float deltaTime)
 
 }
 
-void EnemyDie::Exit(No::Registry& registry)
+void EnemyDie<TrackEnemyComponent>::Exit(No::Registry& registry)
 {
     (void)registry;
 

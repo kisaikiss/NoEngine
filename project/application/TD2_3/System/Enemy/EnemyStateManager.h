@@ -29,7 +29,8 @@ public:
         auto argsTuple = std::make_tuple(std::forward<ArgType>(args)...);
         //ステートの変更命令を格納する
         //ステートの変更命令を関数ポインタに格納する
-        fnChangeState_ = [this,&registry, argsTuple = std::move(argsTuple)]() mutable {
+        fnChangeState_ = [this, &registry, argsTuple = std::move(argsTuple)]() mutable {
+
 
             if (owner_ == nullptr)   return;
 
