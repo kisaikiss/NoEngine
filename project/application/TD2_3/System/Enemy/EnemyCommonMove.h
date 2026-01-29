@@ -8,7 +8,7 @@
 /// @param defaultScale デフォルトの大きさ
 void PoyoPoyo(No::TransformComponent& transform, float timer, float speed, float scaling, const NoEngine::Vector3& defaultScale = NoEngine::Vector3::UNIT_SCALE);
 
-void TimerUpdate(float& timer, float& deltaTime);
+void TimerUpdate(float& timer, const float& deltaTime);
 
 void LookTarget(No::TransformComponent& transform, const NoEngine::Vector3& target);
 

@@ -10,7 +10,7 @@ void PoyoPoyo(No::TransformComponent& transform, float timer, float speed, float
     transform.scale.y = defaultScale.y + sin(theta) * scaling;
 }
 
-void TimerUpdate(float& timer, float& deltaTime)
+void TimerUpdate(float& timer, const float& deltaTime)
 {
     timer += deltaTime;
 }

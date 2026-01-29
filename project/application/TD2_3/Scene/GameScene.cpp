@@ -155,32 +155,32 @@ void GameScene::InitBall(No::Registry& registry)
 
 void GameScene::InitEnemy(No::Registry& registry)
 {
-    for (int i = 0; i < 3; ++i) {
-        No::Entity bossEntity = registry.GenerateEntity();
-        registry.AddComponent<NormalEnemyTag>(bossEntity);
-        registry.AddComponent<DeathFlag>(bossEntity);
+    for (int i = 0; i < 5; ++i) {
+        No::Entity enemyEntity = registry.GenerateEntity();
+        registry.AddComponent<NormalEnemyTag>(enemyEntity);
+        registry.AddComponent<DeathFlag>(enemyEntity);
 
-        auto* enemy = registry.AddComponent<NormalEnemyComponent>(bossEntity);
+        auto* enemy = registry.AddComponent<NormalEnemyComponent>(enemyEntity);
         //enemy->velocity = { 0.5f,0.5f,0.0f };
-        enemy->entity = bossEntity; // ★ ここでセット
+        enemy->entity = enemyEntity; // ★ ここでセット
         //enemy->stateManager->Start(enemy);
         //enemy->stateManager->ChangeState<EnemyAppear<NormalEnemyComponent>>(registry);
 
-        auto* collider = registry.AddComponent<SphereColliderComponent>(bossEntity);
+        auto* collider = registry.AddComponent<SphereColliderComponent>(enemyEntity);
         collider->colliderType = ColliderMask::kEnemy;
         collider->collideMask = ColliderMask::kBall;
 
-        auto* transform = registry.AddComponent<No::TransformComponent>(bossEntity);
+        auto* transform = registry.AddComponent<No::TransformComponent>(enemyEntity);
         transform->rotation.FromAxisAngle(Vector3::UP, 3.14f);
-        transform->translate = GenerateRandomPointInCircle(3.0f);
+        transform->translate = GenerateRandomPointInCircle(2.0f,3.0f);
 
         enemy->defaultTranslate_ = transform->translate;
 
-        auto* model = registry.AddComponent<No::MeshComponent>(bossEntity);
-        auto* animationComp = registry.AddComponent<No::AnimatorComponent>(bossEntity);
+        auto* model = registry.AddComponent<No::MeshComponent>(enemyEntity);
+        auto* animationComp = registry.AddComponent<No::AnimatorComponent>(enemyEntity);
         NoEngine::ModelLoader::LoadModel(enemyResources_.modelName, enemyResources_.modelPath, model, animationComp);
 
-        auto m = registry.AddComponent<No::MaterialComponent>(bossEntity);
+        auto m = registry.AddComponent<No::MaterialComponent>(enemyEntity);
         m->materials = NoEngine::ModelLoader::GetMaterial("bat");
         m->materials[0].textureHandle = NoEngine::TextureManager::LoadCovertTexture(enemyResources_.texturePath);
         m->psoName = L"Renderer : Default PSO";
@@ -287,21 +287,36 @@ void GameScene::DestroyGameObject()
     }
 }
 
-NoEngine::Vector3 GameScene::GenerateRandomPointInCircle(float radius)
+NoEngine::Vector3 GameScene::GenerateRandomPointInCircle(float minRadius, float maxRadius)
 {
+    // 0〜1の乱数を生成して√で均等分布に
+    float raw = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+    float r = std::sqrt(raw) * (maxRadius - minRadius) + minRadius;
 
-   int randomAngle =  rand() % 628;
-   float angle = randomAngle * 0.01f;
-
-   // 0〜1の乱数を生成して√で均等分布に 
-  float raw = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
-  float r = radius * std::sqrt(raw);
+    // 0〜2πの角度をランダムに生成
+    float angle = static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2.0f * 3.14159265f;
 
     float x = r * std::cos(angle);
     float y = r * std::sin(angle);
 
-    return Vector3{ x, y, -0.5f }; // Zは0で平面上に配置
+    return Vector3{ x, y, -0.5f }; // Zは固定
 }
+
+//NoEngine::Vector3 GameScene::GenerateRandomPointInCircle(float radius)
+//{
+//
+//   int randomAngle =  rand() % 628;
+//   float angle = randomAngle * 0.01f;
+//
+//   // 0〜1の乱数を生成して√で均等分布に 
+//  float raw = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+//  float r = radius * std::sqrt(raw);
+//
+//    float x = r * std::cos(angle);
+//    float y = r * std::sin(angle);
+//
+//    return Vector3{ x, y, -0.5f }; // Zは0で平面上に配置
+//}
 
 void GameScene::SoundLoad()
 {

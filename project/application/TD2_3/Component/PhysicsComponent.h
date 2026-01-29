@@ -7,6 +7,6 @@ struct PhysicsComponent
 	float coefficient = 0.8f;				//反発係数
 	float friction = 0.7f;					//摩擦係数
 	bool useGravity = true;					//重力を使うか
-	float baseSpeed = 4.0f;					//基本速度
+	float baseSpeed = 5.0f;					//基本速度
 	static constexpr float kGravity = 6.0f;	//重力
 };
