@@ -11,13 +11,23 @@
 #include "engine/Runtime/GraphicsCore.h"
 #include "engine/Math/Easing.h"
 #include "externals/imgui/imgui.h"
+#include "engine/Functions/Input/Input.h"
 
 using namespace NoEngine;
 
 namespace
 {
 	constexpr float kRingInitialRadius = 4.85f;
+	constexpr float kStickDeadZone = 0.2f;
+	constexpr float kMouseMoveAngleThreshold = 0.05f;
 	float sRingRadius = kRingInitialRadius;
+}
+
+static float NormalizeAngleLocal(float a)
+{
+	while (a > PI) a -= 2 * PI;
+	while (a < -PI) a += 2 * PI;
+	return a;
 }
 
 void VausControlSystem::Update(No::Registry& registry, float deltaTime)
@@ -40,11 +50,78 @@ void VausControlSystem::Update(No::Registry& registry, float deltaTime)
 		No::MaterialComponent,
 		RingAnimationComponent>();
 	
-	float angle = CalculateMouseAngle();
-	static float currentCharge = 0.0f;
-	isPress_ = (GetAsyncKeyState(VK_LBUTTON) & 0x8000) != 0;
-	static float chargeTime = 0.0f;
-	static float power = 0.0f;
+	// 現在のマウス角度（常に取得）
+	float mouseAngle = CalculateMouseAngle();
+
+	// スティックの情報を取得
+	auto stick = Input::Pad::GetStick();
+	float lmag2 = stick.leftStickX * stick.leftStickX + stick.leftStickY * stick.leftStickY;
+	float rmag2 = stick.rightStickX * stick.rightStickX + stick.rightStickY * stick.rightStickY;
+	float dead2 = kStickDeadZone * kStickDeadZone;
+	bool stickActive = (lmag2 > dead2) || (rmag2 > dead2);
+	float stickAngle = CalculateStickAngle();
+
+	if (stickActive)
+	{
+		lastInput_ = LastInput::Stick;
+	}
+	else
+	{
+		// マウス移動を検出
+		float d = std::fabs(NormalizeAngleLocal(mouseAngle - prevMouseAngle_));
+		bool mouseMoved = d > kMouseMoveAngleThreshold;
+		bool mousePressedNow = (GetAsyncKeyState(VK_LBUTTON) & 0x8000) != 0;
+		if (mouseMoved || mousePressedNow)
+		{
+			if (lastInput_ == LastInput::Stick)
+			{
+				isBlending_ = true;
+				blendTime_ = 0.0f;
+				blendFromAngle_ = currentAngle_;
+			}
+			lastInput_ = LastInput::Mouse;
+		}
+	}
+
+	float angle = currentAngle_;
+
+	if (lastInput_ == LastInput::Stick && stickActive)
+	{
+		currentAngle_ = stickAngle;
+	}
+	else if (lastInput_ == LastInput::Mouse)
+	{
+		float target = mouseAngle;
+
+		if (isBlending_)
+		{
+			blendTime_ += deltaTime;
+			float t = std::clamp(blendTime_ / blendDuration_, 0.0f, 1.0f);
+
+			currentAngle_ = Easing::EaseOutCubic(
+				blendFromAngle_,
+				target,
+				t
+			);
+
+			if (t >= 1.0f)
+				isBlending_ = false;
+		}
+		else
+		{
+			currentAngle_ = target;
+		}
+	}
+
+
+	currentAngle_ = NormalizeAngleLocal(currentAngle_);
+	angle = currentAngle_;
+
+
+	// ボタン/押下状態：マウス左ボタンまたはパッドの A ボタ ン
+	isPress_ = ((GetAsyncKeyState(VK_LBUTTON) & 0x8000) != 0) || Input::Pad::IsPress(Input::GamepadButton::A);
+
+	
 	for (auto entity : ringView)
 	{
 		auto* ringTrans = registry.GetComponent<No::TransformComponent>(entity);
@@ -53,14 +130,14 @@ void VausControlSystem::Update(No::Registry& registry, float deltaTime)
 		{
 			if (!wasPress_)
 			{
-				power = 0.0f;
+				power_ = 0.0f;
 			}
 			ringAnimation->releaseTime = 0.0f;
 			ringAnimation->pressedTime += deltaTime * 2.0f;
 			ringAnimation->pressedTime = std::clamp(ringAnimation->pressedTime, 0.0f, 1.0f);
-			chargeTime = Easing::Lerp(0.0f, 1.0f, ringAnimation->pressedTime);
-			ringAnimation->tTemp = chargeTime;
-			if (chargeTime >= 1.0f)
+			chargeTime_ = Easing::Lerp(0.0f, 1.0f, ringAnimation->pressedTime);
+			ringAnimation->tTemp = chargeTime_;
+			if (chargeTime_ >= 1.0f)
 			{
 				ringTrans->translate.x += static_cast<float>( rand() % 3 - 1) * deltaTime;
 				ringTrans->translate.y += static_cast<float>(rand() % 3 - 1) * deltaTime;
@@ -71,15 +148,15 @@ void VausControlSystem::Update(No::Registry& registry, float deltaTime)
 			ringTrans->translate = Vector3::ZERO;
 			if (wasPress_ && !isPress_)
 			{
-				power = ringAnimation->tTemp;
+				power_ = ringAnimation->tTemp;
 			}
 			ringAnimation->pressedTime = 0.0f;
 			ringAnimation->releaseTime += deltaTime;
 			ringAnimation->releaseTime = std::clamp(ringAnimation->releaseTime, 0.0f, 1.0f);
-			chargeTime = Easing::EaseOutElastic(ringAnimation->tTemp, 0.0f, ringAnimation->releaseTime);
+			chargeTime_ = Easing::EaseOutElastic(ringAnimation->tTemp, 0.0f, ringAnimation->releaseTime);
 		}
-		ringTrans->scale = Vector3::UNIT_SCALE * (1.0f + ringAnimation->kChargeScale * chargeTime);
-		sRingRadius = kRingInitialRadius + chargeTime;
+		ringTrans->scale = Vector3::UNIT_SCALE * (1.0f + ringAnimation->kChargeScale * chargeTime_);
+		sRingRadius = kRingInitialRadius + chargeTime_;
 	}
 	if (!wasPress_ && isPress_)
 	{
@@ -103,19 +180,19 @@ void VausControlSystem::Update(No::Registry& registry, float deltaTime)
 		auto* vausState = registry.GetComponent<VausStateComponent>(entity);
 		Vector3 posBeforeUpdate = vausTransform->translate;
 		vausState->currentRingRadius = sRingRadius;
-		vausState->chargePower = power;
+		vausState->chargePower = power_;
 		vausState->theta = angle;
 		Vector3 ringPos{ sRingRadius * std::cos(angle), sRingRadius * std::sin(angle), -0.25f };
 		vausTransform->translate = ringPos;
 		vausTransform->rotation = MathCalculations::MakeRotateAxisAngleQuaternion(Vector3::FORWARD, angle + PI * 0.5f);
-		vausTransform->scale = Vector3::UNIT_SCALE * (1.0f + 0.2f * chargeTime);
+		vausTransform->scale = Vector3::UNIT_SCALE * (1.0f + 0.2f * chargeTime_);
 		vausState->isReleasing = false;
 		ImGui::Text("RingRadius: %.3f", vausState->currentRingRadius);
 		if (wasPress_ && !isPress_)
 		{
 			vausState->isReleasing = true;
 		}
-		if (!isPress_ && chargeTime > 0.001f)
+		if (!isPress_ && chargeTime_ > 0.001f)
 		{
 			vausState->isReleasing = true;
 		}
@@ -133,6 +210,7 @@ void VausControlSystem::Update(No::Registry& registry, float deltaTime)
 	}
 
 	wasPress_ = isPress_;
+	prevMouseAngle_ = mouseAngle;
 }
 
 float VausControlSystem::CalculateMouseAngle()
@@ -160,4 +238,15 @@ float VausControlSystem::CalculateMouseAngle()
 	float my = static_cast<float>(-(pt.y - cy));
 
 	return std::atan2f(my, mx);
+}
+
+float VausControlSystem::CalculateStickAngle()
+{	
+	auto stick = Input::Pad::GetStick();
+	float lmag2 = stick.leftStickX * stick.leftStickX + stick.leftStickY * stick.leftStickY;
+	float rmag2 = stick.rightStickX * stick.rightStickX + stick.rightStickY * stick.rightStickY;
+	float dead2 = kStickDeadZone * kStickDeadZone;
+	if (lmag2 > rmag2 && lmag2 > dead2) return std::atan2f(stick.leftStickY, stick.leftStickX);
+	if (rmag2 > dead2) return std::atan2f(stick.rightStickY, stick.rightStickX);
+	return 0.0f;
 }

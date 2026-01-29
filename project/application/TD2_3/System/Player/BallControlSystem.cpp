@@ -3,6 +3,8 @@
 #include "../../Component/VausStateComponent.h"
 #include "../../Component/PhysicsComponent.h"
 #include "../../Component/BallStateComponent.h"
+#include "../../Component/NormalEnemyComponent.h"
+#include "../../Component/TrackEnemyComponent.h"
 
 #include "../../tag.h"
 #include "engine/Functions/Renderer/Primitive.h"
@@ -115,6 +117,8 @@ void BallControlSystem::Update(No::Registry& registry, float deltaTime)
 
 		if (ballCollider->isCollied && (static_cast<uint32_t>(ballCollider->colliedWith) & static_cast<uint32_t>(ColliderMask::kEnemy)) != 0)
 		{
+			if (ballState->landed)ballState->landed = false;
+
 			// colliedEntity が有効であることを前提とする
 			if (registry.Has<No::TransformComponent>(ballCollider->colliedEntity) &&
 				registry.Has<SphereColliderComponent>(ballCollider->colliedEntity))
@@ -178,6 +182,7 @@ void BallControlSystem::Update(No::Registry& registry, float deltaTime)
 		// 移動更新
 		ballTransform->translate.x += ballPhysics->velocity.x * deltaTime;
 		ballTransform->translate.y += ballPhysics->velocity.y * deltaTime;
+
 
 		Primitive::DrawSphere(ballTransform->translate, ballCollider->radius, NoEngine::Color(1.0f, 0.7f, 0.f));
 	}

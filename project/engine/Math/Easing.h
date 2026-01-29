@@ -48,5 +48,11 @@ inline T EaseOutElastic(const T& a, const T& b, float t)
 		: powf(2, -10 * t) * sinf((t * 10 - 0.75f) * c4) + 1;
 	return Lerp(a, b, t);
 }
+template<typename T>
+inline T EaseOutCubic(const T& a, const T& b, float t)
+{
+	t = 1 - powf(1 - t, 3);
+	return Lerp(a, b, t);
+}
 }
 }
