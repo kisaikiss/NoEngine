@@ -11,10 +11,14 @@ namespace Render {
 
 using namespace Component;
 
+namespace {
+Matrix4x4 sOrthographicMatrix;
+}
+
 NoEngine::Render::SpritePass::SpritePass() {
 
 	auto size = GraphicsCore::gWindowManager.GetMainWindow()->GetWindowSize();
-	orthographicMatrix_ = MathCalculations::MakeOrthographicMatrix(0.f, 0.f, static_cast<float>(size.clientWidth), static_cast<float>(size.clientHeight), 0.1f, 100.f);
+	sOrthographicMatrix = MathCalculations::MakeOrthographicMatrix(0.f, 0.f, static_cast<float>(size.clientWidth), static_cast<float>(size.clientHeight), 0.1f, 100.f);
 
 }
 
@@ -133,7 +137,7 @@ void SpritePass::Render(GraphicsContext& gfx) {
 	gfx.SetPipelineState(GetPSO(Render::GetPSOID(L"Renderer : Default Sprite PSO")));
 	gfx.SetRootSignature(GetRootSignature(Render::GetRootSignatureID(L"Renderer : Default Sprite PSO")));
 	gfx.SetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	gfx.SetDynamicConstantBufferView(rootIndex["gCameraMatrix"], sizeof(Matrix4x4), &orthographicMatrix_);
+	gfx.SetDynamicConstantBufferView(rootIndex["gCameraMatrix"], sizeof(Matrix4x4), &sOrthographicMatrix);
 	gfx.SetDynamicVB(0, vertices_.size(), sizeof(SpriteVertex), vertices_.data());
 	gfx.SetDynamicIB(indices_.size(), indices_.data());
 	size_t start = 0;

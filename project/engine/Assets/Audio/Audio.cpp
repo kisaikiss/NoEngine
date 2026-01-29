@@ -204,8 +204,11 @@ void SoundStop(std::string name) {
 		return;
 	}
 	HRESULT hr = soundData[name].pSourceVoice->Stop();
-	(void)hr;
-	assert(SUCCEEDED(hr));
+	if (FAILED(hr)) {
+		Log::DebugPrint("SoundStop Failed : " + name);
+		assert(false);
+	}
+	
 }
 
 void SoundCompleteStop(std::string name) {
