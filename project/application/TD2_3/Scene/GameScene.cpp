@@ -162,7 +162,6 @@ void GameScene::InitEnemy(No::Registry& registry)
 
         auto* enemy = registry.AddComponent<NormalEnemyComponent>(enemyEntity);
         //enemy->velocity = { 0.5f,0.5f,0.0f };
-        enemy->entity = enemyEntity; // ★ ここでセット
         //enemy->stateManager->Start(enemy);
         //enemy->stateManager->ChangeState<EnemyAppear<NormalEnemyComponent>>(registry);
 

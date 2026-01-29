@@ -74,21 +74,21 @@ void NormalEnemyControlSystem::Update(No::Registry& registry, float deltaTime)
 
 }
 
-void EnemyAppear<NormalEnemyComponent>::Enter(No::Registry& registry)
+void EnemyAppear<NormalEnemyComponent>::Enter(No::Registry registry, No::Entity entity)
 {
 
     (void)registry;
     timer_ = 0.0f;
-    auto* transform = registry.GetComponent<TransformComponent>(ownerType_->entity);
+    auto* transform = registry.GetComponent<TransformComponent>(entity);
     transform->scale = Vector3::ZERO;
 }
 
-void EnemyAppear<NormalEnemyComponent>::Update(No::Registry& registry, float deltaTime) {
+void EnemyAppear<NormalEnemyComponent>::Update(No::Registry registry,No::Entity entity,float deltaTime) {
 
 
     TimerUpdate(timer_, deltaTime);
 
-    auto* transform = registry.GetComponent<TransformComponent>(ownerType_->entity);
+    auto* transform = registry.GetComponent<TransformComponent>(entity);
 
     if (timer_ <= 7.5f) {
         float timer = timer_ / 7.5f;
@@ -99,29 +99,30 @@ void EnemyAppear<NormalEnemyComponent>::Update(No::Registry& registry, float del
 
 }
 
-void EnemyAppear<NormalEnemyComponent>::Exit(No::Registry& registry)
+void EnemyAppear<NormalEnemyComponent>::Exit(No::Registry registry, No::Entity entity)
 {
-    auto* transform = registry.GetComponent<TransformComponent>(ownerType_->entity);
+    auto* transform = registry.GetComponent<TransformComponent>(entity);
     transform->scale = Vector3::UNIT_SCALE;
 
 }
 
-void EnemyMove::Enter(No::Registry& registry)
+void EnemyMove::Enter(No::Registry registry, No::Entity entity)
 {
     (void)registry;
+    (void)entity;
     theta_ = rand() % 314 * 0.01f;
 }
 
 
-void EnemyMove::Update(No::Registry& registry, float deltaTime)
+void EnemyMove::Update(No::Registry registry,No::Entity entity,float deltaTime)
 {
-    auto* material = registry.GetComponent<MaterialComponent>(ownerType_->entity);
+    auto* material = registry.GetComponent<MaterialComponent>(entity);
 
-    auto* transform = registry.GetComponent<No::TransformComponent>(ownerType_->entity);
+    auto* transform = registry.GetComponent<No::TransformComponent>(entity);
     theta_ += deltaTime * PI;
     transform->translate.y = ownerType_->defaultTranslate_.y + sinf(theta_) * 0.5f;
 
-    auto* collider = registry.GetComponent<SphereColliderComponent>(ownerType_->entity);
+    auto* collider = registry.GetComponent<SphereColliderComponent>(entity);
 
     if (collider->isCollied)
     {
@@ -133,20 +134,20 @@ void EnemyMove::Update(No::Registry& registry, float deltaTime)
 
 }
 
-void EnemyMove::Exit(No::Registry& registry)
+void EnemyMove::Exit(No::Registry registry, No::Entity entity)
 {
     (void)registry;
 
 }
 
-void EnemyHit<NormalEnemyComponent>::Enter(No::Registry& registry)
+void EnemyHit<NormalEnemyComponent>::Enter(No::Registry registry, No::Entity entity)
 {
 
     timer_ = 0.0f;
 
-    auto* material = registry.GetComponent<MaterialComponent>(ownerType_->entity);
+    auto* material = registry.GetComponent<MaterialComponent>(entity);
     material->materials[0].color = NoEngine::Color(1.0f, 0.0f, 0.0f, 1.0f);
-    auto* enemy = registry.GetComponent<NormalEnemyComponent>(ownerType_->entity);
+    auto* enemy = registry.GetComponent<NormalEnemyComponent>(entity);
     //HPを減らす
     enemy->hp--;
 
@@ -165,12 +166,12 @@ void EnemyHit<NormalEnemyComponent>::Enter(No::Registry& registry)
     No::SoundEffectPlay("batDie", 0.5f);
 }
 
-void EnemyHit<NormalEnemyComponent>::Update(No::Registry& registry, float deltaTime)
+void EnemyHit<NormalEnemyComponent>::Update(No::Registry registry,No::Entity entity,float deltaTime)
 {
 
     TimerUpdate(timer_, deltaTime);
 
-    auto* transform = registry.GetComponent<No::TransformComponent>(ownerType_->entity);
+    auto* transform = registry.GetComponent<No::TransformComponent>(entity);
 
     PoyoPoyo(*transform, timer_, 10.0f, 0.25f, Vector3::UNIT_SCALE);
 
@@ -201,43 +202,43 @@ void EnemyHit<NormalEnemyComponent>::Update(No::Registry& registry, float deltaT
 
 }
 
-void EnemyHit<NormalEnemyComponent>::Exit(No::Registry& registry)
+void EnemyHit<NormalEnemyComponent>::Exit(No::Registry registry, No::Entity entity)
 {
 
-    auto* material = registry.GetComponent<MaterialComponent>(ownerType_->entity);
+    auto* material = registry.GetComponent<MaterialComponent>(entity);
     material->materials[0].color = NoEngine::Color(1.0f, 0.0f, 0.0f, 1.0f);
-    auto* transform = registry.GetComponent<No::TransformComponent>(ownerType_->entity);
+    auto* transform = registry.GetComponent<No::TransformComponent>(entity);
     transform->scale = Vector3::UNIT_SCALE;
 
     ballPhysics_ = nullptr;
 
 }
 
-void EnemyDie<NormalEnemyComponent>::Enter(No::Registry& registry)
+void EnemyDie<NormalEnemyComponent>::Enter(No::Registry registry, No::Entity entity)
 {
     (void)registry;
     timer_ = 0.0f;
 }
 
-void EnemyDie<NormalEnemyComponent>::Update(No::Registry& registry, float deltaTime)
+void EnemyDie<NormalEnemyComponent>::Update(No::Registry registry,No::Entity entity,float deltaTime)
 {
     TimerUpdate(timer_, deltaTime);
 
-    auto* transform = registry.GetComponent<TransformComponent>(ownerType_->entity);
+    auto* transform = registry.GetComponent<TransformComponent>(entity);
 
     if (timer_ <= 3.0f) {
         float timer = timer_ / 3.0f;
         transform->scale = NoEngine::Easing::EaseInOutBack(Vector3::UNIT_SCALE, Vector3::ZERO, timer);
     } else {
-        auto* deathFlag = registry.GetComponent<DeathFlag>(ownerType_->entity);
+        auto* deathFlag = registry.GetComponent<DeathFlag>(entity);
         deathFlag->isDead = true;
     }
 
 }
 
-void EnemyDie<NormalEnemyComponent>::Exit(No::Registry& registry)
+void EnemyDie<NormalEnemyComponent>::Exit(No::Registry registry, No::Entity entity)
 {
-    auto* deathFlag = registry.GetComponent<DeathFlag>(ownerType_->entity);
+    auto* deathFlag = registry.GetComponent<DeathFlag>(entity);
     deathFlag->isDead = true;
 
 }
