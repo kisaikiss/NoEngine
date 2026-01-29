@@ -4,7 +4,8 @@
 #include "engine/Functions/ECS/Component/Transfrom2DComponent.h"
 #include "engine/Runtime/GpuResource/GpuBuffer.h"
 #include "engine/Math/Types/Matrix4x4.h"
-
+#pragma warning(push)
+#pragma warning(disable: 4324)
 namespace NoEngine {
 namespace Render {
 
@@ -28,8 +29,6 @@ private:
     std::vector<SpriteVertex> vertices_;
     std::vector<uint16_t> indices_;
    
-    Matrix4x4 orthographicMatrix_;
-
     void Collect(ECS::Registry& registry);
     void Sort();
     void MakeLocalQuad(const DrawItem& item , Vector2 out[4]);
@@ -39,3 +38,5 @@ private:
 
 }
 }
+#pragma warning(pop)
+

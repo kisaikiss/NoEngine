@@ -76,5 +76,5 @@ float4 main(VSOutput input) : SV_TARGET
     //Tanh tonemap
     color2 = tanh(color2 * color2 / 4e2);
     finalColor += color2.rgb;
-    return float4(finalColor.rgb, 1.0);
+    return float4(finalColor.rgb * 0.3, 1.0);
 }

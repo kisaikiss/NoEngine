@@ -298,7 +298,7 @@ NoEngine::Vector3 GameScene::GenerateRandomPointInCircle(float minRadius, float 
     float x = r * std::cos(angle);
     float y = r * std::sin(angle);
 
-    return Vector3{ x, y, -0.5f }; // Zは固定
+    return Vector3{ x, y, 0.0f}; // Zは0で平面上に配置
 }
 
 //NoEngine::Vector3 GameScene::GenerateRandomPointInCircle(float radius)
