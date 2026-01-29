@@ -101,7 +101,7 @@ void GameScene::InitVaus(No::Registry& registry)
 
 	auto* m = registry.AddComponent<No::MaterialComponent>(vausEntity);
 	m->materials = NoEngine::ModelLoader::GetMaterial("bar");
-	m->materials.front().color = {0.8f,0.2f,0.2f};
+	m->color = {0.8f,0.2f,0.2f};
 
     m->psoName = L"Renderer : Default PSO";
     m->psoId = NoEngine::Render::GetPSOID(m->psoName);
@@ -119,8 +119,8 @@ void GameScene::InitRing(No::Registry& registry)
 
 	auto m = registry.AddComponent<No::MaterialComponent>(ringEntity);
 	m->materials = NoEngine::ModelLoader::GetMaterial("circle");
-	m->materials.front().color.a = 0.7f;
-	m->materials.front().color.b = 0.5f;
+	m->color.a = 0.7f;
+	m->color.b = 0.5f;
 
     m->psoName = L"Renderer : Default PSO";
     m->psoId = NoEngine::Render::GetPSOID(m->psoName);
@@ -162,7 +162,6 @@ void GameScene::InitEnemy(No::Registry& registry)
 
         auto* enemy = registry.AddComponent<NormalEnemyComponent>(enemyEntity);
         //enemy->velocity = { 0.5f,0.5f,0.0f };
-        enemy->entity = enemyEntity; // ★ ここでセット
         //enemy->stateManager->Start(enemy);
         //enemy->stateManager->ChangeState<EnemyAppear<NormalEnemyComponent>>(registry);
 

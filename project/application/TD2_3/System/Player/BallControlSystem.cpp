@@ -43,6 +43,9 @@ void BallControlSystem::Update(No::Registry& registry, float deltaTime)
 		//auto* ballDeathFlag = registry.GetComponent<DeathFlag>(entityBall);
 		auto* ballPhysics = registry.GetComponent<PhysicsComponent>(entityBall);
 		auto* ballState = registry.GetComponent<BallStateComponent>(entityBall);
+#ifndef RELEASE
+		if (Input::Keyboard::IsTrigger('R'))ballState->landed = true;
+#endif // !RELEASE
 
 		for (auto entityVaus : vausView)
 		{

@@ -16,10 +16,10 @@ public:
 
     EnemyChase() = default;
     //ステートが始まるときに一度だけ呼ばれる
-    void Enter(No::Registry& registry) override;
+    void Enter(No::Registry& registry, No::Entity entity) override;
     //ステートが更新時に呼ばれる
-    void Update(No::Registry& registry, float deltaTime)override;
+    void Update(No::Registry& registry, No::Entity entity, float deltaTime)override;
     //ステートが終了するときに一度だけ呼ばれる
-    void Exit(No::Registry& registry)override;
+    void Exit(No::Registry& registry, No::Entity entity)override;
 
 };
