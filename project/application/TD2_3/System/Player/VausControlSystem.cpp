@@ -153,7 +153,7 @@ void VausControlSystem::Update(No::Registry& registry, float deltaTime)
 				//ヨシダ追加しました
 				float pitch = 1.0f + ringAnimation->pressedTime * 0.5f;
 				No::SetPitch("chargeEnter", pitch);
-				No::SoundPlay("chargeEnter", 0.5f, false);
+				No::SoundEffectPlay("chargeEnter", 0.5f);
 			}
 			ringAnimation->pressedTime = 0.0f;
 			ringAnimation->releaseTime += deltaTime;
