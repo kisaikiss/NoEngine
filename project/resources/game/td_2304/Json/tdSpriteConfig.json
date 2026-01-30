@@ -1,8 +1,9 @@
 {
 
     "PlayerHpGauge": {
-        "translate": [ 100, 200 ],
-        "scale": [ 448, 88 ],
+        "translate": [ 256.0, 64.0 ],
+        "rotate": 0.0,
+        "scale": [ 448.0, 88.0 ],
         "pivot": [ 0.5, 0.5 ],
         "flipX": false,
         "flipY": false,
@@ -12,8 +13,9 @@
         "color": [ 1, 1, 1, 1 ]
     },
     "Level": {
-        "translate": [ 100, 200 ],
-        "scale": [ 451, 83 ],
+        "translate": [ 256.0, 160.0 ],
+        "rotate": 0.0,
+        "scale": [ 451.0, 83.0 ],
         "pivot": [ 0.5, 0.5 ],
         "flipX": false,
         "flipY": false,
@@ -22,7 +24,6 @@
         "orderInLayer": 2,
         "color": [ 1, 1, 1, 1 ]
     }
-}
-{
+
 
 }

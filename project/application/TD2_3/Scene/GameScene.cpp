@@ -59,6 +59,9 @@ void GameScene::Setup()
 	//衝突判定用システム
 	AddSystem(std::make_unique<CollisionSystem>());
 
+
+    SpriteConfigManager::Get().Load("resources/game/td_2304/Json/tdSpriteConfig.json");
+
 	No::Registry& registry = *GetRegistry();
 	InitBackGround(registry);
 	InitVaus(registry);
@@ -71,7 +74,7 @@ void GameScene::Setup()
     InitLights(registry);
     InitHpGaugeSprite(registry);
     InitLevelGaugeSprite(registry);
-    SpriteConfigManager::Get().Load("resources/game/td_2304/Json/sprite_config.json");
+
 
 	constexpr Vector3 kStartCameraPosition = Vector3{ 0.0f, 0.0f, -28.0f };
 	//カメラ初期化
@@ -286,22 +289,19 @@ void GameScene::InitLights(No::Registry& registry) {
 
 void GameScene::InitHpGaugeSprite(No::Registry& registry)
 {
-  CreateSprite(registry, { 100.f, 200.f }, { 448.f, 88.f }, "hp.png","PlayerHpGauge");
+  CreateSprite(registry, "hp.png","PlayerHpGauge");
 }
 
 void GameScene::InitLevelGaugeSprite(No::Registry& registry)
 {
-    CreateSprite(registry, { 100.f, 200.f }, { 451.f, 83.f },"lv.png","Level");
+    CreateSprite(registry, "lv.png","Level");
 }
 
-void GameScene::CreateSprite(No::Registry& registry, NoEngine::Vector2 translate,
-    NoEngine::Vector2 scale, const std::string& fileName, const std::string& configName)
+void GameScene::CreateSprite(No::Registry& registry, const std::string& fileName, const std::string& configName)
 {
     No::Entity entity = registry.GenerateEntity();
 
     auto* t2d = registry.AddComponent<No::Transform2DComponent>(entity); 
-    t2d->translate = translate; 
-    t2d->scale = scale;
 
     auto* sprite = registry.AddComponent<No::SpriteComponent>(entity);
     sprite->name = configName; // JSON のキーと一致させる

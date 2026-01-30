@@ -15,6 +15,15 @@ nlohmann::json SpriteToJson(const NoEngine::Component::SpriteComponent& sp)
     };
 }
 
+//nlohmann::json SpriteToJson(const NoEngine::Component::Transform2DComponent& sp)
+//{
+//    return {
+//        {"translate", {sp.translate.x, sp.translate.y}},
+//        {"scale", sp.scale.x,sp.scale.y},
+//    };
+//}
+
+
 void ApplyJsonToSprite( NoEngine::Component::SpriteComponent& sp, const nlohmann::json& j)
 {
 
@@ -48,24 +57,23 @@ void ApplyJsonToTransform(NoEngine::Component::Transform2DComponent& t, const nl
         t.translate.y = j["translate"][1];
     }
 
+    if (j.contains("rotate")) {
+        t.rotation = j["rotate"];
+    }
+
     if (j.contains("scale")) {
         t.scale.x = j["scale"][0];
         t.scale.y = j["scale"][1];
     }
-
-    if (j.contains("rotate")) {
-        t.rotation = j["rotate"];
-    }
+  
 }
-
-
-SpriteConfigManager* instance_ = nullptr;
 
 void SpriteConfigManager::Load(const std::string& path)
 {
     std::ifstream f(path);
     if (!f.is_open()) return;
     f >> jsonData;
+
 }
 
 void SpriteConfigManager::ApplyToSprite(NoEngine::Component::SpriteComponent& sp,NoEngine::Component::Transform2DComponent& t)
@@ -78,6 +86,6 @@ void SpriteConfigManager::ApplyToSprite(NoEngine::Component::SpriteComponent& sp
 
     ApplyJsonToSprite(sp, j);
 
-    if (&t) { ApplyJsonToTransform(t, j); }
+    ApplyJsonToTransform(t, j); 
 
 }
