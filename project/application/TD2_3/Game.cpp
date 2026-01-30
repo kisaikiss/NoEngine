@@ -4,9 +4,6 @@
 
 #include "application/TD2_3/Render/BackGroundEffect.h"
 
-namespace {
-float angle = 0.f;
-}
 
 void Game::Startup(void) {
 	RegisterScene("TestScene", []() {
@@ -15,7 +12,7 @@ void Game::Startup(void) {
 	RegisterScene("GameScene", []() {
 		return std::make_unique<GameScene>();
 		});
-	ChangeScene("TestScene");
+	ChangeScene("GameScene");
 
 	// カスタム RenderPass の追加例
 	AddRenderPass(std::make_unique<BackGroundEffectPass>());
