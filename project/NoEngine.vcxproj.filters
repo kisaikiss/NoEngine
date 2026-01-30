@@ -121,6 +121,7 @@
     <ClCompile Include="application\TD2_3\Scene\TitleScene.cpp" />
     <ClCompile Include="application\TD2_3\Scene\GameOverScene.cpp" />
     <ClCompile Include="application\TD2_3\Scene\ResultScene.cpp" />
+    <ClCompile Include="application\TD2_3\System\Player\PlayerStatusSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="application\TD2_3\Component\BackGroundComponent.h" />
@@ -273,8 +274,9 @@
     <ClInclude Include="application\TD2_3\Render\BallTrailPass.h" />
     <ClInclude Include="application\TD2_3\Scene\TitleScene.h" />
     <ClInclude Include="application\TD2_3\Scene\GameOverScene.h" />
-    <ClInclude Include="application\TD2_3\Component\PlayerStateComponent.h" />
+    <ClInclude Include="application\TD2_3\Component\PlayerstatusComponent.h" />
     <ClInclude Include="application\TD2_3\Scene\ResultScene.h" />
+    <ClInclude Include="application\TD2_3\System\Player\PlayerStatusSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\engine\Shaders\Default.hlsli" />

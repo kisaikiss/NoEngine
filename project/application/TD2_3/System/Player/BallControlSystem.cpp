@@ -116,6 +116,26 @@ void BallControlSystem::Update(No::Registry& registry, float deltaTime)
 						float hitFactor = -diff / halfTheta;
 						constexpr float kAngleBias = 0.25f;
 						Vector3 dir = MathCalculations::Normalize(normal + tangent * hitFactor * kAngleBias);
+
+						// --- ここからランダム性の付与（軽いジッターで反射角を固定化しすぎない） ---
+						// 小さめの最大ジッター（ラジアン）。値は調整可能。
+						constexpr float kReflectionJitter = 0.12f;
+						// hitFactor が端に近いほどジッターを少し抑える（好みで変更可）
+						float jitterScale = 1.0f - 0.5f * std::fabs(hitFactor);
+						float raw = static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX); // 0..1
+						float jitter = (raw - 0.5f) * 2.0f * kReflectionJitter * jitterScale;
+
+						// 2D 回転で dir をジッター回転させる
+						float cosA = std::cos(jitter);
+						float sinA = std::sin(jitter);
+						Vector3 dir2{
+							dir.x * cosA - dir.y * sinA,
+							dir.x * sinA + dir.y * cosA,
+							0.0f
+						};
+						dir = MathCalculations::Normalize(dir2);
+						// --- ランダム性付与ここまで ---
+
 						float finalSpeed = ballPhysics->baseSpeed;
 						if (vausState->isReleasing)
 						{

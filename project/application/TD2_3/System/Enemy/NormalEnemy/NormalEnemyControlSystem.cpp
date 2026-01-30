@@ -3,6 +3,7 @@
 #include "../../../Component/VausStateComponent.h"
 //#include"../../Component/NormalEnemyComponent.h"
 #include "../../../Component/BallStateComponent.h"
+#include "../../../Component/PlayerstatusComponent.h"
 #include"engine/Math/Easing.h"
 
 #include "../../../tag.h"
@@ -48,22 +49,22 @@ void NormalEnemyControlSystem::Update(No::Registry& registry, float deltaTime)
 		enemy->stateManager->Update(registry, entity, deltaTime);
 
 #ifdef USE_IMGUI
-		auto* collider = registry.GetComponent<SphereColliderComponent>(entity);
-		auto* transform = registry.GetComponent<No::TransformComponent>(entity);
-		auto* deathFlag = registry.GetComponent<DeathFlag>(entity);
+		//auto* collider = registry.GetComponent<SphereColliderComponent>(entity);
+		//auto* transform = registry.GetComponent<No::TransformComponent>(entity);
+		//auto* deathFlag = registry.GetComponent<DeathFlag>(entity);
 
-		std::string imGuiName = "model" + std::to_string(entity);
-		ImGui::Begin(imGuiName.c_str());
-		ImGui::DragFloat3("translate", &transform->translate.x, 0.05f);
-		ImGui::DragFloat3("scale", &transform->scale.x, 0.05f);
-		ImGui::DragFloat4("rotate", &transform->rotation.x, 0.04f);
-		ImGui::Text("collied %s", collider->isCollied ? "true" : "false");
-		ImGui::Text("colliedWith %u", static_cast<uint32_t>(collider->colliedWith));
-		ImGui::Text("colliedEntity %u", static_cast<uint32_t>(collider->colliedEntity));
+		//std::string imGuiName = "model" + std::to_string(entity);
+		//ImGui::Begin(imGuiName.c_str());
+		//ImGui::DragFloat3("translate", &transform->translate.x, 0.05f);
+		//ImGui::DragFloat3("scale", &transform->scale.x, 0.05f);
+		//ImGui::DragFloat4("rotate", &transform->rotation.x, 0.04f);
+		//ImGui::Text("collied %s", collider->isCollied ? "true" : "false");
+		//ImGui::Text("colliedWith %u", static_cast<uint32_t>(collider->colliedWith));
+		//ImGui::Text("colliedEntity %u", static_cast<uint32_t>(collider->colliedEntity));
 
-		ImGui::Text("isDead %s", deathFlag->isDead ? "true" : "false");
-		ImGui::Text("hp %d", enemy->hp);
-		ImGui::End();
+		//ImGui::Text("isDead %s", deathFlag->isDead ? "true" : "false");
+		//ImGui::Text("hp %d", enemy->hp);
+		//ImGui::End();
 
 #endif // USE_IMGUI
 
@@ -236,6 +237,14 @@ void EnemyDie<NormalEnemyComponent>::Update(No::Registry& registry, No::Entity e
 	{
 		auto* deathFlag = registry.GetComponent<DeathFlag>(entity);
 		deathFlag->isDead = true;
+		auto view = registry.View<
+			PlayerStatusComponent>();
+		for (auto playerEntity : view)
+		{
+			auto* status = registry.GetComponent<PlayerStatusComponent>(playerEntity);
+			status->score += 100;
+			status->exp++;
+		}
 	}
 
 }
@@ -244,5 +253,4 @@ void EnemyDie<NormalEnemyComponent>::Exit(No::Registry& registry, No::Entity ent
 {
 	auto* deathFlag = registry.GetComponent<DeathFlag>(entity);
 	deathFlag->isDead = true;
-
 }
