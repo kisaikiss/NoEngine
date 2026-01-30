@@ -32,6 +32,15 @@ public:
 
 	float* ptr(void) { return reinterpret_cast<float*>(this); }
 	float& operator[](int index) { return ptr()[index]; }
+	Color operator*(float s) const {
+		return Color(r * s, g * s, b * s, a * s);
+	}
+	Color operator+(const Color& other) const {
+		return Color(r + other.r, g + other.g, b + other.b, a + other.a);
+	}
+	Color operator-(const Color& other) const {
+		return Color(r - other.r, g - other.g, b - other.b, a - other.a);
+	}
 
 	static const Color WHITE;
 	static const Color BLACK;

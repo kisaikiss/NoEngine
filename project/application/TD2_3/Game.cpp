@@ -3,6 +3,7 @@
 #include "Scene/GameScene.h"
 
 #include "application/TD2_3/Render/BackGroundEffect.h"
+#include "application/TD2_3/Render/BallTrailPass.h"
 
 namespace {
 float angle = 0.f;
@@ -18,7 +19,10 @@ void Game::Startup(void) {
 	ChangeScene("GameScene");
 
 	// カスタム RenderPass の追加例
+
 	AddRenderPass(std::make_unique<BackGroundEffectPass>());
+	AddRenderPass(std::make_unique<BallTrailPass>());
+
 }
 
 void Game::Cleanup(void) {

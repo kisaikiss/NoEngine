@@ -6,10 +6,12 @@
 #include "../../Component/NormalEnemyComponent.h"
 #include "../../Component/TrackEnemyComponent.h"
 #include "../../Component/BackGroundComponent.h"
+#include "../../Component/BallTrailComponent.h"
 
 #include "../../tag.h"
 #include "engine/Functions/Renderer/Primitive.h"
 #include "engine/Math/Types/Calculations/Vector3Calculations.h"
+#include "externals/imgui/imgui.h"
 
 using namespace NoEngine;
 
@@ -33,8 +35,7 @@ void BallControlSystem::Update(No::Registry& registry, float deltaTime)
 	auto vausView = registry.View<
 		No::TransformComponent,
 		VausStateComponent>();
-	
-	auto backGroundView = registry.View<BackGroundComponent>();
+
 	for (auto entityBall : ballView)
 	{
 		auto* ballTransform = registry.GetComponent<No::TransformComponent>(entityBall);
@@ -43,8 +44,25 @@ void BallControlSystem::Update(No::Registry& registry, float deltaTime)
 		//auto* ballDeathFlag = registry.GetComponent<DeathFlag>(entityBall);
 		auto* ballPhysics = registry.GetComponent<PhysicsComponent>(entityBall);
 		auto* ballState = registry.GetComponent<BallStateComponent>(entityBall);
+		BallTrailComponent* trail = nullptr;
+		if (registry.Has<BallTrailComponent>(entityBall))
+		{
+			trail = registry.GetComponent<BallTrailComponent>(entityBall);
+		}
+
 #ifndef RELEASE
-		if (Input::Keyboard::IsTrigger('R'))ballState->landed = true;
+		if (Input::Keyboard::IsTrigger('R'))
+		{
+			ballState->landed = true;
+			ballState->isOut = false;
+		}
+		if (trail)
+		{
+			ImGui::Begin("Ball Trail");
+			ImGui::ColorEdit4("startColor", &trail->startColor.r);
+			ImGui::ColorEdit4("endColor", &trail->endColor.r);
+			ImGui::End();
+		}
 #endif // !RELEASE
 
 		for (auto entityVaus : vausView)
@@ -80,14 +98,14 @@ void BallControlSystem::Update(No::Registry& registry, float deltaTime)
 				float dist = MathCalculations::Length(ballTransform->translate);
 
 				// 判定閾値を球の半径
-				if (dist >= vausState->currentRingRadius - ballCollider->radius)
+				if (!ballState->isOut && dist >= vausState->currentRingRadius - ballCollider->radius)
 				{
 					/*No::SoundPlay("ballPong", 0.5f,false);*/
 
 					float theta = std::atan2(ballTransform->translate.y, ballTransform->translate.x);
 					float diff = NormalizeAngle(theta - vausState->theta);
-					constexpr float kPaddleLinearWidth = 3.5f;
-					float paddleWidth = kPaddleLinearWidth * vausTransform->scale.x;
+
+					float paddleWidth = vausState->widthScale * vausState->kBaseWidth * vausTransform->scale.x;
 					float sinArg = std::clamp((paddleWidth * 0.5f) / vausState->currentRingRadius, -1.0f, 1.0f);
 					float halfTheta = std::asin(sinArg);
 
@@ -117,8 +135,12 @@ void BallControlSystem::Update(No::Registry& registry, float deltaTime)
 
 						ballTransform->translate.x += dir.x * 0.05f;
 						ballTransform->translate.y += dir.y * 0.05f;
+						ballState->isOut = false;
 					}
-
+					else
+					{
+						ballState->isOut = true;
+					}
 				}
 			}
 		}
@@ -131,7 +153,7 @@ void BallControlSystem::Update(No::Registry& registry, float deltaTime)
 			if (registry.Has<No::TransformComponent>(ballCollider->colliedEntity) &&
 				registry.Has<SphereColliderComponent>(ballCollider->colliedEntity))
 			{
-	
+
 				No::SoundEffectPlay("ballPong", 0.5f);
 				auto* enemyTransform = registry.GetComponent<No::TransformComponent>(ballCollider->colliedEntity);
 				auto* enemyCollider = registry.GetComponent<SphereColliderComponent>(ballCollider->colliedEntity);
@@ -192,8 +214,34 @@ void BallControlSystem::Update(No::Registry& registry, float deltaTime)
 		// 移動更新
 		ballTransform->translate.x += ballPhysics->velocity.x * deltaTime;
 		ballTransform->translate.y += ballPhysics->velocity.y * deltaTime;
+		if (trail)
+		{
+			if (deltaTime > 0.0f)
+				trail->sampleInterval = deltaTime;
+			// 既存サンプルを経過時間分だけ進める
+			for (auto& s : trail->samples)s.age += deltaTime;
 
+			// サンプリングタイミング管理
+			trail->timeSinceLast += deltaTime;
+			if (trail->timeSinceLast >= trail->sampleInterval)
+			{
+				trail->timeSinceLast = 0.0f;
+				BallTrailComponent::Sample sample;
+				sample.pos = ballTransform->translate;
+				sample.age = 0.0f;
+				// newest を front に入れる
+				trail->samples.push_front(sample);
+				if (trail->samples.size() > trail->maxSamples)
+				{
+					trail->samples.pop_back();
+				}
+			}
 
-		Primitive::DrawSphere(ballTransform->translate, ballCollider->radius, NoEngine::Color(1.0f, 0.7f, 0.f));
+			// 期限切れサンプルを削除
+			while (!trail->samples.empty() && trail->samples.back().age > trail->maxAge)
+			{
+				trail->samples.pop_back();
+			}
+		}
 	}
 }

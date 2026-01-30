@@ -7,6 +7,7 @@
 #include "../Component/BackGroundComponent.h"
 #include"../Component/NormalEnemyComponent.h"
 #include"../Component/BatBossComponent.h"
+#include "../Component/BallTrailComponent.h"
 
 //collision
 #include "../System/CollisionSystem.h"
@@ -27,7 +28,6 @@
 //ヨシダ追加しました。
 #include "../tag.h"
 
-#include "engine/Functions/Renderer/Primitive.h"
 
 using namespace NoEngine;
 
@@ -101,7 +101,7 @@ void GameScene::InitVaus(No::Registry& registry)
 
 	auto* m = registry.AddComponent<No::MaterialComponent>(vausEntity);
 	m->materials = NoEngine::ModelLoader::GetMaterial("bar");
-	m->color = {0.8f,0.2f,0.2f};
+	m->color = 0xA82C57ff;
 
     m->psoName = L"Renderer : Default PSO";
     m->psoId = NoEngine::Render::GetPSOID(m->psoName);
@@ -133,6 +133,14 @@ void GameScene::InitBall(No::Registry& registry)
     registry.AddComponent<BallTag>(ballEntity);
     registry.AddComponent<PhysicsComponent>(ballEntity);
     registry.AddComponent<BallStateComponent>(ballEntity);
+
+    //軌跡
+    auto* trailComp = registry.AddComponent<BallTrailComponent>(ballEntity);
+    // 必要ならパラメータを微調整
+    trailComp->maxAge = 0.6f;
+    trailComp->sampleInterval = 0.02f;
+    trailComp->thickness = 0.35f;
+    trailComp->maxSamples = 256;
     auto* collider = registry.AddComponent<SphereColliderComponent>(ballEntity);
     collider->radius = 0.25f;
     collider->colliderType = ColliderMask::kBall;

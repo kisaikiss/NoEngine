@@ -24,7 +24,10 @@ float LengthSquared(const Vector3& v) {
 
 Vector3 Normalize(const Vector3& vector3) {
 	float length = Length(vector3);
-	assert(length != 0);
+	if (length == 0.0f)
+	{
+		return Vector3::ZERO;
+	}
 	return Vector3(vector3.x / length, vector3.y / length, vector3.z / length);
 }
 
