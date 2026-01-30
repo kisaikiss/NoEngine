@@ -28,11 +28,21 @@ void TestScene::Setup() {
 	t2d->scale = { 100.f, 100.f };
 	sprite->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/engine/Model/enemy.png");
 
+
+
 	auto light = registry.GenerateEntity();
 	auto* dir = registry.AddComponent<No::DirectionalLightComponent>(light);
 	dir->color = { 1.f,1.f,1.f,1.f };
 	dir->direction = { 0.f,-1.f,0.f };
 	dir->intensity = 1.f;
+
+	auto* t2d2 = registry.AddComponent<No::Transform2DComponent>(light);
+	t2d2->translate = { 100.f, 200.f };
+	auto* sprite2 = registry.AddComponent<No::SpriteComponent>(light);
+	sprite2->layer = 1;
+
+	t2d2->scale = { 100.f, 100.f };
+	sprite2->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/engine/Model/enemy.png");
 
 	auto light2 = registry.GenerateEntity();
 	auto* dir2 = registry.AddComponent<No::DirectionalLightComponent>(light2);

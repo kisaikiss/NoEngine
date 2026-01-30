@@ -53,15 +53,9 @@ void SpritePass::Sort() {
 	std::sort(items_.begin(), items_.end(), [](const DrawItem& a, const DrawItem& b) {
 		if (a.sprite->layer != b.sprite->layer) return a.sprite->layer < b.sprite->layer;
 		if (a.sprite->orderInLayer != b.sprite->orderInLayer) return a.sprite->orderInLayer < b.sprite->orderInLayer;
-		return a.sprite->textureHandle < b.sprite->textureHandle;
+		if(a.sprite->textureHandle != a.sprite->textureHandle) return a.sprite->textureHandle < b.sprite->textureHandle;
+		return a.sprite->color < a.sprite->color;
 		});
-	/*
-	std::sort(items_.begin(), items_.end(),
-		[](const DrawItem& a, const DrawItem& b) {
-			if (a.psoId != b.psoId) return a.psoId < b.psoId;
-			return a.distanceToCamera < b.distanceToCamera;
-		});
-	*/
 }
 
 void SpritePass::MakeLocalQuad(const DrawItem& item, Vector2 out[4]) {
@@ -138,11 +132,12 @@ void SpritePass::Render(GraphicsContext& gfx) {
 	gfx.SetRootSignature(GetRootSignature(Render::GetRootSignatureID(L"Renderer : Default Sprite PSO")));
 	gfx.SetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	gfx.SetDynamicConstantBufferView(rootIndex["gCameraMatrix"], sizeof(Matrix4x4), &sOrthographicMatrix);
+	gfx.SetDynamicConstantBufferView(rootIndex["gMaterial"], sizeof(Color), &Color::WHITE);
 	gfx.SetDynamicVB(0, vertices_.size(), sizeof(SpriteVertex), vertices_.data());
 	gfx.SetDynamicIB(indices_.size(), indices_.data());
 	size_t start = 0;
 	
-	gfx.SetDynamicConstantBufferView(rootIndex["gMaterial"], sizeof(Color), &Color::WHITE);
+	
 
 	while (start < items_.size()) {
 		TextureRef tex = items_[start].sprite->textureHandle;
@@ -156,7 +151,7 @@ void SpritePass::Render(GraphicsContext& gfx) {
 		// この範囲でDrawCall
 		uint32_t indexStart = static_cast<uint32_t>(start) * 6;
 		uint32_t indexCount = static_cast<uint32_t>(end - start) * 6;
-
+		
 
 		gfx.SetDynamicDescriptor(rootIndex["gTexture"], 0, tex.GetSRV());
 		gfx.DrawIndexedInstanced(indexCount, 1, indexStart, 0, 0);

@@ -40,6 +40,10 @@ void TestSystem::Update(No::Registry& registry, float deltaTime) {
 		ImGui::Checkbox("flipX", &sp->flipX);
 		ImGui::Checkbox("flipY", &sp->flipY);
 		ImGui::DragFloat4("uv", &sp->uv.x, 0.05f);
+		ImGui::DragFloat4("color", &sp->color.r, 0.1f);
+		int layer = static_cast<int>(sp->layer);
+		ImGui::DragInt("layer", &layer);
+		sp->layer = static_cast<uint32_t>(layer);
 		ImGui::End();
 	}
 
