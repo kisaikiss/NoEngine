@@ -20,7 +20,6 @@ void TestScene::Setup() {
 	m->psoId = NoEngine::Render::GetPSOID(m->psoName);
 	m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
 
-
 	auto* t2d = registry.AddComponent<No::Transform2DComponent>(entity);
 	t2d->translate = { 100.f, 200.f };
 	auto* sprite = registry.AddComponent<No::SpriteComponent>(entity);

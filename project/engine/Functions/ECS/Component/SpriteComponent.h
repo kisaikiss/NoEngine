@@ -13,6 +13,7 @@ struct SpriteComponent {
 	uint32_t orderInLayer = 0;
 	TextureRef textureHandle;
 	Color color = {Color::WHITE};
+	std::string name;
 };
 }
 }
