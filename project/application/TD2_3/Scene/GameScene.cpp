@@ -282,6 +282,8 @@ void GameScene::InitLights(No::Registry& registry) {
     dir->color = { 1.f,1.f,1.f,1.f };
     dir->direction = { 0.f,-1.f,0.f };
     dir->intensity = 1.f;
+}
+
 void GameScene::InitHpGaugeSprite(No::Registry& registry)
 {
   CreateSprite(registry, { 100.f, 200.f }, { 448.f, 88.f }, "hp.png","PlayerHpGauge");
