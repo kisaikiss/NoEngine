@@ -51,10 +51,11 @@ void MeshPass::Render(GraphicsContext& context) {
 	uint32_t currentPSO = 110;
 	
 	for (auto& item : items_) {
-		std::unordered_map<std::string, uint32_t>& rootIndex = RootSignatureBuilder::GetRootIndexMap(item.psoName);
+		auto& rootIndex = RootSignatureBuilder::GetRootIndexMap(item.psoName);
 		if (item.psoId != currentPSO) {
 			context.SetPipelineState(GetPSO(item.psoId));
 			context.SetRootSignature(GetRootSignature(item.rootSigId));
+			context.SetDynamicDescriptor(rootIndex["gDirectionalLights"], 0, GetRenderContext()->GetDirectionalLightSRV());
 			context.SetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 			currentPSO = item.psoId;
 		}
@@ -62,6 +63,16 @@ void MeshPass::Render(GraphicsContext& context) {
 		Matrix4x4 worldData = item.transform->MakeAffineMatrix4x4();
 		context.SetDynamicConstantBufferView(rootIndex["gWorldMatrix"], sizeof(Matrix4x4), &worldData);
 		context.SetDynamicConstantBufferView(rootIndex["gCameraMatrix"], sizeof(Matrix4x4), &GetCamera()->GetViewProjMatrix());
+		{
+			_declspec(align(16)) struct {
+				uint32_t directionalLightNum;
+				uint32_t pointLightNum = 0;
+				uint32_t spotLightNum = 0;
+				uint32_t pad;
+			}constants;
+			constants.directionalLightNum = GetRenderContext()->GetLightNums()->directionalLightNum;
+			context.SetDynamicConstantBufferView(rootIndex["gLightNums"], sizeof(RenderContext::LightNums), &constants);
+		}
 		context.SetVertexBuffer(0, item.mesh->mesh->vertexBuffer.VertexBufferView());
 		context.SetIndexBuffer(item.mesh->mesh->indexBuffer.IndexBufferView());
 		

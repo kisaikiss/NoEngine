@@ -42,6 +42,19 @@ void TestSystem::Update(No::Registry& registry, float deltaTime) {
 		ImGui::DragFloat4("uv", &sp->uv.x, 0.05f);
 		ImGui::End();
 	}
+
+	auto lightView = registry.View<No::DirectionalLightComponent>();
+
+	for (auto entity : lightView) {
+		auto* a = registry.GetComponent<No::DirectionalLightComponent>(entity);
+		std::string imGuiName = "light" + std::to_string(entity);
+		ImGui::Begin(imGuiName.c_str());
+		ImGui::DragFloat4("color", &a->color.r, 0.1f);
+		ImGui::DragFloat3("direction", &a->direction.x, 0.05f);
+		ImGui::DragFloat("intensity", &a->intensity, 0.03f);
+		a->direction = a->direction.Normalize();
+		ImGui::End();
+	}
 #endif // USE_IMGUI
 	
 

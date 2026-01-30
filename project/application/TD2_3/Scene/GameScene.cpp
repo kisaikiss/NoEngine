@@ -68,6 +68,7 @@ void GameScene::Setup()
 	InitBoss(registry);
 	InitBatGirl(registry);
 	InitPlayerGirl(registry);
+    InitLights(registry);
     InitHpGaugeSprite(registry);
     InitLevelGaugeSprite(registry);
     SpriteConfigManager::Get().Load("resources/game/td_2304/Json/sprite_config.json");
@@ -275,6 +276,12 @@ void GameScene::InitPlayerGirl(No::Registry& registry)
     m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
 }
 
+void GameScene::InitLights(No::Registry& registry) {
+    auto light = registry.GenerateEntity();
+    auto* dir = registry.AddComponent<No::DirectionalLightComponent>(light);
+    dir->color = { 1.f,1.f,1.f,1.f };
+    dir->direction = { 0.f,-1.f,0.f };
+    dir->intensity = 1.f;
 void GameScene::InitHpGaugeSprite(No::Registry& registry)
 {
   CreateSprite(registry, { 100.f, 200.f }, { 448.f, 88.f }, "hp.png","PlayerHpGauge");
