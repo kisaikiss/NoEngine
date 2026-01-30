@@ -68,6 +68,14 @@ inline T EaseOutCubic(const T& a, const T& b, float t)
 	t = 1 - powf(1 - t, 3);
 	return Lerp(a, b, t);
 }
+
+template<typename T>
+inline T EaseOutCirc(const T& a, const T& b, float t)
+{
+	t = sqrt(1 - powf(t - 1, 2.0f));
+	return Lerp(a, b, t);
+}
+
 }
 }
 

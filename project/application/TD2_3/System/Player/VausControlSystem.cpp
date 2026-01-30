@@ -11,6 +11,8 @@
 #include "engine/Math/Easing.h"
 #include "engine/Functions/Input/Input.h"
 
+#include <cmath>
+
 using namespace NoEngine;
 
 namespace
@@ -18,6 +20,9 @@ namespace
 	constexpr float kRingInitialRadius = 4.85f;
 	constexpr float kStickDeadZone = 0.2f;
 	constexpr float kMouseMoveAngleThreshold = 0.05f;
+	constexpr float kAngleSmoothSpeed = 25.0f;
+	constexpr float kAngleSnapEpsilon = 0.001f;
+
 	float sRingRadius = kRingInitialRadius;
 }
 
@@ -47,7 +52,7 @@ void VausControlSystem::Update(No::Registry& registry, float deltaTime)
 		No::TransformComponent,
 		No::MaterialComponent,
 		RingAnimationComponent>();
-	
+
 	auto backGroundView = registry.View<BackGroundComponent>();
 
 	// 現在のマウス角度（常に取得）
@@ -87,6 +92,7 @@ void VausControlSystem::Update(No::Registry& registry, float deltaTime)
 
 	if (lastInput_ == LastInput::Stick && stickActive)
 	{
+		// スティックは即時反映（入力遅延を避けたい場合はここを変更）
 		currentAngle_ = stickAngle;
 	}
 	else if (lastInput_ == LastInput::Mouse)
@@ -95,24 +101,32 @@ void VausControlSystem::Update(No::Registry& registry, float deltaTime)
 
 		if (isBlending_)
 		{
+			// ブレンド時は「最短角度経路」を使ってイージング
 			blendTime_ += deltaTime;
 			float t = std::clamp(blendTime_ / blendDuration_, 0.0f, 1.0f);
 
-			currentAngle_ = Easing::EaseOutCubic(
-				blendFromAngle_,
-				target,
-				t
-			);
+			// shortest delta between angles
+			float delta = NormalizeAngleLocal(target - blendFromAngle_);
+			// ease t from 0..1
+			float easedT = Easing::EaseOutCubic(0.0f, 1.0f, t);
+			currentAngle_ = blendFromAngle_ + delta * easedT;
 
 			if (t >= 1.0f)
 				isBlending_ = false;
 		}
 		else
 		{
-			currentAngle_ = target;
+			// フレームごとの指数的平滑（ラグを最小化しつつ滑らかに）
+			float delta = NormalizeAngleLocal(target - currentAngle_);
+			// alpha = 1 - exp(-speed * dt)
+			float alpha = 1.0f - std::expf(-kAngleSmoothSpeed * deltaTime);
+			currentAngle_ += delta * alpha;
+
+			// 十分近ければターゲットにスナップ
+			if (std::fabs(NormalizeAngleLocal(target - currentAngle_)) < kAngleSnapEpsilon)
+				currentAngle_ = target;
 		}
 	}
-
 
 	currentAngle_ = NormalizeAngleLocal(currentAngle_);
 	angle = currentAngle_;
@@ -121,7 +135,7 @@ void VausControlSystem::Update(No::Registry& registry, float deltaTime)
 	// ボタン/押下状態：マウス左ボタンまたはパッドの A ボタ ン
 	isPress_ = ((GetAsyncKeyState(VK_LBUTTON) & 0x8000) != 0) || Input::Pad::IsPress(Input::GamepadButton::A);
 
-	
+
 	for (auto entity : ringView)
 	{
 		auto* ringTrans = registry.GetComponent<No::TransformComponent>(entity);
@@ -140,7 +154,7 @@ void VausControlSystem::Update(No::Registry& registry, float deltaTime)
 			ringAnimation->tTemp = chargeTime_;
 			if (chargeTime_ >= 1.0f)
 			{
-				ringTrans->translate.x += static_cast<float>( rand() % 3 - 1) * deltaTime;
+				ringTrans->translate.x += static_cast<float>(rand() % 3 - 1) * deltaTime;
 				ringTrans->translate.y += static_cast<float>(rand() % 3 - 1) * deltaTime;
 			}
 		}
@@ -245,7 +259,7 @@ float VausControlSystem::CalculateMouseAngle()
 }
 
 float VausControlSystem::CalculateStickAngle()
-{	
+{
 	auto stick = Input::Pad::GetStick();
 	float lmag2 = stick.leftStickX * stick.leftStickX + stick.leftStickY * stick.leftStickY;
 	float rmag2 = stick.rightStickX * stick.rightStickX + stick.rightStickY * stick.rightStickY;
