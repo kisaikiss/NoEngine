@@ -31,6 +31,7 @@ void PlayerGirlControlSystem::Update(No::Registry& registry, float deltaTime)
     timer_ = fmodf(timer_, 3.0f);
 
     voiceTimer_ += deltaTime;
+
     if (voiceTimer_ >= 5.0f) {
         voiceTimer_ = 0.0f;
         int randNum = rand() % strings_.size();

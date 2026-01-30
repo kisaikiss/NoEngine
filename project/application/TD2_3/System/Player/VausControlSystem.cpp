@@ -144,6 +144,7 @@ void VausControlSystem::Update(No::Registry& registry, float deltaTime)
 		{
 			if (!wasPress_)
 			{
+				No::SoundEffectPlay("ballPong2", 0.5f);
 				power_ = 0.0f;
 			}
 			ringAnimation->releaseTime = 0.0f;
@@ -163,6 +164,10 @@ void VausControlSystem::Update(No::Registry& registry, float deltaTime)
 			if (wasPress_ && !isPress_)
 			{
 				power_ = ringAnimation->tTemp;
+				//ヨシダ追加しました
+				float pitch = 1.0f + ringAnimation->pressedTime * 0.5f;
+				No::SetPitch("chargeEnter", pitch);
+				No::SoundEffectPlay("chargeEnter", 0.5f);
 			}
 			ringAnimation->pressedTime = 0.0f;
 			ringAnimation->releaseTime += deltaTime;

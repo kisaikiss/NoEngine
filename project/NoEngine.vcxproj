@@ -187,6 +187,8 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="engine\Functions\ECS\Registry.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\AnimationSystem.cpp" />
     <ClCompile Include="engine\Functions\Input\Input.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\RenderContext.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\RenderPass\LightPass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\MeshPass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PrimitivePass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\RenderPassScheduler.cpp" />
@@ -290,6 +292,8 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="application\TD2_3\System\HpSpriteControlSystem.cpp" />
+    <ClCompile Include="application\TD2_3\SpriteConfigManager\SpriteConfigManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="application\TD2_3\System\Enemy\NormalEnemy\NormalEnemyControlSystem.cpp" />
     <ClCompile Include="application\TD2_3\System\Human\PlayerGirlControlSystem.cpp" />
@@ -314,6 +318,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\TD2_3\Component\TrackEnemyComponent.h" />
     <ClInclude Include="application\TD2_3\Component\VausStateComponent.h" />
     <ClInclude Include="application\TD2_3\Game.h" />
+    <ClInclude Include="application\TD2_3\Random\Random.h" />
     <ClInclude Include="application\TD2_3\Render\BackGroundEffect.h" />
     <ClInclude Include="application\TD2_3\Render\BallTrailPass.h" />
     <ClInclude Include="application\TD2_3\Scene\GameOverScene.h" />
@@ -354,6 +359,8 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="engine\Functions\ECS\System\ISystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\SystemManager.h" />
     <ClInclude Include="engine\Functions\Input\Input.h" />
+    <ClInclude Include="engine\Functions\Renderer\RenderContext.h" />
+    <ClInclude Include="engine\Functions\Renderer\RenderPass\LightPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\MeshPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PrimitivePass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\RenderPass.h" />
@@ -482,6 +489,8 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </ClInclude>
     <ClInclude Include="application\TD2_3\System\Enemy\NormalEnemy\NormalEnemyControlSystem.h" />
     <ClInclude Include="application\TD2_3\System\Human\PlayerGirlControlSystem.h" />
+    <ClInclude Include="application\TD2_3\System\HpSpriteControlSystem.h" />
+    <ClInclude Include="application\TD2_3\SpriteConfigManager\SpriteConfigManager.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="engine\Assets\Texture\Texture.h" />
     <ClInclude Include="application\TD2_3\System\Player\VausControlSystem.h" />
@@ -595,6 +604,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </ClInclude>
     <None Include="resources\engine\Shaders\Default.hlsli" />
     <None Include="resources\game\Shaders\ShaderMathUtil.hlsli" />
+    <None Include="resources\game\td_2304\Json\tdSpriteConfig.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

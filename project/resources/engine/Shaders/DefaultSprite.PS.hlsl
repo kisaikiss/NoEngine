@@ -1,4 +1,9 @@
-#include "Default.hlsli"
+
+struct VertexShaderOutput
+{
+    float4 position : SV_POSITION;
+    float2 texcoord : TEXCOORD0;
+};
 
 struct PixelShaderOutput
 {
@@ -7,10 +12,21 @@ struct PixelShaderOutput
 Texture2D<float4> gTexture : register(t0);
 SamplerState gSampler : register(s0);
 
+struct Material
+{
+    float4 color;
+};
+ConstantBuffer<Material> gMaterial : register(b0);
+
+
 PixelShaderOutput main(VertexShaderOutput input)
 {
     PixelShaderOutput output;
     float4 textureColor = gTexture.Sample(gSampler, input.texcoord);
-    output.color = textureColor;
+    if (textureColor.a <= 0.5)
+    {
+        discard;
+    }
+    output.color = textureColor * gMaterial.color;
     return output;
 }

@@ -127,8 +127,6 @@ void ImGuiManager::BeginFrame() {
 	ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_PassthruCentralNode);
 	ImGui::End();
 
-	//ImGui::ShowDemoWindow();
-	//ImGui::ShowMetricsWindow();
 }
 
 void ImGuiManager::Render(GraphicsContext& context) {

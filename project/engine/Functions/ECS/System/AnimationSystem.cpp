@@ -16,9 +16,10 @@ void AnimationSystem::AnimationUpdate(Registry& registry, float deltaTime) {
 	for (auto entity : view) {
 		auto* animeComp = registry.GetComponent<Component::AnimatorComponent>(entity);
 		auto* meshComp = registry.GetComponent<Component::MeshComponent>(entity);
-		if (!animeComp->animation || !meshComp->mesh) continue;
+		if (!animeComp->skeleton || !meshComp->mesh) continue;
 		animeComp->time += deltaTime;
-		animeComp->time = std::fmod(animeComp->time, animeComp->animation->duration);
+		uint32_t currentAnimation = animeComp->currentAnimation;
+		animeComp->time = std::fmod(animeComp->time, animeComp->animation[currentAnimation].duration);
 		if (animeComp->skeleton) {
 			SkeletonUpdate(animeComp);
 			SkeletonDraw(animeComp);
@@ -28,10 +29,9 @@ void AnimationSystem::AnimationUpdate(Registry& registry, float deltaTime) {
 }
 
 void AnimationSystem::SkeletonUpdate(Component::AnimatorComponent* animeComp) {
-
+	uint32_t currentAnimation = animeComp->currentAnimation;
 	for (Joint& joint : animeComp->skeleton->joints) {
-
-		if (auto it = animeComp->animation->nodeAnimations.find(joint.name); it != animeComp->animation->nodeAnimations.end()) {
+		if (auto it = animeComp->animation[currentAnimation].nodeAnimations.find(joint.name); it != animeComp->animation[currentAnimation].nodeAnimations.end()) {
 			const NodeAnimation& rootNodeAnimation = (*it).second;
 			CalculateValue(rootNodeAnimation, joint.transform, animeComp->time);
 		}

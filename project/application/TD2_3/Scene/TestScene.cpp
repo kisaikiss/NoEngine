@@ -12,14 +12,14 @@ void TestScene::Setup() {
 	t->rotation.FromAxisAngle(NoEngine::Vector3(0.f, 1.f, 0.f), PI);
 	auto* m = registry.AddComponent<No::MaterialComponent>(entity);
 	auto* a = registry.AddComponent<No::AnimatorComponent>(entity);
-	NoEngine::ModelLoader::LoadModel("magiclash", "resources/engine/Model/test/TD_girl/test7.gltf");
+	NoEngine::ModelLoader::LoadModel("magiclash", "resources/engine/Model/test/panda/panda.gltf");
 	NoEngine::ModelLoader::GetModel("magiclash", model, a);
 	m->materials = NoEngine::ModelLoader::GetMaterial("magiclash");
+	a->currentAnimation = 1;
 	
 	m->psoName = L"Renderer : DefaultSkinned PSO";
 	m->psoId = NoEngine::Render::GetPSOID(m->psoName);
 	m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
-
 
 	auto* t2d = registry.AddComponent<No::Transform2DComponent>(entity);
 	t2d->translate = { 100.f, 200.f };
@@ -29,8 +29,28 @@ void TestScene::Setup() {
 	t2d->scale = { 100.f, 100.f };
 	sprite->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/engine/Model/enemy.png");
 
-	No::SoundLoad(L"resources/engine/Audio/gamePlay.mp3", "test");
-	No::SoundPlay("test", 0.5f, true);
+
+
+	auto light = registry.GenerateEntity();
+	auto* dir = registry.AddComponent<No::DirectionalLightComponent>(light);
+	dir->color = { 1.f,1.f,1.f,1.f };
+	dir->direction = { 0.f,-1.f,0.f };
+	dir->intensity = 1.f;
+
+	auto* t2d2 = registry.AddComponent<No::Transform2DComponent>(light);
+	t2d2->translate = { 100.f, 200.f };
+	auto* sprite2 = registry.AddComponent<No::SpriteComponent>(light);
+	sprite2->layer = 1;
+
+	t2d2->scale = { 100.f, 100.f };
+	sprite2->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/engine/Model/enemy.png");
+
+	auto light2 = registry.GenerateEntity();
+	auto* dir2 = registry.AddComponent<No::DirectionalLightComponent>(light2);
+	dir2->color = { 1.f,1.f,1.f,1.f };
+	dir2->direction = { 0.f,-1.f,0.f };
+	dir2->intensity = 1.f;
+
 
 	camera_ = std::make_unique<NoEngine::Camera>();
 	cameraTransform_.translate.z = -5.f;

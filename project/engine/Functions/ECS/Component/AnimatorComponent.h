@@ -6,7 +6,8 @@ namespace NoEngine {
 
 namespace Component {
 struct AnimatorComponent {
-	Animation* animation = nullptr;
+	std::span<Animation> animation;
+	uint32_t currentAnimation = 0;
 	Skeleton* skeleton = nullptr;
 	float time = 0.f;
 	bool drawSkeleton = false;

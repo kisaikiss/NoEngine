@@ -10,6 +10,8 @@ public:
 
 	void SetTransform(const Transform& transform);
 
+	virtual void SetAspectRatio(float aspectRatio) { (void)aspectRatio; }
+
 	[[nodiscard]] const Transform& GetTransform() const noexcept { return transform_; }
 	[[nodiscard]] const Matrix4x4& GetViewMatrix() const noexcept { return viewMatrix_; }
 	[[nodiscard]] const Matrix4x4& GetProjMatrix() const noexcept { return projectionMatrix_; }

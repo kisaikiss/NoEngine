@@ -78,7 +78,7 @@ void Initialize() {
 
 	std::vector<D3D12_INPUT_ELEMENT_DESC> skinnedInputLayout = InputLayoutBuilder::BuildFromReflection(vsSkinnedReflection);
 	// ToDo : inputLayoutのReflectionがUINT型のインプットが対応できていないので、このように後から入れる形になってしまっています。UINT型に対応すべきです。
-	skinnedInputLayout[3].Format = DXGI_FORMAT_R32G32B32A32_UINT;
+	skinnedInputLayout[4].Format = DXGI_FORMAT_R32G32B32A32_UINT;
 
 	
 	GraphicsPSO defaultSkinnedPSO(defaultSkinnedPSOName);
@@ -102,12 +102,14 @@ void Initialize() {
 	{
 
 		ShaderModule defaultSpriteVS(ShaderStage::Vertex, L"resources/engine/Shaders/DefaultSprite.VS.hlsl", L"vs_6_0");
+		ShaderModule defaultSpritePS(ShaderStage::Vertex, L"resources/engine/Shaders/DefaultSprite.PS.hlsl", L"ps_6_0");
 
 		const ShaderReflection& spriteVsReflection = defaultSpriteVS.GetReflection();
+		const ShaderReflection& spritePsReflection = defaultSpritePS.GetReflection();
 
 		std::vector<ShaderReflection> reflectionSprite;
 		reflectionSprite.push_back(spriteVsReflection);
-		reflectionSprite.push_back(psReflection);
+		reflectionSprite.push_back(spritePsReflection);
 		std::unique_ptr<RootSignature> defaultSpriteRootSignature = std::make_unique<RootSignature>();
 		std::wstring defaultSpritePSOName = L"Renderer : Default Sprite PSO";
 		RootSignatureBuilder::BuildFromReflection(reflectionSprite, *defaultSpriteRootSignature, ConvertString(defaultSpritePSOName));
@@ -137,7 +139,7 @@ void Initialize() {
 		defaultSpritePSO.SetPrimitiveTopologyType(D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
 		defaultSpritePSO.SetRenderTargetFormats(1, rtvFormat, DXGI_FORMAT_UNKNOWN);
 		defaultSpritePSO.SetVertexShader(defaultSpriteVS.GetBytecode());
-		defaultSpritePSO.SetPixelShader(defaultPS.GetBytecode());
+		defaultSpritePSO.SetPixelShader(defaultSpritePS.GetBytecode());
 		defaultSpritePSO.SetSampleMask(D3D12_DEFAULT_SAMPLE_MASK);
 		defaultSpritePSO.Finalize();
 		sGraphicsPSOs.push_back(defaultSpritePSO);

@@ -26,7 +26,10 @@
 #include "../System/Human/BatGirlControlSystem.h"
 #include "../System/Human/PlayerGirlControlSystem.h"
 
+#include"../System/HpSpriteControlSystem.h"
+#include"../SpriteConfigManager/SpriteConfigManager.h"
 //ヨシダ追加しました。
+
 #include "../tag.h"
 
 
@@ -55,8 +58,13 @@ void GameScene::Setup()
 	//playerステータス管理システム
 	AddSystem(std::make_unique<PlayerStatusSystem>());
 
+    //HISprite
+    AddSystem(std::make_unique<HpSpriteControlSystem>());
 	//衝突判定用システム
 	AddSystem(std::make_unique<CollisionSystem>());
+
+
+    SpriteConfigManager::Get().Load("resources/game/td_2304/Json/tdSpriteConfig.json");
 
 	No::Registry& registry = *GetRegistry();
 	InitBackGround(registry);
@@ -68,6 +76,10 @@ void GameScene::Setup()
 	InitBatGirl(registry);
 	InitPlayerGirl(registry);
 	InitPlayerStatus(registry);
+  InitLights(registry);
+  InitHpGaugeSprite(registry);
+  InitLevelGaugeSprite(registry);
+
 
 	constexpr Vector3 kStartCameraPosition = Vector3{ 0.0f, 0.0f, -28.0f };
 	//カメラ初期化
@@ -289,6 +301,39 @@ void GameScene::InitPlayerStatus(No::Registry& registry)
 	status->hp = 5;
 	status->level = 1;
 	status->score = 0;
+}
+
+void GameScene::InitLights(No::Registry& registry) {
+    auto light = registry.GenerateEntity();
+    auto* dir = registry.AddComponent<No::DirectionalLightComponent>(light);
+    dir->color = { 1.f,1.f,1.f,1.f };
+    dir->direction = { 0.f,-1.f,0.f };
+    dir->intensity = 1.f;
+}
+
+void GameScene::InitHpGaugeSprite(No::Registry& registry)
+{
+  CreateSprite(registry, "hp.png","PlayerHpGauge");
+}
+
+void GameScene::InitLevelGaugeSprite(No::Registry& registry)
+{
+    CreateSprite(registry, "lv.png","Level");
+}
+
+void GameScene::CreateSprite(No::Registry& registry, const std::string& fileName, const std::string& configName)
+{
+    No::Entity entity = registry.GenerateEntity();
+
+    auto* t2d = registry.AddComponent<No::Transform2DComponent>(entity); 
+
+    auto* sprite = registry.AddComponent<No::SpriteComponent>(entity);
+    sprite->name = configName; // JSON のキーと一致させる
+    //sprite->name = fileName.substr(0, fileName.rfind("."));
+    std::string filePath = "resources/game/td_2304/Texture/" + fileName;
+    sprite->textureHandle = NoEngine::TextureManager::LoadCovertTexture(filePath);
+    // JSON 設定を適用 
+    SpriteConfigManager::Get().ApplyToSprite(*sprite,*t2d);
 }
 
 void GameScene::DestroyGameObject()

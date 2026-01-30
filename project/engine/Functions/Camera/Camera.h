@@ -7,7 +7,7 @@ public:
     Camera();
 
     void SetFOV(float fovY) { fovY_ = fovY; UpdateProjectionMatrix(); }
-    void SetAspectRatio(float aspectRatio) { aspectRatio_ = aspectRatio; UpdateProjectionMatrix(); }
+    void SetAspectRatio(float aspectRatio) override { aspectRatio_ = aspectRatio; UpdateProjectionMatrix(); }
 private:
     void UpdateProjectionMatrix();
 

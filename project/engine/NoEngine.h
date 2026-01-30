@@ -6,7 +6,7 @@
 #include "Functions/ECS/Component/TransformComponent.h"
 #include "Functions/ECS/Component/Transfrom2DComponent.h"
 #include "Functions/ECS/Component/MaterialComponent.h"
-
+#include "Functions/ECS/Component/LightComponent.h"
 
 #include "Functions/ECS/System/AnimationSystem.h"
 

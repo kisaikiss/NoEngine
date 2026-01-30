@@ -30,6 +30,11 @@ public:
 	// 十六進数へ変換
 	uint32_t ToRGBA8() const;
 
+
+	bool operator<(const Color& other) const {
+		return r + g + b < other.r + other.g + other.b; // SpritePassで色をまとめて描画するために使用します。
+	}
+
 	float* ptr(void) { return reinterpret_cast<float*>(this); }
 	float& operator[](int index) { return ptr()[index]; }
 	Color operator*(float s) const {

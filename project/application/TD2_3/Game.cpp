@@ -5,9 +5,6 @@
 #include "application/TD2_3/Render/BackGroundEffect.h"
 #include "application/TD2_3/Render/BallTrailPass.h"
 
-namespace {
-float angle = 0.f;
-}
 
 void Game::Startup(void) {
 	RegisterScene("TestScene", []() {
