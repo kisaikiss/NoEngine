@@ -1,7 +1,7 @@
 #pragma once
 #include "engine/Runtime/Command/GraphicsContext.h"
 #include "engine/Functions/ECS/Registry.h"
-#include "engine/Functions/Camera/CameraBase.h"
+#include "../RenderContext.h"
 
 namespace NoEngine {
 namespace Render {
@@ -10,11 +10,14 @@ public:
 	virtual ~RenderPass() = default;
 	virtual void Execute(GraphicsContext& gfx, ECS::Registry& registry) = 0;
 
-	void SetCamera(CameraBase* camera) { camera_ = camera; }
+	void SetRenderContext(RenderContext* renderContext) { renderContext_ = renderContext; }
 protected:
-	CameraBase* GetCamera() { return camera_; }
+	RenderContext* GetRenderContext() { return renderContext_; }
+
+	// ToDo : コンフリクト回避のための関数。チーム制作終了後削除
+	const CameraBase* GetCamera() { return renderContext_->GetCamera(); }
 private:
-	CameraBase* camera_;
+	RenderContext* renderContext_;
 };
 }
 }

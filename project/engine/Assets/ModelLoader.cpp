@@ -51,11 +51,12 @@ void ModelLoader::LoadModel(const std::string& name, const std::string& filePath
 		for (uint32_t vertexIndex = 0; vertexIndex < mesh->mNumVertices; ++vertexIndex) {
 			aiVector3D& position = mesh->mVertices[vertexIndex];
 			aiVector3D& texcoord = mesh->mTextureCoords[0][vertexIndex];
-			// ToDo : ライト未実装のためノーマル読み込み部分がありません。ライト実装次第早急に読み込むべきです。
+			aiVector3D& normal = mesh->mNormals[vertexIndex];
 
 			Vertex vertex;
 			vertex.position = { -position.x, position.y, position.z, 1.0f };
 			vertex.texcoord = { texcoord.x, texcoord.y };
+			vertex.normal = { normal.x, normal.y, normal.z };
 			sMeshes[name].vertices.push_back(vertex);
 		}
 
@@ -223,10 +224,6 @@ void ModelLoader::LoadModel(const std::string& name, const std::string& filePath
 			indexUpload
 		);
 	}
-
-	
-
-	// ToDo : Material読み込みもできるようにすべきです。
 
 	if (model) model->mesh = &sMeshes[name];
 }

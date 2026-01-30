@@ -64,6 +64,7 @@ void GameScene::Setup()
 	InitBoss(registry);
 	InitBatGirl(registry);
 	InitPlayerGirl(registry);
+    InitLights(registry);
 
 	constexpr Vector3 kStartCameraPosition = Vector3{ 0.0f, 0.0f, -28.0f };
 	//カメラ初期化
@@ -267,6 +268,14 @@ void GameScene::InitPlayerGirl(No::Registry& registry)
     m->psoName = L"Renderer : DefaultSkinned PSO";
     m->psoId = NoEngine::Render::GetPSOID(m->psoName);
     m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
+}
+
+void GameScene::InitLights(No::Registry& registry) {
+    auto light = registry.GenerateEntity();
+    auto* dir = registry.AddComponent<No::DirectionalLightComponent>(light);
+    dir->color = { 1.f,1.f,1.f,1.f };
+    dir->direction = { 0.f,-1.f,0.f };
+    dir->intensity = 1.f;
 }
 
 void GameScene::DestroyGameObject()

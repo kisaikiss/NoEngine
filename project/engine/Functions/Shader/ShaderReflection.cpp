@@ -1,6 +1,7 @@
 #include "ShaderReflection.h"
 
 #include "engine/Utilities/Conversion/ConvertString.h"
+#include "engine/Functions/Debug/Logger/Log.h"
 
 #include <d3d12shader.h>
 
@@ -239,6 +240,16 @@ void RootSignatureBuilder::BuildFromReflection(
 	const std::vector<ShaderReflection>& reflections,
 	RootSignature& rootSig,
 	const std::string& rootSigName) {
+
+	Log::DebugPrint("=== Reflection Dump ===\n");
+	for (auto& refl : reflections) {
+		for (auto& r : refl.resources_) {
+			Log::DebugPrint("stage=" + std::to_string(static_cast<int>(refl.stage_)) + 
+				"name="+ r.name +" type="+ std::to_string(static_cast<int>(r.type))+" bindPoint=" +
+				std::to_string(static_cast<int>(r.bindPoint)) +" space=" + std::to_string(static_cast<int>(r.space)));
+		}
+	}
+
 	struct ResourceKey {
 		ShaderReflection::ResourceType type;
 		uint32_t bindPoint;

@@ -41,6 +41,8 @@ int RunApplication(std::unique_ptr<IGameApp> game) {
 	// ゲームアプリケーションの初期化を行います。
 	game->Startup();
 
+	RenderContext renderContext;
+
 	// メインループ
 	while (GraphicsCore::gWindowManager.ProcessMessage() == 0) {
 
@@ -56,7 +58,8 @@ int RunApplication(std::unique_ptr<IGameApp> game) {
 		const float deltaTime = CalculateDeltaTime();
 		game->Update(deltaTime);
 
-		renderPassScheduler->SetCamera(game->GetCamera());
+		renderContext.SetCamera(game->GetCamera());
+		renderPassScheduler->SetRenderContext(renderContext);
 		renderPassScheduler->Render(context, game->GetRegistry());
 
 #ifdef USE_IMGUI
@@ -93,7 +96,7 @@ void EngineInitialize() {
 	// ウィンドウの生成、初期化を行います。
 	GraphicsCore::gWindowManager.Create(L"NoEngine", 1280, 720);
 	GraphicsCore::gWindowManager.SetMainWindowName(L"NoEngine");
-	
+	GraphicsCore::gWindowManager.GetMainWindow()->SetSizeChangeMode(Window::SizeChangeMode::kNone);
 	InputInitialize();
 	AudioInitialize();
 

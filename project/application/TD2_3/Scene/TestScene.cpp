@@ -29,8 +29,18 @@ void TestScene::Setup() {
 	t2d->scale = { 100.f, 100.f };
 	sprite->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/engine/Model/enemy.png");
 
-	No::SoundLoad(L"resources/engine/Audio/gamePlay.mp3", "test");
-	No::SoundPlay("test", 0.5f, true);
+	auto light = registry.GenerateEntity();
+	auto* dir = registry.AddComponent<No::DirectionalLightComponent>(light);
+	dir->color = { 1.f,1.f,1.f,1.f };
+	dir->direction = { 0.f,-1.f,0.f };
+	dir->intensity = 1.f;
+
+	auto light2 = registry.GenerateEntity();
+	auto* dir2 = registry.AddComponent<No::DirectionalLightComponent>(light2);
+	dir2->color = { 1.f,1.f,1.f,1.f };
+	dir2->direction = { 0.f,-1.f,0.f };
+	dir2->intensity = 1.f;
+
 
 	camera_ = std::make_unique<NoEngine::Camera>();
 	cameraTransform_.translate.z = -5.f;

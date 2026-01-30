@@ -45,6 +45,7 @@ void UploadBuffer::Create(const std::wstring& name, size_t BufferSize) {
     static_cast<void>(name);
 #else
     resource_->SetName(name.c_str());
+    name_ = name;
 #endif
     Log::DebugPrint("UploadBuffer Created", VerbosityLevel::kDebug);
 }

@@ -53,8 +53,26 @@ void Log::SetVerbosityLevel(VerbosityLevel verbosityLevel) {
 void Log::DebugPrint(const std::string& message, VerbosityLevel verbosityLevel) {
 	if (sVerbosityLevel >= verbosityLevel) {
 		std::ofstream logStream(sFilePath, std::ios::app);
+		std::string logMessage = message + "\n";
 		if (sVerbosityLevel >= VerbosityLevel::kDebug) {
-			std::string logMessage = message + "\nverbosityLevel:" + std::to_string(static_cast<int>(verbosityLevel)) + "\n";
+			switch (verbosityLevel) {
+			case NoEngine::VerbosityLevel::kCritical:
+				logMessage = "Critical : " + logMessage;
+				break;
+			case NoEngine::VerbosityLevel::kError:
+				logMessage = "Error : " + logMessage;
+				break;
+			case NoEngine::VerbosityLevel::kWarning:
+				logMessage = "Warning : " + logMessage;
+				break;
+			case NoEngine::VerbosityLevel::kInfo:
+				logMessage = "Info : " + logMessage;
+				break;
+			case NoEngine::VerbosityLevel::kDebug:
+				logMessage = "Debug : " + logMessage;
+				break;
+			}
+			
 			logStream << logMessage << std::endl;
 			OutputDebugStringA(logMessage.c_str());
 		} else {
