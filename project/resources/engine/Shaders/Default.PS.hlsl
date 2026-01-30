@@ -32,6 +32,8 @@ StructuredBuffer<DirectionalLight> gDirectionalLights : register(t2);
 PixelShaderOutput main(VertexShaderOutput input)
 {
     PixelShaderOutput output;
+    output.color = 0;
+
     float4 textureColor = gTexture.Sample(gSampler, input.texcoord);
     
     for (int i = 0; i < gLightNums.directionalLightNum; i++)
