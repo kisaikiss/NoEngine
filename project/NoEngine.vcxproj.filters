@@ -115,6 +115,8 @@
     <ClCompile Include="application\TD2_3\System\Enemy\BaseEnemyState.cpp" />
     <ClCompile Include="application\TD2_3\System\Enemy\EnemyStateManager.cpp" />
     <ClCompile Include="application\TD2_3\System\Enemy\EnemyCommonMove.cpp" />
+    <ClCompile Include="application\TD2_3\System\HpSpriteControlSystem.cpp" />
+    <ClCompile Include="application\TD2_3\SpriteConfigManager\SpriteConfigManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="application\TD2_3\Component\BackGroundComponent.h" />
@@ -263,9 +265,13 @@
     <ClInclude Include="engine\Functions\ECS\Component\LightComponent.h" />
     <ClInclude Include="application\TD2_3\Component\BatBossComponent.h" />
     <ClInclude Include="application\TD2_3\System\Enemy\EnemyCommonMove.h" />
+    <ClInclude Include="application\TD2_3\System\HpSpriteControlSystem.h" />
+    <ClInclude Include="application\TD2_3\SpriteConfigManager\SpriteConfigManager.h" />
+    <ClInclude Include="application\TD2_3\Random\Random.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\engine\Shaders\Default.hlsli" />
     <None Include="resources\game\Shaders\ShaderMathUtil.hlsli" />
+    <None Include="resources\game\td_2304\Json\tdSpriteConfig.json" />
   </ItemGroup>
 </Project>
