@@ -15,7 +15,7 @@ void Game::Startup(void) {
 	RegisterScene("GameScene", []() {
 		return std::make_unique<GameScene>();
 		});
-	ChangeScene("GameScene");
+	ChangeScene("TestScene");
 
 	// カスタム RenderPass の追加例
 	AddRenderPass(std::make_unique<BackGroundEffectPass>());
@@ -27,13 +27,5 @@ void Game::Cleanup(void) {
 
 void Game::Update(float deltaT) {
 	UpdateScene(deltaT);
-#ifdef USE_IMGUI
-
-	bool isPress = No::Keyboard::IsPress('A');
-	ImGui::Begin("InputKeys");
-	ImGui::Checkbox("isPressA", &isPress);
-	ImGui::End();
-#endif // USE_IMGUI
-
 }
 
