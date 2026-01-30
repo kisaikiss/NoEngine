@@ -25,8 +25,6 @@ void TestSystem::Update(No::Registry& registry, float deltaTime) {
 #endif // USE_IMGUI
 	}
 
-
-
 #ifdef USE_IMGUI
 	auto spriteView = registry.View < No::Transform2DComponent, No::SpriteComponent>();
 

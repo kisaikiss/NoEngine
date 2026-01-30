@@ -49,8 +49,6 @@ void MeshPass::Sort() {
 void MeshPass::Render(GraphicsContext& context) {
 	// ToDo : currentPsoの値は被りえない値にすべきです。
 	uint32_t currentPSO = 110;
-	MaterialComponent* currentMaterial = nullptr;
-
 	
 	for (auto& item : items_) {
 		auto& rootIndex = RootSignatureBuilder::GetRootIndexMap(item.psoName);
@@ -88,13 +86,11 @@ void MeshPass::Render(GraphicsContext& context) {
 		for (const auto& subMesh : item.mesh->mesh->subMeshes) {
 	
 			_declspec(align(16)) struct {
-				Vector4 color;
+				Color color;
 			}constants;
-			constants.color = item.material->materials[subMesh.materialIndex].color.ToVector4();
-			context.SetDynamicConstantBufferView(rootIndex["gMaterial"], sizeof(Color), &constants);
+			constants.color = item.material->color;
+			context.SetDynamicConstantBufferView(rootIndex["gMaterial"], sizeof(constants), &constants);
 			context.SetDynamicDescriptor(rootIndex["gTexture"], 0, item.material->materials[subMesh.materialIndex].textureHandle.GetSRV());
-
-			currentMaterial = item.material;
 
 			context.DrawIndexedInstanced(subMesh.indexCount, 1, subMesh.indexStart, subMesh.vertexStart, 0);
 		}

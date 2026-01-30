@@ -1,12 +1,10 @@
 #pragma once
 #include"BaseEnemyState.h"
-#include<shared_mutex>
 #include <memory> 
-#include <utility> 
 #include <tuple> 
 #include <functional>
-template<typename EnemyOwnerType>
 
+template<typename EnemyOwnerType>
 class EnemyStateManager {
 public:
 
@@ -24,18 +22,18 @@ public:
     //ステートの変更処理を関数ポインタの中に閉じ込め更新が終わった後に呼ぶ
     //ステートの型を指定したら関数内でインスタンスを作成し、コンストラクタに値を渡せるように変更
     template<typename StateType, typename ...ArgType>
-    void ChangeState(No::Registry& registry, ArgType&&... args) {
+    void ChangeState(No::Registry& registry,No::Entity entity, ArgType&&... args) {
         // 引数をタプルにまとめてキャプチャ 
         auto argsTuple = std::make_tuple(std::forward<ArgType>(args)...);
         //ステートの変更命令を格納する
         //ステートの変更命令を関数ポインタに格納する
-        fnChangeState_ = [this, &registry, argsTuple = std::move(argsTuple)]() mutable {
+        fnChangeState_ = [this, &registry, entity, argsTuple = std::move(argsTuple)]() mutable {
 
 
             if (owner_ == nullptr)   return;
 
             if (state_ != nullptr) {
-                state_->CallExit(registry, owner_);
+                state_->CallExit(registry, entity, owner_);
                 state_ = nullptr;
             }
             // 新しいステートを作成
@@ -52,21 +50,21 @@ public:
 
             //新しいステートにこのマシーンをセット
             state_->SetEnemyStateManager(this);
-            state_->CallEnter(registry, owner_);
+            state_->CallEnter(registry, entity, owner_);
             
             };
     }
 
-    void Update(No::Registry& registry,float deltaTime) {
-
+    void Update(No::Registry& registry, No::Entity entity, float deltaTime)
+    {
         fnChangeState_();
         fnChangeState_ = []() {};
 
-        if (state_ != nullptr) {
-            state_->CallUpdate(registry, owner_,deltaTime);
+        if (state_ != nullptr && owner_ != nullptr)
+        {
+            state_->CallUpdate(registry, entity, owner_, deltaTime);
         }
     }
-
 private:
 
     //現在の持ち主のポインタ

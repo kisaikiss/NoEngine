@@ -130,6 +130,7 @@ void VausControlSystem::Update(No::Registry& registry, float deltaTime)
 		{
 			if (!wasPress_)
 			{
+				No::SoundEffectPlay("ballPong2", 0.5f);
 				power_ = 0.0f;
 			}
 			ringAnimation->releaseTime = 0.0f;
@@ -149,6 +150,10 @@ void VausControlSystem::Update(No::Registry& registry, float deltaTime)
 			if (wasPress_ && !isPress_)
 			{
 				power_ = ringAnimation->tTemp;
+				//ヨシダ追加しました
+				float pitch = 1.0f + ringAnimation->pressedTime * 0.5f;
+				No::SetPitch("chargeEnter", pitch);
+				No::SoundPlay("chargeEnter", 0.5f, false);
 			}
 			ringAnimation->pressedTime = 0.0f;
 			ringAnimation->releaseTime += deltaTime;
@@ -197,14 +202,8 @@ void VausControlSystem::Update(No::Registry& registry, float deltaTime)
 			vausState->isReleasing = true;
 		}
 
-		if (deltaTime > 0.0f)
-		{
-			vausState->currentVelocity = (vausTransform->translate - vausState->prevPosition) / deltaTime;
-		}
-		else
-		{
-			vausState->currentVelocity = Vector3::ZERO;
-		}
+		vausState->currentVelocity = (vausTransform->translate - vausState->prevPosition) * VausStateComponent::kPower;
+
 
 		vausState->prevPosition = vausTransform->translate;
 	}

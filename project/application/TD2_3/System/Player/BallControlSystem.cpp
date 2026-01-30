@@ -43,6 +43,9 @@ void BallControlSystem::Update(No::Registry& registry, float deltaTime)
 		//auto* ballDeathFlag = registry.GetComponent<DeathFlag>(entityBall);
 		auto* ballPhysics = registry.GetComponent<PhysicsComponent>(entityBall);
 		auto* ballState = registry.GetComponent<BallStateComponent>(entityBall);
+#ifndef RELEASE
+		if (Input::Keyboard::IsTrigger('R'))ballState->landed = true;
+#endif // !RELEASE
 
 		for (auto entityVaus : vausView)
 		{
@@ -92,7 +95,7 @@ void BallControlSystem::Update(No::Registry& registry, float deltaTime)
 					{
 						auto normal = MathCalculations::Normalize(Vector3::ZERO - ballTransform->translate);
 						Vector3 tangent = MathCalculations::Normalize(Vector3(-normal.y, normal.x, 0));
-						float hitFactor = diff / halfTheta;
+						float hitFactor = -diff / halfTheta;
 						constexpr float kAngleBias = 0.25f;
 						Vector3 dir = MathCalculations::Normalize(normal + tangent * hitFactor * kAngleBias);
 						float finalSpeed = ballPhysics->baseSpeed;
@@ -102,7 +105,7 @@ void BallControlSystem::Update(No::Registry& registry, float deltaTime)
 
 							if (velocityProjected > 0.0f)
 							{
-								float additionalSpeed = velocityProjected * vausState->kPower;
+								float additionalSpeed = velocityProjected * vausState->chargePower;
 								finalSpeed += additionalSpeed;
 							}
 						}

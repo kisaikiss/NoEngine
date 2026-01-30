@@ -22,6 +22,10 @@ private:
 	void InitBatGirl(No::Registry& registry);
 	void InitPlayerGirl(No::Registry& registry);
 	void InitLights(No::Registry& registry);
+	void InitHpGaugeSprite(No::Registry& registry);
+	void InitLevelGaugeSprite(No::Registry& registry);
+	void CreateSprite(No::Registry& registry, NoEngine::Vector2 translate,
+		NoEngine::Vector2 scale, const std::string& fileName, const std::string& configName);
 	void DestroyGameObject();
 	NoEngine::Vector3 GenerateRandomPointInCircle(float minRadius, float maxRadius);
 

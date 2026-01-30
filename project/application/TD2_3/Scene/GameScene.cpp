@@ -24,7 +24,10 @@
 #include "../System/Human/BatGirlControlSystem.h"
 #include "../System/Human/PlayerGirlControlSystem.h"
 
+#include"../System/HpSpriteControlSystem.h"
+#include"../SpriteConfigManager/SpriteConfigManager.h"
 //ヨシダ追加しました。
+
 #include "../tag.h"
 
 #include "engine/Functions/Renderer/Primitive.h"
@@ -51,7 +54,8 @@ void GameScene::Setup()
 	AddSystem(std::make_unique<BatGirlControlSystem>());
 	//プレイヤー少女システム
 	AddSystem(std::make_unique<PlayerGirlControlSystem>());
-
+    //HISprite
+    AddSystem(std::make_unique<HpSpriteControlSystem>());
 	//衝突判定用システム
 	AddSystem(std::make_unique<CollisionSystem>());
 
@@ -65,6 +69,9 @@ void GameScene::Setup()
 	InitBatGirl(registry);
 	InitPlayerGirl(registry);
     InitLights(registry);
+    InitHpGaugeSprite(registry);
+    InitLevelGaugeSprite(registry);
+    SpriteConfigManager::Get().Load("resources/game/td_2304/Json/sprite_config.json");
 
 	constexpr Vector3 kStartCameraPosition = Vector3{ 0.0f, 0.0f, -28.0f };
 	//カメラ初期化
@@ -102,7 +109,7 @@ void GameScene::InitVaus(No::Registry& registry)
 
 	auto* m = registry.AddComponent<No::MaterialComponent>(vausEntity);
 	m->materials = NoEngine::ModelLoader::GetMaterial("bar");
-	m->materials.front().color = {0.8f,0.2f,0.2f};
+	m->color = {0.8f,0.2f,0.2f};
 
     m->psoName = L"Renderer : Default PSO";
     m->psoId = NoEngine::Render::GetPSOID(m->psoName);
@@ -120,8 +127,8 @@ void GameScene::InitRing(No::Registry& registry)
 
 	auto m = registry.AddComponent<No::MaterialComponent>(ringEntity);
 	m->materials = NoEngine::ModelLoader::GetMaterial("circle");
-	m->materials.front().color.a = 0.7f;
-	m->materials.front().color.b = 0.5f;
+	m->color.a = 0.7f;
+	m->color.b = 0.5f;
 
     m->psoName = L"Renderer : Default PSO";
     m->psoId = NoEngine::Render::GetPSOID(m->psoName);
@@ -163,7 +170,6 @@ void GameScene::InitEnemy(No::Registry& registry)
 
         auto* enemy = registry.AddComponent<NormalEnemyComponent>(enemyEntity);
         //enemy->velocity = { 0.5f,0.5f,0.0f };
-        enemy->entity = enemyEntity; // ★ ここでセット
         //enemy->stateManager->Start(enemy);
         //enemy->stateManager->ChangeState<EnemyAppear<NormalEnemyComponent>>(registry);
 
@@ -276,6 +282,32 @@ void GameScene::InitLights(No::Registry& registry) {
     dir->color = { 1.f,1.f,1.f,1.f };
     dir->direction = { 0.f,-1.f,0.f };
     dir->intensity = 1.f;
+void GameScene::InitHpGaugeSprite(No::Registry& registry)
+{
+  CreateSprite(registry, { 100.f, 200.f }, { 448.f, 88.f }, "hp.png","PlayerHpGauge");
+}
+
+void GameScene::InitLevelGaugeSprite(No::Registry& registry)
+{
+    CreateSprite(registry, { 100.f, 200.f }, { 451.f, 83.f },"lv.png","Level");
+}
+
+void GameScene::CreateSprite(No::Registry& registry, NoEngine::Vector2 translate,
+    NoEngine::Vector2 scale, const std::string& fileName, const std::string& configName)
+{
+    No::Entity entity = registry.GenerateEntity();
+
+    auto* t2d = registry.AddComponent<No::Transform2DComponent>(entity); 
+    t2d->translate = translate; 
+    t2d->scale = scale;
+
+    auto* sprite = registry.AddComponent<No::SpriteComponent>(entity);
+    sprite->name = configName; // JSON のキーと一致させる
+    //sprite->name = fileName.substr(0, fileName.rfind("."));
+    std::string filePath = "resources/game/td_2304/Texture/" + fileName;
+    sprite->textureHandle = NoEngine::TextureManager::LoadCovertTexture(filePath);
+    // JSON 設定を適用 
+    SpriteConfigManager::Get().ApplyToSprite(*sprite,*t2d);
 }
 
 void GameScene::DestroyGameObject()
@@ -308,7 +340,7 @@ NoEngine::Vector3 GameScene::GenerateRandomPointInCircle(float minRadius, float 
     float x = r * std::cos(angle);
     float y = r * std::sin(angle);
 
-    return Vector3{ x, y, -0.5f }; // Zは固定
+    return Vector3{ x, y, 0.0f}; // Zは0で平面上に配置
 }
 
 //NoEngine::Vector3 GameScene::GenerateRandomPointInCircle(float radius)
