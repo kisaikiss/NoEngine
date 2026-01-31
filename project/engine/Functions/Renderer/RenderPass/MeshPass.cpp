@@ -9,10 +9,18 @@ namespace Render {
 
 using namespace Component;
 
+MeshPass::MeshPass() {
+	outlinePSOName_ = "Renderer : outline PSO";
+	outlinePSOID_ = GetPSOID(ConvertString(outlinePSOName_));
+	outlineSkinnedPSOName_ = "Renderer : skinnedOutline PSO";
+	outlineSkinnedPSOID_ = GetPSOID(ConvertString(outlineSkinnedPSOName_));
+}
+
 void MeshPass::Execute(GraphicsContext& gfx, ECS::Registry& registry) {
 	Collect(registry);
 	Sort();
 	Render(gfx);
+	RenderOutline(gfx);
 }
 
 void MeshPass::Collect(ECS::Registry& registry) {
@@ -34,7 +42,7 @@ void MeshPass::Collect(ECS::Registry& registry) {
 		auto name = material->psoName;
 		float distance = MathCalculations::LengthSquared(transform->translate - cameraPos);
 
-		items_.push_back({ mesh,material,transform, pso, rootSig, ConvertString(name), distance});
+		items_.push_back({ mesh,material,transform, pso, rootSig, ConvertString(name), distance });
 	}
 }
 
@@ -49,7 +57,7 @@ void MeshPass::Sort() {
 void MeshPass::Render(GraphicsContext& context) {
 	// ToDo : currentPsoの値は被りえない値にすべきです。
 	uint32_t currentPSO = 110;
-	
+
 	for (auto& item : items_) {
 		auto& rootIndex = RootSignatureBuilder::GetRootIndexMap(item.psoName);
 		if (item.psoId != currentPSO) {
@@ -61,7 +69,7 @@ void MeshPass::Render(GraphicsContext& context) {
 
 		Matrix4x4 worldData = item.transform->MakeAffineMatrix4x4();
 		context.SetDynamicConstantBufferView(rootIndex["gWorldMatrix"], sizeof(Matrix4x4), &worldData);
-		context.SetDynamicConstantBufferView(rootIndex["gCameraMatrix"], sizeof(Matrix4x4), &GetCamera()->GetViewProjMatrix());
+		context.SetDynamicConstantBufferView(rootIndex["gCameraMatrix"], sizeof(CameraBase::CameraForGPU), &GetCamera()->GetCameraForGPU());
 		context.SetDynamicDescriptor(rootIndex["gDirectionalLights"], 0, GetRenderContext()->GetDirectionalLightSRV());
 		{
 			_declspec(align(16)) struct {
@@ -75,16 +83,16 @@ void MeshPass::Render(GraphicsContext& context) {
 		}
 		context.SetVertexBuffer(0, item.mesh->mesh->vertexBuffer.VertexBufferView());
 		context.SetIndexBuffer(item.mesh->mesh->indexBuffer.IndexBufferView());
-		
-		if (item.mesh->mesh->numJoints) {
+
+		if (item.mesh->mesh->numJoints && item.material->enableSkinning) {
 
 			context.CopyBufferRegion(item.mesh->mesh->paletteResource, 0, item.mesh->mesh->paletteUpload, 0, sizeof(SkeletonWell) * item.mesh->mesh->mappedPalette.size());
-			
+
 			context.SetDynamicDescriptor(rootIndex["gJoints"], 0, item.mesh->mesh->paletteResource.GetSRV());
 		}
 
 		for (const auto& subMesh : item.mesh->mesh->subMeshes) {
-	
+
 			_declspec(align(16)) struct {
 				Color color;
 			}constants;
@@ -92,6 +100,52 @@ void MeshPass::Render(GraphicsContext& context) {
 			context.SetDynamicConstantBufferView(rootIndex["gMaterial"], sizeof(constants), &constants);
 			context.SetDynamicDescriptor(rootIndex["gTexture"], 0, item.material->materials[subMesh.materialIndex].textureHandle.GetSRV());
 
+			context.DrawIndexedInstanced(subMesh.indexCount, 1, subMesh.indexStart, subMesh.vertexStart, 0);
+		}
+	}
+}
+
+void MeshPass::RenderOutline(GraphicsContext& context) {
+	if (items_.empty()) return;
+	bool currentPSOEnableSkinning = false;
+	std::string currentPSOName = outlinePSOName_;
+	context.SetPipelineState(GetPSO(GetPSOID(ConvertString(outlinePSOName_))));
+	context.SetRootSignature(GetRootSignature(GetPSOID(ConvertString(outlinePSOName_))));
+	context.SetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	for (auto& item : items_) {
+		if (!item.material->drawOutline) continue;
+
+		if (currentPSOEnableSkinning != item.material->enableSkinning) {
+			currentPSOEnableSkinning = item.material->enableSkinning;
+			if (currentPSOEnableSkinning) {
+				currentPSOName = outlineSkinnedPSOName_;
+				context.SetPipelineState(GetPSO(GetPSOID(ConvertString(currentPSOName))));
+				context.SetRootSignature(GetRootSignature(GetPSOID(ConvertString(currentPSOName))));
+				context.SetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+			} else {
+				currentPSOName = outlinePSOName_;
+				context.SetPipelineState(GetPSO(GetPSOID(ConvertString(outlinePSOName_))));
+				context.SetRootSignature(GetRootSignature(GetPSOID(ConvertString(outlinePSOName_))));
+				context.SetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+			}
+		}
+	
+		auto& rootIndex = RootSignatureBuilder::GetRootIndexMap(currentPSOName);
+
+		Matrix4x4 worldData = item.transform->MakeAffineMatrix4x4();
+		context.SetDynamicConstantBufferView(rootIndex["gWorldMatrix"], sizeof(Matrix4x4), &worldData);
+		context.SetDynamicConstantBufferView(rootIndex["gCameraMatrix"], sizeof(CameraBase::CameraForGPU), &GetCamera()->GetCameraForGPU());
+		
+		context.SetVertexBuffer(0, item.mesh->mesh->vertexBuffer.VertexBufferView());
+		context.SetIndexBuffer(item.mesh->mesh->indexBuffer.IndexBufferView());
+
+		if (item.mesh->mesh->numJoints && item.material->enableSkinning) {
+
+			context.SetDynamicDescriptor(rootIndex["gJoints"], 0, item.mesh->mesh->paletteResource.GetSRV());
+		}
+
+		for (const auto& subMesh : item.mesh->mesh->subMeshes) {
 			context.DrawIndexedInstanced(subMesh.indexCount, 1, subMesh.indexStart, subMesh.vertexStart, 0);
 		}
 	}

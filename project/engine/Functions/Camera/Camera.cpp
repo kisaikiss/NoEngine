@@ -17,6 +17,7 @@ farClip_(1000.f){
 
 void Camera::UpdateProjectionMatrix() {
 	projectionMatrix_ = MathCalculations::MakePerspectiveFovMatrix(fovY_, aspectRatio_, nearClip_, farClip_);
+	forGpu_.fov = fovY_;
 }
 
 }

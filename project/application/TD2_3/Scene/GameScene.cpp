@@ -236,6 +236,7 @@ void GameScene::InitBoss(No::Registry& registry)
 	m->materials = NoEngine::ModelLoader::GetMaterial("batBoss");
 
 	m->psoName = L"Renderer : DefaultSkinned PSO";
+	m->enableSkinning = true;
 	m->psoId = NoEngine::Render::GetPSOID(m->psoName);
 	m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
 
@@ -268,6 +269,8 @@ void GameScene::InitBatGirl(No::Registry& registry)
 	m->materials = NoEngine::ModelLoader::GetMaterial("batGirl");
 
 	m->psoName = L"Renderer : DefaultSkinned PSO";
+	m->enableSkinning = true;
+	m->drawOutline = true;
 	m->psoId = NoEngine::Render::GetPSOID(m->psoName);
 	m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
 }
@@ -289,6 +292,8 @@ void GameScene::InitPlayerGirl(No::Registry& registry)
 	m->materials = NoEngine::ModelLoader::GetMaterial("playerGirl");
 
 	m->psoName = L"Renderer : DefaultSkinned PSO";
+	m->enableSkinning = true;
+	m->drawOutline = true;
 	m->psoId = NoEngine::Render::GetPSOID(m->psoName);
 	m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
 }

@@ -13,6 +13,9 @@
     <FxCompile Include="resources\game\Shaders\RingAndBall.VS.hlsl" />
     <FxCompile Include="resources\game\Shaders\BallTrail.PS.hlsl" />
     <FxCompile Include="resources\game\Shaders\BallTrail.VS.hlsl" />
+    <FxCompile Include="resources\engine\Shaders\Outline.VS.hlsl" />
+    <FxCompile Include="resources\engine\Shaders\Black.PS.hlsl" />
+    <FxCompile Include="resources\engine\Shaders\OutlineSkinned.VS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="application\TD2_3\Game.cpp" />

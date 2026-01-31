@@ -65,38 +65,122 @@ void Initialize() {
 	sRootSignatures.push_back(std::move(defaultRootSignature));
 	sRootSignatureIndexMap[defaultPSOName] = static_cast<uint32_t>(sRootSignatures.size()) - 1;
 
-	ShaderModule defaultSkinnedVS(ShaderStage::Vertex, L"resources/engine/Shaders/DefaultSkinned.VS.hlsl", L"vs_6_0");
+	// スキニング
+	{
+		ShaderModule defaultSkinnedVS(ShaderStage::Vertex, L"resources/engine/Shaders/DefaultSkinned.VS.hlsl", L"vs_6_0");
 
-	const ShaderReflection& vsSkinnedReflection = defaultSkinnedVS.GetReflection();
-	std::vector<ShaderReflection> skinnedRefls;
-	skinnedRefls.push_back(vsSkinnedReflection);
-	skinnedRefls.push_back(psReflection);
+		const ShaderReflection& vsSkinnedReflection = defaultSkinnedVS.GetReflection();
+		std::vector<ShaderReflection> skinnedRefls;
+		skinnedRefls.push_back(vsSkinnedReflection);
+		skinnedRefls.push_back(psReflection);
 
-	std::unique_ptr<RootSignature> defaultSkinnedRootSignature = std::make_unique<RootSignature>();
-	std::wstring defaultSkinnedPSOName = L"Renderer : DefaultSkinned PSO";
-	RootSignatureBuilder::BuildFromReflection(skinnedRefls, *defaultSkinnedRootSignature, ConvertString(defaultSkinnedPSOName));
+		std::unique_ptr<RootSignature> defaultSkinnedRootSignature = std::make_unique<RootSignature>();
+		std::wstring defaultSkinnedPSOName = L"Renderer : DefaultSkinned PSO";
+		RootSignatureBuilder::BuildFromReflection(skinnedRefls, *defaultSkinnedRootSignature, ConvertString(defaultSkinnedPSOName));
 
-	std::vector<D3D12_INPUT_ELEMENT_DESC> skinnedInputLayout = InputLayoutBuilder::BuildFromReflection(vsSkinnedReflection);
-	// ToDo : inputLayoutのReflectionがUINT型のインプットが対応できていないので、このように後から入れる形になってしまっています。UINT型に対応すべきです。
-	skinnedInputLayout[4].Format = DXGI_FORMAT_R32G32B32A32_UINT;
+		std::vector<D3D12_INPUT_ELEMENT_DESC> skinnedInputLayout = InputLayoutBuilder::BuildFromReflection(vsSkinnedReflection);
+		// ToDo : inputLayoutのReflectionがUINT型のインプットが対応できていないので、このように後から入れる形になってしまっています。UINT型に対応すべきです。
+		skinnedInputLayout[4].Format = DXGI_FORMAT_R32G32B32A32_UINT;
 
+
+		GraphicsPSO defaultSkinnedPSO(defaultSkinnedPSOName);
+		defaultSkinnedPSO.SetRootSignature(*defaultSkinnedRootSignature);
+		defaultSkinnedPSO.SetRasterizerState(rasterizerDesc);
+		defaultSkinnedPSO.SetBlendState(blendDesc);
+		defaultSkinnedPSO.SetDepthStencilState(depthStencilDesc);
+		defaultSkinnedPSO.SetInputLayout(skinnedInputLayout);
+		defaultSkinnedPSO.SetPrimitiveTopologyType(D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
+		defaultSkinnedPSO.SetRenderTargetFormats(1, rtvFormat, DXGI_FORMAT_D24_UNORM_S8_UINT);
+		defaultSkinnedPSO.SetVertexShader(defaultSkinnedVS.GetBytecode());
+		defaultSkinnedPSO.SetPixelShader(defaultPS.GetBytecode());
+		defaultSkinnedPSO.SetSampleMask(D3D12_DEFAULT_SAMPLE_MASK);
+		defaultSkinnedPSO.Finalize();
+		sGraphicsPSOs.push_back(defaultSkinnedPSO);
+		sGraphicsPSOIndexMap[defaultSkinnedPSOName] = static_cast<uint32_t>(sGraphicsPSOs.size()) - 1;
+		sRootSignatures.push_back(std::move(defaultSkinnedRootSignature));
+		sRootSignatureIndexMap[defaultSkinnedPSOName] = static_cast<uint32_t>(sRootSignatures.size()) - 1;
+	}
 	
-	GraphicsPSO defaultSkinnedPSO(defaultSkinnedPSOName);
-	defaultSkinnedPSO.SetRootSignature(*defaultSkinnedRootSignature);
-	defaultSkinnedPSO.SetRasterizerState(rasterizerDesc);
-	defaultSkinnedPSO.SetBlendState(blendDesc);
-	defaultSkinnedPSO.SetDepthStencilState(depthStencilDesc);
-	defaultSkinnedPSO.SetInputLayout(skinnedInputLayout);
-	defaultSkinnedPSO.SetPrimitiveTopologyType(D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
-	defaultSkinnedPSO.SetRenderTargetFormats(1, rtvFormat, DXGI_FORMAT_D24_UNORM_S8_UINT);
-	defaultSkinnedPSO.SetVertexShader(defaultSkinnedVS.GetBytecode());
-	defaultSkinnedPSO.SetPixelShader(defaultPS.GetBytecode());
-	defaultSkinnedPSO.SetSampleMask(D3D12_DEFAULT_SAMPLE_MASK);
-	defaultSkinnedPSO.Finalize();
-	sGraphicsPSOs.push_back(defaultSkinnedPSO);
-	sGraphicsPSOIndexMap[defaultSkinnedPSOName] = static_cast<uint32_t>(sGraphicsPSOs.size()) - 1;
-	sRootSignatures.push_back(std::move(defaultSkinnedRootSignature));
-	sRootSignatureIndexMap[defaultSkinnedPSOName] = static_cast<uint32_t>(sRootSignatures.size()) - 1;
+	// アウトライン
+	{
+		ShaderModule outlineVS(ShaderStage::Vertex, L"resources/engine/Shaders/Outline.VS.hlsl", L"vs_6_0");
+		ShaderModule blackPS(ShaderStage::Vertex, L"resources/engine/Shaders/Black.PS.hlsl", L"ps_6_0");
+
+		const ShaderReflection& outlineVsReflection = outlineVS.GetReflection();
+		const ShaderReflection& blackPsReflection = blackPS.GetReflection();
+
+		std::vector<ShaderReflection> reflectionOutline;
+		reflectionOutline.push_back(outlineVsReflection);
+		reflectionOutline.push_back(blackPsReflection);
+		std::unique_ptr<RootSignature> outlineRootSignature = std::make_unique<RootSignature>();
+		std::wstring outlinePSOName = L"Renderer : outline PSO";
+		RootSignatureBuilder::BuildFromReflection(reflectionOutline, *outlineRootSignature, ConvertString(outlinePSOName));
+
+		D3D12_RASTERIZER_DESC rasterizerOutlineDesc{};
+		rasterizerOutlineDesc.CullMode = D3D12_CULL_MODE_FRONT;
+		rasterizerOutlineDesc.FillMode = D3D12_FILL_MODE_SOLID;
+
+		std::vector<D3D12_INPUT_ELEMENT_DESC> outlineInputLayout = InputLayoutBuilder::BuildFromReflection(outlineVsReflection);
+
+		GraphicsPSO outlinePSO(outlinePSOName);
+
+		outlinePSO.SetRootSignature(*outlineRootSignature);
+		outlinePSO.SetRasterizerState(rasterizerOutlineDesc);
+		outlinePSO.SetBlendState(blendDesc);
+		outlinePSO.SetDepthStencilState(depthStencilDesc);
+		outlinePSO.SetInputLayout(outlineInputLayout);
+		outlinePSO.SetPrimitiveTopologyType(D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
+		outlinePSO.SetRenderTargetFormats(1, rtvFormat, DXGI_FORMAT_D24_UNORM_S8_UINT);
+		outlinePSO.SetVertexShader(outlineVS.GetBytecode());
+		outlinePSO.SetPixelShader(blackPS.GetBytecode());
+		outlinePSO.SetSampleMask(D3D12_DEFAULT_SAMPLE_MASK);
+		outlinePSO.Finalize();
+		sGraphicsPSOs.push_back(outlinePSO);
+		sGraphicsPSOIndexMap[outlinePSOName] = static_cast<uint32_t>(sGraphicsPSOs.size()) - 1;
+		sRootSignatures.push_back(std::move(outlineRootSignature));
+		sRootSignatureIndexMap[outlinePSOName] = static_cast<uint32_t>(sRootSignatures.size()) - 1;
+	}
+
+	// スキニングするモデルのアウトライン
+	{
+		ShaderModule outlineVS(ShaderStage::Vertex, L"resources/engine/Shaders/OutlineSkinned.VS.hlsl", L"vs_6_0");
+		ShaderModule blackPS(ShaderStage::Vertex, L"resources/engine/Shaders/Black.PS.hlsl", L"ps_6_0");
+
+		const ShaderReflection& outlineVsReflection = outlineVS.GetReflection();
+		const ShaderReflection& blackPsReflection = blackPS.GetReflection();
+
+		std::vector<ShaderReflection> reflectionOutline;
+		reflectionOutline.push_back(outlineVsReflection);
+		reflectionOutline.push_back(blackPsReflection);
+		std::unique_ptr<RootSignature> outlineRootSignature = std::make_unique<RootSignature>();
+		std::wstring outlinePSOName = L"Renderer : skinnedOutline PSO";
+		RootSignatureBuilder::BuildFromReflection(reflectionOutline, *outlineRootSignature, ConvertString(outlinePSOName));
+
+		D3D12_RASTERIZER_DESC rasterizerOutlineDesc{};
+		rasterizerOutlineDesc.CullMode = D3D12_CULL_MODE_FRONT;
+		rasterizerOutlineDesc.FillMode = D3D12_FILL_MODE_SOLID;
+
+		std::vector<D3D12_INPUT_ELEMENT_DESC> outlineInputLayout = InputLayoutBuilder::BuildFromReflection(outlineVsReflection);
+		outlineInputLayout[4].Format = DXGI_FORMAT_R32G32B32A32_UINT;
+
+		GraphicsPSO outlinePSO(outlinePSOName);
+
+		outlinePSO.SetRootSignature(*outlineRootSignature);
+		outlinePSO.SetRasterizerState(rasterizerOutlineDesc);
+		outlinePSO.SetBlendState(blendDesc);
+		outlinePSO.SetDepthStencilState(depthStencilDesc);
+		outlinePSO.SetInputLayout(outlineInputLayout);
+		outlinePSO.SetPrimitiveTopologyType(D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
+		outlinePSO.SetRenderTargetFormats(1, rtvFormat, DXGI_FORMAT_D24_UNORM_S8_UINT);
+		outlinePSO.SetVertexShader(outlineVS.GetBytecode());
+		outlinePSO.SetPixelShader(blackPS.GetBytecode());
+		outlinePSO.SetSampleMask(D3D12_DEFAULT_SAMPLE_MASK);
+		outlinePSO.Finalize();
+		sGraphicsPSOs.push_back(outlinePSO);
+		sGraphicsPSOIndexMap[outlinePSOName] = static_cast<uint32_t>(sGraphicsPSOs.size()) - 1;
+		sRootSignatures.push_back(std::move(outlineRootSignature));
+		sRootSignatureIndexMap[outlinePSOName] = static_cast<uint32_t>(sRootSignatures.size()) - 1;
+	}
 
 	// sprite
 	{

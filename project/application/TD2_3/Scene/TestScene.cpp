@@ -16,6 +16,8 @@ void TestScene::Setup() {
 	NoEngine::ModelLoader::LoadModel("magiclash", "resources/engine/Model/test/TD_girl/test7.gltf");
 	NoEngine::ModelLoader::GetModel("magiclash", model, a);
 	m->materials = NoEngine::ModelLoader::GetMaterial("magiclash");
+	m->drawOutline = true;
+	m->enableSkinning = true;
 	
 	m->psoName = L"Renderer : DefaultSkinned PSO";
 	m->psoId = NoEngine::Render::GetPSOID(m->psoName);
