@@ -20,12 +20,12 @@ void PlayerStatusSystem::Update(No::Registry& registry, float deltaTime)
 	for (auto entity : playerStatusView)
 	{
 		auto* status = registry.GetComponent<PlayerStatusComponent>(entity);
-
+		
 		// 経験値が閾値を超えたらレベルアップを開始（UI 表示のため pendingUpgrade を使う）
 		const int requiredExp = 3;
 		if (!status->pendingUpgrade && status->exp >= requiredExp)
 		{
-			status->exp -= requiredExp;
+			status->exp = 0;
 			status->level++;
 			// UI 表示開始フラグ
 			status->pendingUpgrade = true;
@@ -33,6 +33,13 @@ void PlayerStatusSystem::Update(No::Registry& registry, float deltaTime)
 
 		// レベルアップの選択 UI を表示中なら ImGui で三択を表示
 #ifdef USE_IMGUI
+		ImGui::Begin("Debug Player Status");
+		ImGui::Text("Score: %d", status->score);
+		ImGui::Text("Level: %d", status->level);
+		ImGui::Text("EXP: %d ", status->exp);
+		ImGui::Text("HP: %d / %d", status->hp, status->hpMax);
+		ImGui::End();
+
 		if (status->pendingUpgrade)
 		{
 			ImGui::SetNextWindowSize(ImVec2(400, 160), ImGuiCond_Once);
@@ -48,8 +55,8 @@ void PlayerStatusSystem::Update(No::Registry& registry, float deltaTime)
 				for (auto vausEntity : registry.View<VausTag, VausStateComponent>())
 				{
 					auto* vausState = registry.GetComponent<VausStateComponent>(vausEntity);
-					// 過度に増えないよう比例で増加（例: 1.2 倍）
-					vausState->widthScale *= 1.2f;
+					// 過度に増えないよう比例で増加
+					vausState->widthScale += 0.05f;
 				}
 
 				status->pendingUpgrade = false;

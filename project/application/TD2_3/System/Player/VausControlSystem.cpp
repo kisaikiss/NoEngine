@@ -204,7 +204,7 @@ void VausControlSystem::Update(No::Registry& registry, float deltaTime)
 		Vector3 ringPos{ sRingRadius * std::cos(angle), sRingRadius * std::sin(angle), -0.25f };
 		vausTransform->translate = ringPos;
 		vausTransform->rotation = MathCalculations::MakeRotateAxisAngleQuaternion(Vector3::FORWARD, angle + PI * 0.5f);
-		vausTransform->scale = Vector3::UNIT_SCALE * (1.0f + 0.2f * chargeTime_);
+		vausTransform->scale = Vector3(vausState->widthScale,1,1) * (1.0f + 0.2f * chargeTime_);
 		vausState->isReleasing = false;
 
 		if (wasPress_ && !isPress_)
