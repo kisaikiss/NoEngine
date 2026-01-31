@@ -96,6 +96,7 @@ public:
 	float GetAspectRatio() const noexcept { return size_.aspectRatio; }
 	SizeChangeMode GetSizeChangeMode() const noexcept { return sizeChangeMode_; }
 	WindowSize& GetWindowSize()noexcept { return size_; }
+	WindowMode GetWindowMode() const noexcept { return windowMode_; }
 	void SetSizeChangeMode(SizeChangeMode sizeChangeMode);
 	void SetWindowMode(WindowMode windowMode);
 	void SetWindowSize(UINT width, UINT height);
@@ -112,6 +113,7 @@ private:
 	SizeChangeMode sizeChangeMode_ = SizeChangeMode::kNormal;
 	WindowMode windowMode_ = WindowMode::kWindow;
 	WindowSize size_;
+	WindowSize preWindowSize_{};
 
 	WindowCore core_;
 	bool isDead_;

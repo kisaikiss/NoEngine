@@ -238,13 +238,23 @@ void Window::SetWindowMode(WindowMode windowMode) {
 	case WindowMode::kWindow:
 		Log::DebugPrint("Change WindowMode : Window", VerbosityLevel::kInfo);
 		// ウィンドウモード
+		size_ = preWindowSize_;
 		SetWindowLong(core_.hwnd, GWL_STYLE, core_.windowStyle);
 		ShowWindow(core_.hwnd, SW_NORMAL);
 		AdjustWindowSize();
+
+		/*SetWindowPos(core_.hwnd, HWND_TOP,
+			size_.clientRect.left,
+			size_.clientRect.top,
+			size_.clientRect.right - size_.clientRect.left,
+			size_.clientRect.bottom - size_.clientRect.top,
+			SWP_NOOWNERZORDER | SWP_FRAMECHANGED);*/
 		break;
 
 	case WindowMode::kFullScreen:
 		Log::DebugPrint("Change WindowMode : FullScreen", VerbosityLevel::kInfo);
+
+		preWindowSize_ = size_;
 		// フルスクリーンモード
 		SetWindowLong(core_.hwnd, GWL_STYLE, WS_POPUP);
 
@@ -257,7 +267,8 @@ void Window::SetWindowMode(WindowMode windowMode) {
 			monitorInfo.rcMonitor.left, monitorInfo.rcMonitor.top,
 			monitorInfo.rcMonitor.right - monitorInfo.rcMonitor.left,
 			monitorInfo.rcMonitor.bottom - monitorInfo.rcMonitor.top,
-			SWP_FRAMECHANGED);
+			SWP_FRAMECHANGED | SWP_NOZORDER | SWP_NOOWNERZORDER);
+		ShowWindow(core_.hwnd, SW_NORMAL);
 		break;
 	}
 }
@@ -265,6 +276,8 @@ void Window::SetWindowMode(WindowMode windowMode) {
 void Window::SetWindowSize(UINT width, UINT height) {
 	size_.clientWidth = width;
 	size_.clientHeight = height;
+	size_.clientRect = { 0, 0, LONG(size_.clientWidth), LONG(size_.clientHeight) };
+	size_.windowRect = size_.clientRect;
 	CalculateAspectRatio();
 	AdjustWindowSize();
 }

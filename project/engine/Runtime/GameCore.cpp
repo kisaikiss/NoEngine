@@ -27,6 +27,11 @@ namespace {
 std::chrono::steady_clock::time_point sLastTickTime{ std::chrono::steady_clock::now() };
 }
 
+
+bool IGameApp::Exit() {
+	return Input::Keyboard::IsTrigger(VK_ESCAPE);
+}
+
 int RunApplication(std::unique_ptr<IGameApp> game) {
 	// リソースリークチェッカー
 	GraphicsResourceLeakChecker leakCheck;
@@ -68,6 +73,7 @@ int RunApplication(std::unique_ptr<IGameApp> game) {
 
 		
 		GraphicsCore::gWindowManager.EndFrame(context);
+		if (game->Exit()) break;
 	}
 
 	game->Cleanup();
@@ -96,7 +102,13 @@ void EngineInitialize() {
 	// ウィンドウの生成、初期化を行います。
 	GraphicsCore::gWindowManager.Create(L"NoEngine", 1280, 720);
 	GraphicsCore::gWindowManager.SetMainWindowName(L"NoEngine");
-	GraphicsCore::gWindowManager.GetMainWindow()->SetSizeChangeMode(Window::SizeChangeMode::kNone);
+#ifdef RELEASE
+	// ToDo : チーム制作用にリリースでフルスクリーンを強制しています。ウィンドウモード変更のバグは修正すべきです。
+	auto* window = GraphicsCore::gWindowManager.GetMainWindow();
+	window->SetWindowMode(Window::WindowMode::kFullScreen);
+	window->SetWindowMode(Window::WindowMode::kWindow);
+#endif // RELEASE
+	
 	InputInitialize();
 	AudioInitialize();
 

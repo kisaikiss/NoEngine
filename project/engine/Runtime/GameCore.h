@@ -31,6 +31,8 @@ public:
 
 	virtual void RenderScene(void) {};
 
+	virtual bool Exit();
+
 	ECS::Registry& GetRegistry() { return *sceneManager_->GetRegistry(); }
 
 	CameraBase* GetCamera() { return sceneManager_->GetCamera(); }
