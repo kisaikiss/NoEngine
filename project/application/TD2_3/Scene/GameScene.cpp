@@ -113,10 +113,10 @@ void GameScene::InitVaus(No::Registry& registry)
 	transform->translate = { 0.f, -4.85f, 0.f };
 
 	auto* model = registry.AddComponent<No::MeshComponent>(vausEntity);
-	NoEngine::ModelLoader::LoadModel("bar", "resources/game/td_2304/Model/bar/bar.obj", model);
+	NoEngine::ModelLoader::LoadModel("paddleMiddle", "resources/game/td_2304/Model/paddle/middle1.obj", model);
 
 	auto* m = registry.AddComponent<No::MaterialComponent>(vausEntity);
-	m->materials = NoEngine::ModelLoader::GetMaterial("bar");
+	m->materials = NoEngine::ModelLoader::GetMaterial("paddleMiddle");
 	m->color = 0xA82C57ff;
 
 	m->psoName = L"Renderer : Default PSO";
