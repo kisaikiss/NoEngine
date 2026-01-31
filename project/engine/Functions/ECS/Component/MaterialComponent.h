@@ -9,6 +9,8 @@ struct MaterialComponent {
 	uint32_t psoId = 0;
 	uint32_t rootSigId = 0;
 	std::wstring psoName;
+	bool drawOutline = false;
+	bool enableSkinning = false;
 };
 }
 }

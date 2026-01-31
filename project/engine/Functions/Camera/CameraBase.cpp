@@ -6,6 +6,9 @@ void CameraBase::Update() {
 	viewMatrix_ = worldMatrix_;
 	viewMatrix_.Inverse();
 	viewProjectionMatrix_ = viewMatrix_ * projectionMatrix_;
+
+	forGpu_.viewProjection = viewProjectionMatrix_;
+	forGpu_.worldPosition = transform_.translate;
 }
 
 void CameraBase::SetTransform(const Transform& transform) {

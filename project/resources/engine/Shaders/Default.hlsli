@@ -9,5 +9,7 @@ struct VertexShaderOutput
 struct CameraMatrix
 {
     float4x4 viewProjection;
+    float3 worldPosition;
+    float fov;
 };
 ConstantBuffer<CameraMatrix> gCameraMatrix : register(b2);

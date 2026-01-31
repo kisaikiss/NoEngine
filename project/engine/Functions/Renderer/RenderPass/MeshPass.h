@@ -9,6 +9,7 @@ namespace Render {
 class MeshPass :
     public RenderPass {
 public:
+    MeshPass();
     void Execute(GraphicsContext& gfx, ECS::Registry& registry) override;
 private:
 
@@ -24,9 +25,15 @@ private:
 
     std::vector<DrawItem> items_;
 
+    std::string outlinePSOName_;
+    std::string outlineSkinnedPSOName_;
+    uint32_t outlinePSOID_;
+    uint32_t outlineSkinnedPSOID_;
+
     void Collect(ECS::Registry& registry);
     void Sort();
     void Render(GraphicsContext& gfx);
+    void RenderOutline(GraphicsContext& gfx);
 };
 }
 }
