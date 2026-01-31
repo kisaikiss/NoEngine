@@ -236,14 +236,18 @@ void EnemyDie<NormalEnemyComponent>::Update(No::Registry& registry, No::Entity e
 	else
 	{
 		auto* deathFlag = registry.GetComponent<DeathFlag>(entity);
-		deathFlag->isDead = true;
-		auto view = registry.View<
-			PlayerStatusComponent>();
-		for (auto playerEntity : view)
+		
+		if (!deathFlag->isDead)
 		{
-			auto* status = registry.GetComponent<PlayerStatusComponent>(playerEntity);
-			status->score += 100;
-			status->exp++;
+			auto view = registry.View<
+				PlayerStatusComponent>();
+			for (auto playerEntity : view)
+			{
+				auto* status = registry.GetComponent<PlayerStatusComponent>(playerEntity);
+				status->score += 100;
+				status->exp++;
+			}
+			deathFlag->isDead = true;
 		}
 	}
 
