@@ -470,7 +470,9 @@ void GameScene::SoundLoad()
 		No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_uwa.mp3", "voice_uwa");
 
 	}
-
+	{
+		No::SoundLoad(L"resources/game/td_2304//Audio/Voice/batGirlLaugh.mp3", "batGirlLaugh");
+	}
 
 
 	No::SoundPlay("titleBGM", 0.125f, true);
