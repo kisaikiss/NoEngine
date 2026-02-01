@@ -39,236 +39,236 @@ using namespace NoEngine;
 
 void GameScene::Setup()
 {
-	//乱数の初期化
-	srand(static_cast<unsigned int>(time(nullptr)));
+    //乱数の初期化
+    srand(static_cast<unsigned int>(time(nullptr)));
 
-	//アニメーションシステム
-	AddSystem(std::make_unique<No::AnimationSystem>());
-	//effect
-	AddSystem(std::make_unique<BackGroundEffectSystem>());
+    //アニメーションシステム
+    AddSystem(std::make_unique<No::AnimationSystem>());
+    //effect
+    AddSystem(std::make_unique<BackGroundEffectSystem>());
 
-	//player用システム
-	AddSystem(std::make_unique<VausControlSystem>());
-	AddSystem(std::make_unique<BallControlSystem>());
-	//Enemy
-	AddSystem(std::make_unique<NormalEnemyControlSystem>());
-	AddSystem(std::make_unique<BossControlSystem>());
-	//こうもり少女のシステム
-	AddSystem(std::make_unique<BatGirlControlSystem>());
-	//プレイヤー少女システム
-	AddSystem(std::make_unique<PlayerGirlControlSystem>());
-	//playerステータス管理システム
-	AddSystem(std::make_unique<PlayerStatusSystem>());
-	AddSystem(std::make_unique<UpgradeSelectionSystem>());
-	//HISprite
-	AddSystem(std::make_unique<HpSpriteControlSystem>());
-	//衝突判定用システム
-	AddSystem(std::make_unique<CollisionSystem>());
+    //player用システム
+    AddSystem(std::make_unique<VausControlSystem>());
+    AddSystem(std::make_unique<BallControlSystem>());
+    //Enemy
+    AddSystem(std::make_unique<NormalEnemyControlSystem>());
+    AddSystem(std::make_unique<BossControlSystem>());
+    //こうもり少女のシステム
+    AddSystem(std::make_unique<BatGirlControlSystem>());
+    //プレイヤー少女システム
+    AddSystem(std::make_unique<PlayerGirlControlSystem>());
+    //playerステータス管理システム
+    AddSystem(std::make_unique<PlayerStatusSystem>());
+    AddSystem(std::make_unique<UpgradeSelectionSystem>());
+    //HISprite
+    AddSystem(std::make_unique<HpSpriteControlSystem>());
+    //衝突判定用システム
+    AddSystem(std::make_unique<CollisionSystem>());
 
 
-	SpriteConfigManager::Get().Load("resources/game/td_2304/Json/tdSpriteConfig.json");
+    SpriteConfigManager::Get().Load("resources/game/td_2304/Json/tdSpriteConfig.json");
 
-	No::Registry& registry = *GetRegistry();
-	InitBackGround(registry);
-	InitVaus(registry);
-	InitEnemy(registry);
-	InitRing(registry);
-	InitBall(registry);
-	InitBoss(registry);
-	InitBatGirl(registry);
-	InitPlayerGirl(registry);
-	InitPlayerStatus(registry);
-	InitLights(registry);
-	InitHpGaugeSprite(registry);
-	InitLevelGaugeSprite(registry);
-	InitChooseSprite(registry);
+    No::Registry& registry = *GetRegistry();
+    InitBackGround(registry);
+    InitVaus(registry);
+    InitEnemy(registry);
+    InitRing(registry);
+    InitBall(registry);
+    InitBoss(registry);
+    InitBatGirl(registry);
+    InitPlayerGirl(registry);
+    InitPlayerStatus(registry);
+    InitLights(registry);
+    InitHpGaugeSprite(registry);
+    InitLevelGaugeSprite(registry);
+    InitChooseSprite(registry);
 
-	constexpr Vector3 kStartCameraPosition = Vector3{ 0.0f, 0.0f, -28.0f };
-	//カメラ初期化
-	camera_ = std::make_unique<NoEngine::Camera>();
-	cameraTransform_.translate = kStartCameraPosition;
-	camera_->SetTransform(cameraTransform_);
-	SetCamera(camera_.get());
+    constexpr Vector3 kStartCameraPosition = Vector3{ 0.0f, 0.0f, -28.0f };
+    //カメラ初期化
+    camera_ = std::make_unique<NoEngine::Camera>();
+    cameraTransform_.translate = kStartCameraPosition;
+    camera_->SetTransform(cameraTransform_);
+    SetCamera(camera_.get());
 
-	SoundLoad();
+    SoundLoad();
 }
 
 void GameScene::NotSystemUpdate()
 {
 #ifdef USE_IMGUI
-	ImGui::Begin("camera");
-	ImGui::DragFloat3("pos", &cameraTransform_.translate.x, 0.1f);
-	ImGui::End();
-	camera_->SetTransform(cameraTransform_);
+    ImGui::Begin("camera");
+    ImGui::DragFloat3("pos", &cameraTransform_.translate.x, 0.1f);
+    ImGui::End();
+    camera_->SetTransform(cameraTransform_);
 #endif // USE_IMGUI
 
-	camera_->Update();
-	DestroyGameObject();
+    camera_->Update();
+    DestroyGameObject();
 }
 
 void GameScene::InitVaus(No::Registry& registry)
 {
-	No::Entity vausEntity = registry.GenerateEntity();
-	registry.AddComponent<VausTag>(vausEntity);
-	registry.AddComponent<VausStateComponent>(vausEntity);
-	auto* transform = registry.AddComponent<No::TransformComponent>(vausEntity);
-	transform->translate = { 0.f, -4.85f, 0.f };
+    No::Entity vausEntity = registry.GenerateEntity();
+    registry.AddComponent<VausTag>(vausEntity);
+    registry.AddComponent<VausStateComponent>(vausEntity);
+    auto* transform = registry.AddComponent<No::TransformComponent>(vausEntity);
+    transform->translate = { 0.f, -4.85f, 0.f };
 
-	auto* model = registry.AddComponent<No::MeshComponent>(vausEntity);
-	NoEngine::ModelLoader::LoadModel("paddleMiddle", "resources/game/td_2304/Model/paddle/middle1.obj", model);
+    auto* model = registry.AddComponent<No::MeshComponent>(vausEntity);
+    NoEngine::ModelLoader::LoadModel("paddleMiddle", "resources/game/td_2304/Model/paddle/middle1.obj", model);
 
-	auto* m = registry.AddComponent<No::MaterialComponent>(vausEntity);
-	m->materials = NoEngine::ModelLoader::GetMaterial("paddleMiddle");
-	m->color = 0xA82C57ff;
+    auto* m = registry.AddComponent<No::MaterialComponent>(vausEntity);
+    m->materials = NoEngine::ModelLoader::GetMaterial("paddleMiddle");
+    m->color = 0xA82C57ff;
 
-	m->psoName = L"Renderer : Default PSO";
-	m->psoId = NoEngine::Render::GetPSOID(m->psoName);
-	m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
+    m->psoName = L"Renderer : Default PSO";
+    m->psoId = NoEngine::Render::GetPSOID(m->psoName);
+    m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
 }
 
 void GameScene::InitRing(No::Registry& registry)
 {
-	No::Entity ringEntity = registry.GenerateEntity();
-	registry.AddComponent<RingTag>(ringEntity);
-	registry.AddComponent< RingAnimationComponent>(ringEntity);
-	registry.AddComponent<No::TransformComponent>(ringEntity);
-	auto* model = registry.AddComponent<No::MeshComponent>(ringEntity);
-	NoEngine::ModelLoader::LoadModel("circle", "resources/game/td_2304/Model/circle/circle.obj", model);
+    No::Entity ringEntity = registry.GenerateEntity();
+    registry.AddComponent<RingTag>(ringEntity);
+    registry.AddComponent< RingAnimationComponent>(ringEntity);
+    registry.AddComponent<No::TransformComponent>(ringEntity);
+    auto* model = registry.AddComponent<No::MeshComponent>(ringEntity);
+    NoEngine::ModelLoader::LoadModel("circle", "resources/game/td_2304/Model/circle/circle.obj", model);
 
-	auto m = registry.AddComponent<No::MaterialComponent>(ringEntity);
-	m->materials = NoEngine::ModelLoader::GetMaterial("circle");
-	m->color.a = 0.7f;
-	m->color.b = 0.5f;
+    auto m = registry.AddComponent<No::MaterialComponent>(ringEntity);
+    m->materials = NoEngine::ModelLoader::GetMaterial("circle");
+    m->color.a = 0.7f;
+    m->color.b = 0.5f;
 
-	m->psoName = L"Renderer : Default PSO";
-	m->psoId = NoEngine::Render::GetPSOID(m->psoName);
-	m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
+    m->psoName = L"Renderer : Default PSO";
+    m->psoId = NoEngine::Render::GetPSOID(m->psoName);
+    m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
 }
 
 void GameScene::InitBall(No::Registry& registry)
 {
-	No::Entity ballEntity = registry.GenerateEntity();
-	registry.AddComponent<BallTag>(ballEntity);
-	registry.AddComponent<PhysicsComponent>(ballEntity);
-	registry.AddComponent<BallStateComponent>(ballEntity);
+    No::Entity ballEntity = registry.GenerateEntity();
+    registry.AddComponent<BallTag>(ballEntity);
+    registry.AddComponent<PhysicsComponent>(ballEntity);
+    registry.AddComponent<BallStateComponent>(ballEntity);
 
-	//軌跡
-	auto* trailComp = registry.AddComponent<BallTrailComponent>(ballEntity);
-	// 必要ならパラメータを微調整
-	trailComp->maxAge = 0.6f;
-	trailComp->sampleInterval = 0.02f;
-	trailComp->thickness = 0.35f;
-	trailComp->maxSamples = 256;
-	auto* collider = registry.AddComponent<SphereColliderComponent>(ballEntity);
-	collider->radius = 0.25f;
-	collider->colliderType = ColliderMask::kBall;
-	collider->collideMask = ColliderMask::kEnemy;
+    //軌跡
+    auto* trailComp = registry.AddComponent<BallTrailComponent>(ballEntity);
+    // 必要ならパラメータを微調整
+    trailComp->maxAge = 0.6f;
+    trailComp->sampleInterval = 0.02f;
+    trailComp->thickness = 0.35f;
+    trailComp->maxSamples = 256;
+    auto* collider = registry.AddComponent<SphereColliderComponent>(ballEntity);
+    collider->radius = 0.25f;
+    collider->colliderType = ColliderMask::kBall;
+    collider->collideMask = ColliderMask::kEnemy;
 
-	registry.AddComponent<DeathFlag>(ballEntity);
-	auto* transform = registry.AddComponent<No::TransformComponent>(ballEntity);
-	transform->translate = { 0.0f, -4.35f, 0.f };
+    registry.AddComponent<DeathFlag>(ballEntity);
+    auto* transform = registry.AddComponent<No::TransformComponent>(ballEntity);
+    transform->translate = { 0.0f, -4.35f, 0.f };
 
-	auto* model = registry.AddComponent<No::MeshComponent>(ballEntity);
-	NoEngine::ModelLoader::LoadModel("ball", "resources/game/td_2304/Model/ball/ball.obj", model);
+    auto* model = registry.AddComponent<No::MeshComponent>(ballEntity);
+    NoEngine::ModelLoader::LoadModel("ball", "resources/game/td_2304/Model/ball/ball.obj", model);
 
-	auto m = registry.AddComponent<No::MaterialComponent>(ballEntity);
-	m->materials = NoEngine::ModelLoader::GetMaterial("ball");
+    auto m = registry.AddComponent<No::MaterialComponent>(ballEntity);
+    m->materials = NoEngine::ModelLoader::GetMaterial("ball");
 
-	m->psoName = L"Renderer : Default PSO";
-	m->psoId = NoEngine::Render::GetPSOID(m->psoName);
-	m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
+    m->psoName = L"Renderer : Default PSO";
+    m->psoId = NoEngine::Render::GetPSOID(m->psoName);
+    m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
 }
 
 void GameScene::InitEnemy(No::Registry& registry)
 {
-	for (int i = 0; i < 5; ++i)
-	{
-		No::Entity enemyEntity = registry.GenerateEntity();
-		registry.AddComponent<NormalEnemyTag>(enemyEntity);
-		registry.AddComponent<DeathFlag>(enemyEntity);
+    for (int i = 0; i < 5; ++i)
+    {
+        No::Entity enemyEntity = registry.GenerateEntity();
+        registry.AddComponent<NormalEnemyTag>(enemyEntity);
+        registry.AddComponent<DeathFlag>(enemyEntity);
 
-		auto* enemy = registry.AddComponent<NormalEnemyComponent>(enemyEntity);
-		//enemy->velocity = { 0.5f,0.5f,0.0f };
-		//enemy->stateManager->Start(enemy);
-		//enemy->stateManager->ChangeState<EnemyAppear<NormalEnemyComponent>>(registry);
+        auto* enemy = registry.AddComponent<NormalEnemyComponent>(enemyEntity);
+        //enemy->velocity = { 0.5f,0.5f,0.0f };
+        //enemy->stateManager->Start(enemy);
+        //enemy->stateManager->ChangeState<EnemyAppear<NormalEnemyComponent>>(registry);
 
-		auto* collider = registry.AddComponent<SphereColliderComponent>(enemyEntity);
-		collider->colliderType = ColliderMask::kEnemy;
-		collider->collideMask = ColliderMask::kBall;
+        auto* collider = registry.AddComponent<SphereColliderComponent>(enemyEntity);
+        collider->colliderType = ColliderMask::kEnemy;
+        collider->collideMask = ColliderMask::kBall;
 
-		auto* transform = registry.AddComponent<No::TransformComponent>(enemyEntity);
-		transform->rotation.FromAxisAngle(Vector3::UP, 3.14f);
-		transform->translate = GenerateRandomPointInCircle(2.0f, 3.0f);
+        auto* transform = registry.AddComponent<No::TransformComponent>(enemyEntity);
+        transform->rotation.FromAxisAngle(Vector3::UP, 3.14f);
+        transform->translate = GenerateRandomPointInCircle(2.0f, 3.0f);
 
-		enemy->defaultTranslate_ = transform->translate;
+        enemy->defaultTranslate_ = transform->translate;
 
-		auto* model = registry.AddComponent<No::MeshComponent>(enemyEntity);
-		auto* animationComp = registry.AddComponent<No::AnimatorComponent>(enemyEntity);
-		NoEngine::ModelLoader::LoadModel(enemyResources_.modelName, enemyResources_.modelPath, model, animationComp);
+        auto* model = registry.AddComponent<No::MeshComponent>(enemyEntity);
+        auto* animationComp = registry.AddComponent<No::AnimatorComponent>(enemyEntity);
+        NoEngine::ModelLoader::LoadModel(enemyResources_.modelName, enemyResources_.modelPath, model, animationComp);
 
-		auto m = registry.AddComponent<No::MaterialComponent>(enemyEntity);
-		m->materials = NoEngine::ModelLoader::GetMaterial("bat");
-		m->materials[0].textureHandle = NoEngine::TextureManager::LoadCovertTexture(enemyResources_.texturePath);
-		m->psoName = L"Renderer : Default PSO";
-		m->psoId = NoEngine::Render::GetPSOID(m->psoName);
-		m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
-	}
+        auto m = registry.AddComponent<No::MaterialComponent>(enemyEntity);
+        m->materials = NoEngine::ModelLoader::GetMaterial("bat");
+        m->materials[0].textureHandle = NoEngine::TextureManager::LoadCovertTexture(enemyResources_.texturePath);
+        m->psoName = L"Renderer : Default PSO";
+        m->psoId = NoEngine::Render::GetPSOID(m->psoName);
+        m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
+    }
 }
 
 void GameScene::InitBoss(No::Registry& registry)
 {
 
-	No::Entity bossEntity = registry.GenerateEntity();
-	registry.AddComponent<Boss1Tag>(bossEntity);
-	registry.AddComponent<DeathFlag>(bossEntity);
-	registry.AddComponent<BattBossComponent>(bossEntity);
-	auto* collider = registry.AddComponent<SphereColliderComponent>(bossEntity);
-	collider->colliderType = ColliderMask::kEnemy;
-	collider->collideMask = ColliderMask::kBall;
+    No::Entity bossEntity = registry.GenerateEntity();
+    registry.AddComponent<Boss1Tag>(bossEntity);
+    registry.AddComponent<DeathFlag>(bossEntity);
+    registry.AddComponent<BattBossComponent>(bossEntity);
+    auto* collider = registry.AddComponent<SphereColliderComponent>(bossEntity);
+    collider->colliderType = ColliderMask::kEnemy;
+    collider->collideMask = ColliderMask::kBall;
 
-	auto* transform = registry.AddComponent<No::TransformComponent>(bossEntity);
-	transform->rotation.FromAxisAngle(Vector3::UP, 3.14f);
+    auto* transform = registry.AddComponent<No::TransformComponent>(bossEntity);
+    transform->rotation.FromAxisAngle(Vector3::UP, 3.14f);
 
 
-	auto* model = registry.AddComponent<No::MeshComponent>(bossEntity);
-	auto* animationComp = registry.AddComponent<No::AnimatorComponent>(bossEntity);
-	NoEngine::ModelLoader::LoadModel("batBoss", "resources/game/td_2304/Model/batBoss/batBoss.gltf", model, animationComp);
+    auto* model = registry.AddComponent<No::MeshComponent>(bossEntity);
+    auto* animationComp = registry.AddComponent<No::AnimatorComponent>(bossEntity);
+    NoEngine::ModelLoader::LoadModel("batBoss", "resources/game/td_2304/Model/batBoss/batBoss.gltf", model, animationComp);
 
-	auto m = registry.AddComponent<No::MaterialComponent>(bossEntity);
-	m->materials = NoEngine::ModelLoader::GetMaterial("batBoss");
+    auto m = registry.AddComponent<No::MaterialComponent>(bossEntity);
+    m->materials = NoEngine::ModelLoader::GetMaterial("batBoss");
 
-	m->psoName = L"Renderer : DefaultSkinned PSO";
-	m->enableSkinning = true;
-	m->psoId = NoEngine::Render::GetPSOID(m->psoName);
-	m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
+    m->psoName = L"Renderer : DefaultSkinned PSO";
+    m->enableSkinning = true;
+    m->psoId = NoEngine::Render::GetPSOID(m->psoName);
+    m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
 
 }
 
 void GameScene::InitBackGround(No::Registry& registry)
 {
-	No::Entity backGroundEntity = registry.GenerateEntity();
-	auto* transform = registry.AddComponent<No::TransformComponent>(backGroundEntity);
-	transform->translate.z = 5;
-	transform->scale = { 30,30,1 };
+    No::Entity backGroundEntity = registry.GenerateEntity();
+    auto* transform = registry.AddComponent<No::TransformComponent>(backGroundEntity);
+    transform->translate.z = 5;
+    transform->scale = { 30,30,1 };
 
-	registry.AddComponent<BackGroundComponent>(backGroundEntity);
+    registry.AddComponent<BackGroundComponent>(backGroundEntity);
 }
 
 void GameScene::InitBatGirl(No::Registry& registry)
 {
-	No::Entity batGirlEntity = registry.GenerateEntity();
-	registry.AddComponent<BatGirlTag>(batGirlEntity);
+    No::Entity batGirlEntity = registry.GenerateEntity();
+    registry.AddComponent<BatGirlTag>(batGirlEntity);
 
-	auto* transform = registry.AddComponent<No::TransformComponent>(batGirlEntity);
-	auto* model = registry.AddComponent<No::MeshComponent>(batGirlEntity);
-	auto* animationComp = registry.AddComponent<No::AnimatorComponent>(batGirlEntity);
-	NoEngine::ModelLoader::LoadModel("batGirl", "resources/game/td_2304/Model/batGirl/batGirl.gltf", model, animationComp);
+    auto* transform = registry.AddComponent<No::TransformComponent>(batGirlEntity);
+    auto* model = registry.AddComponent<No::MeshComponent>(batGirlEntity);
+    auto* animationComp = registry.AddComponent<No::AnimatorComponent>(batGirlEntity);
+    NoEngine::ModelLoader::LoadModel("batGirl", "resources/game/td_2304/Model/batGirl/batGirl.gltf", model, animationComp);
 
-	transform->translate = { 6.1f,-14.55f,-8.5f };
-	transform->rotation.FromAxisAngle(NoEngine::Vector3::UP, 3.14f);
+    transform->translate = { 6.1f,-14.55f,-8.5f };
+    transform->rotation.FromAxisAngle(NoEngine::Vector3::UP, 3.14f);
 
-	auto m = registry.AddComponent<No::MaterialComponent>(batGirlEntity);
-	m->materials = NoEngine::ModelLoader::GetMaterial("batGirl");
+    auto m = registry.AddComponent<No::MaterialComponent>(batGirlEntity);
+    m->materials = NoEngine::ModelLoader::GetMaterial("batGirl");
 
 	m->psoName = L"Renderer : ToonSkinned PSO";
 	m->enableSkinning = true;
@@ -279,19 +279,19 @@ void GameScene::InitBatGirl(No::Registry& registry)
 
 void GameScene::InitPlayerGirl(No::Registry& registry)
 {
-	No::Entity playerGirlEntity = registry.GenerateEntity();
-	registry.AddComponent<PlayerGirlTag>(playerGirlEntity);
+    No::Entity playerGirlEntity = registry.GenerateEntity();
+    registry.AddComponent<PlayerGirlTag>(playerGirlEntity);
 
-	auto* transform = registry.AddComponent<No::TransformComponent>(playerGirlEntity);
-	auto* model = registry.AddComponent<No::MeshComponent>(playerGirlEntity);
-	auto* animationComp = registry.AddComponent<No::AnimatorComponent>(playerGirlEntity);
-	NoEngine::ModelLoader::LoadModel("playerGirl", "resources/game/td_2304/Model/playerGirl/playerGirl.gltf", model, animationComp);
+    auto* transform = registry.AddComponent<No::TransformComponent>(playerGirlEntity);
+    auto* model = registry.AddComponent<No::MeshComponent>(playerGirlEntity);
+    auto* animationComp = registry.AddComponent<No::AnimatorComponent>(playerGirlEntity);
+    NoEngine::ModelLoader::LoadModel("playerGirl", "resources/game/td_2304/Model/playerGirl/playerGirl.gltf", model, animationComp);
 
-	transform->translate = { -6.1f,-14.55f,-8.5f };
-	transform->rotation.FromAxisAngle(NoEngine::Vector3::UP, 3.14f);
+    transform->translate = { -6.1f,-14.55f,-8.5f };
+    transform->rotation.FromAxisAngle(NoEngine::Vector3::UP, 3.14f);
 
-	auto m = registry.AddComponent<No::MaterialComponent>(playerGirlEntity);
-	m->materials = NoEngine::ModelLoader::GetMaterial("playerGirl");
+    auto m = registry.AddComponent<No::MaterialComponent>(playerGirlEntity);
+    m->materials = NoEngine::ModelLoader::GetMaterial("playerGirl");
 
 	m->psoName = L"Renderer : ToonSkinned PSO";
 	m->enableSkinning = true;
@@ -302,129 +302,129 @@ void GameScene::InitPlayerGirl(No::Registry& registry)
 
 void GameScene::InitPlayerStatus(No::Registry& registry)
 {
-	No::Entity playerStatusEntity = registry.GenerateEntity();
-	auto* status = registry.AddComponent<PlayerStatusComponent>(playerStatusEntity);
-	status->exp = 0;
-	status->hp = 5;
-	status->level = 1;
-	status->score = 0;
+    No::Entity playerStatusEntity = registry.GenerateEntity();
+    auto* status = registry.AddComponent<PlayerStatusComponent>(playerStatusEntity);
+    status->exp = 0;
+    status->hp = 5;
+    status->level = 1;
+    status->score = 0;
 
-	//No::Entity upgradeEntity = registry.GenerateEntity();
-	//registry.AddComponent<UpgradeChooseComponent>(upgradeEntity);
+    //No::Entity upgradeEntity = registry.GenerateEntity();
+    //registry.AddComponent<UpgradeChooseComponent>(upgradeEntity);
 }
 
 void GameScene::InitLights(No::Registry& registry)
 {
-	auto light = registry.GenerateEntity();
-	auto* dir = registry.AddComponent<No::DirectionalLightComponent>(light);
-	dir->color = { 1.f,1.f,1.f,1.f };
-	dir->direction = { 0.f,-1.f,0.f };
-	dir->intensity = 1.f;
+    auto light = registry.GenerateEntity();
+    auto* dir = registry.AddComponent<No::DirectionalLightComponent>(light);
+    dir->color = { 1.f,1.f,1.f,1.f };
+    dir->direction = { 0.f,-1.f,0.f };
+    dir->intensity = 1.f;
 }
 
 void GameScene::InitHpGaugeSprite(No::Registry& registry)
 {
-	CreateSprite(registry, "hp.png", "PlayerHpGauge");
+    CreateSprite(registry, "hp.png", "PlayerHpGauge");
 }
 
 void GameScene::InitLevelGaugeSprite(No::Registry& registry)
 {
-	CreateSprite(registry, "lv.png", "Level");
+    CreateSprite(registry, "lv.png", "Level");
 }
 
 void GameScene::InitChooseSprite(No::Registry& registry)
 {
-	//hp上限up
-	{
-		No::Entity hpLimitUpEntity = registry.GenerateEntity();
-		registry.AddComponent<StatusSpriteTag>(hpLimitUpEntity);
-		auto* ts = registry.AddComponent<No::Transform2DComponent>(hpLimitUpEntity);
-		ts->scale = { 320,144 };
-		auto* sprite = registry.AddComponent<No::SpriteComponent>(hpLimitUpEntity);
-		sprite->name = "hpLimitUp";
-		sprite->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Sprite/hpLimitUp.png");
-	}
+    //hp上限up
+    {
+        No::Entity hpLimitUpEntity = registry.GenerateEntity();
+        registry.AddComponent<StatusSpriteTag>(hpLimitUpEntity);
+        auto* ts = registry.AddComponent<No::Transform2DComponent>(hpLimitUpEntity);
+        ts->scale = { 320,144 };
+        auto* sprite = registry.AddComponent<No::SpriteComponent>(hpLimitUpEntity);
+        sprite->name = "hpLimitUp";
+        sprite->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Sprite/hpLimitUp.png");
+    }
 
-	//ballUp
-	{
-		No::Entity ballUpEntity = registry.GenerateEntity();
-		registry.AddComponent<StatusSpriteTag>(ballUpEntity);
-		auto* ts = registry.AddComponent<No::Transform2DComponent>(ballUpEntity);
-		ts->scale = { 320,144 };
-		auto* sprite = registry.AddComponent<No::SpriteComponent>(ballUpEntity);
-		sprite->name = "ballUp";
-		sprite->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Sprite/ballUp.png");
-	}
+    //ballUp
+    {
+        No::Entity ballUpEntity = registry.GenerateEntity();
+        registry.AddComponent<StatusSpriteTag>(ballUpEntity);
+        auto* ts = registry.AddComponent<No::Transform2DComponent>(ballUpEntity);
+        ts->scale = { 320,144 };
+        auto* sprite = registry.AddComponent<No::SpriteComponent>(ballUpEntity);
+        sprite->name = "ballUp";
+        sprite->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Sprite/ballUp.png");
+    }
 
-	//paddleSpread
-	{
-		No::Entity paddleSpreadEntity = registry.GenerateEntity();
-		registry.AddComponent<StatusSpriteTag>(paddleSpreadEntity);
-		auto* ts = registry.AddComponent<No::Transform2DComponent>(paddleSpreadEntity);
-		ts->scale = { 320,144 };
-		auto* sprite = registry.AddComponent<No::SpriteComponent>(paddleSpreadEntity);
-		sprite->name = "paddleSpread";
-		sprite->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Sprite/paddleSpread.png");
-	}
-	//buttonFrame x3
-	for (int i = 0; i < 3; ++i)
-	{
-		No::Entity buttonFrameEntity = registry.GenerateEntity();
-		registry.AddComponent<StatusSpriteTag>(buttonFrameEntity);
-		auto* ts = registry.AddComponent<No::Transform2DComponent>(buttonFrameEntity);
-		ts->scale = { 320,144 };
-		auto* sprite = registry.AddComponent<No::SpriteComponent>(buttonFrameEntity);
-		sprite->name = "buttonFrame";
-		sprite->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Sprite/buttonFrame.png");
-	}
+    //paddleSpread
+    {
+        No::Entity paddleSpreadEntity = registry.GenerateEntity();
+        registry.AddComponent<StatusSpriteTag>(paddleSpreadEntity);
+        auto* ts = registry.AddComponent<No::Transform2DComponent>(paddleSpreadEntity);
+        ts->scale = { 320,144 };
+        auto* sprite = registry.AddComponent<No::SpriteComponent>(paddleSpreadEntity);
+        sprite->name = "paddleSpread";
+        sprite->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Sprite/paddleSpread.png");
+    }
+    //buttonFrame x3
+    for (int i = 0; i < 3; ++i)
+    {
+        No::Entity buttonFrameEntity = registry.GenerateEntity();
+        registry.AddComponent<StatusSpriteTag>(buttonFrameEntity);
+        auto* ts = registry.AddComponent<No::Transform2DComponent>(buttonFrameEntity);
+        ts->scale = { 320,144 };
+        auto* sprite = registry.AddComponent<No::SpriteComponent>(buttonFrameEntity);
+        sprite->name = "buttonFrame";
+        sprite->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Sprite/buttonFrame.png");
+    }
 }
 
 void GameScene::CreateSprite(No::Registry& registry, const std::string& fileName, const std::string& configName)
 {
-	No::Entity entity = registry.GenerateEntity();
+    No::Entity entity = registry.GenerateEntity();
 
-	auto* t2d = registry.AddComponent<No::Transform2DComponent>(entity);
+    auto* t2d = registry.AddComponent<No::Transform2DComponent>(entity);
 
-	auto* sprite = registry.AddComponent<No::SpriteComponent>(entity);
-	sprite->name = configName; // JSON のキーと一致させる
-	//sprite->name = fileName.substr(0, fileName.rfind("."));
-	std::string filePath = "resources/game/td_2304/Texture/" + fileName;
-	sprite->textureHandle = NoEngine::TextureManager::LoadCovertTexture(filePath);
-	// JSON 設定を適用 
-	SpriteConfigManager::Get().ApplyToSprite(*sprite, *t2d);
+    auto* sprite = registry.AddComponent<No::SpriteComponent>(entity);
+    sprite->name = configName; // JSON のキーと一致させる
+    //sprite->name = fileName.substr(0, fileName.rfind("."));
+    std::string filePath = "resources/game/td_2304/Texture/" + fileName;
+    sprite->textureHandle = NoEngine::TextureManager::LoadCovertTexture(filePath);
+    // JSON 設定を適用 
+    SpriteConfigManager::Get().ApplyToSprite(*sprite, *t2d);
 }
 
 void GameScene::DestroyGameObject()
 {
-	No::Registry& registry = *GetRegistry();
+    No::Registry& registry = *GetRegistry();
 
-	auto view = registry.View<DeathFlag>();
-	for (auto entity : view)
-	{
-		if (registry.Has<DeathFlag>(entity))
-		{
-			auto* flag = registry.GetComponent<DeathFlag>(entity);
-			if (flag->isDead)
-			{
-				registry.DestroyEntity(entity);
-			}
-		}
-	}
+    auto view = registry.View<DeathFlag>();
+    for (auto entity : view)
+    {
+        if (registry.Has<DeathFlag>(entity))
+        {
+            auto* flag = registry.GetComponent<DeathFlag>(entity);
+            if (flag->isDead)
+            {
+                registry.DestroyEntity(entity);
+            }
+        }
+    }
 }
 
 NoEngine::Vector3 GameScene::GenerateRandomPointInCircle(float minRadius, float maxRadius)
 {
-	// 0〜1の乱数を生成して√で均等分布に
-	float raw = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
-	float r = std::sqrt(raw) * (maxRadius - minRadius) + minRadius;
+    // 0〜1の乱数を生成して√で均等分布に
+    float raw = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+    float r = std::sqrt(raw) * (maxRadius - minRadius) + minRadius;
 
-	// 0〜2πの角度をランダムに生成
-	float angle = static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2.0f * 3.14159265f;
+    // 0〜2πの角度をランダムに生成
+    float angle = static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2.0f * 3.14159265f;
 
-	float x = r * std::cos(angle);
-	float y = r * std::sin(angle);
+    float x = r * std::cos(angle);
+    float y = r * std::sin(angle);
 
-	return Vector3{ x, y, 0.0f }; // Zは0で平面上に配置
+    return Vector3{ x, y, 0.0f }; // Zは0で平面上に配置
 }
 
 //NoEngine::Vector3 GameScene::GenerateRandomPointInCircle(float radius)
@@ -445,35 +445,43 @@ NoEngine::Vector3 GameScene::GenerateRandomPointInCircle(float minRadius, float 
 
 void GameScene::SoundLoad()
 {
-	No::SoundLoad(L"resources/game/td_2304//Audio/BGM/batBGM.mp3", "batBGM");
-	No::SoundLoad(L"resources/game/td_2304//Audio/BGM/secondBGM.mp3", "secondBGM");
-	No::SoundLoad(L"resources/game/td_2304//Audio/BGM/titleBGM.mp3", "titleBGM");
+    No::SoundLoad(L"resources/game/td_2304//Audio/BGM/batBGM.mp3", "batBGM");
+    No::SoundLoad(L"resources/game/td_2304//Audio/BGM/secondBGM.mp3", "secondBGM");
+    No::SoundLoad(L"resources/game/td_2304//Audio/BGM/titleBGM.mp3", "titleBGM");
 
-	No::SoundLoad(L"resources/game/td_2304//Audio/SE/ballPong.mp3", "ballPong");
+    No::SoundLoad(L"resources/game/td_2304//Audio/SE/ballPong.mp3", "ballPong");
 
-	No::SoundLoad(L"resources/game/td_2304//Audio/SE/ballPong2.mp3", "ballPong2");
+    No::SoundLoad(L"resources/game/td_2304//Audio/SE/ballPong2.mp3", "ballPong2");
 
-	No::SoundLoad(L"resources/game/td_2304//Audio/SE/chargeEnter.mp3", "chargeEnter");
+    No::SoundLoad(L"resources/game/td_2304//Audio/SE/chargeEnter.mp3", "chargeEnter");
 
-	No::SoundLoad(L"resources/game/td_2304//Audio/SE/batDie.mp3", "batDie");
+    No::SoundLoad(L"resources/game/td_2304//Audio/SE/batDie.mp3", "batDie");
 
-	{
-		No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_aa.mp3", "voice_aa");
-		No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_checkmate.mp3", "voice_checkmate");
-		No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_iityoushi.mp3", "voice_iityoushi");
-		No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_iq.mp3", "voice_iq");
-		No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_ite.mp3", "voice_ite");
-		No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_kuso_high.mp3", "voice_kuso_high");
-		No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_kuso_low.mp3", "voice_kuso_low");
-		No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_u.mp3", "voice_u");
-		No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_ugu.mp3", "voice_ugu");
-		No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_uwa.mp3", "voice_uwa");
+    {
+        //PLAYER_VOICE
+        No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_iq.mp3", "voice_iq");
 
-	}
-	{
-		No::SoundLoad(L"resources/game/td_2304//Audio/Voice/batGirlLaugh.mp3", "batGirlLaugh");
-	}
+        No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_aa.mp3", "voice_aa");
+        No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_ite.mp3", "voice_ite");
+        No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_kuso_high.mp3", "voice_kuso_high");
+        No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_kuso_low.mp3", "voice_kuso_low");
+        No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_u.mp3", "voice_u");
+        No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_ugu.mp3", "voice_ugu");
+        No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_uwa.mp3", "voice_uwa");
+
+        No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_iikanzi.mp3", "voice_iikanzi");
+        No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_iityoushi.mp3", "voice_iityoushi");
+        No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_ikke.mp3", "voice_ikke");
+        No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_sugoi.mp3", "voice_sugoi");
+        No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_mazide.mp3", "voice_mazide");
+        No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_checkmate.mp3", "voice_checkmate");
+
+    }
+    {
+        No::SoundLoad(L"resources/game/td_2304//Audio/Voice/batGirlLaugh.mp3", "batGirlLaugh");
+        No::SoundLoad(L"resources/game/td_2304//Audio/Voice/batGirl_omedetou.mp3", "batGirl_omedetou");
+    }
 
 
-	No::SoundPlay("titleBGM", 0.125f, true);
+    No::SoundPlay("titleBGM", 0.125f, true);
 }

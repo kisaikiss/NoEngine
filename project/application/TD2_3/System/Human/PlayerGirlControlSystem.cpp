@@ -6,8 +6,11 @@ PlayerGirlControlSystem::PlayerGirlControlSystem()
 {    //strings_.push_back("voice_checkmate");
     timer_ = 0.0f;
     voiceTimer_ = 0.0f;
+    winVoiceTimer_ = 0.0f;
     isSoundBallOut_ = false;
+    isSoundWin_ = false;
     strings_.clear();
+    winVoice_.clear();
 
     //ここから下はランダムに呼び出す
     strings_.push_back("voice_aa");
@@ -17,10 +20,18 @@ PlayerGirlControlSystem::PlayerGirlControlSystem()
     strings_.push_back("voice_u");
     strings_.push_back("voice_ugu");
     strings_.push_back("voice_uwa");
+
+    //winVoice_.push_back("voice_checkmate");
+    winVoice_.push_back("voice_iityoushi");
+    winVoice_.push_back("voice_iikanzi");
+    winVoice_.push_back("voice_ikke"); 
+    winVoice_.push_back("voice_sugoi");
+    winVoice_.push_back("voice_mazide");
 }
 
 void PlayerGirlControlSystem::Update(No::Registry& registry, float deltaTime)
 {
+
 
     if (timer_ == 0.0f) {
         No::SoundPlay("voice_iq", 1.0f, false);
@@ -28,7 +39,14 @@ void PlayerGirlControlSystem::Update(No::Registry& registry, float deltaTime)
     timer_ += deltaTime;
     timer_ = fmodf(timer_, 3.0f);
 
+    if (isSoundWin_) {
+        winVoiceTimer_ += deltaTime;
+        if (winVoiceTimer_ >= 3.0f) {
+            isSoundWin_ = false;
+            winVoiceTimer_ = 0.0f;
 
+        }
+    }
 
     auto ballView = registry.View<
         BallStateComponent,
@@ -61,15 +79,31 @@ void PlayerGirlControlSystem::Update(No::Registry& registry, float deltaTime)
         isSoundBallOut_ = false;
     }
 
+
+    auto normalEnemyView = registry.View <
+        NormalEnemyTag,
+        DeathFlag>();
+
+    for (auto normalEnemyEntity : normalEnemyView)
+    {
+        auto* deathFlag = registry.GetComponent<DeathFlag>(normalEnemyEntity);
+        if (deathFlag->isDead) {
+            //もし敵に当たったら
+            if (!isSoundWin_) {
+                int random = rand() % winVoice_.size();
+                No::SoundEffectPlay(winVoice_[random], 1.0f);
+                isSoundWin_ = true;
+                break;
+            }
+         
+
+        }
+    }
+
     auto view = registry.View<
         No::TransformComponent,
         No::MaterialComponent,
         PlayerGirlTag>();
-
-
-
-    //もし敵に当たったら
-   // No::SoundPlay("voice_iityoushi", 1.0f, false);
 
     for (auto entity : view)
     {
