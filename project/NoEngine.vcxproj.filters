@@ -301,6 +301,7 @@
     <ClInclude Include="application\TD2_3\System\HpSpriteControlSystem.h" />
     <ClInclude Include="application\TD2_3\SpriteConfigManager\SpriteConfigManager.h" />
     <ClInclude Include="application\TD2_3\Random\Random.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="application\TD2_3\Component\UpgradeChooseComponent.h" />
     <ClInclude Include="application\TD2_3\System\Player\UpgradeSelectionSystem.h" />
   </ItemGroup>
@@ -308,5 +309,11 @@
     <None Include="resources\engine\Shaders\Default.hlsli" />
     <None Include="resources\game\Shaders\ShaderMathUtil.hlsli" />
     <None Include="resources\game\td_2304\Json\tdSpriteConfig.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="NoEngine.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="resources\game\td_2304\game.ico" />
   </ItemGroup>
 </Project>

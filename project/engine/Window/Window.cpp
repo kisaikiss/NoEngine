@@ -13,6 +13,8 @@
 #include "engine/Runtime/GraphicsCore.h"
 #include "externals/imgui/imgui.h"
 
+#include "resource.h"
+
 namespace NoEngine {
 using namespace std;
 Window::~Window() {
@@ -43,7 +45,7 @@ void Window::Create(WNDPROC windowProc, std::wstring title, uint32_t width, uint
 	core_.wcex.cbClsExtra = 0;
 	core_.wcex.cbWndExtra = 0;
 	core_.wcex.hInstance = GetModuleHandle(nullptr);
-	core_.wcex.hIcon = LoadIcon(nullptr, IDI_APPLICATION);
+	core_.wcex.hIcon = (HICON)LoadImage(core_.wcex.hInstance, MAKEINTRESOURCE(IDI_ICON1), IMAGE_ICON, GetSystemMetrics(SM_CXICON), GetSystemMetrics(SM_CYICON), 0);
 	core_.wcex.hCursor = LoadCursor(nullptr, IDC_ARROW);
 	core_.wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
 	core_.wcex.lpszMenuName = nullptr;

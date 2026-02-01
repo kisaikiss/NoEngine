@@ -100,7 +100,7 @@ void EngineInitialize() {
 	GraphicsCore::Initialize();
 
 	// ウィンドウの生成、初期化を行います。
-	GraphicsCore::gWindowManager.Create(L"NoEngine", 1280, 720);
+	GraphicsCore::gWindowManager.Create(L"NoEngine", 1280, 720, L"resources/game/td_2304/game.ico");
 	GraphicsCore::gWindowManager.SetMainWindowName(L"NoEngine");
 #ifdef RELEASE
 	// ToDo : チーム制作用にリリースでフルスクリーンを強制しています。ウィンドウモード変更のバグは修正すべきです。
