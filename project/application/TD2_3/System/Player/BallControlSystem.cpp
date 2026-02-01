@@ -7,10 +7,12 @@
 #include "../../Component/TrackEnemyComponent.h"
 #include "../../Component/BackGroundComponent.h"
 #include "../../Component/BallTrailComponent.h"
+#include "../../Component/PlayerstatusComponent.h"
 
 #include "../../tag.h"
 #include "engine/Functions/Renderer/Primitive.h"
 #include "engine/Math/Types/Calculations/Vector3Calculations.h"
+#include "engine/Assets/ModelLoader.h"
 #include "externals/imgui/imgui.h"
 
 using namespace NoEngine;
@@ -36,6 +38,16 @@ void BallControlSystem::Update(No::Registry& registry, float deltaTime)
 		No::TransformComponent,
 		VausStateComponent>();
 
+	// まず Vaus の参照を取得（スポーン/閾値チェックで使うため）
+	No::TransformComponent* vausTransformPtr = nullptr;
+	VausStateComponent* vausStatePtr = nullptr;
+	for (auto e : vausView)
+	{
+		vausTransformPtr = registry.GetComponent<No::TransformComponent>(e);
+		vausStatePtr = registry.GetComponent<VausStateComponent>(e);
+	}
+
+	ballCount_ = 0;
 	for (auto entityBall : ballView)
 	{
 		auto* ballTransform = registry.GetComponent<No::TransformComponent>(entityBall);
@@ -49,6 +61,22 @@ void BallControlSystem::Update(No::Registry& registry, float deltaTime)
 		{
 			trail = registry.GetComponent<BallTrailComponent>(entityBall);
 		}
+		auto* deathFlag = registry.GetComponent<DeathFlag>(entityBall);
+
+		if (vausStatePtr)
+		{
+			float dist = MathCalculations::Length(ballTransform->translate);
+			const float kDestroyOuterFactor = 2.0f;
+			if (dist > vausStatePtr->currentRingRadius * kDestroyOuterFactor)
+			{
+				if (deathFlag) deathFlag->isDead = true;
+				// 削除マークを付けたのでこのフレームはそれ以上処理しない
+				continue;
+			}
+		}
+
+		// この時点で生存している（削除マークのついていない）ボールのみをカウント
+		ballCount_++;
 
 #ifndef RELEASE
 		if (Input::Keyboard::IsTrigger('R'))
@@ -63,6 +91,7 @@ void BallControlSystem::Update(No::Registry& registry, float deltaTime)
 			ImGui::ColorEdit4("endColor", &trail->endColor.r);
 			ImGui::End();
 		}
+
 #endif // !RELEASE
 
 		for (auto entityVaus : vausView)
@@ -263,5 +292,92 @@ void BallControlSystem::Update(No::Registry& registry, float deltaTime)
 				trail->samples.pop_back();
 			}
 		}
+
+
 	}
+
+	if (ballCount_ == 0)
+	{
+		vausStatePtr->isHerted = true;
+		// プレイヤー HP を -1 する
+		auto playerStatusView = registry.View<PlayerStatusComponent>();
+		for (auto playerEntity : playerStatusView)
+		{
+			auto* playerStatus = registry.GetComponent<PlayerStatusComponent>(playerEntity);
+			playerStatus->hp -= 1;
+		}
+
+		// 新しいボールを一つ生成（Vaus 位置があればそこを基準に、無ければ原点付近）
+		No::Entity ballEntity = registry.GenerateEntity();
+		registry.AddComponent<BallTag>(ballEntity);
+		registry.AddComponent<PhysicsComponent>(ballEntity);
+		registry.AddComponent<BallStateComponent>(ballEntity);
+
+		auto* trailComp = registry.AddComponent<BallTrailComponent>(ballEntity);
+		trailComp->maxAge = 0.6f;
+		trailComp->sampleInterval = 0.02f;
+		trailComp->thickness = 0.35f;
+		trailComp->maxSamples = 256;
+
+		auto* collider = registry.AddComponent<SphereColliderComponent>(ballEntity);
+		collider->radius = 0.25f;
+		collider->colliderType = ColliderMask::kBall;
+		collider->collideMask = ColliderMask::kEnemy;
+
+		registry.AddComponent<DeathFlag>(ballEntity);
+
+		auto* transform = registry.AddComponent<No::TransformComponent>(ballEntity);
+		// スポーン位置: Vaus の外側少し内側に配置する（参照が無ければ既存のデフォルト）
+		if (vausTransformPtr && vausStatePtr)
+		{
+			Vector3 normal = MathCalculations::Normalize(-vausTransformPtr->translate);
+			transform->translate = vausTransformPtr->translate + normal * (collider->radius * 1.75f);
+		}
+		else
+		{
+			transform->translate = { 0.0f, -4.35f, 0.f };
+		}
+
+		auto* model = registry.AddComponent<No::MeshComponent>(ballEntity);
+		NoEngine::ModelLoader::LoadModel("ball", "resources/game/td_2304/Model/ball/ball.obj", model);
+
+		auto m = registry.AddComponent<No::MaterialComponent>(ballEntity);
+		m->materials = NoEngine::ModelLoader::GetMaterial("ball");
+
+		m->psoName = L"Renderer : Default PSO";
+		m->psoId = NoEngine::Render::GetPSOID(m->psoName);
+		m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
+	}
+
+	if (vausStatePtr->isHerted)
+	{
+		if (vausStatePtr->playerDamageCooldown < vausStatePtr->kDamageCooldownTime)
+			vausStatePtr->playerDamageCooldown += deltaTime;
+		else
+		{
+			vausStatePtr->isHerted = false;
+			vausStatePtr->playerDamageCooldown = 0.0f;
+		}
+		auto vausMeshView = registry.View<No::MeshComponent, VausTag>();
+		if (std::fmod(vausStatePtr->playerDamageCooldown, 0.2f) < 0.1f)
+		{
+			for (auto e : vausMeshView)
+			{
+				auto* vausMesh = registry.GetComponent<No::MeshComponent>(e);
+				vausMesh->isVisible = true;
+			}
+		}
+		else
+		{
+			for (auto e : vausMeshView)
+			{
+				auto* vausMesh = registry.GetComponent<No::MeshComponent>(e);
+				vausMesh->isVisible = false;
+			}
+		}
+	}
+
+	//ImGui::Begin("Ball Debug");
+	//ImGui::Text("Ball Count: %d", ballCount_);
+	//ImGui::End();
 }

@@ -23,7 +23,7 @@ CompType* Registry::AddComponent(const Entity entity) {
 template<typename CompType>
 void Registry::RemoveComponent(const Entity entity) {
 	// 削除するコンポーネントを格納するコンテナクラスを取得
-	ComponentPool<CompType>* compPool = static_cast<ComponentPool<CompType>*>(componentPools_[Utilities::TypeID<CompType>()]);
+	ComponentPool<CompType>* compPool = static_cast<ComponentPool<CompType>*>(componentPools_[Utilities::TypeID<CompType>()].get());
 	// コンポーネントをエンティティから取り外す
 	compPool->RemoveComponent(entity);
 }

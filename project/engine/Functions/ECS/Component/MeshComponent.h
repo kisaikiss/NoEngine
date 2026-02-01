@@ -6,6 +6,7 @@ namespace Component {
 
 struct MeshComponent {
 	Mesh* mesh;
+	bool isVisible = true;
 };
 }
 }

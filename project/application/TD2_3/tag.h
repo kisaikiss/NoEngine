@@ -17,3 +17,4 @@ struct DeathFlag
 {
 	bool isDead = false;
 };
+struct StatusSpriteTag {};

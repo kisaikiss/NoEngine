@@ -9,12 +9,14 @@
 #include"../Component/BatBossComponent.h"
 #include "../Component/BallTrailComponent.h"
 #include "../Component/PlayerstatusComponent.h"
+#include "../Component/UpgradeChooseComponent.h"
 //collision
 #include "../System/CollisionSystem.h"
 //player
 #include "../System/Player/BallControlSystem.h"
 #include "../System/Player/VausControlSystem.h"
 #include "../System/Player/PlayerStatusSystem.h"
+#include "../System/Player/UpgradeSelectionSystem.h"
 
 //effect
 #include "../System/BackGroundEffectSystem.h"
@@ -57,14 +59,14 @@ void GameScene::Setup()
 	AddSystem(std::make_unique<PlayerGirlControlSystem>());
 	//playerステータス管理システム
 	AddSystem(std::make_unique<PlayerStatusSystem>());
-
-    //HISprite
-    AddSystem(std::make_unique<HpSpriteControlSystem>());
+	AddSystem(std::make_unique<UpgradeSelectionSystem>());
+	//HISprite
+	AddSystem(std::make_unique<HpSpriteControlSystem>());
 	//衝突判定用システム
 	AddSystem(std::make_unique<CollisionSystem>());
 
 
-    SpriteConfigManager::Get().Load("resources/game/td_2304/Json/tdSpriteConfig.json");
+	SpriteConfigManager::Get().Load("resources/game/td_2304/Json/tdSpriteConfig.json");
 
 	No::Registry& registry = *GetRegistry();
 	InitBackGround(registry);
@@ -76,10 +78,10 @@ void GameScene::Setup()
 	InitBatGirl(registry);
 	InitPlayerGirl(registry);
 	InitPlayerStatus(registry);
-  InitLights(registry);
-  InitHpGaugeSprite(registry);
-  InitLevelGaugeSprite(registry);
-
+	InitLights(registry);
+	InitHpGaugeSprite(registry);
+	InitLevelGaugeSprite(registry);
+	InitChooseSprite(registry);
 
 	constexpr Vector3 kStartCameraPosition = Vector3{ 0.0f, 0.0f, -28.0f };
 	//カメラ初期化
@@ -306,39 +308,90 @@ void GameScene::InitPlayerStatus(No::Registry& registry)
 	status->hp = 5;
 	status->level = 1;
 	status->score = 0;
+
+	//No::Entity upgradeEntity = registry.GenerateEntity();
+	//registry.AddComponent<UpgradeChooseComponent>(upgradeEntity);
 }
 
-void GameScene::InitLights(No::Registry& registry) {
-    auto light = registry.GenerateEntity();
-    auto* dir = registry.AddComponent<No::DirectionalLightComponent>(light);
-    dir->color = { 1.f,1.f,1.f,1.f };
-    dir->direction = { 0.f,-1.f,0.f };
-    dir->intensity = 1.f;
+void GameScene::InitLights(No::Registry& registry)
+{
+	auto light = registry.GenerateEntity();
+	auto* dir = registry.AddComponent<No::DirectionalLightComponent>(light);
+	dir->color = { 1.f,1.f,1.f,1.f };
+	dir->direction = { 0.f,-1.f,0.f };
+	dir->intensity = 1.f;
 }
 
 void GameScene::InitHpGaugeSprite(No::Registry& registry)
 {
-  CreateSprite(registry, "hp.png","PlayerHpGauge");
+	CreateSprite(registry, "hp.png", "PlayerHpGauge");
 }
 
 void GameScene::InitLevelGaugeSprite(No::Registry& registry)
 {
-    CreateSprite(registry, "lv.png","Level");
+	CreateSprite(registry, "lv.png", "Level");
+}
+
+void GameScene::InitChooseSprite(No::Registry& registry)
+{
+	//hp上限up
+	{
+		No::Entity hpLimitUpEntity = registry.GenerateEntity();
+		registry.AddComponent<StatusSpriteTag>(hpLimitUpEntity);
+		auto* ts = registry.AddComponent<No::Transform2DComponent>(hpLimitUpEntity);
+		ts->scale = { 320,144 };
+		auto* sprite = registry.AddComponent<No::SpriteComponent>(hpLimitUpEntity);
+		sprite->name = "hpLimitUp";
+		sprite->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Sprite/hpLimitUp.png");
+	}
+
+	//ballUp
+	{
+		No::Entity ballUpEntity = registry.GenerateEntity();
+		registry.AddComponent<StatusSpriteTag>(ballUpEntity);
+		auto* ts = registry.AddComponent<No::Transform2DComponent>(ballUpEntity);
+		ts->scale = { 320,144 };
+		auto* sprite = registry.AddComponent<No::SpriteComponent>(ballUpEntity);
+		sprite->name = "ballUp";
+		sprite->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Sprite/ballUp.png");
+	}
+
+	//paddleSpread
+	{
+		No::Entity paddleSpreadEntity = registry.GenerateEntity();
+		registry.AddComponent<StatusSpriteTag>(paddleSpreadEntity);
+		auto* ts = registry.AddComponent<No::Transform2DComponent>(paddleSpreadEntity);
+		ts->scale = { 320,144 };
+		auto* sprite = registry.AddComponent<No::SpriteComponent>(paddleSpreadEntity);
+		sprite->name = "paddleSpread";
+		sprite->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Sprite/paddleSpread.png");
+	}
+	//buttonFrame x3
+	for (int i = 0; i < 3; ++i)
+	{
+		No::Entity buttonFrameEntity = registry.GenerateEntity();
+		registry.AddComponent<StatusSpriteTag>(buttonFrameEntity);
+		auto* ts = registry.AddComponent<No::Transform2DComponent>(buttonFrameEntity);
+		ts->scale = { 320,144 };
+		auto* sprite = registry.AddComponent<No::SpriteComponent>(buttonFrameEntity);
+		sprite->name = "buttonFrame";
+		sprite->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Sprite/buttonFrame.png");
+	}
 }
 
 void GameScene::CreateSprite(No::Registry& registry, const std::string& fileName, const std::string& configName)
 {
-    No::Entity entity = registry.GenerateEntity();
+	No::Entity entity = registry.GenerateEntity();
 
-    auto* t2d = registry.AddComponent<No::Transform2DComponent>(entity); 
+	auto* t2d = registry.AddComponent<No::Transform2DComponent>(entity);
 
-    auto* sprite = registry.AddComponent<No::SpriteComponent>(entity);
-    sprite->name = configName; // JSON のキーと一致させる
-    //sprite->name = fileName.substr(0, fileName.rfind("."));
-    std::string filePath = "resources/game/td_2304/Texture/" + fileName;
-    sprite->textureHandle = NoEngine::TextureManager::LoadCovertTexture(filePath);
-    // JSON 設定を適用 
-    SpriteConfigManager::Get().ApplyToSprite(*sprite,*t2d);
+	auto* sprite = registry.AddComponent<No::SpriteComponent>(entity);
+	sprite->name = configName; // JSON のキーと一致させる
+	//sprite->name = fileName.substr(0, fileName.rfind("."));
+	std::string filePath = "resources/game/td_2304/Texture/" + fileName;
+	sprite->textureHandle = NoEngine::TextureManager::LoadCovertTexture(filePath);
+	// JSON 設定を適用 
+	SpriteConfigManager::Get().ApplyToSprite(*sprite, *t2d);
 }
 
 void GameScene::DestroyGameObject()
