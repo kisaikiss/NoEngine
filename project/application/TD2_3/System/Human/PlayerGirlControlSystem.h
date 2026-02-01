@@ -12,5 +12,6 @@ private:
     float timer_ = 0.0f;
     float voiceTimer_ = 0.0f;
     std::vector<std::string> strings_;
+    bool isSoundBallOut_ = false;
 };
 

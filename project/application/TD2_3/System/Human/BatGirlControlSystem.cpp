@@ -65,11 +65,12 @@ void BatGirlControlSystem::Update(No::Registry& registry, float deltaTime)
                 animation->currentAnimation = idleRandNum_;
             }
 
-            if (timer_ <= 1.5f || timer_ >= 2.0f) {
-                material->materials[1].textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Model/batGirl/face.png");
-            } else {
+            if (animation->currentAnimation == 3|| timer_ >= 1.5f && timer_ <= 2.0f) {
                 material->materials[1].textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Model/batGirl/face2.png");
+            } else {
+                material->materials[1].textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Model/batGirl/face.png");
             }
+          
         }
 
 
