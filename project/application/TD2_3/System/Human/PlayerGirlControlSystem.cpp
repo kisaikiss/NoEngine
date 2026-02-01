@@ -24,7 +24,7 @@ PlayerGirlControlSystem::PlayerGirlControlSystem()
     //winVoice_.push_back("voice_checkmate");
     winVoice_.push_back("voice_iityoushi");
     winVoice_.push_back("voice_iikanzi");
-    winVoice_.push_back("voice_ikke"); 
+    //winVoice_.push_back("voice_ikke"); 
     winVoice_.push_back("voice_sugoi");
     winVoice_.push_back("voice_mazide");
 }
