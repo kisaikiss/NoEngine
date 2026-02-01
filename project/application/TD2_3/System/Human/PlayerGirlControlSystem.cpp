@@ -1,11 +1,12 @@
 #include "PlayerGirlControlSystem.h"
+#include "../../Component/BallStateComponent.h"
 #include "../../tag.h"
 
 PlayerGirlControlSystem::PlayerGirlControlSystem()
 {    //strings_.push_back("voice_checkmate");
     timer_ = 0.0f;
     voiceTimer_ = 0.0f;
-
+    isSoundBallOut_ = false;
     strings_.clear();
 
     //ここから下はランダムに呼び出す
@@ -20,23 +21,52 @@ PlayerGirlControlSystem::PlayerGirlControlSystem()
 
 void PlayerGirlControlSystem::Update(No::Registry& registry, float deltaTime)
 {
-    auto view = registry.View<
-        No::TransformComponent,
-        No::MaterialComponent,
-        PlayerGirlTag>();
+
     if (timer_ == 0.0f) {
         No::SoundPlay("voice_iq", 1.0f, false);
     }
     timer_ += deltaTime;
     timer_ = fmodf(timer_, 3.0f);
 
-    voiceTimer_ += deltaTime;
 
-    if (voiceTimer_ >= 5.0f) {
-        voiceTimer_ = 0.0f;
-        int randNum = rand() % strings_.size();
-        No::SoundPlay(strings_[randNum], 1.0f, false);
+
+    auto ballView = registry.View<
+        BallStateComponent,
+        BallTag, DeathFlag>();
+
+    bool isOut = false;
+
+    for (auto ballEntity : ballView)
+    {
+        auto* ball = registry.GetComponent<BallStateComponent>(ballEntity);
+        //ballの状態を取得する
+        isOut = ball->isOut;
+
+    
     }
+    if (isOut) {
+        if (!isSoundBallOut_) {
+            int randNum = rand() % strings_.size();
+            No::SoundPlay(strings_[randNum], 1.0f, false);
+            isSoundBallOut_ = true;
+        }
+        voiceTimer_ += deltaTime;
+
+        if (voiceTimer_ >= 1.0f) {
+            voiceTimer_ = 0.0f;
+        }
+
+    } else {
+        voiceTimer_ = 0.0f;
+        isSoundBallOut_ = false;
+    }
+
+    auto view = registry.View<
+        No::TransformComponent,
+        No::MaterialComponent,
+        PlayerGirlTag>();
+
+
 
     //もし敵に当たったら
    // No::SoundPlay("voice_iityoushi", 1.0f, false);
