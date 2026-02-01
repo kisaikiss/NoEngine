@@ -270,7 +270,7 @@ void GameScene::InitBatGirl(No::Registry& registry)
 	auto m = registry.AddComponent<No::MaterialComponent>(batGirlEntity);
 	m->materials = NoEngine::ModelLoader::GetMaterial("batGirl");
 
-	m->psoName = L"Renderer : DefaultSkinned PSO";
+	m->psoName = L"Renderer : ToonSkinned PSO";
 	m->enableSkinning = true;
 	m->drawOutline = true;
 	m->psoId = NoEngine::Render::GetPSOID(m->psoName);
@@ -293,7 +293,7 @@ void GameScene::InitPlayerGirl(No::Registry& registry)
 	auto m = registry.AddComponent<No::MaterialComponent>(playerGirlEntity);
 	m->materials = NoEngine::ModelLoader::GetMaterial("playerGirl");
 
-	m->psoName = L"Renderer : DefaultSkinned PSO";
+	m->psoName = L"Renderer : ToonSkinned PSO";
 	m->enableSkinning = true;
 	m->drawOutline = true;
 	m->psoId = NoEngine::Render::GetPSOID(m->psoName);
