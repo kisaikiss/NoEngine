@@ -14,6 +14,7 @@ struct SpriteComponent {
 	TextureRef textureHandle;
 	Color color = {Color::WHITE};
 	std::string name;
+	bool isVisible = true;
 };
 }
 }

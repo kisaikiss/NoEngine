@@ -35,6 +35,7 @@ void MeshPass::Collect(ECS::Registry& registry) {
 	const Vector3& cameraPos = GetCamera()->GetTransform().translate;
 	for (auto entity : view) {
 		auto* mesh = registry.GetComponent<MeshComponent>(entity);
+		if (!mesh->isVisible)continue;
 		auto* material = registry.GetComponent<MaterialComponent>(entity);
 		auto* transform = registry.GetComponent<TransformComponent>(entity);
 		auto pso = material->psoId;

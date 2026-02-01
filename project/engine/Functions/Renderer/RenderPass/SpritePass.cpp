@@ -42,8 +42,9 @@ void SpritePass::Collect(ECS::Registry& registry) {
 	if (view.Empty()) return;
 
 	for (auto entity : view) {
-		auto* transform = registry.GetComponent<Transform2DComponent>(entity);
 		auto* sprite = registry.GetComponent<SpriteComponent>(entity);
+		if (!sprite->isVisible) continue;
+		auto* transform = registry.GetComponent<Transform2DComponent>(entity);
 
 		items_.push_back({ transform, sprite });
 	}

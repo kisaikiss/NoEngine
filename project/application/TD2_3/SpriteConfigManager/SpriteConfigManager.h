@@ -1,7 +1,7 @@
 #pragma once
 #include"../../../externals/nlohmann/json.hpp"
 #include"../../../engine/Functions/ECS/Component/SpriteComponent.h"
-#include"../../../engine/Functions/ECS/Component/Transfrom2DComponent.h"
+#include"../../../engine/Functions/ECS/Component/Transform2DComponent.h"
 
 nlohmann::json SpriteToJson(const  NoEngine::Component::SpriteComponent& sp);
 void ApplyJsonToSprite(NoEngine::Component::SpriteComponent& sp, const nlohmann::json& j);
