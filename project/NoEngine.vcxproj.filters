@@ -294,6 +294,8 @@
     <ClInclude Include="engine\Assets\Texture\Texture.h" />
     <ClInclude Include="application\TD2_3\System\Player\VausControlSystem.h" />
     <ClInclude Include="engine\Functions\ECS\Registry.hpp" />
+    <ClInclude Include="engine\Functions\ECS\EventBus.h" />
+    <ClInclude Include="engine\Functions\ECS\Event\SceneChangeEvent.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />
