@@ -8,7 +8,8 @@ struct PlayerStatusComponent
 	// 現在のHP（ゲーム内で変動）と上限を分離
 	int32_t hp = 5;
 	int32_t hpMax = 5;
-
+	int32_t requiredExp = 5;
+	int32_t ballCount = 1;
 	// レベルアップ選択中か（UI が開かれているか）を示すフラグ
 	bool pendingUpgrade = false;
 };
