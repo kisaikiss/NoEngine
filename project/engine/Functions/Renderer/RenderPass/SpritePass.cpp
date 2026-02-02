@@ -133,28 +133,45 @@ void SpritePass::Render(GraphicsContext& gfx) {
 	gfx.SetRootSignature(GetRootSignature(Render::GetRootSignatureID(L"Renderer : Default Sprite PSO")));
 	gfx.SetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	gfx.SetDynamicConstantBufferView(rootIndex["gCameraMatrix"], sizeof(Matrix4x4), &sOrthographicMatrix);
-	gfx.SetDynamicConstantBufferView(rootIndex["gMaterial"], sizeof(Color), &Color::WHITE);
 	gfx.SetDynamicVB(0, vertices_.size(), sizeof(SpriteVertex), vertices_.data());
 	gfx.SetDynamicIB(indices_.size(), indices_.data());
 	size_t start = 0;
 	
 	
+	while (start < items_.size())
+	{
+		_declspec(align(16)) struct
+		{
+			float fill;
+			int useMask;
+			float pad[2];
+		} MaskConstants;
+		MaskConstants.fill = items_[start].sprite->fill;
+		MaskConstants.useMask = (items_[start].sprite->useMask != 0 && items_[start].sprite->maskTextureHandle.IsValid()) ? 1 : 0;
 
-	while (start < items_.size()) {
+		gfx.SetDynamicConstantBufferView(rootIndex["gMaskParams"], sizeof(MaskConstants), &MaskConstants);
+		gfx.SetDynamicConstantBufferView(rootIndex["gMaterial"], sizeof(Color), &items_[start].sprite->color);
+
 		TextureRef tex = items_[start].sprite->textureHandle;
-
+		if (items_[start].sprite->maskTextureHandle.IsValid())
+		{
+			TextureRef maskTex = items_[start].sprite->maskTextureHandle;
+			gfx.SetDynamicDescriptor(rootIndex["gMask"], 0, maskTex.GetSRV());
+		}
 		size_t end = start + 1;
 		while (end < items_.size() &&
-			items_[end].sprite->textureHandle == tex) {
+			items_[end].sprite->textureHandle == tex)
+		{
 			end++;
 		}
 
 		// この範囲でDrawCall
 		uint32_t indexStart = static_cast<uint32_t>(start) * 6;
 		uint32_t indexCount = static_cast<uint32_t>(end - start) * 6;
-		
+
 
 		gfx.SetDynamicDescriptor(rootIndex["gTexture"], 0, tex.GetSRV());
+
 		gfx.DrawIndexedInstanced(indexCount, 1, indexStart, 0, 0);
 
 		start = end;

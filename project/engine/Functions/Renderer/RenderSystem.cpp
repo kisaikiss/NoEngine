@@ -102,7 +102,7 @@ void Initialize() {
 	}
 
 	// トゥーンレンダリング
-	ShaderModule ToonPS(ShaderStage::Vertex, L"resources/engine/Shaders/Toon.PS.hlsl", L"ps_6_0");
+	ShaderModule ToonPS(ShaderStage::Pixel, L"resources/engine/Shaders/Toon.PS.hlsl", L"ps_6_0");
 	const ShaderReflection& ToonReflection = ToonPS.GetReflection();
 	{
 		std::vector<ShaderReflection> reflectionToon;
@@ -174,7 +174,7 @@ void Initialize() {
 	// アウトライン
 	{
 		ShaderModule outlineVS(ShaderStage::Vertex, L"resources/engine/Shaders/Outline.VS.hlsl", L"vs_6_0");
-		ShaderModule blackPS(ShaderStage::Vertex, L"resources/engine/Shaders/Black.PS.hlsl", L"ps_6_0");
+		ShaderModule blackPS(ShaderStage::Pixel, L"resources/engine/Shaders/Black.PS.hlsl", L"ps_6_0");
 
 		const ShaderReflection& outlineVsReflection = outlineVS.GetReflection();
 		const ShaderReflection& blackPsReflection = blackPS.GetReflection();
@@ -214,7 +214,7 @@ void Initialize() {
 	// スキニングするモデルのアウトライン
 	{
 		ShaderModule outlineVS(ShaderStage::Vertex, L"resources/engine/Shaders/OutlineSkinned.VS.hlsl", L"vs_6_0");
-		ShaderModule blackPS(ShaderStage::Vertex, L"resources/engine/Shaders/Black.PS.hlsl", L"ps_6_0");
+		ShaderModule blackPS(ShaderStage::Pixel, L"resources/engine/Shaders/Black.PS.hlsl", L"ps_6_0");
 
 		const ShaderReflection& outlineVsReflection = outlineVS.GetReflection();
 		const ShaderReflection& blackPsReflection = blackPS.GetReflection();
@@ -256,7 +256,7 @@ void Initialize() {
 	{
 
 		ShaderModule defaultSpriteVS(ShaderStage::Vertex, L"resources/engine/Shaders/DefaultSprite.VS.hlsl", L"vs_6_0");
-		ShaderModule defaultSpritePS(ShaderStage::Vertex, L"resources/engine/Shaders/DefaultSprite.PS.hlsl", L"ps_6_0");
+		ShaderModule defaultSpritePS(ShaderStage::Pixel, L"resources/engine/Shaders/DefaultSprite.PS.hlsl", L"ps_6_0");
 
 		const ShaderReflection& spriteVsReflection = defaultSpriteVS.GetReflection();
 		const ShaderReflection& spritePsReflection = defaultSpritePS.GetReflection();

@@ -29,7 +29,7 @@ void MeshPass::Collect(ECS::Registry& registry) {
 		MeshComponent,
 		MaterialComponent
 	>();
-
+	if (view.Empty()) return;
 	items_.clear();
 
 	const Vector3& cameraPos = GetCamera()->GetTransform().translate;

@@ -66,10 +66,7 @@ BackGroundEffectPass::BackGroundEffectPass()
 				{ Vector3{  0.5f,  0.5f, 0.0f }, Vector2{ 1.0f, 0.0f } },
 				{ Vector3{  0.5f, -0.5f, 0.0f }, Vector2{ 1.0f, 1.0f } }
 	};
-	/*meshData_.indices = {
-		0, 1, 2,
-		1, 3, 2
-	};*/
+
 }
 
 BackGroundEffectPass::~BackGroundEffectPass()
@@ -80,7 +77,7 @@ BackGroundEffectPass::~BackGroundEffectPass()
 void BackGroundEffectPass::Execute(NoEngine::GraphicsContext& gfx, NoEngine::ECS::Registry& registry)
 {
 	auto view = registry.View<Component::TransformComponent, BackGroundComponent>();
-
+	if (view.Empty()) return;
 	gfx.SetRootSignature(rootSignature_);
 	gfx.SetPipelineState(pso_);
 	gfx.SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);

@@ -310,9 +310,6 @@ void GameScene::InitPlayerStatus(No::Registry& registry)
     status->hp = 5;
     status->level = 1;
     status->score = 0;
-
-    //No::Entity upgradeEntity = registry.GenerateEntity();
-    //registry.AddComponent<UpgradeChooseComponent>(upgradeEntity);
 }
 
 void GameScene::InitLights(No::Registry& registry)
@@ -331,7 +328,16 @@ void GameScene::InitHpGaugeSprite(No::Registry& registry)
 
 void GameScene::InitLevelGaugeSprite(No::Registry& registry)
 {
-    CreateSprite(registry, "lv.png", "Level");
+    auto sp1 = CreateSprite(registry, "lv.png", "Level");
+    auto sp2 = CreateSprite(registry, "lv_gauge.png", "LevelGauge");
+	auto* sprite1Transform = registry.GetComponent<No::Transform2DComponent>(sp1);
+
+	auto* sprite2Transform = registry.GetComponent<No::Transform2DComponent>(sp2);
+    sprite2Transform->translate = sprite1Transform->translate;
+	sprite2Transform->scale = sprite1Transform->scale;
+	auto* sprite2 = registry.GetComponent<No::SpriteComponent>(sp2);
+	sprite2->useMask = 1;
+	sprite2->maskTextureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Sprite/lv_gauge_mask.png");
 }
 
 void GameScene::InitChooseSprite(No::Registry& registry)
@@ -381,7 +387,7 @@ void GameScene::InitChooseSprite(No::Registry& registry)
     }
 }
 
-void GameScene::CreateSprite(No::Registry& registry, const std::string& fileName, const std::string& configName)
+No::Entity  GameScene::CreateSprite(No::Registry& registry, const std::string& fileName, const std::string& configName)
 {
     No::Entity entity = registry.GenerateEntity();
 
@@ -394,6 +400,7 @@ void GameScene::CreateSprite(No::Registry& registry, const std::string& fileName
     sprite->textureHandle = NoEngine::TextureManager::LoadCovertTexture(filePath);
     // JSON 設定を適用 
     SpriteConfigManager::Get().ApplyToSprite(*sprite, *t2d);
+	return entity;
 }
 
 void GameScene::DestroyGameObject()
