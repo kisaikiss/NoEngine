@@ -120,6 +120,7 @@ void GameScene::InitVaus(No::Registry& registry)
 	auto* m = registry.AddComponent<No::MaterialComponent>(vausEntity);
 	m->materials = NoEngine::ModelLoader::GetMaterial("paddleMiddle");
 	m->color = 0xA82C57ff;
+	m->drawOutline = true;
 
 	m->psoName = L"Renderer : Default PSO";
 	m->psoId = NoEngine::Render::GetPSOID(m->psoName);
@@ -212,6 +213,7 @@ void GameScene::InitEnemy(No::Registry& registry)
 		m->psoName = L"Renderer : Default PSO";
 		m->psoId = NoEngine::Render::GetPSOID(m->psoName);
 		m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
+		m->drawOutline = true;
 	}
 }
 
@@ -236,7 +238,7 @@ void GameScene::InitBoss(No::Registry& registry)
 
 	auto m = registry.AddComponent<No::MaterialComponent>(bossEntity);
 	m->materials = NoEngine::ModelLoader::GetMaterial("batBoss");
-
+	m->drawOutline = true;
 	m->psoName = L"Renderer : DefaultSkinned PSO";
 	m->enableSkinning = true;
 	m->psoId = NoEngine::Render::GetPSOID(m->psoName);
