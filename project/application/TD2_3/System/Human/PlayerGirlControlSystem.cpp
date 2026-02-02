@@ -80,7 +80,7 @@ void PlayerGirlControlSystem::Update(No::Registry& registry, float deltaTime)
     }
 
     auto normalEnemyView = registry.View <
-        NormalEnemyTag,
+        BatTag,
         DeathFlag>();
 
     bool isEnemyDead = false;
