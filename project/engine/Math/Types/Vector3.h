@@ -9,6 +9,7 @@ public:
 	Vector3& operator-=(const Vector3& other);
 	Vector3& operator*=(const float s);
 	Vector3& operator/=(const float s);
+	Vector3& operator=(const float s);
 
 	[[nodiscard]] float Dot(const Vector3& other) const noexcept;
 	[[nodiscard]] Vector3 Cross(const Vector3& other) const noexcept;

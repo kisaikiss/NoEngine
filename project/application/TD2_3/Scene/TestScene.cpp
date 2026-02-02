@@ -29,7 +29,7 @@ void TestScene::Setup() {
 	sprite->layer = 1;
 
 	t2d->scale = { 100.f, 100.f };
-	sprite->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/engine/Model/enemy.png");
+	sprite->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Sprite/numbers.png");
 
 
 

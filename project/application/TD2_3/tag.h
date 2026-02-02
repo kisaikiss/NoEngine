@@ -8,6 +8,7 @@ struct EnemyTag {};
 //Enemy
 struct NormalEnemyTag{};
 struct Boss1Tag{};
+struct BatTag{};
 
 //Human
 struct BatGirlTag{};
@@ -18,3 +19,5 @@ struct DeathFlag
 	bool isDead = false;
 };
 struct StatusSpriteTag {};
+
+struct ScoreDigitTag{};

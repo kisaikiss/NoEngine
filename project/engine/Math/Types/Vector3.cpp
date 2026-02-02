@@ -65,6 +65,13 @@ Vector3& Vector3::operator/=(const float s) {
 	return *this;
 }
 
+Vector3& Vector3::operator=(const float s) {
+	x = s;
+	y = s;
+	z = s;
+	return *this;
+}
+
 float Vector3::Dot(const Vector3& other) const noexcept {
 	return MathCalculations::Dot(*this, other);
 }

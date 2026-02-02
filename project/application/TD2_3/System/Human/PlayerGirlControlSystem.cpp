@@ -3,8 +3,8 @@
 #include "../../tag.h"
 
 PlayerGirlControlSystem::PlayerGirlControlSystem()
-{  
-    
+{
+
     //PLAYER_VOICE
     No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_iq.mp3", "voice_iq");
 
@@ -29,11 +29,12 @@ PlayerGirlControlSystem::PlayerGirlControlSystem()
     No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_tamasii.mp3", "voice_tamasii");
     No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_tabemono.mp3", "voice_tabemono");
     No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_kitanai.mp3", "voice_kitanai");
-    
-    
+
+
     //strings_.push_back("voice_checkmate");
-    timer_ = 0.0f;
+    blinkTimer_ = 0.0f;
     voiceTimer_ = 0.0f;
+    idleActionTimer_ = 0.0f;
 
     isBallOut_ = false;
     isSoundWin_ = false;
@@ -51,7 +52,7 @@ PlayerGirlControlSystem::PlayerGirlControlSystem()
     strings_.push_back("voice_ugu");
     strings_.push_back("voice_kuso_high");
     strings_.push_back("voice_kuso_low");
- 
+
 
     //winVoice_.push_back("voice_checkmate");
     winVoice_.push_back("voice_iityoushi");
@@ -59,18 +60,12 @@ PlayerGirlControlSystem::PlayerGirlControlSystem()
     //winVoice_.push_back("voice_ikke"); 
     winVoice_.push_back("voice_sugoi");
     winVoice_.push_back("voice_mazide");
+
+    No::SoundPlay("voice_iq", 1.0f, false);
 }
 
 void PlayerGirlControlSystem::Update(No::Registry& registry, float deltaTime)
 {
-
-
-    if (timer_ == 0.0f) {
-        No::SoundPlay("voice_iq", 1.0f, false);
-    }
-
-
-
     auto ballView = registry.View<
         BallStateComponent,
         BallTag, DeathFlag>();
@@ -82,8 +77,6 @@ void PlayerGirlControlSystem::Update(No::Registry& registry, float deltaTime)
         auto* ball = registry.GetComponent<BallStateComponent>(ballEntity);
         //ballの状態を取得する
         isOut = ball->isOut;
-
-    
     }
 
     auto normalEnemyView = registry.View <
@@ -97,10 +90,10 @@ void PlayerGirlControlSystem::Update(No::Registry& registry, float deltaTime)
         auto* deathFlag = registry.GetComponent<DeathFlag>(normalEnemyEntity);
         if (deathFlag->isDead) {
             //もし敵に当たったら
-    
-                isEnemyDead = true;
-                break;
-            
+
+            isEnemyDead = true;
+            break;
+
         }
     }
 
@@ -112,11 +105,9 @@ void PlayerGirlControlSystem::Update(No::Registry& registry, float deltaTime)
 
     for (auto entity : view)
     {
-      
+
         auto* material = registry.GetComponent<No::MaterialComponent>(entity);
         auto* animation = registry.GetComponent<No::AnimatorComponent>(entity);
-
-
 
         if (isEnemyDead) {
             //勝ってるとき
@@ -124,24 +115,32 @@ void PlayerGirlControlSystem::Update(No::Registry& registry, float deltaTime)
                 int randomSound = rand() % winVoice_.size();
                 No::SoundEffectPlay(winVoice_[randomSound], 1.0f);
 
-                animation->currentAnimation = rand() % 3 + 4;
-                material->materials[1].textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Model/playerGirl/face2.png");
+                animation->currentAnimation = rand() % 2 + 5;
+                int faceRand = rand() % 2;
+                if (faceRand == 0) {
+                    material->materials[1].textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Model/playerGirl/face_surprise.png");
 
+                } else if(faceRand== 1){
+                    material->materials[1].textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Model/playerGirl/face_wink.png");
+
+                } else {
+                    material->materials[1].textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Model/playerGirl/face2.png");
+
+                }
+           
             }
-     
+
             isSoundWin_ = true;
-  
-        } else if(isOut){
+
+        } else if (isOut) {
 
             if (!isBallOut_) {
 
-         
-           
-                animation->currentAnimation = rand() % 2 + 8;
-                if (animation->currentAnimation == 8) {
+                animation->currentAnimation = rand() % 2 + 7;
+                if (animation->currentAnimation == 7) {
                     No::SoundPlay(strings_[0], 1.0f, false);
                 } else {
-                    int randNum = rand() % (strings_.size()-1)+1;
+                    int randNum = rand() % (strings_.size() - 1) + 1;
                     No::SoundPlay(strings_[randNum], 1.0f, false);
                 }
 
@@ -155,34 +154,50 @@ void PlayerGirlControlSystem::Update(No::Registry& registry, float deltaTime)
             if (voiceTimer_ >= 1.0f) {
                 voiceTimer_ = 0.0f;
             }
-      
+
         } else {
             voiceTimer_ = 0.0f;
 
-            timer_ += deltaTime;
-            timer_ = fmodf(timer_, 3.0f);
+   
+            //アクションタイマーを足す
+            idleActionTimer_ += deltaTime;
 
             if (animation->time + deltaTime >= animation->animation[animation->currentAnimation].duration) {
+
                 isSoundWin_ = false;
                 isBallOut_ = false;
-                do {
-                    idleRandNum_ = rand() % 4;
 
-                } while (animation->currentAnimation == idleRandNum_);
-                animation->currentAnimation = idleRandNum_;
+                if (idleActionTimer_ >= 20.0f) {
 
-                if (timer_ <= 2.5f) {
-                    material->materials[1].textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Model/playerGirl/face.png");
+                    do {
+                        idleRandNum_ = rand() % 4+1;
+                    } while (animation->currentAnimation == idleRandNum_);
+                    animation->currentAnimation = idleRandNum_;
+                    idleActionTimer_ = 0.0f;
+
                 } else {
-                    material->materials[1].textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Model/playerGirl/face2.png");
+                    animation->currentAnimation = 0;
                 }
             }
 
-        
+            if (!isSoundWin_ && !isBallOut_) {
+                blinkTimer_ += deltaTime;
+                blinkTimer_ = fmodf(blinkTimer_, 3.0f);
+
+                if (blinkTimer_ <= 2.75f) {
+                    material->materials[1].textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Model/playerGirl/face.png");
+                } else {
+                    material->materials[1].textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Model/playerGirl/face_blink.png");
+                }
+
+            }
+
+
+       
         }
 
 
-     
+
 
 
 #ifdef USE_IMGUI
