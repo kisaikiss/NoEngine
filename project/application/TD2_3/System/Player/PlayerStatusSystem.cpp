@@ -10,38 +10,45 @@ void PlayerStatusSystem::Update(No::Registry& registry, float deltaTime)
 {
 	(void)deltaTime;
 	auto playerStatusView = registry.View<PlayerStatusComponent>();
+	auto spriteView = registry.View<No::SpriteComponent, No::Transform2DComponent>();
 
 	for (auto entity : playerStatusView)
 	{
 		auto* status = registry.GetComponent<PlayerStatusComponent>(entity);
-		
+
 		// 経験値が閾値を超えたらレベルアップを開始（UI 表示のため pendingUpgrade を使う）
 		const int requiredExp = 3;
 		if (!status->pendingUpgrade && status->exp >= requiredExp)
 		{
-			status->exp = 0;
 			status->level++;
 			// UI 表示開始フラグ
 			status->pendingUpgrade = true;
 		}
 
-		// レベルアップの選択 UI を表示中なら ImGui で三択を表示
+		//if (status->hp <= 0)
+		//{
+		//	registry.EmitEvent(No::SceneChangeEvent("GameOverScene"));
+		//}
 #ifdef USE_IMGUI
-		ImGui::Begin("Debug Player Status");
-		ImGui::Text("Score: %d", status->score);
-		ImGui::Text("Level: %d", status->level);
-		ImGui::Text("EXP: %d ", status->exp);
-		ImGui::Text("HP: %d / %d", status->hp, status->hpMax);
-		ImGui::End();
-
-		ImGui::Begin("UpgradeSprite");
-
-		auto spriteView = registry.View<No::SpriteComponent, No::Transform2DComponent,StatusSpriteTag>();
-
 		int index = 0;
+#endif
 		for (auto spriteEntity : spriteView)
 		{
 			auto* sprite = registry.GetComponent<No::SpriteComponent>(spriteEntity);
+
+			if (sprite->name == "LevelGauge")
+				sprite->fill = status->exp / 3.0f;
+#ifdef USE_IMGUI
+			ImGui::Begin("Debug Player Status");
+			ImGui::Text("Score: %d", status->score);
+			ImGui::Text("Level: %d", status->level);
+			ImGui::Text("EXP: %d ", status->exp);
+			ImGui::Text("HP: %d / %d", status->hp, status->hpMax);
+			ImGui::End();
+
+			ImGui::Begin("UpgradeSprite");
+
+
 			auto* transform2D = registry.GetComponent<No::Transform2DComponent>(spriteEntity);
 			if (ImGui::CollapsingHeader(sprite->name.c_str(), ImGuiTreeNodeFlags_DefaultOpen))
 			{
@@ -61,13 +68,15 @@ void PlayerStatusSystem::Update(No::Registry& registry, float deltaTime)
 					ImGui::DragFloat4("UV##A", &sprite->uv.x);
 					ImGui::DragInt("Layer##A", (int*)&sprite->layer);
 					ImGui::DragInt("OrderInLayer##A", (int*)&sprite->orderInLayer);
+					ImGui::DragFloat("Fill##A", &sprite->fill, 0.01f, 0.0f, 1.0f);
 					ImGui::TreePop();
 				}
 				ImGui::PopID();
 			}
 			index++;
-		}
-		ImGui::End();
+			ImGui::End();
 #endif // USE_IMGUI
+		}
 	}
+
 }

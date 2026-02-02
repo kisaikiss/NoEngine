@@ -257,6 +257,7 @@ void UpgradeSelectionSystem::Update(No::Registry& registry, float deltaTime)
 					HideChooseUI(registry, choose, chooseEntity);
 
 					status->pendingUpgrade = false;
+					status->exp = 0;
 					choose->active = false;
 					return;
 				}
@@ -271,6 +272,7 @@ void UpgradeSelectionSystem::Update(No::Registry& registry, float deltaTime)
 			HideChooseUI(registry, choose, chooseEntity);
 
 			status->pendingUpgrade = false;
+			status->exp = 0;
 			choose->active = false;
 			return;
 		}

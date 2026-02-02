@@ -15,6 +15,9 @@ struct SpriteComponent {
 	Color color = {Color::WHITE};
 	std::string name;
 	bool isVisible = true;
+	float fill = 0.0f;				// 0..1 （UV.x に対する切り詰め量）
+	int useMask = 0;				// マスクを使用するかどうか（UI 用）
+	TextureRef maskTextureHandle;	// マスクテクスチャ（UI 用）
 };
 }
 }

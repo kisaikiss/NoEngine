@@ -5,6 +5,7 @@
 #include "../../Component/VausStateComponent.h"
 #include "../../Component/BallStateComponent.h"
 #include "../../Component/BackGroundComponent.h"
+#include "../../Component/PlayerstatusComponent.h"
 
 #include "engine/Math/Types/Calculations/QuaternionCalculations.h"
 #include "engine/Runtime/GraphicsCore.h"
@@ -35,6 +36,17 @@ static float NormalizeAngleLocal(float a)
 
 void VausControlSystem::Update(No::Registry& registry, float deltaTime)
 {
+	auto playerStatusView = registry.View<PlayerStatusComponent>();
+	for (auto playerEntity : playerStatusView)
+	{
+		auto* playerStatus = registry.GetComponent<PlayerStatusComponent>(playerEntity);
+		if (playerStatus->pendingUpgrade)
+		{
+			// レベルアップ選択中は操作を受け付けない
+			wasPress_ = isPress_;
+			return;
+		}
+	}
 	auto vausView = registry.View<
 		VausTag,
 		No::TransformComponent,

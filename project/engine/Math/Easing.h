@@ -76,6 +76,13 @@ inline T EaseOutCirc(const T& a, const T& b, float t)
 	return Lerp(a, b, t);
 }
 
+template<typename T>
+inline T EaseInOutSine(const T& a, const T& b, float t)
+{
+	t = -(cosf(PI * t) - 1.0f) / 2.0f;
+	return Lerp(a, b, t);
+}
+
 }
 }
 

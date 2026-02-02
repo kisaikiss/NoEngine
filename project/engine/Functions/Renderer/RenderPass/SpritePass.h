@@ -28,7 +28,7 @@ private:
     };
     std::vector<SpriteVertex> vertices_;
     std::vector<uint16_t> indices_;
-   
+
     void Collect(ECS::Registry& registry);
     void Sort();
     void MakeLocalQuad(const DrawItem& item , Vector2 out[4]);

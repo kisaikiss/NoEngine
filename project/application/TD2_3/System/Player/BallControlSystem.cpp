@@ -26,6 +26,17 @@ static float NormalizeAngle(float a)
 
 void BallControlSystem::Update(No::Registry& registry, float deltaTime)
 {
+	auto playerStatusView = registry.View<PlayerStatusComponent>();
+	for (auto playerEntity : playerStatusView)
+	{
+		auto* playerStatus = registry.GetComponent<PlayerStatusComponent>(playerEntity);
+		if (playerStatus->pendingUpgrade)
+		{
+			// レベルアップ選択中は操作を受け付けない
+			return;
+		}
+	}
+
 	auto ballView = registry.View<
 		No::TransformComponent,
 		No::MaterialComponent,
@@ -300,7 +311,7 @@ void BallControlSystem::Update(No::Registry& registry, float deltaTime)
 	{
 		vausStatePtr->isHerted = true;
 		// プレイヤー HP を -1 する
-		auto playerStatusView = registry.View<PlayerStatusComponent>();
+
 		for (auto playerEntity : playerStatusView)
 		{
 			auto* playerStatus = registry.GetComponent<PlayerStatusComponent>(playerEntity);

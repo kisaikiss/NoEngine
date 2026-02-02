@@ -29,7 +29,7 @@ private:
 	void InitBat(No::Registry& registry);
 
 	void InitChooseSprite(No::Registry& registry);
-	void CreateSprite(No::Registry& registry, const std::string& fileName, const std::string& configName);
+	No::Entity CreateSprite(No::Registry& registry, const std::string& fileName, const std::string& configName);
 	void DestroyGameObject();
 	NoEngine::Vector3 GenerateRandomPointInCircle(float minRadius, float maxRadius);
 
