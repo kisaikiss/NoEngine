@@ -132,6 +132,10 @@
     <ClCompile Include="engine\Assets\Texture\Texture.cpp" />
     <ClCompile Include="application\TD2_3\System\Player\VausControlSystem.cpp" />
     <ClCompile Include="application\TD2_3\System\Sprite\ScoreSpriteControlSystem.cpp" />
+    <ClCompile Include="application\TD2_3\System\Enemy\BatEnemy\BatControlSystem.cpp" />
+    <ClCompile Include="application\TD2_3\Random\RandomFanc.cpp" />
+    <ClCompile Include="application\TD2_3\System\Effect\SmokeEffectControlSystem.cpp" />
+    <ClCompile Include="application\TD2_3\System\Enemy\BatEnemy\BatGenerateSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="application\TD2_3\Component\BackGroundComponent.h" />
@@ -298,6 +302,12 @@
     <ClInclude Include="engine\Functions\ECS\EventBus.h" />
     <ClInclude Include="engine\Functions\ECS\Event\SceneChangeEvent.h" />
     <ClInclude Include="application\TD2_3\System\Sprite\ScoreSpriteControlSystem.h" />
+    <ClInclude Include="application\TD2_3\System\Enemy\BatEnemy\BatControlSystem.h" />
+    <ClInclude Include="application\TD2_3\Component\Enemy\BatComponent.h" />
+    <ClInclude Include="application\TD2_3\Component\EffectComponent.h" />
+    <ClInclude Include="application\TD2_3\Random\RandomFanc.h" />
+    <ClInclude Include="application\TD2_3\System\Effect\SmokeEffectControlSystem.h" />
+    <ClInclude Include="application\TD2_3\System\Enemy\BatEnemy\BatGenerateSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

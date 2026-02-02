@@ -47,7 +47,7 @@ int RunApplication(std::unique_ptr<IGameApp> game) {
 	game->Startup();
 
 	RenderContext renderContext;
-
+	CalculateDeltaTime();
 	// メインループ
 	while (GraphicsCore::gWindowManager.ProcessMessage() == 0) {
 

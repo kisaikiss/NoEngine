@@ -24,6 +24,7 @@
 //Enemy
 #include "../System/Enemy/Boss/BossControlSystem.h"
 #include"../System/Enemy/NormalEnemy/NormalEnemyControlSystem.h"
+#include "../System/Enemy/BatEnemy/BatControlSystem.h"
 //Human
 #include "../System/Human/BatGirlControlSystem.h"
 #include "../System/Human/PlayerGirlControlSystem.h"
@@ -34,6 +35,12 @@
 
 // score
 #include "../System/Sprite/ScoreSpriteControlSystem.h"
+// bat
+#include "../Component/Enemy/BatComponent.h"
+#include "../System/Enemy/BatEnemy/BatGenerateSystem.h"
+
+// effect
+#include "../System/Effect/SmokeEffectControlSystem.h"
 
 #include "../tag.h"
 
@@ -49,12 +56,13 @@ void GameScene::Setup()
     AddSystem(std::make_unique<No::AnimationSystem>());
     //effect
     AddSystem(std::make_unique<BackGroundEffectSystem>());
-
+    
     //player用システム
     AddSystem(std::make_unique<VausControlSystem>());
     AddSystem(std::make_unique<BallControlSystem>());
     //Enemy
-    AddSystem(std::make_unique<NormalEnemyControlSystem>());
+    AddSystem(std::make_unique<BatControlSystem>());
+    AddSystem(std::make_unique<BatGenerateSystem>());
     AddSystem(std::make_unique<BossControlSystem>());
     //こうもり少女のシステム
     AddSystem(std::make_unique<BatGirlControlSystem>());
@@ -69,13 +77,17 @@ void GameScene::Setup()
     AddSystem(std::make_unique<CollisionSystem>());
     // スコア描画のためのコントロールシステム
     AddSystem(std::make_unique<ScoreSpriteControlSystem>());
+    // 煙エフェクト
+    AddSystem(std::make_unique<SmokeEffectControlSystem>());
+
 
     SpriteConfigManager::Get().Load("resources/game/td_2304/Json/tdSpriteConfig.json");
 
     No::Registry& registry = *GetRegistry();
     InitBackGround(registry);
     InitVaus(registry);
-    InitEnemy(registry);
+    //InitEnemy(registry);
+    InitBat(registry);
     InitRing(registry);
     InitBall(registry);
     InitBoss(registry);
@@ -358,6 +370,39 @@ void GameScene::InitScore(No::Registry& registry) {
     sprite->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Sprite/score.png");
     transform->scale = { 236.f,52.f };
     transform->translate = { 900.f,50.f };
+}
+
+void GameScene::InitBat(No::Registry& registry) {
+    for (int i = 0; i < 5; ++i) {
+        No::Entity entity = registry.GenerateEntity();
+        registry.AddComponent<BatTag>(entity);
+        registry.AddComponent<DeathFlag>(entity);
+
+        auto* enemy = registry.AddComponent<BatComponent>(entity);
+       
+        auto* collider = registry.AddComponent<SphereColliderComponent>(entity);
+        collider->colliderType = ColliderMask::kEnemy;
+        collider->collideMask = ColliderMask::kBall;
+
+        auto* transform = registry.AddComponent<No::TransformComponent>(entity);
+        transform->rotation.FromAxisAngle(Vector3::UP, 3.14f);
+        transform->translate = GenerateRandomPointInCircle(2.0f, 3.0f);
+        transform->scale = 0.f;
+
+        enemy->defaultTranslate = transform->translate;
+
+        auto* model = registry.AddComponent<No::MeshComponent>(entity);
+        auto* animationComp = registry.AddComponent<No::AnimatorComponent>(entity);
+        NoEngine::ModelLoader::LoadModel(enemyResources_.modelName, enemyResources_.modelPath, model, animationComp);
+
+        auto m = registry.AddComponent<No::MaterialComponent>(entity);
+        m->materials = NoEngine::ModelLoader::GetMaterial("bat");
+        // m->materials[0].textureHandle = NoEngine::TextureManager::LoadCovertTexture(enemyResources_.texturePath);
+        m->psoName = L"Renderer : Default PSO";
+        m->psoId = NoEngine::Render::GetPSOID(m->psoName);
+        m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
+        m->drawOutline = true;
+    }
 }
 
 void GameScene::InitChooseSprite(No::Registry& registry)
