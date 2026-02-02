@@ -108,22 +108,23 @@ void GameScene::NotSystemUpdate()
 
 void GameScene::InitVaus(No::Registry& registry)
 {
-    No::Entity vausEntity = registry.GenerateEntity();
-    registry.AddComponent<VausTag>(vausEntity);
-    registry.AddComponent<VausStateComponent>(vausEntity);
-    auto* transform = registry.AddComponent<No::TransformComponent>(vausEntity);
-    transform->translate = { 0.f, -4.85f, 0.f };
+	No::Entity vausEntity = registry.GenerateEntity();
+	registry.AddComponent<VausTag>(vausEntity);
+	registry.AddComponent<VausStateComponent>(vausEntity);
+	auto* transform = registry.AddComponent<No::TransformComponent>(vausEntity);
+	transform->translate = { 0.f, -4.85f, 0.f };
 
-    auto* model = registry.AddComponent<No::MeshComponent>(vausEntity);
-    NoEngine::ModelLoader::LoadModel("paddleMiddle", "resources/game/td_2304/Model/paddle/middle1.obj", model);
+	auto* model = registry.AddComponent<No::MeshComponent>(vausEntity);
+	NoEngine::ModelLoader::LoadModel("paddleMiddle", "resources/game/td_2304/Model/paddle/middle1.obj", model);
 
-    auto* m = registry.AddComponent<No::MaterialComponent>(vausEntity);
-    m->materials = NoEngine::ModelLoader::GetMaterial("paddleMiddle");
-    m->color = 0xA82C57ff;
+	auto* m = registry.AddComponent<No::MaterialComponent>(vausEntity);
+	m->materials = NoEngine::ModelLoader::GetMaterial("paddleMiddle");
+	m->color = 0xA82C57ff;
+	m->drawOutline = true;
 
-    m->psoName = L"Renderer : Default PSO";
-    m->psoId = NoEngine::Render::GetPSOID(m->psoName);
-    m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
+	m->psoName = L"Renderer : Default PSO";
+	m->psoId = NoEngine::Render::GetPSOID(m->psoName);
+	m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
 }
 
 void GameScene::InitRing(No::Registry& registry)
@@ -181,38 +182,39 @@ void GameScene::InitBall(No::Registry& registry)
 
 void GameScene::InitEnemy(No::Registry& registry)
 {
-    for (int i = 0; i < 5; ++i)
-    {
-        No::Entity enemyEntity = registry.GenerateEntity();
-        registry.AddComponent<NormalEnemyTag>(enemyEntity);
-        registry.AddComponent<DeathFlag>(enemyEntity);
+	for (int i = 0; i < 5; ++i)
+	{
+		No::Entity enemyEntity = registry.GenerateEntity();
+		registry.AddComponent<NormalEnemyTag>(enemyEntity);
+		registry.AddComponent<DeathFlag>(enemyEntity);
 
-        auto* enemy = registry.AddComponent<NormalEnemyComponent>(enemyEntity);
-        //enemy->velocity = { 0.5f,0.5f,0.0f };
-        //enemy->stateManager->Start(enemy);
-        //enemy->stateManager->ChangeState<EnemyAppear<NormalEnemyComponent>>(registry);
+		auto* enemy = registry.AddComponent<NormalEnemyComponent>(enemyEntity);
+		//enemy->velocity = { 0.5f,0.5f,0.0f };
+		//enemy->stateManager->Start(enemy);
+		//enemy->stateManager->ChangeState<EnemyAppear<NormalEnemyComponent>>(registry);
 
-        auto* collider = registry.AddComponent<SphereColliderComponent>(enemyEntity);
-        collider->colliderType = ColliderMask::kEnemy;
-        collider->collideMask = ColliderMask::kBall;
+		auto* collider = registry.AddComponent<SphereColliderComponent>(enemyEntity);
+		collider->colliderType = ColliderMask::kEnemy;
+		collider->collideMask = ColliderMask::kBall;
 
-        auto* transform = registry.AddComponent<No::TransformComponent>(enemyEntity);
-        transform->rotation.FromAxisAngle(Vector3::UP, 3.14f);
-        transform->translate = GenerateRandomPointInCircle(2.0f, 3.0f);
+		auto* transform = registry.AddComponent<No::TransformComponent>(enemyEntity);
+		transform->rotation.FromAxisAngle(Vector3::UP, 3.14f);
+		transform->translate = GenerateRandomPointInCircle(2.0f, 3.0f);
 
-        enemy->defaultTranslate_ = transform->translate;
+		enemy->defaultTranslate_ = transform->translate;
 
-        auto* model = registry.AddComponent<No::MeshComponent>(enemyEntity);
-        auto* animationComp = registry.AddComponent<No::AnimatorComponent>(enemyEntity);
-        NoEngine::ModelLoader::LoadModel(enemyResources_.modelName, enemyResources_.modelPath, model, animationComp);
+		auto* model = registry.AddComponent<No::MeshComponent>(enemyEntity);
+		auto* animationComp = registry.AddComponent<No::AnimatorComponent>(enemyEntity);
+		NoEngine::ModelLoader::LoadModel(enemyResources_.modelName, enemyResources_.modelPath, model, animationComp);
 
-        auto m = registry.AddComponent<No::MaterialComponent>(enemyEntity);
-        m->materials = NoEngine::ModelLoader::GetMaterial("bat");
-        m->materials[0].textureHandle = NoEngine::TextureManager::LoadCovertTexture(enemyResources_.texturePath);
-        m->psoName = L"Renderer : Default PSO";
-        m->psoId = NoEngine::Render::GetPSOID(m->psoName);
-        m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
-    }
+		auto m = registry.AddComponent<No::MaterialComponent>(enemyEntity);
+		m->materials = NoEngine::ModelLoader::GetMaterial("bat");
+		m->materials[0].textureHandle = NoEngine::TextureManager::LoadCovertTexture(enemyResources_.texturePath);
+		m->psoName = L"Renderer : Default PSO";
+		m->psoId = NoEngine::Render::GetPSOID(m->psoName);
+		m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
+		m->drawOutline = true;
+	}
 }
 
 void GameScene::InitBoss(No::Registry& registry)
@@ -234,13 +236,13 @@ void GameScene::InitBoss(No::Registry& registry)
     auto* animationComp = registry.AddComponent<No::AnimatorComponent>(bossEntity);
     NoEngine::ModelLoader::LoadModel("batBoss", "resources/game/td_2304/Model/batBoss/batBoss.gltf", model, animationComp);
 
-    auto m = registry.AddComponent<No::MaterialComponent>(bossEntity);
-    m->materials = NoEngine::ModelLoader::GetMaterial("batBoss");
-
-    m->psoName = L"Renderer : DefaultSkinned PSO";
-    m->enableSkinning = true;
-    m->psoId = NoEngine::Render::GetPSOID(m->psoName);
-    m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
+	auto m = registry.AddComponent<No::MaterialComponent>(bossEntity);
+	m->materials = NoEngine::ModelLoader::GetMaterial("batBoss");
+	m->drawOutline = true;
+	m->psoName = L"Renderer : DefaultSkinned PSO";
+	m->enableSkinning = true;
+	m->psoId = NoEngine::Render::GetPSOID(m->psoName);
+	m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
 
 }
 
