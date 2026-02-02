@@ -337,6 +337,8 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\TD2_3\System\Player\UpgradeSelectionSystem.h" />
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
     <ClInclude Include="engine\Functions\ECS\Component\LightComponent.h" />
+    <ClInclude Include="engine\Functions\ECS\EventBus.h" />
+    <ClInclude Include="engine\Functions\ECS\Event\SceneChangeEvent.h" />
     <ClInclude Include="engine\Functions\Renderer\Primitive.h" />
     <ClInclude Include="application\TD2_3\Scene\GameScene.h" />
     <ClInclude Include="application\TD2_3\Scene\TestScene.h" />
@@ -494,6 +496,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\TD2_3\System\Human\PlayerGirlControlSystem.h" />
     <ClInclude Include="application\TD2_3\System\HpSpriteControlSystem.h" />
     <ClInclude Include="application\TD2_3\SpriteConfigManager\SpriteConfigManager.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="engine\Assets\Texture\Texture.h" />
     <ClInclude Include="application\TD2_3\System\Player\VausControlSystem.h" />
@@ -576,6 +579,14 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
+    <FxCompile Include="resources\engine\Shaders\Toon.PS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Development|x64'">Pixel</ShaderType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
     <FxCompile Include="resources\game\Shaders\BackGround.PS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
@@ -632,6 +643,12 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <None Include="resources\engine\Shaders\Default.hlsli" />
     <None Include="resources\game\Shaders\ShaderMathUtil.hlsli" />
     <None Include="resources\game\td_2304\Json\tdSpriteConfig.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="NoEngine.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="resources\game\td_2304\game.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

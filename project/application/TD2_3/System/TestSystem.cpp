@@ -59,6 +59,11 @@ void TestSystem::Update(No::Registry& registry, float deltaTime) {
 		a->direction = a->direction.Normalize();
 		ImGui::End();
 	}
+
+	if (No::Keyboard::IsTrigger('T')) {
+		registry.EmitEvent(No::SceneChangeEvent{"GameScene"});
+	}
+
 #endif // USE_IMGUI
 	
 

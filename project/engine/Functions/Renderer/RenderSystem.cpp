@@ -100,6 +100,76 @@ void Initialize() {
 		sRootSignatures.push_back(std::move(defaultSkinnedRootSignature));
 		sRootSignatureIndexMap[defaultSkinnedPSOName] = static_cast<uint32_t>(sRootSignatures.size()) - 1;
 	}
+
+	// トゥーンレンダリング
+	ShaderModule ToonPS(ShaderStage::Vertex, L"resources/engine/Shaders/Toon.PS.hlsl", L"ps_6_0");
+	const ShaderReflection& ToonReflection = ToonPS.GetReflection();
+	{
+		std::vector<ShaderReflection> reflectionToon;
+		reflectionToon.push_back(vsReflection);
+		reflectionToon.push_back(ToonReflection);
+		std::unique_ptr<RootSignature> toonRootSignature = std::make_unique<RootSignature>();
+		std::wstring toonPSOName = L"Renderer : Toon PSO";
+		RootSignatureBuilder::BuildFromReflection(reflectionToon, *toonRootSignature, ConvertString(toonPSOName));
+
+		D3D12_RASTERIZER_DESC rasterizerOutlineDesc{};
+		rasterizerOutlineDesc.CullMode = D3D12_CULL_MODE_FRONT;
+		rasterizerOutlineDesc.FillMode = D3D12_FILL_MODE_SOLID;
+
+		GraphicsPSO toonPSO(toonPSOName);
+
+		toonPSO.SetRootSignature(*toonRootSignature);
+		toonPSO.SetRasterizerState(rasterizerOutlineDesc);
+		toonPSO.SetBlendState(blendDesc);
+		toonPSO.SetDepthStencilState(depthStencilDesc);
+		toonPSO.SetInputLayout(inputLayout);
+		toonPSO.SetPrimitiveTopologyType(D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
+		toonPSO.SetRenderTargetFormats(1, rtvFormat, DXGI_FORMAT_D24_UNORM_S8_UINT);
+		toonPSO.SetVertexShader(defaultVS.GetBytecode());
+		toonPSO.SetPixelShader(ToonPS.GetBytecode());
+		toonPSO.SetSampleMask(D3D12_DEFAULT_SAMPLE_MASK);
+		toonPSO.Finalize();
+		sGraphicsPSOs.push_back(toonPSO);
+		sGraphicsPSOIndexMap[toonPSOName] = static_cast<uint32_t>(sGraphicsPSOs.size()) - 1;
+		sRootSignatures.push_back(std::move(toonRootSignature));
+		sRootSignatureIndexMap[toonPSOName] = static_cast<uint32_t>(sRootSignatures.size()) - 1;
+	}
+
+	// スキニングトゥーンレンダリング
+	{
+		ShaderModule defaultSkinnedVS(ShaderStage::Vertex, L"resources/engine/Shaders/DefaultSkinned.VS.hlsl", L"vs_6_0");
+
+		const ShaderReflection& vsSkinnedReflection = defaultSkinnedVS.GetReflection();
+		std::vector<ShaderReflection> skinnedRefls;
+		skinnedRefls.push_back(vsSkinnedReflection);
+		skinnedRefls.push_back(ToonReflection);
+
+		std::unique_ptr<RootSignature> defaultSkinnedRootSignature = std::make_unique<RootSignature>();
+		std::wstring defaultSkinnedPSOName = L"Renderer : ToonSkinned PSO";
+		RootSignatureBuilder::BuildFromReflection(skinnedRefls, *defaultSkinnedRootSignature, ConvertString(defaultSkinnedPSOName));
+
+		std::vector<D3D12_INPUT_ELEMENT_DESC> skinnedInputLayout = InputLayoutBuilder::BuildFromReflection(vsSkinnedReflection);
+		// ToDo : inputLayoutのReflectionがUINT型のインプットが対応できていないので、このように後から入れる形になってしまっています。UINT型に対応すべきです。
+		skinnedInputLayout[4].Format = DXGI_FORMAT_R32G32B32A32_UINT;
+
+
+		GraphicsPSO defaultSkinnedPSO(defaultSkinnedPSOName);
+		defaultSkinnedPSO.SetRootSignature(*defaultSkinnedRootSignature);
+		defaultSkinnedPSO.SetRasterizerState(rasterizerDesc);
+		defaultSkinnedPSO.SetBlendState(blendDesc);
+		defaultSkinnedPSO.SetDepthStencilState(depthStencilDesc);
+		defaultSkinnedPSO.SetInputLayout(skinnedInputLayout);
+		defaultSkinnedPSO.SetPrimitiveTopologyType(D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
+		defaultSkinnedPSO.SetRenderTargetFormats(1, rtvFormat, DXGI_FORMAT_D24_UNORM_S8_UINT);
+		defaultSkinnedPSO.SetVertexShader(defaultSkinnedVS.GetBytecode());
+		defaultSkinnedPSO.SetPixelShader(ToonPS.GetBytecode());
+		defaultSkinnedPSO.SetSampleMask(D3D12_DEFAULT_SAMPLE_MASK);
+		defaultSkinnedPSO.Finalize();
+		sGraphicsPSOs.push_back(defaultSkinnedPSO);
+		sGraphicsPSOIndexMap[defaultSkinnedPSOName] = static_cast<uint32_t>(sGraphicsPSOs.size()) - 1;
+		sRootSignatures.push_back(std::move(defaultSkinnedRootSignature));
+		sRootSignatureIndexMap[defaultSkinnedPSOName] = static_cast<uint32_t>(sRootSignatures.size()) - 1;
+	}
 	
 	// アウトライン
 	{

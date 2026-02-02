@@ -7,6 +7,7 @@
 #include "Functions/ECS/Component/Transform2DComponent.h"
 #include "Functions/ECS/Component/MaterialComponent.h"
 #include "Functions/ECS/Component/LightComponent.h"
+#include "Functions/ECS/Event/SceneChangeEvent.h"
 
 #include "Functions/ECS/System/AnimationSystem.h"
 
@@ -27,6 +28,7 @@ using namespace NoEngine::GameCore;
 using namespace NoEngine::ECS;
 using namespace NoEngine::Input;
 using namespace NoEngine::Component;
+using namespace NoEngine::Event;
 using namespace NoEngine::Scene;
 using namespace NoEngine::Audio;
 }

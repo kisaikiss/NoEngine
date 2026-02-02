@@ -1,6 +1,7 @@
 #pragma once
 #include "Entity.h"
 #include "ComponentPool.h"
+#include "EventBus.h"
 
 namespace NoEngine {
 namespace ECS {
@@ -134,6 +135,27 @@ public:
 		return Query<Components...>(*this);
 	}
 
+	/// <summary>
+	/// イベントを追加します。
+	/// </summary>
+	/// <typeparam name="Event">追加するイベント構造体の種類</typeparam>
+	/// <param name="e">追加するイベント</param>
+	template<typename Event>
+	void EmitEvent(const Event& e) {
+		eventBus_.Emit(e);
+	}
+
+	/// <summary>
+	/// 指定したイベントを取得します。
+	/// </summary>
+	/// <typeparam name="Event">イベント構造体の種類</typeparam>
+	/// <returns>イベント</returns>
+	template<typename Event>
+	std::optional<Event> PollEvent() {
+		return eventBus_.Poll<Event>();
+	}
+
+
 	bool Empty();
 private:
 	// エンティティと有効フラグを紐づけするコンテナ
@@ -142,6 +164,8 @@ private:
 	std::vector<Entity> freeEntities_;
 	// 削除待ちのエンティティ
 	std::vector<Entity> pendingDestroy_;
+	// イベントの集合
+	EventBus eventBus_;
 
 	// 次に生成するエンティティのID
 	size_t nextID_ = 0;

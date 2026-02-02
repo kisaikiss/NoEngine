@@ -29,7 +29,8 @@ void Registry::FlushDestroy() {
 		entityToActive_[entity] = false;
 		freeEntities_.emplace_back(entity);
 		for (auto& pool : componentPools_) {
-			pool->RemoveIfExists(entity);
+			if (pool)
+				pool->RemoveIfExists(entity);
 		}
 	}
 	pendingDestroy_.clear();

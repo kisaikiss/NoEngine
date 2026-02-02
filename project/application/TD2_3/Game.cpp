@@ -27,6 +27,10 @@ void Game::Cleanup(void) {
 }
 
 void Game::Update(float deltaT) {
+	if (auto event = GetRegistry().PollEvent<No::SceneChangeEvent>()) {
+		ChangeScene(event->nextScene);
+	}
+
 	UpdateScene(deltaT);
 }
 

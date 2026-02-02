@@ -10,6 +10,9 @@ CompType* Registry::AddComponent(const Entity entity) {
 		componentPools_[type] = std::make_unique<ComponentPool<CompType>>();
 	}
 
+	if (componentPools_[type] == nullptr) {
+		componentPools_[type] = std::make_unique<ComponentPool<CompType>>();
+	}
 
 	// 追加するコンポーネントを格納するコンテナクラスを取得
 	ComponentPool<CompType>* compPool = static_cast<ComponentPool<CompType>*>(componentPools_[type].get());

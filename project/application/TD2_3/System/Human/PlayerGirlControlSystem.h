@@ -11,6 +11,15 @@ public:
 private:
     float timer_ = 0.0f;
     float voiceTimer_ = 0.0f;
+
     std::vector<std::string> strings_;
+    std::vector<std::string> winVoice_;
+
+    bool isBallOut_ = false;
+
+    bool isSoundWin_ = false;
+
+    uint32_t idleRandNum_ = 0;
+
 };
 
