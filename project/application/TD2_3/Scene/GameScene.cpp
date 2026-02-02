@@ -32,6 +32,9 @@
 #include"../SpriteConfigManager/SpriteConfigManager.h"
 //ヨシダ追加しました。
 
+// score
+#include "../System/Sprite/ScoreSpriteControlSystem.h"
+
 #include "../tag.h"
 
 
@@ -64,7 +67,8 @@ void GameScene::Setup()
     AddSystem(std::make_unique<HpSpriteControlSystem>());
     //衝突判定用システム
     AddSystem(std::make_unique<CollisionSystem>());
-
+    // スコア描画のためのコントロールシステム
+    AddSystem(std::make_unique<ScoreSpriteControlSystem>());
 
     SpriteConfigManager::Get().Load("resources/game/td_2304/Json/tdSpriteConfig.json");
 
@@ -82,6 +86,7 @@ void GameScene::Setup()
     InitHpGaugeSprite(registry);
     InitLevelGaugeSprite(registry);
     InitChooseSprite(registry);
+    InitScore(registry);
 
     constexpr Vector3 kStartCameraPosition = Vector3{ 0.0f, 0.0f, -28.0f };
     //カメラ初期化
@@ -332,6 +337,27 @@ void GameScene::InitHpGaugeSprite(No::Registry& registry)
 void GameScene::InitLevelGaugeSprite(No::Registry& registry)
 {
     CreateSprite(registry, "lv.png", "Level");
+}
+
+void GameScene::InitScore(No::Registry& registry) {
+    const uint32_t kDigits = 6;
+    for (uint32_t i = 0; i < kDigits; i++) {
+        auto nums = registry.GenerateEntity();
+        auto* sprite = registry.AddComponent<No::SpriteComponent>(nums);
+        auto* transform = registry.AddComponent<No::Transform2DComponent>(nums);
+        transform->scale = { 64.f,64.f };
+        registry.AddComponent<ScoreDigitTag>(nums);
+        sprite->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Sprite/numbers.png");
+        sprite->uv.width = 0.1f;
+    }
+
+    auto score = registry.GenerateEntity();
+    auto* sprite = registry.AddComponent<No::SpriteComponent>(score);
+    auto* transform = registry.AddComponent<No::Transform2DComponent>(score);
+
+    sprite->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Sprite/score.png");
+    transform->scale = { 236.f,52.f };
+    transform->translate = { 900.f,50.f };
 }
 
 void GameScene::InitChooseSprite(No::Registry& registry)

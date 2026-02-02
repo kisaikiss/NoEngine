@@ -25,6 +25,7 @@ private:
 	void InitLights(No::Registry& registry);
 	void InitHpGaugeSprite(No::Registry& registry);
 	void InitLevelGaugeSprite(No::Registry& registry);
+	void InitScore(No::Registry& registry);
 
 	void InitChooseSprite(No::Registry& registry);
 	void CreateSprite(No::Registry& registry, const std::string& fileName, const std::string& configName);
