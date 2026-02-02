@@ -29,7 +29,7 @@
 #include "../System/Human/BatGirlControlSystem.h"
 #include "../System/Human/PlayerGirlControlSystem.h"
 
-#include"../System/HpSpriteControlSystem.h"
+#include"../System/StatusSpriteControlSystem.h"
 #include"../SpriteConfigManager/SpriteConfigManager.h"
 //ヨシダ追加しました。
 
@@ -72,7 +72,7 @@ void GameScene::Setup()
     AddSystem(std::make_unique<PlayerStatusSystem>());
     AddSystem(std::make_unique<UpgradeSelectionSystem>());
     //HISprite
-    AddSystem(std::make_unique<HpSpriteControlSystem>());
+    AddSystem(std::make_unique<StatusSpriteControlSystem>());
     //衝突判定用システム
     AddSystem(std::make_unique<CollisionSystem>());
     // スコア描画のためのコントロールシステム
@@ -355,6 +355,15 @@ void GameScene::InitLevelGaugeSprite(No::Registry& registry)
 	auto* sprite2 = registry.GetComponent<No::SpriteComponent>(sp2);
 	sprite2->useMask = 1;
 	sprite2->maskTextureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Sprite/lv_gauge_mask.png");
+
+    auto nums = registry.GenerateEntity();
+    auto* sprite = registry.AddComponent<No::SpriteComponent>(nums);
+    auto* transform = registry.AddComponent<No::Transform2DComponent>(nums);
+    transform->scale = { 64.f,64.f };
+    sprite->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Sprite/levelNumbers.png");
+    sprite->uv.width = 0.1f;
+    sprite->name = "LevelFont";
+    sprite->layer = 2;
 }
 
 void GameScene::InitScore(No::Registry& registry) {

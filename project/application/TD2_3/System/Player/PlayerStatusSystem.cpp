@@ -6,6 +6,7 @@
 
 #include "externals/imgui/imgui.h"
 
+
 void PlayerStatusSystem::Update(No::Registry& registry, float deltaTime)
 {
 	(void)deltaTime;
@@ -17,18 +18,17 @@ void PlayerStatusSystem::Update(No::Registry& registry, float deltaTime)
 		auto* status = registry.GetComponent<PlayerStatusComponent>(entity);
 
 		// 経験値が閾値を超えたらレベルアップを開始（UI 表示のため pendingUpgrade を使う）
-		const int requiredExp = 3;
-		if (!status->pendingUpgrade && status->exp >= requiredExp)
+		if (!status->pendingUpgrade && status->exp >= status->requiredExp)
 		{
 			status->level++;
 			// UI 表示開始フラグ
 			status->pendingUpgrade = true;
 		}
 
-		//if (status->hp <= 0)
-		//{
-		//	registry.EmitEvent(No::SceneChangeEvent("GameOverScene"));
-		//}
+		if (status->hp <= 0)
+		{
+			registry.EmitEvent(No::SceneChangeEvent("GameOverScene"));
+		}
 #ifdef USE_IMGUI
 		int index = 0;
 #endif
@@ -37,7 +37,9 @@ void PlayerStatusSystem::Update(No::Registry& registry, float deltaTime)
 			auto* sprite = registry.GetComponent<No::SpriteComponent>(spriteEntity);
 
 			if (sprite->name == "LevelGauge")
-				sprite->fill = status->exp / 3.0f;
+			{
+				sprite->fill = static_cast<float>(status->exp) / static_cast<float>(status->requiredExp);
+			}
 #ifdef USE_IMGUI
 			ImGui::Begin("Debug Player Status");
 			ImGui::Text("Score: %d", status->score);

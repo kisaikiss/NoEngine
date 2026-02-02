@@ -123,7 +123,7 @@
     <ClCompile Include="externals\imgui\imgui_tables.cpp" />
     <ClCompile Include="externals\imgui\imgui_widgets.cpp" />
     <ClCompile Include="engine\Editor\ImGuiManager.cpp" />
-    <ClCompile Include="application\TD2_3\System\HpSpriteControlSystem.cpp" />
+    <ClCompile Include="application\TD2_3\System\StatusSpriteControlSystem.cpp" />
     <ClCompile Include="application\TD2_3\SpriteConfigManager\SpriteConfigManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="application\TD2_3\System\Enemy\NormalEnemy\NormalEnemyControlSystem.cpp" />
@@ -293,7 +293,7 @@
     <ClInclude Include="engine\Editor\ImGuiManager.h" />
     <ClInclude Include="application\TD2_3\System\Enemy\NormalEnemy\NormalEnemyControlSystem.h" />
     <ClInclude Include="application\TD2_3\System\Human\PlayerGirlControlSystem.h" />
-    <ClInclude Include="application\TD2_3\System\HpSpriteControlSystem.h" />
+    <ClInclude Include="application\TD2_3\System\StatusSpriteControlSystem.h" />
     <ClInclude Include="application\TD2_3\SpriteConfigManager\SpriteConfigManager.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />

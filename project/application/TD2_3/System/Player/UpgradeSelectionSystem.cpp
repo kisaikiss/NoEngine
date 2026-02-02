@@ -251,13 +251,12 @@ void UpgradeSelectionSystem::Update(No::Registry& registry, float deltaTime)
 				// クリックで決定
 				if (mouseClicked)
 				{
-					// confirm selection
 					ApplyUpgradeChoice(registry, statusEnt, choose->optionNames[i], choose);
-					// hide UI and deactivate
 					HideChooseUI(registry, choose, chooseEntity);
 
 					status->pendingUpgrade = false;
 					status->exp = 0;
+					status->requiredExp += 2;
 					choose->active = false;
 					return;
 				}
@@ -273,6 +272,7 @@ void UpgradeSelectionSystem::Update(No::Registry& registry, float deltaTime)
 
 			status->pendingUpgrade = false;
 			status->exp = 0;
+			status->requiredExp += 2;
 			choose->active = false;
 			return;
 		}
@@ -417,5 +417,6 @@ void UpgradeSelectionSystem::ApplyUpgradeChoice(No::Registry& registry, No::Enti
 			m->psoId = NoEngine::Render::GetPSOID(m->psoName);
 			m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
 		}
+		status->ballCount++;
 	}
 }
