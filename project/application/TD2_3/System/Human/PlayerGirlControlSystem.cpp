@@ -6,11 +6,8 @@ PlayerGirlControlSystem::PlayerGirlControlSystem()
 {
 
     //PLAYER_VOICE
-    No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_iq.mp3", "voice_iq");
-
     No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_aa.mp3", "voice_aa");
     No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_ite.mp3", "voice_ite");
-    No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_kuso_high.mp3", "voice_kuso_high");
     No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_kuso_low.mp3", "voice_kuso_low");
     No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_u.mp3", "voice_u");
     No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_ugu.mp3", "voice_ugu");
@@ -29,7 +26,7 @@ PlayerGirlControlSystem::PlayerGirlControlSystem()
     No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_tamasii.mp3", "voice_tamasii");
     No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_tabemono.mp3", "voice_tabemono");
     No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_kitanai.mp3", "voice_kitanai");
-
+    No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_iq.mp3", "voice_iq");
 
     //strings_.push_back("voice_checkmate");
     blinkTimer_ = 0.0f;
@@ -43,6 +40,7 @@ PlayerGirlControlSystem::PlayerGirlControlSystem()
 
     strings_.clear();
     winVoice_.clear();
+    advices_.clear();
 
     //ここから下はランダムに呼び出す
     strings_.push_back("voice_uwa");
@@ -50,18 +48,24 @@ PlayerGirlControlSystem::PlayerGirlControlSystem()
     strings_.push_back("voice_ite");
     strings_.push_back("voice_u");
     strings_.push_back("voice_ugu");
-    strings_.push_back("voice_kuso_high");
     strings_.push_back("voice_kuso_low");
 
-
     //winVoice_.push_back("voice_checkmate");
+        //winVoice_.push_back("voice_ikke"); 
+
     winVoice_.push_back("voice_iityoushi");
     winVoice_.push_back("voice_iikanzi");
-    //winVoice_.push_back("voice_ikke"); 
     winVoice_.push_back("voice_sugoi");
     winVoice_.push_back("voice_mazide");
 
-    No::SoundPlay("voice_iq", 1.0f, false);
+    advices_.push_back("voice_iq");
+    advices_.push_back("voice_nouryoku");
+    advices_.push_back("voice_itiban");
+    advices_.push_back("voice_seikoudekiru");
+    advices_.push_back("voice_tamasii");
+    advices_.push_back("voice_tabemono");
+    advices_.push_back("voice_kitanai");
+
 }
 
 void PlayerGirlControlSystem::Update(No::Registry& registry, float deltaTime)
@@ -140,8 +144,15 @@ void PlayerGirlControlSystem::Update(No::Registry& registry, float deltaTime)
                 if (animation->currentAnimation == 7) {
                     No::SoundPlay(strings_[0], 1.0f, false);
                 } else {
-                    int randNum = rand() % (strings_.size() - 1) + 1;
-                    No::SoundPlay(strings_[randNum], 1.0f, false);
+                    int randVoice = rand() % 2;
+                    if (randVoice == 0) {
+                        int randNum = rand() % (strings_.size() - 1) + 1;
+                        No::SoundPlay(strings_[randNum], 1.0f, false);
+                    } else {
+                        int randNum = rand() % advices_.size();
+                        No::SoundPlay(advices_[randNum], 2.0f, false);
+                    }
+        
                 }
 
                 material->materials[1].textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Model/playerGirl/face_sad.png");
@@ -158,7 +169,6 @@ void PlayerGirlControlSystem::Update(No::Registry& registry, float deltaTime)
         } else {
             voiceTimer_ = 0.0f;
 
-   
             //アクションタイマーを足す
             idleActionTimer_ += deltaTime;
 
