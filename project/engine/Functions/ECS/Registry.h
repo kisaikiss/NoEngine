@@ -120,6 +120,14 @@ public:
 			return !base_;
 		}
 
+		bool NoEntity() {
+			if (Empty()) {
+				return true;
+			}
+
+			return (base_->Size() == 0);
+		}
+
 	private:
 		Registry& registry_;
 		IComponentPool* base_;

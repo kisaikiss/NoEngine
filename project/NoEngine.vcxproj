@@ -161,6 +161,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="application\TD2_3\Component\DynamicSplinePath.cpp" />
     <ClCompile Include="application\TD2_3\Game.cpp" />
     <ClCompile Include="application\TD2_3\Random\RandomFanc.cpp" />
     <ClCompile Include="application\TD2_3\Render\BackGroundEffect.cpp" />
@@ -174,6 +175,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\TD2_3\System\Enemy\BatEnemy\BatControlSystem.cpp" />
     <ClCompile Include="application\TD2_3\System\Enemy\BatEnemy\BatGenerateSystem.cpp" />
     <ClCompile Include="application\TD2_3\System\Enemy\BatEnemy\BatGreenControlSystem.cpp" />
+    <ClCompile Include="application\TD2_3\System\Enemy\Boss\BossGenerateSystem.cpp" />
     <ClCompile Include="application\TD2_3\System\Enemy\EnemyBulletControlSystem.cpp" />
     <ClCompile Include="application\TD2_3\System\Enemy\EnemyPushBackSystem.cpp" />
     <ClCompile Include="application\TD2_3\System\Enemy\EnemyStateManager.cpp" />
@@ -323,6 +325,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\TD2_3\Component\BallTrailComponent.h" />
     <ClInclude Include="application\TD2_3\Component\BatBossComponent.h" />
     <ClInclude Include="application\TD2_3\Component\ColliderComponent.h" />
+    <ClInclude Include="application\TD2_3\Component\DynamicSplinePath.h" />
     <ClInclude Include="application\TD2_3\Component\EffectComponent.h" />
     <ClInclude Include="application\TD2_3\Component\Enemy\BatComponent.h" />
     <ClInclude Include="application\TD2_3\Component\Enemy\EnemyBulletComponent.h" />
@@ -348,6 +351,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\TD2_3\System\Enemy\BatEnemy\BatControlSystem.h" />
     <ClInclude Include="application\TD2_3\System\Enemy\BatEnemy\BatGenerateSystem.h" />
     <ClInclude Include="application\TD2_3\System\Enemy\BatEnemy\BatGreenControlSystem.h" />
+    <ClInclude Include="application\TD2_3\System\Enemy\Boss\BossGenerateSystem.h" />
     <ClInclude Include="application\TD2_3\System\Enemy\EnemyBulletControlSystem.h" />
     <ClInclude Include="application\TD2_3\System\Enemy\EnemyPushBackSystem.h" />
     <ClInclude Include="application\TD2_3\System\Enemy\EnemyStateManager.h" />

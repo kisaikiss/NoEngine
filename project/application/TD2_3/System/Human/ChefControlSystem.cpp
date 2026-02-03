@@ -143,7 +143,8 @@ void ChefControlSystem::Update(No::Registry& registry, float deltaTime)
         ImGui::DragFloat("animTime", &animation->time, 0.04f);
         ImGui::Text("currentAnim %d", animation->currentAnimation);
         ImGui::End();
-
+#else
+        (void)material;
 #endif // USE_IMGUI
 
     }

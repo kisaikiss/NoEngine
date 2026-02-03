@@ -43,6 +43,9 @@
 #include "../System/Enemy/BatEnemy/BatGreenControlSystem.h"
 #include "../System/Enemy/EnemyBulletControlSystem.h"
 
+// boss
+#include "../System/Enemy/Boss/BossGenerateSystem.h"
+
 #include "../System/Enemy/EnemyPushBackSystem.h"
 
 // effect
@@ -70,6 +73,7 @@ void GameScene::Setup()
     AddSystem(std::make_unique<BatControlSystem>());
     AddSystem(std::make_unique<BatGreenControlSystem>());
     AddSystem(std::make_unique<BatGenerateSystem>());
+    AddSystem(std::make_unique<BossGenerateSystem>());
     AddSystem(std::make_unique<BossControlSystem>());
     AddSystem(std::make_unique<EnemyBulletControlSystem>());
     //こうもり少女のシステム
@@ -104,7 +108,6 @@ void GameScene::Setup()
     InitBat(registry);
     InitRing(registry);
     InitBall(registry);
-    InitBoss(registry);
     InitBatGirl(registry);
     InitPlayerGirl(registry);
     //シェフの初期化
@@ -123,6 +126,7 @@ void GameScene::Setup()
     camera_->SetTransform(cameraTransform_);
     SetCamera(camera_.get());
 
+    ModelLoad();
     SoundLoad();
 }
 
@@ -252,35 +256,6 @@ void GameScene::InitEnemy(No::Registry& registry)
 		m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
 		m->drawOutline = true;
 	}
-}
-
-void GameScene::InitBoss(No::Registry& registry)
-{
-
-    No::Entity bossEntity = registry.GenerateEntity();
-    registry.AddComponent<Boss1Tag>(bossEntity);
-    registry.AddComponent<DeathFlag>(bossEntity);
-    registry.AddComponent<BattBossComponent>(bossEntity);
-    auto* collider = registry.AddComponent<SphereColliderComponent>(bossEntity);
-    collider->colliderType = ColliderMask::kEnemy;
-    collider->collideMask = ColliderMask::kBall;
-
-    auto* transform = registry.AddComponent<No::TransformComponent>(bossEntity);
-    transform->rotation.FromAxisAngle(Vector3::UP, 3.14f);
-
-
-    auto* model = registry.AddComponent<No::MeshComponent>(bossEntity);
-    auto* animationComp = registry.AddComponent<No::AnimatorComponent>(bossEntity);
-    NoEngine::ModelLoader::LoadModel("batBoss", "resources/game/td_2304/Model/batBoss/batBoss.gltf", model, animationComp);
-
-	auto m = registry.AddComponent<No::MaterialComponent>(bossEntity);
-	m->materials = NoEngine::ModelLoader::GetMaterial("batBoss");
-	m->drawOutline = true;
-	m->psoName = L"Renderer : DefaultSkinned PSO";
-	m->enableSkinning = true;
-	m->psoId = NoEngine::Render::GetPSOID(m->psoName);
-	m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
-
 }
 
 void GameScene::InitBackGround(No::Registry& registry)
@@ -610,4 +585,8 @@ void GameScene::SoundLoad()
     No::SoundLoad(L"resources/game/td_2304//Audio/SE/batDie.mp3", "batDie");
     No::SoundStop("titleBGM");
     No::SoundPlay("batBGM", 0.25f, true);
+}
+
+void GameScene::ModelLoad() {
+    NoEngine::ModelLoader::LoadModel("batBoss", "resources/game/td_2304/Model/batBoss/batBoss.gltf");
 }

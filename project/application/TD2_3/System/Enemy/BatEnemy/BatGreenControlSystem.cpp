@@ -13,6 +13,15 @@
 
 void BatGreenControlSystem::Update(No::Registry& registry, float deltaTime) {
 
+	auto playerStatusView = registry.View<PlayerStatusComponent>();
+	PlayerStatusComponent* playerStatus = nullptr;
+	for (auto playerEntity : playerStatusView) {
+		playerStatus = registry.GetComponent<PlayerStatusComponent>(playerEntity);
+		if (playerStatus->pendingUpgrade) {
+			// レベルアップ選択中はうごかさない
+			return;
+		}
+	}
 
 	auto view = registry.View<BatGreenTag>();
 	if (view.Empty()) return;
@@ -68,7 +77,7 @@ void BatGreenControlSystem::LiveUpdate(No::Entity entity, No::Registry& registry
 	Vector3 offset = { 0.f,0.f,-10.f };
 	No::TransformComponent tt = *transform;
 	LookTarget(tt, t->GetWorldPosition() + offset);
-	transform->rotation = Slerp(transform->rotation, tt.rotation, 0.1f);
+	transform->rotation = Slerp(transform->rotation, tt.rotation, 7.f * deltaTime);
 
 	const float kShootTime = 5.f;
 	if (bat->shootTimer > kShootTime) {

@@ -7,6 +7,15 @@
 #include "application/TD2_3/Random/RandomFanc.h"
 
 void BatControlSystem::Update(No::Registry& registry, float deltaTime) {
+	auto playerStatusView = registry.View<PlayerStatusComponent>();
+	PlayerStatusComponent* playerStatus = nullptr;
+	for (auto playerEntity : playerStatusView) {
+		playerStatus = registry.GetComponent<PlayerStatusComponent>(playerEntity);
+		if (playerStatus->pendingUpgrade) {
+			// レベルアップ選択中はうごかさない
+			return;
+		}
+	}
 
 	auto view = registry.View<BatTag>();
 	for (auto entity : view) {

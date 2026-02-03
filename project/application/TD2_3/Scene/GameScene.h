@@ -17,7 +17,6 @@ private:
 	void InitRing(No::Registry& registry);
 	void InitBall(No::Registry& registry);
 	void InitEnemy(No::Registry& registry);
-	void InitBoss(No::Registry& registry);
 	void InitBackGround(No::Registry& registry);
 	void InitBatGirl(No::Registry& registry);
 	void InitPlayerGirl(No::Registry& registry);
@@ -37,5 +36,6 @@ private:
 	NoEngine::Vector3 GenerateRandomPointInCircle(float minRadius, float maxRadius);
 
 	void SoundLoad();
+	void ModelLoad();
 };
 
