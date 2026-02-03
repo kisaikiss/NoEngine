@@ -105,7 +105,7 @@ void GameScene::Setup()
     InitRing(registry);
     InitBall(registry);
     InitBoss(registry);
- /*   InitBatGirl(registry);*/
+    InitBatGirl(registry);
     InitPlayerGirl(registry);
     //シェフの初期化
  /*   InitChef(registry);*/
