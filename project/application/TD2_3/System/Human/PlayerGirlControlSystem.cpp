@@ -138,7 +138,8 @@ void PlayerGirlControlSystem::Update(No::Registry& registry, float deltaTime)
 
         } else if (isOut) {
 
-            if (!isBallOut_) {
+   
+            if (!isBallOut_&&!isSoundWin_) {
 
                 animation->currentAnimation = rand() % 2 + 7;
                 if (animation->currentAnimation == 7) {

@@ -21,12 +21,15 @@ private:
 	void InitBackGround(No::Registry& registry);
 	void InitBatGirl(No::Registry& registry);
 	void InitPlayerGirl(No::Registry& registry);
+	void InitChef(No::Registry& registry);
 	void InitPlayerStatus(No::Registry& registry);
 	void InitLights(No::Registry& registry);
 	void InitHpGaugeSprite(No::Registry& registry);
 	void InitLevelGaugeSprite(No::Registry& registry);
 	void InitScore(No::Registry& registry);
 	void InitBat(No::Registry& registry);
+	void InitPhase(No::Registry& registry);
+
 
 	void InitChooseSprite(No::Registry& registry);
 	No::Entity CreateSprite(No::Registry& registry, const std::string& fileName, const std::string& configName);

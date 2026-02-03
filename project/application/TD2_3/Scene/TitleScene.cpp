@@ -41,6 +41,10 @@ void TitleScene::Setup()
 	camera_->SetTransform(cameraTransform_);
 	SetCamera(camera_.get());
 
+	//BGMの読み込み
+	No::SoundLoad(L"resources/game/td_2304//Audio/BGM/titleBGM.mp3", "titleBGM");
+	No::SoundPlay("titleBGM", 0.125f, true);
+	No::SoundLoad(L"resources/game/td_2304//Audio/SE/select.mp3", "select");
 }
 
 void TitleScene::NotSystemUpdate()
@@ -49,7 +53,10 @@ void TitleScene::NotSystemUpdate()
 }
 
 void TitleScene::InitTitle(No::Registry& registry)
-{
+{	//BGMの再生
+	//No::SoundStop("");
+
+
 	// タイトル文字
 	{
 		auto titleFont = registry.GenerateEntity();

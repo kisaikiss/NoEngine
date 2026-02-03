@@ -141,6 +141,7 @@
     <ClCompile Include="application\TD2_3\System\Enemy\BatEnemy\BatGreenControlSystem.cpp" />
     <ClCompile Include="application\TD2_3\System\Enemy\EnemyPushBackSystem.cpp" />
     <ClCompile Include="application\TD2_3\System\Enemy\EnemyBulletControlSystem.cpp" />
+    <ClCompile Include="application\TD2_3\System\Human\ChefControlSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="application\TD2_3\Component\BackGroundComponent.h" />
@@ -320,6 +321,7 @@
     <ClInclude Include="application\TD2_3\System\Enemy\EnemyBulletControlSystem.h" />
     <ClInclude Include="application\TD2_3\Component\Enemy\EnemyBulletComponent.h" />
     <ClInclude Include="application\TD2_3\Component\PhaseComponent.h" />
+    <ClInclude Include="application\TD2_3\System\Human\ChefControlSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

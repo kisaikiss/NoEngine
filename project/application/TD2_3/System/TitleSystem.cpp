@@ -10,6 +10,8 @@ void TitleSystem::Update(No::Registry& registry, float deltaTime)
 	time_ += deltaTime;
 	if (NoEngine::Input::Keyboard::IsTrigger(VK_RETURN))
 	{
+		//一旦ここでSE再生 ヨシダ
+		No::SoundEffectPlay("select", 0.5f);
 		registry.EmitEvent(No::SceneChangeEvent("GameScene"));
 	}
 	for (auto entity : registry.View<No::SpriteComponent, No::Transform2DComponent>())

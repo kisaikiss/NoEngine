@@ -1,5 +1,6 @@
 #include "BatGirlControlSystem.h"
 #include "../../Component/BallStateComponent.h"
+#include "../../Component/PhaseComponent.h"
 #include "../../tag.h"
 
 BatGirlControlSystem::BatGirlControlSystem()
@@ -17,6 +18,14 @@ BatGirlControlSystem::BatGirlControlSystem()
 
 void BatGirlControlSystem::Update(No::Registry& registry, float deltaTime)
 {
+
+    auto phaseView = registry.View<PhaseComponent>();
+    for (auto entity : phaseView) {
+        auto* phase = registry.GetComponent<PhaseComponent>(entity);
+        if (phase->phase != Phase::ONE)
+            return;
+    }
+
     auto view = registry.View<
         No::TransformComponent,
         No::MaterialComponent,
@@ -70,8 +79,12 @@ void BatGirlControlSystem::Update(No::Registry& registry, float deltaTime)
             }
   
         } else if(isEnemyDead){
-            //エネミーが死んだとき
-            animation->currentAnimation = 5;
+
+            if (!isLaughStart_) {
+                //エネミーが死んだとき
+                animation->currentAnimation = 5;
+            }
+        
 
         } else {
 

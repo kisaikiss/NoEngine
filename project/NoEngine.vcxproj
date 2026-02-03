@@ -185,6 +185,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\TD2_3\System\Player\UpgradeSelectionSystem.cpp" />
     <ClCompile Include="application\TD2_3\System\TitleSystem.cpp" />
     <ClCompile Include="application\TD2_3\System\Sprite\ScoreSpriteControlSystem.cpp" />
+    <ClCompile Include="application\TD2_3\System\Human\ChefControlSystem.cpp" />
     <ClCompile Include="engine\Assets\Audio\Audio.cpp" />
     <ClCompile Include="engine\Functions\Renderer\Primitive.cpp" />
     <ClCompile Include="application\TD2_3\Scene\GameScene.cpp" />
@@ -359,6 +360,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\TD2_3\System\Player\UpgradeSelectionSystem.h" />
     <ClInclude Include="application\TD2_3\System\TitleSystem.h" />
     <ClInclude Include="application\TD2_3\System\Sprite\ScoreSpriteControlSystem.h" />
+    <ClInclude Include="application\TD2_3\System\Human\ChefControlSystem.h" />
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
     <ClInclude Include="engine\Functions\ECS\Component\LightComponent.h" />
     <ClInclude Include="engine\Functions\ECS\EventBus.h" />
