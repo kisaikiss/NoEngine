@@ -38,6 +38,7 @@
 // bat
 #include "../Component/Enemy/BatComponent.h"
 #include "../System/Enemy/BatEnemy/BatGenerateSystem.h"
+#include "../System/Enemy/BatEnemy/BatGreenControlSystem.h"
 
 // effect
 #include "../System/Effect/SmokeEffectControlSystem.h"
@@ -62,6 +63,7 @@ void GameScene::Setup()
     AddSystem(std::make_unique<BallControlSystem>());
     //Enemy
     AddSystem(std::make_unique<BatControlSystem>());
+    AddSystem(std::make_unique<BatGreenControlSystem>());
     AddSystem(std::make_unique<BatGenerateSystem>());
     AddSystem(std::make_unique<BossControlSystem>());
     //こうもり少女のシステム

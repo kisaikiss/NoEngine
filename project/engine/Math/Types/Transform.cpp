@@ -10,5 +10,9 @@ Matrix4x4 Transform::MakeAffineMatrix4x4() {
     }
     return result;
 }
+
+Vector3 Transform::GetWorldPosition() {
+    return MakeAffineMatrix4x4().GetTranslate();
+}
 }
 

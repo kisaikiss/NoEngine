@@ -7,6 +7,7 @@ public:
 	void Update(No::Registry& registry, float deltaTime) override;
 private:
 	float timer_ = 0.f;
+	bool isGreen_ = false;
 
 	EnemyResources resource_;
 
