@@ -3,14 +3,11 @@
 #include "../../Component/VausStateComponent.h"
 #include "../../Component/PhysicsComponent.h"
 #include "../../Component/BallStateComponent.h"
-#include "../../Component/NormalEnemyComponent.h"
-#include "../../Component/TrackEnemyComponent.h"
-#include "../../Component/BackGroundComponent.h"
 #include "../../Component/BallTrailComponent.h"
 #include "../../Component/PlayerstatusComponent.h"
 
 #include "../../tag.h"
-#include "engine/Functions/Renderer/Primitive.h"
+#include "engine/Math/Easing.h"
 #include "engine/Math/Types/Calculations/Vector3Calculations.h"
 #include "engine/Assets/ModelLoader.h"
 #include "externals/imgui/imgui.h"
@@ -273,8 +270,8 @@ void BallControlSystem::Update(No::Registry& registry, float deltaTime)
 		}
 
 		// 移動更新
-		ballTransform->translate.x += ballPhysics->velocity.x * deltaTime;
-		ballTransform->translate.y += ballPhysics->velocity.y * deltaTime;
+		ballTransform->translate.x += ballPhysics->velocity.x * deltaTime * ballState->ballSlowFactor;
+		ballTransform->translate.y += ballPhysics->velocity.y * deltaTime * ballState->ballSlowFactor;
 		if (trail)
 		{
 			if (deltaTime > 0.0f)
@@ -387,5 +384,13 @@ void BallControlSystem::Update(No::Registry& registry, float deltaTime)
 				vausMesh->isVisible = false;
 			}
 		}
+	}
+
+	if (BallStateComponent::ballSlowtime < BallStateComponent::kSlowDuration)
+	{
+		BallStateComponent::ballSlowtime += deltaTime;
+		float t = BallStateComponent::ballSlowtime / BallStateComponent::kSlowDuration;
+		BallStateComponent::ballSlowFactor = Easing::EaseInExpo(
+			BallStateComponent::kSlowRcp, 1.0f, t);
 	}
 }
