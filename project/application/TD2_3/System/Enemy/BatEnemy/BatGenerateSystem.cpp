@@ -41,7 +41,7 @@ void BatGenerateSystem::Update(No::Registry& registry, float deltaTime) {
         auto* model = registry.AddComponent<No::MeshComponent>(entity);
         auto* animationComp = registry.AddComponent<No::AnimatorComponent>(entity);
         auto m = registry.AddComponent<No::MaterialComponent>(entity);
-
+        registry.AddComponent<EnemyTag>(entity);
         if (isGreen_) {
             registry.AddComponent<BatGreenTag>(entity);
             NoEngine::ModelLoader::LoadModel(resource_.greenName, resource_.greenModelPath, model, animationComp);

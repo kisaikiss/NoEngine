@@ -40,6 +40,8 @@
 #include "../System/Enemy/BatEnemy/BatGenerateSystem.h"
 #include "../System/Enemy/BatEnemy/BatGreenControlSystem.h"
 
+#include "../System/Enemy/EnemyPushBackSystem.h"
+
 // effect
 #include "../System/Effect/SmokeEffectControlSystem.h"
 
@@ -77,6 +79,8 @@ void GameScene::Setup()
     AddSystem(std::make_unique<StatusSpriteControlSystem>());
     //衝突判定用システム
     AddSystem(std::make_unique<CollisionSystem>());
+    AddSystem(std::make_unique<EnemyPushBackSystem>());
+
     // スコア描画のためのコントロールシステム
     AddSystem(std::make_unique<ScoreSpriteControlSystem>());
     // 煙エフェクト
@@ -392,6 +396,7 @@ void GameScene::InitScore(No::Registry& registry) {
 void GameScene::InitBat(No::Registry& registry) {
     for (int i = 0; i < 5; ++i) {
         No::Entity entity = registry.GenerateEntity();
+        registry.AddComponent<EnemyTag>(entity);
         registry.AddComponent<BatTag>(entity);
         registry.AddComponent<DeathFlag>(entity);
 
