@@ -419,4 +419,6 @@ void UpgradeSelectionSystem::ApplyUpgradeChoice(No::Registry& registry, No::Enti
 		}
 		status->ballCount++;
 	}
+	BallStateComponent::ballSlowFactor = BallStateComponent::kSlowRcp;
+	BallStateComponent::ballSlowtime = 0.0f;
 }

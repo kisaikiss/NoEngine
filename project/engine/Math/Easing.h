@@ -83,6 +83,14 @@ inline T EaseInOutSine(const T& a, const T& b, float t)
 	return Lerp(a, b, t);
 }
 
+template<typename T>
+inline T EaseInExpo(const T& a, const T& b, float t)
+{
+	t = t == 0 ? 0 : powf(2.0f, 10 * t - 10);
+	return Lerp(a, b, t);
+}
+
+
 }
 }
 
