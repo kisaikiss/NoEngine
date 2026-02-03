@@ -125,6 +125,10 @@ void GameScene::NotSystemUpdate()
     camera_->SetTransform(cameraTransform_);
 #endif // USE_IMGUI
 
+    if (Input::Keyboard::IsTrigger(VK_F1) || Input::Pad::IsTrigger(Input::GamepadButton::Start))
+    {
+        GetRegistry()->EmitEvent(Event::SceneChangeEvent("TitleScene"));
+    }
     camera_->Update();
     DestroyGameObject();
 }
@@ -346,21 +350,33 @@ void GameScene::InitLights(No::Registry& registry)
 
 void GameScene::InitHpGaugeSprite(No::Registry& registry)
 {
-    CreateSprite(registry, "hp.png", "PlayerHpGauge");
+    auto hpBar = CreateSprite(registry, "hpBar.png", "PlayerHpBar");
+    auto hpGauge = CreateSprite(registry, "hpGaugeColor.png", "HpGauge");
+    auto* hpBarTransform = registry.GetComponent<No::Transform2DComponent>(hpBar);
+
+    auto* hpGaugeTransform = registry.GetComponent<No::Transform2DComponent>(hpGauge);
+    hpGaugeTransform->translate = hpBarTransform->translate;
+    hpGaugeTransform->scale = hpBarTransform->scale;
+
+    auto* hpGaugeSprite = registry.GetComponent<No::SpriteComponent>(hpGauge);
+    hpGaugeSprite->useMask = 1;
+    hpGaugeSprite->maskTextureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Sprite/hpGageMask.png");
+
 }
 
 void GameScene::InitLevelGaugeSprite(No::Registry& registry)
 {
-    auto sp1 = CreateSprite(registry, "lv.png", "Level");
-    auto sp2 = CreateSprite(registry, "lv_gauge.png", "LevelGauge");
-	auto* sprite1Transform = registry.GetComponent<No::Transform2DComponent>(sp1);
+    auto lvSp = CreateSprite(registry, "lv.png", "Level");
+    auto lvGauge = CreateSprite(registry, "lv_gauge.png", "LevelGauge");
+	auto* lvTransform = registry.GetComponent<No::Transform2DComponent>(lvSp);
 
-	auto* sprite2Transform = registry.GetComponent<No::Transform2DComponent>(sp2);
-    sprite2Transform->translate = sprite1Transform->translate;
-	sprite2Transform->scale = sprite1Transform->scale;
-	auto* sprite2 = registry.GetComponent<No::SpriteComponent>(sp2);
-	sprite2->useMask = 1;
-	sprite2->maskTextureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Sprite/lv_gauge_mask.png");
+	auto* lvGaugeTransform = registry.GetComponent<No::Transform2DComponent>(lvGauge);
+    lvGaugeTransform->translate = lvTransform->translate;
+	lvGaugeTransform->scale = lvTransform->scale;
+
+	auto* lvGaugeSprite = registry.GetComponent<No::SpriteComponent>(lvGauge);
+	lvGaugeSprite->useMask = 1;
+	lvGaugeSprite->maskTextureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Sprite/lv_gauge_mask.png");
 
     auto nums = registry.GenerateEntity();
     auto* sprite = registry.AddComponent<No::SpriteComponent>(nums);

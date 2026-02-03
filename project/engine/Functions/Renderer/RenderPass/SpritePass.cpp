@@ -150,7 +150,13 @@ void SpritePass::Render(GraphicsContext& gfx) {
 		MaskConstants.useMask = (items_[start].sprite->useMask != 0 && items_[start].sprite->maskTextureHandle.IsValid()) ? 1 : 0;
 
 		gfx.SetDynamicConstantBufferView(rootIndex["gMaskParams"], sizeof(MaskConstants), &MaskConstants);
-		gfx.SetDynamicConstantBufferView(rootIndex["gMaterial"], sizeof(Color), &items_[start].sprite->color);
+		
+		_declspec(align(16)) struct
+		{
+			Color color;
+		} MaterialConstants;
+		MaterialConstants.color = items_[start].sprite->color;
+		gfx.SetDynamicConstantBufferView(rootIndex["gMaterial"], sizeof(MaterialConstants), &MaterialConstants);
 
 		TextureRef tex = items_[start].sprite->textureHandle;
 		if (items_[start].sprite->maskTextureHandle.IsValid())

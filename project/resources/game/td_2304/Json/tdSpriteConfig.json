@@ -1,6 +1,6 @@
 {
 
-    "PlayerHpGauge": {
+    "PlayerHpBar": {
         "translate": [ 256.0, 64.0 ],
         "rotate": 0.0,
         "scale": [ 448.0, 88.0 ],

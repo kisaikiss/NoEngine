@@ -10,6 +10,7 @@
 void PlayerStatusSystem::Update(No::Registry& registry, float deltaTime)
 {
 	(void)deltaTime;
+	
 	auto playerStatusView = registry.View<PlayerStatusComponent>();
 	auto spriteView = registry.View<No::SpriteComponent, No::Transform2DComponent>();
 
@@ -25,9 +26,11 @@ void PlayerStatusSystem::Update(No::Registry& registry, float deltaTime)
 			status->pendingUpgrade = true;
 		}
 
-		if (status->hp <= 0)
+		if (status->hp <= 0 && !isDead_)
 		{
-			registry.EmitEvent(No::SceneChangeEvent("GameOverScene"));
+			isDead_ = true;
+			registry.EmitEvent(NoEngine::Event::SceneChangeEvent("GameOverScene"));
+			return;
 		}
 #ifdef USE_IMGUI
 		int index = 0;
@@ -36,9 +39,14 @@ void PlayerStatusSystem::Update(No::Registry& registry, float deltaTime)
 		{
 			auto* sprite = registry.GetComponent<No::SpriteComponent>(spriteEntity);
 
+
 			if (sprite->name == "LevelGauge")
 			{
 				sprite->fill = static_cast<float>(status->exp) / static_cast<float>(status->requiredExp);
+			}
+			else if (sprite->name == "HpGauge")
+			{
+				sprite->fill = static_cast<float>(status->hp) / static_cast<float>(status->hpMax);
 			}
 #ifdef USE_IMGUI
 			ImGui::Begin("Debug Player Status");
@@ -64,6 +72,7 @@ void PlayerStatusSystem::Update(No::Registry& registry, float deltaTime)
 				}
 				if (ImGui::TreeNodeEx("Sprite", ImGuiTreeNodeFlags_DefaultOpen))
 				{
+					ImGui::ColorEdit4("Color##A", &sprite->color.r);
 					ImGui::DragFloat2("Pivot##A", &sprite->pivot.x);
 					ImGui::Checkbox("FlipX##A", &sprite->flipX);
 					ImGui::Checkbox("FlipY##A", &sprite->flipY);
@@ -80,5 +89,4 @@ void PlayerStatusSystem::Update(No::Registry& registry, float deltaTime)
 #endif // USE_IMGUI
 		}
 	}
-
 }

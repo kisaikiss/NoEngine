@@ -137,6 +137,7 @@
     <ClCompile Include="application\TD2_3\Random\RandomFanc.cpp" />
     <ClCompile Include="application\TD2_3\System\Effect\SmokeEffectControlSystem.cpp" />
     <ClCompile Include="application\TD2_3\System\Enemy\BatEnemy\BatGenerateSystem.cpp" />
+    <ClCompile Include="application\TD2_3\System\GameOverSystem.cpp" />
     <ClCompile Include="application\TD2_3\System\Enemy\BatEnemy\BatGreenControlSystem.cpp" />
     <ClCompile Include="application\TD2_3\System\Enemy\EnemyPushBackSystem.cpp" />
   </ItemGroup>
@@ -312,6 +313,7 @@
     <ClInclude Include="application\TD2_3\Random\RandomFanc.h" />
     <ClInclude Include="application\TD2_3\System\Effect\SmokeEffectControlSystem.h" />
     <ClInclude Include="application\TD2_3\System\Enemy\BatEnemy\BatGenerateSystem.h" />
+    <ClInclude Include="application\TD2_3\System\GameOverSystem.h" />
     <ClInclude Include="application\TD2_3\System\Enemy\BatEnemy\BatGreenControlSystem.h" />
     <ClInclude Include="application\TD2_3\System\Enemy\EnemyPushBackSystem.h" />
   </ItemGroup>
