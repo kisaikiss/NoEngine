@@ -10,6 +10,7 @@
 #include "../Component/BallTrailComponent.h"
 #include "../Component/PlayerstatusComponent.h"
 #include "../Component/UpgradeChooseComponent.h"
+#include "../Component/PhaseComponent.h"
 //collision
 #include "../System/CollisionSystem.h"
 //player
@@ -27,6 +28,7 @@
 #include "../System/Enemy/BatEnemy/BatControlSystem.h"
 //Human
 #include "../System/Human/BatGirlControlSystem.h"
+#include "../System/Human/ChefControlSystem.h"
 #include "../System/Human/PlayerGirlControlSystem.h"
 
 #include"../System/StatusSpriteControlSystem.h"
@@ -72,6 +74,8 @@ void GameScene::Setup()
     AddSystem(std::make_unique<EnemyBulletControlSystem>());
     //こうもり少女のシステム
     AddSystem(std::make_unique<BatGirlControlSystem>());
+    //シェフシステム
+    AddSystem(std::make_unique<ChefControlSystem>());
     //プレイヤー少女システム
     AddSystem(std::make_unique<PlayerGirlControlSystem>());
     //playerステータス管理システム
@@ -95,12 +99,16 @@ void GameScene::Setup()
     InitBackGround(registry);
     InitVaus(registry);
     //InitEnemy(registry);
+    //phaseの初期化
+    InitPhase(registry);
     InitBat(registry);
     InitRing(registry);
     InitBall(registry);
     InitBoss(registry);
-    InitBatGirl(registry);
+ /*   InitBatGirl(registry);*/
     InitPlayerGirl(registry);
+    //シェフの初期化
+ /*   InitChef(registry);*/
     InitPlayerStatus(registry);
     InitLights(registry);
     InitHpGaugeSprite(registry);
@@ -331,6 +339,30 @@ void GameScene::InitPlayerGirl(No::Registry& registry)
 	m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
 }
 
+void GameScene::InitChef(No::Registry& registry)
+{
+    No::Entity chefEntity = registry.GenerateEntity();
+    registry.AddComponent<ChefTag>(chefEntity);
+
+    auto* transform = registry.AddComponent<No::TransformComponent>(chefEntity);
+    auto* model = registry.AddComponent<No::MeshComponent>(chefEntity);
+    auto* animationComp = registry.AddComponent<No::AnimatorComponent>(chefEntity);
+    NoEngine::ModelLoader::LoadModel("chef", "resources/game/td_2304/Model/man/man.gltf", model, animationComp);
+
+    transform->translate = { 6.1f,-14.55f,-8.5f };
+    transform->rotation.FromAxisAngle(NoEngine::Vector3::UP, 3.14f);
+
+    auto m = registry.AddComponent<No::MaterialComponent>(chefEntity);
+    m->materials = NoEngine::ModelLoader::GetMaterial("chef");
+
+    m->psoName = L"Renderer : ToonSkinned PSO";
+    m->enableSkinning = true;
+    m->drawOutline = true;
+    m->psoId = NoEngine::Render::GetPSOID(m->psoName);
+    m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
+
+}
+
 void GameScene::InitPlayerStatus(No::Registry& registry)
 {
     No::Entity playerStatusEntity = registry.GenerateEntity();
@@ -443,6 +475,13 @@ void GameScene::InitBat(No::Registry& registry) {
         m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
         m->drawOutline = true;
     }
+}
+
+void GameScene::InitPhase(No::Registry& registry)
+{
+    No::Entity entity = registry.GenerateEntity();
+    auto* phase = registry.AddComponent<PhaseComponent>(entity);
+    phase->phase = Phase::ONE;
 }
 
 void GameScene::InitChooseSprite(No::Registry& registry)
@@ -561,7 +600,7 @@ void GameScene::SoundLoad()
 {
     No::SoundLoad(L"resources/game/td_2304//Audio/BGM/batBGM.mp3", "batBGM");
     No::SoundLoad(L"resources/game/td_2304//Audio/BGM/secondBGM.mp3", "secondBGM");
-    No::SoundLoad(L"resources/game/td_2304//Audio/BGM/titleBGM.mp3", "titleBGM");
+   
 
     No::SoundLoad(L"resources/game/td_2304//Audio/SE/ballPong.mp3", "ballPong");
     No::SoundLoad(L"resources/game/td_2304//Audio/SE/ballPong2.mp3", "ballPong2");
@@ -569,7 +608,6 @@ void GameScene::SoundLoad()
     No::SoundLoad(L"resources/game/td_2304//Audio/SE/chargeEnter.mp3", "chargeEnter");
 
     No::SoundLoad(L"resources/game/td_2304//Audio/SE/batDie.mp3", "batDie");
-
-
-    No::SoundPlay("titleBGM", 0.125f, true);
+    No::SoundStop("titleBGM");
+    No::SoundPlay("batBGM", 0.25f, true);
 }

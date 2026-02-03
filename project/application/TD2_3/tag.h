@@ -14,6 +14,7 @@ struct BatGreenTag{};
 
 //Human
 struct BatGirlTag{};
+struct ChefTag {};
 struct PlayerGirlTag {};
 
 struct DeathFlag
