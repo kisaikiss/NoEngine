@@ -9,9 +9,10 @@
 #include "../EnemyCommonMove.h"
 #include "engine/Math/Types/Calculations/Vector3Calculations.h"
 #include "engine/Math/Types/Calculations/QuaternionCalculations.h"
+#include "engine/Math/Easing.h"
 
 void BatGreenControlSystem::Update(No::Registry& registry, float deltaTime) {
-	
+
 
 	auto view = registry.View<BatGreenTag>();
 	if (view.Empty()) return;
@@ -44,7 +45,7 @@ void BatGreenControlSystem::LiveUpdate(No::Entity entity, No::Registry& registry
 	using namespace NoEngine;
 	using namespace MathCalculations;
 	bat->t += deltaTime;
-	bat->shootTimer += deltaTime;
+	
 	transform->translate.y = bat->defaultTranslate.y + std::sinf(bat->t) / 2.f;
 	CheckCollideEntity(registry, entity);
 
@@ -71,8 +72,37 @@ void BatGreenControlSystem::LiveUpdate(No::Entity entity, No::Registry& registry
 
 	const float kShootTime = 5.f;
 	if (bat->shootTimer > kShootTime) {
-		bat->shootTimer = 0.f;
-		Shoot(registry, transform, t->GetWorldPosition());
+		if (bat->shootState == BatShootState::NONE) {
+			bat->shootState = BatShootState::STANBY;
+			bat->shootTimer = 0.f;
+		}
+		
+	}
+
+	if (bat->shootState != BatShootState::NONE) {
+		BatShootState state = bat->shootState;
+		bat->shootTimer += 3.f * deltaTime;
+		switch (state) {
+		case BatShootState::STANBY:
+			transform->scale = No::Lerp(transform->scale, NoEngine::Vector3(1.25f, 1.25f, 1.25f), bat->shootTimer);
+			if (bat->shootTimer > 1.f) {
+				bat->shootState = BatShootState::SHOOT;
+				bat->shootTimer = 0.f;
+				Shoot(registry, transform, t->GetWorldPosition());
+			}
+			break;
+		case BatShootState::SHOOT:
+			transform->scale = No::Lerp(transform->scale, NoEngine::Vector3(1.f, 1.f, 1.f), bat->shootTimer);
+			if (bat->shootTimer > 1.f) {
+				bat->shootState = BatShootState::NONE;
+				bat->shootTimer = 0.f;
+				transform->scale = 1.f;
+				
+			}
+			break;
+		}
+	} else {
+		bat->shootTimer += deltaTime;
 	}
 
 }
@@ -83,7 +113,7 @@ void BatGreenControlSystem::Shoot(No::Registry& registry, No::TransformComponent
 	auto* ultrasound = registry.AddComponent<EnemyBulletComponent>(entity);
 	registry.AddComponent<DeathFlag>(entity);
 
-	const float kUltrasoundSpeed = 2.f;
+	const float kUltrasoundSpeed = 3.5f;
 	ultrasound->velocity = target - enemyTransform->translate;
 	ultrasound->velocity = ultrasound->velocity.Normalize() * kUltrasoundSpeed;
 
@@ -108,4 +138,10 @@ void BatGreenControlSystem::Shoot(No::Registry& registry, No::TransformComponent
 	m->psoId = NoEngine::Render::GetPSOID(m->psoName);
 	m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
 	m->color = Color::RED;
+
+	const uint32_t kSmokeNum = 5;
+	for (uint32_t i = 0; i < kSmokeNum; i++) {
+		GenerateSmokeEffect(registry, transform->translate);
+	}
+
 }
