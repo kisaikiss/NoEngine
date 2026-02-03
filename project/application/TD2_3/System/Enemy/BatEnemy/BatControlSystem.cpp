@@ -34,11 +34,7 @@ void BatControlSystem::GenerateUpdate(No::Entity entity, No::Registry& registry,
 	auto* bat = registry.GetComponent<BatComponent>(entity);
 	auto* transform = registry.GetComponent<No::TransformComponent>(entity);
 
-	auto* collider = registry.GetComponent<SphereColliderComponent>(entity);
-	if (collider->isCollied) {
-		bat->t = 0.f;
-		bat->state = BatState::DEAD;
-	}
+	CheckCollideEntity(registry, entity);
 
 	bat->t += 3.f * deltaTime;
 	if (bat->t > 1.f) bat->t = 1.f;
@@ -68,13 +64,7 @@ void BatControlSystem::LiveUpdate(No::Entity entity, No::Registry& registry, flo
 	bat->t += deltaTime;
 	auto* transform = registry.GetComponent<No::TransformComponent>(entity);
 	transform->translate.y = bat->defaultTranslate.y + std::sinf(bat->t);
-
-	auto* collider = registry.GetComponent<SphereColliderComponent>(entity);
-	if (collider->isCollied) {
-		bat->t = 0.f;
-		bat->state = BatState::DEAD;
-	}
-
+	CheckCollideEntity(registry, entity);
 }
 
 void BatControlSystem::DeadUpdate(No::Entity entity, No::Registry& registry, float deltaTime) {
@@ -85,8 +75,7 @@ void BatControlSystem::DeadUpdate(No::Entity entity, No::Registry& registry, flo
 	transform->scale = NoEngine::Easing::EaseInOutBack<NoEngine::Vector3>(NoEngine::Vector3(1.f, 1.f, 1.f), NoEngine::Vector3(0.f, 0.f, 0.f), bat->t);
 	transform->rotation.FromAxisAngle(NoEngine::Vector3::UP, (3.14f + bat->t * 25.f));
 	if (transform->scale.x <= 0) {
-		auto view = registry.View<
-			PlayerStatusComponent>();
+		auto view = registry.View<PlayerStatusComponent>();
 		for (auto playerEntity : view) {
 			auto* status = registry.GetComponent<PlayerStatusComponent>(playerEntity);
 			status->score += 100;
@@ -116,4 +105,14 @@ void BatControlSystem::GenerateSmokeEffect(No::Registry& registry, NoEngine::Vec
 	auto* smokeComp = registry.AddComponent<SmokeEffectComponent>(smoke);
 	smokeComp->velocity = RNG::GetRandomVector3(-2.f, 2.f);
 
+}
+
+void BatControlSystem::CheckCollideEntity(No::Registry& registry, No::Entity enemyEntity) {
+	auto* bat = registry.GetComponent<BatComponent>(enemyEntity);
+	auto* collider = registry.GetComponent<SphereColliderComponent>(enemyEntity);
+
+	if (collider->isCollied) {
+		bat->t = 0.f;
+		bat->state = BatState::DEAD;
+	}
 }

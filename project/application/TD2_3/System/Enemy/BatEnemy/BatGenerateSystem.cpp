@@ -16,11 +16,18 @@ void BatGenerateSystem::Update(No::Registry& registry, float deltaTime) {
 		timer_ = 0.f;
         sGenerateTime = RNG::GetRandomVal(1.f, 4.f);
 
+        if (RNG::GetRandomValNormalized() > 0.1f) {
+            isGreen_ = true;
+        } else {
+            isGreen_ = false;
+        }
+
+      
         No::Entity entity = registry.GenerateEntity();
-        registry.AddComponent<BatTag>(entity);
+        
         registry.AddComponent<DeathFlag>(entity);
 
-        auto* enemy = registry.AddComponent<BatComponent>(entity);
+       
 
         auto* collider = registry.AddComponent<SphereColliderComponent>(entity);
         collider->colliderType = ColliderMask::kEnemy;
@@ -31,15 +38,28 @@ void BatGenerateSystem::Update(No::Registry& registry, float deltaTime) {
         transform->translate = GenerateRandomPointInCircle(2.0f, 3.0f);
         transform->scale = 0.f;
 
-        enemy->defaultTranslate = transform->translate;
-
         auto* model = registry.AddComponent<No::MeshComponent>(entity);
         auto* animationComp = registry.AddComponent<No::AnimatorComponent>(entity);
-        NoEngine::ModelLoader::LoadModel(resource_.modelName, resource_.modelPath, model, animationComp);
-
         auto m = registry.AddComponent<No::MaterialComponent>(entity);
-        m->materials = NoEngine::ModelLoader::GetMaterial("bat");
-        // m->materials[0].textureHandle = NoEngine::TextureManager::LoadCovertTexture(enemyResources_.texturePath);
+        registry.AddComponent<EnemyTag>(entity);
+        if (isGreen_) {
+            registry.AddComponent<BatGreenTag>(entity);
+            NoEngine::ModelLoader::LoadModel(resource_.greenName, resource_.greenModelPath, model, animationComp);
+            m->materials = NoEngine::ModelLoader::GetMaterial(resource_.greenName);
+
+        } else {
+            registry.AddComponent<BatTag>(entity);
+            NoEngine::ModelLoader::LoadModel(resource_.modelName, resource_.modelPath, model, animationComp);
+            m->materials = NoEngine::ModelLoader::GetMaterial(resource_.modelName);
+        }
+
+        
+       
+        
+        auto* enemy = registry.AddComponent<BatComponent>(entity);
+        enemy->defaultTranslate = transform->translate;
+       
+    
         m->psoName = L"Renderer : Default PSO";
         m->psoId = NoEngine::Render::GetPSOID(m->psoName);
         m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);

@@ -24,6 +24,8 @@ public:
 	}
 
 	Matrix4x4 MakeAffineMatrix4x4();
+
+	Vector3 GetWorldPosition();
 };
 
 
