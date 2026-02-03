@@ -1,10 +1,11 @@
 #pragma once
 #include "engine/NoEngine.h"
 
-class PlayerStatusSystem : public No::ISystem
+class GameOverSystem : public No::ISystem
 {
 public:
 	void Update(No::Registry& registry, float deltaTime) override;
 private:
-	bool isDead_ = false;
+
+	float time_ = 0.f;
 };

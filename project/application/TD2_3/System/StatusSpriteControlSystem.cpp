@@ -95,17 +95,26 @@ void StatusSpriteControlSystem::Update(No::Registry& registry, float deltaTime)
         const int idxFromRight = static_cast<int>(levelFontEntities.size() - 1 - i);
         if (idxFromRight == 0)
         {
-            // ones
             int digit = level % 10;
-            sp->uv.x = kDigitUvWidth * static_cast<float>(digit);
-            t->translate = kBaseLevelFontPosition;
+            // ones
+            if (levelFontEntities.size() <= 1)
+            {
+                sp->uv.x = kDigitUvWidth * static_cast<float>(digit);
+                t->translate = kBaseLevelFontPosition;
+            }
+            else
+            {
+                sp->uv.x = kDigitUvWidth * static_cast<float>(digit);
+                NoEngine::Vector2 offset = { kLevelFontScale.x, 0.f };
+                t->translate = kBaseLevelFontPosition + offset;
+            }
         }
         else if (idxFromRight == 1)
         {
             int digit = (level / 10) % 10;
             sp->uv.x = kDigitUvWidth * static_cast<float>(digit);
             NoEngine::Vector2 offset = { kLevelFontScale.x, 0.f };
-            t->translate = kBaseLevelFontPosition - offset;
+            t->translate = kBaseLevelFontPosition;
         }
         else
         {
@@ -113,7 +122,7 @@ void StatusSpriteControlSystem::Update(No::Registry& registry, float deltaTime)
             if (idxFromRight == 2) digit = (level / 100) % 10;
             sp->uv.x = kDigitUvWidth * static_cast<float>(digit);
             NoEngine::Vector2 offset = { kLevelFontScale.x * static_cast<float>(idxFromRight), 0.f };
-            t->translate = kBaseLevelFontPosition - offset;
+            t->translate = kBaseLevelFontPosition;
         }
 
         // サイズが異なる可能性があるため scale を再設定

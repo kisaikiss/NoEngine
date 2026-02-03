@@ -54,7 +54,7 @@ public:
 protected:
 	void RegisterScene(const std::string& name, Scene::SceneManager::SceneFactory factory) { sceneManager_->RegisterScene(name, factory); }
 
-	void ChangeScene(const std::string& name) { sceneManager_->ChangeScene(name); }
+	void ChangeScene(const std::string& name, bool immediate = true) { sceneManager_->ChangeScene(name,immediate); }
 
 	void UpdateScene(float deltaTime) { sceneManager_->Update(deltaTime); }
 

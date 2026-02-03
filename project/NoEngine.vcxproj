@@ -175,6 +175,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\TD2_3\System\Enemy\BatEnemy\BatGenerateSystem.cpp" />
     <ClCompile Include="application\TD2_3\System\Enemy\EnemyStateManager.cpp" />
     <ClCompile Include="application\TD2_3\System\Enemy\TrackEnemy\TrackEnemyControlSystem.cpp" />
+    <ClCompile Include="application\TD2_3\System\GameOverSystem.cpp" />
     <ClCompile Include="application\TD2_3\System\Human\BatGirlControlSystem.cpp" />
     <ClCompile Include="application\TD2_3\System\Enemy\EnemyCommonMove.cpp" />
     <ClCompile Include="application\TD2_3\System\Player\PlayerStatusSystem.cpp" />
@@ -342,6 +343,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\TD2_3\System\Enemy\BatEnemy\BatGenerateSystem.h" />
     <ClInclude Include="application\TD2_3\System\Enemy\EnemyStateManager.h" />
     <ClInclude Include="application\TD2_3\System\Enemy\TrackEnemy\TrackEnemyControlSystem.h" />
+    <ClInclude Include="application\TD2_3\System\GameOverSystem.h" />
     <ClInclude Include="application\TD2_3\System\Human\BatGirlControlSystem.h" />
     <ClInclude Include="application\TD2_3\Loader\EnemyResources.h" />
     <ClInclude Include="application\TD2_3\System\Enemy\EnemyCommonMove.h" />
