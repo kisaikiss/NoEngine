@@ -158,7 +158,6 @@ void PlayerGirlControlSystem::Update(No::Registry& registry, float deltaTime)
         } else {
             voiceTimer_ = 0.0f;
 
-   
             //アクションタイマーを足す
             idleActionTimer_ += deltaTime;
 

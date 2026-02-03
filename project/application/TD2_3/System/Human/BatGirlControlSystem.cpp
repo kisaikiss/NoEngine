@@ -8,6 +8,7 @@ BatGirlControlSystem::BatGirlControlSystem()
     idleRandNum_ = 0;
     isWin_ = false;
     isLaughStart_ = false;
+    idleTimer_ = 0.0f;
 }
 
 void BatGirlControlSystem::Update(No::Registry& registry, float deltaTime)
@@ -23,8 +24,7 @@ void BatGirlControlSystem::Update(No::Registry& registry, float deltaTime)
         BallTag, DeathFlag>();
 
    
-    timer_ += deltaTime;
-    timer_ = fmodf(timer_, 3.0f);
+
 
     bool isOut = false;
 
@@ -32,12 +32,25 @@ void BatGirlControlSystem::Update(No::Registry& registry, float deltaTime)
     {
         auto* ball = registry.GetComponent<BallStateComponent>(ballEntity);
         //ballの状態を取得する
-
             isOut = ball->isOut;
-
-      
     }
 
+    bool isEnemyDead = false;
+
+    auto normalEnemyView = registry.View <
+        BatTag,
+        DeathFlag>();
+
+    for (auto normalEnemyEntity : normalEnemyView)
+    {
+        auto* deathFlag = registry.GetComponent<DeathFlag>(normalEnemyEntity);
+        if (deathFlag->isDead) {
+            //もし敵に当たったら
+            isEnemyDead = true;
+            break;
+
+        }
+    }
 
     for (auto entity : view)
     {
@@ -47,30 +60,50 @@ void BatGirlControlSystem::Update(No::Registry& registry, float deltaTime)
 
         if (isOut) {
             if (!isLaughStart_) {
-                animation->currentAnimation = 5;
+                animation->currentAnimation = 6;
                 material->materials[1].textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Model/batGirl/faceJoy.png");
                 No::SoundEffectPlay("batGirlLaugh", 0.5f);
                 isLaughStart_ = true;
             }
-      
+  
+        } else if(isEnemyDead){
+            //エネミーが死んだとき
+            animation->currentAnimation = 5;
+
         } else {
+
+            idleTimer_ += deltaTime;
 
             if (animation->time + deltaTime >= animation->animation[animation->currentAnimation].duration) {
 
                 isLaughStart_ = false;
-                do {
-                    idleRandNum_ = rand() % 4;
 
-                } while (animation->currentAnimation == idleRandNum_);
-                animation->currentAnimation = idleRandNum_;
+                if (timer_ >= 20.0f) {
+
+                    do {
+                        idleRandNum_ = rand() % 4 + 1;
+                    } while (animation->currentAnimation == idleRandNum_);
+                    animation->currentAnimation = idleRandNum_;
+                    timer_ = 0.0f;
+
+                } else {
+                    animation->currentAnimation = 0;
+                }
             }
 
-            if (animation->currentAnimation == 3|| timer_ >= 1.5f && timer_ <= 2.0f) {
-                material->materials[1].textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Model/batGirl/face2.png");
-            } else {
-                material->materials[1].textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Model/batGirl/face.png");
+  
+            if (!isLaughStart_) {
+
+                timer_ += deltaTime;
+
+                if (animation->currentAnimation == 3 || timer_ >= 1.5f && timer_ <= 2.0f) {
+                    material->materials[1].textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Model/batGirl/face2.png");
+                } else {
+                    material->materials[1].textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Model/batGirl/face.png");
+                }
+
             }
-          
+        
         }
 
 
