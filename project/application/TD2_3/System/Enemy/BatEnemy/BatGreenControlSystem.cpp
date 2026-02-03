@@ -5,11 +5,14 @@
 #include "application/TD2_3/Component/PlayerstatusComponent.h"
 #include "application/TD2_3/Component/EffectComponent.h"
 #include "application/TD2_3/Random/RandomFanc.h"
+#include "application/TD2_3/Component/Enemy/EnemyBulletComponent.h"
 #include "../EnemyCommonMove.h"
 #include "engine/Math/Types/Calculations/Vector3Calculations.h"
 #include "engine/Math/Types/Calculations/QuaternionCalculations.h"
 
 void BatGreenControlSystem::Update(No::Registry& registry, float deltaTime) {
+	
+
 	auto view = registry.View<BatGreenTag>();
 	if (view.Empty()) return;
 	for (auto entity : view) {
@@ -41,21 +44,23 @@ void BatGreenControlSystem::LiveUpdate(No::Entity entity, No::Registry& registry
 	using namespace NoEngine;
 	using namespace MathCalculations;
 	bat->t += deltaTime;
+	bat->shootTimer += deltaTime;
 	transform->translate.y = bat->defaultTranslate.y + std::sinf(bat->t) / 2.f;
 	CheckCollideEntity(registry, entity);
-	
+
+
 
 	float finalLength = 100000.f;
 	No::Entity ballEn = 0;
 	for (auto e : view) {
 		auto* t = registry.GetComponent<No::TransformComponent>(e);
-		
+
 		float length = LengthSquared(transform->GetWorldPosition() - t->GetWorldPosition());
 
 		if (length < finalLength) {
 			finalLength = length;
 			ballEn = e;
-		}	
+		}
 	}
 	if (ballEn == 0) return;
 	auto* t = registry.GetComponent<No::TransformComponent>(ballEn);
@@ -64,10 +69,43 @@ void BatGreenControlSystem::LiveUpdate(No::Entity entity, No::Registry& registry
 	LookTarget(tt, t->GetWorldPosition() + offset);
 	transform->rotation = Slerp(transform->rotation, tt.rotation, 0.1f);
 
-
+	const float kShootTime = 5.f;
+	if (bat->shootTimer > kShootTime) {
+		bat->shootTimer = 0.f;
+		Shoot(registry, transform, t->GetWorldPosition());
+	}
 
 }
 
-void BatGreenControlSystem::Shoot(No::Registry& registry) {
-	(void)registry;
+void BatGreenControlSystem::Shoot(No::Registry& registry, No::TransformComponent* enemyTransform, const NoEngine::Vector3& target) {
+	using namespace NoEngine;
+	No::Entity entity = registry.GenerateEntity();
+	auto* ultrasound = registry.AddComponent<EnemyBulletComponent>(entity);
+	registry.AddComponent<DeathFlag>(entity);
+
+	const float kUltrasoundSpeed = 2.f;
+	ultrasound->velocity = target - enemyTransform->translate;
+	ultrasound->velocity = ultrasound->velocity.Normalize() * kUltrasoundSpeed;
+
+	auto* collider = registry.AddComponent<SphereColliderComponent>(entity);
+	collider->colliderType = ColliderMask::kEnemy;
+	collider->collideMask = ColliderMask::kBall;
+
+	auto* transform = registry.AddComponent<No::TransformComponent>(entity);
+	transform->rotation.FromAxisAngle(Vector3::UP, 3.14f);
+	transform->translate = enemyTransform->translate;
+	Vector3 offset = { 0.f,0.f,-5.f };
+	LookTarget(*transform, target + offset);
+
+
+	auto* model = registry.AddComponent<No::MeshComponent>(entity);
+	auto* animationComp = registry.AddComponent<No::AnimatorComponent>(entity);
+	NoEngine::ModelLoader::LoadModel("wave", "resources/game/td_2304/Model/wave/wave.obj", model, animationComp);
+
+	auto m = registry.AddComponent<No::MaterialComponent>(entity);
+	m->materials = NoEngine::ModelLoader::GetMaterial("wave");
+	m->psoName = L"Renderer : Toon PSO";
+	m->psoId = NoEngine::Render::GetPSOID(m->psoName);
+	m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
+	m->color = Color::RED;
 }

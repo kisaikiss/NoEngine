@@ -28,6 +28,25 @@ void BatControlSystem::Update(No::Registry& registry, float deltaTime) {
 			break;
 		}
 	}
+
+#ifdef USE_IMGUI
+	auto StatusView = registry.View<PlayerStatusComponent>();
+	for (auto playerEntity : StatusView) {
+		auto* status = registry.GetComponent<PlayerStatusComponent>(playerEntity);
+		if (No::Keyboard::IsTrigger('I')) {
+			if (isDebug_) {
+				isDebug_ = false;
+			} else {
+				isDebug_ = true;
+			}
+		}
+		if (isDebug_) {
+			
+			status->hp = status->hpMax;
+			
+		}
+	}
+#endif // USE_IMGUI
 }
 
 void BatControlSystem::GenerateUpdate(No::Entity entity, No::Registry& registry, float deltaTime) {
@@ -80,6 +99,7 @@ void BatControlSystem::DeadUpdate(No::Entity entity, No::Registry& registry, flo
 			auto* status = registry.GetComponent<PlayerStatusComponent>(playerEntity);
 			status->score += 100;
 			status->exp++;
+
 		}
 		death->isDead = true;
 		const uint32_t kSmokeNum = 10;

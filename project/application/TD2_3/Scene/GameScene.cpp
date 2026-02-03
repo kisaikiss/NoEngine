@@ -39,6 +39,7 @@
 #include "../Component/Enemy/BatComponent.h"
 #include "../System/Enemy/BatEnemy/BatGenerateSystem.h"
 #include "../System/Enemy/BatEnemy/BatGreenControlSystem.h"
+#include "../System/Enemy/EnemyBulletControlSystem.h"
 
 #include "../System/Enemy/EnemyPushBackSystem.h"
 
@@ -68,6 +69,7 @@ void GameScene::Setup()
     AddSystem(std::make_unique<BatGreenControlSystem>());
     AddSystem(std::make_unique<BatGenerateSystem>());
     AddSystem(std::make_unique<BossControlSystem>());
+    AddSystem(std::make_unique<EnemyBulletControlSystem>());
     //こうもり少女のシステム
     AddSystem(std::make_unique<BatGirlControlSystem>());
     //プレイヤー少女システム

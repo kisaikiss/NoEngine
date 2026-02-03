@@ -174,6 +174,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\TD2_3\System\Enemy\BatEnemy\BatControlSystem.cpp" />
     <ClCompile Include="application\TD2_3\System\Enemy\BatEnemy\BatGenerateSystem.cpp" />
     <ClCompile Include="application\TD2_3\System\Enemy\BatEnemy\BatGreenControlSystem.cpp" />
+    <ClCompile Include="application\TD2_3\System\Enemy\EnemyBulletControlSystem.cpp" />
     <ClCompile Include="application\TD2_3\System\Enemy\EnemyPushBackSystem.cpp" />
     <ClCompile Include="application\TD2_3\System\Enemy\EnemyStateManager.cpp" />
     <ClCompile Include="application\TD2_3\System\Enemy\TrackEnemy\TrackEnemyControlSystem.cpp" />
@@ -323,7 +324,9 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\TD2_3\Component\ColliderComponent.h" />
     <ClInclude Include="application\TD2_3\Component\EffectComponent.h" />
     <ClInclude Include="application\TD2_3\Component\Enemy\BatComponent.h" />
+    <ClInclude Include="application\TD2_3\Component\Enemy\EnemyBulletComponent.h" />
     <ClInclude Include="application\TD2_3\Component\NormalEnemyComponent.h" />
+    <ClInclude Include="application\TD2_3\Component\PhaseComponent.h" />
     <ClInclude Include="application\TD2_3\Component\PhysicsComponent.h" />
     <ClInclude Include="application\TD2_3\Component\PlayerstatusComponent.h" />
     <ClInclude Include="application\TD2_3\Component\RingAnimationComponent.h" />
@@ -344,6 +347,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\TD2_3\System\Enemy\BatEnemy\BatControlSystem.h" />
     <ClInclude Include="application\TD2_3\System\Enemy\BatEnemy\BatGenerateSystem.h" />
     <ClInclude Include="application\TD2_3\System\Enemy\BatEnemy\BatGreenControlSystem.h" />
+    <ClInclude Include="application\TD2_3\System\Enemy\EnemyBulletControlSystem.h" />
     <ClInclude Include="application\TD2_3\System\Enemy\EnemyPushBackSystem.h" />
     <ClInclude Include="application\TD2_3\System\Enemy\EnemyStateManager.h" />
     <ClInclude Include="application\TD2_3\System\Enemy\TrackEnemy\TrackEnemyControlSystem.h" />

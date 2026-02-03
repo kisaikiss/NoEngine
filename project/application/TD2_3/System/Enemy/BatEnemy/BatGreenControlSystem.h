@@ -7,6 +7,6 @@ public:
 private:
 	void LiveUpdate(No::Entity entity, No::Registry& registry, float deltaTime) override;
 
-	void Shoot(No::Registry& registry);
+	void Shoot(No::Registry& registry, No::TransformComponent* transform, const NoEngine::Vector3& target);
 };
 

@@ -49,5 +49,6 @@ public:
 
 	static const Color WHITE;
 	static const Color BLACK;
+	static const Color RED;
 };
 }

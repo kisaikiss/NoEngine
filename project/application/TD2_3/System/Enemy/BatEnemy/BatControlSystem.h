@@ -12,5 +12,7 @@ protected:
 	void GenerateSmokeEffect(No::Registry& registry, NoEngine::Vector3 position);
 
 	virtual void CheckCollideEntity(No::Registry& registry, No::Entity enemyEntity);
+private:
+	bool isDebug_ = false;
 };
 

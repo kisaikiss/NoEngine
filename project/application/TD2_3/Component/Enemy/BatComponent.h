@@ -12,4 +12,5 @@ struct BatComponent {
 	NoEngine::Vector3 defaultTranslate;
 	bool isStarted = false;
 	float t = 0.f;
+	float shootTimer = 0.f;
 };
