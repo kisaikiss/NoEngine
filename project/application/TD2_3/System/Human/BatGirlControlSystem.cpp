@@ -4,11 +4,15 @@
 
 BatGirlControlSystem::BatGirlControlSystem()
 {
-    timer_ = 0.0f;
+    timer_ = 10.0f;
     idleRandNum_ = 0;
     isWin_ = false;
     isLaughStart_ = false;
     idleTimer_ = 0.0f;
+
+    No::SoundLoad(L"resources/game/td_2304//Audio/Voice/batGirlLaugh.mp3", "batGirlLaugh");
+    No::SoundLoad(L"resources/game/td_2304//Audio/Voice/batGirl_omedetou.mp3", "batGirl_omedetou");
+    No::SoundLoad(L"resources/game/td_2304//Audio/Voice/batGirl_huwa.mp3", "batGirl_huwa");
 }
 
 void BatGirlControlSystem::Update(No::Registry& registry, float deltaTime)
@@ -22,9 +26,6 @@ void BatGirlControlSystem::Update(No::Registry& registry, float deltaTime)
     auto ballView = registry.View<
         BallStateComponent,
         BallTag, DeathFlag>();
-
-   
-
 
     bool isOut = false;
 
@@ -63,6 +64,8 @@ void BatGirlControlSystem::Update(No::Registry& registry, float deltaTime)
                 animation->currentAnimation = 6;
                 material->materials[1].textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Model/batGirl/faceJoy.png");
                 No::SoundEffectPlay("batGirlLaugh", 0.5f);
+ 
+                
                 isLaughStart_ = true;
             }
   
@@ -85,6 +88,10 @@ void BatGirlControlSystem::Update(No::Registry& registry, float deltaTime)
                     } while (animation->currentAnimation == idleRandNum_);
                     animation->currentAnimation = idleRandNum_;
                     timer_ = 0.0f;
+
+                    if (animation->currentAnimation == 2|| animation->currentAnimation == 3) {
+                        No::SoundEffectPlay("batGirl_huwa", 0.5f);
+                    }
 
                 } else {
                     animation->currentAnimation = 0;

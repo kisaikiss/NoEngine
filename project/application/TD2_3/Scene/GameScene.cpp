@@ -570,13 +570,6 @@ void GameScene::SoundLoad()
 
     No::SoundLoad(L"resources/game/td_2304//Audio/SE/batDie.mp3", "batDie");
 
-    {
-        No::SoundLoad(L"resources/game/td_2304//Audio/Voice/batGirlLaugh.mp3", "batGirlLaugh");
-        No::SoundLoad(L"resources/game/td_2304//Audio/Voice/batGirl_omedetou.mp3", "batGirl_omedetou");
-        No::SoundLoad(L"resources/game/td_2304//Audio/Voice/batGirl_yaho.mp3", "batGirl_yaho");
-        No::SoundLoad(L"resources/game/td_2304//Audio/Voice/batGirl_huwa.mp3", "batGirl_huwa");
-    }
-
 
     No::SoundPlay("titleBGM", 0.125f, true);
 }
