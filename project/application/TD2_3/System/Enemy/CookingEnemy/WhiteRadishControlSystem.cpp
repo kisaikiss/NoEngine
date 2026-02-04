@@ -113,9 +113,9 @@ void WhiteRadishControlSystem::DeadUpdate(No::Entity entity, No::Registry& regis
 		auto view = registry.View<PlayerStatusComponent>();
 		for (auto playerEntity : view) {
 			auto* status = registry.GetComponent<PlayerStatusComponent>(playerEntity);
-			status->score += int32_t(150 * status->scoreRatio);
+			status->score += int32_t(150.0f * status->scoreRatio);
 			status->exp++;
-
+			status->scoreRatio += 0.1f;
 		}
 		death->isDead = true;
 		const uint32_t kSmokeNum = 10;

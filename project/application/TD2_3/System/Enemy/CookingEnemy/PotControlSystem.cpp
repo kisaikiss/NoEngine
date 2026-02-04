@@ -207,7 +207,7 @@ void PotControlSystem::DeadUpdate(No::Registry& registry, No::Entity entity, flo
 		auto view = registry.View<PlayerStatusComponent>();
 		for (auto playerEntity : view) {
 			auto* status = registry.GetComponent<PlayerStatusComponent>(playerEntity);
-			status->score += int32_t(1500 * status->scoreRatio);
+			status->score += int32_t(1500.f * status->scoreRatio);
 		}
 
 		auto phaseView = registry.View<PhaseComponent>();

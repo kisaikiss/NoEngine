@@ -232,9 +232,9 @@ void BossControlSystem::DeadUpdate(No::Registry& registry, No::Entity entity, fl
 		auto view = registry.View<PlayerStatusComponent>();
 		for (auto playerEntity : view) {
 			auto* status = registry.GetComponent<PlayerStatusComponent>(playerEntity);
-			status->score += int32_t(1000 * status->scoreRatio);
+			status->score += int32_t(1000.f * status->scoreRatio);
 			status->exp += 30;
-
+			status->scoreRatio += 1.5f;
 		}
 
 		auto phaseView = registry.View<PhaseComponent>();

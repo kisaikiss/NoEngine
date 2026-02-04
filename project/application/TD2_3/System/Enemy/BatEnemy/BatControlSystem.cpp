@@ -107,9 +107,9 @@ void BatControlSystem::DeadUpdate(No::Entity entity, No::Registry& registry, flo
 		for (auto playerEntity : view) {
 			auto* status = registry.GetComponent<PlayerStatusComponent>(playerEntity);
 			
-			status->score += int32_t(100 * status->scoreRatio);
+			status->score += int32_t(100.0f * status->scoreRatio);
 			status->exp++;
-
+			status->scoreRatio += 0.1f;
 		}
 		death->isDead = true;
 		const uint32_t kSmokeNum = 10;
