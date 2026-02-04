@@ -9,12 +9,9 @@
 #include"engine/Math/MathInclude.h"
 
 #include "../System/BackGroundEffectSystem.h"
-#include"../System/Human/HumanControlSystem.h"
-#include"../System/Human/BatGirlControlSystem.h"
-#include"../System/Human/ChefControlSystem.h"
-#include"../System/Human/GameOverPlayerGirlControlSystem.h"
+#include"../System/Human/ResultPlayerGirlControlSystem.h"
 #include "../System/Human/GameOverBatControlSystem.h"
-#include "../System/Human/GameOverChefControlSystem.h"
+#include "../System/Human/ResultChefControlSystem.h"
 #include "../tag.h"
 
 using namespace NoEngine;
@@ -25,8 +22,8 @@ void GameOverScene::Setup()
     AddSystem(std::make_unique<BackGroundEffectSystem>());
     AddSystem(std::make_unique<ScoreRankingSystem>());
 
-    AddSystem(std::make_unique<GameOverPlayerGirlControlSystem>());
-    AddSystem(std::make_unique<GameOverChefControlSystem>());
+    AddSystem(std::make_unique<ResultPlayerGirlControlSystem>());
+    AddSystem(std::make_unique<ResultChefControlSystem>());
     AddSystem(std::make_unique<GameOverBatControlSystem>());
 
     InitPlayerGirl();

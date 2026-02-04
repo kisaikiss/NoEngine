@@ -1,8 +1,8 @@
-#include "GameOverPlayerGirlControlSystem.h"
+#include "ResultPlayerGirlControlSystem.h"
 #include "../../Component/PlayerStatusComponent.h"
 #include "../../tag.h"
 
-void GameOverPlayerGirlControlSystem::Update(No::Registry& registry, float deltaTime)
+void ResultPlayerGirlControlSystem::Update(No::Registry& registry, float deltaTime)
 {
     //ゲーム終了時
     auto view = registry.View<

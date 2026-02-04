@@ -13,6 +13,7 @@
 #include "../Component/PhaseComponent.h"
 #include "../Component/ScoreDigitComponent.h"
 #include "../Component/TutorialSpriteComponent.h"
+
 //collision
 #include "../System/CollisionSystem.h"
 //player
@@ -165,12 +166,6 @@ void GameScene::NotSystemUpdate()
     }
     camera_->Update();
 
-#ifdef _DEBUG
-    if (Input::Keyboard::IsTrigger(VK_F2)) {
-        PhaseComponent::phase = Phase::TWO;
-    }
-
-#endif
     switch (PhaseComponent::phase) {
     case Phase::ONE:
         No::SoundCompleteStop("chefBGM");

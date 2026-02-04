@@ -1,10 +1,9 @@
-#include "GameOverChefControlSystem.h"
+#include "ResultChefControlSystem.h"
 #include "../../tag.h"
 #include "../../Component/PhaseComponent.h"
-
-void GameOverChefControlSystem::Update(No::Registry& registry, float deltaTime)
+#include "../../Component/PlayerstatusComponent.h"
+void ResultChefControlSystem::Update(No::Registry& registry, float deltaTime)
 {
-
 
     if (PhaseComponent::phase != Phase::TWO) {
         return;
@@ -23,9 +22,13 @@ void GameOverChefControlSystem::Update(No::Registry& registry, float deltaTime)
         auto* transform = registry.GetComponent<No::TransformComponent>(entity);
         auto* material = registry.GetComponent<No::MaterialComponent>(entity);
         auto* animation = registry.GetComponent<No::AnimatorComponent>(entity);
-
-        //ゲーム終了時
-        animation->currentAnimation = 4;
+        if (PlayerStatusComponent::isGameOver) {
+            //ゲーム終了時
+            animation->currentAnimation = 4;
+        } else {
+            animation->currentAnimation = 5;
+        }
+        
 
 #ifdef USE_IMGUI
 

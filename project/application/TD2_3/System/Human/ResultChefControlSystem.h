@@ -1,7 +1,7 @@
 #pragma once
 #include "engine/NoEngine.h"
 
-class GameOverChefControlSystem :
+class ResultChefControlSystem :
     public No::ISystem
 {
 public:

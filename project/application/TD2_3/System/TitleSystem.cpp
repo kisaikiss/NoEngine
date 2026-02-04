@@ -4,6 +4,8 @@
 #include "engine/Functions/Input/Input.h"
 #include "engine/Math/Easing.h"
 #include "externals/imgui/imgui.h"
+#include "../Component/PhaseComponent.h"
+#include "../Component/PlayerstatusComponent.h"
 
 void TitleSystem::Update(No::Registry& registry, float deltaTime)
 {
