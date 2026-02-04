@@ -1,5 +1,6 @@
 #include "PlayerGirlControlSystem.h"
 #include "../../Component/BallStateComponent.h"
+#include "../../Component/PhaseComponent.h"
 #include "../../tag.h"
 
 PlayerGirlControlSystem::PlayerGirlControlSystem()
@@ -19,6 +20,7 @@ PlayerGirlControlSystem::PlayerGirlControlSystem()
     No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_sugoi.mp3", "voice_sugoi");
     No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_mazide.mp3", "voice_mazide");
     No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_checkmate.mp3", "voice_checkmate");
+    No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_tabemono.mp3", "voice_tabemono");
 
     //strings_.push_back("voice_checkmate");
     blinkTimer_ = 0.0f;
@@ -32,10 +34,10 @@ PlayerGirlControlSystem::PlayerGirlControlSystem()
 
     strings_.clear();
     winVoice_.clear();
-   
+
 
     //ここから下はランダムに呼び出す
-    strings_.push_back("voice_uwa");
+    //strings_.push_back("voice_tabemono");
     strings_.push_back("voice_aa");
     strings_.push_back("voice_ite");
     strings_.push_back("voice_u");
@@ -54,6 +56,13 @@ PlayerGirlControlSystem::PlayerGirlControlSystem()
 
 void PlayerGirlControlSystem::Update(No::Registry& registry, float deltaTime)
 {
+
+    auto phaseView = registry.View<PhaseComponent>();
+    PhaseComponent* phase = nullptr;
+    for (auto entity : phaseView) {
+        phase = registry.GetComponent<PhaseComponent>(entity);
+    }
+
     auto ballView = registry.View<
         BallStateComponent,
         BallTag, DeathFlag>();
@@ -85,6 +94,21 @@ void PlayerGirlControlSystem::Update(No::Registry& registry, float deltaTime)
         }
     }
 
+    auto whiteRadishView = registry.View <
+        WhiteRadishTag,
+        DeathFlag>();
+
+    for (auto whiteRadishEntity : whiteRadishView)
+    {
+        auto* deathFlag = registry.GetComponent<DeathFlag>(whiteRadishEntity);
+        if (deathFlag->isDead) {
+            //もし敵に当たったら
+            isEnemyDead = true;
+            break;
+
+        }
+    }
+
     auto view = registry.View<
         No::TransformComponent,
         No::MaterialComponent,
@@ -99,7 +123,7 @@ void PlayerGirlControlSystem::Update(No::Registry& registry, float deltaTime)
 
         if (isEnemyDead) {
             //勝ってるとき
-            if (!isSoundWin_) {
+            if (!isBallOut_ && !isSoundWin_) {
                 int randomSound = rand() % winVoice_.size();
                 No::SoundEffectPlay(winVoice_[randomSound], 1.0f);
 
@@ -127,11 +151,26 @@ void PlayerGirlControlSystem::Update(No::Registry& registry, float deltaTime)
 
                 animation->currentAnimation = rand() % 2 + 7;
                 if (animation->currentAnimation == 7) {
-                    No::SoundPlay(strings_[0], 1.0f, false);
+                    No::SoundPlay("voice_uwa", 1.0f, false);
                 } else {
+                    if (phase->phase == Phase::TWO) {
+                        int randNum = rand() % strings_.size() + 1;
 
-                    int randNum = rand() % (strings_.size() - 1) + 1;
-                    No::SoundPlay(strings_[randNum], 1.0f, false);
+                        if (randNum != strings_.size()) {
+                            No::SoundPlay(strings_[randNum], 1.0f, false);
+                        } else {
+                            No::SoundPlay("voice_tabemono", 1.0f, false);
+                        }
+
+
+                    } else {
+                        int randNum = rand() % strings_.size();
+
+                        No::SoundPlay(strings_[randNum], 1.0f, false);
+
+                    }
+
+
 
 
                 }

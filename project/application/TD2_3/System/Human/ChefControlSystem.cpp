@@ -29,6 +29,10 @@ void ChefControlSystem::Update(No::Registry& registry, float deltaTime)
     auto phaseView = registry.View<PhaseComponent>();
     for (auto entity : phaseView) {
         auto* phase = registry.GetComponent<PhaseComponent>(entity);
+#ifdef _DEBUG
+        
+        phase->phase = Phase::TWO;
+#endif
         if (phase->phase != Phase::TWO)
             return;
     }
@@ -57,7 +61,6 @@ void ChefControlSystem::Update(No::Registry& registry, float deltaTime)
     auto normalEnemyView = registry.View <
         BatTag,
         DeathFlag>();
-
     for (auto normalEnemyEntity : normalEnemyView)
     {
         auto* deathFlag = registry.GetComponent<DeathFlag>(normalEnemyEntity);
@@ -69,7 +72,35 @@ void ChefControlSystem::Update(No::Registry& registry, float deltaTime)
         }
     }
 
+    auto carrotView = registry.View <
+        CarrotTag,
+        DeathFlag>();
+    for (auto carrotEntity : carrotView)
+    {
+        auto* deathFlag = registry.GetComponent<DeathFlag>(carrotEntity);
+        if (deathFlag->isDead) {
+            //もし敵に当たったら
+            isEnemyDead = true;
+            break;
 
+        }
+    }
+
+    auto bossView = registry.View <
+        Boss2Tag,
+        DeathFlag>();
+    for (auto bossEntity : bossView)
+    {
+        auto* deathFlag = registry.GetComponent<DeathFlag>(bossEntity);
+        if (deathFlag->isDead) {
+            //もしBossに当たったら
+            isEnemyDead = true;
+            break;
+
+        }
+    }
+
+    
     for (auto entity : view)
     {
         auto* transform = registry.GetComponent<No::TransformComponent>(entity);
@@ -78,7 +109,7 @@ void ChefControlSystem::Update(No::Registry& registry, float deltaTime)
         auto* animation = registry.GetComponent<No::AnimatorComponent>(entity);
 
         if (isOut) {
-            if (!isAmoreStart_) {
+            if (!isAmoreStart_&& !isBallHit_) {
                 animation->currentAnimation = 1;
                 //material->materials[1].textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Model/batGirl/faceJoy.png");
                 No::SoundEffectPlay("chef_amore", 1.0f);

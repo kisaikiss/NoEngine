@@ -18,7 +18,19 @@ BatGirlControlSystem::BatGirlControlSystem()
 
 void BatGirlControlSystem::Update(No::Registry& registry, float deltaTime)
 {
+    auto bossView = registry.View <
+        Boss1Tag,
+        DeathFlag>();
+    for (auto bossEntity : bossView)
+    {
+        auto* deathFlag = registry.GetComponent<DeathFlag>(bossEntity);
+        if (deathFlag->isDead) {
+            //もしBossが死んだら
+            No::SoundEffectPlay("batGirl_omedetou", 0.25f);
+            break;
 
+        }
+    }
     auto phaseView = registry.View<PhaseComponent>();
     for (auto entity : phaseView) {
         auto* phase = registry.GetComponent<PhaseComponent>(entity);
@@ -50,7 +62,6 @@ void BatGirlControlSystem::Update(No::Registry& registry, float deltaTime)
     auto normalEnemyView = registry.View <
         BatTag,
         DeathFlag>();
-
     for (auto normalEnemyEntity : normalEnemyView)
     {
         auto* deathFlag = registry.GetComponent<DeathFlag>(normalEnemyEntity);
@@ -61,6 +72,22 @@ void BatGirlControlSystem::Update(No::Registry& registry, float deltaTime)
 
         }
     }
+    auto trackEnemyView = registry.View <
+        BatGreenTag,
+        DeathFlag>();
+    for (auto trackEnemyEntity : trackEnemyView)
+    {
+        auto* deathFlag = registry.GetComponent<DeathFlag>(trackEnemyEntity);
+        if (deathFlag->isDead) {
+            //もし敵に当たったら
+            isEnemyDead = true;
+            break;
+
+        }
+    }
+
+
+
 
 
     for (auto entity : view)
@@ -84,8 +111,10 @@ void BatGirlControlSystem::Update(No::Registry& registry, float deltaTime)
             if (!isLaughStart_) {
                 //エネミーが死んだとき
                 animation->currentAnimation = 5;
+
             }
         
+          
 
         } else {
 
