@@ -194,6 +194,8 @@ void UpgradeSelectionSystem::Update(No::Registry& registry, float deltaTime)
 		choose->inputCooldown = 0.f;
 		choose->confirmLock = kConfirmLockTime;
 		choose->wasMouseDown = (GetAsyncKeyState(VK_LBUTTON) & 0x8000) != 0;
+
+		No::SoundPlay("levelUp", 1.0f, false);
 	}
 
 	// UI 表示中の入力・アニメーション処理
@@ -423,7 +425,7 @@ void UpgradeSelectionSystem::ApplyUpgradeChoice(No::Registry& registry, No::Enti
 		status->ballCount++;
 	}
 	status->hp = status->hpMax;
-
+	No::SoundPlay("upgrade", 1.0f,false);
 	BallStateComponent::ballSlowFactor = BallStateComponent::kSlowRcp;
 	BallStateComponent::ballSlowtime = 0.0f;
 }

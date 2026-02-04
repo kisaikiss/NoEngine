@@ -704,6 +704,11 @@ void GameScene::SoundLoad()
     No::SoundLoad(L"resources/game/td_2304//Audio/SE/chargeEnter.mp3", "chargeEnter");
 
     No::SoundLoad(L"resources/game/td_2304//Audio/SE/batDie.mp3", "batDie");
+    
+    No::SoundLoad(L"resources/game/td_2304//Audio/SE/levelUp.mp3", "levelUp");
+
+    No::SoundLoad(L"resources/game/td_2304//Audio/SE/upgrade.mp3", "upgrade");
+
 
     No::SoundCompleteStop("titleBGM");
     No::SoundCompleteStop("batBGM");
