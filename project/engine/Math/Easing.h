@@ -90,7 +90,15 @@ inline T EaseInExpo(const T& a, const T& b, float t)
 	return Lerp(a, b, t);
 }
 
+template<typename T>
+inline T EaseOutBack(const T& a, const T& b, float t)
+{
+	const float c1 = 1.70158f;
+	const float c3 = c1 + 1.0f;
 
+	t = 1 + c3 * powf(t - 1.0f, 3.0f) + c1 * pow(t - 1.0f, 2.0f);
+	return Lerp(a, b, t);
+}
 }
 }
 

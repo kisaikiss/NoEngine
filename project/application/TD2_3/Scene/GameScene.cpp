@@ -11,6 +11,8 @@
 #include "../Component/PlayerstatusComponent.h"
 #include "../Component/UpgradeChooseComponent.h"
 #include "../Component/PhaseComponent.h"
+#include "../Component/ScoreDigitComponent.h"
+
 //collision
 #include "../System/CollisionSystem.h"
 //player
@@ -413,12 +415,14 @@ void GameScene::InitLevelGaugeSprite(No::Registry& registry)
 
 void GameScene::InitScore(No::Registry& registry) {
     const uint32_t kDigits = 6;
+
+    
     for (uint32_t i = 0; i < kDigits; i++) {
         auto nums = registry.GenerateEntity();
         auto* sprite = registry.AddComponent<No::SpriteComponent>(nums);
         auto* transform = registry.AddComponent<No::Transform2DComponent>(nums);
         transform->scale = { 64.f,64.f };
-        registry.AddComponent<ScoreDigitTag>(nums);
+       registry.AddComponent<ScoreDigitComponent>(nums);
         sprite->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Sprite/numbers.png");
         sprite->uv.width = 0.1f;
     }

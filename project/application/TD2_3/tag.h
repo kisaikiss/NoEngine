@@ -24,4 +24,3 @@ struct DeathFlag
 };
 struct StatusSpriteTag {};
 
-struct ScoreDigitTag{};

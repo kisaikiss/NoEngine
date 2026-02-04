@@ -54,8 +54,8 @@ void SpritePass::Sort() {
 	std::sort(items_.begin(), items_.end(), [](const DrawItem& a, const DrawItem& b) {
 		if (a.sprite->layer != b.sprite->layer) return a.sprite->layer < b.sprite->layer;
 		if (a.sprite->orderInLayer != b.sprite->orderInLayer) return a.sprite->orderInLayer < b.sprite->orderInLayer;
-		if(a.sprite->textureHandle != a.sprite->textureHandle) return a.sprite->textureHandle < b.sprite->textureHandle;
-		return a.sprite->color < a.sprite->color;
+		if (a.sprite->textureHandle != b.sprite->textureHandle) return a.sprite->textureHandle < b.sprite->textureHandle;
+		return a.sprite->color < b.sprite->color;
 		});
 }
 
@@ -166,7 +166,8 @@ void SpritePass::Render(GraphicsContext& gfx) {
 		}
 		size_t end = start + 1;
 		while (end < items_.size() &&
-			items_[end].sprite->textureHandle == tex)
+			items_[end].sprite->textureHandle == tex &&
+			items_[end].sprite->color.ToRGBA8() == items_[start].sprite->color.ToRGBA8())
 		{
 			end++;
 		}

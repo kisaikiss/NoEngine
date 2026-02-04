@@ -1,6 +1,6 @@
 #include "ScoreSpriteControlSystem.h"
-#include "application/TD2_3/tag.h"
 #include "application/TD2_3/Component/PlayerstatusComponent.h"
+#include "application/TD2_3/Component/ScoreDigitComponent.h"
 
 namespace {
 const NoEngine::Vector2 skScorePositionBase = { 1230.f,120.f };
@@ -24,10 +24,11 @@ void ScoreSpriteControlSystem::Update(No::Registry& registry, float deltaTime) {
 		score /= 10;
 	}
 
-	auto view = registry.View<No::Transform2DComponent, No::SpriteComponent, ScoreDigitTag>();
+	auto view = registry.View<No::Transform2DComponent, No::SpriteComponent, ScoreDigitComponent>();
 	uint32_t counter = 0;
 	for (auto entity : view) {
 		auto* sprite = registry.GetComponent<No::SpriteComponent>(entity);
+
 		sprite->uv.x = 0.1f * digits_[counter];
 		auto* transform = registry.GetComponent<No::Transform2DComponent>(entity);
 		NoEngine::Vector2 offset = { static_cast<float>(counter) * skSpriteWidth, 0.f };

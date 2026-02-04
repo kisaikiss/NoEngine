@@ -117,7 +117,8 @@ void BallControlSystem::Update(No::Registry& registry, float deltaTime)
 
 				// 追従中は速度をリセット
 				ballPhysics->velocity = Vector3::ZERO;
-
+				playerStatus->scoreRatio = 1.0f;
+				playerStatus->isComboing = false;
 			}
 			else
 			{
@@ -194,6 +195,8 @@ void BallControlSystem::Update(No::Registry& registry, float deltaTime)
 						ballTransform->translate.x += dir.x * 0.05f;
 						ballTransform->translate.y += dir.y * 0.05f;
 						ballState->isOut = false;
+						playerStatus->scoreRatio = 1.0f;
+						playerStatus->isComboing = false;
 					}
 					else
 					{
@@ -207,6 +210,14 @@ void BallControlSystem::Update(No::Registry& registry, float deltaTime)
 		{
 			if (ballState->landed)ballState->landed = false;
 
+			if (playerStatus)
+			{
+				if (!playerStatus->isComboing)playerStatus->isComboing = true;
+				else
+				{
+					playerStatus->scoreRatio += 0.25f;
+				}
+			}
 			// colliedEntity が有効であることを前提とする
 			if (registry.Has<No::TransformComponent>(ballCollider->colliedEntity) &&
 				registry.Has<SphereColliderComponent>(ballCollider->colliedEntity))
