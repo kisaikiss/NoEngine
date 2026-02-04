@@ -20,9 +20,6 @@ void HumanControlSystem::Update(No::Registry& registry, float deltaTime)
         No::TransformComponent,
         EnemyHumanTag>();
 
-
-
-
     auto phaseView = registry.View<PhaseComponent>();
 
     for (auto entity : phaseView) {
@@ -49,46 +46,37 @@ void HumanControlSystem::Update(No::Registry& registry, float deltaTime)
 
 
     for (auto entity : view) {
-       
+
         auto* transform = registry.GetComponent<No::TransformComponent>(entity);
 
-        if (!isSetParent_) {
+        auto batGirlView = registry.View<
+            No::TransformComponent,
+            BatGirlTag>();
 
-            isSetParent_ = true;
-
-   
-            auto batGirlView = registry.View<
-                No::TransformComponent,
-                BatGirlTag>();
-
-            for (auto batGirlEntity : batGirlView) {
-                registry.GetComponent<No::TransformComponent>(batGirlEntity)->parent = transform;
-            }
-
-            auto ChefView = registry.View<
-                No::TransformComponent,
-                ChefTag>();
-
-            for (auto chefEntity : ChefView) {
-                registry.GetComponent<No::TransformComponent>(chefEntity)->parent = transform;
-            }
-
-
+        for (auto batGirlEntity : batGirlView) {
+            registry.GetComponent<No::TransformComponent>(batGirlEntity)->parent = transform;
         }
 
-        
-        if (isChangePhase_ /*&& !timer_ == 0.0f*/) {
+        auto ChefView = registry.View<
+            No::TransformComponent,
+            ChefTag>();
+
+        for (auto chefEntity : ChefView) {
+            registry.GetComponent<No::TransformComponent>(chefEntity)->parent = transform;
+        }
+
+        if (isChangePhase_ && timer_ != 0.0f) {
 
             timer_ -= deltaTime;
             float time = timer_ / kDuration_;
             //タイマーをclamp
             timer_ = std::clamp(timer_, 0.0f, kDuration_);
-            angle_ = NoEngine::Easing::EaseInOutBack(PI+ startAngle_, startAngle_, time);
+            angle_ = NoEngine::Easing::EaseInOutBack(PI + startAngle_, startAngle_, time);
         }
 
-        if (timer_ == 0.0f) {
-            isChangePhase_ = false;
-        }
+        //if (timer_ == 0.0f) {
+        //    isChangePhase_ = false;
+        //}
 
         q_.FromAxisAngle(Vector3::UP, angle_);
 

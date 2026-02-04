@@ -63,18 +63,9 @@ void BatGirlControlSystem::Update(No::Registry& registry, float deltaTime)
     }
 
 
-    auto humanParentView = registry.View<No::TransformComponent, EnemyHumanTag>();
-    No::TransformComponent* parent = nullptr;
-
-    for (auto entity : humanParentView) {
-        parent = registry.GetComponent<No::TransformComponent>(entity);
-    }
-
     for (auto entity : view)
     {
-        //人間を親にする
-        auto* transform = registry.GetComponent<No::TransformComponent>(entity);
-        transform->parent = parent;
+
         auto* material = registry.GetComponent<No::MaterialComponent>(entity);
         auto*  animation = registry.GetComponent<No::AnimatorComponent>(entity);
 
@@ -140,6 +131,7 @@ void BatGirlControlSystem::Update(No::Registry& registry, float deltaTime)
 
      
 #ifdef USE_IMGUI
+        auto* transform = registry.GetComponent<No::TransformComponent>(entity);
         std::string imGuiName = "batGirl";
         ImGui::Begin(imGuiName.c_str());
         ImGui::DragFloat3("translate", &transform->translate.x, 0.05f);
