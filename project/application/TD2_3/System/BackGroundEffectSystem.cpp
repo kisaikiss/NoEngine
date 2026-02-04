@@ -16,10 +16,14 @@ void BackGroundEffectSystem::Update(No::Registry& registry, float deltaTime)
 
 #ifdef USE_IMGUI
 		ImGui::Begin("BackGround");
+		ImGui::ColorEdit4("bgColor", &backGround->bgColor.r);
+		ImGui::ColorEdit4("ringColor", &backGround->ringColor.r);
+
 		ImGui::DragFloat("timeScale", &backGround->timeScale, 0.01f, 0.0f, 10.0f);
 		ImGui::DragFloat("powerFactor", &backGround->powerFactor, 0.01f, 0.0f, 1.0f);
 		ImGui::DragFloat("fadeInner", &backGround->fadeInner, 0.01f, 0.0f, 10.0f);
 		ImGui::DragFloat("fadeOuter", &backGround->fadeOuter, 0.01f, 0.0f, 10.0f);
+		ImGui::DragFloat("seed", &backGround->seed, 0.1f, 0.0f, 1000.0f);
 		ImGui::End();
 #endif // USE_IMGUI
 

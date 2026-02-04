@@ -9,16 +9,19 @@
 #include "application/TD2_3/Render/BallTrailPass.h"
 
 
-void Game::Startup(void) {
-	RegisterScene("TestScene", []() {
-		return std::make_unique<TestScene>();
+void Game::Startup(void)
+{
+	RegisterScene("TestScene", []()
+		{
+			return std::make_unique<TestScene>();
 		});
 	RegisterScene("TitleScene", []()
 		{
 			return std::make_unique<TitleScene>();
 		});
-	RegisterScene("GameScene", []() {
-		return std::make_unique<GameScene>();
+	RegisterScene("GameScene", []()
+		{
+			return std::make_unique<GameScene>();
 		});
 	RegisterScene("GameOverScene", []()
 		{
@@ -37,11 +40,13 @@ void Game::Startup(void) {
 
 }
 
-void Game::Cleanup(void) {
+void Game::Cleanup(void)
+{
 	ShutdownSceneManager();
 }
 
-void Game::Update(float deltaT) {
+void Game::Update(float deltaT)
+{
 	if (auto event = GetRegistry().PollEvent<No::SceneChangeEvent>())
 	{
 		ChangeScene(event->nextScene, false);

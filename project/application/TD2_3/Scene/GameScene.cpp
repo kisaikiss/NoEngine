@@ -272,7 +272,9 @@ void GameScene::InitBackGround(No::Registry& registry)
     transform->translate.z = 5;
     transform->scale = { 30,30,1 };
 
-    registry.AddComponent<BackGroundComponent>(backGroundEntity);
+    auto* back = registry.AddComponent<BackGroundComponent>(backGroundEntity);
+    back->seed = 123;
+	back->useRing = 1;
 }
 
 void GameScene::InitBatGirl(No::Registry& registry)

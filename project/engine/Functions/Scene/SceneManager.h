@@ -26,6 +26,7 @@ namespace Scene {
 
 		// フェード遷移用状態
 		std::string pendingName_;
+		bool isChanging_ = false;
 		bool isTransitioning_ = false;
 		enum class TransitionPhase { None, FadingOut, Loading, FadingIn };
 		TransitionPhase transitionPhase_ = TransitionPhase::None;

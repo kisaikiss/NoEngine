@@ -32,7 +32,10 @@ void GameOverScene::Setup()
 		transform->translate.z = 5;
 		transform->scale = { 15,15,1 };
 
-		registry.AddComponent<BackGroundComponent>(backGroundEntity);
+		auto* back = registry.AddComponent<BackGroundComponent>(backGroundEntity);
+		back->seed = 34;
+		back->bgColor = Color(0x8E1313FF);
+		back->ringColor = Color(0xB92F2FFF);
 	}
 
 	InitPlayerScore();
@@ -49,7 +52,8 @@ void GameOverScene::Setup()
 
 void GameOverScene::NotSystemUpdate()
 {
-	if (NoEngine::Input::Keyboard::IsTrigger(VK_RETURN))
+	if (NoEngine::Input::Keyboard::IsTrigger(VK_RETURN) ||
+		NoEngine::Input::Pad::IsTrigger(NoEngine::Input::GamepadButton::A))
 	{
 		GetRegistry()->EmitEvent(NoEngine::Event::SceneChangeEvent("TitleScene"));
 	}
@@ -61,17 +65,6 @@ void GameOverScene::InitPlayerScore()
 	No::Entity playerStatusEntity = registry.GenerateEntity();
 	registry.AddComponent<PlayerStatusComponent>(playerStatusEntity);
 	
-	//const uint32_t kDigits = 6;
-	//for (uint32_t i = 0; i < kDigits; i++)
-	//{
-	//	auto nums = registry.GenerateEntity();
-	//	auto* sprite = registry.AddComponent<No::SpriteComponent>(nums);
-	//	auto* transform = registry.AddComponent<No::Transform2DComponent>(nums);
-	//	transform->scale = { 64.f,64.f };
-	//	registry.AddComponent<ScoreDigitComponent>(nums);
-	//	sprite->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Sprite/numbers.png");
-	//	sprite->uv.width = 0.1f;
-	//}
 }
 
 void GameOverScene::InitRankingSprite()

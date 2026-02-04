@@ -32,7 +32,9 @@ void TitleScene::Setup()
 		transform->translate.z = 5;
 		transform->scale = { 15,15,1 };
 
-		registry.AddComponent<BackGroundComponent>(backGroundEntity);
+		auto* back = registry.AddComponent<BackGroundComponent>(backGroundEntity);
+		back->seed = 1;
+		back->bgColor = Color(0x11278FFF);
 	}
 	constexpr Vector3 kStartCameraPosition = Vector3{ 0.0f, 0.0f, -10.0f };
 	//カメラ初期化

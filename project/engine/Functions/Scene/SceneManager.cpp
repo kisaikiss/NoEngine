@@ -29,6 +29,11 @@ namespace NoEngine
 		auto it = factories_.find(name);
 		if (it == factories_.end()) return;
 
+		if (isChanging_)
+			return;
+
+		isChanging_ = true;
+
 		if (immediate || !currentScene_)
 		{
 			if (currentScene_)
@@ -44,6 +49,9 @@ namespace NoEngine
 			isTransitioning_ = false;
 			transitionPhase_ = TransitionPhase::None;
 			overlayEntity_ = 0;
+
+			// 即時切替は完了とみなしてフラグを戻す
+			isChanging_ = false;
 			return;
 		}
 
@@ -163,6 +171,7 @@ namespace NoEngine
 					isTransitioning_ = false;
 					transitionPhase_ = TransitionPhase::None;
 					transitionTimer_ = 0.0f;
+					isChanging_ = false;
 				}
 			}
 			if (currentScene_)

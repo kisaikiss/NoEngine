@@ -53,8 +53,6 @@ void ScoreRankingSystem::Update(No::Registry& registry, float deltaTime)
 		currentScore = status->score;
 	}
 
-	// 新しいシステムインスタンスが初めて使われたときだけ（例：GameOver/Result シーンで生成されたとき）
-	// static な topScores_ に currentScore を挿入して上位3件を保持する
 	if (!scoresCommitted_)
 	{
 		std::array<int32_t, 4> tmp;

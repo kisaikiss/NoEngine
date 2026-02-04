@@ -8,12 +8,13 @@
 void TitleSystem::Update(No::Registry& registry, float deltaTime)
 {
 	time_ += deltaTime;
-	if (No::Keyboard::IsTrigger(VK_RETURN) ||
-		No::Pad::IsTrigger(No::GamepadButton::A))
+	if ((No::Keyboard::IsTrigger(VK_RETURN) ||
+		No::Pad::IsTrigger(No::GamepadButton::A)) && !isChangeScene_)
 	{
 		//一旦ここでSE再生 ヨシダ
 		No::SoundEffectPlay("select", 0.5f);
 		registry.EmitEvent(No::SceneChangeEvent("GameScene"));
+		isChangeScene_ = true;
 	}
 	for (auto entity : registry.View<No::SpriteComponent, No::Transform2DComponent>())
 	{
@@ -28,7 +29,7 @@ void TitleSystem::Update(No::Registry& registry, float deltaTime)
 		}
 		else if (sprite->name == "StartButton")
 		{
-			transform->translate.y += 0.03f * std::sin(time_ * 2.0f) ;
+			transform->translate.y += 0.03f * std::sin(time_ * 2.0f);
 			transform->rotation = 0.05f * std::sin(time_ * 2.0f);
 		}
 		else if (sprite->name == "AButton")
