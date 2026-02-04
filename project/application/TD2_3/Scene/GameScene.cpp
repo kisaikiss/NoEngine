@@ -57,6 +57,7 @@
 #include "../System/Enemy/CookingEnemy/RootVegetableGenerateSystem.h"
 #include "../System/Enemy/CookingEnemy/WhiteRadishControlSystem.h"
 #include "../System/Enemy/CookingEnemy/CarrotControlSystem.h"
+#include "../System/Enemy/CookingEnemy/PotControlSystem.h"
 
 #include "../tag.h"
 
@@ -85,6 +86,7 @@ void GameScene::Setup()
     AddSystem(std::make_unique<RootVegetableGenerateSystem>());
     AddSystem(std::make_unique<BossGenerateSystem>());
     AddSystem(std::make_unique<BossControlSystem>());
+    AddSystem(std::make_unique<PotControlSystem>());
     AddSystem(std::make_unique<EnemyBulletControlSystem>());
     //HumanControlSystem シーン切り替え時の処理用
     AddSystem(std::make_unique<HumanControlSystem>());

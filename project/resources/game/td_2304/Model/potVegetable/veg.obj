@@ -1,6 +1,6 @@
 # Blender 4.4.1
 # www.blender.org
-mtllib .obj.mtl
+mtllib veg.obj.mtl
 o Cube
 v -0.153367 -0.153367 0.153367
 v -0.153367 0.153367 0.153367

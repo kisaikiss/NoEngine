@@ -177,6 +177,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\TD2_3\System\Enemy\BatEnemy\BatGreenControlSystem.cpp" />
     <ClCompile Include="application\TD2_3\System\Enemy\Boss\BossGenerateSystem.cpp" />
     <ClCompile Include="application\TD2_3\System\Enemy\CookingEnemy\CarrotControlSystem.cpp" />
+    <ClCompile Include="application\TD2_3\System\Enemy\CookingEnemy\PotControlSystem.cpp" />
     <ClCompile Include="application\TD2_3\System\Enemy\CookingEnemy\RootVegetableGenerateSystem.cpp" />
     <ClCompile Include="application\TD2_3\System\Enemy\CookingEnemy\WhiteRadishControlSystem.cpp" />
     <ClCompile Include="application\TD2_3\System\Enemy\EnemyBulletControlSystem.cpp" />
@@ -360,6 +361,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\TD2_3\System\Enemy\BatEnemy\BatGreenControlSystem.h" />
     <ClInclude Include="application\TD2_3\System\Enemy\Boss\BossGenerateSystem.h" />
     <ClInclude Include="application\TD2_3\System\Enemy\CookingEnemy\CarrotControlSystem.h" />
+    <ClInclude Include="application\TD2_3\System\Enemy\CookingEnemy\PotControlSystem.h" />
     <ClInclude Include="application\TD2_3\System\Enemy\CookingEnemy\RootVegetableGenerateSystem.h" />
     <ClInclude Include="application\TD2_3\System\Enemy\CookingEnemy\WhiteRadishControlSystem.h" />
     <ClInclude Include="application\TD2_3\System\Enemy\EnemyBulletControlSystem.h" />
