@@ -36,6 +36,7 @@ void BossGenerateSystem::Update(No::Registry& registry, float deltaTime) {
 	}
 
 	Phase phase = phaseComp->phase;
+	playerStatus->currentPhase = phase;
 
 	switch (phase) {
 	case Phase::ONE:

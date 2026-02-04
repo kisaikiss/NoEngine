@@ -169,6 +169,13 @@ void PotControlSystem::DeadUpdate(No::Registry& registry, No::Entity entity, flo
 	using namespace NoEngine;
 	using namespace MathCalculations;
 
+	auto playerStatusView = registry.View<PlayerStatusComponent>();
+	PlayerStatusComponent* playerStatus = nullptr;
+	for (auto playerEntity : playerStatusView)
+	{
+		playerStatus = registry.GetComponent<PlayerStatusComponent>(playerEntity);
+	}
+
 	// 移動
 	auto* path = registry.GetComponent<PathComponent>(entity);
 	path->t += deltaTime * path->speed;
@@ -197,17 +204,19 @@ void PotControlSystem::DeadUpdate(No::Registry& registry, No::Entity entity, flo
 	bat->deadTimer += 0.4f * deltaTime;
 	transform->rotation.FromAxisAngle(NoEngine::Vector3::UP, (3.14f + bat->t * 25.f));
 	transform->scale = NoEngine::Easing::EaseInOutBack<NoEngine::Vector3>(NoEngine::Vector3(1.f, 1.f, 1.f), NoEngine::Vector3(0.f, 0.f, 0.f), bat->deadTimer);
+	
 	if (bat->deadTimer > 1.f) {
 		auto* death = registry.GetComponent<DeathFlag>(entity);
 		death->isDead = true;
 		if (death->isDead)
 		{
 			registry.EmitEvent(No::SceneChangeEvent("ResultScene"));
+			
+			if (playerStatus)playerStatus->isGameClear = true;
 		}
-		auto view = registry.View<PlayerStatusComponent>();
-		for (auto playerEntity : view) {
-			auto* status = registry.GetComponent<PlayerStatusComponent>(playerEntity);
-			status->score += int32_t(1500.f * status->scoreRatio);
+		if (playerStatus)
+		{
+			playerStatus->score += int32_t(1500.f * playerStatus->scoreRatio);
 		}
 
 		auto phaseView = registry.View<PhaseComponent>();

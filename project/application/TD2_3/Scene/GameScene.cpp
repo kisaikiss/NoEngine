@@ -378,6 +378,9 @@ void GameScene::InitPlayerStatus(No::Registry& registry)
     status->hp = 5;
     status->level = 1;
     status->score = 0;
+	status->isGameClear = false;
+	status->isGameOver = false;
+	status->currentPhase = Phase::ONE;
 }
 
 void GameScene::InitLights(No::Registry& registry)

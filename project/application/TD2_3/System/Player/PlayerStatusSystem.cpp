@@ -30,6 +30,7 @@ void PlayerStatusSystem::Update(No::Registry& registry, float deltaTime)
 		{
 			isDead_ = true;
 			registry.EmitEvent(NoEngine::Event::SceneChangeEvent("GameOverScene"));
+			status->isGameOver = true;
 			return;
 		}
 #ifdef USE_IMGUI

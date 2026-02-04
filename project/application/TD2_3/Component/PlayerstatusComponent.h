@@ -1,9 +1,14 @@
 #pragma once
 #include <array>
+#include "PhaseComponent.h"
 
 struct PlayerStatusComponent
 {
 	static inline int32_t score = 0;
+	static inline bool isGameOver = false;
+	static inline bool isGameClear = false;
+	static inline Phase currentPhase = Phase::ONE;
+
 	float scoreRatio = 1.0f;
 	bool isComboing = false;
 	int32_t level = 1;
