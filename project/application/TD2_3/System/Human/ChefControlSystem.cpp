@@ -29,10 +29,6 @@ void ChefControlSystem::Update(No::Registry& registry, float deltaTime)
     auto phaseView = registry.View<PhaseComponent>();
     for (auto entity : phaseView) {
         auto* phase = registry.GetComponent<PhaseComponent>(entity);
-#ifdef _DEBUG
-        
-        phase->phase = Phase::TWO;
-#endif
         if (phase->phase != Phase::TWO)
             return;
     }
