@@ -5,6 +5,8 @@ cbuffer gControl : register(b1)
     float time;
     float timeScale;
     float powerFactor;
+    float fadeInner;
+    float fadeOuter;
 }
 
 float3 drawCircle(float2 pos, float radius, float width, float power, float4 color)
@@ -34,6 +36,7 @@ struct VSOutput
 float4 main(VSOutput input) : SV_TARGET
 {
     float2 uv = input.uv * 2.0 - 1.0;
+    float2 uvCenter = uv;
     
     float h = lerp(0.45, 0.7, length(uv));
     float4 color = float4(hsv2rgb(h, 0.9, 0.9), 1.0);
@@ -42,6 +45,7 @@ float4 main(VSOutput input) : SV_TARGET
     float power = powerFactor;
     float3 finalColor = drawCircle(uv, radius, width, power, color);
     finalColor = pow(finalColor, 0.454545);
+    finalColor.rgb *= 0.7;
     uv = abs(uv);
     
     //return float4(finalColor, 1.0);
@@ -76,5 +80,10 @@ float4 main(VSOutput input) : SV_TARGET
     //Tanh tonemap
     color2 = tanh(color2 * color2 / 4e2);
     finalColor += color2.rgb;
+    
+    float distCenter = length(uvCenter);
+    float fade = 1.0 - smoothstep(fadeInner, fadeOuter, distCenter);
+    finalColor.rgb *= fade;
+    
     return float4(finalColor.rgb * 0.3, 1.0);
 }

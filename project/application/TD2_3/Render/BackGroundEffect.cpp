@@ -104,11 +104,15 @@ void BackGroundEffectPass::Execute(NoEngine::GraphicsContext& gfx, NoEngine::ECS
 			float time;
 			float timeScale;
 			float powerFactor;
-			float pad;
+			float fadeInner;
+			float fadeOuter;
+			float padding[3];
 		} psConstants;
 		psConstants.time = backGround->time;
 		psConstants.timeScale = backGround->timeScale;
 		psConstants.powerFactor = backGround->powerFactor;
+		psConstants.fadeInner = backGround->fadeInner;
+		psConstants.fadeOuter = backGround->fadeOuter;
 
 		gfx.SetDynamicVB(0, meshData_.vertices.size(), sizeof(vertex), meshData_.vertices.data());
 		gfx.SetDynamicConstantBufferView(rootIndex["gWorld"], sizeof(vsConstants), &vsConstants);
