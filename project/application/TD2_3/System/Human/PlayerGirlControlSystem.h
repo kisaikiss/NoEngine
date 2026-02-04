@@ -16,12 +16,8 @@ private:
     std::vector<std::string> strings_;
     std::vector<std::string> winVoice_;
     bool isBallOut_ = false;
-
     bool isSoundWin_ = false;
-
     uint32_t idleRandNum_ = 0;
-
-    bool isGameOverAnimationStart_ = false;
 
 };
 

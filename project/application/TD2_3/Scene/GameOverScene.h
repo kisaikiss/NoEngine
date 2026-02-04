@@ -14,4 +14,8 @@ private:
 private:
 	void InitPlayerScore();
 	void InitRankingSprite();
+	void InitHuman();
+	void InitPlayerGirl();
+	void InitChef();
+	void InitBatGirl();
 };

@@ -314,6 +314,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\TD2_3\System\StatusSpriteControlSystem.cpp" />
     <ClCompile Include="application\TD2_3\SpriteConfigManager\SpriteConfigManager.cpp" />
     <ClCompile Include="application\TD2_3\System\Human\HumanControlSystem.cpp" />
+    <ClCompile Include="application\TD2_3\System\Human\GameOverPlayerGirlControlSystem.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="application\TD2_3\System\Enemy\NormalEnemy\NormalEnemyControlSystem.cpp" />
     <ClCompile Include="application\TD2_3\System\Human\PlayerGirlControlSystem.cpp" />
@@ -544,6 +545,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\TD2_3\System\StatusSpriteControlSystem.h" />
     <ClInclude Include="application\TD2_3\SpriteConfigManager\SpriteConfigManager.h" />
     <ClInclude Include="application\TD2_3\System\Human\HumanControlSystem.h" />
+    <ClInclude Include="application\TD2_3\System\Human\GameOverPlayerGirlControlSystem.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="engine\Assets\Texture\Texture.h" />

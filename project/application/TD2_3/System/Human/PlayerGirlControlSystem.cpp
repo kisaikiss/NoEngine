@@ -30,8 +30,7 @@ PlayerGirlControlSystem::PlayerGirlControlSystem()
 
     isBallOut_ = false;
     isSoundWin_ = false;
-    isGameOverAnimationStart_ = false;
-
+  
     idleRandNum_ = 0;
 
     strings_.clear();
@@ -58,8 +57,6 @@ PlayerGirlControlSystem::PlayerGirlControlSystem()
 
 void PlayerGirlControlSystem::Update(No::Registry& registry, float deltaTime)
 {
-
-
 
     auto phaseView = registry.View<PhaseComponent>();
     PhaseComponent* phase = nullptr;
@@ -230,29 +227,7 @@ void PlayerGirlControlSystem::Update(No::Registry& registry, float deltaTime)
 
 
             }
-        } else {
-            //ゲーム終了時
-
-            if (PlayerStatusComponent::isGameOver) {
-
-                if (!isGameOverAnimationStart_) {
-                    animation->currentAnimation = 10;
-                    isGameOverAnimationStart_ = true;
-                }
-                if (animation->time + deltaTime >= animation->animation[animation->currentAnimation].duration) {
-                    animation->currentAnimation = 11;
-                }
-
-            } else if (PlayerStatusComponent::isGameClear) {
-              
-                animation->currentAnimation = 9;
-            }
-
-
-
-
-        }
-
+        } 
 
 
 #ifdef USE_IMGUI
