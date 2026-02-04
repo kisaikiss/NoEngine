@@ -37,7 +37,7 @@ void BossControlSystem::Update(No::Registry& registry, float deltaTime) {
 		auto* collider = registry.GetComponent<SphereColliderComponent>(entity);
 		auto* boss = registry.GetComponent<BatBossComponent>(entity);
 		BatBossState state = boss->state;
-		const float kInvincibleTime = 0.5f;
+		const float kInvincibleTime = 0.8f;
 		switch (state) {
 		case BatBossState::GENERATE:
 			GenerateUpdate(registry, entity, deltaTime);
@@ -232,9 +232,9 @@ void BossControlSystem::DeadUpdate(No::Registry& registry, No::Entity entity, fl
 		auto view = registry.View<PlayerStatusComponent>();
 		for (auto playerEntity : view) {
 			auto* status = registry.GetComponent<PlayerStatusComponent>(playerEntity);
-			status->score += 1000;
+			status->score += int32_t(1000.f * status->scoreRatio);
 			status->exp += 30;
-
+			status->scoreRatio += 1.5f;
 		}
 
 		auto phaseView = registry.View<PhaseComponent>();

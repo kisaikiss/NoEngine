@@ -2,6 +2,7 @@
 enum class Phase {
 	ONE,
 	TWO,
+	END
 };
 
 struct PhaseComponent {

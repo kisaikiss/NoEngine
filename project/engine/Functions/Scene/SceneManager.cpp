@@ -1,178 +1,221 @@
 #include "SceneManager.h"
+
 #include "engine/Runtime/GraphicsCore.h"
 #include "engine/Assets/Texture/TextureManager.h"
 #include "engine/Functions/ECS/Component/SpriteComponent.h"
 #include "engine/Functions/ECS/Component/Transform2DComponent.h"
 #include "engine/Math/Easing.h"
+
 #include <algorithm>
 
 namespace NoEngine
 {
-	//元のコード
-	//void Scene::SceneManager::ChangeScene(const std::string& name)
-	//{
-	//	auto it = factories_.find(name);
-	//	if (it == factories_.end()) return;
-	//
-	//	if (currentScene_)
-	//	{
-	//		currentScene_->OnExit();
-	//	}
-	//
-	//	currentScene_ = it->second();
-	//	currentScene_->Setup();
-	//	currentScene_->OnEnter();
-	//}
-
-	void Scene::SceneManager::ChangeScene(const std::string& name, bool immediate)
+	namespace Scene
 	{
-		auto it = factories_.find(name);
-		if (it == factories_.end()) return;
-
-		if (immediate || !currentScene_)
+		//元のコード
+		//void Scene::SceneManager::ChangeScene(const std::string& name)
+		//{
+		//	auto it = factories_.find(name);
+		//	if (it == factories_.end()) return;
+		//
+		//	if (currentScene_)
+		//	{
+		//		currentScene_->OnExit();
+		//	}
+		//
+		//	currentScene_ = it->second();
+		//	currentScene_->Setup();
+		//	currentScene_->OnEnter();
+		//}
+		void SceneManager::CreateCircleOverlay(float initialAlpha, float initialScale)
 		{
-			if (currentScene_)
-			{
-				currentScene_->OnExit();
-			}
+			if (!currentScene_) return;
 
-			currentScene_ = it->second();
-			currentScene_->Setup();
-			currentScene_->OnEnter();
+			auto registry = currentScene_->GetRegistry();
+			if (!registry) return;
 
-			// クリア遷移状態
-			isTransitioning_ = false;
-			transitionPhase_ = TransitionPhase::None;
-			overlayEntity_ = 0;
-			return;
-		}
-
-		// フェード遷移を開始
-		pendingName_ = name;
-		isTransitioning_ = true;
-		transitionPhase_ = TransitionPhase::FadingOut;
-		transitionTimer_ = 0.0f;
-
-		// オーバーレイを現在のシーンの Registry に作成（黒、alpha=0）
-		auto registry = currentScene_->GetRegistry();
-		if (registry)
-		{
 			auto winSize = GraphicsCore::gWindowManager.GetMainWindow()->GetWindowSize();
+			float winW = static_cast<float>(winSize.clientWidth);
+			float winH = static_cast<float>(winSize.clientHeight);
+
+			float maxSide = std::max(winW, winH);
+			float coverSize = maxSide * 3.f;
+
 			overlayEntity_ = registry->GenerateEntity();
+
 			auto* t2d = registry->AddComponent<Component::Transform2DComponent>(overlayEntity_);
-			t2d->scale = { static_cast<float>(winSize.clientWidth), static_cast<float>(winSize.clientHeight) };
-			t2d->translate = { static_cast<float>(winSize.clientWidth) * 0.5f, static_cast<float>(winSize.clientHeight) * 0.5f };
+			t2d->scale = { coverSize * initialScale, coverSize * initialScale };
+			t2d->translate = { winW * 0.5f, winH * 0.5f };
 
 			auto* sprite = registry->AddComponent<Component::SpriteComponent>(overlayEntity_);
-
-			sprite->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/engine/white1x1.png");
-			sprite->name = "SceneFadeOverlay";
-			sprite->layer = 100;
-			sprite->color = { 0.f, 0.f, 0.f, 0.f };
+			sprite->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Sprite/circle_soft.png");
+			sprite->name = "SceneCircleScaleOverlay";
+			sprite->layer = 100000;
+			sprite->color = { 0.f, 0.f, 0.f, std::clamp(initialAlpha, 0.0f, 1.0f) };
 		}
-	}
 
-	void Scene::SceneManager::Update(float deltaTime)
-	{
-		// フェード遷移中の挙動を優先して処理
-		if (isTransitioning_)
+		void SceneManager::UpdateOverlay(float alpha, float scale)
 		{
-			float half = transitionDuration_ * 0.5f;
-			if (deltaTime > 0.0f && deltaTime < 0.1f)
-				transitionTimer_ += deltaTime;
+			if (!currentScene_) return;
 
-			//現在の overlayEntity_ の alpha を更新
-			auto updateOverlayAlpha = [&](float a)
-				{
-					if (currentScene_)
-					{
-						auto registry = currentScene_->GetRegistry();
-						if (registry && overlayEntity_ != 0 && registry->Has<Component::SpriteComponent>(overlayEntity_))
-						{
-							auto* sp = registry->GetComponent<Component::SpriteComponent>(overlayEntity_);
-							sp->color.a = std::clamp(a, 0.0f, 1.0f);
-						}
-					}
-				};
+			auto registry = currentScene_->GetRegistry();
+			if (!registry) return;
 
-			if (transitionPhase_ == TransitionPhase::FadingOut)
-			{
-				// 線形ではなくイージングで alpha を補間
-				float t = std::clamp(transitionTimer_ / half, 0.0f, 1.0f);
-				float eased = NoEngine::Easing::EaseInOutSine(0.0f, 1.0f, t);
-				updateOverlayAlpha(eased);
+			if (overlayEntity_ == 0) return;
+			if (!registry->Has<Component::SpriteComponent>(overlayEntity_)) return;
+			if (!registry->Has<Component::Transform2DComponent>(overlayEntity_)) return;
 
-				// フェードアウト完了したらロード移行
-				if (transitionTimer_ >= half)
-				{
-					if (currentScene_) currentScene_->OnExit();
+			auto winSize = GraphicsCore::gWindowManager.GetMainWindow()->GetWindowSize();
+			float winW = static_cast<float>(winSize.clientWidth);
+			float winH = static_cast<float>(winSize.clientHeight);
 
-					auto it = factories_.find(pendingName_);
-					if (it != factories_.end())
-					{
-						currentScene_ = it->second();
-						// 次シーンの Setup を呼ぶ（ここでモデル／テクスチャ等を読み込む）
-						currentScene_->Setup();
-						currentScene_->OnEnter();
-					}
+			float maxSide = std::max(winW, winH);
+			float coverSize = maxSide * 3.0f;
 
-					// 新シーンの Registry にオーバーレイ作成
-					if (currentScene_)
-					{
-						auto registry = currentScene_->GetRegistry();
-						if (registry)
-						{
-							auto winSize = GraphicsCore::gWindowManager.GetMainWindow()->GetWindowSize();
-							overlayEntity_ = registry->GenerateEntity();
-							auto* t2d = registry->AddComponent<Component::Transform2DComponent>(overlayEntity_);
-							t2d->scale = { static_cast<float>(winSize.clientWidth), static_cast<float>(winSize.clientHeight) };
-							t2d->translate = { static_cast<float>(winSize.clientWidth) * 0.5f, static_cast<float>(winSize.clientHeight) * 0.5f };
+			auto* sp = registry->GetComponent<Component::SpriteComponent>(overlayEntity_);
+			auto* t2d = registry->GetComponent<Component::Transform2DComponent>(overlayEntity_);
 
-							auto* sprite = registry->AddComponent<Component::SpriteComponent>(overlayEntity_);
-							sprite->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/engine/white1x1.png");
-							sprite->name = "SceneFadeOverlay";
-							sprite->layer = 10000;
-							sprite->color = { 0.f, 0.f, 0.f, 1.f };
-						}
-					}
+			sp->color.a = std::clamp(alpha, 0.0f, 1.0f);
 
-					// 次フェーズへ
-					transitionPhase_ = TransitionPhase::FadingIn;
-					transitionTimer_ = 0.0f;
-				}
-			}
-			else if (transitionPhase_ == TransitionPhase::FadingIn)
-			{
-				// 逆向きもイージングで
-				float t = std::clamp(transitionTimer_ / half, 0.0f, 1.0f);
-				float eased = NoEngine::Easing::EaseInOutSine(0.0f, 1.0f, t);
-				updateOverlayAlpha(1.0f - eased);
-
-				if (transitionTimer_ >= half)
-				{
-					// フェード終了。オーバーレイを削除して終了
-					if (currentScene_)
-					{
-						auto registry = currentScene_->GetRegistry();
-						if (registry && overlayEntity_ != 0 && registry->Has<Component::SpriteComponent>(overlayEntity_))
-						{
-							registry->DestroyEntity(overlayEntity_);
-						}
-					}
-					overlayEntity_ = 0;
-					isTransitioning_ = false;
-					transitionPhase_ = TransitionPhase::None;
-					transitionTimer_ = 0.0f;
-				}
-			}
-			if (currentScene_)
-			{
-				currentScene_->Update(deltaTime);
-			}
-			return;
+			float s = std::max(scale, 0.0f);
+			t2d->scale = { coverSize * s, coverSize * s };
+			t2d->translate = { winW * 0.5f, winH * 0.5f };
 		}
 
-		// 通常更新
-		if (currentScene_) currentScene_->Update(deltaTime);
+		void SceneManager::DestroyOverlay()
+		{
+			if (!currentScene_) return;
+
+			auto registry = currentScene_->GetRegistry();
+			if (!registry) return;
+
+			if (overlayEntity_ != 0)
+			{
+				if (registry->Has<Component::SpriteComponent>(overlayEntity_))
+				{
+					registry->DestroyEntity(overlayEntity_);
+				}
+			}
+			overlayEntity_ = 0;
+		}
+
+		void SceneManager::ChangeScene(const std::string& name, bool immediate)
+		{
+			auto it = factories_.find(name);
+			if (it == factories_.end()) return;
+
+			// 連続呼び出し防止
+			if (isChanging_) return;
+
+			isChanging_ = true;
+
+			// 即時切替（従来通り）
+			if (immediate || !currentScene_)
+			{
+				if (currentScene_)
+				{
+					currentScene_->OnExit();
+				}
+
+				currentScene_ = it->second();
+				currentScene_->Setup();
+				currentScene_->OnEnter();
+
+				// 状態クリア
+				isTransitioning_ = false;
+				transitionPhase_ = TransitionPhase::None;
+				transitionTimer_ = 0.0f;
+				overlayEntity_ = 0;
+
+				isChanging_ = false;
+				return;
+			}
+
+			//遷移開始
+			pendingName_ = name;
+			isTransitioning_ = true;
+			transitionPhase_ = TransitionPhase::FadingOut;
+			transitionTimer_ = 0.0f;
+
+			// 最初は小さい円
+			CreateCircleOverlay(0.0f, 0.0f);
+		}
+
+		void SceneManager::Update(float deltaTime)
+		{
+			// 遷移中
+			if (isTransitioning_)
+			{
+				float half = transitionDuration_ * 0.5f;
+
+				// deltaTime 異常値対策
+				if (deltaTime > 0.0f && deltaTime < 0.1f)
+				{
+					transitionTimer_ += deltaTime;
+				}
+
+				if (transitionPhase_ == TransitionPhase::FadingOut)
+				{
+					float t = std::clamp(transitionTimer_ / half, 0.0f, 1.0f);
+					float eased = NoEngine::Easing::EaseInOutSine(0.0f, 1.0f, t);
+
+					// scale 0 -> 1
+					// alpha 0 -> 1
+					UpdateOverlay(eased, eased);
+
+					if (transitionTimer_ >= half)
+					{
+						// シーン切替
+						if (currentScene_) currentScene_->OnExit();
+
+						auto it = factories_.find(pendingName_);
+						if (it != factories_.end())
+						{
+							currentScene_ = it->second();
+							currentScene_->Setup();
+							currentScene_->OnEnter();
+						}
+
+						// 新シーン側で overlay 作り直し
+						overlayEntity_ = 0;
+						CreateCircleOverlay(1.0f, 1.0f);
+
+						// 次へ
+						transitionPhase_ = TransitionPhase::FadingIn;
+						transitionTimer_ = 0.0f;
+					}
+				}
+				else if (transitionPhase_ == TransitionPhase::FadingIn)
+				{
+					float t = std::clamp(transitionTimer_ / half, 0.0f, 1.0f);
+					float eased = NoEngine::Easing::EaseInOutSine(0.0f, 1.0f, t);
+
+					float s = 1.0f - eased;
+					UpdateOverlay(s, s);
+
+					if (transitionTimer_ >= half)
+					{
+						DestroyOverlay();
+
+						isTransitioning_ = false;
+						transitionPhase_ = TransitionPhase::None;
+						transitionTimer_ = 0.0f;
+
+						isChanging_ = false;
+					}
+				}
+
+				// 遷移中でも Scene Update
+				if (currentScene_)
+				{
+					currentScene_->Update(deltaTime);
+				}
+				return;
+			}
+
+			// 通常更新
+			if (currentScene_) currentScene_->Update(deltaTime);
+		}
+
 	}
 }

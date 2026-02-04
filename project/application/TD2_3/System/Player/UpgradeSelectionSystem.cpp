@@ -372,7 +372,6 @@ void UpgradeSelectionSystem::ApplyUpgradeChoice(No::Registry& registry, No::Enti
 	else if (choiceName == "hpLimitUp")
 	{
 		status->hpMax += 1;
-		status->hp = std::min(status->hp + 1, status->hpMax);
 	}
 	else if (choiceName == "ballUp")
 	{
@@ -423,6 +422,8 @@ void UpgradeSelectionSystem::ApplyUpgradeChoice(No::Registry& registry, No::Enti
 		}
 		status->ballCount++;
 	}
+	status->hp = status->hpMax;
+
 	BallStateComponent::ballSlowFactor = BallStateComponent::kSlowRcp;
 	BallStateComponent::ballSlowtime = 0.0f;
 }

@@ -3,6 +3,7 @@
 #include "engine/Utilities/Conversion/ConvertString.h"
 #include "engine/Functions/ECS/Component/TransformComponent.h"
 #include "../Component/BackGroundComponent.h"
+#include "engine/Math/Color/Color.h"
 
 using namespace NoEngine;
 
@@ -101,18 +102,27 @@ void BackGroundEffectPass::Execute(NoEngine::GraphicsContext& gfx, NoEngine::ECS
 
 		_declspec(align(16)) struct PSConstants
 		{
+			Color bgColor;
+			Color ringColor;
 			float time;
 			float timeScale;
 			float powerFactor;
 			float fadeInner;
 			float fadeOuter;
-			float padding[3];
+			float seed;
+			float variant;
+			uint32_t useRing;
 		} psConstants;
+		psConstants.bgColor = backGround->bgColor;
+		psConstants.ringColor = backGround->ringColor;
 		psConstants.time = backGround->time;
 		psConstants.timeScale = backGround->timeScale;
 		psConstants.powerFactor = backGround->powerFactor;
 		psConstants.fadeInner = backGround->fadeInner;
 		psConstants.fadeOuter = backGround->fadeOuter;
+		psConstants.seed = backGround->seed;
+		psConstants.variant = backGround->variant;
+		psConstants.useRing = backGround->useRing;
 
 		gfx.SetDynamicVB(0, meshData_.vertices.size(), sizeof(vertex), meshData_.vertices.data());
 		gfx.SetDynamicConstantBufferView(rootIndex["gWorld"], sizeof(vsConstants), &vsConstants);

@@ -1,38 +1,54 @@
 #pragma once
 #include "IScene.h"
-namespace NoEngine {
-namespace Scene {
-	class SceneManager
+
+#include <unordered_map>
+#include <functional>
+#include <memory>
+#include <string>
+
+namespace NoEngine
+{
+	namespace Scene
 	{
-	public:
-		using SceneFactory = std::function<std::unique_ptr<IScene>()>;
 
-		void RegisterScene(const std::string& name, SceneFactory factory) { factories_[name] = factory; }
+		class SceneManager
+		{
+		public:
+			using SceneFactory = std::function<std::unique_ptr<IScene>()>;
 
-		// immediate == true : 即時切替
-		// immediate == false: フェード遷移開始
-		void ChangeScene(const std::string& name, bool immediate = true);
+			void RegisterScene(const std::string& name, SceneFactory factory) { factories_[name] = factory; }
 
-		// Scene の Update は SceneManager 側で遷移制御を行うため実装を cpp に移動
-		void Update(float deltaTime);
+			// immediate == true : 即時切替
+			// immediate == false: CircleScale 遷移開始
+			void ChangeScene(const std::string& name, bool immediate = true);
 
-		ECS::Registry* GetRegistry() { return currentScene_ ? currentScene_->GetRegistry() : nullptr; }
+			void Update(float deltaTime);
 
-		CameraBase* GetCamera() { return currentScene_ ? currentScene_->GetCamera() : nullptr; }
+			ECS::Registry* GetRegistry() { return currentScene_ ? currentScene_->GetRegistry() : nullptr; }
+			CameraBase* GetCamera() { return currentScene_ ? currentScene_->GetCamera() : nullptr; }
 
-	private:
-		std::unordered_map<std::string, SceneFactory> factories_;
-		std::unique_ptr<IScene> currentScene_;
+		private:
+			void CreateCircleOverlay(float initialAlpha, float initialScale);
+			void UpdateOverlay(float alpha, float scale);
+			void DestroyOverlay();
 
-		// フェード遷移用状態
-		std::string pendingName_;
-		bool isTransitioning_ = false;
-		enum class TransitionPhase { None, FadingOut, Loading, FadingIn };
-		TransitionPhase transitionPhase_ = TransitionPhase::None;
-		float transitionTimer_ = 0.0f;
-		float transitionDuration_ = 1.5f;
-		ECS::Entity overlayEntity_ = 0;
-	};
-}
-}
+		private:
+			std::unordered_map<std::string, SceneFactory> factories_;
+			std::unique_ptr<IScene> currentScene_;
 
+			// 遷移状態
+			std::string pendingName_;
+			bool isChanging_ = false;
+			bool isTransitioning_ = false;
+
+			enum class TransitionPhase { None, FadingOut, Loading, FadingIn };
+			TransitionPhase transitionPhase_ = TransitionPhase::None;
+
+			float transitionTimer_ = 0.0f;
+			float transitionDuration_ = 1.5f;
+
+			ECS::Entity overlayEntity_ = 0;
+		};
+
+	} // namespace Scene
+} // namespace NoEngine

@@ -143,6 +143,7 @@ void ChefControlSystem::Update(No::Registry& registry, float deltaTime)
         ImGui::Text("currentAnim %d", animation->currentAnimation);
         ImGui::End();
 #else
+        (void)transform;
         (void)material;
 #endif // USE_IMGUI
 

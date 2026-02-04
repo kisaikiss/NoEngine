@@ -8,9 +8,11 @@ struct EnemyTag {};
 //Enemy
 struct NormalEnemyTag{};
 struct Boss1Tag{};
+struct Boss2Tag{};
 struct BatTag{};
 struct BatGreenTag{};
-
+struct CarrotTag{};
+struct WhiteRadishTag{};
 
 //Human
 struct BatGirlTag{};

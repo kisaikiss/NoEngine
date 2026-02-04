@@ -197,6 +197,12 @@ void BallControlSystem::Update(No::Registry& registry, float deltaTime)
 						ballState->isOut = false;
 						playerStatus->scoreRatio = 1.0f;
 						playerStatus->isComboing = false;
+
+						const std::string soundName[] = { 
+							"ballPong", "ballPong2"};
+
+						int soundIndex = std::rand() % 2;
+						No::SoundEffectPlay(soundName[soundIndex], 0.5f);
 					}
 					else
 					{

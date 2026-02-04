@@ -32,7 +32,9 @@ void TitleScene::Setup()
 		transform->translate.z = 5;
 		transform->scale = { 15,15,1 };
 
-		registry.AddComponent<BackGroundComponent>(backGroundEntity);
+		auto* back = registry.AddComponent<BackGroundComponent>(backGroundEntity);
+		back->seed = 1;
+		back->bgColor = Color(0x11278FFF);
 	}
 	constexpr Vector3 kStartCameraPosition = Vector3{ 0.0f, 0.0f, -10.0f };
 	//カメラ初期化
@@ -42,16 +44,21 @@ void TitleScene::Setup()
 	SetCamera(camera_.get());
 
 	//BGMの読み込み
-	No::SoundLoad(L"resources/game/td_2304//Audio/BGM/titleBGM.mp3", "titleBGM");
+	No::SoundLoad(L"resources/game/td_2304/Audio/BGM/titleBGM.mp3", "titleBGM");
 	No::SoundCompleteStop("batBGM");
 	No::SoundCompleteStop("titleBGM");
 	No::SoundPlay("titleBGM", 0.125f, true);
-	No::SoundLoad(L"resources/game/td_2304//Audio/SE/select.mp3", "select");
+	No::SoundLoad(L"resources/game/td_2304/Audio/SE/select.mp3", "select");
 }
 
 void TitleScene::NotSystemUpdate()
 {
-
+#ifdef USE_IMGUI
+	ImGui::Begin("camera");
+	ImGui::DragFloat3("pos", &cameraTransform_.translate.x, 0.1f);
+	ImGui::End();
+	camera_->SetTransform(cameraTransform_);
+#endif // USE_IMGUI
 }
 
 void TitleScene::InitTitle(No::Registry& registry)
