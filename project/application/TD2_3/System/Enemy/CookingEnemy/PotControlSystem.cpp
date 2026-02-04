@@ -179,6 +179,10 @@ void PotControlSystem::DeadUpdate(No::Registry& registry, No::Entity entity, flo
 	if (bat->deadTimer > 1.f) {
 		auto* death = registry.GetComponent<DeathFlag>(entity);
 		death->isDead = true;
+		if (death->isDead)
+		{
+			registry.EmitEvent(No::SceneChangeEvent("ResultScene"));
+		}
 		auto view = registry.View<PlayerStatusComponent>();
 		for (auto playerEntity : view) {
 			auto* status = registry.GetComponent<PlayerStatusComponent>(playerEntity);
