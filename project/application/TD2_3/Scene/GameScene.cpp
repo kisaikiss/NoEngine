@@ -36,6 +36,7 @@
 
 #include"../System/StatusSpriteControlSystem.h"
 #include"../SpriteConfigManager/SpriteConfigManager.h"
+#include "../System/Tutorial/TutorialControlSystem.h"
 //ヨシダ追加しました。
 
 // score
@@ -90,6 +91,8 @@ void GameScene::Setup()
     //playerステータス管理システム
     AddSystem(std::make_unique<PlayerStatusSystem>());
     AddSystem(std::make_unique<UpgradeSelectionSystem>());
+    //Tutorial
+    AddSystem(std::make_unique<TutorialControlSystem>());
     //HISprite
     AddSystem(std::make_unique<StatusSpriteControlSystem>());
     //衝突判定用システム
@@ -422,6 +425,7 @@ void GameScene::InitTutorialSprite(No::Registry& registry)
         registry.AddComponent<TutorialSpriteTag>(stickLEntity);
         auto* ts = registry.AddComponent<No::Transform2DComponent>(stickLEntity);
         ts->scale = { 72, 80 };
+        ts->translate = { 0.0f,360.0f };
         auto* sprite = registry.AddComponent<No::SpriteComponent>(stickLEntity);
         sprite->name = "stickL";
 
@@ -434,6 +438,7 @@ void GameScene::InitTutorialSprite(No::Registry& registry)
         registry.AddComponent<TutorialSpriteTag>(stickLEntity);
         auto* ts = registry.AddComponent<No::Transform2DComponent>(stickLEntity);
         ts->scale = { 58,80 };
+        ts->translate = { 0.0f,360.0f };
         auto* sprite = registry.AddComponent<No::SpriteComponent>(stickLEntity);
         sprite->name = "cursorMove";
         sprite->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Sprite/cursorMove.png");
@@ -445,6 +450,7 @@ void GameScene::InitTutorialSprite(No::Registry& registry)
         registry.AddComponent<TutorialSpriteTag>(stickLEntity);
         auto* ts = registry.AddComponent<No::Transform2DComponent>(stickLEntity);
         ts->scale = { 61, 76 };
+        ts->translate = { 0.0f,360.0f };
         auto* sprite = registry.AddComponent<No::SpriteComponent>(stickLEntity);
         sprite->name = "gameAButton2";
         sprite->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Sprite/gameAButton2.png");
@@ -457,6 +463,7 @@ void GameScene::InitTutorialSprite(No::Registry& registry)
         registry.AddComponent<TutorialSpriteTag>(stickLEntity);
         auto* ts = registry.AddComponent<No::Transform2DComponent>(stickLEntity);
         ts->scale = { 62, 72 };
+        ts->translate = { 0.0f,360.0f };
         auto* sprite = registry.AddComponent<No::SpriteComponent>(stickLEntity);
         sprite->name = "cursorPush";
         sprite->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Sprite/cursorPush.png");
@@ -469,6 +476,7 @@ void GameScene::InitTutorialSprite(No::Registry& registry)
         registry.AddComponent<TutorialSpriteTag>(stickLEntity);
         auto* ts = registry.AddComponent<No::Transform2DComponent>(stickLEntity);
         ts->scale = { 424,74 };
+        ts->translate = { 0.0f,360.0f };
         auto* sprite = registry.AddComponent<No::SpriteComponent>(stickLEntity);
         sprite->name = "paddleRound";
         sprite->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Sprite/paddle.png");
@@ -480,6 +488,7 @@ void GameScene::InitTutorialSprite(No::Registry& registry)
         registry.AddComponent<TutorialSpriteTag>(stickLEntity);
         auto* ts = registry.AddComponent<No::Transform2DComponent>(stickLEntity);
         ts->scale = { 402,82 };
+        ts->translate = { 0.0f,360.0f };
         auto* sprite = registry.AddComponent<No::SpriteComponent>(stickLEntity);
         sprite->name = "throwBall";
         sprite->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Sprite/throwBall.png");
