@@ -12,7 +12,7 @@
 #include "../Component/UpgradeChooseComponent.h"
 #include "../Component/PhaseComponent.h"
 #include "../Component/ScoreDigitComponent.h"
-
+#include "../Component/TutorialSpriteComponent.h"
 //collision
 #include "../System/CollisionSystem.h"
 //player
@@ -424,8 +424,11 @@ void GameScene::InitTutorialSprite(No::Registry& registry)
         No::Entity stickLEntity = registry.GenerateEntity();
         registry.AddComponent<TutorialSpriteTag>(stickLEntity);
         auto* ts = registry.AddComponent<No::Transform2DComponent>(stickLEntity);
+        registry.AddComponent<TutorialSpriteComponent>(stickLEntity);
+    
         ts->scale = { 72, 80 };
         ts->translate = { 0.0f,360.0f };
+
         auto* sprite = registry.AddComponent<No::SpriteComponent>(stickLEntity);
         sprite->name = "stickL";
 
@@ -437,6 +440,7 @@ void GameScene::InitTutorialSprite(No::Registry& registry)
         No::Entity stickLEntity = registry.GenerateEntity();
         registry.AddComponent<TutorialSpriteTag>(stickLEntity);
         auto* ts = registry.AddComponent<No::Transform2DComponent>(stickLEntity);
+        registry.AddComponent<TutorialSpriteComponent>(stickLEntity);
         ts->scale = { 58,80 };
         ts->translate = { 0.0f,360.0f };
         auto* sprite = registry.AddComponent<No::SpriteComponent>(stickLEntity);
@@ -449,6 +453,7 @@ void GameScene::InitTutorialSprite(No::Registry& registry)
         No::Entity stickLEntity = registry.GenerateEntity();
         registry.AddComponent<TutorialSpriteTag>(stickLEntity);
         auto* ts = registry.AddComponent<No::Transform2DComponent>(stickLEntity);
+        registry.AddComponent<TutorialSpriteComponent>(stickLEntity);
         ts->scale = { 61, 76 };
         ts->translate = { 0.0f,360.0f };
         auto* sprite = registry.AddComponent<No::SpriteComponent>(stickLEntity);
@@ -462,6 +467,7 @@ void GameScene::InitTutorialSprite(No::Registry& registry)
         No::Entity stickLEntity = registry.GenerateEntity();
         registry.AddComponent<TutorialSpriteTag>(stickLEntity);
         auto* ts = registry.AddComponent<No::Transform2DComponent>(stickLEntity);
+        registry.AddComponent<TutorialSpriteComponent>(stickLEntity);
         ts->scale = { 62, 72 };
         ts->translate = { 0.0f,360.0f };
         auto* sprite = registry.AddComponent<No::SpriteComponent>(stickLEntity);
@@ -475,6 +481,7 @@ void GameScene::InitTutorialSprite(No::Registry& registry)
         No::Entity stickLEntity = registry.GenerateEntity();
         registry.AddComponent<TutorialSpriteTag>(stickLEntity);
         auto* ts = registry.AddComponent<No::Transform2DComponent>(stickLEntity);
+        registry.AddComponent<TutorialSpriteComponent>(stickLEntity);
         ts->scale = { 424,74 };
         ts->translate = { 0.0f,360.0f };
         auto* sprite = registry.AddComponent<No::SpriteComponent>(stickLEntity);
@@ -487,6 +494,7 @@ void GameScene::InitTutorialSprite(No::Registry& registry)
         No::Entity stickLEntity = registry.GenerateEntity();
         registry.AddComponent<TutorialSpriteTag>(stickLEntity);
         auto* ts = registry.AddComponent<No::Transform2DComponent>(stickLEntity);
+        registry.AddComponent<TutorialSpriteComponent>(stickLEntity);
         ts->scale = { 402,82 };
         ts->translate = { 0.0f,360.0f };
         auto* sprite = registry.AddComponent<No::SpriteComponent>(stickLEntity);

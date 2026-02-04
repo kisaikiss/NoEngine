@@ -331,6 +331,7 @@
     <ClInclude Include="application\TD2_3\System\ScoreRankingSystem.h" />
     <ClInclude Include="application\TD2_3\System\Human\HumanControlSystem.h" />
     <ClInclude Include="application\TD2_3\System\Tutorial\TutorialControlSystem.h" />
+    <ClInclude Include="application\TD2_3\Component\TutorialSpriteComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />
