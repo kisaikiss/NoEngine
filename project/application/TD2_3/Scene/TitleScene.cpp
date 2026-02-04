@@ -44,16 +44,21 @@ void TitleScene::Setup()
 	SetCamera(camera_.get());
 
 	//BGMの読み込み
-	No::SoundLoad(L"resources/game/td_2304//Audio/BGM/titleBGM.mp3", "titleBGM");
+	No::SoundLoad(L"resources/game/td_2304/Audio/BGM/titleBGM.mp3", "titleBGM");
 	No::SoundCompleteStop("batBGM");
 	No::SoundCompleteStop("titleBGM");
 	No::SoundPlay("titleBGM", 0.125f, true);
-	No::SoundLoad(L"resources/game/td_2304//Audio/SE/select.mp3", "select");
+	No::SoundLoad(L"resources/game/td_2304/Audio/SE/select.mp3", "select");
 }
 
 void TitleScene::NotSystemUpdate()
 {
-
+#ifdef USE_IMGUI
+	ImGui::Begin("camera");
+	ImGui::DragFloat3("pos", &cameraTransform_.translate.x, 0.1f);
+	ImGui::End();
+	camera_->SetTransform(cameraTransform_);
+#endif // USE_IMGUI
 }
 
 void TitleScene::InitTitle(No::Registry& registry)

@@ -41,7 +41,7 @@ void GameOverScene::Setup()
 	InitPlayerScore();
 	InitRankingSprite();
 
-	constexpr Vector3 kStartCameraPosition = Vector3{ 0.0f, 0.0f, -10.0f };
+	constexpr Vector3 kStartCameraPosition = Vector3{ 0.0f, 0.0f, -28.0f };
 	//カメラ初期化
 	camera_ = std::make_unique<NoEngine::Camera>();
 	cameraTransform_.translate = kStartCameraPosition;
@@ -52,8 +52,14 @@ void GameOverScene::Setup()
 
 void GameOverScene::NotSystemUpdate()
 {
-	if (NoEngine::Input::Keyboard::IsTrigger(VK_RETURN) ||
-		NoEngine::Input::Pad::IsTrigger(NoEngine::Input::GamepadButton::A))
+#ifdef USE_IMGUI
+	ImGui::Begin("camera");
+	ImGui::DragFloat3("pos", &cameraTransform_.translate.x, 0.1f);
+	ImGui::End();
+	camera_->SetTransform(cameraTransform_);
+#endif // USE_IMGUI
+	if ((No::Keyboard::IsTrigger(VK_RETURN) ||
+		No::Pad::IsTrigger(No::GamepadButton::A)) && !isChangeScene_)
 	{
 		GetRegistry()->EmitEvent(NoEngine::Event::SceneChangeEvent("TitleScene"));
 	}

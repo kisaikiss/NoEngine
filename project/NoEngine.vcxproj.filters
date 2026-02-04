@@ -15,8 +15,6 @@
     <FxCompile Include="resources\game\Shaders\BackGround.VS.hlsl" />
     <FxCompile Include="resources\game\Shaders\BallTrail.PS.hlsl" />
     <FxCompile Include="resources\game\Shaders\BallTrail.VS.hlsl" />
-    <FxCompile Include="resources\game\Shaders\RingAndBall.PS.hlsl" />
-    <FxCompile Include="resources\game\Shaders\RingAndBall.VS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="application\TD2_3\Component\DynamicSplinePath.cpp" />
