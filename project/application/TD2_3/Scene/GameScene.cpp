@@ -166,7 +166,10 @@ void GameScene::NotSystemUpdate()
     camera_->Update();
 
 #ifdef _DEBUG
-    PhaseComponent::phase = Phase::TWO;
+    if (Input::Keyboard::IsTrigger(VK_F2)) {
+        PhaseComponent::phase = Phase::TWO;
+    }
+
 #endif
     switch (PhaseComponent::phase) {
     case Phase::ONE:
