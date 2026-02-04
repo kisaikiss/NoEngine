@@ -26,6 +26,8 @@ private:
 	void InitLights(No::Registry& registry);
 	void InitHpGaugeSprite(No::Registry& registry);
 	void InitLevelGaugeSprite(No::Registry& registry);
+	void InitTutorialSprite(No::Registry& registry);
+
 	void InitScore(No::Registry& registry);
 	void InitBat(No::Registry& registry);
 	void InitPhase(No::Registry& registry);
