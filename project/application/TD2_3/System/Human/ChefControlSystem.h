@@ -13,6 +13,5 @@ public:
     bool isAmoreStart_ = false;
     bool isBallHit_ = false;
     std::vector<std::string> loseVoice_;
-    bool isSetParent_ = false;
 };
 

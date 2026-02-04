@@ -16,6 +16,12 @@ HumanControlSystem::HumanControlSystem()
 
 void HumanControlSystem::Update(No::Registry& registry, float deltaTime)
 {
+    auto view = registry.View<
+        No::TransformComponent,
+        EnemyHumanTag>();
+
+
+
 
     auto phaseView = registry.View<PhaseComponent>();
 
@@ -41,15 +47,36 @@ void HumanControlSystem::Update(No::Registry& registry, float deltaTime)
         }
     }
 
-    auto view = registry.View<
-        No::TransformComponent,
-        EnemyHumanTag>();
-
-
 
     for (auto entity : view) {
+       
         auto* transform = registry.GetComponent<No::TransformComponent>(entity);
 
+        if (!isSetParent_) {
+
+            isSetParent_ = true;
+
+   
+            auto batGirlView = registry.View<
+                No::TransformComponent,
+                BatGirlTag>();
+
+            for (auto batGirlEntity : batGirlView) {
+                registry.GetComponent<No::TransformComponent>(batGirlEntity)->parent = transform;
+            }
+
+            auto ChefView = registry.View<
+                No::TransformComponent,
+                ChefTag>();
+
+            for (auto chefEntity : ChefView) {
+                registry.GetComponent<No::TransformComponent>(chefEntity)->parent = transform;
+            }
+
+
+        }
+
+        
         if (isChangePhase_ /*&& !timer_ == 0.0f*/) {
 
             timer_ -= deltaTime;
