@@ -10,6 +10,7 @@
 #include "application/TD2_3/Component/EffectComponent.h"
 #include "application/TD2_3/Random/RandomFanc.h"
 #include "application/TD2_3/Component/PlayerstatusComponent.h"
+#include "application/TD2_3/Component/PhaseComponent.h"
 
 void BossControlSystem::Update(No::Registry& registry, float deltaTime) {
 
@@ -234,6 +235,12 @@ void BossControlSystem::DeadUpdate(No::Registry& registry, No::Entity entity, fl
 			status->score += 1000;
 			status->exp += 30;
 
+		}
+
+		auto phaseView = registry.View<PhaseComponent>();
+		for (auto phaseEntity : phaseView) {
+			auto* phase = registry.GetComponent<PhaseComponent>(phaseEntity);
+			phase->phase = Phase::TWO;
 		}
 	}
 

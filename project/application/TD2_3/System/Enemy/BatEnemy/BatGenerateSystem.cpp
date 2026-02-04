@@ -5,6 +5,7 @@
 #include "../../../Component/Enemy/BatComponent.h"
 #include "../../../Component/PlayerstatusComponent.h"
 #include "../../../tag.h"
+#include "../../../Component/PhaseComponent.h"
 
 namespace {
 float sGenerateTime = 10.f;
@@ -17,6 +18,15 @@ void BatGenerateSystem::Update(No::Registry& registry, float deltaTime) {
         playerStatus = registry.GetComponent<PlayerStatusComponent>(playerEntity);
         if (playerStatus->pendingUpgrade) {
             // レベルアップ選択中はうごかさない
+            return;
+        }
+    }
+
+    auto phaseView = registry.View<PhaseComponent>();
+    for (auto entity : phaseView) {
+        auto* phase = registry.GetComponent<PhaseComponent>(entity);
+        if (phase->phase != Phase::ONE) {
+            // Phase1以外では動かさない
             return;
         }
     }

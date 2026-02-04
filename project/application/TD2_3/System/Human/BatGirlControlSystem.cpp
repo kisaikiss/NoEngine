@@ -19,6 +19,15 @@ BatGirlControlSystem::BatGirlControlSystem()
 void BatGirlControlSystem::Update(No::Registry& registry, float deltaTime)
 {
 
+    No::TransformComponent* parent = nullptr;
+
+        auto humanParentView = registry.View<No::TransformComponent, EnemyHumanTag>();
+        for (auto entity : humanParentView) {
+            parent = registry.GetComponent<No::TransformComponent>(entity);
+        }
+        assert(parent);
+
+
     auto phaseView = registry.View<PhaseComponent>();
     for (auto entity : phaseView) {
         auto* phase = registry.GetComponent<PhaseComponent>(entity);
@@ -64,6 +73,13 @@ void BatGirlControlSystem::Update(No::Registry& registry, float deltaTime)
 
     for (auto entity : view)
     {
+
+        //人間を親にする
+        if (!isSetParent_) {
+            auto* transform = registry.GetComponent<No::TransformComponent>(entity);
+            transform->parent = parent;
+            isSetParent_ = true;
+        }
 
         auto* material = registry.GetComponent<No::MaterialComponent>(entity);
         auto*  animation = registry.GetComponent<No::AnimatorComponent>(entity);

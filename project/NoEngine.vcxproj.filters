@@ -144,6 +144,7 @@
     <ClCompile Include="application\TD2_3\System\Enemy\Boss\BossGenerateSystem.cpp" />
     <ClCompile Include="application\TD2_3\Component\DynamicSplinePath.cpp" />
     <ClCompile Include="application\TD2_3\System\ScoreRankingSystem.cpp" />
+    <ClCompile Include="application\TD2_3\System\Human\HumanControlSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="application\TD2_3\Component\BackGroundComponent.h" />
@@ -327,6 +328,7 @@
     <ClInclude Include="application\TD2_3\Component\DynamicSplinePath.h" />
     <ClInclude Include="application\TD2_3\Component\ScoreDigitComponent.h" />
     <ClInclude Include="application\TD2_3\System\ScoreRankingSystem.h" />
+    <ClInclude Include="application\TD2_3\System\Human\HumanControlSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

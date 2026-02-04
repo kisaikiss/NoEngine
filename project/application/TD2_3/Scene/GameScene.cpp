@@ -32,6 +32,7 @@
 #include "../System/Human/BatGirlControlSystem.h"
 #include "../System/Human/ChefControlSystem.h"
 #include "../System/Human/PlayerGirlControlSystem.h"
+#include"../System/Human/HumanControlSystem.h"
 
 #include"../System/StatusSpriteControlSystem.h"
 #include"../SpriteConfigManager/SpriteConfigManager.h"
@@ -78,6 +79,8 @@ void GameScene::Setup()
     AddSystem(std::make_unique<BossGenerateSystem>());
     AddSystem(std::make_unique<BossControlSystem>());
     AddSystem(std::make_unique<EnemyBulletControlSystem>());
+    //HumanControlSystem シーン切り替え時の処理用
+    AddSystem(std::make_unique<HumanControlSystem>());
     //こうもり少女のシステム
     AddSystem(std::make_unique<BatGirlControlSystem>());
     //シェフシステム
@@ -110,10 +113,11 @@ void GameScene::Setup()
     InitBat(registry);
     InitRing(registry);
     InitBall(registry);
+    InitHumanParent(registry);
     InitBatGirl(registry);
     InitPlayerGirl(registry);
     //シェフの初期化
- /*   InitChef(registry);*/
+    InitChef(registry);
     InitPlayerStatus(registry);
     InitLights(registry);
     InitHpGaugeSprite(registry);
@@ -264,6 +268,7 @@ void GameScene::InitBackGround(No::Registry& registry)
 {
     No::Entity backGroundEntity = registry.GenerateEntity();
     auto* transform = registry.AddComponent<No::TransformComponent>(backGroundEntity);
+    
     transform->translate.z = 5;
     transform->scale = { 30,30,1 };
 
@@ -280,7 +285,7 @@ void GameScene::InitBatGirl(No::Registry& registry)
     auto* animationComp = registry.AddComponent<No::AnimatorComponent>(batGirlEntity);
     NoEngine::ModelLoader::LoadModel("batGirl", "resources/game/td_2304/Model/batGirl/batGirl.gltf", model, animationComp);
 
-    transform->translate = { 6.1f,-14.55f,-8.5f };
+    transform->translate = { -2.75f,0.0f,0.0f};
     transform->rotation.FromAxisAngle(NoEngine::Vector3::UP, 3.14f);
 
     auto m = registry.AddComponent<No::MaterialComponent>(batGirlEntity);
@@ -318,6 +323,8 @@ void GameScene::InitPlayerGirl(No::Registry& registry)
 
 void GameScene::InitChef(No::Registry& registry)
 {
+
+
     No::Entity chefEntity = registry.GenerateEntity();
     registry.AddComponent<ChefTag>(chefEntity);
 
@@ -326,8 +333,7 @@ void GameScene::InitChef(No::Registry& registry)
     auto* animationComp = registry.AddComponent<No::AnimatorComponent>(chefEntity);
     NoEngine::ModelLoader::LoadModel("chef", "resources/game/td_2304/Model/man/man.gltf", model, animationComp);
 
-    transform->translate = { 6.1f,-14.55f,-8.5f };
-    transform->rotation.FromAxisAngle(NoEngine::Vector3::UP, 3.14f);
+    transform->translate = { 3.00f,0.0f,0.0f};
 
     auto m = registry.AddComponent<No::MaterialComponent>(chefEntity);
     m->materials = NoEngine::ModelLoader::GetMaterial("chef");
@@ -338,6 +344,14 @@ void GameScene::InitChef(No::Registry& registry)
     m->psoId = NoEngine::Render::GetPSOID(m->psoName);
     m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
 
+}
+
+void GameScene::InitHumanParent(No::Registry& registry)
+{
+    No::Entity humanControlSystem = registry.GenerateEntity();
+   auto* transform =  registry.AddComponent<No::TransformComponent>(humanControlSystem);
+   transform->translate = { 9.5f, -14.55f, -8.5f };
+    registry.AddComponent<EnemyHumanTag>(humanControlSystem);
 }
 
 void GameScene::InitPlayerStatus(No::Registry& registry)
