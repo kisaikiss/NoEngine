@@ -15,7 +15,6 @@ private:
 
     std::vector<std::string> strings_;
     std::vector<std::string> winVoice_;
-    std::vector<std::string> advices_;
     bool isBallOut_ = false;
 
     bool isSoundWin_ = false;
