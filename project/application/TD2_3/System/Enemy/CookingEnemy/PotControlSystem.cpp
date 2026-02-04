@@ -11,6 +11,7 @@
 #include "application/TD2_3/Random/RandomFanc.h"
 #include "application/TD2_3/Component/PlayerstatusComponent.h"
 #include "application/TD2_3/Component/PhaseComponent.h"
+#include "application/TD2_3/Component/Enemy/IngredientsComponent.h"
 
 void PotControlSystem::Update(No::Registry& registry, float deltaTime) {
 
@@ -130,26 +131,15 @@ void PotControlSystem::MoveUpdate(No::Registry& registry, No::Entity entity, flo
 		path->t);
 
 
-	// 玉の方を見る
-	float finalLength = 100000.f;
-	No::Entity ballEn = 0;
-	auto view = registry.View<BallTag>();
-	for (auto e : view) {
-		auto* t = registry.GetComponent<No::TransformComponent>(e);
+	// 回転
+	auto pot = registry.GetComponent<PotBossComponent>(entity);
+	pot->t += deltaTime;
+	Quaternion rotate{};
+	rotate.FromAxisAngle(Vector3::FORWARD, std::sinf(pot->t));
 
-		float length = LengthSquared(transform->GetWorldPosition() - t->GetWorldPosition());
-
-		if (length < finalLength) {
-			finalLength = length;
-			ballEn = e;
-		}
-	}
-	if (ballEn == 0) return;
-	auto* t = registry.GetComponent<No::TransformComponent>(ballEn);
-	Vector3 offset = { 0.f,0.f,-10.f };
-	No::TransformComponent tt = *transform;
-	LookTarget(tt, t->GetWorldPosition() + offset);
-	transform->rotation = Slerp(transform->rotation, tt.rotation, 7.f * deltaTime);
+	Quaternion rotate2{};
+	rotate2.FromAxisAngle(Vector3::UP, PI);
+	transform->rotation = rotate * rotate2;
 
 	
 }
@@ -218,15 +208,15 @@ void PotControlSystem::DeadUpdate(No::Registry& registry, No::Entity entity, flo
 
 
 
-void PotControlSystem::Shoot(No::Registry& registry, No::TransformComponent* enemyTransform, const NoEngine::Vector3& target) {
+void PotControlSystem::Shoot(No::Registry& registry, No::TransformComponent* enemyTransform) {
 	using namespace NoEngine;
 	No::Entity entity = registry.GenerateEntity();
-	auto* ultrasound = registry.AddComponent<EnemyBulletComponent>(entity);
+	auto* ultrasound = registry.AddComponent<IngredientsComponent>(entity);
 	registry.AddComponent<DeathFlag>(entity);
 
-	const float kUltrasoundSpeed = 5.f;
-	ultrasound->velocity = target - enemyTransform->translate;
-	ultrasound->velocity = ultrasound->velocity.Normalize() * kUltrasoundSpeed;
+	//const float kUltrasoundSpeed = 5.f;
+	
+	ultrasound->velocity;
 
 	auto* collider = registry.AddComponent<SphereColliderComponent>(entity);
 	collider->colliderType = ColliderMask::kEnemy;
@@ -237,8 +227,7 @@ void PotControlSystem::Shoot(No::Registry& registry, No::TransformComponent* ene
 	transform->translate = enemyTransform->translate;
 	transform->scale = 2.5f;
 	Vector3 offset = { 0.f,0.f,-5.f };
-	LookTarget(*transform, target + offset);
-
+	
 
 	auto* model = registry.AddComponent<No::MeshComponent>(entity);
 	auto* animationComp = registry.AddComponent<No::AnimatorComponent>(entity);

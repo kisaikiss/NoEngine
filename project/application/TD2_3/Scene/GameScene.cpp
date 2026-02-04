@@ -58,6 +58,7 @@
 #include "../System/Enemy/CookingEnemy/WhiteRadishControlSystem.h"
 #include "../System/Enemy/CookingEnemy/CarrotControlSystem.h"
 #include "../System/Enemy/CookingEnemy/PotControlSystem.h"
+#include "../System/Enemy/CookingEnemy/IngredientsControlSystem.h"
 
 #include "../tag.h"
 
@@ -88,6 +89,7 @@ void GameScene::Setup()
     AddSystem(std::make_unique<BossControlSystem>());
     AddSystem(std::make_unique<PotControlSystem>());
     AddSystem(std::make_unique<EnemyBulletControlSystem>());
+    AddSystem(std::make_unique<IngredientsControlSystem>());
     //HumanControlSystem シーン切り替え時の処理用
     AddSystem(std::make_unique<HumanControlSystem>());
     //こうもり少女のシステム
