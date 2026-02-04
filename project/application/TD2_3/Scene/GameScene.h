@@ -21,6 +21,7 @@ private:
 	void InitBatGirl(No::Registry& registry);
 	void InitPlayerGirl(No::Registry& registry);
 	void InitChef(No::Registry& registry);
+	void InitHumanParent(No::Registry& registry);
 	void InitPlayerStatus(No::Registry& registry);
 	void InitLights(No::Registry& registry);
 	void InitHpGaugeSprite(No::Registry& registry);

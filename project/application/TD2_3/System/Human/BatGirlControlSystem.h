@@ -12,5 +12,6 @@ public:
     uint32_t idleRandNum_ = 0;
     bool isWin_ = false;
     bool isLaughStart_ = false;
+    bool isSetParent_ = false;
 };
 

@@ -15,7 +15,7 @@ ChefControlSystem::ChefControlSystem()
     No::SoundLoad(L"resources/game/td_2304//Audio/Voice/chef_sharenaran.mp3", "chef_sharenaran");
     No::SoundLoad(L"resources/game/td_2304//Audio/Voice/chef_akan.mp3", "chef_akan");
     No::SoundLoad(L"resources/game/td_2304//Audio/Voice/chef_ariehen.mp3", "chef_ariehen");
-  
+
     loseVoice_.clear();
     loseVoice_.push_back("chef_sharenaran");
     loseVoice_.push_back("chef_akan");
@@ -25,6 +25,31 @@ ChefControlSystem::ChefControlSystem()
 
 void ChefControlSystem::Update(No::Registry& registry, float deltaTime)
 {
+
+    if (!isSetParent_) {
+
+        auto humanParentView = registry.View<No::TransformComponent, EnemyHumanTag>();
+        No::TransformComponent* parent = nullptr;
+
+        for (auto entity : humanParentView) {
+            parent = registry.GetComponent<No::TransformComponent>(entity);
+        }
+
+        auto view = registry.View<
+            No::TransformComponent,
+            No::MaterialComponent,
+            No::AnimatorComponent,
+            ChefTag>();
+
+        for (auto entity : view)
+        {
+            //人間を親にする
+            auto* transform = registry.GetComponent<No::TransformComponent>(entity);
+            transform->parent = parent;
+            isSetParent_ = true;
+        }
+
+    }
 
     auto phaseView = registry.View<PhaseComponent>();
     for (auto entity : phaseView) {
@@ -72,6 +97,7 @@ void ChefControlSystem::Update(No::Registry& registry, float deltaTime)
     for (auto entity : view)
     {
 
+
         auto* material = registry.GetComponent<No::MaterialComponent>(entity);
         auto* animation = registry.GetComponent<No::AnimatorComponent>(entity);
 
@@ -84,7 +110,7 @@ void ChefControlSystem::Update(No::Registry& registry, float deltaTime)
             }
 
         } else if (isEnemyDead) {
-            
+
             if (!isAmoreStart_) {
                 //アモーレ開始していないとき
                 if (!isBallHit_) {
