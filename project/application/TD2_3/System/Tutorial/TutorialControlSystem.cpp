@@ -108,7 +108,14 @@ void TutorialControlSystem::MoveSprite(No::Transform2DComponent* transform, Tuto
         float time = tutorial->startTimer / kFirstStartTime;
         time = std::clamp(time, 0.0f, 1.0f);
 
-        tutorial->startPos = kStartPosX_ + transform->scale.x * 0.5f+offset.x;
+        float offsetX = 0.0f;
+        if (offset.x < 0.0f) {
+            offsetX = -offset.x;
+        } else {
+            offsetX = offset.x;
+        }
+
+        tutorial->startPos = kStartPosX_ + transform->scale.x * 0.5f+ offsetX;
         tutorial->endPos = kMiddlePosX_ + offset.x;
         transform->translate.x = EaseInOutBack(tutorial->startPos, tutorial->endPos, time);
 
