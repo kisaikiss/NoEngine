@@ -238,8 +238,8 @@ void BossControlSystem::DeadUpdate(No::Registry& registry, No::Entity entity, fl
 		}
 
 		auto phaseView = registry.View<PhaseComponent>();
-		for (auto entity : phaseView) {
-			auto* phase = registry.GetComponent<PhaseComponent>(entity);
+		for (auto phaseEntity : phaseView) {
+			auto* phase = registry.GetComponent<PhaseComponent>(phaseEntity);
 			phase->phase = Phase::TWO;
 		}
 	}
