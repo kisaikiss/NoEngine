@@ -43,6 +43,8 @@ void TitleScene::Setup()
 
 	//BGMの読み込み
 	No::SoundLoad(L"resources/game/td_2304//Audio/BGM/titleBGM.mp3", "titleBGM");
+	No::SoundCompleteStop("batBGM");
+	No::SoundCompleteStop("titleBGM");
 	No::SoundPlay("titleBGM", 0.125f, true);
 	No::SoundLoad(L"resources/game/td_2304//Audio/SE/select.mp3", "select");
 }

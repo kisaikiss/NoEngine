@@ -583,7 +583,9 @@ void GameScene::SoundLoad()
     No::SoundLoad(L"resources/game/td_2304//Audio/SE/chargeEnter.mp3", "chargeEnter");
 
     No::SoundLoad(L"resources/game/td_2304//Audio/SE/batDie.mp3", "batDie");
-    No::SoundStop("titleBGM");
+
+    No::SoundCompleteStop("titleBGM");
+    No::SoundCompleteStop("batBGM");
     No::SoundPlay("batBGM", 0.25f, true);
 }
 
