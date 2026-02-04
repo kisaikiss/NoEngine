@@ -21,5 +21,7 @@ private:
 
     uint32_t idleRandNum_ = 0;
 
+    bool isGameOverAnimationStart_ = false;
+
 };
 

@@ -8,10 +8,9 @@ void TutorialControlSystem::Update(No::Registry& registry, float deltaTime)
 {
     timer_ += deltaTime;
 
-    if (timer_ <= 2.0f) {
+    if (timer_ <= 2.0f|| timer_ >= 20.0f) {
         return;
     }
-
 
     auto spriteView = registry.View<
         No::Transform2DComponent,
