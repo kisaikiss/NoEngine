@@ -113,7 +113,7 @@ void WhiteRadishControlSystem::DeadUpdate(No::Entity entity, No::Registry& regis
 		auto view = registry.View<PlayerStatusComponent>();
 		for (auto playerEntity : view) {
 			auto* status = registry.GetComponent<PlayerStatusComponent>(playerEntity);
-			status->score += 100;
+			status->score += int32_t(150 * status->scoreRatio);
 			status->exp++;
 
 		}

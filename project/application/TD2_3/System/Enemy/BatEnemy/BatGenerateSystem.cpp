@@ -42,7 +42,7 @@ void BatGenerateSystem::Update(No::Registry& registry, float deltaTime) {
 
 	if (timer_ > sGenerateTime) {
 		timer_ = 0.f;
-        sGenerateTime = RNG::GetRandomVal(5.f, 10.f);
+        sGenerateTime = RNG::GetRandomVal(4.f, 7.f);
 
         uint32_t generateCount = 0;
 

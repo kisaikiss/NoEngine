@@ -6,4 +6,5 @@ struct IngredientsComponent {
 	static inline const float skGravity = -9.f;
 	NoEngine::Vector3 velocity{};
 	float t = 0.f;
+	bool isCollide = false;
 };

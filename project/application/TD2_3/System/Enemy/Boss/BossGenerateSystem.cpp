@@ -8,7 +8,7 @@
 #include "application/TD2_3/Component/PhaseComponent.h"
 
 namespace {
-const float skGenerateTime = 1.f;
+const float skGenerateTime = 60.f;
 }
 
 

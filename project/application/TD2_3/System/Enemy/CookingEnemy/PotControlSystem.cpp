@@ -141,6 +141,27 @@ void PotControlSystem::MoveUpdate(No::Registry& registry, No::Entity entity, flo
 	rotate2.FromAxisAngle(Vector3::UP, PI);
 	transform->rotation = rotate * rotate2;
 
+	// 具材出す
+	
+	if (std::sinf(pot->t) > 0.6f) {
+		pot->shootTimer += 5.f * deltaTime;
+		if (pot->shootTimer > 1.f) {
+			pot->shootTimer = 0.f;
+			Vector3 velocity = Vector3(RNG::GetRandomVal(-5.f, -2.f), RNG::GetRandomVal(5.f, 10.f), 0.f);
+			
+			Shoot(registry, transform, velocity);
+		}
+
+	}else if(std::sinf(pot->t) < -0.6f) {
+		pot->shootTimer += 5.f * deltaTime;
+		if (pot->shootTimer > 1.f) {
+			pot->shootTimer = 0.f;
+			Vector3 velocity = Vector3(RNG::GetRandomVal(2.f, 5.f), RNG::GetRandomVal(5.f, 10.f), 0.f);
+			Shoot(registry, transform, velocity);
+		}
+
+	}
+
 	
 }
 
@@ -186,9 +207,7 @@ void PotControlSystem::DeadUpdate(No::Registry& registry, No::Entity entity, flo
 		auto view = registry.View<PlayerStatusComponent>();
 		for (auto playerEntity : view) {
 			auto* status = registry.GetComponent<PlayerStatusComponent>(playerEntity);
-			status->score += 1000;
-			status->exp += 30;
-
+			status->score += int32_t(1500 * status->scoreRatio);
 		}
 
 		auto phaseView = registry.View<PhaseComponent>();
@@ -202,7 +221,7 @@ void PotControlSystem::DeadUpdate(No::Registry& registry, No::Entity entity, flo
 		bat->shootTimer = 0.f;
 		const float kSmokeNum = 3;
 		for (uint32_t i = 0; i < kSmokeNum; i++) {
-			Vector3 smokePosition = transform->GetWorldPosition() + Vector3(RNG::GetRandomValNormalized(), RNG::GetRandomValNormalized(), -1.f);
+			Vector3 smokePosition = transform->translate + Vector3(RNG::GetRandomValNormalized(), RNG::GetRandomValNormalized(), -1.f);
 			GenerateSmokeEffect(registry, smokePosition);
 		}
 	}
@@ -212,15 +231,13 @@ void PotControlSystem::DeadUpdate(No::Registry& registry, No::Entity entity, flo
 
 
 
-void PotControlSystem::Shoot(No::Registry& registry, No::TransformComponent* enemyTransform) {
+void PotControlSystem::Shoot(No::Registry& registry, No::TransformComponent* enemyTransform, NoEngine::Vector3 velocity) {
 	using namespace NoEngine;
 	No::Entity entity = registry.GenerateEntity();
 	auto* ultrasound = registry.AddComponent<IngredientsComponent>(entity);
 	registry.AddComponent<DeathFlag>(entity);
 
-	//const float kUltrasoundSpeed = 5.f;
-	
-	ultrasound->velocity;
+	ultrasound->velocity = velocity;
 
 	auto* collider = registry.AddComponent<SphereColliderComponent>(entity);
 	collider->colliderType = ColliderMask::kEnemy;
@@ -229,20 +246,20 @@ void PotControlSystem::Shoot(No::Registry& registry, No::TransformComponent* ene
 	auto* transform = registry.AddComponent<No::TransformComponent>(entity);
 	transform->rotation.FromAxisAngle(Vector3::UP, 3.14f);
 	transform->translate = enemyTransform->translate;
-	transform->scale = 2.5f;
+	transform->scale = 1.f;
 	Vector3 offset = { 0.f,0.f,-5.f };
 	
 
 	auto* model = registry.AddComponent<No::MeshComponent>(entity);
 	auto* animationComp = registry.AddComponent<No::AnimatorComponent>(entity);
-	NoEngine::ModelLoader::LoadModel("wave", "resources/game/td_2304/Model/wave/wave.obj", model, animationComp);
+	NoEngine::ModelLoader::LoadModel("veg", "resources/game/td_2304/Model/potVegetable/veg.obj", model, animationComp);
 
 	auto m = registry.AddComponent<No::MaterialComponent>(entity);
-	m->materials = NoEngine::ModelLoader::GetMaterial("wave");
+	m->materials = NoEngine::ModelLoader::GetMaterial("veg");
 	m->psoName = L"Renderer : Toon PSO";
 	m->psoId = NoEngine::Render::GetPSOID(m->psoName);
 	m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
-	m->color = Color::RED;
+	m->color = Color(RNG::GetRandomVal(0.f, 1.f), RNG::GetRandomVal(0.f, 1.f), RNG::GetRandomVal(0.f, 1.f), 1.f);
 
 	const uint32_t kSmokeNum = 5;
 	for (uint32_t i = 0; i < kSmokeNum; i++) {
