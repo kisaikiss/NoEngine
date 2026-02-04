@@ -8,7 +8,8 @@
 void TitleSystem::Update(No::Registry& registry, float deltaTime)
 {
 	time_ += deltaTime;
-	if (NoEngine::Input::Keyboard::IsTrigger(VK_RETURN))
+	if (No::Keyboard::IsTrigger(VK_RETURN) ||
+		No::Pad::IsTrigger(No::GamepadButton::A))
 	{
 		//一旦ここでSE再生 ヨシダ
 		No::SoundEffectPlay("select", 0.5f);

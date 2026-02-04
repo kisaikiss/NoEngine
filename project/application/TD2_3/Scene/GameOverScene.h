@@ -9,4 +9,9 @@ private:
 	std::unique_ptr<NoEngine::Camera> camera_;
 	NoEngine::Transform cameraTransform_{};
 	void NotSystemUpdate() override;
+
+
+private:
+	void InitPlayerScore();
+	void InitRankingSprite();
 };

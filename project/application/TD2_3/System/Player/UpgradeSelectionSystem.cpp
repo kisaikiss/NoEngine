@@ -26,6 +26,8 @@ namespace
 	constexpr float kSelectedYOffset = -30.f;    // 選択時に上へ移動する量
 	constexpr float kAnimSpeed = 10.f;           // 補間速度
 	constexpr float kInputCooldown = 0.12f;      // 入力間隔
+	constexpr float kConfirmLockTime = 0.25f;	 //UI 表示直後に A ボタンを無効にする時間
+	float inputCounter = 0.f;
 }
 
 // ヘルパー：クライアント座標を GraphicsCore の描画解像度に合わせてスケーリングしたマウス位置を返す
@@ -190,6 +192,7 @@ void UpgradeSelectionSystem::Update(No::Registry& registry, float deltaTime)
 		choose->active = true;
 		choose->selectedIndex = 1;
 		choose->inputCooldown = 0.f;
+		choose->confirmLock = kConfirmLockTime;
 		choose->wasMouseDown = (GetAsyncKeyState(VK_LBUTTON) & 0x8000) != 0;
 	}
 
@@ -197,16 +200,17 @@ void UpgradeSelectionSystem::Update(No::Registry& registry, float deltaTime)
 	if (choose->active)
 	{
 		choose->inputCooldown = std::max(0.f, choose->inputCooldown - deltaTime);
-
+		choose->confirmLock = std::max(0.f, choose->confirmLock - deltaTime);
 		// パッド左右で選択移動 (トリガー検出)
 		if (choose->inputCooldown <= 0.f)
 		{
-			if (Input::Pad::IsTrigger(Input::GamepadButton::Left))
+			const auto& stick = Input::Pad::GetStick();
+			if (Input::Pad::IsTrigger(Input::GamepadButton::Left) || stick.leftStickX < -0.2f)
 			{
 				choose->selectedIndex = (choose->selectedIndex + 2) % 3; // left
 				choose->inputCooldown = kInputCooldown;
 			}
-			else if (Input::Pad::IsTrigger(Input::GamepadButton::Right))
+			else if (Input::Pad::IsTrigger(Input::GamepadButton::Right) || stick.leftStickX > 0.2f)
 			{
 				choose->selectedIndex = (choose->selectedIndex + 1) % 3; // right
 				choose->inputCooldown = kInputCooldown;
@@ -264,7 +268,7 @@ void UpgradeSelectionSystem::Update(No::Registry& registry, float deltaTime)
 		}
 
 		// パッド A で確定
-		if (Input::Pad::IsTrigger(Input::GamepadButton::A))
+		if (choose->confirmLock <= 0.f && Input::Pad::IsTrigger(Input::GamepadButton::A))
 		{
 			int i = choose->selectedIndex;
 			ApplyUpgradeChoice(registry, statusEnt, choose->optionNames[i], choose);

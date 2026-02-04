@@ -106,7 +106,8 @@ void BatControlSystem::DeadUpdate(No::Entity entity, No::Registry& registry, flo
 		auto view = registry.View<PlayerStatusComponent>();
 		for (auto playerEntity : view) {
 			auto* status = registry.GetComponent<PlayerStatusComponent>(playerEntity);
-			status->score += 100;
+			
+			status->score += int32_t(100 * status->scoreRatio);
 			status->exp++;
 
 		}

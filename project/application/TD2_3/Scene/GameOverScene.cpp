@@ -2,17 +2,19 @@
 #include"engine/Functions/ECS/Component/SpriteComponent.h"
 #include"engine/Functions/ECS/Component/Transform2DComponent.h"
 #include "../Component/BackGroundComponent.h"
+#include "../Component/PlayerstatusComponent.h"
+#include "../Component/ScoreDigitComponent.h"
 
+#include "../System/ScoreRankingSystem.h"
 #include"engine/Math/MathInclude.h"
 
-#include "../System/GameOverSystem.h"
 #include "../System/BackGroundEffectSystem.h"
 
 using namespace NoEngine;
 void GameOverScene::Setup()
 {
-	AddSystem(std::make_unique<GameOverSystem>());
 	AddSystem(std::make_unique<BackGroundEffectSystem>());
+	AddSystem(std::make_unique<ScoreRankingSystem>());
 
 	auto& registry = *GetRegistry();
 	{
@@ -33,6 +35,9 @@ void GameOverScene::Setup()
 		registry.AddComponent<BackGroundComponent>(backGroundEntity);
 	}
 
+	InitPlayerScore();
+	InitRankingSprite();
+
 	constexpr Vector3 kStartCameraPosition = Vector3{ 0.0f, 0.0f, -10.0f };
 	//カメラ初期化
 	camera_ = std::make_unique<NoEngine::Camera>();
@@ -48,4 +53,36 @@ void GameOverScene::NotSystemUpdate()
 	{
 		GetRegistry()->EmitEvent(NoEngine::Event::SceneChangeEvent("TitleScene"));
 	}
+}
+
+void GameOverScene::InitPlayerScore()
+{
+	auto& registry = *GetRegistry();
+	No::Entity playerStatusEntity = registry.GenerateEntity();
+	registry.AddComponent<PlayerStatusComponent>(playerStatusEntity);
+	
+	//const uint32_t kDigits = 6;
+	//for (uint32_t i = 0; i < kDigits; i++)
+	//{
+	//	auto nums = registry.GenerateEntity();
+	//	auto* sprite = registry.AddComponent<No::SpriteComponent>(nums);
+	//	auto* transform = registry.AddComponent<No::Transform2DComponent>(nums);
+	//	transform->scale = { 64.f,64.f };
+	//	registry.AddComponent<ScoreDigitComponent>(nums);
+	//	sprite->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Sprite/numbers.png");
+	//	sprite->uv.width = 0.1f;
+	//}
+}
+
+void GameOverScene::InitRankingSprite()
+{
+	auto& registry = *GetRegistry();
+	No::Entity rankSprite = registry.GenerateEntity();
+	auto* sprite = registry.AddComponent<No::SpriteComponent>(rankSprite);
+	sprite->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Sprite/ranking.png");
+	sprite->name = "Ranking";
+
+	auto* transform = registry.AddComponent<No::Transform2DComponent>(rankSprite);
+	transform->scale = { 664.0f,176.0f };
+	transform->translate = { 640.0f,200.0f };
 }

@@ -1,7 +1,5 @@
 #pragma once
-#include "engine/Functions/ECS/Component/SpriteComponent.h"
 #include <array>
-#include <vector>
 #include <string>
 
 struct UpgradeChooseComponent
@@ -34,4 +32,7 @@ struct UpgradeChooseComponent
 
 	// マウス状態保存
 	bool wasMouseDown = false;
+
+	// Aボタン無効時間（UI表示直後に短時間 A を受け付けない）
+	float confirmLock = 0.f;
 };

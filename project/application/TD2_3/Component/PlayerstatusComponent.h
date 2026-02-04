@@ -1,8 +1,11 @@
 #pragma once
+#include <array>
 
 struct PlayerStatusComponent
 {
-	int32_t score = 0;
+	static inline int32_t score = 0;
+	float scoreRatio = 1.0f;
+	bool isComboing = false;
 	int32_t level = 1;
 	int32_t exp = 0;
 	// 現在のHP（ゲーム内で変動）と上限を分離
