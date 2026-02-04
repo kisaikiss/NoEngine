@@ -164,6 +164,18 @@ void GameScene::NotSystemUpdate()
         GetRegistry()->EmitEvent(Event::SceneChangeEvent("TitleScene"));
     }
     camera_->Update();
+
+    switch (PhaseComponent::phase) {
+    case Phase::ONE:
+        No::SoundCompleteStop("chefBGM");
+        No::SoundPlay("batBGM", 0.25f, true);
+        break;
+    case  Phase::TWO:
+        No::SoundCompleteStop("batBGM");
+        No::SoundPlay("chefBGM", 0.25f, true);
+        break;
+    }
+
     DestroyGameObject();
 }
 
@@ -288,7 +300,7 @@ void GameScene::InitBackGround(No::Registry& registry)
 
     auto* back = registry.AddComponent<BackGroundComponent>(backGroundEntity);
     back->seed = 123;
-	back->useRing = 1;
+    back->useRing = 1;
 }
 
 void GameScene::InitBatGirl(No::Registry& registry)
@@ -378,9 +390,9 @@ void GameScene::InitPlayerStatus(No::Registry& registry)
     status->hp = 5;
     status->level = 1;
     status->score = 0;
-	status->isGameClear = false;
-	status->isGameOver = false;
-	status->currentPhase = Phase::ONE;
+    status->isGameClear = false;
+    status->isGameOver = false;
+    status->currentPhase = Phase::ONE;
 }
 
 void GameScene::InitLights(No::Registry& registry)
@@ -441,7 +453,7 @@ void GameScene::InitTutorialSprite(No::Registry& registry)
         registry.AddComponent<TutorialSpriteTag>(stickLEntity);
         auto* ts = registry.AddComponent<No::Transform2DComponent>(stickLEntity);
         registry.AddComponent<TutorialSpriteComponent>(stickLEntity);
-    
+
         ts->scale = { 72, 80 };
         ts->translate = { -1000.f,360.0f };
 
@@ -698,16 +710,14 @@ NoEngine::Vector3 GameScene::GenerateRandomPointInCircle(float minRadius, float 
 void GameScene::SoundLoad()
 {
     No::SoundLoad(L"resources/game/td_2304//Audio/BGM/batBGM.mp3", "batBGM");
-    No::SoundLoad(L"resources/game/td_2304//Audio/BGM/secondBGM.mp3", "secondBGM");
-
-
+    No::SoundLoad(L"resources/game/td_2304//Audio/BGM/chefBGM.mp3", "chefBGM");
     No::SoundLoad(L"resources/game/td_2304//Audio/SE/ballPong.mp3", "ballPong");
     No::SoundLoad(L"resources/game/td_2304//Audio/SE/ballPong2.mp3", "ballPong2");
 
     No::SoundLoad(L"resources/game/td_2304//Audio/SE/chargeEnter.mp3", "chargeEnter");
 
     No::SoundLoad(L"resources/game/td_2304//Audio/SE/batDie.mp3", "batDie");
-    
+
     No::SoundLoad(L"resources/game/td_2304//Audio/SE/levelUp.mp3", "levelUp");
 
     No::SoundLoad(L"resources/game/td_2304//Audio/SE/upgrade.mp3", "upgrade");
@@ -715,7 +725,10 @@ void GameScene::SoundLoad()
 
     No::SoundCompleteStop("titleBGM");
     No::SoundCompleteStop("batBGM");
+    No::SoundCompleteStop("secondBGM");
+    No::SoundCompleteStop("chefBGM");
     No::SoundPlay("batBGM", 0.25f, true);
+
 }
 
 void GameScene::ModelLoad() {

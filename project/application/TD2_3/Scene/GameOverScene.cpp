@@ -65,6 +65,14 @@ void GameOverScene::Setup()
     camera_->SetTransform(cameraTransform_);
     SetCamera(camera_.get());
 
+    No::SoundLoad(L"resources/game/td_2304//Audio/BGM/secondBGM.mp3", "secondBGM");
+    No::SoundCompleteStop("titleBGM");
+    No::SoundCompleteStop("chefBGM");
+    No::SoundCompleteStop("rapMusic");
+    No::SoundCompleteStop("secondBGM");
+    No::SoundCompleteStop("batBGM");
+    No::SoundPlay("secondBGM", 0.25f, true);
+
 }
 
 void GameOverScene::NotSystemUpdate()
@@ -78,6 +86,8 @@ void GameOverScene::NotSystemUpdate()
     if ((No::Keyboard::IsTrigger(VK_RETURN) ||
         No::Pad::IsTrigger(No::GamepadButton::A)) && !isChangeScene_)
     {
+        //SE再生 
+        No::SoundEffectPlay("select", 0.5f);
         GetRegistry()->EmitEvent(NoEngine::Event::SceneChangeEvent("TitleScene"));
     }
 }
