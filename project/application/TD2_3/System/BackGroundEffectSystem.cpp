@@ -18,6 +18,8 @@ void BackGroundEffectSystem::Update(No::Registry& registry, float deltaTime)
 		ImGui::Begin("BackGround");
 		ImGui::DragFloat("timeScale", &backGround->timeScale, 0.01f, 0.0f, 10.0f);
 		ImGui::DragFloat("powerFactor", &backGround->powerFactor, 0.01f, 0.0f, 1.0f);
+		ImGui::DragFloat("fadeInner", &backGround->fadeInner, 0.01f, 0.0f, 10.0f);
+		ImGui::DragFloat("fadeOuter", &backGround->fadeOuter, 0.01f, 0.0f, 10.0f);
 		ImGui::End();
 #endif // USE_IMGUI
 
