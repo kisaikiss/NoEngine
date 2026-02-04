@@ -70,17 +70,9 @@ void ChefControlSystem::Update(No::Registry& registry, float deltaTime)
     }
 
 
-    auto humanParentView = registry.View<No::TransformComponent, EnemyHumanTag>();
-    No::TransformComponent* parent = nullptr;
-
-    for (auto entity : humanParentView) {
-        parent = registry.GetComponent<No::TransformComponent>(entity);
-    }
-
     for (auto entity : view)
     {
         auto* transform = registry.GetComponent<No::TransformComponent>(entity);
-        transform->parent = parent;
 
         auto* material = registry.GetComponent<No::MaterialComponent>(entity);
         auto* animation = registry.GetComponent<No::AnimatorComponent>(entity);
@@ -151,6 +143,7 @@ void ChefControlSystem::Update(No::Registry& registry, float deltaTime)
         ImGui::Text("currentAnim %d", animation->currentAnimation);
         ImGui::End();
 #else
+        (void)transform;
         (void)material;
 #endif // USE_IMGUI
 

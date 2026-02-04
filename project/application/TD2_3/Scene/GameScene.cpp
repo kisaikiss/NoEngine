@@ -54,6 +54,12 @@
 // effect
 #include "../System/Effect/SmokeEffectControlSystem.h"
 
+#include "../System/Enemy/CookingEnemy/RootVegetableGenerateSystem.h"
+#include "../System/Enemy/CookingEnemy/WhiteRadishControlSystem.h"
+#include "../System/Enemy/CookingEnemy/CarrotControlSystem.h"
+#include "../System/Enemy/CookingEnemy/PotControlSystem.h"
+#include "../System/Enemy/CookingEnemy/IngredientsControlSystem.h"
+
 #include "../tag.h"
 
 
@@ -76,9 +82,14 @@ void GameScene::Setup()
     AddSystem(std::make_unique<BatControlSystem>());
     AddSystem(std::make_unique<BatGreenControlSystem>());
     AddSystem(std::make_unique<BatGenerateSystem>());
+    AddSystem(std::make_unique<WhiteRadishControlSystem>());
+    AddSystem(std::make_unique<CarrotControlSystem>());
+    AddSystem(std::make_unique<RootVegetableGenerateSystem>());
     AddSystem(std::make_unique<BossGenerateSystem>());
     AddSystem(std::make_unique<BossControlSystem>());
+    AddSystem(std::make_unique<PotControlSystem>());
     AddSystem(std::make_unique<EnemyBulletControlSystem>());
+    AddSystem(std::make_unique<IngredientsControlSystem>());
     //HumanControlSystem シーン切り替え時の処理用
     AddSystem(std::make_unique<HumanControlSystem>());
     //こうもり少女のシステム
@@ -611,4 +622,5 @@ void GameScene::SoundLoad()
 
 void GameScene::ModelLoad() {
     NoEngine::ModelLoader::LoadModel("batBoss", "resources/game/td_2304/Model/batBoss/batBoss.gltf");
+    NoEngine::ModelLoader::LoadModel("potBoss", "resources/game/td_2304/Model/pot/pot.gltf");
 }

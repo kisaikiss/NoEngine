@@ -48,6 +48,10 @@ void Quaternion::FromAxisAngle(const Vector3& axis, float angle) {
 	*this = MathCalculations::MakeRotateAxisAngleQuaternion(axis, angle);
 }
 
+Vector3 Quaternion::RotateVector(const Vector3& vector) {
+	return MathCalculations::RotateVector(vector, *this);
+}
+
 Quaternion operator+(const Quaternion& q1, const Quaternion& q2) {
 	return Quaternion(q1.x + q2.x, q1.y + q2.y, q1.z + q2.z, q1.w + q2.w);
 }
