@@ -54,7 +54,7 @@ void ResultScene::Setup()
     No::SoundCompleteStop("batBGM");
     No::SoundCompleteStop("titleBGM");
     No::SoundCompleteStop("chefBGM");
-    No::SoundPlay("rapMusic", 0.125f, true);
+    No::SoundPlay("rapMusic", 0.25f, true);
 
 }
 

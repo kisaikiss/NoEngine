@@ -14,6 +14,7 @@
 #include"../System/Human/ChefControlSystem.h"
 #include"../System/Human/GameOverPlayerGirlControlSystem.h"
 #include "../System/Human/GameOverBatControlSystem.h"
+#include "../System/Human/GameOverChefControlSystem.h"
 #include "../tag.h"
 
 using namespace NoEngine;
@@ -25,13 +26,13 @@ void GameOverScene::Setup()
     AddSystem(std::make_unique<ScoreRankingSystem>());
 
     AddSystem(std::make_unique<GameOverPlayerGirlControlSystem>());
-    //AddSystem(std::make_unique<ChefControlSystem>());
+    AddSystem(std::make_unique<GameOverChefControlSystem>());
     AddSystem(std::make_unique<GameOverBatControlSystem>());
 
     InitPlayerGirl();
     InitBatGirl();
-    //InitChef();
-    //InitHuman();
+    InitChef();
+
 
     auto& registry = *GetRegistry();
     {
@@ -113,15 +114,6 @@ void GameOverScene::InitRankingSprite()
     transform->translate = { 640.0f,200.0f };
 }
 
-void GameOverScene::InitHuman()
-{
-    auto& registry = *GetRegistry();
-    No::Entity humanControlSystem = registry.GenerateEntity();
-    auto* transform = registry.AddComponent<No::TransformComponent>(humanControlSystem);
-    transform->translate = { 9.5f, -14.55f, -8.5f };
-    registry.AddComponent<EnemyHumanTag>(humanControlSystem);
-}
-
 void GameOverScene::InitPlayerGirl()
 {
     auto& registry = *GetRegistry();
@@ -149,6 +141,11 @@ void GameOverScene::InitPlayerGirl()
 
 void GameOverScene::InitChef()
 {
+
+    if (PhaseComponent::phase != Phase::TWO) {
+        return;
+    }
+
     auto& registry = *GetRegistry();
     No::Entity chefEntity = registry.GenerateEntity();
     registry.AddComponent<ChefTag>(chefEntity);
@@ -158,7 +155,9 @@ void GameOverScene::InitChef()
     auto* animationComp = registry.AddComponent<No::AnimatorComponent>(chefEntity);
     NoEngine::ModelLoader::LoadModel("chef", "resources/game/td_2304/Model/man/man.gltf", model, animationComp);
 
-    transform->translate = { 3.00f,0.0f,0.0f };
+    transform->translate = { 1.35f,-2.15f,4.05f };
+    transform->scale = { 0.15f,0.15f,0.15f };
+    transform->rotation.FromAxisAngle(NoEngine::Vector3::UP, 3.14f);
 
     auto m = registry.AddComponent<No::MaterialComponent>(chefEntity);
     m->materials = NoEngine::ModelLoader::GetMaterial("chef");
@@ -172,6 +171,10 @@ void GameOverScene::InitChef()
 
 void GameOverScene::InitBatGirl()
 {
+    if (PhaseComponent::phase != Phase::ONE) {
+        return;
+    }
+
     auto& registry = *GetRegistry();
     No::Entity batGirlEntity = registry.GenerateEntity();
     registry.AddComponent<BatGirlTag>(batGirlEntity);

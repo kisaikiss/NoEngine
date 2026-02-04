@@ -165,6 +165,9 @@ void GameScene::NotSystemUpdate()
     }
     camera_->Update();
 
+#ifdef _DEBUG
+    PhaseComponent::phase = Phase::TWO;
+#endif
     switch (PhaseComponent::phase) {
     case Phase::ONE:
         No::SoundCompleteStop("chefBGM");
@@ -721,7 +724,6 @@ void GameScene::SoundLoad()
     No::SoundLoad(L"resources/game/td_2304//Audio/SE/levelUp.mp3", "levelUp");
 
     No::SoundLoad(L"resources/game/td_2304//Audio/SE/upgrade.mp3", "upgrade");
-
 
     No::SoundCompleteStop("titleBGM");
     No::SoundCompleteStop("batBGM");
