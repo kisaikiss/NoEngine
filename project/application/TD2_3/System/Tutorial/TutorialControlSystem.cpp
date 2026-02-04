@@ -6,12 +6,21 @@ using namespace Easing;
 void TutorialControlSystem::Update(No::Registry& registry, float deltaTime)
 {
     timer_ += deltaTime;
-    
-    if (timer_ >= 0.0f) {
-        paddleShowTimer_ += deltaTime;
-    } else if (timer_ >= 5.0f) {
-        ballPongShowTimer_ += deltaTime;
-    }	
+    float firstSpriteTime = kMoveSpriteStartDuration_ + kMoveSpriteEndDuration_ + kShowTime_;
+    if (timer_ <= firstSpriteTime) {
+
+        if (timer_ <= kMoveSpriteStartDuration_ || timer_ >= kMoveSpriteStartDuration_ + kShowTime_) {
+            paddleShowTimer_ += deltaTime;    
+        }
+
+    } else {
+ 
+        if (timer_ <= firstSpriteTime + kBallPongSpriteStartDuration_ || timer_ > kBallPongSpriteEndDuration_ + kShowTime_) {
+            ballPongShowTimer_ += deltaTime;
+            ballPongShowTimer_ = std::clamp(ballPongShowTimer_, 0.0f, kBallPongSpriteStartDuration_ + kBallPongSpriteEndDuration_);
+        }
+
+    }
 
     auto spriteView = registry.View<
         No::Transform2DComponent, 
@@ -24,9 +33,23 @@ void TutorialControlSystem::Update(No::Registry& registry, float deltaTime)
         auto* sp = registry.GetComponent<No::SpriteComponent>(entity);
 
         if (sp->name == "stickL") {
-            float startPos = kStartPosX_ + a->scale.x * 0.5f;
-            float endPos = kMiddlePosX_ - a->scale.x * 0.5f;
-            a->translate.x = EaseInExpo(startPos, endPos,timer_);
+
+            float startPos = 0.0f;
+            float endPos = 0.0f;
+            float time = 0.0f;
+
+            if (paddleShowTimer_ <= kMoveSpriteStartDuration_) {
+               startPos = kStartPosX_ + a->scale.x * 0.5f;
+               endPos = kMiddlePosX_ - a->scale.x * 0.5f;
+               time = paddleShowTimer_ / kMoveSpriteStartDuration_;  
+            } else if(paddleShowTimer_ <= kMoveSpriteStartDuration_+paddleShowTimer_){
+                startPos = kMiddlePosX_ + a->scale.x * 0.5f;
+                endPos = kEndPosX_ - a->scale.x * 0.5f;
+                time = (paddleShowTimer_ - kMoveSpriteStartDuration_)/ kMoveSpriteEndDuration_;
+            }
+
+            time = std::clamp(time, 0.0f, 1.0f);
+            a->translate.x = EaseInExpo(startPos, endPos, time);
         }
 
         if (sp->name == "cursorMove") {
