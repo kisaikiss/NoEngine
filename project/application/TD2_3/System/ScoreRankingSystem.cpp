@@ -38,9 +38,11 @@ static float EaseOutSmooth(float t)
 void ScoreRankingSystem::Update(No::Registry& registry, float deltaTime)
 {
 	// デバッグでベース位置を調整可能に
+#ifdef USE_IMGUI
 	ImGui::Begin("ranking debug");
 	ImGui::DragFloat2("rankingBase", &skRankingBase.x);
 	ImGui::End();
+#endif // USE_IMGUI
 
 	// 現在のプレイヤースコアを取得
 	auto playerView = registry.View<PlayerStatusComponent>();
