@@ -324,6 +324,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </ClCompile>
     <ClCompile Include="engine\Assets\Texture\Texture.cpp" />
     <ClCompile Include="application\TD2_3\System\Player\VausControlSystem.cpp" />
+    <ClCompile Include="application\TD2_3\System\Tutorial\TutorialControlSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="application\TD2_3\Component\BackGroundComponent.h" />
@@ -345,6 +346,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\TD2_3\Component\RingAnimationComponent.h" />
     <ClInclude Include="application\TD2_3\Component\ScoreDigitComponent.h" />
     <ClInclude Include="application\TD2_3\Component\TrackEnemyComponent.h" />
+    <ClInclude Include="application\TD2_3\Component\TutorialSpriteComponent.h" />
     <ClInclude Include="application\TD2_3\Component\UpgradeChooseComponent.h" />
     <ClInclude Include="application\TD2_3\Component\VausStateComponent.h" />
     <ClInclude Include="application\TD2_3\Game.h" />
@@ -546,6 +548,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="engine\Assets\Texture\Texture.h" />
     <ClInclude Include="application\TD2_3\System\Player\VausControlSystem.h" />
+    <ClInclude Include="application\TD2_3\System\Tutorial\TutorialControlSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="externals\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">

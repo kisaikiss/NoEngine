@@ -20,14 +20,6 @@ PlayerGirlControlSystem::PlayerGirlControlSystem()
     No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_mazide.mp3", "voice_mazide");
     No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_checkmate.mp3", "voice_checkmate");
 
-    No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_nouryoku.mp3", "voice_nouryoku");
-    No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_itiban.mp3", "voice_itiban");
-    No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_seikoudekiru.mp3", "voice_seikoudekiru");
-    No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_tamasii.mp3", "voice_tamasii");
-    No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_tabemono.mp3", "voice_tabemono");
-    No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_kitanai.mp3", "voice_kitanai");
-    No::SoundLoad(L"resources/game/td_2304//Audio/Voice/voice_iq.mp3", "voice_iq");
-
     //strings_.push_back("voice_checkmate");
     blinkTimer_ = 0.0f;
     voiceTimer_ = 0.0f;
@@ -40,7 +32,7 @@ PlayerGirlControlSystem::PlayerGirlControlSystem()
 
     strings_.clear();
     winVoice_.clear();
-    advices_.clear();
+   
 
     //ここから下はランダムに呼び出す
     strings_.push_back("voice_uwa");
@@ -57,14 +49,6 @@ PlayerGirlControlSystem::PlayerGirlControlSystem()
     winVoice_.push_back("voice_iikanzi");
     winVoice_.push_back("voice_sugoi");
     winVoice_.push_back("voice_mazide");
-
-    advices_.push_back("voice_iq");
-    advices_.push_back("voice_nouryoku");
-    advices_.push_back("voice_itiban");
-    advices_.push_back("voice_seikoudekiru");
-    advices_.push_back("voice_tamasii");
-    advices_.push_back("voice_tabemono");
-    advices_.push_back("voice_kitanai");
 
 }
 
@@ -124,36 +108,32 @@ void PlayerGirlControlSystem::Update(No::Registry& registry, float deltaTime)
                 if (faceRand == 0) {
                     material->materials[1].textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Model/playerGirl/face_surprise.png");
 
-                } else if(faceRand== 1){
+                } else if (faceRand == 1) {
                     material->materials[1].textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Model/playerGirl/face_wink.png");
 
                 } else {
                     material->materials[1].textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Model/playerGirl/face2.png");
 
                 }
-           
+
             }
 
             isSoundWin_ = true;
 
         } else if (isOut) {
 
-   
-            if (!isBallOut_&&!isSoundWin_) {
+
+            if (!isBallOut_ && !isSoundWin_) {
 
                 animation->currentAnimation = rand() % 2 + 7;
                 if (animation->currentAnimation == 7) {
                     No::SoundPlay(strings_[0], 1.0f, false);
                 } else {
-                    int randVoice = rand() % 2;
-                    if (randVoice == 0) {
-                        int randNum = rand() % (strings_.size() - 1) + 1;
-                        No::SoundPlay(strings_[randNum], 1.0f, false);
-                    } else {
-                        int randNum = rand() % advices_.size();
-                        No::SoundPlay(advices_[randNum], 2.0f, false);
-                    }
-        
+
+                    int randNum = rand() % (strings_.size() - 1) + 1;
+                    No::SoundPlay(strings_[randNum], 1.0f, false);
+
+
                 }
 
                 material->materials[1].textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Model/playerGirl/face_sad.png");
@@ -181,7 +161,7 @@ void PlayerGirlControlSystem::Update(No::Registry& registry, float deltaTime)
                 if (idleActionTimer_ >= 20.0f) {
 
                     do {
-                        idleRandNum_ = rand() % 4+1;
+                        idleRandNum_ = rand() % 4 + 1;
                     } while (animation->currentAnimation == idleRandNum_);
                     animation->currentAnimation = idleRandNum_;
                     idleActionTimer_ = 0.0f;
@@ -204,7 +184,7 @@ void PlayerGirlControlSystem::Update(No::Registry& registry, float deltaTime)
             }
 
 
-       
+
         }
 
 

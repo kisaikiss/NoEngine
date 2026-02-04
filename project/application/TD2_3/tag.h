@@ -26,3 +26,4 @@ struct DeathFlag
 };
 struct StatusSpriteTag {};
 
+struct TutorialSpriteTag{};
