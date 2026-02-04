@@ -14,5 +14,6 @@ public:
     float angle_ = 0.0f;
     float startAngle_ = 0.0f;
     NoEngine::Quaternion q_;
+    bool isSetParent_ = false;
 };
 

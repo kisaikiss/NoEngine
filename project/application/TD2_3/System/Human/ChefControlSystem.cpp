@@ -26,31 +26,6 @@ ChefControlSystem::ChefControlSystem()
 void ChefControlSystem::Update(No::Registry& registry, float deltaTime)
 {
 
-    if (!isSetParent_) {
-
-        auto humanParentView = registry.View<No::TransformComponent, EnemyHumanTag>();
-        No::TransformComponent* parent = nullptr;
-
-        for (auto entity : humanParentView) {
-            parent = registry.GetComponent<No::TransformComponent>(entity);
-        }
-
-        auto view = registry.View<
-            No::TransformComponent,
-            No::MaterialComponent,
-            No::AnimatorComponent,
-            ChefTag>();
-
-        for (auto entity : view)
-        {
-            //人間を親にする
-            auto* transform = registry.GetComponent<No::TransformComponent>(entity);
-            transform->parent = parent;
-            isSetParent_ = true;
-        }
-
-    }
-
     auto phaseView = registry.View<PhaseComponent>();
     for (auto entity : phaseView) {
         auto* phase = registry.GetComponent<PhaseComponent>(entity);
@@ -94,9 +69,18 @@ void ChefControlSystem::Update(No::Registry& registry, float deltaTime)
         }
     }
 
+
+    auto humanParentView = registry.View<No::TransformComponent, EnemyHumanTag>();
+    No::TransformComponent* parent = nullptr;
+
+    for (auto entity : humanParentView) {
+        parent = registry.GetComponent<No::TransformComponent>(entity);
+    }
+
     for (auto entity : view)
     {
-
+        auto* transform = registry.GetComponent<No::TransformComponent>(entity);
+        transform->parent = parent;
 
         auto* material = registry.GetComponent<No::MaterialComponent>(entity);
         auto* animation = registry.GetComponent<No::AnimatorComponent>(entity);
@@ -155,12 +139,9 @@ void ChefControlSystem::Update(No::Registry& registry, float deltaTime)
         }
 
 
-
-
 #ifdef USE_IMGUI
-        auto* transform = registry.GetComponent<No::TransformComponent>(entity);
-        std::string imGuiName = "batGirl";
-        ImGui::Begin(imGuiName.c_str());
+
+        ImGui::Begin("Chef");
         ImGui::DragFloat3("translate", &transform->translate.x, 0.05f);
         ImGui::DragFloat3("scale", &transform->scale.x, 0.05f);
         ImGui::DragFloat4("rotate", &transform->rotation.x, 0.04f);
