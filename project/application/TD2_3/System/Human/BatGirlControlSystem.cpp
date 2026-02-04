@@ -19,19 +19,7 @@ BatGirlControlSystem::BatGirlControlSystem()
 
 void BatGirlControlSystem::Update(No::Registry& registry, float deltaTime)
 {
-    auto bossView = registry.View <
-        Boss1Tag,
-        DeathFlag>();
-    for (auto bossEntity : bossView)
-    {
-        auto* deathFlag = registry.GetComponent<DeathFlag>(bossEntity);
-        if (deathFlag->isDead) {
-            //もしBossが死んだら
-            No::SoundEffectPlay("batGirl_omedetou", 0.25f);
-            break;
 
-        }
-    }
     auto phaseView = registry.View<PhaseComponent>();
     for (auto entity : phaseView) {
         auto* phase = registry.GetComponent<PhaseComponent>(entity);
@@ -55,7 +43,7 @@ void BatGirlControlSystem::Update(No::Registry& registry, float deltaTime)
     {
         auto* ball = registry.GetComponent<BallStateComponent>(ballEntity);
         //ballの状態を取得する
-            isOut = ball->isOut;
+        isOut = ball->isOut;
     }
 
     bool isEnemyDead = false;
@@ -88,103 +76,90 @@ void BatGirlControlSystem::Update(No::Registry& registry, float deltaTime)
     }
 
 
-
-
-  
-
-
     for (auto entity : view)
     {
 
         auto* material = registry.GetComponent<No::MaterialComponent>(entity);
-        auto*  animation = registry.GetComponent<No::AnimatorComponent>(entity);
-   
-        if (PlayerStatusComponent::isGameOver) {
-
-            //ゲーム終了時
-            animation->currentAnimation = 6;
-
-        } else {
-            if (isOut) {
-                if (!isLaughStart_) {
-                    animation->currentAnimation = 6;
-                    material->materials[1].textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Model/batGirl/faceJoy.png");
-                    No::SoundEffectPlay("batGirlLaugh", 0.5f);
+        auto* animation = registry.GetComponent<No::AnimatorComponent>(entity);
+  
+       if (isOut) {
+           if (!isLaughStart_) {
+               animation->currentAnimation = 6;
+               material->materials[1].textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Model/batGirl/faceJoy.png");
+               No::SoundEffectPlay("batGirlLaugh", 0.5f);
 
 
-                    isLaughStart_ = true;
-                }
+               isLaughStart_ = true;
+           }
 
-            } else if (isEnemyDead) {
+       } else if (isEnemyDead) {
 
-                if (!isLaughStart_) {
-                    //エネミーが死んだとき
-                    animation->currentAnimation = 5;
+           if (!isLaughStart_) {
+               //エネミーが死んだとき
+               animation->currentAnimation = 5;
 
-                }
+           }
 
 
 
-            } else {
+       } else {
 
-                idleTimer_ += deltaTime;
+           idleTimer_ += deltaTime;
 
-                if (animation->time + deltaTime >= animation->animation[animation->currentAnimation].duration) {
+           if (animation->time + deltaTime >= animation->animation[animation->currentAnimation].duration) {
 
-                    isLaughStart_ = false;
+               isLaughStart_ = false;
 
-                    if (timer_ >= 20.0f) {
+               if (timer_ >= 20.0f) {
 
-                        do {
-                            idleRandNum_ = rand() % 4 + 1;
-                        } while (animation->currentAnimation == idleRandNum_);
-                        animation->currentAnimation = idleRandNum_;
-                        timer_ = 0.0f;
+                   do {
+                       idleRandNum_ = rand() % 4 + 1;
+                   } while (animation->currentAnimation == idleRandNum_);
+                   animation->currentAnimation = idleRandNum_;
+                   timer_ = 0.0f;
 
-                        if (animation->currentAnimation == 2 || animation->currentAnimation == 3) {
-                            No::SoundEffectPlay("batGirl_huwa", 0.5f);
-                        }
+                   if (animation->currentAnimation == 2 || animation->currentAnimation == 3) {
+                       No::SoundEffectPlay("batGirl_huwa", 0.5f);
+                   }
 
-                    } else {
-                        animation->currentAnimation = 0;
-                    }
-                }
-
-
-                if (!isLaughStart_) {
-
-                    timer_ += deltaTime;
-
-                    if (animation->currentAnimation == 3 || timer_ >= 1.5f && timer_ <= 2.0f) {
-                        material->materials[1].textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Model/batGirl/face2.png");
-                    } else {
-                        material->materials[1].textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Model/batGirl/face.png");
-                    }
-
-                }
-
-            }
-
-        }
-     
+               } else {
+                   animation->currentAnimation = 0;
+               }
+           }
 
 
-     
+           if (!isLaughStart_) {
+
+               timer_ += deltaTime;
+
+               if (animation->currentAnimation == 3 || timer_ >= 1.5f && timer_ <= 2.0f) {
+                   material->materials[1].textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Model/batGirl/face2.png");
+               } else {
+                   material->materials[1].textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Model/batGirl/face.png");
+               }
+
+           }
+
+
+
+       }
+
+
 #ifdef USE_IMGUI
-        auto* transform = registry.GetComponent<No::TransformComponent>(entity);
-        std::string imGuiName = "batGirl";
-        ImGui::Begin(imGuiName.c_str());
-        ImGui::DragFloat3("translate", &transform->translate.x, 0.05f);
-        ImGui::DragFloat3("scale", &transform->scale.x, 0.05f);
-        ImGui::DragFloat4("rotate", &transform->rotation.x, 0.04f);
-        ImGui::DragFloat4("faceColor1", &material->materials[1].color.r, 0.04f);
-        ImGui::DragFloat("animD", &animation->animation[animation->currentAnimation].duration, 0.04f);
-        ImGui::DragFloat("animTime", &animation->time, 0.04f);
-        ImGui::Text("currentAnim %d", animation->currentAnimation);
-        ImGui::End();
+       auto* transform = registry.GetComponent<No::TransformComponent>(entity);
+       std::string imGuiName = "batGirl";
+       ImGui::Begin(imGuiName.c_str());
+       ImGui::DragFloat3("translate", &transform->translate.x, 0.05f);
+       ImGui::DragFloat3("scale", &transform->scale.x, 0.05f);
+       ImGui::DragFloat4("rotate", &transform->rotation.x, 0.04f);
+       ImGui::DragFloat4("faceColor1", &material->materials[1].color.r, 0.04f);
+       ImGui::DragFloat("animD", &animation->animation[animation->currentAnimation].duration, 0.04f);
+       ImGui::DragFloat("animTime", &animation->time, 0.04f);
+       ImGui::Text("currentAnim %d", animation->currentAnimation);
+       ImGui::End();
 
 #endif // USE_IMGUI
-  
-    }
 
-}
+       }
+
+    }

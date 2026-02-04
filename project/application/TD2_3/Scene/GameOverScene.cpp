@@ -13,7 +13,7 @@
 #include"../System/Human/BatGirlControlSystem.h"
 #include"../System/Human/ChefControlSystem.h"
 #include"../System/Human/GameOverPlayerGirlControlSystem.h"
-
+#include "../System/Human/GameOverBatControlSystem.h"
 #include "../tag.h"
 
 using namespace NoEngine;
@@ -26,10 +26,10 @@ void GameOverScene::Setup()
 
     AddSystem(std::make_unique<GameOverPlayerGirlControlSystem>());
     //AddSystem(std::make_unique<ChefControlSystem>());
-    //AddSystem(std::make_unique<HumanControlSystem>());
+    AddSystem(std::make_unique<GameOverBatControlSystem>());
 
     InitPlayerGirl();
-    //InitBatGirl();
+    InitBatGirl();
     //InitChef();
     //InitHuman();
 
@@ -171,8 +171,8 @@ void GameOverScene::InitBatGirl()
     auto* animationComp = registry.AddComponent<No::AnimatorComponent>(batGirlEntity);
     NoEngine::ModelLoader::LoadModel("batGirl", "resources/game/td_2304/Model/batGirl/batGirl.gltf", model, animationComp);
 
-    transform->translate = { -2.75f,0.0f,0.0f };
-    transform->rotation.FromAxisAngle(NoEngine::Vector3::UP, 3.14f);
+    transform->translate = { 0.95f,2.0f,2.75f };
+    transform->scale = { 0.15f,0.15f,0.15f };
 
     auto m = registry.AddComponent<No::MaterialComponent>(batGirlEntity);
     m->materials = NoEngine::ModelLoader::GetMaterial("batGirl");
