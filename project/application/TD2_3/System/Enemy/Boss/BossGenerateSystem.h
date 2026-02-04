@@ -6,8 +6,11 @@ public:
     void Update(No::Registry& registry, float deltaTime) override;
 private:
     void GenerateBatBoss(No::Registry& registry);
+    void GeneratePotBoss(No::Registry& registry);
 
     float timer_ = 0.f;
     bool isGenerate_ = false;
+    bool isPotGenerate_ = false;
+
 };
 

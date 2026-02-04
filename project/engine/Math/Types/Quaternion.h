@@ -19,6 +19,7 @@ public:
 	void FromRotationMatrix(const Matrix3x3& rotation);
 	void FromRotationMatrix(const Matrix4x4& rotation);
 	void FromAxisAngle(const Vector3& axis, float angle);
+	Vector3 RotateVector(const Vector3& vector);
 
 	static const Quaternion ZERO;
 	static const Quaternion IDENTITY;
