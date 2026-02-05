@@ -1,6 +1,7 @@
 #include "ChefControlSystem.h"
 #include "../../Component/BallStateComponent.h"
 #include "../../Component/PhaseComponent.h"
+#include "../../Component/PlayerstatusComponent.h"
 #include "../../tag.h"
 
 ChefControlSystem::ChefControlSystem()
@@ -104,58 +105,70 @@ void ChefControlSystem::Update(No::Registry& registry, float deltaTime)
         auto* material = registry.GetComponent<No::MaterialComponent>(entity);
         auto* animation = registry.GetComponent<No::AnimatorComponent>(entity);
 
-        if (isOut) {
-            if (!isAmoreStart_&& !isBallHit_) {
-                animation->currentAnimation = 1;
-                //material->materials[1].textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Model/batGirl/faceJoy.png");
-                No::SoundEffectPlay("chef_amore", 1.0f);
-                isAmoreStart_ = true;
-            }
 
-        } else if (isEnemyDead) {
 
-            if (!isAmoreStart_) {
-                //アモーレ開始していないとき
-                if (!isBallHit_) {
-                    //エネミーが死んだとき
-                    animation->currentAnimation = 3;
+        if (PlayerStatusComponent::isGameOver) {
 
-                    int randVoice = rand() % loseVoice_.size();
-                    No::SoundEffectPlay(loseVoice_[randVoice], 1.0f);
-                    isBallHit_ = true;
-                }
-            }
+            //ゲーム終了時
+            animation->currentAnimation = 4;
+
         } else {
 
-            idleTimer_ += deltaTime;
-
-            if (animation->time + deltaTime >= animation->animation[animation->currentAnimation].duration) {
-
-                isAmoreStart_ = false;
-                isBallHit_ = false;
-
-                if (timer_ >= 20.0f) {
-                    animation->currentAnimation = 2;
-                    timer_ = 0.0f;
-                } else {
-                    animation->currentAnimation = 0;
+            if (isOut) {
+                if (!isAmoreStart_ && !isBallHit_) {
+                    animation->currentAnimation = 1;
+                    //material->materials[1].textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Model/batGirl/faceJoy.png");
+                    No::SoundEffectPlay("chef_amore", 1.0f);
+                    isAmoreStart_ = true;
                 }
+
+            } else if (isEnemyDead) {
+
+                if (!isAmoreStart_) {
+                    //アモーレ開始していないとき
+                    if (!isBallHit_) {
+                        //エネミーが死んだとき
+                        animation->currentAnimation = 3;
+
+                        int randVoice = rand() % loseVoice_.size();
+                        No::SoundEffectPlay(loseVoice_[randVoice], 1.0f);
+                        isBallHit_ = true;
+                    }
+                }
+            } else {
+
+                idleTimer_ += deltaTime;
+
+                if (animation->time + deltaTime >= animation->animation[animation->currentAnimation].duration) {
+
+                    isAmoreStart_ = false;
+                    isBallHit_ = false;
+
+                    if (timer_ >= 20.0f) {
+                        animation->currentAnimation = 2;
+                        timer_ = 0.0f;
+                    } else {
+                        animation->currentAnimation = 0;
+                    }
+                }
+
+
+                if (!isAmoreStart_) {
+
+                    timer_ += deltaTime;
+
+                    //if (animation->currentAnimation == 3 || timer_ >= 1.5f && timer_ <= 2.0f) {
+                    //    material->materials[1].textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Model/batGirl/face2.png");
+                    //} else {
+                    //    material->materials[1].textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Model/batGirl/face.png");
+                    //}
+
+                }
+
             }
-
-
-            if (!isAmoreStart_) {
-
-                timer_ += deltaTime;
-
-                //if (animation->currentAnimation == 3 || timer_ >= 1.5f && timer_ <= 2.0f) {
-                //    material->materials[1].textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Model/batGirl/face2.png");
-                //} else {
-                //    material->materials[1].textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_2304/Model/batGirl/face.png");
-                //}
-
-            }
-
         }
+
+
 
 
 #ifdef USE_IMGUI

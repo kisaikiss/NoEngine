@@ -163,6 +163,9 @@
     <ClCompile Include="application\TD2_3\System\Tutorial\TutorialControlSystem.cpp" />
     <ClCompile Include="application\TD2_3\System\Enemy\CookingEnemy\PotControlSystem.cpp" />
     <ClCompile Include="application\TD2_3\System\Enemy\CookingEnemy\IngredientsControlSystem.cpp" />
+    <ClCompile Include="application\TD2_3\System\Human\ResultPlayerGirlControlSystem.cpp" />
+    <ClCompile Include="application\TD2_3\System\Human\GameOverBatControlSystem.cpp" />
+    <ClCompile Include="application\TD2_3\System\Human\ResultChefControlSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="application\TD2_3\Component\BackGroundComponent.h" />
@@ -378,6 +381,9 @@
     <ClInclude Include="application\TD2_3\System\Enemy\CookingEnemy\PotControlSystem.h" />
     <ClInclude Include="application\TD2_3\Component\Enemy\IngredientsComponent.h" />
     <ClInclude Include="application\TD2_3\System\Enemy\CookingEnemy\IngredientsControlSystem.h" />
+    <ClInclude Include="application\TD2_3\System\Human\ResultPlayerGirlControlSystem.h" />
+    <ClInclude Include="application\TD2_3\System\Human\GameOverBatControlSystem.h" />
+    <ClInclude Include="application\TD2_3\System\Human\ResultChefControlSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

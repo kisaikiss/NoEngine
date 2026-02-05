@@ -10,12 +10,19 @@
 
 #include "../System/BackGroundEffectSystem.h"
 
+#include "../System/Human/ResultChefControlSystem.h"
+#include"../System/Human/ResultPlayerGirlControlSystem.h"
+#include "../tag.h"
+
 using namespace NoEngine;
 
 void ResultScene::Setup()
 {
+    AddSystem(std::make_unique<No::AnimationSystem>());
     AddSystem(std::make_unique<BackGroundEffectSystem>());
     AddSystem(std::make_unique<ScoreRankingSystem>());
+    AddSystem(std::make_unique<ResultPlayerGirlControlSystem>());
+    AddSystem(std::make_unique<ResultChefControlSystem>());
 
     auto& registry = *GetRegistry();
     {
@@ -41,6 +48,8 @@ void ResultScene::Setup()
 
     InitPlayerScore();
     InitRankingSprite();
+    InitPlayerGirl();
+    InitChef();
 
     constexpr Vector3 kStartCameraPosition = Vector3{ 0.0f, 0.0f, -10.0f };
     //カメラ初期化
@@ -48,6 +57,14 @@ void ResultScene::Setup()
     cameraTransform_.translate = kStartCameraPosition;
     camera_->SetTransform(cameraTransform_);
     SetCamera(camera_.get());
+
+    No::SoundLoad(L"resources/game/td_2304/Audio/BGM/rapMusic.mp3", "rapMusic");
+    No::SoundCompleteStop("secondBGM");
+    No::SoundCompleteStop("batBGM");
+    No::SoundCompleteStop("titleBGM");
+    No::SoundCompleteStop("chefBGM");
+    No::SoundPlay("rapMusic", 0.25f, true);
+
 }
 
 void ResultScene::NotSystemUpdate()
@@ -61,6 +78,8 @@ void ResultScene::NotSystemUpdate()
 	if ((No::Keyboard::IsTrigger(VK_RETURN) ||
         No::Pad::IsTrigger(No::GamepadButton::A)) && !isChangeScene_)
 	{
+        //SE再生 
+        No::SoundEffectPlay("select", 0.5f);
 		GetRegistry()->EmitEvent(NoEngine::Event::SceneChangeEvent("TitleScene"));
 	}
 }
@@ -84,4 +103,54 @@ void ResultScene::InitRankingSprite()
 	auto* transform = registry.AddComponent<No::Transform2DComponent>(rankSprite);
 	transform->scale = { 664.0f,176.0f };
 	transform->translate = { 640.0f,200.0f };
+}
+
+void ResultScene::InitPlayerGirl()
+{
+    auto& registry = *GetRegistry();
+    No::Entity playerGirlEntity = registry.GenerateEntity();
+    registry.AddComponent<PlayerGirlTag>(playerGirlEntity);
+
+    auto* transform = registry.AddComponent<No::TransformComponent>(playerGirlEntity);
+    auto* model = registry.AddComponent<No::MeshComponent>(playerGirlEntity);
+    auto* animationComp = registry.AddComponent<No::AnimatorComponent>(playerGirlEntity);
+    NoEngine::ModelLoader::LoadModel("playerGirl", "resources/game/td_2304/Model/playerGirl/playerGirl.gltf", model, animationComp);
+
+    transform->translate = { -1.00f,-1.85f,3.0f };
+    transform->scale = { 0.15f,0.15f,0.15f };
+    transform->rotation.FromAxisAngle(NoEngine::Vector3::UP, 3.14f - 0.5f);
+
+    auto m = registry.AddComponent<No::MaterialComponent>(playerGirlEntity);
+    m->materials = NoEngine::ModelLoader::GetMaterial("playerGirl");
+
+    m->psoName = L"Renderer : ToonSkinned PSO";
+    m->enableSkinning = true;
+    m->drawOutline = true;
+    m->psoId = NoEngine::Render::GetPSOID(m->psoName);
+    m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
+}
+
+void ResultScene::InitChef()
+{
+    auto& registry = *GetRegistry();
+    No::Entity chefEntity = registry.GenerateEntity();
+    registry.AddComponent<ChefTag>(chefEntity);
+
+    auto* transform = registry.AddComponent<No::TransformComponent>(chefEntity);
+    auto* model = registry.AddComponent<No::MeshComponent>(chefEntity);
+    auto* animationComp = registry.AddComponent<No::AnimatorComponent>(chefEntity);
+    NoEngine::ModelLoader::LoadModel("chef", "resources/game/td_2304/Model/man/man.gltf", model, animationComp);
+
+    transform->translate = { 1.35f,-2.15f,4.05f };
+    transform->scale = { 0.15f,0.15f,0.15f };
+    transform->rotation.FromAxisAngle(NoEngine::Vector3::UP, 3.14f);
+
+    auto m = registry.AddComponent<No::MaterialComponent>(chefEntity);
+    m->materials = NoEngine::ModelLoader::GetMaterial("chef");
+
+    m->psoName = L"Renderer : ToonSkinned PSO";
+    m->enableSkinning = true;
+    m->drawOutline = true;
+    m->psoId = NoEngine::Render::GetPSOID(m->psoName);
+    m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
 }

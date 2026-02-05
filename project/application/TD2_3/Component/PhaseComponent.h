@@ -6,5 +6,6 @@ enum class Phase {
 };
 
 struct PhaseComponent {
-	Phase phase = Phase::ONE;
+	//static化します
+	static inline Phase phase = Phase::ONE;
 };
