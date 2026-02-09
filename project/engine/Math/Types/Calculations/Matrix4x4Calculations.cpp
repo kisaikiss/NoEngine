@@ -3,6 +3,8 @@
 
 namespace NoEngine {
 namespace MathCalculations {
+using namespace Math;
+
 Matrix4x4 MakeIdentity4x4() {
 	Matrix4x4 result(
 		1.0f, 0.0f, 0.0f, 0.0f,

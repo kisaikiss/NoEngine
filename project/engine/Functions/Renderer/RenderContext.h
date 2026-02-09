@@ -16,7 +16,7 @@ public:
 
 	void SetDirectionalLight(GraphicsContext& gfx, UploadBuffer& directionalLightUpload, uint32_t directionalLightNum);
 	void SetCamera(CameraBase* camera) { camera_ = camera; }
-	[[nodiscard]] const Matrix4x4& GetViewProjMatrix() { return camera_->GetViewProjMatrix(); }
+	[[nodiscard]] const Math::Matrix4x4& GetViewProjMatrix() { return camera_->GetViewProjMatrix(); }
 	const CameraBase* GetCamera() { return camera_; }
 	const LightNums* GetLightNums() { return &lightNums_; }
 

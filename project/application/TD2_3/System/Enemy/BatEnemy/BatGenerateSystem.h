@@ -11,6 +11,6 @@ private:
 
 	EnemyResources resource_;
 
-	NoEngine::Vector3 GenerateRandomPointInCircle(float minRadius, float maxRadius);
+	No::Vector3 GenerateRandomPointInCircle(float minRadius, float maxRadius);
 };
 

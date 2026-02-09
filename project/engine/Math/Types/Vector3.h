@@ -1,6 +1,6 @@
 #pragma once
 namespace NoEngine {
-
+namespace Math {
 struct Vector3 final {
 public:
 	float x, y, z;
@@ -37,4 +37,5 @@ Vector3 operator/(const Vector3& v, float s);
 Vector3 operator+(const Vector3& v);
 
 Vector3 operator-(const Vector3& v);
+}
 }

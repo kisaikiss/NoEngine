@@ -22,10 +22,10 @@ void GameOverBatControlSystem::Update(No::Registry& registry, float deltaTime)
         //ゲーム終了時
         animation->currentAnimation = 6;
 
-        NoEngine::Quaternion rotate1;
-        rotate1.FromAxisAngle(NoEngine::Vector3::UP, -PI*0.375f);
-        NoEngine::Quaternion rotate2;
-        rotate2.FromAxisAngle(NoEngine::Vector3::RIGHT, PI);
+        No::Quaternion rotate1;
+        rotate1.FromAxisAngle(No::Vector3::UP, -PI*0.375f);
+        No::Quaternion rotate2;
+        rotate2.FromAxisAngle(No::Vector3::RIGHT, PI);
 
         transform->rotation = rotate2 * rotate1;
 

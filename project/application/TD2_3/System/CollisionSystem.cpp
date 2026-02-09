@@ -55,15 +55,15 @@ void CollisionSystem::UpdateCollider(No::Registry& registry)
 	}
 }
 
-bool CollisionSystem::CheckSphereToSphere(const NoEngine::Vector3& center1, const NoEngine::Vector3& center2, const float radius1, const float radius2)
+bool CollisionSystem::CheckSphereToSphere(const No::Vector3& center1, const No::Vector3& center2, const float radius1, const float radius2)
 {
-	NoEngine::Vector3 diff = center1 - center2;
+	No::Vector3 diff = center1 - center2;
 	float distanceSq = LengthSquared(diff);
 	float radiusSum = radius1 + radius2;
 	return distanceSq <= radiusSum * radiusSum;
 }
 
-bool CollisionSystem::CheckBoxToBox(const NoEngine::Vector3& center1, const NoEngine::Vector3& center2, const NoEngine::Vector3& size1, const NoEngine::Vector3& size2)
+bool CollisionSystem::CheckBoxToBox(const No::Vector3& center1, const No::Vector3& center2, const No::Vector3& size1, const No::Vector3& size2)
 {
 	auto minA = center1 - size1 * 0.5f;
 	auto maxA = center1 + size1 * 0.5f;
@@ -76,13 +76,13 @@ bool CollisionSystem::CheckBoxToBox(const NoEngine::Vector3& center1, const NoEn
 		minA.z <= maxB.z && maxA.z >= minB.z;
 }
 
-bool CollisionSystem::CheckBoxToSphere(const NoEngine::Vector3& center1, const NoEngine::Vector3& center2, const NoEngine::Vector3& size, const float radius)
+bool CollisionSystem::CheckBoxToSphere(const No::Vector3& center1, const No::Vector3& center2, const No::Vector3& size, const float radius)
 {
 	auto min = center1 - size * 0.5f;
 	auto max = center1 + size * 0.5f;
 
 	// AABBと球の最近接点を求める
-	NoEngine::Vector3 closetPoint = {
+	No::Vector3 closetPoint = {
 		std::clamp(center2.x, min.x, max.x),
 		std::clamp(center2.y, min.y, max.y),
 		std::clamp(center2.z, min.z, max.z)

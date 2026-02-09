@@ -11,7 +11,7 @@ namespace {
 const float skGenerateTime = 60.f;
 }
 
-
+using namespace No;
 void BossGenerateSystem::Update(No::Registry& registry, float deltaTime) {
 
 	auto playerStatusView = registry.View<PlayerStatusComponent>();

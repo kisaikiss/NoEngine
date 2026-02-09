@@ -12,8 +12,8 @@
 #include "engine/Assets/ModelLoader.h"
 #include "externals/imgui/imgui.h"
 
+using namespace No;
 using namespace NoEngine;
-
 static float NormalizeAngle(float a)
 {
 	while (a > PI) a -= 2 * PI;

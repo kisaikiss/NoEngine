@@ -1,7 +1,7 @@
 #pragma once
 #include <stdlib.h>
 namespace NoEngine {
-
+namespace Math {
 struct Vector2 final {
 	float x, y;
 
@@ -30,4 +30,5 @@ Vector2 operator*(float s, const Vector2& v);
 Vector2 operator*(const Vector2& v, float s);
 
 Vector2 operator/(const Vector2& v, float s);
+}
 }

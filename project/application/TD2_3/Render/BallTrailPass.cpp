@@ -5,6 +5,7 @@
 #include "engine/Functions/Renderer/RenderSystem.h"
 #include "engine/Math/Types/Calculations/Vector3Calculations.h"
 #include "engine/Math/Easing.h"
+#include "engine/NoEngine.h"
 
 #include <algorithm>
 
@@ -27,7 +28,7 @@ void BallTrailPass::Execute(GraphicsContext& gfx, ECS::Registry& registry) {
     gfx.SetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
     // カメラ行列
-    gfx.SetDynamicConstantBufferView(rootIndex["gCamera"], sizeof(Matrix4x4), &GetCamera()->GetViewProjMatrix());
+    gfx.SetDynamicConstantBufferView(rootIndex["gCamera"], sizeof(No:: Matrix4x4), &GetCamera()->GetViewProjMatrix());
 
     // マテリアル色（透明含む）
     _declspec(align(16)) struct
@@ -71,24 +72,24 @@ void BallTrailPass::CollectAndGenerate(ECS::Registry& registry) {
         // CPU側で法線（XY平面）を計算して左右頂点を生成
         for (size_t i = 0; i < n; ++i) {
             // 隣接サンプルを使って接線を計算
-            NoEngine::Vector3 p = s[i].pos;
-            NoEngine::Vector3 dir;
-            if (i == 0) dir = (n > 1) ? (s[0].pos - s[1].pos) : NoEngine::Vector3(1,0,0);
+            No::Vector3 p = s[i].pos;
+            No::Vector3 dir;
+            if (i == 0) dir = (n > 1) ? (s[0].pos - s[1].pos) : No::Vector3(1,0,0);
             else if (i == n - 1) dir = (s[n - 1].pos - s[n - 2].pos);
             else dir = (s[i - 1].pos - s[i + 1].pos);
 
             dir.z = 0.0f;
             dir = MathCalculations::Normalize(dir);
             // 法線（XY平面）
-            NoEngine::Vector3 normal = MathCalculations::Normalize(NoEngine::Vector3(-dir.y, dir.x, 0.0f));
+            No::Vector3 normal = MathCalculations::Normalize(No::Vector3(-dir.y, dir.x, 0.0f));
 
             float ageRatio = std::clamp(s[i].age / trail->maxAge, 0.0f, 1.0f);
             float localThickness = trail->thickness * (1.0f - ageRatio);
 
-            NoEngine::Vector3 leftPos = p + normal * (localThickness * 0.5f);
-            NoEngine::Vector3 rightPos = p - normal * (localThickness * 0.5f);
+            No::Vector3 leftPos = p + normal * (localThickness * 0.5f);
+            No::Vector3 rightPos = p - normal * (localThickness * 0.5f);
 
-            NoEngine::Color vertexColor;
+            No::Color vertexColor;
             float tNorm = ageRatio; // 0..1 (若い=0 -> ヘッド)
             if (trail->useSegmentedColors && trail->colorSegments > 0)
             {
@@ -98,8 +99,8 @@ void BallTrailPass::CollectAndGenerate(ECS::Registry& registry) {
                 float segStart = segIdx * segSize;
                 float segEnd = std::min((segIdx + 1) * segSize, 1.0f);
                 float localT = (segEnd - segStart) > 0.0f ? ((tNorm - segStart) / (segEnd - segStart)) : 0.0f;
-                NoEngine::Color cStart = Easing::Lerp(trail->startColor, trail->endColor, segStart);
-                NoEngine::Color cEnd = Easing::Lerp(trail->startColor, trail->endColor, segEnd);
+                No::Color cStart = Easing::Lerp(trail->startColor, trail->endColor, segStart);
+                No::Color cEnd = Easing::Lerp(trail->startColor, trail->endColor, segEnd);
                 vertexColor = Easing::EaseOutCirc(cStart, cEnd, localT);
             }
             else
@@ -109,13 +110,13 @@ void BallTrailPass::CollectAndGenerate(ECS::Registry& registry) {
             }
 
             TrailVertex vLeft;
-            vLeft.position = NoEngine::Vector4(leftPos.x, leftPos.y, leftPos.z, 1.0f);
+            vLeft.position = No::Vector4(leftPos.x, leftPos.y, leftPos.z, 1.0f);
             vLeft.color = vertexColor;
             vLeft.age = s[i].age;
             vertices_.push_back(vLeft);
 
             TrailVertex vRight;
-            vRight.position = NoEngine::Vector4(rightPos.x, rightPos.y, rightPos.z, 1.0f);
+            vRight.position = No::Vector4(rightPos.x, rightPos.y, rightPos.z, 1.0f);
             vRight.color = vertexColor;
             vRight.age = s[i].age;
             vertices_.push_back(vRight);

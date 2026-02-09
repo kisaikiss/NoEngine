@@ -8,7 +8,7 @@
 namespace NoEngine {
 void GraphicsContext::ClearColor(ColorBuffer& target) {
 	FlushResourceBarriers();
-	const Color& colorVec = target.GetClearColor();
+	const Math::Color& colorVec = target.GetClearColor();
 	float color[] = { colorVec.r, colorVec.g, colorVec.b, colorVec.a };
 	commandList_->ClearRenderTargetView(target.GetRTV(), color, 0, nullptr);
 }

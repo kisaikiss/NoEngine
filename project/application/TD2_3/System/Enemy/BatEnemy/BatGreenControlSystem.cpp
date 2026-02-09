@@ -11,6 +11,8 @@
 #include "engine/Math/Types/Calculations/QuaternionCalculations.h"
 #include "engine/Math/Easing.h"
 
+using namespace No;
+
 void BatGreenControlSystem::Update(No::Registry& registry, float deltaTime) {
 
 	auto playerStatusView = registry.View<PlayerStatusComponent>();
@@ -93,7 +95,7 @@ void BatGreenControlSystem::LiveUpdate(No::Entity entity, No::Registry& registry
 		bat->shootTimer += 3.f * deltaTime;
 		switch (state) {
 		case BatShootState::STANBY:
-			transform->scale = No::Lerp(transform->scale, NoEngine::Vector3(1.25f, 1.25f, 1.25f), bat->shootTimer);
+			transform->scale = No::Lerp(transform->scale, No::Vector3(1.25f, 1.25f, 1.25f), bat->shootTimer);
 			if (bat->shootTimer > 1.f) {
 				bat->shootState = BatShootState::SHOOT;
 				bat->shootTimer = 0.f;
@@ -101,7 +103,7 @@ void BatGreenControlSystem::LiveUpdate(No::Entity entity, No::Registry& registry
 			}
 			break;
 		case BatShootState::SHOOT:
-			transform->scale = No::Lerp(transform->scale, NoEngine::Vector3(1.f, 1.f, 1.f), bat->shootTimer);
+			transform->scale = No::Lerp(transform->scale, No::Vector3(1.f, 1.f, 1.f), bat->shootTimer);
 			if (bat->shootTimer > 1.f) {
 				bat->shootState = BatShootState::NONE;
 				bat->shootTimer = 0.f;
@@ -116,7 +118,7 @@ void BatGreenControlSystem::LiveUpdate(No::Entity entity, No::Registry& registry
 
 }
 
-void BatGreenControlSystem::Shoot(No::Registry& registry, No::TransformComponent* enemyTransform, const NoEngine::Vector3& target) {
+void BatGreenControlSystem::Shoot(No::Registry& registry, No::TransformComponent* enemyTransform, const No::Vector3& target) {
 	using namespace NoEngine;
 	No::Entity entity = registry.GenerateEntity();
 	auto* ultrasound = registry.AddComponent<EnemyBulletComponent>(entity);

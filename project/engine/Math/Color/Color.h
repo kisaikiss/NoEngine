@@ -3,6 +3,7 @@
 #include "engine/Math/Types/Vector4.h"
 
 namespace NoEngine {
+namespace Math {
 /// <summary>
 /// 色を表すクラス
 /// </summary>
@@ -20,11 +21,11 @@ public:
 		a = ((rgba >> 0) & 0xFF) / 255.0f;
 	}
 
-	Vector3 ToVector3() const {
-		return Vector3(r, g, b);
+	Math::Vector3 ToVector3() const {
+		return Math::Vector3(r, g, b);
 	}
-	Vector4 ToVector4() const {
-		return Vector4(r, g, b, a);
+	Math::Vector4 ToVector4() const {
+		return Math::Vector4(r, g, b, a);
 	}
 
 	// 十六進数へ変換
@@ -51,4 +52,5 @@ public:
 	static const Color BLACK;
 	static const Color RED;
 };
+}
 }

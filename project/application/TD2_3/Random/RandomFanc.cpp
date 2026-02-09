@@ -16,6 +16,6 @@ float RNG::GetRandomVal(float min, float max) {
 	return distribution(randomEngine);
 }
 
-NoEngine::Vector3 RNG::GetRandomVector3(float min, float max) {
-	return NoEngine::Vector3(GetRandomVal(min, max), GetRandomVal(min, max), GetRandomVal(min, max));
+No::Vector3 RNG::GetRandomVector3(float min, float max) {
+	return No::Vector3(GetRandomVal(min, max), GetRandomVal(min, max), GetRandomVal(min, max));
 }

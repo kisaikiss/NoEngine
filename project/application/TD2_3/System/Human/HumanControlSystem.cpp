@@ -5,6 +5,7 @@
 #include"engine/Math/Easing.h"
 #include "../../tag.h"
 using namespace NoEngine;
+using namespace No;
 using namespace MathCalculations;
 HumanControlSystem::HumanControlSystem()
 {

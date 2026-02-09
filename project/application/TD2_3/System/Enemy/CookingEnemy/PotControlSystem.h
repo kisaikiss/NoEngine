@@ -9,8 +9,8 @@ private:
     void MoveUpdate(No::Registry& registry, No::Entity entity, float deltaTime);
     void DeadUpdate(No::Registry& registry, No::Entity entity, float deltaTime);
 
-    void Shoot(No::Registry& registry, No::TransformComponent* transform, NoEngine::Vector3 velocity);
-    void GenerateSmokeEffect(No::Registry& registry, NoEngine::Vector3 position);
+    void Shoot(No::Registry& registry, No::TransformComponent* transform, No::Vector3 velocity);
+    void GenerateSmokeEffect(No::Registry& registry, No::Vector3 position);
     float speed_ = 4.0f;
 
 };

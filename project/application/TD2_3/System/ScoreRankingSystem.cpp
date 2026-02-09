@@ -10,7 +10,7 @@ using namespace NoEngine;
 
 namespace
 {
-	NoEngine::Vector2 skRankingBase = { 800.0f, 500.0f };
+	No::Vector2 skRankingBase = { 800.0f, 500.0f };
 	const float skSpriteWidth = 64.f;
 	const uint32_t skDigitNum = 6;
 
@@ -21,11 +21,11 @@ namespace
 	// 各ランクが開始するまでの遅延（低スコアから順に表示されるように増やす）
 	const float skPerRankDelay = 0.25f;
 
-	const NoEngine::Color kGold = NoEngine::Color(0xD0A900FF);
-	//const NoEngine::Color kGoldHighlight = NoEngine::Color(0xfff9e6ff);
+	const No::Color kGold = No::Color(0xD0A900FF);
+	//const No::Color kGoldHighlight = No::Color(0xfff9e6ff);
 
-	const NoEngine::Color kSilver = NoEngine::Color(0.75f, 0.75f, 0.75f, 1.0f);
-	const NoEngine::Color kBronze = NoEngine::Color(0.804f, 0.498f, 0.196f, 1.0f);
+	const No::Color kSilver = No::Color(0.75f, 0.75f, 0.75f, 1.0f);
+	const No::Color kBronze = No::Color(0.804f, 0.498f, 0.196f, 1.0f);
 }
 
 static float EaseOutSmooth(float t)
@@ -105,8 +105,8 @@ void ScoreRankingSystem::Update(No::Registry& registry, float deltaTime)
 			// 表示は下から上へ low->mid->high の順で移動してくるので、
 			// target の Y は (baseY + spacing), (baseY), (baseY - spacing)
 			float targetY = skRankingBase.y + (1.0f - static_cast<float>(r)) * skRankingSpacingY;
-			NoEngine::Vector2 targetBase = { skRankingBase.x, targetY };
-			NoEngine::Vector2 startBase = targetBase;
+			No::Vector2 targetBase = { skRankingBase.x, targetY };
+			No::Vector2 startBase = targetBase;
 			startBase.y += skStartOffsetY; // 画面下方（ターゲットより下）から上がってくる
 
 			rankAnims_[r].targetBase = targetBase;
@@ -163,11 +163,11 @@ void ScoreRankingSystem::Update(No::Registry& registry, float deltaTime)
 			sprite->uv.x = 0.1f * static_cast<float>(digits[d]);
 
 			// 最終的な桁位置（右寄せするため base - offset）
-			NoEngine::Vector2 offset = { static_cast<float>(d) * skSpriteWidth, 0.f };
-			NoEngine::Vector2 targetPos = anim.targetBase - offset;
-			NoEngine::Vector2 startPos = anim.startBase - offset;
+			No::Vector2 offset = { static_cast<float>(d) * skSpriteWidth, 0.f };
+			No::Vector2 targetPos = anim.targetBase - offset;
+			No::Vector2 startPos = anim.startBase - offset;
 
-			NoEngine::Vector2 curPos = NoEngine::Easing::EaseInOutBack(startPos, targetPos, t);
+			No::Vector2 curPos = NoEngine::Easing::EaseInOutBack(startPos, targetPos, t);
 			transform->translate = curPos;
 		}
 	}

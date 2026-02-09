@@ -1,5 +1,6 @@
 #include "Color.h"
 namespace NoEngine {
+namespace Math {
 const Color Color::WHITE(1.f, 1.f, 1.f, 1.f);
 const Color Color::BLACK(0.f, 0.f, 0.f, 1.f);
 const Color Color::RED(1.f, 0.f, 0.f, 1.f);
@@ -12,5 +13,5 @@ uint32_t Color::ToRGBA8() const {
 
 	return (R << 24) | (G << 16) | (B << 8) | A;
 }
-
+}
 }

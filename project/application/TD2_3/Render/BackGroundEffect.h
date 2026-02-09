@@ -1,6 +1,7 @@
 #pragma once
 #include "engine/Functions/Renderer/RenderPass/RenderPass.h"
 #include "engine/Runtime/PipelineStateObject/GraphicsPSO.h"
+#include "engine/NoEngine.h"
 
 class BackGroundEffectPass : public NoEngine::Render::RenderPass
 {
@@ -14,8 +15,8 @@ private:
 	NoEngine::GraphicsPSO pso_;
 	struct vertex
 	{
-		NoEngine::Vector3 position;
-		NoEngine::Vector2 uv;
+		No::Vector3 position;
+		No::Vector2 uv;
 	};
 	struct MeshData
 	{

@@ -6,7 +6,7 @@
 namespace NoEngine {
 struct Material {
 	Rect uv{};
-	Color color{ Color::WHITE };
+	Math::Color color{ Math::Color::WHITE };
 	TextureRef textureHandle;
 	
 };

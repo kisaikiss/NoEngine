@@ -7,7 +7,7 @@ public:
 private:
 	void UpdateCollider(No::Registry& registry);
 
-	bool CheckSphereToSphere(const NoEngine::Vector3& center1, const NoEngine::Vector3& center2, const float radius1, const float radius2);
+	bool CheckSphereToSphere(const No::Vector3& center1, const No::Vector3& center2, const float radius1, const float radius2);
 
 	void PushBack(No::Registry& registry, No::Entity e1, No::Entity e2);
 };

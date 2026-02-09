@@ -9,7 +9,7 @@ void TestScene::Setup() {
 	No::Entity entity = registry.GenerateEntity();
 	auto* t = registry.AddComponent<No::TransformComponent>(entity);
 	auto* model = registry.AddComponent<No::MeshComponent>(entity);
-	t->rotation.FromAxisAngle(NoEngine::Vector3(0.f, 1.f, 0.f), PI);
+	t->rotation.FromAxisAngle(No::Vector3(0.f, 1.f, 0.f), PI);
 	t->translate = { 0.f,-1.5f,4.f };
 	auto* m = registry.AddComponent<No::MaterialComponent>(entity);
 	auto* a = registry.AddComponent<No::AnimatorComponent>(entity);

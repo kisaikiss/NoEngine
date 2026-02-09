@@ -66,13 +66,13 @@ void BatControlSystem::GenerateUpdate(No::Entity entity, No::Registry& registry,
 
 	bat->t += 3.f * deltaTime;
 	if (bat->t > 1.f) bat->t = 1.f;
-	transform->scale = NoEngine::Easing::EaseOutCirc<NoEngine::Vector3>(NoEngine::Vector3(0.f, 0.f, 0.f), NoEngine::Vector3(1.f, 1.f, 1.f), bat->t);
-	transform->rotation.FromAxisAngle(NoEngine::Vector3::UP, (3.14f + bat->t * 5.f));
+	transform->scale = NoEngine::Easing::EaseOutCirc<No::Vector3>(No::Vector3(0.f, 0.f, 0.f), No::Vector3(1.f, 1.f, 1.f), bat->t);
+	transform->rotation.FromAxisAngle(No::Vector3::UP, (3.14f + bat->t * 5.f));
 	if (transform->scale.x >= 1.f) {
 		transform->scale = 1.f;
 		bat->state = BatState::LIVE;
 		bat->t = 0.f;
-		transform->rotation.FromAxisAngle(NoEngine::Vector3::UP, PI);
+		transform->rotation.FromAxisAngle(No::Vector3::UP, PI);
 	}
 	
 
@@ -100,8 +100,8 @@ void BatControlSystem::DeadUpdate(No::Entity entity, No::Registry& registry, flo
 	auto* bat = registry.GetComponent<BatComponent>(entity);
 	auto* death = registry.GetComponent<DeathFlag>(entity);
 	bat->t += 1.5f * deltaTime;
-	transform->scale = NoEngine::Easing::EaseInOutBack<NoEngine::Vector3>(NoEngine::Vector3(1.f, 1.f, 1.f), NoEngine::Vector3(0.f, 0.f, 0.f), bat->t);
-	transform->rotation.FromAxisAngle(NoEngine::Vector3::UP, (3.14f + bat->t * 25.f));
+	transform->scale = NoEngine::Easing::EaseInOutBack<No::Vector3>(No::Vector3(1.f, 1.f, 1.f), No::Vector3(0.f, 0.f, 0.f), bat->t);
+	transform->rotation.FromAxisAngle(No::Vector3::UP, (3.14f + bat->t * 25.f));
 	if (transform->scale.x <= 0) {
 		auto view = registry.View<PlayerStatusComponent>();
 		for (auto playerEntity : view) {
@@ -120,7 +120,7 @@ void BatControlSystem::DeadUpdate(No::Entity entity, No::Registry& registry, flo
 	
 }
 
-void BatControlSystem::GenerateSmokeEffect(No::Registry& registry, NoEngine::Vector3 position) {
+void BatControlSystem::GenerateSmokeEffect(No::Registry& registry, No::Vector3 position) {
 	auto smoke = registry.GenerateEntity();
 	auto* t = registry.AddComponent<No::TransformComponent>(smoke);
 	t->translate = position;

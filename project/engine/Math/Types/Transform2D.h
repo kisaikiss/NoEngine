@@ -4,18 +4,18 @@
 
 namespace NoEngine {
 struct Transform2D {
-	Vector2 scale{ Vector2::UNIT_SCALE };
+	Math::Vector2 scale{ Math::Vector2::UNIT_SCALE };
 	float rotation{};
-	Vector2 translate{ Vector2::ZERO };
+	Math::Vector2 translate{ Math::Vector2::ZERO };
 
 	Transform2D* parent = nullptr;
 
 	Transform2D() = default;
 
-	Transform2D(const Vector2& position, float rotation, const Vector2& scale)
+	Transform2D(const Math::Vector2& position, float rotation, const Math::Vector2& scale)
 		: translate(position), rotation(rotation), scale(scale) {
 	}
 
-	Matrix3x3 MakeAffineMatrix3x3() const;
+	Math::Matrix3x3 MakeAffineMatrix3x3() const;
 };
 }

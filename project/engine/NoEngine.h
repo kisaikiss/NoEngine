@@ -32,4 +32,5 @@ using namespace NoEngine::Event;
 using namespace NoEngine::Scene;
 using namespace NoEngine::Audio;
 using namespace NoEngine::Easing;
+using namespace NoEngine::Math;
 }

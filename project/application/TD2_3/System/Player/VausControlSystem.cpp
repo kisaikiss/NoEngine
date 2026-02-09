@@ -15,6 +15,7 @@
 #include <cmath>
 
 using namespace NoEngine;
+using namespace No;
 
 namespace
 {

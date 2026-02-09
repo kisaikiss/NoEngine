@@ -4,7 +4,7 @@
 using namespace No;
 using namespace NoEngine;
 
-void PoyoPoyo(No::TransformComponent& transform, float timer, float speed, float scaling, const NoEngine::Vector3& defaultScale)
+void PoyoPoyo(No::TransformComponent& transform, float timer, float speed, float scaling, const No::Vector3& defaultScale)
 {
     float theta = std::numbers::pi_v<float>*speed * timer;
     transform.scale.x = defaultScale.x + cos(theta) * scaling;

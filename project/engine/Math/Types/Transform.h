@@ -5,27 +5,27 @@
 namespace NoEngine {
 struct Transform {
 public:
-	Vector3 scale{ Vector3::UNIT_SCALE };
-	Quaternion rotation{ Quaternion::IDENTITY };
-	Vector3 translate{ Vector3::ZERO };
+	Math::Vector3 scale{ Math::Vector3::UNIT_SCALE };
+	Math::Quaternion rotation{ Math::Quaternion::IDENTITY };
+	Math::Vector3 translate{ Math::Vector3::ZERO };
 
 	Transform* parent = nullptr;
 
 	Transform() = default;
 
-	Transform(const Vector3& position, const Quaternion& rotation, const Vector3& scale)
+	Transform(const Math::Vector3& position, const Math::Quaternion& rotation, const Math::Vector3& scale)
 		: translate(position), rotation(rotation), scale(scale) {
 	}
-	Transform(const Vector3& x, const Vector3& y, const Vector3& z, const Vector3& w) {
-		Matrix4x4 temp(x, y, z, w);
+	Transform(const Math::Vector3& x, const Math::Vector3& y, const Math::Vector3& z, const Math::Vector3& w) {
+		Math::Matrix4x4 temp(x, y, z, w);
 		scale = temp.GetScale();
 		rotation = temp.GetRotation();
 		translate = temp.GetTranslate();
 	}
 
-	Matrix4x4 MakeAffineMatrix4x4();
+	Math::Matrix4x4 MakeAffineMatrix4x4();
 
-	Vector3 GetWorldPosition();
+	Math::Vector3 GetWorldPosition();
 };
 
 

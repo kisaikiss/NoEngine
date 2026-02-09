@@ -16,7 +16,7 @@ enum class VegetableShootState {
 struct VegetableComponent {
 	VegetableState state = VegetableState::GENERATE;
 	VegetableShootState shootState = VegetableShootState::NONE;
-	NoEngine::Vector3 defaultTranslate;
+	No::Vector3 defaultTranslate;
 	bool isStarted = false;
 	float t = 0.f;
 	float shootTimer = 0.f;

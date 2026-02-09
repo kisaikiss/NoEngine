@@ -8,8 +8,8 @@ struct VausStateComponent
 	float widthScale = 1.0f;
 	float releaseTime = 0.0f;
 	
-	NoEngine::Vector3 prevPosition = NoEngine::Vector3::ZERO;
-	NoEngine::Vector3 currentVelocity = NoEngine::Vector3::ZERO;
+	No::Vector3 prevPosition = No::Vector3::ZERO;
+	No::Vector3 currentVelocity = No::Vector3::ZERO;
 
 	float playerDamageCooldown = 0.0f;
 	bool isHerted = false;

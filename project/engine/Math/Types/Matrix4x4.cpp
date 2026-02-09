@@ -1,11 +1,12 @@
 #include "Matrix4x4.h"
 #include "Calculations/Matrix4x4Calculations.h"
 namespace NoEngine {
+namespace Math {
 const Matrix4x4 Matrix4x4::ZERO(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 const Matrix4x4 Matrix4x4::ZEROAFFINE(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
 const Matrix4x4 Matrix4x4::IDENTITY(
 	1, 0, 0, 0,
-	0, 1, 0, 0, 
+	0, 1, 0, 0,
 	0, 0, 1, 0,
 	0, 0, 0, 1);
 
@@ -68,5 +69,5 @@ void Matrix4x4::MakeAffine(const Vector3& scale, const Quaternion& rotate, const
 void Matrix4x4::Inverse() {
 	*this = MathCalculations::Inverse(*this);
 }
-
+}
 }

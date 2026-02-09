@@ -17,5 +17,5 @@ private:
 	const float kFirstShowTime = 3.0f;
 	const float kFirstEndTime = 1.0f;
 
-	void MoveSprite(No::Transform2DComponent* transform, TutorialSpriteComponent* tutorial,const NoEngine::Vector2& offset,float deltaTime);
+	void MoveSprite(No::Transform2DComponent* transform, TutorialSpriteComponent* tutorial,const No::Vector2& offset,float deltaTime);
 };

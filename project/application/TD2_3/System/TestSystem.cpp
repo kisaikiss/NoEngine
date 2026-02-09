@@ -14,7 +14,7 @@ void TestSystem::Update(No::Registry& registry, float deltaTime) {
 		a->translate.y += p.leftStickY * deltaTime;
 #ifdef USE_IMGUI
 		//angle_ += 1.f * deltaTime;
-		//a->rotation.FromAxisAngle(NoEngine::Vector3(0.f, 1.f, 0.f), angle_);
+		//a->rotation.FromAxisAngle(No::Vector3(0.f, 1.f, 0.f), angle_);
 
 		std::string imGuiName = "model" + std::to_string(entity);
 		ImGui::Begin(imGuiName.c_str());

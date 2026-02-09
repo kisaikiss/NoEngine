@@ -34,9 +34,9 @@ void TitleScene::Setup()
 
 		auto* back = registry.AddComponent<BackGroundComponent>(backGroundEntity);
 		back->seed = 1;
-		back->bgColor = Color(0x11278FFF);
+		back->bgColor = No::Color(0x11278FFF);
 	}
-	constexpr Vector3 kStartCameraPosition = Vector3{ 0.0f, 0.0f, -10.0f };
+	constexpr No::Vector3 kStartCameraPosition = No::Vector3{ 0.0f, 0.0f, -10.0f };
 	//カメラ初期化
 	camera_ = std::make_unique<NoEngine::Camera>();
 	cameraTransform_.translate = kStartCameraPosition;

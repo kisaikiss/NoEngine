@@ -49,14 +49,14 @@ void GameOverScene::Setup()
 
         auto* back = registry.AddComponent<BackGroundComponent>(backGroundEntity);
         back->seed = 34;
-        back->bgColor = Color(0x8E1313FF);
-        back->ringColor = Color(0xB92F2FFF);
+        back->bgColor = No::Color(0x8E1313FF);
+        back->ringColor = No::Color(0xB92F2FFF);
     }
 
     InitPlayerScore();
     InitRankingSprite();
 
-    constexpr Vector3 kStartCameraPosition = Vector3{ 0.0f, 0.0f, -28.0f };
+    constexpr No::Vector3 kStartCameraPosition = No::Vector3{ 0.0f, 0.0f, -28.0f };
     //カメラ初期化
     camera_ = std::make_unique<NoEngine::Camera>();
     cameraTransform_.translate = kStartCameraPosition;
@@ -124,7 +124,7 @@ void GameOverScene::InitPlayerGirl()
 
     transform->translate = { -0.60f,-0.85f,3.25f };
     transform->scale = { 0.15f,0.15f,0.15f };
-    transform->rotation.FromAxisAngle(NoEngine::Vector3::UP, 3.14f+0.5f);
+    transform->rotation.FromAxisAngle(No::Vector3::UP, 3.14f+0.5f);
 
     auto m = registry.AddComponent<No::MaterialComponent>(playerGirlEntity);
     m->materials = NoEngine::ModelLoader::GetMaterial("playerGirl");
@@ -154,7 +154,7 @@ void GameOverScene::InitChef()
 
     transform->translate = { 1.35f,-2.15f,4.05f };
     transform->scale = { 0.15f,0.15f,0.15f };
-    transform->rotation.FromAxisAngle(NoEngine::Vector3::UP, 3.14f);
+    transform->rotation.FromAxisAngle(No::Vector3::UP, 3.14f);
 
     auto m = registry.AddComponent<No::MaterialComponent>(chefEntity);
     m->materials = NoEngine::ModelLoader::GetMaterial("chef");

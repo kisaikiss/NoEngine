@@ -36,7 +36,7 @@ private:
 	void InitChooseSprite(No::Registry& registry);
 	No::Entity CreateSprite(No::Registry& registry, const std::string& fileName, const std::string& configName);
 	void DestroyGameObject();
-	NoEngine::Vector3 GenerateRandomPointInCircle(float minRadius, float maxRadius);
+	No::Vector3 GenerateRandomPointInCircle(float minRadius, float maxRadius);
 
 	void SoundLoad();
 	void ModelLoad();

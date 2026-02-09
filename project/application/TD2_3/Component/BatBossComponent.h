@@ -11,7 +11,7 @@ enum class BatBossState {
 
 struct BatBossComponent
 {
-	NoEngine::Vector3 velocity = { 0.0f, 0.0f, 0.0f };
+	No::Vector3 velocity = { 0.0f, 0.0f, 0.0f };
 	BatBossState state = BatBossState::GENERATE;
 	BatShootState shootState = BatShootState::NONE;
 	int32_t hp = 30;

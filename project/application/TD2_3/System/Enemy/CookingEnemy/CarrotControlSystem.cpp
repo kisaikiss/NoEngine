@@ -47,7 +47,7 @@ void CarrotControlSystem::LiveUpdate(No::Entity entity, No::Registry& registry, 
 	auto* bat = registry.GetComponent<VegetableComponent>(entity);
 	bat->t += deltaTime;
 	auto* transform = registry.GetComponent<No::TransformComponent>(entity);
-	transform->rotation.FromAxisAngle(NoEngine::Vector3::FORWARD, (3.14f + bat->t));
+	transform->rotation.FromAxisAngle(No::Vector3::FORWARD, (3.14f + bat->t));
 	using namespace NoEngine;
 
 	// 移動
@@ -87,7 +87,7 @@ void CarrotControlSystem::LiveUpdate(No::Entity entity, No::Registry& registry, 
 		bat->shootTimer += 3.f * deltaTime;
 		switch (state) {
 		case VegetableShootState::STANBY:
-			transform->scale = No::Lerp(transform->scale, NoEngine::Vector3(1.25f, 1.25f, 1.25f), bat->shootTimer);
+			transform->scale = No::Lerp(transform->scale, No::Vector3(1.25f, 1.25f, 1.25f), bat->shootTimer);
 			if (bat->shootTimer > 1.f) {
 				bat->shootState = VegetableShootState::SHOOT;
 				bat->shootTimer = 0.f;
@@ -95,7 +95,7 @@ void CarrotControlSystem::LiveUpdate(No::Entity entity, No::Registry& registry, 
 			}
 			break;
 		case VegetableShootState::SHOOT:
-			transform->scale = No::Lerp(transform->scale, NoEngine::Vector3(1.f, 1.f, 1.f), bat->shootTimer);
+			transform->scale = No::Lerp(transform->scale, No::Vector3(1.f, 1.f, 1.f), bat->shootTimer);
 			if (bat->shootTimer > 1.f) {
 				bat->shootState = VegetableShootState::NONE;
 				bat->shootTimer = 0.f;
@@ -116,7 +116,7 @@ void CarrotControlSystem::Shoot(No::Registry& registry, No::TransformComponent* 
 	registry.AddComponent<DeathFlag>(entity);
 
 	const float kUltrasoundSpeed = 3.5f;
-	Vector3 localSpeed = Vector3(0.f, -1.f, 0.f);
+	No::Vector3 localSpeed = No::Vector3(0.f, -1.f, 0.f);
 	ultrasound->velocity = enemyTransform->rotation.RotateVector(localSpeed);
 	ultrasound->velocity = ultrasound->velocity.Normalize() * kUltrasoundSpeed;
 
@@ -138,7 +138,7 @@ void CarrotControlSystem::Shoot(No::Registry& registry, No::TransformComponent* 
 	m->psoName = L"Renderer : Toon PSO";
 	m->psoId = NoEngine::Render::GetPSOID(m->psoName);
 	m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
-	m->color = Color::RED;
+	m->color = No::Color::RED;
 
 
 

@@ -142,7 +142,7 @@ void EnemyHit<NormalEnemyComponent>::Enter(No::Registry& registry, No::Entity en
 	timer_ = 0.0f;
 
 	auto* material = registry.GetComponent<MaterialComponent>(entity);
-	material->color = NoEngine::Color(1.f, 0.2f, 0.2f, 1.0f);
+	material->color = No::Color(1.f, 0.2f, 0.2f, 1.0f);
 	auto* enemy = registry.GetComponent<NormalEnemyComponent>(entity);
 	//HPを減らす
 	enemy->hp--;
@@ -207,7 +207,7 @@ void EnemyHit<NormalEnemyComponent>::Update(No::Registry& registry, No::Entity e
 void EnemyHit<NormalEnemyComponent>::Exit(No::Registry& registry, No::Entity entity)
 {
 	auto* material = registry.GetComponent<MaterialComponent>(entity);
-	material->color = NoEngine::Color(1.0f, 1.0f, 1.0f, 1.0f);
+	material->color = No::Color(1.0f, 1.0f, 1.0f, 1.0f);
 	auto* transform = registry.GetComponent<No::TransformComponent>(entity);
 	transform->scale = Vector3::UNIT_SCALE;
 

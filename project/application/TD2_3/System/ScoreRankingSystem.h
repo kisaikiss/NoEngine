@@ -20,8 +20,8 @@ private:
 		float elapsed = 0.f;
 		float duration = 0.6f;
 		float delay = 0.f;
-		NoEngine::Vector2 startBase = { 0.f, 0.f };
-		NoEngine::Vector2 targetBase = { 0.f, 0.f };
+		No::Vector2 startBase = { 0.f, 0.f };
+		No::Vector2 targetBase = { 0.f, 0.f };
 		bool initialized = false;
 	};
 	std::array<RankAnim, 3> rankAnims_;

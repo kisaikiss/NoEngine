@@ -6,10 +6,10 @@
 /// @param timer アニメーションタイマー
 /// @param speed PoyoPoyo周期
 /// @param defaultScale デフォルトの大きさ
-void PoyoPoyo(No::TransformComponent& transform, float timer, float speed, float scaling, const NoEngine::Vector3& defaultScale = NoEngine::Vector3::UNIT_SCALE);
+void PoyoPoyo(No::TransformComponent& transform, float timer, float speed, float scaling, const No::Vector3& defaultScale = No::Vector3::UNIT_SCALE);
 
 void TimerUpdate(float& timer, const float& deltaTime);
 
-void LookTarget(No::TransformComponent& transform, const NoEngine::Vector3& target);
+void LookTarget(No::TransformComponent& transform, const No::Vector3& target);
 
-NoEngine::Vector3 GatTargetDir(NoEngine::Vector3& translate, const NoEngine::Vector3& target);
+No::Vector3 GatTargetDir(No::Vector3& translate, const No::Vector3& target);

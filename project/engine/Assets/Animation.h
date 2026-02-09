@@ -9,8 +9,8 @@ struct Keyframe {
 	tValue value;
 };
 
-using KeyframeVector3 = Keyframe<Vector3>;
-using KeyframeQuaternion = Keyframe<Quaternion>;
+using KeyframeVector3 = Keyframe<Math::Vector3>;
+using KeyframeQuaternion = Keyframe<Math::Quaternion>;
 
 template <typename tValue>
 struct AnimationCurve {

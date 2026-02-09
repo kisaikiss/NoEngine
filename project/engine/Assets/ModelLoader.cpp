@@ -333,7 +333,7 @@ void ModelLoader::ProcessSkeleton(const std::string& name, const Node& rootNode)
 		);
 
 
-		skeleton.inverseBindPoseMatrices.assign(skeleton.joints.size(), Matrix4x4::IDENTITY);
+		skeleton.inverseBindPoseMatrices.assign(skeleton.joints.size(), Math::Matrix4x4::IDENTITY);
 
 		for (const auto& jointWeight : sMeshes[name].skinClusterData) {
 			auto it = skeleton.jointMap.find(jointWeight.first);
@@ -350,7 +350,7 @@ int32_t ModelLoader::CreateJoint(const Node& node, const std::optional<int32_t>&
 	Joint joint;
 	joint.name = node.name;
 	joint.localMatrix = node.localMatrix;
-	joint.skeletonSpaceMatrix = { Matrix4x4::IDENTITY };
+	joint.skeletonSpaceMatrix = { Math::Matrix4x4::IDENTITY };
 	joint.transform = node.transform;
 	joint.index = int32_t(joints.size()); // 現在登録されてる数をIndexに
 	joint.parent = parent;

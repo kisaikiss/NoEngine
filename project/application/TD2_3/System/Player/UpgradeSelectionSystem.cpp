@@ -377,7 +377,7 @@ void UpgradeSelectionSystem::ApplyUpgradeChoice(No::Registry& registry, No::Enti
 	}
 	else if (choiceName == "ballUp")
 	{
-		NoEngine::Vector3 spawnPos = NoEngine::Vector3::ZERO;
+		No::Vector3 spawnPos = No::Vector3::ZERO;
 		bool foundLastBall = false;
 		for (auto ve : registry.View<BallTag, No::TransformComponent>())
 		{
@@ -387,8 +387,8 @@ void UpgradeSelectionSystem::ApplyUpgradeChoice(No::Registry& registry, No::Enti
 		}
 		if (foundLastBall)
 		{
-			NoEngine::Vector3 dir = NoEngine::MathCalculations::Normalize(spawnPos);
-			NoEngine::Vector3 ballPos = spawnPos + dir * 0.5f;
+			No::Vector3 dir = NoEngine::MathCalculations::Normalize(spawnPos);
+			No::Vector3 ballPos = spawnPos + dir * 0.5f;
 
 			auto ballEntity = registry.GenerateEntity();
 			registry.AddComponent<BallTag>(ballEntity);

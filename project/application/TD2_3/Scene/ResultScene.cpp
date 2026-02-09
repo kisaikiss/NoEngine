@@ -42,8 +42,8 @@ void ResultScene::Setup()
 
         auto* back = registry.AddComponent<BackGroundComponent>(backGroundEntity);
         back->seed = 12;
-        back->bgColor = Color(0x230692FF);
-        back->ringColor = Color(0x6A4AE4FF);
+        back->bgColor = No::Color(0x230692FF);
+        back->ringColor = No::Color(0x6A4AE4FF);
     }
 
     InitPlayerScore();
@@ -51,7 +51,7 @@ void ResultScene::Setup()
     InitPlayerGirl();
     InitChef();
 
-    constexpr Vector3 kStartCameraPosition = Vector3{ 0.0f, 0.0f, -10.0f };
+    constexpr No::Vector3 kStartCameraPosition = No:: Vector3{ 0.0f, 0.0f, -10.0f };
     //カメラ初期化
     camera_ = std::make_unique<NoEngine::Camera>();
     cameraTransform_.translate = kStartCameraPosition;
@@ -118,7 +118,7 @@ void ResultScene::InitPlayerGirl()
 
     transform->translate = { -1.00f,-1.85f,3.0f };
     transform->scale = { 0.15f,0.15f,0.15f };
-    transform->rotation.FromAxisAngle(NoEngine::Vector3::UP, 3.14f - 0.5f);
+    transform->rotation.FromAxisAngle(No::Vector3::UP, 3.14f - 0.5f);
 
     auto m = registry.AddComponent<No::MaterialComponent>(playerGirlEntity);
     m->materials = NoEngine::ModelLoader::GetMaterial("playerGirl");
@@ -143,7 +143,7 @@ void ResultScene::InitChef()
 
     transform->translate = { 1.35f,-2.15f,4.05f };
     transform->scale = { 0.15f,0.15f,0.15f };
-    transform->rotation.FromAxisAngle(NoEngine::Vector3::UP, 3.14f);
+    transform->rotation.FromAxisAngle(No::Vector3::UP, 3.14f);
 
     auto m = registry.AddComponent<No::MaterialComponent>(chefEntity);
     m->materials = NoEngine::ModelLoader::GetMaterial("chef");

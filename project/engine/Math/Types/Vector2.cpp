@@ -2,6 +2,7 @@
 #include "Calculations/Vector2Calculations.h"
 
 namespace NoEngine {
+namespace Math {
 const Vector2 Vector2::ZERO(0.f, 0.f);
 const Vector2 Vector2::RIGHT(1.f, 0.f);
 const Vector2 Vector2::UNIT_SCALE(1.f, 1.f);
@@ -69,5 +70,5 @@ float Vector2::LengthSquared() const noexcept {
 Vector2 Vector2::Normalize() const {
     return MathCalculations::Normalize(*this);
 }
-
+}
 }

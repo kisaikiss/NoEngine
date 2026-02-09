@@ -18,7 +18,7 @@ namespace Easing {
 /// <param name="end"></param>
 /// <param name="t"></param>
 /// <returns></returns>
-Vector3 Lerp(Vector3 start, Vector3 end, float t);
+Math::Vector3 Lerp(Math::Vector3 start, Math::Vector3 end, float t);
 
 /// <summary>
 /// 線形補間Quaternion版
@@ -27,7 +27,7 @@ Vector3 Lerp(Vector3 start, Vector3 end, float t);
 /// <param name="end"></param>
 /// <param name="t"></param>
 /// <returns></returns>
-Quaternion Lerp(Quaternion start, Quaternion end, float t);
+Math::Quaternion Lerp(Math::Quaternion start, Math::Quaternion end, float t);
 
 
 template<typename T>

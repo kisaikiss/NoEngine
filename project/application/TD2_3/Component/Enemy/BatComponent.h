@@ -16,7 +16,7 @@ enum class BatShootState {
 struct BatComponent {
 	BatState state = BatState::GENERATE;
 	BatShootState shootState = BatShootState::NONE;
-	NoEngine::Vector3 defaultTranslate;
+	No::Vector3 defaultTranslate;
 	bool isStarted = false;
 	float t = 0.f;
 	float shootTimer = 0.f;

@@ -4,8 +4,10 @@
 #include "engine/Functions/ECS/Component/TransformComponent.h"
 #include "../Component/BackGroundComponent.h"
 #include "engine/Math/Color/Color.h"
+#include "engine/NoEngine.h"
 
 using namespace NoEngine;
+using namespace No;
 
 BackGroundEffectPass::BackGroundEffectPass()
 {

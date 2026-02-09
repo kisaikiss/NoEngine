@@ -17,8 +17,8 @@ private:
 	void SKinUpdate(Component::AnimatorComponent* animeComp, Component::MeshComponent* meshComp);
 
 	void CalculateValue(const NodeAnimation& keyframes, Transform& transform, float time);
-	Vector3 CalculateValue(const std::vector<KeyframeVector3>& keyframes, float time);
-	Quaternion CalculateValue(const std::vector<KeyframeQuaternion>& keyframes, float time);
+	Math::Vector3 CalculateValue(const std::vector<KeyframeVector3>& keyframes, float time);
+	Math::Quaternion CalculateValue(const std::vector<KeyframeQuaternion>& keyframes, float time);
 };
 
 }

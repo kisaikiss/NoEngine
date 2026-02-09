@@ -10,7 +10,7 @@ namespace MathCalculations {
 /// <param name="v1"></param>
 /// <param name="v2"></param>
 /// <returns></returns>
-float Dot(Vector3 v1, Vector3 v2);
+float Dot(Math::Vector3 v1, Math::Vector3 v2);
 
 /// <summary>
 /// ベクトルの外積
@@ -18,23 +18,23 @@ float Dot(Vector3 v1, Vector3 v2);
 /// <param name="v1"></param>
 /// <param name="v2"></param>
 /// <returns></returns>
-Vector3 Cross(const Vector3& v1, const Vector3& v2);
+Math::Vector3 Cross(const Math::Vector3& v1, const Math::Vector3& v2);
 
 /// <summary>
 /// ベクトルの長さ
 /// </summary>
 /// <param name="vector3"></param>
 /// <returns></returns>
-float Length(Vector3 vector3);
+float Length(Math::Vector3 vector3);
 
-float LengthSquared(const Vector3& v);
+float LengthSquared(const Math::Vector3& v);
 
 /// <summary>
 /// ベクトルの正規化
 /// </summary>
 /// <param name="vector3"></param>
 /// <returns></returns>
-Vector3 Normalize(const Vector3& vector3);
+Math::Vector3 Normalize(const Math::Vector3& vector3);
 
 /// <summary>
 /// 正射影ベクトル(v1をv2に投影)
@@ -42,7 +42,7 @@ Vector3 Normalize(const Vector3& vector3);
 /// <param name="v1"></param>
 /// <param name="v2"></param>
 /// <returns></returns>
-Vector3 MakeOrthographicVector(Vector3& v1, Vector3& v2);
+Math::Vector3 MakeOrthographicVector(Math::Vector3& v1, Math::Vector3& v2);
 
 /// <summary>
 /// ベクトルの距離
@@ -50,6 +50,6 @@ Vector3 MakeOrthographicVector(Vector3& v1, Vector3& v2);
 /// <param name="v1"></param>
 /// <param name="v2"></param>
 /// <returns></returns>
-float Distance(const Vector3& v1,const Vector3& v2);
+float Distance(const Math::Vector3& v1,const Math::Vector3& v2);
 }
 }

@@ -13,6 +13,8 @@
 #include "application/TD2_3/Component/PhaseComponent.h"
 #include "application/TD2_3/Component/Enemy/IngredientsComponent.h"
 
+using namespace No;
+
 void PotControlSystem::Update(No::Registry& registry, float deltaTime) {
 
 	auto playerStatusView = registry.View<PlayerStatusComponent>();
@@ -46,19 +48,19 @@ void PotControlSystem::Update(No::Registry& registry, float deltaTime) {
 				boss->hp--;
 				if (boss->invincibleTimer == 0.f)
 					boss->invincibleTimer = kInvincibleTime;
-				material->color = NoEngine::Color(1.0f, 0.0f, 0.0f, 1.0f);
+				material->color = No::Color(1.0f, 0.0f, 0.0f, 1.0f);
 			} else {
 				// 無敵時間中なら
 				if (boss->invincibleTimer > 0.f) {
 					boss->invincibleTimer -= deltaTime;
 				} else {
 					boss->invincibleTimer = 0.f;
-					material->color = NoEngine::Color(1.0f, 1.0f, 1.0f, 1.0f);
+					material->color = No::Color(1.0f, 1.0f, 1.0f, 1.0f);
 				}
 			}
 
 			if (boss->hp <= 0) {
-				material->color = NoEngine::Color(1.0f, 1.0f, 1.0f, 1.0f);
+				material->color = No::Color(1.0f, 1.0f, 1.0f, 1.0f);
 				boss->state = PotBossState::DEAD;
 				boss->shootTimer = 0.f;
 				auto* path = registry.GetComponent<PathComponent>(entity);
@@ -84,13 +86,13 @@ void PotControlSystem::GenerateUpdate(No::Registry& registry, No::Entity entity,
 
 	bat->t += 1.f * deltaTime;
 	if (bat->t > 1.f) bat->t = 1.f;
-	transform->scale = NoEngine::Easing::EaseOutCirc<NoEngine::Vector3>(NoEngine::Vector3(0.f, 0.f, 0.f), NoEngine::Vector3(1.f, 1.f, 1.f), bat->t);
+	transform->scale = NoEngine::Easing::EaseOutCirc<No::Vector3>(No::Vector3(0.f, 0.f, 0.f), No::Vector3(1.f, 1.f, 1.f), bat->t);
 
 	if (transform->scale.x >= 1.f) {
 		transform->scale = 1.f;
 		bat->state = PotBossState::MOVE;
 		bat->t = 0.f;
-		transform->rotation.FromAxisAngle(NoEngine::Vector3::UP, PI);
+		transform->rotation.FromAxisAngle(No::Vector3::UP, PI);
 	}
 
 
@@ -202,8 +204,8 @@ void PotControlSystem::DeadUpdate(No::Registry& registry, No::Entity entity, flo
 	bat->t += 1.5f * deltaTime;
 	bat->shootTimer += 6.f * deltaTime;
 	bat->deadTimer += 0.4f * deltaTime;
-	transform->rotation.FromAxisAngle(NoEngine::Vector3::UP, (3.14f + bat->t * 25.f));
-	transform->scale = NoEngine::Easing::EaseInOutBack<NoEngine::Vector3>(NoEngine::Vector3(1.f, 1.f, 1.f), NoEngine::Vector3(0.f, 0.f, 0.f), bat->deadTimer);
+	transform->rotation.FromAxisAngle(No::Vector3::UP, (3.14f + bat->t * 25.f));
+	transform->scale = NoEngine::Easing::EaseInOutBack<No::Vector3>(No::Vector3(1.f, 1.f, 1.f), No::Vector3(0.f, 0.f, 0.f), bat->deadTimer);
 	
 	if (bat->deadTimer > 1.f) {
 		auto* death = registry.GetComponent<DeathFlag>(entity);
@@ -240,7 +242,7 @@ void PotControlSystem::DeadUpdate(No::Registry& registry, No::Entity entity, flo
 
 
 
-void PotControlSystem::Shoot(No::Registry& registry, No::TransformComponent* enemyTransform, NoEngine::Vector3 velocity) {
+void PotControlSystem::Shoot(No::Registry& registry, No::TransformComponent* enemyTransform, No::Vector3 velocity) {
 	using namespace NoEngine;
 	No::Entity entity = registry.GenerateEntity();
 	auto* ultrasound = registry.AddComponent<IngredientsComponent>(entity);
@@ -278,7 +280,7 @@ void PotControlSystem::Shoot(No::Registry& registry, No::TransformComponent* ene
 }
 
 
-void PotControlSystem::GenerateSmokeEffect(No::Registry& registry, NoEngine::Vector3 position) {
+void PotControlSystem::GenerateSmokeEffect(No::Registry& registry, No::Vector3 position) {
 	auto smoke = registry.GenerateEntity();
 	auto* t = registry.AddComponent<No::TransformComponent>(smoke);
 	t->translate = position;

@@ -2,6 +2,7 @@
 
 namespace NoEngine {
 namespace Easing {
+using namespace Math;
 Vector3 Lerp(Vector3 start, Vector3 end, float t) {
 	Vector3 result;
 	result.x = std::lerp(start.x, end.x, t);

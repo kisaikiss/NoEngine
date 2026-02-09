@@ -2,6 +2,7 @@
 #include "Vector2.h"
 
 namespace NoEngine {
+namespace Math {
 struct Matrix4x4;
 __declspec(align(4))struct Matrix3x3 {
 public:
@@ -20,4 +21,5 @@ public:
 	static const Matrix3x3 IDENTITY;
 };
 Matrix3x3 operator*(const Matrix3x3& matrix1, const Matrix3x3& matrix2);
+}
 }

@@ -66,6 +66,7 @@
 
 
 using namespace NoEngine;
+using namespace No;
 
 void GameScene::Setup()
 {
@@ -315,7 +316,7 @@ void GameScene::InitBatGirl(No::Registry& registry)
     NoEngine::ModelLoader::LoadModel("batGirl", "resources/game/td_2304/Model/batGirl/batGirl.gltf", model, animationComp);
 
     transform->translate = { -2.75f,0.0f,0.0f };
-    transform->rotation.FromAxisAngle(NoEngine::Vector3::UP, 3.14f);
+    transform->rotation.FromAxisAngle(No::Vector3::UP, 3.14f);
 
     auto m = registry.AddComponent<No::MaterialComponent>(batGirlEntity);
     m->materials = NoEngine::ModelLoader::GetMaterial("batGirl");
@@ -338,7 +339,7 @@ void GameScene::InitPlayerGirl(No::Registry& registry)
     NoEngine::ModelLoader::LoadModel("playerGirl", "resources/game/td_2304/Model/playerGirl/playerGirl.gltf", model, animationComp);
 
     transform->translate = { -6.1f,-14.55f,-8.5f };
-    transform->rotation.FromAxisAngle(NoEngine::Vector3::UP, 3.14f);
+    transform->rotation.FromAxisAngle(No::Vector3::UP, 3.14f);
 
     auto m = registry.AddComponent<No::MaterialComponent>(playerGirlEntity);
     m->materials = NoEngine::ModelLoader::GetMaterial("playerGirl");
@@ -677,7 +678,7 @@ void GameScene::DestroyGameObject()
     }
 }
 
-NoEngine::Vector3 GameScene::GenerateRandomPointInCircle(float minRadius, float maxRadius)
+No::Vector3 GameScene::GenerateRandomPointInCircle(float minRadius, float maxRadius)
 {
     // 0〜1の乱数を生成して√で均等分布に
     float raw = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
@@ -692,7 +693,7 @@ NoEngine::Vector3 GameScene::GenerateRandomPointInCircle(float minRadius, float 
     return Vector3{ x, y, 0.0f }; // Zは0で平面上に配置
 }
 
-//NoEngine::Vector3 GameScene::GenerateRandomPointInCircle(float radius)
+//No::Vector3 GameScene::GenerateRandomPointInCircle(float radius)
 //{
 //
 //   int randomAngle =  rand() % 628;

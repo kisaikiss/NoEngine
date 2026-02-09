@@ -2,6 +2,7 @@
 
 namespace NoEngine {
 namespace MathCalculations {
+using namespace Math;
 Matrix3x3 Inverse(Matrix3x3 const& matrix) {
 	Matrix3x3 result{};
 	float determinant = matrix.m[0][0] * matrix.m[1][1] * matrix.m[2][2] +

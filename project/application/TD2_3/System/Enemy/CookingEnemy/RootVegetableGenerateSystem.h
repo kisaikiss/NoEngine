@@ -10,6 +10,6 @@ private:
 
 	bool isCarrot_ = false;
 
-	NoEngine::Vector3 GenerateRandomPointInCircle(float minRadius, float maxRadius);
+	No::Vector3 GenerateRandomPointInCircle(float minRadius, float maxRadius);
 };
 

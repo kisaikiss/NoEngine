@@ -2,6 +2,7 @@
 #include "engine/Functions/Renderer/RenderPass/RenderPass.h"
 #include "application/TD2_3/Component/BallTrailComponent.h"
 #include "engine/Math/Types/Vector4.h"
+#include "engine/NoEngine.h"
 
 #include <vector>
 
@@ -17,8 +18,8 @@ public:
 private:
 	struct TrailVertex
 	{
-		NoEngine::Vector4 position; // ワールド位置.xyz, w unused
-		NoEngine::Color color;
+		No::Vector4 position; // ワールド位置.xyz, w unused
+		No::Color color;
 		float age;        // サンプルの経過時間
 	};
 	std::vector<TrailVertex> vertices_;

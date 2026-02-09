@@ -3,7 +3,7 @@
 #include "Calculations/Matrix3x3Calculations.h"
 
 namespace NoEngine {
-
+namespace Math {
 const Matrix3x3 Matrix3x3::ZERO(0, 0, 0, 0, 0, 0, 0, 0, 0);
 const Matrix3x3 Matrix3x3::IDENTITY(1, 0, 0, 0, 1, 0, 0, 0, 1);
 
@@ -20,11 +20,11 @@ Matrix3x3::Matrix3x3(const Matrix4x4& matrix4x4) {
 }
 
 Matrix3x3::Matrix3x3(float entry00, float entry01, float entry02,
-	float entry10, float entry11, float entry12,
-	float entry20, float entry21, float entry22) {
-	m[0][0] = entry00; m[0][1] = entry01; m[0][2] = entry02;
-	m[1][0] = entry10; m[1][1] = entry11; m[1][2] = entry12;
-	m[2][0] = entry20; m[2][1] = entry21; m[2][2] = entry22;
+    float entry10, float entry11, float entry12,
+    float entry20, float entry21, float entry22) {
+    m[0][0] = entry00; m[0][1] = entry01; m[0][2] = entry02;
+    m[1][0] = entry10; m[1][1] = entry11; m[1][2] = entry12;
+    m[2][0] = entry20; m[2][1] = entry21; m[2][2] = entry22;
 }
 
 void Matrix3x3::MakeAffine(const Vector2& scale, const float& rotate, const Vector2& translate) {
@@ -38,5 +38,5 @@ void Matrix3x3::Inverse() {
 Matrix3x3 operator*(const Matrix3x3& matrix1, const Matrix3x3& matrix2) {
     return  MathCalculations::Multiply(matrix1, matrix2);
 }
-
+}
 }

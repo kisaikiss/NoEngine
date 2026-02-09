@@ -8,7 +8,7 @@ public:
 private:
     void UpdateCollider(No::Registry& registry);
 
-    bool CheckSphereToSphere(const NoEngine::Vector3& center1, const NoEngine::Vector3& center2, const float radius1, const float radius2);
-    bool CheckBoxToBox(const NoEngine::Vector3& center1, const NoEngine::Vector3& center2, const NoEngine::Vector3& size1, const NoEngine::Vector3& size2);
-    bool CheckBoxToSphere(const NoEngine::Vector3& center1, const NoEngine::Vector3& center2, const NoEngine::Vector3& size, const float radius);
+    bool CheckSphereToSphere(const No::Vector3& center1, const No::Vector3& center2, const float radius1, const float radius2);
+    bool CheckBoxToBox(const No::Vector3& center1, const No::Vector3& center2, const No::Vector3& size1, const No::Vector3& size2);
+    bool CheckBoxToSphere(const No::Vector3& center1, const No::Vector3& center2, const No::Vector3& size, const float radius);
 };

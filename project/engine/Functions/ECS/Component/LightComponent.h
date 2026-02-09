@@ -3,20 +3,20 @@
 
 namespace NoEngine::Component {
 struct DirectionalLightComponent {
-	Color color;
-	Vector3 direction;
+	Math::Color color;
+	Math::Vector3 direction;
 	float intensity;
 };
 
 struct PointLightComponent {
-	Color color;
+	Math::Color color;
 	float intensity;
 	float radius;
 	float decay;
 };
 
 struct SpotLightComponent {
-	Color color;
+	Math::Color color;
 	float intensity;
 	float distance;
 	float decay;

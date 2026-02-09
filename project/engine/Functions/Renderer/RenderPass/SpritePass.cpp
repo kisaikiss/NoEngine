@@ -10,7 +10,7 @@ namespace NoEngine {
 namespace Render {
 
 using namespace Component;
-
+using namespace Math;
 namespace {
 Matrix4x4 sOrthographicMatrix;
 }

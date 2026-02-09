@@ -3,6 +3,7 @@
 #include "Vector3.h"
 
 namespace NoEngine {
+namespace Math {
 struct Matrix4x4;
 struct Quaternion {
 public:
@@ -35,5 +36,6 @@ Quaternion operator*(const Quaternion& q, float s);
 
 Quaternion operator*(float s, const Quaternion& q);
 
-Quaternion operator-(const Quaternion& q0,const Quaternion& q1);
+Quaternion operator-(const Quaternion& q0, const Quaternion& q1);
+}
 }

@@ -3,7 +3,7 @@
 #include "application/TD2_3/Component/ScoreDigitComponent.h"
 
 namespace {
-const NoEngine::Vector2 skScorePositionBase = { 1230.f,120.f };
+const No::Vector2 skScorePositionBase = { 1230.f,120.f };
 const float skSpriteWidth = 64.f;
 const uint32_t skDigitNum = 6;
 }
@@ -31,7 +31,7 @@ void ScoreSpriteControlSystem::Update(No::Registry& registry, float deltaTime) {
 
 		sprite->uv.x = 0.1f * digits_[counter];
 		auto* transform = registry.GetComponent<No::Transform2DComponent>(entity);
-		NoEngine::Vector2 offset = { static_cast<float>(counter) * skSpriteWidth, 0.f };
+		No::Vector2 offset = { static_cast<float>(counter) * skSpriteWidth, 0.f };
 		transform->translate = skScorePositionBase - offset;
 
 

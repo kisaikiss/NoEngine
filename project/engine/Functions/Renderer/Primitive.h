@@ -2,8 +2,9 @@
 #include "engine/Runtime/Command/GraphicsContext.h"
 #include "engine/Math/MathInclude.h"
 
-class Primitive
-{
+namespace NoEngine {
+
+class Primitive {
 public:
 	static void Initialize();
 	static void Shutdown();
@@ -15,7 +16,7 @@ public:
 	/// <param name="b">ポイントB</param>
 	/// <param name="color">色</param>
 	/// <param name="viewProj">カメラ行列</param>
-	static void DrawLine(const NoEngine::Vector3& a, const NoEngine::Vector3& b, const NoEngine::Color& color);
+	static void DrawLine(const Math::Vector3& a, const Math::Vector3& b, const Math::Color& color);
 
 	/// <summary>
 	/// ボックス描画
@@ -24,8 +25,8 @@ public:
 	/// <param name="size">サイズ</param>
 	/// <param name="color">色</param>
 	/// <param name="viewProj">カメラ行列</param>
-	static void DrawCube(const NoEngine::Vector3& center, const NoEngine::Vector3& size,
-		const NoEngine::Color& color);
+	static void DrawCube(const Math::Vector3& center, const Math::Vector3& size,
+		const Math::Color& color);
 
 	/// <summary>
 	/// 球の描画
@@ -36,7 +37,7 @@ public:
 	/// <param name="viewProj">カメラ行列</param>
 	/// <param name="slices">分割数(x)</param>
 	/// <param name="stacks">分割数(y)</param>
-	static void DrawSphere(const NoEngine::Vector3& center, float radius, const NoEngine::Color& color,uint32_t slices = 16, uint32_t stacks = 16);
+	static void DrawSphere(const Math::Vector3& center, float radius, const Math::Color& color, uint32_t slices = 16, uint32_t stacks = 16);
 
 	/// <summary>
 	/// 三角形描画
@@ -46,13 +47,14 @@ public:
 	/// <param name="c">ポイントC</param>
 	/// <param name="color">色</param>
 	/// <param name="viewProj">カメラ行列</param>
-	static void DrawTriangle(const NoEngine::Vector3& a, const NoEngine::Vector3& b, const NoEngine::Vector3& c, const NoEngine::Color& color);
+	static void DrawTriangle(const Math::Vector3& a, const Math::Vector3& b, const Math::Vector3& c, const Math::Color& color);
 
 	/// <summary>
 	/// 描画
 	/// </summary>
-	static void Render(NoEngine::GraphicsContext& ctx,const NoEngine::Matrix4x4& ViewProj);
+	static void Render(GraphicsContext& ctx, const Math::Matrix4x4& ViewProj);
 
 private:
-	static void AddLineInternal(const NoEngine::Vector3& a, const NoEngine::Vector3& b, const NoEngine::Color& color);
+	static void AddLineInternal(const Math::Vector3& a, const Math::Vector3& b, const Math::Color& color);
 };
+}

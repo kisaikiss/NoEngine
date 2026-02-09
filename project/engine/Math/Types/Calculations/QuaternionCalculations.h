@@ -3,29 +3,29 @@
 
 namespace NoEngine {
 
-struct Vector3;
-struct Matrix4x4;
+struct Math::Vector3;
+struct Math::Matrix4x4;
 namespace MathCalculations {
-Quaternion IdentityQuaternion();
+Math::Quaternion IdentityQuaternion();
 
-Quaternion Conjugate(const Quaternion& quaternion);
+Math::Quaternion Conjugate(const Math::Quaternion& quaternion);
 
-Quaternion Multiply(const Quaternion& q1, const Quaternion& q2);
+Math::Quaternion Multiply(const Math::Quaternion& q1, const Math::Quaternion& q2);
 
-float Dot(const Quaternion& q1, const Quaternion& q2);
+float Dot(const Math::Quaternion& q1, const Math::Quaternion& q2);
 
-Quaternion Normalize(const Quaternion& q);
+Math::Quaternion Normalize(const Math::Quaternion& q);
 
-float Norm(const Quaternion& q);
+float Norm(const Math::Quaternion& q);
 
-Quaternion Inverse(const Quaternion& q);
+Math::Quaternion Inverse(const Math::Quaternion& q);
 
-Quaternion MakeRotateAxisAngleQuaternion(const Vector3& axis, float angle);
+Math::Quaternion MakeRotateAxisAngleQuaternion(const Math::Vector3& axis, float angle);
 
-Vector3 RotateVector(const Vector3& vector, const Quaternion& quaternion);
+Math::Vector3 RotateVector(const Math::Vector3& vector, const Math::Quaternion& quaternion);
 
-Matrix4x4 MakeRotateMatrix(const Quaternion& quaternion);
+Math::Matrix4x4 MakeRotateMatrix(const Math::Quaternion& quaternion);
 
-Quaternion Slerp(const Quaternion& q0,const Quaternion& q1, float t);
+Math::Quaternion Slerp(const Math::Quaternion& q0,const Math::Quaternion& q1, float t);
 }
 }

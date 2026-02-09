@@ -3,7 +3,7 @@
 #include "Quaternion.h"
 
 namespace NoEngine {
-
+namespace Math {
 __declspec(align(16))struct Matrix4x4 {
 	float m[4][4];
 
@@ -38,4 +38,5 @@ __declspec(align(16))struct Matrix4x4 {
 };
 
 Matrix4x4 operator*(const Matrix4x4& matrix1, const Matrix4x4& matrix2);
+}
 }

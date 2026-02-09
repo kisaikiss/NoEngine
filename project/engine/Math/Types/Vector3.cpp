@@ -2,7 +2,7 @@
 #include "Calculations/Vector3Calculations.h"
 
 namespace NoEngine {
-
+namespace Math {
 const Vector3 Vector3::ZERO(0.f, 0.f, 0.f);
 const Vector3 Vector3::RIGHT(1.f, 0.f, 0.f);
 const Vector3 Vector3::UP(0.f, 1.f, 0.f);
@@ -91,5 +91,5 @@ float Vector3::LengthSquared() const noexcept {
 Vector3 Vector3::Normalize() const {
 	return MathCalculations::Normalize(*this);
 }
-
+}
 }

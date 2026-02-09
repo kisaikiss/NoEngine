@@ -21,15 +21,15 @@ void EnemyPushBackSystem::Update(No::Registry& registry, float deltaTime) {
 
 }
 
-bool EnemyPushBackSystem::CheckSphereToSphere(const NoEngine::Vector3& center1, const NoEngine::Vector3& center2, const float radius1, const float radius2) {
-	NoEngine::Vector3 diff = center1 - center2;
+bool EnemyPushBackSystem::CheckSphereToSphere(const No::Vector3& center1, const No::Vector3& center2, const float radius1, const float radius2) {
+	No::Vector3 diff = center1 - center2;
 	float distanceSq = diff.LengthSquared();
 	float radiusSum = radius1 + radius2;
 	return distanceSq <= radiusSum * radiusSum;
 }
 
 void EnemyPushBackSystem::PushBack(No::Registry& registry, No::Entity e1, No::Entity e2) {
-	using namespace NoEngine;
+	using namespace No;
 
 	auto* transform1 = registry.GetComponent<No::TransformComponent>(e1);
 	auto* transform2 = registry.GetComponent<No::TransformComponent>(e2);

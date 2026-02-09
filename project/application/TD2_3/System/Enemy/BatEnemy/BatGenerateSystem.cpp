@@ -79,7 +79,7 @@ void BatGenerateSystem::Update(No::Registry& registry, float deltaTime) {
             collider->collideMask = ColliderMask::kBall;
 
             auto* transform = registry.AddComponent<No::TransformComponent>(entity);
-            transform->rotation.FromAxisAngle(NoEngine::Vector3::UP, 3.14f);
+            transform->rotation.FromAxisAngle(No::Vector3::UP, 3.14f);
             transform->translate = GenerateRandomPointInCircle(2.0f, 3.0f);
             transform->scale = 0.f;
 
@@ -113,7 +113,7 @@ void BatGenerateSystem::Update(No::Registry& registry, float deltaTime) {
 	}
 }
 
-NoEngine::Vector3 BatGenerateSystem::GenerateRandomPointInCircle(float minRadius, float maxRadius) {
+No::Vector3 BatGenerateSystem::GenerateRandomPointInCircle(float minRadius, float maxRadius) {
     // 0〜1の乱数を生成して√で均等分布に
     float raw = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
     float r = std::sqrt(raw) * (maxRadius - minRadius) + minRadius;
@@ -124,5 +124,5 @@ NoEngine::Vector3 BatGenerateSystem::GenerateRandomPointInCircle(float minRadius
     float x = r * std::cos(angle);
     float y = r * std::sin(angle);
 
-    return NoEngine::Vector3{ x, y, 0.0f }; // Zは0で平面上に配置
+    return No::Vector3{ x, y, 0.0f }; // Zは0で平面上に配置
 }

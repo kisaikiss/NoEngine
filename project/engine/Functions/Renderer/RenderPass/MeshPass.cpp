@@ -32,7 +32,7 @@ void MeshPass::Collect(ECS::Registry& registry) {
 	if (view.Empty()) return;
 	items_.clear();
 
-	const Vector3& cameraPos = GetCamera()->GetTransform().translate;
+	const Math::Vector3& cameraPos = GetCamera()->GetTransform().translate;
 	for (auto entity : view) {
 		auto* mesh = registry.GetComponent<MeshComponent>(entity);
 		if (!mesh->isVisible)continue;
@@ -68,8 +68,8 @@ void MeshPass::Render(GraphicsContext& context) {
 			currentPSO = item.psoId;
 		}
 
-		Matrix4x4 worldData = item.transform->MakeAffineMatrix4x4();
-		context.SetDynamicConstantBufferView(rootIndex["gWorldMatrix"], sizeof(Matrix4x4), &worldData);
+		Math::Matrix4x4 worldData = item.transform->MakeAffineMatrix4x4();
+		context.SetDynamicConstantBufferView(rootIndex["gWorldMatrix"], sizeof(Math::Matrix4x4), &worldData);
 		context.SetDynamicConstantBufferView(rootIndex["gCameraMatrix"], sizeof(CameraBase::CameraForGPU), &GetCamera()->GetCameraForGPU());
 		context.SetDynamicDescriptor(rootIndex["gDirectionalLights"], 0, GetRenderContext()->GetDirectionalLightSRV());
 		{
@@ -95,7 +95,7 @@ void MeshPass::Render(GraphicsContext& context) {
 		for (const auto& subMesh : item.mesh->mesh->subMeshes) {
 
 			_declspec(align(16)) struct {
-				Color color;
+				Math::Color color;
 			}constants;
 			constants.color = item.material->color;
 			context.SetDynamicConstantBufferView(rootIndex["gMaterial"], sizeof(constants), &constants);
@@ -134,8 +134,8 @@ void MeshPass::RenderOutline(GraphicsContext& context) {
 	
 		auto& rootIndex = RootSignatureBuilder::GetRootIndexMap(currentPSOName);
 
-		Matrix4x4 worldData = item.transform->MakeAffineMatrix4x4();
-		context.SetDynamicConstantBufferView(rootIndex["gWorldMatrix"], sizeof(Matrix4x4), &worldData);
+		Math::Matrix4x4 worldData = item.transform->MakeAffineMatrix4x4();
+		context.SetDynamicConstantBufferView(rootIndex["gWorldMatrix"], sizeof(Math::Matrix4x4), &worldData);
 		context.SetDynamicConstantBufferView(rootIndex["gCameraMatrix"], sizeof(CameraBase::CameraForGPU), &GetCamera()->GetCameraForGPU());
 		
 		context.SetVertexBuffer(0, item.mesh->mesh->vertexBuffer.VertexBufferView());

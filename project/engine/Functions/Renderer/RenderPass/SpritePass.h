@@ -23,15 +23,15 @@ private:
     std::vector<DrawItem> items_;
 
     struct SpriteVertex {
-        Vector4 position; // ワールド座標系
-        Vector2 texcoord;
+        Math::Vector4 position; // ワールド座標系
+        Math::Vector2 texcoord;
     };
     std::vector<SpriteVertex> vertices_;
     std::vector<uint16_t> indices_;
 
     void Collect(ECS::Registry& registry);
     void Sort();
-    void MakeLocalQuad(const DrawItem& item , Vector2 out[4]);
+    void MakeLocalQuad(const DrawItem& item , Math::Vector2 out[4]);
     void GenerateVertices();
     void Render(GraphicsContext& gfx);
 };

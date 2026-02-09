@@ -5,6 +5,7 @@
 #include "engine/Functions/Renderer/RenderSystem.h"
 
 using namespace NoEngine;
+using namespace NoEngine::Math;
 namespace
 {
 	struct PrimitiveVertex
@@ -126,11 +127,11 @@ void Primitive::DrawTriangle(
 	AddLineInternal(c, a, color);
 }
 
-void Primitive::Render(NoEngine::GraphicsContext& ctx, const NoEngine::Matrix4x4& ViewProj)
+void Primitive::Render(GraphicsContext& ctx, const Matrix4x4& ViewProj)
 {
 	if (sVertices.empty() || !pPSO) return;
 
-	ctx.SetRootSignature(NoEngine::Render::GetRootSignature(Render::GetRootSignatureID(L"Renderer : Primitive PSO")));
+	ctx.SetRootSignature(Render::GetRootSignature(Render::GetRootSignatureID(L"Renderer : Primitive PSO")));
 	ctx.SetPipelineState(*pPSO);
 	ctx.SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINELIST);
 
@@ -143,7 +144,7 @@ void Primitive::Render(NoEngine::GraphicsContext& ctx, const NoEngine::Matrix4x4
 	sVertices.clear();
 }
 
-void Primitive::AddLineInternal(const NoEngine::Vector3& a, const NoEngine::Vector3& b, const NoEngine::Color& color)
+void Primitive::AddLineInternal(const Vector3& a, const Vector3& b, const Color& color)
 {
 	sVertices.push_back({ a, color });
 	sVertices.push_back({ b, color });

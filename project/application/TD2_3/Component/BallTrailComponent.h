@@ -1,12 +1,13 @@
 #pragma once
 #include <deque>
 #include "engine/Math/MathInclude.h"
+#include "engine/NoEngine.h"
 
 struct BallTrailComponent
 {
     struct Sample {
-        NoEngine::Vector3 pos;
-        NoEngine::Color color = NoEngine::Color::WHITE;
+        No::Vector3 pos;
+        No::Color color = No::Color::WHITE;
         float age; // seconds since sample
     };
     std::deque<Sample> samples;
@@ -19,8 +20,8 @@ struct BallTrailComponent
     uint32_t maxSamples = 64;
 
     // 頂点カラー向け設定
-    NoEngine::Color startColor = NoEngine::Color(0xE491C9ff);
-    NoEngine::Color endColor = NoEngine::Color(0x088395ff);
+    No::Color startColor = No::Color(0xE491C9ff);
+    No::Color endColor = No::Color(0x088395ff);
     uint32_t colorSegments = 4;
     bool useSegmentedColors = true;
 };

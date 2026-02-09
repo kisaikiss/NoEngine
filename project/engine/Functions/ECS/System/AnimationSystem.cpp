@@ -5,7 +5,7 @@
 
 namespace NoEngine {
 namespace ECS {
-
+using namespace Math;
 void AnimationSystem::Update(Registry& registry, float deltaTime) {
 	AnimationUpdate(registry, deltaTime);
 }

@@ -45,7 +45,7 @@ void TrackEnemyControlSystem::Update(No::Registry& registry, float deltaTime)
             enemy->stateManager->ChangeState<EnemyHit<TrackEnemyComponent>>(registry,entity);
         } else
         {
-            material->materials[0].color = NoEngine::Color(1.0f, 1.0f, 1.0f, 1.0f);
+            material->materials[0].color = No::Color(1.0f, 1.0f, 1.0f, 1.0f);
         }
 
         enemy->stateManager->Update(registry, entity,deltaTime);
@@ -158,7 +158,7 @@ void EnemyHit<TrackEnemyComponent>::Enter(No::Registry& registry, No::Entity ent
     timer_ = 0.0f;
 
     auto* material = registry.GetComponent<MaterialComponent>(entity);
-    material->materials[0].color = NoEngine::Color(1.0f, 0.0f, 0.0f, 1.0f);
+    material->materials[0].color = No::Color(1.0f, 0.0f, 0.0f, 1.0f);
     auto* enemy = registry.GetComponent<TrackEnemyComponent>(entity);
     //HPを減らす
     enemy->hp--;
@@ -235,7 +235,7 @@ void EnemyHit<TrackEnemyComponent>::Exit(No::Registry& registry, No::Entity enti
 {
 
     auto* material = registry.GetComponent<MaterialComponent>(entity);
-    material->materials[0].color = NoEngine::Color(1.0f, 1.0f, 1.0f, 1.0f);
+    material->materials[0].color = No::Color(1.0f, 1.0f, 1.0f, 1.0f);
     auto* transform = registry.GetComponent<No::TransformComponent>(entity);
     transform->scale = Vector3::UNIT_SCALE;
 

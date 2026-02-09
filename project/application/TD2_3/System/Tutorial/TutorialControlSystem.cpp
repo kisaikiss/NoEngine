@@ -3,6 +3,7 @@
 #include "application/TD2_3/tag.h"
 #include "../../Component/TutorialSpriteComponent.h"
 using namespace NoEngine;
+using namespace No;
 using namespace Easing;
 void TutorialControlSystem::Update(No::Registry& registry, float deltaTime)
 {

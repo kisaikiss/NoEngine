@@ -5,14 +5,14 @@
 
 namespace NoEngine {
 struct Vertex {
-	Vector4 position;
-	Vector2 texcoord;
-	Vector3 normal;
+	Math::Vector4 position;
+	Math::Vector2 texcoord;
+	Math::Vector3 normal;
 };
 
 struct Node {
 	Transform transform;
-	Matrix4x4 localMatrix;
+	Math::Matrix4x4 localMatrix;
 	std::string name;
 	std::vector<Node> children;
 };
@@ -23,7 +23,7 @@ struct VertexWeightData {
 };
 
 struct JointWeightData {
-	Matrix4x4 inverseBindPoseMatrix;
+	Math::Matrix4x4 inverseBindPoseMatrix;
 	std::vector<VertexWeightData> vertexWeights;
 };
 
@@ -38,8 +38,8 @@ struct SubMesh {
 };
 
 _declspec(align(16))struct SkeletonWell {
-	Matrix4x4 skeletonSpaceMatrix;
-	Matrix4x4 skeletonSpaceInverseTransposeMatrix;
+	Math::Matrix4x4 skeletonSpaceMatrix;
+	Math::Matrix4x4 skeletonSpaceInverseTransposeMatrix;
 };
 
 struct Mesh {
