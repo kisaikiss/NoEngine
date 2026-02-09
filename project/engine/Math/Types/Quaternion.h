@@ -6,7 +6,6 @@ namespace NoEngine {
 namespace Math {
 struct Matrix4x4;
 struct Quaternion {
-public:
 	float x;
 	float y;
 	float z;
@@ -17,10 +16,17 @@ public:
 	explicit Quaternion(const Matrix3x3& rot) { this->FromRotationMatrix(rot); }
 	explicit Quaternion(const Matrix4x4& rot) { this->FromRotationMatrix(rot); }
 
+	void Conjugate();
+	void Normalize();
+	void Inverse();
+	float Norm();
+
 	void FromRotationMatrix(const Matrix3x3& rotation);
 	void FromRotationMatrix(const Matrix4x4& rotation);
 	void FromAxisAngle(const Vector3& axis, float angle);
 	Vector3 RotateVector(const Vector3& vector);
+
+	static Quaternion Slerp(const Quaternion& q0, const Quaternion& q1, float t);
 
 	static const Quaternion ZERO;
 	static const Quaternion IDENTITY;

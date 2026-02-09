@@ -8,6 +8,22 @@ namespace Math {
 const Quaternion Quaternion::ZERO(0, 0, 0, 0);
 const Quaternion Quaternion::IDENTITY(0, 0, 0, 1);
 
+void Quaternion::Conjugate() {
+	*this = MathCalculations::Conjugate(*this);
+}
+
+void Quaternion::Normalize() {
+	*this = MathCalculations::Normalize(*this);
+}
+
+void Quaternion::Inverse() {
+	*this = MathCalculations::Inverse(*this);
+}
+
+float Quaternion::Norm() {
+	return MathCalculations::Norm(*this);
+}
+
 void Quaternion::FromRotationMatrix(const Matrix3x3& rotation) {
 	float trace = rotation.m[0][0] + rotation.m[1][1] + rotation.m[2][2];
 	float root;
@@ -51,6 +67,10 @@ void Quaternion::FromAxisAngle(const Vector3& axis, float angle) {
 
 Vector3 Quaternion::RotateVector(const Vector3& vector) {
 	return MathCalculations::RotateVector(vector, *this);
+}
+
+Quaternion Quaternion::Slerp(const Quaternion& q0, const Quaternion& q1, float t) {
+	return MathCalculations::Slerp(q0, q1, t);
 }
 
 Quaternion operator+(const Quaternion& q1, const Quaternion& q2) {

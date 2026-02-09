@@ -2,7 +2,6 @@
 namespace NoEngine {
 namespace Math {
 struct Vector3 final {
-public:
 	float x, y, z;
 
 	Vector3& operator+=(const Vector3& other);
@@ -15,7 +14,14 @@ public:
 	[[nodiscard]] Vector3 Cross(const Vector3& other) const noexcept;
 	[[nodiscard]] float Length() const noexcept;
 	[[nodiscard]] float LengthSquared() const noexcept;
+	[[nodiscard]] float Distance(const Vector3& other) const noexcept;
 	[[nodiscard]] Vector3 Normalize() const;
+	/// <summary>
+	/// 引数のベクトルをこのベクトルへ投影
+	/// </summary>
+	/// <param name="other"></param>
+	/// <returns></returns>
+	[[nodiscard]] Vector3 MakeOrthographicVector(const Vector3& other) const noexcept;
 
 	static const Vector3 ZERO;
 	static const Vector3 RIGHT;

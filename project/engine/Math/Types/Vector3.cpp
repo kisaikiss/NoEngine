@@ -88,8 +88,16 @@ float Vector3::LengthSquared() const noexcept {
 	return MathCalculations::LengthSquared(*this);
 }
 
+float Vector3::Distance(const Vector3& other) const noexcept {
+	return MathCalculations::Distance(*this, other);
+}
+
 Vector3 Vector3::Normalize() const {
 	return MathCalculations::Normalize(*this);
+}
+
+Vector3 Vector3::MakeOrthographicVector(const Vector3& other) const noexcept {
+	return MathCalculations::MakeOrthographicVector(other, *this);
 }
 }
 }

@@ -42,7 +42,7 @@ Math::Vector3 Normalize(const Math::Vector3& vector3);
 /// <param name="v1"></param>
 /// <param name="v2"></param>
 /// <returns></returns>
-Math::Vector3 MakeOrthographicVector(Math::Vector3& v1, Math::Vector3& v2);
+Math::Vector3 MakeOrthographicVector(const Math::Vector3& v1, const  Math::Vector3& v2);
 
 /// <summary>
 /// ベクトルの距離

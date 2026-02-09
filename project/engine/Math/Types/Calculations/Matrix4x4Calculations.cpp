@@ -118,7 +118,7 @@ Vector3 Transform(const Vector3& vector, const Matrix4x4& matrix) {
 	return result;
 }
 
-Vector3 TransforNormal(const Vector3& vector, const Matrix4x4& matrix) {
+Vector3 TransformNormal(const Vector3& vector, const Matrix4x4& matrix) {
 	Vector3 result{
 		vector.x * matrix.m[0][0] + vector.y * matrix.m[1][0] + vector.z * matrix.m[2][0],
 		vector.x * matrix.m[0][1] + vector.y * matrix.m[1][1] + vector.z * matrix.m[2][1],

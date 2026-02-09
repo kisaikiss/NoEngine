@@ -81,12 +81,12 @@ Math::Matrix4x4 MakeAffineMatrix(const Math::Vector3& scale, const Math::Quatern
 Math::Vector3 Transform(const Math::Vector3& vector, const Math::Matrix4x4& matrix);
 
 /// <summary>
-/// 
+/// 平行移動成分を打ち消して同次座標の行列を3次元座標に直す
 /// </summary>
 /// <param name="vector"></param>
 /// <param name="matrix"></param>
 /// <returns></returns>
-Math::Vector3 TransforNormal(const Math::Vector3& vector, const Math::Matrix4x4& matrix);
+Math::Vector3 TransformNormal(const Math::Vector3& vector, const Math::Matrix4x4& matrix);
 
 /// <summary>
 /// 逆行列

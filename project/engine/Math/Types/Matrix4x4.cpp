@@ -1,5 +1,6 @@
 #include "Matrix4x4.h"
 #include "Calculations/Matrix4x4Calculations.h"
+#include "Calculations/QuaternionCalculations.h"
 namespace NoEngine {
 namespace Math {
 const Matrix4x4 Matrix4x4::ZERO(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
@@ -62,12 +63,52 @@ Matrix4x4::Matrix4x4(float m00, float m01, float m02, float m03,
 	m[3][0] = m30; m[3][1] = m31; m[3][2] = m32; m[3][3] = m33;
 }
 
+Vector3 Matrix4x4::Transform(const Vector3& vector) {
+	return MathCalculations::Transform(vector, *this);
+}
+
+Vector3 Matrix4x4::TransformNormal(const Vector3& vector) {
+	return MathCalculations::TransformNormal(vector, *this);
+}
+
+void Matrix4x4::MakeScale(const Vector3& scale) {
+	*this = MathCalculations::MakeScaleMatrix(scale);
+}
+
+void Matrix4x4::MakeRotate(const Quaternion& quaternion) {
+	*this = MathCalculations::MakeRotateMatrix(quaternion);
+}
+
+void Matrix4x4::MakeRotate(const Vector3& rotate) {
+	*this = MathCalculations::MakeRotateMatrix(rotate);
+}
+
+void Matrix4x4::MakeTranslate(const Vector3& translate) {
+	*this = MathCalculations::MakeTranslateMatrix(translate);
+}
+
 void Matrix4x4::MakeAffine(const Vector3& scale, const Quaternion& rotate, const Vector3& translate) {
 	*this = MathCalculations::MakeAffineMatrix(scale, rotate, translate);
 }
 
+void Matrix4x4::MakeOrthographic(float left, float top, float right, float bottom, float zNear, float zFar) {
+	*this = MathCalculations::MakeOrthographicMatrix(left, top, right, bottom, zNear, zFar);
+}
+
+void Matrix4x4::MakePerspectiveFov(float fovY, float aspectRatio, float nearClip, float farClip) {
+	*this = MathCalculations::MakePerspectiveFovMatrix(fovY, aspectRatio, nearClip, farClip);
+}
+
+void Matrix4x4::MakeViewport(float left, float top, float width, float height, float minDepth, float maxDepth) {
+	*this = MathCalculations::MakeViewportMatrix(left, top, width, height, minDepth, maxDepth);
+}
+
 void Matrix4x4::Inverse() {
 	*this = MathCalculations::Inverse(*this);
+}
+
+void Matrix4x4::Transpose() {
+	*this = MathCalculations::Transpose(*this);
 }
 }
 }

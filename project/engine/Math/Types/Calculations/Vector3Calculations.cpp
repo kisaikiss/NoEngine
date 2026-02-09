@@ -32,12 +32,12 @@ Vector3 Normalize(const Vector3& vector3) {
 	return Vector3(vector3.x / length, vector3.y / length, vector3.z / length);
 }
 
-Vector3 MakeOrthographicVector(Vector3& v1, Vector3& v2) {
+Vector3 MakeOrthographicVector(const Vector3& v1, const Vector3& v2) {
 	Vector3 result{};
-	v2 = Normalize(v2);
-	result.x = (v2.x * Dot(v1, v2));
-	result.y = (v2.y * Dot(v1, v2));
-	result.z = (v2.z * Dot(v1, v2));
+	Vector3 v = Normalize(v2);
+	result.x = (v.x * Dot(v1, v));
+	result.y = (v.y * Dot(v1, v));
+	result.z = (v.z * Dot(v1, v));
 	return result;
 }
 float Distance(const Vector3& v1, const Vector3& v2)
