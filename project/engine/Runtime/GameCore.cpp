@@ -100,8 +100,8 @@ void EngineInitialize() {
 	GraphicsCore::Initialize();
 
 	// ウィンドウの生成、初期化を行います。
-	GraphicsCore::gWindowManager.Create(L"2304_歪んだパドル", 1280, 720, L"resources/game/td_2304/game.ico");
-	GraphicsCore::gWindowManager.SetMainWindowName(L"2304_歪んだパドル");
+	GraphicsCore::gWindowManager.Create(L"NoEngine", 1280, 720, L"resources/engine/noicon.ico");
+	GraphicsCore::gWindowManager.SetMainWindowName(L"NoEngine");
 #ifdef RELEASE
 	// ToDo : チーム制作用にリリースでフルスクリーンを強制しています。ウィンドウモード変更のバグは修正すべきです。
 	auto* window = GraphicsCore::gWindowManager.GetMainWindow();

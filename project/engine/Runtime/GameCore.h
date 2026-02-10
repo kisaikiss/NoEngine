@@ -1,6 +1,7 @@
 #pragma once
 #include "engine/Functions/Scene/SceneManager.h"
 #include "engine/Functions/Renderer/RenderPass/RenderPassScheduler.h"
+#include "engine/Functions/ECS/Event/SceneChangeEvent.h"
 
 namespace NoEngine {
 namespace GameCore {
@@ -21,13 +22,19 @@ public:
 	/// ゲームアプリケーションの終了処理を行います。
 	/// </summary>
 	/// <param name=""></param>
-	virtual void Cleanup(void) = 0;
+	virtual void Cleanup(void) { ShutdownSceneManager(); }
 
 	/// <summary>
 	/// 更新処理を行います。フレームごとに1回呼び出されます。
 	/// </summary>
 	/// <param name="deltaT">経過時間</param>
-	virtual void Update(float deltaT) = 0;
+	virtual void Update(float deltaT) {
+		if (auto event = GetRegistry().PollEvent<Event::SceneChangeEvent>()) {
+			ChangeScene(event->nextScene, true);
+		}
+
+		UpdateScene(deltaT);
+	};
 
 	virtual void RenderScene(void) {};
 

@@ -368,63 +368,6 @@ void Initialize() {
 		sRootSignatureIndexMap[defaultPrimitivePSOName] = static_cast<uint32_t>(sRootSignatures.size()) - 1;
 
 	}
-	// Ball Trail PSO
-	{
-		ShaderModule trailVS(ShaderStage::Vertex, L"resources/game/Shaders/BallTrail.VS.hlsl", L"vs_6_0");
-		ShaderModule trailPS(ShaderStage::Pixel, L"resources/game/Shaders/BallTrail.PS.hlsl", L"ps_6_0");
-
-		const ShaderReflection& trailVsReflection = trailVS.GetReflection();
-		const ShaderReflection& trailPsReflection = trailPS.GetReflection();
-
-		std::vector<ShaderReflection> trailRefls;
-		trailRefls.push_back(trailVsReflection);
-		trailRefls.push_back(trailPsReflection);
-
-		std::unique_ptr<RootSignature> trailRootSignature = std::make_unique<RootSignature>();
-		std::wstring trailPSOName = L"Renderer : Ball Trail PSO";
-		RootSignatureBuilder::BuildFromReflection(trailRefls, *trailRootSignature, ConvertString(trailPSOName));
-
-		D3D12_RASTERIZER_DESC trailRasterizerDesc{};
-		trailRasterizerDesc.CullMode = D3D12_CULL_MODE_NONE;
-		trailRasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
-
-		D3D12_BLEND_DESC trailBlendDesc = {};
-		trailBlendDesc.IndependentBlendEnable = FALSE;
-		trailBlendDesc.RenderTarget[0].BlendEnable = TRUE;
-		trailBlendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
-		trailBlendDesc.RenderTarget[0].DestBlend = D3D12_BLEND_ONE;
-		trailBlendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
-		trailBlendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
-		trailBlendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_INV_SRC_ALPHA;
-		trailBlendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
-		trailBlendDesc.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
-
-		D3D12_DEPTH_STENCIL_DESC trailDepthStencilDesc{};
-		// 深度テストは有効にするが、透明なので深度書き込みはオフにする
-		trailDepthStencilDesc.DepthEnable = TRUE;
-		trailDepthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;
-		trailDepthStencilDesc.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
-
-		std::vector<D3D12_INPUT_ELEMENT_DESC> trailInputLayout = InputLayoutBuilder::BuildFromReflection(trailVsReflection);
-
-		GraphicsPSO trailPSO(trailPSOName);
-		trailPSO.SetRootSignature(*trailRootSignature);
-		trailPSO.SetRasterizerState(trailRasterizerDesc);
-		trailPSO.SetBlendState(trailBlendDesc);
-		trailPSO.SetDepthStencilState(trailDepthStencilDesc);
-		trailPSO.SetInputLayout(trailInputLayout);
-		trailPSO.SetPrimitiveTopologyType(D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
-		trailPSO.SetRenderTargetFormats(1, rtvFormat, DXGI_FORMAT_D24_UNORM_S8_UINT);
-		trailPSO.SetVertexShader(trailVS.GetBytecode());
-		trailPSO.SetPixelShader(trailPS.GetBytecode());
-		trailPSO.SetSampleMask(D3D12_DEFAULT_SAMPLE_MASK);
-		trailPSO.Finalize();
-
-		sGraphicsPSOs.push_back(trailPSO);
-		sGraphicsPSOIndexMap[trailPSOName] = static_cast<uint32_t>(sGraphicsPSOs.size()) - 1;
-		sRootSignatures.push_back(std::move(trailRootSignature));
-		sRootSignatureIndexMap[trailPSOName] = static_cast<uint32_t>(sRootSignatures.size()) - 1;
-	}
 }
 
 void Shutdown() {
