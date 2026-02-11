@@ -8,6 +8,7 @@
 namespace NoEngine {
 
 using namespace Component;
+using namespace Asset;
 
 // ToDo : 現在は読み込んだモデル、アニメーション、マテリアルをここで保存していますが、別クラスで保存すべきです。
 namespace {

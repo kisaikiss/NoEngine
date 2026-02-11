@@ -8,6 +8,8 @@
 #include <assimp/postprocess.h>
 
 namespace NoEngine {
+namespace Asset {
+
 class ModelLoader {
 public:
 	static void LoadModel(const std::string& name, const std::string& filePath, Component::MeshComponent* model = nullptr, Component::AnimatorComponent* animator = nullptr);
@@ -24,4 +26,5 @@ private:
 	static int32_t CreateJoint(const Node& node, const std::optional<int32_t>& parent, std::vector<Joint>& joints);
 };
 
+}
 }

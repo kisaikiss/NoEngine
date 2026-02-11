@@ -4,7 +4,7 @@ namespace NoEngine {
 void AudioInitialize();
 void AudioShutdown();
 
-namespace Audio {
+namespace Asset {
 /// <summary>
 /// 音声データ読み込み
 /// </summary>

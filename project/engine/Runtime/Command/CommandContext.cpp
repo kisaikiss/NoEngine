@@ -102,6 +102,12 @@ GraphicsContext& CommandContext::GetGraphicsContext() {
 	return reinterpret_cast<GraphicsContext&>(*this);
 }
 
+ComputeContext& CommandContext::GetComputeContext() {
+	Log::DebugPrint("Converting a command context to a compute context");
+	return reinterpret_cast<ComputeContext&>(*this);
+	
+}
+
 void CommandContext::CopyBuffer(GpuResource& Dest, GpuResource& Src) {
 	TransitionResource(Dest, D3D12_RESOURCE_STATE_COPY_DEST);
 	TransitionResource(Src, D3D12_RESOURCE_STATE_COPY_SOURCE);

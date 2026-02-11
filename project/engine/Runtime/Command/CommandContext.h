@@ -35,17 +35,6 @@ public:
 
 	static CommandContext& Begin(const std::wstring id = L"");
 
-	// Flush existing commands to the GPU but keep the context alive
-
-	/// <summary>
-	/// 既存のコマンドをGPUにフラッシュしますが、コンテキストは維持します。結果を uint64_t で返します。
-	/// </summary>
-	/// <param name="WaitForCompletion">完了まで待機するかどうかを示すフラグ。true の場合、関数は処理が完了するまでブロッキングします。デフォルトは false。</param>
-	/// <returns>処理の結果を表す uint64_t 値。</returns>
-	//uint64_t Flush(bool WaitForCompletion = false);
-
-	// Flush existing commands and release the current context
-
 	/// <summary>
 	/// 既存のコマンドをフラッシュし、現在のコンテキストを解放します。結果を uint64_t で返します。
 	/// </summary>
@@ -58,24 +47,11 @@ public:
 
 	GraphicsContext& GetGraphicsContext();
 
-	//ComputeContext& GetComputeContext() {
-	//    return reinterpret_cast<ComputeContext&>(*this);
-	//}
-
-	//ID3D12GraphicsCommandList4* GetCommandList() {
-	//    return m_CommandList;
-	//}
+	ComputeContext& GetComputeContext();
 
 	void CopyBuffer(GpuResource& Dest, GpuResource& Src);
 	void CopyBufferRegion(GpuResource& Dest, size_t DestOffset, GpuResource& Src, size_t SrcOffset, size_t NumBytes);
-	//void CopySubresource(GpuResource& Dest, UINT DestSubIndex, GpuResource& Src, UINT SrcSubIndex);
-	//void CopyCounter(GpuResource& Dest, size_t DestOffset, StructuredBuffer& Src);
-	//void CopyTextureRegion(GpuResource& Dest, UINT x, UINT y, UINT z, GpuResource& Source, RECT& rect);
-	//void ResetCounter(StructuredBuffer& Buf, uint32_t Value = 0);
-
-	//// Creates a readback buffer of sufficient size, copies the texture into it,
-	//// and returns row pitch in bytes.
-	//uint32_t ReadbackTexture(ReadbackBuffer& DstBuffer, PixelBuffer& SrcBuffer);
+	
 
 	DynAlloc ReserveUploadMemory(size_t SizeInBytes) {
 	    return cpuLinearAllocator_.Allocate(SizeInBytes);
@@ -108,16 +84,6 @@ public:
 	/// <param name="destOffset">dest内で書き込みを開始するオフセット（バイト単位）。デフォルトは0。</param>
 	static void InitializeBuffer(GpuBuffer& dest, const UploadBuffer& src, size_t srcOffset, size_t numBytes = -1, size_t destOffset = 0);
 	
-	//static void InitializeTextureArraySlice(GpuResource& Dest, UINT SliceIndex, GpuResource& Src);
-	//
-	//    void WriteBuffer(GpuResource& Dest, size_t DestOffset, const void* Data, size_t NumBytes);
-	//    void FillBuffer(GpuResource& Dest, size_t DestOffset, DWParam Value, size_t NumBytes);
-	//
-	//    void TransitionResource(GpuResource& Resource, D3D12_RESOURCE_STATES NewState, bool FlushImmediate = false);
-	//    void BeginResourceTransition(GpuResource& Resource, D3D12_RESOURCE_STATES NewState, bool FlushImmediate = false);
-	//    void InsertUAVBarrier(GpuResource& Resource, bool FlushImmediate = false);
-	//    void InsertAliasBarrier(GpuResource& Before, GpuResource& After, bool FlushImmediate = false);
-	
 	/// <summary>
 	/// リソースの状態遷移を行います。
 	/// </summary>
@@ -130,19 +96,10 @@ public:
 	/// 溜めていた状態遷移要求をまとめて発行します。
 	/// </summary>
 	void FlushResourceBarriers(void);
-	//
-	//    void InsertTimeStamp(ID3D12QueryHeap* pQueryHeap, uint32_t QueryIdx);
-	//    void ResolveTimeStamps(ID3D12Resource* pReadbackHeap, ID3D12QueryHeap* pQueryHeap, uint32_t NumQueries);
-	//    void PIXBeginEvent(const wchar_t* label);
-	//    void PIXEndEvent(void);
-	//    void PIXSetMarker(const wchar_t* label);
-	//
+
 	void SetDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE type, ID3D12DescriptorHeap* heapPtr);
 	void SetDescriptorHeaps(UINT heapCount, D3D12_DESCRIPTOR_HEAP_TYPE type[], ID3D12DescriptorHeap* heapPtrs[]);
 	void SetPipelineState(const PSO& PSO);
-	//
-	//    void SetPredication(ID3D12Resource* Buffer, UINT64 BufferOffset, D3D12_PREDICATION_OP Op);
-	//
 
 	ID3D12GraphicsCommandList4* GetCommandList() const { return commandList_; }
 protected:

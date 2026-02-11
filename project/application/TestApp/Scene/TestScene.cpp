@@ -13,9 +13,9 @@ void TestScene::Setup() {
 	t->translate = { 0.f,-1.5f,4.f };
 	auto* m = registry.AddComponent<No::MaterialComponent>(entity);
 	auto* a = registry.AddComponent<No::AnimatorComponent>(entity);
-	NoEngine::ModelLoader::LoadModel("magiclash", "resources/engine/Model/test/TD_girl/test7.gltf");
-	NoEngine::ModelLoader::GetModel("magiclash", model, a);
-	m->materials = NoEngine::ModelLoader::GetMaterial("magiclash");
+	No::ModelLoader::LoadModel("magiclash", "resources/engine/Model/test/TD_girl/test7.gltf");
+	No::ModelLoader::GetModel("magiclash", model, a);
+	m->materials = No::ModelLoader::GetMaterial("magiclash");
 	m->drawOutline = true;
 	m->enableSkinning = true;
 	

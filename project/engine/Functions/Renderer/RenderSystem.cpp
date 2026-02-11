@@ -372,7 +372,7 @@ void Initialize() {
 
 void Shutdown() {
 	gTextureHeap.Destroy();
-	ModelLoader::DeleteAll();
+	Asset::ModelLoader::DeleteAll();
 	PSO::DestroyAll();
 	RootSignature::DestroyAll();
 	ShaderModule::Shutdown();

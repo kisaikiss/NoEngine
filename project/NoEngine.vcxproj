@@ -184,6 +184,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="engine\Math\Types\Calculations\Matrix3x3Calculations.cpp" />
     <ClCompile Include="engine\Math\Types\Calculations\Vector2Calculations.cpp" />
     <ClCompile Include="engine\Math\Types\Transform2D.cpp" />
+    <ClCompile Include="engine\Runtime\Command\ComputeContext.cpp" />
     <ClCompile Include="engine\Runtime\GpuResource\PixelBuffer\DepthBuffer.cpp" />
     <ClCompile Include="engine\Assets\Texture\TextureManager.cpp" />
     <ClCompile Include="engine\Functions\Camera\Camera.cpp" />
@@ -221,6 +222,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="engine\Runtime\Graphics\GraphicsInfrastructures.cpp" />
     <ClCompile Include="engine\Runtime\GraphicsCore.cpp" />
     <ClCompile Include="engine\Runtime\Graphics\GraphicsSwapChain.cpp" />
+    <ClCompile Include="engine\Runtime\PipelineStateObject\ComputePSO.cpp" />
     <ClCompile Include="engine\Runtime\PipelineStateObject\GraphicsPSO.cpp" />
     <ClCompile Include="engine\Runtime\PipelineStateObject\PSO.cpp" />
     <ClCompile Include="engine\Runtime\PipelineStateObject\RootSignature.cpp" />
@@ -326,6 +328,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="engine\Math\Types\Rect.h" />
     <ClInclude Include="engine\Math\Types\Transform2D.h" />
     <ClInclude Include="engine\NoEngine.h" />
+    <ClInclude Include="engine\Runtime\Command\ComputeContext.h" />
     <ClInclude Include="engine\Runtime\GpuResource\PixelBuffer\DepthBuffer.h" />
     <ClInclude Include="engine\Assets\Mesh.h" />
     <ClInclude Include="engine\Assets\Texture\TextureManager.h" />
@@ -368,6 +371,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="engine\Runtime\Graphics\GraphicsInfrastructures.h" />
     <ClInclude Include="engine\Runtime\GraphicsCore.h" />
     <ClInclude Include="engine\Runtime\Graphics\GraphicsSwapChain.h" />
+    <ClInclude Include="engine\Runtime\PipelineStateObject\ComputePSO.h" />
     <ClInclude Include="engine\Runtime\PipelineStateObject\GraphicsPSO.h" />
     <ClInclude Include="engine\Runtime\PipelineStateObject\PSO.h" />
     <ClInclude Include="engine\Runtime\PipelineStateObject\RootParameter.h" />
@@ -454,6 +458,17 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Development|x64'">Pixel</ShaderType>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="resources\engine\Shaders\Compute\Skinning.CS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Development|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Development|x64'">4.0</ShaderModel>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="resources\engine\Shaders\Default.PS.hlsl">

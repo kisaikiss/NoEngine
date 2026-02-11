@@ -62,7 +62,7 @@ void AudioShutdown() {
 	Log::DebugPrint("Audio Finalized\n",VerbosityLevel::kInfo);
 }
 
-namespace Audio {
+namespace Asset {
 
 void SoundLoad(std::wstring filePath, std::string name) {
 	Log::DebugPrint("Sound lord begin. filePath : " + ConvertString(filePath) + ", name : " + name + "\n");

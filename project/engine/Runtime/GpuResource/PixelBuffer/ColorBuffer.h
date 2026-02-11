@@ -23,7 +23,7 @@ public:
     /// <param name="baseResource">スワップチェーンのGetBuffer()より取得できるリソース</param>
     void CreateFromSwapChain(const std::wstring& name, ID3D12Resource* baseResource);
 
-    const Math::Color& GetClearColor() { return clearColor_; }
+    Math::Color& GetClearColor() { return clearColor_; }
 
     const D3D12_CPU_DESCRIPTOR_HANDLE& GetSRV(void) const { return srvHandle_; }
     const D3D12_CPU_DESCRIPTOR_HANDLE& GetRTV(void) const { return rtvHandle_; }
