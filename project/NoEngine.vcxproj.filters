@@ -116,6 +116,8 @@
     <ClCompile Include="engine\Functions\ECS\Component\Transform2DComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\SpriteComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\LightComponent.cpp" />
+    <ClCompile Include="application\TD3\OneSide.cpp" />
+    <ClCompile Include="application\TD3\Scene\SampleScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -254,6 +256,8 @@
     <ClInclude Include="engine\Editor\EditUtils.h" />
     <ClInclude Include="engine\Functions\ECS\System\EditSystem.h" />
     <ClInclude Include="engine\Editor\ComponentRegistry.h" />
+    <ClInclude Include="application\TD3\OneSide.h" />
+    <ClInclude Include="application\TD3\Scene\SampleScene.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />
