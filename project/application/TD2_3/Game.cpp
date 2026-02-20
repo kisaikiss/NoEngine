@@ -1,5 +1,4 @@
 #include "Game.h"
-#include "Scene/TestScene.h"
 #include "Scene/GameScene.h"
 #include "Scene/TitleScene.h"
 #include "Scene/GameOverScene.h"
@@ -11,10 +10,6 @@
 
 void Game::Startup(void)
 {
-	RegisterScene("TestScene", []()
-		{
-			return std::make_unique<TestScene>();
-		});
 	RegisterScene("TitleScene", []()
 		{
 			return std::make_unique<TitleScene>();
@@ -34,9 +29,6 @@ void Game::Startup(void)
 	ChangeScene("TitleScene");
 
 	// カスタム RenderPass の追加例
-
-	AddRenderPass(std::make_unique<BackGroundEffectPass>());
-	AddRenderPass(std::make_unique<BallTrailPass>());
 
 }
 

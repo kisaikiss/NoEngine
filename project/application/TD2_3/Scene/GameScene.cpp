@@ -128,7 +128,6 @@ void GameScene::Setup()
     InitPhase(registry);
     InitBat(registry);
     InitRing(registry);
-    InitBall(registry);
     InitHumanParent(registry);
     InitBatGirl(registry);
     InitPlayerGirl(registry);
@@ -215,40 +214,6 @@ void GameScene::InitRing(No::Registry& registry)
     m->materials = No::ModelLoader::GetMaterial("circle");
     m->color.a = 0.7f;
     m->color.b = 0.5f;
-
-    m->psoName = L"Renderer : Default PSO";
-    m->psoId = NoEngine::Render::GetPSOID(m->psoName);
-    m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
-}
-
-void GameScene::InitBall(No::Registry& registry)
-{
-    No::Entity ballEntity = registry.GenerateEntity();
-    registry.AddComponent<BallTag>(ballEntity);
-    registry.AddComponent<PhysicsComponent>(ballEntity);
-    registry.AddComponent<BallStateComponent>(ballEntity);
-
-    //軌跡
-    auto* trailComp = registry.AddComponent<BallTrailComponent>(ballEntity);
-    // 必要ならパラメータを微調整
-    trailComp->maxAge = 0.6f;
-    trailComp->sampleInterval = 0.02f;
-    trailComp->thickness = 0.35f;
-    trailComp->maxSamples = 256;
-    auto* collider = registry.AddComponent<SphereColliderComponent>(ballEntity);
-    collider->radius = 0.25f;
-    collider->colliderType = ColliderMask::kBall;
-    collider->collideMask = ColliderMask::kEnemy;
-
-    registry.AddComponent<DeathFlag>(ballEntity);
-    auto* transform = registry.AddComponent<No::TransformComponent>(ballEntity);
-    transform->translate = { 0.0f, -4.35f, 0.f };
-
-    auto* model = registry.AddComponent<No::MeshComponent>(ballEntity);
-    No::ModelLoader::LoadModel("ball", "resources/game/td_2304/Model/ball/ball.obj", model);
-
-    auto m = registry.AddComponent<No::MaterialComponent>(ballEntity);
-    m->materials = No::ModelLoader::GetMaterial("ball");
 
     m->psoName = L"Renderer : Default PSO";
     m->psoId = NoEngine::Render::GetPSOID(m->psoName);
