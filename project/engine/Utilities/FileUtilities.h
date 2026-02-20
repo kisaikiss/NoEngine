@@ -27,6 +27,9 @@ std::string RemoveExtension(const std::string& str);
 std::wstring RemoveExtension(const std::wstring& str);
 std::wstring GetDirectoryFromPath(const std::wstring& fullPath);
 
+std::string ExtractTypeName(const std::string& fullName);
+std::string ExtractTypeName(const char* fullName);
+
 void SIMDMemCopy(void* __restrict Dest, const void* __restrict Source, size_t NumQuadwords);
 void SIMDMemFill(void* __restrict Dest, __m128 FillVector, size_t NumQuadwords);
 }

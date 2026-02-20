@@ -36,6 +36,10 @@ void Registry::FlushDestroy() {
 	pendingDestroy_.clear();
 }
 
+bool Registry::Has(size_t typeID, Entity e) const {
+	return componentPools_[typeID]->Has(e);
+}
+
 bool Registry::Empty() {
 	return entityToActive_.empty();
 }

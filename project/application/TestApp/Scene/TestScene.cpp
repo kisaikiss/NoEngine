@@ -4,11 +4,15 @@
 void TestScene::Setup() {
 	AddSystem(std::make_unique<TestSystem>());
 	AddSystem(std::make_unique<No::AnimationSystem>());
+	AddSystem(std::make_unique<No::EditSystem>());
 
 	No::Registry& registry = *GetRegistry();
 	No::Entity entity = registry.GenerateEntity();
-	auto* t = registry.AddComponent<No::TransformComponent>(entity);
+	
 	auto* model = registry.AddComponent<No::MeshComponent>(entity);
+	auto* t = registry.AddComponent<No::TransformComponent>(entity);
+	auto* imguiName = registry.AddComponent<No::EditTag>(entity);
+	imguiName->name = "girl";
 	t->rotation.FromAxisAngle(No::Vector3(0.f, 1.f, 0.f), PI);
 	t->translate = { 0.f,-1.5f,4.f };
 	auto* m = registry.AddComponent<No::MaterialComponent>(entity);
@@ -30,8 +34,6 @@ void TestScene::Setup() {
 
 	t2d->scale = { 100.f, 100.f };
 	sprite->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/engine/Model/enemy.png");
-
-
 
 	auto light = registry.GenerateEntity();
 	auto* dir = registry.AddComponent<No::DirectionalLightComponent>(light);

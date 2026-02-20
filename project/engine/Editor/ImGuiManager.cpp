@@ -8,7 +8,7 @@
 #include "externals/imgui/imgui_impl_win32.h"
 
 namespace NoEngine {
-namespace Editor {
+
 void ImGuiManager::Initialize() {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -141,5 +141,4 @@ void ImGuiManager::Shutdown() {
 	ImGui::DestroyContext();
 }
 
-}
 }

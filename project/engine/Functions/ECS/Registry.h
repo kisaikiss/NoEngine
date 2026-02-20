@@ -63,6 +63,14 @@ public:
 	bool Has(Entity e) const;
 
 	/// <summary>
+	/// エンティティが指定したTypeIDのコンポーネントと関連付けられているか判別します。
+	/// </summary>
+	/// <param name="typeID">コンポーネントのTypeID</param>
+	/// <param name="e">エンティティ</param>
+	/// <returns>true : 関連付けられている, false : 関連付けられていない</returns>
+	bool Has(size_t typeID, Entity e) const;
+
+	/// <summary>
 	/// エンティティが指定した全てのコンポーネントと関連付けられているか判別します。
 	/// </summary>
 	/// <typeparam name="...Components">コンポーネント。複数指定できます。</typeparam>

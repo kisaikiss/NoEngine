@@ -10,6 +10,7 @@ public:
 	virtual ~IComponentPool() = default;
 	virtual void RemoveIfExists(Entity entity) = 0;
 	virtual size_t Size() const = 0;
+	virtual bool Has(Entity entity) const = 0;
 	virtual const std::vector<Entity>& Entities() const = 0;
 };
 
@@ -69,7 +70,7 @@ public:
 	/// </summary>
 	/// <param name="entity">エンティティ</param>
 	/// <returns>コンポーネントを持っているかどうか(true : 持っている, false : 持っていない)</returns>
-	bool Has(Entity entity) const {
+	bool Has(Entity entity) const override {
 		return entity < entityToIndex_.size() && entityToIndex_[entity] >= 0;
 	}
 

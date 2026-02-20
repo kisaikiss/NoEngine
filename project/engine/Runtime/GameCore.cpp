@@ -16,7 +16,7 @@
 #include "engine/Editor/ImGuiManager.h"
 #include "externals/imgui/imgui.h"
 namespace {
-NoEngine::Editor::ImGuiManager imguiManager;
+NoEngine::ImGuiManager imguiManager;
 }
 #endif // USE_IMGUI
 

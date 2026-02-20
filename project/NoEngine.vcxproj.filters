@@ -110,6 +110,12 @@
     <ClCompile Include="application\TestApp\TestApp.cpp" />
     <ClCompile Include="engine\Runtime\PipelineStateObject\ComputePSO.cpp" />
     <ClCompile Include="engine\Runtime\Command\ComputeContext.cpp" />
+    <ClCompile Include="engine\Editor\EditUtils.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\EditSystem.cpp" />
+    <ClCompile Include="engine\Functions\ECS\Component\TransformComponent.cpp" />
+    <ClCompile Include="engine\Functions\ECS\Component\Transform2DComponent.cpp" />
+    <ClCompile Include="engine\Functions\ECS\Component\SpriteComponent.cpp" />
+    <ClCompile Include="engine\Functions\ECS\Component\LightComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -242,6 +248,12 @@
     <ClInclude Include="application\TestApp\TestApp.h" />
     <ClInclude Include="engine\Runtime\PipelineStateObject\ComputePSO.h" />
     <ClInclude Include="engine\Runtime\Command\ComputeContext.h" />
+    <ClInclude Include="engine\Editor\Reflection.h" />
+    <ClInclude Include="engine\Editor\ReflectionTypeTraits.h" />
+    <ClInclude Include="engine\Editor\ReflectionMacros.h" />
+    <ClInclude Include="engine\Editor\EditUtils.h" />
+    <ClInclude Include="engine\Functions\ECS\System\EditSystem.h" />
+    <ClInclude Include="engine\Editor\ComponentRegistry.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

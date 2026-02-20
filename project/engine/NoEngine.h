@@ -8,8 +8,11 @@
 #include "Functions/ECS/Component/MaterialComponent.h"
 #include "Functions/ECS/Component/LightComponent.h"
 #include "Functions/ECS/Event/SceneChangeEvent.h"
+#include "Editor/EditUtils.h"
+#include "Editor/ReflectionMacros.h"
 
 #include "Functions/ECS/System/AnimationSystem.h"
+#include "Functions/ECS/System/EditSystem.h"
 
 #include "Assets/ModelLoader.h"
 #include "Assets/Audio/Audio.h"
@@ -33,4 +36,5 @@ using namespace NoEngine::Scene;
 using namespace NoEngine::Asset;
 using namespace NoEngine::Easing;
 using namespace NoEngine::Math;
+using namespace NoEngine::Editor;
 }
