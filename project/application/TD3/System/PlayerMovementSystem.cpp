@@ -149,22 +149,49 @@ void PlayerMovementSystem::UpdateRecentInputs(
 ) {
     player->inputHistoryTime += deltaTime;
     
-    // 履歴ウィンドウを超えたらクリア
-    if (player->inputHistoryTime > player->inputHistoryWindow) {
-        player->recentInputCount = 0;
-        player->inputHistoryTime = 0.0f;
-        for (int i = 0; i < 4; ++i) {
-            player->recentInputs[i] = Direction::None;
-        }
-    }
-    
-    // 進行方向以外のキー入力をチェック
+    // 現在押されているキーを取得
     bool inputW = NoEngine::Input::Keyboard::IsPress(KEY_W);
     bool inputS = NoEngine::Input::Keyboard::IsPress(KEY_S);
     bool inputA = NoEngine::Input::Keyboard::IsPress(KEY_A);
     bool inputD = NoEngine::Input::Keyboard::IsPress(KEY_D);
     
-    // 入力を記録する関数（ラムダ）
+    // ========== 履歴から離されたキーを削除 ==========
+    for (int i = 0; i < player->recentInputCount; ) {
+        Direction dir = player->recentInputs[i];
+        bool stillPressed = false;
+        
+        // このキーがまだ押されているかチェック
+        switch (dir) {
+            case Direction::Up:
+                stillPressed = inputW;
+                break;
+            case Direction::Down:
+                stillPressed = inputS;
+                break;
+            case Direction::Left:
+                stillPressed = inputA;
+                break;
+            case Direction::Right:
+                stillPressed = inputD;
+                break;
+            default:
+                break;
+        }
+        
+        if (!stillPressed) {
+            // 離されたキーを履歴から削除（配列を詰める）
+            for (int j = i; j < player->recentInputCount - 1; ++j) {
+                player->recentInputs[j] = player->recentInputs[j + 1];
+            }
+            player->recentInputs[player->recentInputCount - 1] = Direction::None;
+            player->recentInputCount--;
+            // i はインクリメントしない（次の要素が詰められるため）
+        } else {
+            i++;  // 次の要素へ
+        }
+    }
+    
+    // ========== 進行方向以外のキーを記録 ==========
     auto addInput = [&](Direction dir) {
         // 既に記録されていないかチェック
         for (int i = 0; i < player->recentInputCount; ++i) {
@@ -191,6 +218,15 @@ void PlayerMovementSystem::UpdateRecentInputs(
     }
     if (inputD && player->currentDirection != Direction::Right) {
         addInput(Direction::Right);
+    }
+    
+    // ========== 履歴ウィンドウを超えたらクリア ==========
+    if (player->inputHistoryTime > player->inputHistoryWindow) {
+        player->recentInputCount = 0;
+        player->inputHistoryTime = 0.0f;
+        for (int i = 0; i < 4; ++i) {
+            player->recentInputs[i] = Direction::None;
+        }
     }
 }
 
