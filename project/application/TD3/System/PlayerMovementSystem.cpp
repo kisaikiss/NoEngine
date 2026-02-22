@@ -6,7 +6,7 @@
 #include "externals/imgui/imgui.h"
 #endif
 
-// キーコード定義（VK_*は本来Windows.hにあるが、衝突回避のため直接定義）
+// キーコード定義
 #define KEY_W 'W'
 #define KEY_A 'A'
 #define KEY_S 'S'
@@ -20,10 +20,18 @@ void PlayerMovementSystem::Update(No::Registry& registry, float deltaTime) {
         auto* transform = registry.GetComponent<No::TransformComponent>(entity);
         
         // 状態別の処理
-        if (player->isOnNode) {
-            HandleNodeInput(player, registry);
-        } else if (player->isOnEdge) {
-            HandleEdgeMovement(player, deltaTime, registry);
+        switch (player->state) {
+            case PlayerState::OnNode:
+                HandleNodeInput(player, registry);
+                break;
+                
+            case PlayerState::MovingOnEdge:
+                HandleEdgeMovement(player, deltaTime, registry);
+                break;
+                
+            case PlayerState::StoppedOnEdge:
+                HandleStoppedOnEdge(player, registry);
+                break;
         }
         
         // Transform更新
@@ -116,13 +124,16 @@ void PlayerMovementSystem::HandleEdgeMovement(
         // 移動継続
         player->progressOnEdge += player->moveSpeed * deltaTime;
         
+        // 入力履歴を更新（進行方向以外のキーを記録）
+        UpdateRecentInputs(player, deltaTime);
+        
         // ノード到達チェック（高速移動対応）
         while (player->progressOnEdge >= 1.0f) {
             player->progressOnEdge -= 1.0f;
             OnReachNode(player, registry);
             
             // 停止したらループ脱出
-            if (!player->isOnEdge) {
+            if (player->state != PlayerState::MovingOnEdge) {
                 break;
             }
         }
@@ -132,6 +143,97 @@ void PlayerMovementSystem::HandleEdgeMovement(
     }
 }
 
+void PlayerMovementSystem::UpdateRecentInputs(
+    PlayerComponent* player,
+    float deltaTime
+) {
+    player->inputHistoryTime += deltaTime;
+    
+    // 履歴ウィンドウを超えたらクリア
+    if (player->inputHistoryTime > player->inputHistoryWindow) {
+        player->recentInputCount = 0;
+        player->inputHistoryTime = 0.0f;
+        for (int i = 0; i < 4; ++i) {
+            player->recentInputs[i] = Direction::None;
+        }
+    }
+    
+    // 進行方向以外のキー入力をチェック
+    bool inputW = NoEngine::Input::Keyboard::IsPress(KEY_W);
+    bool inputS = NoEngine::Input::Keyboard::IsPress(KEY_S);
+    bool inputA = NoEngine::Input::Keyboard::IsPress(KEY_A);
+    bool inputD = NoEngine::Input::Keyboard::IsPress(KEY_D);
+    
+    // 入力を記録する関数（ラムダ）
+    auto addInput = [&](Direction dir) {
+        // 既に記録されていないかチェック
+        for (int i = 0; i < player->recentInputCount; ++i) {
+            if (player->recentInputs[i] == dir) {
+                return; // 既に記録済み
+            }
+        }
+        // 新規追加（配列の末尾に追加 = 最新）
+        if (player->recentInputCount < 4) {
+            player->recentInputs[player->recentInputCount] = dir;
+            player->recentInputCount++;
+        }
+    };
+    
+    // 進行方向以外のキーを記録
+    if (inputW && player->currentDirection != Direction::Up) {
+        addInput(Direction::Up);
+    }
+    if (inputS && player->currentDirection != Direction::Down) {
+        addInput(Direction::Down);
+    }
+    if (inputA && player->currentDirection != Direction::Left) {
+        addInput(Direction::Left);
+    }
+    if (inputD && player->currentDirection != Direction::Right) {
+        addInput(Direction::Right);
+    }
+}
+
+void PlayerMovementSystem::HandleStoppedOnEdge(
+    PlayerComponent* player,
+    No::Registry& registry
+) {
+    (void)registry; // 未使用パラメータ警告回避
+    
+    // actualMovingDirection が None なら何もしない（初期状態）
+    if (player->actualMovingDirection == Direction::None) {
+        return;
+    }
+    
+    // 実際に移動していた方向のキー入力をチェック
+    bool hasContinuousInput = false;
+    
+    switch (player->actualMovingDirection) {
+        case Direction::Up:
+            hasContinuousInput = NoEngine::Input::Keyboard::IsPress(KEY_W);
+            break;
+        case Direction::Right:
+            hasContinuousInput = NoEngine::Input::Keyboard::IsPress(KEY_D);
+            break;
+        case Direction::Down:
+            hasContinuousInput = NoEngine::Input::Keyboard::IsPress(KEY_S);
+            break;
+        case Direction::Left:
+            hasContinuousInput = NoEngine::Input::Keyboard::IsPress(KEY_A);
+            break;
+        default:
+            break;
+    }
+    
+    if (hasContinuousInput) {
+        // 移動再開（progressOnEdge保持、同じ方向に継続）
+        player->state = PlayerState::MovingOnEdge;
+        player->currentDirection = player->actualMovingDirection;
+    }
+    
+    // 他の入力は完全無視
+}
+
 void PlayerMovementSystem::OnReachNode(
     PlayerComponent* player,
     No::Registry& registry
@@ -139,79 +241,101 @@ void PlayerMovementSystem::OnReachNode(
     // ノード更新
     player->currentNodeX = player->targetNodeX;
     player->currentNodeY = player->targetNodeY;
-    player->isOnEdge = false;
-    player->isOnNode = true;
+    player->state = PlayerState::OnNode;
     
-    // 全入力取得
-    bool inputW = NoEngine::Input::Keyboard::IsPress(KEY_W);
-    bool inputS = NoEngine::Input::Keyboard::IsPress(KEY_S);
-    bool inputA = NoEngine::Input::Keyboard::IsPress(KEY_A);
-    bool inputD = NoEngine::Input::Keyboard::IsPress(KEY_D);
+    // ========== ノード到達時に「来た方向」を記録 ==========
+    if (player->currentDirection != Direction::None) {
+        player->lastDirection = player->currentDirection;
+    }
     
     Direction nextDir = Direction::None;
     
-    // 進行方向別に曲がり優先判定
-    // 曲がり（進行方向以外）を先にチェック、直進は後
-    
-    if (player->currentDirection == Direction::Right) {
-        // 右進行中 → 上下優先、直進次点
-        if (inputW && CanMoveInDirection(registry, player->currentNodeX, 
-            player->currentNodeY, Direction::Up, player->lastDirection)) {
-            nextDir = Direction::Up;
-        } else if (inputS && CanMoveInDirection(registry, player->currentNodeX, 
-            player->currentNodeY, Direction::Down, player->lastDirection)) {
-            nextDir = Direction::Down;
-        } else if (inputD && CanMoveInDirection(registry, player->currentNodeX, 
-            player->currentNodeY, Direction::Right, player->lastDirection)) {
-            nextDir = Direction::Right;
-        }
-    }
-    else if (player->currentDirection == Direction::Left) {
-        // 左進行中 → 上下優先
-        if (inputW && CanMoveInDirection(registry, player->currentNodeX, 
-            player->currentNodeY, Direction::Up, player->lastDirection)) {
-            nextDir = Direction::Up;
-        } else if (inputS && CanMoveInDirection(registry, player->currentNodeX, 
-            player->currentNodeY, Direction::Down, player->lastDirection)) {
-            nextDir = Direction::Down;
-        } else if (inputA && CanMoveInDirection(registry, player->currentNodeX, 
-            player->currentNodeY, Direction::Left, player->lastDirection)) {
-            nextDir = Direction::Left;
-        }
-    }
-    else if (player->currentDirection == Direction::Up) {
-        // 上進行中 → 左右優先
-        if (inputA && CanMoveInDirection(registry, player->currentNodeX, 
-            player->currentNodeY, Direction::Left, player->lastDirection)) {
-            nextDir = Direction::Left;
-        } else if (inputD && CanMoveInDirection(registry, player->currentNodeX, 
-            player->currentNodeY, Direction::Right, player->lastDirection)) {
-            nextDir = Direction::Right;
-        } else if (inputW && CanMoveInDirection(registry, player->currentNodeX, 
-            player->currentNodeY, Direction::Up, player->lastDirection)) {
-            nextDir = Direction::Up;
-        }
-    }
-    else if (player->currentDirection == Direction::Down) {
-        // 下進行中 → 左右優先
-        if (inputA && CanMoveInDirection(registry, player->currentNodeX, 
-            player->currentNodeY, Direction::Left, player->lastDirection)) {
-            nextDir = Direction::Left;
-        } else if (inputD && CanMoveInDirection(registry, player->currentNodeX, 
-            player->currentNodeY, Direction::Right, player->lastDirection)) {
-            nextDir = Direction::Right;
-        } else if (inputS && CanMoveInDirection(registry, player->currentNodeX, 
-            player->currentNodeY, Direction::Down, player->lastDirection)) {
-            nextDir = Direction::Down;
+    // ========== 1. 入力履歴から最新の入力を優先的にチェック =========
+    // 逆順（最新から）でチェック
+    for (int i = player->recentInputCount - 1; i >= 0; --i) {
+        Direction dir = player->recentInputs[i];
+        
+        if (CanMoveInDirection(registry, player->currentNodeX, 
+            player->currentNodeY, dir, player->lastDirection)) {
+            nextDir = dir;
+            break; // 最新の移動可能な方向を採用
         }
     }
     
-    // 移動開始 or 停止
+    // ========== 2. 履歴になければ現在の入力をチェック =========
+    if (nextDir == Direction::None) {
+        // 全入力取得
+        bool inputW = NoEngine::Input::Keyboard::IsPress(KEY_W);
+        bool inputS = NoEngine::Input::Keyboard::IsPress(KEY_S);
+        bool inputA = NoEngine::Input::Keyboard::IsPress(KEY_A);
+        bool inputD = NoEngine::Input::Keyboard::IsPress(KEY_D);
+        
+        // 進行方向別に曲がり優先判定
+        if (player->currentDirection == Direction::Right) {
+            // 右進行中 → 上下優先、直進次点
+            if (inputW && CanMoveInDirection(registry, player->currentNodeX, 
+                player->currentNodeY, Direction::Up, player->lastDirection)) {
+                nextDir = Direction::Up;
+            } else if (inputS && CanMoveInDirection(registry, player->currentNodeX, 
+                player->currentNodeY, Direction::Down, player->lastDirection)) {
+                nextDir = Direction::Down;
+            } else if (inputD && CanMoveInDirection(registry, player->currentNodeX, 
+                player->currentNodeY, Direction::Right, player->lastDirection)) {
+                nextDir = Direction::Right;
+            }
+        }
+        else if (player->currentDirection == Direction::Left) {
+            // 左進行中 → 上下優先
+            if (inputW && CanMoveInDirection(registry, player->currentNodeX, 
+                player->currentNodeY, Direction::Up, player->lastDirection)) {
+                nextDir = Direction::Up;
+            } else if (inputS && CanMoveInDirection(registry, player->currentNodeX, 
+                player->currentNodeY, Direction::Down, player->lastDirection)) {
+                nextDir = Direction::Down;
+            } else if (inputA && CanMoveInDirection(registry, player->currentNodeX, 
+                player->currentNodeY, Direction::Left, player->lastDirection)) {
+                nextDir = Direction::Left;
+            }
+        }
+        else if (player->currentDirection == Direction::Up) {
+            // 上進行中 → 左右優先
+            if (inputA && CanMoveInDirection(registry, player->currentNodeX, 
+                player->currentNodeY, Direction::Left, player->lastDirection)) {
+                nextDir = Direction::Left;
+            } else if (inputD && CanMoveInDirection(registry, player->currentNodeX, 
+                player->currentNodeY, Direction::Right, player->lastDirection)) {
+                nextDir = Direction::Right;
+            } else if (inputW && CanMoveInDirection(registry, player->currentNodeX, 
+                player->currentNodeY, Direction::Up, player->lastDirection)) {
+                nextDir = Direction::Up;
+            }
+        }
+        else if (player->currentDirection == Direction::Down) {
+            // 下進行中 → 左右優先
+            if (inputA && CanMoveInDirection(registry, player->currentNodeX, 
+                player->currentNodeY, Direction::Left, player->lastDirection)) {
+                nextDir = Direction::Left;
+            } else if (inputD && CanMoveInDirection(registry, player->currentNodeX, 
+                player->currentNodeY, Direction::Right, player->lastDirection)) {
+                nextDir = Direction::Right;
+            } else if (inputS && CanMoveInDirection(registry, player->currentNodeX, 
+                player->currentNodeY, Direction::Down, player->lastDirection)) {
+                nextDir = Direction::Down;
+            }
+        }
+    }
+    
+    // ========== 入力履歴をクリア =========
+    player->recentInputCount = 0;
+    player->inputHistoryTime = 0.0f;
+    for (int i = 0; i < 4; ++i) {
+        player->recentInputs[i] = Direction::None;
+    }
+    
+    // ========== 移動開始 or 停止 =========
     if (nextDir != Direction::None) {
-        player->lastDirection = player->currentDirection;
         StartMovement(player, nextDir, registry);
     } else {
-        player->lastDirection = player->currentDirection;
         player->currentDirection = Direction::None;
         CheckDeadEnd(player, registry);
     }
@@ -224,6 +348,15 @@ void PlayerMovementSystem::StartMovement(
 ) {
     (void)registry; // 未使用パラメータ警告回避
     
+    // 初回移動時のみ lastDirection を設定
+    // 2回目以降は OnReachNode で更新される
+    if (player->lastDirection == Direction::None) {
+        player->lastDirection = dir;
+    }
+    
+    // 実際の移動方向を記録（エッジ停止時の再開に使用）
+    player->actualMovingDirection = dir;
+    
     // 次のノード座標を計算
     GetNextNodeCoords(
         player->currentNodeX,
@@ -235,17 +368,15 @@ void PlayerMovementSystem::StartMovement(
     
     // 移動状態を設定
     player->currentDirection = dir;
-    player->isOnEdge = true;
-    player->isOnNode = false;
+    player->state = PlayerState::MovingOnEdge;
     player->progressOnEdge = 0.0f;
     player->isAtDeadEnd = false;
 }
 
 void PlayerMovementSystem::StopMovement(PlayerComponent* player) {
-    // エッジ途中で停止（progressOnEdge は保持）
+    // エッジ途中で停止（progressOnEdgeは保持）
     player->currentDirection = Direction::None;
-    player->isOnEdge = false;
-    player->isOnNode = false; // エッジ途中にいる
+    player->state = PlayerState::StoppedOnEdge;
 }
 
 bool PlayerMovementSystem::CanMoveInDirection(
@@ -349,7 +480,7 @@ void PlayerMovementSystem::GetNextNodeCoords(
 No::Vector3 PlayerMovementSystem::CalculateWorldPosition(
     const PlayerComponent* player
 ) {
-    if (player->isOnNode) {
+    if (player->state == PlayerState::OnNode) {
         // ノード上
         return No::Vector3{
             static_cast<float>(player->currentNodeX),
@@ -357,7 +488,7 @@ No::Vector3 PlayerMovementSystem::CalculateWorldPosition(
             0.0f
         };
     } else {
-        // エッジ上を線形補間
+        // エッジ上を線形補間（MovingOnEdge or StoppedOnEdge）
         No::Vector3 currentPos{
             static_cast<float>(player->currentNodeX),
             static_cast<float>(player->currentNodeY),
@@ -410,13 +541,9 @@ void PlayerMovementSystem::ShowPlayerDebugUI(PlayerComponent* player) {
     ImGui::Text("Current Node: (%d, %d)", 
         player->currentNodeX, player->currentNodeY);
     
-    if (player->isOnEdge) {
+    if (player->state != PlayerState::OnNode) {
         ImGui::Text("Target Node: (%d, %d)", 
             player->targetNodeX, player->targetNodeY);
-        ImGui::ProgressBar(player->progressOnEdge, 
-            ImVec2(-1, 0), "Progress");
-    } else if (!player->isOnNode) {
-        ImGui::Text("Stopped on Edge");
         ImGui::ProgressBar(player->progressOnEdge, 
             ImVec2(-1, 0), "Progress");
     }
@@ -424,8 +551,7 @@ void PlayerMovementSystem::ShowPlayerDebugUI(PlayerComponent* player) {
     // 状態
     ImGui::Separator();
     ImGui::Text("=== State ===");
-    ImGui::Text("On Node: %s", player->isOnNode ? "Yes" : "No");
-    ImGui::Text("On Edge: %s", player->isOnEdge ? "Yes" : "No");
+    ImGui::Text("State: %s", StateToString(player->state));
     ImGui::Text("At Dead End: %s", player->isAtDeadEnd ? "Yes" : "No");
     
     // 方向
@@ -433,11 +559,23 @@ void PlayerMovementSystem::ShowPlayerDebugUI(PlayerComponent* player) {
     ImGui::Text("=== Direction ===");
     ImGui::Text("Current: %s", DirectionToString(player->currentDirection));
     ImGui::Text("Last: %s", DirectionToString(player->lastDirection));
+    ImGui::Text("Actual Moving: %s", DirectionToString(player->actualMovingDirection));
+    
+    // 入力履歴
+    ImGui::Separator();
+    ImGui::Text("=== Input History ===");
+    ImGui::Text("Count: %d", player->recentInputCount);
+    for (int i = 0; i < player->recentInputCount; ++i) {
+        ImGui::Text("  [%d] %s", i, DirectionToString(player->recentInputs[i]));
+    }
+    ImGui::Text("History Time: %.2f", player->inputHistoryTime);
     
     // パラメータ
     ImGui::Separator();
     ImGui::DragFloat("Move Speed", &player->moveSpeed, 
         0.1f, 0.1f, 10.0f);
+    ImGui::DragFloat("Input History Window", &player->inputHistoryWindow,
+        0.01f, 0.0f, 1.0f);
     
     ImGui::End();
 }
@@ -450,6 +588,15 @@ const char* PlayerMovementSystem::DirectionToString(Direction dir) {
         case Direction::Down:  return "Down";
         case Direction::Left:  return "Left";
         default:               return "Unknown";
+    }
+}
+
+const char* PlayerMovementSystem::StateToString(PlayerState state) {
+    switch (state) {
+        case PlayerState::OnNode:        return "OnNode";
+        case PlayerState::MovingOnEdge:  return "MovingOnEdge";
+        case PlayerState::StoppedOnEdge: return "StoppedOnEdge";
+        default:                         return "Unknown";
     }
 }
 #endif

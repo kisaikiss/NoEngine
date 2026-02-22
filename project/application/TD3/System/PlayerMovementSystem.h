@@ -23,6 +23,18 @@ private:
         No::Registry& registry
     );
     
+    // ========== エッジ上で停止中の処理 ==========
+    void HandleStoppedOnEdge(
+        PlayerComponent* player,
+        No::Registry& registry
+    );
+    
+    // ========== 入力履歴の更新 ==========
+    void UpdateRecentInputs(
+        PlayerComponent* player,
+        float deltaTime
+    );
+    
     // ========== ノード到達処理 ==========
     void OnReachNode(
         PlayerComponent* player,
@@ -91,5 +103,6 @@ private:
     #ifdef USE_IMGUI
     void ShowPlayerDebugUI(PlayerComponent* player);
     const char* DirectionToString(Direction dir);
+    const char* StateToString(PlayerState state);
     #endif
 };
