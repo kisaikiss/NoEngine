@@ -164,6 +164,8 @@
     <ClCompile Include="application\TD2_3\Game.cpp" />
     <ClCompile Include="application\TD3\OneSide.cpp" />
     <ClCompile Include="application\TD3\Scene\SampleScene.cpp" />
+    <ClCompile Include="application\TD3\System\GridRenderSystem.cpp" />
+    <ClCompile Include="application\TD3\System\PlayerMovementSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -374,6 +376,12 @@
     <ClInclude Include="application\TD2_3\tag.h" />
     <ClInclude Include="application\TD3\OneSide.h" />
     <ClInclude Include="application\TD3\Scene\SampleScene.h" />
+    <ClInclude Include="application\TD3\Component\GridCellComponent.h" />
+    <ClInclude Include="application\TD3\Component\PlayerComponent.h" />
+    <ClInclude Include="application\TD3\Component\PlayerTag.h" />
+    <ClInclude Include="application\TD3\MapData\ShinMapData.h" />
+    <ClInclude Include="application\TD3\System\GridRenderSystem.h" />
+    <ClInclude Include="application\TD3\System\PlayerMovementSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />
