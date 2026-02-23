@@ -7,7 +7,6 @@
 #include "../System/PlayerWeaponSystem.h"
 #include "../System/PlayerBulletSystem.h"
 #include "../System/AmmoItemSystem.h"
-#include "../System/DeathSystem.h"
 #include "../MapData/ShinMapData.h"
 
 void SampleScene::Setup() {
@@ -17,7 +16,6 @@ void SampleScene::Setup() {
 	AddSystem(std::make_unique<PlayerWeaponSystem>());
 	AddSystem(std::make_unique<PlayerBulletSystem>());
 	AddSystem(std::make_unique<AmmoItemSystem>());
-	AddSystem(std::make_unique<DeathSystem>());
 
 	// レジストリ取得
 	No::Registry& registry = *GetRegistry();
@@ -106,4 +104,27 @@ void SampleScene::NotSystemUpdate() {
 	camera_->SetTransform(cameraTransform_);
 #endif // USE_IMGUI
 	camera_->Update();
+
+
+	//最後に消す
+	DestroyGameObject();
+}
+
+void SampleScene::DestroyGameObject()
+{
+	No::Registry& registry = *GetRegistry();
+	//フラグないときはリターン
+	if (registry.View<DeathFlag>().Empty()) { return; }
+	auto view = registry.View<DeathFlag>();
+	for (auto entity : view)
+	{
+		if (registry.Has<DeathFlag>(entity))
+		{
+			auto* flag = registry.GetComponent<DeathFlag>(entity);
+			if (flag->isDead)
+			{
+				registry.DestroyEntity(entity);
+			}
+		}
+	}
 }

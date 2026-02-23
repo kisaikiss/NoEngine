@@ -1,7 +1,7 @@
 #include "PlayerBulletSystem.h"
 #include <cmath>
 #include "../GameTag.h"
-
+#include "engine/Functions/Renderer/Primitive.h"
 // ============================================================
 // 定数定義
 // ============================================================
@@ -27,7 +27,7 @@ void PlayerBulletSystem::Update(No::Registry& registry, float deltaTime) {
 		No::Vector3 movement = bullet->direction * bullet->speed * deltaTime;
 		transform->translate = transform->translate + movement;
 		bullet->travelDistance += bullet->speed * deltaTime;
-
+		NoEngine::Primitive::DrawSphere(transform->translate, 1.0f, { 0.0f, 0.0f, 0.0f, 1.0f });
 		// ---- 安全網：最大距離で消滅 ----
 		if (bullet->travelDistance >= bullet->maxDistance) {
 			deathFlag->isDead = true;
@@ -66,6 +66,8 @@ void PlayerBulletSystem::Update(No::Registry& registry, float deltaTime) {
 			//削除
 			deathFlag->isDead = true;
 		}
+
+		
 	}
 }
 

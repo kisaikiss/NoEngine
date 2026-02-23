@@ -17,4 +17,7 @@ private:
 
 	// ライト初期化
 	void InitializeLight(No::Registry& registry);
+
+
+	void DestroyGameObject();
 };
