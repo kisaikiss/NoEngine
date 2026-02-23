@@ -25,7 +25,8 @@ private:
 	void HandleBulletFire(
 		PlayerComponent* player,
 		No::Registry& registry,
-		const No::Vector3& playerPosition
+		const No::Vector3 playerPosition  //参照渡しにすると3.	ダングリングリファレンス発生して参照が指すメモリアドレスが無効化され、未初期化メモリを参照してたみたい？
+
 	);
 
 	/// <summary>

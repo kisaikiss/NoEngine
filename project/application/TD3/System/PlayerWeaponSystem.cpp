@@ -4,6 +4,8 @@
 
 #ifdef USE_IMGUI
 #include "externals/imgui/imgui.h"
+#include <Windows.h>
+#include <sstream>
 #endif
 
 
@@ -38,7 +40,7 @@ void PlayerWeaponSystem::Update(No::Registry& registry, float deltaTime) {
 void PlayerWeaponSystem::HandleBulletFire(
 	PlayerComponent* player,
 	No::Registry& registry,
-	const No::Vector3& playerPosition
+	const No::Vector3 playerPosition  //参照渡しにすると3.	ダングリングリファレンス発生して参照が指すメモリアドレスが無効化され、未初期化メモリを参照してたみたい？
 ) {
 	if (!NoEngine::Input::Keyboard::IsTrigger(KEY_SPACE)) {
 		return;
@@ -92,6 +94,16 @@ void PlayerWeaponSystem::HandleBulletFire(
 	material->psoName = L"Renderer : Default PSO";
 	material->psoId = NoEngine::Render::GetPSOID(material->psoName);
 	material->rootSigId = NoEngine::Render::GetRootSignatureID(material->psoName);
+
+#ifdef USE_IMGUI
+	//// デバッグ出力：弾丸発射情報
+	//std::ostringstream oss;
+	//oss << "[BULLET FIRE] Entity:" << bulletEntity 
+	//	<< " Pos:(" << playerPosition.x << "," << playerPosition.y << "," << playerPosition.z << ")"
+	//	<< " StartNode:(" << bullet->startNodeX << "," << bullet->startNodeY << ")"
+	//	<< " Dir:(" << bullet->direction.x << "," << bullet->direction.y << "," << bullet->direction.z << ")\n";
+	//OutputDebugStringA(oss.str().c_str());
+#endif
 }
 
 No::Vector3 PlayerWeaponSystem::DirectionToVector(Direction dir) {

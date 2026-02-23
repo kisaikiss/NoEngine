@@ -2,6 +2,13 @@
 #include <cmath>
 #include "../GameTag.h"
 #include "engine/Functions/Renderer/Primitive.h"
+
+#ifdef USE_IMGUI
+#include <Windows.h>
+#include <string>
+#include <sstream>
+#endif
+
 // ============================================================
 // 定数定義
 // ============================================================
@@ -28,8 +35,18 @@ void PlayerBulletSystem::Update(No::Registry& registry, float deltaTime) {
 		transform->translate = transform->translate + movement;
 		bullet->travelDistance += bullet->speed * deltaTime;
 		NoEngine::Primitive::DrawSphere(transform->translate, 1.0f, { 0.0f, 0.0f, 0.0f, 1.0f });
+		
 		// ---- 安全網：最大距離で消滅 ----
 		if (bullet->travelDistance >= bullet->maxDistance) {
+#ifdef USE_IMGUI
+/*			std::ostringstream oss;
+			oss << "[BULLET DESTROY] Entity:" << entity 
+				<< " Reason:MaxDistance Travel:" << bullet->travelDistance 
+				<< " Pos:(" << transform->translate.x << "," << transform->translate.y << ")\n";
+			OutputDebugStringA(oss.str().c_str());
+			*/
+
+			#endif
 			deathFlag->isDead = true;
 			continue;
 		}
@@ -49,6 +66,19 @@ void PlayerBulletSystem::Update(No::Registry& registry, float deltaTime) {
 
 		// ノード付近にいる場合のみ判定する
 		if (distFromNode >= NODE_DETECT_THRESHOLD) {
+#ifdef USE_IMGUI
+			/*
+			// フレーム毎の詳細ログ（最初の1秒間のみ）
+			if (bullet->travelDistance < 5.0f) {
+				std::ostringstream oss;
+				oss << "[BULLET UPDATE] Entity:" << entity 
+					<< " Travel:" << bullet->travelDistance 
+					<< " Pos:(" << transform->translate.x << "," << transform->translate.y << ")"
+					<< " NearNode:(" << nearestX << "," << nearestY << ")"
+					<< " Dist:" << distFromNode << " SKIP:TooFar\n";
+				OutputDebugStringA(oss.str().c_str());
+			}*/
+#endif
 			continue;
 		}
 
@@ -58,13 +88,50 @@ void PlayerBulletSystem::Update(No::Registry& registry, float deltaTime) {
 		if (nearestX == bullet->startNodeX &&
 			nearestY == bullet->startNodeY &&
 			bullet->travelDistance < NODE_DETECT_THRESHOLD * 2.0f) {
+#ifdef USE_IMGUI
+			/*
+			// フレーム毎の詳細ログ（最初の1秒間のみ）
+			if (bullet->travelDistance < 5.0f) {
+				std::ostringstream oss;
+				oss << "[BULLET UPDATE] Entity:" << entity 
+					<< " Travel:" << bullet->travelDistance 
+					<< " Pos:(" << transform->translate.x << "," << transform->translate.y << ")"
+					<< " NearNode:(" << nearestX << "," << nearestY << ")"
+					<< " Dist:" << distFromNode << " SKIP:StartNode\n";
+				OutputDebugStringA(oss.str().c_str());
+			}*/
+#endif
 			continue;
 		}
 
 		// 前方接続チェック：接続がない、またはマップ外なら消滅
 		if (ShouldDestroyAtNode(registry, nearestX, nearestY, bullet->direction)) {
+#ifdef USE_IMGUI
+			/*
+			std::ostringstream oss;
+			oss << "[BULLET DESTROY] Entity:" << entity 
+				<< " Reason:NoConnection Travel:" << bullet->travelDistance 
+				<< " Pos:(" << transform->translate.x << "," << transform->translate.y << ")"
+				<< " Node:(" << nearestX << "," << nearestY << ")\n";
+			OutputDebugStringA(oss.str().c_str());
+			*/
+#endif
 			//削除
 			deathFlag->isDead = true;
+		} else {
+#ifdef USE_IMGUI
+			/*
+			// フレーム毎の詳細ログ（最初の1秒間のみ）
+			if (bullet->travelDistance < 5.0f) {
+				std::ostringstream oss;
+				oss << "[BULLET UPDATE] Entity:" << entity 
+					<< " Travel:" << bullet->travelDistance 
+					<< " Pos:(" << transform->translate.x << "," << transform->translate.y << ")"
+					<< " NearNode:(" << nearestX << "," << nearestY << ")"
+					<< " Dist:" << distFromNode << " CHECK:Pass\n";
+				OutputDebugStringA(oss.str().c_str());
+			}*/
+#endif
 		}
 
 		
