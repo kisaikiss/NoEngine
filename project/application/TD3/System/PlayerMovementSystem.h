@@ -169,12 +169,6 @@ private:
 	/// <summary>
 	/// 移動方向に対応する回転クオータニオンを返す
 	/// モデルは identity 回転のとき Z+ を向き前提(違うのなら適宜合わせる)
-	///
-	///None	: Z-を向く（カメラ側・初期向き）		= Y軸	+180°
-	///Up		: Y+を向く					= X軸	+90°
-	///Down	: Y-を向く						= X軸	-90°
-	///Right	: X+を向く					= Y軸	+90°
-	///Left	: X-を向く						= Y軸	-90°
 	/// </summary>
 	NoEngine::Math::Quaternion CalcDirectionRotation(Direction dir);
 

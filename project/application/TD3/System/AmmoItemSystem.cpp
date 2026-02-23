@@ -1,5 +1,5 @@
 #include "AmmoItemSystem.h"
-#include "../Component/PlayerTag.h"
+#include "../GameTag.h"
 
 void AmmoItemSystem::Update(No::Registry& registry, float deltaTime) {
 	(void)deltaTime;

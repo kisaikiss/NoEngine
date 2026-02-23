@@ -1,7 +1,7 @@
 #include "SampleScene.h"
 #include "../Component/GridCellComponent.h"
 #include "../Component/PlayerComponent.h"
-#include "../Component/PlayerTag.h"
+#include "../GameTag.h"
 #include "../System/GridRenderSystem.h"
 #include "../System/PlayerMovementSystem.h"
 #include "../System/PlayerBulletSystem.h"

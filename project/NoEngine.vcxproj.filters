@@ -380,7 +380,6 @@
     <ClInclude Include="application\TD3\Scene\SampleScene.h" />
     <ClInclude Include="application\TD3\Component\GridCellComponent.h" />
     <ClInclude Include="application\TD3\Component\PlayerComponent.h" />
-    <ClInclude Include="application\TD3\Component\PlayerTag.h" />
     <ClInclude Include="application\TD3\MapData\ShinMapData.h" />
     <ClInclude Include="application\TD3\System\GridRenderSystem.h" />
     <ClInclude Include="application\TD3\System\PlayerMovementSystem.h" />
@@ -388,6 +387,7 @@
     <ClInclude Include="application\TD3\Component\AmmoItemComponent.h" />
     <ClInclude Include="application\TD3\System\PlayerBulletSystem.h" />
     <ClInclude Include="application\TD3\System\AmmoItemSystem.h" />
+    <ClInclude Include="application\TD3\GameTag.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

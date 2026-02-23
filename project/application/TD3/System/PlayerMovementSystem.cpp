@@ -1,6 +1,6 @@
 #include "PlayerMovementSystem.h"
 #include "../Component/GridCellComponent.h"
-#include "../Component/PlayerTag.h"
+#include "../GameTag.h"
 #include "../Component/PlayerBulletComponent.h"
 #include "../Component/AmmoItemComponent.h"
 
@@ -316,7 +316,7 @@ void PlayerMovementSystem::UpdateRecentInputs(
 			}
 			player->recentInputs[player->recentInputCount - 1] = Direction::None;
 			player->recentInputCount--;
-			// i はインクリメントしない（次の要素が詰められるため）
+			// i はインクリメントしない（次の要素が詰められるため） 
 		} else {
 			i++;  // 次の要素へ
 		}

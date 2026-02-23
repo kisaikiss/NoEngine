@@ -419,7 +419,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\TD3\Component\GridCellComponent.h" />
     <ClInclude Include="application\TD3\Component\PlayerBulletComponent.h" />
     <ClInclude Include="application\TD3\Component\PlayerComponent.h" />
-    <ClInclude Include="application\TD3\Component\PlayerTag.h" />
+    <ClInclude Include="application\TD3\GameTag.h" />
     <ClInclude Include="application\TD3\MapData\ShinMapData.h" />
     <ClInclude Include="application\TD3\OneSide.h" />
     <ClInclude Include="application\TD3\Scene\SampleScene.h" />
