@@ -53,16 +53,13 @@ void SampleScene::InitializePlayer(No::Registry& registry) {
 	auto entity = registry.GenerateEntity();
 
 	// PlayerComponent（デフォルト値で初期化済み、中央ノード(1,1)）
-	registry.AddComponent<PlayerComponent>(entity);
-	registry.AddComponent<PlayerTag>(entity);
-
 	auto* player = registry.AddComponent<PlayerComponent>(entity);
-	// グリッド座標だけ設定（ワールド座標は PlayerMovementSystem が自動同期）
 	player->currentNodeX = 2;
 	player->currentNodeY = 2;
 	player->targetNodeX = 2;
 	player->targetNodeY = 2;
 
+	registry.AddComponent<PlayerTag>(entity);
 
 	// Transform（スケールを0.1に調整）
 	auto* transform = registry.AddComponent<No::TransformComponent>(entity);
