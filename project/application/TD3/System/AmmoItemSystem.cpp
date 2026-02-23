@@ -2,7 +2,7 @@
 #include "../GameTag.h"
 
 void AmmoItemSystem::Update(No::Registry& registry, float deltaTime) {
-	(void)deltaTime;
+	static_cast<void>(deltaTime);// 未使用パラメータ警告回避
 
 	// プレイヤーを取得
 	auto playerView = registry.View<PlayerComponent, PlayerTag>();
@@ -19,15 +19,14 @@ void AmmoItemSystem::Update(No::Registry& registry, float deltaTime) {
 	if (!player) return;
 
 	// 弾薬アイテムをチェック
-	auto ammoView = registry.View<AmmoItemComponent>();
+	auto ammoView = registry.View<AmmoItemComponent, AmmoItemTag, DeathFlag>();
 	if (ammoView.Empty()) {
 		return;
 	}
-	
-	std::vector<No::Entity> itemsToRemove;
 
 	for (No::Entity entity : ammoView) {
 		auto* ammo = registry.GetComponent<AmmoItemComponent>(entity);
+		auto* deathFlag = registry.GetComponent<DeathFlag>(entity);
 
 		// プレイヤーと同じ座標かチェック
 		if (player->currentNodeX == ammo->gridX &&
@@ -40,13 +39,8 @@ void AmmoItemSystem::Update(No::Registry& registry, float deltaTime) {
 				player->currentBullets = player->maxBullets;
 			}
 
-			// アイテムを削除リストに追加
-			itemsToRemove.push_back(entity);
+			// アイテムを削除
+			deathFlag->isDead = true;
 		}
-	}
-
-	// アイテムを削除
-	for (No::Entity entity : itemsToRemove) {
-		registry.DestroyEntity(entity);
 	}
 }

@@ -5,7 +5,7 @@
 
 /// <summary>
 /// プレイヤー弾丸システム
-/// 弾丸の移動・グリッドベース消滅・最大距離消滅を管理する
+/// 弾丸の移動・消滅判定を管理する
 /// </summary>
 class PlayerBulletSystem : public No::ISystem {
 public:
@@ -16,18 +16,22 @@ public:
 
 private:
 	/// <summary>
-	/// 指定座標のグリッドセルを取得する
-	/// 見つからない場合は nullptr を返す
-	/// </summary>
-	GridCellComponent* GetGridCell(No::Registry& registry, int x, int y);
-
-	/// <summary>
-	/// 弾の進行方向ベクトルからグリッド接続の有無を判定する
-	/// ノード上で前方に接続がなければ true（消滅すべき）を返す
+	/// 指定ノードで弾丸を消滅させるべきか判定する
+	/// 前方への接続がない、またはマップ外の場合に true を返す
 	/// </summary>
 	bool ShouldDestroyAtNode(
 		No::Registry& registry,
-		int nodeX, int nodeY,
+		int nodeX,
+		int nodeY,
 		const No::Vector3& direction
+	);
+
+	/// <summary>
+	/// 指定座標のグリッドセルを取得する
+	/// </summary>
+	GridCellComponent* GetGridCell(
+		No::Registry& registry,
+		int x,
+		int y
 	);
 };

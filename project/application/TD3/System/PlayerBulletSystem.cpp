@@ -1,6 +1,6 @@
 #include "PlayerBulletSystem.h"
 #include <cmath>
-#include <vector>
+#include "../GameTag.h"
 
 // ============================================================
 // 定数定義
@@ -16,13 +16,12 @@ static constexpr float NODE_DETECT_THRESHOLD = 0.15f;
 // ============================================================
 
 void PlayerBulletSystem::Update(No::Registry& registry, float deltaTime) {
-	auto view = registry.View<PlayerBulletComponent, No::TransformComponent>();
-
-	std::vector<No::Entity> bulletsToRemove;
+	auto view = registry.View<PlayerBulletComponent, PlayerBulletTag, DeathFlag, No::TransformComponent>();
 
 	for (auto entity : view) {
 		auto* bullet = registry.GetComponent<PlayerBulletComponent>(entity);
 		auto* transform = registry.GetComponent<No::TransformComponent>(entity);
+		auto* deathFlag = registry.GetComponent<DeathFlag>(entity);
 
 		// ---- 移動 ----
 		No::Vector3 movement = bullet->direction * bullet->speed * deltaTime;
@@ -30,9 +29,8 @@ void PlayerBulletSystem::Update(No::Registry& registry, float deltaTime) {
 		bullet->travelDistance += bullet->speed * deltaTime;
 
 		// ---- 安全網：最大距離で消滅 ----
-		// グリッド判定をすり抜けた弾が永遠に飛び続けないようにする保険
 		if (bullet->travelDistance >= bullet->maxDistance) {
-			bulletsToRemove.push_back(entity);
+			deathFlag->isDead = true;
 			continue;
 		}
 
@@ -65,13 +63,9 @@ void PlayerBulletSystem::Update(No::Registry& registry, float deltaTime) {
 
 		// 前方接続チェック：接続がない、またはマップ外なら消滅
 		if (ShouldDestroyAtNode(registry, nearestX, nearestY, bullet->direction)) {
-			bulletsToRemove.push_back(entity);
+			//削除
+			deathFlag->isDead = true;
 		}
-	}
-
-	// 削除リストの弾丸を削除
-	for (auto entity : bulletsToRemove) {
-		registry.DestroyEntity(entity);
 	}
 }
 

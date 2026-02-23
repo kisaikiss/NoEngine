@@ -72,7 +72,7 @@ struct PlayerComponent {
 		isAtDeadEnd(false),
 		currentBullets(5),
 		maxBullets(10),
-		bulletSpeed(5.0f)
+		bulletSpeed(3.0f)
 	{
 		for (int i = 0; i < 4; ++i) {
 			recentInputs[i] = Direction::None;

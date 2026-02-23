@@ -15,7 +15,7 @@
 // ============================================================
 
 void PlayerWeaponSystem::Update(No::Registry& registry, float deltaTime) {
-	static_cast<void>(deltaTime);
+	static_cast<void>(deltaTime);// 未使用パラメータ警告回避
 
 	auto view = registry.View<PlayerComponent, PlayerTag, No::TransformComponent>();
 
@@ -63,6 +63,9 @@ void PlayerWeaponSystem::HandleBulletFire(
 	player->currentBullets--;
 
 	auto bulletEntity = registry.GenerateEntity();
+
+	registry.AddComponent<PlayerBulletTag>(bulletEntity);
+	registry.AddComponent<DeathFlag>(bulletEntity);
 
 	auto* bullet = registry.AddComponent<PlayerBulletComponent>(bulletEntity);
 	bullet->direction = DirectionToVector(player->actualMovingDirection);

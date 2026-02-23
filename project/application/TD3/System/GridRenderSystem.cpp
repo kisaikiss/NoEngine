@@ -3,7 +3,7 @@
 #include "engine/Functions/Renderer/Primitive.h"
 
 void GridRenderSystem::Update(No::Registry& registry, float deltaTime) {
-	(void)deltaTime; // 未使用パラメータ警告回避
+	static_cast<void>(deltaTime);// 未使用パラメータ警告回避
 
 	auto view = registry.View<GridCellComponent>();
 

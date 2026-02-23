@@ -210,6 +210,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\TD3\OneSide.cpp" />
     <ClCompile Include="application\TD3\Scene\SampleScene.cpp" />
     <ClCompile Include="application\TD3\System\AmmoItemSystem.cpp" />
+    <ClCompile Include="application\TD3\System\DeathSystem.cpp" />
     <ClCompile Include="application\TD3\System\GridRenderSystem.cpp" />
     <ClCompile Include="application\TD3\System\PlayerBulletSystem.cpp" />
     <ClCompile Include="application\TD3\System\PlayerMovementSystem.cpp" />
@@ -425,6 +426,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\TD3\OneSide.h" />
     <ClInclude Include="application\TD3\Scene\SampleScene.h" />
     <ClInclude Include="application\TD3\System\AmmoItemSystem.h" />
+    <ClInclude Include="application\TD3\System\DeathSystem.h" />
     <ClInclude Include="application\TD3\System\GridRenderSystem.h" />
     <ClInclude Include="application\TD3\System\PlayerBulletSystem.h" />
     <ClInclude Include="application\TD3\System\PlayerMovementSystem.h" />

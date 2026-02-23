@@ -7,6 +7,7 @@
 #include "../System/PlayerWeaponSystem.h"
 #include "../System/PlayerBulletSystem.h"
 #include "../System/AmmoItemSystem.h"
+#include "../System/DeathSystem.h"
 #include "../MapData/ShinMapData.h"
 
 void SampleScene::Setup() {
@@ -16,6 +17,7 @@ void SampleScene::Setup() {
 	AddSystem(std::make_unique<PlayerWeaponSystem>());
 	AddSystem(std::make_unique<PlayerBulletSystem>());
 	AddSystem(std::make_unique<AmmoItemSystem>());
+	AddSystem(std::make_unique<DeathSystem>());
 
 	// レジストリ取得
 	No::Registry& registry = *GetRegistry();

@@ -875,6 +875,9 @@ void PlayerMovementSystem::CreateAmmoItem(
 ) {
 	auto entity = registry.GenerateEntity();
 
+	registry.AddComponent<AmmoItemTag>(entity);
+	registry.AddComponent<DeathFlag>(entity);
+
 	auto* ammo = registry.AddComponent<AmmoItemComponent>(entity);
 	ammo->gridX = gridX;
 	ammo->gridY = gridY;
