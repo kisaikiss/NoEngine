@@ -1,4 +1,6 @@
 #pragma once
+#include <set>
+#include <utility>
 
 // プレイヤーの状態
 enum class PlayerState {
@@ -51,6 +53,11 @@ struct PlayerComponent {
 	/// 状態フラグ
 	bool isAtDeadEnd;					// 行き止まりフラグ
 
+	/// 弾薬システム
+	int currentBullets;					// 現在の弾数
+	int maxBullets;						// 最大弾数
+	std::set<std::pair<int, int>> visitedIntersections;	// 通過済み交差点（gridX, gridY）
+
 	PlayerComponent()
 		: currentNodeX(1), currentNodeY(1),
 		targetNodeX(1), targetNodeY(1),
@@ -64,7 +71,9 @@ struct PlayerComponent {
 		bufferedDirection(Direction::None),
 		moveSpeed(2.0f),
 		inputHistoryWindow(0.15f),
-		isAtDeadEnd(false)
+		isAtDeadEnd(false),
+		currentBullets(5),
+		maxBullets(10)
 	{
 		for (int i = 0; i < 4; ++i) {
 			recentInputs[i] = Direction::None;

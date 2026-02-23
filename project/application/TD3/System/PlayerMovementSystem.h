@@ -188,6 +188,67 @@ private:
 		No::Registry& registry
 	);
 
+	// ========== 弾丸発射 ==========
+
+	/// <summary>
+	/// 弾丸発射処理
+	/// スペースキーで弾丸を発射する
+	/// </summary>
+	void HandleBulletFire(
+		PlayerComponent* player,
+		No::Registry& registry,
+		const No::Vector3& playerPosition
+	);
+
+	/// <summary>
+	/// 方向から正規化されたベクトルを取得
+	/// </summary>
+	No::Vector3 DirectionToVector(Direction dir);
+
+	// ========== 交差点検出と弾薬配置 ==========
+
+	/// <summary>
+	/// 交差点かどうかを判定する（接続数が3以上）
+	/// </summary>
+	bool IsIntersection(
+		const GridCellComponent* cell
+	);
+
+	/// <summary>
+	/// 交差点通過時の処理（弾薬配置・回収可能化）
+	/// </summary>
+	void HandleIntersection(
+		PlayerComponent* player,
+		No::Registry& registry
+	);
+
+	/// <summary>
+	/// 指定座標に弾薬アイテムが存在するかチェック
+	/// </summary>
+	bool HasAmmoAtPosition(
+		No::Registry& registry,
+		int gridX,
+		int gridY
+	);
+
+	/// <summary>
+	/// 弾薬アイテムを生成する
+	/// </summary>
+	void CreateAmmoItem(
+		No::Registry& registry,
+		int gridX,
+		int gridY
+	);
+
+	/// <summary>
+	/// 指定座標の弾薬アイテムを回収可能にする
+	/// </summary>
+	void EnableAmmoPickup(
+		No::Registry& registry,
+		int gridX,
+		int gridY
+	);
+
 	// ========== デバッグ UI ==========
 #ifdef USE_IMGUI
 	void ShowPlayerDebugUI(PlayerComponent* player);

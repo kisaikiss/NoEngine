@@ -166,6 +166,8 @@
     <ClCompile Include="application\TD3\Scene\SampleScene.cpp" />
     <ClCompile Include="application\TD3\System\GridRenderSystem.cpp" />
     <ClCompile Include="application\TD3\System\PlayerMovementSystem.cpp" />
+    <ClCompile Include="application\TD3\System\PlayerBulletSystem.cpp" />
+    <ClCompile Include="application\TD3\System\AmmoItemSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -382,6 +384,10 @@
     <ClInclude Include="application\TD3\MapData\ShinMapData.h" />
     <ClInclude Include="application\TD3\System\GridRenderSystem.h" />
     <ClInclude Include="application\TD3\System\PlayerMovementSystem.h" />
+    <ClInclude Include="application\TD3\Component\PlayerBulletComponent.h" />
+    <ClInclude Include="application\TD3\Component\AmmoItemComponent.h" />
+    <ClInclude Include="application\TD3\System\PlayerBulletSystem.h" />
+    <ClInclude Include="application\TD3\System\AmmoItemSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

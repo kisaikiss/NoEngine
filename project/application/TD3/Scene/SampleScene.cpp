@@ -4,12 +4,16 @@
 #include "../Component/PlayerTag.h"
 #include "../System/GridRenderSystem.h"
 #include "../System/PlayerMovementSystem.h"
+#include "../System/PlayerBulletSystem.h"
+#include "../System/AmmoItemSystem.h"
 #include "../MapData/ShinMapData.h"
 
 void SampleScene::Setup() {
 	// システム追加
 	AddSystem(std::make_unique<GridRenderSystem>());
 	AddSystem(std::make_unique<PlayerMovementSystem>());
+	AddSystem(std::make_unique<PlayerBulletSystem>());
+	AddSystem(std::make_unique<AmmoItemSystem>());
 
 	// レジストリ取得
 	No::Registry& registry = *GetRegistry();

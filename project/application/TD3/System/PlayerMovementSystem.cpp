@@ -1,6 +1,8 @@
 #include "PlayerMovementSystem.h"
 #include "../Component/GridCellComponent.h"
 #include "../Component/PlayerTag.h"
+#include "../Component/PlayerBulletComponent.h"
+#include "../Component/AmmoItemComponent.h"
 
 #ifdef USE_IMGUI
 #include "externals/imgui/imgui.h"
@@ -13,6 +15,7 @@
 #define KEY_A 'A'
 #define KEY_S 'S'
 #define KEY_D 'D'
+#define KEY_SPACE VK_SPACE
 
 // ============================================================
 //  Update
@@ -25,10 +28,15 @@ void PlayerMovementSystem::Update(No::Registry& registry, float deltaTime) {
 		auto* player = registry.GetComponent<PlayerComponent>(entity);
 		auto* transform = registry.GetComponent<No::TransformComponent>(entity);
 
+		// 弾丸発射処理
+		HandleBulletFire(player, registry, transform->translate);
+
 		// 状態別の処理
 		switch (player->state) {
 		case PlayerState::OnNode:
 			HandleNodeInput(player, registry);
+			// 交差点検出
+			HandleIntersection(player, registry);
 			break;
 
 		case PlayerState::MovingOnEdge:
@@ -371,6 +379,9 @@ void PlayerMovementSystem::OnReachNode(
 	if (player->currentDirection != Direction::None) {
 		player->lastDirection = player->currentDirection;
 	}
+
+	// 交差点検出
+	HandleIntersection(player, registry);
 
 	Direction nextDir = Direction::None;
 
@@ -782,6 +793,12 @@ void PlayerMovementSystem::ShowPlayerDebugUI(PlayerComponent* player) {
 	}
 	ImGui::Text("History Time: %.2f", player->inputHistoryTime);
 
+	// 弾薬情報
+	ImGui::Separator();
+	ImGui::Text("=== Ammo ===");
+	ImGui::Text("Bullets: %d / %d", player->currentBullets, player->maxBullets);
+	ImGui::Text("Visited Intersections: %zu", player->visitedIntersections.size());
+
 	// パラメータ
 	ImGui::Separator();
 	ImGui::DragFloat("Move Speed", &player->moveSpeed, 0.1f, 0.1f, 10.0f);
@@ -810,3 +827,188 @@ const char* PlayerMovementSystem::StateToString(PlayerState state) {
 	}
 }
 #endif
+// ============================================================
+//  弾丸発射
+// ============================================================
+
+void PlayerMovementSystem::HandleBulletFire(
+	PlayerComponent* player,
+	No::Registry& registry,
+	const No::Vector3& playerPosition
+) {
+	// スペースキーのトリガー入力をチェック
+	if (!NoEngine::Input::Keyboard::IsTrigger(KEY_SPACE)) {
+		return;
+	}
+
+	// 弾数チェック
+	if (player->currentBullets <= 0) {
+		return;
+	}
+
+	// 移動方向がない場合は発射しない
+	if (player->actualMovingDirection == Direction::None) {
+		return;
+	}
+
+	// 弾数を消費
+	player->currentBullets--;
+
+	// 弾丸エンティティを生成
+	auto bulletEntity = registry.GenerateEntity();
+
+	// PlayerBulletComponent追加
+	auto* bullet = registry.AddComponent<PlayerBulletComponent>(bulletEntity);
+	bullet->direction = DirectionToVector(player->actualMovingDirection);
+	bullet->speed = 5.0f;
+	bullet->maxDistance = 20.0f;
+
+	// Transform追加
+	auto* transform = registry.AddComponent<No::TransformComponent>(bulletEntity);
+	transform->translate = playerPosition;
+	transform->scale = { 0.1f, 0.1f, 0.1f };
+
+	// Mesh追加
+	auto* mesh = registry.AddComponent<No::MeshComponent>(bulletEntity);
+	auto* material = registry.AddComponent<No::MaterialComponent>(bulletEntity);
+
+	NoEngine::Asset::ModelLoader::LoadModel(
+		"PlayerBullet",
+		"resources/game/td_3105/Model/ball/ball.obj",
+		mesh
+	);
+
+	material->materials = NoEngine::Asset::ModelLoader::GetMaterial("PlayerBullet");
+	material->color = { 0.0f, 0.0f, 0.0f, 1.0f }; // 黒色
+	material->psoName = L"Renderer : Default PSO";
+	material->psoId = NoEngine::Render::GetPSOID(material->psoName);
+	material->rootSigId = NoEngine::Render::GetRootSignatureID(material->psoName);
+}
+
+No::Vector3 PlayerMovementSystem::DirectionToVector(Direction dir) {
+	switch (dir) {
+	case Direction::Up:    return { 0.0f, 1.0f, 0.0f };
+	case Direction::Right: return { 1.0f, 0.0f, 0.0f };
+	case Direction::Down:  return { 0.0f, -1.0f, 0.0f };
+	case Direction::Left:  return { -1.0f, 0.0f, 0.0f };
+	default:               return { 0.0f, 0.0f, 0.0f };
+	}
+}
+
+// ============================================================
+//  交差点検出と弾薬配置
+// ============================================================
+
+bool PlayerMovementSystem::IsIntersection(const GridCellComponent* cell) {
+	if (!cell) return false;
+
+	int connectionCount = 0;
+	if (cell->hasConnectionUp)    connectionCount++;
+	if (cell->hasConnectionRight) connectionCount++;
+	if (cell->hasConnectionDown)  connectionCount++;
+	if (cell->hasConnectionLeft)  connectionCount++;
+
+	return connectionCount >= 3;
+}
+
+void PlayerMovementSystem::HandleIntersection(
+	PlayerComponent* player,
+	No::Registry& registry
+) {
+	// 現在のノードを取得
+	auto* cell = GetGridCell(registry, player->currentNodeX, player->currentNodeY);
+	if (!IsIntersection(cell)) {
+		return;
+	}
+
+	// 交差点の座標をペアで作成
+	std::pair<int, int> intersectionCoord = { player->currentNodeX, player->currentNodeY };
+
+	// 既に訪問済みかチェック
+	if (player->visitedIntersections.find(intersectionCoord) != player->visitedIntersections.end()) {
+		// 2回目以降の訪問：弾薬アイテムがあれば回収可能にする
+		EnableAmmoPickup(registry, player->currentNodeX, player->currentNodeY);
+		return;
+	}
+
+	// 初回訪問：弾薬アイテムが存在しない場合のみ配置
+	if (!HasAmmoAtPosition(registry, player->currentNodeX, player->currentNodeY)) {
+		CreateAmmoItem(registry, player->currentNodeX, player->currentNodeY);
+	}
+
+	// 訪問済みとして記録
+	player->visitedIntersections.insert(intersectionCoord);
+}
+
+bool PlayerMovementSystem::HasAmmoAtPosition(
+	No::Registry& registry,
+	int gridX,
+	int gridY
+) {
+	auto view = registry.View<AmmoItemComponent>();
+	if (view.Empty()) {
+		return false;
+	}
+	
+	for (auto entity : view) {
+		auto* ammo = registry.GetComponent<AmmoItemComponent>(entity);
+		if (ammo->gridX == gridX && ammo->gridY == gridY) {
+			return true;
+		}
+	}
+	return false;
+}
+
+void PlayerMovementSystem::CreateAmmoItem(
+	No::Registry& registry,
+	int gridX,
+	int gridY
+) {
+	auto entity = registry.GenerateEntity();
+
+	// AmmoItemComponent追加
+	auto* ammo = registry.AddComponent<AmmoItemComponent>(entity);
+	ammo->gridX = gridX;
+	ammo->gridY = gridY;
+	ammo->canPickup = false;	// 初回は回収不可
+	ammo->ammoAmount = 1;
+
+	// Transform追加
+	auto* transform = registry.AddComponent<No::TransformComponent>(entity);
+	transform->translate = { static_cast<float>(gridX), static_cast<float>(gridY), 0.0f };
+	transform->scale = { 0.1f, 0.1f, 0.1f };
+
+	// Mesh追加
+	auto* mesh = registry.AddComponent<No::MeshComponent>(entity);
+	auto* material = registry.AddComponent<No::MaterialComponent>(entity);
+
+	NoEngine::Asset::ModelLoader::LoadModel(
+		"AmmoItem",
+		"resources/game/td_3105/Model/ball/ball.obj",
+		mesh
+	);
+
+	material->materials = NoEngine::Asset::ModelLoader::GetMaterial("AmmoItem");
+	material->color = { 1.0f, 1.0f, 0.0f, 1.0f }; // 黄色
+	material->psoName = L"Renderer : Default PSO";
+	material->psoId = NoEngine::Render::GetPSOID(material->psoName);
+	material->rootSigId = NoEngine::Render::GetRootSignatureID(material->psoName);
+}
+
+void PlayerMovementSystem::EnableAmmoPickup(
+	No::Registry& registry,
+	int gridX,
+	int gridY
+) {
+	auto view = registry.View<AmmoItemComponent>();
+	if (view.Empty()) {
+		return;
+	}
+	
+	for (auto entity : view) {
+		auto* ammo = registry.GetComponent<AmmoItemComponent>(entity);
+		if (ammo->gridX == gridX && ammo->gridY == gridY) {
+			ammo->canPickup = true;
+		}
+	}
+}
