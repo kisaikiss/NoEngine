@@ -7,10 +7,7 @@
 #ifdef USE_IMGUI
 #include "externals/imgui/imgui.h"
 #endif
-
-// ============================================================
 // キーコード定義
-// ============================================================
 #define KEY_W 'W'
 #define KEY_A 'A'
 #define KEY_S 'S'
@@ -27,9 +24,6 @@ void PlayerMovementSystem::Update(No::Registry& registry, float deltaTime) {
 	for (auto entity : view) {
 		auto* player = registry.GetComponent<PlayerComponent>(entity);
 		auto* transform = registry.GetComponent<No::TransformComponent>(entity);
-
-		// 弾丸発射処理
-		HandleBulletFire(player, registry, transform->translate);
 
 		// 状態別の処理
 		switch (player->state) {
@@ -53,7 +47,7 @@ void PlayerMovementSystem::Update(No::Registry& registry, float deltaTime) {
 
 		// デバッグUI
 #ifdef USE_IMGUI
-		ShowPlayerDebugUI(player);
+		DebugUI(player);
 #endif
 	}
 }
@@ -756,8 +750,8 @@ void PlayerMovementSystem::CheckDeadEnd(
 // ============================================================
 
 #ifdef USE_IMGUI
-void PlayerMovementSystem::ShowPlayerDebugUI(PlayerComponent* player) {
-	ImGui::Begin("Player Debug");
+void PlayerMovementSystem::DebugUI(PlayerComponent* player) {
+	ImGui::Begin("Player Movement");
 
 	// 位置情報
 	ImGui::Text("=== Position ===");
@@ -793,25 +787,6 @@ void PlayerMovementSystem::ShowPlayerDebugUI(PlayerComponent* player) {
 	}
 	ImGui::Text("History Time: %.2f", player->inputHistoryTime);
 
-	// 弾薬情報
-	ImGui::Separator();
-	ImGui::Text("=== Ammo ===");
-	ImGui::Text("Bullets: %d / %d", player->currentBullets, player->maxBullets);
-
-	// 最大弾数の編集（1〜99）
-	ImGui::DragInt("Max Bullets", &player->maxBullets, 1, 1, 99);
-
-	// 現在の弾数の編集（0〜最大弾数）
-	ImGui::DragInt("Current Bullets", &player->currentBullets, 1, 0, player->maxBullets);
-
-	// 現在の弾数を最大にするボタン
-	if (ImGui::Button("Fill Ammo")) {
-		player->currentBullets = player->maxBullets;
-	}
-
-	// 弾の速度の編集
-	ImGui::DragFloat("Bullet Speed", &player->bulletSpeed, 0.1f, 1.0f, 20.0f);
-
 	// 移動パラメータ
 	ImGui::Separator();
 	ImGui::DragFloat("Move Speed", &player->moveSpeed, 0.1f, 0.1f, 10.0f);
@@ -840,91 +815,6 @@ const char* PlayerMovementSystem::StateToString(PlayerState state) {
 	}
 }
 #endif
-// ============================================================
-//  弾丸発射
-// ============================================================
-
-void PlayerMovementSystem::HandleBulletFire(
-	PlayerComponent* player,
-	No::Registry& registry,
-	const No::Vector3& playerPosition
-) {
-	// スペースキーのトリガー入力をチェック
-	if (!NoEngine::Input::Keyboard::IsTrigger(KEY_SPACE)) {
-		return;
-	}
-
-	// 弾数チェック
-	if (player->currentBullets <= 0) {
-		return;
-	}
-
-	// 移動方向がない場合は発射しない
-	if (player->actualMovingDirection == Direction::None) {
-		return;
-	}
-
-	// ---- 発射前の前方接続チェック ----
-	// 現在のノードから actualMovingDirection 方向への接続がない場合は発射しない。
-	// 例：行き止まりノードで前方に接続がない場合、弾を生成してもグリッドのない空間に飛び出してしまうためここで弾消費なしにブロックする。
-	auto* cell = GetGridCell(registry, player->currentNodeX, player->currentNodeY);
-	if (!cell) {
-		return;
-	}
-	if (!HasConnection(cell, player->actualMovingDirection)) {
-		return;
-	}
-
-	// 弾数を消費
-	player->currentBullets--;
-
-	// 弾丸エンティティを生成
-	auto bulletEntity = registry.GenerateEntity();
-
-	// PlayerBulletComponent追加
-	auto* bullet = registry.AddComponent<PlayerBulletComponent>(bulletEntity);
-	bullet->direction = DirectionToVector(player->actualMovingDirection);
-
-	// 発射元ノード座標を記録する
-	// PlayerBulletSystem はこのノードのみグリッド判定をスキップし、それ以降のノードで前方接続チェックを行う。
-	// プレイヤーがエッジ途中にいる場合でも currentNodeX/Y（直前に通過したノード）を使う。
-	// 発射時点で弾がそのノードより先にいるケースでは、そのノードまでの距離が NODE_DETECT_THRESHOLD を超えているため自然に無視される。
-	bullet->startNodeX = player->currentNodeX;
-	bullet->startNodeY = player->currentNodeY;
-	bullet->speed = player->bulletSpeed;
-	bullet->maxDistance = 20.0f;
-
-	// Transform追加
-	auto* transform = registry.AddComponent<No::TransformComponent>(bulletEntity);
-	transform->translate = playerPosition;
-	transform->scale = { 0.2f, 0.2f, 0.2f };
-
-	// Mesh追加
-	auto* mesh = registry.AddComponent<No::MeshComponent>(bulletEntity);
-	auto* material = registry.AddComponent<No::MaterialComponent>(bulletEntity);
-
-	NoEngine::Asset::ModelLoader::LoadModel(
-		"PlayerBullet",
-		"resources/game/td_3105/Model/ball/ball.obj",
-		mesh
-	);
-
-	material->materials = NoEngine::Asset::ModelLoader::GetMaterial("PlayerBullet");
-	material->color = { 0.0f, 0.0f, 0.0f, 1.0f }; // 黒色
-	material->psoName = L"Renderer : Default PSO";
-	material->psoId = NoEngine::Render::GetPSOID(material->psoName);
-	material->rootSigId = NoEngine::Render::GetRootSignatureID(material->psoName);
-}
-
-No::Vector3 PlayerMovementSystem::DirectionToVector(Direction dir) {
-	switch (dir) {
-	case Direction::Up:    return { 0.0f, 1.0f, 0.0f };
-	case Direction::Right: return { 1.0f, 0.0f, 0.0f };
-	case Direction::Down:  return { 0.0f, -1.0f, 0.0f };
-	case Direction::Left:  return { -1.0f, 0.0f, 0.0f };
-	default:               return { 0.0f, 0.0f, 0.0f };
-	}
-}
 
 // ============================================================
 //  交差点検出と弾薬配置
@@ -946,30 +836,15 @@ void PlayerMovementSystem::HandleIntersection(
 	PlayerComponent* player,
 	No::Registry& registry
 ) {
-	// 現在のノードを取得
 	auto* cell = GetGridCell(registry, player->currentNodeX, player->currentNodeY);
 
-	// 交差点でなければ何もしない（接続数 3 以上を交差点と定義）
 	if (!IsIntersection(cell)) {
 		return;
 	}
 
-	// ---- 弾薬アイテムの状態で処理を分岐 ----
-	//【弾薬がない場合】
-	//→ アイテムを新規配置する（canPickup = false で配置、まだ回収不可）
-	//【弾薬がある場合】
-	//→ 回収可能にする（canPickup = true）
-	//→ AmmoItemSystem が同フレーム内でプレイヤー座標と照合して回収する
-	// 
-	//1回目の通過: 弾薬がない → 配置
-	//2回目の通過: 弾薬がある → 回収可能化 → AmmoItemSystem が回収
-	//3回目の通過: 弾薬がない（回収済み）→ 再配置
-
 	if (!HasAmmoAtPosition(registry, player->currentNodeX, player->currentNodeY)) {
-		// 弾薬なし → 新規配置
 		CreateAmmoItem(registry, player->currentNodeX, player->currentNodeY);
 	} else {
-		// 弾薬あり → 回収可能にする
 		EnableAmmoPickup(registry, player->currentNodeX, player->currentNodeY);
 	}
 }
@@ -1000,19 +875,16 @@ void PlayerMovementSystem::CreateAmmoItem(
 ) {
 	auto entity = registry.GenerateEntity();
 
-	// AmmoItemComponent追加
 	auto* ammo = registry.AddComponent<AmmoItemComponent>(entity);
 	ammo->gridX = gridX;
 	ammo->gridY = gridY;
-	ammo->canPickup = false;	// 初回は回収不可
+	ammo->canPickup = false;
 	ammo->ammoAmount = 1;
 
-	// Transform追加
 	auto* transform = registry.AddComponent<No::TransformComponent>(entity);
 	transform->translate = { static_cast<float>(gridX), static_cast<float>(gridY), 0.0f };
 	transform->scale = { 0.2f, 0.2f, 0.2f };
 
-	// Mesh追加
 	auto* mesh = registry.AddComponent<No::MeshComponent>(entity);
 	auto* material = registry.AddComponent<No::MaterialComponent>(entity);
 
@@ -1023,7 +895,7 @@ void PlayerMovementSystem::CreateAmmoItem(
 	);
 
 	material->materials = NoEngine::Asset::ModelLoader::GetMaterial("AmmoItem");
-	material->color = { 1.0f, 1.0f, 0.0f, 1.0f }; // 黄色
+	material->color = { 1.0f, 1.0f, 0.0f, 1.0f };
 	material->psoName = L"Renderer : Default PSO";
 	material->psoId = NoEngine::Render::GetPSOID(material->psoName);
 	material->rootSigId = NoEngine::Render::GetRootSignatureID(material->psoName);

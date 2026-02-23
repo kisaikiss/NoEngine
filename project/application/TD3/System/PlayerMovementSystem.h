@@ -182,23 +182,6 @@ private:
 		No::Registry& registry
 	);
 
-	// ========== 弾丸発射 ==========
-
-	/// <summary>
-	/// 弾丸発射処理
-	/// スペースキーで弾丸を発射する
-	/// </summary>
-	void HandleBulletFire(
-		PlayerComponent* player,
-		No::Registry& registry,
-		const No::Vector3& playerPosition
-	);
-
-	/// <summary>
-	/// 方向から正規化されたベクトルを取得
-	/// </summary>
-	No::Vector3 DirectionToVector(Direction dir);
-
 	// ========== 交差点検出と弾薬配置 ==========
 
 	/// <summary>
@@ -245,7 +228,7 @@ private:
 
 	// ========== デバッグ UI ==========
 #ifdef USE_IMGUI
-	void ShowPlayerDebugUI(PlayerComponent* player);
+	void DebugUI(PlayerComponent* player);
 	const char* DirectionToString(Direction dir);
 	const char* StateToString(PlayerState state);
 #endif
