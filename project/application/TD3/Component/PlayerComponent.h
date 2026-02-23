@@ -18,6 +18,11 @@ enum class Direction {
 
 /// <summary>
 /// プレイヤーコンポーネント
+///
+/// 【座標設定について】
+/// currentNodeX/Y の初期値はコンストラクタで (0,0) に設定されるが、
+/// 実際の初期位置は SampleScene::InitializePlayer(registry, x, y) の引数で決定される。
+/// コンストラクタの座標を直接変更しても反映されないので注意。
 /// </summary>
 struct PlayerComponent {
 
@@ -51,14 +56,24 @@ struct PlayerComponent {
 	/// 状態フラグ
 	bool isAtDeadEnd;					// 行き止まりフラグ
 
+	/// ========== Stage2 追加 ==========
+	/// <summary>
+	/// 移動中フラグ
+	/// PlayerMovementSystem が毎フレーム更新する。
+	/// state == MovingOnEdge のとき true、それ以外は false。
+	/// EnemyMovementSystem がこのフラグを参照し、
+	/// プレイヤーが動いているときだけ敵を動かす。
+	/// </summary>
+	bool isMoving;
+
 	/// 弾薬システム
 	int currentBullets;					// 現在の弾数
 	int maxBullets;						// 最大弾数
 	float bulletSpeed;					// 弾の移動速度（ImGuiで調整可能）
 
 	PlayerComponent()
-		: currentNodeX(1), currentNodeY(1),
-		targetNodeX(1), targetNodeY(1),
+		: currentNodeX(0), currentNodeY(0),		// 実際の初期位置は InitializePlayer の引数で設定
+		targetNodeX(0), targetNodeY(0),
 		progressOnEdge(0.0f),
 		state(PlayerState::OnNode),
 		currentDirection(Direction::None),
@@ -70,6 +85,7 @@ struct PlayerComponent {
 		moveSpeed(2.0f),
 		inputHistoryWindow(0.15f),
 		isAtDeadEnd(false),
+		isMoving(false),
 		currentBullets(5),
 		maxBullets(10),
 		bulletSpeed(3.0f)

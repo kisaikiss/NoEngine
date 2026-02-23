@@ -1,6 +1,7 @@
 #include "PlayerWeaponSystem.h"
 #include "../Component/PlayerBulletComponent.h"
 #include "../GameTag.h"
+#include "../Utility/GridUtils.h"
 
 #ifdef USE_IMGUI
 #include "externals/imgui/imgui.h"
@@ -8,8 +9,6 @@
 #include <sstream>
 #endif
 
-
-// キーコード定義
 #define KEY_SPACE VK_SPACE
 
 // ============================================================
@@ -17,7 +16,7 @@
 // ============================================================
 
 void PlayerWeaponSystem::Update(No::Registry& registry, float deltaTime) {
-	static_cast<void>(deltaTime);// 未使用パラメータ警告回避
+	static_cast<void>(deltaTime);
 
 	auto view = registry.View<PlayerComponent, PlayerTag, No::TransformComponent>();
 
@@ -34,33 +33,21 @@ void PlayerWeaponSystem::Update(No::Registry& registry, float deltaTime) {
 }
 
 // ============================================================
-//  弾丸発射
+//  HandleBulletFire
 // ============================================================
 
 void PlayerWeaponSystem::HandleBulletFire(
 	PlayerComponent* player,
 	No::Registry& registry,
-	const No::Vector3 playerPosition  //参照渡しにすると3.	ダングリングリファレンス発生して参照が指すメモリアドレスが無効化され、未初期化メモリを参照してたみたい？
+	const No::Vector3 playerPosition // 値渡し：ダングリングリファレンス防止
 ) {
-	if (!NoEngine::Input::Keyboard::IsTrigger(KEY_SPACE)) {
-		return;
-	}
+	if (!NoEngine::Input::Keyboard::IsTrigger(KEY_SPACE)) return;
+	if (player->currentBullets <= 0)                       return;
+	if (player->actualMovingDirection == Direction::None)  return;
 
-	if (player->currentBullets <= 0) {
-		return;
-	}
-
-	if (player->actualMovingDirection == Direction::None) {
-		return;
-	}
-
-	auto* cell = GetGridCell(registry, player->currentNodeX, player->currentNodeY);
-	if (!cell) {
-		return;
-	}
-	if (!HasConnection(cell, player->actualMovingDirection)) {
-		return;
-	}
+	auto* cell = GridUtils::GetGridCell(registry, player->currentNodeX, player->currentNodeY);
+	if (!cell)                                                                  return;
+	if (!GridUtils::HasConnection(cell, player->actualMovingDirection))         return;
 
 	player->currentBullets--;
 
@@ -94,52 +81,19 @@ void PlayerWeaponSystem::HandleBulletFire(
 	material->psoName = L"Renderer : Default PSO";
 	material->psoId = NoEngine::Render::GetPSOID(material->psoName);
 	material->rootSigId = NoEngine::Render::GetRootSignatureID(material->psoName);
-
-#ifdef USE_IMGUI
-	//// デバッグ出力：弾丸発射情報
-	//std::ostringstream oss;
-	//oss << "[BULLET FIRE] Entity:" << bulletEntity 
-	//	<< " Pos:(" << playerPosition.x << "," << playerPosition.y << "," << playerPosition.z << ")"
-	//	<< " StartNode:(" << bullet->startNodeX << "," << bullet->startNodeY << ")"
-	//	<< " Dir:(" << bullet->direction.x << "," << bullet->direction.y << "," << bullet->direction.z << ")\n";
-	//OutputDebugStringA(oss.str().c_str());
-#endif
 }
+
+// ============================================================
+//  DirectionToVector
+// ============================================================
 
 No::Vector3 PlayerWeaponSystem::DirectionToVector(Direction dir) {
 	switch (dir) {
-	case Direction::Up:    return { 0.0f, 1.0f, 0.0f };
-	case Direction::Right: return { 1.0f, 0.0f, 0.0f };
+	case Direction::Up:    return { 0.0f,  1.0f, 0.0f };
+	case Direction::Right: return { 1.0f,  0.0f, 0.0f };
 	case Direction::Down:  return { 0.0f, -1.0f, 0.0f };
 	case Direction::Left:  return { -1.0f, 0.0f, 0.0f };
-	default:               return { 0.0f, 0.0f, 0.0f };
-	}
-}
-
-GridCellComponent* PlayerWeaponSystem::GetGridCell(
-	No::Registry& registry,
-	int x, int y
-) {
-	auto view = registry.View<GridCellComponent>();
-	for (auto entity : view) {
-		auto* cell = registry.GetComponent<GridCellComponent>(entity);
-		if (cell->gridX == x && cell->gridY == y) {
-			return cell;
-		}
-	}
-	return nullptr;
-}
-
-bool PlayerWeaponSystem::HasConnection(
-	const GridCellComponent* cell,
-	Direction dir
-) {
-	switch (dir) {
-	case Direction::Up:		return cell->hasConnectionUp;
-	case Direction::Right:	return cell->hasConnectionRight;
-	case Direction::Down:	return cell->hasConnectionDown;
-	case Direction::Left:	return cell->hasConnectionLeft;
-	default:				return false;
+	default:               return { 0.0f,  0.0f, 0.0f };
 	}
 }
 

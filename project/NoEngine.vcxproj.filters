@@ -169,6 +169,7 @@
     <ClCompile Include="application\TD3\System\PlayerBulletSystem.cpp" />
     <ClCompile Include="application\TD3\System\AmmoItemSystem.cpp" />
     <ClCompile Include="application\TD3\System\PlayerWeaponSystem.cpp" />
+    <ClCompile Include="application\TD3\Utility\GridUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -390,6 +391,7 @@
     <ClInclude Include="application\TD3\System\AmmoItemSystem.h" />
     <ClInclude Include="application\TD3\GameTag.h" />
     <ClInclude Include="application\TD3\System\PlayerWeaponSystem.h" />
+    <ClInclude Include="application\TD3\Utility\GridUtils.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

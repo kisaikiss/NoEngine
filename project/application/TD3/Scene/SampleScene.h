@@ -12,12 +12,16 @@ private:
 	// グリッド初期化
 	void InitializeGrid(No::Registry& registry);
 
-	// プレイヤー初期化
-	void InitializePlayer(No::Registry& registry);
+	/// <summary>
+	/// プレイヤー初期化
+	/// グリッド座標を引数で受け取り、ワールド座標への変換はPlayerMovementSystem::UpdateTransform に任せる。
+	/// </summary>
+	/// <param name="startX">プレイヤーの初期グリッドX座標</param>
+	/// <param name="startY">プレイヤーの初期グリッドY座標</param>
+	void InitializePlayer(No::Registry& registry, int startX, int startY);
 
 	// ライト初期化
 	void InitializeLight(No::Registry& registry);
-
 
 	void DestroyGameObject();
 };

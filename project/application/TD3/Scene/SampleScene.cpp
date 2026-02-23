@@ -11,6 +11,8 @@
 
 void SampleScene::Setup() {
 	// システム追加
+	// ※ DeathSystem は必ず最後に追加すること。
+	//   他システムが isDead を立てた同フレームにエンティティを削除するため。
 	AddSystem(std::make_unique<GridRenderSystem>());
 	AddSystem(std::make_unique<PlayerMovementSystem>());
 	AddSystem(std::make_unique<PlayerWeaponSystem>());
@@ -22,18 +24,22 @@ void SampleScene::Setup() {
 
 	// エンティティ初期化
 	InitializeGrid(registry);
-	InitializePlayer(registry);
+
+	// プレイヤーの初期位置をここ1か所で設定する。
+	// グリッド座標だけ指定すれば、ワールド座標は PlayerMovementSystem が自動反映する。
+	InitializePlayer(registry, 2, 2);
+
 	InitializeLight(registry);
 
-	// カメラ初期化（最後）
+
+	// カメラ初期化
 	camera_ = std::make_unique<NoEngine::Camera>();
-	cameraTransform_.translate = { 1.0f, 1.0f, -15.0f }; // 申の字マップ中央を見る位置
+	cameraTransform_.translate = { 1.0f, 1.0f, -15.0f }; // 申の字マップ中央を見る適当な位置
 	camera_->SetTransform(cameraTransform_);
 	SetCamera(camera_.get());
 }
 
 void SampleScene::InitializeGrid(No::Registry& registry) {
-	// 申の字マップからグリッドセルを生成
 	for (size_t i = 0; i < MapData::SHIN_MAP_SIZE; ++i) {
 		auto entity = registry.GenerateEntity();
 		auto* cell = registry.AddComponent<GridCellComponent>(entity);
@@ -47,47 +53,41 @@ void SampleScene::InitializeGrid(No::Registry& registry) {
 	}
 }
 
-void SampleScene::InitializePlayer(No::Registry& registry) {
+void SampleScene::InitializePlayer(No::Registry& registry, int startX, int startY) {
 	auto entity = registry.GenerateEntity();
-
-	// PlayerComponent（デフォルト値で初期化済み、中央ノード(1,1)）
 	auto* player = registry.AddComponent<PlayerComponent>(entity);
-	player->currentNodeX = 2;
-	player->currentNodeY = 2;
-	player->targetNodeX = 2;
-	player->targetNodeY = 2;
+
+	// グリッド座標だけ設定する。
+	// ワールド座標（transform.translate）は PlayerMovementSystem::UpdateTransform が
+	// 毎フレーム先頭で自動的に同期するため、ここで手動設定しない
+	player->currentNodeX = startX;
+	player->currentNodeY = startY;
+	player->targetNodeX = startX;
+	player->targetNodeY = startY;
 
 	registry.AddComponent<PlayerTag>(entity);
 
-	// Transform（スケールを0.1に調整）
 	auto* transform = registry.AddComponent<No::TransformComponent>(entity);
-	transform->translate = { 2.0f, 2.0f, 0.0f };
+	// translate は設定しない（PlayerMovementSystem が第1フレームから正しい値を書き込む）
 	transform->scale = { 0.1f, 0.1f, 0.1f };
 
-	// Mesh
 	auto* mesh = registry.AddComponent<No::MeshComponent>(entity);
 	auto* material = registry.AddComponent<No::MaterialComponent>(entity);
 
-	// モデル読み込み
 	NoEngine::Asset::ModelLoader::LoadModel(
 		"TestPlayer",
 		"resources/game/td_3105/Model/TestPlayer/TestPlayer.obj",
 		mesh
 	);
 
-	// マテリアル取得
 	material->materials = NoEngine::Asset::ModelLoader::GetMaterial("TestPlayer");
-
-	// PSO設定
 	material->psoName = L"Renderer : Default PSO";
 	material->psoId = NoEngine::Render::GetPSOID(material->psoName);
 	material->rootSigId = NoEngine::Render::GetRootSignatureID(material->psoName);
 }
 
 void SampleScene::InitializeLight(No::Registry& registry) {
-	// DirectionalLight生成
 	auto lightEntity = registry.GenerateEntity();
-
 	auto* light = registry.AddComponent<NoEngine::Component::DirectionalLightComponent>(lightEntity);
 	light->color = { 1.0f, 1.0f, 1.0f, 1.0f };
 	light->direction = { 0.0f, -1.0f, 0.0f };
@@ -95,18 +95,15 @@ void SampleScene::InitializeLight(No::Registry& registry) {
 }
 
 void SampleScene::NotSystemUpdate() {
-
 #ifdef USE_IMGUI
 	ImGui::Begin("camera");
 	ImGui::DragFloat3("pos", &cameraTransform_.translate.x, 0.1f);
 	ImGui::DragFloat3("rot", &cameraTransform_.rotation.x, 0.1f);
 	ImGui::End();
 	camera_->SetTransform(cameraTransform_);
-#endif // USE_IMGUI
+#endif
 	camera_->Update();
 
-
-	//最後に消す
 	DestroyGameObject();
 }
 
