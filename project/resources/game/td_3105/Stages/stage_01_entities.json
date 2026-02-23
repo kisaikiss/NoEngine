@@ -1,0 +1,7 @@
+{
+  "entities": [
+    { "type": "player", "x": 2, "y": 2 },
+    { "type": "enemy",  "x": 0, "y": 0, "enemy_type": "normal" },
+    { "type": "enemy",  "x": 4, "y": 4, "enemy_type": "normal" }
+  ]
+}

@@ -13,7 +13,7 @@
 #include "../System/EnemyMovementSystem.h"
 #include "../System/CollisionSystem.h"
 #include "../System/EnemyCollisionSystem.h"
-#include "../MapData/ShinMapData.h"
+#include "../MapData/MapLoader.h"
 #include <vector>
 
 void SampleScene::Setup() {
@@ -22,30 +22,36 @@ void SampleScene::Setup() {
 	// 2. CollisionSystem（全衝突判定）
 	// 3. 衝突結果を使うSystem（ダメージ処理など）
 	AddSystem(std::make_unique<GridRenderSystem>());
-	AddSystem(std::make_unique<PlayerMovementSystem>());    // プレイヤーのTransform更新
-	AddSystem(std::make_unique<EnemyMovementSystem>());     // 敵のTransform更新（Player.isMoving確定後）
-	AddSystem(std::make_unique<PlayerBulletSystem>());      // 弾のTransform更新（移動のみ）
-	AddSystem(std::make_unique<CollisionSystem>());         // 全衝突判定を実行
-	AddSystem(std::make_unique<EnemyCollisionSystem>());    // 衝突結果を参照してダメージ処理
-	AddSystem(std::make_unique<PlayerWeaponSystem>());      // 弾生成
-	AddSystem(std::make_unique<AmmoItemSystem>());          // アイテム回収
+	AddSystem(std::make_unique<PlayerMovementSystem>());	// プレイヤーのTransform更新
+	AddSystem(std::make_unique<EnemyMovementSystem>());		// 敵のTransform更新（Player.isMoving確定後）
+	AddSystem(std::make_unique<PlayerBulletSystem>());		// 弾のTransform更新（移動のみ）
+	AddSystem(std::make_unique<CollisionSystem>());			// 全衝突判定を実行
+	AddSystem(std::make_unique<EnemyCollisionSystem>());	// 衝突結果を参照してダメージ処理
+	AddSystem(std::make_unique<PlayerWeaponSystem>());		// 弾生成
+	AddSystem(std::make_unique<AmmoItemSystem>());			// アイテム回収
 
-	// レジストリ取得
 	No::Registry& registry = *GetRegistry();
 
-	// エンティティ初期化
-	InitializeGrid(registry);
+	// ========== JSON からステージデータを読み込む ==========
+	// ShinMapData.h のハードコードを廃止し、MapLoader に一元化した。
+	// ステージを変えたいときはここのパスを書き換えるだけでよい（Stage6 でさらに動的化予定）。
+	MapData::StageData stageData = MapLoader::LoadStage("resources/game/td_3105/Stages/stage_01.json");
 
-	// プレイヤーの初期位置をここ1か所で設定する。
-	// グリッド座標だけ指定すれば、ワールド座標は PlayerMovementSystem が自動反映する。
-	InitializePlayer(registry, 2, 2);
+	// ---- グリッド初期化（接続マップを渡す）----
+	InitializeGrid(registry, stageData.connectionMap);
 
-	// 敵を2体生成（座標はここで一元管理）
-	InitializeEnemy(registry, 0, 0);
-	InitializeEnemy(registry, 4, 4);
+	// ---- エンティティ初期化（JSON の entities 配列順に生成）----
+	// type が "player" なら InitializePlayer、"enemy" なら InitializeEnemy を呼ぶ。
+	// 将来 enemy_type ごとに種別を変えたい場合はここを拡張する。
+	for (const auto& entity : stageData.entityMap.entities) {
+		if (entity.type == "player") {
+			InitializePlayer(registry, entity.x, entity.y);
+		} else if (entity.type == "enemy") {
+			InitializeEnemy(registry, entity.x, entity.y);
+		}
+	}
 
 	InitializeLight(registry);
-
 
 	// カメラ初期化
 	camera_ = std::make_unique<NoEngine::Camera>();
@@ -54,19 +60,27 @@ void SampleScene::Setup() {
 	SetCamera(camera_.get());
 }
 
-void SampleScene::InitializeGrid(No::Registry& registry) {
-	for (size_t i = 0; i < MapData::SHIN_MAP_SIZE; ++i) {
-		auto entity = registry.GenerateEntity();
+// ============================================================
+//  InitializeGrid
+// // ============================================================
+
+void SampleScene::InitializeGrid(No::Registry& registry, const MapData::ConnectionMapData& mapData) {
+	for (const auto& nodeData : mapData.nodes) {
+		auto  entity = registry.GenerateEntity();
 		auto* cell = registry.AddComponent<GridCellComponent>(entity);
 
-		cell->gridX = MapData::SHIN_MAP[i].x;
-		cell->gridY = MapData::SHIN_MAP[i].y;
-		cell->hasConnectionUp = MapData::SHIN_MAP[i].up;
-		cell->hasConnectionRight = MapData::SHIN_MAP[i].right;
-		cell->hasConnectionDown = MapData::SHIN_MAP[i].down;
-		cell->hasConnectionLeft = MapData::SHIN_MAP[i].left;
+		cell->gridX = nodeData.x;
+		cell->gridY = nodeData.y;
+		cell->hasConnectionUp = nodeData.up;
+		cell->hasConnectionRight = nodeData.right;
+		cell->hasConnectionDown = nodeData.down;
+		cell->hasConnectionLeft = nodeData.left;
 	}
 }
+
+// ============================================================
+//  InitializePlayer
+// ============================================================
 
 void SampleScene::InitializePlayer(No::Registry& registry, int startX, int startY) {
 	auto entity = registry.GenerateEntity();
@@ -81,7 +95,7 @@ void SampleScene::InitializePlayer(No::Registry& registry, int startX, int start
 	player->targetNodeY = startY;
 
 	registry.AddComponent<PlayerTag>(entity);
-	registry.AddComponent<DeathFlag>(entity); // 自機も死亡フラグが必要
+	registry.AddComponent<DeathFlag>(entity);
 
 	// HP 設定（最大HP=5）
 	auto* health = registry.AddComponent<HealthComponent>(entity);
@@ -90,12 +104,11 @@ void SampleScene::InitializePlayer(No::Registry& registry, int startX, int start
 
 	// SphereCollider 追加
 	auto* collider = registry.AddComponent<SphereColliderComponent>(entity);
-	collider->radius = 0.5f;               // モデル空間での半径（直径1の立方体の内接球）
-	collider->colliderType = kPlayer;      // プレイヤータイプ
-	collider->collideMask = kEnemy;        // 敵とのみ衝突
+	collider->radius = 0.5f;					// モデル空間での半径（直径1の立方体の内接球）
+	collider->colliderType = kPlayer;			// プレイヤータイプ
+	collider->collideMask = kEnemy;				// 敵とのみ衝突
 
 	auto* transform = registry.AddComponent<No::TransformComponent>(entity);
-	// translate は設定しない（PlayerMovementSystem::UpdateTransform が第1フレームから同期）
 	transform->scale = { 0.2f, 0.2f, 0.2f };
 
 	auto* mesh = registry.AddComponent<No::MeshComponent>(entity);
@@ -105,12 +118,15 @@ void SampleScene::InitializePlayer(No::Registry& registry, int startX, int start
 		"resources/game/td_3105/Model/TestPlayer/TestPlayer.obj",
 		mesh
 	);
-
 	material->materials = NoEngine::Asset::ModelLoader::GetMaterial("TestPlayer");
 	material->psoName = L"Renderer : Default PSO";
 	material->psoId = NoEngine::Render::GetPSOID(material->psoName);
 	material->rootSigId = NoEngine::Render::GetRootSignatureID(material->psoName);
 }
+
+// ============================================================
+//  InitializeEnemy
+// ============================================================
 
 void SampleScene::InitializeEnemy(No::Registry& registry, int startX, int startY) {
 	auto entity = registry.GenerateEntity();
@@ -128,24 +144,30 @@ void SampleScene::InitializeEnemy(No::Registry& registry, int startX, int startY
 
 	// SphereCollider 追加
 	auto* collider = registry.AddComponent<SphereColliderComponent>(entity);
-	collider->radius = 0.5f;                        // モデル空間での半径（直径1の立方体の内接球）
-	collider->colliderType = kEnemy;                // 敵タイプ
-	collider->collideMask = kPlayer | kPlayerBullet; // プレイヤーと弾に衝突
+	collider->radius = 0.5f;							// モデル空間での半径（直径1の立方体の内接球）
+	collider->colliderType = kEnemy;					// 敵タイプ
+	collider->collideMask = kPlayer | kPlayerBullet;	// プレイヤーと弾に衝突
 
 	auto* transform = registry.AddComponent<No::TransformComponent>(entity);
-	// translate は設定しない（EnemyMovementSystem::UpdateTransform が同期）
 	transform->scale = { 0.2f, 0.2f, 0.2f };
 
 	auto* mesh = registry.AddComponent<No::MeshComponent>(entity);
 	auto* material = registry.AddComponent<No::MaterialComponent>(entity);
-	// モデルはプレイヤーと同じ obj を流用（将来 Enemy 専用モデルに差し替え可能）
-	NoEngine::Asset::ModelLoader::LoadModel("Enemy", "resources/game/td_3105/Model/TestPlayer/TestPlayer.obj", mesh);
+	NoEngine::Asset::ModelLoader::LoadModel(
+		"Enemy",
+		"resources/game/td_3105/Model/TestPlayer/TestPlayer.obj",
+		mesh
+	);
 	material->materials = NoEngine::Asset::ModelLoader::GetMaterial("Enemy");
 	material->color = { 1.0f, 0.2f, 0.2f, 1.0f }; // 赤色で敵と自機を区別
 	material->psoName = L"Renderer : Default PSO";
 	material->psoId = NoEngine::Render::GetPSOID(material->psoName);
 	material->rootSigId = NoEngine::Render::GetRootSignatureID(material->psoName);
 }
+
+// ============================================================
+//  InitializeLight
+// ============================================================
 
 void SampleScene::InitializeLight(No::Registry& registry) {
 	auto lightEntity = registry.GenerateEntity();
@@ -154,6 +176,10 @@ void SampleScene::InitializeLight(No::Registry& registry) {
 	light->direction = { 0.0f, -1.0f, 0.0f };
 	light->intensity = 1.0f;
 }
+
+// ============================================================
+//  NotSystemUpdate
+// ============================================================
 
 void SampleScene::NotSystemUpdate() {
 #ifdef USE_IMGUI
@@ -166,6 +192,10 @@ void SampleScene::NotSystemUpdate() {
 	camera_->Update();
 	DestroyGameObject();
 }
+
+// ============================================================
+//  DestroyGameObject
+// ============================================================
 
 void SampleScene::DestroyGameObject() {
 	No::Registry& registry = *GetRegistry();
