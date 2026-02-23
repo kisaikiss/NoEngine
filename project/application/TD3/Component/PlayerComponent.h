@@ -1,6 +1,4 @@
 #pragma once
-#include <set>
-#include <utility>
 
 // プレイヤーの状態
 enum class PlayerState {
@@ -41,12 +39,12 @@ struct PlayerComponent {
 	int recentInputCount;				// 記録されている入力数
 	float inputHistoryTime;				// 入力履歴の経過時間
 
-	/// 終点近傍の先行入力=
+	/// 終点近傍の先行入力
 	// progress が NEAR_END_THRESHOLD 以上のとき、ターゲットノードで有効な方向のキーを押すと記録される。
 	// OnReachNode で最優先に使用し、消費後は None に戻す。
 	Direction bufferedDirection;
 
-	/// パラメータ 
+	/// パラメータ
 	float moveSpeed;					// 移動速度（グリッド単位/秒）
 	float inputHistoryWindow;			// 入力履歴の保持時間（秒）
 
@@ -56,7 +54,7 @@ struct PlayerComponent {
 	/// 弾薬システム
 	int currentBullets;					// 現在の弾数
 	int maxBullets;						// 最大弾数
-	std::set<std::pair<int, int>> visitedIntersections;	// 通過済み交差点（gridX, gridY）
+	float bulletSpeed;					// 弾の移動速度（ImGuiで調整可能）
 
 	PlayerComponent()
 		: currentNodeX(1), currentNodeY(1),
@@ -73,7 +71,8 @@ struct PlayerComponent {
 		inputHistoryWindow(0.15f),
 		isAtDeadEnd(false),
 		currentBullets(5),
-		maxBullets(10)
+		maxBullets(10),
+		bulletSpeed(5.0f)
 	{
 		for (int i = 0; i < 4; ++i) {
 			recentInputs[i] = Direction::None;
