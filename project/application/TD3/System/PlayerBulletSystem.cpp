@@ -33,7 +33,7 @@ void PlayerBulletSystem::Update(No::Registry& registry, float deltaTime) {
 		transform->translate = transform->translate + movement;
 		bullet->travelDistance += bullet->speed * deltaTime;
 
-		NoEngine::Primitive::DrawSphere(transform->translate, 1.0f, { 0.0f, 0.0f, 0.0f, 1.0f });
+		NoEngine::Primitive::DrawSphere(transform->translate, transform->scale.x, { 0.0f, 0.0f, 0.0f, 1.0f });
 
 		// ---- 安全網：最大距離で消滅 ----
 		if (bullet->travelDistance >= bullet->maxDistance) {
