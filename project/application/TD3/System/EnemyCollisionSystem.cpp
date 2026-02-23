@@ -2,6 +2,7 @@
 #include "../GameTag.h"
 #include "../Component/PlayerComponent.h"
 #include "../Component/EnemyComponent.h"
+#include "../Component/ColliderComponent.h"
 
 #ifdef USE_IMGUI
 #include "externals/imgui/imgui.h"
@@ -13,11 +14,11 @@
 
 void EnemyCollisionSystem::Update(No::Registry& registry, float deltaTime) {
 	// プレイヤーを取得
-	auto playerView = registry.View<PlayerComponent, PlayerTag, No::TransformComponent, HealthComponent, DeathFlag>();
+	auto playerView = registry.View<PlayerComponent, PlayerTag, SphereColliderComponent, HealthComponent, DeathFlag>();
 	if (playerView.Empty()) return;
 
 	PlayerComponent* player = nullptr;
-	No::TransformComponent* playerTransform = nullptr;
+	SphereColliderComponent* playerCollider = nullptr;
 	HealthComponent* playerHealth = nullptr;
 	DeathFlag* playerDeath = nullptr;
 
@@ -25,13 +26,12 @@ void EnemyCollisionSystem::Update(No::Registry& registry, float deltaTime) {
 		// Empty() チェック済みのため begin() は必ず有効
 		auto it = playerView.begin();
 		player = registry.GetComponent<PlayerComponent>(*it);
-		playerTransform = registry.GetComponent<No::TransformComponent>(*it);
+		playerCollider = registry.GetComponent<SphereColliderComponent>(*it);
 		playerHealth = registry.GetComponent<HealthComponent>(*it);
 		playerDeath = registry.GetComponent<DeathFlag>(*it);
 	}
 
-
-	if (!player || !playerTransform || !playerHealth || !playerDeath) return;
+	if (!player || !playerCollider || !playerHealth || !playerDeath) return;
 	// すでに死亡済みのプレイヤーには何もしない
 	if (playerDeath->isDead) return;
 
@@ -46,34 +46,26 @@ void EnemyCollisionSystem::Update(No::Registry& registry, float deltaTime) {
 	DebugUI(playerHealth);
 #endif
 
-	// 各敵とプレイヤーのワールド座標で近傍判定
-	auto enemyView = registry.View<EnemyComponent, EnemyTag, No::TransformComponent, DeathFlag>();
-	for (auto entity : enemyView) {
-		auto* enemy = registry.GetComponent<EnemyComponent>(entity);
-		auto* enemyTransform = registry.GetComponent<No::TransformComponent>(entity);
-		auto* enemyDeath = registry.GetComponent<DeathFlag>(entity);
+	// CollisionSystemが設定した衝突フラグをチェック
+	if (playerCollider->isCollied && playerCollider->colliedWith == kEnemy) {
+		auto enemyEntity = playerCollider->colliedEntity;
 		
-		// 死亡予定の敵はスキップ
-		if (enemyDeath->isDead) continue;
-		(void)enemy; // 衝突判定はワールド座標ベースのため EnemyComponent 自体は参照しない
+		// 敵が有効か確認
+		if (registry.Has<DeathFlag>(enemyEntity)) {
+			auto* enemyDeath = registry.GetComponent<DeathFlag>(enemyEntity);
+			
+			if (!enemyDeath->isDead) {
+				// 敵を死亡させる
+				enemyDeath->isDead = true;
 
-		float dx = playerTransform->translate.x - enemyTransform->translate.x;
-		float dy = playerTransform->translate.y - enemyTransform->translate.y;
-		float distSq = dx * dx + dy * dy;
-
-		if (distSq < COLLISION_RADIUS_SQ) {
-			// 敵を死亡させる
-			enemyDeath->isDead = true;
-
-			// プレイヤーにダメージを与える
-			bool died = playerHealth->TakeDamage(1);
-			if (died && !playerHealth->isInvincible) {
-				playerDeath->isDead = true;
+				// プレイヤーにダメージを与える
+				bool died = playerHealth->TakeDamage(1);
+				if (died && !playerHealth->isInvincible) {
+					playerDeath->isDead = true;
+				}
 			}
 		}
 	}
-
-
 }
 
 #ifdef USE_IMGUI

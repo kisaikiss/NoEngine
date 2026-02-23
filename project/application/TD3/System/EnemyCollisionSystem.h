@@ -4,10 +4,10 @@
 
 /// <summary>
 /// 敵衝突システム
-/// 敵 ↔ プレイヤーのワールド座標近傍判定を行い、
-/// 接触時に敵を死亡させ、プレイヤーに1ダメージを与える。
+/// プレイヤーと敵の衝突判定を行い、接触時に敵を死亡させ、プレイヤーに1ダメージを与える。
 ///
-/// 弾 → 敵 の衝突は PlayerBulletSystem が担当する。
+/// 衝突判定自体はCollisionSystemが担当し、
+/// このSystemは結果（isColliedフラグ）を参照してダメージ処理を行う。
 /// </summary>
 class EnemyCollisionSystem : public No::ISystem {
 public:
@@ -15,11 +15,8 @@ public:
 	/// 更新処理
 	/// </summary>
 	void Update(No::Registry& registry, float deltaTime) override;
-private:
-	// 衝突判定距離（二乗で管理してsqrt省略）
-	static constexpr float COLLISION_RADIUS = 0.4f;
-	static constexpr float COLLISION_RADIUS_SQ = COLLISION_RADIUS * COLLISION_RADIUS;
 
+private:
 #ifdef USE_IMGUI
 	/// <summary>
 	/// プレイヤーの HP 表示・無敵フラグ操作ウィンドウ

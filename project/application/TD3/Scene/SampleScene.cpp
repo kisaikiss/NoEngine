@@ -3,6 +3,7 @@
 #include "../Component/PlayerComponent.h"
 #include "../Component/EnemyComponent.h"
 #include "../Component/HealthComponent.h"
+#include "../Component/ColliderComponent.h"
 #include "../GameTag.h"
 #include "../System/GridRenderSystem.h"
 #include "../System/PlayerMovementSystem.h"
@@ -10,21 +11,24 @@
 #include "../System/PlayerBulletSystem.h"
 #include "../System/AmmoItemSystem.h"
 #include "../System/EnemyMovementSystem.h"
+#include "../System/CollisionSystem.h"
 #include "../System/EnemyCollisionSystem.h"
 #include "../MapData/ShinMapData.h"
 #include <vector>
 
 void SampleScene::Setup() {
 	// システム追加順序は重要。
-	// PlayerMovement が isMoving を更新した後に EnemyMovement が読む必要がある。
-	// DestroyGameObject（相当）は全衝突判定の後。
+	// 1. Transform更新（移動処理）
+	// 2. CollisionSystem（全衝突判定）
+	// 3. 衝突結果を使うSystem（ダメージ処理など）
 	AddSystem(std::make_unique<GridRenderSystem>());
-	AddSystem(std::make_unique<PlayerMovementSystem>());
-	AddSystem(std::make_unique<PlayerWeaponSystem>());
-	AddSystem(std::make_unique<PlayerBulletSystem>());
-	AddSystem(std::make_unique<AmmoItemSystem>());
-	AddSystem(std::make_unique<EnemyMovementSystem>());    // Player の isMoving 確定後
-	AddSystem(std::make_unique<EnemyCollisionSystem>());   // 移動後に衝突判定
+	AddSystem(std::make_unique<PlayerMovementSystem>());    // プレイヤーのTransform更新
+	AddSystem(std::make_unique<EnemyMovementSystem>());     // 敵のTransform更新（Player.isMoving確定後）
+	AddSystem(std::make_unique<PlayerBulletSystem>());      // 弾のTransform更新（移動のみ）
+	AddSystem(std::make_unique<CollisionSystem>());         // 全衝突判定を実行
+	AddSystem(std::make_unique<EnemyCollisionSystem>());    // 衝突結果を参照してダメージ処理
+	AddSystem(std::make_unique<PlayerWeaponSystem>());      // 弾生成
+	AddSystem(std::make_unique<AmmoItemSystem>());          // アイテム回収
 
 	// レジストリ取得
 	No::Registry& registry = *GetRegistry();
@@ -84,9 +88,15 @@ void SampleScene::InitializePlayer(No::Registry& registry, int startX, int start
 	health->currentHp = 5;
 	health->maxHp = 5;
 
+	// SphereCollider 追加
+	auto* collider = registry.AddComponent<SphereColliderComponent>(entity);
+	collider->radius = 0.5f;               // モデル空間での半径（直径1の立方体の内接球）
+	collider->colliderType = kPlayer;      // プレイヤータイプ
+	collider->collideMask = kEnemy;        // 敵とのみ衝突
+
 	auto* transform = registry.AddComponent<No::TransformComponent>(entity);
 	// translate は設定しない（PlayerMovementSystem::UpdateTransform が第1フレームから同期）
-	transform->scale = { 0.1f, 0.1f, 0.1f };
+	transform->scale = { 0.2f, 0.2f, 0.2f };
 
 	auto* mesh = registry.AddComponent<No::MeshComponent>(entity);
 	auto* material = registry.AddComponent<No::MaterialComponent>(entity);
@@ -102,9 +112,6 @@ void SampleScene::InitializePlayer(No::Registry& registry, int startX, int start
 	material->rootSigId = NoEngine::Render::GetRootSignatureID(material->psoName);
 }
 
-
-
-
 void SampleScene::InitializeEnemy(No::Registry& registry, int startX, int startY) {
 	auto entity = registry.GenerateEntity();
 	auto* enemy = registry.AddComponent<EnemyComponent>(entity);
@@ -119,9 +126,15 @@ void SampleScene::InitializeEnemy(No::Registry& registry, int startX, int startY
 	// HP 設定（一撃死 = デフォルトの maxHp=1 のまま）
 	registry.AddComponent<HealthComponent>(entity);
 
+	// SphereCollider 追加
+	auto* collider = registry.AddComponent<SphereColliderComponent>(entity);
+	collider->radius = 0.5f;                        // モデル空間での半径（直径1の立方体の内接球）
+	collider->colliderType = kEnemy;                // 敵タイプ
+	collider->collideMask = kPlayer | kPlayerBullet; // プレイヤーと弾に衝突
+
 	auto* transform = registry.AddComponent<No::TransformComponent>(entity);
 	// translate は設定しない（EnemyMovementSystem::UpdateTransform が同期）
-	transform->scale = { 0.1f, 0.1f, 0.1f };
+	transform->scale = { 0.2f, 0.2f, 0.2f };
 
 	auto* mesh = registry.AddComponent<No::MeshComponent>(entity);
 	auto* material = registry.AddComponent<No::MaterialComponent>(entity);

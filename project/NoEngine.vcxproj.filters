@@ -157,7 +157,6 @@
     <ClCompile Include="application\TD2_3\System\Sprite\ScoreSpriteControlSystem.cpp" />
     <ClCompile Include="application\TD2_3\System\Tutorial\TutorialControlSystem.cpp" />
     <ClCompile Include="application\TD2_3\System\BackGroundEffectSystem.cpp" />
-    <ClCompile Include="application\TD2_3\System\CollisionSystem.cpp" />
     <ClCompile Include="application\TD2_3\System\ScoreRankingSystem.cpp" />
     <ClCompile Include="application\TD2_3\System\StatusSpriteControlSystem.cpp" />
     <ClCompile Include="application\TD2_3\System\TitleSystem.cpp" />
@@ -172,6 +171,7 @@
     <ClCompile Include="application\TD3\Utility\GridUtils.cpp" />
     <ClCompile Include="application\TD3\System\EnemyMovementSystem.cpp" />
     <ClCompile Include="application\TD3\System\EnemyCollisionSystem.cpp" />
+    <ClCompile Include="application\TD3\System\CollisionSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -319,7 +319,6 @@
     <ClInclude Include="application\TD2_3\Component\BallStateComponent.h" />
     <ClInclude Include="application\TD2_3\Component\BallTrailComponent.h" />
     <ClInclude Include="application\TD2_3\Component\BatBossComponent.h" />
-    <ClInclude Include="application\TD2_3\Component\ColliderComponent.h" />
     <ClInclude Include="application\TD2_3\Component\DynamicSplinePath.h" />
     <ClInclude Include="application\TD2_3\Component\EffectComponent.h" />
     <ClInclude Include="application\TD2_3\Component\NormalEnemyComponent.h" />
@@ -374,7 +373,6 @@
     <ClInclude Include="application\TD2_3\System\Sprite\ScoreSpriteControlSystem.h" />
     <ClInclude Include="application\TD2_3\System\Tutorial\TutorialControlSystem.h" />
     <ClInclude Include="application\TD2_3\System\BackGroundEffectSystem.h" />
-    <ClInclude Include="application\TD2_3\System\CollisionSystem.h" />
     <ClInclude Include="application\TD2_3\System\ScoreRankingSystem.h" />
     <ClInclude Include="application\TD2_3\System\StatusSpriteControlSystem.h" />
     <ClInclude Include="application\TD2_3\System\TitleSystem.h" />
@@ -398,6 +396,8 @@
     <ClInclude Include="application\TD3\Component\HealthComponent.h" />
     <ClInclude Include="application\TD3\System\EnemyMovementSystem.h" />
     <ClInclude Include="application\TD3\System\EnemyCollisionSystem.h" />
+    <ClInclude Include="application\TD3\Component\ColliderComponent.h" />
+    <ClInclude Include="application\TD3\System\CollisionSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

@@ -1,5 +1,6 @@
 #include "PlayerWeaponSystem.h"
 #include "../Component/PlayerBulletComponent.h"
+#include "../Component/ColliderComponent.h"
 #include "../GameTag.h"
 #include "../Utility/GridUtils.h"
 
@@ -62,6 +63,12 @@ void PlayerWeaponSystem::HandleBulletFire(
 	bullet->startNodeY = player->currentNodeY;
 	bullet->speed = player->bulletSpeed;
 	bullet->maxDistance = 20.0f;
+
+	// SphereCollider 追加
+	auto* collider = registry.AddComponent<SphereColliderComponent>(bulletEntity);
+	collider->radius = 0.5f;                // モデル空間での半径（直径1の球体の半径）
+	collider->colliderType = kPlayerBullet; // プレイヤーの弾タイプ
+	collider->collideMask = kEnemy;         // 敵とのみ衝突
 
 	auto* transform = registry.AddComponent<No::TransformComponent>(bulletEntity);
 	transform->translate = playerPosition;

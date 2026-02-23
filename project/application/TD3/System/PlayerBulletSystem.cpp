@@ -4,6 +4,7 @@
 #include "../Utility/GridUtils.h"
 #include "../Component/EnemyComponent.h"
 #include "../Component/HealthComponent.h"
+#include "../Component/ColliderComponent.h"
 #include "engine/Functions/Renderer/Primitive.h"
 
 
@@ -18,18 +19,18 @@ static constexpr float NODE_DETECT_THRESHOLD = 0.15f;
 // ============================================================
 
 void PlayerBulletSystem::Update(No::Registry& registry, float deltaTime) {
-	auto view = registry.View<PlayerBulletComponent, PlayerBulletTag, DeathFlag, No::TransformComponent>();
+	auto view = registry.View<PlayerBulletComponent, PlayerBulletTag, DeathFlag, No::TransformComponent, SphereColliderComponent>();
 
 	for (auto entity : view) {
 		auto* bullet = registry.GetComponent<PlayerBulletComponent>(entity);
 		auto* transform = registry.GetComponent<No::TransformComponent>(entity);
 		auto* deathFlag = registry.GetComponent<DeathFlag>(entity);
+		auto* collider = registry.GetComponent<SphereColliderComponent>(entity);
 
 		// ---- 移動 ----
 		No::Vector3 movement = bullet->direction * bullet->speed * deltaTime;
 		transform->translate = transform->translate + movement;
 		bullet->travelDistance += bullet->speed * deltaTime;
-		NoEngine::Primitive::DrawSphere(transform->translate, transform->scale.x, { 0.0f, 0.0f, 0.0f, 1.0f });
 
 		// ---- 安全網：最大距離で消滅 ----
 		if (bullet->travelDistance >= bullet->maxDistance) {
@@ -37,7 +38,28 @@ void PlayerBulletSystem::Update(No::Registry& registry, float deltaTime) {
 			continue;
 		}
 
-		// ---- グリッドベース消滅判定 ----
+		// ---- 敵との衝突判定（CollisionSystemの結果を参照） ----
+		if (collider->isCollied && collider->colliedWith == kEnemy) {
+			auto enemyEntity = collider->colliedEntity;
+			
+			// 敵が有効か確認
+			if (registry.Has<HealthComponent>(enemyEntity) && registry.Has<DeathFlag>(enemyEntity)) {
+				auto* enemyHealth = registry.GetComponent<HealthComponent>(enemyEntity);
+				auto* enemyDeath = registry.GetComponent<DeathFlag>(enemyEntity);
+				
+				if (!enemyDeath->isDead) {
+					bool died = enemyHealth->TakeDamage(1);
+					if (died) {
+						enemyDeath->isDead = true;
+					}
+					// 弾を消滅
+					deathFlag->isDead = true;
+					continue;
+				}
+			}
+		}
+
+		// ---- グリッドベース壁判定 ----
 		// 始点スキップは座標ベースで行う（距離ベースにするとエッジ途中発射時にバグが起きる）
 
 		int nearestX = static_cast<int>(std::round(transform->translate.x));
@@ -60,51 +82,11 @@ void PlayerBulletSystem::Update(No::Registry& registry, float deltaTime) {
 			continue;
 		}
 
-		// 敵ヒット判定（壁チェックより先に実行）
-		// 弾がノードに到達したとき、まず敵がいるかチェックする。
-		// 敵にヒットした場合は壁判定をスキップして即座に弾を消滅させる。
-		if (CheckEnemyHitAtNode(registry, nearestX, nearestY)) {
-			deathFlag->isDead = true;
-			continue;
-		}
-
 		// 前方接続チェック：接続がない or マップ外なら消滅
 		if (ShouldDestroyAtNode(registry, nearestX, nearestY, bullet->direction)) {
 			deathFlag->isDead = true;
 		}
 	}
-}
-
-// ============================================================
-//  CheckEnemyHitAtNode
-// ============================================================
-
-bool PlayerBulletSystem::CheckEnemyHitAtNode(
-	No::Registry& registry,
-	int nodeX,
-	int nodeY
-) {
-	auto view = registry.View<EnemyComponent, EnemyTag, DeathFlag, HealthComponent>();
-	if (view.Empty()) return false;
-
-	for (auto entity : view) {
-		auto* enemy = registry.GetComponent<EnemyComponent>(entity);
-		auto* enemyDeath = registry.GetComponent<DeathFlag>(entity);
-		auto* health = registry.GetComponent<HealthComponent>(entity);
-
-		// すでに死亡予定の敵はスキップ
-		if (enemyDeath->isDead) continue;
-
-		// 敵の currentNode が弾のノード座標と一致するかチェック
-		if (enemy->currentNodeX == nodeX && enemy->currentNodeY == nodeY) {
-			bool died = health->TakeDamage(1);
-			if (died) {
-				enemyDeath->isDead = true;
-			}
-			return true; // ヒットしたら弾を消滅させる
-		}
-	}
-	return false;
 }
 
 // ============================================================
