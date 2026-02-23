@@ -2,7 +2,9 @@
 #include "../GameTag.h"
 #include "../Utility/GridUtils.h"
 #include <cmath>
-#include <cstdlib>
+#include <queue>
+#include <set>
+#include <utility>
 
 #ifdef USE_IMGUI
 #include "externals/imgui/imgui.h"
@@ -159,10 +161,11 @@ void EnemyMovementSystem::StartMovement(
 }
 
 // ============================================================
-//  ChooseDirection（Stage3: グリーディーヒューリスティック）
+//  ChooseDirection（BFS 最短経路探索）
 //
-//  Stage4 でこの関数を BFS 最短経路探索に差し替える。
-//  BFS に切り替えても呼び出し元（OnReachNode / HandleOnNode）は変更不要。
+//  敵の currentNode からプレイヤーの currentNode への最短経路を BFS で探索し、
+//  「最初の1歩の方向」だけを返す。
+//  ノード到達時に毎回呼ばれるため、1ステップ先だけ決めれば十分。
 // ============================================================
 
 Direction EnemyMovementSystem::ChooseDirection(
@@ -170,49 +173,90 @@ Direction EnemyMovementSystem::ChooseDirection(
 	int playerX, int playerY,
 	No::Registry& registry
 ) {
-	int dx = playerX - enemy->currentNodeX;
-	int dy = playerY - enemy->currentNodeY;
-
-	// プレイヤー方向への優先リストを構築
-	// マンハッタン距離が大きい軸を先に試みる
-	Direction pref[4];
-	int count = 0;
-
-	if (std::abs(dx) >= std::abs(dy)) {
-		// X 軸距離が大きい（or 等しい）場合、X 方向を先に試す
-		if (dx > 0 && count < 4) pref[count++] = Direction::Right;
-		else if (dx < 0 && count < 4) pref[count++] = Direction::Left;
-		if (dy > 0 && count < 4) pref[count++] = Direction::Up;
-		else if (dy < 0 && count < 4) pref[count++] = Direction::Down;
-	} else {
-		// Y 軸距離が大きい場合、Y 方向を先に試す
-		if (dy > 0 && count < 4) pref[count++] = Direction::Up;
-		else if (dy < 0 && count < 4) pref[count++] = Direction::Down;
-		if (dx > 0 && count < 4) pref[count++] = Direction::Right;
-		else if (dx < 0 && count < 4) pref[count++] = Direction::Left;
+	// ========== すでにプレイヤーと同じノードにいる場合 ==========
+	if (enemy->currentNodeX == playerX && enemy->currentNodeY == playerY) {
+		return Direction::None;
 	}
 
-	// プレイヤーと同一ノードなど残り方向を補完する
-	Direction all[4] = { Direction::Up, Direction::Right, Direction::Down, Direction::Left };
-	for (int i = 0; i < 4; i++) {
-		bool found = false;
-		for (int j = 0; j < count; j++) {
-			if (pref[j] == all[i]) { found = true; break; }
-		}
-		if (!found && count < 4) pref[count++] = all[i];
-	}
+	// ========== BFS の準備 ==========
 
-	// 優先順に GridUtils::CanMoveInDirection で移動可否を確認
-	// 後退禁止 + 行き止まり例外（A案）が適用される
-	for (int i = 0; i < count; i++) {
-		if (GridUtils::CanMoveInDirection(
+	using Coord = std::pair<int, int>;
+
+	// BFS キューの要素
+	// x, y : 現在チェックしているノードの座標
+	// firstDir : スタートからの「最初の1歩の方向」（経路逆算の代わりに伝播させる）
+	struct BFSNode {
+		int x;
+		int y;
+		Direction firstDir;
+	};
+
+	std::queue<BFSNode> que;
+	std::set<Coord>     visited;
+
+	// スタートノードを訪問済みにする
+	visited.insert({ enemy->currentNodeX, enemy->currentNodeY });
+
+	// ========== 最初の1歩：後退禁止制約あり ==========
+	// GridUtils::CanMoveInDirection に lastDirection を渡して
+	// 後退禁止 + 行き止まり例外（A案）を適用する。
+	const Direction allDirs[4] = {
+		Direction::Up, Direction::Right, Direction::Down, Direction::Left
+	};
+
+	for (Direction dir : allDirs) {
+		if (!GridUtils::CanMoveInDirection(
 			registry,
 			enemy->currentNodeX, enemy->currentNodeY,
-			pref[i], enemy->lastDirection)) {
-			return pref[i];
+			dir, enemy->lastDirection)) {
+			continue;
+		}
+
+		int nx, ny;
+		GridUtils::GetNextNodeCoords(enemy->currentNodeX, enemy->currentNodeY, dir, nx, ny);
+		Coord nc = { nx, ny };
+
+		if (visited.find(nc) == visited.end()) {
+			visited.insert(nc);
+			que.push({ nx, ny, dir });
 		}
 	}
 
+	// ========== BFS 本体 ==========
+	while (!que.empty()) {
+		BFSNode current = que.front();
+		que.pop();
+
+		// ゴール到達 → 最初の1歩の方向を返す
+		if (current.x == playerX && current.y == playerY) {
+			return current.firstDir;
+		}
+
+		// ========== 2歩目以降：後退禁止制約なし ==========
+		// Direction::None を lastDir に渡すことで CanMoveInDirection 内の
+		// 後退禁止チェックをスキップし、接続確認のみを行う。
+		for (Direction dir : allDirs) {
+			if (!GridUtils::CanMoveInDirection(
+				registry,
+				current.x, current.y,
+				dir, Direction::None)) {
+				continue;
+			}
+
+			int nx, ny;
+			GridUtils::GetNextNodeCoords(current.x, current.y, dir, nx, ny);
+			Coord nc = { nx, ny };
+
+			if (visited.find(nc) == visited.end()) {
+				visited.insert(nc);
+				// firstDir はスタートからの方向を引き継ぐ
+				que.push({ nx, ny, current.firstDir });
+			}
+		}
+	}
+
+	// ========== 到達不能（孤立マップなど） ==========
+	// 敵は停止する
 	return Direction::None;
 }
 
