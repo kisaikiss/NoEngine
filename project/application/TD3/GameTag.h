@@ -4,6 +4,9 @@
 struct PlayerTag {};
 struct PlayerBulletTag {};
 
+// 敵関連
+struct EnemyTag {};
+
 // アイテム関連
 struct AmmoItemTag {};
 

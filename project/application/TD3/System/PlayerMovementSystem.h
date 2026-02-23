@@ -16,6 +16,7 @@ public:
 
 private:
 	// エッジ終点近傍での先行入力を有効にする閾値 [0.0 ~ 1.0]
+	// この値以上の progress のとき、ターゲットノードで有効な方向キーを押すだけで自動前進が許可される
 	static constexpr float NEAR_END_THRESHOLD = 0.75f;
 
 	// ========== 状態別の入力・移動処理 ==========
@@ -79,33 +80,22 @@ private:
 
 	/// <summary>
 	/// ターゲットノードで有効な方向キーが現在押されているか判定する
+	/// （方向は返さない。どの方向に進むかは OnReachNode の recentInputs に任せる）
 	/// </summary>
+	/// <param name="futureLastDir">ターゲットノード到達後の lastDirection（現在の進行方向）</param>
+	/// <returns>有効なキーが1つ以上押されていれば true </returns>
 	bool HasValidNearEndInput(
 		PlayerComponent* player,
 		No::Registry& registry,
 		Direction futureLastDir
 	);
 
-	// ========== 判定ヘルパー ==========
-
-	/// <summary>
-	/// 指定ノードから指定方向に移動できるか判定する。
-	/// 接続チェックと後退禁止ルールを考慮する（行き止まりの後退は例外許可）。
-	/// この関数はゲーム固有ロジックを含むため GridUtils には移さない。
-	/// Enemy も同じルールを使うため、Stage3 で共有化を検討する。
-	/// </summary>
-	bool CanMoveInDirection(
-		No::Registry& registry,
-		int nodeX, int nodeY,
-		Direction dir,
-		Direction lastDir
-	);
-
 	// ========== Transform 更新 ==========
 
 	/// <summary>
 	/// プレイヤーのワールド座標を計算する
-	/// GridUtils::GridToWorld を使用するためスケール変更に対応済み
+	/// OnNode のときはノード座標、エッジ上は線形補間で求める
+	/// GridUtils::GridToWorld を使用しているため、スケール変更時は GridUtils.h のみ変更すればよい
 	/// </summary>
 	No::Vector3 CalculateWorldPosition(
 		const PlayerComponent* player
@@ -136,25 +126,40 @@ private:
 
 	// ========== 交差点検出と弾薬配置 ==========
 
+	/// <summary>
+	/// 交差点かどうかを判定する（接続数が3以上）
+	/// </summary>
 	bool IsIntersection(const GridCellComponent* cell);
 
+	/// <summary>
+	/// 交差点通過時の処理（弾薬配置・回収可能化）
+	/// </summary>
 	void HandleIntersection(
 		PlayerComponent* player,
 		No::Registry& registry
 	);
 
+	/// <summary>
+	/// 指定座標に弾薬アイテムが存在するかチェック
+	/// </summary>
 	bool HasAmmoAtPosition(
 		No::Registry& registry,
 		int gridX,
 		int gridY
 	);
 
+	/// <summary>
+	/// 弾薬アイテムを生成する
+	/// </summary>
 	void CreateAmmoItem(
 		No::Registry& registry,
 		int gridX,
 		int gridY
 	);
 
+	/// <summary>
+	/// 指定座標の弾薬アイテムを回収可能にする
+	/// </summary>
 	void EnableAmmoPickup(
 		No::Registry& registry,
 		int gridX,

@@ -43,7 +43,7 @@ struct PlayerComponent {
 	Direction recentInputs[4];			// 最近押された方向（最大4方向）
 	int recentInputCount;				// 記録されている入力数
 	float inputHistoryTime;				// 入力履歴の経過時間
-
+	
 	/// 終点近傍の先行入力
 	// progress が NEAR_END_THRESHOLD 以上のとき、ターゲットノードで有効な方向のキーを押すと記録される。
 	// OnReachNode で最優先に使用し、消費後は None に戻す。
@@ -56,14 +56,9 @@ struct PlayerComponent {
 	/// 状態フラグ
 	bool isAtDeadEnd;					// 行き止まりフラグ
 
-	/// ========== Stage2 追加 ==========
-	/// <summary>
-	/// 移動中フラグ
-	/// PlayerMovementSystem が毎フレーム更新する。
-	/// state == MovingOnEdge のとき true、それ以外は false。
-	/// EnemyMovementSystem がこのフラグを参照し、
+	/// プレイヤーが MovingOnEdge 状態のとき true。
+	/// EnemyMovementSystem が参照して、
 	/// プレイヤーが動いているときだけ敵を動かす。
-	/// </summary>
 	bool isMoving;
 
 	/// 弾薬システム

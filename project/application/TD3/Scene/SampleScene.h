@@ -20,8 +20,12 @@ private:
 	/// <param name="startY">プレイヤーの初期グリッドY座標</param>
 	void InitializePlayer(No::Registry& registry, int startX, int startY);
 
+	//敵初期化
+	void InitializeEnemy(No::Registry& registry, int startX, int startY);
+	
 	// ライト初期化
 	void InitializeLight(No::Registry& registry);
 
+	/// イテレータ安全版の一括削除
 	void DestroyGameObject();
 };

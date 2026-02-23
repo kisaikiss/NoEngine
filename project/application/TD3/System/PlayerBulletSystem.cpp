@@ -2,13 +2,10 @@
 #include <cmath>
 #include "../GameTag.h"
 #include "../Utility/GridUtils.h"
+#include "../Component/EnemyComponent.h"
+#include "../Component/HealthComponent.h"
 #include "engine/Functions/Renderer/Primitive.h"
 
-#ifdef USE_IMGUI
-#include <Windows.h>
-#include <string>
-#include <sstream>
-#endif
 
 // ノード付近と判定する距離の閾値
 // グリッド間隔が 1.0 のため 0.15f で十分に検出できる。
@@ -32,7 +29,6 @@ void PlayerBulletSystem::Update(No::Registry& registry, float deltaTime) {
 		No::Vector3 movement = bullet->direction * bullet->speed * deltaTime;
 		transform->translate = transform->translate + movement;
 		bullet->travelDistance += bullet->speed * deltaTime;
-
 		NoEngine::Primitive::DrawSphere(transform->translate, transform->scale.x, { 0.0f, 0.0f, 0.0f, 1.0f });
 
 		// ---- 安全網：最大距離で消滅 ----
@@ -57,9 +53,18 @@ void PlayerBulletSystem::Update(No::Registry& registry, float deltaTime) {
 		}
 
 		// 発射元ノードのスキップ（発射直後のみ）
+		// （行き止まりノードで発射した場合に素通りしてしまうバグへの対処）
 		if (nearestX == bullet->startNodeX &&
 			nearestY == bullet->startNodeY &&
 			bullet->travelDistance < NODE_DETECT_THRESHOLD * 2.0f) {
+			continue;
+		}
+
+		// 敵ヒット判定（壁チェックより先に実行）
+		// 弾がノードに到達したとき、まず敵がいるかチェックする。
+		// 敵にヒットした場合は壁判定をスキップして即座に弾を消滅させる。
+		if (CheckEnemyHitAtNode(registry, nearestX, nearestY)) {
+			deathFlag->isDead = true;
 			continue;
 		}
 
@@ -68,6 +73,38 @@ void PlayerBulletSystem::Update(No::Registry& registry, float deltaTime) {
 			deathFlag->isDead = true;
 		}
 	}
+}
+
+// ============================================================
+//  CheckEnemyHitAtNode
+// ============================================================
+
+bool PlayerBulletSystem::CheckEnemyHitAtNode(
+	No::Registry& registry,
+	int nodeX,
+	int nodeY
+) {
+	auto view = registry.View<EnemyComponent, EnemyTag, DeathFlag, HealthComponent>();
+	if (view.Empty()) return false;
+
+	for (auto entity : view) {
+		auto* enemy = registry.GetComponent<EnemyComponent>(entity);
+		auto* enemyDeath = registry.GetComponent<DeathFlag>(entity);
+		auto* health = registry.GetComponent<HealthComponent>(entity);
+
+		// すでに死亡予定の敵はスキップ
+		if (enemyDeath->isDead) continue;
+
+		// 敵の currentNode が弾のノード座標と一致するかチェック
+		if (enemy->currentNodeX == nodeX && enemy->currentNodeY == nodeY) {
+			bool died = health->TakeDamage(1);
+			if (died) {
+				enemyDeath->isDead = true;
+			}
+			return true; // ヒットしたら弾を消滅させる
+		}
+	}
+	return false;
 }
 
 // ============================================================
@@ -97,5 +134,6 @@ bool PlayerBulletSystem::ShouldDestroyAtNode(
 		hasForwardConnection = cell->hasConnectionLeft;
 	}
 
+	// 前方への接続がない場合消滅
 	return !hasForwardConnection;
 }

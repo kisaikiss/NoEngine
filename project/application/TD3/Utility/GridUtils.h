@@ -128,4 +128,28 @@ namespace GridUtils {
 		}
 	}
 
+
+	// Player・Enemy 共通の移動可否判定（後退禁止 + 行き止まり例外 = A案）
+	inline bool CanMoveInDirection(
+		No::Registry& registry,
+		int nodeX, int nodeY,
+		Direction dir,
+		Direction lastDir
+	) {
+		auto* cell = GetGridCell(registry, nodeX, nodeY);
+		if (!cell) return false;
+		if (!HasConnection(cell, dir)) return false;
+		if (lastDir == Direction::None) return true;
+
+		Direction opposite = GetOppositeDirection(lastDir);
+		if (dir == opposite) {
+			bool forwardBlocked = !HasConnection(cell, lastDir);
+			bool onlyBackward = HasConnection(cell, opposite);
+			int  connCount = CountConnections(cell);
+			if (forwardBlocked && onlyBackward && connCount == 1) return true;
+			return false;
+		}
+		return true;
+	}
+
 } // namespace GridUtils
