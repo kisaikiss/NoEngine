@@ -10,14 +10,13 @@
 class PlayerMovementSystem : public No::ISystem {
 public:
 	/// <summary>
-	/// 毎フレーム呼ばれるメイン更新処理
-	/// プレイヤーの状態に応じた処理を振り分ける
+	/// 更新処理
 	/// </summary>
 	void Update(No::Registry& registry, float deltaTime) override;
 
 private:
 	// エッジ終点近傍での先行入力を有効にする閾値 [0.0 ~ 1.0]
-	// この値以上の progress ではターゲットノードで有効な方向キーを押すだけで自動前進+方向転換が行われる
+	// この値以上の progress のとき、ターゲットノードで有効な方向キーを押すだけで自動前進が許可される
 	static constexpr float NEAR_END_THRESHOLD = 0.75f;
 
 	// ========== 状態別の入力・移動処理 ==========
@@ -34,7 +33,7 @@ private:
 	/// <summary>
 	/// エッジ移動中の処理
 	/// 現在方向キーの継続入力で前進し、ノードに到達したら OnReachNode を呼ぶ。
-	/// エッジ終点 NEAR_END_THRESHOLD 以降は、ターゲットノードで有効な方向キーでも前進する。
+	/// progress が NEAR_END_THRESHOLD 以上のとき、ターゲットノードで有効な方向キーを押すだけでも自動前進する。
 	/// キーを離したらエッジ途中で停止する。
 	/// </summary>
 	void HandleEdgeMovement(
@@ -46,7 +45,8 @@ private:
 	/// <summary>
 	/// エッジ途中で停止中のときの処理
 	/// 来た方向のキーを押すと移動を再開する。
-	/// エッジ終点 NEAR_END_THRESHOLD 以降は、ターゲットノードで有効な方向キーでも再開する。
+	/// progress が NEAR_END_THRESHOLD 以上のとき、ターゲットノードで
+	/// 有効な方向キーを押すだけでも移動を再開する。
 	/// </summary>
 	void HandleStoppedOnEdge(
 		PlayerComponent* player,
@@ -55,8 +55,8 @@ private:
 
 	/// <summary>
 	/// 入力履歴の更新処理
-	/// 進行方向以外の押下キーを記録し、離されたキーは削除する。
-	/// 一定時間が経過したら履歴をクリアする。
+	/// 進行方向以外の押下キーを押した順に記録し、離されたキーは削除する。
+	/// inputHistoryWindow を超えたら履歴をクリアする。
 	/// </summary>
 	void UpdateRecentInputs(
 		PlayerComponent* player,
@@ -66,7 +66,7 @@ private:
 	/// <summary>
 	/// ノード到達時の処理
 	/// 現在座標をターゲットノードに更新し、次の移動方向を決定する。
-	/// bufferedDirection → recentInputs → 現在入力 の優先順でチェックする。
+	/// recentInputs（最新優先）→ 現在入力（曲がり優先）の順でチェックする。
 	/// </summary>
 	void OnReachNode(
 		PlayerComponent* player,
@@ -89,17 +89,18 @@ private:
 	/// </summary>
 	void StopMovement(PlayerComponent* player);
 
-	// ========== 先行入力 ==========
+	// ========== 終点近傍チェック ==========
 
 	/// <summary>
-	/// エッジ終点近傍での有効方向キー取得
-	/// ターゲットノードで移動できる方向のキーが押されているか調べ、
-	/// 最初に見つかった有効方向を返す。なければ Direction::None を返す。
-	/// 曲がり方向（現在の進行方向以外）を直進より優先して返す。
+	/// ターゲットノードで有効な方向キーが現在押されているか判定する
+	/// （方向は返さない。どの方向に進むかは OnReachNode の recentInputs に任せる）
 	/// </summary>
-	Direction GetNearEndInputDirection(
+	/// <param name="futureLastDir">ターゲットノード到達後の lastDirection（現在の進行方向）</param>
+	/// <returns>有効なキーが1つ以上押されていれば true </returns>
+	bool HasValidNearEndInput(
 		PlayerComponent* player,
-		No::Registry& registry
+		No::Registry& registry,
+		Direction futureLastDir
 	);
 
 	// ========== 判定ヘルパー ==========
@@ -167,13 +168,13 @@ private:
 
 	/// <summary>
 	/// 移動方向に対応する回転クオータニオンを返す
-	/// モデルは identity 回転のとき Z+ を向いている前提（DirectX 左手座標系）
+	/// モデルは identity 回転のとき Z+ を向き前提(違うのなら適宜合わせる)
 	///
-	/// None  : Z- を向く（カメラ側・初期向き） = Y軸 +180°
-	/// Up    : Y+ を向く                       = X軸  +90°
-	/// Down  : Y- を向く                       = X軸  -90°
-	/// Right : X+ を向く                       = Y軸  +90°
-	/// Left  : X- を向く                       = Y軸  -90°
+	///None	: Z-を向く（カメラ側・初期向き）		= Y軸	+180°
+	///Up		: Y+を向く					= X軸	+90°
+	///Down	: Y-を向く						= X軸	-90°
+	///Right	: X+を向く					= Y軸	+90°
+	///Left	: X-を向く						= Y軸	-90°
 	/// </summary>
 	NoEngine::Math::Quaternion CalcDirectionRotation(Direction dir);
 
