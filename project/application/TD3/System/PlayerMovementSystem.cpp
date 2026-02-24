@@ -21,6 +21,7 @@
 
 void PlayerMovementSystem::Update(No::Registry& registry, float deltaTime) {
 	auto view = registry.View<PlayerComponent, PlayerTag, No::TransformComponent>();
+	if (view.Empty())return;
 
 	for (auto entity : view) {
 		auto* player = registry.GetComponent<PlayerComponent>(entity);

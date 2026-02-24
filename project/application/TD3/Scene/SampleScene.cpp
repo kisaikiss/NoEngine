@@ -95,17 +95,6 @@ void SampleScene::ReloadStage(int stageNumber) {
 // ============================================================
 
 void SampleScene::OnEnterEditorMode() {
-	No::Registry& registry = *GetRegistry();
-
-	// ゲームエンティティを全削除（グリッド含む）
-	std::vector<No::Entity> all;
-	for (auto e : registry.View<GridCellComponent>())     all.push_back(e);
-	for (auto e : registry.View<PlayerComponent>())       all.push_back(e);
-	for (auto e : registry.View<EnemyComponent>())        all.push_back(e);
-	for (auto e : registry.View<PlayerBulletComponent>()) all.push_back(e);
-	for (auto e : registry.View<AmmoItemComponent>())     all.push_back(e);
-	for (auto e : all) registry.DestroyEntity(e);
-
 #ifdef USE_IMGUI
 	// エディタを空のキャンバスにリセット
 	editor_->Reset();
@@ -128,29 +117,33 @@ void SampleScene::OnExitEditorMode() {
 // ============================================================
 
 void SampleScene::UpdateGame(No::Registry& registry) {
-	// ---- ゲームオーバー判定 ----
-	auto playerView = registry.View<PlayerTag, DeathFlag>();
-	for (auto entity : playerView) {
-		auto* flag = registry.GetComponent<DeathFlag>(entity);
-		if (flag && flag->isDead) {
-			ReloadStage(stageNumber_);
-			return;
-		}
-	}
+	///それぞれの判定はコメントアウトするが残しておく
+	// ToDo : クリア・ゲームオーバーの判定はいつでも使えるようにするが、今は必要ない。
+	(void)registry;		//今は未使用なので警告回避
+
+	//// ---- ゲームオーバー判定 ----
+	//auto playerView = registry.View<PlayerTag, DeathFlag>();
+	//for (auto entity : playerView) {
+	//	auto* flag = registry.GetComponent<DeathFlag>(entity);
+	//	if (flag && flag->isDead) {
+	//		ReloadStage(stageNumber_);
+	//		return;
+	//	}
+	//}
 
 	// ---- クリア判定（敵が全滅したとき） ----
-	auto enemyView = registry.View<EnemyTag, DeathFlag>();
-	if (enemyView.Empty()) return;
+	//auto enemyView = registry.View<EnemyTag, DeathFlag>();
+	//if (enemyView.Empty()) return;
 
-	int aliveEnemies = 0;
-	for (auto entity : enemyView) {
-		auto* flag = registry.GetComponent<DeathFlag>(entity);
-		if (flag && !flag->isDead) aliveEnemies++;
-	}
+	//int aliveEnemies = 0;
+	//for (auto entity : enemyView) {
+	//	auto* flag = registry.GetComponent<DeathFlag>(entity);
+	//	if (flag && !flag->isDead) aliveEnemies++;
+	//}
 
-	if (aliveEnemies == 0) {
-		ReloadStage(stageNumber_ + 1);
-	}
+	//if (aliveEnemies == 0) {
+	//	ReloadStage(stageNumber_ + 1);
+	//}
 }
 
 // ============================================================
@@ -193,6 +186,11 @@ void SampleScene::DebugStageControlUI(No::Registry& registry) {
 	}
 
 	ImGui::End();
+#else
+
+	// USE_IMGUI が定義されていないとき
+	(void)registry; // 警告回避
+
 #endif
 
 }
@@ -221,7 +219,7 @@ void SampleScene::NotSystemUpdate() {
 
 	camera_->Update();
 
-	// エディタモード中はゲーム進行チェックをスキップ
+	// エディタモード中はゲーム判定チェックをスキップ
 	if (!isEditorMode_) {
 		UpdateGame(registry);
 	}

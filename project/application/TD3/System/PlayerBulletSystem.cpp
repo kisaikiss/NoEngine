@@ -20,6 +20,7 @@ static constexpr float NODE_DETECT_THRESHOLD = 0.15f;
 
 void PlayerBulletSystem::Update(No::Registry& registry, float deltaTime) {
 	auto view = registry.View<PlayerBulletComponent, PlayerBulletTag, DeathFlag, No::TransformComponent, SphereColliderComponent>();
+	if (view.Empty())return;
 
 	for (auto entity : view) {
 		auto* bullet = registry.GetComponent<PlayerBulletComponent>(entity);

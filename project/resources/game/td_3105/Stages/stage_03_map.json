@@ -1,0 +1,102 @@
+{
+  "grid_scale": 1.0,
+  "nodes": [
+    {
+      "down": false,
+      "left": false,
+      "right": true,
+      "up": false,
+      "x": 0,
+      "y": 3
+    },
+    {
+      "down": false,
+      "left": true,
+      "right": true,
+      "up": false,
+      "x": 1,
+      "y": 3
+    },
+    {
+      "down": false,
+      "left": false,
+      "right": true,
+      "up": true,
+      "x": 2,
+      "y": -2
+    },
+    {
+      "down": true,
+      "left": false,
+      "right": false,
+      "up": true,
+      "x": 2,
+      "y": -1
+    },
+    {
+      "down": true,
+      "left": false,
+      "right": false,
+      "up": true,
+      "x": 2,
+      "y": 0
+    },
+    {
+      "down": true,
+      "left": false,
+      "right": false,
+      "up": true,
+      "x": 2,
+      "y": 1
+    },
+    {
+      "down": true,
+      "left": false,
+      "right": false,
+      "up": true,
+      "x": 2,
+      "y": 2
+    },
+    {
+      "down": true,
+      "left": true,
+      "right": false,
+      "up": true,
+      "x": 2,
+      "y": 3
+    },
+    {
+      "down": true,
+      "left": false,
+      "right": false,
+      "up": true,
+      "x": 2,
+      "y": 4
+    },
+    {
+      "down": true,
+      "left": false,
+      "right": false,
+      "up": true,
+      "x": 2,
+      "y": 5
+    },
+    {
+      "down": true,
+      "left": false,
+      "right": false,
+      "up": false,
+      "x": 2,
+      "y": 6
+    },
+    {
+      "down": false,
+      "left": true,
+      "right": false,
+      "up": false,
+      "x": 3,
+      "y": -2
+    }
+  ],
+  "stage_name": "stage_03"
+}

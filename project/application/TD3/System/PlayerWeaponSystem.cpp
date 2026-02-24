@@ -20,6 +20,7 @@ void PlayerWeaponSystem::Update(No::Registry& registry, float deltaTime) {
 	static_cast<void>(deltaTime);
 
 	auto view = registry.View<PlayerComponent, PlayerTag, No::TransformComponent>();
+	if (view.Empty())return;
 
 	for (auto entity : view) {
 		auto* player = registry.GetComponent<PlayerComponent>(entity);
