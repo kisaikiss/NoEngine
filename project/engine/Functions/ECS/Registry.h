@@ -96,14 +96,19 @@ public:
 			size_t index;
 
 			Entity operator*() const {
-				return base->Entities()[index];
+				if (base) {
+					return base->Entities()[index];
+				}
+				return 0;
 			}
 
 			Iterator& operator++() {
-				do {
-					index++;
-				} while (index < base->Size() &&
-					!registry.HasAll<Components...>(base->Entities()[index]));
+				if (base) {
+					do {
+						index++;
+					} while (index < base->Size() &&
+						!registry.HasAll<Components...>(base->Entities()[index]));
+				}
 				return *this;
 			}
 
@@ -113,6 +118,9 @@ public:
 		};
 
 		Iterator begin() {
+			if (!base_) {
+				return { registry_, nullptr, 0 };
+			}
 			size_t idx = 0;
 			while (idx < base_->Size() &&
 				!registry_.HasAll<Components...>(base_->Entities()[idx]))
@@ -121,6 +129,9 @@ public:
 		}
 
 		Iterator end() {
+			if (!base_) {
+				return { registry_, nullptr, 0 };
+			}
 			return { registry_, base_, base_->Size() };
 		}
 
