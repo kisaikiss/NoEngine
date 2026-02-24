@@ -159,6 +159,9 @@ private:
 	/// 2 ノードが上下左右のどれかで隣接しているか判定
 	bool AreAdjacent(int ax, int ay, int bx, int by) const;
 
+	///十字パネルを作成する関数
+	void DrawCrossPanel(MapData::NodeData& node);
+
 	// ============================================================
 	//  Save / Load / Validate
 	// ============================================================

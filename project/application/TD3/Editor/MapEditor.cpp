@@ -24,8 +24,13 @@ void MapEditor::Update(No::Registry& registry) {
 	// ---- 中央ペイン（ビューポート） ----
 	float vpW = static_cast<float>(gridWidth_) * CELL_SIZE;
 	float vpH = static_cast<float>(gridHeight_) * CELL_SIZE;
-	float childW = std::min(vpW + 4.0f, 520.0f);
-	float childH = std::min(vpH + 4.0f, 520.0f);
+
+	float padding = ImGui::GetStyle().ScrollbarSize; + 8.0f;                  // バー分 + 余白
+
+	float childW = std::min(vpW + padding, 520.0f);
+	float childH = std::min(vpH + padding, 520.0f);
+
+
 	ImGui::BeginChild("##center", ImVec2(childW, childH), true,
 		ImGuiWindowFlags_HorizontalScrollbar);
 	DrawViewportWindow();
@@ -238,7 +243,35 @@ void MapEditor::DrawViewportWindow() {
 	bool rightClicked = ImGui::IsItemClicked(ImGuiMouseButton_Right);
 
 	ImDrawList* dl = ImGui::GetWindowDrawList();
+	// ---- 中央ガイドライン（グリッド線の前に描画してセルを薄く塗る） ----
+	// 奇数: 中央1列/行,  偶数: 中央2列/行
+	{
+		ImU32 centerColor = IM_COL32(70, 70, 70, 50); // 半透明グレー
 
+		// 中央列の範囲 [colStart, colEnd)
+		int colStart = (gridWidth_ % 2 == 1)
+			? gridWidth_ / 2
+			: gridWidth_ / 2 - 1;
+		int colEnd = gridWidth_ / 2 + 1;
+
+		// 中央行の範囲 [rowStart, rowEnd)
+		int rowStart = (gridHeight_ % 2 == 1)
+			? gridHeight_ / 2
+			: gridHeight_ / 2 - 1;
+		int rowEnd = gridHeight_ / 2 + 1;
+
+		// 縦帯（中央列）
+		float rx0 = origin.x + colStart * CELL_SIZE;
+		float rx1 = origin.x + colEnd * CELL_SIZE;
+		dl->AddRectFilled(ImVec2(rx0, origin.y),
+			ImVec2(rx1, origin.y + vpH), centerColor);
+
+		// 横帯（中央行）
+		float ry0 = origin.y + rowStart * CELL_SIZE;
+		float ry1 = origin.y + rowEnd * CELL_SIZE;
+		dl->AddRectFilled(ImVec2(origin.x, ry0),
+			ImVec2(origin.x + vpW, ry1), centerColor);
+	}
 	// ---- グリッド枠線 ----
 	ImU32 gridColor = IM_COL32(60, 60, 60, 255);
 	for (int xi = 0; xi <= gridWidth_; xi++) {
@@ -338,33 +371,8 @@ void MapEditor::DrawPropertiesPanel() {
 	ImGui::Text("ノード (%d, %d)", node.x, node.y);
 	ImGui::Spacing();
 
-	// ---- 接続フラグ ----
-	ImGui::Text("接続方向");
-	ImGui::Separator();
-
-	bool changed = false;
-	changed |= ImGui::Checkbox("上", &node.up);
-	changed |= ImGui::Checkbox("右", &node.right);
-	changed |= ImGui::Checkbox("下", &node.down);
-	changed |= ImGui::Checkbox("左", &node.left);
-
-	if (changed) {
-		// 双方向同期（隣ノードが存在する場合のみ）
-		auto syncNeighbor = [&](int nx, int ny, bool newVal,
-			bool MapData::NodeData::* neighborField) {
-				auto nit = nodes_.find({ nx, ny });
-				if (nit != nodes_.end()) {
-					nit->second.*neighborField = newVal;
-				}
-			};
-
-		syncNeighbor(node.x, node.y + 1, node.up, &MapData::NodeData::down);
-		syncNeighbor(node.x + 1, node.y, node.right, &MapData::NodeData::left);
-		syncNeighbor(node.x, node.y - 1, node.down, &MapData::NodeData::up);
-		syncNeighbor(node.x - 1, node.y, node.left, &MapData::NodeData::right);
-
-		dirty_ = true;
-	}
+	// ---- 接続フラグ（十字配置） ----
+	DrawCrossPanel(node);
 
 	ImGui::Spacing();
 
@@ -701,7 +709,87 @@ bool MapEditor::AreAdjacent(int ax, int ay, int bx, int by) const {
 	int dy = std::abs(by - ay);
 	return (dx == 1 && dy == 0) || (dx == 0 && dy == 1);
 }
+void MapEditor::DrawCrossPanel(MapData::NodeData& node)
+{
+	ImGui::Text("接続方向");
+	ImGui::Separator();
 
+	const float size = 36.0f;
+	ImVec2 btn(size, size);
+
+	// トグルボタン（漢字表示）
+	auto DirButton = [&](const char* label, bool& flag)
+		{
+			if (flag)
+			{
+				ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(80, 180, 80, 255));
+				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, IM_COL32(100, 200, 100, 255));
+				ImGui::PushStyleColor(ImGuiCol_ButtonActive, IM_COL32(60, 160, 60, 255));
+			}
+
+			bool pressed = ImGui::Button(label, btn);
+
+			if (flag)
+				ImGui::PopStyleColor(3);
+
+			if (pressed)
+				flag = !flag;
+
+			return pressed;
+		};
+
+	bool changed = false;
+
+	// 中央揃え
+	float fullWidth = size * 3.0f;
+	float avail = ImGui::GetContentRegionAvail().x;
+	float offset = (avail - fullWidth) * 0.5f;
+	if (offset < 0) offset = 0;
+
+	float baseX = ImGui::GetCursorPosX();
+
+	// ---- 上 ----
+	ImGui::SetCursorPosX(baseX + offset);
+	ImGui::Dummy(btn);
+	ImGui::SameLine();
+	changed |= DirButton("上", node.up);
+	ImGui::SameLine();
+	ImGui::Dummy(btn);
+
+	// ---- 左・中央・右 ----
+	ImGui::SetCursorPosX(baseX + offset);
+	changed |= DirButton("左", node.left);
+	ImGui::SameLine();
+	ImGui::Dummy(btn);
+	ImGui::SameLine();
+	changed |= DirButton("右", node.right);
+
+	// ---- 下 ----
+	ImGui::SetCursorPosX(baseX + offset);
+	ImGui::Dummy(btn);
+	ImGui::SameLine();
+	changed |= DirButton("下", node.down);
+	ImGui::SameLine();
+	ImGui::Dummy(btn);
+
+	if (changed)
+	{
+		auto syncNeighbor = [&](int nx, int ny, bool newVal,
+			bool MapData::NodeData::* neighborField)
+			{
+				auto it = nodes_.find({ nx, ny });
+				if (it != nodes_.end())
+					it->second.*neighborField = newVal;
+			};
+
+		syncNeighbor(node.x, node.y + 1, node.up, &MapData::NodeData::down);
+		syncNeighbor(node.x + 1, node.y, node.right, &MapData::NodeData::left);
+		syncNeighbor(node.x, node.y - 1, node.down, &MapData::NodeData::up);
+		syncNeighbor(node.x - 1, node.y, node.left, &MapData::NodeData::right);
+
+		dirty_ = true;
+	}
+}
 // ============================================================
 //  ExecuteSave
 // ============================================================
