@@ -10,10 +10,6 @@
 #include "externals/imgui/imgui.h"
 #endif
 
-// ============================================================
-//  Update
-// ============================================================
-
 void EnemyMovementSystem::Update(No::Registry& registry, float deltaTime) {
 
 	auto playerView = registry.View<PlayerComponent, PlayerTag>();
@@ -32,13 +28,23 @@ void EnemyMovementSystem::Update(No::Registry& registry, float deltaTime) {
 	DebugUI(registry);
 #endif
 
-	/// プレイヤーが動いていないときは敵も動かさない
-	if (!player->isMoving) return;
+	auto enemyView = registry.View<EnemyComponent, EnemyTag, No::TransformComponent, DeathFlag>();
+
+	/// プレイヤーが動いていないときは移動処理をスキップするが、 Transform は必ず更新する（ステージロード直後の初期位置反映のため）
+	if (!player->isMoving) {
+		for (auto entity : enemyView) {
+			auto* enemy = registry.GetComponent<EnemyComponent>(entity);
+			auto* transform = registry.GetComponent<No::TransformComponent>(entity);
+			auto* deathFlag = registry.GetComponent<DeathFlag>(entity);
+			if (deathFlag->isDead) continue;
+			UpdateTransform(enemy, transform);
+		}
+		return;
+	}
 
 	int playerX = player->currentNodeX;
 	int playerY = player->currentNodeY;
 
-	auto enemyView = registry.View<EnemyComponent, EnemyTag, No::TransformComponent, DeathFlag>();
 	for (auto entity : enemyView) {
 		auto* enemy = registry.GetComponent<EnemyComponent>(entity);
 		auto* transform = registry.GetComponent<No::TransformComponent>(entity);
