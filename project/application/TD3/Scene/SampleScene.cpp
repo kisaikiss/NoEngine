@@ -219,8 +219,9 @@ void SampleScene::InitializePlayer(No::Registry& registry, int startX, int start
 	registry.AddComponent<DeathFlag>(entity);
 
 	auto* health = registry.AddComponent<HealthComponent>(entity);
-	health->currentHp = 5;
-	health->maxHp = 5;
+	int HP = 3;
+	health->currentHp = HP;
+	health->maxHp = HP;
 
 	auto* collider = registry.AddComponent<SphereColliderComponent>(entity);
 	collider->radius = 0.5f;
