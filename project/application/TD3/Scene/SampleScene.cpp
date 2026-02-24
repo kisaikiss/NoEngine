@@ -4,6 +4,8 @@
 #include "../Component/EnemyComponent.h"
 #include "../Component/HealthComponent.h"
 #include "../Component/ColliderComponent.h"
+#include "../Component/PlayerBulletComponent.h"
+#include "../Component/AmmoItemComponent.h"
 #include "../GameTag.h"
 #include "../System/GridRenderSystem.h"
 #include "../System/PlayerMovementSystem.h"
@@ -33,6 +35,10 @@ void SampleScene::Setup() {
 
 	No::Registry& registry = *GetRegistry();
 
+#ifdef USE_IMGUI
+	editor_ = std::make_unique<MapEditor>();
+#endif
+
 	stageNumber_ = 1;
 	std::string path = "resources/game/td_3105/Stages/stage_0"
 		+ std::to_string(stageNumber_) + ".json";
@@ -54,15 +60,13 @@ void SampleScene::Setup() {
 
 // ============================================================
 //  ReloadStage
-//  ECS を全リセットし、指定ステージを再ロードする。
-//  システムは再登録しない（AddSystem は Setup で1回だけでよい）。
 // ============================================================
 
 void SampleScene::ReloadStage(int stageNumber) {
 	stageNumber_ = stageNumber;
 	No::Registry& registry = *GetRegistry();
 
-	// ---- 全エンティティを View で収集してからまとめて削除 ----
+	// 全エンティティを収集してまとめて削除
 	std::vector<No::Entity> all;
 	for (auto e : registry.View<GridCellComponent>())     all.push_back(e);
 	for (auto e : registry.View<PlayerComponent>())       all.push_back(e);
@@ -87,9 +91,40 @@ void SampleScene::ReloadStage(int stageNumber) {
 }
 
 // ============================================================
+//  OnEnterEditorMode
+// ============================================================
+
+void SampleScene::OnEnterEditorMode() {
+	No::Registry& registry = *GetRegistry();
+
+	// ゲームエンティティを全削除（グリッド含む）
+	std::vector<No::Entity> all;
+	for (auto e : registry.View<GridCellComponent>())     all.push_back(e);
+	for (auto e : registry.View<PlayerComponent>())       all.push_back(e);
+	for (auto e : registry.View<EnemyComponent>())        all.push_back(e);
+	for (auto e : registry.View<PlayerBulletComponent>()) all.push_back(e);
+	for (auto e : registry.View<AmmoItemComponent>())     all.push_back(e);
+	for (auto e : all) registry.DestroyEntity(e);
+
+#ifdef USE_IMGUI
+	// エディタを空のキャンバスにリセット
+	editor_->Reset();
+#endif
+}
+
+// ============================================================
+//  OnExitEditorMode
+// ============================================================
+
+void SampleScene::OnExitEditorMode() {
+#ifdef USE_IMGUI
+	// 現在のステージ番号でゲームに戻る
+	ReloadStage(stageNumber_);
+#endif
+}
+
+// ============================================================
 //  UpdateGame
-//  クリア・ゲームオーバーを検出する。
-//  NotSystemUpdate から毎フレーム呼ばれる。
 // ============================================================
 
 void SampleScene::UpdateGame(No::Registry& registry) {
@@ -114,8 +149,6 @@ void SampleScene::UpdateGame(No::Registry& registry) {
 	}
 
 	if (aliveEnemies == 0) {
-		// 次ステージへ。JSON が存在しない場合は MapLoader が例外を投げる。
-		// 将来はステージ数の上限チェックをここに追加する。
 		ReloadStage(stageNumber_ + 1);
 	}
 }
@@ -124,40 +157,45 @@ void SampleScene::UpdateGame(No::Registry& registry) {
 //  DebugStageControlUI
 // ============================================================
 
-#ifdef USE_IMGUI
+
 void SampleScene::DebugStageControlUI(No::Registry& registry) {
-
+#ifdef USE_IMGUI
 	(void)registry;
-
 	ImGui::Begin("Stage Control");
 
 	ImGui::Text("Current Stage: %d", stageNumber_);
 	ImGui::Separator();
 
-	// ステージ番号を指定してロード
+	// ---- ステージ指定リロード ----
 	static int inputStageNumber = 1;
 	ImGui::InputInt("Stage Number", &inputStageNumber);
 	if (inputStageNumber < 1) inputStageNumber = 1;
 
 	if (ImGui::Button("Load Stage")) {
-		ReloadStage(inputStageNumber);
+		if (!isEditorMode_) ReloadStage(inputStageNumber);
 	}
 	ImGui::SameLine();
 	if (ImGui::Button("Reload Current")) {
-		ReloadStage(stageNumber_);
+		if (!isEditorMode_) ReloadStage(stageNumber_);
 	}
 
 	ImGui::Separator();
 
-	// エディタモード切り替え（Stage7 実装まで無効化）
-	ImGui::BeginDisabled();
+	// ---- エディタモード切り替え ----
+	bool prevEditorMode = isEditorMode_;
 	ImGui::Checkbox("Editor Mode", &isEditorMode_);
-	ImGui::EndDisabled();
-	ImGui::TextDisabled("(Editor: Stage7 で実装予定)");
+	if (isEditorMode_ != prevEditorMode) {
+		if (isEditorMode_) {
+			OnEnterEditorMode();
+		} else {
+			OnExitEditorMode();
+		}
+	}
 
 	ImGui::End();
-}
 #endif
+
+}
 
 // ============================================================
 //  NotSystemUpdate
@@ -174,11 +212,16 @@ void SampleScene::NotSystemUpdate() {
 	camera_->SetTransform(cameraTransform_);
 
 	DebugStageControlUI(registry);
+
+	// エディタモード中はエディタの Update を呼ぶ
+	if (isEditorMode_) {
+		editor_->Update(registry);
+	}
 #endif
 
 	camera_->Update();
 
-	// エディタモード中はゲーム進行チェックをスキップ（Stage7 対応）
+	// エディタモード中はゲーム進行チェックをスキップ
 	if (!isEditorMode_) {
 		UpdateGame(registry);
 	}

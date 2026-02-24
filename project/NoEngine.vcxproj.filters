@@ -173,6 +173,7 @@
     <ClCompile Include="application\TD3\System\EnemyCollisionSystem.cpp" />
     <ClCompile Include="application\TD3\System\CollisionSystem.cpp" />
     <ClCompile Include="application\TD3\MapData\MapLoader.cpp" />
+    <ClCompile Include="application\TD3\Editor\MapEditor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -401,6 +402,7 @@
     <ClInclude Include="application\TD3\System\CollisionSystem.h" />
     <ClInclude Include="application\TD3\MapData\MapLoader.h" />
     <ClInclude Include="application\TD3\MapData\StageData.h" />
+    <ClInclude Include="application\TD3\Editor\MapEditor.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

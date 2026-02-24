@@ -4,34 +4,50 @@
 
 /// <summary>
 /// マップローダー
-/// ステージマニフェスト JSON を起点に、接続マップとエンティティマップを読み込む。
+/// ステージマニフェスト JSON を起点に、接続マップとエンティティマップを読み書きする。
 ///
 /// 【ファイル構成】
-///   resources/stages/stage_01.json          ← マニフェスト（このパスを LoadStage に渡す）
-///   resources/stages/stage_01_map.json      ← ノード接続情報
-///   resources/stages/stage_01_entities.json ← エンティティ配置
+///   resources/game/td_3105/Stages/stage_01.json          ← マニフェスト
+///   resources/game/td_3105/Stages/stage_01_map.json      ← ノード接続情報
+///   resources/game/td_3105/Stages/stage_01_entities.json ← エンティティ配置
 ///
-/// 【使用例】
-///   StageData data = MapLoader::LoadStage("resources/stages/stage_01.json");
+/// 【Stage5 変更点】
+///   LoadStage を追加。
+///
+/// 【Stage7 変更点】
+///   SaveStage を追加。MapEditor から呼ばれる。
 /// </summary>
 class MapLoader {
 public:
 	/// <summary>
 	/// ステージ全体を読み込んで StageData を返す。
-	/// 内部でマニフェストを解析し、接続マップとエンティティマップを読み込む。
 	/// </summary>
 	/// <param name="manifestPath">マニフェスト JSON のパス</param>
-	/// <returns>読み込んだステージデータ</returns>
 	static MapData::StageData LoadStage(const std::string& manifestPath);
 
-private:
 	/// <summary>
-	/// 接続マップ JSON（stage_XX_map.json）を読み込む
+	/// StageData を JSON ファイルに書き出す。
+	/// ステージ番号からパスを自動生成する。
+	/// マニフェスト・マップ・エンティティの 3 ファイルを書き出す。
 	/// </summary>
-	static MapData::ConnectionMapData LoadConnectionMap(const std::string& path);
+	/// <param name="data">書き出すステージデータ</param>
+	/// <param name="stageNumber">書き出し先のステージ番号（例: 1 → stage_01.json）</param>
+	static void SaveStage(const MapData::StageData& data, int stageNumber);
 
 	/// <summary>
-	/// エンティティマップ JSON（stage_XX_entities.json）を読み込む
+	/// ステージ番号からマニフェストのパスを生成する。
+	/// MapEditor のファイル存在チェックでも使用する。
 	/// </summary>
-	static MapData::EntityMapData LoadEntityMap(const std::string& path);
+	static std::string MakeManifestPath(int stageNumber);
+
+private:
+	static MapData::ConnectionMapData LoadConnectionMap(const std::string& path);
+	static MapData::EntityMapData     LoadEntityMap(const std::string& path);
+
+	/// <summary>
+	/// ステージ番号から各ファイルのパスを生成する。
+	/// 1  → "resources/game/td_3105/Stages/stage_01"
+	/// 10 → "resources/game/td_3105/Stages/stage_10"
+	/// </summary>
+	static std::string MakeBasePath(int stageNumber);
 };

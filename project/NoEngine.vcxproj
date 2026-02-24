@@ -206,6 +206,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\TD2_3\System\StatusSpriteControlSystem.cpp" />
     <ClCompile Include="application\TD2_3\System\TitleSystem.cpp" />
     <ClCompile Include="application\TD2_3\System\Tutorial\TutorialControlSystem.cpp" />
+    <ClCompile Include="application\TD3\Editor\MapEditor.cpp" />
     <ClCompile Include="application\TD3\MapData\MapLoader.cpp" />
     <ClCompile Include="application\TD3\OneSide.cpp" />
     <ClCompile Include="application\TD3\Scene\SampleScene.cpp" />
@@ -425,6 +426,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\TD3\Component\HealthComponent.h" />
     <ClInclude Include="application\TD3\Component\PlayerBulletComponent.h" />
     <ClInclude Include="application\TD3\Component\PlayerComponent.h" />
+    <ClInclude Include="application\TD3\Editor\MapEditor.h" />
     <ClInclude Include="application\TD3\GameTag.h" />
     <ClInclude Include="application\TD3\MapData\MapLoader.h" />
     <ClInclude Include="application\TD3\MapData\ShinMapData.h" />

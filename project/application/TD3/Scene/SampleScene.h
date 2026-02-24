@@ -2,15 +2,11 @@
 #include "engine/NoEngine.h"
 #include "../MapData/StageData.h"
 
+#ifdef USE_IMGUI
+#include "../Editor/MapEditor.h"
+#endif
 /// <summary>
 /// サンプルシーン
-///
-/// 【Stage6 変更点】
-/// ・stageNumber_ メンバ追加（現在のステージ番号を保持）
-/// ・ReloadStage(int) 追加（ECS全リセット→指定ステージを再初期化）
-/// ・isEditorMode_ フラグ追加（Stage7 MapEditor との切り替え用、今は常に false）
-/// ・UpdateGame() 追加（クリア/ゲームオーバー検出）
-/// ・ImGui ウィンドウ "Stage Control" でステージ番号指定＋リロードが可能
 /// </summary>
 class SampleScene : public No::IScene {
 public:
@@ -22,28 +18,40 @@ private:
 
 	// ========== ステージ管理 ==========
 
-	int  stageNumber_ = 1;     // 現在のステージ番号
-	bool isEditorMode_ = false; // Stage7 で使用。今は常に false
-
+	int  stageNumber_ = 1;		// 現在のステージ番号
+	bool isEditorMode_ = false;	// エディタ使用フラグ
 	/// <summary>
 	/// ECS を全リセットし、指定ステージを再ロードする。
-	/// クリア・ゲームオーバー・ImGui からのリロード要求で呼ばれる。
 	/// </summary>
 	void ReloadStage(int stageNumber);
 
 	/// <summary>
-	/// ゲーム進行の状態チェック（クリア・ゲームオーバー検出）
-	/// NotSystemUpdate から毎フレーム呼ばれる。
+	/// クリア・ゲームオーバー検出。NotSystemUpdate から毎フレーム呼ばれる。
 	/// </summary>
 	void UpdateGame(No::Registry& registry);
-
+	
 	/// <summary>
-	/// Stage Control ImGui ウィンドウ
-	/// ステージ番号の指定・リロード・エディタモード切り替えボタンを持つ。
+	/// Stage Control ImGui ウィンドウ（ステージ切り替え・エディタモード切り替え）
 	/// </summary>
 	void DebugStageControlUI(No::Registry& registry);
 
-	// ========== 初期化ヘルパー ==========
+	// ========== Stage7 ==========
+
+#ifdef USE_IMGUI
+	std::unique_ptr<MapEditor> editor_;
+#endif
+
+	/// <summary>
+	/// エディタモード ON 時の処理。
+	/// ゲームエンティティを全削除し、エディタを空のキャンバスで初期化する。
+	/// </summary>
+	void OnEnterEditorMode();
+
+	/// <summary>
+	/// エディタモード OFF 時の処理。現在のステージをリロードしてゲームに戻る。
+	/// </summary>
+	void OnExitEditorMode();
+
 
 	void InitializeGrid(No::Registry& registry, const MapData::ConnectionMapData& mapData);
 	void InitializePlayer(No::Registry& registry, int startX, int startY);
