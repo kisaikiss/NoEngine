@@ -19,7 +19,7 @@ private:
 	// ========== ステージ管理 ==========
 
 	int  stageNumber_ = 1;		// 現在のステージ番号
-	bool isEditorMode_ = false;	// エディタ使用フラグ
+
 	/// <summary>
 	/// ECS を全リセットし、指定ステージを再ロードする。
 	/// </summary>
@@ -35,10 +35,11 @@ private:
 	/// </summary>
 	void DebugStageControlUI(No::Registry& registry);
 
-	// ========== Stage7 ==========
+	// ========== エディタ管理 ==========
 
 #ifdef USE_IMGUI
 	std::unique_ptr<MapEditor> editor_;
+	bool isEditorMode_ = false;	// エディタ使用フラグ
 #endif
 
 	/// <summary>

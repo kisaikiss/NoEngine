@@ -200,9 +200,10 @@ void SampleScene::DebugStageControlUI(No::Registry& registry) {
 // ============================================================
 
 void SampleScene::NotSystemUpdate() {
-	No::Registry& registry = *GetRegistry();
 
 #ifdef USE_IMGUI
+	No::Registry& registry = *GetRegistry();
+
 	ImGui::Begin("camera");
 	ImGui::DragFloat3("pos", &cameraTransform_.translate.x, 0.1f);
 	ImGui::DragFloat3("rot", &cameraTransform_.rotation.x, 0.1f);
@@ -215,14 +216,16 @@ void SampleScene::NotSystemUpdate() {
 	if (isEditorMode_) {
 		editor_->Update(registry);
 	}
-#endif
-
-	camera_->Update();
 
 	// エディタモード中はゲーム判定チェックをスキップ
 	if (!isEditorMode_) {
 		UpdateGame(registry);
 	}
+#endif
+
+	camera_->Update();
+
+
 
 	DestroyGameObject();
 }
