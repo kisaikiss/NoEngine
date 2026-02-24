@@ -12,14 +12,15 @@
 
 /// <summary>
 /// エディタツールモード
+///   配置 / 削除 の切り替えは左クリック / 右クリックで行う。
+///     Node   : 左=ノード配置, 右=ノード削除
+///     Connect: 左=接続(2クリック), 右=切断(2クリック)
+///     Entity : 左=エンティティ配置, 右=エンティティ削除
 /// </summary>
 enum class EditorTool {
-	NodePlace,
-	NodeDelete,
-	Connect,
-	Disconnect,
-	EntityPlace,
-	EntityDelete
+	Node,    // ノード操作
+	Connect, // 接続 / 切断
+	Entity   // エンティティ操作
 };
 
 /// <summary>
@@ -46,10 +47,10 @@ private:
 	//  グリッド設定
 	// ============================================================
 
-	int gridWidth_ = 10;  // 編集可能範囲（幅）
-	int gridHeight_ = 10;  // 編集可能範囲（高さ）
-	int viewOriginX_ = 0;   // ビューポート左端のグリッド X 座標
-	int viewOriginY_ = 0;   // ビューポート下端のグリッド Y 座標（ゲーム座標）
+	int gridWidth_ = 10; // 編集可能範囲（幅）
+	int gridHeight_ = 10; // 編集可能範囲（高さ）
+	int viewOriginX_ = 0;  // ビューポート左端のグリッド X 座標
+	int viewOriginY_ = 0;  // ビューポート下端のグリッド Y 座標（ゲーム座標）
 
 	// Apply ボタンを押すまで実際の値に反映しない pending 値
 	int pendingWidth_ = 10;
@@ -61,7 +62,7 @@ private:
 	//  UI 状態
 	// ============================================================
 
-	EditorTool currentTool_ = EditorTool::NodePlace;
+	EditorTool currentTool_ = EditorTool::Node;
 
 	// 無効なノード座標のセンチネル値
 	static constexpr int INVALID = INT_MIN;
@@ -69,10 +70,14 @@ private:
 	/// 選択中ノードの座標。未選択時は {INVALID, INVALID}
 	std::pair<int, int> selectedNode_ = { INVALID, INVALID };
 
-	/// Connect / Disconnect ツールで 1 回目にクリックしたノード
+	/// Connect ツールで 1 回目にクリックしたノード
 	std::pair<int, int> connectFirstNode_ = { INVALID, INVALID };
 
-	/// EntityPlace ツールで配置するエンティティ種別
+	/// Connect ツールの現在操作が「切断」かどうか
+	/// false=接続（左クリック起動）/ true=切断（右クリック起動）
+	bool connectIsDisconnecting_ = false;
+
+	/// Entity ツールで配置するエンティティ種別
 	std::string entityTypeToPlace_ = "player";
 
 	// ============================================================
@@ -83,7 +88,7 @@ private:
 	int  loadStageNumber_ = 1;
 	bool showOverwritePopup_ = false;
 
-	/// 左ペインに表示するステータス文字列（成功=緑、エラー=赤）
+	/// ステータス文字列（成功=緑、エラー=赤）
 	std::string statusMessage_;
 	bool        statusIsError_ = false;
 
@@ -106,39 +111,31 @@ private:
 	//  ImGui 描画
 	// ============================================================
 
-	/// <summary>左ペイン：グリッド設定・ツール選択・ロード・セーブ</summary>
-	void DrawLeftPane();
+	/// "ツール・設定" ウィンドウ内容
+	void DrawToolPanel();
 
-	/// <summary>中央ペイン：グリッドビューポート（DrawList で描画）</summary>
-	void DrawCenterPane();
+	/// "マップビューポート" ウィンドウ内容
+	void DrawViewportWindow();
 
-	/// <summary>右ペイン：選択ノードのプロパティ（接続フラグ・エンティティ）</summary>
-	void DrawRightPane();
+	/// "プロパティ" ウィンドウ内容
+	void DrawPropertiesPanel();
 
-	/// <summary>上書き確認ポップアップ</summary>
+	/// 上書き確認ポップアップ（DrawToolPanel 内で呼ぶ）
 	void DrawOverwritePopup();
 
 	// ============================================================
 	//  座標変換
 	// ============================================================
 
-	/// <summary>
-	/// グリッド座標 → ImGui スクリーン座標（Y軸反転）
-	/// </summary>
 	ImVec2 GridToScreen(int gx, int gy, ImVec2 viewportOrigin) const;
-
-	/// <summary>
-	/// ImGui スクリーン座標 → グリッド座標（Y軸反転）
-	/// グリッド範囲外の場合 false を返す。
-	/// </summary>
 	bool ScreenToGrid(ImVec2 screenPos, ImVec2 viewportOrigin, int& outX, int& outY) const;
 
 	// ============================================================
 	//  ノード・エンティティ操作
 	// ============================================================
 
-	/// ビューポートのクリックを currentTool_ に応じて振り分ける
-	void HandleViewportClick(int gx, int gy);
+	/// isRightClick=false→配置/接続, true→削除/切断
+	void HandleViewportClick(int gx, int gy, bool isRightClick);
 
 	void PlaceNode(int gx, int gy);
 	void DeleteNode(int gx, int gy);
@@ -146,7 +143,6 @@ private:
 	/// Connect / Disconnect ツールの 2 クリック処理
 	/// isConnect=true で接続追加、false で接続削除
 	void HandleConnectClick(int gx, int gy, bool isConnect);
-
 	void PlaceEntity(int gx, int gy);
 	void DeleteEntity(int gx, int gy);
 
@@ -169,18 +165,13 @@ private:
 
 	void ExecuteSave();
 	void ExecuteLoad();
-
-	/// セーブ前のバリデーション。NG の場合 errorMsg にメッセージを入れて false を返す。
 	bool ValidateStage(std::string& errorMsg) const;
-
-	/// std::ifstream で存在チェック（C++17 不要）
 	bool FileExists(const std::string& path) const;
 
 	// ============================================================
 	//  ECS ヘルパー
 	// ============================================================
 
-	/// ECS から GridCellComponent を持つ全エンティティを削除
 	void ClearGridEntities(No::Registry& registry);
 
 	// ============================================================
@@ -189,7 +180,5 @@ private:
 
 	void SetStatus(const std::string& msg, bool isError);
 };
-
-
 
 #endif // USE_IMGUI
