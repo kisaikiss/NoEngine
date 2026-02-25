@@ -66,16 +66,19 @@ private:
 	//  グリッド設定
 	// ============================================================
 
-	int gridWidth_ = 10; // 編集可能範囲（幅）
-	int gridHeight_ = 10; // 編集可能範囲（高さ）
-	int viewOriginX_ = 0;  // ビューポート左端のグリッド X 座標
-	int viewOriginY_ = 0;  // ビューポート下端のグリッド Y 座標（ゲーム座標）
+	int gridWidth_ = 10;		// 編集可能範囲（幅）
+	int gridHeight_ = 10;		// 編集可能範囲（高さ）
+	int viewOriginX_ = 0;		// ビューポート左端のグリッド X 座標
+	int viewOriginY_ = 0;		// ビューポート下端のグリッド Y 座標（ゲーム座標）
+	float gridScale_ = 1.0f;	// gridのサイズを指定する変数
+
 
 	// Apply ボタンを押すまで実際の値に反映しない pending 値
 	int pendingWidth_ = 10;
 	int pendingHeight_ = 10;
 	int pendingOriginX_ = 0;
 	int pendingOriginY_ = 0;
+	float pendingScale_ = 1.0f;
 
 	// ============================================================
 	//  UI 状態

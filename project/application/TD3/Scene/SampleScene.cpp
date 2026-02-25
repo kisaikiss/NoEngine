@@ -16,6 +16,7 @@
 #include "../System/CollisionSystem.h"
 #include "../System/EnemyCollisionSystem.h"
 #include "../MapData/MapLoader.h"
+#include "../Utility/GridUtils.h"
 #include <vector>
 #include <string>
 
@@ -43,6 +44,9 @@ void SampleScene::Setup() {
 	std::string path = "resources/game/td_3105/Stages/stage_0"
 		+ std::to_string(stageNumber_) + ".json";
 	MapData::StageData stageData = MapLoader::LoadStage(path);
+
+	// ロードしたスケールをGridUtilsに設定
+	GridUtils::gGridScale = stageData.connectionMap.gridScale;
 
 	InitializeGrid(registry, stageData.connectionMap);
 	for (const auto& entity : stageData.entityMap.entities) {
@@ -77,11 +81,17 @@ void SampleScene::ReloadStage(int stageNumber) {
 	for (auto e : all) {
 		registry.DestroyEntity(e);
 	}
+	
+	// 削除を即座に実行
+	registry.FlushDestroy();
 
 	// ---- 指定ステージを読み込んで再初期化 ----
 	std::string path = "resources/game/td_3105/Stages/stage_0"
 		+ std::to_string(stageNumber_) + ".json";
 	MapData::StageData stageData = MapLoader::LoadStage(path);
+
+	// ロードしたスケールをGridUtilsに設定
+	GridUtils::gGridScale = stageData.connectionMap.gridScale;
 
 	InitializeGrid(registry, stageData.connectionMap);
 	for (const auto& entity : stageData.entityMap.entities) {

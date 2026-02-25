@@ -11,18 +11,41 @@
 namespace GridUtils {
 
 	// ============================================================
+	//  グローバル設定
+	// ============================================================
+
+	/// <summary>
+	/// グリッド1マスのワールド単位スケール。
+	/// エディタやJSONから変更可能。デフォルトは1.0f。
+	/// </summary>
+	inline float gGridScale = 1.0f;
+
+	// ============================================================
 	//  座標変換
 	// ============================================================
 
 	/// <summary>
-	/// グリッド座標をワールド座標に変換する。
-	/// scale パラメータを持たせることで、将来マップスケールが変わっても
-	/// この1か所を変えるだけで全システムに反映される。
+	/// グリッド座標をワールド座標に変換する
+	/// 通常はこちらを使用する。
 	/// </summary>
 	/// <param name="x">グリッドX座標</param>
 	/// <param name="y">グリッドY座標</param>
-	/// <param name="scale">グリッド1マス = 何ワールド単位か（デフォルト1.0f）</param>
-	inline No::Vector3 GridToWorld(int x, int y, float scale = 1.0f) {
+	inline No::Vector3 GridToWorld(int x, int y) {
+		return No::Vector3{
+			static_cast<float>(x) * gGridScale,
+			static_cast<float>(y) * gGridScale,
+			0.0f
+		};
+	}
+
+	/// <summary>
+	/// グリッド座標をワールド座標に変換する（カスタムスケール版）。
+	/// 特殊な用途でスケールを明示的に指定したい場合のみ使用。
+	/// </summary>
+	/// <param name="x">グリッドX座標</param>
+	/// <param name="y">グリッドY座標</param>
+	/// <param name="scale">グリッド1マス = 何ワールド単位か</param>
+	inline No::Vector3 GridToWorld(int x, int y, float scale) {
 		return No::Vector3{
 			static_cast<float>(x) * scale,
 			static_cast<float>(y) * scale,
@@ -31,8 +54,18 @@ namespace GridUtils {
 	}
 
 	/// <summary>
-	/// ワールド座標をグリッド座標に変換する（逆変換）。
-	/// マップエディタのクリック判定で使用する。
+	/// ワールド座標をグリッド座標に変換する
+	/// </summary>
+	/// <param name="worldPos">ワールド座標</param>
+	/// <param name="outX">出力グリッドX座標</param>
+	/// <param name="outY">出力グリッドY座標</param>
+	inline void WorldToGrid(const No::Vector3& worldPos, int& outX, int& outY) {
+		outX = static_cast<int>(std::round(worldPos.x / gGridScale));
+		outY = static_cast<int>(std::round(worldPos.y / gGridScale));
+	}
+
+	/// <summary>
+	/// ワールド座標をグリッド座標に変換する（カスタムスケール版）。
 	/// </summary>
 	/// <param name="worldPos">ワールド座標</param>
 	/// <param name="scale">グリッド1マス = 何ワールド単位か</param>

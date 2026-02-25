@@ -3,6 +3,7 @@
 
 #include "../Component/GridCellComponent.h"
 #include "../MapData/MapLoader.h"
+#include "../Utility/GridUtils.h"
 #include <algorithm>
 #include <fstream>
 #include <climits>
@@ -74,11 +75,13 @@ void MapEditor::Reset() {
 	gridHeight_ = 10;
 	viewOriginX_ = 0;
 	viewOriginY_ = 0;
+	gridScale_ = 1.0f;
 
 	pendingWidth_ = 10;
 	pendingHeight_ = 10;
 	pendingOriginX_ = 0;
 	pendingOriginY_ = 0;
+	pendingScale_ = 1.0f;
 
 	selectedNode_ = { INVALID, INVALID };
 	connectFirstNode_ = { INVALID, INVALID };
@@ -112,6 +115,8 @@ void MapEditor::DrawToolPanel() {
 	ImGui::InputInt("高さ", &pendingHeight_);
 	ImGui::InputInt("原点 X", &pendingOriginX_);
 	ImGui::InputInt("原点 Y", &pendingOriginY_);
+	ImGui::DragFloat("スケール", &pendingScale_, 0.01f, 0.1f, 100.0f, "%.2f");
+	if (pendingScale_ < 0.1f) pendingScale_ = 0.1f;
 
 	if (pendingWidth_ < 1) pendingWidth_ = 1;
 	if (pendingHeight_ < 1) pendingHeight_ = 1;
@@ -131,7 +136,9 @@ void MapEditor::DrawToolPanel() {
 		gridHeight_ = pendingHeight_;
 		viewOriginX_ = pendingOriginX_;
 		viewOriginY_ = pendingOriginY_;
-
+		gridScale_ = pendingScale_;
+		GridUtils::gGridScale = gridScale_;
+		dirty_ = true;
 		if (outOfRange) {
 			SetStatus("警告: 範囲外のノードがあります", true);
 		}
@@ -883,7 +890,7 @@ void MapEditor::DrawCrossPanel(MapData::NodeData& node)
 
 void MapEditor::ExecuteSave() {
 	MapData::StageData stageData;
-	stageData.connectionMap.gridScale = 1.0f;
+	stageData.connectionMap.gridScale = gridScale_;
 
 	std::string stageStr = (saveStageNumber_ < 10 ? "0" : "") + std::to_string(saveStageNumber_);
 	stageData.connectionMap.stageName = "stage_" + stageStr;
@@ -943,6 +950,9 @@ void MapEditor::ExecuteLoad() {
 			pendingOriginY_ = viewOriginY_;
 			pendingWidth_ = gridWidth_;
 			pendingHeight_ = gridHeight_;
+			gridScale_ = stageData.connectionMap.gridScale;
+			pendingScale_ = gridScale_;
+			GridUtils::gGridScale = gridScale_;
 		}
 
 		selectedNode_ = { INVALID, INVALID };
@@ -1058,7 +1068,7 @@ void MapEditor::SetStatus(const std::string& msg, bool isError) {
 //  変更を加える直前に呼ぶ。現在の nodes_ / entities_ を保存する。
 //  DrawCrossPanel / DrawPropertiesPanel のように ImGui が参照越しに
 //  直接書き換える箇所では、描画開始前にスナップショットを手動で
-//  作成し、changed 確認後にスタックへ積む（PushUndo は使わない）。
+//  作成し、changed 確認後にのみスタックへ積む（PushUndo は使わない）。
 // ============================================================
 
 void MapEditor::PushUndo() {
