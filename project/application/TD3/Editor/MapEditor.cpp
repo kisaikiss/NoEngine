@@ -11,6 +11,14 @@
 void MapEditor::Update(No::Registry& registry) {
 	dirty_ = false;
 
+	// ---- Ctrl+Z / Ctrl+Y ショートカット（テキスト入力中は無視）----
+	// WantTextInput が true のとき ImGui の InputInt 等にフォーカスがある。
+	if (!ImGui::GetIO().WantTextInput) {
+		const bool ctrl = ImGui::GetIO().KeyCtrl;
+		if (ctrl && ImGui::IsKeyPressed(ImGuiKey_Z)) Undo();
+		if (ctrl && ImGui::IsKeyPressed(ImGuiKey_Y)) Redo();
+	}
+
 	ImGui::Begin("マップエディタ", nullptr,
 		ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
 
@@ -25,7 +33,7 @@ void MapEditor::Update(No::Registry& registry) {
 	float vpW = static_cast<float>(gridWidth_) * CELL_SIZE;
 	float vpH = static_cast<float>(gridHeight_) * CELL_SIZE;
 
-	float padding = ImGui::GetStyle().ScrollbarSize; + 8.0f;                  // バー分 + 余白
+	float padding = ImGui::GetStyle().ScrollbarSize; +8.0f;// バー分 + 余白
 
 	float childW = std::min(vpW + padding, 520.0f);
 	float childH = std::min(vpH + padding, 520.0f);
@@ -84,6 +92,10 @@ void MapEditor::Reset() {
 	statusMessage_ = "";
 	statusIsError_ = false;
 	dirty_ = false;
+
+	// Undo / Redo 履歴もリセット（ロード前の状態には戻せないため）
+	undoStack_.clear();
+	redoStack_.clear();
 }
 
 // ============================================================
@@ -127,10 +139,41 @@ void MapEditor::DrawToolPanel() {
 
 	ImGui::Spacing();
 
+	// ========== Undo / Redo ==========
+	ImGui::Text("操作履歴");
+	ImGui::Separator();
+
+	// Undo ボタン（履歴がなければグレーアウト）
+	const bool canUndo = !undoStack_.empty();
+	const bool canRedo = !redoStack_.empty();
+
+	if (!canUndo) ImGui::BeginDisabled();
+	if (ImGui::Button("Undo", ImVec2(ImGui::GetContentRegionAvail().x * 0.5f - 2.0f, 0))) {
+		Undo();
+	}
+	if (!canUndo) ImGui::EndDisabled();
+
+	ImGui::SameLine();
+
+	if (!canRedo) ImGui::BeginDisabled();
+	if (ImGui::Button("Redo", ImVec2(-1, 0))) {
+		Redo();
+	}
+	if (!canRedo) ImGui::EndDisabled();
+
+	// 残り手数表示
+	ImGui::TextDisabled("履歴: %d / %d  Redo: %d",
+		static_cast<int>(undoStack_.size()), MAX_UNDO,
+		static_cast<int>(redoStack_.size()));
+	ImGui::TextDisabled("Ctrl+Z / Ctrl+Y");
+
+	ImGui::Spacing();
+
 	// ========== ツール選択 ==========
 	ImGui::Text("ツール");
 	ImGui::Separator();
-	ImGui::TextDisabled("左クリック: 配置 / 右クリック: 削除");
+	ImGui::TextDisabled("左クリック: 配置");
+	ImGui::TextDisabled("右クリック: 削除");
 	ImGui::Spacing();
 
 	// アクティブなツールのボタンを強調表示するラムダ
@@ -390,10 +433,21 @@ void MapEditor::DrawPropertiesPanel() {
 		}
 	}
 
+	// ★ DrawCrossPanel と同じ理由で描画前スナップショットを保存する。
+	//    RadioButton が直接 entities_ を書き換えるため、
+	//    changed 確認後にのみスタックへ積む。
+	EditorSnapshot preEntity = { nodes_, entities_ };
+	bool entityChanged = false;
+
 	if (ImGui::RadioButton("なし##prop", currentType == "none")) {
-		if (entityIdx >= 0) entities_.erase(entities_.begin() + entityIdx);
+		if (entityIdx >= 0) {
+			entityChanged = true;
+			entities_.erase(entities_.begin() + entityIdx);
+		}
+		// entityIdx < 0 のとき（すでに「なし」）は変化なし → entityChanged=false のまま
 	}
 	if (ImGui::RadioButton("プレイヤー##prop", currentType == "player")) {
+		entityChanged = true;
 		// 既存の Player を全削除してから配置（1体制約）
 		entities_.erase(
 			std::remove_if(entities_.begin(), entities_.end(),
@@ -404,11 +458,19 @@ void MapEditor::DrawPropertiesPanel() {
 		entities_.push_back(ed);
 	}
 	if (ImGui::RadioButton("敵##prop", currentType == "enemy")) {
+		entityChanged = true;
 		if (entityIdx >= 0) entities_.erase(entities_.begin() + entityIdx);
 		MapData::EntityData ed;
 		ed.type = "enemy"; ed.x = node.x; ed.y = node.y;
 		ed.enemyType = "normal";
 		entities_.push_back(ed);
+	}
+
+	if (entityChanged) {
+		undoStack_.push_back(std::move(preEntity));
+		if (static_cast<int>(undoStack_.size()) > MAX_UNDO)
+			undoStack_.erase(undoStack_.begin());
+		redoStack_.clear();
 	}
 }
 
@@ -529,7 +591,9 @@ void MapEditor::HandleViewportClick(int gx, int gy, bool isRightClick) {
 // ============================================================
 
 void MapEditor::PlaceNode(int gx, int gy) {
-	if (nodes_.count({ gx, gy })) return;
+	if (nodes_.count({ gx, gy })) return; // 既に存在 → 変化なし、Undo不要
+
+	PushUndo();
 
 	MapData::NodeData node;
 	node.x = gx; node.y = gy;
@@ -546,7 +610,9 @@ void MapEditor::PlaceNode(int gx, int gy) {
 
 void MapEditor::DeleteNode(int gx, int gy) {
 	auto it = nodes_.find({ gx, gy });
-	if (it == nodes_.end()) return;
+	if (it == nodes_.end()) return; // 存在しない → 変化なし、Undo不要
+
+	PushUndo();
 
 	// 隣接ノードの接続フラグを解除（双方向）
 	if (nodes_.count({ gx,     gy + 1 })) nodes_.at({ gx,     gy + 1 }).down = false;
@@ -598,9 +664,11 @@ void MapEditor::HandleConnectClick(int gx, int gy, bool isConnect) {
 		if (!AreAdjacent(ax, ay, gx, gy)) {
 			SetStatus("隣接するノードのみ操作できます", true);
 		} else if (isConnect) {
+			PushUndo(); // 接続確定時のみ Undo に積む（1クリック目はUI状態変化のみ）
 			AddConnection(ax, ay, gx, gy);
 			SetStatus("接続しました", false);
 		} else {
+			PushUndo(); // 切断確定時のみ Undo に積む
 			RemoveConnection(ax, ay, gx, gy);
 			SetStatus("切断しました", false);
 		}
@@ -616,8 +684,10 @@ void MapEditor::HandleConnectClick(int gx, int gy, bool isConnect) {
 void MapEditor::PlaceEntity(int gx, int gy) {
 	if (!nodes_.count({ gx, gy })) {
 		SetStatus("ノード上にのみ配置できます", true);
-		return;
+		return; // 変化なし → Undo不要
 	}
+
+	PushUndo();
 
 	// Player は 1 体のみ → 既存 Player を全削除
 	if (entityTypeToPlace_ == "player") {
@@ -651,7 +721,13 @@ void MapEditor::PlaceEntity(int gx, int gy) {
 // ============================================================
 
 void MapEditor::DeleteEntity(int gx, int gy) {
-	size_t before = entities_.size();
+	// 削除対象が存在するか先に確認してから Undo に積む
+	bool exists = std::any_of(entities_.begin(), entities_.end(),
+		[gx, gy](const MapData::EntityData& e) { return e.x == gx && e.y == gy; });
+	if (!exists) return; // 変化なし → Undo不要
+
+	PushUndo();
+
 	entities_.erase(
 		std::remove_if(entities_.begin(), entities_.end(),
 			[gx, gy](const MapData::EntityData& e) {
@@ -659,9 +735,7 @@ void MapEditor::DeleteEntity(int gx, int gy) {
 			}),
 		entities_.end());
 
-	if (entities_.size() < before) {
-		SetStatus("エンティティを削除しました", false);
-	}
+	SetStatus("エンティティを削除しました", false);
 }
 
 // ============================================================
@@ -714,6 +788,12 @@ void MapEditor::DrawCrossPanel(MapData::NodeData& node)
 	ImGui::Text("接続方向");
 	ImGui::Separator();
 
+	// ★ 描画前にスナップショットを保存する。
+	//    DirButton が node.up/down/left/right を参照で直接書き換えるため、
+	//    PushUndo() を changed の後に呼ぶと「変更後の状態」が積まれてしまう。
+	//    変更前の状態をここで手動保存し、changed == true のときだけ積む。
+	EditorSnapshot preSnap = { nodes_, entities_ };
+
 	const float size = 36.0f;
 	ImVec2 btn(size, size);
 
@@ -733,7 +813,7 @@ void MapEditor::DrawCrossPanel(MapData::NodeData& node)
 				ImGui::PopStyleColor(3);
 
 			if (pressed)
-				flag = !flag;
+				flag = !flag; // ← ここで node のメンバが書き換わる
 
 			return pressed;
 		};
@@ -774,6 +854,13 @@ void MapEditor::DrawCrossPanel(MapData::NodeData& node)
 
 	if (changed)
 	{
+		// 変更が確定したので、変更前スナップショットを Undo スタックへ積む
+		undoStack_.push_back(std::move(preSnap));
+		if (static_cast<int>(undoStack_.size()) > MAX_UNDO)
+			undoStack_.erase(undoStack_.begin());
+		redoStack_.clear();
+
+		// 隣接ノードとの双方向同期
 		auto syncNeighbor = [&](int nx, int ny, bool newVal,
 			bool MapData::NodeData::* neighborField)
 			{
@@ -862,6 +949,10 @@ void MapEditor::ExecuteLoad() {
 		connectFirstNode_ = { INVALID, INVALID };
 		connectIsDisconnecting_ = false;
 		dirty_ = true;
+
+		// ロード完了 → 以前の Undo 履歴は意味をなさないのでクリア
+		undoStack_.clear();
+		redoStack_.clear();
 
 		SetStatus("ステージ " + std::to_string(loadStageNumber_) + " を読み込みました", false);
 	} catch (const std::exception& e) {
@@ -960,6 +1051,74 @@ void MapEditor::ClearGridEntities(No::Registry& registry) {
 void MapEditor::SetStatus(const std::string& msg, bool isError) {
 	statusMessage_ = msg;
 	statusIsError_ = isError;
+}
+
+// ============================================================
+//  PushUndo
+//  変更を加える直前に呼ぶ。現在の nodes_ / entities_ を保存する。
+//  DrawCrossPanel / DrawPropertiesPanel のように ImGui が参照越しに
+//  直接書き換える箇所では、描画開始前にスナップショットを手動で
+//  作成し、changed 確認後にスタックへ積む（PushUndo は使わない）。
+// ============================================================
+
+void MapEditor::PushUndo() {
+	undoStack_.push_back({ nodes_, entities_ });
+	if (static_cast<int>(undoStack_.size()) > MAX_UNDO)
+		undoStack_.erase(undoStack_.begin());
+	redoStack_.clear();
+}
+
+// ============================================================
+//  Undo
+// ============================================================
+
+void MapEditor::Undo() {
+	if (undoStack_.empty()) {
+		SetStatus("これ以上戻れません", true);
+		return;
+	}
+	// 現在の状態を Redo スタックへ退避
+	redoStack_.push_back({ nodes_, entities_ });
+	if (static_cast<int>(redoStack_.size()) > MAX_UNDO)
+		redoStack_.erase(redoStack_.begin());
+
+	// 1つ前の状態を復元
+	nodes_ = std::move(undoStack_.back().nodes);
+	entities_ = std::move(undoStack_.back().entities);
+	undoStack_.pop_back();
+
+	// 接続操作の途中状態をリセット（中断されたとみなす）
+	connectFirstNode_ = { INVALID, INVALID };
+	connectIsDisconnecting_ = false;
+
+	dirty_ = true;
+	SetStatus("元に戻しました (残り " + std::to_string(undoStack_.size()) + " 手)", false);
+}
+
+// ============================================================
+//  Redo
+// ============================================================
+
+void MapEditor::Redo() {
+	if (redoStack_.empty()) {
+		SetStatus("やり直す操作がありません", true);
+		return;
+	}
+	// 現在の状態を Undo スタックへ退避
+	undoStack_.push_back({ nodes_, entities_ });
+	if (static_cast<int>(undoStack_.size()) > MAX_UNDO)
+		undoStack_.erase(undoStack_.begin());
+
+	// 1つ先の状態を復元
+	nodes_ = std::move(redoStack_.back().nodes);
+	entities_ = std::move(redoStack_.back().entities);
+	redoStack_.pop_back();
+
+	connectFirstNode_ = { INVALID, INVALID };
+	connectIsDisconnecting_ = false;
+
+	dirty_ = true;
+	SetStatus("やり直しました (Redo 残り " + std::to_string(redoStack_.size()) + " 手)", false);
 }
 
 #endif // USE_IMGUI

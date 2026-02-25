@@ -34,6 +34,25 @@ public:
 
 private:
 	// ============================================================
+	//  Undo / Redo スナップショット
+	// ============================================================
+
+	/// nodes_ と entities_ の丸ごとコピー。
+	/// スナップショット方式を採用する理由:
+	///   DrawCrossPanel / DrawPropertiesPanel の RadioButton が
+	///   参照経由で nodes_ / entities_ を直接書き換えるため、
+	///   コマンドパターンでは「変更前」の取得箇所がなくなる。
+	struct EditorSnapshot {
+		std::map<std::pair<int, int>, MapData::NodeData> nodes;
+		std::vector<MapData::EntityData>                 entities;
+	};
+
+	std::vector<EditorSnapshot> undoStack_;  ///< Undo 履歴（末尾が最新）
+	std::vector<EditorSnapshot> redoStack_;  ///< Redo 履歴（末尾が最新）
+
+	static constexpr int MAX_UNDO = 50;      ///< 履歴の上限数
+
+	// ============================================================
 	//  内部データ
 	// ============================================================
 
@@ -182,6 +201,21 @@ private:
 	// ============================================================
 
 	void SetStatus(const std::string& msg, bool isError);
+
+	// ============================================================
+	//  Undo / Redo
+	// ============================================================
+
+	/// 現在の nodes_ / entities_ を Undo スタックに積む。
+	/// Redo スタックはクリアされる。
+	/// 必ず変更を加える直前に呼ぶこと。
+	void PushUndo();
+
+	/// 1つ前の状態に戻す。
+	void Undo();
+
+	/// 1つ先の状態へ進む。
+	void Redo();
 };
 
 #endif // USE_IMGUI
