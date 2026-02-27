@@ -6,7 +6,7 @@
 ///
 ///	使用方法
 ///	Player → maxHp=5, currentHp=5 で AddComponent 後に設定
-///	Enemy  → デフォルト値のまま AddComponent（maxHp=1, currentHp=1）
+///	Enemy  → デフォルト値のまま AddComponent（maxHp=1, currentHp=1）HPといいつつ当たったら死ぬイメージ
 /// </summary>
 struct HealthComponent {
 	

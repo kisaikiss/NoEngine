@@ -100,7 +100,7 @@ void SampleScene::SetupCameraForStage(const MapData::ConnectionMapData& mapData)
 	float spanX = static_cast<float>(maxX - minX) * GridUtils::gGridScale;
 	float spanY = static_cast<float>(maxY - minY) * GridUtils::gGridScale;
 
-	// Camera::fovY_ = 0.45f（Camera.cppのコンストラクタで固定されている値）
+	// Camera::fovY_ = 0.45f（Cameraのコンストラクタで固定されている値）
 	// アスペクト比は取得できないため、X/Y両方向で必要なZを計算して大きい方を採用する。
 	//
 	// 【計算式】
@@ -110,9 +110,9 @@ void SampleScene::SetupCameraForStage(const MapData::ConnectionMapData& mapData)
 	//
 	// アスペクト比が不明なので spanX / spanY の比率でアスペクトを推定し
 	// 横方向の必要Zも計算して安全側（大きい方）を使う。
-	const float FOV_Y = 0.45f;             // Camera.cppと合わせる
-	const float MARGIN = 1.3f;             // 余白係数（大きいほど余裕が出る）
-	const float Z_MIN = 5.0f;             // 最低Z距離
+	const float FOV_Y = 0.45f;				// Cameraと合わせる
+	const float MARGIN = 1.3f;				// 余白係数（大きいほど余裕が出る）
+	const float Z_MIN = 5.0f;				// 最低Z距離
 
 	float halfFov = FOV_Y * 0.5f;
 	float tanHalfFov = std::tan(halfFov);    // ≈ 0.230
@@ -121,8 +121,6 @@ void SampleScene::SetupCameraForStage(const MapData::ConnectionMapData& mapData)
 	float zForY = (spanY * 0.5f) / tanHalfFov;
 
 	// X方向に収めるために必要なZ
-	// 一般的なアスペクト比 16:9 ≈ 1.778 を仮定して計算
-	// （実際のアスペクト比と違っても余白係数MARGINで吸収できる）
 	const float ASSUMED_ASPECT = 16.0f / 9.0f;
 	float zForX = (spanX * 0.5f) / (tanHalfFov * ASSUMED_ASPECT);
 

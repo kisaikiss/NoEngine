@@ -7,7 +7,7 @@
 /// 入力履歴・弾薬など「プレイヤー固有」のフィールドは持たない。
 ///
 /// 移動方向の決定は EnemyMovementSystem が行う。
-///   Stage4: BFS による最短経路探索（後退禁止制約考慮）
+/// BFS による最短経路探索（後退禁止制約考慮）
 /// </summary>
 struct EnemyComponent {
 
