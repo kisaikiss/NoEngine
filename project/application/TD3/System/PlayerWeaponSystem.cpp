@@ -26,7 +26,7 @@ void PlayerWeaponSystem::Update(No::Registry& registry, float deltaTime) {
 		auto* player = registry.GetComponent<PlayerComponent>(entity);
 		auto* transform = registry.GetComponent<No::TransformComponent>(entity);
 
-		HandleBulletFire(player, registry, transform->translate);
+		HandleBulletFire(player, registry, transform->translate, transform->rotation);
 
 #ifdef USE_IMGUI
 		DebugUI(player);
@@ -41,7 +41,8 @@ void PlayerWeaponSystem::Update(No::Registry& registry, float deltaTime) {
 void PlayerWeaponSystem::HandleBulletFire(
 	PlayerComponent* player,
 	No::Registry& registry,
-	const No::Vector3 playerPosition // 値渡し：ダングリングリファレンス防止
+	const No::Vector3 playerPosition,      // 値渡し：ダングリングリファレンス防止
+	const NoEngine::Math::Quaternion playerRotation  // 値渡し：ダングリングリファレンス防止
 ) {
 	if (!NoEngine::Input::Keyboard::IsTrigger(KEY_SPACE)) return;
 	if (player->currentBullets <= 0)                       return;
@@ -74,13 +75,15 @@ void PlayerWeaponSystem::HandleBulletFire(
 	auto* transform = registry.AddComponent<No::TransformComponent>(bulletEntity);
 	transform->translate = playerPosition;
 	transform->scale = { 0.2f, 0.2f, 0.2f };
+	// 回転はplayerの向きと同じにする
+	transform->rotation = playerRotation;
 
 	auto* mesh = registry.AddComponent<No::MeshComponent>(bulletEntity);
 	auto* material = registry.AddComponent<No::MaterialComponent>(bulletEntity);
 
 	NoEngine::Asset::ModelLoader::LoadModel(
 		"PlayerBullet",
-		"resources/game/td_3105/Model/ball/ball.obj",
+		"resources/game/td_3105/Model/Shot/Shot.obj",
 		mesh
 	);
 

@@ -21,7 +21,8 @@ private:
 	void HandleBulletFire(
 		PlayerComponent* player,
 		No::Registry& registry,
-		const No::Vector3 playerPosition // 値渡し：ダングリングリファレンス防止
+		const No::Vector3 playerPosition,      // 値渡し：ダングリングリファレンス防止
+		const NoEngine::Math::Quaternion playerRotation  // 値渡し：ダングリングリファレンス防止
 	);
 
 	/// <summary>

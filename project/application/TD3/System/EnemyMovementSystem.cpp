@@ -123,13 +123,22 @@ void EnemyMovementSystem::HandleOnEdge(
 
 	// ノード到達チェック（高速移動対応）
 	while (enemy->progressOnEdge >= 1.0f) {
-		enemy->progressOnEdge -= 1.0f;
+		// 余剰分を先に保持
+		float overflow = enemy->progressOnEdge - 1.0f;
+		
+		// progressOnEdge を1.0に設定してからノード到達処理
+		enemy->progressOnEdge = 1.0f;
 		OnReachNode(enemy, playerX, playerY, registry);
 
 		// 停止（方向が決まらなかった）場合はループ脱出
 		if (enemy->state != PlayerState::MovingOnEdge) {
 			break;
 		}
+		
+		// 次の移動が開始された場合、余剰分を引き継ぐ
+		// StartMovement内でprogressOnEdgeが0.0にリセットされているため、
+		// ここで余剰分を加算する
+		enemy->progressOnEdge += overflow;
 	}
 }
 
@@ -199,9 +208,25 @@ Direction EnemyMovementSystem::ChooseDirection(
 	int playerX, int playerY,
 	No::Registry& registry
 ) {
-	// ========== すでにプレイヤーと同じノードにいる場合 ==========
+	// ========== プレイヤーと完全に同じノードで、プレイヤーも停止中の場合のみ停止 ==========
+	// プレイヤーが移動中の場合は targetNode を追いかける必要があるため、
+	// ここでは停止しない
 	if (enemy->currentNodeX == playerX && enemy->currentNodeY == playerY) {
-		return Direction::None;
+		// プレイヤーの状態を確認
+		auto playerView = registry.View<PlayerComponent, PlayerTag>();
+		if (!playerView.Empty()) {
+			auto it = playerView.begin();
+			auto* player = registry.GetComponent<PlayerComponent>(*it);
+			
+			// プレイヤーが移動中の場合は targetNode を目標にする
+			if (player && player->state == PlayerState::MovingOnEdge) {
+				playerX = player->targetNodeX;
+				playerY = player->targetNodeY;
+			} else {
+				// プレイヤーが停止中で同じノードにいる場合のみ停止
+				return Direction::None;
+			}
+		}
 	}
 
 	// ========== BFS の準備 ==========

@@ -424,7 +424,7 @@ void SampleScene::InitializePlayer(No::Registry& registry, int startX, int start
 	auto* material = registry.AddComponent<No::MaterialComponent>(entity);
 	NoEngine::Asset::ModelLoader::LoadModel(
 		"TestPlayer",
-		"resources/game/td_3105/Model/TestPlayer/TestPlayer.obj",
+		"resources/game/td_3105/Model/Player/PlayerModel.obj",
 		mesh
 	);
 	material->materials = NoEngine::Asset::ModelLoader::GetMaterial("TestPlayer");
@@ -462,7 +462,7 @@ void SampleScene::InitializeEnemy(No::Registry& registry, int startX, int startY
 	auto* material = registry.AddComponent<No::MaterialComponent>(entity);
 	NoEngine::Asset::ModelLoader::LoadModel(
 		"Enemy",
-		"resources/game/td_3105/Model/TestPlayer/TestPlayer.obj",
+		"resources/game/td_3105/Model/Enemy/Enemy.obj",
 		mesh
 	);
 	material->materials = NoEngine::Asset::ModelLoader::GetMaterial("Enemy");

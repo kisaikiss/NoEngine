@@ -1,36 +1,206 @@
 {
-  "stage_name": "stage_01",
   "grid_scale": 1.0,
   "nodes": [
-    { "comment": "=== 元のノード（座標 x2） ===",
-      "x":  2, "y":  6, "up": false, "right": false, "down": true,  "left": false },
-    { "x":  0, "y":  4, "up": false, "right": true,  "down": true,  "left": false },
-    { "x":  2, "y":  4, "up": true,  "right": true,  "down": true,  "left": true  },
-    { "x":  4, "y":  4, "up": false, "right": false, "down": true,  "left": true  },
-    { "x":  0, "y":  2, "up": true,  "right": true,  "down": true,  "left": false },
-    { "x":  2, "y":  2, "up": true,  "right": true,  "down": true,  "left": true  },
-    { "x":  4, "y":  2, "up": true,  "right": false, "down": true,  "left": true  },
-    { "x":  0, "y":  0, "up": true,  "right": true,  "down": false, "left": false },
-    { "x":  2, "y":  0, "up": true,  "right": true,  "down": true,  "left": true  },
-    { "x":  4, "y":  0, "up": true,  "right": false, "down": false, "left": true  },
-    { "x":  2, "y": -2, "up": true,  "right": false, "down": false, "left": false },
-
-    { "comment": "=== 縦エッジの中間ノード ===",
-      "x":  2, "y":  5, "up": true,  "right": false, "down": true,  "left": false },
-    { "x":  0, "y":  3, "up": true,  "right": false, "down": true,  "left": false },
-    { "x":  2, "y":  3, "up": true,  "right": false, "down": true,  "left": false },
-    { "x":  4, "y":  3, "up": true,  "right": false, "down": true,  "left": false },
-    { "x":  0, "y":  1, "up": true,  "right": false, "down": true,  "left": false },
-    { "x":  2, "y":  1, "up": true,  "right": false, "down": true,  "left": false },
-    { "x":  4, "y":  1, "up": true,  "right": false, "down": true,  "left": false },
-    { "x":  2, "y": -1, "up": true,  "right": false, "down": true,  "left": false },
-
-    { "comment": "=== 横エッジの中間ノード ===",
-      "x":  1, "y":  4, "up": false, "right": true,  "down": false, "left": true  },
-    { "x":  3, "y":  4, "up": false, "right": true,  "down": false, "left": true  },
-    { "x":  1, "y":  2, "up": false, "right": true,  "down": false, "left": true  },
-    { "x":  3, "y":  2, "up": false, "right": true,  "down": false, "left": true  },
-    { "x":  1, "y":  0, "up": false, "right": true,  "down": false, "left": true  },
-    { "x":  3, "y":  0, "up": false, "right": true,  "down": false, "left": true  }
-  ]
+    {
+      "down": false,
+      "left": false,
+      "right": true,
+      "up": true,
+      "x": 0,
+      "y": 0
+    },
+    {
+      "down": true,
+      "left": false,
+      "right": false,
+      "up": true,
+      "x": 0,
+      "y": 1
+    },
+    {
+      "down": true,
+      "left": false,
+      "right": true,
+      "up": true,
+      "x": 0,
+      "y": 2
+    },
+    {
+      "down": true,
+      "left": false,
+      "right": false,
+      "up": true,
+      "x": 0,
+      "y": 3
+    },
+    {
+      "down": true,
+      "left": false,
+      "right": true,
+      "up": false,
+      "x": 0,
+      "y": 4
+    },
+    {
+      "down": false,
+      "left": true,
+      "right": true,
+      "up": false,
+      "x": 1,
+      "y": 0
+    },
+    {
+      "down": false,
+      "left": true,
+      "right": true,
+      "up": false,
+      "x": 1,
+      "y": 2
+    },
+    {
+      "down": false,
+      "left": true,
+      "right": true,
+      "up": false,
+      "x": 1,
+      "y": 4
+    },
+    {
+      "down": false,
+      "left": false,
+      "right": false,
+      "up": true,
+      "x": 2,
+      "y": -2
+    },
+    {
+      "down": true,
+      "left": false,
+      "right": false,
+      "up": true,
+      "x": 2,
+      "y": -1
+    },
+    {
+      "down": true,
+      "left": true,
+      "right": true,
+      "up": true,
+      "x": 2,
+      "y": 0
+    },
+    {
+      "down": true,
+      "left": false,
+      "right": false,
+      "up": true,
+      "x": 2,
+      "y": 1
+    },
+    {
+      "down": true,
+      "left": true,
+      "right": true,
+      "up": true,
+      "x": 2,
+      "y": 2
+    },
+    {
+      "down": true,
+      "left": false,
+      "right": false,
+      "up": true,
+      "x": 2,
+      "y": 3
+    },
+    {
+      "down": true,
+      "left": true,
+      "right": true,
+      "up": true,
+      "x": 2,
+      "y": 4
+    },
+    {
+      "down": true,
+      "left": false,
+      "right": false,
+      "up": true,
+      "x": 2,
+      "y": 5
+    },
+    {
+      "down": true,
+      "left": false,
+      "right": false,
+      "up": false,
+      "x": 2,
+      "y": 6
+    },
+    {
+      "down": false,
+      "left": true,
+      "right": true,
+      "up": false,
+      "x": 3,
+      "y": 0
+    },
+    {
+      "down": false,
+      "left": true,
+      "right": true,
+      "up": false,
+      "x": 3,
+      "y": 2
+    },
+    {
+      "down": false,
+      "left": true,
+      "right": true,
+      "up": false,
+      "x": 3,
+      "y": 4
+    },
+    {
+      "down": false,
+      "left": true,
+      "right": false,
+      "up": true,
+      "x": 4,
+      "y": 0
+    },
+    {
+      "down": true,
+      "left": false,
+      "right": false,
+      "up": true,
+      "x": 4,
+      "y": 1
+    },
+    {
+      "down": true,
+      "left": true,
+      "right": false,
+      "up": true,
+      "x": 4,
+      "y": 2
+    },
+    {
+      "down": true,
+      "left": false,
+      "right": false,
+      "up": true,
+      "x": 4,
+      "y": 3
+    },
+    {
+      "down": true,
+      "left": true,
+      "right": false,
+      "up": false,
+      "x": 4,
+      "y": 4
+    }
+  ],
+  "stage_name": "stage_01"
 }
