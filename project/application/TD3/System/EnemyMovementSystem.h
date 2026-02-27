@@ -3,12 +3,17 @@
 #include "../Component/EnemyComponent.h"
 #include "../Component/PlayerComponent.h"
 
+// 前方宣言
+class GameTimer;
+
 /// <summary>
 /// 敵移動システム
 /// player->isMoving が true のときのみ敵を動かす。
 /// ChooseDirection を BFS 最短経路探索に差し替えた。
 /// 後退禁止制約は最初の1歩のみ適用し、
 /// 2歩目以降は制約なしで探索することで迂回ルートにも対応する。
+/// 
+/// ゲームタイマーを使用して、プレイヤーが移動中のみ敵が動く仕様を実現する。
 /// </summary>
 class EnemyMovementSystem : public No::ISystem {
 public:
@@ -17,7 +22,14 @@ public:
 	/// </summary>
 	void Update(No::Registry& registry, float deltaTime) override;
 
+	/// <summary>
+	/// ゲームタイマーを設定
+	/// </summary>
+	void SetGameTimer(GameTimer* timer) { gameTimer_ = timer; }
+
 private:
+	GameTimer* gameTimer_ = nullptr;
+
 	// ========== 状態別の移動処理 ==========
 
 	/// <summary>

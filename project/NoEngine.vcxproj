@@ -438,6 +438,8 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\TD3\Scene\SampleScene.h" />
     <ClInclude Include="application\TD3\System\AmmoItemSystem.h" />
     <ClInclude Include="application\TD3\System\CollisionSystem.h" />
+    <ClInclude Include="application\TD3\System\GameTimer.h" />
+    <ClInclude Include="application\TD3\System\GameTimerSystem.h" />
     <ClInclude Include="application\TD3\System\GridRenderSystem.h" />
     <ClInclude Include="application\TD3\System\PlayerBulletSystem.h" />
     <ClInclude Include="application\TD3\System\PlayerMovementSystem.h" />

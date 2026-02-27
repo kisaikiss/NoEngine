@@ -1,6 +1,7 @@
 #pragma once
 #include "engine/NoEngine.h"
 #include "../MapData/StageData.h"
+#include "../System/GameTimer.h"
 
 #ifdef USE_IMGUI
 #include "../Editor/MapEditor.h"
@@ -13,9 +14,18 @@ class SampleScene : public No::IScene {
 public:
 	void Setup() override;
 
+	/// <summary>
+	/// ゲームタイマーを取得
+	/// </summary>
+	GameTimer* GetGameTimer() { return &gameTimer_; }
+
 private:
 	std::unique_ptr<NoEngine::Camera> camera_;
 	NoEngine::Transform cameraTransform_{};
+
+	// ========== ゲームタイマー ==========
+	GameTimer gameTimer_;
+	float lastRealDeltaTime_ = 0.0f;	// デバッグ表示用
 
 	// ========== ステージ管理 ==========
 

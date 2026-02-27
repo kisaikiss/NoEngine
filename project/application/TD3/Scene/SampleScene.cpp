@@ -8,6 +8,7 @@
 #include "../Component/AmmoItemComponent.h"
 #include "../GameTag.h"
 #include "../System/GridRenderSystem.h"
+#include "../System/GameTimerSystem.h"
 #include "../System/PlayerMovementSystem.h"
 #include "../System/PlayerWeaponSystem.h"
 #include "../System/PlayerBulletSystem.h"
@@ -28,9 +29,19 @@
 #endif
 
 void SampleScene::Setup() {
+	// ゲームタイマーを初期化
+	gameTimer_.Reset();
+
+	// システムの登録（GameTimerSystemを最初に登録）
+	AddSystem(std::make_unique<GameTimerSystem>(&gameTimer_, &lastRealDeltaTime_));
 	AddSystem(std::make_unique<GridRenderSystem>());
 	AddSystem(std::make_unique<PlayerMovementSystem>());
-	AddSystem(std::make_unique<EnemyMovementSystem>());
+	
+	// EnemyMovementSystem にゲームタイマーを設定
+	auto enemyMovementSystem = std::make_unique<EnemyMovementSystem>();
+	enemyMovementSystem->SetGameTimer(&gameTimer_);
+	AddSystem(std::move(enemyMovementSystem));
+	
 	AddSystem(std::make_unique<PlayerBulletSystem>());
 	AddSystem(std::make_unique<CollisionSystem>());
 	AddSystem(std::make_unique<ShockwaveSystem>());
@@ -151,6 +162,9 @@ void SampleScene::ReloadStage(int stageNumber) {
 	
 	// 削除を即座に実行
 	registry.FlushDestroy();
+
+	// ゲームタイマーをリセット
+	gameTimer_.Reset();
 
 	// ---- 指定ステージを読み込んで再初期化 ----
 	std::string path = "resources/game/td_3105/Stages/stage_0"
@@ -281,6 +295,60 @@ void SampleScene::NotSystemUpdate() {
 
 #ifdef USE_IMGUI
 	No::Registry& registry = *GetRegistry();
+
+	// ========== プレイヤーの移動状態を取得 ==========
+	bool isPlayerMoving = false;
+	auto playerView = registry.View<PlayerComponent, PlayerTag>();
+	if (!playerView.Empty()) {
+		auto it = playerView.begin();
+		PlayerComponent* player = registry.GetComponent<PlayerComponent>(*it);
+		if (player) {
+			isPlayerMoving = player->isMoving;
+		}
+	}
+
+	// ========== ゲームタイマーデバッグ UI ==========
+	ImGui::Begin("ゲームタイマー");
+
+	ImGui::Text("プレイヤー移動%s", isPlayerMoving ? "中" : "してない");
+	ImGui::Separator();
+
+	// リアルタイムとゲームタイムの比較
+	ImGui::Text("実際のデルタタイム: %.4f 秒 (%.1f FPS)",
+		lastRealDeltaTime_,
+		lastRealDeltaTime_ > 0.0f ? 1.0f / lastRealDeltaTime_ : 0.0f);
+
+	ImGui::Text("ゲームデルタタイム: %.4f 秒",
+		gameTimer_.GetGameDeltaTime());
+
+	// 差分の計算
+	float timeDiff = lastRealDeltaTime_ - gameTimer_.GetGameDeltaTime();
+	ImGui::Text("差分: %.4f 秒", timeDiff);
+
+	ImGui::Separator();
+	ImGui::Text("累積ゲーム時間: %.2f 秒", gameTimer_.GetGameTime());
+	ImGui::Separator();
+
+	float timeScale = gameTimer_.GetTimeScale();
+	if (ImGui::SliderFloat("タイムスケール", &timeScale, 0.0f, 3.0f)) {
+		gameTimer_.SetTimeScale(timeScale);
+	}
+
+	ImGui::SameLine();
+	if (ImGui::Button("1.0倍")) {
+		gameTimer_.SetTimeScale(1.0f);
+	}
+
+	bool isPaused = gameTimer_.IsPaused();
+	if (ImGui::Checkbox("一時停止", &isPaused)) {
+		gameTimer_.SetPaused(isPaused);
+	}
+
+	if (ImGui::Button("タイマーをリセット")) {
+		gameTimer_.Reset();
+	}
+
+	ImGui::End();
 
 	// カメラ手動調整ウィンドウ（自動配置後の微調整用）
 	ImGui::Begin("camera");

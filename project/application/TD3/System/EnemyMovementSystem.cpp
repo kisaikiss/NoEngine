@@ -1,6 +1,7 @@
 #include "EnemyMovementSystem.h"
 #include "../GameTag.h"
 #include "../Utility/GridUtils.h"
+#include "../System/GameTimer.h"
 #include <cmath>
 #include <queue>
 #include <set>
@@ -23,6 +24,12 @@ void EnemyMovementSystem::Update(No::Registry& registry, float deltaTime) {
 	}
 	if (!player) return;
 
+	// ========== ゲームタイマーから経過時間を取得 ==========
+	float gameDeltaTime = 0.0f;
+	if (gameTimer_) {
+		gameDeltaTime = gameTimer_->GetGameDeltaTime();
+	}
+
 	// デバッグUI
 #ifdef USE_IMGUI
 	DebugUI(registry);
@@ -30,14 +37,15 @@ void EnemyMovementSystem::Update(No::Registry& registry, float deltaTime) {
 
 	auto enemyView = registry.View<EnemyComponent, EnemyTag, No::TransformComponent, DeathFlag>();
 
-	if (!player->isMoving) {
+	// ========== ゲーム時間が進んでいない場合 ==========
+	if (gameDeltaTime <= 0.0f) {
 		for (auto entity : enemyView) {
 			auto* enemy = registry.GetComponent<EnemyComponent>(entity);
 			auto* transform = registry.GetComponent<No::TransformComponent>(entity);
 			auto* deathFlag = registry.GetComponent<DeathFlag>(entity);
 			if (deathFlag->isDead) continue;
 
-			// reverseTimer の減算はプレイヤー停止中も行う
+			// reverseTimer の減算はリアルタイムで行う（ゲーム時間とは独立）
 			if (enemy->reverseTimer > 0.0f) {
 				enemy->reverseTimer -= deltaTime;
 				if (enemy->reverseTimer < 0.0f) enemy->reverseTimer = 0.0f;
@@ -59,7 +67,7 @@ void EnemyMovementSystem::Update(No::Registry& registry, float deltaTime) {
 		// 死亡予定の敵は処理しない
 		if (deathFlag->isDead) continue;
 
-		// ---- reverseTimer 減算 ----
+		// ---- reverseTimer 減算（リアルタイム） ----
 		if (enemy->reverseTimer > 0.0f) {
 			enemy->reverseTimer -= deltaTime;
 			if (enemy->reverseTimer < 0.0f) enemy->reverseTimer = 0.0f;
@@ -71,7 +79,7 @@ void EnemyMovementSystem::Update(No::Registry& registry, float deltaTime) {
 			break;
 
 		case PlayerState::MovingOnEdge:
-			HandleOnEdge(enemy, deltaTime, playerX, playerY, registry);
+			HandleOnEdge(enemy, gameDeltaTime, playerX, playerY, registry);
 			break;
 
 		case PlayerState::StoppedOnEdge:
@@ -314,6 +322,16 @@ void EnemyMovementSystem::UpdateTransform(
 #ifdef USE_IMGUI
 void EnemyMovementSystem::DebugUI(No::Registry& registry) {
 	ImGui::Begin("Enemy Movement");
+
+	// ゲームタイマー情報の表示
+	if (gameTimer_) {
+		ImGui::Text("ゲームタイマー(プレイヤーが動いた時しか時間取らない)");
+		ImGui::Text("Game Delta: %.4f sec", gameTimer_->GetGameDeltaTime());
+		ImGui::Text("Time Scale: %.2fx", gameTimer_->GetTimeScale());
+	} else {
+		ImGui::Text("ゲームタイマーねぇよ");
+	}
+	ImGui::Separator();
 
 	auto view = registry.View<EnemyComponent, EnemyTag>();
 	int idx = 0;

@@ -408,6 +408,8 @@
     <ClInclude Include="application\TD3\System\EnemyToEnemyCollisionSystem.h" />
     <ClInclude Include="application\TD3\Component\ShockwaveComponent.h" />
     <ClInclude Include="application\TD3\System\ShockwaveSystem.h" />
+    <ClInclude Include="application\TD3\System\GameTimer.h" />
+    <ClInclude Include="application\TD3\System\GameTimerSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />
