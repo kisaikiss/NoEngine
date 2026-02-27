@@ -32,8 +32,8 @@ void SampleScene::Setup() {
 	AddSystem(std::make_unique<PlayerMovementSystem>());
 	AddSystem(std::make_unique<EnemyMovementSystem>());
 	AddSystem(std::make_unique<PlayerBulletSystem>());
-	AddSystem(std::make_unique<ShockwaveSystem>());
 	AddSystem(std::make_unique<CollisionSystem>());
+	AddSystem(std::make_unique<ShockwaveSystem>());
 	AddSystem(std::make_unique<EnemyCollisionSystem>());
 	AddSystem(std::make_unique<EnemyToEnemyCollisionSystem>());
 	AddSystem(std::make_unique<PlayerWeaponSystem>());
@@ -386,8 +386,8 @@ void SampleScene::InitializeEnemy(No::Registry& registry, int startX, int startY
 	auto* collider = registry.AddComponent<SphereColliderComponent>(entity);
 	collider->radius = 0.5f;
 	collider->colliderType = kEnemy;
-	// kEnemy を追加：敵同士の衝突も検出する
-	collider->collideMask = kPlayer | kPlayerBullet | kEnemy;
+	// 敵同士の衝突と衝撃波も検出する
+	collider->collideMask = kPlayer | kPlayerBullet | kEnemy | kShockwave;
 
 	auto* transform = registry.AddComponent<No::TransformComponent>(entity);
 	transform->scale = { 0.2f, 0.2f, 0.2f };

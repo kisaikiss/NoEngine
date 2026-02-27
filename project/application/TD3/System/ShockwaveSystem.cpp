@@ -69,6 +69,11 @@ void ShockwaveSystem::Update(No::Registry& registry, float deltaTime) {
 					}
 					// ヒット済みとしてマーク
 					shockwave->hitEnemies.insert(enemyEntity);
+
+#ifdef USE_IMGUI
+					NoEngine::Primitive::DrawSphere(transform->translate, shockwave->currentRadius * 1.2f, 
+					                                {1.0f, 0.0f, 0.0f, 0.8f});
+#endif
 				}
 			}
 		}
@@ -76,7 +81,9 @@ void ShockwaveSystem::Update(No::Registry& registry, float deltaTime) {
 		// ---- デバッグ描画 ----
 #ifdef USE_IMGUI
 		// 衝撃波を青色の半透明円で描画
-		No::Color color = { 0.0f, 0.5f, 1.0f, shockwave->currentAlpha * 0.5f };
+		No::Color color = collider->isCollied ? 
+		    No::Color{ 1.0f, 1.0f, 0.0f, shockwave->currentAlpha * 0.7f } :  // 衝突中は黄色
+		    No::Color{ 0.0f, 0.0f, 0.0f, shockwave->currentAlpha * 0.5f };   // 通常は青
 		NoEngine::Primitive::DrawSphere(transform->translate, shockwave->currentRadius, color);
 #endif
 	}
