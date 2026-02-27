@@ -3,6 +3,7 @@
 // プレイヤー関連
 struct PlayerTag {};
 struct PlayerBulletTag {};
+struct ShockwaveTag {};
 
 // 敵関連
 struct EnemyTag {};

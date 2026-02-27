@@ -15,7 +15,8 @@
 #include "../System/EnemyMovementSystem.h"
 #include "../System/CollisionSystem.h"
 #include "../System/EnemyCollisionSystem.h"
-#include "../System/EnemyToEnemyCollisionSystem.h"   // 追加
+#include "../System/EnemyToEnemyCollisionSystem.h"
+#include "../System/ShockwaveSystem.h"
 #include "../MapData/MapLoader.h"
 #include "../Utility/GridUtils.h"
 #include <vector>
@@ -31,11 +32,13 @@ void SampleScene::Setup() {
 	AddSystem(std::make_unique<PlayerMovementSystem>());
 	AddSystem(std::make_unique<EnemyMovementSystem>());
 	AddSystem(std::make_unique<PlayerBulletSystem>());
+	AddSystem(std::make_unique<ShockwaveSystem>());
 	AddSystem(std::make_unique<CollisionSystem>());
 	AddSystem(std::make_unique<EnemyCollisionSystem>());
-	AddSystem(std::make_unique<EnemyToEnemyCollisionSystem>());  // 追加
+	AddSystem(std::make_unique<EnemyToEnemyCollisionSystem>());
 	AddSystem(std::make_unique<PlayerWeaponSystem>());
 	AddSystem(std::make_unique<AmmoItemSystem>());
+
 
 	No::Registry& registry = *GetRegistry();
 

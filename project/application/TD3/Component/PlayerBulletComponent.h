@@ -1,5 +1,6 @@
 #pragma once
 #include "engine/Math/MathInclude.h"
+#include <unordered_set>
 
 /// <summary>
 /// プレイヤーの弾丸コンポーネント
@@ -12,6 +13,8 @@ struct PlayerBulletComponent {
 	float speed;						// 移動速度
 	float travelDistance;				// 移動した距離
 	float maxDistance;					// 最大移動距離（安全網として保持しておく）
+	
+	std::unordered_set<int> visitedIntersections;	// 訪問済み交差点（重複発生防止用）
 
 	PlayerBulletComponent()
 		: direction(NoEngine::Math::Vector3::ZERO),

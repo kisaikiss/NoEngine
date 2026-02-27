@@ -175,6 +175,7 @@
     <ClCompile Include="application\TD3\MapData\MapLoader.cpp" />
     <ClCompile Include="application\TD3\Editor\MapEditor.cpp" />
     <ClCompile Include="application\TD3\System\EnemyToEnemyCollisionSystem.cpp" />
+    <ClCompile Include="application\TD3\System\ShockwaveSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -405,6 +406,8 @@
     <ClInclude Include="application\TD3\MapData\StageData.h" />
     <ClInclude Include="application\TD3\Editor\MapEditor.h" />
     <ClInclude Include="application\TD3\System\EnemyToEnemyCollisionSystem.h" />
+    <ClInclude Include="application\TD3\Component\ShockwaveComponent.h" />
+    <ClInclude Include="application\TD3\System\ShockwaveSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />
