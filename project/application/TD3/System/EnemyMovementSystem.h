@@ -28,6 +28,8 @@ public:
 	void SetGameTimer(GameTimer* timer) { gameTimer_ = timer; }
 
 private:
+	static constexpr float PI = 3.14159265358979323846f;
+	
 	GameTimer* gameTimer_ = nullptr;
 
 	// ========== 状態別の移動処理 ==========
@@ -80,6 +82,11 @@ private:
 	/// 位置更新
 	/// </summary>
 	void UpdateTransform(const EnemyComponent* enemy, No::TransformComponent* transform);
+
+	/// <summary>
+	/// 方向に応じた回転を計算する
+	/// </summary>
+	NoEngine::Math::Quaternion CalcDirectionRotation(Direction dir);
 
 #ifdef USE_IMGUI
 

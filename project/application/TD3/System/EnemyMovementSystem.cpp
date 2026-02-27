@@ -336,8 +336,57 @@ void EnemyMovementSystem::UpdateTransform(
 	const EnemyComponent* enemy,
 	No::TransformComponent* transform
 ) {
-	// 位置のみ更新する（敵のモデル回転は未実装）
+	// 位置と回転を更新
 	transform->translate = CalculateWorldPosition(enemy);
+	transform->rotation = CalcDirectionRotation(enemy->actualMovingDirection);
+}
+
+// ============================================================
+//  CalcDirectionRotation
+// ============================================================
+
+NoEngine::Math::Quaternion EnemyMovementSystem::CalcDirectionRotation(Direction dir) {
+	NoEngine::Math::Quaternion q;
+	NoEngine::Math::Quaternion baseRotation;
+	NoEngine::Math::Quaternion directionRotation;
+	
+	// 基本姿勢：頭をカメラ側に向ける（X軸周りに-90度）
+	baseRotation.FromAxisAngle(NoEngine::Math::Vector3{ 1.0f, 0.0f, 0.0f }, -PI * 0.5f);
+	
+	switch (dir) {
+	case Direction::None:
+		// 停止時は上向き（基本姿勢のみ）
+		q = baseRotation;
+		break;
+		
+	case Direction::Up:
+		// 上方向：基本姿勢のまま（追加回転なし）
+		q = baseRotation;
+		break;
+		
+	case Direction::Down:
+		// 下方向：基本姿勢 + Y軸周りに180度
+		directionRotation.FromAxisAngle(NoEngine::Math::Vector3{ 0.0f, 1.0f, 0.0f }, PI);
+		q = baseRotation * directionRotation;
+		break;
+		
+	case Direction::Right:
+		// 右方向：基本姿勢 + Y軸周りに90度
+		directionRotation.FromAxisAngle(NoEngine::Math::Vector3{ 0.0f, 1.0f, 0.0f }, PI * 0.5f);
+		q = baseRotation * directionRotation;
+		break;
+		
+	case Direction::Left:
+		// 左方向：基本姿勢 + Y軸周りに-90度
+		directionRotation.FromAxisAngle(NoEngine::Math::Vector3{ 0.0f, 1.0f, 0.0f }, -PI * 0.5f);
+		q = baseRotation * directionRotation;
+		break;
+		
+	default:
+		q = NoEngine::Math::Quaternion::IDENTITY;
+		break;
+	}
+	return q;
 }
 
 // ============================================================
