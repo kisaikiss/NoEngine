@@ -6,39 +6,39 @@
       "left": false,
       "right": false,
       "up": true,
-      "x": 0,
+      "x": -3,
       "y": -2
     },
     {
       "down": true,
       "left": false,
-      "right": false,
+      "right": true,
       "up": true,
-      "x": 0,
+      "x": -3,
       "y": -1
     },
     {
       "down": true,
       "left": false,
+      "right": false,
+      "up": true,
+      "x": -3,
+      "y": 0
+    },
+    {
+      "down": true,
+      "left": false,
       "right": true,
       "up": true,
-      "x": 0,
-      "y": 0
+      "x": -3,
+      "y": 1
     },
     {
       "down": true,
       "left": false,
       "right": false,
       "up": true,
-      "x": 0,
-      "y": 1
-    },
-    {
-      "down": true,
-      "left": false,
-      "right": true,
-      "up": true,
-      "x": 0,
+      "x": -3,
       "y": 2
     },
     {
@@ -46,15 +46,15 @@
       "left": false,
       "right": true,
       "up": true,
-      "x": 0,
+      "x": -3,
       "y": 3
     },
     {
       "down": true,
       "left": false,
-      "right": true,
+      "right": false,
       "up": true,
-      "x": 0,
+      "x": -3,
       "y": 4
     },
     {
@@ -62,7 +62,7 @@
       "left": false,
       "right": true,
       "up": true,
-      "x": 0,
+      "x": -3,
       "y": 5
     },
     {
@@ -70,7 +70,255 @@
       "left": false,
       "right": false,
       "up": false,
+      "x": -3,
+      "y": 6
+    },
+    {
+      "down": false,
+      "left": true,
+      "right": true,
+      "up": false,
+      "x": -2,
+      "y": -1
+    },
+    {
+      "down": false,
+      "left": true,
+      "right": true,
+      "up": false,
+      "x": -2,
+      "y": 1
+    },
+    {
+      "down": false,
+      "left": true,
+      "right": true,
+      "up": false,
+      "x": -2,
+      "y": 3
+    },
+    {
+      "down": false,
+      "left": true,
+      "right": true,
+      "up": false,
+      "x": -2,
+      "y": 5
+    },
+    {
+      "down": false,
+      "left": false,
+      "right": false,
+      "up": true,
+      "x": -1,
+      "y": -2
+    },
+    {
+      "down": true,
+      "left": true,
+      "right": false,
+      "up": true,
+      "x": -1,
+      "y": -1
+    },
+    {
+      "down": true,
+      "left": false,
+      "right": true,
+      "up": true,
+      "x": -1,
+      "y": 0
+    },
+    {
+      "down": true,
+      "left": true,
+      "right": false,
+      "up": true,
+      "x": -1,
+      "y": 1
+    },
+    {
+      "down": true,
+      "left": false,
+      "right": true,
+      "up": true,
+      "x": -1,
+      "y": 2
+    },
+    {
+      "down": true,
+      "left": true,
+      "right": true,
+      "up": true,
+      "x": -1,
+      "y": 3
+    },
+    {
+      "down": true,
+      "left": false,
+      "right": true,
+      "up": true,
+      "x": -1,
+      "y": 4
+    },
+    {
+      "down": true,
+      "left": true,
+      "right": false,
+      "up": true,
+      "x": -1,
+      "y": 5
+    },
+    {
+      "down": true,
+      "left": false,
+      "right": false,
+      "up": false,
+      "x": -1,
+      "y": 6
+    },
+    {
+      "down": false,
+      "left": true,
+      "right": true,
+      "up": false,
       "x": 0,
+      "y": 0
+    },
+    {
+      "down": false,
+      "left": true,
+      "right": true,
+      "up": true,
+      "x": 0,
+      "y": 2
+    },
+    {
+      "down": true,
+      "left": true,
+      "right": true,
+      "up": true,
+      "x": 0,
+      "y": 3
+    },
+    {
+      "down": true,
+      "left": true,
+      "right": true,
+      "up": false,
+      "x": 0,
+      "y": 4
+    },
+    {
+      "down": false,
+      "left": true,
+      "right": true,
+      "up": true,
+      "x": 1,
+      "y": 0
+    },
+    {
+      "down": true,
+      "left": false,
+      "right": false,
+      "up": true,
+      "x": 1,
+      "y": 1
+    },
+    {
+      "down": true,
+      "left": true,
+      "right": true,
+      "up": false,
+      "x": 1,
+      "y": 2
+    },
+    {
+      "down": false,
+      "left": true,
+      "right": false,
+      "up": true,
+      "x": 1,
+      "y": 3
+    },
+    {
+      "down": true,
+      "left": true,
+      "right": true,
+      "up": false,
+      "x": 1,
+      "y": 4
+    },
+    {
+      "down": false,
+      "left": false,
+      "right": false,
+      "up": true,
+      "x": 2,
+      "y": -2
+    },
+    {
+      "down": true,
+      "left": false,
+      "right": false,
+      "up": true,
+      "x": 2,
+      "y": -1
+    },
+    {
+      "down": true,
+      "left": true,
+      "right": true,
+      "up": true,
+      "x": 2,
+      "y": 0
+    },
+    {
+      "down": true,
+      "left": false,
+      "right": true,
+      "up": true,
+      "x": 2,
+      "y": 1
+    },
+    {
+      "down": true,
+      "left": true,
+      "right": true,
+      "up": true,
+      "x": 2,
+      "y": 2
+    },
+    {
+      "down": true,
+      "left": false,
+      "right": false,
+      "up": true,
+      "x": 2,
+      "y": 3
+    },
+    {
+      "down": true,
+      "left": true,
+      "right": true,
+      "up": true,
+      "x": 2,
+      "y": 4
+    },
+    {
+      "down": true,
+      "left": false,
+      "right": false,
+      "up": true,
+      "x": 2,
+      "y": 5
+    },
+    {
+      "down": true,
+      "left": false,
+      "right": false,
+      "up": false,
+      "x": 2,
       "y": 6
     },
     {
@@ -78,15 +326,15 @@
       "left": true,
       "right": true,
       "up": true,
-      "x": 1,
+      "x": 3,
       "y": 0
     },
     {
       "down": true,
-      "left": false,
+      "left": true,
       "right": false,
       "up": true,
-      "x": 1,
+      "x": 3,
       "y": 1
     },
     {
@@ -94,15 +342,47 @@
       "left": true,
       "right": true,
       "up": false,
-      "x": 1,
+      "x": 3,
       "y": 2
     },
     {
       "down": false,
-      "left": true,
-      "right": false,
+      "left": false,
+      "right": true,
       "up": true,
-      "x": 1,
+      "x": 3,
+      "y": 3
+    },
+    {
+      "down": true,
+      "left": true,
+      "right": true,
+      "up": false,
+      "x": 3,
+      "y": 4
+    },
+    {
+      "down": false,
+      "left": true,
+      "right": true,
+      "up": false,
+      "x": 4,
+      "y": 0
+    },
+    {
+      "down": false,
+      "left": true,
+      "right": true,
+      "up": true,
+      "x": 4,
+      "y": 2
+    },
+    {
+      "down": true,
+      "left": true,
+      "right": true,
+      "up": true,
+      "x": 4,
       "y": 3
     },
     {
@@ -110,15 +390,15 @@
       "left": true,
       "right": true,
       "up": true,
-      "x": 1,
+      "x": 4,
       "y": 4
     },
     {
       "down": true,
-      "left": true,
-      "right": false,
+      "left": false,
+      "right": true,
       "up": false,
-      "x": 1,
+      "x": 4,
       "y": 5
     },
     {
@@ -126,47 +406,47 @@
       "left": false,
       "right": false,
       "up": true,
-      "x": 2,
+      "x": 5,
       "y": -2
     },
     {
       "down": true,
       "left": false,
-      "right": false,
+      "right": true,
       "up": true,
-      "x": 2,
+      "x": 5,
       "y": -1
     },
     {
       "down": true,
       "left": true,
-      "right": true,
+      "right": false,
       "up": true,
-      "x": 2,
+      "x": 5,
       "y": 0
-    },
-    {
-      "down": true,
-      "left": false,
-      "right": true,
-      "up": true,
-      "x": 2,
-      "y": 1
-    },
-    {
-      "down": true,
-      "left": true,
-      "right": true,
-      "up": true,
-      "x": 2,
-      "y": 2
     },
     {
       "down": true,
       "left": false,
       "right": false,
       "up": true,
-      "x": 2,
+      "x": 5,
+      "y": 1
+    },
+    {
+      "down": true,
+      "left": true,
+      "right": false,
+      "up": true,
+      "x": 5,
+      "y": 2
+    },
+    {
+      "down": true,
+      "left": true,
+      "right": false,
+      "up": true,
+      "x": 5,
       "y": 3
     },
     {
@@ -174,15 +454,15 @@
       "left": true,
       "right": true,
       "up": true,
-      "x": 2,
+      "x": 5,
       "y": 4
     },
     {
       "down": true,
-      "left": false,
+      "left": true,
       "right": false,
       "up": true,
-      "x": 2,
+      "x": 5,
       "y": 5
     },
     {
@@ -190,47 +470,23 @@
       "left": false,
       "right": false,
       "up": false,
-      "x": 2,
+      "x": 5,
       "y": 6
     },
     {
       "down": false,
       "left": true,
       "right": true,
-      "up": true,
-      "x": 3,
-      "y": 0
-    },
-    {
-      "down": true,
-      "left": true,
-      "right": false,
-      "up": true,
-      "x": 3,
-      "y": 1
-    },
-    {
-      "down": true,
-      "left": true,
-      "right": true,
       "up": false,
-      "x": 3,
-      "y": 2
+      "x": 6,
+      "y": -1
     },
     {
       "down": false,
-      "left": false,
-      "right": true,
-      "up": true,
-      "x": 3,
-      "y": 3
-    },
-    {
-      "down": true,
       "left": true,
       "right": true,
       "up": false,
-      "x": 3,
+      "x": 6,
       "y": 4
     },
     {
@@ -238,23 +494,23 @@
       "left": false,
       "right": false,
       "up": true,
-      "x": 4,
+      "x": 7,
       "y": -2
     },
     {
       "down": true,
-      "left": false,
+      "left": true,
       "right": false,
       "up": true,
-      "x": 4,
+      "x": 7,
       "y": -1
     },
     {
       "down": true,
-      "left": true,
+      "left": false,
       "right": false,
       "up": true,
-      "x": 4,
+      "x": 7,
       "y": 0
     },
     {
@@ -262,23 +518,23 @@
       "left": false,
       "right": false,
       "up": true,
-      "x": 4,
+      "x": 7,
       "y": 1
     },
     {
       "down": true,
-      "left": true,
+      "left": false,
       "right": false,
       "up": true,
-      "x": 4,
+      "x": 7,
       "y": 2
     },
     {
       "down": true,
-      "left": true,
+      "left": false,
       "right": false,
       "up": true,
-      "x": 4,
+      "x": 7,
       "y": 3
     },
     {
@@ -286,7 +542,7 @@
       "left": true,
       "right": false,
       "up": true,
-      "x": 4,
+      "x": 7,
       "y": 4
     },
     {
@@ -294,7 +550,7 @@
       "left": false,
       "right": false,
       "up": true,
-      "x": 4,
+      "x": 7,
       "y": 5
     },
     {
@@ -302,7 +558,7 @@
       "left": false,
       "right": false,
       "up": false,
-      "x": 4,
+      "x": 7,
       "y": 6
     }
   ],

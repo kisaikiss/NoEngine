@@ -168,7 +168,6 @@
     <ClCompile Include="application\TD3\System\PlayerBulletSystem.cpp" />
     <ClCompile Include="application\TD3\System\AmmoItemSystem.cpp" />
     <ClCompile Include="application\TD3\System\PlayerWeaponSystem.cpp" />
-    <ClCompile Include="application\TD3\Utility\GridUtils.cpp" />
     <ClCompile Include="application\TD3\System\EnemyMovementSystem.cpp" />
     <ClCompile Include="application\TD3\System\EnemyCollisionSystem.cpp" />
     <ClCompile Include="application\TD3\System\CollisionSystem.cpp" />

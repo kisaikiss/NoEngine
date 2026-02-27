@@ -180,6 +180,12 @@ private:
 
 	/// 2 ノードが上下左右のどれかで隣接しているか判定
 	bool AreAdjacent(int ax, int ay, int bx, int by) const;
+	
+	/// 指定ノードの隣接ノードと自動接続する
+	void AutoConnectNode(int gx, int gy);
+	
+	/// すべてのノードを隣接ノードと自動接続する
+	void AutoConnectAll();
 
 	///十字パネルを作成する関数
 	void DrawCrossPanel(MapData::NodeData& node);

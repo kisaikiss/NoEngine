@@ -126,7 +126,7 @@ void SampleScene::SetupCameraForStage(const MapData::ConnectionMapData& mapData)
 	const float Z_MIN = 5.0f;				// 最低Z距離
 
 	float halfFov = FOV_Y * 0.5f;
-	float tanHalfFov = std::tan(halfFov);    // ≈ 0.230
+	float tanHalfFov = std::tan(halfFov);	// ≈ 0.230
 
 	// Y方向に収めるために必要なZ
 	float zForY = (spanY * 0.5f) / tanHalfFov;
@@ -150,11 +150,11 @@ void SampleScene::ReloadStage(int stageNumber) {
 	No::Registry& registry = *GetRegistry();
 
 	std::vector<No::Entity> all;
-	for (auto e : registry.View<GridCellComponent>())     all.push_back(e);
-	for (auto e : registry.View<PlayerComponent>())       all.push_back(e);
-	for (auto e : registry.View<EnemyComponent>())        all.push_back(e);
-	for (auto e : registry.View<PlayerBulletComponent>()) all.push_back(e);
-	for (auto e : registry.View<AmmoItemComponent>())     all.push_back(e);
+	for (auto e : registry.View<GridCellComponent>())		all.push_back(e);
+	for (auto e : registry.View<PlayerComponent>())			all.push_back(e);
+	for (auto e : registry.View<EnemyComponent>())			all.push_back(e);
+	for (auto e : registry.View<PlayerBulletComponent>())	all.push_back(e);
+	for (auto e : registry.View<AmmoItemComponent>())		all.push_back(e);
 
 	for (auto e : all) {
 		registry.DestroyEntity(e);

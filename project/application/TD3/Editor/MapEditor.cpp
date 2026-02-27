@@ -175,6 +175,17 @@ void MapEditor::DrawToolPanel() {
 	ImGui::TextDisabled("Ctrl+Z / Ctrl+Y");
 
 	ImGui::Spacing();
+	
+	// ========== 自動接続 ==========
+	ImGui::Text("自動接続");
+	ImGui::Separator();
+	ImGui::TextDisabled("隣接ノードと自動接続");
+	
+	if (ImGui::Button("全ノードを自動接続", ImVec2(-1, 0))) {
+		AutoConnectAll();
+	}
+	
+	ImGui::Spacing();
 
 	// ========== ツール選択 ==========
 	ImGui::Text("ツール");
@@ -606,6 +617,9 @@ void MapEditor::PlaceNode(int gx, int gy) {
 	node.x = gx; node.y = gy;
 	node.up = node.right = node.down = node.left = false;
 	nodes_[{ gx, gy }] = node;
+	
+	// 隣接ノードと自動接続
+	AutoConnectNode(gx, gy);
 
 	dirty_ = true;
 	SetStatus("ノードを配置しました (" + std::to_string(gx) + ", " + std::to_string(gy) + ")", false);
@@ -790,15 +804,79 @@ bool MapEditor::AreAdjacent(int ax, int ay, int bx, int by) const {
 	int dy = std::abs(by - ay);
 	return (dx == 1 && dy == 0) || (dx == 0 && dy == 1);
 }
+
+// ============================================================
+//  AutoConnectNode
+//  指定ノードの上下左右をチェックし、隣接ノードがあれば自動接続する
+// ============================================================
+
+void MapEditor::AutoConnectNode(int gx, int gy) {
+	auto it = nodes_.find({ gx, gy });
+	if (it == nodes_.end()) return;
+	
+	// 上方向チェック
+	if (nodes_.count({ gx, gy + 1 })) {
+		AddConnection(gx, gy, gx, gy + 1);
+	}
+	
+	// 右方向チェック
+	if (nodes_.count({ gx + 1, gy })) {
+		AddConnection(gx, gy, gx + 1, gy);
+	}
+	
+	// 下方向チェック
+	if (nodes_.count({ gx, gy - 1 })) {
+		AddConnection(gx, gy, gx, gy - 1);
+	}
+	
+	// 左方向チェック
+	if (nodes_.count({ gx - 1, gy })) {
+		AddConnection(gx, gy, gx - 1, gy);
+	}
+}
+
+// ============================================================
+//  AutoConnectAll
+//  すべてのノードを隣接ノードと自動接続する
+// ============================================================
+
+void MapEditor::AutoConnectAll() {
+	if (nodes_.empty()) {
+		SetStatus("ノードがありません", true);
+		return;
+	}
+	
+	PushUndo();
+	
+	int connectionCount = 0;
+	for (auto& [coord, node] : nodes_) {
+		// 右方向と上方向のみチェック（重複防止）
+		if (nodes_.count({ node.x + 1, node.y })) {
+			if (!node.right) { // 未接続の場合のみ
+				AddConnection(node.x, node.y, node.x + 1, node.y);
+				connectionCount++;
+			}
+		}
+		if (nodes_.count({ node.x, node.y + 1 })) {
+			if (!node.up) { // 未接続の場合のみ
+				AddConnection(node.x, node.y, node.x, node.y + 1);
+				connectionCount++;
+			}
+		}
+	}
+	
+	dirty_ = true;
+	SetStatus("全ノードを自動接続しました (" + std::to_string(connectionCount) + " 本)", false);
+}
+
 void MapEditor::DrawCrossPanel(MapData::NodeData& node)
 {
 	ImGui::Text("接続方向");
 	ImGui::Separator();
+	ImGui::TextDisabled("クリックでON/OFF切り替え");
+	ImGui::Spacing();
 
-	// ★ 描画前にスナップショットを保存する。
-	//    DirButton が node.up/down/left/right を参照で直接書き換えるため、
-	//    PushUndo() を changed の後に呼ぶと「変更後の状態」が積まれてしまう。
-	//    変更前の状態をここで手動保存し、changed == true のときだけ積む。
+	// 描画前にスナップショットを保存する。
 	EditorSnapshot preSnap = { nodes_, entities_ };
 
 	const float size = 36.0f;
@@ -820,7 +898,7 @@ void MapEditor::DrawCrossPanel(MapData::NodeData& node)
 				ImGui::PopStyleColor(3);
 
 			if (pressed)
-				flag = !flag; // ← ここで node のメンバが書き換わる
+				flag = !flag; // トグル：押すたびにON/OFFが切り替わる
 
 			return pressed;
 		};

@@ -63,8 +63,8 @@ private:
 	/// 「最初の1歩の方向」だけを返す。次のノード到達時に再計算するため1ステップで十分。
 	///
 	/// 後退禁止制約：
-	///   最初の1歩のみ GridUtils::CanMoveInDirection(... lastDirection) を適用。
-	///   2歩目以降は GridUtils::CanMoveInDirection(... Direction::None) で制約なし。
+	/// 最初の1歩のみ GridUtils::CanMoveInDirection(... lastDirection) を適用。
+	/// 2歩目以降は GridUtils::CanMoveInDirection(... Direction::None) で制約なし。
 	///
 	/// 到達不能な場合は Direction::None を返す（敵は停止）。
 	/// </summary>
