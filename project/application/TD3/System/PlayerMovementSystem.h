@@ -127,9 +127,12 @@ private:
 	// ========== 交差点検出と弾薬配置 ==========
 
 	/// <summary>
-	/// 交差点かどうかを判定する（接続数が3以上）
+	/// 交差点かどうかを判定する
 	/// </summary>
-	bool IsIntersection(const GridCellComponent* cell);
+	bool IsIntersection(
+		const GridCellComponent* cell,
+		Direction movingDirection
+	);
 
 	/// <summary>
 	/// 交差点通過時の処理（弾薬配置・回収可能化）

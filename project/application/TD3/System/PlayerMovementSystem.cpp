@@ -640,9 +640,33 @@ const char* PlayerMovementSystem::StateToString(PlayerState state) {
 //  交差点検出と弾薬配置
 // ============================================================
 
-bool PlayerMovementSystem::IsIntersection(const GridCellComponent* cell) {
+bool PlayerMovementSystem::IsIntersection(const GridCellComponent* cell, Direction movingDirection) {
 	if (!cell) return false;
-	return GridUtils::CountConnections(cell) >= 3;
+
+	// 進行方向を判定
+	bool goingUp = (movingDirection == Direction::Up);
+	bool goingDown = (movingDirection == Direction::Down);
+	bool goingRight = (movingDirection == Direction::Right);
+	bool goingLeft = (movingDirection == Direction::Left);
+
+	// 進行方向と来た方向（逆方向）以外の接続をカウント
+	int sideConnections = 0;
+
+	if (goingUp || goingDown) {
+		// 縦方向に進んでいる場合、横方向の接続をチェック
+		if (cell->hasConnectionLeft) sideConnections++;
+		if (cell->hasConnectionRight) sideConnections++;
+	} else if (goingRight || goingLeft) {
+		// 横方向に進んでいる場合、縦方向の接続をチェック
+		if (cell->hasConnectionUp) sideConnections++;
+		if (cell->hasConnectionDown) sideConnections++;
+	} else {
+		// 進行方向がない場合（初期位置など）は配置しない
+		return false;
+	}
+
+	// 横道が1つ以上あれば交差点（曲がり角）とみなす
+	return sideConnections > 0;
 }
 
 void PlayerMovementSystem::HandleIntersection(
@@ -651,7 +675,8 @@ void PlayerMovementSystem::HandleIntersection(
 ) {
 	auto* cell = GridUtils::GetGridCell(registry, player->currentNodeX, player->currentNodeY);
 
-	if (!IsIntersection(cell)) return;
+	// lastDirection を使って判定（ノードに到達した直後なので、来た方向が分かる）
+	if (!IsIntersection(cell, player->lastDirection)) return;
 	
 	if (!HasAmmoAtPosition(registry, player->currentNodeX, player->currentNodeY)) {
 		CreateAmmoItem(registry, player->currentNodeX, player->currentNodeY);
