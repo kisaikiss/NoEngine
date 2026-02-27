@@ -7,7 +7,6 @@
 /// 入力履歴・弾薬など「プレイヤー固有」のフィールドは持たない。
 ///
 /// 移動方向の決定は EnemyMovementSystem が行う。
-///   Stage3: グリーディーヒューリスティック（プレイヤー方向へ直進優先）
 ///   Stage4: BFS による最短経路探索（後退禁止制約考慮）
 /// </summary>
 struct EnemyComponent {
@@ -28,6 +27,10 @@ struct EnemyComponent {
 	/// 移動速度（グリッド単位/秒）
 	float moveSpeed;
 
+	///敵同士の衝突を反転させるためのクールダウンタイマ
+	float reverseTimer;
+	static constexpr float REVERSE_COOLDOWN = 0.5f; // 反転後に衝突を無視する時間（秒）
+
 	EnemyComponent()
 		: currentNodeX(0), currentNodeY(0),
 		targetNodeX(0), targetNodeY(0),
@@ -36,6 +39,8 @@ struct EnemyComponent {
 		currentDirection(Direction::None),
 		lastDirection(Direction::None),
 		actualMovingDirection(Direction::None),
-		moveSpeed(1.5f) {
+		moveSpeed(1.5f),
+		reverseTimer(0.0f)
+	{
 	}
 };

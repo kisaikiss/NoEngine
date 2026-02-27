@@ -5,6 +5,7 @@
 #ifdef USE_IMGUI
 #include "../Editor/MapEditor.h"
 #endif
+
 /// <summary>
 /// サンプルシーン
 /// </summary>
@@ -29,7 +30,7 @@ private:
 	/// クリア・ゲームオーバー検出。NotSystemUpdate から毎フレーム呼ばれる。
 	/// </summary>
 	void UpdateGame(No::Registry& registry);
-	
+
 	/// <summary>
 	/// Stage Control ImGui ウィンドウ（ステージ切り替え・エディタモード切り替え）
 	/// </summary>
@@ -58,6 +59,14 @@ private:
 	void InitializePlayer(No::Registry& registry, int startX, int startY);
 	void InitializeEnemy(No::Registry& registry, int startX, int startY);
 	void InitializeLight(No::Registry& registry);
+
+	// ========== カメラ ==========
+
+	/// <summary>
+	/// ステージのノード座標からマップ中心とZ距離を自動計算してカメラを設定する。
+	/// Setup() と ReloadStage() の両方から呼ぶ。
+	/// </summary>
+	void SetupCameraForStage(const MapData::ConnectionMapData& mapData);
 
 	// ========== システム更新 ==========
 

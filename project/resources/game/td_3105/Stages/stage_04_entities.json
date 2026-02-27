@@ -1,0 +1,33 @@
+{
+  "entities": [
+    {
+      "enemy_type": "normal",
+      "type": "enemy",
+      "x": 5,
+      "y": 1
+    },
+    {
+      "enemy_type": "normal",
+      "type": "enemy",
+      "x": 6,
+      "y": 10
+    },
+    {
+      "enemy_type": "normal",
+      "type": "enemy",
+      "x": 9,
+      "y": 7
+    },
+    {
+      "enemy_type": "normal",
+      "type": "enemy",
+      "x": 5,
+      "y": 4
+    },
+    {
+      "type": "player",
+      "x": 6,
+      "y": -1
+    }
+  ]
+}

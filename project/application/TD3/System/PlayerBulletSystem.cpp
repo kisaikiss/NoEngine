@@ -42,12 +42,12 @@ void PlayerBulletSystem::Update(No::Registry& registry, float deltaTime) {
 		// ---- 敵との衝突判定（CollisionSystemの結果を参照） ----
 		if (collider->isCollied && collider->colliedWith == kEnemy) {
 			auto enemyEntity = collider->colliedEntity;
-			
+
 			// 敵が有効か確認
 			if (registry.Has<HealthComponent>(enemyEntity) && registry.Has<DeathFlag>(enemyEntity)) {
 				auto* enemyHealth = registry.GetComponent<HealthComponent>(enemyEntity);
 				auto* enemyDeath = registry.GetComponent<DeathFlag>(enemyEntity);
-				
+
 				if (!enemyDeath->isDead) {
 					bool died = enemyHealth->TakeDamage(1);
 					if (died) {
@@ -63,11 +63,16 @@ void PlayerBulletSystem::Update(No::Registry& registry, float deltaTime) {
 		// ---- グリッドベース壁判定 ----
 		// 始点スキップは座標ベースで行う（距離ベースにするとエッジ途中発射時にバグが起きる）
 
-		int nearestX = static_cast<int>(std::round(transform->translate.x));
-		int nearestY = static_cast<int>(std::round(transform->translate.y));
+		// ワールド座標 → グリッド座標に変換する
+		// grid_scale=1.0 以外でも正しく動作させるために GridUtils::WorldToGrid を使う
+		// （以前は std::round(translate.x) をそのままグリッド座標として使っており、scale=2.0 のステージでノードが見つからず即消滅するバグがあった）
+		int nearestGridX, nearestGridY;
+		GridUtils::WorldToGrid(transform->translate, nearestGridX, nearestGridY);
 
-		float dx = transform->translate.x - static_cast<float>(nearestX);
-		float dy = transform->translate.y - static_cast<float>(nearestY);
+		// 最近接ノードのワールド座標を求め、そこからの距離で「ノード付近か」を判定する
+		No::Vector3 nodeWorldPos = GridUtils::GridToWorld(nearestGridX, nearestGridY);
+		float dx = transform->translate.x - nodeWorldPos.x;
+		float dy = transform->translate.y - nodeWorldPos.y;
 		float distFromNode = std::sqrt(dx * dx + dy * dy);
 
 		// ノード付近以外はスキップ
@@ -77,14 +82,14 @@ void PlayerBulletSystem::Update(No::Registry& registry, float deltaTime) {
 
 		// 発射元ノードのスキップ（発射直後のみ）
 		// （行き止まりノードで発射した場合に素通りしてしまうバグへの対処）
-		if (nearestX == bullet->startNodeX &&
-			nearestY == bullet->startNodeY &&
+		if (nearestGridX == bullet->startNodeX &&
+			nearestGridY == bullet->startNodeY &&
 			bullet->travelDistance < NODE_DETECT_THRESHOLD * 2.0f) {
 			continue;
 		}
 
 		// 前方接続チェック：接続がない or マップ外なら消滅
-		if (ShouldDestroyAtNode(registry, nearestX, nearestY, bullet->direction)) {
+		if (ShouldDestroyAtNode(registry, nearestGridX, nearestGridY, bullet->direction)) {
 			deathFlag->isDead = true;
 		}
 	}

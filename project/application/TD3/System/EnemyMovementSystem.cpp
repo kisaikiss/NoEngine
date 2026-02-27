@@ -30,13 +30,19 @@ void EnemyMovementSystem::Update(No::Registry& registry, float deltaTime) {
 
 	auto enemyView = registry.View<EnemyComponent, EnemyTag, No::TransformComponent, DeathFlag>();
 
-	/// プレイヤーが動いていないときは移動処理をスキップするが、 Transform は必ず更新する（ステージロード直後の初期位置反映のため）
 	if (!player->isMoving) {
 		for (auto entity : enemyView) {
 			auto* enemy = registry.GetComponent<EnemyComponent>(entity);
 			auto* transform = registry.GetComponent<No::TransformComponent>(entity);
 			auto* deathFlag = registry.GetComponent<DeathFlag>(entity);
 			if (deathFlag->isDead) continue;
+
+			// reverseTimer の減算はプレイヤー停止中も行う
+			if (enemy->reverseTimer > 0.0f) {
+				enemy->reverseTimer -= deltaTime;
+				if (enemy->reverseTimer < 0.0f) enemy->reverseTimer = 0.0f;
+			}
+
 			UpdateTransform(enemy, transform);
 		}
 		return;
@@ -52,6 +58,12 @@ void EnemyMovementSystem::Update(No::Registry& registry, float deltaTime) {
 
 		// 死亡予定の敵は処理しない
 		if (deathFlag->isDead) continue;
+
+		// ---- reverseTimer 減算 ----
+		if (enemy->reverseTimer > 0.0f) {
+			enemy->reverseTimer -= deltaTime;
+			if (enemy->reverseTimer < 0.0f) enemy->reverseTimer = 0.0f;
+		}
 
 		switch (enemy->state) {
 		case PlayerState::OnNode:
@@ -319,6 +331,7 @@ void EnemyMovementSystem::DebugUI(No::Registry& registry) {
 
 		ImGui::Text("  Direction: %s", DirectionToString(enemy->actualMovingDirection));
 		ImGui::Text("  Last Direction: %s", DirectionToString(enemy->lastDirection));
+		ImGui::Text("  ReverseTimer: %.2f", enemy->reverseTimer);
 		ImGui::DragFloat("Speed##enemy", &enemy->moveSpeed, 0.1f, 0.1f, 10.0f);
 		ImGui::Separator();
 	}

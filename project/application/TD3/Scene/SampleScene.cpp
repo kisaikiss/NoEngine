@@ -15,10 +15,12 @@
 #include "../System/EnemyMovementSystem.h"
 #include "../System/CollisionSystem.h"
 #include "../System/EnemyCollisionSystem.h"
+#include "../System/EnemyToEnemyCollisionSystem.h"   // 追加
 #include "../MapData/MapLoader.h"
 #include "../Utility/GridUtils.h"
 #include <vector>
 #include <string>
+#include <algorithm>   // std::min, std::max
 
 #ifdef USE_IMGUI
 #include "externals/imgui/imgui.h"
@@ -31,6 +33,7 @@ void SampleScene::Setup() {
 	AddSystem(std::make_unique<PlayerBulletSystem>());
 	AddSystem(std::make_unique<CollisionSystem>());
 	AddSystem(std::make_unique<EnemyCollisionSystem>());
+	AddSystem(std::make_unique<EnemyToEnemyCollisionSystem>());  // 追加
 	AddSystem(std::make_unique<PlayerWeaponSystem>());
 	AddSystem(std::make_unique<AmmoItemSystem>());
 
@@ -45,7 +48,6 @@ void SampleScene::Setup() {
 		+ std::to_string(stageNumber_) + ".json";
 	MapData::StageData stageData = MapLoader::LoadStage(path);
 
-	// ロードしたスケールをGridUtilsに設定
 	GridUtils::gGridScale = stageData.connectionMap.gridScale;
 
 	InitializeGrid(registry, stageData.connectionMap);
@@ -57,9 +59,74 @@ void SampleScene::Setup() {
 	InitializeLight(registry);
 
 	camera_ = std::make_unique<NoEngine::Camera>();
-	cameraTransform_.translate = { 1.0f, 1.0f, -15.0f };
-	camera_->SetTransform(cameraTransform_);
+	SetupCameraForStage(stageData.connectionMap);   // 自動配置
 	SetCamera(camera_.get());
+}
+
+// ============================================================
+//  SetupCameraForStage
+//  全ノードのXY座標からマップ中心とZ距離を自動計算する。
+// ============================================================
+
+void SampleScene::SetupCameraForStage(const MapData::ConnectionMapData& mapData) {
+	if (mapData.nodes.empty()) {
+		// ノードがない場合はデフォルト値
+		cameraTransform_.translate = { 0.0f, 0.0f, -15.0f };
+		camera_->SetTransform(cameraTransform_);
+		return;
+	}
+
+	// 全ノードのmin/maxを求める
+	int minX = mapData.nodes[0].x;
+	int maxX = mapData.nodes[0].x;
+	int minY = mapData.nodes[0].y;
+	int maxY = mapData.nodes[0].y;
+
+	for (const auto& node : mapData.nodes) {
+		minX = std::min(minX, node.x);
+		maxX = std::max(maxX, node.x);
+		minY = std::min(minY, node.y);
+		maxY = std::max(maxY, node.y);
+	}
+
+	// マップ中心（ワールド座標）
+	float centerX = (static_cast<float>(minX + maxX) * 0.5f) * GridUtils::gGridScale;
+	float centerY = (static_cast<float>(minY + maxY) * 0.5f) * GridUtils::gGridScale;
+
+	// マップの広さ（グリッド数 × スケール）
+	float spanX = static_cast<float>(maxX - minX) * GridUtils::gGridScale;
+	float spanY = static_cast<float>(maxY - minY) * GridUtils::gGridScale;
+
+	// Camera::fovY_ = 0.45f（Camera.cppのコンストラクタで固定されている値）
+	// アスペクト比は取得できないため、X/Y両方向で必要なZを計算して大きい方を採用する。
+	//
+	// 【計算式】
+	//   画角の半分: halfFov = fovY / 2
+	//   Zから見えるY方向の半分: visibleHalf = Z * tan(halfFov)
+	//   spanY を収めるには: Z >= (spanY/2) / tan(halfFov)
+	//
+	// アスペクト比が不明なので spanX / spanY の比率でアスペクトを推定し
+	// 横方向の必要Zも計算して安全側（大きい方）を使う。
+	const float FOV_Y = 0.45f;             // Camera.cppと合わせる
+	const float MARGIN = 1.3f;             // 余白係数（大きいほど余裕が出る）
+	const float Z_MIN = 5.0f;             // 最低Z距離
+
+	float halfFov = FOV_Y * 0.5f;
+	float tanHalfFov = std::tan(halfFov);    // ≈ 0.230
+
+	// Y方向に収めるために必要なZ
+	float zForY = (spanY * 0.5f) / tanHalfFov;
+
+	// X方向に収めるために必要なZ
+	// 一般的なアスペクト比 16:9 ≈ 1.778 を仮定して計算
+	// （実際のアスペクト比と違っても余白係数MARGINで吸収できる）
+	const float ASSUMED_ASPECT = 16.0f / 9.0f;
+	float zForX = (spanX * 0.5f) / (tanHalfFov * ASSUMED_ASPECT);
+
+	float zDistance = std::max({ zForY, zForX, Z_MIN }) * MARGIN;
+
+	cameraTransform_.translate = { centerX, centerY, -zDistance };
+	camera_->SetTransform(cameraTransform_);
 }
 
 // ============================================================
@@ -70,7 +137,6 @@ void SampleScene::ReloadStage(int stageNumber) {
 	stageNumber_ = stageNumber;
 	No::Registry& registry = *GetRegistry();
 
-	// 全エンティティを収集してまとめて削除
 	std::vector<No::Entity> all;
 	for (auto e : registry.View<GridCellComponent>())     all.push_back(e);
 	for (auto e : registry.View<PlayerComponent>())       all.push_back(e);
@@ -98,6 +164,9 @@ void SampleScene::ReloadStage(int stageNumber) {
 		if (entity.type == "player")     InitializePlayer(registry, entity.x, entity.y);
 		else if (entity.type == "enemy") InitializeEnemy(registry, entity.x, entity.y);
 	}
+
+	// ステージが変わるたびにカメラを再配置
+	SetupCameraForStage(stageData.connectionMap);
 }
 
 // ============================================================
@@ -160,7 +229,6 @@ void SampleScene::UpdateGame(No::Registry& registry) {
 //  DebugStageControlUI
 // ============================================================
 
-
 void SampleScene::DebugStageControlUI(No::Registry& registry) {
 #ifdef USE_IMGUI
 	(void)registry;
@@ -202,7 +270,6 @@ void SampleScene::DebugStageControlUI(No::Registry& registry) {
 	(void)registry; // 警告回避
 
 #endif
-
 }
 
 // ============================================================
@@ -214,6 +281,7 @@ void SampleScene::NotSystemUpdate() {
 #ifdef USE_IMGUI
 	No::Registry& registry = *GetRegistry();
 
+	// カメラ手動調整ウィンドウ（自動配置後の微調整用）
 	ImGui::Begin("camera");
 	ImGui::DragFloat3("pos", &cameraTransform_.translate.x, 0.1f);
 	ImGui::DragFloat3("rot", &cameraTransform_.rotation.x, 0.1f);
@@ -234,8 +302,6 @@ void SampleScene::NotSystemUpdate() {
 #endif
 
 	camera_->Update();
-
-
 
 	DestroyGameObject();
 }
@@ -317,7 +383,8 @@ void SampleScene::InitializeEnemy(No::Registry& registry, int startX, int startY
 	auto* collider = registry.AddComponent<SphereColliderComponent>(entity);
 	collider->radius = 0.5f;
 	collider->colliderType = kEnemy;
-	collider->collideMask = kPlayer | kPlayerBullet;
+	// kEnemy を追加：敵同士の衝突も検出する
+	collider->collideMask = kPlayer | kPlayerBullet | kEnemy;
 
 	auto* transform = registry.AddComponent<No::TransformComponent>(entity);
 	transform->scale = { 0.2f, 0.2f, 0.2f };
