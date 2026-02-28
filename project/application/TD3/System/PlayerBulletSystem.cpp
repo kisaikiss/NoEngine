@@ -281,47 +281,40 @@ bool PlayerBulletSystem::IsIntersectionNode(
 	int nodeX, int nodeY,
 	const No::Vector3& direction
 ) {
+	(void)direction;  // 方向は使用しない
+	
 	auto* cell = GridUtils::GetGridCell(registry, nodeX, nodeY);
 	if (!cell) return false;
 
-	// 進行方向を判定
-	bool goingUp = (direction.y > 0.5f);
-	bool goingDown = (direction.y < -0.5f);
-	bool goingRight = (direction.x > 0.5f);
-	bool goingLeft = (direction.x < -0.5f);
+	// 全方向の接続数をカウント
+	int totalConnections = 0;
+	if (cell->hasConnectionUp) totalConnections++;
+	if (cell->hasConnectionDown) totalConnections++;
+	if (cell->hasConnectionLeft) totalConnections++;
+	if (cell->hasConnectionRight) totalConnections++;
 
-	// 来た方向（逆方向）の接続を確認
-	bool hasBackConnection = false;
-	if (goingUp) {
-		hasBackConnection = cell->hasConnectionDown;  // 下から来た
-	} else if (goingDown) {
-		hasBackConnection = cell->hasConnectionUp;    // 上から来た
-	} else if (goingRight) {
-		hasBackConnection = cell->hasConnectionLeft;  // 左から来た
-	} else if (goingLeft) {
-		hasBackConnection = cell->hasConnectionRight; // 右から来た
+	// 接続が3以上 = 交差点（T字、十字路、それ以上）
+	if (totalConnections >= 3) {
+		return true;
 	}
 
-	// 来た方向に接続がない場合は交差点ではない（行き止まりやT字路の先端）
-	if (!hasBackConnection) {
+	// 接続が2の場合 = 直線道 または L字
+	if (totalConnections == 2) {
+		// 縦方向と横方向の両方に接続がある = L字（曲がり角）
+		bool hasVertical = (cell->hasConnectionUp || cell->hasConnectionDown);
+		bool hasHorizontal = (cell->hasConnectionLeft || cell->hasConnectionRight);
+		
+		// 縦横両方に接続があればL字（曲がり角）
+		if (hasVertical && hasHorizontal) {
+			return true;
+		}
+		
+		// 同じ軸（縦のみ or 横のみ）= 直線道
 		return false;
 	}
 
-	// 進行方向と来た方向（逆方向）以外の接続をカウント
-	int sideConnections = 0;
-
-	if (goingUp || goingDown) {
-		// 縦方向に進んでいる場合、横方向の接続をチェック
-		if (cell->hasConnectionLeft) sideConnections++;
-		if (cell->hasConnectionRight) sideConnections++;
-	} else if (goingRight || goingLeft) {
-		// 横方向に進んでいる場合、縦方向の接続をチェック
-		if (cell->hasConnectionUp) sideConnections++;
-		if (cell->hasConnectionDown) sideConnections++;
-	}
-
-	// 横道が1つ以上あれば交差点（曲がり角）とみなす
-	return sideConnections > 0;
+	// 接続が1以下 = 行き止まり or 孤立ノード
+	return false;
 }
 
 // ============================================================
