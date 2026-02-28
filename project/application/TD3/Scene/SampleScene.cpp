@@ -32,6 +32,9 @@ void SampleScene::Setup() {
 	// ゲームタイマーを初期化
 	gameTimer_.Reset();
 
+	// カメラを先に作成（システム設定で使用するため）
+	camera_ = std::make_unique<NoEngine::Camera>();
+
 	// システムの登録（GameTimerSystemを最初に登録）
 	AddSystem(std::make_unique<GameTimerSystem>(&gameTimer_, &lastRealDeltaTime_));
 	AddSystem(std::make_unique<GridRenderSystem>());
@@ -42,7 +45,11 @@ void SampleScene::Setup() {
 	enemyMovementSystem->SetGameTimer(&gameTimer_);
 	AddSystem(std::move(enemyMovementSystem));
 	
-	AddSystem(std::make_unique<PlayerBulletSystem>());
+	// PlayerBulletSystem にカメラを設定
+	auto playerBulletSystem = std::make_unique<PlayerBulletSystem>();
+	playerBulletSystem->SetCamera(camera_.get());
+	AddSystem(std::move(playerBulletSystem));
+	
 	AddSystem(std::make_unique<CollisionSystem>());
 	AddSystem(std::make_unique<ShockwaveSystem>());
 	AddSystem(std::make_unique<EnemyCollisionSystem>());
@@ -72,7 +79,6 @@ void SampleScene::Setup() {
 
 	InitializeLight(registry);
 
-	camera_ = std::make_unique<NoEngine::Camera>();
 	SetupCameraForStage(stageData.connectionMap);   // 自動配置
 	SetCamera(camera_.get());
 }

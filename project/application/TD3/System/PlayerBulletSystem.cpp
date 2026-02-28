@@ -2,10 +2,12 @@
 #include <cmath>
 #include "../GameTag.h"
 #include "../Utility/GridUtils.h"
+#include "../Utility/CameraBounds.h"
 #include "../Component/EnemyComponent.h"
 #include "../Component/HealthComponent.h"
 #include "../Component/ColliderComponent.h"
 #include "../Component/ShockwaveComponent.h"
+#include "../Component/PlayerComponent.h"
 #include "engine/Functions/Renderer/Primitive.h"
 
 
@@ -34,12 +36,6 @@ void PlayerBulletSystem::Update(No::Registry& registry, float deltaTime) {
 		transform->translate = transform->translate + movement;
 		bullet->travelDistance += bullet->speed * deltaTime;
 
-		// ---- 安全網：最大距離で消滅 ----
-		if (bullet->travelDistance >= bullet->maxDistance) {
-			deathFlag->isDead = true;
-			continue;
-		}
-
 		// ---- 敵との衝突判定（CollisionSystemの結果を参照） ----
 		if (collider->isCollied && collider->colliedWith == kEnemy) {
 			auto enemyEntity = collider->colliedEntity;
@@ -54,55 +50,193 @@ void PlayerBulletSystem::Update(No::Registry& registry, float deltaTime) {
 					if (died) {
 						enemyDeath->isDead = true;
 					}
-					// 弾を消滅
-					deathFlag->isDead = true;
-					continue;
+
+					// ---- 敵貫通フラグのチェック ----
+					if (!bullet->penetrateEnemies) {
+						// 貫通しない場合は弾を消滅
+						deathFlag->isDead = true;
+						continue;
+					} else {
+						// 貫通する場合、敵ヒット時にループ無効化フラグをチェック
+						if (bullet->disableLoopOnHit) {
+							bullet->loopDisabled = true;
+						}
+					}
 				}
 			}
 		}
 
-		// ---- グリッドベース壁判定 ----
-		// 始点スキップは座標ベースで行う（距離ベースにするとエッジ途中発射時にバグが起きる）
-
-		// ワールド座標 → グリッド座標に変換する
-		// grid_scale=1.0 以外でも正しく動作させるために GridUtils::WorldToGrid を使う
-		// （以前は std::round(translate.x) をそのままグリッド座標として使っており、scale=2.0 のステージでノードが見つからず即消滅するバグがあった）
-		int nearestGridX, nearestGridY;
-		GridUtils::WorldToGrid(transform->translate, nearestGridX, nearestGridY);
-
-		// 最近接ノードのワールド座標を求め、そこからの距離で「ノード付近か」を判定する
-		No::Vector3 nodeWorldPos = GridUtils::GridToWorld(nearestGridX, nearestGridY);
-		float dx = transform->translate.x - nodeWorldPos.x;
-		float dy = transform->translate.y - nodeWorldPos.y;
-		float distFromNode = std::sqrt(dx * dx + dy * dy);
-
-		// ノード付近以外はスキップ
-		if (distFromNode >= NODE_DETECT_THRESHOLD) {
-			continue;
+		// ---- プレイヤーとの衝突判定（ループ後の弾のみ） ----
+		if (bullet->loopedOnce) {
+			HandlePlayerCollision(registry, entity, bullet);
+			if (deathFlag->isDead) continue;
 		}
 
-		// 発射元ノードのスキップ（発射直後のみ）
-		// （行き止まりノードで発射した場合に素通りしてしまうバグへの対処）
-		if (nearestGridX == bullet->startNodeX &&
-			nearestGridY == bullet->startNodeY &&
-			bullet->travelDistance < NODE_DETECT_THRESHOLD * 2.0f) {
-			continue;
-		}
-
-		// ---- 交差点判定：衝撃波を生成 ----
-		int nodeHash = HashNodeCoords(nearestGridX, nearestGridY);
-		if (bullet->visitedIntersections.count(nodeHash) == 0) {
-			if (IsIntersectionNode(registry, nearestGridX, nearestGridY, bullet->direction)) {
-				// 衝撃波を生成
-				CreateShockwave(registry, nodeWorldPos);
-				// 訪問済みとしてマーク
-				bullet->visitedIntersections.insert(nodeHash);
+		// ---- 画面外ループ処理 ----
+		if (bullet->enableLooping && !bullet->loopDisabled) {
+			HandleScreenLooping(registry, entity, bullet, transform);
+			if (bullet->loopedOnce) {
+				// ループ後はプレイヤーにも当たるようにマスクを変更
+				collider->collideMask |= kPlayer;
 			}
 		}
 
-		// 前方接続チェック：接続がない or マップ外なら消滅
-		if (ShouldDestroyAtNode(registry, nearestGridX, nearestGridY, bullet->direction)) {
-			deathFlag->isDead = true;
+		// ---- 交差点判定（壁貫通に関わらず実行） ----
+		{
+			// ワールド座標 → グリッド座標に変換する
+			int nearestGridX, nearestGridY;
+			GridUtils::WorldToGrid(transform->translate, nearestGridX, nearestGridY);
+
+			// 最近接ノードのワールド座標を求め、そこからの距離で「ノード付近か」を判定する
+			No::Vector3 nodeWorldPos = GridUtils::GridToWorld(nearestGridX, nearestGridY);
+			float dx = transform->translate.x - nodeWorldPos.x;
+			float dy = transform->translate.y - nodeWorldPos.y;
+			float distFromNode = std::sqrt(dx * dx + dy * dy);
+
+			// ノード付近の場合のみ処理
+			if (distFromNode < NODE_DETECT_THRESHOLD) {
+				// 発射元ノードのスキップ（発射直後のみ）
+				bool isStartNode = (nearestGridX == bullet->startNodeX &&
+					nearestGridY == bullet->startNodeY &&
+					bullet->travelDistance < NODE_DETECT_THRESHOLD * 2.0f);
+
+				if (!isStartNode) {
+					// ---- 交差点判定：衝撃波を生成 ----
+					int nodeHash = HashNodeCoords(nearestGridX, nearestGridY);
+					if (bullet->visitedIntersections.count(nodeHash) == 0) {
+						if (IsIntersectionNode(registry, nearestGridX, nearestGridY, bullet->direction)) {
+							CreateShockwave(registry, nodeWorldPos);
+							bullet->visitedIntersections.insert(nodeHash);
+						}
+					}
+				}
+			}
+		}
+
+		// ---- グリッドベース壁判定（penetrateWalls で制御） ----
+		if (!bullet->penetrateWalls) {
+			// ワールド座標 → グリッド座標に変換する
+			int nearestGridX, nearestGridY;
+			GridUtils::WorldToGrid(transform->translate, nearestGridX, nearestGridY);
+
+			// 最近接ノードのワールド座標を求め、そこからの距離で「ノード付近か」を判定する
+			No::Vector3 nodeWorldPos = GridUtils::GridToWorld(nearestGridX, nearestGridY);
+			float dx = transform->translate.x - nodeWorldPos.x;
+			float dy = transform->translate.y - nodeWorldPos.y;
+			float distFromNode = std::sqrt(dx * dx + dy * dy);
+
+			// ノード付近以外はスキップ
+			if (distFromNode < NODE_DETECT_THRESHOLD) {
+				// 発射元ノードのスキップ（発射直後のみ）
+				bool isStartNode = (nearestGridX == bullet->startNodeX &&
+					nearestGridY == bullet->startNodeY &&
+					bullet->travelDistance < NODE_DETECT_THRESHOLD * 2.0f);
+
+				if (!isStartNode) {
+					// 前方接続チェック：接続がない or マップ外なら消滅
+					if (ShouldDestroyAtNode(registry, nearestGridX, nearestGridY, bullet->direction)) {
+						deathFlag->isDead = true;
+					}
+				}
+			}
+		}
+	}
+}
+
+// ============================================================
+//  HandleScreenLooping
+// ============================================================
+
+void PlayerBulletSystem::HandleScreenLooping(
+	No::Registry& registry,
+	No::Entity entity,
+	PlayerBulletComponent* bullet,
+	No::TransformComponent* transform
+) {
+	(void)registry;
+
+	if (!camera_) return;
+
+	// 既に1回ループしている場合
+	if (bullet->loopedOnce) {
+		// 2回目の画面外で消滅
+		// ループ直後の境界判定を避けるため、完全に範囲外に出たことを確認
+		float left, right, bottom, top;
+		CameraBounds::GetVisibleBounds(camera_, transform->translate.z, left, right, bottom, top);
+		
+		// オフセット分範囲を広げる
+		left -= bullet->screenBoundsOffset;
+		right += bullet->screenBoundsOffset;
+		bottom -= bullet->screenBoundsOffset;
+		top += bullet->screenBoundsOffset;
+		
+		// 完全に範囲外に出た場合のみ消滅（境界上は許容）
+		bool completelyOutside = (transform->translate.x < left - 1.0f || 
+		                          transform->translate.x > right + 1.0f ||
+		                          transform->translate.y < bottom - 1.0f || 
+		                          transform->translate.y > top + 1.0f);
+		
+		if (completelyOutside) {
+			auto* deathFlag = registry.GetComponent<DeathFlag>(entity);
+			if (deathFlag) {
+				deathFlag->isDead = true;
+			}
+		}
+		return;
+	}
+
+	// まだループしていない場合、ループ処理を実行
+	bool looped = false;
+	No::Vector3 newPosition = CameraBounds::LoopPosition(
+		camera_,
+		transform->translate,
+		bullet->screenBoundsOffset,
+		looped
+	);
+
+	if (looped) {
+		transform->translate = newPosition;
+		bullet->loopedOnce = true;
+		// ループ時に訪問済み交差点をクリア（ループ後も衝撃波を発生させるため）
+		bullet->visitedIntersections.clear();
+	}
+}
+
+// ============================================================
+//  HandlePlayerCollision
+// ============================================================
+
+void PlayerBulletSystem::HandlePlayerCollision(
+	No::Registry& registry,
+	No::Entity bulletEntity,
+	PlayerBulletComponent* bullet
+) {
+	(void)bullet;
+
+	auto* bulletCollider = registry.GetComponent<SphereColliderComponent>(bulletEntity);
+	if (!bulletCollider) return;
+
+	// プレイヤーとの衝突判定
+	if (bulletCollider->isCollied && bulletCollider->colliedWith == kPlayer) {
+		auto playerEntity = bulletCollider->colliedEntity;
+
+		// プレイヤーが有効か確認
+		if (registry.Has<HealthComponent>(playerEntity) && registry.Has<DeathFlag>(playerEntity)) {
+			auto* playerHealth = registry.GetComponent<HealthComponent>(playerEntity);
+			auto* playerDeath = registry.GetComponent<DeathFlag>(playerEntity);
+
+			if (!playerDeath->isDead) {
+				bool died = playerHealth->TakeDamage(1);
+				if (died) {
+					playerDeath->isDead = true;
+				}
+
+				// 弾を消滅
+				auto* bulletDeath = registry.GetComponent<DeathFlag>(bulletEntity);
+				if (bulletDeath) {
+					bulletDeath->isDead = true;
+				}
+			}
 		}
 	}
 }
@@ -155,6 +289,23 @@ bool PlayerBulletSystem::IsIntersectionNode(
 	bool goingDown = (direction.y < -0.5f);
 	bool goingRight = (direction.x > 0.5f);
 	bool goingLeft = (direction.x < -0.5f);
+
+	// 来た方向（逆方向）の接続を確認
+	bool hasBackConnection = false;
+	if (goingUp) {
+		hasBackConnection = cell->hasConnectionDown;  // 下から来た
+	} else if (goingDown) {
+		hasBackConnection = cell->hasConnectionUp;    // 上から来た
+	} else if (goingRight) {
+		hasBackConnection = cell->hasConnectionLeft;  // 左から来た
+	} else if (goingLeft) {
+		hasBackConnection = cell->hasConnectionRight; // 右から来た
+	}
+
+	// 来た方向に接続がない場合は交差点ではない（行き止まりやT字路の先端）
+	if (!hasBackConnection) {
+		return false;
+	}
 
 	// 進行方向と来た方向（逆方向）以外の接続をカウント
 	int sideConnections = 0;

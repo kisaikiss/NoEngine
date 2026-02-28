@@ -1,6 +1,7 @@
 #include "PlayerWeaponSystem.h"
 #include "../Component/PlayerBulletComponent.h"
 #include "../Component/ColliderComponent.h"
+#include "../Config/PlayerBulletConfig.h"
 #include "../GameTag.h"
 #include "../Utility/GridUtils.h"
 
@@ -64,7 +65,14 @@ void PlayerWeaponSystem::HandleBulletFire(
 	bullet->startNodeX = player->currentNodeX;
 	bullet->startNodeY = player->currentNodeY;
 	bullet->speed = player->bulletSpeed;
-	bullet->maxDistance = 20.0f;
+
+	// ---- グローバル設定からフラグをコピー ----
+	auto& config = PlayerBulletConfig::GetInstance();
+	bullet->penetrateWalls = config.defaultPenetrateWalls;
+	bullet->penetrateEnemies = config.defaultPenetrateEnemies;
+	bullet->enableLooping = config.defaultEnableLooping;
+	bullet->disableLoopOnHit = config.defaultDisableLoopOnHit;
+	bullet->screenBoundsOffset = config.defaultScreenBoundsOffset;
 
 	// SphereCollider 追加
 	auto* collider = registry.AddComponent<SphereColliderComponent>(bulletEntity);
@@ -128,6 +136,16 @@ void PlayerWeaponSystem::DebugUI(PlayerComponent* player) {
 
 	ImGui::DragFloat("自機弾の速度", &player->bulletSpeed, 0.1f, 1.0f, 20.0f);
 
+	ImGui::Separator();
+	ImGui::Text("弾の挙動設定（全ての新規弾に適用）");
+
+	auto& config = PlayerBulletConfig::GetInstance();
+	ImGui::Checkbox("壁を貫通", &config.defaultPenetrateWalls);
+	ImGui::Checkbox("敵を貫通", &config.defaultPenetrateEnemies);
+	ImGui::Checkbox("画面外ループ", &config.defaultEnableLooping);
+	ImGui::Checkbox("敵ヒット時ループ無効化", &config.defaultDisableLoopOnHit);
+	ImGui::DragFloat("画面外判定オフセット", &config.defaultScreenBoundsOffset, 0.1f, 0.0f, 5.0f);
+
 	ImGui::End();
 }
-#endif
+#endif#endif

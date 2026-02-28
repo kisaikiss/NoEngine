@@ -11,10 +11,20 @@ struct PlayerBulletComponent {
 	int startNodeX;						// 発射元のグリッドX座標（このノードのみグリッド判定をスキップする）
 	int startNodeY;						// 発射元のグリッドY座標
 	float speed;						// 移動速度
-	float travelDistance;				// 移動した距離
-	float maxDistance;					// 最大移動距離（安全網として保持しておく）
+	float travelDistance;				// 移動した距離（発射元ノード判定用）
 	
 	std::unordered_set<int> visitedIntersections;	// 訪問済み交差点（重複発生防止用）
+
+	// ---- 弾の挙動制御フラグ ----
+	bool penetrateWalls;				// 壁を貫通するか
+	bool penetrateEnemies;				// 敵を貫通するか
+	bool enableLooping;					// 画面外ループを有効にするか
+	bool disableLoopOnHit;				// 敵に当たった時にループを無効化するか
+
+	// ---- ループ状態管理 ----
+	bool loopedOnce;					// 既に1回ループしたか
+	bool loopDisabled;					// ループが無効化されたか（敵ヒット等）
+	float screenBoundsOffset;			// 画面外判定のオフセット（モデルサイズ分の余裕）
 
 	PlayerBulletComponent()
 		: direction(NoEngine::Math::Vector3::ZERO),
@@ -22,6 +32,12 @@ struct PlayerBulletComponent {
 		startNodeY(0),
 		speed(5.0f),
 		travelDistance(0.0f),
-		maxDistance(20.0f) {
+		penetrateWalls(true),
+		penetrateEnemies(true),
+		enableLooping(true),
+		disableLoopOnHit(true),
+		loopedOnce(false),
+		loopDisabled(false),
+		screenBoundsOffset(0.5f) {
 	}
 };

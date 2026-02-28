@@ -11,6 +11,12 @@ public:
 	/// 更新処理
 	/// </summary>
 	void Update(No::Registry& registry, float deltaTime) override;
+
+	/// <summary>
+	/// カメラをセット（画面外判定用）
+	/// </summary>
+	void SetCamera(NoEngine::CameraBase* camera) { camera_ = camera; }
+
 private:
 	/// <summary>
 	/// 指定ノードで弾を消滅すべきか判定する
@@ -32,4 +38,17 @@ private:
 	/// ノード座標をハッシュ化する（訪問済み判定用）
 	/// </summary>
 	int HashNodeCoords(int x, int y) const;
+
+	/// <summary>
+	/// 画面外ループ処理
+	/// </summary>
+	void HandleScreenLooping(No::Registry& registry, No::Entity entity, PlayerBulletComponent* bullet, No::TransformComponent* transform);
+
+	/// <summary>
+	/// プレイヤーとの衝突判定（ループ後の弾のみ）
+	/// </summary>
+	void HandlePlayerCollision(No::Registry& registry, No::Entity bulletEntity, PlayerBulletComponent* bullet);
+
+private:
+	NoEngine::CameraBase* camera_ = nullptr;
 };

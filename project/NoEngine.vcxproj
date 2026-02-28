@@ -217,6 +217,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\TD3\System\PlayerMovementSystem.cpp" />
     <ClCompile Include="application\TD3\System\PlayerWeaponSystem.cpp" />
     <ClCompile Include="application\TD3\System\ShockwaveSystem.cpp" />
+    <ClCompile Include="application\TD3\Utility\CameraBounds.cpp" />
     <ClCompile Include="application\TestApp\TestApp.cpp" />
     <ClCompile Include="application\TD3\System\EnemyCollisionSystem.cpp" />
     <ClCompile Include="application\TD3\System\EnemyMovementSystem.cpp" />
@@ -428,6 +429,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\TD3\Component\PlayerBulletComponent.h" />
     <ClInclude Include="application\TD3\Component\PlayerComponent.h" />
     <ClInclude Include="application\TD3\Component\ShockwaveComponent.h" />
+    <ClInclude Include="application\TD3\Config\PlayerBulletConfig.h" />
     <ClInclude Include="application\TD3\Editor\MapEditor.h" />
     <ClInclude Include="application\TD3\GameTag.h" />
     <ClInclude Include="application\TD3\MapData\MapLoader.h" />
@@ -444,6 +446,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\TD3\System\PlayerMovementSystem.h" />
     <ClInclude Include="application\TD3\System\PlayerWeaponSystem.h" />
     <ClInclude Include="application\TD3\System\ShockwaveSystem.h" />
+    <ClInclude Include="application\TD3\Utility\CameraBounds.h" />
     <ClInclude Include="application\TestApp\TestApp.h" />
     <ClInclude Include="application\TD3\System\EnemyCollisionSystem.h" />
     <ClInclude Include="application\TD3\System\EnemyMovementSystem.h" />

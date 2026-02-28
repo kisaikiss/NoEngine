@@ -3,6 +3,9 @@
 #include "../MapData/StageData.h"
 #include "../System/GameTimer.h"
 
+// 前方宣言
+class PlayerBulletSystem;
+
 #ifdef USE_IMGUI
 #include "../Editor/MapEditor.h"
 #endif
