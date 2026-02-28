@@ -18,11 +18,6 @@ enum class Direction {
 
 /// <summary>
 /// プレイヤーコンポーネント
-///
-/// 【座標設定について】
-/// currentNodeX/Y の初期値はコンストラクタで (0,0) に設定されるが、
-/// 実際の初期位置は SampleScene::InitializePlayer(registry, x, y) の引数で決定される。
-/// コンストラクタの座標を直接変更しても反映されないので注意。
 /// </summary>
 struct PlayerComponent {
 

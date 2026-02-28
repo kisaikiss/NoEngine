@@ -2,6 +2,7 @@
 #include "engine/NoEngine.h"
 #include "../MapData/StageData.h"
 #include "../System/GameTimer.h"
+#include "../Component/PlayerComponent.h"  // Direction enum を使用するため
 
 // 前方宣言
 class PlayerBulletSystem;
@@ -88,6 +89,16 @@ private:
 	void InitializeLight(No::Registry& registry);
 
 	// ========== カメラ ==========
+
+	/// <summary>
+	/// 方向から回転を計算する（敵・スポナー共通）
+	/// </summary>
+	NoEngine::Math::Quaternion CalcDirectionRotation(Direction dir);
+
+	/// <summary>
+	/// スポナーの回転を更新する（SetupSpawners後に呼ぶ）
+	/// </summary>
+	void UpdateSpawnerRotations(No::Registry& registry);
 
 	/// <summary>
 	/// ステージのノード座標からマップ中心とZ距離を自動計算してカメラを設定する。

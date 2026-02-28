@@ -7,7 +7,7 @@
 /// 入力履歴・弾薬など「プレイヤー固有」のフィールドは持たない。
 ///
 /// 移動方向の決定は EnemyMovementSystem が行う。
-/// BFS による最短経路探索（後退禁止制約考慮）
+/// BFS による最短経路探索（後退禁止）
 /// </summary>
 struct EnemyComponent {
 
@@ -35,14 +35,14 @@ struct EnemyComponent {
 	// EnemySpawnerから生成された直後のモード
 	// isSpawning=true の間、自機・自機弾・衝撃波・敵同士の衝突判定を受けない。
 
-	bool  isSpawning = false; // スポーニング状態フラグ
-	float spawningSpeed = 0.0f;  // 敵専用道上の移動速度（EnemySpawnerSystemが計算して設定）
-	float spawnExitTimer = 0.0f;  // 通常ノード到達後のカウントダウン（GameTimer基準）
+	bool  isSpawning = false;			// スポーニング状態フラグ
+	float spawningSpeed = 0.0f;			// 敵専用道上の移動速度（EnemySpawnerSystemが計算して設定）
+	float spawnExitTimer = 0.0f;		// 通常ノード到達後のカウントダウン（GameTimer基準）
 	static constexpr float SPAWN_EXIT_DURATION = 0.5f; // 通常ノード到達後、何秒で通常状態に移行するか
 
 	// ========== 色情報 ==========
-	No::Color spawningColor;  // スポーニング状態の色（白）
-	No::Color defaultColor;   // 通常状態の色（赤）
+	No::Color spawningColor;			// スポーニング状態の色（白）
+	No::Color defaultColor;				// 通常状態の色（赤）
 
 	EnemyComponent()
 		: currentNodeX(0), currentNodeY(0),
@@ -57,8 +57,8 @@ struct EnemyComponent {
 		isSpawning(false),
 		spawningSpeed(0.0f),
 		spawnExitTimer(0.0f),
-		spawningColor({ 1.0f, 1.0f, 1.0f, 1.0f }),  // 白
-		defaultColor({ 1.0f, 0.2f, 0.2f, 1.0f })    // 赤
+		spawningColor({ 1.0f, 1.0f, 1.0f, 1.0f }),		// 白
+		defaultColor({ 1.0f, 0.2f, 0.2f, 1.0f })		// 赤
 	{
 	}
 };

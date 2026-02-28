@@ -4,8 +4,6 @@
 /// <summary>
 /// グリッド描画システム
 /// グリッドの線を赤色で描画するシステム
-///
-/// GridToWorld は GridUtils::GridToWorld に移動した。
 /// スケール変更は GridUtils.h の scale パラメータで行う。
 /// </summary>
 class GridRenderSystem : public No::ISystem {

@@ -4,8 +4,8 @@
 /// ヘルスコンポーネント（Player・Enemy 共用）
 /// 拡張性のため独立コンポーネントとして定義する。
 ///
-///	使用方法
-///	Player → maxHp=5, currentHp=5 で AddComponent 後に設定
+///	使用例
+///	Player ならmaxHp=3, currentHp=3 で AddComponent 後に設定
 ///	Enemy  → デフォルト値のまま AddComponent（maxHp=1, currentHp=1）HPといいつつ当たったら死ぬイメージ
 /// </summary>
 struct HealthComponent {

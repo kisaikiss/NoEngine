@@ -7,21 +7,8 @@ class GameTimer;
 
 /// <summary>
 /// 敵スポナーシステム
-///
-/// 【初期化（SetupSpawners）】
-///   ステージロード後に SampleScene から呼ぶ。
-///   各スポナーの spawnDirection を自動検出し、chainCount と calculatedSpeed を計算する。
-///
-/// 【更新（Update）】
-///   GameTimer を参照してスポーンタイマーを進める。
-///   タイマーが spawnInterval_ に達したら敵を生成してタイマーをリセットする。
-///   生成した敵は isSpawning=true、spawningSpeed=calculatedSpeed、
-///   lastDirection=spawnDirection の逆方向で初期化される。
-///
-/// 【ImGui】
-///   - スポーン間隔スライダー（全スポナー共通。変更時に calculatedSpeed を再計算）
-///   - 各スポナーの残り時間 ProgressBar と数値
-///   - 自動計算された速度の読み取り表示
+///	ステージロード後に SampleScene から呼ぶ。
+///	各スポナーの spawnDirection を自動検出し、chainCount と calculatedSpeed を計算する。
 /// </summary>
 class EnemySpawnerSystem : public No::ISystem {
 public:
@@ -44,13 +31,13 @@ private:
 
 	// ========== スポーン設定 ==========
 
-	float spawnInterval_ = 2.5f;     ///< スポーン間隔（全スポナー共通, ImGui で変更可）
+	float spawnInterval_ = 2.5f;     ///< スポーン間隔（全スポナー共通）
 	float prevSpawnInterval_ = 2.5f; ///< 変更検出用
 
 	// ========== スポーン処理 ==========
 
 	/// <summary>
-	/// 指定スポナーから敵を 1 体生成する
+	/// 指定スポナーから敵を1体生成する
 	/// </summary>
 	void SpawnEnemy(No::Registry& registry, EnemySpawnerComponent* spawner);
 

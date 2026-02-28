@@ -7,8 +7,6 @@
 /// <summary>
 /// プレイヤー武器システム
 /// 弾丸発射とImGuiでの弾薬パラメータ表示を担当する。
-///
-/// GetGridCell / HasConnection は GridUtils に移動した。
 /// </summary>
 class PlayerWeaponSystem : public No::ISystem {
 public:
@@ -21,8 +19,8 @@ private:
 	void HandleBulletFire(
 		PlayerComponent* player,
 		No::Registry& registry,
-		const No::Vector3 playerPosition,      // 値渡し：ダングリングリファレンス防止
-		const NoEngine::Math::Quaternion playerRotation  // 値渡し：ダングリングリファレンス防止
+		const No::Vector3 playerPosition,				// 値渡し：ダングリングリファレンス防止
+		const NoEngine::Math::Quaternion playerRotation	// 値渡し：ダングリングリファレンス防止
 	);
 
 	/// <summary>

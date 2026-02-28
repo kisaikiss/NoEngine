@@ -111,6 +111,9 @@ void SampleScene::Setup() {
 	// スポナーの方向・速度を計算（InitializeGrid + スポナーエンティティ生成後に呼ぶ）
 	if (spawnerSystem_) spawnerSystem_->SetupSpawners(registry);
 
+	// スポナーのモデル回転を設定
+	UpdateSpawnerRotations(registry);
+
 	InitializeLight(registry);
 
 	SetupCameraForStage(stageData.connectionMap);   // 自動配置
@@ -227,6 +230,9 @@ void SampleScene::ReloadStage(int stageNumber) {
 
 	// スポナーの方向・速度を再計算
 	if (spawnerSystem_) spawnerSystem_->SetupSpawners(registry);
+
+	// スポナーのモデル回転を設定
+	UpdateSpawnerRotations(registry);
 
 	// ステージが変わるたびにカメラを再配置
 	SetupCameraForStage(stageData.connectionMap);
@@ -424,7 +430,7 @@ void SampleScene::NotSystemUpdate() {
 
 		// 操作方法
 		ImGui::Text("操作方法:");
-		ImGui::BulletText("移動: WASD or 矢印キー");
+		ImGui::BulletText("移動: WASD");
 		ImGui::BulletText("発射: スペースキー");
 	} else {
 		ImGui::Text("プレイヤー情報が取得できません");
@@ -670,7 +676,7 @@ void SampleScene::DestroyGameObject() {
 
 	std::vector<No::Entity> toDestroy;
 	auto view = registry.View<DeathFlag>();
-for (auto entity : view) {
+	for (auto entity : view) {
 		if (registry.Has<DeathFlag>(entity)) {
 			auto* flag = registry.GetComponent<DeathFlag>(entity);
 			if (flag && flag->isDead) toDestroy.push_back(entity);
@@ -678,5 +684,72 @@ for (auto entity : view) {
 	}
 	for (auto entity : toDestroy) {
 		registry.DestroyEntity(entity);
+	}
+}
+
+// ============================================================
+//  CalcDirectionRotation（敵・スポナー共通の回転計算）
+// ============================================================
+
+NoEngine::Math::Quaternion SampleScene::CalcDirectionRotation(Direction dir) {
+	NoEngine::Math::Quaternion q;
+	NoEngine::Math::Quaternion baseRotation;
+	NoEngine::Math::Quaternion directionRotation;
+
+	// 基本姿勢：頭をカメラ側に向ける（X軸周りに-90度）
+	baseRotation.FromAxisAngle(NoEngine::Math::Vector3{ 1.0f, 0.0f, 0.0f }, -PI * 0.5f);
+
+	switch (dir) {
+	case Direction::None:
+		// 停止時は上向き（基本姿勢のみ）
+		q = baseRotation;
+		break;
+
+	case Direction::Up:
+		// 上方向：基本姿勢のまま（追加回転なし）
+		q = baseRotation;
+		break;
+
+	case Direction::Down:
+		// 下方向：基本姿勢 + Y軸周りに180度
+		directionRotation.FromAxisAngle(NoEngine::Math::Vector3{ 0.0f, 1.0f, 0.0f }, PI);
+		q = baseRotation * directionRotation;
+		break;
+
+	case Direction::Right:
+		// 右方向：基本姿勢 + Y軸周りに90度
+		directionRotation.FromAxisAngle(NoEngine::Math::Vector3{ 0.0f, 1.0f, 0.0f }, PI * 0.5f);
+		q = baseRotation * directionRotation;
+		break;
+
+	case Direction::Left:
+		// 左方向：基本姿勢 + Y軸周りに-90度
+		directionRotation.FromAxisAngle(NoEngine::Math::Vector3{ 0.0f, 1.0f, 0.0f }, -PI * 0.5f);
+		q = baseRotation * directionRotation;
+		break;
+
+	default:
+		q = NoEngine::Math::Quaternion::IDENTITY;
+		break;
+	}
+	return q;
+}
+
+// ============================================================
+//  UpdateSpawnerRotations
+//  SetupSpawners呼び出し後に、各スポナーの方向に応じて回転を設定する
+// ============================================================
+
+void SampleScene::UpdateSpawnerRotations(No::Registry& registry) {
+	auto view = registry.View<EnemySpawnerComponent, EnemySpawnerTag, No::TransformComponent>();
+	
+	for (auto entity : view) {
+		auto* spawner = registry.GetComponent<EnemySpawnerComponent>(entity);
+		auto* transform = registry.GetComponent<No::TransformComponent>(entity);
+
+		if (spawner && transform) {
+			// スポナーのspawnDirectionに基づいて回転を設定
+			transform->rotation = CalcDirectionRotation(spawner->spawnDirection);
+		}
 	}
 }

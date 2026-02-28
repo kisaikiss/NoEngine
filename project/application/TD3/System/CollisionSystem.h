@@ -5,8 +5,7 @@
 /// 衝突判定システム
 /// 全てのSphereColliderComponentを総当たりでチェックし、
 /// 衝突フラグとエンティティ情報を設定する。
-/// 
-/// 実際のダメージ処理やイベント発火は他のSystemで行う。
+/// 実際のダメージ処理は他のSystemで行う。
 /// </summary>
 class CollisionSystem : public No::ISystem {
 public:
@@ -26,18 +25,15 @@ private:
 	/// <summary>
 	/// 球体同士の衝突判定（距離ベース）
 	/// </summary>
-	static bool CheckSphereToSphere(const No::Vector3& center1, const No::Vector3& center2, 
-	                                 const float radius1, const float radius2);
+	static bool CheckSphereToSphere(const No::Vector3& center1, const No::Vector3& center2, const float radius1, const float radius2);
 
 	/// <summary>
 	/// ボックス同士の衝突判定（AABB、将来の拡張用）
 	/// </summary>
-	static bool CheckBoxToBox(const No::Vector3& center1, const No::Vector3& center2, 
-	                          const No::Vector3& size1, const No::Vector3& size2);
+	static bool CheckBoxToBox(const No::Vector3& center1, const No::Vector3& center2, const No::Vector3& size1, const No::Vector3& size2);
 
 	/// <summary>
 	/// ボックスと球体の衝突判定（将来の拡張用）
 	/// </summary>
-	static bool CheckBoxToSphere(const No::Vector3& center1, const No::Vector3& center2, 
-	                             const No::Vector3& size, const float radius);
+	static bool CheckBoxToSphere(const No::Vector3& center1, const No::Vector3& center2, const No::Vector3& size, const float radius);
 };

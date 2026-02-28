@@ -2,6 +2,7 @@
 #include "engine/NoEngine.h"
 #include "../Component/EnemyComponent.h"
 #include "../Component/PlayerComponent.h"
+#include <numbers>
 
 // 前方宣言
 class GameTimer;
@@ -12,8 +13,6 @@ class GameTimer;
 /// ChooseDirection を BFS 最短経路探索に差し替えた。
 /// 後退禁止制約は最初の1歩のみ適用し、
 /// 2歩目以降は制約なしで探索することで迂回ルートにも対応する。
-/// 
-/// ゲームタイマーを使用して、プレイヤーが移動中のみ敵が動く仕様を実現する。
 /// </summary>
 class EnemyMovementSystem : public No::ISystem {
 public:
@@ -28,8 +27,7 @@ public:
 	void SetGameTimer(GameTimer* timer) { gameTimer_ = timer; }
 
 private:
-	static constexpr float PI = 3.14159265358979323846f;
-
+	static constexpr float PI = std::numbers::pi_v<float>;
 	GameTimer* gameTimer_ = nullptr;
 
 	// ========== 状態別の移動処理 ==========
@@ -57,12 +55,12 @@ private:
 	// ========== 経路選択 ==========
 
 	/// <summary>
-	/// 次に移動する方向を BFS で決定する（Stage4）
+	/// 次に移動する方向を BFS で決定する
 	///
 	/// 敵の currentNode からプレイヤーの currentNode への最短経路を BFS で探索し、
 	/// 「最初の1歩の方向」だけを返す。次のノード到達時に再計算するため1ステップで十分。
 	///
-	/// 後退禁止制約：
+	/// 後退禁止：
 	/// 最初の1歩のみ GridUtils::CanMoveInDirection(... lastDirection) を適用。
 	/// 2歩目以降は GridUtils::CanMoveInDirection(... Direction::None) で制約なし。
 	///
@@ -72,7 +70,7 @@ private:
 	Direction ChooseDirection(EnemyComponent* enemy, int playerX, int playerY, No::Registry& registry);
 
 	/// <summary>
-	/// スポーニング敵専用の方向決定。
+	/// スポーニング敵専用の方向決定
 	/// BFS を使わず、後退禁止制約のみで次に進める方向を返す。
 	/// 敵専用道は接続数 2（一本道）なので、これで十分に前進できる。
 	/// </summary>

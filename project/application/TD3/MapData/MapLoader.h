@@ -5,17 +5,10 @@
 /// <summary>
 /// マップローダー
 /// ステージマニフェスト JSON を起点に、接続マップとエンティティマップを読み書きする。
-///
 /// 【ファイル構成】
-///   resources/game/td_3105/Stages/stage_01.json          ← マニフェスト
-///   resources/game/td_3105/Stages/stage_01_map.json      ← ノード接続情報
-///   resources/game/td_3105/Stages/stage_01_entities.json ← エンティティ配置
-///
-/// 【Stage5 変更点】
-///   LoadStage を追加。
-///
-/// 【Stage7 変更点】
-///   SaveStage を追加。MapEditor から呼ばれる。
+///   resources/game/td_3105/Stages/stage_01.json			← マニフェスト
+///   resources/game/td_3105/Stages/stage_01_map.json		← ノード接続情報
+///   resources/game/td_3105/Stages/stage_01_entities.json	← エンティティ配置
 /// </summary>
 class MapLoader {
 public:

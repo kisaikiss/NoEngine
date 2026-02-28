@@ -3,17 +3,8 @@
 
 /// <summary>
 /// 敵スポナーコンポーネント
-///
 /// EnemySpawnerTag を持つエンティティに付与される。
 /// 自身が置かれたノードから spawnDirection に向かって敵を生成する。
-///
-/// 【速度の自動計算】
-///   chainCount / spawnInterval = calculatedSpeed
-///   これにより「敵専用道を通過する時間 = スポーン間隔」が保証される。
-///   chainCount は EnemySpawnerSystem::SetupSpawners() でステージロード時に計算。
-///
-/// 【タイマー】
-///   spawnTimer は GameTimer（自機が動いているときだけ加算）で計測。
 /// </summary>
 struct EnemySpawnerComponent {
 

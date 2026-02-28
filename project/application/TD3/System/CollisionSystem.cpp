@@ -50,8 +50,7 @@ void CollisionSystem::Update(No::Registry& registry, float deltaTime) {
 		}
 	}
 
-	// 3. デバッグ描画（衝突判定完了後に実行することで isCollied が正しい状態になる）
-	// 新規 View を取得して再イテレート（衝突判定で使った sphereView は消費済みの可能性があるため）
+	// デバッグ描画（衝突判定完了後に実行することで isCollied が正しい状態になる）
 	// ShockwaveComponent を持つエンティティは ShockwaveSystem が独自に描画するためスキップする
 #ifdef USE_IMGUI
 	auto drawView = registry.View<SphereColliderComponent>();
@@ -66,6 +65,8 @@ void CollisionSystem::Update(No::Registry& registry, float deltaTime) {
 		No::Vector3 color = sphere->isCollied
 			? No::Vector3{ 1.0f, 0.0f, 0.0f }  // 衝突中は赤
 		: No::Vector3{ 0.0f, 1.0f, 0.0f };  // 通常は緑
+
+		//一時的にコメントアウト
 
 		//NoEngine::Primitive::DrawSphere(sphere->center, sphere->worldRadius,
 		//	{ color.x, color.y, color.z, 0.5f });

@@ -5,9 +5,7 @@
 /// <summary>
 /// 敵衝突システム
 /// プレイヤーと敵の衝突判定を行い、接触時に敵を死亡させ、プレイヤーに1ダメージを与える。
-///
-/// 衝突判定自体はCollisionSystemが担当し、
-/// このSystemは結果（isColliedフラグ）を参照してダメージ処理を行う。
+/// 衝突判定自体はCollisionSystemが担当してこのSystemは結果（isColliedフラグ）を参照してダメージ処理を行う。
 /// </summary>
 class EnemyCollisionSystem : public No::ISystem {
 public:
