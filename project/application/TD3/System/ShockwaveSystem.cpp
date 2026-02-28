@@ -73,6 +73,10 @@ void ShockwaveSystem::Update(No::Registry& registry, float deltaTime) {
 					bool died = enemyHealth->TakeDamage(1);
 					if (died) {
 						enemyDeath->isDead = true;
+						// 敵撃破カウント増加
+						if (onEnemyKilled_) {
+							onEnemyKilled_();
+						}
 					}
 					// ヒット済みとしてマーク
 					shockwave->hitEnemies.insert(enemyEntity);

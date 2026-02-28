@@ -20,6 +20,11 @@ public:
 	/// </summary>
 	void SetCamera(NoEngine::CameraBase* camera) { camera_ = camera; }
 
+	/// <summary>
+	/// 敵撃破カウントのコールバックを設定
+	/// </summary>
+	void SetEnemyKillCallback(std::function<void()> callback) { onEnemyKilled_ = callback; }
+
 private:
 	/// <summary>
 	/// 指定ノードで弾を消滅すべきか判定する
@@ -64,4 +69,5 @@ private:
 
 private:
 	NoEngine::CameraBase* camera_ = nullptr;
+	std::function<void()> onEnemyKilled_;
 };

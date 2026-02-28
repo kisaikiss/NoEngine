@@ -81,8 +81,8 @@ struct PlayerComponent {
 		inputHistoryWindow(0.15f),
 		isAtDeadEnd(false),
 		isMoving(false),
-		currentBullets(5),
-		maxBullets(10),
+		currentBullets(3),
+		maxBullets(3),
 		bulletSpeed(3.0f)
 	{
 		for (int i = 0; i < 4; ++i) {

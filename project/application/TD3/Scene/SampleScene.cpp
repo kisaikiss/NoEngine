@@ -58,11 +58,31 @@ void SampleScene::Setup() {
 	// PlayerBulletSystem にカメラを設定
 	auto playerBulletSystem = std::make_unique<PlayerBulletSystem>();
 	playerBulletSystem->SetCamera(camera_.get());
+	playerBulletSystem->SetEnemyKillCallback([this]() {
+		IncrementEnemyKillCount();
+	});
 	AddSystem(std::move(playerBulletSystem));
 
 	AddSystem(std::make_unique<CollisionSystem>());
-	AddSystem(std::make_unique<ShockwaveSystem>());
-	AddSystem(std::make_unique<EnemyCollisionSystem>());
+
+	// ShockwaveSystem に敵撃破カウントコールバックを設定
+	{
+		auto sys = std::make_unique<ShockwaveSystem>();
+		sys->SetEnemyKillCallback([this]() {
+			IncrementEnemyKillCount();
+		});
+		AddSystem(std::move(sys));
+	}
+
+	// EnemyCollisionSystem に敵撃破カウントコールバックを設定
+	{
+		auto sys = std::make_unique<EnemyCollisionSystem>();
+		sys->SetEnemyKillCallback([this]() {
+			IncrementEnemyKillCount();
+		});
+		AddSystem(std::move(sys));
+	}
+
 	AddSystem(std::make_unique<EnemyToEnemyCollisionSystem>());
 	AddSystem(std::make_unique<PlayerWeaponSystem>());
 	AddSystem(std::make_unique<AmmoItemSystem>());
@@ -74,7 +94,7 @@ void SampleScene::Setup() {
 	editor_ = std::make_unique<MapEditor>();
 #endif
 
-	stageNumber_ = 1;
+	stageNumber_ = 3;
 	std::string path = "resources/game/td_3105/Stages/stage_0"
 		+ std::to_string(stageNumber_) + ".json";
 	MapData::StageData stageData = MapLoader::LoadStage(path);
@@ -187,6 +207,9 @@ void SampleScene::ReloadStage(int stageNumber) {
 	// ゲームタイマーをリセット
 	gameTimer_.Reset();
 
+	// 敵撃破数をリセット
+	enemyKillCount_ = 0;
+
 	// ---- 指定ステージを読み込んで再初期化 ----
 	std::string path = "resources/game/td_3105/Stages/stage_0"
 		+ std::to_string(stageNumber_) + ".json";
@@ -250,7 +273,14 @@ void SampleScene::UpdateGame(No::Registry& registry) {
 		}
 	}
 
-	/* ---- クリア判定（敵が全滅したとき） ----*/
+	// ---- クリア判定 ----
+	if (enemyKillCount_ >= clearKillCount_) {
+		ReloadStage(stageNumber_);
+		return;
+	}
+
+	/* ---- クリア判定（敵が全滅したとき）旧版 ----*/
+	/*
 	auto enemyView = registry.View<EnemyTag, DeathFlag>();
 	if (enemyView.Empty()) return;
 
@@ -263,6 +293,7 @@ void SampleScene::UpdateGame(No::Registry& registry) {
 	if (aliveEnemies == 0) {
 		ReloadStage(stageNumber_);
 	}
+	*/
 }
 
 // ============================================================
@@ -332,6 +363,92 @@ void SampleScene::NotSystemUpdate() {
 		}
 	}
 
+	// ========== UI代わりタブ ==========
+	ImGui::Begin("UI代わり");
+
+	// プレイヤー情報を取得
+	PlayerComponent* player = nullptr;
+	HealthComponent* playerHealth = nullptr;
+	auto playerUIView = registry.View<PlayerComponent, PlayerTag, HealthComponent>();
+	if (!playerUIView.Empty()) {
+		auto it = playerUIView.begin();
+		player = registry.GetComponent<PlayerComponent>(*it);
+		playerHealth = registry.GetComponent<HealthComponent>(*it);
+	}
+
+	if (player && playerHealth) {
+		// HP表示
+		ImGui::Text("HP: %d / %d", playerHealth->currentHp, playerHealth->maxHp);
+		
+		// HPバー表示
+		float hpRatio = (playerHealth->maxHp > 0) 
+			? static_cast<float>(playerHealth->currentHp) / static_cast<float>(playerHealth->maxHp)
+			: 0.0f;
+		ImVec4 hpBarColor = (hpRatio > 0.5f) ? ImVec4(0.0f, 1.0f, 0.0f, 1.0f)
+			: (hpRatio > 0.25f) ? ImVec4(1.0f, 1.0f, 0.0f, 1.0f)
+			: ImVec4(1.0f, 0.0f, 0.0f, 1.0f);
+		ImGui::PushStyleColor(ImGuiCol_PlotHistogram, hpBarColor);
+		ImGui::ProgressBar(hpRatio, ImVec2(-1, 0));
+		ImGui::PopStyleColor();
+
+		ImGui::Separator();
+
+		// 弾数表示
+		ImGui::Text("弾数: %d / %d", player->currentBullets, player->maxBullets);
+		
+		// 弾数バー表示
+		float bulletRatio = (player->maxBullets > 0)
+			? static_cast<float>(player->currentBullets) / static_cast<float>(player->maxBullets)
+			: 0.0f;
+		ImGui::ProgressBar(bulletRatio, ImVec2(-1, 0));
+
+		ImGui::Separator();
+
+		// 撃破数表示
+		ImGui::Text("撃破数: %d / 25", enemyKillCount_);
+		
+		// 撃破数バー表示
+		float killRatio = enemyKillCount_ / 25.0f;
+		ImVec4 killBarColor = (killRatio >= 1.0f) ? ImVec4(1.0f, 0.84f, 0.0f, 1.0f) // ゴールド
+			: ImVec4(0.0f, 0.5f, 1.0f, 1.0f); // 青
+		ImGui::PushStyleColor(ImGuiCol_PlotHistogram, killBarColor);
+		ImGui::ProgressBar(killRatio, ImVec2(-1, 0));
+		ImGui::PopStyleColor();
+
+		ImGui::Separator();
+
+		// ステージ情報
+		ImGui::Text("ステージ: stage_0%d", stageNumber_);
+
+		ImGui::Separator();
+
+		// 操作方法
+		ImGui::Text("操作方法:");
+		ImGui::BulletText("移動: WASD or 矢印キー");
+		ImGui::BulletText("発射: スペースキー");
+	} else {
+		ImGui::Text("プレイヤー情報が取得できません");
+	}
+
+	ImGui::End();
+
+	// ========== ゲームタイマーデバッグ UI ==========
+	ImGui::Begin("ゲームタイマー");
+
+	ImGui::Text("プレイヤー移動%s", isPlayerMoving ? "中" : "してない");
+	ImGui::Separator();
+
+	// 敵撃破数の表示
+	ImGui::Text("敵撃破数: %d / 25", enemyKillCount_);
+	ImGui::Separator();
+
+	// ---- デバッグ情報（フレームレート、デリゲートテストなど） ----
+	ImGui::Text("ImGui Demo Test");
+
+	static float testValue = 0.0f;
+	ImGui::SliderFloat("Test Value", &testValue, 0.0f, 1.0f);
+
+	ImGui::End();
 	// ========== ゲームタイマーデバッグ UI ==========
 	ImGui::Begin("ゲームタイマー");
 
@@ -374,7 +491,6 @@ void SampleScene::NotSystemUpdate() {
 	}
 
 	ImGui::End();
-
 	// カメラ手動調整ウィンドウ（自動配置後の微調整用）
 	ImGui::Begin("camera");
 	ImGui::DragFloat3("pos", &cameraTransform_.translate.x, 0.1f);
@@ -553,7 +669,7 @@ void SampleScene::DestroyGameObject() {
 
 	std::vector<No::Entity> toDestroy;
 	auto view = registry.View<DeathFlag>();
-	for (auto entity : view) {
+for (auto entity : view) {
 		if (registry.Has<DeathFlag>(entity)) {
 			auto* flag = registry.GetComponent<DeathFlag>(entity);
 			if (flag && flag->isDead) toDestroy.push_back(entity);

@@ -23,6 +23,16 @@ public:
 	/// </summary>
 	GameTimer* GetGameTimer() { return &gameTimer_; }
 
+	/// <summary>
+	/// 敵撃破数を増やす
+	/// </summary>
+	void IncrementEnemyKillCount() { enemyKillCount_++; }
+
+	/// <summary>
+	/// 敵撃破数を取得
+	/// </summary>
+	int GetEnemyKillCount() const { return enemyKillCount_; }
+
 private:
 	std::unique_ptr<NoEngine::Camera> camera_;
 	NoEngine::Transform cameraTransform_{};
@@ -33,7 +43,9 @@ private:
 
 	// ========== ステージ管理 ==========
 
-	int  stageNumber_ = 1;		// 現在のステージ番号
+	int  stageNumber_ = 0;		// ステージ番号(こ子は仮置きなんで０にしておく)
+	int  enemyKillCount_ = 0;	// 敵撃破数
+	int clearKillCount_ = 25;	// クリアに必要な撃破数
 
 	/// <summary>
 	/// ECS を全リセットし、指定ステージを再ロードする。

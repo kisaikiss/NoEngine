@@ -16,7 +16,14 @@ public:
 	/// </summary>
 	void Update(No::Registry& registry, float deltaTime) override;
 
+	/// <summary>
+	/// 敵撃破カウントのコールバックを設定
+	/// </summary>
+	void SetEnemyKillCallback(std::function<void()> callback) { onEnemyKilled_ = callback; }
+
 private:
+	std::function<void()> onEnemyKilled_;
+
 #ifdef USE_IMGUI
 	/// <summary>
 	/// プレイヤーの HP 表示・無敵フラグ操作ウィンドウ

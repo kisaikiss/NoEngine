@@ -64,6 +64,11 @@ void EnemyCollisionSystem::Update(No::Registry& registry, float deltaTime) {
 				// 敵を死亡させる
 				enemyDeath->isDead = true;
 
+				// 敵撃破カウント増加
+				if (onEnemyKilled_) {
+					onEnemyKilled_();
+				}
+
 				// プレイヤーにダメージを与える
 				bool died = playerHealth->TakeDamage(1);
 				if (died && !playerHealth->isInvincible) {
