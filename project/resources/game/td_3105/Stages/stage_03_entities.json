@@ -46,6 +46,21 @@
       "type": "enemy",
       "x": 5,
       "y": -1
+    },
+    {
+      "type": "spawner",
+      "x": -4,
+      "y": 1
+    },
+    {
+      "type": "spawner",
+      "x": 8,
+      "y": 3
+    },
+    {
+      "type": "spawner",
+      "x": 5,
+      "y": 6
     }
   ]
 }

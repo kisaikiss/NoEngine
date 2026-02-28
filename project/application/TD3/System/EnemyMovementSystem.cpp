@@ -76,16 +76,12 @@ void EnemyMovementSystem::Update(No::Registry& registry, float deltaTime) {
 
 		// ---- spawnExitTimer 減算（ゲームタイム） ----
 		// isSpawning=true かつ通常ノードに到達済みのときのみカウントダウンする。
-		// ゼロに達したら通常状態へ移行し、コライダー色を緑（通常色）に戻す。
+		// ゼロに達したら通常状態へ移行する。
 		if (enemy->isSpawning && enemy->spawnExitTimer > 0.0f) {
 			enemy->spawnExitTimer -= gameDeltaTime;
 			if (enemy->spawnExitTimer <= 0.0f) {
 				enemy->isSpawning = false;
 				enemy->spawnExitTimer = 0.0f;
-				// コライダー色を通常（緑）に戻す
-				if (registry.Has<SphereColliderComponent>(entity)) {
-					registry.GetComponent<SphereColliderComponent>(entity)->debugColor = { 0.0f, 1.0f, 0.0f };
-				}
 			}
 		}
 

@@ -1,6 +1,7 @@
 #include "CollisionSystem.h"
 #include "engine/Math/Types/Calculations/Vector3Calculations.h"
 #include "../Component/ColliderComponent.h"
+#include "../Component/ShockwaveComponent.h"
 #include "engine/Functions/Renderer/Primitive.h"
 #include <algorithm>
 
@@ -17,7 +18,7 @@ using namespace NoEngine::MathCalculations;
 void CollisionSystem::Update(No::Registry& registry, float deltaTime) {
 	(void)deltaTime;
 
-	// 1. 全コライダーのワールド座標と半径を更新
+	// 1. 全コライダーのワールド座標と半径を更新（描画はここでは行わない）
 	UpdateCollider(registry);
 
 	// 2. 球体同士の衝突判定（総当たり）
@@ -48,6 +49,28 @@ void CollisionSystem::Update(No::Registry& registry, float deltaTime) {
 			}
 		}
 	}
+
+	// 3. デバッグ描画（衝突判定完了後に実行することで isCollied が正しい状態になる）
+	// 新規 View を取得して再イテレート（衝突判定で使った sphereView は消費済みの可能性があるため）
+	// ShockwaveComponent を持つエンティティは ShockwaveSystem が独自に描画するためスキップする
+#ifdef USE_IMGUI
+	auto drawView = registry.View<SphereColliderComponent>();
+	for (auto entity : drawView) {
+		if (!registry.Has<SphereColliderComponent>(entity)) continue;
+
+		// 衝撃波は ShockwaveSystem が独自に描画するので CollisionSystem では描画しない
+		if (registry.Has<ShockwaveComponent>(entity)) continue;
+
+		auto* sphere = registry.GetComponent<SphereColliderComponent>(entity);
+
+		No::Vector3 color = sphere->isCollied
+			? No::Vector3{ 1.0f, 0.0f, 0.0f }  // 衝突中は赤
+		: No::Vector3{ 0.0f, 1.0f, 0.0f };  // 通常は緑
+
+		//NoEngine::Primitive::DrawSphere(sphere->center, sphere->worldRadius,
+		//	{ color.x, color.y, color.z, 0.5f });
+	}
+#endif
 }
 
 // ============================================================
@@ -77,13 +100,6 @@ void CollisionSystem::UpdateCollider(No::Registry& registry) {
 
 		// 衝突フラグをリセット
 		sphereA->isCollied = false;
-
-		// デバッグ可視化（衝突中は赤に上書き、通常時はコンポーネントの debugColor を使用）
-#ifdef USE_IMGUI
-		No::Vector3 color = sphereA->debugColor; // 通常時はコンポーネント指定色
-		NoEngine::Primitive::DrawSphere(sphereA->center, sphereA->worldRadius,
-			{ color.x, color.y, color.z, 0.5f });
-#endif
 	}
 }
 
@@ -117,7 +133,7 @@ bool CollisionSystem::CheckBoxToBox(const No::Vector3& center1, const No::Vector
 }
 
 // ============================================================
-//  CheckBoxToSphere
+//  CheckBoxToSphere（将来の拡張用）
 // ============================================================
 
 bool CollisionSystem::CheckBoxToSphere(const No::Vector3& center1, const No::Vector3& center2,

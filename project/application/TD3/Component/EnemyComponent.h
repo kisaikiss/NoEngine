@@ -29,7 +29,7 @@ struct EnemyComponent {
 
 	///敵同士の衝突を反転させるためのクールダウンタイマ
 	float reverseTimer;
-	static constexpr float REVERSE_COOLDOWN = 0.5f; // 反転後に衝突を無視する時間（秒）
+	static constexpr float REVERSE_COOLDOWN = 1.0f; // 反転後に衝突を無視する時間（秒）
 
 	// ========== スポーニング状態 ==========
 	// EnemySpawnerから生成された直後のモード
@@ -38,7 +38,7 @@ struct EnemyComponent {
 	bool  isSpawning = false; // スポーニング状態フラグ
 	float spawningSpeed = 0.0f;  // 敵専用道上の移動速度（EnemySpawnerSystemが計算して設定）
 	float spawnExitTimer = 0.0f;  // 通常ノード到達後のカウントダウン（GameTimer基準）
-	static constexpr float SPAWN_EXIT_DURATION = 2.0f; // 通常ノード到達後、何秒で通常状態に移行するか
+	static constexpr float SPAWN_EXIT_DURATION = 0.5f; // 通常ノード到達後、何秒で通常状態に移行するか
 
 	EnemyComponent()
 		: currentNodeX(0), currentNodeY(0),

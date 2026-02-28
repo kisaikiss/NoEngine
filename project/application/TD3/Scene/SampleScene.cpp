@@ -482,7 +482,7 @@ void SampleScene::InitializeEnemy(No::Registry& registry, int startX, int startY
 	collider->collideMask = kPlayer | kPlayerBullet | kEnemy | kShockwave;
 
 	auto* transform = registry.AddComponent<No::TransformComponent>(entity);
-	transform->scale = { 0.2f, 0.2f, 0.2f };
+	transform->scale = { 0.4f, 0.4f, 0.4f };
 
 	auto* mesh = registry.AddComponent<No::MeshComponent>(entity);
 	auto* material = registry.AddComponent<No::MaterialComponent>(entity);
@@ -514,7 +514,7 @@ void SampleScene::InitializeSpawner(No::Registry& registry, int startX, int star
 	// Transform（グリッド座標に配置）
 	auto* transform = registry.AddComponent<No::TransformComponent>(entity);
 	transform->translate = GridUtils::GridToWorld(startX, startY);
-	transform->scale = { 0.3f, 0.3f, 0.3f };
+	transform->scale = { 0.4f, 0.4f, 0.4f };
 
 	// モデル表示
 	auto* mesh = registry.AddComponent<No::MeshComponent>(entity);
@@ -525,7 +525,7 @@ void SampleScene::InitializeSpawner(No::Registry& registry, int startX, int star
 		mesh
 	);
 	material->materials = NoEngine::Asset::ModelLoader::GetMaterial("EnemySpawner");
-	material->color = { 1.0f, 1.0f, 1.0f, 1.0f }; // 黄色
+	material->color = { 1.0f, 1.0f, 1.0f, 1.0f };
 	material->psoName = L"Renderer : Default PSO";
 	material->psoId = NoEngine::Render::GetPSOID(material->psoName);
 	material->rootSigId = NoEngine::Render::GetRootSignatureID(material->psoName);

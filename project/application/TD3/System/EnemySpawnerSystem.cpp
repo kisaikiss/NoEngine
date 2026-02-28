@@ -87,7 +87,7 @@ void EnemySpawnerSystem::SetupSpawners(No::Registry& registry) {
 		spawner->spawnDirection = spawnDir;
 
 		if (spawnDir == Direction::None) {
-			spawner->chainCount      = 0;
+			spawner->chainCount = 0;
 			spawner->calculatedSpeed = 1.0f;
 			continue;
 		}
@@ -113,7 +113,7 @@ void EnemySpawnerSystem::SetupSpawners(No::Registry& registry) {
 			if (!nextCell->isEnemyOnly) break;
 
 			// 次のノードへ進む（来た方向の逆以外で次の接続を探す）
-			Direction back    = GridUtils::GetOppositeDirection(curDir);
+			Direction back = GridUtils::GetOppositeDirection(curDir);
 			Direction nextDir = Direction::None;
 			for (Direction d : allDirs) {
 				if (d == back) continue;
@@ -122,8 +122,8 @@ void EnemySpawnerSystem::SetupSpawners(No::Registry& registry) {
 					break;
 				}
 			}
-			cx     = nx;
-			cy     = ny;
+			cx = nx;
+			cy = ny;
 			curDir = nextDir;
 		}
 
@@ -167,16 +167,16 @@ void EnemySpawnerSystem::SpawnEnemy(No::Registry& registry, EnemySpawnerComponen
 	auto* enemy = registry.AddComponent<EnemyComponent>(entity);
 	enemy->currentNodeX = spawner->nodeX;
 	enemy->currentNodeY = spawner->nodeY;
-	enemy->targetNodeX  = spawner->nodeX;
-	enemy->targetNodeY  = spawner->nodeY;
-	enemy->state        = PlayerState::OnNode;
+	enemy->targetNodeX = spawner->nodeX;
+	enemy->targetNodeY = spawner->nodeY;
+	enemy->state = PlayerState::OnNode;
 
 	// 後退防止: 来た方向（=スポーン方向の逆）を lastDirection に設定する
 	enemy->lastDirection = GridUtils::GetOppositeDirection(spawner->spawnDirection);
 
 	// スポーニング状態の初期化
-	enemy->isSpawning     = true;
-	enemy->spawningSpeed  = spawner->calculatedSpeed;
+	enemy->isSpawning = true;
+	enemy->spawningSpeed = spawner->calculatedSpeed;
 	enemy->spawnExitTimer = 0.0f;
 
 	registry.AddComponent<EnemyTag>(entity);
@@ -185,27 +185,26 @@ void EnemySpawnerSystem::SpawnEnemy(No::Registry& registry, EnemySpawnerComponen
 
 	// コライダー（スポーニング状態は青）
 	auto* collider = registry.AddComponent<SphereColliderComponent>(entity);
-	collider->radius       = 0.5f;
+	collider->radius = 0.5f;
 	collider->colliderType = kEnemy;
-	collider->collideMask  = kPlayer | kPlayerBullet | kEnemy | kShockwave;
-	collider->debugColor   = { 0.0f, 0.0f, 1.0f }; // 青: スポーニング中
+	collider->collideMask = kPlayer | kPlayerBullet | kEnemy | kShockwave;
 
 	auto* transform = registry.AddComponent<No::TransformComponent>(entity);
 	transform->translate = GridUtils::GridToWorld(spawner->nodeX, spawner->nodeY);
-	transform->scale     = { 0.2f, 0.2f, 0.2f };
+	transform->scale = { 0.4f, 0.4f, 0.4f };
 
-	auto* mesh     = registry.AddComponent<No::MeshComponent>(entity);
+	auto* mesh = registry.AddComponent<No::MeshComponent>(entity);
 	auto* material = registry.AddComponent<No::MaterialComponent>(entity);
 	NoEngine::Asset::ModelLoader::LoadModel(
 		"Enemy",
 		"resources/game/td_3105/Model/Enemy/Enemy.obj",
 		mesh
 	);
-	material->materials  = NoEngine::Asset::ModelLoader::GetMaterial("Enemy");
-	material->color      = { 0.0f, 0.5f, 1.0f, 1.0f }; // 青系: スポーニング中
-	material->psoName    = L"Renderer : Default PSO";
-	material->psoId      = NoEngine::Render::GetPSOID(material->psoName);
-	material->rootSigId  = NoEngine::Render::GetRootSignatureID(material->psoName);
+	material->materials = NoEngine::Asset::ModelLoader::GetMaterial("Enemy");
+	material->color = { 1.0f, 1.0f, 1.0f, 1.0f }; // 青系: スポーニング中
+	material->psoName = L"Renderer : Default PSO";
+	material->psoId = NoEngine::Render::GetPSOID(material->psoName);
+	material->rootSigId = NoEngine::Render::GetRootSignatureID(material->psoName);
 }
 
 // ============================================================

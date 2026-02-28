@@ -3,6 +3,16 @@
   "nodes": [
     {
       "down": false,
+      "is_enemy_only": true,
+      "left": false,
+      "right": true,
+      "up": false,
+      "x": -4,
+      "y": 1
+    },
+    {
+      "down": false,
+      "is_enemy_only": false,
       "left": false,
       "right": false,
       "up": true,
@@ -11,6 +21,7 @@
     },
     {
       "down": true,
+      "is_enemy_only": false,
       "left": false,
       "right": true,
       "up": true,
@@ -19,6 +30,7 @@
     },
     {
       "down": true,
+      "is_enemy_only": false,
       "left": false,
       "right": false,
       "up": true,
@@ -27,7 +39,8 @@
     },
     {
       "down": true,
-      "left": false,
+      "is_enemy_only": false,
+      "left": true,
       "right": true,
       "up": true,
       "x": -3,
@@ -35,6 +48,7 @@
     },
     {
       "down": true,
+      "is_enemy_only": false,
       "left": false,
       "right": false,
       "up": true,
@@ -43,6 +57,7 @@
     },
     {
       "down": true,
+      "is_enemy_only": false,
       "left": false,
       "right": true,
       "up": true,
@@ -51,6 +66,7 @@
     },
     {
       "down": true,
+      "is_enemy_only": false,
       "left": false,
       "right": false,
       "up": true,
@@ -59,6 +75,7 @@
     },
     {
       "down": true,
+      "is_enemy_only": false,
       "left": false,
       "right": true,
       "up": true,
@@ -67,6 +84,7 @@
     },
     {
       "down": true,
+      "is_enemy_only": false,
       "left": false,
       "right": false,
       "up": false,
@@ -75,6 +93,7 @@
     },
     {
       "down": false,
+      "is_enemy_only": false,
       "left": true,
       "right": true,
       "up": false,
@@ -83,6 +102,7 @@
     },
     {
       "down": false,
+      "is_enemy_only": false,
       "left": true,
       "right": true,
       "up": false,
@@ -91,6 +111,7 @@
     },
     {
       "down": false,
+      "is_enemy_only": false,
       "left": true,
       "right": true,
       "up": false,
@@ -99,6 +120,7 @@
     },
     {
       "down": false,
+      "is_enemy_only": false,
       "left": true,
       "right": true,
       "up": false,
@@ -107,6 +129,7 @@
     },
     {
       "down": false,
+      "is_enemy_only": false,
       "left": false,
       "right": false,
       "up": true,
@@ -115,6 +138,7 @@
     },
     {
       "down": true,
+      "is_enemy_only": false,
       "left": true,
       "right": false,
       "up": true,
@@ -123,6 +147,7 @@
     },
     {
       "down": true,
+      "is_enemy_only": false,
       "left": false,
       "right": true,
       "up": true,
@@ -131,6 +156,7 @@
     },
     {
       "down": true,
+      "is_enemy_only": false,
       "left": true,
       "right": false,
       "up": true,
@@ -139,6 +165,7 @@
     },
     {
       "down": true,
+      "is_enemy_only": false,
       "left": false,
       "right": true,
       "up": true,
@@ -147,6 +174,7 @@
     },
     {
       "down": true,
+      "is_enemy_only": false,
       "left": true,
       "right": true,
       "up": true,
@@ -155,6 +183,7 @@
     },
     {
       "down": true,
+      "is_enemy_only": false,
       "left": false,
       "right": true,
       "up": true,
@@ -163,6 +192,7 @@
     },
     {
       "down": true,
+      "is_enemy_only": false,
       "left": true,
       "right": false,
       "up": true,
@@ -171,6 +201,7 @@
     },
     {
       "down": true,
+      "is_enemy_only": false,
       "left": false,
       "right": false,
       "up": false,
@@ -179,6 +210,7 @@
     },
     {
       "down": false,
+      "is_enemy_only": false,
       "left": true,
       "right": true,
       "up": false,
@@ -187,6 +219,7 @@
     },
     {
       "down": false,
+      "is_enemy_only": false,
       "left": true,
       "right": true,
       "up": true,
@@ -195,6 +228,7 @@
     },
     {
       "down": true,
+      "is_enemy_only": false,
       "left": true,
       "right": true,
       "up": true,
@@ -203,6 +237,7 @@
     },
     {
       "down": true,
+      "is_enemy_only": false,
       "left": true,
       "right": true,
       "up": false,
@@ -211,6 +246,7 @@
     },
     {
       "down": false,
+      "is_enemy_only": false,
       "left": true,
       "right": true,
       "up": true,
@@ -219,6 +255,7 @@
     },
     {
       "down": true,
+      "is_enemy_only": false,
       "left": false,
       "right": false,
       "up": true,
@@ -227,6 +264,7 @@
     },
     {
       "down": true,
+      "is_enemy_only": false,
       "left": true,
       "right": true,
       "up": false,
@@ -235,6 +273,7 @@
     },
     {
       "down": false,
+      "is_enemy_only": false,
       "left": true,
       "right": false,
       "up": true,
@@ -243,6 +282,7 @@
     },
     {
       "down": true,
+      "is_enemy_only": false,
       "left": true,
       "right": true,
       "up": false,
@@ -251,6 +291,7 @@
     },
     {
       "down": false,
+      "is_enemy_only": false,
       "left": false,
       "right": false,
       "up": true,
@@ -259,6 +300,7 @@
     },
     {
       "down": true,
+      "is_enemy_only": false,
       "left": false,
       "right": false,
       "up": true,
@@ -267,6 +309,7 @@
     },
     {
       "down": true,
+      "is_enemy_only": false,
       "left": true,
       "right": true,
       "up": true,
@@ -275,6 +318,7 @@
     },
     {
       "down": true,
+      "is_enemy_only": false,
       "left": false,
       "right": true,
       "up": true,
@@ -283,6 +327,7 @@
     },
     {
       "down": true,
+      "is_enemy_only": false,
       "left": true,
       "right": true,
       "up": true,
@@ -291,6 +336,7 @@
     },
     {
       "down": true,
+      "is_enemy_only": false,
       "left": false,
       "right": false,
       "up": true,
@@ -299,6 +345,7 @@
     },
     {
       "down": true,
+      "is_enemy_only": false,
       "left": true,
       "right": true,
       "up": true,
@@ -307,6 +354,7 @@
     },
     {
       "down": true,
+      "is_enemy_only": false,
       "left": false,
       "right": false,
       "up": true,
@@ -315,6 +363,7 @@
     },
     {
       "down": true,
+      "is_enemy_only": false,
       "left": false,
       "right": false,
       "up": false,
@@ -323,6 +372,7 @@
     },
     {
       "down": false,
+      "is_enemy_only": false,
       "left": true,
       "right": true,
       "up": true,
@@ -331,6 +381,7 @@
     },
     {
       "down": true,
+      "is_enemy_only": false,
       "left": true,
       "right": false,
       "up": true,
@@ -339,6 +390,7 @@
     },
     {
       "down": true,
+      "is_enemy_only": false,
       "left": true,
       "right": true,
       "up": false,
@@ -347,6 +399,7 @@
     },
     {
       "down": false,
+      "is_enemy_only": false,
       "left": false,
       "right": true,
       "up": true,
@@ -355,6 +408,7 @@
     },
     {
       "down": true,
+      "is_enemy_only": false,
       "left": true,
       "right": true,
       "up": false,
@@ -363,6 +417,7 @@
     },
     {
       "down": false,
+      "is_enemy_only": false,
       "left": true,
       "right": true,
       "up": false,
@@ -371,6 +426,7 @@
     },
     {
       "down": false,
+      "is_enemy_only": false,
       "left": true,
       "right": true,
       "up": true,
@@ -379,6 +435,7 @@
     },
     {
       "down": true,
+      "is_enemy_only": false,
       "left": true,
       "right": true,
       "up": true,
@@ -387,6 +444,7 @@
     },
     {
       "down": true,
+      "is_enemy_only": false,
       "left": true,
       "right": true,
       "up": true,
@@ -395,6 +453,7 @@
     },
     {
       "down": true,
+      "is_enemy_only": false,
       "left": false,
       "right": true,
       "up": false,
@@ -403,6 +462,7 @@
     },
     {
       "down": false,
+      "is_enemy_only": false,
       "left": false,
       "right": false,
       "up": true,
@@ -411,6 +471,7 @@
     },
     {
       "down": true,
+      "is_enemy_only": false,
       "left": false,
       "right": true,
       "up": true,
@@ -419,6 +480,7 @@
     },
     {
       "down": true,
+      "is_enemy_only": false,
       "left": true,
       "right": false,
       "up": true,
@@ -427,6 +489,7 @@
     },
     {
       "down": true,
+      "is_enemy_only": false,
       "left": false,
       "right": false,
       "up": true,
@@ -435,6 +498,7 @@
     },
     {
       "down": true,
+      "is_enemy_only": false,
       "left": true,
       "right": false,
       "up": true,
@@ -443,6 +507,7 @@
     },
     {
       "down": true,
+      "is_enemy_only": false,
       "left": true,
       "right": false,
       "up": true,
@@ -451,6 +516,7 @@
     },
     {
       "down": true,
+      "is_enemy_only": false,
       "left": true,
       "right": true,
       "up": true,
@@ -459,6 +525,7 @@
     },
     {
       "down": true,
+      "is_enemy_only": false,
       "left": true,
       "right": false,
       "up": true,
@@ -467,6 +534,7 @@
     },
     {
       "down": true,
+      "is_enemy_only": true,
       "left": false,
       "right": false,
       "up": false,
@@ -475,6 +543,7 @@
     },
     {
       "down": false,
+      "is_enemy_only": false,
       "left": true,
       "right": true,
       "up": false,
@@ -483,6 +552,7 @@
     },
     {
       "down": false,
+      "is_enemy_only": false,
       "left": true,
       "right": true,
       "up": false,
@@ -491,6 +561,7 @@
     },
     {
       "down": false,
+      "is_enemy_only": false,
       "left": false,
       "right": false,
       "up": true,
@@ -499,6 +570,7 @@
     },
     {
       "down": true,
+      "is_enemy_only": false,
       "left": true,
       "right": false,
       "up": true,
@@ -507,6 +579,7 @@
     },
     {
       "down": true,
+      "is_enemy_only": false,
       "left": false,
       "right": false,
       "up": true,
@@ -515,6 +588,7 @@
     },
     {
       "down": true,
+      "is_enemy_only": false,
       "left": false,
       "right": false,
       "up": true,
@@ -523,6 +597,7 @@
     },
     {
       "down": true,
+      "is_enemy_only": false,
       "left": false,
       "right": false,
       "up": true,
@@ -531,14 +606,16 @@
     },
     {
       "down": true,
+      "is_enemy_only": false,
       "left": false,
-      "right": false,
+      "right": true,
       "up": true,
       "x": 7,
       "y": 3
     },
     {
       "down": true,
+      "is_enemy_only": false,
       "left": true,
       "right": false,
       "up": true,
@@ -547,6 +624,7 @@
     },
     {
       "down": true,
+      "is_enemy_only": false,
       "left": false,
       "right": false,
       "up": true,
@@ -555,11 +633,21 @@
     },
     {
       "down": true,
+      "is_enemy_only": false,
       "left": false,
       "right": false,
       "up": false,
       "x": 7,
       "y": 6
+    },
+    {
+      "down": false,
+      "is_enemy_only": true,
+      "left": true,
+      "right": false,
+      "up": false,
+      "x": 8,
+      "y": 3
     }
   ],
   "stage_name": "stage_03"
