@@ -45,14 +45,22 @@ void PlayerBulletSystem::Update(No::Registry& registry, float deltaTime) {
 				auto* enemyDeath = registry.GetComponent<DeathFlag>(enemyEntity);
 
 				if (!enemyDeath->isDead) {
-					bool died = enemyHealth->TakeDamage(1);
-					if (died) {
-						enemyDeath->isDead = true;
+					// スポーニング状態の敵は弾ダメージを受けない（弾も消えない）
+					bool enemyIsSpawning = false;
+					if (registry.Has<EnemyComponent>(enemyEntity)) {
+						enemyIsSpawning = registry.GetComponent<EnemyComponent>(enemyEntity)->isSpawning;
 					}
 
-					if (!bullet->penetrateEnemies) {
-						deathFlag->isDead = true;
-						continue;
+					if (!enemyIsSpawning) {
+						bool died = enemyHealth->TakeDamage(1);
+						if (died) {
+							enemyDeath->isDead = true;
+						}
+
+						if (!bullet->penetrateEnemies) {
+							deathFlag->isDead = true;
+							continue;
+						}
 					}
 				}
 			}

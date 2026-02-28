@@ -15,11 +15,15 @@ struct GridCellComponent {
 	bool hasConnectionDown;
 	bool hasConnectionLeft;
 
+	// 敵専用道フラグ（true のときプレイヤーは侵入不可）
+	bool isEnemyOnly;
+
 	GridCellComponent()
 		: gridX(0), gridY(0),
 		hasConnectionUp(false),
 		hasConnectionRight(false),
 		hasConnectionDown(false),
-		hasConnectionLeft(false) {
+		hasConnectionLeft(false),
+		isEnemyOnly(false) {
 	}
 };

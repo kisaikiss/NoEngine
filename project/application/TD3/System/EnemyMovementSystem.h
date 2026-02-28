@@ -29,7 +29,7 @@ public:
 
 private:
 	static constexpr float PI = 3.14159265358979323846f;
-	
+
 	GameTimer* gameTimer_ = nullptr;
 
 	// ========== 状態別の移動処理 ==========
@@ -67,8 +67,16 @@ private:
 	/// 2歩目以降は GridUtils::CanMoveInDirection(... Direction::None) で制約なし。
 	///
 	/// 到達不能な場合は Direction::None を返す（敵は停止）。
+	/// isEnemyOnly ノードは通常敵の BFS では通過しない（侵入不可）。
 	/// </summary>
 	Direction ChooseDirection(EnemyComponent* enemy, int playerX, int playerY, No::Registry& registry);
+
+	/// <summary>
+	/// スポーニング敵専用の方向決定。
+	/// BFS を使わず、後退禁止制約のみで次に進める方向を返す。
+	/// 敵専用道は接続数 2（一本道）なので、これで十分に前進できる。
+	/// </summary>
+	Direction ChooseDirectionSpawning(EnemyComponent* enemy, No::Registry& registry);
 
 	// ========== Transform 更新 ==========
 

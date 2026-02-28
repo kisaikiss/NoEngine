@@ -185,4 +185,26 @@ namespace GridUtils {
 		return true;
 	}
 
+	/// <summary>
+	/// プレイヤー専用の移動可否判定。
+	/// CanMoveInDirection の判定に加え、移動先ノードが isEnemyOnly の場合は false を返す。
+	/// PlayerMovementSystem の全ての移動判定で使用する。
+	/// </summary>
+	inline bool CanPlayerMoveInDirection(
+		No::Registry& registry,
+		int nodeX, int nodeY,
+		Direction dir,
+		Direction lastDir
+	) {
+		if (!CanMoveInDirection(registry, nodeX, nodeY, dir, lastDir)) return false;
+
+		// 移動先ノードが敵専用道なら侵入不可
+		int nx, ny;
+		GetNextNodeCoords(nodeX, nodeY, dir, nx, ny);
+		auto* targetCell = GetGridCell(registry, nx, ny);
+		if (targetCell && targetCell->isEnemyOnly) return false;
+
+		return true;
+	}
+
 } // namespace GridUtils

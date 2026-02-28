@@ -21,6 +21,9 @@ void EnemyToEnemyCollisionSystem::Update(No::Registry& registry, float deltaTime
 		// 死亡済みはスキップ
 		if (death->isDead) continue;
 
+		// スポーニング状態はスキップ（敵同士の衝突判定を行わない）
+		if (enemy->isSpawning) continue;
+
 		// クールダウン中はスキップ（振動防止）
 		if (enemy->reverseTimer > 0.0f) continue;
 
@@ -37,6 +40,9 @@ void EnemyToEnemyCollisionSystem::Update(No::Registry& registry, float deltaTime
 		auto* otherDeath = registry.GetComponent<DeathFlag>(otherEntity);
 
 		if (otherDeath->isDead) continue;
+
+		// 相手もスポーニング状態ならスキップ
+		if (otherEnemy->isSpawning) continue;
 
 		// 相手もクールダウン中なら両者ともスキップ（二重処理防止）
 		if (otherEnemy->reverseTimer > 0.0f) continue;

@@ -6,6 +6,7 @@
 #include "../Component/ColliderComponent.h"
 #include "../Component/PlayerBulletComponent.h"
 #include "../Component/AmmoItemComponent.h"
+#include "../Component/EnemySpawnerComponent.h"
 #include "../GameTag.h"
 #include "../System/GridRenderSystem.h"
 #include "../System/GameTimerSystem.h"
@@ -14,6 +15,7 @@
 #include "../System/PlayerBulletSystem.h"
 #include "../System/AmmoItemSystem.h"
 #include "../System/EnemyMovementSystem.h"
+#include "../System/EnemySpawnerSystem.h"
 #include "../System/CollisionSystem.h"
 #include "../System/EnemyCollisionSystem.h"
 #include "../System/EnemyToEnemyCollisionSystem.h"
@@ -39,17 +41,25 @@ void SampleScene::Setup() {
 	AddSystem(std::make_unique<GameTimerSystem>(&gameTimer_, &lastRealDeltaTime_));
 	AddSystem(std::make_unique<GridRenderSystem>());
 	AddSystem(std::make_unique<PlayerMovementSystem>());
-	
+
 	// EnemyMovementSystem にゲームタイマーを設定
 	auto enemyMovementSystem = std::make_unique<EnemyMovementSystem>();
 	enemyMovementSystem->SetGameTimer(&gameTimer_);
 	AddSystem(std::move(enemyMovementSystem));
-	
+
+	// EnemySpawnerSystem にゲームタイマーを設定し、raw ポインタを保持
+	{
+		auto sys = std::make_unique<EnemySpawnerSystem>();
+		sys->SetGameTimer(&gameTimer_);
+		spawnerSystem_ = sys.get();
+		AddSystem(std::move(sys));
+	}
+
 	// PlayerBulletSystem にカメラを設定
 	auto playerBulletSystem = std::make_unique<PlayerBulletSystem>();
 	playerBulletSystem->SetCamera(camera_.get());
 	AddSystem(std::move(playerBulletSystem));
-	
+
 	AddSystem(std::make_unique<CollisionSystem>());
 	AddSystem(std::make_unique<ShockwaveSystem>());
 	AddSystem(std::make_unique<EnemyCollisionSystem>());
@@ -73,9 +83,13 @@ void SampleScene::Setup() {
 
 	InitializeGrid(registry, stageData.connectionMap);
 	for (const auto& entity : stageData.entityMap.entities) {
-		if (entity.type == "player")     InitializePlayer(registry, entity.x, entity.y);
-		else if (entity.type == "enemy") InitializeEnemy(registry, entity.x, entity.y);
+		if (entity.type == "player")        InitializePlayer(registry, entity.x, entity.y);
+		else if (entity.type == "enemy")    InitializeEnemy(registry, entity.x, entity.y);
+		else if (entity.type == "spawner")  InitializeSpawner(registry, entity.x, entity.y);
 	}
+
+	// スポナーの方向・速度を計算（InitializeGrid + スポナーエンティティ生成後に呼ぶ）
+	if (spawnerSystem_) spawnerSystem_->SetupSpawners(registry);
 
 	InitializeLight(registry);
 
@@ -161,11 +175,12 @@ void SampleScene::ReloadStage(int stageNumber) {
 	for (auto e : registry.View<EnemyComponent>())			all.push_back(e);
 	for (auto e : registry.View<PlayerBulletComponent>())	all.push_back(e);
 	for (auto e : registry.View<AmmoItemComponent>())		all.push_back(e);
+	for (auto e : registry.View<EnemySpawnerComponent>())	all.push_back(e);
 
 	for (auto e : all) {
 		registry.DestroyEntity(e);
 	}
-	
+
 	// 削除を即座に実行
 	registry.FlushDestroy();
 
@@ -182,9 +197,13 @@ void SampleScene::ReloadStage(int stageNumber) {
 
 	InitializeGrid(registry, stageData.connectionMap);
 	for (const auto& entity : stageData.entityMap.entities) {
-		if (entity.type == "player")     InitializePlayer(registry, entity.x, entity.y);
-		else if (entity.type == "enemy") InitializeEnemy(registry, entity.x, entity.y);
+		if (entity.type == "player")        InitializePlayer(registry, entity.x, entity.y);
+		else if (entity.type == "enemy")    InitializeEnemy(registry, entity.x, entity.y);
+		else if (entity.type == "spawner")  InitializeSpawner(registry, entity.x, entity.y);
 	}
+
+	// スポナーの方向・速度を再計算
+	if (spawnerSystem_) spawnerSystem_->SetupSpawners(registry);
 
 	// ステージが変わるたびにカメラを再配置
 	SetupCameraForStage(stageData.connectionMap);
@@ -219,31 +238,31 @@ void SampleScene::OnExitEditorMode() {
 void SampleScene::UpdateGame(No::Registry& registry) {
 	///それぞれの判定はコメントアウトするが残しておく
 	// ToDo : クリア・ゲームオーバーの判定はいつでも使えるようにするが、今は必要ない。
-	(void)registry;		//今は未使用なので警告回避
+	//(void)registry;		//今は未使用なので警告回避
 
-	//// ---- ゲームオーバー判定 ----
-	//auto playerView = registry.View<PlayerTag, DeathFlag>();
-	//for (auto entity : playerView) {
-	//	auto* flag = registry.GetComponent<DeathFlag>(entity);
-	//	if (flag && flag->isDead) {
-	//		ReloadStage(stageNumber_);
-	//		return;
-	//	}
-	//}
+	// ---- ゲームオーバー判定 ----
+	auto playerView = registry.View<PlayerTag, DeathFlag>();
+	for (auto entity : playerView) {
+		auto* flag = registry.GetComponent<DeathFlag>(entity);
+		if (flag && flag->isDead) {
+			ReloadStage(stageNumber_);
+			return;
+		}
+	}
 
-	// ---- クリア判定（敵が全滅したとき） ----
-	//auto enemyView = registry.View<EnemyTag, DeathFlag>();
-	//if (enemyView.Empty()) return;
+	/* ---- クリア判定（敵が全滅したとき） ----*/
+	auto enemyView = registry.View<EnemyTag, DeathFlag>();
+	if (enemyView.Empty()) return;
 
-	//int aliveEnemies = 0;
-	//for (auto entity : enemyView) {
-	//	auto* flag = registry.GetComponent<DeathFlag>(entity);
-	//	if (flag && !flag->isDead) aliveEnemies++;
-	//}
-
-	//if (aliveEnemies == 0) {
-	//	ReloadStage(stageNumber_ + 1);
-	//}
+	int aliveEnemies = 0;
+	for (auto entity : enemyView) {
+		auto* flag = registry.GetComponent<DeathFlag>(entity);
+		if (flag && !flag->isDead) aliveEnemies++;
+	}
+	//一時的にステージをリロードする
+	if (aliveEnemies == 0) {
+		ReloadStage(stageNumber_);
+	}
 }
 
 // ============================================================
@@ -395,6 +414,7 @@ void SampleScene::InitializeGrid(No::Registry& registry, const MapData::Connecti
 		cell->hasConnectionRight = nodeData.right;
 		cell->hasConnectionDown = nodeData.down;
 		cell->hasConnectionLeft = nodeData.left;
+		cell->isEnemyOnly = nodeData.isEnemyOnly;
 	}
 }
 
@@ -473,6 +493,39 @@ void SampleScene::InitializeEnemy(No::Registry& registry, int startX, int startY
 	);
 	material->materials = NoEngine::Asset::ModelLoader::GetMaterial("Enemy");
 	material->color = { 1.0f, 0.2f, 0.2f, 1.0f };
+	material->psoName = L"Renderer : Default PSO";
+	material->psoId = NoEngine::Render::GetPSOID(material->psoName);
+	material->rootSigId = NoEngine::Render::GetRootSignatureID(material->psoName);
+}
+
+// ============================================================
+//  InitializeSpawner
+// ============================================================
+
+void SampleScene::InitializeSpawner(No::Registry& registry, int startX, int startY) {
+	auto  entity = registry.GenerateEntity();
+	auto* spawner = registry.AddComponent<EnemySpawnerComponent>(entity);
+	spawner->nodeX = startX;
+	spawner->nodeY = startY;
+	// spawnDirection・chainCount・calculatedSpeed は SetupSpawners() で設定される
+
+	registry.AddComponent<EnemySpawnerTag>(entity);
+
+	// Transform（グリッド座標に配置）
+	auto* transform = registry.AddComponent<No::TransformComponent>(entity);
+	transform->translate = GridUtils::GridToWorld(startX, startY);
+	transform->scale = { 0.3f, 0.3f, 0.3f };
+
+	// モデル表示
+	auto* mesh = registry.AddComponent<No::MeshComponent>(entity);
+	auto* material = registry.AddComponent<No::MaterialComponent>(entity);
+	NoEngine::Asset::ModelLoader::LoadModel(
+		"EnemySpawner",
+		"resources/game/td_3105/Model/EnemySpawner/EnemySpawner.obj",
+		mesh
+	);
+	material->materials = NoEngine::Asset::ModelLoader::GetMaterial("EnemySpawner");
+	material->color = { 1.0f, 1.0f, 1.0f, 1.0f }; // 黄色
 	material->psoName = L"Renderer : Default PSO";
 	material->psoId = NoEngine::Render::GetPSOID(material->psoName);
 	material->rootSigId = NoEngine::Render::GetRootSignatureID(material->psoName);

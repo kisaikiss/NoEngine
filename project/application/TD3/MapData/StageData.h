@@ -19,6 +19,7 @@ namespace MapData {
 	struct NodeData {
 		int  x, y;
 		bool up, right, down, left;
+		bool isEnemyOnly = false; // 敵専用道フラグ（プレイヤーは侵入不可）
 	};
 
 	/// <summary>

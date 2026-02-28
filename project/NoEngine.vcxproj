@@ -212,6 +212,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\TD3\Scene\SampleScene.cpp" />
     <ClCompile Include="application\TD3\System\AmmoItemSystem.cpp" />
     <ClCompile Include="application\TD3\System\CollisionSystem.cpp" />
+    <ClCompile Include="application\TD3\System\EnemySpawnerSystem.cpp" />
     <ClCompile Include="application\TD3\System\GridRenderSystem.cpp" />
     <ClCompile Include="application\TD3\System\PlayerBulletSystem.cpp" />
     <ClCompile Include="application\TD3\System\PlayerMovementSystem.cpp" />
@@ -424,6 +425,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\TD3\Component\AmmoItemComponent.h" />
     <ClInclude Include="application\TD3\Component\ColliderComponent.h" />
     <ClInclude Include="application\TD3\Component\EnemyComponent.h" />
+    <ClInclude Include="application\TD3\Component\EnemySpawnerComponent.h" />
     <ClInclude Include="application\TD3\Component\GridCellComponent.h" />
     <ClInclude Include="application\TD3\Component\HealthComponent.h" />
     <ClInclude Include="application\TD3\Component\PlayerBulletComponent.h" />
@@ -439,6 +441,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\TD3\Scene\SampleScene.h" />
     <ClInclude Include="application\TD3\System\AmmoItemSystem.h" />
     <ClInclude Include="application\TD3\System\CollisionSystem.h" />
+    <ClInclude Include="application\TD3\System\EnemySpawnerSystem.h" />
     <ClInclude Include="application\TD3\System\GameTimer.h" />
     <ClInclude Include="application\TD3\System\GameTimerSystem.h" />
     <ClInclude Include="application\TD3\System\GridRenderSystem.h" />

@@ -176,6 +176,7 @@
     <ClCompile Include="application\TD3\System\EnemyToEnemyCollisionSystem.cpp" />
     <ClCompile Include="application\TD3\System\ShockwaveSystem.cpp" />
     <ClCompile Include="application\TD3\Utility\CameraBounds.cpp" />
+    <ClCompile Include="application\TD3\System\EnemySpawnerSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -412,6 +413,8 @@
     <ClInclude Include="application\TD3\System\GameTimerSystem.h" />
     <ClInclude Include="application\TD3\Utility\CameraBounds.h" />
     <ClInclude Include="application\TD3\Config\PlayerBulletConfig.h" />
+    <ClInclude Include="application\TD3\Component\EnemySpawnerComponent.h" />
+    <ClInclude Include="application\TD3\System\EnemySpawnerSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

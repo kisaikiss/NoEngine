@@ -2,6 +2,7 @@
 #include "../Component/ShockwaveComponent.h"
 #include "../Component/HealthComponent.h"
 #include "../Component/ColliderComponent.h"
+#include "../Component/EnemyComponent.h"
 #include "../GameTag.h"
 #include "engine/Math/Easing.h"
 #include "engine/Functions/Renderer/Primitive.h"
@@ -62,6 +63,12 @@ void ShockwaveSystem::Update(No::Registry& registry, float deltaTime) {
 				auto* enemyDeath = registry.GetComponent<DeathFlag>(enemyEntity);
 
 				if (!enemyDeath->isDead) {
+					// スポーニング状態の敵は衝撃波を受けない
+					if (registry.Has<EnemyComponent>(enemyEntity)) {
+						auto* ec = registry.GetComponent<EnemyComponent>(enemyEntity);
+						if (ec->isSpawning) continue;
+					}
+
 					// ダメージを与える
 					bool died = enemyHealth->TakeDamage(1);
 					if (died) {
@@ -71,8 +78,8 @@ void ShockwaveSystem::Update(No::Registry& registry, float deltaTime) {
 					shockwave->hitEnemies.insert(enemyEntity);
 
 #ifdef USE_IMGUI
-					NoEngine::Primitive::DrawSphere(transform->translate, shockwave->currentRadius * 1.2f, 
-					                                {1.0f, 0.0f, 0.0f, 0.8f});
+					NoEngine::Primitive::DrawSphere(transform->translate, shockwave->currentRadius * 1.2f,
+						{ 1.0f, 0.0f, 0.0f, 0.8f });
 #endif
 				}
 			}
@@ -81,9 +88,9 @@ void ShockwaveSystem::Update(No::Registry& registry, float deltaTime) {
 		// ---- デバッグ描画 ----
 #ifdef USE_IMGUI
 		// 衝撃波を青色の半透明円で描画
-		No::Color color = collider->isCollied ? 
-		    No::Color{ 1.0f, 1.0f, 0.0f, shockwave->currentAlpha * 0.7f } :  // 衝突中は黄色
-		    No::Color{ 0.0f, 0.0f, 0.0f, shockwave->currentAlpha * 0.5f };   // 通常は青
+		No::Color color = collider->isCollied ?
+			No::Color{ 1.0f, 1.0f, 0.0f, shockwave->currentAlpha * 0.7f } :  // 衝突中は黄色
+			No::Color{ 0.0f, 0.0f, 0.0f, shockwave->currentAlpha * 0.5f };   // 通常は青
 		NoEngine::Primitive::DrawSphere(transform->translate, shockwave->currentRadius, color);
 #endif
 	}

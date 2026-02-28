@@ -11,6 +11,9 @@ struct EnemyTag {};
 // アイテム関連
 struct AmmoItemTag {};
 
+// スポナー関連
+struct EnemySpawnerTag {};
+
 // 共通フラグ
 struct DeathFlag {
 	bool isDead = false;

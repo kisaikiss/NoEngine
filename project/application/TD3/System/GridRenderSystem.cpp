@@ -8,8 +8,9 @@ void GridRenderSystem::Update(No::Registry& registry, float deltaTime) {
 
 	auto view = registry.View<GridCellComponent>();
 
-	// 赤色の線
-	No::Color lineColor = { 1.0f, 0.0f, 0.0f, 1.0f };
+	// 通常道: 黒、敵専用道: 赤
+	No::Color normalColor = { 0.0f, 0.0f, 0.0f, 1.0f };
+	No::Color enemyOnlyColor = { 1.0f, 0.0f, 0.0f, 1.0f };
 
 	for (auto entity : view) {
 		auto* cell = registry.GetComponent<GridCellComponent>(entity);
@@ -19,14 +20,26 @@ void GridRenderSystem::Update(No::Registry& registry, float deltaTime) {
 		// 右接続があれば右方向に線を描画
 		if (cell->hasConnectionRight) {
 			No::Vector3 rightPos = GridUtils::GridToWorld(cell->gridX + 1, cell->gridY);
-			NoEngine::Primitive::DrawLine(nodePos, rightPos, lineColor);
+			// 自分または隣が敵専用ノードならば赤で描画
+			bool isEnemyEdge = cell->isEnemyOnly;
+			if (!isEnemyEdge) {
+				// 隣のノードも確認
+				auto* rightCell = GridUtils::GetGridCell(registry, cell->gridX + 1, cell->gridY);
+				if (rightCell && rightCell->isEnemyOnly) isEnemyEdge = true;
+			}
+			NoEngine::Primitive::DrawLine(nodePos, rightPos, isEnemyEdge ? enemyOnlyColor : normalColor);
 		}
 
 		// 下接続があれば下方向に線を描画
 		// （上接続は上のノードが描画するので、重複を避けるため下のみ）
 		if (cell->hasConnectionDown) {
 			No::Vector3 downPos = GridUtils::GridToWorld(cell->gridX, cell->gridY - 1);
-			NoEngine::Primitive::DrawLine(nodePos, downPos, lineColor);
+			bool isEnemyEdge = cell->isEnemyOnly;
+			if (!isEnemyEdge) {
+				auto* downCell = GridUtils::GetGridCell(registry, cell->gridX, cell->gridY - 1);
+				if (downCell && downCell->isEnemyOnly) isEnemyEdge = true;
+			}
+			NoEngine::Primitive::DrawLine(nodePos, downPos, isEnemyEdge ? enemyOnlyColor : normalColor);
 		}
 	}
 }

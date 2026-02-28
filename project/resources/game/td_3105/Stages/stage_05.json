@@ -1,0 +1,6 @@
+{
+  "connection_map": "resources/game/td_3105/Stages/stage_05_map.json",
+  "entity_map": "resources/game/td_3105/Stages/stage_05_entities.json",
+  "stage_name": "stage_05",
+  "version": 1
+}

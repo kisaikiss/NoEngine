@@ -27,6 +27,7 @@ struct SphereColliderComponent
 	uint32_t collideMask = 0xffffffff;							// 衝突判定する対象の種類（ColliderMask）
 	ColliderMask colliedWith = static_cast<ColliderMask>(0);	// 衝突相手の種類
 	NoEngine::ECS::Entity colliedEntity;						// 衝突相手のエンティティ
+	No::Vector3 debugColor = { 0.0f, 1.0f, 0.0f };				// デバッグ描画色（デフォルト: 緑）。何も設定しなければ従来どおり。
 };
 
 /// <summary>

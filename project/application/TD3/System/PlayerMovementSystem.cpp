@@ -83,17 +83,17 @@ void PlayerMovementSystem::HandleNodeInput(
 	// 初期状態（向きなし）の場合
 	if (player->lastDirection == Direction::None) {
 		// 接続がある方向への入力で初期向きを決定
-		// GridUtils::CanMoveInDirection で後退禁止 + 行き止まり例外の共通ロジックを使用
-		if (inputW && GridUtils::CanMoveInDirection(registry, player->currentNodeX,
+		// GridUtils::CanPlayerMoveInDirection で後退禁止 + 行き止まり例外の共通ロジックを使用
+		if (inputW && GridUtils::CanPlayerMoveInDirection(registry, player->currentNodeX,
 			player->currentNodeY, Direction::Up, Direction::None)) {
 			StartMovement(player, Direction::Up, registry);
-		} else if (inputD && GridUtils::CanMoveInDirection(registry, player->currentNodeX,
+		} else if (inputD && GridUtils::CanPlayerMoveInDirection(registry, player->currentNodeX,
 			player->currentNodeY, Direction::Right, Direction::None)) {
 			StartMovement(player, Direction::Right, registry);
-		} else if (inputS && GridUtils::CanMoveInDirection(registry, player->currentNodeX,
+		} else if (inputS && GridUtils::CanPlayerMoveInDirection(registry, player->currentNodeX,
 			player->currentNodeY, Direction::Down, Direction::None)) {
 			StartMovement(player, Direction::Down, registry);
-		} else if (inputA && GridUtils::CanMoveInDirection(registry, player->currentNodeX,
+		} else if (inputA && GridUtils::CanPlayerMoveInDirection(registry, player->currentNodeX,
 			player->currentNodeY, Direction::Left, Direction::None)) {
 			StartMovement(player, Direction::Left, registry);
 		}
@@ -101,16 +101,16 @@ void PlayerMovementSystem::HandleNodeInput(
 	}
 
 	// 通常移動（lastDirection がある状態）
-	if (inputW && GridUtils::CanMoveInDirection(registry, player->currentNodeX,
+	if (inputW && GridUtils::CanPlayerMoveInDirection(registry, player->currentNodeX,
 		player->currentNodeY, Direction::Up, player->lastDirection)) {
 		StartMovement(player, Direction::Up, registry);
-	} else if (inputD && GridUtils::CanMoveInDirection(registry, player->currentNodeX,
+	} else if (inputD && GridUtils::CanPlayerMoveInDirection(registry, player->currentNodeX,
 		player->currentNodeY, Direction::Right, player->lastDirection)) {
 		StartMovement(player, Direction::Right, registry);
-	} else if (inputS && GridUtils::CanMoveInDirection(registry, player->currentNodeX,
+	} else if (inputS && GridUtils::CanPlayerMoveInDirection(registry, player->currentNodeX,
 		player->currentNodeY, Direction::Down, player->lastDirection)) {
 		StartMovement(player, Direction::Down, registry);
-	} else if (inputA && GridUtils::CanMoveInDirection(registry, player->currentNodeX,
+	} else if (inputA && GridUtils::CanPlayerMoveInDirection(registry, player->currentNodeX,
 		player->currentNodeY, Direction::Left, player->lastDirection)) {
 		StartMovement(player, Direction::Left, registry);
 	}
@@ -240,24 +240,24 @@ bool PlayerMovementSystem::HasValidNearEndInput(
 	bool bA = NoEngine::Input::Keyboard::IsPress(KEY_A);
 	bool bD = NoEngine::Input::Keyboard::IsPress(KEY_D);
 
-	// 各キーについて「ターゲットノードで有効か」を GridUtils::CanMoveInDirection で判定する
+	// 各キーについて「ターゲットノードで有効か」を GridUtils::CanPlayerMoveInDirection で判定する
 	// ※方向は返さない。どの方向に進むかは OnReachNode の recentInputs に任せる
-	if (bW && GridUtils::CanMoveInDirection(registry,
+	if (bW && GridUtils::CanPlayerMoveInDirection(registry,
 		player->targetNodeX, player->targetNodeY,
 		Direction::Up, futureLastDir)) {
 		return true;
 	}
-	if (bS && GridUtils::CanMoveInDirection(registry,
+	if (bS && GridUtils::CanPlayerMoveInDirection(registry,
 		player->targetNodeX, player->targetNodeY,
 		Direction::Down, futureLastDir)) {
 		return true;
 	}
-	if (bA && GridUtils::CanMoveInDirection(registry,
+	if (bA && GridUtils::CanPlayerMoveInDirection(registry,
 		player->targetNodeX, player->targetNodeY,
 		Direction::Left, futureLastDir)) {
 		return true;
 	}
-	if (bD && GridUtils::CanMoveInDirection(registry,
+	if (bD && GridUtils::CanPlayerMoveInDirection(registry,
 		player->targetNodeX, player->targetNodeY,
 		Direction::Right, futureLastDir)) {
 		return true;
@@ -359,7 +359,7 @@ void PlayerMovementSystem::OnReachNode(
 	for (int i = player->recentInputCount - 1; i >= 0; --i) {
 		Direction dir = player->recentInputs[i];
 
-		if (GridUtils::CanMoveInDirection(registry, player->currentNodeX,
+		if (GridUtils::CanPlayerMoveInDirection(registry, player->currentNodeX,
 			player->currentNodeY, dir, player->lastDirection)) {
 			nextDir = dir;
 			break;
@@ -376,49 +376,49 @@ void PlayerMovementSystem::OnReachNode(
 		// 進行方向別に曲がり優先判定
 		if (player->currentDirection == Direction::Right) {
 			// 右進行中 → 上下優先、直進次点
-			if (inputW && GridUtils::CanMoveInDirection(registry, player->currentNodeX,
+			if (inputW && GridUtils::CanPlayerMoveInDirection(registry, player->currentNodeX,
 				player->currentNodeY, Direction::Up, player->lastDirection)) {
 				nextDir = Direction::Up;
-			} else if (inputS && GridUtils::CanMoveInDirection(registry, player->currentNodeX,
+			} else if (inputS && GridUtils::CanPlayerMoveInDirection(registry, player->currentNodeX,
 				player->currentNodeY, Direction::Down, player->lastDirection)) {
 				nextDir = Direction::Down;
-			} else if (inputD && GridUtils::CanMoveInDirection(registry, player->currentNodeX,
+			} else if (inputD && GridUtils::CanPlayerMoveInDirection(registry, player->currentNodeX,
 				player->currentNodeY, Direction::Right, player->lastDirection)) {
 				nextDir = Direction::Right;
 			}
 		} else if (player->currentDirection == Direction::Left) {
 			// 左進行中 → 上下優先
-			if (inputW && GridUtils::CanMoveInDirection(registry, player->currentNodeX,
+			if (inputW && GridUtils::CanPlayerMoveInDirection(registry, player->currentNodeX,
 				player->currentNodeY, Direction::Up, player->lastDirection)) {
 				nextDir = Direction::Up;
-			} else if (inputS && GridUtils::CanMoveInDirection(registry, player->currentNodeX,
+			} else if (inputS && GridUtils::CanPlayerMoveInDirection(registry, player->currentNodeX,
 				player->currentNodeY, Direction::Down, player->lastDirection)) {
 				nextDir = Direction::Down;
-			} else if (inputA && GridUtils::CanMoveInDirection(registry, player->currentNodeX,
+			} else if (inputA && GridUtils::CanPlayerMoveInDirection(registry, player->currentNodeX,
 				player->currentNodeY, Direction::Left, player->lastDirection)) {
 				nextDir = Direction::Left;
 			}
 		} else if (player->currentDirection == Direction::Up) {
 			// 上進行中 → 左右優先
-			if (inputA && GridUtils::CanMoveInDirection(registry, player->currentNodeX,
+			if (inputA && GridUtils::CanPlayerMoveInDirection(registry, player->currentNodeX,
 				player->currentNodeY, Direction::Left, player->lastDirection)) {
 				nextDir = Direction::Left;
-			} else if (inputD && GridUtils::CanMoveInDirection(registry, player->currentNodeX,
+			} else if (inputD && GridUtils::CanPlayerMoveInDirection(registry, player->currentNodeX,
 				player->currentNodeY, Direction::Right, player->lastDirection)) {
 				nextDir = Direction::Right;
-			} else if (inputW && GridUtils::CanMoveInDirection(registry, player->currentNodeX,
+			} else if (inputW && GridUtils::CanPlayerMoveInDirection(registry, player->currentNodeX,
 				player->currentNodeY, Direction::Up, player->lastDirection)) {
 				nextDir = Direction::Up;
 			}
 		} else if (player->currentDirection == Direction::Down) {
 			// 下進行中 → 左右優先
-			if (inputA && GridUtils::CanMoveInDirection(registry, player->currentNodeX,
+			if (inputA && GridUtils::CanPlayerMoveInDirection(registry, player->currentNodeX,
 				player->currentNodeY, Direction::Left, player->lastDirection)) {
 				nextDir = Direction::Left;
-			} else if (inputD && GridUtils::CanMoveInDirection(registry, player->currentNodeX,
+			} else if (inputD && GridUtils::CanPlayerMoveInDirection(registry, player->currentNodeX,
 				player->currentNodeY, Direction::Right, player->lastDirection)) {
 				nextDir = Direction::Right;
-			} else if (inputS && GridUtils::CanMoveInDirection(registry, player->currentNodeX,
+			} else if (inputS && GridUtils::CanPlayerMoveInDirection(registry, player->currentNodeX,
 				player->currentNodeY, Direction::Down, player->lastDirection)) {
 				nextDir = Direction::Down;
 			}
@@ -523,39 +523,39 @@ NoEngine::Math::Quaternion PlayerMovementSystem::CalcDirectionRotation(Direction
 	NoEngine::Math::Quaternion q;
 	NoEngine::Math::Quaternion baseRotation;
 	NoEngine::Math::Quaternion directionRotation;
-	
+
 	// 基本姿勢：頭をカメラ側に向ける（X軸周りに-90度）
 	baseRotation.FromAxisAngle(NoEngine::Math::Vector3{ 1.0f, 0.0f, 0.0f }, -PI * 0.5f);
-	
+
 	switch (dir) {
 	case Direction::None:
 		// 停止時はこちらを向く
 		q.FromAxisAngle(NoEngine::Math::Vector3{ 0.0f, 1.0f, 0.0f }, PI);
 		break;
-		
+
 	case Direction::Up:
 		// 上方向：基本姿勢のまま（追加回転なし）
 		q = baseRotation;
 		break;
-		
+
 	case Direction::Down:
 		// 下方向：基本姿勢 + Y軸周りに180度
 		directionRotation.FromAxisAngle(NoEngine::Math::Vector3{ 0.0f, 1.0f, 0.0f }, PI);
 		q = baseRotation * directionRotation;
 		break;
-		
+
 	case Direction::Right:
 		// 右方向：基本姿勢 + Y軸周りに90度
 		directionRotation.FromAxisAngle(NoEngine::Math::Vector3{ 0.0f, 1.0f, 0.0f }, PI * 0.5f);
 		q = baseRotation * directionRotation;
 		break;
-		
+
 	case Direction::Left:
 		// 左方向：基本姿勢 + Y軸周りに-90度
 		directionRotation.FromAxisAngle(NoEngine::Math::Vector3{ 0.0f, 1.0f, 0.0f }, -PI * 0.5f);
 		q = baseRotation * directionRotation;
 		break;
-		
+
 	default:
 		q = NoEngine::Math::Quaternion::IDENTITY;
 		break;
@@ -696,7 +696,7 @@ void PlayerMovementSystem::HandleIntersection(
 
 	// lastDirection を使って判定（ノードに到達した直後なので、来た方向が分かる）
 	if (!IsIntersection(cell, player->lastDirection)) return;
-	
+
 	if (!HasAmmoAtPosition(registry, player->currentNodeX, player->currentNodeY)) {
 		CreateAmmoItem(registry, player->currentNodeX, player->currentNodeY);
 	} else {

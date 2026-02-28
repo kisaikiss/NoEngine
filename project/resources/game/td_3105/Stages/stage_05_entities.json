@@ -1,0 +1,32 @@
+{
+  "entities": [
+    {
+      "type": "player",
+      "x": 2,
+      "y": 2
+    },
+    {
+      "enemy_type": "normal",
+      "type": "enemy",
+      "x": 0,
+      "y": 0
+    },
+    {
+      "enemy_type": "normal",
+      "type": "enemy",
+      "x": 4,
+      "y": 4
+    },
+    {
+      "enemy_type": "normal",
+      "type": "enemy",
+      "x": 2,
+      "y": 6
+    },
+    {
+      "type": "spawner",
+      "x": 5,
+      "y": 2
+    }
+  ]
+}

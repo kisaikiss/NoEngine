@@ -84,6 +84,7 @@ void MapLoader::SaveStage(const MapData::StageData& data, int stageNumber) {
 			n["right"] = node.right;
 			n["down"] = node.down;
 			n["left"] = node.left;
+			n["is_enemy_only"] = node.isEnemyOnly;
 			nodes.push_back(n);
 		}
 		j["nodes"] = nodes;
@@ -144,6 +145,7 @@ MapData::ConnectionMapData MapLoader::LoadConnectionMap(const std::string& path)
 		node.right = nodeJson.value("right", false);
 		node.down = nodeJson.value("down", false);
 		node.left = nodeJson.value("left", false);
+		node.isEnemyOnly = nodeJson.value("is_enemy_only", false);
 		data.nodes.push_back(node);
 	}
 	return data;

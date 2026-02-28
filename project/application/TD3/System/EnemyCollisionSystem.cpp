@@ -49,12 +49,18 @@ void EnemyCollisionSystem::Update(No::Registry& registry, float deltaTime) {
 	// CollisionSystemが設定した衝突フラグをチェック
 	if (playerCollider->isCollied && playerCollider->colliedWith == kEnemy) {
 		auto enemyEntity = playerCollider->colliedEntity;
-		
+
 		// 敵が有効か確認
 		if (registry.Has<DeathFlag>(enemyEntity)) {
 			auto* enemyDeath = registry.GetComponent<DeathFlag>(enemyEntity);
-			
+
 			if (!enemyDeath->isDead) {
+				// スポーニング状態の敵は衝突判定を行わない
+				if (registry.Has<EnemyComponent>(enemyEntity)) {
+					auto* ec = registry.GetComponent<EnemyComponent>(enemyEntity);
+					if (ec->isSpawning) return;
+				}
+
 				// 敵を死亡させる
 				enemyDeath->isDead = true;
 

@@ -5,6 +5,7 @@
 
 // 前方宣言
 class PlayerBulletSystem;
+class EnemySpawnerSystem;
 
 #ifdef USE_IMGUI
 #include "../Editor/MapEditor.h"
@@ -71,6 +72,7 @@ private:
 	void InitializeGrid(No::Registry& registry, const MapData::ConnectionMapData& mapData);
 	void InitializePlayer(No::Registry& registry, int startX, int startY);
 	void InitializeEnemy(No::Registry& registry, int startX, int startY);
+	void InitializeSpawner(No::Registry& registry, int startX, int startY);
 	void InitializeLight(No::Registry& registry);
 
 	// ========== カメラ ==========
@@ -89,4 +91,10 @@ private:
 	/// イテレータ安全版の一括削除
 	/// </summary>
 	void DestroyGameObject();
+
+	// ========== システムへの参照 ==========
+
+	/// SetupSpawners をステージロードのたびに呼ぶため、rawポインタを保持する。
+	/// unique_ptr の所有権は IScene 側にある。
+	EnemySpawnerSystem* spawnerSystem_ = nullptr;
 };

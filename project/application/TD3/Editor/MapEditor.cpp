@@ -175,16 +175,16 @@ void MapEditor::DrawToolPanel() {
 	ImGui::TextDisabled("Ctrl+Z / Ctrl+Y");
 
 	ImGui::Spacing();
-	
+
 	// ========== 自動接続 ==========
 	ImGui::Text("自動接続");
 	ImGui::Separator();
 	ImGui::TextDisabled("隣接ノードと自動接続");
-	
+
 	if (ImGui::Button("全ノードを自動接続", ImVec2(-1, 0))) {
 		AutoConnectAll();
 	}
-	
+
 	ImGui::Spacing();
 
 	// ========== ツール選択 ==========
@@ -222,6 +222,9 @@ void MapEditor::DrawToolPanel() {
 		}
 		if (ImGui::RadioButton("敵", entityTypeToPlace_ == "enemy")) {
 			entityTypeToPlace_ = "enemy";
+		}
+		if (ImGui::RadioButton("スポナー", entityTypeToPlace_ == "spawner")) {
+			entityTypeToPlace_ = "spawner";
 		}
 		ImGui::Unindent();
 	}
@@ -345,14 +348,18 @@ void MapEditor::DrawViewportWindow() {
 	}
 
 	// ---- 接続（エッジ）描画：right と up のみ（重複防止） ----
-	ImU32 edgeColor = IM_COL32(200, 200, 200, 255);
+	// 両端のいずれかが isEnemyOnly なら赤、通常は白
 	for (auto& [coord, node] : nodes_) {
 		ImVec2 from = GridToScreen(node.x, node.y, origin);
 		if (node.right && nodes_.count({ node.x + 1, node.y })) {
-			dl->AddLine(from, GridToScreen(node.x + 1, node.y, origin), edgeColor, 2.0f);
+			bool enemyEdge = node.isEnemyOnly || nodes_.at({ node.x + 1, node.y }).isEnemyOnly;
+			ImU32 ec = enemyEdge ? IM_COL32(255, 60, 60, 255) : IM_COL32(200, 200, 200, 255);
+			dl->AddLine(from, GridToScreen(node.x + 1, node.y, origin), ec, 2.0f);
 		}
 		if (node.up && nodes_.count({ node.x, node.y + 1 })) {
-			dl->AddLine(from, GridToScreen(node.x, node.y + 1, origin), edgeColor, 2.0f);
+			bool enemyEdge = node.isEnemyOnly || nodes_.at({ node.x, node.y + 1 }).isEnemyOnly;
+			ImU32 ec = enemyEdge ? IM_COL32(255, 60, 60, 255) : IM_COL32(200, 200, 200, 255);
+			dl->AddLine(from, GridToScreen(node.x, node.y + 1, origin), ec, 2.0f);
 		}
 	}
 
@@ -365,6 +372,8 @@ void MapEditor::DrawViewportWindow() {
 			fillColor = IM_COL32(0, 220, 220, 255);   // シアン: 接続1回目選択中
 		} else if (coord == selectedNode_) {
 			fillColor = IM_COL32(255, 220, 0, 255);   // 黄: 選択中
+		} else if (node.isEnemyOnly) {
+			fillColor = IM_COL32(255, 100, 60, 255);  // オレンジ: 敵専用ノード
 		} else {
 			fillColor = IM_COL32(210, 210, 210, 255); // 白: 通常
 		}
@@ -384,6 +393,10 @@ void MapEditor::DrawViewportWindow() {
 			dl->AddCircleFilled(pos, 11.0f, IM_COL32(255, 50, 50, 190));
 			dl->AddText(ImVec2(pos.x - 4.0f, pos.y - 7.0f),
 				IM_COL32(255, 255, 255, 255), "E");
+		} else if (entity.type == "spawner") {
+			dl->AddCircleFilled(pos, 11.0f, IM_COL32(255, 200, 0, 220));
+			dl->AddText(ImVec2(pos.x - 4.0f, pos.y - 7.0f),
+				IM_COL32(0, 0, 0, 255), "S");
 		}
 	}
 
@@ -430,6 +443,34 @@ void MapEditor::DrawPropertiesPanel() {
 
 	// ---- 座標表示 ----
 	ImGui::Text("ノード (%d, %d)", node.x, node.y);
+	ImGui::Spacing();
+
+	// ---- 敵専用道フラグ ----
+	// DrawCrossPanel と同様のスナップショット方式で Undo に積む。
+	{
+		EditorSnapshot preEnemyOnly = { nodes_, entities_ };
+		bool prev = node.isEnemyOnly;
+		if (ImGui::Checkbox("敵専用道 (isEnemyOnly)", &node.isEnemyOnly)) {
+			if (prev != node.isEnemyOnly) {
+				// isEnemyOnly を外すとき、このノードにスポナーがあれば自動削除して警告
+				if (!node.isEnemyOnly) {
+					auto it2 = std::find_if(entities_.begin(), entities_.end(),
+						[&node](const MapData::EntityData& e) {
+							return e.type == "spawner" && e.x == node.x && e.y == node.y;
+						});
+					if (it2 != entities_.end()) {
+						entities_.erase(it2);
+						SetStatus("警告: 敵専用フラグ解除に伴いスポナーを削除しました", true);
+					}
+				}
+				undoStack_.push_back(std::move(preEnemyOnly));
+				if (static_cast<int>(undoStack_.size()) > MAX_UNDO)
+					undoStack_.erase(undoStack_.begin());
+				redoStack_.clear();
+				dirty_ = true;
+			}
+		}
+	}
 	ImGui::Spacing();
 
 	// ---- 接続フラグ（十字配置） ----
@@ -482,6 +523,18 @@ void MapEditor::DrawPropertiesPanel() {
 		ed.type = "enemy"; ed.x = node.x; ed.y = node.y;
 		ed.enemyType = "normal";
 		entities_.push_back(ed);
+	}
+	if (ImGui::RadioButton("スポナー##prop", currentType == "spawner")) {
+		// スポナーは isEnemyOnly ノードにのみ配置可能
+		if (!node.isEnemyOnly) {
+			SetStatus("エラー: スポナーは敵専用ノードにのみ配置できます", true);
+		} else {
+			entityChanged = true;
+			if (entityIdx >= 0) entities_.erase(entities_.begin() + entityIdx);
+			MapData::EntityData ed;
+			ed.type = "spawner"; ed.x = node.x; ed.y = node.y;
+			entities_.push_back(ed);
+		}
 	}
 
 	if (entityChanged) {
@@ -617,7 +670,7 @@ void MapEditor::PlaceNode(int gx, int gy) {
 	node.x = gx; node.y = gy;
 	node.up = node.right = node.down = node.left = false;
 	nodes_[{ gx, gy }] = node;
-	
+
 	// 隣接ノードと自動接続
 	AutoConnectNode(gx, gy);
 
@@ -718,6 +771,15 @@ void MapEditor::PlaceEntity(int gx, int gy) {
 			entities_.end());
 	}
 
+	// スポナーは isEnemyOnly ノードにのみ配置可能
+	if (entityTypeToPlace_ == "spawner") {
+		auto nodeIt = nodes_.find({ gx, gy });
+		if (nodeIt == nodes_.end() || !nodeIt->second.isEnemyOnly) {
+			SetStatus("エラー: スポナーは敵専用ノード(isEnemyOnly)にのみ配置できます", true);
+			return;
+		}
+	}
+
 	// 同ノードの既存エンティティを上書き
 	entities_.erase(
 		std::remove_if(entities_.begin(), entities_.end(),
@@ -732,7 +794,11 @@ void MapEditor::PlaceEntity(int gx, int gy) {
 	if (entityTypeToPlace_ == "enemy") ed.enemyType = "normal";
 	entities_.push_back(ed);
 
-	std::string typeLabel = (entityTypeToPlace_ == "player") ? "プレイヤー" : "敵";
+	std::string typeLabel;
+	if (entityTypeToPlace_ == "player")       typeLabel = "プレイヤー";
+	else if (entityTypeToPlace_ == "enemy")   typeLabel = "敵";
+	else if (entityTypeToPlace_ == "spawner") typeLabel = "スポナー";
+	else                                       typeLabel = entityTypeToPlace_;
 	SetStatus(typeLabel + "を配置しました ("
 		+ std::to_string(gx) + ", " + std::to_string(gy) + ")", false);
 }
@@ -813,22 +879,22 @@ bool MapEditor::AreAdjacent(int ax, int ay, int bx, int by) const {
 void MapEditor::AutoConnectNode(int gx, int gy) {
 	auto it = nodes_.find({ gx, gy });
 	if (it == nodes_.end()) return;
-	
+
 	// 上方向チェック
 	if (nodes_.count({ gx, gy + 1 })) {
 		AddConnection(gx, gy, gx, gy + 1);
 	}
-	
+
 	// 右方向チェック
 	if (nodes_.count({ gx + 1, gy })) {
 		AddConnection(gx, gy, gx + 1, gy);
 	}
-	
+
 	// 下方向チェック
 	if (nodes_.count({ gx, gy - 1 })) {
 		AddConnection(gx, gy, gx, gy - 1);
 	}
-	
+
 	// 左方向チェック
 	if (nodes_.count({ gx - 1, gy })) {
 		AddConnection(gx, gy, gx - 1, gy);
@@ -845,9 +911,9 @@ void MapEditor::AutoConnectAll() {
 		SetStatus("ノードがありません", true);
 		return;
 	}
-	
+
 	PushUndo();
-	
+
 	int connectionCount = 0;
 	for (auto& [coord, node] : nodes_) {
 		// 右方向と上方向のみチェック（重複防止）
@@ -864,7 +930,7 @@ void MapEditor::AutoConnectAll() {
 			}
 		}
 	}
-	
+
 	dirty_ = true;
 	SetStatus("全ノードを自動接続しました (" + std::to_string(connectionCount) + " 本)", false);
 }
@@ -1118,6 +1184,7 @@ void MapEditor::RebuildGridEntities(No::Registry& registry) {
 		cell->hasConnectionRight = node.right;
 		cell->hasConnectionDown = node.down;
 		cell->hasConnectionLeft = node.left;
+		cell->isEnemyOnly = node.isEnemyOnly;
 	}
 }
 

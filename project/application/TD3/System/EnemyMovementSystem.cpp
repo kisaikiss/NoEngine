@@ -2,6 +2,7 @@
 #include "../GameTag.h"
 #include "../Utility/GridUtils.h"
 #include "../System/GameTimer.h"
+#include "../Component/ColliderComponent.h"
 #include <cmath>
 #include <queue>
 #include <set>
@@ -73,6 +74,21 @@ void EnemyMovementSystem::Update(No::Registry& registry, float deltaTime) {
 			if (enemy->reverseTimer < 0.0f) enemy->reverseTimer = 0.0f;
 		}
 
+		// ---- spawnExitTimer 減算（ゲームタイム） ----
+		// isSpawning=true かつ通常ノードに到達済みのときのみカウントダウンする。
+		// ゼロに達したら通常状態へ移行し、コライダー色を緑（通常色）に戻す。
+		if (enemy->isSpawning && enemy->spawnExitTimer > 0.0f) {
+			enemy->spawnExitTimer -= gameDeltaTime;
+			if (enemy->spawnExitTimer <= 0.0f) {
+				enemy->isSpawning = false;
+				enemy->spawnExitTimer = 0.0f;
+				// コライダー色を通常（緑）に戻す
+				if (registry.Has<SphereColliderComponent>(entity)) {
+					registry.GetComponent<SphereColliderComponent>(entity)->debugColor = { 0.0f, 1.0f, 0.0f };
+				}
+			}
+		}
+
 		switch (enemy->state) {
 		case PlayerState::OnNode:
 			HandleOnNode(enemy, playerX, playerY, registry);
@@ -103,7 +119,20 @@ void EnemyMovementSystem::HandleOnNode(
 	int playerX, int playerY,
 	No::Registry& registry
 ) {
-	Direction nextDir = ChooseDirection(enemy, playerX, playerY, registry);
+	Direction nextDir = Direction::None;
+
+	if (enemy->isSpawning) {
+		// スポーニング状態: 敵専用道ならシンプル前進、通常道ならBFS
+		auto* cell = GridUtils::GetGridCell(registry, enemy->currentNodeX, enemy->currentNodeY);
+		if (cell && cell->isEnemyOnly) {
+			nextDir = ChooseDirectionSpawning(enemy, registry);
+		} else {
+			nextDir = ChooseDirection(enemy, playerX, playerY, registry);
+		}
+	} else {
+		nextDir = ChooseDirection(enemy, playerX, playerY, registry);
+	}
+
 	if (nextDir != Direction::None) {
 		StartMovement(enemy, nextDir);
 	}
@@ -119,13 +148,28 @@ void EnemyMovementSystem::HandleOnEdge(
 	int playerX, int playerY,
 	No::Registry& registry
 ) {
-	enemy->progressOnEdge += enemy->moveSpeed * deltaTime;
+	// スポーニング状態の場合は有効速度を切り替える。
+	// 敵専用道上 → spawningSpeed（スポナーが計算した一定速度）
+	// 通常道上かつスポーニング中 → moveSpeed * 0.5f（通常の半速）
+	float effectiveSpeed;
+	if (enemy->isSpawning) {
+		auto* currentCell = GridUtils::GetGridCell(registry, enemy->currentNodeX, enemy->currentNodeY);
+		if (currentCell && currentCell->isEnemyOnly) {
+			effectiveSpeed = enemy->spawningSpeed;
+		} else {
+			effectiveSpeed = enemy->moveSpeed * 0.5f;
+		}
+	} else {
+		effectiveSpeed = enemy->moveSpeed;
+	}
+
+	enemy->progressOnEdge += effectiveSpeed * deltaTime;
 
 	// ノード到達チェック（高速移動対応）
 	while (enemy->progressOnEdge >= 1.0f) {
 		// 余剰分を先に保持
 		float overflow = enemy->progressOnEdge - 1.0f;
-		
+
 		// progressOnEdge を1.0に設定してからノード到達処理
 		enemy->progressOnEdge = 1.0f;
 		OnReachNode(enemy, playerX, playerY, registry);
@@ -134,7 +178,7 @@ void EnemyMovementSystem::HandleOnEdge(
 		if (enemy->state != PlayerState::MovingOnEdge) {
 			break;
 		}
-		
+
 		// 次の移動が開始された場合、余剰分を引き継ぐ
 		// StartMovement内でprogressOnEdgeが0.0にリセットされているため、
 		// ここで余剰分を加算する
@@ -162,8 +206,30 @@ void EnemyMovementSystem::OnReachNode(
 
 	enemy->state = PlayerState::OnNode;
 
+	// ---- スポーニング状態: 敵専用道 → 通常道への遷移を検出 ----
+	// spawnExitTimer が未セット（0.0f）のときだけチェックして、
+	// 一度遷移したら再度タイマーをセットしない。
+	if (enemy->isSpawning && enemy->spawnExitTimer <= 0.0f) {
+		auto* cell = GridUtils::GetGridCell(registry, enemy->currentNodeX, enemy->currentNodeY);
+		if (cell && !cell->isEnemyOnly) {
+			// 通常ノードに到達 → 退場タイマーを開始
+			enemy->spawnExitTimer = EnemyComponent::SPAWN_EXIT_DURATION;
+		}
+	}
+
 	// 次の移動方向を決定
-	Direction nextDir = ChooseDirection(enemy, playerX, playerY, registry);
+	Direction nextDir = Direction::None;
+	if (enemy->isSpawning) {
+		auto* cell = GridUtils::GetGridCell(registry, enemy->currentNodeX, enemy->currentNodeY);
+		if (cell && cell->isEnemyOnly) {
+			nextDir = ChooseDirectionSpawning(enemy, registry);
+		} else {
+			nextDir = ChooseDirection(enemy, playerX, playerY, registry);
+		}
+	} else {
+		nextDir = ChooseDirection(enemy, playerX, playerY, registry);
+	}
+
 	if (nextDir != Direction::None) {
 		StartMovement(enemy, nextDir);
 	}
@@ -217,7 +283,7 @@ Direction EnemyMovementSystem::ChooseDirection(
 		if (!playerView.Empty()) {
 			auto it = playerView.begin();
 			auto* player = registry.GetComponent<PlayerComponent>(*it);
-			
+
 			// プレイヤーが移動中の場合は targetNode を目標にする
 			if (player && player->state == PlayerState::MovingOnEdge) {
 				playerX = player->targetNodeX;
@@ -265,6 +331,11 @@ Direction EnemyMovementSystem::ChooseDirection(
 
 		int nx, ny;
 		GridUtils::GetNextNodeCoords(enemy->currentNodeX, enemy->currentNodeY, dir, nx, ny);
+
+		// 通常敵は敵専用道（isEnemyOnly）には侵入しない
+		auto* targetCell = GridUtils::GetGridCell(registry, nx, ny);
+		if (targetCell && targetCell->isEnemyOnly) continue;
+
 		Coord nc = { nx, ny };
 
 		if (visited.find(nc) == visited.end()) {
@@ -296,6 +367,11 @@ Direction EnemyMovementSystem::ChooseDirection(
 
 			int nx, ny;
 			GridUtils::GetNextNodeCoords(current.x, current.y, dir, nx, ny);
+
+			// 通常敵は敵専用道には侵入しない
+			auto* targetCell = GridUtils::GetGridCell(registry, nx, ny);
+			if (targetCell && targetCell->isEnemyOnly) continue;
+
 			Coord nc = { nx, ny };
 
 			if (visited.find(nc) == visited.end()) {
@@ -308,6 +384,34 @@ Direction EnemyMovementSystem::ChooseDirection(
 
 	// ========== 到達不能（孤立マップなど） ==========
 	// 敵は停止する
+	return Direction::None;
+}
+
+// ============================================================
+//  ChooseDirectionSpawning
+//
+//  スポーニング敵専用の方向決定。
+//  BFS を使わず、後退禁止制約だけで次に進める方向を返す。
+//  敵専用道は接続数 2 の一本道なので、来た方向以外の 1 方向を選ぶだけで十分。
+// ============================================================
+
+Direction EnemyMovementSystem::ChooseDirectionSpawning(
+	EnemyComponent* enemy,
+	No::Registry& registry
+) {
+	const Direction allDirs[4] = {
+		Direction::Up, Direction::Right, Direction::Down, Direction::Left
+	};
+
+	for (Direction dir : allDirs) {
+		if (!GridUtils::CanMoveInDirection(
+			registry,
+			enemy->currentNodeX, enemy->currentNodeY,
+			dir, enemy->lastDirection)) {
+			continue;
+		}
+		return dir;
+	}
 	return Direction::None;
 }
 
@@ -349,39 +453,39 @@ NoEngine::Math::Quaternion EnemyMovementSystem::CalcDirectionRotation(Direction 
 	NoEngine::Math::Quaternion q;
 	NoEngine::Math::Quaternion baseRotation;
 	NoEngine::Math::Quaternion directionRotation;
-	
+
 	// 基本姿勢：頭をカメラ側に向ける（X軸周りに-90度）
 	baseRotation.FromAxisAngle(NoEngine::Math::Vector3{ 1.0f, 0.0f, 0.0f }, -PI * 0.5f);
-	
+
 	switch (dir) {
 	case Direction::None:
 		// 停止時は上向き（基本姿勢のみ）
 		q = baseRotation;
 		break;
-		
+
 	case Direction::Up:
 		// 上方向：基本姿勢のまま（追加回転なし）
 		q = baseRotation;
 		break;
-		
+
 	case Direction::Down:
 		// 下方向：基本姿勢 + Y軸周りに180度
 		directionRotation.FromAxisAngle(NoEngine::Math::Vector3{ 0.0f, 1.0f, 0.0f }, PI);
 		q = baseRotation * directionRotation;
 		break;
-		
+
 	case Direction::Right:
 		// 右方向：基本姿勢 + Y軸周りに90度
 		directionRotation.FromAxisAngle(NoEngine::Math::Vector3{ 0.0f, 1.0f, 0.0f }, PI * 0.5f);
 		q = baseRotation * directionRotation;
 		break;
-		
+
 	case Direction::Left:
 		// 左方向：基本姿勢 + Y軸周りに-90度
 		directionRotation.FromAxisAngle(NoEngine::Math::Vector3{ 0.0f, 1.0f, 0.0f }, -PI * 0.5f);
 		q = baseRotation * directionRotation;
 		break;
-		
+
 	default:
 		q = NoEngine::Math::Quaternion::IDENTITY;
 		break;
