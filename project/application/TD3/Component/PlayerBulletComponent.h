@@ -21,9 +21,9 @@ struct PlayerBulletComponent {
 	bool enableLooping;					// 画面外ループを有効にするか
 	bool disableLoopOnHit;				// 敵に当たった時にループを無効化するか
 
-	// ---- ループ状態管理 ----
-	bool loopedOnce;					// 既に1回ループしたか
-	bool loopDisabled;					// ループが無効化されたか（敵ヒット等）
+	// ---- ループ弾識別 ----
+	bool isLoopedBullet;				// ループ弾かどうか（通常弾=false、ループ弾=true）
+	
 	float screenBoundsOffset;			// 画面外判定のオフセット（モデルサイズ分の余裕）
 
 	PlayerBulletComponent()
@@ -32,12 +32,11 @@ struct PlayerBulletComponent {
 		startNodeY(0),
 		speed(5.0f),
 		travelDistance(0.0f),
-		penetrateWalls(true),
-		penetrateEnemies(true),
-		enableLooping(true),
-		disableLoopOnHit(true),
-		loopedOnce(false),
-		loopDisabled(false),
+		penetrateWalls(false),
+		penetrateEnemies(false),
+		enableLooping(false),
+		disableLoopOnHit(false),
+		isLoopedBullet(false),
 		screenBoundsOffset(0.5f) {
 	}
 };

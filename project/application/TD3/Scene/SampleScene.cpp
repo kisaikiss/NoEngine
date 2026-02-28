@@ -421,7 +421,7 @@ void SampleScene::InitializePlayer(No::Registry& registry, int startX, int start
 	auto* collider = registry.AddComponent<SphereColliderComponent>(entity);
 	collider->radius = 0.5f;
 	collider->colliderType = kPlayer;
-	collider->collideMask = kEnemy;
+	collider->collideMask = kEnemy | kPlayerBullet;  // ループ後の弾も検出
 
 	auto* transform = registry.AddComponent<No::TransformComponent>(entity);
 	transform->scale = { 0.2f, 0.2f, 0.2f };
