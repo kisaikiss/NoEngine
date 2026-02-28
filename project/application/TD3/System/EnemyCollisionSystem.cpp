@@ -3,6 +3,8 @@
 #include "../Component/PlayerComponent.h"
 #include "../Component/EnemyComponent.h"
 #include "../Component/ColliderComponent.h"
+#include "../Component/DeathEffectComponent.h"
+#include "engine/Functions/ECS/Component/TransformComponent.h"
 
 #ifdef USE_IMGUI
 #include "externals/imgui/imgui.h"
@@ -21,14 +23,16 @@ void EnemyCollisionSystem::Update(No::Registry& registry, float deltaTime) {
 	SphereColliderComponent* playerCollider = nullptr;
 	HealthComponent* playerHealth = nullptr;
 	DeathFlag* playerDeath = nullptr;
+	No::Entity playerEntity = 0;
 
 	{
 		// Empty() チェック済みのため begin() は必ず有効
 		auto it = playerView.begin();
-		player = registry.GetComponent<PlayerComponent>(*it);
-		playerCollider = registry.GetComponent<SphereColliderComponent>(*it);
-		playerHealth = registry.GetComponent<HealthComponent>(*it);
-		playerDeath = registry.GetComponent<DeathFlag>(*it);
+		playerEntity = *it;
+		player = registry.GetComponent<PlayerComponent>(playerEntity);
+		playerCollider = registry.GetComponent<SphereColliderComponent>(playerEntity);
+		playerHealth = registry.GetComponent<HealthComponent>(playerEntity);
+		playerDeath = registry.GetComponent<DeathFlag>(playerEntity);
 	}
 
 	if (!player || !playerCollider || !playerHealth || !playerDeath) return;
@@ -61,6 +65,21 @@ void EnemyCollisionSystem::Update(No::Registry& registry, float deltaTime) {
 					if (ec->isSpawning) return;
 				}
 
+				// 敵の位置を取得して撃破演出を生成
+				if (registry.Has<No::TransformComponent>(enemyEntity)) {
+					auto* enemyTransform = registry.GetComponent<No::TransformComponent>(enemyEntity);
+					
+					// 敵撃破演出を生成
+					DeathEffectConfig config;
+					config.color = { 1.0f, 0.2f, 0.2f, 1.0f };  // 赤
+					config.particleScale = 0.15f;
+					config.particleCount = 8;
+					config.duration = 0.6f;
+					config.spreadDistance = 2.0f;
+					
+					DeathEffectHelper::SpawnDeathEffect(registry, enemyTransform->translate, config);
+				}
+
 				// 敵を死亡させる
 				enemyDeath->isDead = true;
 
@@ -73,6 +92,21 @@ void EnemyCollisionSystem::Update(No::Registry& registry, float deltaTime) {
 				bool died = playerHealth->TakeDamage(1);
 				if (died && !playerHealth->isInvincible) {
 					playerDeath->isDead = true;
+				} else {
+					// プレイヤーがダメージを受けた（死亡していない）場合、プレイヤーダメージ演出を生成
+					if (registry.Has<No::TransformComponent>(playerEntity)) {
+						auto* playerTransform = registry.GetComponent<No::TransformComponent>(playerEntity);
+						
+						// プレイヤーダメージ演出を生成（色違い）
+						DeathEffectConfig playerDamageConfig;
+						playerDamageConfig.color = { 0.3f, 0.5f, 1.0f, 1.0f };  // 青
+						playerDamageConfig.particleScale = 0.3f;
+						playerDamageConfig.particleCount = 6;
+						playerDamageConfig.duration = 0.5f;
+						playerDamageConfig.spreadDistance = 1.5f;
+						
+						DeathEffectHelper::SpawnDeathEffect(registry, playerTransform->translate, playerDamageConfig);
+					}
 				}
 			}
 		}

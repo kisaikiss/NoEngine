@@ -177,6 +177,8 @@
     <ClCompile Include="application\TD3\System\ShockwaveSystem.cpp" />
     <ClCompile Include="application\TD3\Utility\CameraBounds.cpp" />
     <ClCompile Include="application\TD3\System\EnemySpawnerSystem.cpp" />
+    <ClCompile Include="application\TD3\System\DeathEffectSystem.cpp" />
+    <ClCompile Include="application\TD3\Component\DeathEffectComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -415,6 +417,8 @@
     <ClInclude Include="application\TD3\Config\PlayerBulletConfig.h" />
     <ClInclude Include="application\TD3\Component\EnemySpawnerComponent.h" />
     <ClInclude Include="application\TD3\System\EnemySpawnerSystem.h" />
+    <ClInclude Include="application\TD3\Component\DeathEffectComponent.h" />
+    <ClInclude Include="application\TD3\System\DeathEffectSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

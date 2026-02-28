@@ -20,6 +20,7 @@
 #include "../System/EnemyCollisionSystem.h"
 #include "../System/EnemyToEnemyCollisionSystem.h"
 #include "../System/ShockwaveSystem.h"
+#include "../System/DeathEffectSystem.h"
 #include "../MapData/MapLoader.h"
 #include "../Utility/GridUtils.h"
 #include <vector>
@@ -73,6 +74,9 @@ void SampleScene::Setup() {
 		});
 		AddSystem(std::move(sys));
 	}
+
+	// DeathEffectSystem を追加
+	AddSystem(std::make_unique<DeathEffectSystem>());
 
 	// EnemyCollisionSystem に敵撃破カウントコールバックを設定
 	{

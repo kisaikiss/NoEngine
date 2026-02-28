@@ -3,6 +3,7 @@
 #include "../Component/HealthComponent.h"
 #include "../Component/ColliderComponent.h"
 #include "../Component/EnemyComponent.h"
+#include "../Component/DeathEffectComponent.h"
 #include "../GameTag.h"
 #include "engine/Math/Easing.h"
 #include "engine/Functions/Renderer/Primitive.h"
@@ -72,6 +73,21 @@ void ShockwaveSystem::Update(No::Registry& registry, float deltaTime) {
 					// ダメージを与える
 					bool died = enemyHealth->TakeDamage(1);
 					if (died) {
+						// 敵の位置を取得して撃破演出を生成
+						if (registry.Has<No::TransformComponent>(enemyEntity)) {
+							auto* enemyTransform = registry.GetComponent<No::TransformComponent>(enemyEntity);
+							
+							// 敵撃破演出を生成
+							DeathEffectConfig config;
+							config.color = { 1.0f, 0.2f, 0.2f, 1.0f };  // 赤
+							config.particleScale = 0.15f;
+							config.particleCount = 8;
+							config.duration = 0.6f;
+							config.spreadDistance = 2.0f;
+							
+							DeathEffectHelper::SpawnDeathEffect(registry, enemyTransform->translate, config);
+						}
+
 						enemyDeath->isDead = true;
 						// 敵撃破カウント増加
 						if (onEnemyKilled_) {
