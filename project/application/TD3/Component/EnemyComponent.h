@@ -40,6 +40,10 @@ struct EnemyComponent {
 	float spawnExitTimer = 0.0f;  // 通常ノード到達後のカウントダウン（GameTimer基準）
 	static constexpr float SPAWN_EXIT_DURATION = 0.5f; // 通常ノード到達後、何秒で通常状態に移行するか
 
+	// ========== 色情報 ==========
+	No::Color spawningColor;  // スポーニング状態の色（白）
+	No::Color defaultColor;   // 通常状態の色（赤）
+
 	EnemyComponent()
 		: currentNodeX(0), currentNodeY(0),
 		targetNodeX(0), targetNodeY(0),
@@ -52,7 +56,9 @@ struct EnemyComponent {
 		reverseTimer(0.0f),
 		isSpawning(false),
 		spawningSpeed(0.0f),
-		spawnExitTimer(0.0f)
+		spawnExitTimer(0.0f),
+		spawningColor({ 1.0f, 1.0f, 1.0f, 1.0f }),  // 白
+		defaultColor({ 1.0f, 0.2f, 0.2f, 1.0f })    // 赤
 	{
 	}
 };

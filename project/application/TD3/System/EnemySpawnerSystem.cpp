@@ -201,7 +201,8 @@ void EnemySpawnerSystem::SpawnEnemy(No::Registry& registry, EnemySpawnerComponen
 		mesh
 	);
 	material->materials = NoEngine::Asset::ModelLoader::GetMaterial("Enemy");
-	material->color = { 1.0f, 1.0f, 1.0f, 1.0f }; // 青系: スポーニング中
+	// スポーニング中は白色
+	material->color = enemy->spawningColor;
 	material->psoName = L"Renderer : Default PSO";
 	material->psoId = NoEngine::Render::GetPSOID(material->psoName);
 	material->rootSigId = NoEngine::Render::GetRootSignatureID(material->psoName);

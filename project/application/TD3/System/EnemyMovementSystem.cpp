@@ -82,6 +82,14 @@ void EnemyMovementSystem::Update(No::Registry& registry, float deltaTime) {
 			if (enemy->spawnExitTimer <= 0.0f) {
 				enemy->isSpawning = false;
 				enemy->spawnExitTimer = 0.0f;
+
+				// 色を通常状態に変更
+				if (registry.Has<No::MaterialComponent>(entity)) {
+					auto* material = registry.GetComponent<No::MaterialComponent>(entity);
+					if (material) {
+						material->color = enemy->defaultColor;
+					}
+				}
 			}
 		}
 

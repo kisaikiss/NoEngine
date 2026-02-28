@@ -608,7 +608,8 @@ void SampleScene::InitializeEnemy(No::Registry& registry, int startX, int startY
 		mesh
 	);
 	material->materials = NoEngine::Asset::ModelLoader::GetMaterial("Enemy");
-	material->color = { 1.0f, 0.2f, 0.2f, 1.0f };
+	// 最初から配置された敵は赤色
+	material->color = enemy->defaultColor;
 	material->psoName = L"Renderer : Default PSO";
 	material->psoId = NoEngine::Render::GetPSOID(material->psoName);
 	material->rootSigId = NoEngine::Render::GetRootSignatureID(material->psoName);
