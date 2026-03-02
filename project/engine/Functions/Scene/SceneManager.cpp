@@ -93,6 +93,7 @@ void SceneManager::ChangeScene(const std::string& name, bool immediate) {
 		}
 
 		currentScene_ = it->second();
+		currentScene_->SetName(name);
 		currentScene_->Setup();
 		currentScene_->OnEnter();
 
@@ -141,6 +142,7 @@ void SceneManager::Update(float deltaTime) {
 				auto it = factories_.find(pendingName_);
 				if (it != factories_.end()) {
 					currentScene_ = it->second();
+					currentScene_->SetName(pendingName_);
 					currentScene_->Setup();
 					currentScene_->OnEnter();
 				}

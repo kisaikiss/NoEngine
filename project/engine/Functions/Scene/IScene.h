@@ -2,6 +2,7 @@
 #include "engine/Functions/ECS/Registry.h"
 #include "engine/Functions/ECS/System/SystemManager.h"
 #include "engine/Functions/Camera/Camera.h"
+#include "SceneNameComponent.h"
 
 namespace NoEngine {
 namespace Scene {
@@ -10,8 +11,13 @@ namespace Scene {
 /// シーン基底クラス
 /// </summary>
 class IScene {
+	friend class SceneManager;
 public:
-	IScene() : registry_(std::make_unique<ECS::Registry>()), systemManager_(std::make_unique<ECS::SystemManager>()) {}
+	IScene() : 
+		registry_(std::make_unique<ECS::Registry>()),
+		systemManager_(std::make_unique<ECS::SystemManager>()) { 
+		registry_->AddComponent<SceneNameComponent>(registry_->GenerateEntity());
+	}
 	virtual ~IScene() = default;
 
 	/// <summary>
@@ -53,6 +59,13 @@ protected:
 	/// </summary>
 	virtual void NotSystemUpdate(){}
 private:
+	void SetName(const std::string& name) {
+		auto view = registry_->View<SceneNameComponent>();
+		for (auto entity : view) {
+			auto* scene = registry_->GetComponent<SceneNameComponent>(entity);
+			scene->name = name;
+		}
+	}
 	std::unique_ptr<ECS::Registry> registry_;
 	std::unique_ptr<ECS::SystemManager> systemManager_;
 

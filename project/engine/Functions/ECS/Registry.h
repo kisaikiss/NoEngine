@@ -54,6 +54,14 @@ public:
 	CompType* GetComponent(const Entity entity);
 
 	/// <summary>
+	/// エンティティとコンポーネントのTypeIDを指定し、コンポーネントのvoidポインタを取得します。
+	/// </summary>
+	/// <param name="typeId">型ごとに一意に定められるID</param>
+	/// <param name="entity">エンティティ</param>
+	/// <returns>コンポーネントのvoidポインタ</returns>
+	void* GetComponent(const size_t& typeId, const Entity& entity);
+
+	/// <summary>
 	/// エンティティが指定したコンポーネントと関連付けられているか判別します。
 	/// </summary>
 	/// <typeparam name="CompType">コンポーネント</typeparam>

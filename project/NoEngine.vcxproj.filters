@@ -118,6 +118,8 @@
     <ClCompile Include="engine\Functions\ECS\Component\LightComponent.cpp" />
     <ClCompile Include="application\TD3\OneSide.cpp" />
     <ClCompile Include="application\TD3\Scene\SampleScene.cpp" />
+    <ClCompile Include="engine\Editor\DataDriven\SceneSerializer.cpp" />
+    <ClCompile Include="application\TestApp\Scene\TestScene2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -258,6 +260,9 @@
     <ClInclude Include="engine\Editor\ComponentRegistry.h" />
     <ClInclude Include="application\TD3\OneSide.h" />
     <ClInclude Include="application\TD3\Scene\SampleScene.h" />
+    <ClInclude Include="engine\Editor\DataDriven\SceneSerializer.h" />
+    <ClInclude Include="engine\Functions\Scene\SceneNameComponent.h" />
+    <ClInclude Include="application\TestApp\Scene\TestScene2.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

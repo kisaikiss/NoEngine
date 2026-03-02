@@ -9,6 +9,7 @@ class IComponentPool {
 public:
 	virtual ~IComponentPool() = default;
 	virtual void RemoveIfExists(Entity entity) = 0;
+	virtual void* GetVoidPointerComponent(Entity entity) = 0;
 	virtual size_t Size() const = 0;
 	virtual bool Has(Entity entity) const = 0;
 	virtual const std::vector<Entity>& Entities() const = 0;
@@ -84,6 +85,16 @@ public:
 		int32_t index = entityToIndex_[entity];
 		if (index >= 0) {
 			return &components_[index];
+		}
+
+		return nullptr;
+	}
+
+	inline void* GetVoidPointerComponent(Entity entity) override {
+		// エンティティが有効なら
+		int32_t index = entityToIndex_[entity];
+		if (index >= 0) {
+			return static_cast<void*>(&components_[index]);
 		}
 
 		return nullptr;
