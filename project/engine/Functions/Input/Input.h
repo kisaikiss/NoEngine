@@ -65,5 +65,34 @@ private:
 	static void Update();
 };
 
+enum class MouseButton {
+	Left = 0,
+	Right,
+	Middle,
+	NONE
+};
+
+class Mouse {
+	friend void NoEngine::InputUpdate();
+public:
+	static bool IsTrigger(MouseButton button);
+
+	static bool IsPress(MouseButton button);
+
+	/// <summary>
+	/// マウスのスクリーン上の座標を取得
+	/// </summary>
+	/// <param name="mouseX">X座標の戻り値引数</param>
+	/// <param name="mouseY">Y座標の戻り値引数</param>
+	/// <returns>成功したか(true : 成功, false : 失敗)</returns>
+	static bool GetPosition(int* mouseX, int* mouseY);
+
+	static float GetMouseWheelX();
+	static float GetMouseWheelY();
+
+private:
+	static void Update();
+};
+
 }
 }

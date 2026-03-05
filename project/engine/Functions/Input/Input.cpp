@@ -1,7 +1,7 @@
 #include "Input.h"
+#include "engine/Runtime/GraphicsCore.h"
 
 #pragma comment(lib, "gameinput.lib")
-
 
 namespace NoEngine {
 
@@ -16,6 +16,10 @@ GameInputGamepadState gamepadState;
 GameInputGamepadState preGamepadState;
 Input::Pad::Stick stick;
 Input::Pad::Trigger triggerButton;
+
+GameInputMouseState mouseState;
+GameInputMouseState preMouseState;
+
 
 bool isGamepadConnected;
 }
@@ -34,6 +38,7 @@ void InputShutdown() {
 void InputUpdate() {
 	Input::Keyboard::Update();
 	Input::Pad::Update();
+	Input::Mouse::Update();
 }
 
 namespace Input {
@@ -141,6 +146,57 @@ const Pad::Stick& Pad::GetStick() {
 
 bool Pad::IsGamepadConnected() {
 	return isGamepadConnected;
+}
+
+bool Mouse::IsTrigger(MouseButton button) {
+	switch (button) {
+	case NoEngine::Input::MouseButton::Left:	return (mouseState.buttons & GameInputMouseLeftButton) && !(preMouseState.buttons & GameInputMouseLeftButton);		break;
+	case NoEngine::Input::MouseButton::Right:	return (mouseState.buttons & GameInputMouseRightButton) && !(preMouseState.buttons & GameInputMouseRightButton);	break;
+	case NoEngine::Input::MouseButton::Middle:	return (mouseState.buttons & GameInputMouseMiddleButton) && !(preMouseState.buttons & GameInputMouseMiddleButton);	break;
+	}
+	return false;
+}
+
+bool Mouse::IsPress(MouseButton button) {
+	switch (button) {
+	case NoEngine::Input::MouseButton::Left:	return mouseState.buttons & GameInputMouseLeftButton;	break;
+	case NoEngine::Input::MouseButton::Right:	return mouseState.buttons & GameInputMouseRightButton;	break;
+	case NoEngine::Input::MouseButton::Middle:	return mouseState.buttons & GameInputMouseMiddleButton;	break;
+	}
+	return false;
+}
+
+bool Mouse::GetPosition(int* mouseX, int* mouseY) {
+	if (mouseX && mouseY) {
+		// スクリーンを座標系からウィンドウ座標に変換
+		POINT cursorPos;
+		GetCursorPos(&cursorPos); // スクリーンを得る
+		ScreenToClient(GraphicsCore::gWindowManager.GetMainWindow()->GetWindowHandle(), &cursorPos); // ウィンドウ座標に変換
+
+		*mouseX = static_cast<int>(cursorPos.x);
+		*mouseY = static_cast<int>(cursorPos.y);
+		return true;
+	}
+
+	return false;
+}
+
+float Mouse::GetMouseWheelX() {
+	return static_cast<float>(mouseState.wheelX);
+}
+
+float Mouse::GetMouseWheelY() {
+	return static_cast<float>(mouseState.wheelY);
+}
+
+void Mouse::Update() {
+	preMouseState = mouseState;
+
+	IGameInputReading* readingMouse = nullptr;
+	if (SUCCEEDED(input->GetCurrentReading(GameInputKindMouse, nullptr, &readingMouse))) {
+		readingMouse->GetMouseState(&mouseState);
+		readingMouse->Release();
+	}
 }
 
 }
