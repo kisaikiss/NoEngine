@@ -21,7 +21,6 @@ public:
 	void Update(float deltaTime);
 
 	ECS::Registry* GetRegistry() { return currentScene_ ? currentScene_->GetRegistry() : nullptr; }
-	CameraBase* GetCamera() { return currentScene_ ? currentScene_->GetCamera() : nullptr; }
 
 private:
 	void CreateCircleOverlay(float initialAlpha, float initialScale);

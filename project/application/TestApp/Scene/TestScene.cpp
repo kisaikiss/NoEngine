@@ -5,6 +5,7 @@ void TestScene::Setup() {
 	AddSystem(std::make_unique<TestSystem>());
 	AddSystem(std::make_unique<No::AnimationSystem>());
 	AddSystem(std::make_unique<No::EditSystem>());
+	AddSystem(std::make_unique<No::CameraSystem>());
 
 	No::Registry& registry = *GetRegistry();
 	No::Entity entity = registry.GenerateEntity();
@@ -55,20 +56,15 @@ void TestScene::Setup() {
 	dir2->direction = { 0.f,-1.f,0.f };
 	dir2->intensity = 1.f;
 
-
-	camera_ = std::make_unique<NoEngine::Camera>();
-	cameraTransform_.translate.z = -5.f;
-	camera_->SetTransform(cameraTransform_);
-	SetCamera(camera_.get());
+	auto camera = registry.GenerateEntity();
+	registry.AddComponent<No::ActiveCameraTag>(camera);
+	registry.AddComponent<No::CameraComponent>(camera);
+	auto* cameraTransform = registry.AddComponent<No::TransformComponent>(camera);
+	cameraTransform->translate.z = -5.f;
 }
 
 void TestScene::NotSystemUpdate() {
 #ifdef USE_IMGUI
-	ImGui::Begin("camera");
-	ImGui::DragFloat3("pos", &cameraTransform_.translate.x, 0.1f);
-	ImGui::End();
-	camera_->SetTransform(cameraTransform_);
-
 	ImGui::Begin("ChangeScene");
 	if (ImGui::Button("SceneChange")) {
 		No::SceneChangeEvent event;
@@ -78,6 +74,4 @@ void TestScene::NotSystemUpdate() {
 	ImGui::End();
 
 #endif // USE_IMGUI
-
-	camera_->Update();
 }

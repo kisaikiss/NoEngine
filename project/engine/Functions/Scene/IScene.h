@@ -1,7 +1,6 @@
 #pragma once
 #include "engine/Functions/ECS/Registry.h"
 #include "engine/Functions/ECS/System/SystemManager.h"
-#include "engine/Functions/Camera/Camera.h"
 #include "SceneNameComponent.h"
 
 namespace NoEngine {
@@ -47,12 +46,8 @@ public:
 
 	ECS::Registry* GetRegistry() { return registry_.get(); }
 
-	CameraBase* GetCamera() { return useCamera_; }
-
 protected:
 	void AddSystem(std::unique_ptr<ECS::ISystem> system) { systemManager_->AddSystem(std::move(system)); }
-
-	void SetCamera(CameraBase* camera) { useCamera_ = camera; }
 
 	/// <summary>
 	/// Systemではない更新処理。主にテスト用に使用します。
@@ -68,9 +63,6 @@ private:
 	}
 	std::unique_ptr<ECS::Registry> registry_;
 	std::unique_ptr<ECS::SystemManager> systemManager_;
-
-	// ToDo : カメラもECSで扱うようにすべきです。
-	CameraBase* useCamera_ = nullptr;
 };
 }
 }

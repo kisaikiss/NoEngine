@@ -39,8 +39,6 @@ void SpritePass::Collect(ECS::Registry& registry) {
 
 	items_.clear();
 
-	if (view.Empty()) return;
-
 	for (auto entity : view) {
 		auto* sprite = registry.GetComponent<SpriteComponent>(entity);
 		if (!sprite->isVisible) continue;

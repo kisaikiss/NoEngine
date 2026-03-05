@@ -42,8 +42,6 @@
     <ClCompile Include="engine\Math\Types\Transform2D.cpp" />
     <ClCompile Include="engine\Runtime\GpuResource\PixelBuffer\DepthBuffer.cpp" />
     <ClCompile Include="engine\Assets\Texture\TextureManager.cpp" />
-    <ClCompile Include="engine\Functions\Camera\Camera.cpp" />
-    <ClCompile Include="engine\Functions\Camera\CameraBase.cpp" />
     <ClCompile Include="engine\Functions\Debug\CrashHandler\ExportDump.cpp" />
     <ClCompile Include="engine\Functions\Debug\GraphicsResourceLeakChecker.cpp" />
     <ClCompile Include="engine\Functions\Debug\Logger\Log.cpp" />
@@ -120,6 +118,7 @@
     <ClCompile Include="application\TD3\Scene\SampleScene.cpp" />
     <ClCompile Include="engine\Editor\DataDriven\SceneSerializer.cpp" />
     <ClCompile Include="application\TestApp\Scene\TestScene2.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\CameraSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -165,8 +164,6 @@
     <ClInclude Include="engine\Runtime\GpuResource\PixelBuffer\DepthBuffer.h" />
     <ClInclude Include="engine\Assets\Mesh.h" />
     <ClInclude Include="engine\Assets\Texture\TextureManager.h" />
-    <ClInclude Include="engine\Functions\Camera\Camera.h" />
-    <ClInclude Include="engine\Functions\Camera\CameraBase.h" />
     <ClInclude Include="engine\Assets\Material.h" />
     <ClInclude Include="engine\Functions\Debug\CrashHandler\ExportDump.h" />
     <ClInclude Include="engine\Functions\Debug\GraphicsResourceLeakChecker.h" />
@@ -263,6 +260,8 @@
     <ClInclude Include="engine\Editor\DataDriven\SceneSerializer.h" />
     <ClInclude Include="engine\Functions\Scene\SceneNameComponent.h" />
     <ClInclude Include="application\TestApp\Scene\TestScene2.h" />
+    <ClInclude Include="engine\Functions\ECS\Component\CameraComponent.h" />
+    <ClInclude Include="engine\Functions\ECS\System\CameraSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />
