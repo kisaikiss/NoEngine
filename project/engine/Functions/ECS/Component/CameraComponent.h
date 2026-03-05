@@ -25,5 +25,32 @@ struct CameraComponent {
     Math::Matrix4x4 projection;
     CameraForGPU forGPU;
 };
+
+/// <summary>
+/// デバッグカメラを表すコンポーネント
+/// </summary>
+struct DebugCameraComponent {
+    int preMousePositionX_ = 0;
+    int preMousePositionY_ = 0;
+    int mousePositionX_ = 0;
+    int mousePositionY_ = 0;
+    float preMouseWheelY_ = 0.0f;
+    float mouseWheelY_ = 0.0f;
+
+    //マウスホイールで球面座標系での距離を移動させるか、中心点を移動させるかを決めるフラグ
+    bool isDistanceMove_ = true;
+    //球面座標系での中心点を描画するか
+    bool drawCenter_ = false;
+
+    // 球面座標系での球面の中心点
+    Math::Vector3 center_;
+    //球面座標での中心からの距離
+    float distance_;
+    //横回転
+    float theta_;
+    //縦回転
+    float phi_;
+};
+
 }
 }

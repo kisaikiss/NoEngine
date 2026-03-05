@@ -219,6 +219,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="engine\Functions\ECS\Component\SpriteComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Transform2DComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\TransformComponent.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\DebugCameraSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\EditSystem.cpp" />
     <ClCompile Include="engine\Functions\Renderer\Primitive.cpp" />
     <ClCompile Include="application\TestApp\Scene\TestScene.cpp" />
@@ -428,6 +429,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="engine\Functions\ECS\Component\LightComponent.h" />
     <ClInclude Include="engine\Functions\ECS\EventBus.h" />
     <ClInclude Include="engine\Functions\ECS\Event\SceneChangeEvent.h" />
+    <ClInclude Include="engine\Functions\ECS\System\DebugCameraSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\EditSystem.h" />
     <ClInclude Include="engine\Functions\Renderer\Primitive.h" />
     <ClInclude Include="application\TestApp\Scene\TestScene.h" />
