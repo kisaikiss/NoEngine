@@ -119,6 +119,7 @@
     <ClCompile Include="engine\Editor\DataDriven\SceneSerializer.cpp" />
     <ClCompile Include="application\TestApp\Scene\TestScene2.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\CameraSystem.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\DebugCameraSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -262,6 +263,7 @@
     <ClInclude Include="application\TestApp\Scene\TestScene2.h" />
     <ClInclude Include="engine\Functions\ECS\Component\CameraComponent.h" />
     <ClInclude Include="engine\Functions\ECS\System\CameraSystem.h" />
+    <ClInclude Include="engine\Functions\ECS\System\DebugCameraSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />
