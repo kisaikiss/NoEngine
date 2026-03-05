@@ -4,6 +4,7 @@
 #include "engine/Functions/Renderer/RenderSystem.h"
 #include "engine/Utilities/Conversion/ConvertString.h"
 
+
 namespace NoEngine {
 namespace Render {
 
@@ -29,10 +30,17 @@ void MeshPass::Collect(ECS::Registry& registry) {
 		MeshComponent,
 		MaterialComponent
 	>();
-	if (view.Empty()) return;
 	items_.clear();
 
-	const Math::Vector3& cameraPos = GetCamera()->GetTransform().translate;
+	auto cameraView = registry.View<TransformComponent, CameraComponent, ActiveCameraTag>();
+	Math::Vector3 cameraPos{};
+	for (auto entity : cameraView) {
+		auto* cameraTransform = registry.GetComponent<TransformComponent>(entity);
+		cameraPos = cameraTransform->GetWorldPosition();
+		camera_ = registry.GetComponent<CameraComponent>(entity);
+	}
+
+
 	for (auto entity : view) {
 		auto* mesh = registry.GetComponent<MeshComponent>(entity);
 		if (!mesh->isVisible)continue;
@@ -70,7 +78,7 @@ void MeshPass::Render(GraphicsContext& context) {
 
 		Math::Matrix4x4 worldData = item.transform->MakeAffineMatrix4x4();
 		context.SetDynamicConstantBufferView(rootIndex["gWorldMatrix"], sizeof(Math::Matrix4x4), &worldData);
-		context.SetDynamicConstantBufferView(rootIndex["gCameraMatrix"], sizeof(CameraBase::CameraForGPU), &GetCamera()->GetCameraForGPU());
+		context.SetDynamicConstantBufferView(rootIndex["gCameraMatrix"], sizeof(Component::CameraForGPU), &camera_->forGPU);
 		context.SetDynamicDescriptor(rootIndex["gDirectionalLights"], 0, GetRenderContext()->GetDirectionalLightSRV());
 		{
 			_declspec(align(16)) struct {
@@ -136,7 +144,7 @@ void MeshPass::RenderOutline(GraphicsContext& context) {
 
 		Math::Matrix4x4 worldData = item.transform->MakeAffineMatrix4x4();
 		context.SetDynamicConstantBufferView(rootIndex["gWorldMatrix"], sizeof(Math::Matrix4x4), &worldData);
-		context.SetDynamicConstantBufferView(rootIndex["gCameraMatrix"], sizeof(CameraBase::CameraForGPU), &GetCamera()->GetCameraForGPU());
+		context.SetDynamicConstantBufferView(rootIndex["gCameraMatrix"], sizeof(Component::CameraForGPU), &camera_->forGPU);
 		
 		context.SetVertexBuffer(0, item.mesh->mesh->vertexBuffer.VertexBufferView());
 		context.SetIndexBuffer(item.mesh->mesh->indexBuffer.IndexBufferView());

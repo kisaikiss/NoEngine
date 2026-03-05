@@ -1,12 +1,14 @@
 #include "SampleScene.h"
 
 void SampleScene::Setup() {
-	camera_ = std::make_unique<NoEngine::Camera>();
-	cameraTransform_.translate.z = -5.f;
-	camera_->SetTransform(cameraTransform_);
-	SetCamera(camera_.get());
+	AddSystem(std::make_unique<No::CameraSystem>());
+	No::Registry& registry = *GetRegistry();
+	auto camera = registry.GenerateEntity();
+	registry.AddComponent<No::ActiveCameraTag>(camera);
+	registry.AddComponent<No::CameraComponent>(camera);
+	auto* cameraTransform = registry.AddComponent<No::TransformComponent>(camera);
+	cameraTransform->translate.z = -5.f;
 }
 
 void SampleScene::NotSystemUpdate() {
-	camera_->Update();
 }

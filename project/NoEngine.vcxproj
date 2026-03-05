@@ -209,8 +209,11 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\TD2_3\System\Tutorial\TutorialControlSystem.cpp" />
     <ClCompile Include="application\TD3\OneSide.cpp" />
     <ClCompile Include="application\TD3\Scene\SampleScene.cpp" />
+    <ClCompile Include="application\TestApp\Scene\TestScene2.cpp" />
     <ClCompile Include="application\TestApp\TestApp.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\CameraSystem.cpp" />
     <ClCompile Include="engine\Assets\Audio\Audio.cpp" />
+    <ClCompile Include="engine\Editor\DataDriven\SceneSerializer.cpp" />
     <ClCompile Include="engine\Editor\EditUtils.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\LightComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\SpriteComponent.cpp" />
@@ -241,8 +244,6 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="engine\Runtime\Command\ComputeContext.cpp" />
     <ClCompile Include="engine\Runtime\GpuResource\PixelBuffer\DepthBuffer.cpp" />
     <ClCompile Include="engine\Assets\Texture\TextureManager.cpp" />
-    <ClCompile Include="engine\Functions\Camera\Camera.cpp" />
-    <ClCompile Include="engine\Functions\Camera\CameraBase.cpp" />
     <ClCompile Include="engine\Functions\Debug\CrashHandler\ExportDump.cpp" />
     <ClCompile Include="engine\Functions\Debug\GraphicsResourceLeakChecker.cpp" />
     <ClCompile Include="engine\Functions\Debug\Logger\Log.cpp" />
@@ -413,13 +414,17 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\TD2_3\tag.h" />
     <ClInclude Include="application\TD3\OneSide.h" />
     <ClInclude Include="application\TD3\Scene\SampleScene.h" />
+    <ClInclude Include="application\TestApp\Scene\TestScene2.h" />
     <ClInclude Include="application\TestApp\TestApp.h" />
+    <ClInclude Include="engine\Functions\ECS\System\CameraSystem.h" />
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
     <ClInclude Include="engine\Editor\ComponentRegistry.h" />
+    <ClInclude Include="engine\Editor\DataDriven\SceneSerializer.h" />
     <ClInclude Include="engine\Editor\EditUtils.h" />
     <ClInclude Include="engine\Editor\Reflection.h" />
     <ClInclude Include="engine\Editor\ReflectionMacros.h" />
     <ClInclude Include="engine\Editor\ReflectionTypeTraits.h" />
+    <ClInclude Include="engine\Functions\ECS\Component\CameraComponent.h" />
     <ClInclude Include="engine\Functions\ECS\Component\LightComponent.h" />
     <ClInclude Include="engine\Functions\ECS\EventBus.h" />
     <ClInclude Include="engine\Functions\ECS\Event\SceneChangeEvent.h" />
@@ -454,6 +459,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="engine\Functions\Renderer\RenderSystem.h" />
     <ClInclude Include="engine\Functions\Scene\IScene.h" />
     <ClInclude Include="engine\Functions\Scene\SceneManager.h" />
+    <ClInclude Include="engine\Functions\Scene\SceneNameComponent.h" />
     <ClInclude Include="engine\Math\Easing.h" />
     <ClInclude Include="engine\Math\Types\Calculations\Matrix3x3Calculations.h" />
     <ClInclude Include="engine\Math\Types\Calculations\Vector2Calculations.h" />
@@ -464,8 +470,6 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="engine\Runtime\GpuResource\PixelBuffer\DepthBuffer.h" />
     <ClInclude Include="engine\Assets\Mesh.h" />
     <ClInclude Include="engine\Assets\Texture\TextureManager.h" />
-    <ClInclude Include="engine\Functions\Camera\Camera.h" />
-    <ClInclude Include="engine\Functions\Camera\CameraBase.h" />
     <ClInclude Include="engine\Assets\Material.h" />
     <ClInclude Include="engine\Functions\Debug\CrashHandler\ExportDump.h" />
     <ClInclude Include="engine\Functions\Debug\GraphicsResourceLeakChecker.h" />

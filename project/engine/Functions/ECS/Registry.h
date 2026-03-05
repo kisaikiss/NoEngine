@@ -54,6 +54,14 @@ public:
 	CompType* GetComponent(const Entity entity);
 
 	/// <summary>
+	/// エンティティとコンポーネントのTypeIDを指定し、コンポーネントのvoidポインタを取得します。
+	/// </summary>
+	/// <param name="typeId">型ごとに一意に定められるID</param>
+	/// <param name="entity">エンティティ</param>
+	/// <returns>コンポーネントのvoidポインタ</returns>
+	void* GetComponent(const size_t& typeId, const Entity& entity);
+
+	/// <summary>
 	/// エンティティが指定したコンポーネントと関連付けられているか判別します。
 	/// </summary>
 	/// <typeparam name="CompType">コンポーネント</typeparam>
@@ -88,18 +96,25 @@ public:
 	public:
 		Query(Registry& registry) : registry_(registry) {
 			base_ = registry_.GetSmallestPool<Components...>();
+
+			if (!base_) {
+				empty_ = true;
+			}
 		}
 
 		struct Iterator {
 			Registry& registry;
 			IComponentPool* base;
 			size_t index;
+			bool empty;
 
 			Entity operator*() const {
 				return base->Entities()[index];
 			}
 
 			Iterator& operator++() {
+				if (empty) return *this;
+
 				do {
 					index++;
 				} while (index < base->Size() &&
@@ -108,37 +123,28 @@ public:
 			}
 
 			bool operator!=(const Iterator& other) const {
-				return index != other.index;
+				return index != other.index || empty != other.empty;
 			}
 		};
 
 		Iterator begin() {
+			if (empty_) return end();
+
 			size_t idx = 0;
 			while (idx < base_->Size() &&
 				!registry_.HasAll<Components...>(base_->Entities()[idx]))
 				idx++;
-			return { registry_, base_, idx };
+			return { registry_, base_, idx, empty_ };
 		}
 
 		Iterator end() {
-			return { registry_, base_, base_->Size() };
-		}
-
-		bool Empty() {
-			return !base_;
-		}
-
-		bool NoEntity() {
-			if (Empty()) {
-				return true;
-			}
-
-			return (base_->Size() == 0);
+			return { registry_, base_, base_ ? base_->Size() : 0, empty_ };
 		}
 
 	private:
 		Registry& registry_;
 		IComponentPool* base_;
+		bool empty_ = false;
 	};
 
 	/// <summary>
@@ -188,6 +194,15 @@ private:
 
 	// コンポーネントをタイプ別に管理するコンテナ
 	std::vector<std::unique_ptr<IComponentPool>> componentPools_;
+
+	/// <summary>
+	/// エンティティにコンポーネントを追加します。
+	/// </summary>
+	/// <typeparam name="CompType">コンポーネント構造体</typeparam>
+	/// <param name="entity">エンティティ</param>
+	/// <returns>取り付けた構造体</returns>
+	template<typename CompType>
+	CompType* AddComponentInternal(const Entity entity);
 
 	/// <summary>
 	/// 指定した型のコンポーネントプールを取得します。

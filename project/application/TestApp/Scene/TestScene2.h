@@ -1,7 +1,7 @@
 #pragma once
 #include "engine/NoEngine.h"
 
-class TestScene : public No::IScene {
+class TestScene2 : public No::IScene {
 public:
 	void Setup() override;
 private:

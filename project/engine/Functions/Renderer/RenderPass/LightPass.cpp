@@ -12,8 +12,6 @@ void LightPass::Execute(GraphicsContext& gfx, ECS::Registry& registry) {
 void LightPass::Collect(ECS::Registry& registry) {
 	auto view = registry.View<DirectionalLightComponent>();
 
-	if (view.Empty())return;
-
 	directionalLights_.clear();
 	for (auto entity : view) {
 

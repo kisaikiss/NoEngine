@@ -7,16 +7,19 @@
 #include "Functions/ECS/Component/Transform2DComponent.h"
 #include "Functions/ECS/Component/MaterialComponent.h"
 #include "Functions/ECS/Component/LightComponent.h"
+#include "Functions/ECS/Component/CameraComponent.h"
 #include "Functions/ECS/Event/SceneChangeEvent.h"
 #include "Editor/EditUtils.h"
 #include "Editor/ReflectionMacros.h"
 
 #include "Functions/ECS/System/AnimationSystem.h"
 #include "Functions/ECS/System/EditSystem.h"
+#include "Functions/ECS/System/CameraSystem.h"
 
 #include "Assets/ModelLoader.h"
 #include "Assets/Audio/Audio.h"
 #include "Functions/Renderer/RenderSystem.h"
+#include "Functions/Renderer/Primitive.h"
 #include "Functions/Input/Input.h"
 
 #include "Math/MathInclude.h"
