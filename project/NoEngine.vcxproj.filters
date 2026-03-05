@@ -120,6 +120,7 @@
     <ClCompile Include="application\TestApp\Scene\TestScene2.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\CameraSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\DebugCameraSystem.cpp" />
+    <ClCompile Include="engine\Functions\ECS\Component\CameraComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />

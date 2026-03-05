@@ -15,6 +15,7 @@
 #include "Functions/ECS/System/AnimationSystem.h"
 #include "Functions/ECS/System/EditSystem.h"
 #include "Functions/ECS/System/CameraSystem.h"
+#include "Functions/ECS/System/DebugCameraSystem.h"
 
 #include "Assets/ModelLoader.h"
 #include "Assets/Audio/Audio.h"

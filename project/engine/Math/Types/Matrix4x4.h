@@ -42,6 +42,8 @@ __declspec(align(16))struct Matrix4x4 {
 	void MakePerspectiveFov(float fovY, float aspectRatio, float nearClip, float farClip);
 	void MakeViewport(float left, float top, float width, float height, float minDepth, float maxDepth);
 
+	void DirectionToDirection(const Vector3& from, const Vector3& to);
+
 	void Inverse();
 	void Transpose();
 
@@ -51,6 +53,11 @@ __declspec(align(16))struct Matrix4x4 {
 	static const Matrix4x4 IDENTITY;
 };
 
+Matrix4x4 operator+(const Matrix4x4& matrix1, const Matrix4x4& matrix2);
+Matrix4x4 operator-(const Matrix4x4& matrix1, const Matrix4x4& matrix2);
 Matrix4x4 operator*(const Matrix4x4& matrix1, const Matrix4x4& matrix2);
+Matrix4x4 operator*(float s, const Matrix4x4& matrix);
+Matrix4x4 operator*(const Matrix4x4& matrix, float s);
+Matrix4x4 operator-(const Matrix4x4& matrix);
 }
 }

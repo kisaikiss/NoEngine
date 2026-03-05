@@ -11,8 +11,41 @@ const Matrix4x4 Matrix4x4::IDENTITY(
 	0, 0, 1, 0,
 	0, 0, 0, 1);
 
+Matrix4x4 operator+(const Matrix4x4& matrix1, const Matrix4x4& matrix2) {
+	return MathCalculations::Add(matrix1, matrix2);
+}
+
+Matrix4x4 operator-(const Matrix4x4& matrix1, const Matrix4x4& matrix2) {
+	return MathCalculations::Subtract(matrix1, matrix2);
+}
+
 Matrix4x4 operator*(const Matrix4x4& matrix1, const Matrix4x4& matrix2) {
 	return MathCalculations::Multiply(matrix1, matrix2);
+}
+
+Matrix4x4 operator*(float s, const Matrix4x4& matrix) {
+	Matrix4x4 result;
+	for (uint32_t i = 0; i < 4; i++) {
+		for (uint32_t j = 0; j < 4; j++) {
+			result.m[i][j] = matrix.m[i][j] * s;
+		}
+	}
+	return result;
+}
+
+Matrix4x4 operator*(const Matrix4x4& matrix, float s) {
+	return operator*(s, matrix);
+}
+
+Matrix4x4 operator-(const Matrix4x4& matrix) {
+	Matrix4x4 result;
+	for (uint32_t i = 0; i < 4; i++) {
+		for (uint32_t j = 0; j < 4; j++) {
+			result.m[i][j] = matrix.m[i][j] * -1.0f;
+		}
+	}
+
+	return result;
 }
 
 Matrix4x4::Matrix4x4(const Matrix4x4& matrix4x4) {
@@ -101,6 +134,10 @@ void Matrix4x4::MakePerspectiveFov(float fovY, float aspectRatio, float nearClip
 
 void Matrix4x4::MakeViewport(float left, float top, float width, float height, float minDepth, float maxDepth) {
 	*this = MathCalculations::MakeViewportMatrix(left, top, width, height, minDepth, maxDepth);
+}
+
+void Matrix4x4::DirectionToDirection(const Vector3& from, const Vector3& to) {
+	*this = MathCalculations::DirectionToDirection(from, to);
 }
 
 void Matrix4x4::Inverse() {

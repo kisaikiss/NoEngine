@@ -11,6 +11,22 @@ namespace MathCalculations {
 Math::Matrix4x4 MakeIdentity4x4();
 
 /// <summary>
+/// 行列の加法
+/// </summary>
+/// <param name="m1"></param>
+/// <param name="m2"></param>
+/// <returns></returns>
+Math::Matrix4x4 Add(const Math::Matrix4x4& m1, const Math::Matrix4x4& m2);
+
+/// <summary>
+/// 行列の減法
+/// </summary>
+/// <param name="m1"></param>
+/// <param name="m2"></param>
+/// <returns></returns>
+Math::Matrix4x4 Subtract(const Math::Matrix4x4& m1, const Math::Matrix4x4& m2);
+
+/// <summary>
 /// 行列の積
 /// </summary>
 /// <param name="matrix1"></param>
@@ -133,5 +149,13 @@ Math::Matrix4x4 MakePerspectiveFovMatrix(float fovY, float aspectRatio, float ne
 /// <param name="maxDepth"></param>
 /// <returns></returns>
 Math::Matrix4x4 MakeViewportMatrix(float left, float top, float width, float height, float minDepth, float maxDepth);
+
+/// <summary>
+/// ある方向からある方向への回転
+/// </summary>
+/// <param name="from"></param>
+/// <param name="to"></param>
+/// <returns></returns>
+Math::Matrix4x4 DirectionToDirection(const Math::Vector3& from, const Math::Vector3& to);
 }
 }

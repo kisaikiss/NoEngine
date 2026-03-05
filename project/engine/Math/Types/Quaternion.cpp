@@ -69,6 +69,20 @@ Vector3 Quaternion::RotateVector(const Vector3& vector) {
 	return MathCalculations::RotateVector(vector, *this);
 }
 
+void Quaternion::LookRotation(const Vector3& forward, const Vector3& up) {
+	Math::Vector3 f = forward.Normalize();
+	Math::Vector3 r = up.Cross(f).Normalize();
+	Math::Vector3 u = f.Cross(r);
+
+	Math::Matrix4x4 m;
+	m.m[0][0] = r.x; m.m[0][1] = r.y; m.m[0][2] = r.z;
+	m.m[1][0] = u.x; m.m[1][1] = u.y; m.m[1][2] = u.z;
+	m.m[2][0] = f.x; m.m[2][1] = f.y; m.m[2][2] = f.z;
+
+	FromRotationMatrix(m);
+
+}
+
 Quaternion Quaternion::Slerp(const Quaternion& q0, const Quaternion& q1, float t) {
 	return MathCalculations::Slerp(q0, q1, t);
 }

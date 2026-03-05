@@ -1,10 +1,15 @@
 #include "TestScene.h"
 #include "application/TestApp/System/TestSystem.h"
 
+namespace {
+No::Entity cameraE;
+}
+
 void TestScene::Setup() {
 	AddSystem(std::make_unique<TestSystem>());
 	AddSystem(std::make_unique<No::AnimationSystem>());
 	AddSystem(std::make_unique<No::EditSystem>());
+	AddSystem(std::make_unique<No::DebugCameraSystem>());
 	AddSystem(std::make_unique<No::CameraSystem>());
 
 	No::Registry& registry = *GetRegistry();
@@ -59,8 +64,16 @@ void TestScene::Setup() {
 	auto camera = registry.GenerateEntity();
 	registry.AddComponent<No::ActiveCameraTag>(camera);
 	registry.AddComponent<No::CameraComponent>(camera);
+	registry.AddComponent<No::DebugCameraComponent>(camera);
+	auto* cameraEditTag = registry.AddComponent<No::EditTag>(camera);
+	cameraEditTag->name = "camera";
 	auto* cameraTransform = registry.AddComponent<No::TransformComponent>(camera);
 	cameraTransform->translate.z = -5.f;
+
+	cameraE = registry.GenerateEntity();
+	registry.AddComponent<No::CameraComponent>(cameraE);
+	auto* cameraTransform2 = registry.AddComponent<No::TransformComponent>(cameraE);
+	cameraTransform2->translate.z = -5.f;
 }
 
 void TestScene::NotSystemUpdate() {
@@ -71,6 +84,11 @@ void TestScene::NotSystemUpdate() {
 		event.nextScene = "TestScene2";
 		GetRegistry()->EmitEvent(event);
 	}
+
+	if (ImGui::Button("CameraChange")) {
+		GetRegistry()->AddComponent<No::ActiveCameraTag>(cameraE);
+	}
+
 	ImGui::End();
 
 #endif // USE_IMGUI
