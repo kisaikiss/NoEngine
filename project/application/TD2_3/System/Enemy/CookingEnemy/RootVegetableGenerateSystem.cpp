@@ -34,7 +34,10 @@ void RootVegetableGenerateSystem::Update(No::Registry& registry, float deltaTime
     auto carrotView = registry.View<CarrotTag>();
     auto whiteView = registry.View<WhiteRadishTag>();
 
-    if (carrotView.NoEntity() && whiteView.NoEntity()) {
+    bool hasCarrot = (carrotView.begin() != carrotView.end());
+    bool hasWhite = (whiteView.begin() != whiteView.end());
+
+    if (!hasCarrot && !hasWhite) {
         timer_ += generateTime_;
     }
 

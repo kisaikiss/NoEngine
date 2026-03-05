@@ -20,7 +20,8 @@ void CarrotControlSystem::Update(No::Registry& registry, float deltaTime) {
 	}
 
 	auto view = registry.View<CarrotTag>();
-	if (view.Empty())return;
+	bool hasEntities = (view.begin() != view.end());
+	if (!hasEntities) return;
 
 	for (auto entity : view) {
 		auto* death = registry.GetComponent<DeathFlag>(entity);

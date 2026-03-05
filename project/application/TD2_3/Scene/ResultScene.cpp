@@ -19,6 +19,7 @@ using namespace NoEngine;
 void ResultScene::Setup()
 {
     AddSystem(std::make_unique<No::AnimationSystem>());
+    AddSystem(std::make_unique<No::CameraSystem>());
     AddSystem(std::make_unique<BackGroundEffectSystem>());
     AddSystem(std::make_unique<ScoreRankingSystem>());
     AddSystem(std::make_unique<ResultPlayerGirlControlSystem>());
@@ -51,12 +52,15 @@ void ResultScene::Setup()
     InitPlayerGirl();
     InitChef();
 
-    constexpr No::Vector3 kStartCameraPosition = No:: Vector3{ 0.0f, 0.0f, -10.0f };
+    constexpr No::Vector3 kStartCameraPosition = No::Vector3{ 0.0f, 0.0f, -10.0f };
     //カメラ初期化
-    camera_ = std::make_unique<NoEngine::Camera>();
-    cameraTransform_.translate = kStartCameraPosition;
-    camera_->SetTransform(cameraTransform_);
-    SetCamera(camera_.get());
+    {
+        auto camera = registry.GenerateEntity();
+        registry.AddComponent<No::ActiveCameraTag>(camera);
+        registry.AddComponent<No::CameraComponent>(camera);
+        auto* cameraTransform = registry.AddComponent<No::TransformComponent>(camera);
+        cameraTransform->translate = kStartCameraPosition;
+    }
 
     No::SoundLoad(L"resources/game/td_2304/Audio/BGM/rapMusic.mp3", "rapMusic");
     No::SoundCompleteStop("secondBGM");
@@ -69,12 +73,6 @@ void ResultScene::Setup()
 
 void ResultScene::NotSystemUpdate()
 {
-#ifdef USE_IMGUI
-    ImGui::Begin("camera");
-    ImGui::DragFloat3("pos", &cameraTransform_.translate.x, 0.1f);
-    ImGui::End();
-    camera_->SetTransform(cameraTransform_);
-#endif // USE_IMGUI
 	if ((No::Keyboard::IsTrigger(VK_RETURN) ||
         No::Pad::IsTrigger(No::GamepadButton::A)) && !isChangeScene_)
 	{

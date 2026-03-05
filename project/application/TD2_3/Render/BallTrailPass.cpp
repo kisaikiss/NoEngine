@@ -21,6 +21,17 @@ void BallTrailPass::Execute(GraphicsContext& gfx, ECS::Registry& registry) {
 
     if (vertices_.empty() || indices_.empty()) return;
 
+    // カメラ行列の取得
+    No::Matrix4x4 viewProjMatrix = No::Matrix4x4::IDENTITY;
+    {
+        auto cameraView = registry.View<Component::ActiveCameraTag, Component::CameraComponent>();
+        auto it = cameraView.begin();
+        if (it != cameraView.end()) {
+            auto* camera = registry.GetComponent<Component::CameraComponent>(*it);
+            viewProjMatrix = camera->forGPU.viewProjection;
+        }
+    }
+
     // レンダリング
     std::unordered_map<std::string, uint32_t>& rootIndex = RootSignatureBuilder::GetRootIndexMap("Renderer : Ball Trail PSO");
     gfx.SetPipelineState(GetPSO(Render::GetPSOID(L"Renderer : Ball Trail PSO")));
@@ -28,7 +39,7 @@ void BallTrailPass::Execute(GraphicsContext& gfx, ECS::Registry& registry) {
     gfx.SetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
     // カメラ行列
-    gfx.SetDynamicConstantBufferView(rootIndex["gCamera"], sizeof(No:: Matrix4x4), &GetCamera()->GetViewProjMatrix());
+    gfx.SetDynamicConstantBufferView(rootIndex["gCamera"], sizeof(No::Matrix4x4), &viewProjMatrix);
 
     // マテリアル色（透明含む）
     _declspec(align(16)) struct
@@ -56,7 +67,8 @@ void BallTrailPass::CollectAndGenerate(ECS::Registry& registry) {
         BallTrailComponent
     >();
 
-    if (view.Empty()) return;
+    bool hasEntities = (view.begin() != view.end());
+    if (!hasEntities) return;
 
     for (auto entity : view) {
         auto* trail = registry.GetComponent<BallTrailComponent>(entity);

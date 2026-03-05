@@ -80,7 +80,18 @@ BackGroundEffectPass::~BackGroundEffectPass()
 void BackGroundEffectPass::Execute(NoEngine::GraphicsContext& gfx, NoEngine::ECS::Registry& registry)
 {
 	auto view = registry.View<Component::TransformComponent, BackGroundComponent>();
-	if (view.Empty()) return;
+	bool hasEntities = (view.begin() != view.end());
+	if (!hasEntities) return;
+
+	// カメラの取得
+	No::Matrix4x4 viewProjMatrix = No::Matrix4x4::IDENTITY;
+	auto cameraView = registry.View<Component::ActiveCameraTag, Component::CameraComponent>();
+	auto it = cameraView.begin();
+	if (it != cameraView.end()) {
+		auto* camera = registry.GetComponent<Component::CameraComponent>(*it);
+		viewProjMatrix = camera->forGPU.viewProjection;
+	}
+
 	gfx.SetRootSignature(rootSignature_);
 	gfx.SetPipelineState(pso_);
 	gfx.SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -100,7 +111,7 @@ void BackGroundEffectPass::Execute(NoEngine::GraphicsContext& gfx, NoEngine::ECS
 		} vsConstants;
 		vsConstants.WorldMat = transform->MakeAffineMatrix4x4();
 		vsConstants.UVTransform = backGround->uvTransform;
-		vsConstants.ViewProjMat = GetCamera()->GetViewProjMatrix();
+		vsConstants.ViewProjMat = viewProjMatrix;
 
 		_declspec(align(16)) struct PSConstants
 		{
