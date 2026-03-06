@@ -2,9 +2,9 @@
 #include "engine/NoEngine.h"
 #include "../MapData/StageData.h"
 #include "../System/GameTimer.h"
-#include "../Component/PlayerComponent.h"  // Direction enum ��g�p���邽��
+#include "../Component/PlayerComponent.h"
 
-// �O���錾
+// 前方宣言
 class PlayerBulletSystem;
 class EnemySpawnerSystem;
 
@@ -13,38 +13,35 @@ class EnemySpawnerSystem;
 #endif
 
 /// <summary>
-/// �T���v���V�[��
+/// サンプルシーン
 /// </summary>
 class SampleScene : public No::IScene {
 public:
 	void Setup() override;
 
 	/// <summary>
-	/// �Q�[���^�C�}�[��擾
+	/// ゲームタイマーを取得
 	/// </summary>
 	GameTimer* GetGameTimer() { return &gameTimer_; }
 
 	/// <summary>
-	/// �G���j���𑝂₷
+	/// 敵キル数を増やす
 	/// </summary>
 	void IncrementEnemyKillCount() { enemyKillCount_++; }
 
 	/// <summary>
-	/// �G���j����擾
+	/// 敵キル数を取得
 	/// </summary>
 	int GetEnemyKillCount() const { return enemyKillCount_; }
 
 private:
-	std::unique_ptr<NoEngine::Camera> camera_;
-	NoEngine::Transform cameraTransform_{};
-
 	// ========== ゲームタイマー ==========
 	GameTimer gameTimer_;
 	float lastRealDeltaTime_ = 0.0f;	// デバッグ表示用
 
 	// ========== ステージ管理 ==========
 
-	int  stageNumber_ = 0;		// ステージ番号(こ子は仮置きなんで０にしておく)
+	int  stageNumber_ = 0;		// ステージ番号
 	int  enemyKillCount_ = 0;	// 敵撃破数
 	int clearKillCount_ = 25;	// クリアに必要な撃破数
 
@@ -87,6 +84,7 @@ private:
 	void InitializeEnemy(No::Registry& registry, int startX, int startY);
 	void InitializeSpawner(No::Registry& registry, int startX, int startY);
 	void InitializeLight(No::Registry& registry);
+	void InitializeCamera(No::Registry& registry);
 
 	// ========== カメラ ==========
 
@@ -104,20 +102,20 @@ private:
 	/// ステージのノード座標からマップ中心とZ距離を自動計算してカメラを設定する。
 	/// Setup() と ReloadStage() の両方から呼ぶ。
 	/// </summary>
-	void SetupCameraForStage(const MapData::ConnectionMapData& mapData);
+	void SetupCameraForStage(No::Registry& registry, const MapData::ConnectionMapData& mapData);
 
 	// ========== システム更新 ==========
 
 	void NotSystemUpdate() override;
 
 	/// <summary>
-	/// �C�e���[�^���S�ł̈ꊇ�폜
+	/// イテレータが空での一括削除
 	/// </summary>
 	void DestroyGameObject();
 
-	// ========== �V�X�e���ւ̎Q�� ==========
+	// ========== システムへの参照 ==========
 
-	/// SetupSpawners ��X�e�[�W���[�h�̂��тɌĂԂ��߁Araw�|�C���^��ێ�����B
-	/// unique_ptr �̏��L���� IScene ���ɂ���B
+	/// SetupSpawners をステージロードのたびに呼ぶため、rawポインタを保持する。
+	/// unique_ptr の所有権は IScene 側にある。
 	EnemySpawnerSystem* spawnerSystem_ = nullptr;
 };

@@ -15,7 +15,7 @@
 void EnemyMovementSystem::Update(No::Registry& registry, float deltaTime) {
 
 	auto playerView = registry.View<PlayerComponent, PlayerTag>();
-	if (playerView.Empty()) return;
+
 
 	PlayerComponent* player = nullptr;
 	{
@@ -284,18 +284,16 @@ Direction EnemyMovementSystem::ChooseDirection(
 	if (enemy->currentNodeX == playerX && enemy->currentNodeY == playerY) {
 		// プレイヤーの状態を確認
 		auto playerView = registry.View<PlayerComponent, PlayerTag>();
-		if (!playerView.Empty()) {
-			auto it = playerView.begin();
-			auto* player = registry.GetComponent<PlayerComponent>(*it);
+		auto it = playerView.begin();
+		auto* player = registry.GetComponent<PlayerComponent>(*it);
 
-			// プレイヤーが移動中の場合は targetNode を目標にする
-			if (player && player->state == PlayerState::MovingOnEdge) {
-				playerX = player->targetNodeX;
-				playerY = player->targetNodeY;
-			} else {
-				// プレイヤーが停止中で同じノードにいる場合のみ停止
-				return Direction::None;
-			}
+		// プレイヤーが移動中の場合は targetNode を目標にする
+		if (player && player->state == PlayerState::MovingOnEdge) {
+			playerX = player->targetNodeX;
+			playerY = player->targetNodeY;
+		} else {
+			// プレイヤーが停止中で同じノードにいる場合のみ停止
+			return Direction::None;
 		}
 	}
 

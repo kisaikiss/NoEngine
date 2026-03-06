@@ -17,7 +17,6 @@
 void EnemyCollisionSystem::Update(No::Registry& registry, float deltaTime) {
 	// プレイヤーを取得
 	auto playerView = registry.View<PlayerComponent, PlayerTag, SphereColliderComponent, HealthComponent, DeathFlag>();
-	if (playerView.Empty()) return;
 
 	PlayerComponent* player = nullptr;
 	SphereColliderComponent* playerCollider = nullptr;

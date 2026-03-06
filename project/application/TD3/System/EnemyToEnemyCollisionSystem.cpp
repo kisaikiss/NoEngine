@@ -11,7 +11,7 @@ void EnemyToEnemyCollisionSystem::Update(No::Registry& registry, float deltaTime
 	(void)deltaTime;
 
 	auto view = registry.View<EnemyComponent, EnemyTag, SphereColliderComponent, DeathFlag>();
-	if (view.Empty()) return;
+
 
 	for (auto entity : view) {
 		auto* enemy = registry.GetComponent<EnemyComponent>(entity);

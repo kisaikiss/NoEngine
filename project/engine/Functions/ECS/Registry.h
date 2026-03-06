@@ -125,6 +125,10 @@ public:
 				return *this;
 			}
 
+			bool operator==(const Iterator& other) const {
+				return index == other.index && empty == other.empty;
+			}
+
 			bool operator!=(const Iterator& other) const {
 				return index != other.index || empty != other.empty;
 			}

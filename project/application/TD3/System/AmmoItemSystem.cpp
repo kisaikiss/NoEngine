@@ -6,7 +6,6 @@ void AmmoItemSystem::Update(No::Registry& registry, float deltaTime) {
 
 	// プレイヤーを取得
 	auto playerView = registry.View<PlayerComponent, PlayerTag>();
-	if (playerView.Empty()) return;
 
 	PlayerComponent* player = nullptr;
 	{
@@ -20,9 +19,6 @@ void AmmoItemSystem::Update(No::Registry& registry, float deltaTime) {
 
 	// 弾薬アイテムをチェック
 	auto ammoView = registry.View<AmmoItemComponent, AmmoItemTag, DeathFlag>();
-	if (ammoView.Empty()) {
-		return;
-	}
 
 	for (No::Entity entity : ammoView) {
 		auto* ammo = registry.GetComponent<AmmoItemComponent>(entity);

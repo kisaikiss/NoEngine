@@ -21,9 +21,8 @@ static constexpr float NODE_DETECT_THRESHOLD = 0.15f;
 //  Update
 // ============================================================
 
-void PlayerBulletSystem::Update(No::Registry& registry, float deltaTime) {
+void PlayerBulletSystem::Update(NoEngine::ECS::Registry& registry, float deltaTime) {
 	auto view = registry.View<PlayerBulletComponent, PlayerBulletTag, DeathFlag, No::TransformComponent, SphereColliderComponent>();
-	if (view.Empty())return;
 
 	for (auto entity : view) {
 		auto* bullet = registry.GetComponent<PlayerBulletComponent>(entity);
@@ -93,7 +92,7 @@ void PlayerBulletSystem::Update(No::Registry& registry, float deltaTime) {
 		}
 
 		// ---- 画面外ループ処理 ----
-		if (bullet->enableLooping && camera_) {
+		if (bullet->enableLooping) {
 			HandleScreenLooping(registry, entity, bullet, transform, deathFlag);
 			if (deathFlag->isDead) continue;
 		}
@@ -165,7 +164,7 @@ void PlayerBulletSystem::Update(No::Registry& registry, float deltaTime) {
 // ============================================================
 
 void PlayerBulletSystem::HandleScreenLooping(
-	No::Registry& registry,
+	NoEngine::ECS::Registry& registry,
 	No::Entity entity,
 	PlayerBulletComponent* bullet,
 	No::TransformComponent* transform,
@@ -173,7 +172,7 @@ void PlayerBulletSystem::HandleScreenLooping(
 ) {
 	(void)entity;
 
-	bool isOutside = !CameraBounds::IsInBounds(camera_, transform->translate, bullet->screenBoundsOffset);
+	bool isOutside = !CameraBounds::IsInBounds(registry, transform->translate, bullet->screenBoundsOffset);
 
 	if (isOutside) {
 		if (!bullet->isLoopedBullet) {
@@ -182,7 +181,7 @@ void PlayerBulletSystem::HandleScreenLooping(
 			// 事前に必要な値をコピーしてからループ弾を生成する（ダングリングポインタ防止）
 			No::Vector3 currentPosition = transform->translate;
 			PlayerBulletComponent bulletCopy = *bullet;
-			No::Vector3 loopedPosition = CalculateLoopedPosition(currentPosition, bulletCopy.screenBoundsOffset);
+			No::Vector3 loopedPosition = CalculateLoopedPosition(registry, currentPosition, bulletCopy.screenBoundsOffset);
 			CreateLoopedBullet(registry, loopedPosition, bulletCopy);
 		}
 		// 元の弾を削除
@@ -194,11 +193,9 @@ void PlayerBulletSystem::HandleScreenLooping(
 //  CalculateLoopedPosition
 // ============================================================
 
-No::Vector3 PlayerBulletSystem::CalculateLoopedPosition(const No::Vector3& currentPosition, float offset) {
-	if (!camera_) return currentPosition;
-
+No::Vector3 PlayerBulletSystem::CalculateLoopedPosition(NoEngine::ECS::Registry& registry, const No::Vector3& currentPosition, float offset) {
 	float left, right, bottom, top;
-	CameraBounds::GetVisibleBounds(camera_, currentPosition.z, left, right, bottom, top);
+	CameraBounds::GetVisibleBounds(registry, currentPosition.z, left, right, bottom, top);
 
 	left -= offset;
 	right += offset;
@@ -227,7 +224,7 @@ No::Vector3 PlayerBulletSystem::CalculateLoopedPosition(const No::Vector3& curre
 // ============================================================
 
 void PlayerBulletSystem::CreateLoopedBullet(
-	No::Registry& registry,
+	NoEngine::ECS::Registry& registry,
 	const No::Vector3& loopedPosition,
 	const PlayerBulletComponent originalBullet	// 値渡し：AddComponent による再アロケートでポインタが無効になるのを防ぐ
 ) {
@@ -277,7 +274,7 @@ void PlayerBulletSystem::CreateLoopedBullet(
 // ============================================================
 
 void PlayerBulletSystem::HandlePlayerCollision(
-	No::Registry& registry,
+	NoEngine::ECS::Registry& registry,
 	No::Entity bulletEntity,
 	PlayerBulletComponent* bullet
 ) {
@@ -330,7 +327,7 @@ void PlayerBulletSystem::HandlePlayerCollision(
 // ============================================================
 
 bool PlayerBulletSystem::ShouldDestroyAtNode(
-	No::Registry& registry,
+	NoEngine::ECS::Registry& registry,
 	int nodeX, int nodeY,
 	const No::Vector3& direction
 ) {
@@ -361,7 +358,7 @@ bool PlayerBulletSystem::ShouldDestroyAtNode(
 // ============================================================
 
 bool PlayerBulletSystem::IsIntersectionNode(
-	No::Registry& registry,
+	NoEngine::ECS::Registry& registry,
 	int nodeX, int nodeY,
 	const No::Vector3& direction
 ) {
@@ -405,7 +402,7 @@ bool PlayerBulletSystem::IsIntersectionNode(
 //  CreateShockwave
 // ============================================================
 
-void PlayerBulletSystem::CreateShockwave(No::Registry& registry, const No::Vector3& position) {
+void PlayerBulletSystem::CreateShockwave(NoEngine::ECS::Registry& registry, const No::Vector3& position) {
 	auto shockwaveEntity = registry.GenerateEntity();
 
 	// Transform

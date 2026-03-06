@@ -16,7 +16,6 @@ using namespace NoEngine::Easing;
 
 void ShockwaveSystem::Update(No::Registry& registry, float deltaTime) {
 	auto view = registry.View<ShockwaveComponent, ShockwaveTag, DeathFlag, No::TransformComponent, SphereColliderComponent>();
-	if (view.Empty()) return;
 
 	for (auto entity : view) {
 		auto* shockwave = registry.GetComponent<ShockwaveComponent>(entity);

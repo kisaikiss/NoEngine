@@ -20,7 +20,7 @@ void DeathEffectSystem::Update(NoEngine::ECS::Registry& registry, float deltaTim
 
 	// DeathParticleComponentを持つエンティティを走査
 	auto view = registry.View<DeathParticleComponent, NoEngine::Component::TransformComponent, NoEngine::Component::MaterialComponent>();
-	if (view.Empty()) return;
+
 
 	for (auto entity : view) {
 		auto* particle = registry.GetComponent<DeathParticleComponent>(entity);

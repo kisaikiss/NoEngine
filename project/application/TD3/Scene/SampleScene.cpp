@@ -35,10 +35,8 @@ void SampleScene::Setup() {
 	// ゲームタイマーを初期化
 	gameTimer_.Reset();
 
-	// カメラを先に作成（システム設定で使用するため）
-	camera_ = std::make_unique<NoEngine::Camera>();
-
 	// システムの登録（GameTimerSystemを最初に登録）
+	AddSystem(std::make_unique<No::CameraSystem>());
 	AddSystem(std::make_unique<GameTimerSystem>(&gameTimer_, &lastRealDeltaTime_));
 	AddSystem(std::make_unique<GridRenderSystem>());
 	AddSystem(std::make_unique<PlayerMovementSystem>());
@@ -56,9 +54,8 @@ void SampleScene::Setup() {
 		AddSystem(std::move(sys));
 	}
 
-	// PlayerBulletSystem にカメラを設定
+	// PlayerBulletSystem に敵キルカウントコールバックを設定
 	auto playerBulletSystem = std::make_unique<PlayerBulletSystem>();
-	playerBulletSystem->SetCamera(camera_.get());
 	playerBulletSystem->SetEnemyKillCallback([this]() {
 		IncrementEnemyKillCount();
 	});
@@ -119,9 +116,9 @@ void SampleScene::Setup() {
 	UpdateSpawnerRotations(registry);
 
 	InitializeLight(registry);
+	InitializeCamera(registry);
 
-	SetupCameraForStage(stageData.connectionMap);   // 自動配置
-	SetCamera(camera_.get());
+	SetupCameraForStage(registry, stageData.connectionMap);
 }
 
 // ============================================================
@@ -129,11 +126,18 @@ void SampleScene::Setup() {
 //  全ノードのXY座標からマップ中心とZ距離を自動計算する。
 // ============================================================
 
-void SampleScene::SetupCameraForStage(const MapData::ConnectionMapData& mapData) {
+void SampleScene::SetupCameraForStage(No::Registry& registry, const MapData::ConnectionMapData& mapData) {
+	// カメラエンティティを取得
+	auto cameraView = registry.View<No::ActiveCameraTag, No::CameraComponent, No::TransformComponent>();
+	auto it = cameraView.begin();
+	if (it == cameraView.end()) return;
+
+	auto* cameraTransform = registry.GetComponent<No::TransformComponent>(*it);
+	if (!cameraTransform) return;
+
 	if (mapData.nodes.empty()) {
 		// ノードがない場合はデフォルト値
-		cameraTransform_.translate = { 0.0f, 0.0f, -15.0f };
-		camera_->SetTransform(cameraTransform_);
+		cameraTransform->translate = { 0.0f, 0.0f, -15.0f };
 		return;
 	}
 
@@ -158,22 +162,12 @@ void SampleScene::SetupCameraForStage(const MapData::ConnectionMapData& mapData)
 	float spanX = static_cast<float>(maxX - minX) * GridUtils::gGridScale;
 	float spanY = static_cast<float>(maxY - minY) * GridUtils::gGridScale;
 
-	// Camera::fovY_ = 0.45f（Cameraのコンストラクタで固定されている値）
-	// アスペクト比は取得できないため、X/Y両方向で必要なZを計算して大きい方を採用する。
-	//
-	// 【計算式】
-	//   画角の半分: halfFov = fovY / 2
-	//   Zから見えるY方向の半分: visibleHalf = Z * tan(halfFov)
-	//   spanY を収めるには: Z >= (spanY/2) / tan(halfFov)
-	//
-	// アスペクト比が不明なので spanX / spanY の比率でアスペクトを推定し
-	// 横方向の必要Zも計算して安全側（大きい方）を使う。
-	const float FOV_Y = 0.45f;				// Cameraと合わせる
-	const float MARGIN = 1.3f;				// 余白係数（大きいほど余裕が出る）
-	const float Z_MIN = 5.0f;				// 最低Z距離
+	const float FOV_Y = 0.45f;
+	const float MARGIN = 1.3f;
+	const float Z_MIN = 5.0f;
 
 	float halfFov = FOV_Y * 0.5f;
-	float tanHalfFov = std::tan(halfFov);	// ≈ 0.230
+	float tanHalfFov = std::tan(halfFov);
 
 	// Y方向に収めるために必要なZ
 	float zForY = (spanY * 0.5f) / tanHalfFov;
@@ -184,8 +178,7 @@ void SampleScene::SetupCameraForStage(const MapData::ConnectionMapData& mapData)
 
 	float zDistance = std::max({ zForY, zForX, Z_MIN }) * MARGIN;
 
-	cameraTransform_.translate = { centerX, centerY, -zDistance };
-	camera_->SetTransform(cameraTransform_);
+	cameraTransform->translate = { centerX, centerY, -zDistance };
 }
 
 // ============================================================
@@ -239,7 +232,7 @@ void SampleScene::ReloadStage(int stageNumber) {
 	UpdateSpawnerRotations(registry);
 
 	// ステージが変わるたびにカメラを再配置
-	SetupCameraForStage(stageData.connectionMap);
+	SetupCameraForStage(registry, stageData.connectionMap);
 }
 
 // ============================================================
@@ -271,7 +264,6 @@ void SampleScene::OnExitEditorMode() {
 void SampleScene::UpdateGame(No::Registry& registry) {
 	///それぞれの判定はコメントアウトするが残しておく
 	// ToDo : クリア・ゲームオーバーの判定はいつでも使えるようにするが、今は必要ない。
-	//(void)registry;		//今は未使用なので警告回避
 
 	// ---- ゲームオーバー判定 ----
 	auto playerView = registry.View<PlayerTag, DeathFlag>();
@@ -288,22 +280,6 @@ void SampleScene::UpdateGame(No::Registry& registry) {
 		ReloadStage(stageNumber_);
 		return;
 	}
-
-	/* ---- クリア判定（敵が全滅したとき）旧版 ----*/
-	/*
-	auto enemyView = registry.View<EnemyTag, DeathFlag>();
-	if (enemyView.Empty()) return;
-
-	int aliveEnemies = 0;
-	for (auto entity : enemyView) {
-		auto* flag = registry.GetComponent<DeathFlag>(entity);
-		if (flag && !flag->isDead) aliveEnemies++;
-	}
-	//一時的にステージをリロードする
-	if (aliveEnemies == 0) {
-		ReloadStage(stageNumber_);
-	}
-	*/
 }
 
 // ============================================================
@@ -365,7 +341,8 @@ void SampleScene::NotSystemUpdate() {
 	// ========== プレイヤーの移動状態を取得 ==========
 	bool isPlayerMoving = false;
 	auto playerView = registry.View<PlayerComponent, PlayerTag>();
-	if (!playerView.Empty()) {
+	bool hasPlayer = (playerView.begin() != playerView.end());
+	if (hasPlayer) {
 		auto it = playerView.begin();
 		PlayerComponent* player = registry.GetComponent<PlayerComponent>(*it);
 		if (player) {
@@ -380,7 +357,8 @@ void SampleScene::NotSystemUpdate() {
 	PlayerComponent* player = nullptr;
 	HealthComponent* playerHealth = nullptr;
 	auto playerUIView = registry.View<PlayerComponent, PlayerTag, HealthComponent>();
-	if (!playerUIView.Empty()) {
+	bool hasPlayerUI = (playerUIView.begin() != playerUIView.end());
+	if (hasPlayerUI) {
 		auto it = playerUIView.begin();
 		player = registry.GetComponent<PlayerComponent>(*it);
 		playerHealth = registry.GetComponent<HealthComponent>(*it);
@@ -503,10 +481,14 @@ void SampleScene::NotSystemUpdate() {
 	ImGui::End();
 	// カメラ手動調整ウィンドウ（自動配置後の微調整用）
 	ImGui::Begin("camera");
-	ImGui::DragFloat3("pos", &cameraTransform_.translate.x, 0.1f);
-	ImGui::DragFloat3("rot", &cameraTransform_.rotation.x, 0.1f);
+	auto cameraView = registry.View<No::ActiveCameraTag, No::TransformComponent>();
+	auto camIt = cameraView.begin();
+	if (camIt != cameraView.end()) {
+		auto* cameraTransform = registry.GetComponent<No::TransformComponent>(*camIt);
+		ImGui::DragFloat3("pos", &cameraTransform->translate.x, 0.1f);
+		ImGui::DragFloat3("rot", &cameraTransform->rotation.x, 0.1f);
+	}
 	ImGui::End();
-	camera_->SetTransform(cameraTransform_);
 
 	DebugStageControlUI(registry);
 
@@ -520,8 +502,6 @@ void SampleScene::NotSystemUpdate() {
 		UpdateGame(registry);
 	}
 #endif
-
-	camera_->Update();
 
 	DestroyGameObject();
 }
@@ -671,12 +651,26 @@ void SampleScene::InitializeLight(No::Registry& registry) {
 }
 
 // ============================================================
+//  InitializeCamera
+// ============================================================
+
+void SampleScene::InitializeCamera(No::Registry& registry) {
+	auto camera = registry.GenerateEntity();
+	registry.AddComponent<No::ActiveCameraTag>(camera);
+	registry.AddComponent<No::CameraComponent>(camera);
+	auto* cameraTransform = registry.AddComponent<No::TransformComponent>(camera);
+	cameraTransform->translate.z = -15.f;
+}
+
+// ============================================================
 //  DestroyGameObject
 // ============================================================
 
 void SampleScene::DestroyGameObject() {
 	No::Registry& registry = *GetRegistry();
-	if (registry.View<DeathFlag>().Empty()) return;
+	auto deathView = registry.View<DeathFlag>();
+	bool hasDeathFlags = (deathView.begin() != deathView.end());
+	if (!hasDeathFlags) return;
 
 	std::vector<No::Entity> toDestroy;
 	auto view = registry.View<DeathFlag>();

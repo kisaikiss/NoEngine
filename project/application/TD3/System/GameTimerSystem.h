@@ -24,7 +24,8 @@ public:
 		// プレイヤーの移動状態を取得
 		bool isPlayerMoving = false;
 		auto playerView = registry.View<PlayerComponent, PlayerTag>();
-		if (!playerView.Empty()) {
+		bool hasPlayer = (playerView.begin() != playerView.end());
+		if (hasPlayer) {
 			auto it = playerView.begin();
 			PlayerComponent* player = registry.GetComponent<PlayerComponent>(*it);
 			if (player) {

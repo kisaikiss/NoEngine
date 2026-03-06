@@ -21,7 +21,6 @@
 
 void PlayerMovementSystem::Update(No::Registry& registry, float deltaTime) {
 	auto view = registry.View<PlayerComponent, PlayerTag, No::TransformComponent>();
-	if (view.Empty())return;
 
 	for (auto entity : view) {
 		auto* player = registry.GetComponent<PlayerComponent>(entity);
@@ -710,7 +709,6 @@ bool PlayerMovementSystem::HasAmmoAtPosition(
 	int gridY
 ) {
 	auto view = registry.View<AmmoItemComponent>();
-	if (view.Empty()) return false;
 
 	for (auto entity : view) {
 		auto* ammo = registry.GetComponent<AmmoItemComponent>(entity);
@@ -761,7 +759,6 @@ void PlayerMovementSystem::EnableAmmoPickup(
 	int gridY
 ) {
 	auto view = registry.View<AmmoItemComponent>();
-	if (view.Empty()) return;
 
 	for (auto entity : view) {
 		auto* ammo = registry.GetComponent<AmmoItemComponent>(entity);

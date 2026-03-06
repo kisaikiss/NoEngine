@@ -1,5 +1,5 @@
 #include "CameraBounds.h"
-#include "engine/Functions/Camera/CameraBase.h"
+#include "engine/NoEngine.h"
 #include <cmath>
 
 // ============================================================
@@ -8,31 +8,34 @@
 // ============================================================
 
 void CameraBounds::GetVisibleBounds(
-	const NoEngine::CameraBase* camera,
+	NoEngine::ECS::Registry& registry,
 	float zPosition,
 	float& outLeft,
 	float& outRight,
 	float& outBottom,
 	float& outTop
 ) {
-	if (!camera) {
+	// カメラエンティティを取得
+	auto cameraView = registry.View<No::ActiveCameraTag, No::CameraComponent, No::TransformComponent>();
+	auto it = cameraView.begin();
+	if (it == cameraView.end()) {
 		outLeft = outRight = outBottom = outTop = 0.0f;
 		return;
 	}
 
-	// カメラの位置とProjection行列から計算
-	const auto& cameraTransform = camera->GetTransform();
-	const auto& projMatrix = camera->GetProjMatrix();
+	auto* camera = registry.GetComponent<No::CameraComponent>(*it);
+	auto* cameraTransform = registry.GetComponent<No::TransformComponent>(*it);
+	if (!camera || !cameraTransform) {
+		outLeft = outRight = outBottom = outTop = 0.0f;
+		return;
+	}
 
 	// カメラからオブジェクトまでのZ距離を計算
-	float zDistance = std::abs(zPosition - cameraTransform.translate.z);
+	float zDistance = std::abs(zPosition - cameraTransform->translate.z);
 
-	// Projection行列からFOVとアスペクト比を逆算
-	// projMatrix.m[1][1] = 1 / tan(fovY / 2)
-	// projMatrix.m[0][0] = projMatrix.m[1][1] / aspectRatio
-	
-	float tanHalfFovY = 1.0f / projMatrix.m[1][1];
-	float aspectRatio = projMatrix.m[1][1] / projMatrix.m[0][0];
+	// FOVとアスペクト比から計算
+	float tanHalfFovY = std::tan(camera->fov * 0.5f);
+	float aspectRatio = camera->aspect;
 
 	// Z距離から可視範囲を計算
 	float visibleHeight = 2.0f * zDistance * tanHalfFovY;
@@ -43,10 +46,10 @@ void CameraBounds::GetVisibleBounds(
 	float halfHeight = visibleHeight * 0.5f;
 
 	// カメラのワールド座標を中心に範囲を設定
-	outLeft = cameraTransform.translate.x - halfWidth;
-	outRight = cameraTransform.translate.x + halfWidth;
-	outBottom = cameraTransform.translate.y - halfHeight;
-	outTop = cameraTransform.translate.y + halfHeight;
+	outLeft = cameraTransform->translate.x - halfWidth;
+	outRight = cameraTransform->translate.x + halfWidth;
+	outBottom = cameraTransform->translate.y - halfHeight;
+	outTop = cameraTransform->translate.y + halfHeight;
 }
 
 // ============================================================
@@ -55,14 +58,12 @@ void CameraBounds::GetVisibleBounds(
 // ============================================================
 
 bool CameraBounds::IsInBounds(
-	const NoEngine::CameraBase* camera,
+	NoEngine::ECS::Registry& registry,
 	const NoEngine::Math::Vector3& worldPosition,
 	float offset
 ) {
-	if (!camera) return false;
-
 	float left, right, bottom, top;
-	GetVisibleBounds(camera, worldPosition.z, left, right, bottom, top);
+	GetVisibleBounds(registry, worldPosition.z, left, right, bottom, top);
 
 	// オフセット分範囲を広げる
 	left -= offset;
@@ -80,17 +81,15 @@ bool CameraBounds::IsInBounds(
 // ============================================================
 
 NoEngine::Math::Vector3 CameraBounds::LoopPosition(
-	const NoEngine::CameraBase* camera,
+	NoEngine::ECS::Registry& registry,
 	const NoEngine::Math::Vector3& worldPosition,
 	float offset,
 	bool& outLooped
 ) {
 	outLooped = false;
 
-	if (!camera) return worldPosition;
-
 	float left, right, bottom, top;
-	GetVisibleBounds(camera, worldPosition.z, left, right, bottom, top);
+	GetVisibleBounds(registry, worldPosition.z, left, right, bottom, top);
 
 	// オフセット分範囲を広げる
 	left -= offset;
