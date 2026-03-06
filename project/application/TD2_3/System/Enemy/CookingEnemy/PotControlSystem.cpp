@@ -28,8 +28,7 @@ void PotControlSystem::Update(No::Registry& registry, float deltaTime) {
 	}
 
 	auto view = registry.View<Boss2Tag>();
-	bool hasEntities = (view.begin() != view.end());
-	if (!hasEntities) return;
+
 
 	for (auto entity : view) {
 

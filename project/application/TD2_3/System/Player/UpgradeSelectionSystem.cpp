@@ -62,8 +62,6 @@ void UpgradeSelectionSystem::Update(No::Registry& registry, float deltaTime)
 {
 	// PlayerStatus の存在チェック（単一想定）
 	auto statusView = registry.View<PlayerStatusComponent>();
-	bool hasStatus = (statusView.begin() != statusView.end());
-	if (!hasStatus) return;
 
 	// UpgradeChooseComponent を持つエンティティがあれば使う（単一想定）
 	auto chooseView = registry.View<UpgradeChooseComponent>();

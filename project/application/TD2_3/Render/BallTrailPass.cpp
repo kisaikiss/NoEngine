@@ -67,8 +67,6 @@ void BallTrailPass::CollectAndGenerate(ECS::Registry& registry) {
         BallTrailComponent
     >();
 
-    bool hasEntities = (view.begin() != view.end());
-    if (!hasEntities) return;
 
     for (auto entity : view) {
         auto* trail = registry.GetComponent<BallTrailComponent>(entity);

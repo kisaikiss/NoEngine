@@ -6,8 +6,7 @@
 
 void IngredientsControlSystem::Update(No::Registry& registry, float deltaTime) {
 	auto view = registry.View<IngredientsComponent>();
-	bool hasEntities = (view.begin() != view.end());
-	if (!hasEntities) return;
+
 
 	for (auto entity : view) {
 		auto* transform = registry.GetComponent<No::TransformComponent>(entity);

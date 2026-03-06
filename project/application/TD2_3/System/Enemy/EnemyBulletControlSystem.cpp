@@ -9,8 +9,8 @@ void EnemyBulletControlSystem::Update(No::Registry& registry, float deltaTime) {
 	using namespace NoEngine;
 	using namespace MathCalculations;
 	auto view = registry.View<EnemyBulletComponent>();
-	bool hasEntities = (view.begin() != view.end());
-	if (!hasEntities) return;
+	//bool hasEntities = (view.begin() != view.end());
+	//if (!hasEntities) return;
 	for (auto entity : view) {
 		auto* t = registry.GetComponent<No::TransformComponent>(entity);
 		auto* b = registry.GetComponent<EnemyBulletComponent>(entity);

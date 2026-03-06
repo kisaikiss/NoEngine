@@ -80,8 +80,7 @@ BackGroundEffectPass::~BackGroundEffectPass()
 void BackGroundEffectPass::Execute(NoEngine::GraphicsContext& gfx, NoEngine::ECS::Registry& registry)
 {
 	auto view = registry.View<Component::TransformComponent, BackGroundComponent>();
-	bool hasEntities = (view.begin() != view.end());
-	if (!hasEntities) return;
+
 
 	// カメラの取得
 	No::Matrix4x4 viewProjMatrix = No::Matrix4x4::IDENTITY;
