@@ -42,8 +42,6 @@ public:
 
 	ECS::Registry& GetRegistry() { return *sceneManager_->GetRegistry(); }
 
-	CameraBase* GetCamera() { return sceneManager_->GetCamera(); }
-
 	/// <summary>
 	/// カスタム RenderPass を追加します。IGameApp から呼び出してください。
 	/// </summary>

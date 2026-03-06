@@ -4,7 +4,7 @@
 
 void SmokeEffectControlSystem::Update(No::Registry& registry, float deltaTime) {
 	auto view = registry.View<SmokeEffectComponent>();
-	if (view.Empty())return;
+
 	for (auto entity : view) {
 		auto* transform = registry.GetComponent<No::TransformComponent>(entity);
 		auto* smoke = registry.GetComponent<SmokeEffectComponent>(entity);

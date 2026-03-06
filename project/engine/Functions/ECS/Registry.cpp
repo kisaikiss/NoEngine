@@ -36,6 +36,10 @@ void Registry::FlushDestroy() {
 	pendingDestroy_.clear();
 }
 
+void* Registry::GetComponent(const size_t& typeId, const Entity& entity) {
+	return componentPools_[typeId]->GetVoidPointerComponent(entity);
+}
+
 bool Registry::Has(size_t typeID, Entity e) const {
 	return componentPools_[typeID]->Has(e);
 }

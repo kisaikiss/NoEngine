@@ -1,9 +1,10 @@
 #include "engine/Utilities/TypeIndex.h"
+#include "engine/Functions/ECS/Component/CameraComponent.h"
 
 namespace NoEngine{
 namespace ECS{
 template<typename CompType>
-CompType* Registry::AddComponent(const Entity entity) {
+CompType* Registry::AddComponentInternal(const Entity entity) {
 	size_t type = Utilities::TypeID<CompType>();
 	if (componentPools_.size() <= type) {
 		componentPools_.resize(type + 1);
@@ -21,6 +22,34 @@ CompType* Registry::AddComponent(const Entity entity) {
 
 	// 追加したコンポーネントを返す
 	return resultComp;
+}
+
+template<typename CompType>
+CompType* Registry::AddComponent(const Entity entity) {
+	return AddComponentInternal<CompType>(entity);
+}
+
+/// <summary>
+/// コンポーネント追加のカメラタグについての特殊化。アクティブカメラタグはただ一つとなるように動作します。
+/// </summary>
+/// <param name="e">エンティティ</param>
+/// <returns>カメラタグ</returns>
+template<>
+inline Component::ActiveCameraTag* Registry::AddComponent<Component::ActiveCameraTag>(const Entity e) {
+	// すでに付いているなら何もしない
+	if (Has<Component::ActiveCameraTag>(e))
+		return GetComponent<Component::ActiveCameraTag>(e);
+
+	// 他の Entity から ActiveCameraTag を外す
+	auto view = View<Component::ActiveCameraTag>();
+	for (Entity other : view) {
+		if (other != e && Has<Component::ActiveCameraTag>(other)) {
+			RemoveComponent<Component::ActiveCameraTag>(other);
+		}
+	}
+
+	// この Entity に付ける
+	return AddComponentInternal<Component::ActiveCameraTag>(e);
 }
 
 template<typename CompType>

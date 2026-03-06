@@ -1,15 +1,14 @@
-#include "TestScene.h"
-#include "application/TestApp/System/TestSystem.h"
+#include "stdafx.h"
+#include "TestScene2.h"
 
-void TestScene::Setup() {
-	AddSystem(std::make_unique<TestSystem>());
+void TestScene2::Setup() {
 	AddSystem(std::make_unique<No::AnimationSystem>());
 	AddSystem(std::make_unique<No::EditSystem>());
 	AddSystem(std::make_unique<No::CameraSystem>());
 
 	No::Registry& registry = *GetRegistry();
 	No::Entity entity = registry.GenerateEntity();
-	
+
 	auto* model = registry.AddComponent<No::MeshComponent>(entity);
 	auto* t = registry.AddComponent<No::TransformComponent>(entity);
 	auto* imguiName = registry.AddComponent<No::EditTag>(entity);
@@ -23,7 +22,7 @@ void TestScene::Setup() {
 	m->materials = No::ModelLoader::GetMaterial("magiclash");
 	m->drawOutline = true;
 	m->enableSkinning = true;
-	
+
 	m->psoName = L"Renderer : DefaultSkinned PSO";
 	m->psoId = NoEngine::Render::GetPSOID(m->psoName);
 	m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
@@ -63,15 +62,6 @@ void TestScene::Setup() {
 	cameraTransform->translate.z = -5.f;
 }
 
-void TestScene::NotSystemUpdate() {
-#ifdef USE_IMGUI
-	ImGui::Begin("ChangeScene");
-	if (ImGui::Button("SceneChange")) {
-		No::SceneChangeEvent event;
-		event.nextScene = "TestScene2";
-		GetRegistry()->EmitEvent(event);
-	}
-	ImGui::End();
+void TestScene2::NotSystemUpdate() {
 
-#endif // USE_IMGUI
 }

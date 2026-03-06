@@ -6,9 +6,6 @@ class GameScene : public No::IScene
 public:
 	void Setup() override;
 private:
-	std::unique_ptr<NoEngine::Camera> camera_;
-	NoEngine::Transform cameraTransform_{};
-
 	EnemyResources enemyResources_;
 
 	void NotSystemUpdate() override;

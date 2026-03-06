@@ -15,7 +15,15 @@ public:
 	} 
 	
 	static const std::vector<TypeInfo>& GetAll() { return Get().components_; }
-
+	
+	static TypeInfo* FindByName(std::string name) {
+		for (auto& comp : Get().components_) {
+			if (comp.name == name) {
+				return &comp;
+			}
+		}
+		return nullptr;
+	}
 private:
 	std::vector<TypeInfo> components_;
 	static ComponentRegistry& Get() {

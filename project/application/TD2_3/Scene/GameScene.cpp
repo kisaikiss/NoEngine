@@ -75,6 +75,8 @@ void GameScene::Setup()
 
     //アニメーションシステム
     AddSystem(std::make_unique<No::AnimationSystem>());
+    //CameraSystem
+    AddSystem(std::make_unique<No::CameraSystem>());
     //effect
     AddSystem(std::make_unique<BackGroundEffectSystem>());
 
@@ -142,10 +144,13 @@ void GameScene::Setup()
     InitTutorialSprite(registry);
     constexpr Vector3 kStartCameraPosition = Vector3{ 0.0f, 0.0f, -28.0f };
     //カメラ初期化
-    camera_ = std::make_unique<NoEngine::Camera>();
-    cameraTransform_.translate = kStartCameraPosition;
-    camera_->SetTransform(cameraTransform_);
-    SetCamera(camera_.get());
+    {
+        auto camera = registry.GenerateEntity();
+        registry.AddComponent<No::ActiveCameraTag>(camera);
+        registry.AddComponent<No::CameraComponent>(camera);
+        auto* cameraTransform = registry.AddComponent<No::TransformComponent>(camera);
+        cameraTransform->translate = kStartCameraPosition;
+    }
 
     ModelLoad();
     SoundLoad();
@@ -155,16 +160,19 @@ void GameScene::NotSystemUpdate()
 {
 #ifdef USE_IMGUI
     ImGui::Begin("camera");
-    ImGui::DragFloat3("pos", &cameraTransform_.translate.x, 0.1f);
+    auto& registry = *GetRegistry();
+    auto view = registry.View<No::ActiveCameraTag, No::TransformComponent>();
+    for (auto entity : view) {
+        auto* cameraTransform = registry.GetComponent<No::TransformComponent>(entity);
+        ImGui::DragFloat3("pos", &cameraTransform->translate.x, 0.1f);
+    }
     ImGui::End();
-    camera_->SetTransform(cameraTransform_);
 #endif // USE_IMGUI
 
     if (Input::Keyboard::IsTrigger(VK_F1) || Input::Pad::IsTrigger(Input::GamepadButton::Start))
     {
         GetRegistry()->EmitEvent(Event::SceneChangeEvent("TitleScene"));
     }
-    camera_->Update();
 
     switch (PhaseComponent::phase) {
     case Phase::ONE:

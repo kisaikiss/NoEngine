@@ -36,7 +36,10 @@ void BatGenerateSystem::Update(No::Registry& registry, float deltaTime) {
     auto batView = registry.View<BatTag>();
     auto greenBatView = registry.View<BatGreenTag>();
 
-    if (batView.NoEntity() && greenBatView.NoEntity()) {
+    bool hasBat = (batView.begin() != batView.end());
+    bool hasGreen = (greenBatView.begin() != greenBatView.end());
+
+    if (!hasBat && !hasGreen) {
         timer_ += sGenerateTime;
     }
 

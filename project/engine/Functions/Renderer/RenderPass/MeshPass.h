@@ -3,6 +3,7 @@
 #include "engine/Functions/ECS/Component/MeshComponent.h"
 #include "engine/Functions/ECS/Component/MaterialComponent.h"
 #include "engine/Functions/ECS/Component/TransformComponent.h"
+#include "engine/Functions/ECS/Component/CameraComponent.h"
 
 namespace NoEngine {
 namespace Render {
@@ -24,6 +25,7 @@ private:
     };
 
     std::vector<DrawItem> items_;
+    Component::CameraComponent* camera_;
 
     std::string outlinePSOName_;
     std::string outlineSkinnedPSOName_;

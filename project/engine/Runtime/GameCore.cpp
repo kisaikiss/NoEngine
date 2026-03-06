@@ -63,7 +63,6 @@ int RunApplication(std::unique_ptr<IGameApp> game) {
 		const float deltaTime = CalculateDeltaTime();
 		game->Update(deltaTime);
 
-		renderContext.SetCamera(game->GetCamera());
 		renderPassScheduler->SetRenderContext(renderContext);
 		renderPassScheduler->Render(context, game->GetRegistry());
 

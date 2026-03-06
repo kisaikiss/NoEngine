@@ -62,13 +62,13 @@ void UpgradeSelectionSystem::Update(No::Registry& registry, float deltaTime)
 {
 	// PlayerStatus の存在チェック（単一想定）
 	auto statusView = registry.View<PlayerStatusComponent>();
-	if (statusView.Empty()) return;
 
 	// UpgradeChooseComponent を持つエンティティがあれば使う（単一想定）
 	auto chooseView = registry.View<UpgradeChooseComponent>();
 	UpgradeChooseComponent* choose = nullptr;
-	No::Entity chooseEntity = No::Entity();
-	if (chooseView.Empty())
+	No::Entity chooseEntity = NoEngine::ECS::nullEntity;
+	bool hasChoose = (chooseView.begin() != chooseView.end());
+	if (!hasChoose)
 	{
 		// 自動作成（最初の Update で StatusSpriteTag のスプライトを収集してコンポーネントをアタッチ）
 		// Create a manager entity
@@ -82,7 +82,8 @@ void UpgradeSelectionSystem::Update(No::Registry& registry, float deltaTime)
 		{
 			auto* sp = registry.GetComponent<No::SpriteComponent>(e);
 			if (!sp) continue;
-			if (sp->name == "buttonFrame")
+			const std::string_view spriteName = sp->name;
+			if (spriteName == "buttonFrame")
 			{
 				if (frameIdx < 3)
 				{
@@ -93,7 +94,7 @@ void UpgradeSelectionSystem::Update(No::Registry& registry, float deltaTime)
 					frameIdx++;
 				}
 			}
-			else
+			else if (spriteName == "buttonOption1" || spriteName == "buttonOption2" || spriteName == "buttonOption3")
 			{
 				// option 登録（3つ想定）
 				if (optIdx < 3)
@@ -118,7 +119,7 @@ void UpgradeSelectionSystem::Update(No::Registry& registry, float deltaTime)
 	}
 
 	PlayerStatusComponent* status = nullptr;
-	No::Entity statusEnt = No::Entity();
+	No::Entity statusEnt = NoEngine::ECS::nullEntity;
 	for (auto e : statusView)
 	{
 		status = registry.GetComponent<PlayerStatusComponent>(e);
@@ -175,7 +176,7 @@ void UpgradeSelectionSystem::Update(No::Registry& registry, float deltaTime)
 		for (int i = 0; i < 3; ++i)
 		{
 			auto frameEnt = choose->frameEntities[i];
-			if (frameEnt != No::Entity() && registry.Has<No::Transform2DComponent>(frameEnt))
+			if (frameEnt != NoEngine::ECS::nullEntity && registry.Has<No::Transform2DComponent>(frameEnt))
 			{
 				auto* trf = registry.GetComponent<No::Transform2DComponent>(frameEnt);
 				trf->translate.x = choose->baseX[i];
@@ -299,7 +300,7 @@ void UpgradeSelectionSystem::Update(No::Registry& registry, float deltaTime)
 			}
 			// 同じオフセットを frame にも適用（frame が option の下に追従して上へ動く）
 			auto frameEnt = choose->frameEntities[i];
-			if (frameEnt != No::Entity() && registry.Has<No::Transform2DComponent>(frameEnt))
+			if (frameEnt != NoEngine::ECS::nullEntity && registry.Has<No::Transform2DComponent>(frameEnt))
 			{
 				auto* trf = registry.GetComponent<No::Transform2DComponent>(frameEnt);
 				trf->translate.x = choose->baseX[i];

@@ -14,8 +14,6 @@ public:
 protected:
 	RenderContext* GetRenderContext() { return renderContext_; }
 
-	// ToDo : コンフリクト回避のための関数。チーム制作終了後削除
-	const CameraBase* GetCamera() { return renderContext_->GetCamera(); }
 private:
 	RenderContext* renderContext_;
 };

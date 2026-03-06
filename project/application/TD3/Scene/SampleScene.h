@@ -2,9 +2,9 @@
 #include "engine/NoEngine.h"
 #include "../MapData/StageData.h"
 #include "../System/GameTimer.h"
-#include "../Component/PlayerComponent.h"  // Direction enum を使用するため
+#include "../Component/PlayerComponent.h"  // Direction enum ��g�p���邽��
 
-// 前方宣言
+// �O���錾
 class PlayerBulletSystem;
 class EnemySpawnerSystem;
 
@@ -13,24 +13,24 @@ class EnemySpawnerSystem;
 #endif
 
 /// <summary>
-/// サンプルシーン
+/// �T���v���V�[��
 /// </summary>
 class SampleScene : public No::IScene {
 public:
 	void Setup() override;
 
 	/// <summary>
-	/// ゲームタイマーを取得
+	/// �Q�[���^�C�}�[��擾
 	/// </summary>
 	GameTimer* GetGameTimer() { return &gameTimer_; }
 
 	/// <summary>
-	/// 敵撃破数を増やす
+	/// �G���j���𑝂₷
 	/// </summary>
 	void IncrementEnemyKillCount() { enemyKillCount_++; }
 
 	/// <summary>
-	/// 敵撃破数を取得
+	/// �G���j����擾
 	/// </summary>
 	int GetEnemyKillCount() const { return enemyKillCount_; }
 
@@ -111,13 +111,13 @@ private:
 	void NotSystemUpdate() override;
 
 	/// <summary>
-	/// イテレータ安全版の一括削除
+	/// �C�e���[�^���S�ł̈ꊇ�폜
 	/// </summary>
 	void DestroyGameObject();
 
-	// ========== システムへの参照 ==========
+	// ========== �V�X�e���ւ̎Q�� ==========
 
-	/// SetupSpawners をステージロードのたびに呼ぶため、rawポインタを保持する。
-	/// unique_ptr の所有権は IScene 側にある。
+	/// SetupSpawners ��X�e�[�W���[�h�̂��тɌĂԂ��߁Araw�|�C���^��ێ�����B
+	/// unique_ptr �̏��L���� IScene ���ɂ���B
 	EnemySpawnerSystem* spawnerSystem_ = nullptr;
 };
