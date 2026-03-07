@@ -17,6 +17,21 @@ void TestScene::Setup() {
 	auto* ballTag = registry.AddComponent<No::EditTag>(ballEntity);
 	ballTag->name = "Ball";
 
+	auto* mesh = registry.AddComponent<No::MeshComponent>(ballEntity);
+	auto* material = registry.AddComponent<No::MaterialComponent>(ballEntity);
+
+	NoEngine::Asset::ModelLoader::LoadModel(
+		"ball",
+		"resources/game/td_3105/Model/Particle/Particle.obj",
+		mesh
+	);
+	material->materials = NoEngine::Asset::ModelLoader::GetMaterial("ball");
+	material->color = { 1.0f, 1.0f, 0.0f, 1.0f };
+	material->psoName = L"Renderer : Default PSO";
+	material->psoId = NoEngine::Render::GetPSOID(material->psoName);
+	material->rootSigId = NoEngine::Render::GetRootSignatureID(material->psoName);
+
+
 	// Girl Model (既存のモデル)
 	No::Entity entity = registry.GenerateEntity();
 	auto* model = registry.AddComponent<No::MeshComponent>(entity);

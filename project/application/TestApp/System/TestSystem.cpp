@@ -36,13 +36,9 @@ void TestSystem::Update(No::Registry& registry, float deltaTime) {
 			auto* ballTransform = registry.GetComponent<No::TransformComponent>(ballEntity);
 			if (ballTransform) {
 				ballWorldPos = ballTransform->GetWorldPosition();
-				ballRadius = ballTransform->scale.x;
+				ballRadius = ballTransform->scale.x/2;
 				ballFound = true;
 				
-				//// Ballを回転させる（デバッグ用）
-				//ballTransform->translate.x = std::sin(angle_) * 2.0f;
-				//ballTransform->translate.y = std::cos(angle_) * 1.0f;
-				//
 				// Primitiveで球を描画
 				NoEngine::Primitive::DrawSphere(ballWorldPos, ballRadius, { 0.0f, 1.0f, 0.0f, 1.0f });
 				break;
