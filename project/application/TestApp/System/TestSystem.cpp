@@ -5,6 +5,7 @@
 void TestSystem::Update(No::Registry& registry, float deltaTime) {
 
 	static_cast<void>(deltaTime);
+
 	// 1. カメラ情報を取得
 	No::CameraComponent* camera = nullptr;
 	No::TransformComponent* cameraTransform = nullptr;
@@ -61,9 +62,17 @@ void TestSystem::Update(No::Registry& registry, float deltaTime) {
 		(ballWorldPos.z - cameraPos.z) * (ballWorldPos.z - cameraPos.z)
 	);
 
-	// 焦点距離を計算
-	float focalLength = static_cast<float>(windowSize.clientHeight) / (2.0f * std::tan(camera->fov / 2.0f));
-	float screenRadius = (ballRadius * focalLength) / distance;
+	// Ballの右端の点のワールド座標を計算
+	No::Vector3 ballRightEdge = ballWorldPos;
+	ballRightEdge.x += ballRadius;
+
+	// Ballの右端をスクリーン座標に変換
+	No::Vector2 screenPosRight = WorldToScreen(ballRightEdge, camera->forGPU.viewProjection, windowSize);
+
+	// スクリーン上の中心と右端の距離から半径を計算
+	float dx = screenPosRight.x - screenPos.x;
+	float dy = screenPosRight.y - screenPos.y;
+	float screenRadius = std::sqrt(dx * dx + dy * dy);
 
 	// 6. 当たり判定用Spriteとの衝突判定
 	auto spriteView = registry.View<No::Transform2DComponent, No::SpriteComponent, No::EditTag>();
