@@ -114,4 +114,60 @@ namespace TestApp {
 		return distanceSquared <= radiusSumSquared;
 	}
 
-} 
+	bool CollisionAlgorithms::CheckSphereAABB3D(
+		const No::Vector3& sphereCenter, float radius,
+		const No::Vector3& boxCenter, const No::Vector3& boxSize
+	) {
+		// AABBのハーフサイズを計算
+		float halfX = boxSize.x * 0.5f;
+		float halfY = boxSize.y * 0.5f;
+		float halfZ = boxSize.z * 0.5f;
+
+		// AABBの各軸の範囲
+		float minX = boxCenter.x - halfX;
+		float maxX = boxCenter.x + halfX;
+		float minY = boxCenter.y - halfY;
+		float maxY = boxCenter.y + halfY;
+		float minZ = boxCenter.z - halfZ;
+		float maxZ = boxCenter.z + halfZ;
+
+		// 球体の中心からAABBの最近接点を求める
+		float closestX = std::clamp(sphereCenter.x, minX, maxX);
+		float closestY = std::clamp(sphereCenter.y, minY, maxY);
+		float closestZ = std::clamp(sphereCenter.z, minZ, maxZ);
+
+		// 球体の中心と最近接点の距離の二乗を計算
+		float dx = sphereCenter.x - closestX;
+		float dy = sphereCenter.y - closestY;
+		float dz = sphereCenter.z - closestZ;
+		float distanceSquared = dx * dx + dy * dy + dz * dz;
+
+		// 距離が半径以下なら衝突
+		return distanceSquared <= (radius * radius);
+	}
+
+	bool CollisionAlgorithms::CheckAABB3DAABB3D(
+		const No::Vector3& center1, const No::Vector3& size1,
+		const No::Vector3& center2, const No::Vector3& size2
+	) {
+		// 各AABBのハーフサイズを計算
+		float halfX1 = size1.x * 0.5f;
+		float halfY1 = size1.y * 0.5f;
+		float halfZ1 = size1.z * 0.5f;
+		float halfX2 = size2.x * 0.5f;
+		float halfY2 = size2.y * 0.5f;
+		float halfZ2 = size2.z * 0.5f;
+
+		// 各軸で範囲が重なっているかチェック
+		// X / Y / Z の全軸で重なっていれば衝突
+		bool overlapX = (center1.x - halfX1) <= (center2.x + halfX2) &&
+			(center1.x + halfX1) >= (center2.x - halfX2);
+		bool overlapY = (center1.y - halfY1) <= (center2.y + halfY2) &&
+			(center1.y + halfY1) >= (center2.y - halfY2);
+		bool overlapZ = (center1.z - halfZ1) <= (center2.z + halfZ2) &&
+			(center1.z + halfZ1) >= (center2.z - halfZ2);
+
+		return overlapX && overlapY && overlapZ;
+	}
+
+}

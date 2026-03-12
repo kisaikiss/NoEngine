@@ -48,6 +48,12 @@ namespace TestApp {
 		// ========================================
 
 		/// <summary>
+		/// 3Dコライダー同士の衝突判定
+		/// ShapeTypeの組み合わせに応じて Sphere-Sphere / Sphere-Box / Box-Box を自動選択
+		/// </summary>
+		void Check3DVs3D(No::Registry& registry);
+
+		/// <summary>
 		/// 投影された3Dコライダーと2Dコライダーの衝突判定
 		/// レイヤーマスクによるフィルタリングを適用
 		/// </summary>

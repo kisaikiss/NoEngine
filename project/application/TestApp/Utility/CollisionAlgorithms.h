@@ -76,6 +76,34 @@ namespace TestApp {
 			const No::Vector3& center1, float radius1,
 			const No::Vector3& center2, float radius2
 		);
+
+		/// <summary>
+		/// 球体と3D AABB（軸平行境界ボックス）の衝突判定
+		/// 球体の中心からAABBの最近接点を求め、その距離が半径以下かどうかで判定
+		/// </summary>
+		/// <param name="sphereCenter">球体の中心座標</param>
+		/// <param name="radius">球体の半径</param>
+		/// <param name="boxCenter">ボックスの中心座標</param>
+		/// <param name="boxSize">ボックスのフルサイズ（幅・高さ・奥行き）</param>
+		/// <returns>衝突している場合true</returns>
+		static bool CheckSphereAABB3D(
+			const No::Vector3& sphereCenter, float radius,
+			const No::Vector3& boxCenter, const No::Vector3& boxSize
+		);
+
+		/// <summary>
+		/// 3D AABB同士の衝突判定
+		/// 各軸で範囲が重なっているかどうかで判定
+		/// </summary>
+		/// <param name="center1">ボックス1の中心座標</param>
+		/// <param name="size1">ボックス1のフルサイズ（幅・高さ・奥行き）</param>
+		/// <param name="center2">ボックス2の中心座標</param>
+		/// <param name="size2">ボックス2のフルサイズ（幅・高さ・奥行き）</param>
+		/// <returns>衝突している場合true</returns>
+		static bool CheckAABB3DAABB3D(
+			const No::Vector3& center1, const No::Vector3& size1,
+			const No::Vector3& center2, const No::Vector3& size2
+		);
 	};
 
 }

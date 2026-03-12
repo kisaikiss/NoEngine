@@ -18,6 +18,10 @@ namespace TestApp {
 		UpdateCollider3D(registry);
 		UpdateCollider2D(registry);
 
+		// 3D同士の衝突判定
+		// ShapeTypeを見て最適なアルゴリズムを自動選択
+		Check3DVs3D(registry);
+
 		// 3Dを2D投影処理
 		// カメラ情報を使用して3Dコライダーをスクリーン座標に投影
 		ProjectColliders(registry);
@@ -57,6 +61,19 @@ namespace TestApp {
 			} else {
 				// 設定された半径を直接使用
 				collider->worldRadius = collider->radius * collider->radiusMultiplier;
+			}
+
+			// Box形状の場合はworldBoxSizeも更新
+			if (collider->shapeType == ShapeType3D::Box) {
+				if (collider->useScaleAsBox) {
+					collider->worldBoxSize.x = std::abs(transform->scale.x) * collider->boxSizeMultiplier.x;
+					collider->worldBoxSize.y = std::abs(transform->scale.y) * collider->boxSizeMultiplier.y;
+					collider->worldBoxSize.z = std::abs(transform->scale.z) * collider->boxSizeMultiplier.z;
+				} else {
+					collider->worldBoxSize.x = collider->boxSize.x * collider->boxSizeMultiplier.x;
+					collider->worldBoxSize.y = collider->boxSize.y * collider->boxSizeMultiplier.y;
+					collider->worldBoxSize.z = collider->boxSize.z * collider->boxSizeMultiplier.z;
+				}
 			}
 
 			// 衝突フラグをリセット
@@ -192,6 +209,68 @@ namespace TestApp {
 						collider3D->isColliding = true;
 						collider3D->collidedEntity = collider2DEntity;
 					}
+				}
+			}
+		}
+	}
+
+
+	void CollisionTestSystem::Check3DVs3D(No::Registry& registry) {
+
+		auto view = registry.View<Collider3DComponent>();
+
+		// 総当たり（二重ループ、重複回避のため内側は外側の次から）
+		for (auto it1 = view.begin(); it1 != view.end(); ++it1) {
+			auto entity1 = *it1;
+			auto* c1 = registry.GetComponent<Collider3DComponent>(entity1);
+			if (!c1) continue;
+
+			auto it2 = it1;
+			++it2;
+			for (; it2 != view.end(); ++it2) {
+				auto entity2 = *it2;
+				auto* c2 = registry.GetComponent<Collider3DComponent>(entity2);
+				if (!c2) continue;
+
+				// レイヤーマスク 双方向チェック
+				bool c1CanHitC2 = (c1->collisionLayer & c2->collisionMask) != CollisionType::None;
+				bool c2CanHitC1 = (c2->collisionLayer & c1->collisionMask) != CollisionType::None;
+				if (!c1CanHitC2 || !c2CanHitC1) continue;
+
+				// ShapeType の組み合わせで判定アルゴリズムを切り替え
+				bool isColliding = false;
+
+				if (c1->shapeType == ShapeType3D::Sphere && c2->shapeType == ShapeType3D::Sphere) {
+					// Sphere vs Sphere
+					isColliding = CollisionAlgorithms::CheckSphereSphere(
+						c1->worldPosition, c1->worldRadius,
+						c2->worldPosition, c2->worldRadius
+					);
+				} else if (c1->shapeType == ShapeType3D::Sphere && c2->shapeType == ShapeType3D::Box) {
+					// Sphere vs Box
+					isColliding = CollisionAlgorithms::CheckSphereAABB3D(
+						c1->worldPosition, c1->worldRadius,
+						c2->worldPosition, c2->worldBoxSize
+					);
+				} else if (c1->shapeType == ShapeType3D::Box && c2->shapeType == ShapeType3D::Sphere) {
+					// Box vs Sphere（引数順を逆にして再利用）
+					isColliding = CollisionAlgorithms::CheckSphereAABB3D(
+						c2->worldPosition, c2->worldRadius,
+						c1->worldPosition, c1->worldBoxSize
+					);
+				} else {
+					// Box vs Box
+					isColliding = CollisionAlgorithms::CheckAABB3DAABB3D(
+						c1->worldPosition, c1->worldBoxSize,
+						c2->worldPosition, c2->worldBoxSize
+					);
+				}
+
+				if (isColliding) {
+					c1->isColliding = true;
+					c1->collidedEntity = entity2;
+					c2->isColliding = true;
+					c2->collidedEntity = entity1;
 				}
 			}
 		}

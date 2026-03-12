@@ -10,7 +10,7 @@ using namespace TestApp;
 
 
 void TestScene3::Setup() {
-	
+
 	// CollisionTestSystemは当たり判定処理の先に実行される必要がある
 	AddSystem(std::make_unique<TestApp::CollisionTestSystem>());
 	AddSystem(std::make_unique<TestSystem>());
@@ -72,7 +72,7 @@ void TestScene3::Setup() {
 	// メッシュとマテリアル
 	auto* ball2Mesh = registry.AddComponent<No::MeshComponent>(ball2Entity);
 	auto* ball2Material = registry.AddComponent<No::MaterialComponent>(ball2Entity);
-	
+
 	// 既に読み込まれているモデルを取得
 	NoEngine::Asset::ModelLoader::GetModel("ball", ball2Mesh);
 	ball2Material->materials = NoEngine::Asset::ModelLoader::GetMaterial("ball");
@@ -137,6 +137,45 @@ void TestScene3::Setup() {
 	sprite2Collider->collisionLayer = CollisionType::Enemy;
 	sprite2Collider->collisionMask = CollisionMask::Enemy;
 
+
+
+	// ========================================
+	// Cube Block（3D AABB地形）
+	// ========================================
+
+	No::Entity cubeEntity = registry.GenerateEntity();
+	auto* cubeTransform = registry.AddComponent<No::TransformComponent>(cubeEntity);
+	cubeTransform->translate = { 0.f, 0.f, 7.f };	// Ball1の少し奥
+	cubeTransform->scale = { 1.f, 1.f, 1.f };		// 1x1x1
+	auto* cubeTag = registry.AddComponent<No::EditTag>(cubeEntity);
+	cubeTag->name = "CubeBlock";
+
+	// メッシュとマテリアル
+	auto* cubeMesh = registry.AddComponent<No::MeshComponent>(cubeEntity);
+	auto* cubeMaterial = registry.AddComponent<No::MaterialComponent>(cubeEntity);
+	NoEngine::Asset::ModelLoader::LoadModel(
+		"cube",
+		"resources/game/td_3105/Model/cube/cube.obj",
+		cubeMesh
+	);
+	cubeMaterial->materials = NoEngine::Asset::ModelLoader::GetMaterial("cube");
+	cubeMaterial->color = { 0.5f, 0.5f, 0.5f, 1.0f }; // 初期色: グレー
+	cubeMaterial->psoName = L"Renderer : Default PSO";
+	cubeMaterial->psoId = NoEngine::Render::GetPSOID(cubeMaterial->psoName);
+	cubeMaterial->rootSigId = NoEngine::Render::GetRootSignatureID(cubeMaterial->psoName);
+
+	// コライダー設定（AABB Box）
+	// scale = (1,1,1) をそのままボックスサイズに使用
+	auto* cubeCollider = registry.AddComponent<TestApp::Collider3DComponent>(cubeEntity);
+	cubeCollider->shapeType = TestApp::ShapeType3D::Box;
+	cubeCollider->useScaleAsBox = true;				// Transformのscaleをそのまま使用
+	cubeCollider->boxSizeMultiplier = { 1.f, 1.f, 1.f };
+	cubeCollider->collisionLayer = CollisionType::Block;
+	cubeCollider->collisionMask = CollisionMask::Block;
+
+	// スクリーン投影用（デバッグ描画のため）
+	auto* cubeProjected = registry.AddComponent<TestApp::ProjectedColliderComponent>(cubeEntity);
+	cubeProjected->source3DEntity = cubeEntity;
 
 
 	// ========================================
@@ -220,6 +259,21 @@ void TestScene3::DrawCollisionImGui()
 {
 
 	No::Registry& registry = *GetRegistry();
+
+	// 衝突結果を可視化（3Dモデルの色変更）
+	auto meshView = registry.View<TestApp::Collider3DComponent, No::MaterialComponent>();
+	for (auto entity : meshView) {
+		auto* collider3D = registry.GetComponent<TestApp::Collider3DComponent>(entity);
+		auto* material = registry.GetComponent<No::MaterialComponent>(entity);
+		if (!collider3D || !material) continue;
+
+		// 衝突している場合は赤、していない場合は白
+		if (collider3D->isColliding) {
+			material->color = { 1.0f, 0.0f, 0.0f, 1.0f }; // 赤
+		} else {
+			material->color = { 1.0f, 1.0f, 1.0f, 1.0f }; // 白
+		}
+	}
 
 	// 衝突結果を可視化（2Dスプライトの色変更）
 
