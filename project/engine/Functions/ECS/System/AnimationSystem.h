@@ -9,6 +9,8 @@ namespace ECS {
 class AnimationSystem :
 	public ISystem {
 public:
+	AnimationSystem();
+	void Update(ComputeContext& ctx, Registry& registry, float deltaTime) override;
 	void Update(Registry& registry, float deltaTime) override;
 private:
 	void AnimationUpdate(Registry& registry, float deltaTime);
@@ -19,6 +21,7 @@ private:
 	void CalculateValue(const NodeAnimation& keyframes, Transform& transform, float time);
 	Math::Vector3 CalculateValue(const std::vector<KeyframeVector3>& keyframes, float time);
 	Math::Quaternion CalculateValue(const std::vector<KeyframeQuaternion>& keyframes, float time);
+
 };
 
 }

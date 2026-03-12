@@ -53,6 +53,7 @@ int RunApplication(std::unique_ptr<IGameApp> game) {
 
 		GraphicsContext& context = GraphicsContext::Begin();
 		GraphicsCore::gWindowManager.Clear(context);
+		ComputeContext& ctx = ComputeContext::Begin(L"MainComputeContext", true);
 
 		InputUpdate();
 
@@ -61,7 +62,7 @@ int RunApplication(std::unique_ptr<IGameApp> game) {
 #endif // USE_IMGUI
 
 		const float deltaTime = CalculateDeltaTime();
-		game->Update(deltaTime);
+		game->Update(ctx, deltaTime);
 
 		renderPassScheduler->SetRenderContext(renderContext);
 		renderPassScheduler->Render(context, game->GetRegistry());
@@ -70,7 +71,7 @@ int RunApplication(std::unique_ptr<IGameApp> game) {
 		imguiManager.Render(context);
 #endif // USE_IMGUI
 
-		
+		ctx.Finish(true);
 		GraphicsCore::gWindowManager.EndFrame(context);
 		if (game->Exit()) break;
 	}

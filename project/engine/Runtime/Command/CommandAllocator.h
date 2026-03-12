@@ -5,7 +5,7 @@ namespace NoEngine {
 /// </summary>
 class CommandAllocator {
 public:
-	CommandAllocator(ID3D12Device* device);
+	CommandAllocator(D3D12_COMMAND_LIST_TYPE type, ID3D12Device* device);
 	~CommandAllocator();
 
 	ID3D12CommandAllocator* GetCommandAllocator() { return commandAllocator_.Get(); }

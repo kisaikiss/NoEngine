@@ -18,7 +18,7 @@ public:
 	// immediate == false: CircleScale 遷移開始
 	void ChangeScene(const std::string& name, bool immediate = true);
 
-	void Update(float deltaTime);
+	void Update(ComputeContext& ctx, float deltaTime);
 
 	ECS::Registry* GetRegistry() { return currentScene_ ? currentScene_->GetRegistry() : nullptr; }
 

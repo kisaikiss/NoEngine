@@ -43,7 +43,7 @@ ID3D12CommandAllocator* CommandAllocatorPool::RequestAllocator(uint64_t complete
     // 再利用できるアロケータがない場合は、新しいアロケータを作成します。
     if (allocator == nullptr) {
         // アロケータのラッパークラスを生成します。
-        std::unique_ptr<CommandAllocator> commandAllocator = std::make_unique<CommandAllocator>(device_);
+        std::unique_ptr<CommandAllocator> commandAllocator = std::make_unique<CommandAllocator>(commandListType_, device_);
 
         // アロケータの取得します。
         allocator = commandAllocator->GetCommandAllocator();

@@ -28,12 +28,12 @@ public:
 	/// 更新処理を行います。フレームごとに1回呼び出されます。
 	/// </summary>
 	/// <param name="deltaT">経過時間</param>
-	virtual void Update(float deltaT) {
+	virtual void Update(ComputeContext& ctx, float deltaT) {
 		if (auto event = GetRegistry().PollEvent<Event::SceneChangeEvent>()) {
 			ChangeScene(event->nextScene, true);
 		}
 
-		UpdateScene(deltaT);
+		UpdateScene(ctx, deltaT);
 	};
 
 	virtual void RenderScene(void) {};
@@ -61,7 +61,7 @@ protected:
 
 	void ChangeScene(const std::string& name, bool immediate = true) { sceneManager_->ChangeScene(name,immediate); }
 
-	void UpdateScene(float deltaTime) { sceneManager_->Update(deltaTime); }
+	void UpdateScene(ComputeContext& ctx, float deltaTime) { sceneManager_->Update(ctx, deltaTime); }
 
 	void ShutdownSceneManager() { sceneManager_.reset(); }
 

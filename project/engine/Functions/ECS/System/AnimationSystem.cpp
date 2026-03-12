@@ -2,10 +2,24 @@
 #include "engine/Functions/Renderer/Primitive.h"
 #include "engine/Math/Types/Calculations/Matrix4x4Calculations.h"
 #include "engine/Math/Types/Calculations/QuaternionCalculations.h"
+#include "engine/Runtime/PipelineStateObject/ComputePSO.h"
+#include "engine/Functions/Shader/ShaderModule.h"
+
 
 namespace NoEngine {
 namespace ECS {
 using namespace Math;
+
+
+AnimationSystem::AnimationSystem() {
+	ShaderModule animationCS(ShaderStage::Compute, L"resources/engine/Shaders/Compute/Skinning.CS.hlsl", L"cs_6_0");
+}
+
+void AnimationSystem::Update(ComputeContext& ctx, Registry& registry, float deltaTime) {
+	(void)ctx;
+	Update(registry, deltaTime);
+}
+
 void AnimationSystem::Update(Registry& registry, float deltaTime) {
 	AnimationUpdate(registry, deltaTime);
 }
@@ -121,5 +135,7 @@ Quaternion AnimationSystem::CalculateValue(const std::vector<KeyframeQuaternion>
 	// ここまできた場合は一番後の時刻よりも後ろなので最後の値を返すことにする
 	return (*keyframes.rbegin()).value;
 }
+
+
 }
 }

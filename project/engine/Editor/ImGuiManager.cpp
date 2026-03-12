@@ -21,7 +21,7 @@ void ImGuiManager::Initialize() {
 	config.OversampleH = 2;
 	config.OversampleV = 2;
 	config.PixelSnapH = true;
-	io.Fonts->AddFontFromFileTTF("externals/fonts/ISE-FONT4/Isego.otf", 14.0f, &config);
+	io.Fonts->AddFontFromFileTTF("resources/engine/fonts/ISE-FONT4/Isego.otf", 14.0f, &config);
 
 	ImGuiStyle& style = ImGui::GetStyle();
 	style.WindowRounding = 8.0f;
