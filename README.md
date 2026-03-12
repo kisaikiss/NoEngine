@@ -4,7 +4,7 @@
 > [!NOTE]
 > | Branch | Debug | Release |
 > | ------------- | ------------- | ------------- |
-> | master |[![DebugBuild](https://github.com/kisaikiss/NoEngine/actions/workflows/DebugBuild.yml/badge.svg)](https://github.com/kisaikiss/NoEngine/actions/workflows/DebugBuild.yml)| ------------- |
+> | master |[![DebugBuild](https://github.com/kisaikiss/NoEngine/actions/workflows/DebugBuild.yml/badge.svg)](https://github.com/kisaikiss/NoEngine/actions/workflows/DebugBuild.yml)| [![ReleaseBuild](https://github.com/kisaikiss/NoEngine/actions/workflows/ReleaseBuild.yml/badge.svg)](https://github.com/kisaikiss/NoEngine/actions/workflows/ReleaseBuild.yml) |
   
 ## NoEngineについて
 NoEngineは2025年11月3日にて本格的に制作が開始されたゲームエンジンです。  
