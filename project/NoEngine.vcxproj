@@ -225,7 +225,10 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\TD3\System\ShockwaveSystem.cpp" />
     <ClCompile Include="application\TD3\Utility\CameraBounds.cpp" />
     <ClCompile Include="application\TestApp\Scene\TestScene2.cpp" />
+    <ClCompile Include="application\TestApp\System\CollisionTestSystem.cpp" />
     <ClCompile Include="application\TestApp\TestApp.cpp" />
+    <ClCompile Include="application\TestApp\Utility\CollisionAlgorithms.cpp" />
+    <ClCompile Include="application\TestApp\Utility\CoordinateConverter.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\CameraSystem.cpp" />
     <ClCompile Include="engine\Assets\Audio\Audio.cpp" />
     <ClCompile Include="engine\Editor\DataDriven\SceneSerializer.cpp" />
@@ -356,6 +359,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Development|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="engine\Assets\Texture\Texture.cpp" />
+    <ClCompile Include="application\TestApp\Scene\TestScene3.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="application\TD2_3\Component\BackGroundComponent.h" />
@@ -460,8 +464,15 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\TD3\System\ShockwaveSystem.h" />
     <ClInclude Include="application\TD3\Utility\CameraBounds.h" />
     <ClInclude Include="application\TD3\Utility\GridUtils.h" />
+    <ClInclude Include="application\TestApp\Component\Collider2DComponent.h" />
+    <ClInclude Include="application\TestApp\Component\Collider3DComponent.h" />
+    <ClInclude Include="application\TestApp\Component\ProjectedColliderComponent.h" />
     <ClInclude Include="application\TestApp\Scene\TestScene2.h" />
+    <ClInclude Include="application\TestApp\System\CollisionTestSystem.h" />
     <ClInclude Include="application\TestApp\TestApp.h" />
+    <ClInclude Include="application\TestApp\Utility\CollisionAlgorithms.h" />
+    <ClInclude Include="application\TestApp\Utility\CollisionMask.h" />
+    <ClInclude Include="application\TestApp\Utility\CoordinateConverter.h" />
     <ClInclude Include="engine\Functions\ECS\System\CameraSystem.h" />
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
     <ClInclude Include="engine\Editor\ComponentRegistry.h" />
@@ -628,6 +639,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="engine\Assets\Texture\Texture.h" />
+    <ClInclude Include="application\TestApp\Scene\TestScene3.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="externals\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">

@@ -181,6 +181,10 @@
     <ClCompile Include="application\TD3\System\ShockwaveSystem.cpp" />
     <ClCompile Include="application\TD3\Utility\CameraBounds.cpp" />
     <ClCompile Include="application\TD3\OneSide.cpp" />
+    <ClCompile Include="application\TestApp\Utility\CoordinateConverter.cpp" />
+    <ClCompile Include="application\TestApp\Utility\CollisionAlgorithms.cpp" />
+    <ClCompile Include="application\TestApp\System\CollisionTestSystem.cpp" />
+    <ClCompile Include="application\TestApp\Scene\TestScene3.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="application\TD2_3\Component\BackGroundComponent.h" />
@@ -423,6 +427,14 @@
     <ClInclude Include="application\TD3\Utility\GridUtils.h" />
     <ClInclude Include="application\TD3\GameTag.h" />
     <ClInclude Include="application\TD3\OneSide.h" />
+    <ClInclude Include="application\TestApp\Component\Collider3DComponent.h" />
+    <ClInclude Include="application\TestApp\Component\Collider2DComponent.h" />
+    <ClInclude Include="application\TestApp\Component\ProjectedColliderComponent.h" />
+    <ClInclude Include="application\TestApp\Utility\CoordinateConverter.h" />
+    <ClInclude Include="application\TestApp\Utility\CollisionAlgorithms.h" />
+    <ClInclude Include="application\TestApp\System\CollisionTestSystem.h" />
+    <ClInclude Include="application\TestApp\Scene\TestScene3.h" />
+    <ClInclude Include="application\TestApp\Utility\CollisionMask.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />
