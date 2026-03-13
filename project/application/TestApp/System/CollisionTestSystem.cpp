@@ -127,26 +127,99 @@ namespace TestApp {
 			auto* collider3D = registry.GetComponent<Collider3DComponent>(entity);
 			auto* projected = registry.GetComponent<ProjectedColliderComponent>(entity);
 			if (!collider3D || !projected) continue;
-			// ワールド座標をスクリーン座標に投影
-			projected->screenPosition = CoordinateConverter::WorldToScreen(
-				collider3D->worldPosition,
-				camera->forGPU.viewProjection,
-				windowSize
-			);
-			// ワールド半径をスクリーン半径に投影
-			// 透視投影による距離補正が適用される
-			projected->screenRadius = CoordinateConverter::WorldRadiusToScreen(
-				collider3D->worldPosition,
-				collider3D->worldRadius,
-				camera->forGPU.viewProjection,
-				windowSize
-			);
 
-			// 可視性を判定
-			projected->isVisible = CoordinateConverter::IsOnScreen(
-				projected->screenPosition,
-				windowSize
-			) && projected->screenRadius > 0.0f;
+			if (collider3D->shapeType == ShapeType3D::Sphere) {
+
+				// Sphere
+				projected->isBox = false;
+				// ワールド座標をスクリーン座標に投影
+				projected->screenPosition = CoordinateConverter::WorldToScreen(
+					collider3D->worldPosition,
+					camera->forGPU.viewProjection,
+					windowSize
+				);
+				// ワールド半径をスクリーン半径に投影
+				// 透視投影による距離補正が適用される
+				projected->screenRadius = CoordinateConverter::WorldRadiusToScreen(
+					collider3D->worldPosition,
+					collider3D->worldRadius,
+					camera->forGPU.viewProjection,
+					windowSize
+				);
+				// 可視性を判定
+				projected->isVisible = CoordinateConverter::IsOnScreen(
+					projected->screenPosition,
+					windowSize
+				) && projected->screenRadius > 0.0f;
+
+			} else {
+				// Box: 8頂点を全て投影して screenAABB を構築
+				// clipW <= 0 の頂点は IsValidProjection で除外する
+				projected->isBox = true;
+
+				// ハーフサイズを計算
+				const No::Vector3& c = collider3D->worldPosition;
+				const float hx = collider3D->worldBoxSize.x * 0.5f;
+				const float hy = collider3D->worldBoxSize.y * 0.5f;
+				const float hz = collider3D->worldBoxSize.z * 0.5f;
+
+				// 8頂点（手前面4点 + 奥面4点）
+				const No::Vector3 corners[8] = {
+					{ c.x - hx,  c.y - hy,  c.z - hz },
+					{ c.x + hx,  c.y - hy,  c.z - hz },
+					{ c.x + hx,  c.y + hy,  c.z - hz },
+					{ c.x - hx,  c.y + hy,  c.z - hz },
+					{ c.x - hx,  c.y - hy,  c.z + hz },
+					{ c.x + hx,  c.y - hy,  c.z + hz },
+					{ c.x + hx,  c.y + hy,  c.z + hz },
+					{ c.x - hx,  c.y + hy,  c.z + hz },
+				};
+
+				// 有効な投影点から screenAABB を計算
+				bool initialized = false;
+				No::Vector2 screenMin{};
+				No::Vector2 screenMax{};
+
+				for (int i = 0; i < 8; ++i) {
+					No::Vector2 s = CoordinateConverter::WorldToScreen(
+						corners[i],
+						camera->forGPU.viewProjection,
+						windowSize
+					);
+					// clipW <= 0 や near/far クリッピング対象の頂点はスキップ
+					if (!CoordinateConverter::IsValidProjection(s)) continue;
+
+					if (!initialized) {
+						screenMin = screenMax = s;
+						initialized = true;
+					} else {
+						screenMin.x = std::min(screenMin.x, s.x);
+						screenMin.y = std::min(screenMin.y, s.y);
+						screenMax.x = std::max(screenMax.x, s.x);
+						screenMax.y = std::max(screenMax.y, s.y);
+					}
+				}
+
+				if (initialized) {
+					projected->screenMin = screenMin;
+					projected->screenMax = screenMax;
+					// 中心座標（ImGui 表示 / AABB 計算の両方で使用）
+					projected->screenPosition = {
+						(screenMin.x + screenMax.x) * 0.5f,
+						(screenMin.y + screenMax.y) * 0.5f
+					};
+					// 画面と重なっているかチェック（マージン付き）
+					constexpr float margin = 100.0f;
+					const float wf = static_cast<float>(windowSize.clientWidth);
+					const float hf = static_cast<float>(windowSize.clientHeight);
+					projected->isVisible =
+						screenMax.x >= -margin && screenMin.x <= wf + margin &&
+						screenMax.y >= -margin && screenMin.y <= hf + margin;
+				} else {
+					// 有効な頂点が1つもなかった（全頂点がカメラ裏）
+					projected->isVisible = false;
+				}
+			}
 			// 衝突レイヤー情報をコピー
 			projected->collisionLayer = collider3D->collisionLayer;
 			projected->collisionMask = collider3D->collisionMask;
@@ -183,15 +256,27 @@ namespace TestApp {
 					continue; // レイヤーが一致しないのでスキップ
 				}
 
-				// 円とAABBの衝突判定
-				// 投影されたコライダー円
-				// 2DコライダーAABB
-				bool isColliding = CollisionAlgorithms::CheckCircleAABB(
-					projected->screenPosition,
-					projected->screenRadius,
-					collider2D->screenPosition,
-					collider2D->worldSize
-				);
+				// 形状タイプに応じて判定アルゴリズムを切り替え
+				bool isColliding = false;
+				if (projected->isBox) {
+					// 投影された AABB vs 2D AABB
+					// screenMin/Max から center + size を計算して CheckAABBAABB に渡す
+					No::Vector2 projCenter = projected->screenPosition; // 既に中心として計算済み
+					No::Vector2 projSize = {
+						projected->screenMax.x - projected->screenMin.x,
+						projected->screenMax.y - projected->screenMin.y
+					};
+					isColliding = CollisionAlgorithms::CheckAABBAABB(
+						projCenter, projSize,
+						collider2D->screenPosition, collider2D->worldSize
+					);
+				} else {
+					// 投影された円 vs 2D AABB
+					isColliding = CollisionAlgorithms::CheckCircleAABB(
+						projected->screenPosition, projected->screenRadius,
+						collider2D->screenPosition, collider2D->worldSize
+					);
+				}
 
 				// 衝突結果を設定
 				if (isColliding) {

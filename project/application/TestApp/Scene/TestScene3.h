@@ -7,6 +7,9 @@ public:
 private:
 	void NotSystemUpdate() override;
 
+	void DrawColliderDebug3D(No::Registry& registry);
+
+
+	void DrawCollisionColor(No::Registry& registry);
 	void DrawCollisionImGui();
 };
-

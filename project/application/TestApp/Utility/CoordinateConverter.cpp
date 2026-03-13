@@ -124,6 +124,12 @@ namespace TestApp {
 		return screenRadius;
 	}
 
+	bool CoordinateConverter::IsValidProjection(const No::Vector2& screenPos) {
+		// WorldToScreen が clipW <= 0 または ndcZ 範囲外のとき kOffScreenValue を返す
+		// その値と一致しない = 有効な投影
+		return screenPos.x != kOffScreenValue && screenPos.y != kOffScreenValue;
+	}
+
 	bool CoordinateConverter::IsOnScreen(
 		const No::Vector2& screenPos,
 		const NoEngine::WindowSize& windowSize

@@ -145,7 +145,7 @@ void TestScene3::Setup() {
 
 	No::Entity cubeEntity = registry.GenerateEntity();
 	auto* cubeTransform = registry.AddComponent<No::TransformComponent>(cubeEntity);
-	cubeTransform->translate = { 0.f, 0.f, 7.f };	// Ball1の少し奥
+	cubeTransform->translate = { 1.f, 1.f, 7.f };	// Ball1の少し奥
 	cubeTransform->scale = { 1.f, 1.f, 1.f };		// 1x1x1
 	auto* cubeTag = registry.AddComponent<No::EditTag>(cubeEntity);
 	cubeTag->name = "CubeBlock";
@@ -255,11 +255,46 @@ void TestScene3::NotSystemUpdate() {
 #endif // USE_IMGUI
 }
 
-void TestScene3::DrawCollisionImGui()
+void TestScene3::DrawColliderDebug3D(No::Registry& registry)
 {
+	auto view = registry.View<
+		TestApp::Collider3DComponent,
+		TestApp::ProjectedColliderComponent>();
 
-	No::Registry& registry = *GetRegistry();
+	for (auto entity : view) {
+		auto* c3D = registry.GetComponent<TestApp::Collider3DComponent>(entity);
+		auto* projected = registry.GetComponent<TestApp::ProjectedColliderComponent>(entity);
+		if (!c3D || !projected) continue;
 
+		// 画面外（カメラ裏含む）はスキップ
+		if (!projected->isVisible) continue;
+
+		// 衝突状態で色を切り替え
+		// Sphere: 非衝突=緑 / Box: 非衝突=黄  / 衝突中=赤（共通）
+		const bool colliding = c3D->isColliding;
+
+		if (c3D->shapeType == TestApp::ShapeType3D::Sphere) {
+			NoEngine::Primitive::DrawSphere(
+				c3D->worldPosition,
+				c3D->worldRadius,
+				colliding
+				? NoEngine::Math::Color{ 1.f, 0.f, 0.f, 1.f }	// 衝突: 赤
+				: NoEngine::Math::Color{ 0.f, 1.f, 0.f, 1.f }	// 通常: 緑
+			);
+		} else if (c3D->shapeType == TestApp::ShapeType3D::Box) {
+			NoEngine::Primitive::DrawCube(
+				c3D->worldPosition,
+				c3D->worldBoxSize,
+				colliding
+				? NoEngine::Math::Color{ 1.f, 0.f, 0.f, 1.f }	// 衝突: 赤
+				: NoEngine::Math::Color{ 1.f, 1.f, 0.f, 1.f }	// 通常: 黄
+			);
+		}
+	}
+}
+
+void TestScene3::DrawCollisionColor(No::Registry& registry)
+{
 	// 衝突結果を可視化（3Dモデルの色変更）
 	auto meshView = registry.View<TestApp::Collider3DComponent, No::MaterialComponent>();
 	for (auto entity : meshView) {
@@ -291,15 +326,23 @@ void TestScene3::DrawCollisionImGui()
 			sprite->color = { 0.0f, 0.0f, 1.0f, 1.0f }; // 青
 		}
 	}
+}
+
+void TestScene3::DrawCollisionImGui()
+{
+
+	No::Registry& registry = *GetRegistry();
+
+	// ワイヤーフレーム描画（Sphere / Box を形状に応じて自動切り替え）
+	DrawColliderDebug3D(registry);
+
+	// モデルとスプライトの色変更
+	DrawCollisionColor(registry);
 
 
 	// デバッグ情報の表示
 #ifdef USE_IMGUI
 	ImGui::Begin("Collision Debug");
-
-	// ----------------------------------------
-	// 3Dボールの情報
-	// ----------------------------------------
 
 	ImGui::Text("3D Objects (Projected)");
 
@@ -313,31 +356,37 @@ void TestScene3::DrawCollisionImGui()
 
 		ImGui::Separator();
 		ImGui::Text("Name: %s", tag->name.c_str());
+		ImGui::Text("  Shape: %s", collider3D->shapeType == TestApp::ShapeType3D::Sphere ? "Sphere" : "Box");
 		ImGui::Text("  World Pos: (%.2f, %.2f, %.2f)",
 			collider3D->worldPosition.x,
 			collider3D->worldPosition.y,
 			collider3D->worldPosition.z);
-		ImGui::Text("  World Radius: %.2f", collider3D->worldRadius);
-		ImGui::Text("  Screen Pos: (%.2f, %.2f)",
-			projected->screenPosition.x,
-			projected->screenPosition.y);
-		ImGui::Text("  Screen Radius: %.2f", projected->screenRadius);
+
+		if (collider3D->shapeType == TestApp::ShapeType3D::Sphere) {
+			ImGui::Text("  World Radius: %.2f", collider3D->worldRadius);
+			ImGui::Text("  Screen Pos: (%.2f, %.2f)",
+				projected->screenPosition.x,
+				projected->screenPosition.y);
+			ImGui::Text("  Screen Radius: %.2f", projected->screenRadius);
+		} else {
+			ImGui::Text("  World BoxSize: (%.2f, %.2f, %.2f)",
+				collider3D->worldBoxSize.x,
+				collider3D->worldBoxSize.y,
+				collider3D->worldBoxSize.z);
+			ImGui::Text("  Screen Center: (%.2f, %.2f)",
+				projected->screenPosition.x,
+				projected->screenPosition.y);
+			ImGui::Text("  Screen Min: (%.2f, %.2f)",
+				projected->screenMin.x,
+				projected->screenMin.y);
+			ImGui::Text("  Screen Max: (%.2f, %.2f)",
+				projected->screenMax.x,
+				projected->screenMax.y);
+		}
+
 		ImGui::Text("  Visible: %s", projected->isVisible ? "YES" : "NO");
 		ImGui::Text("  Colliding: %s", collider3D->isColliding ? "YES" : "NO");
-
-		// デバッグ描画（緑の球体）
-		if (projected->isVisible) {
-			NoEngine::Primitive::DrawSphere(
-				collider3D->worldPosition,
-				collider3D->worldRadius,
-				{ 0.0f, 1.0f, 0.0f, 0.5f }
-			);
-		}
 	}
-
-	// ----------------------------------------
-	// 2Dスプライトの情報
-	// ----------------------------------------
 
 	ImGui::Text("");
 	ImGui::Text("2D Sprites");

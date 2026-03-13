@@ -58,6 +58,15 @@ namespace TestApp {
 			const NoEngine::WindowSize& windowSize
 		);
 
+		/// <summary>
+		/// WorldToScreen の結果が有効な投影かどうかを判定
+		/// clipW &lt;= 0（カメラの後ろ）や near/far クリッピングで無効になった場合 false
+		/// 8頂点投影など複数点の有効性チェックに使用する
+		/// </summary>
+		/// <param name="screenPos">WorldToScreen の戻り値</param>
+		/// <returns>有効な投影であれば true</returns>
+		static bool IsValidProjection(const No::Vector2& screenPos);
+
 	private:
 
 		// 画面外を示す特殊な座標値

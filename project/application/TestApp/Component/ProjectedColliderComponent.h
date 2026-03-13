@@ -6,19 +6,34 @@ namespace TestApp {
 
 	/// <summary>
 	/// 3Dオブジェクトを2Dスクリーン座標に投影したコライダー情報
-	/// Collider3DComponentの情報をProjectColliders()が毎フレーム自動更新する
 	/// </summary>
 	struct ProjectedColliderComponent {
 
 		/// 投影元の3Dエンティティ
 		No::Entity source3DEntity;
 
-		/// スクリーン座標での投影位置
+		/// スクリーン座標での投影中心位置（Sphere / Box 共通）
+		/// Box の場合は screenMin/Max の中心として自動計算される
 		No::Vector2 screenPosition{ 0.f, 0.f };
 
-		/// スクリーン座標での半径
+
+		// Sphere 用
+		/// スクリーン座標での半径（Sphere のみ使用）
 		/// カメラから遠いほど小さく、近いほど大きくなる
 		float screenRadius = 0.f;
+
+
+		// Box 用（8頂点投影結果）
+		/// Box の8頂点を投影した結果のスクリーン AABB 左上
+		No::Vector2 screenMin{ 0.f, 0.f };
+		/// Box の8頂点を投影した結果のスクリーン AABB 右下
+		No::Vector2 screenMax{ 0.f, 0.f };
+
+
+		// 共通
+		/// true = Box として投影された（CheckProjectedVs2D で判定方式を切り替え）
+		/// false = Sphere として投影された
+		bool isBox = false;
 
 		/// このオブジェクトがカメラに映っているか
 		/// isVisible = false の場合は衝突判定をスキップ
