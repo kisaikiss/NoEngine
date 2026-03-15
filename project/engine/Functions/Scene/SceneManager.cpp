@@ -117,7 +117,7 @@ void SceneManager::ChangeScene(const std::string& name, bool immediate) {
 	CreateCircleOverlay(0.0f, 0.0f);
 }
 
-void SceneManager::Update(float deltaTime) {
+void SceneManager::Update(ComputeContext& ctx, float deltaTime) {
 	// 遷移中
 	if (isTransitioning_) {
 		float half = transitionDuration_ * 0.5f;
@@ -175,13 +175,13 @@ void SceneManager::Update(float deltaTime) {
 
 		// 遷移中でも Scene Update
 		if (currentScene_) {
-			currentScene_->Update(deltaTime);
+			currentScene_->Update(ctx, deltaTime);
 		}
 		return;
 	}
 
 	// 通常更新
-	if (currentScene_) currentScene_->Update(deltaTime);
+	if (currentScene_) currentScene_->Update(ctx, deltaTime);
 }
 
 }

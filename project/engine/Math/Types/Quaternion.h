@@ -25,6 +25,7 @@ struct Quaternion {
 	void FromRotationMatrix(const Matrix4x4& rotation);
 	void FromAxisAngle(const Vector3& axis, float angle);
 	Vector3 RotateVector(const Vector3& vector);
+	void LookRotation(const Vector3& forward, const Vector3& up);
 
 	static Quaternion Slerp(const Quaternion& q0, const Quaternion& q1, float t);
 

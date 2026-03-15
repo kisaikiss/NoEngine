@@ -30,26 +30,26 @@ struct CameraComponent {
 /// デバッグカメラを表すコンポーネント
 /// </summary>
 struct DebugCameraComponent {
-    int preMousePositionX_ = 0;
-    int preMousePositionY_ = 0;
-    int mousePositionX_ = 0;
-    int mousePositionY_ = 0;
-    float preMouseWheelY_ = 0.0f;
-    float mouseWheelY_ = 0.0f;
+    int preMousePositionX = 0;
+    int preMousePositionY = 0;
+    int mousePositionX = 0;
+    int mousePositionY = 0;
+    float preMouseWheelY = 0.0f;
+    float mouseWheelY = 0.0f;
 
-    //マウスホイールで球面座標系での距離を移動させるか、中心点を移動させるかを決めるフラグ
-    bool isDistanceMove_ = true;
-    //球面座標系での中心点を描画するか
-    bool drawCenter_ = false;
+    // マウスホイールで球面座標系での距離を移動させるか、中心点を移動させるかを決めるフラグ
+    bool isDistanceMove = true;
+    // 球面座標系での中心点を描画するか
+    bool drawCenter = false;
 
     // 球面座標系での球面の中心点
-    Math::Vector3 center_;
-    //球面座標での中心からの距離
-    float distance_;
-    //横回転
-    float theta_;
-    //縦回転
-    float phi_;
+    Math::Vector3 center;
+    // 球面座標での中心からの距離
+    float distance = 2.f;
+    // 横回転
+    float theta = -1.5f;
+    // 縦回転
+    float phi = 1.5f;
 };
 
 }

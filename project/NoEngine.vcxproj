@@ -229,6 +229,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\TestApp\TestApp.cpp" />
     <ClCompile Include="application\TestApp\Utility\CollisionAlgorithms.cpp" />
     <ClCompile Include="application\TestApp\Utility\CoordinateConverter.cpp" />
+    <ClCompile Include="engine\Functions\ECS\Component\CameraComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\CameraSystem.cpp" />
     <ClCompile Include="engine\Assets\Audio\Audio.cpp" />
     <ClCompile Include="engine\Editor\DataDriven\SceneSerializer.cpp" />

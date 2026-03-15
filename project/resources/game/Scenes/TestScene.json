@@ -1,5 +1,41 @@
 {
     "entities": {
+        "camera": {
+            "components": {
+                "DebugCameraComponent": {
+                    "center": [
+                        -1.5441570281982422,
+                        0.5654023885726929,
+                        2.2338647842407227
+                    ],
+                    "distance": 5.699999809265137,
+                    "drawCenter": false,
+                    "mousePositionX": 877,
+                    "mousePositionY": 559,
+                    "mouseWheelY": 0.0,
+                    "phi": 0.9010123610496521,
+                    "theta": -2.8103976249694824
+                },
+                "TransformComponent": {
+                    "rotation": [
+                        0.26753318309783936,
+                        0.5486029982566833,
+                        -0.1909138560295105,
+                        0.7687734961509705
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        -5.769859313964844,
+                        4.104057312011719,
+                        0.78081214427948
+                    ]
+                }
+            }
+        },
         "girl": {
             "components": {
                 "SpriteComponent": {

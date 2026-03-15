@@ -7,9 +7,9 @@ class SystemManager {
 public:
 	void AddSystem(std::unique_ptr<ISystem> system) { systems_.push_back(std::move(system)); }
 
-	void UpdateAll(Registry& registry, float deltaTime) {
+	void UpdateAll(ComputeContext& ctx, Registry& registry, float deltaTime) {
 		for (auto& system : systems_) {
-			system->Update(registry, deltaTime);
+			system->Update(ctx, registry, deltaTime);
 		}
 	}
 

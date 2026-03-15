@@ -1,5 +1,6 @@
 #include "Matrix4x4Calculations.h"
 #include "QuaternionCalculations.h"
+#include "Vector3Calculations.h"
 
 namespace NoEngine {
 namespace MathCalculations {
@@ -12,6 +13,30 @@ Matrix4x4 MakeIdentity4x4() {
 		0.0f, 0.0f, 1.0f, 0.0f,
 		0.0f, 0.0f, 0.0f, 1.0f
 		);
+	return result;
+}
+
+Matrix4x4 Add(const Matrix4x4& m1, const Matrix4x4& m2) {
+	Matrix4x4 result{};
+
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 4; j++) {
+			result.m[i][j] = m1.m[i][j] + m2.m[i][j];
+		}
+	}
+
+	return result;
+}
+
+Matrix4x4 Subtract(const Matrix4x4& m1, const Matrix4x4& m2) {
+	Matrix4x4 result{};
+
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 4; j++) {
+			result.m[i][j] = m1.m[i][j] - m2.m[i][j];
+		}
+	}
+
 	return result;
 }
 
@@ -219,6 +244,47 @@ Matrix4x4 MakeViewportMatrix(float left, float top, float width, float height, f
 	result.m[3][1] = top + (height / 2.f);
 	result.m[3][2] = minDepth;
 	result.m[3][3] = 1.f;
+	return result;
+}
+
+Math::Matrix4x4 DirectionToDirection(const Math::Vector3& from, const Math::Vector3& to) {
+	Matrix4x4 result{};
+	Vector3 axis{};
+	if (from == -to) {
+		axis = { from.y, -from.x, 0.f };
+	} else {
+		axis = Cross(from, to);
+	}
+	axis = Normalize(axis);
+
+	float cos = Dot(from, to);
+	float sin = Length(Cross(from, to));
+
+	Matrix4x4 s = cos * MakeIdentity4x4();
+
+	Matrix4x4 p = {
+		axis.x * axis.x, axis.x * axis.y, axis.x * axis.z, 0.0f,
+		 axis.y * axis.x, axis.y * axis.y, axis.y * axis.z, 0.0f,
+		 axis.z * axis.x, axis.z * axis.y, axis.z * axis.z, 0.0f,
+		 0.0f, 0.0f, 0.0f, 1.0f
+	};
+
+	p = (MakeIdentity4x4() - s) * p;
+
+	Matrix4x4 axisCloss = {
+		0.0f, -axis.z, axis.y, 0.0f,
+		 axis.z, 0.0f, -axis.x, 0.0f,
+		 -axis.y, axis.x, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f
+	};
+
+
+	Matrix4x4 c = -(sin * MakeIdentity4x4()) * axisCloss;
+
+	result = s + p + c;
+
+	result.m[3][3] = 1.0f;
+
 	return result;
 }
 }

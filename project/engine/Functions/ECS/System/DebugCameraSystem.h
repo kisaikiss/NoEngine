@@ -1,4 +1,6 @@
 #include "ISystem.h"
+#include "../Component/TransformComponent.h"
+
 
 namespace NoEngine {
 namespace ECS {
