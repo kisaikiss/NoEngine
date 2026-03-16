@@ -26,7 +26,7 @@ void TutorialControlSystem::Update(No::Registry& registry, float deltaTime)
         if (timer_ <= 3.0f) {
             transform->translate.x = kStartPosX_ + transform->scale.x;
 
-        }  else if (timer_ <= 10.0f) {
+        }  else if (timer_ <= 6.0f) {
             if (sp->name == "stickL") {
                 Vector2 offset = transform->scale * 0.5f;
                 MoveSprite(transform, tutorialComp, 
