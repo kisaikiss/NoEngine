@@ -11,7 +11,7 @@ void TitleSystem::Update(No::Registry& registry, float deltaTime)
 {
 	time_ += deltaTime;
 	if ((No::Keyboard::IsTrigger(VK_RETURN) ||
-		No::Pad::IsTrigger(No::GamepadButton::A)) && !isChangeScene_)
+		No::Pad::IsTrigger(No::GamepadButton::A))/* && !isChangeScene_*/)
 	{
 		//一旦ここでSE再生 ヨシダ
 		No::SoundEffectPlay("select", 0.5f);
