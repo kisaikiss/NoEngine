@@ -1,6 +1,11 @@
 #include "stdafx.h"
 #include "TestScene2.h"
 
+namespace {
+	No::Entity cameraE;
+}
+
+
 void TestScene2::Setup() {
 	AddSystem(std::make_unique<No::AnimationSystem>());
 	AddSystem(std::make_unique<No::EditSystem>());
@@ -55,11 +60,21 @@ void TestScene2::Setup() {
 	dir2->direction = { 0.f,-1.f,0.f };
 	dir2->intensity = 1.f;
 
+
 	auto camera = registry.GenerateEntity();
 	registry.AddComponent<No::ActiveCameraTag>(camera);
 	registry.AddComponent<No::CameraComponent>(camera);
+	registry.AddComponent<No::DebugCameraComponent>(camera);
+	auto* cameraEditTag = registry.AddComponent<No::EditTag>(camera);
+	cameraEditTag->name = "camera";
 	auto* cameraTransform = registry.AddComponent<No::TransformComponent>(camera);
 	cameraTransform->translate.z = -5.f;
+
+	cameraE = registry.GenerateEntity();
+	registry.AddComponent<No::CameraComponent>(cameraE);
+	auto* cameraTransform2 = registry.AddComponent<No::TransformComponent>(cameraE);
+	cameraTransform2->translate.z = -5.f;
+	cameraTransform2->translate.z = -5.f;
 }
 
 void TestScene2::NotSystemUpdate() {

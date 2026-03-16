@@ -37,13 +37,13 @@ void Game::Cleanup(void)
 	ShutdownSceneManager();
 }
 
-void Game::Update(float deltaT)
-{
-	if (auto event = GetRegistry().PollEvent<No::SceneChangeEvent>())
-	{
-		ChangeScene(event->nextScene, false);
-	}
-
-	UpdateScene(deltaT);
-}
+//void Game::Update(float deltaT)
+//{
+//	if (auto event = GetRegistry().PollEvent<No::SceneChangeEvent>())
+//	{
+//		ChangeScene(event->nextScene, false);
+//	}
+//
+//	//UpdateScene(deltaT);
+//}
 

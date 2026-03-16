@@ -18,6 +18,6 @@ public:
 	/// 更新処理を行います。フレームごとに1回呼び出されます。
 	/// </summary>
 	/// <param name="deltaT">経過時間</param>
-	void Update(float deltaT) override;
+	//void Update(float deltaT) override;
 };
 

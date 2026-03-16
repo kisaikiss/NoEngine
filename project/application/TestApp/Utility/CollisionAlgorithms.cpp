@@ -170,4 +170,162 @@ namespace TestApp {
 		return overlapX && overlapY && overlapZ;
 	}
 
+
+	// ============================================================
+	// スクリーン投影衝突判定
+	// ============================================================
+
+	std::vector<No::Vector2> CollisionAlgorithms::ComputeConvexHull(
+		std::vector<No::Vector2> pts
+	) {
+		int n = static_cast<int>(pts.size());
+
+		// 3点未満は凸包を作れないのでそのまま返す
+		if (n <= 2) return pts;
+
+		// ========================================
+		// 基準点の選定
+		// スクリーン座標はY軸が下向き
+		// → Y が最小（画面の最上）の点を基準とし、同率なら X が最小の点
+		// ========================================
+		int pivotIdx = 0;
+		for (int i = 1; i < n; ++i) {
+			if (pts[i].y < pts[pivotIdx].y ||
+				(pts[i].y == pts[pivotIdx].y && pts[i].x < pts[pivotIdx].x)) {
+				pivotIdx = i;
+			}
+		}
+		std::swap(pts[0], pts[pivotIdx]);
+		const No::Vector2 p0 = pts[0];
+
+		// ========================================
+		// 極角でソート
+		// 外積 ax*by - ay*bx > 0 → a が b より「左」（反時計回り方向に先）
+		// スクリーン座標（Y下向き）では見た目は時計回りになるが
+		// SAT 判定には向きは影響しないため問題なし
+		// ========================================
+		std::sort(pts.begin() + 1, pts.end(), [&](const No::Vector2& a, const No::Vector2& b) {
+			const float ax = a.x - p0.x, ay = a.y - p0.y;
+			const float bx = b.x - p0.x, by = b.y - p0.y;
+			const float cross = ax * by - ay * bx;
+			if (std::abs(cross) > 1e-6f) return cross > 0.0f;
+			// 同角度の場合: 基準点に近い点を先にする（遠い点は後で除去）
+			return (ax * ax + ay * ay) < (bx * bx + by * by);
+			});
+
+		// ========================================
+		// Graham Scan
+		// 外積 <= 0（右折または直線）の点はスタックから除去
+		// ========================================
+		std::vector<No::Vector2> hull;
+		hull.reserve(n);
+		for (const auto& p : pts) {
+			while (hull.size() >= 2) {
+				const No::Vector2& a = hull[hull.size() - 2];
+				const No::Vector2& b = hull[hull.size() - 1];
+				// (b-a) × (p-a)
+				const float cross =
+					(b.x - a.x) * (p.y - a.y) -
+					(b.y - a.y) * (p.x - a.x);
+				if (cross <= 0.0f) {
+					hull.pop_back(); // 右折または直線 → 除去
+				} else {
+					break;
+				}
+			}
+			hull.push_back(p);
+		}
+		return hull;
+	}
+
+
+	bool CollisionAlgorithms::CheckConvexHullAABB(
+		const std::vector<No::Vector2>& hull,
+		const No::Vector2& rectCenter,
+		const No::Vector2& rectSize
+	) {
+		// 凸包が空なら衝突なし
+		if (hull.empty()) return false;
+
+		const float halfW = rectSize.x * 0.5f;
+		const float halfH = rectSize.y * 0.5f;
+
+		// AABB の4頂点（SAT の投影に使用）
+		const No::Vector2 aabbVerts[4] = {
+			{ rectCenter.x - halfW, rectCenter.y - halfH },
+			{ rectCenter.x + halfW, rectCenter.y - halfH },
+			{ rectCenter.x + halfW, rectCenter.y + halfH },
+			{ rectCenter.x - halfW, rectCenter.y + halfH },
+		};
+
+		// ========================================
+		// AABB の軸（X軸 / Y軸）で分離判定
+		// 凸包の外接 AABB vs スプライト AABB の判定と同等
+		// ========================================
+
+		// X 軸
+		{
+			float hMin = hull[0].x, hMax = hull[0].x;
+			for (const auto& p : hull) {
+				hMin = std::min(hMin, p.x);
+				hMax = std::max(hMax, p.x);
+			}
+			const float aMin = rectCenter.x - halfW;
+			const float aMax = rectCenter.x + halfW;
+			if (hMax < aMin || aMax < hMin) return false; // 分離軸発見 → 衝突なし
+		}
+
+		// Y 軸
+		{
+			float hMin = hull[0].y, hMax = hull[0].y;
+			for (const auto& p : hull) {
+				hMin = std::min(hMin, p.y);
+				hMax = std::max(hMax, p.y);
+			}
+			const float aMin = rectCenter.y - halfH;
+			const float aMax = rectCenter.y + halfH;
+			if (hMax < aMin || aMax < hMin) return false; // 分離軸発見 → 衝突なし
+		}
+
+		// ========================================
+		// 凸包の各辺の法線軸で分離判定
+		// これが AABB 判定との違い:
+		//   斜め辺の法線方向でも分離できるか検査することで
+		//   外接 AABB の「四隅の余白」による誤判定を排除する
+		// ========================================
+		const int hullSize = static_cast<int>(hull.size());
+		for (int i = 0; i < hullSize; ++i) {
+			const No::Vector2& cur = hull[i];
+			const No::Vector2& nxt = hull[(i + 1) % hullSize];
+
+			// 辺ベクトルの法線（正規化不要: SAT は比率で比較するため）
+			const float nx = -(nxt.y - cur.y);
+			const float ny = (nxt.x - cur.x);
+
+			// 凸包を法線軸に投影
+			float hMin = nx * hull[0].x + ny * hull[0].y;
+			float hMax = hMin;
+			for (const auto& p : hull) {
+				const float proj = nx * p.x + ny * p.y;
+				hMin = std::min(hMin, proj);
+				hMax = std::max(hMax, proj);
+			}
+
+			// AABB を法線軸に投影
+			float aMin = nx * aabbVerts[0].x + ny * aabbVerts[0].y;
+			float aMax = aMin;
+			for (const auto& v : aabbVerts) {
+				const float proj = nx * v.x + ny * v.y;
+				aMin = std::min(aMin, proj);
+				aMax = std::max(aMax, proj);
+			}
+
+			// 分離軸発見 → 衝突なし
+			if (hMax < aMin || aMax < hMin) return false;
+		}
+
+		// 全ての分離軸で重なりが確認された → 衝突
+		return true;
+	}
+
 }

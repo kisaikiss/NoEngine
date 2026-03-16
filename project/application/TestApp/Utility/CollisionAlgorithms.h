@@ -1,5 +1,6 @@
 #pragma once
 #include "engine/NoEngine.h"
+#include <vector>
 
 namespace TestApp {
 
@@ -103,6 +104,41 @@ namespace TestApp {
 		static bool CheckAABB3DAABB3D(
 			const No::Vector3& center1, const No::Vector3& size1,
 			const No::Vector3& center2, const No::Vector3& size2
+		);
+
+		// ========================================
+		// スクリーン投影衝突判定
+		// ========================================
+
+		/// <summary>
+		/// スクリーン上の2D点群から凸包を計算して返す
+		/// ProjectColliders で投影した有効頂点を渡すことで、斜め視点での過剰 AABB を避けた正確な形状になるはず
+		/// </summary>
+		/// <param name="points">有効な投影頂点の集合</param>
+		/// <returns>凸包の頂点列</returns>
+		/// <remarks>
+		/// 入力が2点以下の場合はそのまま返す
+		/// 出力の頂点順序は時計回り（スクリーン座標系）
+		/// </remarks>
+		static std::vector<No::Vector2> ComputeConvexHull(
+			std::vector<No::Vector2> points
+		);
+
+		/// <summary>
+		/// スクリーン空間の凸包とAABBの衝突判定（SAT: 分離軸定理）
+		/// 3D Box を投影した凸多角形と 2D スプライトの矩形を正確に判定する
+		/// </summary>
+		/// <param name="hull">凸包の頂点列（ComputeConvexHull の結果）</param>
+		/// <param name="rectCenter">矩形の中心座標（スクリーン座標）</param>
+		/// <param name="rectSize">矩形のフルサイズ（幅・高さ）</param>
+		/// <returns>衝突している場合true</returns>
+		/// <remarks>
+		///  hull が空の場合は false を返す
+		/// </remarks>
+		static bool CheckConvexHullAABB(
+			const std::vector<No::Vector2>& hull,
+			const No::Vector2& rectCenter,
+			const No::Vector2& rectSize
 		);
 	};
 

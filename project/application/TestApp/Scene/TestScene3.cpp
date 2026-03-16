@@ -8,6 +8,9 @@
 
 using namespace TestApp;
 
+namespace {
+	No::Entity cameraE;
+}
 
 void TestScene3::Setup() {
 
@@ -15,6 +18,7 @@ void TestScene3::Setup() {
 	AddSystem(std::make_unique<TestApp::CollisionTestSystem>());
 	AddSystem(std::make_unique<TestSystem>());
 	AddSystem(std::make_unique<No::AnimationSystem>());
+	AddSystem(std::make_unique<No::DebugCameraSystem>());
 	AddSystem(std::make_unique<No::EditSystem>());
 	AddSystem(std::make_unique<No::CameraSystem>());
 
@@ -222,8 +226,17 @@ void TestScene3::Setup() {
 	auto camera = registry.GenerateEntity();
 	registry.AddComponent<No::ActiveCameraTag>(camera);
 	registry.AddComponent<No::CameraComponent>(camera);
+	registry.AddComponent<No::DebugCameraComponent>(camera);
+	auto* cameraEditTag = registry.AddComponent<No::EditTag>(camera);
+	cameraEditTag->name = "camera";
 	auto* cameraTransform = registry.AddComponent<No::TransformComponent>(camera);
 	cameraTransform->translate.z = -5.f;
+
+	cameraE = registry.GenerateEntity();
+	registry.AddComponent<No::CameraComponent>(cameraE);
+	auto* cameraTransform2 = registry.AddComponent<No::TransformComponent>(cameraE);
+	cameraTransform2->translate.z = -5.f;
+	cameraTransform2->translate.z = -5.f;
 }
 
 void TestScene3::NotSystemUpdate() {
@@ -240,14 +253,10 @@ void TestScene3::NotSystemUpdate() {
 
 	// カメラ手動調整ウィンドウ
 	ImGui::Begin("camera");
-	No::Registry& registry = *GetRegistry();
-	auto cameraView = registry.View<No::ActiveCameraTag, No::TransformComponent>();
-	auto camIt = cameraView.begin();
-	if (camIt != cameraView.end()) {
-		auto* cameraTransform = registry.GetComponent<No::TransformComponent>(*camIt);
-		ImGui::DragFloat3("pos", &cameraTransform->translate.x, 0.1f);
-		ImGui::DragFloat3("rot", &cameraTransform->rotation.x, 0.1f);
+	if (ImGui::Button("CameraChange")) {
+		GetRegistry()->AddComponent<No::ActiveCameraTag>(cameraE);
 	}
+
 	ImGui::End();
 
 

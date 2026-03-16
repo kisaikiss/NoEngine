@@ -153,8 +153,9 @@ namespace TestApp {
 				) && projected->screenRadius > 0.0f;
 
 			} else {
-				// Box: 8頂点を全て投影して screenAABB を構築
-				// clipW <= 0 の頂点は IsValidProjection で除外する
+				// Box: 8頂点を全て投影して screenAABB と凸包を構築
+				// screenMin/Max はデバッグ ImGui 表示用に維持
+				// convexHull が衝突判定に使用される正確な形状
 				projected->isBox = true;
 
 				// ハーフサイズを計算
@@ -175,10 +176,14 @@ namespace TestApp {
 					{ c.x - hx,  c.y + hy,  c.z + hz },
 				};
 
-				// 有効な投影点から screenAABB を計算
+				// 有効な投影点を収集
+				// screenMin/Max → デバッグ表示用の外接 AABB
+				// validPoints → 凸包計算の入力
 				bool initialized = false;
 				No::Vector2 screenMin{};
 				No::Vector2 screenMax{};
+				std::vector<No::Vector2> validPoints;
+				validPoints.reserve(8);
 
 				for (int i = 0; i < 8; ++i) {
 					No::Vector2 s = CoordinateConverter::WorldToScreen(
@@ -188,6 +193,8 @@ namespace TestApp {
 					);
 					// clipW <= 0 や near/far クリッピング対象の頂点はスキップ
 					if (!CoordinateConverter::IsValidProjection(s)) continue;
+
+					validPoints.push_back(s);
 
 					if (!initialized) {
 						screenMin = screenMax = s;
@@ -203,11 +210,16 @@ namespace TestApp {
 				if (initialized) {
 					projected->screenMin = screenMin;
 					projected->screenMax = screenMax;
-					// 中心座標（ImGui 表示 / AABB 計算の両方で使用）
+					// 中心座標（ImGui 表示用）
 					projected->screenPosition = {
 						(screenMin.x + screenMax.x) * 0.5f,
 						(screenMin.y + screenMax.y) * 0.5f
 					};
+
+					// 有効頂点から凸包を計算して保存
+					// 斜め視点でも外接 AABB より正確な形状が得られる
+					projected->convexHull = CollisionAlgorithms::ComputeConvexHull(validPoints);
+
 					// 画面と重なっているかチェック（マージン付き）
 					constexpr float margin = 100.0f;
 					const float wf = static_cast<float>(windowSize.clientWidth);
@@ -218,6 +230,7 @@ namespace TestApp {
 				} else {
 					// 有効な頂点が1つもなかった（全頂点がカメラ裏）
 					projected->isVisible = false;
+					projected->convexHull.clear();
 				}
 			}
 			// 衝突レイヤー情報をコピー
@@ -259,16 +272,13 @@ namespace TestApp {
 				// 形状タイプに応じて判定アルゴリズムを切り替え
 				bool isColliding = false;
 				if (projected->isBox) {
-					// 投影された AABB vs 2D AABB
-					// screenMin/Max から center + size を計算して CheckAABBAABB に渡す
-					No::Vector2 projCenter = projected->screenPosition; // 既に中心として計算済み
-					No::Vector2 projSize = {
-						projected->screenMax.x - projected->screenMin.x,
-						projected->screenMax.y - projected->screenMin.y
-					};
-					isColliding = CollisionAlgorithms::CheckAABBAABB(
-						projCenter, projSize,
-						collider2D->screenPosition, collider2D->worldSize
+	
+					// 投影された凸包 vs 2D AABB（SAT判定）
+					// 外接 AABB ではなく実際のシルエット形状で判定
+					isColliding = CollisionAlgorithms::CheckConvexHullAABB(
+						projected->convexHull,
+						collider2D->screenPosition,
+						collider2D->worldSize
 					);
 				} else {
 					// 投影された円 vs 2D AABB
