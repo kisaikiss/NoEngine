@@ -1,5 +1,5 @@
 #include "Game.h"
-#include "Scene/GameScene.h"
+//#include "Scene/GameScene.h"
 #include "Scene/TitleScene.h"
 #include "Scene/GameOverScene.h"
 #include "Scene/ResultScene.h"
@@ -14,10 +14,10 @@ void Game::Startup(void)
 		{
 			return std::make_unique<TitleScene>();
 		});
-	RegisterScene("GameScene", []()
-		{
-			return std::make_unique<GameScene>();
-		});
+	//RegisterScene("GameScene", []()
+	//	{
+	//		return std::make_unique<GameScene>();
+	//	});
 	RegisterScene("GameOverScene", []()
 		{
 			return std::make_unique<GameOverScene>();
