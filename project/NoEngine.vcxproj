@@ -161,6 +161,10 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="application\CommentBout\Component\PlayerAttackComponent.cpp" />
+    <ClCompile Include="application\CommentBout\System\GrassReactionSystem.cpp" />
+    <ClCompile Include="application\CommentBout\System\LifetimeSystem.cpp" />
+    <ClCompile Include="application\CommentBout\System\PlayerControlSystem.cpp" />
     <ClCompile Include="application\TD2_3\Component\DynamicSplinePath.cpp" />
     <ClCompile Include="application\TD2_3\Game.cpp" />
     <ClCompile Include="application\TD2_3\Random\RandomFanc.cpp" />
@@ -354,6 +358,8 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="application\CommentBout\Scene\GameScene.cpp" />
+    <ClCompile Include="application\CommentBout\Component\HitBalloonComponent.cpp" />
+    <ClCompile Include="application\CommentBout\System\HitBalloonSystem.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -364,6 +370,17 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\TestApp\Scene\TestScene3.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="application\CommentBout\Component\GameResourceComponent.h" />
+    <ClInclude Include="application\CommentBout\Component\GrassReactionComponent.h" />
+    <ClInclude Include="application\CommentBout\Component\GroundComponent.h" />
+    <ClInclude Include="application\CommentBout\Component\LifetimeComponent.h" />
+    <ClInclude Include="application\CommentBout\Component\PlayerAttackComponent.h" />
+    <ClInclude Include="application\CommentBout\Component\PlayerComponent.h" />
+    <ClInclude Include="application\CommentBout\GameTag.h" />
+    <ClInclude Include="application\CommentBout\System\GrassReactionSystem.h" />
+    <ClInclude Include="application\CommentBout\System\LifetimeSystem.h" />
+    <ClInclude Include="application\CommentBout\System\PlayerControlSystem.h" />
+    <ClInclude Include="application\CommentBout\Utility\CBCollisionMask.h" />
     <ClInclude Include="application\TD2_3\Component\BackGroundComponent.h" />
     <ClInclude Include="application\TD2_3\Component\BallStateComponent.h" />
     <ClInclude Include="application\TD2_3\Component\BallTrailComponent.h" />
@@ -639,6 +656,8 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="application\CommentBout\Scene\GameScene.h" />
+    <ClInclude Include="application\CommentBout\Component\HitBalloonComponent.h" />
+    <ClInclude Include="application\CommentBout\System\HitBalloonSystem.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="engine\Assets\Texture\Texture.h" />

@@ -1,0 +1,125 @@
+{
+    "entities": {
+        "Grass": {
+            "components": {
+                "TransformComponent": {
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        2.5,
+                        0.20000000298023224,
+                        7.0
+                    ],
+                    "translate": [
+                        -3.5,
+                        -4.300000190734863,
+                        20.899999618530273
+                    ]
+                }
+            }
+        },
+        "Ground": {
+            "components": {
+                "TransformComponent": {
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        10.0,
+                        1.0,
+                        300.0
+                    ],
+                    "translate": [
+                        0.0,
+                        -5.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "Player": {
+            "components": {
+                "PlayerAttackComponent": {
+                    "attackLayer": 5,
+                    "attackSize": [
+                        150.0,
+                        150.0
+                    ],
+                    "spawnOffset": [
+                        0.0,
+                        -99.5
+                    ],
+                    "visibleTime": 0.3499999940395355
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        128.0,
+                        200.0
+                    ],
+                    "translate": [
+                        640.0,
+                        540.0
+                    ]
+                }
+            }
+        },
+        "camera": {
+            "components": {
+                "DebugCameraComponent": {
+                    "center": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "distance": 2.573826313018799,
+                    "drawCenter": false,
+                    "mousePositionX": 861,
+                    "mousePositionY": 426,
+                    "mouseWheelY": -240.0,
+                    "phi": 1.5297210216522217,
+                    "theta": -1.5463776588439941
+                },
+                "TransformComponent": {
+                    "rotation": [
+                        0.020534681156277657,
+                        -0.012206457555294037,
+                        0.0002507272583898157,
+                        0.9997146129608154
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        0.0627901554107666,
+                        0.10569097846746445,
+                        -2.5708885192871094
+                    ]
+                }
+            }
+        }
+    }
+}

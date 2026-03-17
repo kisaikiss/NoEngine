@@ -191,6 +191,12 @@
     <ClCompile Include="engine\Functions\ECS\Component\CameraComponent.cpp" />
     <ClCompile Include="application\CommentBout\CommentBout.cpp" />
     <ClCompile Include="application\CommentBout\Scene\GameScene.cpp" />
+    <ClCompile Include="application\CommentBout\System\PlayerControlSystem.cpp" />
+    <ClCompile Include="application\CommentBout\System\GrassReactionSystem.cpp" />
+    <ClCompile Include="application\CommentBout\System\LifetimeSystem.cpp" />
+    <ClCompile Include="application\CommentBout\Component\PlayerAttackComponent.cpp" />
+    <ClCompile Include="application\CommentBout\Component\HitBalloonComponent.cpp" />
+    <ClCompile Include="application\CommentBout\System\HitBalloonSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="application\TD2_3\Component\BackGroundComponent.h" />
@@ -442,6 +448,19 @@
     <ClInclude Include="application\TestApp\Utility\CollisionMask.h" />
     <ClInclude Include="application\CommentBout\CommentBout.h" />
     <ClInclude Include="application\CommentBout\Scene\GameScene.h" />
+    <ClInclude Include="application\CommentBout\GameTag.h" />
+    <ClInclude Include="application\CommentBout\Component\PlayerComponent.h" />
+    <ClInclude Include="application\CommentBout\Component\GrassReactionComponent.h" />
+    <ClInclude Include="application\CommentBout\Component\GameResourceComponent.h" />
+    <ClInclude Include="application\CommentBout\System\PlayerControlSystem.h" />
+    <ClInclude Include="application\CommentBout\System\GrassReactionSystem.h" />
+    <ClInclude Include="application\CommentBout\System\LifetimeSystem.h" />
+    <ClInclude Include="application\CommentBout\Component\PlayerAttackComponent.h" />
+    <ClInclude Include="application\CommentBout\Utility\CBCollisionMask.h" />
+    <ClInclude Include="application\CommentBout\Component\GroundComponent.h" />
+    <ClInclude Include="application\CommentBout\Component\HitBalloonComponent.h" />
+    <ClInclude Include="application\CommentBout\System\HitBalloonSystem.h" />
+    <ClInclude Include="application\CommentBout\Component\LifetimeComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

@@ -7,5 +7,7 @@ public:
 private:
 	void NotSystemUpdate() override;
 	void CameraImGui();
+
+	No::Entity activeCameraEntity_{};
 };
 
