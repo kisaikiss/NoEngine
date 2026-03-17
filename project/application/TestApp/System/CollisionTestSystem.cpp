@@ -272,7 +272,7 @@ namespace TestApp {
 				// 形状タイプに応じて判定アルゴリズムを切り替え
 				bool isColliding = false;
 				if (projected->isBox) {
-	
+
 					// 投影された凸包 vs 2D AABB（SAT判定）
 					// 外接 AABB ではなく実際のシルエット形状で判定
 					isColliding = CollisionAlgorithms::CheckConvexHullAABB(
