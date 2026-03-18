@@ -11,40 +11,48 @@ void HitBalloonSystem::Update(No::Registry& registry, float deltaTime)
 	for (auto entity : view) {
 		auto* balloon = registry.GetComponent<HitBalloonComponent>(entity);
 		auto* transform = registry.GetComponent<No::Transform2DComponent>(entity);
-		if (!balloon || !transform) {
-			continue;
-		}
+		if (!balloon || !transform) continue;
 
-		// 追従先エンティティの投影コンポーネントを取得
 		auto* projected = registry.GetComponent<TestApp::ProjectedColliderComponent>(balloon->sourceEntity);
 		if (!projected || !projected->isVisible) {
-			// 追従先が画面外なら吹き出しも非表示位置へ退避
-			// （LifetimeSystemが削除するまでの間だけなので画面外座標で十分）
 			transform->translate = { -9999.f, -9999.f };
 			continue;
 		}
 
-		// アンカー種別に応じてスクリーン上の基点座標を決定
+		// アンカー位置の更新
 		No::Vector2 anchor{};
 		switch (balloon->anchorType) {
-
 		case HitBalloonComponent::AnchorType::TopRight:
-			// 右上: スクリーン上での最右端 x, 最上端 y
 			anchor = { projected->screenMax.x, projected->screenMin.y };
 			break;
-
 		case HitBalloonComponent::AnchorType::Top:
-			// 真上中央: 投影中心 x, 最上端 y
 			anchor = { projected->screenPosition.x, projected->screenMin.y };
 			break;
-
 		case HitBalloonComponent::AnchorType::TopLeft:
-			// 左上: スクリーン上での最左端 x, 最上端 y
 			anchor = { projected->screenMin.x, projected->screenMin.y };
 			break;
 		}
-
-		// アンカー + 微調整オフセットを Transform2D に反映
 		transform->translate = anchor + balloon->localOffset;
+
+		// サイズの更新 
+		// sizeRatio が {0,0} なら GrassReactionSystem がセットした effectSize（固定ピクセル）を維持
+		// sizeRatio が設定されていれば草のスクリーン投影サイズに対する比率でスケールする
+		//
+		// 草のスクリーン AABB サイズ = screenMax - screenMin
+		// → 距離が遠ければ小さく、近ければ大きく、カメラ角度にも自動追従する
+		const bool doScaleX = balloon->sizeRatio.x > 0.f;
+		const bool doScaleY = balloon->sizeRatio.y > 0.f;
+
+		if (doScaleX || doScaleY) {
+			const float grassScreenW = projected->screenMax.x - projected->screenMin.x;
+			const float grassScreenH = projected->screenMax.y - projected->screenMin.y;
+
+			if (doScaleX && grassScreenW > 0.f) {
+				transform->scale.x = grassScreenW * balloon->sizeRatio.x;
+			}
+			if (doScaleY && grassScreenH > 0.f) {
+				transform->scale.y = grassScreenH * balloon->sizeRatio.y;
+			}
+		}
 	}
 }
