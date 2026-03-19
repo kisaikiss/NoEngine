@@ -12,7 +12,7 @@ enum class PotBossState {
 struct PotBossComponent {
 	No::Vector3 velocity = { 0.0f, 0.0f, 0.0f };
 	PotBossState state = PotBossState::GENERATE;
-	int32_t hp = 25;
+	int32_t hp = 10;
 	float t = 0.f;
 	float deadTimer = 0.f;
 	float invincibleTimer = 0.f;
