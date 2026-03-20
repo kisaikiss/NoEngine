@@ -374,6 +374,8 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\CommentBout\Component\GrassReactionComponent.h" />
     <ClInclude Include="application\CommentBout\Component\GroundComponent.h" />
     <ClInclude Include="application\CommentBout\Component\LifetimeComponent.h" />
+    <ClInclude Include="application\CommentBout\Component\OptionMenuConfigComponent.h" />
+    <ClInclude Include="application\CommentBout\Component\OptionStateComponent.h" />
     <ClInclude Include="application\CommentBout\Component\PauseMenuConfigComponent.h" />
     <ClInclude Include="application\CommentBout\Component\PauseStateComponent.h" />
     <ClInclude Include="application\CommentBout\Component\PlayerAttackComponent.h" />

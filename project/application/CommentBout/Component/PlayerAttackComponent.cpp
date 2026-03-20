@@ -1,6 +1,8 @@
 #include "PlayerAttackComponent.h"
 #include "PauseStateComponent.h"
 #include "PauseMenuConfigComponent.h"
+#include "OptionStateComponent.h"
+#include "OptionMenuConfigComponent.h"
 
 REFLECT_STRUCT_BEGIN(PlayerAttackComponent)
 REFLECT_FIELD(spawnOffset),
@@ -61,3 +63,58 @@ REFLECT_FIELD(titleLayer),
 REFLECT_FIELD(itemLayer),
 REFLECT_FIELD(cursorLayer)
 REFLECT_STRUCT_END(PauseMenuConfigComponent)
+
+REFLECT_STRUCT_BEGIN(OptionStateComponent)
+REFLECT_FIELD(isOpen),
+REFLECT_FIELD(phase),
+REFLECT_FIELD(phaseTime),
+REFLECT_FIELD(phaseDuration),
+REFLECT_FIELD(selectedIndex),
+REFLECT_FIELD(itemCount),
+REFLECT_FIELD(isEditing),
+REFLECT_FIELD(masterVolume),
+REFLECT_FIELD(bgmVolume),
+REFLECT_FIELD(seVolume),
+REFLECT_FIELD(vibrationEnabled)
+REFLECT_STRUCT_END(OptionStateComponent)
+
+REFLECT_STRUCT_BEGIN(OptionMenuConfigComponent)
+REFLECT_FIELD(dimStartPosition),
+REFLECT_FIELD(dimEndPosition),
+REFLECT_FIELD(dimSize),
+REFLECT_FIELD(dimColor),
+REFLECT_FIELD(bgStartPosition),
+REFLECT_FIELD(bgEndPosition),
+REFLECT_FIELD(bgStartSize),
+REFLECT_FIELD(bgEndSize),
+REFLECT_FIELD(bgColor),
+REFLECT_FIELD(lineStartPosition),
+REFLECT_FIELD(lineEndPosition),
+REFLECT_FIELD(lineSize),
+REFLECT_FIELD(lineColor),
+REFLECT_FIELD(itemBaseStartPosition),
+REFLECT_FIELD(itemBaseEndPosition),
+REFLECT_FIELD(itemSize),
+REFLECT_FIELD(itemSpacing),
+REFLECT_FIELD(itemColor),
+REFLECT_FIELD(selectedItemColor),
+REFLECT_FIELD(barOffset),
+REFLECT_FIELD(barBaseSize),
+REFLECT_FIELD(barFillMinSize),
+REFLECT_FIELD(barBaseColor),
+REFLECT_FIELD(barFillColor),
+REFLECT_FIELD(toggleOffset),
+REFLECT_FIELD(toggleSize),
+REFLECT_FIELD(toggleOnColor),
+REFLECT_FIELD(toggleOffColor),
+REFLECT_FIELD(openDuration),
+REFLECT_FIELD(closeDuration),
+REFLECT_FIELD(volumeStep),
+REFLECT_FIELD(dimLayer),
+REFLECT_FIELD(bgLayer),
+REFLECT_FIELD(lineLayer),
+REFLECT_FIELD(itemLayer),
+REFLECT_FIELD(barBaseLayer),
+REFLECT_FIELD(barFillLayer),
+REFLECT_FIELD(toggleLayer)
+REFLECT_STRUCT_END(OptionMenuConfigComponent)

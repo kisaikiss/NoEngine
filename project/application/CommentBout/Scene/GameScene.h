@@ -15,6 +15,9 @@ private:
 	void DrawPauseMenu();
 	void CreatePauseMenuSprites(const NoEngine::TextureRef& whiteTexture);
 	void UpdatePauseMenuSprites();
+	void CreateOptionSprites(const NoEngine::TextureRef& whiteTexture);
+	void UpdateOptionState();
+	void UpdateOptionSprites();
 
 	No::Entity activeCameraEntity_{};
 	No::Entity pauseDimEntity_{};
@@ -23,6 +26,14 @@ private:
 	No::Entity pauseTitleEntity_{};
 	std::array<No::Entity, 4> pauseItemEntities_{};
 	No::Entity pauseCursorEntity_{};
+
+	No::Entity optionDimEntity_{};
+	No::Entity optionBgEntity_{};
+	No::Entity optionLineEntity_{};
+	std::array<No::Entity, 5> optionItemEntities_{};
+	std::array<No::Entity, 3> optionBarBaseEntities_{};
+	std::array<No::Entity, 3> optionBarFillEntities_{};
+	No::Entity optionToggleEntity_{};
 	int grassNameIndex_ = 0;
 };
 

@@ -464,6 +464,8 @@
     <ClInclude Include="application\CommentBout\Component\PauseMenuConfigComponent.h" />
     <ClInclude Include="application\CommentBout\Component\PauseStateComponent.h" />
     <ClInclude Include="application\CommentBout\Utility\CBSpriteLayer.h" />
+    <ClInclude Include="application\CommentBout\Component\OptionStateComponent.h" />
+    <ClInclude Include="application\CommentBout\Component\OptionMenuConfigComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />
