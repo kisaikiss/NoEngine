@@ -63,7 +63,7 @@ public:
 	/// <param name="Dest">初期化先のGPUバッファへの参照</param>
 	/// <param name="NumSubresources"></param>
 	/// <param name="SubData"></param>
-	static void InitializeTexture(GpuResource& dest, UINT numSubresources, D3D12_SUBRESOURCE_DATA subData[]);
+	static void InitializeTexture(GpuResource& dest, UINT subresourceCount, D3D12_SUBRESOURCE_DATA subData[]);
 
 	/// <summary>
 	/// GPUバッファを初期化します。指定したバイト数をソースデータから宛先バッファの指定オフセットにコピーします。

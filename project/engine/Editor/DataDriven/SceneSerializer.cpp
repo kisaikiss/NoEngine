@@ -76,7 +76,7 @@ namespace NoEngine {
 				ECS::Entity e = FindEntityByName(registry, name);
 
 				if (e == ECS::nullEntity) {
-					return;
+					continue;
 				}
 
 				// Componentを復元
@@ -113,18 +113,38 @@ namespace NoEngine {
 		}
 
 		void ReadFieldFromJson(const nlohmann::json& j, const FieldInfo& field, void* ptr) {
+			const nlohmann::json* src = nullptr;
 			auto it = j.find(field.name);
-			if (it == j.end()) {
+			if (it != j.end()) {
+				src = &(*it);
+			}
+			else {
+				const std::string& n = field.name;
+				if (n == "titleStartPosition" || n == "titleEndPosition") {
+					auto oldIt = j.find("titlePosition");
+					if (oldIt != j.end()) src = &(*oldIt);
+				}
+				else if (n == "itemBaseStartPosition" || n == "itemBaseEndPosition") {
+					auto oldIt = j.find("itemBasePosition");
+					if (oldIt != j.end()) src = &(*oldIt);
+				}
+				else if (n == "cursorStartOffset" || n == "cursorEndOffset") {
+					auto oldIt = j.find("cursorOffset");
+					if (oldIt != j.end()) src = &(*oldIt);
+				}
+			}
+
+			if (!src) {
 				return;
 			}
 
 			switch (field.type) {
 			case NoEngine::FieldType::Float:
-				*(float*)ptr = it->get<float>();
+				*(float*)ptr = src->get<float>();
 				break;
 			case NoEngine::FieldType::Float2:
 			{
-				auto arr = *it;
+				auto arr = *src;
 				if (!arr.is_array() || arr.size() < 2) {
 					break;
 				}
@@ -135,7 +155,7 @@ namespace NoEngine {
 			break;
 			case NoEngine::FieldType::Float3:
 			{
-				auto arr = *it;
+				auto arr = *src;
 				if (!arr.is_array() || arr.size() < 3) {
 					break;
 				}
@@ -147,7 +167,7 @@ namespace NoEngine {
 			break;
 			case NoEngine::FieldType::Float4:
 			{
-				auto arr = *it;
+				auto arr = *src;
 				if (!arr.is_array() || arr.size() < 4) {
 					break;
 				}
@@ -159,10 +179,10 @@ namespace NoEngine {
 			}
 			break;
 			case NoEngine::FieldType::Int:
-				*(int*)ptr = it->get<int>();
+				*(int*)ptr = src->get<int>();
 				break;
 			case NoEngine::FieldType::Bool:
-				*(bool*)ptr = it->get<bool>();
+				*(bool*)ptr = src->get<bool>();
 				break;
 			default:
 				break;

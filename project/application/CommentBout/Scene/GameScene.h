@@ -31,10 +31,15 @@ private:
 	No::Entity optionDimEntity_{};
 	No::Entity optionBgEntity_{};
 	No::Entity optionLineEntity_{};
+	No::Entity optionTitleEntity_{};
 	std::array<No::Entity, 5> optionItemEntities_{};
+	std::array<No::Entity, 5> optionLabelEntities_{};
 	std::array<No::Entity, 3> optionBarBaseEntities_{};
 	std::array<No::Entity, 3> optionBarFillEntities_{};
 	No::Entity optionToggleEntity_{};
+	No::Entity optionToggleOnEntity_{};
+	No::Entity optionToggleOffEntity_{};
+	No::Entity optionCursorEntity_{};
 	int grassNameIndex_ = 0;
 };
 

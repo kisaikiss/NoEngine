@@ -21,12 +21,28 @@ struct OptionMenuConfigComponent {
 	No::Color lineColor{ 1.000f, 1.000f, 1.000f, 0.950f };
 	float lineRotation = -0.280f;
 
+	No::Vector2 titleStartPosition{ 860.0f, -60.0f };
+	No::Vector2 titleEndPosition{ 920.0f, 120.0f };
+	No::Vector2 titleSize{ 280.0f, 58.0f };
+
 	No::Vector2 itemBaseStartPosition{ 640.000f, 860.000f };
 	No::Vector2 itemBaseEndPosition{ 935.400f, 333.300f };
 	No::Vector2 itemSize{ 620.000f, 52.700f };
 	float itemSpacing = 69.600f;
 	No::Color itemColor{ 0.200f, 0.200f, 0.240f, 0.900f };
 	No::Color selectedItemColor{ 0.420f, 0.340f, 0.120f, 0.960f };
+
+	No::Vector2 labelOffset{ -180.0f, 0.0f };
+	No::Vector2 labelSize{ 250.0f, 42.0f };
+	No::Vector2 backLabelStartPosition{ 700.0f, 860.0f };
+	No::Vector2 backLabelEndPosition{ 760.0f, 612.0f };
+	No::Vector2 backLabelSize{ 220.0f, 44.0f };
+
+	No::Vector2 cursorSelectOffset{ -260.0f, 0.0f };
+	No::Vector2 cursorEditOffset{ -40.0f, 0.0f };
+	No::Vector2 cursorSize{ 14.0f, 48.0f };
+	No::Color cursorColor{ 1.0f, 1.0f, 1.0f, 0.95f };
+	No::Color cursorEditColor{ 1.0f, 0.85f, 0.25f, 1.0f };
 
 	No::Vector2 barOffset{ 110.000f, 0.000f };
 	No::Vector2 barBaseSize{ 360.000f, 16.000f };
@@ -47,6 +63,8 @@ struct OptionMenuConfigComponent {
 	int bgLayer = 945;
 	int lineLayer = 958;
 	int itemLayer = 950;
+	int labelLayer = 951;
+	int cursorLayer = 952;
 	int barBaseLayer = 955;
 	int barFillLayer = 956;
 	int toggleLayer = 957;

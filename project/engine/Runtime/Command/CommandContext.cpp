@@ -122,14 +122,14 @@ void CommandContext::CopyBufferRegion(GpuResource& Dest, size_t DestOffset, GpuR
 	commandList_->CopyBufferRegion(Dest.GetResource(), DestOffset, Src.GetResource(), SrcOffset, NumBytes);
 }
 
-void CommandContext::InitializeTexture(GpuResource& dest, UINT numSubresources, D3D12_SUBRESOURCE_DATA subData[]) {
-	UINT64 uploadBufferSize = GetRequiredIntermediateSize(dest.GetResource(), 0, numSubresources);
+void CommandContext::InitializeTexture(GpuResource& dest, UINT subresourceCount, D3D12_SUBRESOURCE_DATA subData[]) {
+	UINT64 uploadBufferSize = GetRequiredIntermediateSize(dest.GetResource(), 0, subresourceCount);
 
 	CommandContext& InitContext = CommandContext::Begin();
 
 	// データを中間アップロードヒープにコピーし、アップロードヒープからデフォルトテクスチャへのコピーをスケジュールします。
 	DynAlloc mem = InitContext.ReserveUploadMemory(uploadBufferSize);
-	UpdateSubresources(InitContext.commandList_, dest.GetResource(), mem.Buffer.GetResource(), 0, 0, numSubresources, subData);
+	UpdateSubresources(InitContext.commandList_, dest.GetResource(), mem.Buffer.GetResource(), 0, 0, subresourceCount, subData);
 	InitContext.TransitionResource(dest, D3D12_RESOURCE_STATE_GENERIC_READ);
 
 	// コマンドリストを実行し、アップロードバッファを解放できるように完了するまで待ちます。
