@@ -19,8 +19,8 @@ struct OptionStateComponent {
 	int itemCount = 5;
 	bool isEditing = false;
 
-	float masterVolume = 1.0f;
-	float bgmVolume = 1.0f;
-	float seVolume = 1.0f;
+	float masterVolume = 0.5f;
+	float bgmVolume = 0.5f;
+	float seVolume = 0.5f;
 	bool vibrationEnabled = true;
 };

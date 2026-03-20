@@ -469,15 +469,15 @@
         "OptionState": {
             "components": {
                 "OptionStateComponent": {
-                    "bgmVolume": 1.0,
+                    "bgmVolume": 0.49999988079071045,
                     "isEditing": false,
                     "isOpen": false,
                     "itemCount": 5,
-                    "masterVolume": 1.0,
+                    "masterVolume": 0.49999988079071045,
                     "phase": 0,
                     "phaseDuration": 1.0,
                     "phaseTime": 0.0,
-                    "seVolume": 1.0,
+                    "seVolume": 0.49999988079071045,
                     "selectedIndex": 4,
                     "vibrationEnabled": true
                 }

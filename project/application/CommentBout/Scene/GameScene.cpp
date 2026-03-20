@@ -17,6 +17,7 @@
 #include "application/CommentBout/Component/GroundComponent.h"
 #include "application/CommentBout/Utility/CBCollisionMask.h"
 #include "application/CommentBout/Utility/CBSpriteLayer.h"
+#include "application/CommentBout/Utility/CBGameAudio.h"
 #include "application/CommentBout/System/PlayerControlSystem.h"
 #include "application/CommentBout/System/GrassReactionSystem.h"
 #include "application/CommentBout/System/HitBalloonSystem.h"
@@ -64,6 +65,9 @@ void GameScene::Setup() {
 	AddSystem(std::make_unique<No::EditSystem>());
 
 	No::Registry& registry = *GetRegistry();
+	CommentBout::GameAudio::InitializeForCommentBout();
+	CommentBout::GameAudio::StopTestBGM();
+	CommentBout::GameAudio::PlayTestBGM(true);
 
 	const auto whiteTexture = NoEngine::TextureManager::LoadCovertTexture("resources/engine/white1x1.png");
 
@@ -264,6 +268,7 @@ void GameScene::NotSystemUpdate() {
 	UpdatePauseMenuSprites();
 	UpdateOptionState();
 	UpdateOptionSprites();
+	DrawAudioTestImGui();
 	DrawPauseMenu();
 	CameraImGui();
 
@@ -981,6 +986,12 @@ void GameScene::UpdateOptionState()
 		return;
 	}
 
+	CommentBout::GameAudio::ApplyOptionVolumes(
+		optionState->masterVolume,
+		optionState->bgmVolume,
+		optionState->seVolume
+	);
+
 	if (optionState->phase == OptionStateComponent::Closed) {
 		optionState->isOpen = false;
 		optionState->isEditing = false;
@@ -1009,6 +1020,9 @@ void GameScene::UpdateOptionState()
 		const float step = std::max(0.01f, optionConfig->volumeStep);
 		const bool dec = No::Keyboard::IsTrigger('A') || No::Keyboard::IsTrigger(VK_LEFT);
 		const bool inc = No::Keyboard::IsTrigger('D') || No::Keyboard::IsTrigger(VK_RIGHT);
+		const float beforeMaster = optionState->masterVolume;
+		const float beforeBGM = optionState->bgmVolume;
+		const float beforeSE = optionState->seVolume;
 		if (optionState->selectedIndex == 0) {
 			if (dec) optionState->masterVolume = std::max(0.0f, optionState->masterVolume - step);
 			if (inc) optionState->masterVolume = std::min(1.0f, optionState->masterVolume + step);
@@ -1022,6 +1036,14 @@ void GameScene::UpdateOptionState()
 			if (dec || inc) {
 				optionState->vibrationEnabled = !optionState->vibrationEnabled;
 			}
+		}
+
+		const bool volumeChanged =
+			(beforeMaster != optionState->masterVolume) ||
+			(beforeBGM != optionState->bgmVolume) ||
+			(beforeSE != optionState->seVolume);
+		if (volumeChanged) {
+			CommentBout::GameAudio::PlayTestSE();
 		}
 
 		if (No::Keyboard::IsTrigger(VK_SPACE)) {
@@ -1177,4 +1199,28 @@ void GameScene::UpdateOptionSprites()
 		const No::Color c = optionState->vibrationEnabled ? optionConfig->toggleOnColor : optionConfig->toggleOffColor;
 		sp->color = { c.r, c.g, c.b, c.a * t };
 	}
+}
+
+void GameScene::DrawAudioTestImGui()
+{
+#ifdef USE_IMGUI
+	ImGui::Begin("AudioTest");
+	ImGui::Text("Master: %.2f", CommentBout::GameAudio::GetMasterVolume());
+	ImGui::Text("BGM   : %.2f (effective %.2f)", CommentBout::GameAudio::GetBGMVolume(), CommentBout::GameAudio::GetEffectiveBGMVolume());
+	ImGui::Text("SE    : %.2f (effective %.2f)", CommentBout::GameAudio::GetSEVolume(), CommentBout::GameAudio::GetEffectiveSEVolume());
+
+	if (ImGui::Button("Play Test BGM")) {
+		CommentBout::GameAudio::PlayTestBGM(true);
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("Stop Test BGM")) {
+		CommentBout::GameAudio::StopTestBGM();
+	}
+
+	if (ImGui::Button("Play Test SE")) {
+		CommentBout::GameAudio::PlayTestSE();
+	}
+
+	ImGui::End();
+#endif
 }

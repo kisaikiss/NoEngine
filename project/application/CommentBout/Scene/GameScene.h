@@ -18,6 +18,7 @@ private:
 	void CreateOptionSprites(const NoEngine::TextureRef& whiteTexture);
 	void UpdateOptionState();
 	void UpdateOptionSprites();
+	void DrawAudioTestImGui();
 
 	No::Entity activeCameraEntity_{};
 	No::Entity pauseDimEntity_{};
