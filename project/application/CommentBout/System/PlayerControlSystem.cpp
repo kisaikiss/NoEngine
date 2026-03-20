@@ -2,6 +2,7 @@
 #include "PlayerControlSystem.h"
 #include "application/CommentBout/Component/PlayerComponent.h"
 #include "application/CommentBout/Component/PlayerAttackComponent.h"
+#include "application/CommentBout/Component/PauseStateComponent.h"
 #include "application/CommentBout/Component/LifetimeComponent.h"
 #include "application/CommentBout/Component/GameResourceComponent.h"
 #include "application/CommentBout/Utility/CBCollisionMask.h"
@@ -12,6 +13,19 @@
 
 void PlayerControlSystem::Update(No::Registry& registry, float deltaTime)
 {
+	bool isPaused = false;
+	auto pauseView = registry.View<CBPauseStateTag, PauseStateComponent>();
+	for (auto pauseEntity : pauseView) {
+		auto* pauseState = registry.GetComponent<PauseStateComponent>(pauseEntity);
+		if (pauseState) {
+			isPaused = pauseState->isPaused;
+			break;
+		}
+	}
+	if (isPaused) {
+		return;
+	}
+
 	GameResourceComponent* gameResource = nullptr;
 	auto resourceView = registry.View<CBGameResourceTag, GameResourceComponent>();
 	for (auto entity : resourceView) {

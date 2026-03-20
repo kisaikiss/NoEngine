@@ -6,3 +6,6 @@ struct CBGroundTag {};
 struct CBAttackEffectTag {};
 struct CBGrassHitEffectTag {};
 struct CBGameResourceTag {};
+struct CBPauseStateTag {};
+struct CBPauseConfigTag {};
+struct CBPauseDimTag {};

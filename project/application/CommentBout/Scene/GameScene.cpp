@@ -2,13 +2,18 @@
 #include "GameScene.h"
 #include <vector>
 #include <utility>
+#include <array>
+#include <algorithm>
 #include "application/CommentBout/GameTag.h"
 #include "application/CommentBout/Component/PlayerComponent.h"
 #include "application/CommentBout/Component/PlayerAttackComponent.h"
+#include "application/CommentBout/Component/PauseStateComponent.h"
+#include "application/CommentBout/Component/PauseMenuConfigComponent.h"
 #include "application/CommentBout/Component/GrassReactionComponent.h"
 #include "application/CommentBout/Component/GameResourceComponent.h"
 #include "application/CommentBout/Component/GroundComponent.h"
 #include "application/CommentBout/Utility/CBCollisionMask.h"
+#include "application/CommentBout/Utility/CBSpriteLayer.h"
 #include "application/CommentBout/System/PlayerControlSystem.h"
 #include "application/CommentBout/System/GrassReactionSystem.h"
 #include "application/CommentBout/System/HitBalloonSystem.h"
@@ -17,10 +22,12 @@
 #include "application/TestApp/Component/Collider2DComponent.h"
 #include "application/TestApp/Component/Collider3DComponent.h"
 #include "application/TestApp/Component/ProjectedColliderComponent.h"
+#include "engine/Runtime/GraphicsCore.h"
 
 void GameScene::Setup() {
 
 	grassNameIndex_ = 0;
+	pauseDimEntity_ = No::nullEntity;
 
 	// ---- システム登録（順序が重要）----------------------------------------------
 	// 1. PlayerControlSystem    : 入力処理・攻撃エンティティのスポーン
@@ -50,6 +57,38 @@ void GameScene::Setup() {
 	registry.AddComponent<CBGameResourceTag>(gameResourceEntity);
 	auto* gameResource = registry.AddComponent<GameResourceComponent>(gameResourceEntity);
 	gameResource->whiteTexture = whiteTexture;
+
+	auto pauseStateEntity = registry.GenerateEntity();
+	registry.AddComponent<CBPauseStateTag>(pauseStateEntity);
+	auto* pauseState = registry.AddComponent<PauseStateComponent>(pauseStateEntity);
+	pauseState->isPaused = false;
+	pauseState->selectedIndex = 0;
+	auto* pauseStateTag = registry.AddComponent<No::EditTag>(pauseStateEntity);
+	pauseStateTag->name = "PauseState";
+
+	auto pauseConfigEntity = registry.GenerateEntity();
+	registry.AddComponent<CBPauseConfigTag>(pauseConfigEntity);
+	auto* pauseConfig = registry.AddComponent<PauseMenuConfigComponent>(pauseConfigEntity);
+	pauseConfig->dimLayer = static_cast<int>(CommentBout::ToLayer(CommentBout::SpriteLayer::PauseDim));
+	pauseConfig->titleLayer = static_cast<int>(CommentBout::ToLayer(CommentBout::SpriteLayer::PauseTitle));
+	pauseConfig->itemLayer = static_cast<int>(CommentBout::ToLayer(CommentBout::SpriteLayer::PauseItem));
+	pauseConfig->cursorLayer = static_cast<int>(CommentBout::ToLayer(CommentBout::SpriteLayer::PauseCursor));
+	auto* pauseConfigTag = registry.AddComponent<No::EditTag>(pauseConfigEntity);
+	pauseConfigTag->name = "PauseMenuConfig";
+
+	pauseDimEntity_ = registry.GenerateEntity();
+	registry.AddComponent<CBPauseDimTag>(pauseDimEntity_);
+	auto* pauseDimTransform = registry.AddComponent<No::Transform2DComponent>(pauseDimEntity_);
+	pauseDimTransform->translate = { 640.0f, 360.0f };
+	pauseDimTransform->scale = { 1280.0f, 720.0f };
+	auto* pauseDimSprite = registry.AddComponent<No::SpriteComponent>(pauseDimEntity_);
+	pauseDimSprite->textureHandle = whiteTexture;
+	pauseDimSprite->color = { 0.0f, 0.0f, 0.0f, 0.0f };
+	pauseDimSprite->layer = CommentBout::ToLayer(CommentBout::SpriteLayer::PauseDim);
+	pauseDimSprite->orderInLayer = 0;
+	pauseDimSprite->isVisible = false;
+	auto* pauseDimTag = registry.AddComponent<No::EditTag>(pauseDimEntity_);
+	pauseDimTag->name = "PauseDim";
 
 	// ライト
 	auto light = registry.GenerateEntity();
@@ -85,7 +124,7 @@ void GameScene::Setup() {
 	playerTransform->translate = { 640.f, 600.f };
 	playerTransform->scale = { 128.f, 200.f };
 	auto* playerSprite = registry.AddComponent<No::SpriteComponent>(playerEntity);
-	playerSprite->layer = 20;
+	playerSprite->layer = CommentBout::ToLayer(CommentBout::SpriteLayer::Gameplay);
 	playerSprite->color = { 1.f, 1.f, 1.f, 1.f };
 	playerSprite->textureHandle = whiteTexture;
 	auto* playerCollider = registry.AddComponent<TestApp::Collider2DComponent>(playerEntity);
@@ -133,8 +172,6 @@ void GameScene::Setup() {
 	groundCollider->collisionLayer = CommentBout::CollisionLayer::CBGround;
 	groundCollider->collisionMask = CommentBout::CollisionMask::CBGround;
 
-
-
 }
 
 void GameScene::SpawnGrass(const No::Vector3& position, const No::Vector3& size)
@@ -178,6 +215,9 @@ void GameScene::SpawnGrass(const No::Vector3& position, const No::Vector3& size)
 }
 
 void GameScene::NotSystemUpdate() {
+	UpdatePauseState();
+	UpdatePauseDim();
+	DrawPauseMenu();
 	CameraImGui();
 
 	ImGui::Begin("ChangeScene");
@@ -193,6 +233,215 @@ void GameScene::NotSystemUpdate() {
 		GetRegistry()->EmitEvent(event);
 	}
 	ImGui::End();
+}
+
+void GameScene::UpdatePauseState()
+{
+	No::Registry& registry = *GetRegistry();
+	PauseStateComponent* pauseState = nullptr;
+	auto pauseView = registry.View<CBPauseStateTag, PauseStateComponent>();
+	for (auto entity : pauseView) {
+		pauseState = registry.GetComponent<PauseStateComponent>(entity);
+		if (pauseState) {
+			break;
+		}
+	}
+
+	if (!pauseState) {
+		return;
+	}
+
+	pauseState->justEnteredPause = false;
+	pauseState->justExitedPause = false;
+
+	if (!pauseState->isPaused) {
+		if (No::Keyboard::IsTrigger(VK_RETURN)) {
+			pauseState->isPaused = true;
+			pauseState->justEnteredPause = true;
+			pauseState->selectedIndex = 0;
+		}
+		return;
+	}
+
+	if (pauseState->itemCount > 0) {
+		if (No::Keyboard::IsTrigger('W')) {
+			pauseState->selectedIndex--;
+			if (pauseState->selectedIndex < 0) {
+				pauseState->selectedIndex = pauseState->itemCount - 1;
+			}
+		}
+		if (No::Keyboard::IsTrigger('S')) {
+			pauseState->selectedIndex++;
+			if (pauseState->selectedIndex >= pauseState->itemCount) {
+				pauseState->selectedIndex = 0;
+			}
+		}
+	}
+
+	if (No::Keyboard::IsTrigger(VK_RETURN)) {
+		switch (pauseState->selectedIndex) {
+		case 0: // ゲーム再開
+			pauseState->isPaused = false;
+			pauseState->justExitedPause = true;
+			break;
+		case 1: // リスタート
+		{
+			No::SceneChangeEvent event;
+			event.nextScene = "GameScene";
+			registry.EmitEvent(event);
+		}
+			break;
+		case 2: // オプション（実装予定）
+			break;
+		case 3: // タイトルへ
+		{
+			No::SceneChangeEvent event;
+			event.nextScene = "TitleScene";
+			registry.EmitEvent(event);
+		}
+			break;
+		default:
+			break;
+		}
+	}
+}
+
+void GameScene::UpdatePauseDim()
+{
+	No::Registry& registry = *GetRegistry();
+	PauseStateComponent* pauseState = nullptr;
+	PauseMenuConfigComponent* pauseConfig = nullptr;
+
+	auto pauseView = registry.View<CBPauseStateTag, PauseStateComponent>();
+	for (auto entity : pauseView) {
+		pauseState = registry.GetComponent<PauseStateComponent>(entity);
+		if (pauseState) {
+			break;
+		}
+	}
+
+	auto configView = registry.View<CBPauseConfigTag, PauseMenuConfigComponent>();
+	for (auto entity : configView) {
+		pauseConfig = registry.GetComponent<PauseMenuConfigComponent>(entity);
+		if (pauseConfig) {
+			break;
+		}
+	}
+
+	if (!pauseState || !pauseConfig || pauseDimEntity_ == No::nullEntity) {
+		return;
+	}
+
+	if (!registry.Has<No::Transform2DComponent>(pauseDimEntity_) || !registry.Has<No::SpriteComponent>(pauseDimEntity_)) {
+		return;
+	}
+
+	auto* dimTransform = registry.GetComponent<No::Transform2DComponent>(pauseDimEntity_);
+	auto* dimSprite = registry.GetComponent<No::SpriteComponent>(pauseDimEntity_);
+
+	auto* mainWindow = NoEngine::GraphicsCore::gWindowManager.GetMainWindow();
+	if (mainWindow) {
+		const auto& windowSize = mainWindow->GetWindowSize();
+		const float width = static_cast<float>(windowSize.clientWidth);
+		const float height = static_cast<float>(windowSize.clientHeight);
+		dimTransform->translate = { width * 0.5f, height * 0.5f };
+		dimTransform->scale = { width, height };
+	}
+
+	dimSprite->layer = static_cast<uint32_t>(std::max(0, pauseConfig->dimLayer));
+	dimSprite->isVisible = pauseState->isPaused;
+	const float dimAlpha = std::max(0.0f, std::min(1.0f, pauseConfig->dimAlpha));
+	dimSprite->color = { 0.0f, 0.0f, 0.0f, pauseState->isPaused ? dimAlpha : 0.0f };
+}
+
+void GameScene::DrawPauseMenu()
+{
+#ifdef USE_IMGUI
+	No::Registry& registry = *GetRegistry();
+	PauseStateComponent* pauseState = nullptr;
+	PauseMenuConfigComponent* pauseConfig = nullptr;
+
+	auto pauseView = registry.View<CBPauseStateTag, PauseStateComponent>();
+	for (auto entity : pauseView) {
+		pauseState = registry.GetComponent<PauseStateComponent>(entity);
+		if (pauseState) {
+			break;
+		}
+	}
+
+	auto configView = registry.View<CBPauseConfigTag, PauseMenuConfigComponent>();
+	for (auto entity : configView) {
+		pauseConfig = registry.GetComponent<PauseMenuConfigComponent>(entity);
+		if (pauseConfig) {
+			break;
+		}
+	}
+
+	if (!pauseState || !pauseConfig || !pauseState->isPaused) {
+		return;
+	}
+
+	static const std::array<const char*, 4> menuItems = {
+		"ゲーム再開",
+		"リスタート",
+		"オプション",
+		"タイトルへ"
+	};
+
+	ImDrawList* drawList = ImGui::GetForegroundDrawList();
+	if (!drawList) {
+		return;
+	}
+
+	const ImU32 titleColor = IM_COL32(255, 255, 255, 255);
+	const ImU32 normalTextColor = IM_COL32(220, 220, 220, 255);
+	const ImU32 selectedTextColor = IM_COL32(255, 255, 120, 255);
+	const ImU32 selectedFrameColor = IM_COL32(255, 240, 120, 255);
+
+	drawList->AddText(
+		nullptr,
+		pauseConfig->titleSize.y,
+		ImVec2(pauseConfig->titlePosition.x - pauseConfig->titleSize.x * 0.5f, pauseConfig->titlePosition.y - pauseConfig->titleSize.y * 0.5f),
+		titleColor,
+		"PAUSE"
+	);
+
+	for (int i = 0; i < pauseState->itemCount && i < static_cast<int>(menuItems.size()); ++i) {
+		const float y = pauseConfig->itemBasePosition.y + pauseConfig->itemSpacing * static_cast<float>(i);
+		const ImVec2 itemCenter(pauseConfig->itemBasePosition.x, y);
+		const ImVec2 halfSize(pauseConfig->itemSize.x * 0.5f, pauseConfig->itemSize.y * 0.5f);
+		const bool isSelected = (i == pauseState->selectedIndex);
+		if (isSelected) {
+			drawList->AddRect(
+				ImVec2(itemCenter.x - halfSize.x, itemCenter.y - halfSize.y),
+				ImVec2(itemCenter.x + halfSize.x, itemCenter.y + halfSize.y),
+				selectedFrameColor,
+				6.0f,
+				0,
+				2.0f
+			);
+		}
+
+		drawList->AddText(
+			nullptr,
+			pauseConfig->itemSize.y * 0.62f,
+			ImVec2(itemCenter.x - halfSize.x + 22.0f, itemCenter.y - pauseConfig->itemSize.y * 0.28f),
+			isSelected ? selectedTextColor : normalTextColor,
+			menuItems[static_cast<size_t>(i)]
+		);
+	}
+
+	const float cursorY = pauseConfig->itemBasePosition.y + pauseConfig->itemSpacing * static_cast<float>(pauseState->selectedIndex);
+	drawList->AddTriangleFilled(
+		ImVec2(pauseConfig->itemBasePosition.x + pauseConfig->cursorOffset.x, cursorY),
+		ImVec2(pauseConfig->itemBasePosition.x + pauseConfig->cursorOffset.x + pauseConfig->cursorSize.x, cursorY - pauseConfig->cursorSize.y * 0.5f),
+		ImVec2(pauseConfig->itemBasePosition.x + pauseConfig->cursorOffset.x + pauseConfig->cursorSize.x, cursorY + pauseConfig->cursorSize.y * 0.5f),
+		selectedFrameColor
+	);
+#else
+	No::Registry& registry = *GetRegistry();
+	static_cast<void>(registry);
+#endif
 }
 
 void GameScene::CameraImGui()

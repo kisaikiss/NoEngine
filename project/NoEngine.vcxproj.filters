@@ -461,6 +461,9 @@
     <ClInclude Include="application\CommentBout\System\HitBalloonSystem.h" />
     <ClInclude Include="application\CommentBout\Component\LifetimeComponent.h" />
     <ClInclude Include="application\CommentBout\Scene\TitleScene.h" />
+    <ClInclude Include="application\CommentBout\Component\PauseMenuConfigComponent.h" />
+    <ClInclude Include="application\CommentBout\Component\PauseStateComponent.h" />
+    <ClInclude Include="application\CommentBout\Utility\CBSpriteLayer.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />
