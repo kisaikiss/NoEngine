@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "GameScene.h"
+#include <vector>
+#include <utility>
 #include "application/CommentBout/GameTag.h"
 #include "application/CommentBout/Component/PlayerComponent.h"
 #include "application/CommentBout/Component/PlayerAttackComponent.h"
@@ -17,6 +19,8 @@
 #include "application/TestApp/Component/ProjectedColliderComponent.h"
 
 void GameScene::Setup() {
+
+	grassNameIndex_ = 0;
 
 	// ---- システム登録（順序が重要）----------------------------------------------
 	// 1. PlayerControlSystem    : 入力処理・攻撃エンティティのスポーン
@@ -90,44 +94,14 @@ void GameScene::Setup() {
 	playerCollider->collisionLayer = CommentBout::CollisionLayer::CBPlayer;
 	playerCollider->collisionMask = CommentBout::CollisionMask::CBPlayer;
 
-	// 草（3D AABB）
-	auto grassEntity = registry.GenerateEntity();
-	registry.AddComponent<CBGrassTag>(grassEntity);
-
-	// GrassReactionComponent: effectOffset がアンカー(右上端)からの微調整値になる
-	// デフォルト値 {60, -60} のまま使用。変更したい場合は以下のように取得して上書きする
-	// auto* grassReaction = registry.AddComponent<GrassReactionComponent>(grassEntity);
-	// grassReaction->effectOffset = { 10.f, -70.f };
-	registry.AddComponent<GrassReactionComponent>(grassEntity);
-
-	auto* grassTransform = registry.AddComponent<No::TransformComponent>(grassEntity);
-	grassTransform->translate = { 0.f, 0.f, 6.f };
-	grassTransform->scale = { 2.f, 1.5f, 2.f };
-	auto* grassTag = registry.AddComponent<No::EditTag>(grassEntity);
-	grassTag->name = "Grass";
-
-	auto* grassMesh = registry.AddComponent<No::MeshComponent>(grassEntity);
-	auto* grassMaterial = registry.AddComponent<No::MaterialComponent>(grassEntity);
-	NoEngine::Asset::ModelLoader::LoadModel(
-		"commentbout_grass_cube",
-		"resources/game/td_3105/Model/cube/cube.obj",
-		grassMesh
-	);
-	grassMaterial->materials = NoEngine::Asset::ModelLoader::GetMaterial("commentbout_grass_cube");
-	grassMaterial->color = { 0.2f, 0.8f, 0.2f, 1.f };
-	grassMaterial->psoName = L"Renderer : Default PSO";
-	grassMaterial->psoId = NoEngine::Render::GetPSOID(grassMaterial->psoName);
-	grassMaterial->rootSigId = NoEngine::Render::GetRootSignatureID(grassMaterial->psoName);
-
-	auto* grassCollider = registry.AddComponent<TestApp::Collider3DComponent>(grassEntity);
-	grassCollider->shapeType = TestApp::ShapeType3D::Box;
-	grassCollider->useScaleAsBox = true;
-	grassCollider->boxSizeMultiplier = { 1.f, 1.f, 1.f };
-	grassCollider->collisionLayer = CommentBout::CollisionLayer::CBGrass;
-	grassCollider->collisionMask = CommentBout::CollisionMask::CBGrass;
-
-	auto* projected = registry.AddComponent<TestApp::ProjectedColliderComponent>(grassEntity);
-	projected->source3DEntity = grassEntity;
+	const std::vector<std::pair<No::Vector3, No::Vector3>> grassSpawnParams = {
+		{{0.f, 0.f, 6.f}, {2.f, 1.5f, 2.f}},
+		{{-2.8f, 0.f, 8.f}, {1.7f, 1.3f, 1.7f}},
+		{{2.6f, 0.f, 10.f}, {2.3f, 1.7f, 2.3f}}
+	};
+	for (const auto& spawnParam : grassSpawnParams) {
+		SpawnGrass(spawnParam.first, spawnParam.second);
+	}
 
 	// 地面（3D AABB, 現在は何とも当たらない）
 	auto groundEntity = registry.GenerateEntity();
@@ -158,10 +132,67 @@ void GameScene::Setup() {
 	groundCollider->boxSizeMultiplier = { 1.f, 1.f, 1.f };
 	groundCollider->collisionLayer = CommentBout::CollisionLayer::CBGround;
 	groundCollider->collisionMask = CommentBout::CollisionMask::CBGround;
+
+
+
+}
+
+void GameScene::SpawnGrass(const No::Vector3& position, const No::Vector3& size)
+{
+	No::Registry& registry = *GetRegistry();
+
+	// 草（3D AABB）
+	auto grassEntity = registry.GenerateEntity();
+	registry.AddComponent<CBGrassTag>(grassEntity);
+
+	registry.AddComponent<GrassReactionComponent>(grassEntity);
+
+	auto* grassTransform = registry.AddComponent<No::TransformComponent>(grassEntity);
+	grassTransform->translate = position;
+	grassTransform->scale = size;
+	auto* grassTag = registry.AddComponent<No::EditTag>(grassEntity);
+	grassTag->name = "Grass_" + std::to_string(grassNameIndex_++);
+
+	auto* grassMesh = registry.AddComponent<No::MeshComponent>(grassEntity);
+	auto* grassMaterial = registry.AddComponent<No::MaterialComponent>(grassEntity);
+	NoEngine::Asset::ModelLoader::LoadModel(
+		"commentbout_grass_cube",
+		"resources/game/td_3105/Model/cube/cube.obj",
+		grassMesh
+	);
+	grassMaterial->materials = NoEngine::Asset::ModelLoader::GetMaterial("commentbout_grass_cube");
+	grassMaterial->color = { 0.2f, 0.8f, 0.2f, 1.f };
+	grassMaterial->psoName = L"Renderer : Default PSO";
+	grassMaterial->psoId = NoEngine::Render::GetPSOID(grassMaterial->psoName);
+	grassMaterial->rootSigId = NoEngine::Render::GetRootSignatureID(grassMaterial->psoName);
+
+	auto* grassCollider = registry.AddComponent<TestApp::Collider3DComponent>(grassEntity);
+	grassCollider->shapeType = TestApp::ShapeType3D::Box;
+	grassCollider->useScaleAsBox = true;
+	grassCollider->boxSizeMultiplier = { 1.f, 1.f, 1.f };
+	grassCollider->collisionLayer = CommentBout::CollisionLayer::CBGrass;
+	grassCollider->collisionMask = CommentBout::CollisionMask::CBGrass;
+
+	auto* projected = registry.AddComponent<TestApp::ProjectedColliderComponent>(grassEntity);
+	projected->source3DEntity = grassEntity;
 }
 
 void GameScene::NotSystemUpdate() {
 	CameraImGui();
+
+	ImGui::Begin("ChangeScene");
+	if (ImGui::Button("SceneChangeTitle")) {
+		No::SceneChangeEvent event;
+		event.nextScene = "TitleScene";
+		GetRegistry()->EmitEvent(event);
+	}
+
+	if (ImGui::Button("SceneChangeNow")) {
+		No::SceneChangeEvent event;
+		event.nextScene = "GameScene";
+		GetRegistry()->EmitEvent(event);
+	}
+	ImGui::End();
 }
 
 void GameScene::CameraImGui()

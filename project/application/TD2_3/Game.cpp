@@ -1,6 +1,6 @@
 #include "Game.h"
 //#include "Scene/GameScene.h"
-#include "Scene/TitleScene.h"
+//#include "Scene/TitleScene.h"
 #include "Scene/GameOverScene.h"
 #include "Scene/ResultScene.h"
 
@@ -10,10 +10,10 @@
 
 void Game::Startup(void)
 {
-	RegisterScene("TitleScene", []()
-		{
-			return std::make_unique<TitleScene>();
-		});
+	//RegisterScene("TitleScene", []()
+	//	{
+	//		return std::make_unique<TitleScene>();
+	//	});
 	//RegisterScene("GameScene", []()
 	//	{
 	//		return std::make_unique<GameScene>();
@@ -26,7 +26,7 @@ void Game::Startup(void)
 		{
 			return std::make_unique<ResultScene>();
 		});
-	ChangeScene("TitleScene");
+	//ChangeScene("TitleScene");
 
 	// カスタム RenderPass の追加例
 
