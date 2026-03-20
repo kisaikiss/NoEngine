@@ -29,6 +29,8 @@ void GameScene::Setup() {
 
 	grassNameIndex_ = 0;
 	pauseDimEntity_ = No::nullEntity;
+	pauseMenuBgEntity_ = No::nullEntity;
+	pausePanelLineEntity_ = No::nullEntity;
 	pauseTitleEntity_ = No::nullEntity;
 	pauseCursorEntity_ = No::nullEntity;
 	pauseItemEntities_.fill(No::nullEntity);
@@ -81,6 +83,8 @@ void GameScene::Setup() {
 	registry.AddComponent<CBPauseConfigTag>(pauseConfigEntity);
 	auto* pauseConfig = registry.AddComponent<PauseMenuConfigComponent>(pauseConfigEntity);
 	pauseConfig->dimLayer = static_cast<int>(CommentBout::ToLayer(CommentBout::SpriteLayer::PauseDim));
+	pauseConfig->menuBgLayer = static_cast<int>(CommentBout::ToLayer(CommentBout::SpriteLayer::PauseMenuBackground));
+	pauseConfig->panelLineLayer = static_cast<int>(CommentBout::ToLayer(CommentBout::SpriteLayer::PausePanelLine));
 	pauseConfig->titleLayer = static_cast<int>(CommentBout::ToLayer(CommentBout::SpriteLayer::PauseTitle));
 	pauseConfig->itemLayer = static_cast<int>(CommentBout::ToLayer(CommentBout::SpriteLayer::PauseItem));
 	pauseConfig->cursorLayer = static_cast<int>(CommentBout::ToLayer(CommentBout::SpriteLayer::PauseCursor));
@@ -250,45 +254,80 @@ void GameScene::NotSystemUpdate() {
 }
 
 namespace {
-float Clamp01(float v) {
-	if (v < 0.0f) {
-		return 0.0f;
+	float Clamp01(float v) {
+		if (v < 0.0f) {
+			return 0.0f;
+		}
+		if (v > 1.0f) {
+			return 1.0f;
+		}
+		return v;
 	}
-	if (v > 1.0f) {
-		return 1.0f;
-	}
-	return v;
-}
 
-float GetPauseDeltaTime() {
+	No::Vector2 LerpVec2(const No::Vector2& a, const No::Vector2& b, float t) {
+		t = Clamp01(t);
+		return No::Vector2(
+			a.x + (b.x - a.x) * t,
+			a.y + (b.y - a.y) * t
+		);
+	}
+
+	float GetMenuMotionT(const PauseStateComponent* pauseState) {
+		if (!pauseState) {
+			return 0.0f;
+		}
+		const float duration = (pauseState->phaseDuration <= 0.0001f) ? 0.0001f : pauseState->phaseDuration;
+		switch (pauseState->phase) {
+		case PauseStateComponent::Opening:
+		{
+			const float t = pauseState->phaseTime / duration;
+			return No::EaseOutBack(0.0f, 1.0f, t);
+		}
+		case PauseStateComponent::Closing:
+		{
+			const float t = pauseState->phaseTime / duration;
+			return 1.0f - No::EaseOutCubic(0.0f, 1.0f, t);
+		}
+		case PauseStateComponent::Open:
+		case PauseStateComponent::OptionOpening:
+		case PauseStateComponent::OptionOpen:
+		case PauseStateComponent::OptionClosing:
+			return 1.0f;
+		case PauseStateComponent::Closed:
+		default:
+			return 0.0f;
+		}
+	}
+
+	float GetPauseDeltaTime() {
 #ifdef USE_IMGUI
-	return std::max(0.0f, ImGui::GetIO().DeltaTime);
+		return std::max(0.0f, ImGui::GetIO().DeltaTime);
 #else
-	return 1.0f / 60.0f;
+		return 1.0f / 60.0f;
 #endif
-}
-
-float EaseByType(int easeType, float t) {
-	t = Clamp01(t);
-	switch (easeType) {
-	case 1:
-		return No::EaseInExpo(0.0f, 1.0f, t);
-	case 2:
-		return No::EaseOutCubic(0.0f, 1.0f, t);
-	default:
-		return No::EaseInOutSine(0.0f, 1.0f, t);
 	}
-}
 
-float SafeDuration(float d) {
-	return (d <= 0.0001f) ? 0.0001f : d;
-}
+	float EaseByType(int easeType, float t) {
+		t = Clamp01(t);
+		switch (easeType) {
+		case 1:
+			return No::EaseInExpo(0.0f, 1.0f, t);
+		case 2:
+			return No::EaseOutCubic(0.0f, 1.0f, t);
+		default:
+			return No::EaseInOutSine(0.0f, 1.0f, t);
+		}
+	}
 
-void StartPhase(PauseStateComponent* state, int phase, float duration) {
-	state->phase = phase;
-	state->phaseTime = 0.0f;
-	state->phaseDuration = SafeDuration(duration);
-}
+	float SafeDuration(float d) {
+		return (d <= 0.0001f) ? 0.0001f : d;
+	}
+
+	void StartPhase(PauseStateComponent* state, int phase, float duration) {
+		state->phase = phase;
+		state->phaseTime = 0.0f;
+		state->phaseDuration = SafeDuration(duration);
+	}
 }
 
 void GameScene::UpdatePauseState()
@@ -338,7 +377,7 @@ void GameScene::UpdatePauseState()
 				event.nextScene = "GameScene";
 				registry.EmitEvent(event);
 			}
-				break;
+			break;
 			case PauseStateComponent::OpenOption:
 				StartPhase(pauseState, PauseStateComponent::OptionOpening, pauseConfig->optionOpenDuration);
 				break;
@@ -348,7 +387,7 @@ void GameScene::UpdatePauseState()
 				event.nextScene = "TitleScene";
 				registry.EmitEvent(event);
 			}
-				break;
+			break;
 			default:
 				break;
 			}
@@ -409,7 +448,7 @@ void GameScene::UpdatePauseState()
 	}
 
 	if (pauseState->phase == PauseStateComponent::OptionOpen) {
-		if (No::Keyboard::IsTrigger(VK_ESCAPE) || No::Keyboard::IsTrigger(VK_RETURN)) {
+		if (No::Keyboard::IsTrigger(VK_RETURN)) {
 			StartPhase(pauseState, PauseStateComponent::OptionClosing, pauseConfig->optionCloseDuration);
 		}
 		return;
@@ -420,13 +459,13 @@ void GameScene::UpdatePauseState()
 	}
 
 	if (pauseState->itemCount > 0) {
-		if (No::Keyboard::IsTrigger('W')) {
+		if (No::Keyboard::IsTrigger('W') || No::Keyboard::IsTrigger(VK_UP)) {
 			pauseState->selectedIndex--;
 			if (pauseState->selectedIndex < 0) {
 				pauseState->selectedIndex = pauseState->itemCount - 1;
 			}
 		}
-		if (No::Keyboard::IsTrigger('S')) {
+		if (No::Keyboard::IsTrigger('S') || No::Keyboard::IsTrigger(VK_DOWN)) {
 			pauseState->selectedIndex++;
 			if (pauseState->selectedIndex >= pauseState->itemCount) {
 				pauseState->selectedIndex = 0;
@@ -434,7 +473,7 @@ void GameScene::UpdatePauseState()
 		}
 	}
 
-	if (No::Keyboard::IsTrigger(VK_RETURN)) {
+	if (No::Keyboard::IsTrigger(VK_SPACE)) {
 		int action = PauseStateComponent::None;
 		switch (pauseState->selectedIndex) {
 		case 0:
@@ -514,19 +553,19 @@ void GameScene::UpdatePauseDim()
 		const float t = pauseState->phaseTime / SafeDuration(pauseState->phaseDuration);
 		alpha = maxAlpha * EaseByType(pauseConfig->easeType, t);
 	}
-		break;
+	break;
 	case PauseStateComponent::Closing:
 	{
 		const float t = pauseState->phaseTime / SafeDuration(pauseState->phaseDuration);
 		alpha = maxAlpha * (1.0f - EaseByType(pauseConfig->easeType, t));
 	}
-		break;
+	break;
 	case PauseStateComponent::OptionOpening:
 	{
 		const float t = pauseState->phaseTime / SafeDuration(pauseState->phaseDuration);
 		alpha = maxAlpha + 0.12f * EaseByType(pauseConfig->easeType, t);
 	}
-		break;
+	break;
 	case PauseStateComponent::OptionOpen:
 		alpha = maxAlpha + 0.12f;
 		break;
@@ -535,7 +574,7 @@ void GameScene::UpdatePauseDim()
 		const float t = pauseState->phaseTime / SafeDuration(pauseState->phaseDuration);
 		alpha = (maxAlpha + 0.12f) - 0.12f * EaseByType(pauseConfig->easeType, t);
 	}
-		break;
+	break;
 	case PauseStateComponent::Open:
 		alpha = maxAlpha;
 		break;
@@ -579,6 +618,30 @@ void GameScene::CreatePauseMenuSprites(const NoEngine::TextureRef& whiteTexture)
 	const auto restartTexture = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_3105/Sprite/Restart.png");
 	const auto optionTexture = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_3105/Sprite/OptionMenu.png");
 	const auto pauseToTitleTexture = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_3105/Sprite/PauseToTitle.png");
+
+	pauseMenuBgEntity_ = registry.GenerateEntity();
+	auto* bgTransform = registry.AddComponent<No::Transform2DComponent>(pauseMenuBgEntity_);
+	bgTransform->translate = { 640.0f, 430.0f };
+	bgTransform->scale = { 980.0f, 540.0f };
+	auto* bgSprite = registry.AddComponent<No::SpriteComponent>(pauseMenuBgEntity_);
+	bgSprite->textureHandle = whiteTexture;
+	bgSprite->isVisible = false;
+	bgSprite->color = { 0.08f, 0.08f, 0.12f, 0.0f };
+	bgSprite->layer = CommentBout::ToLayer(CommentBout::SpriteLayer::PauseMenuBackground);
+	auto* bgTag = registry.AddComponent<No::EditTag>(pauseMenuBgEntity_);
+	bgTag->name = "PauseMenuBackgroundSprite";
+
+	pausePanelLineEntity_ = registry.GenerateEntity();
+	auto* lineTransform = registry.AddComponent<No::Transform2DComponent>(pausePanelLineEntity_);
+	lineTransform->translate = { 640.0f, 330.0f };
+	lineTransform->scale = { 980.0f, 8.0f };
+	auto* lineSprite = registry.AddComponent<No::SpriteComponent>(pausePanelLineEntity_);
+	lineSprite->textureHandle = whiteTexture;
+	lineSprite->isVisible = false;
+	lineSprite->color = { 1.0f, 1.0f, 1.0f, 0.0f };
+	lineSprite->layer = CommentBout::ToLayer(CommentBout::SpriteLayer::PausePanelLine);
+	auto* lineTag = registry.AddComponent<No::EditTag>(pausePanelLineEntity_);
+	lineTag->name = "PausePanelLineSprite";
 
 	pauseTitleEntity_ = registry.GenerateEntity();
 	auto* titleTransform = registry.AddComponent<No::Transform2DComponent>(pauseTitleEntity_);
@@ -653,26 +716,8 @@ void GameScene::UpdatePauseMenuSprites()
 		return;
 	}
 
-	float menuVisibility = 0.0f;
-	switch (pauseState->phase) {
-	case PauseStateComponent::Opening:
-		menuVisibility = EaseByType(pauseConfig->easeType, pauseState->phaseTime / SafeDuration(pauseState->phaseDuration));
-		break;
-	case PauseStateComponent::Open:
-	case PauseStateComponent::OptionOpening:
-	case PauseStateComponent::OptionOpen:
-	case PauseStateComponent::OptionClosing:
-		menuVisibility = 1.0f;
-		break;
-	case PauseStateComponent::Closing:
-		menuVisibility = 1.0f - EaseByType(pauseConfig->easeType, pauseState->phaseTime / SafeDuration(pauseState->phaseDuration));
-		break;
-	case PauseStateComponent::Closed:
-	default:
-		menuVisibility = 0.0f;
-		break;
-	}
-	menuVisibility = std::max(0.0f, std::min(1.0f, menuVisibility));
+	const float menuMotionT = Clamp01(GetMenuMotionT(pauseState));
+	const float menuVisibility = menuMotionT;
 
 	float confirmPunch = 0.0f;
 	if (pauseState->isConfirmAnimating) {
@@ -681,24 +726,53 @@ void GameScene::UpdatePauseMenuSprites()
 		confirmPunch = 1.0f - std::fabs(2.0f * eased - 1.0f);
 	}
 
+	if (pauseMenuBgEntity_ != No::nullEntity &&
+		registry.Has<No::Transform2DComponent>(pauseMenuBgEntity_) &&
+		registry.Has<No::SpriteComponent>(pauseMenuBgEntity_)) {
+		auto* bgTransform = registry.GetComponent<No::Transform2DComponent>(pauseMenuBgEntity_);
+		auto* bgSprite = registry.GetComponent<No::SpriteComponent>(pauseMenuBgEntity_);
+		bgTransform->translate = LerpVec2(pauseConfig->menuBgStartPosition, pauseConfig->menuBgEndPosition, menuMotionT);
+		bgTransform->scale = LerpVec2(pauseConfig->menuBgStartSize, pauseConfig->menuBgEndSize, menuMotionT);
+		bgSprite->layer = static_cast<uint32_t>(std::max(0, pauseConfig->menuBgLayer));
+		bgSprite->isVisible = (menuVisibility > 0.0001f);
+		bgSprite->color = {
+			pauseConfig->menuBgColor.r,
+			pauseConfig->menuBgColor.g,
+			pauseConfig->menuBgColor.b,
+			pauseConfig->menuBgColor.a * menuVisibility
+		};
+	}
+
+	if (pausePanelLineEntity_ != No::nullEntity &&
+		registry.Has<No::Transform2DComponent>(pausePanelLineEntity_) &&
+		registry.Has<No::SpriteComponent>(pausePanelLineEntity_)) {
+		auto* lineTransform = registry.GetComponent<No::Transform2DComponent>(pausePanelLineEntity_);
+		auto* lineSprite = registry.GetComponent<No::SpriteComponent>(pausePanelLineEntity_);
+		lineTransform->translate = LerpVec2(pauseConfig->panelLineStartPosition, pauseConfig->panelLineEndPosition, menuMotionT);
+		lineTransform->scale = LerpVec2(pauseConfig->panelLineStartSize, pauseConfig->panelLineEndSize, menuMotionT);
+		lineSprite->layer = static_cast<uint32_t>(std::max(0, pauseConfig->panelLineLayer));
+		lineSprite->isVisible = (menuVisibility > 0.0001f);
+		lineSprite->color = {
+			pauseConfig->panelLineColor.r,
+			pauseConfig->panelLineColor.g,
+			pauseConfig->panelLineColor.b,
+			pauseConfig->panelLineColor.a * menuVisibility
+		};
+	}
+
 	if (pauseTitleEntity_ != No::nullEntity &&
 		registry.Has<No::Transform2DComponent>(pauseTitleEntity_) &&
 		registry.Has<No::SpriteComponent>(pauseTitleEntity_)) {
 		auto* titleTransform = registry.GetComponent<No::Transform2DComponent>(pauseTitleEntity_);
 		auto* titleSprite = registry.GetComponent<No::SpriteComponent>(pauseTitleEntity_);
-		titleTransform->translate = {
-			pauseConfig->titlePosition.x,
-			pauseConfig->titlePosition.y + 40.0f * (1.0f - menuVisibility)
-		};
-		titleTransform->scale = {
-			pauseConfig->titleSize.x,
-			pauseConfig->titleSize.y
-		};
+		titleTransform->translate = LerpVec2(pauseConfig->titleStartPosition, pauseConfig->titleEndPosition, menuMotionT);
+		titleTransform->scale = pauseConfig->titleSize;
 		titleSprite->layer = static_cast<uint32_t>(std::max(0, pauseConfig->titleLayer));
 		titleSprite->isVisible = (menuVisibility > 0.0001f);
 		titleSprite->color = { 1.0f, 1.0f, 1.0f, menuVisibility };
 	}
 
+	const No::Vector2 itemBasePosition = LerpVec2(pauseConfig->itemBaseStartPosition, pauseConfig->itemBaseEndPosition, menuMotionT);
 	for (size_t i = 0; i < pauseItemEntities_.size(); ++i) {
 		const No::Entity e = pauseItemEntities_[i];
 		if (e == No::nullEntity) {
@@ -711,8 +785,7 @@ void GameScene::UpdatePauseMenuSprites()
 		auto* itemTransform = registry.GetComponent<No::Transform2DComponent>(e);
 		auto* itemSprite = registry.GetComponent<No::SpriteComponent>(e);
 
-		const float baseY = pauseConfig->itemBasePosition.y + pauseConfig->itemSpacing * static_cast<float>(i);
-		const float itemShiftY = 22.0f * (1.0f - menuVisibility);
+		const float baseY = itemBasePosition.y + pauseConfig->itemSpacing * static_cast<float>(i);
 
 		float itemScale = 1.0f;
 		const bool isSelected = (static_cast<int>(i) == pauseState->selectedIndex && pauseState->phase == PauseStateComponent::Open);
@@ -723,7 +796,7 @@ void GameScene::UpdatePauseMenuSprites()
 			itemScale = 1.0f + (pauseConfig->confirmScale - 1.0f) * confirmPunch;
 		}
 
-		itemTransform->translate = { pauseConfig->itemBasePosition.x, baseY + itemShiftY };
+		itemTransform->translate = { itemBasePosition.x, baseY };
 		itemTransform->scale = {
 			pauseConfig->itemSize.x * itemScale,
 			pauseConfig->itemSize.y * itemScale
@@ -744,10 +817,11 @@ void GameScene::UpdatePauseMenuSprites()
 		registry.Has<No::SpriteComponent>(pauseCursorEntity_)) {
 		auto* cursorTransform = registry.GetComponent<No::Transform2DComponent>(pauseCursorEntity_);
 		auto* cursorSprite = registry.GetComponent<No::SpriteComponent>(pauseCursorEntity_);
-		const float cursorY = pauseConfig->itemBasePosition.y + pauseConfig->itemSpacing * static_cast<float>(pauseState->selectedIndex);
+		const float cursorY = itemBasePosition.y + pauseConfig->itemSpacing * static_cast<float>(pauseState->selectedIndex);
+		const No::Vector2 cursorOffset = LerpVec2(pauseConfig->cursorStartOffset, pauseConfig->cursorEndOffset, menuMotionT);
 		cursorTransform->translate = {
-			pauseConfig->itemBasePosition.x + pauseConfig->cursorOffset.x,
-			cursorY
+			itemBasePosition.x + cursorOffset.x,
+			cursorY + cursorOffset.y
 		};
 		cursorTransform->scale = pauseConfig->cursorSize;
 		cursorSprite->layer = static_cast<uint32_t>(std::max(0, pauseConfig->cursorLayer));

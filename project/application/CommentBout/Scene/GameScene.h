@@ -18,6 +18,8 @@ private:
 
 	No::Entity activeCameraEntity_{};
 	No::Entity pauseDimEntity_{};
+	No::Entity pauseMenuBgEntity_{};
+	No::Entity pausePanelLineEntity_{};
 	No::Entity pauseTitleEntity_{};
 	std::array<No::Entity, 4> pauseItemEntities_{};
 	No::Entity pauseCursorEntity_{};

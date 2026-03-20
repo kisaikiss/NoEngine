@@ -6,6 +6,8 @@ enum class SpriteLayer : uint32_t {
 	Gameplay = 20,
 	Effect = 30,
 	PauseDim = 900,
+	PauseMenuBackground = 905,
+	PausePanelLine = 907,
 	PauseTitle = 910,
 	PauseItem = 920,
 	PauseCursor = 930,
