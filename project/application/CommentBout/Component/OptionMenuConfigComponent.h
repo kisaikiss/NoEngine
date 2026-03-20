@@ -28,6 +28,9 @@ struct OptionMenuConfigComponent {
 	No::Vector2 itemBaseStartPosition{ 640.000f, 860.000f };
 	No::Vector2 itemBaseEndPosition{ 935.400f, 333.300f };
 	No::Vector2 itemSize{ 620.000f, 52.700f };
+	No::Vector2 backItemStartPosition{ 640.000f, 1138.400f };
+	No::Vector2 backItemEndPosition{ 935.400f, 611.700f };
+	No::Vector2 backItemSize{ 620.000f, 52.700f };
 	float itemSpacing = 69.600f;
 	No::Color itemColor{ 0.200f, 0.200f, 0.240f, 0.900f };
 	No::Color selectedItemColor{ 0.420f, 0.340f, 0.120f, 0.960f };
@@ -39,7 +42,7 @@ struct OptionMenuConfigComponent {
 	No::Vector2 backLabelSize{ 220.0f, 44.0f };
 
 	No::Vector2 cursorSelectOffset{ -260.0f, 0.0f };
-	No::Vector2 cursorEditOffset{ -40.0f, 0.0f };
+	No::Vector2 cursorBackOffset{ -260.0f, 0.0f };
 	No::Vector2 cursorSize{ 14.0f, 48.0f };
 	No::Color cursorColor{ 1.0f, 1.0f, 1.0f, 0.95f };
 	No::Color cursorEditColor{ 1.0f, 0.85f, 0.25f, 1.0f };
@@ -58,6 +61,8 @@ struct OptionMenuConfigComponent {
 	float openDuration = 0.220f;
 	float closeDuration = 0.180f;
 	float volumeStep = 0.050f;
+	float confirmDuration = 0.12f;
+	float confirmScale = 1.08f;
 
 	int dimLayer = 940;
 	int bgLayer = 945;

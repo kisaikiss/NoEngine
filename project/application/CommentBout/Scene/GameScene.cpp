@@ -116,6 +116,11 @@ void GameScene::Setup() {
 	optionState->phase = OptionStateComponent::Closed;
 	optionState->phaseDuration = 1.0f;
 	optionState->selectedIndex = 0;
+	optionState->isEditing = false;
+	optionState->isConfirmAnimating = false;
+	optionState->confirmIndex = -1;
+	optionState->confirmAnimTime = 0.0f;
+	optionState->requestedAction = OptionStateComponent::None;
 	auto* optionStateTag = registry.AddComponent<No::EditTag>(optionStateEntity);
 	optionStateTag->name = "OptionState";
 
@@ -1038,125 +1043,12 @@ void GameScene::UpdatePauseMenuSprites()
 	}
 }
 
-void GameScene::UpdateOptionState()
-{
-	No::Registry& registry = *GetRegistry();
-	OptionStateComponent* optionState = nullptr;
-	OptionMenuConfigComponent* optionConfig = nullptr;
-
-	auto stateView = registry.View<CBOptionStateTag, OptionStateComponent>();
-	for (auto entity : stateView) {
-		optionState = registry.GetComponent<OptionStateComponent>(entity);
-		if (optionState) {
-			break;
-		}
-	}
-	auto configView = registry.View<CBOptionConfigTag, OptionMenuConfigComponent>();
-for (auto entity : configView) {
-		optionConfig = registry.GetComponent<OptionMenuConfigComponent>(entity);
-		if (optionConfig) {
-			break;
-		}
-	}
-	if (!optionState || !optionConfig) {
-		return;
-	}
-
-	CommentBout::GameAudio::ApplyOptionVolumes(
-		optionState->masterVolume,
-		optionState->bgmVolume,
-		optionState->seVolume
-	);
-
-	if (optionState->phase == OptionStateComponent::Closed) {
-		optionState->isOpen = false;
-		optionState->isEditing = false;
-		return;
-	}
-
-	if (optionState->phase == OptionStateComponent::Opening || optionState->phase == OptionStateComponent::Closing) {
-		optionState->phaseTime += GetPauseDeltaTime();
-		if (optionState->phaseTime >= optionState->phaseDuration) {
-			if (optionState->phase == OptionStateComponent::Opening) {
-				StartOptionPhase(optionState, OptionStateComponent::OpenSelect, 1.0f);
-			} else {
-				StartOptionPhase(optionState, OptionStateComponent::Closed, 1.0f);
-				optionState->isOpen = false;
-				optionState->isEditing = false;
-			}
-		}
-		return;
-	}
-
-	if (!optionState->isOpen) {
-		return;
-	}
-
-	if (optionState->phase == OptionStateComponent::OpenEdit) {
-		const float step = std::max(0.01f, optionConfig->volumeStep);
-		const bool dec = No::Keyboard::IsTrigger('A') || No::Keyboard::IsTrigger(VK_LEFT);
-		const bool inc = No::Keyboard::IsTrigger('D') || No::Keyboard::IsTrigger(VK_RIGHT);
-		const float beforeMaster = optionState->masterVolume;
-		const float beforeBGM = optionState->bgmVolume;
-		const float beforeSE = optionState->seVolume;
-		if (optionState->selectedIndex == 0) {
-			if (dec) optionState->masterVolume = std::max(0.0f, optionState->masterVolume - step);
-			if (inc) optionState->masterVolume = std::min(1.0f, optionState->masterVolume + step);
-		} else if (optionState->selectedIndex == 1) {
-			if (dec) optionState->bgmVolume = std::max(0.0f, optionState->bgmVolume - step);
-			if (inc) optionState->bgmVolume = std::min(1.0f, optionState->bgmVolume + step);
-		} else if (optionState->selectedIndex == 2) {
-			if (dec) optionState->seVolume = std::max(0.0f, optionState->seVolume - step);
-			if (inc) optionState->seVolume = std::min(1.0f, optionState->seVolume + step);
-		} else if (optionState->selectedIndex == 3) {
-			if (dec || inc) {
-				optionState->vibrationEnabled = !optionState->vibrationEnabled;
-			}
-		}
-
-		const bool volumeChanged =
-			(beforeMaster != optionState->masterVolume) ||
-			(beforeBGM != optionState->bgmVolume) ||
-			(beforeSE != optionState->seVolume);
-		if (volumeChanged) {
-			CommentBout::GameAudio::PlayTestSE();
-		}
-
-		if (No::Keyboard::IsTrigger(VK_SPACE)) {
-			optionState->isEditing = false;
-			StartOptionPhase(optionState, OptionStateComponent::OpenSelect, 1.0f);
-		}
-		return;
-	}
-
-	if (No::Keyboard::IsTrigger('W') || No::Keyboard::IsTrigger(VK_UP)) {
-		optionState->selectedIndex--;
-		if (optionState->selectedIndex < 0) {
-			optionState->selectedIndex = optionState->itemCount - 1;
-		}
-	}
-	if (No::Keyboard::IsTrigger('S') || No::Keyboard::IsTrigger(VK_DOWN)) {
-		optionState->selectedIndex++;
-		if (optionState->selectedIndex >= optionState->itemCount) {
-			optionState->selectedIndex = 0;
-		}
-	}
-
-	if (No::Keyboard::IsTrigger(VK_SPACE)) {
-		if (optionState->selectedIndex == 4) {
-			StartOptionPhase(optionState, OptionStateComponent::Closing, optionConfig->closeDuration);
-			return;
-		}
-		optionState->isEditing = true;
-		StartOptionPhase(optionState, OptionStateComponent::OpenEdit, 1.0f);
-	}
-}
-
 void GameScene::UpdateOptionSprites()
 {
 	No::Registry& registry = *GetRegistry();
 	OptionStateComponent* optionState = nullptr;
 	OptionMenuConfigComponent* optionConfig = nullptr;
+	PauseMenuConfigComponent* pauseConfig = nullptr;
 
 	auto stateView = registry.View<CBOptionStateTag, OptionStateComponent>();
 	for (auto entity : stateView) {
@@ -1169,6 +1061,13 @@ void GameScene::UpdateOptionSprites()
 	for (auto entity : configView) {
 		optionConfig = registry.GetComponent<OptionMenuConfigComponent>(entity);
 		if (optionConfig) {
+			break;
+		}
+	}
+	auto pauseConfigView = registry.View<CBPauseConfigTag, PauseMenuConfigComponent>();
+	for (auto entity : pauseConfigView) {
+		pauseConfig = registry.GetComponent<PauseMenuConfigComponent>(entity);
+		if (pauseConfig) {
 			break;
 		}
 	}
@@ -1188,7 +1087,21 @@ void GameScene::UpdateOptionSprites()
 	}
 	t = Clamp01(t);
 
+	float confirmPunch = 0.0f;
+	if (optionState->isConfirmAnimating) {
+		float confirmDuration = optionConfig->confirmDuration;
+		int confirmEaseType = 2;
+		if (optionState->confirmIndex == 4 && pauseConfig) {
+			confirmDuration = pauseConfig->confirmDuration;
+			confirmEaseType = pauseConfig->easeType;
+		}
+		const float tt = optionState->confirmAnimTime / SafeDuration(confirmDuration);
+		const float eased = EaseByType(confirmEaseType, tt);
+		confirmPunch = 1.0f - std::fabs(2.0f * eased - 1.0f);
+	}
+
 	const No::Vector2 basePos = LerpVec2(optionConfig->itemBaseStartPosition, optionConfig->itemBaseEndPosition, t);
+	const No::Vector2 backItemPos = LerpVec2(optionConfig->backItemStartPosition, optionConfig->backItemEndPosition, t);
 
 	if (optionDimEntity_ != No::nullEntity && registry.Has<No::Transform2DComponent>(optionDimEntity_) && registry.Has<No::SpriteComponent>(optionDimEntity_)) {
 		auto* tr = registry.GetComponent<No::Transform2DComponent>(optionDimEntity_);
@@ -1240,8 +1153,19 @@ void GameScene::UpdateOptionSprites()
 		if (itemE != No::nullEntity && registry.Has<No::Transform2DComponent>(itemE) && registry.Has<No::SpriteComponent>(itemE)) {
 			auto* tr = registry.GetComponent<No::Transform2DComponent>(itemE);
 			auto* sp = registry.GetComponent<No::SpriteComponent>(itemE);
-			tr->translate = { basePos.x, rowY };
-			tr->scale = optionConfig->itemSize;
+			const bool isBack = (i == 4);
+			const No::Vector2 baseSize = isBack ? optionConfig->backItemSize : optionConfig->itemSize;
+			const No::Vector2 baseTranslate = isBack ? backItemPos : No::Vector2(basePos.x, rowY);
+			float scale = 1.0f;
+			if (optionState->isConfirmAnimating && static_cast<int>(i) == optionState->confirmIndex) {
+				float confirmScale = optionConfig->confirmScale;
+				if (isBack && pauseConfig) {
+					confirmScale = pauseConfig->confirmScale;
+				}
+				scale = 1.0f + (confirmScale - 1.0f) * confirmPunch;
+			}
+			tr->translate = baseTranslate;
+			tr->scale = { baseSize.x * scale, baseSize.y * scale };
 			sp->layer = static_cast<uint32_t>(std::max(0, optionConfig->itemLayer));
 			sp->orderInLayer = static_cast<uint32_t>(i);
 			sp->isVisible = (t > 0.0001f);
@@ -1255,7 +1179,8 @@ void GameScene::UpdateOptionSprites()
 			if (i == 4) {
 				tr->translate = LerpVec2(optionConfig->backLabelStartPosition, optionConfig->backLabelEndPosition, t);
 				tr->scale = optionConfig->backLabelSize;
-			} else {
+			}
+			else {
 				tr->translate = { basePos.x + optionConfig->labelOffset.x, rowY + optionConfig->labelOffset.y };
 				tr->scale = optionConfig->labelSize;
 			}
@@ -1297,7 +1222,7 @@ void GameScene::UpdateOptionSprites()
 		tr->scale = optionConfig->toggleSize;
 		sp->layer = static_cast<uint32_t>(std::max(0, optionConfig->toggleLayer));
 		sp->isVisible = (t > 0.0001f);
-		sp->color = { optionConfig->itemColor.r, optionConfig->itemColor.g, optionConfig->itemColor.b, 0.45f * t };
+		sp->color = { optionConfig->itemColor.r, optionConfig->itemColor.g, optionConfig->itemColor.b, 0.35f * t };
 	}
 
 	if (optionToggleOnEntity_ != No::nullEntity && registry.Has<No::Transform2DComponent>(optionToggleOnEntity_) && registry.Has<No::SpriteComponent>(optionToggleOnEntity_)) {
@@ -1308,7 +1233,7 @@ void GameScene::UpdateOptionSprites()
 		tr->scale = optionConfig->toggleSize;
 		sp->layer = static_cast<uint32_t>(std::max(0, optionConfig->toggleLayer));
 		sp->isVisible = (t > 0.0001f) && optionState->vibrationEnabled;
-		sp->color = { 1.0f, 1.0f, 1.0f, t };
+		sp->color = { optionConfig->toggleOnColor.r, optionConfig->toggleOnColor.g, optionConfig->toggleOnColor.b, optionConfig->toggleOnColor.a * t };
 	}
 	if (optionToggleOffEntity_ != No::nullEntity && registry.Has<No::Transform2DComponent>(optionToggleOffEntity_) && registry.Has<No::SpriteComponent>(optionToggleOffEntity_)) {
 		auto* tr = registry.GetComponent<No::Transform2DComponent>(optionToggleOffEntity_);
@@ -1318,39 +1243,175 @@ void GameScene::UpdateOptionSprites()
 		tr->scale = optionConfig->toggleSize;
 		sp->layer = static_cast<uint32_t>(std::max(0, optionConfig->toggleLayer));
 		sp->isVisible = (t > 0.0001f) && !optionState->vibrationEnabled;
-		sp->color = { 1.0f, 1.0f, 1.0f, t };
+		sp->color = { optionConfig->toggleOffColor.r, optionConfig->toggleOffColor.g, optionConfig->toggleOffColor.b, optionConfig->toggleOffColor.a * t };
 	}
 
 	if (optionCursorEntity_ != No::nullEntity && registry.Has<No::Transform2DComponent>(optionCursorEntity_) && registry.Has<No::SpriteComponent>(optionCursorEntity_)) {
 		auto* tr = registry.GetComponent<No::Transform2DComponent>(optionCursorEntity_);
 		auto* sp = registry.GetComponent<No::SpriteComponent>(optionCursorEntity_);
 		const float rowY = basePos.y + optionConfig->itemSpacing * static_cast<float>(optionState->selectedIndex);
-		const bool isEdit = (optionState->phase == OptionStateComponent::OpenEdit);
-		No::Vector2 cursorPos{};
-		if (isEdit && optionState->selectedIndex <= 2) {
-			cursorPos = {
-				basePos.x + optionConfig->barOffset.x + optionConfig->cursorEditOffset.x,
-				rowY + optionConfig->barOffset.y
-			};
-		}
-		else if (isEdit && optionState->selectedIndex == 3) {
-			cursorPos = {
-				basePos.x + optionConfig->toggleOffset.x + optionConfig->cursorEditOffset.x,
-				rowY + optionConfig->toggleOffset.y
-			};
-		}
-		else {
-			cursorPos = {
-				basePos.x + optionConfig->cursorSelectOffset.x,
-				rowY
-			};
-		}
-		tr->translate = cursorPos;
-		tr->scale = isEdit ? No::Vector2(optionConfig->cursorSize.x * 1.3f, optionConfig->cursorSize.y) : optionConfig->cursorSize;
+		const No::Vector2 offset = (optionState->selectedIndex == 4) ? optionConfig->cursorBackOffset : optionConfig->cursorSelectOffset;
+		tr->translate = { basePos.x + offset.x, rowY + offset.y };
+		tr->scale = optionConfig->cursorSize;
 		sp->layer = static_cast<uint32_t>(std::max(0, optionConfig->cursorLayer));
 		sp->isVisible = (t > 0.0001f) && (optionState->phase == OptionStateComponent::OpenSelect || optionState->phase == OptionStateComponent::OpenEdit);
+		const bool isEdit = (optionState->phase == OptionStateComponent::OpenEdit);
 		const No::Color cc = isEdit ? optionConfig->cursorEditColor : optionConfig->cursorColor;
 		sp->color = { cc.r, cc.g, cc.b, cc.a * t };
+	}
+}
+
+void GameScene::UpdateOptionState()
+{
+	No::Registry& registry = *GetRegistry();
+	OptionStateComponent* optionState = nullptr;
+	OptionMenuConfigComponent* optionConfig = nullptr;
+	PauseMenuConfigComponent* pauseConfig = nullptr;
+
+	auto stateView = registry.View<CBOptionStateTag, OptionStateComponent>();
+	for (auto entity : stateView) {
+		optionState = registry.GetComponent<OptionStateComponent>(entity);
+		if (optionState) {
+			break;
+		}
+	}
+	auto configView = registry.View<CBOptionConfigTag, OptionMenuConfigComponent>();
+	for (auto entity : configView) {
+		optionConfig = registry.GetComponent<OptionMenuConfigComponent>(entity);
+		if (optionConfig) {
+			break;
+		}
+	}
+	auto pauseConfigView = registry.View<CBPauseConfigTag, PauseMenuConfigComponent>();
+	for (auto entity : pauseConfigView) {
+		pauseConfig = registry.GetComponent<PauseMenuConfigComponent>(entity);
+		if (pauseConfig) {
+			break;
+		}
+	}
+	if (!optionState || !optionConfig) {
+		return;
+	}
+
+	CommentBout::GameAudio::ApplyOptionVolumes(
+		optionState->masterVolume,
+		optionState->bgmVolume,
+		optionState->seVolume
+	);
+
+	if (optionState->phase == OptionStateComponent::Closed) {
+		optionState->isOpen = false;
+		optionState->isEditing = false;
+		optionState->isConfirmAnimating = false;
+		optionState->confirmIndex = -1;
+		optionState->confirmAnimTime = 0.0f;
+		optionState->requestedAction = OptionStateComponent::None;
+		return;
+	}
+
+	if (optionState->phase == OptionStateComponent::Opening || optionState->phase == OptionStateComponent::Closing) {
+		optionState->phaseTime += GetPauseDeltaTime();
+		if (optionState->phaseTime >= optionState->phaseDuration) {
+			if (optionState->phase == OptionStateComponent::Opening) {
+				StartOptionPhase(optionState, OptionStateComponent::OpenSelect, 1.0f);
+			}
+			else {
+				StartOptionPhase(optionState, OptionStateComponent::Closed, 1.0f);
+				optionState->isOpen = false;
+				optionState->isEditing = false;
+			}
+		}
+		return;
+	}
+
+	if (optionState->isOpen) {
+	}
+
+	if (optionState->isConfirmAnimating) {
+		optionState->confirmAnimTime += GetPauseDeltaTime();
+		float confirmDuration = optionConfig->confirmDuration;
+		if (optionState->confirmIndex == 4 && pauseConfig) {
+			confirmDuration = pauseConfig->confirmDuration;
+		}
+		confirmDuration = SafeDuration(confirmDuration);
+		if (optionState->confirmAnimTime >= confirmDuration) {
+			optionState->isConfirmAnimating = false;
+			optionState->confirmAnimTime = 0.0f;
+			optionState->confirmIndex = -1;
+
+			if (optionState->requestedAction == OptionStateComponent::CloseOption) {
+				StartOptionPhase(optionState, OptionStateComponent::Closing, optionConfig->closeDuration);
+			}
+			else if (optionState->requestedAction == OptionStateComponent::StartEdit) {
+				optionState->isEditing = true;
+				StartOptionPhase(optionState, OptionStateComponent::OpenEdit, 1.0f);
+			}
+			optionState->requestedAction = OptionStateComponent::None;
+		}
+		return;
+	}
+
+	if (optionState->phase == OptionStateComponent::OpenEdit) {
+		const float step = std::max(0.01f, optionConfig->volumeStep);
+		const bool dec = No::Keyboard::IsTrigger('A') || No::Keyboard::IsTrigger(VK_LEFT);
+		const bool inc = No::Keyboard::IsTrigger('D') || No::Keyboard::IsTrigger(VK_RIGHT);
+		const float beforeMaster = optionState->masterVolume;
+		const float beforeBGM = optionState->bgmVolume;
+		const float beforeSE = optionState->seVolume;
+
+		if (optionState->selectedIndex == 0) {
+			if (dec) optionState->masterVolume = std::max(0.0f, optionState->masterVolume - step);
+			if (inc) optionState->masterVolume = std::min(1.0f, optionState->masterVolume + step);
+		}
+		else if (optionState->selectedIndex == 1) {
+			if (dec) optionState->bgmVolume = std::max(0.0f, optionState->bgmVolume - step);
+			if (inc) optionState->bgmVolume = std::min(1.0f, optionState->bgmVolume + step);
+		}
+		else if (optionState->selectedIndex == 2) {
+			if (dec) optionState->seVolume = std::max(0.0f, optionState->seVolume - step);
+			if (inc) optionState->seVolume = std::min(1.0f, optionState->seVolume + step);
+		}
+		else if (optionState->selectedIndex == 3) {
+			if (dec || inc) {
+				optionState->vibrationEnabled = !optionState->vibrationEnabled;
+			}
+		}
+
+		const bool volumeChanged =
+			(beforeMaster != optionState->masterVolume) ||
+			(beforeBGM != optionState->bgmVolume) ||
+			(beforeSE != optionState->seVolume);
+		if (volumeChanged) {
+			CommentBout::GameAudio::PlayTestSE();
+		}
+
+		if (No::Keyboard::IsTrigger(VK_SPACE)) {
+			optionState->isEditing = false;
+			StartOptionPhase(optionState, OptionStateComponent::OpenSelect, 1.0f);
+		}
+		return;
+	}
+
+	if (No::Keyboard::IsTrigger('W') || No::Keyboard::IsTrigger(VK_UP)) {
+		optionState->selectedIndex--;
+		if (optionState->selectedIndex < 0) {
+			optionState->selectedIndex = optionState->itemCount - 1;
+		}
+	}
+	if (No::Keyboard::IsTrigger('S') || No::Keyboard::IsTrigger(VK_DOWN)) {
+		optionState->selectedIndex++;
+		if (optionState->selectedIndex >= optionState->itemCount) {
+			optionState->selectedIndex = 0;
+		}
+	}
+
+	if (No::Keyboard::IsTrigger(VK_SPACE)) {
+		optionState->isConfirmAnimating = true;
+		optionState->confirmIndex = optionState->selectedIndex;
+		optionState->confirmAnimTime = 0.0f;
+		optionState->requestedAction = (optionState->selectedIndex == 4)
+			? OptionStateComponent::CloseOption
+			: OptionStateComponent::StartEdit;
 	}
 }
 

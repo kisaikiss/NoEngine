@@ -140,7 +140,7 @@
                         28.0
                     ],
                     "translate": [
-                        363.79998779296875,
+                        786.5999755859375,
                         1138.4000244140625
                     ]
                 }
@@ -310,7 +310,7 @@
                 "Transform2DComponent": {
                     "rotation": 0.0,
                     "scale": [
-                        620.0,
+                        195.89999389648438,
                         52.70000076293945
                     ],
                     "translate": [
@@ -455,8 +455,8 @@
                 "Transform2DComponent": {
                     "rotation": 0.0,
                     "scale": [
-                        120.0,
-                        56.099998474121094
+                        103.19999694824219,
+                        50.20000076293945
                     ],
                     "translate": [
                         760.0,
@@ -497,13 +497,25 @@
         "OptionMenuConfig": {
             "components": {
                 "OptionMenuConfigComponent": {
+                    "backItemEndPosition": [
+                        1146.699951171875,
+                        611.7000122070313
+                    ],
+                    "backItemSize": [
+                        195.89999389648438,
+                        52.70000076293945
+                    ],
+                    "backItemStartPosition": [
+                        640.0,
+                        1138.4000244140625
+                    ],
                     "backLabelEndPosition": [
-                        1163.699951171875,
-                        609.0
+                        1168.4000244140625,
+                        611.7000122070313
                     ],
                     "backLabelSize": [
-                        120.0,
-                        56.099998474121094
+                        103.19999694824219,
+                        50.20000076293945
                     ],
                     "backLabelStartPosition": [
                         760.0,
@@ -560,6 +572,12 @@
                         520.0
                     ],
                     "closeDuration": 0.18000000715255737,
+                    "confirmDuration": 0.11999999731779099,
+                    "confirmScale": 1.0800000429153442,
+                    "cursorBackOffset": [
+                        146.60000610351563,
+                        0.0
+                    ],
                     "cursorColor": [
                         1.0,
                         1.0,
@@ -571,10 +589,6 @@
                         0.8500000238418579,
                         0.25,
                         1.0
-                    ],
-                    "cursorEditOffset": [
-                        -276.20001220703125,
-                        0.0
                     ],
                     "cursorLayer": 952,
                     "cursorSelectOffset": [
@@ -662,12 +676,12 @@
                         0.9599999785423279
                     ],
                     "titleEndPosition": [
-                        1121.0,
-                        248.39999389648438
+                        1132.199951171875,
+                        230.60000610351563
                     ],
                     "titleSize": [
-                        280.0,
-                        58.0
+                        301.79998779296875,
+                        65.5
                     ],
                     "titleStartPosition": [
                         1383.199951171875,
@@ -702,6 +716,9 @@
             "components": {
                 "OptionStateComponent": {
                     "bgmVolume": 0.49999988079071045,
+                    "confirmAnimTime": 0.0,
+                    "confirmIndex": -1,
+                    "isConfirmAnimating": false,
                     "isEditing": false,
                     "isOpen": false,
                     "itemCount": 5,
@@ -709,6 +726,7 @@
                     "phase": 0,
                     "phaseDuration": 1.0,
                     "phaseTime": 0.0,
+                    "requestedAction": 0,
                     "seVolume": 0.49999988079071045,
                     "selectedIndex": 4,
                     "vibrationEnabled": true
@@ -732,10 +750,10 @@
                     ]
                 },
                 "Transform2DComponent": {
-                    "rotation": 0.0,
+                    "rotation": 0.10000000149011612,
                     "scale": [
-                        280.0,
-                        58.0
+                        301.79998779296875,
+                        65.5
                     ],
                     "translate": [
                         1383.199951171875,
@@ -1142,7 +1160,7 @@
                     ]
                 },
                 "Transform2DComponent": {
-                    "rotation": 0.0,
+                    "rotation": -0.0,
                     "scale": [
                         415.3999938964844,
                         100.80000305175781
@@ -1207,7 +1225,7 @@
                     "drawCenter": false,
                     "mousePositionX": 501,
                     "mousePositionY": 178,
-                    "mouseWheelY": -120.0,
+                    "mouseWheelY": -1200.0,
                     "phi": 1.5,
                     "theta": -1.3665915727615356
                 },
