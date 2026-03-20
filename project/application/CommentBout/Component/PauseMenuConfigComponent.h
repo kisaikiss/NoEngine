@@ -14,6 +14,11 @@ struct PauseMenuConfigComponent {
 	float dimAlpha = 0.65f;
 	float openDuration = 0.2f;
 	float closeDuration = 0.2f;
+	float optionOpenDuration = 0.2f;
+	float optionCloseDuration = 0.2f;
+	float confirmDuration = 0.12f;
+	float selectedScale = 1.08f;
+	float confirmScale = 1.18f;
 	int easeType = 0;
 
 	int dimLayer = 900;

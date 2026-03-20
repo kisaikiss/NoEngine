@@ -4,6 +4,7 @@
 #include <utility>
 #include <array>
 #include <algorithm>
+#include <cmath>
 #include "application/CommentBout/GameTag.h"
 #include "application/CommentBout/Component/PlayerComponent.h"
 #include "application/CommentBout/Component/PlayerAttackComponent.h"
@@ -63,6 +64,13 @@ void GameScene::Setup() {
 	auto* pauseState = registry.AddComponent<PauseStateComponent>(pauseStateEntity);
 	pauseState->isPaused = false;
 	pauseState->selectedIndex = 0;
+	pauseState->phase = PauseStateComponent::Closed;
+	pauseState->phaseTime = 0.0f;
+	pauseState->phaseDuration = 1.0f;
+	pauseState->requestedAction = PauseStateComponent::None;
+	pauseState->isConfirmAnimating = false;
+	pauseState->confirmIndex = -1;
+	pauseState->confirmAnimTime = 0.0f;
 	auto* pauseStateTag = registry.AddComponent<No::EditTag>(pauseStateEntity);
 	pauseStateTag->name = "PauseState";
 
@@ -235,10 +243,54 @@ void GameScene::NotSystemUpdate() {
 	ImGui::End();
 }
 
+namespace {
+float Clamp01(float v) {
+	if (v < 0.0f) {
+		return 0.0f;
+	}
+	if (v > 1.0f) {
+		return 1.0f;
+	}
+	return v;
+}
+
+float GetPauseDeltaTime() {
+#ifdef USE_IMGUI
+	return std::max(0.0f, ImGui::GetIO().DeltaTime);
+#else
+	return 1.0f / 60.0f;
+#endif
+}
+
+float EaseByType(int easeType, float t) {
+	t = Clamp01(t);
+	switch (easeType) {
+	case 1:
+		return No::EaseInExpo(0.0f, 1.0f, t);
+	case 2:
+		return No::EaseOutCubic(0.0f, 1.0f, t);
+	default:
+		return No::EaseInOutSine(0.0f, 1.0f, t);
+	}
+}
+
+float SafeDuration(float d) {
+	return (d <= 0.0001f) ? 0.0001f : d;
+}
+
+void StartPhase(PauseStateComponent* state, int phase, float duration) {
+	state->phase = phase;
+	state->phaseTime = 0.0f;
+	state->phaseDuration = SafeDuration(duration);
+}
+}
+
 void GameScene::UpdatePauseState()
 {
 	No::Registry& registry = *GetRegistry();
 	PauseStateComponent* pauseState = nullptr;
+	PauseMenuConfigComponent* pauseConfig = nullptr;
+
 	auto pauseView = registry.View<CBPauseStateTag, PauseStateComponent>();
 	for (auto entity : pauseView) {
 		pauseState = registry.GetComponent<PauseStateComponent>(entity);
@@ -247,19 +299,117 @@ void GameScene::UpdatePauseState()
 		}
 	}
 
-	if (!pauseState) {
+	auto configView = registry.View<CBPauseConfigTag, PauseMenuConfigComponent>();
+	for (auto entity : configView) {
+		pauseConfig = registry.GetComponent<PauseMenuConfigComponent>(entity);
+		if (pauseConfig) {
+			break;
+		}
+	}
+
+	if (!pauseState || !pauseConfig) {
 		return;
 	}
 
 	pauseState->justEnteredPause = false;
 	pauseState->justExitedPause = false;
 
-	if (!pauseState->isPaused) {
+	if (pauseState->isConfirmAnimating) {
+		pauseState->confirmAnimTime += GetPauseDeltaTime();
+		const float confirmDuration = SafeDuration(pauseConfig->confirmDuration);
+		if (pauseState->confirmAnimTime >= confirmDuration) {
+			pauseState->isConfirmAnimating = false;
+			pauseState->confirmAnimTime = 0.0f;
+			pauseState->confirmIndex = -1;
+
+			switch (pauseState->requestedAction) {
+			case PauseStateComponent::Resume:
+				StartPhase(pauseState, PauseStateComponent::Closing, pauseConfig->closeDuration);
+				break;
+			case PauseStateComponent::Restart:
+			{
+				No::SceneChangeEvent event;
+				event.nextScene = "GameScene";
+				registry.EmitEvent(event);
+			}
+				break;
+			case PauseStateComponent::OpenOption:
+				StartPhase(pauseState, PauseStateComponent::OptionOpening, pauseConfig->optionOpenDuration);
+				break;
+			case PauseStateComponent::BackToTitle:
+			{
+				No::SceneChangeEvent event;
+				event.nextScene = "TitleScene";
+				registry.EmitEvent(event);
+			}
+				break;
+			default:
+				break;
+			}
+			pauseState->requestedAction = PauseStateComponent::None;
+		}
+	}
+
+	if (pauseState->phase == PauseStateComponent::Closed) {
+		pauseState->isPaused = false;
 		if (No::Keyboard::IsTrigger(VK_RETURN)) {
 			pauseState->isPaused = true;
 			pauseState->justEnteredPause = true;
 			pauseState->selectedIndex = 0;
+			pauseState->requestedAction = PauseStateComponent::None;
+			pauseState->isConfirmAnimating = false;
+			pauseState->confirmAnimTime = 0.0f;
+			pauseState->confirmIndex = -1;
+			StartPhase(pauseState, PauseStateComponent::Opening, pauseConfig->openDuration);
 		}
+		return;
+	}
+
+	pauseState->isPaused = true;
+
+	if (pauseState->phase == PauseStateComponent::Opening ||
+		pauseState->phase == PauseStateComponent::Closing ||
+		pauseState->phase == PauseStateComponent::OptionOpening ||
+		pauseState->phase == PauseStateComponent::OptionClosing) {
+		pauseState->phaseTime += GetPauseDeltaTime();
+		if (pauseState->phaseTime >= pauseState->phaseDuration) {
+			switch (pauseState->phase) {
+			case PauseStateComponent::Opening:
+				StartPhase(pauseState, PauseStateComponent::Open, 1.0f);
+				pauseState->phaseTime = 0.0f;
+				break;
+			case PauseStateComponent::Closing:
+				StartPhase(pauseState, PauseStateComponent::Closed, 1.0f);
+				pauseState->isPaused = false;
+				pauseState->justExitedPause = true;
+				break;
+			case PauseStateComponent::OptionOpening:
+				StartPhase(pauseState, PauseStateComponent::OptionOpen, 1.0f);
+				pauseState->phaseTime = 0.0f;
+				break;
+			case PauseStateComponent::OptionClosing:
+				StartPhase(pauseState, PauseStateComponent::Open, 1.0f);
+				pauseState->phaseTime = 0.0f;
+				break;
+			default:
+				break;
+			}
+		}
+		return;
+	}
+
+	if (pauseState->isConfirmAnimating) {
+		return;
+	}
+
+	if (pauseState->phase == PauseStateComponent::OptionOpen) {
+		if (No::Keyboard::IsTrigger(VK_ESCAPE) || No::Keyboard::IsTrigger(VK_RETURN)) {
+			StartPhase(pauseState, PauseStateComponent::OptionClosing, pauseConfig->optionCloseDuration);
+		}
+		return;
+	}
+
+	if (pauseState->phase != PauseStateComponent::Open) {
 		return;
 	}
 
@@ -279,28 +429,27 @@ void GameScene::UpdatePauseState()
 	}
 
 	if (No::Keyboard::IsTrigger(VK_RETURN)) {
+		pauseState->confirmIndex = pauseState->selectedIndex;
+		pauseState->confirmAnimTime = 0.0f;
+		pauseState->isConfirmAnimating = true;
 		switch (pauseState->selectedIndex) {
-		case 0: // ゲーム再開
-			pauseState->isPaused = false;
-			pauseState->justExitedPause = true;
+		case 0:
+			pauseState->requestedAction = PauseStateComponent::Resume;
 			break;
-		case 1: // リスタート
-		{
-			No::SceneChangeEvent event;
-			event.nextScene = "GameScene";
-			registry.EmitEvent(event);
-		}
+		case 1:
+			pauseState->requestedAction = PauseStateComponent::Restart;
 			break;
-		case 2: // オプション（実装予定）
+		case 2:
+			pauseState->requestedAction = PauseStateComponent::OpenOption;
 			break;
-		case 3: // タイトルへ
-		{
-			No::SceneChangeEvent event;
-			event.nextScene = "TitleScene";
-			registry.EmitEvent(event);
-		}
+		case 3:
+			pauseState->requestedAction = PauseStateComponent::BackToTitle;
 			break;
 		default:
+			pauseState->requestedAction = PauseStateComponent::None;
+			pauseState->isConfirmAnimating = false;
+			pauseState->confirmIndex = -1;
+			pauseState->confirmAnimTime = 0.0f;
 			break;
 		}
 	}
@@ -348,10 +497,50 @@ void GameScene::UpdatePauseDim()
 		dimTransform->scale = { width, height };
 	}
 
+	const float maxAlpha = std::max(0.0f, std::min(1.0f, pauseConfig->dimAlpha));
+	float alpha = 0.0f;
+
+	switch (pauseState->phase) {
+	case PauseStateComponent::Opening:
+	{
+		const float t = pauseState->phaseTime / SafeDuration(pauseState->phaseDuration);
+		alpha = maxAlpha * EaseByType(pauseConfig->easeType, t);
+	}
+		break;
+	case PauseStateComponent::Closing:
+	{
+		const float t = pauseState->phaseTime / SafeDuration(pauseState->phaseDuration);
+		alpha = maxAlpha * (1.0f - EaseByType(pauseConfig->easeType, t));
+	}
+		break;
+	case PauseStateComponent::OptionOpening:
+	{
+		const float t = pauseState->phaseTime / SafeDuration(pauseState->phaseDuration);
+		alpha = maxAlpha + 0.12f * EaseByType(pauseConfig->easeType, t);
+	}
+		break;
+	case PauseStateComponent::OptionOpen:
+		alpha = maxAlpha + 0.12f;
+		break;
+	case PauseStateComponent::OptionClosing:
+	{
+		const float t = pauseState->phaseTime / SafeDuration(pauseState->phaseDuration);
+		alpha = (maxAlpha + 0.12f) - 0.12f * EaseByType(pauseConfig->easeType, t);
+	}
+		break;
+	case PauseStateComponent::Open:
+		alpha = maxAlpha;
+		break;
+	case PauseStateComponent::Closed:
+	default:
+		alpha = 0.0f;
+		break;
+	}
+
+	alpha = std::max(0.0f, std::min(1.0f, alpha));
 	dimSprite->layer = static_cast<uint32_t>(std::max(0, pauseConfig->dimLayer));
-	dimSprite->isVisible = pauseState->isPaused;
-	const float dimAlpha = std::max(0.0f, std::min(1.0f, pauseConfig->dimAlpha));
-	dimSprite->color = { 0.0f, 0.0f, 0.0f, pauseState->isPaused ? dimAlpha : 0.0f };
+	dimSprite->isVisible = (alpha > 0.0001f);
+	dimSprite->color = { 0.0f, 0.0f, 0.0f, alpha };
 }
 
 void GameScene::DrawPauseMenu()
@@ -377,7 +566,20 @@ void GameScene::DrawPauseMenu()
 		}
 	}
 
-	if (!pauseState || !pauseConfig || !pauseState->isPaused) {
+	if (!pauseState || !pauseConfig || pauseState->phase == PauseStateComponent::Closed) {
+		return;
+	}
+
+	const float openProgress = (pauseState->phase == PauseStateComponent::Opening)
+		? EaseByType(pauseConfig->easeType, pauseState->phaseTime / SafeDuration(pauseState->phaseDuration))
+		: 1.0f;
+	const float closeProgress = (pauseState->phase == PauseStateComponent::Closing)
+		? EaseByType(pauseConfig->easeType, pauseState->phaseTime / SafeDuration(pauseState->phaseDuration))
+		: 0.0f;
+	const float menuVisibility = std::max(0.0f, std::min(1.0f, openProgress - closeProgress));
+
+	ImDrawList* drawList = ImGui::GetForegroundDrawList();
+	if (!drawList || menuVisibility <= 0.0001f) {
 		return;
 	}
 
@@ -388,30 +590,53 @@ void GameScene::DrawPauseMenu()
 		"タイトルへ"
 	};
 
-	ImDrawList* drawList = ImGui::GetForegroundDrawList();
-	if (!drawList) {
-		return;
-	}
+	const int alphaByte = static_cast<int>(255.0f * menuVisibility);
+	const ImU32 titleColor = IM_COL32(255, 255, 255, alphaByte);
+	const ImU32 normalTextColor = IM_COL32(220, 220, 220, alphaByte);
+	const ImU32 selectedTextColor = IM_COL32(255, 255, 120, alphaByte);
+	const ImU32 selectedFrameColor = IM_COL32(255, 240, 120, alphaByte);
 
-	const ImU32 titleColor = IM_COL32(255, 255, 255, 255);
-	const ImU32 normalTextColor = IM_COL32(220, 220, 220, 255);
-	const ImU32 selectedTextColor = IM_COL32(255, 255, 120, 255);
-	const ImU32 selectedFrameColor = IM_COL32(255, 240, 120, 255);
-
+	const float titleShiftY = 40.0f * (1.0f - menuVisibility);
 	drawList->AddText(
 		nullptr,
 		pauseConfig->titleSize.y,
-		ImVec2(pauseConfig->titlePosition.x - pauseConfig->titleSize.x * 0.5f, pauseConfig->titlePosition.y - pauseConfig->titleSize.y * 0.5f),
+		ImVec2(
+			pauseConfig->titlePosition.x - pauseConfig->titleSize.x * 0.5f,
+			pauseConfig->titlePosition.y - pauseConfig->titleSize.y * 0.5f + titleShiftY
+		),
 		titleColor,
 		"PAUSE"
 	);
 
+	float confirmPunch = 0.0f;
+	if (pauseState->isConfirmAnimating) {
+		const float t = pauseState->confirmAnimTime / SafeDuration(pauseConfig->confirmDuration);
+		const float eased = EaseByType(pauseConfig->easeType, t);
+		confirmPunch = 1.0f - std::fabs(2.0f * eased - 1.0f);
+	}
+
 	for (int i = 0; i < pauseState->itemCount && i < static_cast<int>(menuItems.size()); ++i) {
-		const float y = pauseConfig->itemBasePosition.y + pauseConfig->itemSpacing * static_cast<float>(i);
+		const float baseY = pauseConfig->itemBasePosition.y + pauseConfig->itemSpacing * static_cast<float>(i);
+		const float itemShiftY = 22.0f * (1.0f - menuVisibility);
+		const float y = baseY + itemShiftY;
 		const ImVec2 itemCenter(pauseConfig->itemBasePosition.x, y);
-		const ImVec2 halfSize(pauseConfig->itemSize.x * 0.5f, pauseConfig->itemSize.y * 0.5f);
-		const bool isSelected = (i == pauseState->selectedIndex);
+
+		float itemScale = 1.0f;
+		const bool isSelected = (i == pauseState->selectedIndex && pauseState->phase == PauseStateComponent::Open);
 		if (isSelected) {
+			itemScale = pauseConfig->selectedScale;
+		}
+		if (pauseState->isConfirmAnimating && i == pauseState->confirmIndex) {
+			const float punchScale = pauseConfig->confirmScale;
+			itemScale = 1.0f + (punchScale - 1.0f) * confirmPunch;
+		}
+
+		const ImVec2 halfSize(
+			pauseConfig->itemSize.x * 0.5f * itemScale,
+			pauseConfig->itemSize.y * 0.5f * itemScale
+		);
+
+		if (isSelected || (pauseState->isConfirmAnimating && i == pauseState->confirmIndex)) {
 			drawList->AddRect(
 				ImVec2(itemCenter.x - halfSize.x, itemCenter.y - halfSize.y),
 				ImVec2(itemCenter.x + halfSize.x, itemCenter.y + halfSize.y),
@@ -424,20 +649,58 @@ void GameScene::DrawPauseMenu()
 
 		drawList->AddText(
 			nullptr,
-			pauseConfig->itemSize.y * 0.62f,
+			pauseConfig->itemSize.y * 0.62f * itemScale,
 			ImVec2(itemCenter.x - halfSize.x + 22.0f, itemCenter.y - pauseConfig->itemSize.y * 0.28f),
 			isSelected ? selectedTextColor : normalTextColor,
 			menuItems[static_cast<size_t>(i)]
 		);
 	}
 
-	const float cursorY = pauseConfig->itemBasePosition.y + pauseConfig->itemSpacing * static_cast<float>(pauseState->selectedIndex);
-	drawList->AddTriangleFilled(
-		ImVec2(pauseConfig->itemBasePosition.x + pauseConfig->cursorOffset.x, cursorY),
-		ImVec2(pauseConfig->itemBasePosition.x + pauseConfig->cursorOffset.x + pauseConfig->cursorSize.x, cursorY - pauseConfig->cursorSize.y * 0.5f),
-		ImVec2(pauseConfig->itemBasePosition.x + pauseConfig->cursorOffset.x + pauseConfig->cursorSize.x, cursorY + pauseConfig->cursorSize.y * 0.5f),
-		selectedFrameColor
-	);
+	if (!pauseState->isConfirmAnimating && pauseState->phase == PauseStateComponent::Open) {
+		const float cursorY = pauseConfig->itemBasePosition.y + pauseConfig->itemSpacing * static_cast<float>(pauseState->selectedIndex);
+		drawList->AddTriangleFilled(
+			ImVec2(pauseConfig->itemBasePosition.x + pauseConfig->cursorOffset.x, cursorY),
+			ImVec2(pauseConfig->itemBasePosition.x + pauseConfig->cursorOffset.x + pauseConfig->cursorSize.x, cursorY - pauseConfig->cursorSize.y * 0.5f),
+			ImVec2(pauseConfig->itemBasePosition.x + pauseConfig->cursorOffset.x + pauseConfig->cursorSize.x, cursorY + pauseConfig->cursorSize.y * 0.5f),
+			selectedFrameColor
+		);
+	}
+
+	if (pauseState->phase == PauseStateComponent::OptionOpening ||
+		pauseState->phase == PauseStateComponent::OptionOpen ||
+		pauseState->phase == PauseStateComponent::OptionClosing) {
+		float optionT = 1.0f;
+		if (pauseState->phase == PauseStateComponent::OptionOpening) {
+			optionT = EaseByType(pauseConfig->easeType, pauseState->phaseTime / SafeDuration(pauseState->phaseDuration));
+		} else if (pauseState->phase == PauseStateComponent::OptionClosing) {
+			optionT = 1.0f - EaseByType(pauseConfig->easeType, pauseState->phaseTime / SafeDuration(pauseState->phaseDuration));
+		}
+		optionT = std::max(0.0f, std::min(1.0f, optionT));
+
+		const float panelW = 560.0f;
+		const float panelH = 280.0f;
+		const ImVec2 center(640.0f, 360.0f);
+		const ImVec2 half(panelW * 0.5f * optionT, panelH * 0.5f * optionT);
+
+		drawList->AddRectFilled(
+			ImVec2(center.x - half.x, center.y - half.y),
+			ImVec2(center.x + half.x, center.y + half.y),
+			IM_COL32(18, 18, 18, static_cast<int>(220.0f * optionT)),
+			10.0f
+		);
+		drawList->AddRect(
+			ImVec2(center.x - half.x, center.y - half.y),
+			ImVec2(center.x + half.x, center.y + half.y),
+			IM_COL32(255, 255, 180, static_cast<int>(255.0f * optionT)),
+			10.0f,
+			0,
+			2.0f
+		);
+
+		drawList->AddText(nullptr, 42.0f * optionT, ImVec2(center.x - 120.0f, center.y - 90.0f), IM_COL32(255, 255, 255, static_cast<int>(255.0f * optionT)), "OPTION");
+		drawList->AddText(nullptr, 24.0f * optionT, ImVec2(center.x - 200.0f, center.y - 20.0f), IM_COL32(220, 220, 220, static_cast<int>(255.0f * optionT)), "Enter / Esc : もどる");
+		drawList->AddText(nullptr, 20.0f * optionT, ImVec2(center.x - 200.0f, center.y + 28.0f), IM_COL32(180, 180, 180, static_cast<int>(255.0f * optionT)), "(ここに音量などを追加予定)");
+	}
 #else
 	No::Registry& registry = *GetRegistry();
 	static_cast<void>(registry);
