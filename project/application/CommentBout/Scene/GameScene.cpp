@@ -430,7 +430,7 @@ void GameScene::UpdatePauseState()
 				event.nextScene = "GameScene";
 				registry.EmitEvent(event);
 			}
-				break;
+			break;
 			case PauseStateComponent::OpenOption:
 				if (optionState && optionConfig) {
 					optionState->isOpen = true;
@@ -445,7 +445,7 @@ void GameScene::UpdatePauseState()
 				event.nextScene = "TitleScene";
 				registry.EmitEvent(event);
 			}
-				break;
+			break;
 			default:
 				break;
 			}
@@ -1095,6 +1095,7 @@ void GameScene::UpdateOptionSprites()
 		auto* sp = registry.GetComponent<No::SpriteComponent>(optionDimEntity_);
 		tr->translate = LerpVec2(optionConfig->dimStartPosition, optionConfig->dimEndPosition, t);
 		tr->scale = optionConfig->dimSize;
+		tr->rotation = optionConfig->dimRotation;
 		sp->layer = static_cast<uint32_t>(std::max(0, optionConfig->dimLayer));
 		sp->isVisible = (t > 0.0001f);
 		sp->color = { optionConfig->dimColor.r, optionConfig->dimColor.g, optionConfig->dimColor.b, optionConfig->dimColor.a * t };
@@ -1105,6 +1106,7 @@ void GameScene::UpdateOptionSprites()
 		auto* sp = registry.GetComponent<No::SpriteComponent>(optionBgEntity_);
 		tr->translate = LerpVec2(optionConfig->bgStartPosition, optionConfig->bgEndPosition, t);
 		tr->scale = LerpVec2(optionConfig->bgStartSize, optionConfig->bgEndSize, t);
+		tr->rotation = optionConfig->bgRotation;
 		sp->layer = static_cast<uint32_t>(std::max(0, optionConfig->bgLayer));
 		sp->isVisible = (t > 0.0001f);
 		sp->color = { optionConfig->bgColor.r, optionConfig->bgColor.g, optionConfig->bgColor.b, optionConfig->bgColor.a * t };
@@ -1115,6 +1117,7 @@ void GameScene::UpdateOptionSprites()
 		auto* sp = registry.GetComponent<No::SpriteComponent>(optionLineEntity_);
 		tr->translate = LerpVec2(optionConfig->lineStartPosition, optionConfig->lineEndPosition, t);
 		tr->scale = optionConfig->lineSize;
+		tr->rotation = optionConfig->lineRotation;
 		sp->layer = static_cast<uint32_t>(std::max(0, optionConfig->lineLayer));
 		sp->isVisible = (t > 0.0001f);
 		sp->color = { optionConfig->lineColor.r, optionConfig->lineColor.g, optionConfig->lineColor.b, optionConfig->lineColor.a * t };

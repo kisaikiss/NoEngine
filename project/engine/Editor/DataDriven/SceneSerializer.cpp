@@ -113,22 +113,32 @@ namespace NoEngine {
 		}
 
 		void ReadFieldFromJson(const nlohmann::json& j, const FieldInfo& field, void* ptr) {
+			auto it = j.find(field.name);
+			if (it == j.end()) {
+				return;
+			}
+
 			switch (field.type) {
 			case NoEngine::FieldType::Float:
-				*(float*)ptr = j[field.name].get<float>();
+				*(float*)ptr = it->get<float>();
 				break;
 			case NoEngine::FieldType::Float2:
 			{
-				auto arr = j[field.name];
+				auto arr = *it;
+				if (!arr.is_array() || arr.size() < 2) {
+					break;
+				}
 				float* v = (float*)ptr;
 				v[0] = arr[0];
 				v[1] = arr[1];
 			}
 			break;
-			break;
 			case NoEngine::FieldType::Float3:
 			{
-				auto arr = j[field.name];
+				auto arr = *it;
+				if (!arr.is_array() || arr.size() < 3) {
+					break;
+				}
 				float* v = (float*)ptr;
 				v[0] = arr[0];
 				v[1] = arr[1];
@@ -137,7 +147,10 @@ namespace NoEngine {
 			break;
 			case NoEngine::FieldType::Float4:
 			{
-				auto arr = j[field.name];
+				auto arr = *it;
+				if (!arr.is_array() || arr.size() < 4) {
+					break;
+				}
 				float* v = (float*)ptr;
 				v[0] = arr[0];
 				v[1] = arr[1];
@@ -145,12 +158,11 @@ namespace NoEngine {
 				v[3] = arr[3];
 			}
 			break;
-			break;
 			case NoEngine::FieldType::Int:
-				*(int*)ptr = j[field.name].get<int>();
+				*(int*)ptr = it->get<int>();
 				break;
 			case NoEngine::FieldType::Bool:
-				*(bool*)ptr = j[field.name].get<bool>();
+				*(bool*)ptr = it->get<bool>();
 				break;
 			default:
 				break;
