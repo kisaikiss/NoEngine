@@ -88,6 +88,271 @@
                 }
             }
         },
+        "PauseCursorSprite": {
+            "components": {
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        0.949999988079071,
+                        0.3499999940395355,
+                        0.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        36.0,
+                        36.0
+                    ],
+                    "translate": [
+                        67.19999694824219,
+                        289.70001220703125
+                    ]
+                }
+            }
+        },
+        "PauseDim": {
+            "components": {
+                "SpriteComponent": {
+                    "color": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        1280.0,
+                        720.0
+                    ],
+                    "translate": [
+                        640.0,
+                        360.0
+                    ]
+                }
+            }
+        },
+        "PauseItemSprite_0": {
+            "components": {
+                "SpriteComponent": {
+                    "color": [
+                        0.8199999928474426,
+                        0.8199999928474426,
+                        0.8199999928474426,
+                        0.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        231.89999389648438,
+                        49.400001525878906
+                    ],
+                    "translate": [
+                        223.3000030517578,
+                        311.70001220703125
+                    ]
+                }
+            }
+        },
+        "PauseItemSprite_1": {
+            "components": {
+                "SpriteComponent": {
+                    "color": [
+                        0.8199999928474426,
+                        0.8199999928474426,
+                        0.8199999928474426,
+                        0.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        231.89999389648438,
+                        49.400001525878906
+                    ],
+                    "translate": [
+                        223.3000030517578,
+                        379.70001220703125
+                    ]
+                }
+            }
+        },
+        "PauseItemSprite_2": {
+            "components": {
+                "SpriteComponent": {
+                    "color": [
+                        0.8199999928474426,
+                        0.8199999928474426,
+                        0.8199999928474426,
+                        0.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        231.89999389648438,
+                        49.400001525878906
+                    ],
+                    "translate": [
+                        223.3000030517578,
+                        447.70001220703125
+                    ]
+                }
+            }
+        },
+        "PauseItemSprite_3": {
+            "components": {
+                "SpriteComponent": {
+                    "color": [
+                        0.8199999928474426,
+                        0.8199999928474426,
+                        0.8199999928474426,
+                        0.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        231.89999389648438,
+                        49.400001525878906
+                    ],
+                    "translate": [
+                        223.3000030517578,
+                        515.7000122070313
+                    ]
+                }
+            }
+        },
+        "PauseMenuConfig": {
+            "components": {
+                "PauseMenuConfigComponent": {
+                    "closeDuration": 0.20000000298023224,
+                    "confirmDuration": 0.11999999731779099,
+                    "confirmScale": 1.1799999475479126,
+                    "cursorLayer": 930,
+                    "cursorOffset": [
+                        -156.10000610351563,
+                        0.0
+                    ],
+                    "cursorSize": [
+                        36.0,
+                        36.0
+                    ],
+                    "dimAlpha": 0.6499999761581421,
+                    "dimLayer": 900,
+                    "easeType": 0,
+                    "itemBasePosition": [
+                        223.3000030517578,
+                        289.70001220703125
+                    ],
+                    "itemLayer": 920,
+                    "itemSize": [
+                        231.89999389648438,
+                        49.400001525878906
+                    ],
+                    "itemSpacing": 68.0,
+                    "openDuration": 0.20000000298023224,
+                    "optionCloseDuration": 0.20000000298023224,
+                    "optionOpenDuration": 0.20000000298023224,
+                    "selectedScale": 1.0800000429153442,
+                    "titleLayer": 910,
+                    "titlePosition": [
+                        223.3000030517578,
+                        170.0
+                    ],
+                    "titleSize": [
+                        404.79998779296875,
+                        103.9000015258789
+                    ]
+                }
+            }
+        },
+        "PauseState": {
+            "components": {
+                "PauseStateComponent": {
+                    "confirmAnimTime": 0.0,
+                    "confirmIndex": -1,
+                    "isConfirmAnimating": false,
+                    "isPaused": false,
+                    "itemCount": 4,
+                    "justEnteredPause": false,
+                    "justExitedPause": false,
+                    "phase": 0,
+                    "phaseDuration": 1.0,
+                    "phaseTime": 0.0,
+                    "requestedAction": 0,
+                    "selectedIndex": 0
+                }
+            }
+        },
+        "PauseTitleSprite": {
+            "components": {
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        0.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        404.79998779296875,
+                        103.9000015258789
+                    ],
+                    "translate": [
+                        223.3000030517578,
+                        210.0
+                    ]
+                }
+            }
+        },
         "Player": {
             "components": {
                 "PlayerAttackComponent": {
@@ -129,6 +394,5 @@
                 }
             }
         }
-       
     }
 }
