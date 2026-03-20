@@ -12,6 +12,7 @@
 #include "application/CommentBout/Component/PauseMenuConfigComponent.h"
 #include "application/CommentBout/Component/OptionStateComponent.h"
 #include "application/CommentBout/Component/OptionMenuConfigComponent.h"
+#include "application/CommentBout/Component/OptionMenuViewComponent.h"
 #include "application/CommentBout/Component/GrassReactionComponent.h"
 #include "application/CommentBout/Component/GameResourceComponent.h"
 #include "application/CommentBout/Component/GroundComponent.h"
@@ -22,6 +23,9 @@
 #include "application/CommentBout/System/GrassReactionSystem.h"
 #include "application/CommentBout/System/HitBalloonSystem.h"
 #include "application/CommentBout/System/LifetimeSystem.h"
+#include "application/CommentBout/System/OptionSystem.h"
+#include "application/CommentBout/System/OptionViewSystem.h"
+#include "application/CommentBout/Event/OptionMenuEvent.h"
 #include "application/TestApp/System/CollisionTestSystem.h"
 #include "application/TestApp/Component/Collider2DComponent.h"
 #include "application/TestApp/Component/Collider3DComponent.h"
@@ -65,6 +69,8 @@ void GameScene::Setup() {
 	AddSystem(std::make_unique<GrassReactionSystem>());
 	AddSystem(std::make_unique<HitBalloonSystem>());
 	AddSystem(std::make_unique<LifetimeSystem>());
+	AddSystem(std::make_unique<OptionSystem>());
+	AddSystem(std::make_unique<OptionViewSystem>());
 	AddSystem(std::make_unique<No::DebugCameraSystem>());
 	AddSystem(std::make_unique<No::CameraSystem>());
 	AddSystem(std::make_unique<No::EditSystem>());
@@ -276,8 +282,6 @@ void GameScene::NotSystemUpdate() {
 	UpdatePauseState();
 	UpdatePauseDim();
 	UpdatePauseMenuSprites();
-	UpdateOptionState();
-	UpdateOptionSprites();
 	DrawAudioTestImGui();
 	DrawPauseMenu();
 	CameraImGui();
@@ -386,7 +390,6 @@ void GameScene::UpdatePauseState()
 	PauseStateComponent* pauseState = nullptr;
 	PauseMenuConfigComponent* pauseConfig = nullptr;
 	OptionStateComponent* optionState = nullptr;
-	OptionMenuConfigComponent* optionConfig = nullptr;
 
 	auto pauseView = registry.View<CBPauseStateTag, PauseStateComponent>();
 	for (auto entity : pauseView) {
@@ -408,14 +411,6 @@ void GameScene::UpdatePauseState()
 	for (auto entity : optionStateView) {
 		optionState = registry.GetComponent<OptionStateComponent>(entity);
 		if (optionState) {
-			break;
-		}
-	}
-
-	auto optionConfigView = registry.View<CBOptionConfigTag, OptionMenuConfigComponent>();
-	for (auto entity : optionConfigView) {
-		optionConfig = registry.GetComponent<OptionMenuConfigComponent>(entity);
-		if (optionConfig) {
 			break;
 		}
 	}
@@ -447,13 +442,12 @@ void GameScene::UpdatePauseState()
 			}
 			break;
 			case PauseStateComponent::OpenOption:
-				if (optionState && optionConfig) {
-					optionState->isOpen = true;
-					optionState->isEditing = false;
-					optionState->selectedIndex = 0;
-					StartOptionPhase(optionState, OptionStateComponent::Opening, optionConfig->openDuration);
-				}
-				break;
+			{
+				CommentBout::OpenOptionMenuEvent event;
+				event.owner = CommentBout::OptionMenuOwner::Pause;
+				registry.EmitEvent(event);
+			}
+			break;
 			case PauseStateComponent::BackToTitle:
 			{
 				No::SceneChangeEvent event;
@@ -710,7 +704,7 @@ void GameScene::CreatePauseMenuSprites(const NoEngine::TextureRef& whiteTexture)
 	auto* titleSprite = registry.AddComponent<No::SpriteComponent>(pauseTitleEntity_);
 	titleSprite->textureHandle = pauseTitleTexture;
 	titleSprite->isVisible = false;
-	titleSprite->color = { 1.0f, 1.0f, 1.f, 0.0f };
+	titleSprite->color = { 1.f, 1.f, 1.f, 0.0f };
 	titleSprite->layer = CommentBout::ToLayer(CommentBout::SpriteLayer::PauseTitle);
 	auto* titleTag = registry.AddComponent<No::EditTag>(pauseTitleEntity_);
 	titleTag->name = "PauseTitleSprite";
@@ -730,7 +724,7 @@ void GameScene::CreatePauseMenuSprites(const NoEngine::TextureRef& whiteTexture)
 		auto* itemSprite = registry.AddComponent<No::SpriteComponent>(pauseItemEntities_[i]);
 		itemSprite->textureHandle = itemTextures[i];
 		itemSprite->isVisible = false;
-		itemSprite->color = { 1.0f, 1.0f, 1.f, 0.0f };
+		itemSprite->color = { 1.f, 1.f, 1.f, 0.0f };
 		itemSprite->layer = CommentBout::ToLayer(CommentBout::SpriteLayer::PauseItem);
 		itemSprite->orderInLayer = static_cast<uint32_t>(i);
 		auto* itemTag = registry.AddComponent<No::EditTag>(pauseItemEntities_[i]);
@@ -753,6 +747,9 @@ void GameScene::CreatePauseMenuSprites(const NoEngine::TextureRef& whiteTexture)
 void GameScene::CreateOptionSprites(const NoEngine::TextureRef& whiteTexture)
 {
 	No::Registry& registry = *GetRegistry();
+	auto optionViewEntity = registry.GenerateEntity();
+	registry.AddComponent<CBOptionViewTag>(optionViewEntity);
+	auto* optionView = registry.AddComponent<OptionMenuViewComponent>(optionViewEntity);
 
 	const auto optionTitleTexture = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_3105/Sprite/OptionMenu.png");
 	const auto masterTexture = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_3105/Sprite/Master.png");
@@ -901,6 +898,19 @@ void GameScene::CreateOptionSprites(const NoEngine::TextureRef& whiteTexture)
 	cursorSprite->color = { 1.0f, 1.0f, 1.0f, 0.0f };
 	auto* cursorTag = registry.AddComponent<No::EditTag>(optionCursorEntity_);
 	cursorTag->name = "OptionCursor";
+
+	optionView->dimEntity = optionDimEntity_;
+	optionView->bgEntity = optionBgEntity_;
+	optionView->lineEntity = optionLineEntity_;
+	optionView->titleEntity = optionTitleEntity_;
+	optionView->itemEntities = optionItemEntities_;
+	optionView->labelEntities = optionLabelEntities_;
+	optionView->barBaseEntities = optionBarBaseEntities_;
+	optionView->barFillEntities = optionBarFillEntities_;
+	optionView->toggleEntity = optionToggleEntity_;
+	optionView->toggleOnEntity = optionToggleOnEntity_;
+	optionView->toggleOffEntity = optionToggleOffEntity_;
+	optionView->cursorEntity = optionCursorEntity_;
 }
 
 void GameScene::UpdatePauseMenuSprites()
@@ -1020,7 +1030,8 @@ void GameScene::UpdatePauseMenuSprites()
 		itemSprite->isVisible = (menuVisibility > 0.0001f);
 		if (isSelected || (pauseState->isConfirmAnimating && static_cast<int>(i) == pauseState->confirmIndex)) {
 			itemSprite->color = { 1.0f, 1.0f, 1.0f, menuVisibility };
-		} else {
+		}
+		else {
 			itemSprite->color = { 0.82f, 0.82f, 0.82f, menuVisibility };
 		}
 	}
@@ -1040,378 +1051,6 @@ void GameScene::UpdatePauseMenuSprites()
 		cursorSprite->layer = static_cast<uint32_t>(std::max(0, pauseConfig->cursorLayer));
 		cursorSprite->isVisible = (!pauseState->isConfirmAnimating && pauseState->phase == PauseStateComponent::Open && menuVisibility > 0.0001f);
 		cursorSprite->color = { 1.0f, 0.95f, 0.35f, menuVisibility };
-	}
-}
-
-void GameScene::UpdateOptionSprites()
-{
-	No::Registry& registry = *GetRegistry();
-	OptionStateComponent* optionState = nullptr;
-	OptionMenuConfigComponent* optionConfig = nullptr;
-	PauseMenuConfigComponent* pauseConfig = nullptr;
-
-	auto stateView = registry.View<CBOptionStateTag, OptionStateComponent>();
-	for (auto entity : stateView) {
-		optionState = registry.GetComponent<OptionStateComponent>(entity);
-		if (optionState) {
-			break;
-		}
-	}
-	auto configView = registry.View<CBOptionConfigTag, OptionMenuConfigComponent>();
-	for (auto entity : configView) {
-		optionConfig = registry.GetComponent<OptionMenuConfigComponent>(entity);
-		if (optionConfig) {
-			break;
-		}
-	}
-	auto pauseConfigView = registry.View<CBPauseConfigTag, PauseMenuConfigComponent>();
-	for (auto entity : pauseConfigView) {
-		pauseConfig = registry.GetComponent<PauseMenuConfigComponent>(entity);
-		if (pauseConfig) {
-			break;
-		}
-	}
-	if (!optionState || !optionConfig) {
-		return;
-	}
-
-	float t = 0.0f;
-	if (optionState->phase == OptionStateComponent::Opening) {
-		t = No::EaseOutBack(0.0f, 1.0f, optionState->phaseTime / std::max(0.0001f, optionState->phaseDuration));
-	}
-	else if (optionState->phase == OptionStateComponent::Closing) {
-		t = 1.0f - No::EaseOutCubic(0.0f, 1.0f, optionState->phaseTime / std::max(0.0001f, optionState->phaseDuration));
-	}
-	else if (optionState->phase == OptionStateComponent::OpenSelect || optionState->phase == OptionStateComponent::OpenEdit) {
-		t = 1.0f;
-	}
-	t = Clamp01(t);
-
-	float confirmPunch = 0.0f;
-	if (optionState->isConfirmAnimating) {
-		float confirmDuration = optionConfig->confirmDuration;
-		int confirmEaseType = 2;
-		if (optionState->confirmIndex == 4 && pauseConfig) {
-			confirmDuration = pauseConfig->confirmDuration;
-			confirmEaseType = pauseConfig->easeType;
-		}
-		const float tt = optionState->confirmAnimTime / SafeDuration(confirmDuration);
-		const float eased = EaseByType(confirmEaseType, tt);
-		confirmPunch = 1.0f - std::fabs(2.0f * eased - 1.0f);
-	}
-
-	const No::Vector2 basePos = LerpVec2(optionConfig->itemBaseStartPosition, optionConfig->itemBaseEndPosition, t);
-	const No::Vector2 backItemPos = LerpVec2(optionConfig->backItemStartPosition, optionConfig->backItemEndPosition, t);
-
-	if (optionDimEntity_ != No::nullEntity && registry.Has<No::Transform2DComponent>(optionDimEntity_) && registry.Has<No::SpriteComponent>(optionDimEntity_)) {
-		auto* tr = registry.GetComponent<No::Transform2DComponent>(optionDimEntity_);
-		auto* sp = registry.GetComponent<No::SpriteComponent>(optionDimEntity_);
-		tr->translate = LerpVec2(optionConfig->dimStartPosition, optionConfig->dimEndPosition, t);
-		tr->scale = optionConfig->dimSize;
-		tr->rotation = optionConfig->dimRotation;
-		sp->layer = static_cast<uint32_t>(std::max(0, optionConfig->dimLayer));
-		sp->isVisible = (t > 0.0001f);
-		sp->color = { optionConfig->dimColor.r, optionConfig->dimColor.g, optionConfig->dimColor.b, optionConfig->dimColor.a * t };
-	}
-
-	if (optionBgEntity_ != No::nullEntity && registry.Has<No::Transform2DComponent>(optionBgEntity_) && registry.Has<No::SpriteComponent>(optionBgEntity_)) {
-		auto* tr = registry.GetComponent<No::Transform2DComponent>(optionBgEntity_);
-		auto* sp = registry.GetComponent<No::SpriteComponent>(optionBgEntity_);
-		tr->translate = LerpVec2(optionConfig->bgStartPosition, optionConfig->bgEndPosition, t);
-		tr->scale = LerpVec2(optionConfig->bgStartSize, optionConfig->bgEndSize, t);
-		tr->rotation = optionConfig->bgRotation;
-		sp->layer = static_cast<uint32_t>(std::max(0, optionConfig->bgLayer));
-		sp->isVisible = (t > 0.0001f);
-		sp->color = { optionConfig->bgColor.r, optionConfig->bgColor.g, optionConfig->bgColor.b, optionConfig->bgColor.a * t };
-	}
-
-	if (optionLineEntity_ != No::nullEntity && registry.Has<No::Transform2DComponent>(optionLineEntity_) && registry.Has<No::SpriteComponent>(optionLineEntity_)) {
-		auto* tr = registry.GetComponent<No::Transform2DComponent>(optionLineEntity_);
-		auto* sp = registry.GetComponent<No::SpriteComponent>(optionLineEntity_);
-		tr->translate = LerpVec2(optionConfig->lineStartPosition, optionConfig->lineEndPosition, t);
-		tr->scale = optionConfig->lineSize;
-		tr->rotation = optionConfig->lineRotation;
-		sp->layer = static_cast<uint32_t>(std::max(0, optionConfig->lineLayer));
-		sp->isVisible = (t > 0.0001f);
-		sp->color = { optionConfig->lineColor.r, optionConfig->lineColor.g, optionConfig->lineColor.b, optionConfig->lineColor.a * t };
-	}
-
-	if (optionTitleEntity_ != No::nullEntity && registry.Has<No::Transform2DComponent>(optionTitleEntity_) && registry.Has<No::SpriteComponent>(optionTitleEntity_)) {
-		auto* tr = registry.GetComponent<No::Transform2DComponent>(optionTitleEntity_);
-		auto* sp = registry.GetComponent<No::SpriteComponent>(optionTitleEntity_);
-		tr->translate = LerpVec2(optionConfig->titleStartPosition, optionConfig->titleEndPosition, t);
-		tr->scale = optionConfig->titleSize;
-		sp->layer = static_cast<uint32_t>(std::max(0, optionConfig->labelLayer));
-		sp->isVisible = (t > 0.0001f);
-		sp->color = { 1.0f, 1.0f, 1.0f, t };
-	}
-
-	const std::array<float, 3> volumes = { optionState->masterVolume, optionState->bgmVolume, optionState->seVolume };
-	for (size_t i = 0; i < optionItemEntities_.size(); ++i) {
-		const float rowY = basePos.y + optionConfig->itemSpacing * static_cast<float>(i);
-		const No::Entity itemE = optionItemEntities_[i];
-		if (itemE != No::nullEntity && registry.Has<No::Transform2DComponent>(itemE) && registry.Has<No::SpriteComponent>(itemE)) {
-			auto* tr = registry.GetComponent<No::Transform2DComponent>(itemE);
-			auto* sp = registry.GetComponent<No::SpriteComponent>(itemE);
-			const bool isBack = (i == 4);
-			const No::Vector2 baseSize = isBack ? optionConfig->backItemSize : optionConfig->itemSize;
-			const No::Vector2 baseTranslate = isBack ? backItemPos : No::Vector2(basePos.x, rowY);
-			float scale = 1.0f;
-			if (optionState->isConfirmAnimating && static_cast<int>(i) == optionState->confirmIndex) {
-				float confirmScale = optionConfig->confirmScale;
-				if (isBack && pauseConfig) {
-					confirmScale = pauseConfig->confirmScale;
-				}
-				scale = 1.0f + (confirmScale - 1.0f) * confirmPunch;
-			}
-			tr->translate = baseTranslate;
-			tr->scale = { baseSize.x * scale, baseSize.y * scale };
-			sp->layer = static_cast<uint32_t>(std::max(0, optionConfig->itemLayer));
-			sp->orderInLayer = static_cast<uint32_t>(i);
-			sp->isVisible = (t > 0.0001f);
-			sp->color = { optionConfig->itemColor.r, optionConfig->itemColor.g, optionConfig->itemColor.b, optionConfig->itemColor.a * t };
-		}
-
-		const No::Entity labelE = optionLabelEntities_[i];
-		if (labelE != No::nullEntity && registry.Has<No::Transform2DComponent>(labelE) && registry.Has<No::SpriteComponent>(labelE)) {
-			auto* tr = registry.GetComponent<No::Transform2DComponent>(labelE);
-			auto* sp = registry.GetComponent<No::SpriteComponent>(labelE);
-			if (i == 4) {
-				tr->translate = LerpVec2(optionConfig->backLabelStartPosition, optionConfig->backLabelEndPosition, t);
-				tr->scale = optionConfig->backLabelSize;
-			}
-			else {
-				tr->translate = { basePos.x + optionConfig->labelOffset.x, rowY + optionConfig->labelOffset.y };
-				tr->scale = optionConfig->labelSize;
-			}
-			sp->layer = static_cast<uint32_t>(std::max(0, optionConfig->labelLayer));
-			sp->isVisible = (t > 0.0001f);
-			sp->color = { 1.0f, 1.0f, 1.0f, t };
-		}
-
-		if (i < optionBarBaseEntities_.size()) {
-			const No::Entity baseE = optionBarBaseEntities_[i];
-			const No::Entity fillE = optionBarFillEntities_[i];
-			if (baseE != No::nullEntity && registry.Has<No::Transform2DComponent>(baseE) && registry.Has<No::SpriteComponent>(baseE)) {
-				auto* tr = registry.GetComponent<No::Transform2DComponent>(baseE);
-				auto* sp = registry.GetComponent<No::SpriteComponent>(baseE);
-				tr->translate = { basePos.x + optionConfig->barOffset.x, rowY + optionConfig->barOffset.y };
-				tr->scale = optionConfig->barBaseSize;
-				sp->layer = static_cast<uint32_t>(std::max(0, optionConfig->barBaseLayer));
-				sp->isVisible = (t > 0.0001f);
-				sp->color = { optionConfig->barBaseColor.r, optionConfig->barBaseColor.g, optionConfig->barBaseColor.b, optionConfig->barBaseColor.a * t };
-			}
-			if (fillE != No::nullEntity && registry.Has<No::Transform2DComponent>(fillE) && registry.Has<No::SpriteComponent>(fillE)) {
-				auto* tr = registry.GetComponent<No::Transform2DComponent>(fillE);
-				auto* sp = registry.GetComponent<No::SpriteComponent>(fillE);
-				const float fillW = optionConfig->barFillMinSize.x + (optionConfig->barBaseSize.x - optionConfig->barFillMinSize.x) * Clamp01(volumes[i]);
-				tr->translate = { basePos.x + optionConfig->barOffset.x - (optionConfig->barBaseSize.x - fillW) * 0.5f, rowY + optionConfig->barOffset.y };
-				tr->scale = { fillW, optionConfig->barFillMinSize.y };
-				sp->layer = static_cast<uint32_t>(std::max(0, optionConfig->barFillLayer));
-				sp->isVisible = (t > 0.0001f);
-				sp->color = { optionConfig->barFillColor.r, optionConfig->barFillColor.g, optionConfig->barFillColor.b, optionConfig->barFillColor.a * t };
-			}
-		}
-	}
-
-	if (optionToggleEntity_ != No::nullEntity && registry.Has<No::Transform2DComponent>(optionToggleEntity_) && registry.Has<No::SpriteComponent>(optionToggleEntity_)) {
-		auto* tr = registry.GetComponent<No::Transform2DComponent>(optionToggleEntity_);
-		auto* sp = registry.GetComponent<No::SpriteComponent>(optionToggleEntity_);
-		const float y = basePos.y + optionConfig->itemSpacing * 3.0f;
-		tr->translate = { basePos.x + optionConfig->toggleOffset.x, y + optionConfig->toggleOffset.y };
-		tr->scale = optionConfig->toggleSize;
-		sp->layer = static_cast<uint32_t>(std::max(0, optionConfig->toggleLayer));
-		sp->isVisible = (t > 0.0001f);
-		sp->color = { optionConfig->itemColor.r, optionConfig->itemColor.g, optionConfig->itemColor.b, 0.35f * t };
-	}
-
-	if (optionToggleOnEntity_ != No::nullEntity && registry.Has<No::Transform2DComponent>(optionToggleOnEntity_) && registry.Has<No::SpriteComponent>(optionToggleOnEntity_)) {
-		auto* tr = registry.GetComponent<No::Transform2DComponent>(optionToggleOnEntity_);
-		auto* sp = registry.GetComponent<No::SpriteComponent>(optionToggleOnEntity_);
-		const float y = basePos.y + optionConfig->itemSpacing * 3.0f;
-		tr->translate = { basePos.x + optionConfig->toggleOffset.x, y + optionConfig->toggleOffset.y };
-		tr->scale = optionConfig->toggleSize;
-		sp->layer = static_cast<uint32_t>(std::max(0, optionConfig->toggleLayer));
-		sp->isVisible = (t > 0.0001f) && optionState->vibrationEnabled;
-		sp->color = { optionConfig->toggleOnColor.r, optionConfig->toggleOnColor.g, optionConfig->toggleOnColor.b, optionConfig->toggleOnColor.a * t };
-	}
-	if (optionToggleOffEntity_ != No::nullEntity && registry.Has<No::Transform2DComponent>(optionToggleOffEntity_) && registry.Has<No::SpriteComponent>(optionToggleOffEntity_)) {
-		auto* tr = registry.GetComponent<No::Transform2DComponent>(optionToggleOffEntity_);
-		auto* sp = registry.GetComponent<No::SpriteComponent>(optionToggleOffEntity_);
-		const float y = basePos.y + optionConfig->itemSpacing * 3.0f;
-		tr->translate = { basePos.x + optionConfig->toggleOffset.x, y + optionConfig->toggleOffset.y };
-		tr->scale = optionConfig->toggleSize;
-		sp->layer = static_cast<uint32_t>(std::max(0, optionConfig->toggleLayer));
-		sp->isVisible = (t > 0.0001f) && !optionState->vibrationEnabled;
-		sp->color = { optionConfig->toggleOffColor.r, optionConfig->toggleOffColor.g, optionConfig->toggleOffColor.b, optionConfig->toggleOffColor.a * t };
-	}
-
-	if (optionCursorEntity_ != No::nullEntity && registry.Has<No::Transform2DComponent>(optionCursorEntity_) && registry.Has<No::SpriteComponent>(optionCursorEntity_)) {
-		auto* tr = registry.GetComponent<No::Transform2DComponent>(optionCursorEntity_);
-		auto* sp = registry.GetComponent<No::SpriteComponent>(optionCursorEntity_);
-		const float rowY = basePos.y + optionConfig->itemSpacing * static_cast<float>(optionState->selectedIndex);
-		const No::Vector2 offset = (optionState->selectedIndex == 4) ? optionConfig->cursorBackOffset : optionConfig->cursorSelectOffset;
-		tr->translate = { basePos.x + offset.x, rowY + offset.y };
-		tr->scale = optionConfig->cursorSize;
-		sp->layer = static_cast<uint32_t>(std::max(0, optionConfig->cursorLayer));
-		sp->isVisible = (t > 0.0001f) && (optionState->phase == OptionStateComponent::OpenSelect || optionState->phase == OptionStateComponent::OpenEdit);
-		const bool isEdit = (optionState->phase == OptionStateComponent::OpenEdit);
-		const No::Color cc = isEdit ? optionConfig->cursorEditColor : optionConfig->cursorColor;
-		sp->color = { cc.r, cc.g, cc.b, cc.a * t };
-	}
-}
-
-void GameScene::UpdateOptionState()
-{
-	No::Registry& registry = *GetRegistry();
-	OptionStateComponent* optionState = nullptr;
-	OptionMenuConfigComponent* optionConfig = nullptr;
-	PauseMenuConfigComponent* pauseConfig = nullptr;
-
-	auto stateView = registry.View<CBOptionStateTag, OptionStateComponent>();
-	for (auto entity : stateView) {
-		optionState = registry.GetComponent<OptionStateComponent>(entity);
-		if (optionState) {
-			break;
-		}
-	}
-	auto configView = registry.View<CBOptionConfigTag, OptionMenuConfigComponent>();
-	for (auto entity : configView) {
-		optionConfig = registry.GetComponent<OptionMenuConfigComponent>(entity);
-		if (optionConfig) {
-			break;
-		}
-	}
-	auto pauseConfigView = registry.View<CBPauseConfigTag, PauseMenuConfigComponent>();
-	for (auto entity : pauseConfigView) {
-		pauseConfig = registry.GetComponent<PauseMenuConfigComponent>(entity);
-		if (pauseConfig) {
-			break;
-		}
-	}
-	if (!optionState || !optionConfig) {
-		return;
-	}
-
-	CommentBout::GameAudio::ApplyOptionVolumes(
-		optionState->masterVolume,
-		optionState->bgmVolume,
-		optionState->seVolume
-	);
-
-	if (optionState->phase == OptionStateComponent::Closed) {
-		optionState->isOpen = false;
-		optionState->isEditing = false;
-		optionState->isConfirmAnimating = false;
-		optionState->confirmIndex = -1;
-		optionState->confirmAnimTime = 0.0f;
-		optionState->requestedAction = OptionStateComponent::None;
-		return;
-	}
-
-	if (optionState->phase == OptionStateComponent::Opening || optionState->phase == OptionStateComponent::Closing) {
-		optionState->phaseTime += GetPauseDeltaTime();
-		if (optionState->phaseTime >= optionState->phaseDuration) {
-			if (optionState->phase == OptionStateComponent::Opening) {
-				StartOptionPhase(optionState, OptionStateComponent::OpenSelect, 1.0f);
-			}
-			else {
-				StartOptionPhase(optionState, OptionStateComponent::Closed, 1.0f);
-				optionState->isOpen = false;
-				optionState->isEditing = false;
-			}
-		}
-		return;
-	}
-
-	if (optionState->isOpen) {
-	}
-
-	if (optionState->isConfirmAnimating) {
-		optionState->confirmAnimTime += GetPauseDeltaTime();
-		float confirmDuration = optionConfig->confirmDuration;
-		if (optionState->confirmIndex == 4 && pauseConfig) {
-			confirmDuration = pauseConfig->confirmDuration;
-		}
-		confirmDuration = SafeDuration(confirmDuration);
-		if (optionState->confirmAnimTime >= confirmDuration) {
-			optionState->isConfirmAnimating = false;
-			optionState->confirmAnimTime = 0.0f;
-			optionState->confirmIndex = -1;
-
-			if (optionState->requestedAction == OptionStateComponent::CloseOption) {
-				StartOptionPhase(optionState, OptionStateComponent::Closing, optionConfig->closeDuration);
-			}
-			else if (optionState->requestedAction == OptionStateComponent::StartEdit) {
-				optionState->isEditing = true;
-				StartOptionPhase(optionState, OptionStateComponent::OpenEdit, 1.0f);
-			}
-			optionState->requestedAction = OptionStateComponent::None;
-		}
-		return;
-	}
-
-	if (optionState->phase == OptionStateComponent::OpenEdit) {
-		const float step = std::max(0.01f, optionConfig->volumeStep);
-		const bool dec = No::Keyboard::IsTrigger('A') || No::Keyboard::IsTrigger(VK_LEFT);
-		const bool inc = No::Keyboard::IsTrigger('D') || No::Keyboard::IsTrigger(VK_RIGHT);
-		const float beforeMaster = optionState->masterVolume;
-		const float beforeBGM = optionState->bgmVolume;
-		const float beforeSE = optionState->seVolume;
-
-		if (optionState->selectedIndex == 0) {
-			if (dec) optionState->masterVolume = std::max(0.0f, optionState->masterVolume - step);
-			if (inc) optionState->masterVolume = std::min(1.0f, optionState->masterVolume + step);
-		}
-		else if (optionState->selectedIndex == 1) {
-			if (dec) optionState->bgmVolume = std::max(0.0f, optionState->bgmVolume - step);
-			if (inc) optionState->bgmVolume = std::min(1.0f, optionState->bgmVolume + step);
-		}
-		else if (optionState->selectedIndex == 2) {
-			if (dec) optionState->seVolume = std::max(0.0f, optionState->seVolume - step);
-			if (inc) optionState->seVolume = std::min(1.0f, optionState->seVolume + step);
-		}
-		else if (optionState->selectedIndex == 3) {
-			if (dec || inc) {
-				optionState->vibrationEnabled = !optionState->vibrationEnabled;
-			}
-		}
-
-		const bool volumeChanged =
-			(beforeMaster != optionState->masterVolume) ||
-			(beforeBGM != optionState->bgmVolume) ||
-			(beforeSE != optionState->seVolume);
-		if (volumeChanged) {
-			CommentBout::GameAudio::PlayTestSE();
-		}
-
-		if (No::Keyboard::IsTrigger(VK_SPACE)) {
-			optionState->isEditing = false;
-			StartOptionPhase(optionState, OptionStateComponent::OpenSelect, 1.0f);
-		}
-		return;
-	}
-
-	if (No::Keyboard::IsTrigger('W') || No::Keyboard::IsTrigger(VK_UP)) {
-		optionState->selectedIndex--;
-		if (optionState->selectedIndex < 0) {
-			optionState->selectedIndex = optionState->itemCount - 1;
-		}
-	}
-	if (No::Keyboard::IsTrigger('S') || No::Keyboard::IsTrigger(VK_DOWN)) {
-		optionState->selectedIndex++;
-		if (optionState->selectedIndex >= optionState->itemCount) {
-			optionState->selectedIndex = 0;
-		}
-	}
-
-	if (No::Keyboard::IsTrigger(VK_SPACE)) {
-		optionState->isConfirmAnimating = true;
-		optionState->confirmIndex = optionState->selectedIndex;
-		optionState->confirmAnimTime = 0.0f;
-		optionState->requestedAction = (optionState->selectedIndex == 4)
-			? OptionStateComponent::CloseOption
-			: OptionStateComponent::StartEdit;
 	}
 }
 

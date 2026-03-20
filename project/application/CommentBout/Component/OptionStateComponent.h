@@ -1,5 +1,6 @@
 #pragma once
 #include "engine/NoEngine.h"
+#include "application/CommentBout/Event/OptionMenuEvent.h"
 
 struct OptionStateComponent {
 	enum OptionPhase {
@@ -34,4 +35,5 @@ struct OptionStateComponent {
 	float bgmVolume = 0.5f;
 	float seVolume = 0.5f;
 	bool vibrationEnabled = true;
+	CommentBout::OptionMenuOwner owner = CommentBout::OptionMenuOwner::Unknown;
 };
