@@ -10,15 +10,8 @@ private:
 	void CameraImGui();
 
 	void SpawnGrass(const No::Vector3& position, const No::Vector3& size);
-	void UpdatePauseState();
-	void UpdatePauseDim();
-	void DrawPauseMenu();
 	void CreatePauseMenuSprites(const NoEngine::TextureRef& whiteTexture);
-	void UpdatePauseMenuSprites();
 	void CreateOptionSprites(const NoEngine::TextureRef& whiteTexture);
-	void UpdateOptionState();
-	void UpdateOptionSprites();
-	void DrawAudioTestImGui();
 
 	No::Entity activeCameraEntity_{};
 	No::Entity pauseDimEntity_{};

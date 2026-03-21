@@ -9,6 +9,7 @@ struct CBGameResourceTag {};
 struct CBPauseStateTag {};
 struct CBPauseConfigTag {};
 struct CBPauseDimTag {};
+struct CBPauseViewTag {};
 struct CBOptionStateTag {};
 struct CBOptionConfigTag {};
 struct CBOptionViewTag {};
