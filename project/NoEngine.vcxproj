@@ -166,6 +166,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\CommentBout\System\GrassReactionSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\LifetimeSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\OptionSystem.cpp" />
+    <ClCompile Include="application\CommentBout\System\RailCameraSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\TitleSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\TitleViewSystem.cpp" />
     <ClCompile Include="application\\CommentBout\\System\\OptionViewSystem.cpp" />
@@ -342,10 +343,12 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\CommentBout\Component\OptionMenuConfigComponent.h" />
     <ClInclude Include="application\CommentBout\Component\OptionMenuViewComponent.h" />
     <ClInclude Include="application\CommentBout\Component\OptionStateComponent.h" />
+    <ClInclude Include="application\CommentBout\Component\RailCameraComponent.h" />
     <ClInclude Include="application\CommentBout\Component\TitleMenuConfigComponent.h" />
     <ClInclude Include="application\CommentBout\Component\TitleMenuStateComponent.h" />
     <ClInclude Include="application\CommentBout\Component\TitleMenuViewComponent.h" />
     <ClInclude Include="application\CommentBout\Spawner\TitleMenuSpawner.h" />
+    <ClInclude Include="application\CommentBout\System\RailCameraSystem.h" />
     <ClInclude Include="application\CommentBout\System\TitleSystem.h" />
     <ClInclude Include="application\CommentBout\System\TitleViewSystem.h" />
     <ClInclude Include="application\\CommentBout\\Component\\PauseMenuConfigComponent.h" />
@@ -719,6 +722,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <None Include="resources\engine\Shaders\Default.hlsli" />
     <None Include="resources\game\Shaders\ShaderMathUtil.hlsli" />
     <None Include="resources\game\td_2304\Json\tdSpriteConfig.json" />
+    <None Include="resources\game\td_3105\RailData\sample_rail.json" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

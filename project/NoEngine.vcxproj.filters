@@ -162,6 +162,7 @@
     <ClCompile Include="application\CommentBout\System\TitleSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\TitleViewSystem.cpp" />
     <ClCompile Include="application\CommentBout\Spawner\TitleMenuSpawner.cpp" />
+    <ClCompile Include="application\CommentBout\System\RailCameraSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="application\TestApp\Scene\TestScene2.h" />
@@ -380,6 +381,8 @@
     <ClInclude Include="application\CommentBout\System\TitleSystem.h" />
     <ClInclude Include="application\CommentBout\System\TitleViewSystem.h" />
     <ClInclude Include="application\CommentBout\Spawner\TitleMenuSpawner.h" />
+    <ClInclude Include="application\CommentBout\Component\RailCameraComponent.h" />
+    <ClInclude Include="application\CommentBout\System\RailCameraSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />
@@ -391,5 +394,6 @@
     <None Include="resources\engine\Shaders\Default.hlsli" />
     <None Include="resources\game\Shaders\ShaderMathUtil.hlsli" />
     <None Include="resources\game\td_2304\Json\tdSpriteConfig.json" />
+    <None Include="resources\game\td_3105\RailData\sample_rail.json" />
   </ItemGroup>
 </Project>

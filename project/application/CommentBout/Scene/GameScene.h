@@ -8,11 +8,14 @@ public:
 private:
 	void NotSystemUpdate() override;
 	void CameraImGui();
+	void RailCameraImGui();
 
 	void SpawnGrass(const No::Vector3& position, const No::Vector3& size);
 	void CreatePauseMenuSprites(const NoEngine::TextureRef& whiteTexture);
 
 	No::Entity activeCameraEntity_{};
+	No::Entity debugCameraEntity_{};
+	No::Entity railCameraEntity_{};
 
 	// Pause メニュー用エンティティ
 	No::Entity pauseDimEntity_{};

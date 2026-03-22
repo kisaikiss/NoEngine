@@ -3,6 +3,7 @@
 #include <vector>
 #include <utility>
 #include <array>
+#include <algorithm>
 #include "application/CommentBout/GameTag.h"
 #include "application/CommentBout/Component/PlayerComponent.h"
 #include "application/CommentBout/Component/PlayerAttackComponent.h"
@@ -15,6 +16,7 @@
 #include "application/CommentBout/Component/GrassReactionComponent.h"
 #include "application/CommentBout/Component/GameResourceComponent.h"
 #include "application/CommentBout/Component/GroundComponent.h"
+#include "application/CommentBout/Component/RailCameraComponent.h"
 #include "application/CommentBout/Utility/CBCollisionMask.h"
 #include "application/CommentBout/Utility/CBSpriteLayer.h"
 #include "application/CommentBout/Utility/CBGameAudio.h"
@@ -26,6 +28,7 @@
 #include "application/CommentBout/System/PauseViewSystem.h"
 #include "application/CommentBout/System/OptionSystem.h"
 #include "application/CommentBout/System/OptionViewSystem.h"
+#include "application/CommentBout/System/RailCameraSystem.h"
 #include "application/CommentBout/Spawner/OptionMenuSpawner.h"  // ★追加
 #include "application/TestApp/System/CollisionTestSystem.h"
 #include "application/TestApp/Component/Collider2DComponent.h"
@@ -63,6 +66,7 @@ void GameScene::Setup() {
 	AddSystem(std::make_unique<PauseViewSystem>());
 	AddSystem(std::make_unique<OptionViewSystem>());
 	AddSystem(std::make_unique<No::DebugCameraSystem>());
+	AddSystem(std::make_unique<RailCameraSystem>());
 	AddSystem(std::make_unique<No::CameraSystem>());
 	AddSystem(std::make_unique<No::EditSystem>());
 
@@ -162,6 +166,15 @@ void GameScene::Setup() {
 	auto* cameraTransform = registry.AddComponent<No::TransformComponent>(camera);
 	cameraTransform->translate.z = -5.f;
 	activeCameraEntity_ = camera;
+	debugCameraEntity_ = camera;
+
+	railCameraEntity_ = registry.GenerateEntity();
+	registry.AddComponent<No::CameraComponent>(railCameraEntity_);
+	registry.AddComponent<No::EditTag>(railCameraEntity_)->name = "rail_camera";
+	auto* railCameraTransform = registry.AddComponent<No::TransformComponent>(railCameraEntity_);
+	railCameraTransform->translate = { 0.0f, 2.0f, -10.0f };
+	auto* railCamera = registry.AddComponent<RailCameraComponent>(railCameraEntity_);
+	railCamera->railFilePath = "resources/game/td_3105/RailData/sample_rail.json";
 	// 自機スプライト
 	auto playerEntity = registry.GenerateEntity();
 	registry.AddComponent<CBPlayerTag>(playerEntity);
@@ -253,6 +266,7 @@ void GameScene::SpawnGrass(const No::Vector3& position, const No::Vector3& size)
 void GameScene::NotSystemUpdate()
 {
 	CameraImGui();
+	RailCameraImGui();
 #ifdef USE_IMGUI
 	ImGui::Begin("ChangeScene");
 	if (ImGui::Button("SceneChangeTitle")) {
@@ -273,9 +287,103 @@ void GameScene::CameraImGui()
 {
 #ifdef USE_IMGUI
 	ImGui::Begin("CameraControl");
-	if (ImGui::Button("CameraChange")) {
-		GetRegistry()->AddComponent<No::ActiveCameraTag>(activeCameraEntity_);
+	if (ImGui::Button("Use Debug Camera")) {
+		GetRegistry()->AddComponent<No::ActiveCameraTag>(debugCameraEntity_);
+		activeCameraEntity_ = debugCameraEntity_;
 	}
+	if (ImGui::Button("Use Rail Camera")) {
+		GetRegistry()->AddComponent<No::ActiveCameraTag>(railCameraEntity_);
+		activeCameraEntity_ = railCameraEntity_;
+	}
+	ImGui::Text("Active: %s", (activeCameraEntity_ == railCameraEntity_) ? "Rail" : "Debug");
+	ImGui::End();
+#endif
+}
+
+void GameScene::RailCameraImGui()
+{
+#ifdef USE_IMGUI
+	if (railCameraEntity_ == No::nullEntity) {
+		return;
+	}
+
+	auto* rail = GetRegistry()->GetComponent<RailCameraComponent>(railCameraEntity_);
+	if (!rail) {
+		return;
+	}
+
+	ImGui::Begin("RailCamera");
+	ImGui::Text("Rail File: %s", rail->railFilePath.c_str());
+	ImGui::Text("Loaded: %s", rail->isLoaded ? "Yes" : "No");
+	ImGui::Text("Control Points: %d", static_cast<int>(rail->controlPoints.size()));
+
+	if (rail->totalLength > 0.0f) {
+		const float progress = rail->distance / rail->totalLength;
+		ImGui::Text("Progress: %.1f%%", progress * 100.0f);
+		ImGui::Text("Distance: %.2f / %.2f", rail->distance, rail->totalLength);
+	} else {
+		ImGui::Text("Progress: 0.0%%");
+		ImGui::Text("Distance: %.2f / %.2f", rail->distance, rail->totalLength);
+	}
+
+	if (ImGui::SliderFloat("Speed", &rail->speed, 0.0f, 40.0f)) {
+		if (rail->speed < 0.0f) {
+			rail->speed = 0.0f;
+		}
+	}
+
+	if (ImGui::Button(rail->isPlaying ? "Pause" : "Play")) {
+		if (!rail->isFinished || rail->distance < rail->totalLength) {
+			rail->isPlaying = !rail->isPlaying;
+		}
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("Stop")) {
+		rail->distance = 0.0f;
+		rail->isPlaying = false;
+		rail->isFinished = false;
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("ResetAndPlay")) {
+		rail->distance = 0.0f;
+		rail->isFinished = false;
+		rail->isPlaying = true;
+	}
+
+	float percent = 0.0f;
+	if (rail->totalLength > 0.0f) {
+		percent = (rail->distance / rail->totalLength) * 100.0f;
+	}
+	if (ImGui::SliderFloat("Progress(%)", &percent, 0.0f, 100.0f)) {
+		if (rail->totalLength > 0.0f) {
+			rail->distance = rail->totalLength * (percent / 100.0f);
+			rail->isFinished = (rail->distance >= rail->totalLength);
+			if (rail->isFinished) {
+				rail->isPlaying = false;
+			}
+		}
+	}
+
+	static float jumpPercent = 50.0f;
+	ImGui::SliderFloat("JumpTarget(%)", &jumpPercent, 0.0f, 100.0f);
+	if (ImGui::Button("Jump")) {
+		if (rail->totalLength > 0.0f) {
+			rail->distance = rail->totalLength * (jumpPercent / 100.0f);
+			rail->isFinished = (rail->distance >= rail->totalLength);
+			if (rail->isFinished) {
+				rail->isPlaying = false;
+			}
+		}
+	}
+
+	if (rail->isFinished) {
+		ImGui::Text("State: Finished");
+	} else if (rail->isPlaying) {
+		ImGui::Text("State: Playing");
+	} else {
+		ImGui::Text("State: Paused");
+	}
+
 	ImGui::End();
 #endif
 }
