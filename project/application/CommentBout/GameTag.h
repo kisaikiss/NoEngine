@@ -13,3 +13,6 @@ struct CBPauseViewTag {};
 struct CBOptionStateTag {};
 struct CBOptionConfigTag {};
 struct CBOptionViewTag {};
+struct CBTitleStateTag {};
+struct CBTitleConfigTag {};
+struct CBTitleViewTag {};

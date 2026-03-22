@@ -7,5 +7,5 @@
 void CommentBout::Startup(void) {
 	RegisterScene("TitleScene", []() { return std::make_unique<TitleScene>();	});
 	RegisterScene("GameScene", []() { return std::make_unique<GameScene>();	});
-	ChangeScene("GameScene");
+	ChangeScene("TitleScene");
 }

@@ -1,12 +1,15 @@
 #include "TitleScene.h"
 #include "application/CommentBout/GameTag.h"
+#include "application/CommentBout/Component/TitleMenuStateComponent.h"
+#include "application/CommentBout/Component/TitleMenuConfigComponent.h"
 #include "application/CommentBout/Component/OptionStateComponent.h"
 #include "application/CommentBout/Component/OptionMenuConfigComponent.h"
-#include "application/CommentBout/Component/OptionMenuViewComponent.h"
+#include "application/CommentBout/System/TitleSystem.h"
+#include "application/CommentBout/System/TitleViewSystem.h"
 #include "application/CommentBout/System/OptionSystem.h"
 #include "application/CommentBout/System/OptionViewSystem.h"
-#include "application/CommentBout/Event/OptionMenuEvent.h"
-#include "application/CommentBout/Spawner/OptionMenuSpawner.h"  // ★追加
+#include "application/CommentBout/Spawner/TitleMenuSpawner.h"
+#include "application/CommentBout/Spawner/OptionMenuSpawner.h"
 
 namespace {
 	No::Entity cameraE;
@@ -14,33 +17,15 @@ namespace {
 
 void TitleScene::Setup()
 {
-	AddSystem(std::make_unique<No::AnimationSystem>());
+	AddSystem(std::make_unique<TitleSystem>());
 	AddSystem(std::make_unique<OptionSystem>());
+	AddSystem(std::make_unique<TitleViewSystem>());
 	AddSystem(std::make_unique<OptionViewSystem>());
 	AddSystem(std::make_unique<No::EditSystem>());
 	AddSystem(std::make_unique<No::DebugCameraSystem>());
 	AddSystem(std::make_unique<No::CameraSystem>());
 
 	No::Registry& registry = *GetRegistry();
-	No::Entity entity = registry.GenerateEntity();
-
-	auto* model = registry.AddComponent<No::MeshComponent>(entity);
-	auto* t = registry.AddComponent<No::TransformComponent>(entity);
-	auto* imguiName = registry.AddComponent<No::EditTag>(entity);
-	imguiName->name = "girl";
-	t->rotation.FromAxisAngle(No::Vector3(0.f, 1.f, 0.f), PI);
-	t->translate = { 0.f, -1.5f, 4.f };
-	auto* m = registry.AddComponent<No::MaterialComponent>(entity);
-	auto* a = registry.AddComponent<No::AnimatorComponent>(entity);
-	No::ModelLoader::LoadModel("magiclash", "resources/engine/Model/test/TD_girl/test7.gltf");
-	No::ModelLoader::GetModel("magiclash", model, a);
-	m->materials = No::ModelLoader::GetMaterial("magiclash");
-	m->drawOutline = true;
-	m->enableSkinning = true;
-	m->psoName = L"Renderer : DefaultSkinned PSO";
-	m->psoId = NoEngine::Render::GetPSOID(m->psoName);
-	m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
-
 	auto light = registry.GenerateEntity();
 	auto* dir = registry.AddComponent<No::DirectionalLightComponent>(light);
 	dir->color = { 1.f, 1.f, 1.f, 1.f };
@@ -59,7 +44,22 @@ void TitleScene::Setup()
 	registry.AddComponent<No::CameraComponent>(cameraE);
 	auto* cameraTransform2 = registry.AddComponent<No::TransformComponent>(cameraE);
 	cameraTransform2->translate.z = -5.f;
+	auto titleStateEntity = registry.GenerateEntity();
+	registry.AddComponent<CBTitleStateTag>(titleStateEntity);
+	auto* titleState = registry.AddComponent<TitleMenuStateComponent>(titleStateEntity);
+	titleState->selectedIndex = 0;
+	titleState->itemCount = 3;
+	titleState->isConfirmAnimating = false;
+	titleState->confirmIndex = -1;
+	titleState->confirmAnimTime = 0.0f;
+	titleState->requestedAction = TitleMenuStateComponent::None;
+	titleState->logoMotionTime = 0.0f;
+	registry.AddComponent<No::EditTag>(titleStateEntity)->name = "TitleMenuState";
 
+	auto titleConfigEntity = registry.GenerateEntity();
+	registry.AddComponent<CBTitleConfigTag>(titleConfigEntity);
+	registry.AddComponent<TitleMenuConfigComponent>(titleConfigEntity);
+	registry.AddComponent<No::EditTag>(titleConfigEntity)->name = "TitleMenuConfig";
 
 	auto optionStateEntity = registry.GenerateEntity();
 	registry.AddComponent<CBOptionStateTag>(optionStateEntity);
@@ -75,14 +75,13 @@ void TitleScene::Setup()
 	optionState->requestedAction = OptionStateComponent::None;
 	registry.AddComponent<No::EditTag>(optionStateEntity)->name = "TitleOptionState";
 
-
 	auto optionConfigEntity = registry.GenerateEntity();
 	registry.AddComponent<CBOptionConfigTag>(optionConfigEntity);
-	registry.AddComponent<OptionMenuConfigComponent>(optionConfigEntity); // デフォルト値 = JSON値
+	registry.AddComponent<OptionMenuConfigComponent>(optionConfigEntity);
 	registry.AddComponent<No::EditTag>(optionConfigEntity)->name = "TitleOptionMenuConfig";
 
-
 	const auto whiteTexture = NoEngine::TextureManager::LoadCovertTexture("resources/engine/white1x1.png");
+	TitleMenuSpawner::Create(registry, whiteTexture);
 	OptionMenuSpawner::Create(registry, whiteTexture);
 }
 
