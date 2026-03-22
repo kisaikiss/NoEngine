@@ -15,4 +15,5 @@ struct OptionMenuViewComponent {
 	No::Entity toggleOnEntity = No::nullEntity;
 	No::Entity toggleOffEntity = No::nullEntity;
 	No::Entity cursorEntity = No::nullEntity;
+	std::array<No::Entity, 5> itemOverlayEntities{};
 };

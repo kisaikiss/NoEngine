@@ -2,65 +2,69 @@
 #include "engine/NoEngine.h"
 
 struct OptionMenuConfigComponent {
-	No::Vector2 dimStartPosition{ 198.700f, 430.000f };
-	No::Vector2 dimEndPosition{ 198.700f, 430.000f };
-	No::Vector2 dimSize{ 621.300f, 952.100f };
-	No::Color dimColor{ 0.000f, 0.000f, 0.000f, 0.950f };
-	float dimRotation = -9.700f;
+	No::Vector2 dimStartPosition{ 198.70f, 430.00f };
+	No::Vector2 dimEndPosition{ 198.70f, 430.00f };
+	No::Vector2 dimSize{ 621.30f, 952.10f };
+	No::Color dimColor{ 0.00f, 0.00f, 0.00f, 0.95f };
+	float dimRotation = -9.70f;
 
-	No::Vector2 bgStartPosition{ 640.000f, 760.000f };
-	No::Vector2 bgEndPosition{ 1063.100f, 491.500f };
-	No::Vector2 bgStartSize{ 960.000f, 520.000f };
-	No::Vector2 bgEndSize{ 979.300f, 652.400f };
-	No::Color bgColor{ 1.000f, 0.600f, 0.000f, 0.900f };
-	float bgRotation = -0.280f;
+	No::Vector2 bgStartPosition{ 640.00f, 760.00f };
+	No::Vector2 bgEndPosition{ 1063.10f, 491.50f };
+	No::Vector2 bgStartSize{ 960.00f, 520.00f };
+	No::Vector2 bgEndSize{ 979.30f, 652.40f };
+	No::Color bgColor{ 1.00f, 0.60f, 0.00f, 0.90f };
+	float bgRotation = -0.28f;
 
-	No::Vector2 lineStartPosition{ 857.200f, -130.200f };
-	No::Vector2 lineEndPosition{ 943.000f, 179.800f };
-	No::Vector2 lineSize{ 919.700f, 16.000f };
-	No::Color lineColor{ 1.000f, 1.000f, 1.000f, 0.950f };
-	float lineRotation = -0.280f;
+	No::Vector2 lineStartPosition{ 857.20f, -130.20f };
+	No::Vector2 lineEndPosition{ 943.00f, 179.80f };
+	No::Vector2 lineSize{ 919.70f, 16.00f };
+	No::Color lineColor{ 1.00f, 1.00f, 1.00f, 0.95f };
+	float lineRotation = -0.28f;
 
-	No::Vector2 titleStartPosition{ 860.0f, -60.0f };
-	No::Vector2 titleEndPosition{ 920.0f, 120.0f };
-	No::Vector2 titleSize{ 280.0f, 58.0f };
+	No::Vector2 titleStartPosition{ 1383.20f, 248.40f };
+	No::Vector2 titleEndPosition{ 1132.20f, 230.60f };
+	No::Vector2 titleSize{ 301.80f, 65.50f };
+	float titleRotation = 0.10f;
 
-	No::Vector2 itemBaseStartPosition{ 640.000f, 860.000f };
-	No::Vector2 itemBaseEndPosition{ 935.400f, 333.300f };
-	No::Vector2 itemSize{ 620.000f, 52.700f };
-	No::Vector2 backItemStartPosition{ 640.000f, 1138.400f };
-	No::Vector2 backItemEndPosition{ 935.400f, 611.700f };
-	No::Vector2 backItemSize{ 620.000f, 52.700f };
-	float itemSpacing = 69.600f;
-	No::Color itemColor{ 0.200f, 0.200f, 0.240f, 0.900f };
-	No::Color selectedItemColor{ 0.420f, 0.340f, 0.120f, 0.960f };
+	No::Vector2 itemBaseStartPosition{ 640.00f, 860.00f };
+	No::Vector2 itemBaseEndPosition{ 935.40f, 333.30f };
+	No::Vector2 itemSize{ 620.00f, 52.70f };
+	No::Vector2 backItemStartPosition{ 640.00f, 1138.40f };
+	No::Vector2 backItemEndPosition{ 1146.70f, 611.70f };
+	No::Vector2 backItemSize{ 195.90f, 52.70f };
+	float itemSpacing = 69.60f;
+	No::Color itemColor{ 0.20f, 0.20f, 0.24f, 0.90f };
+	No::Color selectedItemColor{ 0.42f, 0.34f, 0.12f, 0.96f };
 
-	No::Vector2 labelOffset{ -180.0f, 0.0f };
-	No::Vector2 labelSize{ 250.0f, 42.0f };
-	No::Vector2 backLabelStartPosition{ 700.0f, 860.0f };
-	No::Vector2 backLabelEndPosition{ 760.0f, 612.0f };
-	No::Vector2 backLabelSize{ 220.0f, 44.0f };
+	No::Vector2 labelOffset{ -191.50f, 0.00f };
+	No::Vector2 labelSize{ 226.50f, 42.00f };
+	No::Vector2 backLabelStartPosition{ 760.00f, 860.00f };
+	No::Vector2 backLabelEndPosition{ 1168.40f, 611.70f };
+	No::Vector2 backLabelSize{ 103.20f, 50.20f };
 
-	No::Vector2 cursorSelectOffset{ -260.0f, 0.0f };
-	No::Vector2 cursorBackOffset{ -260.0f, 0.0f };
-	No::Vector2 cursorSize{ 14.0f, 48.0f };
-	No::Color cursorColor{ 1.0f, 1.0f, 1.0f, 0.95f };
-	No::Color cursorEditColor{ 1.0f, 0.85f, 0.25f, 1.0f };
+	No::Vector2 cursorSelectOffset{ -276.20f, 0.00f };
+	No::Vector2 cursorBackOffset{ 146.60f, 0.00f };
+	No::Vector2 cursorSize{ 28.00f, 28.00f };
+	No::Color cursorColor{ 1.00f, 1.00f, 1.00f, 0.95f };
+	No::Color cursorEditColor{ 1.00f, 0.85f, 0.25f, 1.00f };
 
-	No::Vector2 barOffset{ 110.000f, 0.000f };
-	No::Vector2 barBaseSize{ 360.000f, 16.000f };
-	No::Vector2 barFillMinSize{ 8.000f, 16.000f };
-	No::Color barBaseColor{ 0.100f, 0.100f, 0.100f, 0.950f };
-	No::Color barFillColor{ 0.950f, 0.900f, 0.280f, 0.950f };
+	No::Vector2 barOffset{ 110.00f, 0.00f };
+	No::Vector2 barBaseSize{ 360.00f, 16.00f };
+	No::Vector2 barFillMinSize{ 8.00f, 16.00f };
+	No::Color barBaseColor{ 0.10f, 0.10f, 0.10f, 0.95f };
+	No::Color barFillColor{ 0.95f, 0.90f, 0.28f, 0.95f };
 
-	No::Vector2 toggleOffset{ 9.000f, 0.000f };
-	No::Vector2 toggleSize{ 154.700f, 34.800f };
-	No::Color toggleOnColor{ 0.200f, 0.750f, 0.300f, 0.950f };
-	No::Color toggleOffColor{ 0.700f, 0.200f, 0.200f, 0.950f };
+	No::Vector2 toggleOffset{ 98.30f, 0.00f };
+	No::Vector2 toggleSize{ 126.20f, 52.00f };
+	No::Color toggleOnColor{ 0.20f, 0.75f, 0.30f, 0.95f };
+	No::Color toggleOffColor{ 0.70f, 0.20f, 0.20f, 0.95f };
 
-	float openDuration = 0.220f;
-	float closeDuration = 0.180f;
-	float volumeStep = 0.050f;
+	// 編集中に非選択行へ重ねる暗幕
+	No::Color itemOverlayColor{ 0.00f, 0.00f, 0.00f, 0.65f };
+
+	float openDuration = 0.22f;
+	float closeDuration = 0.18f;
+	float volumeStep = 0.05f;
 	float confirmDuration = 0.12f;
 	float confirmScale = 1.08f;
 
@@ -73,4 +77,5 @@ struct OptionMenuConfigComponent {
 	int barBaseLayer = 955;
 	int barFillLayer = 956;
 	int toggleLayer = 957;
+	int itemOverlayLayer = 959;
 };

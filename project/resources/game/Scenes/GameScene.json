@@ -634,6 +634,13 @@
                         0.8999999761581421
                     ],
                     "itemLayer": 950,
+                    "itemOverlayColor": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.6700000166893005
+                    ],
+                    "itemOverlayLayer": 959,
                     "itemSize": [
                         620.0,
                         52.70000076293945
@@ -679,6 +686,7 @@
                         1132.199951171875,
                         230.60000610351563
                     ],
+                    "titleRotation": 0.10000000149011612,
                     "titleSize": [
                         301.79998779296875,
                         65.5
@@ -709,6 +717,151 @@
                         52.0
                     ],
                     "volumeStep": 0.05000000074505806
+                }
+            }
+        },
+        "OptionOverlay_0": {
+            "components": {
+                "SpriteComponent": {
+                    "color": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        620.0,
+                        52.70000076293945
+                    ],
+                    "translate": [
+                        640.0,
+                        860.0
+                    ]
+                }
+            }
+        },
+        "OptionOverlay_1": {
+            "components": {
+                "SpriteComponent": {
+                    "color": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        620.0,
+                        52.70000076293945
+                    ],
+                    "translate": [
+                        640.0,
+                        929.5999755859375
+                    ]
+                }
+            }
+        },
+        "OptionOverlay_2": {
+            "components": {
+                "SpriteComponent": {
+                    "color": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        620.0,
+                        52.70000076293945
+                    ],
+                    "translate": [
+                        640.0,
+                        999.2000122070313
+                    ]
+                }
+            }
+        },
+        "OptionOverlay_3": {
+            "components": {
+                "SpriteComponent": {
+                    "color": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        620.0,
+                        52.70000076293945
+                    ],
+                    "translate": [
+                        640.0,
+                        1068.800048828125
+                    ]
+                }
+            }
+        },
+        "OptionOverlay_4": {
+            "components": {
+                "SpriteComponent": {
+                    "color": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        195.89999389648438,
+                        52.70000076293945
+                    ],
+                    "translate": [
+                        640.0,
+                        1138.4000244140625
+                    ]
                 }
             }
         },
@@ -1225,7 +1378,7 @@
                     "drawCenter": false,
                     "mousePositionX": 501,
                     "mousePositionY": 178,
-                    "mouseWheelY": -1200.0,
+                    "mouseWheelY": -2760.0,
                     "phi": 1.5,
                     "theta": -1.3665915727615356
                 },

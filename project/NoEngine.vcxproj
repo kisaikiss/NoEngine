@@ -364,6 +364,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\CommentBout\System\HitBalloonSystem.cpp" />
     <ClCompile Include="application\CommentBout\Scene\GameScene.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="application\CommentBout\Spawner\OptionMenuSpawner.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -674,6 +675,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\CommentBout\Component\HitBalloonComponent.h" />
     <ClInclude Include="application\CommentBout\System\HitBalloonSystem.h" />
     <ClInclude Include="application\CommentBout\Scene\GameScene.h" />
+    <ClInclude Include="application\CommentBout\Spawner\OptionMenuSpawner.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="engine\Assets\Texture\Texture.h" />

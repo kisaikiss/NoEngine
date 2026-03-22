@@ -201,6 +201,7 @@
     <ClCompile Include="application\\CommentBout\\System\\PauseSystem.cpp" />
     <ClCompile Include="application\\CommentBout\\System\\PauseViewSystem.cpp" />
     <ClCompile Include="application\CommentBout\Scene\GameScene.cpp" />
+    <ClCompile Include="application\CommentBout\Spawner\OptionMenuSpawner.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="application\TD2_3\Component\BackGroundComponent.h" />
@@ -478,6 +479,7 @@
     <ClInclude Include="application\\CommentBout\\System\\PauseSystem.h" />
     <ClInclude Include="application\\CommentBout\\System\\PauseViewSystem.h" />
     <ClInclude Include="application\CommentBout\Scene\GameScene.h" />
+    <ClInclude Include="application\CommentBout\Spawner\OptionMenuSpawner.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />
