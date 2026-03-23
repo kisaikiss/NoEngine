@@ -106,6 +106,7 @@ bool LoadRailToComponent(RailCameraComponent& rail, const std::string& stageName
 	rail.isFinished = false;
 	rail.isPlaying = true;
 	rail.isLoaded = false;
+	rail.needsRebuildArcLength = true;
 	return true;
 }
 }
@@ -480,6 +481,7 @@ void GameScene::RailEditorImGui()
 		rail->controlPoints.push_back(newPoint);
 		rail->selectedControlPointIndex = static_cast<int>(rail->controlPoints.size()) - 1;
 		rail->isLoaded = false;
+		rail->needsRebuildArcLength = true;
 	}
 
 	if (ImGui::Button("Delete Selected Point")) {
@@ -492,6 +494,7 @@ void GameScene::RailEditorImGui()
 				rail->selectedControlPointIndex = static_cast<int>(rail->controlPoints.size()) - 1;
 			}
 			rail->isLoaded = false;
+			rail->needsRebuildArcLength = true;
 		}
 	}
 
@@ -510,6 +513,7 @@ void GameScene::RailEditorImGui()
 			No::Vector3& p = rail->controlPoints[static_cast<size_t>(selected)];
 			if (ImGui::DragFloat3("Selected Position", &p.x, 0.05f)) {
 				rail->isLoaded = false;
+				rail->needsRebuildArcLength = true;
 			}
 		}
 	}

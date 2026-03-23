@@ -97,7 +97,7 @@ void PauseSystem::Update(No::Registry& registry, float deltaTime)
 
 	if (pauseState->phase == PauseStateComponent::Closed) {
 		pauseState->isPaused = false;
-		if (No::Keyboard::IsTrigger(VK_RETURN)) {
+		if (No::Keyboard::IsTrigger(VK_TAB)) {
 			pauseState->isPaused = true;
 			pauseState->justEnteredPause = true;
 			pauseState->selectedIndex = 0;

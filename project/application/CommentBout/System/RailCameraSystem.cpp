@@ -118,6 +118,57 @@ void ApplyTransformFromDistance(RailCameraComponent& rail, No::TransformComponen
 	transform->translate = position;
 }
 
+bool RebuildRailCache(RailCameraComponent& rail, bool resetPlayState) {
+	if (rail.controlPoints.size() < 2) {
+		rail.arcLengthTable.clear();
+		rail.totalLength = 0.0f;
+		rail.isLoaded = false;
+		rail.needsRebuildArcLength = false;
+		return false;
+	}
+
+	const int segmentCount = static_cast<int>(rail.controlPoints.size()) - 1;
+	const int samplesPerSegment = std::max(rail.samplesPerSegment, 4);
+	const int sampleCount = segmentCount * samplesPerSegment + 1;
+
+	rail.arcLengthTable.clear();
+	rail.arcLengthTable.reserve(static_cast<size_t>(sampleCount));
+
+	float accumulated = 0.0f;
+	No::Vector3 prev = EvaluatePositionByT(rail, 0.0f);
+	rail.arcLengthTable.push_back(0.0f);
+	for (int i = 1; i < sampleCount; ++i) {
+		const float t = static_cast<float>(i) / static_cast<float>(sampleCount - 1);
+		const No::Vector3 current = EvaluatePositionByT(rail, t);
+		accumulated += current.Distance(prev);
+		rail.arcLengthTable.push_back(accumulated);
+		prev = current;
+	}
+
+	rail.totalLength = accumulated;
+	if (resetPlayState) {
+		rail.distance = 0.0f;
+		rail.isFinished = false;
+	} else {
+		rail.distance = std::max(0.0f, std::min(rail.distance, rail.totalLength));
+		if (rail.distance >= rail.totalLength) {
+			rail.isFinished = true;
+			rail.isPlaying = false;
+		}
+	}
+
+	if (rail.selectedControlPointIndex >= static_cast<int>(rail.controlPoints.size())) {
+		rail.selectedControlPointIndex = static_cast<int>(rail.controlPoints.size()) - 1;
+	}
+	if (rail.selectedControlPointIndex < -1) {
+		rail.selectedControlPointIndex = -1;
+	}
+
+	rail.isLoaded = rail.totalLength > 0.0f;
+	rail.needsRebuildArcLength = false;
+	return rail.isLoaded;
+}
+
 bool LoadRailFromJson(RailCameraComponent& rail) {
 	std::ifstream ifs(rail.railFilePath);
 	if (!ifs) {
@@ -153,32 +204,7 @@ bool LoadRailFromJson(RailCameraComponent& rail) {
 		rail.speed = speedIt->get<float>();
 	}
 
-	const int segmentCount = static_cast<int>(rail.controlPoints.size()) - 1;
-	const int samplesPerSegment = std::max(rail.samplesPerSegment, 4);
-	const int sampleCount = segmentCount * samplesPerSegment + 1;
-
-	rail.arcLengthTable.clear();
-	rail.arcLengthTable.reserve(static_cast<size_t>(sampleCount));
-
-	float accumulated = 0.0f;
-	No::Vector3 prev = EvaluatePositionByT(rail, 0.0f);
-	rail.arcLengthTable.push_back(0.0f);
-	for (int i = 1; i < sampleCount; ++i) {
-		const float t = static_cast<float>(i) / static_cast<float>(sampleCount - 1);
-		const No::Vector3 current = EvaluatePositionByT(rail, t);
-		accumulated += current.Distance(prev);
-		rail.arcLengthTable.push_back(accumulated);
-		prev = current;
-	}
-
-	rail.totalLength = accumulated;
-	rail.distance = 0.0f;
-	rail.isFinished = false;
-	rail.isLoaded = rail.totalLength > 0.0f;
-	if (rail.selectedControlPointIndex >= static_cast<int>(rail.controlPoints.size())) {
-		rail.selectedControlPointIndex = static_cast<int>(rail.controlPoints.size()) - 1;
-	}
-	return rail.isLoaded;
+	return RebuildRailCache(rail, true);
 }
 
 void DrawRailDebug(const RailCameraComponent& rail) {
@@ -266,8 +292,16 @@ void RailCameraSystem::Update(No::Registry& registry, float deltaTime) {
 			continue;
 		}
 
+		if (rail->needsRebuildArcLength) {
+			RebuildRailCache(*rail, false);
+		}
+
 		if (!rail->isLoaded) {
-			LoadRailFromJson(*rail);
+			if (rail->controlPoints.size() >= 2) {
+				RebuildRailCache(*rail, false);
+			} else {
+				LoadRailFromJson(*rail);
+			}
 		}
 		if (!rail->isLoaded || rail->totalLength <= 0.0f) {
 			continue;

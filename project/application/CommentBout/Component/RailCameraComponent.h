@@ -14,6 +14,7 @@ struct RailCameraComponent {
 	float distance = 0.0f;
 
 	bool isLoaded = false;
+	bool needsRebuildArcLength = false;
 	bool isPlaying = true;
 	bool isFinished = false;
 	bool drawRailDebug = true;
