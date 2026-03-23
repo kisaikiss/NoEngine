@@ -1,0 +1,47 @@
+{
+  "stageName": "Stage_01",
+  "events": [
+    {
+      "type": "SpawnEnemy",
+      "triggerDistance": 6.0,
+      "resumeCondition": "None",
+      "resumeAfterSeconds": 0.0,
+      "spawn": {
+        "count": 3,
+        "hp": 3,
+        "moveSpeed": 2.5,
+        "spawnSpacing": 1.5,
+        "spawnPosition": [0.0, 1.0, 20.0],
+        "moveDirection": [0.0, 0.0, -1.0]
+      }
+    },
+    {
+      "type": "RailStop",
+      "triggerDistance": 12.0,
+      "resumeCondition": "None",
+      "resumeAfterSeconds": 0.0,
+      "spawn": {
+        "count": 1,
+        "hp": 3,
+        "moveSpeed": 3.0,
+        "spawnSpacing": 1.0,
+        "spawnPosition": [0.0, 1.0, 20.0],
+        "moveDirection": [0.0, 0.0, -1.0]
+      }
+    },
+    {
+      "type": "RailResume",
+      "triggerDistance": 12.0,
+      "resumeCondition": "EnemiesCleared",
+      "resumeAfterSeconds": 0.0,
+      "spawn": {
+        "count": 1,
+        "hp": 3,
+        "moveSpeed": 3.0,
+        "spawnSpacing": 1.0,
+        "spawnPosition": [0.0, 1.0, 20.0],
+        "moveDirection": [0.0, 0.0, -1.0]
+      }
+    }
+  ]
+}

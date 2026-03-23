@@ -398,5 +398,6 @@
     <None Include="resources\game\td_2304\Json\tdSpriteConfig.json" />
     <None Include="resources\game\td_3105\RailData\sample_rail.json" />
     <None Include="resources\game\td_3105\RailData\Stage_01_rail.json" />
+    <None Include="resources\game\td_3105\RailData\Stage_01_events.json" />
   </ItemGroup>
 </Project>

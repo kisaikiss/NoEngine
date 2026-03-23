@@ -16,3 +16,4 @@ struct CBOptionViewTag {};
 struct CBTitleStateTag {};
 struct CBTitleConfigTag {};
 struct CBTitleViewTag {};
+struct CBRailEnemyTag {};

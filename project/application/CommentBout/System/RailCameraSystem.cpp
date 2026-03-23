@@ -1,6 +1,11 @@
 #include "stdafx.h"
 #include "RailCameraSystem.h"
 #include "application/CommentBout/Component/RailCameraComponent.h"
+#include "application/CommentBout/GameTag.h"
+#include "application/CommentBout/Utility/CBCollisionMask.h"
+#include "application/TestApp/Component/Collider2DComponent.h"
+#include "application/TestApp/Component/Collider3DComponent.h"
+#include "application/TestApp/Component/ProjectedColliderComponent.h"
 #include "engine/Functions/ECS/Component/CameraComponent.h"
 #include "engine/Functions/Renderer/Primitive.h"
 #include "externals/nlohmann/json.hpp"
@@ -17,6 +22,13 @@ No::Vector3 CatmullRom(const No::Vector3& p0, const No::Vector3& p1, const No::V
 	const float t2 = t * t;
 	const float t3 = t2 * t;
 	return 0.5f * ((2.0f * p1) + (-p0 + p2) * t + (2.0f * p0 - 5.0f * p1 + 4.0f * p2 - p3) * t2 + (-p0 + 3.0f * p1 - 3.0f * p2 + p3) * t3);
+}
+
+No::Vector3 NormalizeOrDefault(const No::Vector3& v, const No::Vector3& fallback) {
+	if (v.LengthSquared() <= 0.000001f) {
+		return fallback;
+	}
+	return v.Normalize();
 }
 
 No::Vector3 EvaluatePositionByT(const RailCameraComponent& rail, float t) {
@@ -163,6 +175,12 @@ bool RebuildRailCache(RailCameraComponent& rail, bool resetPlayState) {
 	if (rail.selectedControlPointIndex < -1) {
 		rail.selectedControlPointIndex = -1;
 	}
+	if (rail.selectedEventIndex >= static_cast<int>(rail.events.size())) {
+		rail.selectedEventIndex = static_cast<int>(rail.events.size()) - 1;
+	}
+	if (rail.selectedEventIndex < -1) {
+		rail.selectedEventIndex = -1;
+	}
 
 	rail.isLoaded = rail.totalLength > 0.0f;
 	rail.needsRebuildArcLength = false;
@@ -280,11 +298,142 @@ void DrawRailCameraGizmo(RailCameraComponent& rail, No::TransformComponent* tran
 	No::Primitive::DrawLine(c2, c3, cameraColor);
 	No::Primitive::DrawLine(c3, c0, cameraColor);
 }
+
+int CountAliveRailEnemies(No::Registry& registry) {
+	int count = 0;
+	auto enemyView = registry.View<CBRailEnemyTag, RailEnemyComponent>();
+	for (auto entity : enemyView) {
+		(void)entity;
+		++count;
+	}
+	return count;
+}
+
+void SpawnEnemies(No::Registry& registry, const RailEnemySpawnEventParams& params) {
+	const No::Vector3 direction = NormalizeOrDefault(params.moveDirection, No::Vector3(0.0f, 0.0f, -1.0f));
+	const int spawnCount = std::max(1, params.count);
+
+	for (int i = 0; i < spawnCount; ++i) {
+		auto enemyEntity = registry.GenerateEntity();
+		registry.AddComponent<CBRailEnemyTag>(enemyEntity);
+
+		auto* transform = registry.AddComponent<No::TransformComponent>(enemyEntity);
+		transform->translate = params.spawnPosition + direction * (params.spawnSpacing * static_cast<float>(i));
+		transform->scale = { 0.7f, 0.7f, 0.7f };
+
+		auto* mesh = registry.AddComponent<No::MeshComponent>(enemyEntity);
+		auto* material = registry.AddComponent<No::MaterialComponent>(enemyEntity);
+		No::ModelLoader::LoadModel("commentbout_rail_enemy_cube", "resources/game/td_3105/Model/cube/cube.obj", mesh);
+		material->materials = No::ModelLoader::GetMaterial("commentbout_rail_enemy_cube");
+		material->color = { 0.9f, 0.2f, 0.2f, 1.0f };
+		material->psoName = L"Renderer : Default PSO";
+		material->psoId = NoEngine::Render::GetPSOID(material->psoName);
+		material->rootSigId = NoEngine::Render::GetRootSignatureID(material->psoName);
+
+		auto* enemy = registry.AddComponent<RailEnemyComponent>(enemyEntity);
+		enemy->hp = std::max(1, params.hp);
+		enemy->moveSpeed = std::max(0.0f, params.moveSpeed);
+		enemy->moveDirection = direction;
+
+		auto* collider3D = registry.AddComponent<TestApp::Collider3DComponent>(enemyEntity);
+		collider3D->shapeType = TestApp::ShapeType3D::Box;
+		collider3D->useScaleAsBox = true;
+		collider3D->boxSizeMultiplier = { 1.0f, 1.0f, 1.0f };
+		collider3D->collisionLayer = CommentBout::CollisionLayer::CBEnemy;
+		collider3D->collisionMask = CommentBout::CollisionLayer::CBPlayerAttack;
+
+		auto* projected = registry.AddComponent<TestApp::ProjectedColliderComponent>(enemyEntity);
+		projected->source3DEntity = enemyEntity;
+	}
+}
+
+void UpdateRailEnemies(No::Registry& registry, float deltaTime) {
+	auto view = registry.View<CBRailEnemyTag, RailEnemyComponent, No::TransformComponent, TestApp::Collider3DComponent>();
+	for (auto entity : view) {
+		auto* enemy = registry.GetComponent<RailEnemyComponent>(entity);
+		auto* transform = registry.GetComponent<No::TransformComponent>(entity);
+		auto* collider3D = registry.GetComponent<TestApp::Collider3DComponent>(entity);
+		if (!enemy || !transform || !collider3D) {
+			continue;
+		}
+
+		const No::Vector3 moveDir = NormalizeOrDefault(enemy->moveDirection, No::Vector3(0.0f, 0.0f, -1.0f));
+		transform->translate += moveDir * enemy->moveSpeed * deltaTime;
+
+		bool isHitByPlayerAttack = false;
+		if (collider3D->isColliding) {
+			auto* hit2D = registry.GetComponent<TestApp::Collider2DComponent>(collider3D->collidedEntity);
+			if (hit2D && hit2D->collisionLayer == CommentBout::CollisionLayer::CBPlayerAttack) {
+				isHitByPlayerAttack = true;
+			}
+		}
+
+		if (isHitByPlayerAttack && !enemy->wasCollidingWithAttack) {
+			enemy->hp -= 1;
+		}
+		enemy->wasCollidingWithAttack = isHitByPlayerAttack;
+
+		if (enemy->hp <= 0) {
+			registry.DestroyEntity(entity);
+		}
+	}
+}
+
+void UpdateRailEvents(No::Registry& registry, RailCameraComponent& rail, float deltaTime) {
+	for (auto& eventData : rail.events) {
+		if (!eventData.fired && !eventData.waitingCondition && rail.distance >= eventData.triggerDistance) {
+			switch (eventData.type) {
+			case RailEventType::SpawnEnemy:
+				SpawnEnemies(registry, eventData.spawn);
+				eventData.fired = true;
+				break;
+			case RailEventType::RailStop:
+				rail.isPlaying = false;
+				eventData.fired = true;
+				break;
+			case RailEventType::RailResume:
+				if (eventData.resumeCondition == RailResumeConditionType::None) {
+					rail.isPlaying = true;
+					rail.isFinished = false;
+					eventData.fired = true;
+				} else {
+					eventData.waitingCondition = true;
+					eventData.waitingElapsedSeconds = 0.0f;
+				}
+				break;
+			}
+		}
+
+		if (eventData.waitingCondition && !eventData.fired) {
+			bool shouldResume = false;
+			switch (eventData.resumeCondition) {
+			case RailResumeConditionType::AfterSeconds:
+				eventData.waitingElapsedSeconds += deltaTime;
+				shouldResume = (eventData.waitingElapsedSeconds >= std::max(0.0f, eventData.resumeAfterSeconds));
+				break;
+			case RailResumeConditionType::EnemiesCleared:
+				shouldResume = (CountAliveRailEnemies(registry) == 0);
+				break;
+			default:
+				shouldResume = true;
+				break;
+			}
+
+			if (shouldResume) {
+				rail.isPlaying = true;
+				rail.isFinished = false;
+				eventData.fired = true;
+				eventData.waitingCondition = false;
+			}
+		}
+	}
+}
 }
 
 void RailCameraSystem::Update(No::Registry& registry, float deltaTime) {
-	auto view = registry.View<RailCameraComponent, No::TransformComponent>();
+	UpdateRailEnemies(registry, deltaTime);
 
+	auto view = registry.View<RailCameraComponent, No::TransformComponent>();
 	for (auto entity : view) {
 		auto* rail = registry.GetComponent<RailCameraComponent>(entity);
 		auto* transform = registry.GetComponent<No::TransformComponent>(entity);
@@ -316,6 +465,7 @@ void RailCameraSystem::Update(No::Registry& registry, float deltaTime) {
 			}
 		}
 
+		UpdateRailEvents(registry, *rail, deltaTime);
 		ApplyTransformFromDistance(*rail, transform);
 		DrawRailDebug(*rail);
 		DrawControlPointDebug(*rail);

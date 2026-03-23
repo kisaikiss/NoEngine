@@ -46,6 +46,56 @@ std::string MakeRailFilePath(const std::string& stageName) {
 	return "resources/game/td_3105/RailData/" + stageName + "_rail.json";
 }
 
+std::string MakeEventFilePath(const std::string& stageName) {
+	return "resources/game/td_3105/RailData/" + stageName + "_events.json";
+}
+
+const char* ToEventTypeString(RailEventType type) {
+	switch (type) {
+	case RailEventType::SpawnEnemy: return "SpawnEnemy";
+	case RailEventType::RailStop: return "RailStop";
+	case RailEventType::RailResume: return "RailResume";
+	default: return "SpawnEnemy";
+	}
+}
+
+RailEventType ParseEventType(const std::string& typeName) {
+	if (typeName == "RailStop") {
+		return RailEventType::RailStop;
+	}
+	if (typeName == "RailResume") {
+		return RailEventType::RailResume;
+	}
+	return RailEventType::SpawnEnemy;
+}
+
+const char* ToResumeConditionString(RailResumeConditionType condition) {
+	switch (condition) {
+	case RailResumeConditionType::None: return "None";
+	case RailResumeConditionType::AfterSeconds: return "AfterSeconds";
+	case RailResumeConditionType::EnemiesCleared: return "EnemiesCleared";
+	default: return "None";
+	}
+}
+
+RailResumeConditionType ParseResumeCondition(const std::string& conditionName) {
+	if (conditionName == "AfterSeconds") {
+		return RailResumeConditionType::AfterSeconds;
+	}
+	if (conditionName == "EnemiesCleared") {
+		return RailResumeConditionType::EnemiesCleared;
+	}
+	return RailResumeConditionType::None;
+}
+
+void ResetEventRuntime(RailCameraComponent& rail) {
+	for (auto& eventData : rail.events) {
+		eventData.fired = false;
+		eventData.waitingCondition = false;
+		eventData.waitingElapsedSeconds = 0.0f;
+	}
+}
+
 bool SaveRailToJson(const RailCameraComponent& rail, const std::string& stageName) {
 	nlohmann::json json;
 	json["stageName"] = stageName;
@@ -56,6 +106,36 @@ bool SaveRailToJson(const RailCameraComponent& rail, const std::string& stageNam
 	}
 
 	std::ofstream ofs(MakeRailFilePath(stageName));
+	if (!ofs) {
+		return false;
+	}
+	ofs << json.dump(2);
+	return true;
+}
+
+bool SaveEventsToJson(const RailCameraComponent& rail, const std::string& stageName) {
+	nlohmann::json json;
+	json["stageName"] = stageName;
+	json["events"] = nlohmann::json::array();
+
+	for (const auto& e : rail.events) {
+		nlohmann::json eventJson;
+		eventJson["type"] = ToEventTypeString(e.type);
+		eventJson["triggerDistance"] = e.triggerDistance;
+		eventJson["resumeCondition"] = ToResumeConditionString(e.resumeCondition);
+		eventJson["resumeAfterSeconds"] = e.resumeAfterSeconds;
+		eventJson["spawn"] = {
+			{ "count", e.spawn.count },
+			{ "hp", e.spawn.hp },
+			{ "moveSpeed", e.spawn.moveSpeed },
+			{ "spawnSpacing", e.spawn.spawnSpacing },
+			{ "spawnPosition", { e.spawn.spawnPosition.x, e.spawn.spawnPosition.y, e.spawn.spawnPosition.z } },
+			{ "moveDirection", { e.spawn.moveDirection.x, e.spawn.moveDirection.y, e.spawn.moveDirection.z } }
+		};
+		json["events"].push_back(eventJson);
+	}
+
+	std::ofstream ofs(MakeEventFilePath(stageName));
 	if (!ofs) {
 		return false;
 	}
@@ -107,6 +187,84 @@ bool LoadRailToComponent(RailCameraComponent& rail, const std::string& stageName
 	rail.isPlaying = true;
 	rail.isLoaded = false;
 	rail.needsRebuildArcLength = true;
+	ResetEventRuntime(rail);
+	return true;
+}
+
+bool LoadEventsToComponent(RailCameraComponent& rail, const std::string& stageName) {
+	const std::string filePath = MakeEventFilePath(stageName);
+	std::ifstream ifs(filePath);
+	if (!ifs) {
+		return false;
+	}
+
+	nlohmann::json json;
+	ifs >> json;
+
+	auto eventsIt = json.find("events");
+	if (eventsIt == json.end() || !eventsIt->is_array()) {
+		return false;
+	}
+
+	rail.events.clear();
+	for (const auto& eventJson : *eventsIt) {
+		RailEventData eventData;
+
+		const auto typeIt = eventJson.find("type");
+		if (typeIt != eventJson.end() && typeIt->is_string()) {
+			eventData.type = ParseEventType(typeIt->get<std::string>());
+		}
+		const auto triggerIt = eventJson.find("triggerDistance");
+		if (triggerIt != eventJson.end() && triggerIt->is_number()) {
+			eventData.triggerDistance = triggerIt->get<float>();
+		}
+
+		const auto conditionIt = eventJson.find("resumeCondition");
+		if (conditionIt != eventJson.end() && conditionIt->is_string()) {
+			eventData.resumeCondition = ParseResumeCondition(conditionIt->get<std::string>());
+		}
+		const auto afterIt = eventJson.find("resumeAfterSeconds");
+		if (afterIt != eventJson.end() && afterIt->is_number()) {
+			eventData.resumeAfterSeconds = afterIt->get<float>();
+		}
+
+		const auto spawnIt = eventJson.find("spawn");
+		if (spawnIt != eventJson.end() && spawnIt->is_object()) {
+			const auto countIt = spawnIt->find("count");
+			if (countIt != spawnIt->end() && countIt->is_number_integer()) {
+				eventData.spawn.count = countIt->get<int>();
+			}
+			const auto hpIt = spawnIt->find("hp");
+			if (hpIt != spawnIt->end() && hpIt->is_number_integer()) {
+				eventData.spawn.hp = hpIt->get<int>();
+			}
+			const auto speedIt = spawnIt->find("moveSpeed");
+			if (speedIt != spawnIt->end() && speedIt->is_number()) {
+				eventData.spawn.moveSpeed = speedIt->get<float>();
+			}
+			const auto spacingIt = spawnIt->find("spawnSpacing");
+			if (spacingIt != spawnIt->end() && spacingIt->is_number()) {
+				eventData.spawn.spawnSpacing = spacingIt->get<float>();
+			}
+			const auto spawnPosIt = spawnIt->find("spawnPosition");
+			if (spawnPosIt != spawnIt->end() && spawnPosIt->is_array() && spawnPosIt->size() >= 3) {
+				eventData.spawn.spawnPosition.x = (*spawnPosIt)[0].get<float>();
+				eventData.spawn.spawnPosition.y = (*spawnPosIt)[1].get<float>();
+				eventData.spawn.spawnPosition.z = (*spawnPosIt)[2].get<float>();
+			}
+			const auto moveDirIt = spawnIt->find("moveDirection");
+			if (moveDirIt != spawnIt->end() && moveDirIt->is_array() && moveDirIt->size() >= 3) {
+				eventData.spawn.moveDirection.x = (*moveDirIt)[0].get<float>();
+				eventData.spawn.moveDirection.y = (*moveDirIt)[1].get<float>();
+				eventData.spawn.moveDirection.z = (*moveDirIt)[2].get<float>();
+			}
+		}
+
+		rail.events.push_back(eventData);
+	}
+
+	rail.selectedEventIndex = rail.events.empty() ? -1 : 0;
+	ResetEventRuntime(rail);
 	return true;
 }
 }
@@ -228,6 +386,21 @@ void GameScene::Setup() {
 	auto* railCamera = registry.AddComponent<RailCameraComponent>(railCameraEntity_);
 	railCamera->stageName = "Stage_01";
 	railCamera->railFilePath = MakeRailFilePath(railCamera->stageName);
+	if (!LoadEventsToComponent(*railCamera, railCamera->stageName)) {
+		RailEventData stopEvent;
+		stopEvent.type = RailEventType::RailStop;
+		stopEvent.triggerDistance = 8.0f;
+		railCamera->events.push_back(stopEvent);
+
+		RailEventData resumeEvent;
+		resumeEvent.type = RailEventType::RailResume;
+		resumeEvent.triggerDistance = 8.0f;
+		resumeEvent.resumeCondition = RailResumeConditionType::AfterSeconds;
+		resumeEvent.resumeAfterSeconds = 2.0f;
+		railCamera->events.push_back(resumeEvent);
+
+		railCamera->selectedEventIndex = 0;
+	}
 
 	// 自機スプライト
 	auto playerEntity = registry.GenerateEntity();
@@ -371,6 +544,13 @@ void GameScene::RailCameraImGui()
 	ImGui::Text("Rail File: %s", rail->railFilePath.c_str());
 	ImGui::Text("Loaded: %s", rail->isLoaded ? "Yes" : "No");
 	ImGui::Text("Control Points: %d", static_cast<int>(rail->controlPoints.size()));
+	ImGui::Text("Events: %d", static_cast<int>(rail->events.size()));
+	int aliveRailEnemyCount = 0;
+	for (auto e : GetRegistry()->View<CBRailEnemyTag, RailEnemyComponent>()) {
+		(void)e;
+		++aliveRailEnemyCount;
+	}
+	ImGui::Text("Alive Rail Enemies: %d", aliveRailEnemyCount);
 
 	if (rail->totalLength > 0.0f) {
 		const float progress = rail->distance / rail->totalLength;
@@ -407,6 +587,11 @@ void GameScene::RailCameraImGui()
 		rail->distance = 0.0f;
 		rail->isFinished = false;
 		rail->isPlaying = true;
+		ResetEventRuntime(*rail);
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("Reset Event Runtime")) {
+		ResetEventRuntime(*rail);
 	}
 
 	float percent = 0.0f;
@@ -459,6 +644,7 @@ void GameScene::RailEditorImGui()
 		const std::string stageName(stageNameBuffer);
 		if (!stageName.empty()) {
 			LoadRailToComponent(*rail, stageName);
+			LoadEventsToComponent(*rail, stageName);
 		}
 	}
 	ImGui::SameLine();
@@ -468,6 +654,7 @@ void GameScene::RailEditorImGui()
 			rail->stageName = stageName;
 			rail->railFilePath = MakeRailFilePath(stageName);
 			SaveRailToJson(*rail, stageName);
+			SaveEventsToJson(*rail, stageName);
 		}
 	}
 
@@ -516,6 +703,85 @@ void GameScene::RailEditorImGui()
 				rail->needsRebuildArcLength = true;
 			}
 		}
+	}
+
+	ImGui::Separator();
+	ImGui::Text("Stage Events");
+	if (ImGui::Button("Add SpawnEnemy Event")) {
+		RailEventData newEvent;
+		newEvent.type = RailEventType::SpawnEnemy;
+		newEvent.triggerDistance = rail->distance;
+		rail->events.push_back(newEvent);
+		rail->selectedEventIndex = static_cast<int>(rail->events.size()) - 1;
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("Add Stop Event")) {
+		RailEventData newEvent;
+		newEvent.type = RailEventType::RailStop;
+		newEvent.triggerDistance = rail->distance;
+		rail->events.push_back(newEvent);
+		rail->selectedEventIndex = static_cast<int>(rail->events.size()) - 1;
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("Add Resume Event")) {
+		RailEventData newEvent;
+		newEvent.type = RailEventType::RailResume;
+		newEvent.triggerDistance = rail->distance;
+		newEvent.resumeCondition = RailResumeConditionType::AfterSeconds;
+		newEvent.resumeAfterSeconds = 1.0f;
+		rail->events.push_back(newEvent);
+		rail->selectedEventIndex = static_cast<int>(rail->events.size()) - 1;
+	}
+
+	if (ImGui::Button("Delete Selected Event")) {
+		const int selected = rail->selectedEventIndex;
+		if (selected >= 0 && selected < static_cast<int>(rail->events.size())) {
+			rail->events.erase(rail->events.begin() + selected);
+			if (rail->events.empty()) {
+				rail->selectedEventIndex = -1;
+			} else if (rail->selectedEventIndex >= static_cast<int>(rail->events.size())) {
+				rail->selectedEventIndex = static_cast<int>(rail->events.size()) - 1;
+			}
+		}
+	}
+
+	for (int i = 0; i < static_cast<int>(rail->events.size()); ++i) {
+		const RailEventData& e = rail->events[static_cast<size_t>(i)];
+		char label[128];
+		std::snprintf(label, sizeof(label), "Event %d : %s @ %.2f", i, ToEventTypeString(e.type), e.triggerDistance);
+		if (ImGui::Selectable(label, rail->selectedEventIndex == i)) {
+			rail->selectedEventIndex = i;
+		}
+	}
+
+	if (rail->selectedEventIndex >= 0 && rail->selectedEventIndex < static_cast<int>(rail->events.size())) {
+		RailEventData& e = rail->events[static_cast<size_t>(rail->selectedEventIndex)];
+		ImGui::Separator();
+		int eventType = static_cast<int>(e.type);
+		if (ImGui::Combo("EventType", &eventType, "SpawnEnemy\0RailStop\0RailResume\0")) {
+			e.type = static_cast<RailEventType>(eventType);
+		}
+		ImGui::DragFloat("TriggerDistance", &e.triggerDistance, 0.1f, 0.0f, (rail->totalLength > 0.0f) ? rail->totalLength : 10000.0f);
+
+		if (e.type == RailEventType::SpawnEnemy) {
+			ImGui::DragInt("Spawn Count", &e.spawn.count, 1.0f, 1, 32);
+			ImGui::DragInt("Enemy HP", &e.spawn.hp, 1.0f, 1, 100);
+			ImGui::DragFloat("Enemy Speed", &e.spawn.moveSpeed, 0.1f, 0.0f, 100.0f);
+			ImGui::DragFloat("Spawn Spacing", &e.spawn.spawnSpacing, 0.1f, 0.0f, 20.0f);
+			ImGui::DragFloat3("Spawn Position", &e.spawn.spawnPosition.x, 0.1f);
+			ImGui::DragFloat3("Move Direction", &e.spawn.moveDirection.x, 0.05f);
+		}
+		if (e.type == RailEventType::RailResume) {
+			int conditionType = static_cast<int>(e.resumeCondition);
+			if (ImGui::Combo("ResumeCondition", &conditionType, "None\0AfterSeconds\0EnemiesCleared\0")) {
+				e.resumeCondition = static_cast<RailResumeConditionType>(conditionType);
+			}
+			if (e.resumeCondition == RailResumeConditionType::AfterSeconds) {
+				ImGui::DragFloat("ResumeAfterSeconds", &e.resumeAfterSeconds, 0.05f, 0.0f, 120.0f);
+			}
+		}
+
+		ImGui::Text("Runtime: fired=%s waiting=%s elapsed=%.2f", e.fired ? "true" : "false", e.waitingCondition ? "true" : "false", e.waitingElapsedSeconds);
 	}
 
 	ImGui::End();
