@@ -309,6 +309,21 @@ int CountAliveRailEnemies(No::Registry& registry) {
 	return count;
 }
 
+int CountAliveRailEnemiesByGroup(No::Registry& registry, int groupId) {
+	int count = 0;
+	auto enemyView = registry.View<CBRailEnemyTag, RailEnemyComponent>();
+	for (auto entity : enemyView) {
+		auto* enemy = registry.GetComponent<RailEnemyComponent>(entity);
+		if (!enemy) {
+			continue;
+		}
+		if (enemy->groupId == groupId) {
+			++count;
+		}
+	}
+	return count;
+}
+
 void SpawnEnemies(No::Registry& registry, const RailEnemySpawnEventParams& params) {
 	const No::Vector3 direction = NormalizeOrDefault(params.moveDirection, No::Vector3(0.0f, 0.0f, -1.0f));
 	const int spawnCount = std::max(1, params.count);
@@ -334,6 +349,7 @@ void SpawnEnemies(No::Registry& registry, const RailEnemySpawnEventParams& param
 		enemy->hp = std::max(1, params.hp);
 		enemy->moveSpeed = std::max(0.0f, params.moveSpeed);
 		enemy->moveDirection = direction;
+		enemy->groupId = params.spawnGroupId;
 
 		auto* collider3D = registry.AddComponent<TestApp::Collider3DComponent>(enemyEntity);
 		collider3D->shapeType = TestApp::ShapeType3D::Box;
@@ -412,7 +428,7 @@ void UpdateRailEvents(No::Registry& registry, RailCameraComponent& rail, float d
 				shouldResume = (eventData.waitingElapsedSeconds >= std::max(0.0f, eventData.resumeAfterSeconds));
 				break;
 			case RailResumeConditionType::EnemiesCleared:
-				shouldResume = (CountAliveRailEnemies(registry) == 0);
+				shouldResume = (CountAliveRailEnemiesByGroup(registry, eventData.targetGroupId) == 0);
 				break;
 			default:
 				shouldResume = true;

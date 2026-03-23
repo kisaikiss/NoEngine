@@ -124,13 +124,15 @@ bool SaveEventsToJson(const RailCameraComponent& rail, const std::string& stageN
 		eventJson["triggerDistance"] = e.triggerDistance;
 		eventJson["resumeCondition"] = ToResumeConditionString(e.resumeCondition);
 		eventJson["resumeAfterSeconds"] = e.resumeAfterSeconds;
+		eventJson["targetGroupId"] = e.targetGroupId;
 		eventJson["spawn"] = {
 			{ "count", e.spawn.count },
 			{ "hp", e.spawn.hp },
 			{ "moveSpeed", e.spawn.moveSpeed },
 			{ "spawnSpacing", e.spawn.spawnSpacing },
 			{ "spawnPosition", { e.spawn.spawnPosition.x, e.spawn.spawnPosition.y, e.spawn.spawnPosition.z } },
-			{ "moveDirection", { e.spawn.moveDirection.x, e.spawn.moveDirection.y, e.spawn.moveDirection.z } }
+			{ "moveDirection", { e.spawn.moveDirection.x, e.spawn.moveDirection.y, e.spawn.moveDirection.z } },
+			{ "spawnGroupId", e.spawn.spawnGroupId }
 		};
 		json["events"].push_back(eventJson);
 	}
@@ -227,6 +229,10 @@ bool LoadEventsToComponent(RailCameraComponent& rail, const std::string& stageNa
 		if (afterIt != eventJson.end() && afterIt->is_number()) {
 			eventData.resumeAfterSeconds = afterIt->get<float>();
 		}
+		const auto targetGroupIt = eventJson.find("targetGroupId");
+		if (targetGroupIt != eventJson.end() && targetGroupIt->is_number_integer()) {
+			eventData.targetGroupId = targetGroupIt->get<int>();
+		}
 
 		const auto spawnIt = eventJson.find("spawn");
 		if (spawnIt != eventJson.end() && spawnIt->is_object()) {
@@ -257,6 +263,10 @@ bool LoadEventsToComponent(RailCameraComponent& rail, const std::string& stageNa
 				eventData.spawn.moveDirection.x = (*moveDirIt)[0].get<float>();
 				eventData.spawn.moveDirection.y = (*moveDirIt)[1].get<float>();
 				eventData.spawn.moveDirection.z = (*moveDirIt)[2].get<float>();
+			}
+			const auto spawnGroupIt = spawnIt->find("spawnGroupId");
+			if (spawnGroupIt != spawnIt->end() && spawnGroupIt->is_number_integer()) {
+				eventData.spawn.spawnGroupId = spawnGroupIt->get<int>();
 			}
 		}
 
@@ -747,8 +757,14 @@ void GameScene::RailEditorImGui()
 
 	for (int i = 0; i < static_cast<int>(rail->events.size()); ++i) {
 		const RailEventData& e = rail->events[static_cast<size_t>(i)];
-		char label[128];
-		std::snprintf(label, sizeof(label), "Event %d : %s @ %.2f", i, ToEventTypeString(e.type), e.triggerDistance);
+		char label[160];
+		if (e.type == RailEventType::SpawnEnemy) {
+			std::snprintf(label, sizeof(label), "Event %d : %s [G%d] @ %.2f", i, ToEventTypeString(e.type), e.spawn.spawnGroupId, e.triggerDistance);
+		} else if (e.type == RailEventType::RailResume && e.resumeCondition == RailResumeConditionType::EnemiesCleared) {
+			std::snprintf(label, sizeof(label), "Event %d : %s [TargetG%d] @ %.2f", i, ToEventTypeString(e.type), e.targetGroupId, e.triggerDistance);
+		} else {
+			std::snprintf(label, sizeof(label), "Event %d : %s @ %.2f", i, ToEventTypeString(e.type), e.triggerDistance);
+		}
 		if (ImGui::Selectable(label, rail->selectedEventIndex == i)) {
 			rail->selectedEventIndex = i;
 		}
@@ -770,6 +786,7 @@ void GameScene::RailEditorImGui()
 			ImGui::DragFloat("Spawn Spacing", &e.spawn.spawnSpacing, 0.1f, 0.0f, 20.0f);
 			ImGui::DragFloat3("Spawn Position", &e.spawn.spawnPosition.x, 0.1f);
 			ImGui::DragFloat3("Move Direction", &e.spawn.moveDirection.x, 0.05f);
+			ImGui::DragInt("Spawn GroupId", &e.spawn.spawnGroupId, 1.0f, 0, 999);
 		}
 		if (e.type == RailEventType::RailResume) {
 			int conditionType = static_cast<int>(e.resumeCondition);
@@ -778,6 +795,9 @@ void GameScene::RailEditorImGui()
 			}
 			if (e.resumeCondition == RailResumeConditionType::AfterSeconds) {
 				ImGui::DragFloat("ResumeAfterSeconds", &e.resumeAfterSeconds, 0.05f, 0.0f, 120.0f);
+			}
+			if (e.resumeCondition == RailResumeConditionType::EnemiesCleared) {
+				ImGui::DragInt("Target GroupId", &e.targetGroupId, 1.0f, 0, 999);
 			}
 		}
 

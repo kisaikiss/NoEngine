@@ -22,6 +22,7 @@ struct RailEnemySpawnEventParams {
 	float spawnSpacing = 1.0f;
 	No::Vector3 spawnPosition = { 0.0f, 1.0f, 10.0f };
 	No::Vector3 moveDirection = { 0.0f, 0.0f, -1.0f };
+	int spawnGroupId = 0;
 };
 
 struct RailEventData {
@@ -30,6 +31,7 @@ struct RailEventData {
 
 	RailResumeConditionType resumeCondition = RailResumeConditionType::None;
 	float resumeAfterSeconds = 1.0f;
+	int targetGroupId = 0;
 
 	RailEnemySpawnEventParams spawn;
 
@@ -42,6 +44,7 @@ struct RailEnemyComponent {
 	int hp = 3;
 	float moveSpeed = 3.0f;
 	No::Vector3 moveDirection = { 0.0f, 0.0f, -1.0f };
+	int groupId = 0;
 	bool wasCollidingWithAttack = false;
 };
 
