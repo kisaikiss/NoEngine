@@ -29,7 +29,8 @@
 #include "application/CommentBout/System/OptionSystem.h"
 #include "application/CommentBout/System/OptionViewSystem.h"
 #include "application/CommentBout/System/RailCameraSystem.h"
-#include "application/CommentBout/Spawner/OptionMenuSpawner.h"  // ★追加
+#include "application/CommentBout/Spawner/OptionMenuSpawner.h"
+#include "application/CommentBout/Spawner/PauseMenuSpawner.h"
 #include "application/TestApp/System/CollisionTestSystem.h"
 #include "application/TestApp/Component/Collider2DComponent.h"
 #include "application/TestApp/Component/Collider3DComponent.h"
@@ -39,12 +40,6 @@
 void GameScene::Setup() {
 
 	grassNameIndex_ = 0;
-	pauseDimEntity_ = No::nullEntity;
-	pauseMenuBgEntity_ = No::nullEntity;
-	pausePanelLineEntity_ = No::nullEntity;
-	pauseTitleEntity_ = No::nullEntity;
-	pauseCursorEntity_ = No::nullEntity;
-	pauseItemEntities_.fill(No::nullEntity);
 
 	// ---- システム登録（順序が重要）----------------------------------------------
 	// 1. PlayerControlSystem    : 入力処理・攻撃エンティティのスポawn
@@ -54,7 +49,8 @@ void GameScene::Setup() {
 	//                             → HitBalloonComponent を付与
 	// 4. HitBalloonSystem       : HitBalloonComponent が指す投影位置から
 	//                             エフェクトの Transform2D を毎フレーム更新
-	// 5. LifetimeSystem         : 時間切れエンティティを削除	// ---------------------------------------------------------------------------
+	// 5. LifetimeSystem         : 時間切れエンティティを削除	
+	// ---------------------------------------------------------------------------
 
 	AddSystem(std::make_unique<PauseSystem>());
 	AddSystem(std::make_unique<PlayerControlSystem>());
@@ -96,7 +92,6 @@ void GameScene::Setup() {
 	pauseState->isConfirmAnimating = false;
 	pauseState->confirmIndex = -1;
 	pauseState->confirmAnimTime = 0.0f;
-	registry.AddComponent<No::EditTag>(pauseStateEntity)->name = "PauseState";
 
 
 	auto pauseConfigEntity = registry.GenerateEntity();
@@ -123,31 +118,14 @@ void GameScene::Setup() {
 	optionState->confirmIndex = -1;
 	optionState->confirmAnimTime = 0.0f;
 	optionState->requestedAction = OptionStateComponent::None;
-	registry.AddComponent<No::EditTag>(optionStateEntity)->name = "OptionState";
 
-	
 	auto optionConfigEntity = registry.GenerateEntity();
 	registry.AddComponent<CBOptionConfigTag>(optionConfigEntity);
 	registry.AddComponent<OptionMenuConfigComponent>(optionConfigEntity); // デフォルト値 = JSON値
 	registry.AddComponent<No::EditTag>(optionConfigEntity)->name = "OptionMenuConfig";
 
 
-	pauseDimEntity_ = registry.GenerateEntity();
-	registry.AddComponent<CBPauseDimTag>(pauseDimEntity_);
-	auto* pauseDimTransform = registry.AddComponent<No::Transform2DComponent>(pauseDimEntity_);
-	pauseDimTransform->translate = { 640.0f, 360.0f };
-	pauseDimTransform->scale = { 1280.0f, 720.0f };
-	auto* pauseDimSprite = registry.AddComponent<No::SpriteComponent>(pauseDimEntity_);
-	pauseDimSprite->textureHandle = whiteTexture;
-	pauseDimSprite->color = { 0.0f, 0.0f, 0.0f, 0.0f };
-	pauseDimSprite->layer = CommentBout::ToLayer(CommentBout::SpriteLayer::PauseDim);
-	pauseDimSprite->orderInLayer = 0;
-	pauseDimSprite->isVisible = false;
-	registry.AddComponent<No::EditTag>(pauseDimEntity_)->name = "PauseDim";
-
-	CreatePauseMenuSprites(whiteTexture);
-
-
+	PauseMenuSpawner::Create(registry, whiteTexture);
 	OptionMenuSpawner::Create(registry, whiteTexture);
 
 	// ライト
@@ -175,6 +153,7 @@ void GameScene::Setup() {
 	railCameraTransform->translate = { 0.0f, 2.0f, -10.0f };
 	auto* railCamera = registry.AddComponent<RailCameraComponent>(railCameraEntity_);
 	railCamera->railFilePath = "resources/game/td_3105/RailData/sample_rail.json";
+
 	// 自機スプライト
 	auto playerEntity = registry.GenerateEntity();
 	registry.AddComponent<CBPlayerTag>(playerEntity);
@@ -386,86 +365,4 @@ void GameScene::RailCameraImGui()
 
 	ImGui::End();
 #endif
-}
-
-void GameScene::CreatePauseMenuSprites(const NoEngine::TextureRef& whiteTexture)
-{
-	No::Registry& registry = *GetRegistry();
-	auto pauseViewEntity = registry.GenerateEntity();
-	registry.AddComponent<CBPauseViewTag>(pauseViewEntity);
-	auto* pauseView = registry.AddComponent<PauseMenuViewComponent>(pauseViewEntity);
-
-	const auto pauseTitleTexture = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_3105/Sprite/Pause.png");
-	const auto pauseToGameTexture = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_3105/Sprite/PauseToGame.png");
-	const auto restartTexture = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_3105/Sprite/Restart.png");
-	const auto optionTexture = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_3105/Sprite/OptionMenu.png");
-	const auto pauseToTitleTexture = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_3105/Sprite/PauseToTitle.png");
-
-	pauseMenuBgEntity_ = registry.GenerateEntity();
-	auto* bgTr = registry.AddComponent<No::Transform2DComponent>(pauseMenuBgEntity_);
-	bgTr->translate = { 640.0f, 430.0f };
-	bgTr->scale = { 980.0f, 540.0f };
-	auto* bgSp = registry.AddComponent<No::SpriteComponent>(pauseMenuBgEntity_);
-	bgSp->textureHandle = whiteTexture;
-	bgSp->isVisible = false;
-	bgSp->color = { 0.08f, 0.08f, 0.12f, 0.0f };
-	bgSp->layer = CommentBout::ToLayer(CommentBout::SpriteLayer::PauseMenuBackground);
-	registry.AddComponent<No::EditTag>(pauseMenuBgEntity_)->name = "PauseMenuBackgroundSprite";
-
-	pausePanelLineEntity_ = registry.GenerateEntity();
-	auto* lineTr = registry.AddComponent<No::Transform2DComponent>(pausePanelLineEntity_);
-	lineTr->translate = { 640.0f, 330.0f };
-	lineTr->scale = { 980.0f, 8.0f };
-	auto* lineSp = registry.AddComponent<No::SpriteComponent>(pausePanelLineEntity_);
-	lineSp->textureHandle = whiteTexture;
-	lineSp->isVisible = false;
-	lineSp->color = { 1.0f, 1.0f, 1.0f, 0.0f };
-	lineSp->layer = 0;
-	registry.AddComponent<No::EditTag>(pausePanelLineEntity_)->name = "PausePanelLineSprite";
-
-	pauseTitleEntity_ = registry.GenerateEntity();
-	auto* titleTr = registry.AddComponent<No::Transform2DComponent>(pauseTitleEntity_);
-	titleTr->translate = { 640.0f, 220.0f };
-	titleTr->scale = { 480.0f, 120.0f };
-	auto* titleSp = registry.AddComponent<No::SpriteComponent>(pauseTitleEntity_);
-	titleSp->textureHandle = pauseTitleTexture;
-	titleSp->isVisible = false;
-	titleSp->color = { 1.f, 1.f, 1.f, 0.0f };
-	titleSp->layer = CommentBout::ToLayer(CommentBout::SpriteLayer::PauseTitle);
-	registry.AddComponent<No::EditTag>(pauseTitleEntity_)->name = "PauseTitleSprite";
-
-	const std::array<NoEngine::TextureRef, 4> itemTextures = {
-		pauseToGameTexture, restartTexture, optionTexture, pauseToTitleTexture
-	};
-	for (size_t i = 0; i < pauseItemEntities_.size(); ++i) {
-		pauseItemEntities_[i] = registry.GenerateEntity();
-		auto* itemTr = registry.AddComponent<No::Transform2DComponent>(pauseItemEntities_[i]);
-		itemTr->translate = { 640.0f, 360.0f + 80.0f * static_cast<float>(i) };
-		itemTr->scale = { 420.0f, 84.0f };
-		auto* itemSp = registry.AddComponent<No::SpriteComponent>(pauseItemEntities_[i]);
-		itemSp->textureHandle = itemTextures[i];
-		itemSp->isVisible = false;
-		itemSp->color = { 1.f, 1.f, 1.f, 0.0f };
-		itemSp->layer = CommentBout::ToLayer(CommentBout::SpriteLayer::PauseItem);
-		itemSp->orderInLayer = static_cast<uint32_t>(i);
-		registry.AddComponent<No::EditTag>(pauseItemEntities_[i])->name = "PauseItemSprite_" + std::to_string(i);
-	}
-
-	pauseCursorEntity_ = registry.GenerateEntity();
-	auto* cursorTr = registry.AddComponent<No::Transform2DComponent>(pauseCursorEntity_);
-	cursorTr->translate = { 400.0f, 360.0f };
-	cursorTr->scale = { 16.0f, 52.0f };
-	auto* cursorSp = registry.AddComponent<No::SpriteComponent>(pauseCursorEntity_);
-	cursorSp->textureHandle = whiteTexture;
-	cursorSp->isVisible = false;
-	cursorSp->color = { 1.0f, 0.95f, 0.35f, 0.0f };
-	cursorSp->layer = CommentBout::ToLayer(CommentBout::SpriteLayer::PauseCursor);
-	registry.AddComponent<No::EditTag>(pauseCursorEntity_)->name = "PauseCursorSprite";
-
-	pauseView->dimEntity = pauseDimEntity_;
-	pauseView->menuBgEntity = pauseMenuBgEntity_;
-	pauseView->panelLineEntity = pausePanelLineEntity_;
-	pauseView->titleEntity = pauseTitleEntity_;
-	pauseView->itemEntities = pauseItemEntities_;
-	pauseView->cursorEntity = pauseCursorEntity_;
 }

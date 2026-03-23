@@ -163,6 +163,7 @@
     <ClCompile Include="application\CommentBout\System\TitleViewSystem.cpp" />
     <ClCompile Include="application\CommentBout\Spawner\TitleMenuSpawner.cpp" />
     <ClCompile Include="application\CommentBout\System\RailCameraSystem.cpp" />
+    <ClCompile Include="application\CommentBout\Spawner\PauseMenuSpawner.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="application\TestApp\Scene\TestScene2.h" />
@@ -383,6 +384,7 @@
     <ClInclude Include="application\CommentBout\Spawner\TitleMenuSpawner.h" />
     <ClInclude Include="application\CommentBout\Component\RailCameraComponent.h" />
     <ClInclude Include="application\CommentBout\System\RailCameraSystem.h" />
+    <ClInclude Include="application\CommentBout\Spawner\PauseMenuSpawner.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />
