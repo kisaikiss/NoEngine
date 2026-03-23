@@ -9,6 +9,7 @@ private:
 	void NotSystemUpdate() override;
 	void CameraImGui();
 	void RailCameraImGui();
+	void RailEditorImGui();
 
 	void SpawnGrass(const No::Vector3& position, const No::Vector3& size);
 	void CreatePauseMenuSprites(const NoEngine::TextureRef& whiteTexture);

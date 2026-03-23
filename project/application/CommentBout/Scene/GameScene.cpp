@@ -36,6 +36,79 @@
 #include "application/TestApp/Component/Collider3DComponent.h"
 #include "application/TestApp/Component/ProjectedColliderComponent.h"
 #include "engine/Runtime/GraphicsCore.h"
+#include <algorithm>
+#include <fstream>
+#include <cstdio>
+#include "externals/nlohmann/json.hpp"
+
+namespace {
+std::string MakeRailFilePath(const std::string& stageName) {
+	return "resources/game/td_3105/RailData/" + stageName + "_rail.json";
+}
+
+bool SaveRailToJson(const RailCameraComponent& rail, const std::string& stageName) {
+	nlohmann::json json;
+	json["stageName"] = stageName;
+	json["defaultSpeed"] = rail.speed;
+	json["controlPoints"] = nlohmann::json::array();
+	for (const auto& p : rail.controlPoints) {
+		json["controlPoints"].push_back({ p.x, p.y, p.z });
+	}
+
+	std::ofstream ofs(MakeRailFilePath(stageName));
+	if (!ofs) {
+		return false;
+	}
+	ofs << json.dump(2);
+	return true;
+}
+
+bool LoadRailToComponent(RailCameraComponent& rail, const std::string& stageName) {
+	const std::string filePath = MakeRailFilePath(stageName);
+	std::ifstream ifs(filePath);
+	if (!ifs) {
+		return false;
+	}
+
+	nlohmann::json json;
+	ifs >> json;
+
+	auto pointsIt = json.find("controlPoints");
+	if (pointsIt == json.end() || !pointsIt->is_array()) {
+		return false;
+	}
+
+	rail.controlPoints.clear();
+	for (const auto& p : *pointsIt) {
+		if (!p.is_array() || p.size() < 3) {
+			continue;
+		}
+		No::Vector3 point{};
+		point.x = p[0].get<float>();
+		point.y = p[1].get<float>();
+		point.z = p[2].get<float>();
+		rail.controlPoints.push_back(point);
+	}
+
+	if (rail.controlPoints.size() < 2) {
+		return false;
+	}
+
+	const auto speedIt = json.find("defaultSpeed");
+	if (speedIt != json.end() && speedIt->is_number()) {
+		rail.speed = speedIt->get<float>();
+	}
+
+	rail.stageName = stageName;
+	rail.railFilePath = filePath;
+	rail.selectedControlPointIndex = (rail.controlPoints.empty()) ? -1 : 0;
+	rail.distance = 0.0f;
+	rail.isFinished = false;
+	rail.isPlaying = true;
+	rail.isLoaded = false;
+	return true;
+}
+}
 
 void GameScene::Setup() {
 
@@ -152,7 +225,8 @@ void GameScene::Setup() {
 	auto* railCameraTransform = registry.AddComponent<No::TransformComponent>(railCameraEntity_);
 	railCameraTransform->translate = { 0.0f, 2.0f, -10.0f };
 	auto* railCamera = registry.AddComponent<RailCameraComponent>(railCameraEntity_);
-	railCamera->railFilePath = "resources/game/td_3105/RailData/sample_rail.json";
+	railCamera->stageName = "Stage_01";
+	railCamera->railFilePath = MakeRailFilePath(railCamera->stageName);
 
 	// 自機スプライト
 	auto playerEntity = registry.GenerateEntity();
@@ -246,6 +320,7 @@ void GameScene::NotSystemUpdate()
 {
 	CameraImGui();
 	RailCameraImGui();
+	RailEditorImGui();
 #ifdef USE_IMGUI
 	ImGui::Begin("ChangeScene");
 	if (ImGui::Button("SceneChangeTitle")) {
@@ -310,6 +385,10 @@ void GameScene::RailCameraImGui()
 			rail->speed = 0.0f;
 		}
 	}
+	ImGui::Checkbox("Draw Rail", &rail->drawRailDebug);
+	ImGui::Checkbox("Draw Camera Gizmo", &rail->drawCameraDebug);
+	ImGui::Checkbox("Draw Control Points", &rail->drawControlPointsDebug);
+	ImGui::DragFloat("Control Point Radius", &rail->controlPointDebugRadius, 0.005f, 0.01f, 1.0f);
 
 	if (ImGui::Button(rail->isPlaying ? "Pause" : "Play")) {
 		if (!rail->isFinished || rail->distance < rail->totalLength) {
@@ -343,24 +422,96 @@ void GameScene::RailCameraImGui()
 		}
 	}
 
-	static float jumpPercent = 50.0f;
-	ImGui::SliderFloat("JumpTarget(%)", &jumpPercent, 0.0f, 100.0f);
-	if (ImGui::Button("Jump")) {
-		if (rail->totalLength > 0.0f) {
-			rail->distance = rail->totalLength * (jumpPercent / 100.0f);
-			rail->isFinished = (rail->distance >= rail->totalLength);
-			if (rail->isFinished) {
-				rail->isPlaying = false;
-			}
-		}
-	}
-
 	if (rail->isFinished) {
 		ImGui::Text("State: Finished");
 	} else if (rail->isPlaying) {
 		ImGui::Text("State: Playing");
 	} else {
 		ImGui::Text("State: Paused");
+	}
+
+	ImGui::End();
+#endif
+}
+
+void GameScene::RailEditorImGui()
+{
+#ifdef USE_IMGUI
+	if (railCameraEntity_ == No::nullEntity) {
+		return;
+	}
+
+	auto* rail = GetRegistry()->GetComponent<RailCameraComponent>(railCameraEntity_);
+	if (!rail) {
+		return;
+	}
+
+	static char stageNameBuffer[64] = "";
+	if (stageNameBuffer[0] == '\0') {
+		std::snprintf(stageNameBuffer, sizeof(stageNameBuffer), "%s", rail->stageName.c_str());
+	}
+
+	ImGui::Begin("RailEditor");
+	ImGui::InputText("StageName", stageNameBuffer, sizeof(stageNameBuffer));
+
+	if (ImGui::Button("Load Stage Rail")) {
+		const std::string stageName(stageNameBuffer);
+		if (!stageName.empty()) {
+			LoadRailToComponent(*rail, stageName);
+		}
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("Save Stage Rail")) {
+		const std::string stageName(stageNameBuffer);
+		if (!stageName.empty()) {
+			rail->stageName = stageName;
+			rail->railFilePath = MakeRailFilePath(stageName);
+			SaveRailToJson(*rail, stageName);
+		}
+	}
+
+	ImGui::Separator();
+	if (ImGui::Button("Add Control Point")) {
+		No::Vector3 newPoint = { 0.0f, 0.0f, 0.0f };
+		if (!rail->controlPoints.empty()) {
+			newPoint = rail->controlPoints.back();
+			newPoint.z += 2.0f;
+		}
+		rail->controlPoints.push_back(newPoint);
+		rail->selectedControlPointIndex = static_cast<int>(rail->controlPoints.size()) - 1;
+		rail->isLoaded = false;
+	}
+
+	if (ImGui::Button("Delete Selected Point")) {
+		const int index = rail->selectedControlPointIndex;
+		if (index >= 0 && index < static_cast<int>(rail->controlPoints.size())) {
+			rail->controlPoints.erase(rail->controlPoints.begin() + index);
+			if (rail->controlPoints.empty()) {
+				rail->selectedControlPointIndex = -1;
+			} else if (rail->selectedControlPointIndex >= static_cast<int>(rail->controlPoints.size())) {
+				rail->selectedControlPointIndex = static_cast<int>(rail->controlPoints.size()) - 1;
+			}
+			rail->isLoaded = false;
+		}
+	}
+
+	if (!rail->controlPoints.empty()) {
+		ImGui::Separator();
+		for (int i = 0; i < static_cast<int>(rail->controlPoints.size()); ++i) {
+			char label[32];
+			std::snprintf(label, sizeof(label), "Point %d", i);
+			if (ImGui::Selectable(label, rail->selectedControlPointIndex == i)) {
+				rail->selectedControlPointIndex = i;
+			}
+		}
+
+		const int selected = rail->selectedControlPointIndex;
+		if (selected >= 0 && selected < static_cast<int>(rail->controlPoints.size())) {
+			No::Vector3& p = rail->controlPoints[static_cast<size_t>(selected)];
+			if (ImGui::DragFloat3("Selected Position", &p.x, 0.05f)) {
+				rail->isLoaded = false;
+			}
+		}
 	}
 
 	ImGui::End();

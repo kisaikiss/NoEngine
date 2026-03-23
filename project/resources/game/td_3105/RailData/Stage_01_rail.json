@@ -1,6 +1,6 @@
 {
-  "name": "sample_rail",
-  "defaultSpeed": 3.0,
+  "stageName": "Stage_01",
+  "defaultSpeed": 6.0,
   "controlPoints": [
     [0.0, 2.0, -10.0],
     [0.0, 2.0, -2.0],

@@ -5,6 +5,7 @@
 
 struct RailCameraComponent {
 	std::string railFilePath = "resources/game/td_3105/RailData/sample_rail.json";
+	std::string stageName = "Stage_01";
 	std::vector<No::Vector3> controlPoints;
 	std::vector<float> arcLengthTable;
 
@@ -17,6 +18,9 @@ struct RailCameraComponent {
 	bool isFinished = false;
 	bool drawRailDebug = true;
 	bool drawCameraDebug = true;
+	bool drawControlPointsDebug = true;
+	int selectedControlPointIndex = -1;
+	float controlPointDebugRadius = 0.1f;
 	int samplesPerSegment = 24;
 	int debugRailSamplesPerSegment = 12;
 };

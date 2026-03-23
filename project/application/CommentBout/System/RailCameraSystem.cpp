@@ -8,8 +8,6 @@
 #include <algorithm>
 #include <cmath>
 
-#include <cmath>
-
 namespace No {
 using ::NoEngine::Primitive;
 }
@@ -177,6 +175,9 @@ bool LoadRailFromJson(RailCameraComponent& rail) {
 	rail.distance = 0.0f;
 	rail.isFinished = false;
 	rail.isLoaded = rail.totalLength > 0.0f;
+	if (rail.selectedControlPointIndex >= static_cast<int>(rail.controlPoints.size())) {
+		rail.selectedControlPointIndex = static_cast<int>(rail.controlPoints.size()) - 1;
+	}
 	return rail.isLoaded;
 }
 
@@ -198,6 +199,21 @@ void DrawRailDebug(const RailCameraComponent& rail) {
 		const No::Vector3 current = EvaluatePositionByT(rail, t);
 		No::Primitive::DrawLine(prev, current, NoEngine::Math::Color(1.0f, 0.0f, 0.0f, 1.0f));
 		prev = current;
+	}
+}
+
+void DrawControlPointDebug(const RailCameraComponent& rail) {
+	if (!rail.drawControlPointsDebug) {
+		return;
+	}
+
+	const float radius = (rail.controlPointDebugRadius > 0.0f) ? rail.controlPointDebugRadius : 0.1f;
+	for (size_t i = 0; i < rail.controlPoints.size(); ++i) {
+		const bool isSelected = (static_cast<int>(i) == rail.selectedControlPointIndex);
+		const NoEngine::Math::Color color = isSelected
+			? NoEngine::Math::Color(1.0f, 1.0f, 0.0f, 1.0f)
+			: NoEngine::Math::Color(0.2f, 1.0f, 0.2f, 1.0f);
+		No::Primitive::DrawSphere(rail.controlPoints[i], radius, color, 10, 10);
 	}
 }
 
@@ -268,6 +284,7 @@ void RailCameraSystem::Update(No::Registry& registry, float deltaTime) {
 
 		ApplyTransformFromDistance(*rail, transform);
 		DrawRailDebug(*rail);
+		DrawControlPointDebug(*rail);
 		DrawRailCameraGizmo(*rail, transform);
 	}
 }
