@@ -7,4 +7,5 @@ struct PlayerAttackComponent {
 	No::Vector2 attackSize{ 140.0f, 140.0f };
 	float visibleTime = 0.35f;
 	int attackLayer = 30;
+	int attackPower = 10;
 };

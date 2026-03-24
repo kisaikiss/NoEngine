@@ -17,7 +17,7 @@ enum class RailResumeConditionType {
 
 struct RailEnemySpawnEventParams {
 	int count = 1;
-	int hp = 3;
+	int hp = 10;
 	float moveSpeed = 3.0f;
 	float spawnSpacing = 1.0f;
 	No::Vector3 spawnPosition = { 0.0f, 1.0f, 10.0f };

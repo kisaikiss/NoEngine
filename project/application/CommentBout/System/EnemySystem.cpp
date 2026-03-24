@@ -2,6 +2,7 @@
 #include "EnemySystem.h"
 
 #include "application/CommentBout/Component/EnemyComponent.h"
+#include "application/CommentBout/Component/AttackDamageComponent.h"
 #include "application/CommentBout/GameTag.h"
 #include "application/CommentBout/Utility/CBCollisionMask.h"
 #include "application/TestApp/Component/Collider2DComponent.h"
@@ -29,16 +30,24 @@ void EnemySystem::Update(No::Registry& registry, float deltaTime) {
 		const No::Vector3 moveDir = NormalizeOrDefault(enemy->moveDirection, No::Vector3(0.0f, 0.0f, -1.0f));
 		transform->translate += moveDir * enemy->moveSpeed * deltaTime;
 
+		int attackDamage = 1;
 		bool isHitByPlayerAttack = false;
 		if (collider3D->isColliding) {
 			auto* hit2D = registry.GetComponent<TestApp::Collider2DComponent>(collider3D->collidedEntity);
 			if (hit2D && hit2D->collisionLayer == CommentBout::CollisionLayer::CBPlayerAttack) {
 				isHitByPlayerAttack = true;
+				auto* damage = registry.GetComponent<AttackDamageComponent>(collider3D->collidedEntity);
+				if (damage) {
+					attackDamage = std::max(1, damage->damage);
+				}
 			}
 		}
 
 		if (isHitByPlayerAttack && !enemy->wasCollidingWithAttack) {
-			enemy->hp -= 1;
+			enemy->hp -= attackDamage;
+			if (enemy->hp < 0) {
+				enemy->hp = 0;
+			}
 		}
 		enemy->wasCollidingWithAttack = isHitByPlayerAttack;
 

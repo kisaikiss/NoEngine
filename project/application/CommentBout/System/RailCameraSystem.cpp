@@ -372,7 +372,8 @@ void SpawnEnemies(No::Registry& registry, const RailEnemySpawnEventParams& param
 		material->rootSigId = NoEngine::Render::GetRootSignatureID(material->psoName);
 
 		auto* enemy = registry.AddComponent<EnemyComponent>(enemyEntity);
-		enemy->hp = std::max(1, params.hp);
+		enemy->maxHp = std::max(1, params.hp);
+		enemy->hp = enemy->maxHp;
 		enemy->moveSpeed = std::max(0.0f, params.moveSpeed);
 		enemy->moveDirection = direction;
 		enemy->groupId = params.spawnGroupId;

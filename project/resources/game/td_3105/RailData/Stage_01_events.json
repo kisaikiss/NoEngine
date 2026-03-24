@@ -5,7 +5,7 @@
       "resumeCondition": "None",
       "spawn": {
         "count": 3,
-        "hp": 3,
+        "hp": 10,
         "moveDirection": [
           0.0,
           0.0,
@@ -29,7 +29,7 @@
       "resumeCondition": "None",
       "spawn": {
         "count": 1,
-        "hp": 3,
+        "hp": 10,
         "moveDirection": [
           0.0,
           0.0,
@@ -53,7 +53,7 @@
       "resumeCondition": "AfterSeconds",
       "spawn": {
         "count": 1,
-        "hp": 3,
+        "hp": 10,
         "moveDirection": [
           0.0,
           0.0,
@@ -77,7 +77,7 @@
       "resumeCondition": "None",
       "spawn": {
         "count": 2,
-        "hp": 3,
+        "hp": 10,
         "moveDirection": [
           0.0,
           0.0,

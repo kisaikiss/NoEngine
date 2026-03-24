@@ -394,6 +394,7 @@
     <ClInclude Include="application\CommentBout\Data\RailDataIO.h" />
     <ClInclude Include="application\CommentBout\Component\EnemyComponent.h" />
     <ClInclude Include="application\CommentBout\System\EnemySystem.h" />
+    <ClInclude Include="application\CommentBout\Component\AttackDamageComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

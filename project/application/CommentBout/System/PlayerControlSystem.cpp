@@ -5,6 +5,7 @@
 #include "application/CommentBout/Component/PauseStateComponent.h"
 #include "application/CommentBout/Component/LifetimeComponent.h"
 #include "application/CommentBout/Component/GameResourceComponent.h"
+#include "application/CommentBout/Component/AttackDamageComponent.h"
 #include "application/CommentBout/Utility/CBCollisionMask.h"
 #include "application/CommentBout/GameTag.h"
 #include "application/TestApp/Component/Collider2DComponent.h"
@@ -85,6 +86,9 @@ void PlayerControlSystem::Update(No::Registry& registry, float deltaTime)
 			collider2D->sizeMultiplier = { 1.0f, 1.0f };
 			collider2D->collisionLayer = CommentBout::CollisionLayer::CBPlayerAttack;
 			collider2D->collisionMask = CommentBout::CollisionMask::CBPlayerAttack;
+
+			auto* attackDamage = registry.AddComponent<AttackDamageComponent>(attackEntity);
+			attackDamage->damage = std::max(1, attack->attackPower);
 
 			auto* lifetime = registry.AddComponent<LifetimeComponent>(attackEntity);
 			lifetime->remainingTime = attack->visibleTime;
