@@ -139,7 +139,6 @@
     <ClCompile Include="engine\Functions\ECS\Component\CameraComponent.cpp" />
     <ClCompile Include="application\CommentBout\CommentBout.cpp" />
     <ClCompile Include="application\CommentBout\System\PlayerControlSystem.cpp" />
-    <ClCompile Include="application\CommentBout\System\PlayerHitboxSyncSystem.cpp" />
     <ClCompile Include="application\CommentBout\Collision\Utility\CollisionAlgorithms.cpp" />
     <ClCompile Include="application\CommentBout\Collision\System\CollisionSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\GrassReactionSystem.cpp" />
@@ -345,7 +344,6 @@
     <ClInclude Include="application\CommentBout\Component\GrassReactionComponent.h" />
     <ClInclude Include="application\CommentBout\Component\GameResourceComponent.h" />
     <ClInclude Include="application\CommentBout\System\PlayerControlSystem.h" />
-    <ClInclude Include="application\CommentBout\System\PlayerHitboxSyncSystem.h" />
     <ClInclude Include="application\CommentBout\Collision\Utility\CollisionMask.h" />
     <ClInclude Include="application\CommentBout\Collision\Utility\CollisionAlgorithms.h" />
     <ClInclude Include="application\CommentBout\Collision\Component\ProjectedColliderComponent.h" />

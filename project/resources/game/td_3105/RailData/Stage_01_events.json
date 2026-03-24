@@ -11,7 +11,7 @@
           0.0,
           -1.0
         ],
-        "moveSpeed": 2.5,
+        "moveSpeed": 0.0,
         "spawnGroupId": 1,
         "spawnPosition": [
           0.0,

@@ -180,7 +180,6 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\\CommentBout\\System\\PauseSystem.cpp" />
     <ClCompile Include="application\\CommentBout\\System\\PauseViewSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\PlayerControlSystem.cpp" />
-    <ClCompile Include="application\CommentBout\System\PlayerHitboxSyncSystem.cpp" />
     <ClCompile Include="application\CommentBout\Collision\Utility\CollisionAlgorithms.cpp" />
     <ClCompile Include="application\CommentBout\Collision\System\CollisionSystem.cpp">
       <ObjectFileName>$(IntDir)CommentBout_CollisionSystem.obj</ObjectFileName>
@@ -384,7 +383,6 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\\CommentBout\\System\\PauseSystem.h" />
     <ClInclude Include="application\\CommentBout\\System\\PauseViewSystem.h" />
     <ClInclude Include="application\CommentBout\System\PlayerControlSystem.h" />
-    <ClInclude Include="application\CommentBout\System\PlayerHitboxSyncSystem.h" />
     <ClInclude Include="application\CommentBout\Collision\Utility\CollisionMask.h" />
     <ClInclude Include="application\CommentBout\Collision\Utility\CollisionAlgorithms.h" />
     <ClInclude Include="application\CommentBout\Collision\Component\ProjectedColliderComponent.h" />

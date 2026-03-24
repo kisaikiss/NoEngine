@@ -30,7 +30,6 @@
 #include "application/CommentBout/System/OptionViewSystem.h"
 #include "application/CommentBout/System/RailCameraSystem.h"
 #include "application/CommentBout/System/EnemySystem.h"
-#include "application/CommentBout/System/PlayerHitboxSyncSystem.h"
 #include "application/CommentBout/Spawner/OptionMenuSpawner.h"
 #include "application/CommentBout/Spawner/PauseMenuSpawner.h"
 #include "application/CommentBout/Collision/System/CollisionSystem.h"
@@ -58,7 +57,6 @@ void GameScene::Setup() {
 	AddSystem(std::make_unique<No::DebugCameraSystem>());
 	AddSystem(std::make_unique<RailCameraSystem>());
 	AddSystem(std::make_unique<No::CameraSystem>());
-	AddSystem(std::make_unique<PlayerHitboxSyncSystem>());
 	AddSystem(std::make_unique<CommentBoutCollision::CollisionSystem>());
 	AddSystem(std::make_unique<EnemySystem>());
 	AddSystem(std::make_unique<GrassReactionSystem>());
@@ -124,7 +122,7 @@ void GameScene::Setup() {
 
 	auto optionConfigEntity = registry.GenerateEntity();
 	registry.AddComponent<CBOptionConfigTag>(optionConfigEntity);
-	registry.AddComponent<OptionMenuConfigComponent>(optionConfigEntity); // 繝・ヵ繧ｩ繝ｫ繝亥､ = JSON蛟､
+	registry.AddComponent<OptionMenuConfigComponent>(optionConfigEntity); // デフォルト値 = JSON値
 	registry.AddComponent<No::EditTag>(optionConfigEntity)->name = "OptionMenuConfig";
 
 
@@ -144,7 +142,6 @@ void GameScene::Setup() {
 	registry.AddComponent<No::ActiveCameraTag>(camera);
 	registry.AddComponent<No::CameraComponent>(camera);
 	registry.AddComponent<No::DebugCameraComponent>(camera);
-	registry.AddComponent<No::EditTag>(camera)->name = "camera";
 	auto* cameraTransform = registry.AddComponent<No::TransformComponent>(camera);
 	cameraTransform->translate.z = -5.f;
 	activeCameraEntity_ = camera;
@@ -153,7 +150,6 @@ void GameScene::Setup() {
 
 	railCameraEntity_ = registry.GenerateEntity();
 	registry.AddComponent<No::CameraComponent>(railCameraEntity_);
-	registry.AddComponent<No::EditTag>(railCameraEntity_)->name = "rail_camera";
 	auto* railCameraTransform = registry.AddComponent<No::TransformComponent>(railCameraEntity_);
 	railCameraTransform->translate = { 0.0f, 2.0f, -10.0f };
 	auto* railCamera = registry.AddComponent<RailCameraComponent>(railCameraEntity_);
@@ -208,15 +204,9 @@ void GameScene::Setup() {
 	registry.AddComponent<No::EditTag>(playerHitboxEntity)->name = "PlayerHitbox";
 	auto* playerHitboxComp = registry.AddComponent<PlayerHitboxComponent>(playerHitboxEntity);
 	playerHitboxComp->playerEntity = playerEntity;
-	playerHitboxComp->fitToSprite = true;
-	playerHitboxComp->spritePlaneZ = 0.8f;
-	playerHitboxComp->worldOffset = { 0.0f, 0.0f, 0.0f };
-	playerHitboxComp->worldSize = { 0.8f, 1.2f, 0.8f };
-	playerHitboxComp->sizeMultiplier = { 1.0f, 1.0f, 1.0f };
-	playerHitboxComp->drawDebug = true;
 	auto* playerHitboxTransform = registry.AddComponent<No::TransformComponent>(playerHitboxEntity);
-	playerHitboxTransform->translate = { 0.0f, 1.0f, playerHitboxComp->spritePlaneZ };
-	playerHitboxTransform->scale = playerHitboxComp->worldSize;
+	playerHitboxTransform->translate = { 0.0f, 1.0f, 0.8f };
+	playerHitboxTransform->scale = { 0.8f, 1.2f, 0.8f };
 	auto* playerHitboxCollider = registry.AddComponent<CommentBoutCollision::Collider3DComponent>(playerHitboxEntity);
 	playerHitboxCollider->shapeType = CommentBoutCollision::ShapeType3D::Box;
 	playerHitboxCollider->useScaleAsBox = true;

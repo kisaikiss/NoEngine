@@ -2,19 +2,12 @@
 #include "engine/NoEngine.h"
 
 struct PlayerHitboxComponent {
-	No::Entity playerEntity = No::nullEntity;
-	No::Vector3 worldOffset = { 0.0f, 0.0f, 0.0f };
-	No::Vector3 worldSize = { 0.8f, 1.2f, 0.8f };
-	No::Vector3 sizeMultiplier = { 1.0f, 1.0f, 1.0f };
-	float spritePlaneZ = 0.8f;
-	bool fitToSprite = true;
-	bool useObbCollision = true;
-	bool drawDebug = true;
+    No::Entity playerEntity = No::nullEntity;
 
-	bool obbValid = false;
-	No::Vector3 obbCenter = { 0.0f, 0.0f, 0.0f };
-	No::Vector3 obbAxisX = { 1.0f, 0.0f, 0.0f };
-	No::Vector3 obbAxisY = { 0.0f, 1.0f, 0.0f };
-	No::Vector3 obbAxisZ = { 0.0f, 0.0f, 1.0f };
-	No::Vector3 obbHalfExtents = { 0.4f, 0.6f, 0.4f };
+    bool useCameraGateForPlayerHit = true;
+    float cameraGateNear = 0.0f;
+    float cameraGateDepth = 0.5f;
+    float cameraGateHalfWidth = 0.6f;
+    float cameraGateHalfHeight = 0.32f;
 };
+

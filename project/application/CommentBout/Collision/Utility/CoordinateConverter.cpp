@@ -148,5 +148,4 @@ namespace CommentBoutCollision {
 			screenPos.y >= -margin &&
 			screenPos.y <= static_cast<float>(windowSize.clientHeight) + margin;
 	}
-
 }
