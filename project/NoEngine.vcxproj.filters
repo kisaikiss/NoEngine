@@ -127,6 +127,8 @@
     <ClCompile Include="application\TestApp\System\ParticleTestSystem.cpp" />
     <ClCompile Include="engine\Utilities\Random.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\StartTransformComponent.cpp" />
+    <ClCompile Include="engine\Functions\Scene\IScene.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\SystemManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />

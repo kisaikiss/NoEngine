@@ -6,6 +6,7 @@ namespace ECS {
 class EditSystem :
     public ISystem {
 public:
+    EditSystem() { SetStopInGameStop(false); }
     void Update(Registry& registry, float deltaTime) override;
 private:
     void SaveFile(Registry& registry, nlohmann::json j);

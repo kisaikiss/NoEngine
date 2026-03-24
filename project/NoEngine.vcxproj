@@ -178,6 +178,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="engine\Functions\ECS\Component\TransformComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\DebugCameraSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\EditSystem.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\SystemManager.cpp" />
     <ClCompile Include="engine\Functions\Renderer\Primitive.cpp" />
     <ClCompile Include="application\TestApp\Scene\TestScene.cpp" />
     <ClCompile Include="application\TestApp\System\TestSystem.cpp" />
@@ -194,6 +195,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="engine\Functions\Renderer\RenderPass\RenderPassScheduler.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderSystem.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\SpritePass.cpp" />
+    <ClCompile Include="engine\Functions\Scene\IScene.cpp" />
     <ClCompile Include="engine\Functions\Scene\SceneManager.cpp" />
     <ClCompile Include="engine\Math\Color\Color.cpp" />
     <ClCompile Include="engine\Math\Easing.cpp" />
