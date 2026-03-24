@@ -1,39 +1,39 @@
 #pragma once
-#include "application/TestApp/Utility/CollisionMask.h"
+#include "application/CommentBout/Collision/Utility/CollisionMask.h"
 
 namespace CommentBout {
 
 	namespace CollisionLayer {
-		constexpr TestApp::CollisionType CBPlayer = TestApp::CollisionType::Player;
-		constexpr TestApp::CollisionType CBPlayerAttack = TestApp::CollisionType::PlayerBullet;
-		constexpr TestApp::CollisionType CBGrass = TestApp::CollisionType::Item;
-		constexpr TestApp::CollisionType CBGround = TestApp::CollisionType::Block;
-		constexpr TestApp::CollisionType CBEnemy = TestApp::CollisionType::Enemy;
-		constexpr TestApp::CollisionType CBEnemyBullet = TestApp::CollisionType::EnemyBullet;
+		constexpr CommentBoutCollision::CollisionType CBPlayer = CommentBoutCollision::CollisionType::Player;
+		constexpr CommentBoutCollision::CollisionType CBPlayerAttack = CommentBoutCollision::CollisionType::PlayerBullet;
+		constexpr CommentBoutCollision::CollisionType CBGrass = CommentBoutCollision::CollisionType::Item;
+		constexpr CommentBoutCollision::CollisionType CBGround = CommentBoutCollision::CollisionType::Block;
+		constexpr CommentBoutCollision::CollisionType CBEnemy = CommentBoutCollision::CollisionType::Enemy;
+		constexpr CommentBoutCollision::CollisionType CBEnemyBullet = CommentBoutCollision::CollisionType::EnemyBullet;
 	}
 
 	namespace CollisionMask {
-		constexpr TestApp::CollisionType CBPlayer =
+		constexpr CommentBoutCollision::CollisionType CBPlayer =
 			CollisionLayer::CBEnemy |
 			CollisionLayer::CBEnemyBullet |
 			CollisionLayer::CBGround;
 
-		constexpr TestApp::CollisionType CBPlayerAttack =
+		constexpr CommentBoutCollision::CollisionType CBPlayerAttack =
 			CollisionLayer::CBGrass |
 			CollisionLayer::CBEnemy;
 
-		constexpr TestApp::CollisionType CBGrass =
+		constexpr CommentBoutCollision::CollisionType CBGrass =
 			CollisionLayer::CBPlayerAttack;
 
-		constexpr TestApp::CollisionType CBGround =
-			TestApp::CollisionType::None;
+		constexpr CommentBoutCollision::CollisionType CBGround =
+			CommentBoutCollision::CollisionType::None;
 
-		constexpr TestApp::CollisionType CBEnemy =
+		constexpr CommentBoutCollision::CollisionType CBEnemy =
 			CollisionLayer::CBPlayer |
 			CollisionLayer::CBPlayerAttack;
 
 
-		constexpr TestApp::CollisionType CBEnemyBullet =
+		constexpr CommentBoutCollision::CollisionType CBEnemyBullet =
 			CollisionLayer::CBPlayer |
 			CollisionLayer::CBGround;
 	}

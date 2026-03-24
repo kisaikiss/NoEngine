@@ -1,10 +1,9 @@
 #pragma once
 #include "engine/NoEngine.h"
-#include "application/TestApp/Utility/CollisionMask.h"
+#include "application/CommentBout/Collision/Utility/CollisionMask.h"
 #include <vector>
 
-namespace TestApp {
-
+namespace CommentBoutCollision {
 	/// <summary>
 	/// 3Dオブジェクトを2Dスクリーン座標に投影したコライダー情報
 	/// </summary>

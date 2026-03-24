@@ -5,8 +5,8 @@
 #include "application/CommentBout/Component/LifetimeComponent.h"
 #include "application/CommentBout/Component/GameResourceComponent.h"
 #include "application/CommentBout/GameTag.h"
-#include "application/TestApp/Component/Collider3DComponent.h"
-#include "application/TestApp/Component/ProjectedColliderComponent.h"
+#include "application/CommentBout/Collision/Component/Collider3DComponent.h"
+#include "application/CommentBout/Collision/Component/ProjectedColliderComponent.h"
 
 void GrassReactionSystem::Update(No::Registry& registry, float deltaTime)
 {
@@ -19,10 +19,10 @@ void GrassReactionSystem::Update(No::Registry& registry, float deltaTime)
 		if (gameResource) break;
 	}
 
-	auto grassView = registry.View<CBGrassTag, GrassReactionComponent, TestApp::Collider3DComponent, TestApp::ProjectedColliderComponent>();
+	auto grassView = registry.View<CBGrassTag, GrassReactionComponent, CommentBoutCollision::Collider3DComponent, CommentBoutCollision::ProjectedColliderComponent>();
 	for (auto entity : grassView) {
 		auto* reaction = registry.GetComponent<GrassReactionComponent>(entity);
-		auto* projected = registry.GetComponent<TestApp::ProjectedColliderComponent>(entity);
+		auto* projected = registry.GetComponent<CommentBoutCollision::ProjectedColliderComponent>(entity);
 		if (!reaction || !projected) continue;
 
 		const bool hitNow = projected->isColliding;

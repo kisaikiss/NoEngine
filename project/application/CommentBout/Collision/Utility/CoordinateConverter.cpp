@@ -1,7 +1,7 @@
 #include "CoordinateConverter.h"
 #include <cmath>
 
-namespace TestApp {
+namespace CommentBoutCollision {
 
 	No::Vector2 CoordinateConverter::WorldToScreen(
 		const No::Vector3& worldPos,

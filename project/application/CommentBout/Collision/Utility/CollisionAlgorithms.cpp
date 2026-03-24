@@ -2,7 +2,7 @@
 #include <algorithm>
 #include <cmath>
 
-namespace TestApp {
+namespace CommentBoutCollision {
 
 	bool CollisionAlgorithms::CheckCircleCircle(
 		const No::Vector2& center1, float radius1,

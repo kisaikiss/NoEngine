@@ -1,8 +1,8 @@
 #pragma once
 #include "engine/NoEngine.h"
-#include "application/TestApp/Utility/CollisionMask.h"
+#include "application/CommentBout/Collision/Utility/CollisionMask.h"
 
-namespace TestApp {
+namespace CommentBoutCollision {
 
 	/// <summary>
 	/// 3Dコライダーの形状種別
@@ -70,5 +70,4 @@ namespace TestApp {
 		// 衝突相手のエンティティ
 		No::Entity collidedEntity;
 	};
-
 }

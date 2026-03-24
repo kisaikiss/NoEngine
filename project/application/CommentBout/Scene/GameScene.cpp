@@ -30,12 +30,13 @@
 #include "application/CommentBout/System/OptionViewSystem.h"
 #include "application/CommentBout/System/RailCameraSystem.h"
 #include "application/CommentBout/System/EnemySystem.h"
+#include "application/CommentBout/System/PlayerHitboxSyncSystem.h"
 #include "application/CommentBout/Spawner/OptionMenuSpawner.h"
 #include "application/CommentBout/Spawner/PauseMenuSpawner.h"
-#include "application/TestApp/System/CollisionTestSystem.h"
-#include "application/TestApp/Component/Collider2DComponent.h"
-#include "application/TestApp/Component/Collider3DComponent.h"
-#include "application/TestApp/Component/ProjectedColliderComponent.h"
+#include "application/CommentBout/Collision/System/CollisionSystem.h"
+#include "application/CommentBout/Collision/Component/Collider2DComponent.h"
+#include "application/CommentBout/Collision/Component/Collider3DComponent.h"
+#include "application/CommentBout/Collision/Component/ProjectedColliderComponent.h"
 #include "engine/Runtime/GraphicsCore.h"
 #include <algorithm>
 #include <cstdio>
@@ -54,17 +55,18 @@ void GameScene::Setup() {
 
 	AddSystem(std::make_unique<PauseSystem>());
 	AddSystem(std::make_unique<PlayerControlSystem>());
-	AddSystem(std::make_unique<TestApp::CollisionTestSystem>());
+	AddSystem(std::make_unique<No::DebugCameraSystem>());
+	AddSystem(std::make_unique<RailCameraSystem>());
+	AddSystem(std::make_unique<No::CameraSystem>());
+	AddSystem(std::make_unique<PlayerHitboxSyncSystem>());
+	AddSystem(std::make_unique<CommentBoutCollision::CollisionSystem>());
+	AddSystem(std::make_unique<EnemySystem>());
 	AddSystem(std::make_unique<GrassReactionSystem>());
 	AddSystem(std::make_unique<HitBalloonSystem>());
 	AddSystem(std::make_unique<LifetimeSystem>());
 	AddSystem(std::make_unique<OptionSystem>());
 	AddSystem(std::make_unique<PauseViewSystem>());
 	AddSystem(std::make_unique<OptionViewSystem>());
-	AddSystem(std::make_unique<No::DebugCameraSystem>());
-	AddSystem(std::make_unique<EnemySystem>());
-	AddSystem(std::make_unique<RailCameraSystem>());
-	AddSystem(std::make_unique<No::CameraSystem>());
 	AddSystem(std::make_unique<No::EditSystem>());
 
 	No::Registry& registry = *GetRegistry();
@@ -122,12 +124,13 @@ void GameScene::Setup() {
 
 	auto optionConfigEntity = registry.GenerateEntity();
 	registry.AddComponent<CBOptionConfigTag>(optionConfigEntity);
-	registry.AddComponent<OptionMenuConfigComponent>(optionConfigEntity); // デフォルト値 = JSON値
+	registry.AddComponent<OptionMenuConfigComponent>(optionConfigEntity); // 繝・ヵ繧ｩ繝ｫ繝亥､ = JSON蛟､
 	registry.AddComponent<No::EditTag>(optionConfigEntity)->name = "OptionMenuConfig";
 
 
 	PauseMenuSpawner::Create(registry, whiteTexture);
 	OptionMenuSpawner::Create(registry, whiteTexture);
+
 
 	// ライト
 	auto light = registry.GenerateEntity();
@@ -146,6 +149,7 @@ void GameScene::Setup() {
 	cameraTransform->translate.z = -5.f;
 	activeCameraEntity_ = camera;
 	debugCameraEntity_ = camera;
+
 
 	railCameraEntity_ = registry.GenerateEntity();
 	registry.AddComponent<No::CameraComponent>(railCameraEntity_);
@@ -213,8 +217,8 @@ void GameScene::Setup() {
 	auto* playerHitboxTransform = registry.AddComponent<No::TransformComponent>(playerHitboxEntity);
 	playerHitboxTransform->translate = { 0.0f, 1.0f, playerHitboxComp->spritePlaneZ };
 	playerHitboxTransform->scale = playerHitboxComp->worldSize;
-	auto* playerHitboxCollider = registry.AddComponent<TestApp::Collider3DComponent>(playerHitboxEntity);
-	playerHitboxCollider->shapeType = TestApp::ShapeType3D::Box;
+	auto* playerHitboxCollider = registry.AddComponent<CommentBoutCollision::Collider3DComponent>(playerHitboxEntity);
+	playerHitboxCollider->shapeType = CommentBoutCollision::ShapeType3D::Box;
 	playerHitboxCollider->useScaleAsBox = true;
 	playerHitboxCollider->boxSizeMultiplier = { 1.0f, 1.0f, 1.0f };
 	playerHitboxCollider->collisionLayer = CommentBout::CollisionLayer::CBPlayer;
@@ -274,13 +278,13 @@ void GameScene::SpawnGrass(const No::Vector3& position, const No::Vector3& size)
 	grassMaterial->psoName = L"Renderer : Default PSO";
 	grassMaterial->psoId = NoEngine::Render::GetPSOID(grassMaterial->psoName);
 	grassMaterial->rootSigId = NoEngine::Render::GetRootSignatureID(grassMaterial->psoName);
-	auto* grassCollider = registry.AddComponent<TestApp::Collider3DComponent>(grassEntity);
-	grassCollider->shapeType = TestApp::ShapeType3D::Box;
+	auto* grassCollider = registry.AddComponent<CommentBoutCollision::Collider3DComponent>(grassEntity);
+	grassCollider->shapeType = CommentBoutCollision::ShapeType3D::Box;
 	grassCollider->useScaleAsBox = true;
 	grassCollider->boxSizeMultiplier = { 1.f, 1.f, 1.f };
 	grassCollider->collisionLayer = CommentBout::CollisionLayer::CBGrass;
 	grassCollider->collisionMask = CommentBout::CollisionMask::CBGrass;
-	auto* projected = registry.AddComponent<TestApp::ProjectedColliderComponent>(grassEntity);
+	auto* projected = registry.AddComponent<CommentBoutCollision::ProjectedColliderComponent>(grassEntity);
 	projected->source3DEntity = grassEntity;
 }
 
@@ -378,3 +382,5 @@ void GameScene::ChangeSceneImGui()
 	ImGui::End();
 #endif
 }
+
+

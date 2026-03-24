@@ -1,12 +1,12 @@
 #include "TestScene3.h"
 #include "application/TestApp/System/TestSystem.h"
-#include "application/TestApp/System/CollisionTestSystem.h"
-#include "application/TestApp/Component/Collider3DComponent.h"
-#include "application/TestApp/Component/Collider2DComponent.h"
-#include "application/TestApp/Component/ProjectedColliderComponent.h"
-#include "application/TestApp/Utility/CollisionMask.h"
+#include "application/CommentBout/Collision/System/CollisionSystem.h"
+#include "application/CommentBout/Collision/Component/Collider3DComponent.h"
+#include "application/CommentBout/Collision/Component/Collider2DComponent.h"
+#include "application/CommentBout/Collision/Component/ProjectedColliderComponent.h"
+#include "application/CommentBout/Collision/Utility/CollisionMask.h"
 
-using namespace TestApp;
+using namespace CommentBoutCollision;
 
 namespace {
 	No::Entity cameraE;
@@ -15,7 +15,7 @@ namespace {
 void TestScene3::Setup() {
 
 	// CollisionTestSystemは当たり判定処理の先に実行される必要がある
-	AddSystem(std::make_unique<TestApp::CollisionTestSystem>());
+	AddSystem(std::make_unique<CommentBoutCollision::CollisionSystem>());
 	AddSystem(std::make_unique<TestSystem>());
 	AddSystem(std::make_unique<No::AnimationSystem>());
 	AddSystem(std::make_unique<No::DebugCameraSystem>());
@@ -51,7 +51,7 @@ void TestScene3::Setup() {
 
 	// コライダー設定
 	// scale = 0.5, radius = 0.5 * 0.5 = 0.25
-	auto* ball1Collider = registry.AddComponent<TestApp::Collider3DComponent>(ball1Entity);
+	auto* ball1Collider = registry.AddComponent<CommentBoutCollision::Collider3DComponent>(ball1Entity);
 	ball1Collider->radius = 0.5f;				// Ballの直径
 	ball1Collider->radiusMultiplier = 0.5f;		// 半径なので1/2
 	ball1Collider->useScaleAsRadius = false;	// radiusを直接使用
@@ -59,7 +59,7 @@ void TestScene3::Setup() {
 	ball1Collider->collisionMask = CollisionMask::Player;
 
 	// スクリーン判定Componentを事前に追加(動的追加はvector範囲外参照する？)
-	auto* ball1Projected = registry.AddComponent<TestApp::ProjectedColliderComponent>(ball1Entity);
+	auto* ball1Projected = registry.AddComponent<CommentBoutCollision::ProjectedColliderComponent>(ball1Entity);
 	ball1Projected->source3DEntity = ball1Entity;
 
 	// ========================================
@@ -86,14 +86,14 @@ void TestScene3::Setup() {
 	ball2Material->rootSigId = NoEngine::Render::GetRootSignatureID(ball2Material->psoName);
 
 	// コライダー設定（Transformのscaleを使用する方法で動作確認）
-	auto* ball2Collider = registry.AddComponent<TestApp::Collider3DComponent>(ball2Entity);
+	auto* ball2Collider = registry.AddComponent<CommentBoutCollision::Collider3DComponent>(ball2Entity);
 	ball2Collider->useScaleAsRadius = true;		// Transformのscaleを使用
 	ball2Collider->radiusMultiplier = 0.5f;		// スケールの半分を半径にする
 	ball2Collider->collisionLayer = CollisionType::PlayerBullet;
 	ball2Collider->collisionMask = CollisionMask::PlayerBullet;
 
 	// スクリーン判定Componentを事前に追加(動的追加はvector範囲外参照する？)
-	auto* ball2Projected = registry.AddComponent<TestApp::ProjectedColliderComponent>(ball2Entity);
+	auto* ball2Projected = registry.AddComponent<CommentBoutCollision::ProjectedColliderComponent>(ball2Entity);
 	ball2Projected->source3DEntity = ball2Entity;
 
 	// ========================================
@@ -113,7 +113,7 @@ void TestScene3::Setup() {
 
 	// コライダー設定
 	// scale = 100, size = 100 * 1.0 = 100
-	auto* sprite1Collider = registry.AddComponent<TestApp::Collider2DComponent>(sprite1Entity);
+	auto* sprite1Collider = registry.AddComponent<CommentBoutCollision::Collider2DComponent>(sprite1Entity);
 	sprite1Collider->useTransformAsSize = true;			// Transformのscaleを使用
 	sprite1Collider->sizeMultiplier = { 1.0f, 1.0f };	// スケールをそのまま使用
 	sprite1Collider->collisionLayer = CollisionType::Enemy;
@@ -135,7 +135,7 @@ void TestScene3::Setup() {
 	sprite2Tag->name = "Sprite2";
 
 	// コライダー設定
-	auto* sprite2Collider = registry.AddComponent<TestApp::Collider2DComponent>(sprite2Entity);
+	auto* sprite2Collider = registry.AddComponent<CommentBoutCollision::Collider2DComponent>(sprite2Entity);
 	sprite2Collider->useTransformAsSize = true;
 	sprite2Collider->sizeMultiplier = { 0.9f, 0.9f };	// 見た目の90%のコライダー
 	sprite2Collider->collisionLayer = CollisionType::Enemy;
@@ -170,15 +170,15 @@ void TestScene3::Setup() {
 
 	// コライダー設定（AABB Box）
 	// scale = (1,1,1) をそのままボックスサイズに使用
-	auto* cubeCollider = registry.AddComponent<TestApp::Collider3DComponent>(cubeEntity);
-	cubeCollider->shapeType = TestApp::ShapeType3D::Box;
+	auto* cubeCollider = registry.AddComponent<CommentBoutCollision::Collider3DComponent>(cubeEntity);
+	cubeCollider->shapeType = CommentBoutCollision::ShapeType3D::Box;
 	cubeCollider->useScaleAsBox = true;				// Transformのscaleをそのまま使用
 	cubeCollider->boxSizeMultiplier = { 1.f, 1.f, 1.f };
 	cubeCollider->collisionLayer = CollisionType::Block;
 	cubeCollider->collisionMask = CollisionMask::Block;
 
 	// スクリーン投影用（デバッグ描画のため）
-	auto* cubeProjected = registry.AddComponent<TestApp::ProjectedColliderComponent>(cubeEntity);
+	auto* cubeProjected = registry.AddComponent<CommentBoutCollision::ProjectedColliderComponent>(cubeEntity);
 	cubeProjected->source3DEntity = cubeEntity;
 
 
@@ -267,12 +267,12 @@ void TestScene3::NotSystemUpdate() {
 void TestScene3::DrawColliderDebug3D(No::Registry& registry)
 {
 	auto view = registry.View<
-		TestApp::Collider3DComponent,
-		TestApp::ProjectedColliderComponent>();
+		CommentBoutCollision::Collider3DComponent,
+		CommentBoutCollision::ProjectedColliderComponent>();
 
 	for (auto entity : view) {
-		auto* c3D = registry.GetComponent<TestApp::Collider3DComponent>(entity);
-		auto* projected = registry.GetComponent<TestApp::ProjectedColliderComponent>(entity);
+		auto* c3D = registry.GetComponent<CommentBoutCollision::Collider3DComponent>(entity);
+		auto* projected = registry.GetComponent<CommentBoutCollision::ProjectedColliderComponent>(entity);
 		if (!c3D || !projected) continue;
 
 		// 画面外（カメラ裏含む）はスキップ
@@ -282,7 +282,7 @@ void TestScene3::DrawColliderDebug3D(No::Registry& registry)
 		// Sphere: 非衝突=緑 / Box: 非衝突=黄  / 衝突中=赤（共通）
 		const bool colliding = c3D->isColliding;
 
-		if (c3D->shapeType == TestApp::ShapeType3D::Sphere) {
+		if (c3D->shapeType == CommentBoutCollision::ShapeType3D::Sphere) {
 			NoEngine::Primitive::DrawSphere(
 				c3D->worldPosition,
 				c3D->worldRadius,
@@ -290,7 +290,7 @@ void TestScene3::DrawColliderDebug3D(No::Registry& registry)
 				? NoEngine::Math::Color{ 1.f, 0.f, 0.f, 1.f }	// 衝突: 赤
 				: NoEngine::Math::Color{ 0.f, 1.f, 0.f, 1.f }	// 通常: 緑
 			);
-		} else if (c3D->shapeType == TestApp::ShapeType3D::Box) {
+		} else if (c3D->shapeType == CommentBoutCollision::ShapeType3D::Box) {
 			NoEngine::Primitive::DrawCube(
 				c3D->worldPosition,
 				c3D->worldBoxSize,
@@ -305,9 +305,9 @@ void TestScene3::DrawColliderDebug3D(No::Registry& registry)
 void TestScene3::DrawCollisionColor(No::Registry& registry)
 {
 	// 衝突結果を可視化（3Dモデルの色変更）
-	auto meshView = registry.View<TestApp::Collider3DComponent, No::MaterialComponent>();
+	auto meshView = registry.View<CommentBoutCollision::Collider3DComponent, No::MaterialComponent>();
 	for (auto entity : meshView) {
-		auto* collider3D = registry.GetComponent<TestApp::Collider3DComponent>(entity);
+		auto* collider3D = registry.GetComponent<CommentBoutCollision::Collider3DComponent>(entity);
 		auto* material = registry.GetComponent<No::MaterialComponent>(entity);
 		if (!collider3D || !material) continue;
 
@@ -321,9 +321,9 @@ void TestScene3::DrawCollisionColor(No::Registry& registry)
 
 	// 衝突結果を可視化（2Dスプライトの色変更）
 
-	auto spriteView = registry.View<TestApp::Collider2DComponent, No::SpriteComponent>();
+	auto spriteView = registry.View<CommentBoutCollision::Collider2DComponent, No::SpriteComponent>();
 	for (auto entity : spriteView) {
-		auto* collider = registry.GetComponent<TestApp::Collider2DComponent>(entity);
+		auto* collider = registry.GetComponent<CommentBoutCollision::Collider2DComponent>(entity);
 		auto* sprite = registry.GetComponent<No::SpriteComponent>(entity);
 
 		if (!collider || !sprite) continue;
@@ -355,23 +355,23 @@ void TestScene3::DrawCollisionImGui()
 
 	ImGui::Text("3D Objects (Projected)");
 
-	auto ball3DView = registry.View<TestApp::Collider3DComponent, TestApp::ProjectedColliderComponent, No::EditTag>();
+	auto ball3DView = registry.View<CommentBoutCollision::Collider3DComponent, CommentBoutCollision::ProjectedColliderComponent, No::EditTag>();
 	for (auto entity : ball3DView) {
-		auto* collider3D = registry.GetComponent<TestApp::Collider3DComponent>(entity);
-		auto* projected = registry.GetComponent<TestApp::ProjectedColliderComponent>(entity);
+		auto* collider3D = registry.GetComponent<CommentBoutCollision::Collider3DComponent>(entity);
+		auto* projected = registry.GetComponent<CommentBoutCollision::ProjectedColliderComponent>(entity);
 		auto* tag = registry.GetComponent<No::EditTag>(entity);
 
 		if (!collider3D || !projected || !tag) continue;
 
 		ImGui::Separator();
 		ImGui::Text("Name: %s", tag->name.c_str());
-		ImGui::Text("  Shape: %s", collider3D->shapeType == TestApp::ShapeType3D::Sphere ? "Sphere" : "Box");
+		ImGui::Text("  Shape: %s", collider3D->shapeType == CommentBoutCollision::ShapeType3D::Sphere ? "Sphere" : "Box");
 		ImGui::Text("  World Pos: (%.2f, %.2f, %.2f)",
 			collider3D->worldPosition.x,
 			collider3D->worldPosition.y,
 			collider3D->worldPosition.z);
 
-		if (collider3D->shapeType == TestApp::ShapeType3D::Sphere) {
+		if (collider3D->shapeType == CommentBoutCollision::ShapeType3D::Sphere) {
 			ImGui::Text("  World Radius: %.2f", collider3D->worldRadius);
 			ImGui::Text("  Screen Pos: (%.2f, %.2f)",
 				projected->screenPosition.x,
@@ -400,9 +400,9 @@ void TestScene3::DrawCollisionImGui()
 	ImGui::Text("");
 	ImGui::Text("2D Sprites");
 
-	auto sprite2DView = registry.View<TestApp::Collider2DComponent, No::EditTag>();
+	auto sprite2DView = registry.View<CommentBoutCollision::Collider2DComponent, No::EditTag>();
 	for (auto entity : sprite2DView) {
-		auto* collider2D = registry.GetComponent<TestApp::Collider2DComponent>(entity);
+		auto* collider2D = registry.GetComponent<CommentBoutCollision::Collider2DComponent>(entity);
 		auto* tag = registry.GetComponent<No::EditTag>(entity);
 
 		if (!collider2D || !tag) continue;

@@ -1,15 +1,16 @@
-#include "CollisionTestSystem.h"
-#include "application/TestApp/Component/Collider3DComponent.h"
-#include "application/TestApp/Component/Collider2DComponent.h"
-#include "application/TestApp/Component/ProjectedColliderComponent.h"
-#include "application/TestApp/Utility/CoordinateConverter.h"
-#include "application/TestApp/Utility/CollisionAlgorithms.h"
+#include "CollisionSystem.h"
+#include "application/CommentBout/Collision/Component/Collider3DComponent.h"
+#include "application/CommentBout/Collision/Component/Collider2DComponent.h"
+#include "application/CommentBout/Collision/Component/ProjectedColliderComponent.h"
+#include "application/CommentBout/Collision/Utility/CoordinateConverter.h"
+#include "application/CommentBout/Collision/Utility/CollisionAlgorithms.h"
 #include "engine/Runtime/GraphicsCore.h"
 #include <algorithm>
 
-namespace TestApp {
+namespace CommentBoutCollision {
 
-	void CollisionTestSystem::Update(No::Registry& registry, float deltaTime) {
+
+	void CollisionSystem::Update(No::Registry& registry, float deltaTime) {
 		// 未使用の警告を抑制
 		static_cast<void>(deltaTime);
 
@@ -35,7 +36,7 @@ namespace TestApp {
 	}
 
 
-	void CollisionTestSystem::UpdateCollider3D(No::Registry& registry) {
+	void CollisionSystem::UpdateCollider3D(No::Registry& registry) {
 
 		// 全ての3Dコライダーを取得
 		auto view = registry.View<Collider3DComponent, No::TransformComponent>();
@@ -82,7 +83,7 @@ namespace TestApp {
 	}
 
 
-	void CollisionTestSystem::UpdateCollider2D(No::Registry& registry) {
+	void CollisionSystem::UpdateCollider2D(No::Registry& registry) {
 
 		// 全ての2Dコライダーを取得
 		auto view = registry.View<Collider2DComponent, No::Transform2DComponent>();
@@ -110,7 +111,7 @@ namespace TestApp {
 
 
 
-	void CollisionTestSystem::ProjectColliders(No::Registry& registry) {
+	void CollisionSystem::ProjectColliders(No::Registry& registry) {
 		// カメラ情報を取得
 		No::CameraComponent* camera = GetActiveCamera(registry);
 		if (!camera) {
@@ -242,7 +243,7 @@ namespace TestApp {
 	}
 
 
-	void CollisionTestSystem::CheckProjectedVs2D(No::Registry& registry) {
+	void CollisionSystem::CheckProjectedVs2D(No::Registry& registry) {
 
 		// 投影された3Dコライダーを取得
 		auto projectedView = registry.View<ProjectedColliderComponent>();
@@ -310,7 +311,7 @@ namespace TestApp {
 	}
 
 
-	void CollisionTestSystem::Check3DVs3D(No::Registry& registry) {
+	void CollisionSystem::Check3DVs3D(No::Registry& registry) {
 
 		auto view = registry.View<Collider3DComponent>();
 
@@ -372,7 +373,7 @@ namespace TestApp {
 	}
 
 
-	void CollisionTestSystem::Check2DVs2D(No::Registry& registry) {
+	void CollisionSystem::Check2DVs2D(No::Registry& registry) {
 
 		// 2Dコライダー同士の衝突判定
 		// 今回は使用しないが、将来の拡張用に残しておく
@@ -413,7 +414,7 @@ namespace TestApp {
 	}
 
 
-	No::CameraComponent* CollisionTestSystem::GetActiveCamera(No::Registry& registry) {
+	No::CameraComponent* CollisionSystem::GetActiveCamera(No::Registry& registry) {
 
 		// ActiveCameraTagを持つカメラを検索
 		auto view = registry.View<No::CameraComponent, No::ActiveCameraTag>();
@@ -428,3 +429,5 @@ namespace TestApp {
 	}
 
 }
+
+

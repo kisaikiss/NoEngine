@@ -1,14 +1,13 @@
 #pragma once
 #include "engine/NoEngine.h"
 
-namespace TestApp {
-
+namespace CommentBoutCollision {
 	/// <summary>
 	/// 衝突判定テストシステム
 	/// 3Dオブジェクトと2Dスプライト間の衝突判定を管理する
 	/// コライダーの更新（座標・サイズの同期）、3D→2D投影処理、衝突判定の実行
 	/// </summary>
-	class CollisionTestSystem : public No::ISystem {
+	class CollisionSystem : public No::ISystem {
 	public:
 		/// <summary>
 		/// システムの更新処理

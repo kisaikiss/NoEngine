@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "HitBalloonSystem.h"
 #include "application/CommentBout/Component/HitBalloonComponent.h"
-#include "application/TestApp/Component/ProjectedColliderComponent.h"
+#include "application/CommentBout/Collision/Component/ProjectedColliderComponent.h"
 
 void HitBalloonSystem::Update(No::Registry& registry, float deltaTime)
 {
@@ -13,7 +13,7 @@ void HitBalloonSystem::Update(No::Registry& registry, float deltaTime)
 		auto* transform = registry.GetComponent<No::Transform2DComponent>(entity);
 		if (!balloon || !transform) continue;
 
-		auto* projected = registry.GetComponent<TestApp::ProjectedColliderComponent>(balloon->sourceEntity);
+		auto* projected = registry.GetComponent<CommentBoutCollision::ProjectedColliderComponent>(balloon->sourceEntity);
 		if (!projected || !projected->isVisible) {
 			transform->translate = { -9999.f, -9999.f };
 			continue;

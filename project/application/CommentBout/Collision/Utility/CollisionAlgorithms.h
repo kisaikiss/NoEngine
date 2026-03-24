@@ -2,7 +2,7 @@
 #include "engine/NoEngine.h"
 #include <vector>
 
-namespace TestApp {
+namespace CommentBoutCollision {
 
 	/// <summary>
 	/// 衝突判定アルゴリズム集

@@ -1,7 +1,7 @@
 #pragma once
 #include <cstdint>
 
-namespace TestApp {
+namespace CommentBoutCollision {
 
 	/// <summary>
 	/// CollisionType

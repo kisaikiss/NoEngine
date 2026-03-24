@@ -2,7 +2,8 @@
 #include "engine/NoEngine.h"
 #include "engine/Window/WindowSize.h"
 
-namespace TestApp {
+namespace CommentBoutCollision {
+
 
 	/// <summary>
 	/// 座標変換ユーティリティクラス

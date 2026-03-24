@@ -1,9 +1,9 @@
 #pragma once
 #include "engine/NoEngine.h"
-#include "application/TestApp/Utility/CollisionMask.h"
+#include "application/CommentBout/Collision/Utility/CollisionMask.h"
 
-namespace TestApp {
-
+namespace CommentBoutCollision {
+	
 	/// <summary>
 	/// 2Dスプライト用のAABBコライダーコンポーネント
 	/// Transform2DComponentと連携してスクリーン座標での衝突判定を行う

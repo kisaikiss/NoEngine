@@ -161,6 +161,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="application\CommentBout\Collision\Utility\CoordinateConverter.cpp" />
     <ClCompile Include="application\CommentBout\Component\PlayerAttackComponent.cpp" />
     <ClCompile Include="application\CommentBout\Spawner\TitleMenuSpawner.cpp" />
     <ClCompile Include="application\CommentBout\System\EnemySystem.cpp" />
@@ -170,10 +171,20 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\CommentBout\System\RailCameraSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\TitleSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\TitleViewSystem.cpp" />
+    <ClCompile Include="application\TestApp\Scene\TestScene.cpp" />
+    <ClCompile Include="application\TestApp\Scene\TestScene2.cpp" />
+    <ClCompile Include="application\TestApp\Scene\TestScene3.cpp" />
+    <ClCompile Include="application\TestApp\System\TestSystem.cpp" />
+    <ClCompile Include="application\TestApp\TestApp.cpp" />
     <ClCompile Include="application\\CommentBout\\System\\OptionViewSystem.cpp" />
     <ClCompile Include="application\\CommentBout\\System\\PauseSystem.cpp" />
     <ClCompile Include="application\\CommentBout\\System\\PauseViewSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\PlayerControlSystem.cpp" />
+    <ClCompile Include="application\CommentBout\System\PlayerHitboxSyncSystem.cpp" />
+    <ClCompile Include="application\CommentBout\Collision\Utility\CollisionAlgorithms.cpp" />
+    <ClCompile Include="application\CommentBout\Collision\System\CollisionSystem.cpp">
+      <ObjectFileName>$(IntDir)CommentBout_CollisionSystem.obj</ObjectFileName>
+    </ClCompile>
     <ClCompile Include="application\TD3\Component\DeathEffectComponent.cpp" />
     <ClCompile Include="application\TD3\Editor\MapEditor.cpp" />
     <ClCompile Include="application\TD3\MapData\MapLoader.cpp" />
@@ -192,11 +203,6 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\TD3\System\PlayerWeaponSystem.cpp" />
     <ClCompile Include="application\TD3\System\ShockwaveSystem.cpp" />
     <ClCompile Include="application\TD3\Utility\CameraBounds.cpp" />
-    <ClCompile Include="application\TestApp\Scene\TestScene2.cpp" />
-    <ClCompile Include="application\TestApp\System\CollisionTestSystem.cpp" />
-    <ClCompile Include="application\TestApp\TestApp.cpp" />
-    <ClCompile Include="application\TestApp\Utility\CollisionAlgorithms.cpp" />
-    <ClCompile Include="application\TestApp\Utility\CoordinateConverter.cpp" />
     <ClCompile Include="application\CommentBout\CommentBout.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\CameraComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\CameraSystem.cpp" />
@@ -210,8 +216,6 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="engine\Functions\ECS\System\DebugCameraSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\EditSystem.cpp" />
     <ClCompile Include="engine\Functions\Renderer\Primitive.cpp" />
-    <ClCompile Include="application\TestApp\Scene\TestScene.cpp" />
-    <ClCompile Include="application\TestApp\System\TestSystem.cpp" />
     <ClCompile Include="engine\Assets\ModelLoader.cpp" />
     <ClCompile Include="engine\Assets\Texture\TexUtil.cpp" />
     <ClCompile Include="engine\Functions\ECS\Registry.cpp" />
@@ -337,10 +341,10 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Development|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="engine\Assets\Texture\Texture.cpp" />
-    <ClCompile Include="application\TestApp\Scene\TestScene3.cpp" />
     <ClCompile Include="application\CommentBout\Scene\TitleScene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="application\CommentBout\Collision\Utility\CoordinateConverter.h" />
     <ClInclude Include="application\CommentBout\Component\AttackDamageComponent.h" />
     <ClInclude Include="application\CommentBout\Component\EnemyComponent.h" />
     <ClInclude Include="application\CommentBout\Component\GameResourceComponent.h" />
@@ -361,6 +365,11 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\CommentBout\System\RailCameraSystem.h" />
     <ClInclude Include="application\CommentBout\System\TitleSystem.h" />
     <ClInclude Include="application\CommentBout\System\TitleViewSystem.h" />
+    <ClInclude Include="application\TestApp\Scene\TestScene.h" />
+    <ClInclude Include="application\TestApp\Scene\TestScene2.h" />
+    <ClInclude Include="application\TestApp\Scene\TestScene3.h" />
+    <ClInclude Include="application\TestApp\System\TestSystem.h" />
+    <ClInclude Include="application\TestApp\TestApp.h" />
     <ClInclude Include="application\\CommentBout\\Component\\PauseMenuConfigComponent.h" />
     <ClInclude Include="application\\CommentBout\\Component\\PauseMenuViewComponent.h" />
     <ClInclude Include="application\CommentBout\Component\PauseStateComponent.h" />
@@ -375,6 +384,13 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\\CommentBout\\System\\PauseSystem.h" />
     <ClInclude Include="application\\CommentBout\\System\\PauseViewSystem.h" />
     <ClInclude Include="application\CommentBout\System\PlayerControlSystem.h" />
+    <ClInclude Include="application\CommentBout\System\PlayerHitboxSyncSystem.h" />
+    <ClInclude Include="application\CommentBout\Collision\Utility\CollisionMask.h" />
+    <ClInclude Include="application\CommentBout\Collision\Utility\CollisionAlgorithms.h" />
+    <ClInclude Include="application\CommentBout\Collision\Component\ProjectedColliderComponent.h" />
+    <ClInclude Include="application\CommentBout\Collision\Component\Collider3DComponent.h" />
+    <ClInclude Include="application\CommentBout\Collision\Component\Collider2DComponent.h" />
+    <ClInclude Include="application\CommentBout\Collision\System\CollisionSystem.h" />
     <ClInclude Include="application\CommentBout\Utility\CBCollisionMask.h" />
     <ClInclude Include="application\CommentBout\Utility\CBGameAudio.h" />
     <ClInclude Include="application\CommentBout\Utility\CBSpriteLayer.h" />
@@ -412,15 +428,6 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\TD3\System\ShockwaveSystem.h" />
     <ClInclude Include="application\TD3\Utility\CameraBounds.h" />
     <ClInclude Include="application\TD3\Utility\GridUtils.h" />
-    <ClInclude Include="application\TestApp\Component\Collider2DComponent.h" />
-    <ClInclude Include="application\TestApp\Component\Collider3DComponent.h" />
-    <ClInclude Include="application\TestApp\Component\ProjectedColliderComponent.h" />
-    <ClInclude Include="application\TestApp\Scene\TestScene2.h" />
-    <ClInclude Include="application\TestApp\System\CollisionTestSystem.h" />
-    <ClInclude Include="application\TestApp\TestApp.h" />
-    <ClInclude Include="application\TestApp\Utility\CollisionAlgorithms.h" />
-    <ClInclude Include="application\TestApp\Utility\CollisionMask.h" />
-    <ClInclude Include="application\TestApp\Utility\CoordinateConverter.h" />
     <ClInclude Include="application\CommentBout\CommentBout.h" />
     <ClInclude Include="engine\Functions\ECS\System\CameraSystem.h" />
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -437,8 +444,6 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="engine\Functions\ECS\System\DebugCameraSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\EditSystem.h" />
     <ClInclude Include="engine\Functions\Renderer\Primitive.h" />
-    <ClInclude Include="application\TestApp\Scene\TestScene.h" />
-    <ClInclude Include="application\TestApp\System\TestSystem.h" />
     <ClInclude Include="engine\Assets\Animation.h" />
     <ClInclude Include="engine\Assets\ModelLoader.h" />
     <ClInclude Include="engine\Assets\Skeleton.h" />
@@ -596,7 +601,6 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="engine\Assets\Texture\Texture.h" />
-    <ClInclude Include="application\TestApp\Scene\TestScene3.h" />
     <ClInclude Include="application\CommentBout\Scene\TitleScene.h" />
   </ItemGroup>
   <ItemGroup>
