@@ -366,7 +366,7 @@ void SpawnEnemies(No::Registry& registry, const RailEnemySpawnEventParams& param
 		auto* material = registry.AddComponent<No::MaterialComponent>(enemyEntity);
 		No::ModelLoader::LoadModel("commentbout_rail_enemy_cube", "resources/game/td_3105/Model/cube/cube.obj", mesh);
 		material->materials = No::ModelLoader::GetMaterial("commentbout_rail_enemy_cube");
-		material->color = { 0.9f, 0.2f, 0.2f, 1.0f };
+		material->color = { 1.0f, 1.0f, 1.0f, 1.0f };
 		material->psoName = L"Renderer : Default PSO";
 		material->psoId = NoEngine::Render::GetPSOID(material->psoName);
 		material->rootSigId = NoEngine::Render::GetRootSignatureID(material->psoName);

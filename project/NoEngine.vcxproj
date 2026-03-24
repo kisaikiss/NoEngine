@@ -350,6 +350,8 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\CommentBout\Component\OptionMenuConfigComponent.h" />
     <ClInclude Include="application\CommentBout\Component\OptionMenuViewComponent.h" />
     <ClInclude Include="application\CommentBout\Component\OptionStateComponent.h" />
+    <ClInclude Include="application\CommentBout\Component\PlayerHealthComponent.h" />
+    <ClInclude Include="application\CommentBout\Component\PlayerHitboxComponent.h" />
     <ClInclude Include="application\CommentBout\Component\RailCameraComponent.h" />
     <ClInclude Include="application\CommentBout\Component\TitleMenuConfigComponent.h" />
     <ClInclude Include="application\CommentBout\Component\TitleMenuStateComponent.h" />

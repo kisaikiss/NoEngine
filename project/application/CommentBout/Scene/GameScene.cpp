@@ -4,6 +4,8 @@
 #include "application/CommentBout/Data/RailDataIO.h"
 #include "application/CommentBout/Component/PlayerComponent.h"
 #include "application/CommentBout/Component/PlayerAttackComponent.h"
+#include "application/CommentBout/Component/PlayerHealthComponent.h"
+#include "application/CommentBout/Component/PlayerHitboxComponent.h"
 #include "application/CommentBout/Component/PauseStateComponent.h"
 #include "application/CommentBout/Component/PauseMenuConfigComponent.h"
 #include "application/CommentBout/Component/PauseMenuViewComponent.h"
@@ -180,6 +182,15 @@ void GameScene::Setup() {
 	playerAttack->attackSize = { 140.0f, 140.0f };
 	playerAttack->visibleTime = 0.35f;
 	playerAttack->attackLayer = 30;
+	playerAttack->attackPower = 10;
+	auto* playerHealth = registry.AddComponent<PlayerHealthComponent>(playerEntity);
+	playerHealth->hp = 10;
+	playerHealth->maxHp = 10;
+	playerHealth->invincibleDuration = 0.35f;
+	playerHealth->invincibleTime = 0.0f;
+	playerHealth->isDead = false;
+	playerHealth->deathHandled = false;
+	playerHealth->lastDamageTaken = 0;
 	auto* playerTransform = registry.AddComponent<No::Transform2DComponent>(playerEntity);
 	playerTransform->translate = { 640.f, 600.f };
 	playerTransform->scale = { 128.f, 200.f };
@@ -187,11 +198,24 @@ void GameScene::Setup() {
 	playerSprite->layer = CommentBout::ToLayer(CommentBout::SpriteLayer::Gameplay);
 	playerSprite->color = { 1.f, 1.f, 1.f, 1.f };
 	playerSprite->textureHandle = whiteTexture;
-	auto* playerCollider = registry.AddComponent<TestApp::Collider2DComponent>(playerEntity);
-	playerCollider->useTransformAsSize = true;
-	playerCollider->sizeMultiplier = { 1.f, 1.f };
-	playerCollider->collisionLayer = CommentBout::CollisionLayer::CBPlayer;
-	playerCollider->collisionMask = CommentBout::CollisionMask::CBPlayer;
+
+	auto playerHitboxEntity = registry.GenerateEntity();
+	registry.AddComponent<CBPlayerHitboxTag>(playerHitboxEntity);
+	registry.AddComponent<No::EditTag>(playerHitboxEntity)->name = "PlayerHitbox";
+	auto* playerHitboxComp = registry.AddComponent<PlayerHitboxComponent>(playerHitboxEntity);
+	playerHitboxComp->playerEntity = playerEntity;
+	playerHitboxComp->worldOffset = { 0.0f, 0.0f, 0.8f };
+	playerHitboxComp->worldSize = { 0.8f, 1.2f, 0.8f };
+	playerHitboxComp->drawDebug = true;
+	auto* playerHitboxTransform = registry.AddComponent<No::TransformComponent>(playerHitboxEntity);
+	playerHitboxTransform->translate = { 0.0f, 1.0f, 0.8f };
+	playerHitboxTransform->scale = playerHitboxComp->worldSize;
+	auto* playerHitboxCollider = registry.AddComponent<TestApp::Collider3DComponent>(playerHitboxEntity);
+	playerHitboxCollider->shapeType = TestApp::ShapeType3D::Box;
+	playerHitboxCollider->useScaleAsBox = true;
+	playerHitboxCollider->boxSizeMultiplier = { 1.0f, 1.0f, 1.0f };
+	playerHitboxCollider->collisionLayer = CommentBout::CollisionLayer::CBPlayer;
+	playerHitboxCollider->collisionMask = CommentBout::CollisionMask::CBPlayer;
 
 	const std::vector<std::pair<No::Vector3, No::Vector3>> grassSpawnParams = {
 		{{0.f, 0.f, 6.f},   {2.f, 1.5f, 2.f}},

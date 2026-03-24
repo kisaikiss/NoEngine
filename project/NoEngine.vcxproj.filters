@@ -395,6 +395,8 @@
     <ClInclude Include="application\CommentBout\Component\EnemyComponent.h" />
     <ClInclude Include="application\CommentBout\System\EnemySystem.h" />
     <ClInclude Include="application\CommentBout\Component\AttackDamageComponent.h" />
+    <ClInclude Include="application\CommentBout\Component\PlayerHealthComponent.h" />
+    <ClInclude Include="application\CommentBout\Component\PlayerHitboxComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

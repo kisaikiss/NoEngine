@@ -8,4 +8,8 @@ struct EnemyComponent {
 	No::Vector3 moveDirection = { 0.0f, 0.0f, -1.0f };
 	int groupId = 0;
 	bool wasCollidingWithAttack = false;
+	bool wasCollidingWithPlayer = false;
+	float damageFlashTimer = 0.0f;
+	float damageFlashDuration = 0.12f;
+	int lastDamageTaken = 0;
 };

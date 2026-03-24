@@ -6,11 +6,19 @@
 #include "application/CommentBout/Component/LifetimeComponent.h"
 #include "application/CommentBout/Component/GameResourceComponent.h"
 #include "application/CommentBout/Component/AttackDamageComponent.h"
+#include "application/CommentBout/Component/PlayerHealthComponent.h"
+#include "application/CommentBout/Component/PlayerHitboxComponent.h"
 #include "application/CommentBout/Utility/CBCollisionMask.h"
 #include "application/CommentBout/GameTag.h"
 #include "application/TestApp/Component/Collider2DComponent.h"
+#include "application/TestApp/Component/Collider3DComponent.h"
+#include "engine/Functions/Renderer/Primitive.h"
 #include "engine/Runtime/GraphicsCore.h"
 #include <algorithm>
+
+namespace No {
+using ::NoEngine::Primitive;
+}
 
 void PlayerControlSystem::Update(No::Registry& registry, float deltaTime)
 {
@@ -36,12 +44,33 @@ void PlayerControlSystem::Update(No::Registry& registry, float deltaTime)
 		}
 	}
 
-	auto playerView = registry.View<CBPlayerTag, PlayerComponent, PlayerAttackComponent, No::Transform2DComponent>();
+	auto playerView = registry.View<CBPlayerTag, PlayerComponent, PlayerAttackComponent, PlayerHealthComponent, No::Transform2DComponent>();
 	for (auto entity : playerView) {
 		auto* player = registry.GetComponent<PlayerComponent>(entity);
 		auto* attack = registry.GetComponent<PlayerAttackComponent>(entity);
+		auto* health = registry.GetComponent<PlayerHealthComponent>(entity);
 		auto* transform2D = registry.GetComponent<No::Transform2DComponent>(entity);
-		if (!player || !attack || !transform2D) {
+		if (!player || !attack || !health || !transform2D) {
+			continue;
+		}
+
+		if (health->invincibleTime > 0.0f) {
+			health->invincibleTime -= deltaTime;
+			if (health->invincibleTime < 0.0f) {
+				health->invincibleTime = 0.0f;
+			}
+		}
+
+		if (health->hp <= 0 && !health->deathHandled) {
+			health->isDead = true;
+			health->deathHandled = true;
+			No::SceneChangeEvent event;
+			event.nextScene = "GameScene";
+			registry.EmitEvent(event);
+			continue;
+		}
+
+		if (health->isDead) {
 			continue;
 		}
 
@@ -54,16 +83,18 @@ void PlayerControlSystem::Update(No::Registry& registry, float deltaTime)
 		transform2D->translate.x += input.x * player->moveSpeed * deltaTime;
 		transform2D->translate.y += input.y * player->moveSpeed * deltaTime;
 
+		float windowWidth = 1280.0f;
+		float windowHeight = 720.0f;
 		auto* mainWindow = NoEngine::GraphicsCore::gWindowManager.GetMainWindow();
 		if (mainWindow) {
 			const auto& windowSize = mainWindow->GetWindowSize();
-			const float width = static_cast<float>(windowSize.clientWidth);
-			const float height = static_cast<float>(windowSize.clientHeight);
+			windowWidth = static_cast<float>(windowSize.clientWidth);
+			windowHeight = static_cast<float>(windowSize.clientHeight);
 			const float halfWidth = transform2D->scale.x * 0.5f;
 			const float halfHeight = transform2D->scale.y * 0.5f;
 
-			transform2D->translate.x = std::max(halfWidth, std::min(width - halfWidth, transform2D->translate.x));
-			transform2D->translate.y = std::max(halfHeight, std::min(height - halfHeight, transform2D->translate.y));
+			transform2D->translate.x = std::max(halfWidth, std::min(windowWidth - halfWidth, transform2D->translate.x));
+			transform2D->translate.y = std::max(halfHeight, std::min(windowHeight - halfHeight, transform2D->translate.y));
 		}
 
 		if (No::Keyboard::IsTrigger(VK_SPACE) && gameResource) {
@@ -93,6 +124,42 @@ void PlayerControlSystem::Update(No::Registry& registry, float deltaTime)
 			auto* lifetime = registry.AddComponent<LifetimeComponent>(attackEntity);
 			lifetime->remainingTime = attack->visibleTime;
 			registry.AddComponent<CBAttackEffectTag>(attackEntity);
+		}
+
+		auto* hitboxWindow = NoEngine::GraphicsCore::gWindowManager.GetMainWindow();
+		if (hitboxWindow) {
+			const auto& windowSize = hitboxWindow->GetWindowSize();
+			windowWidth = static_cast<float>(windowSize.clientWidth);
+			windowHeight = static_cast<float>(windowSize.clientHeight);
+
+			auto hitboxView = registry.View<CBPlayerHitboxTag, PlayerHitboxComponent, No::TransformComponent, TestApp::Collider3DComponent>();
+			for (auto hitboxEntity : hitboxView) {
+				auto* hitbox = registry.GetComponent<PlayerHitboxComponent>(hitboxEntity);
+				auto* hitboxTransform = registry.GetComponent<No::TransformComponent>(hitboxEntity);
+				auto* hitboxCollider = registry.GetComponent<TestApp::Collider3DComponent>(hitboxEntity);
+				if (!hitbox || !hitboxTransform || !hitboxCollider) {
+					continue;
+				}
+				if (hitbox->playerEntity != entity) {
+					continue;
+				}
+
+				const float worldX = (transform2D->translate.x - (windowWidth * 0.5f)) / 120.0f;
+				const float worldY = ((windowHeight * 0.5f) - transform2D->translate.y) / 120.0f;
+				hitboxTransform->translate = {
+					worldX + hitbox->worldOffset.x,
+					1.0f + worldY + hitbox->worldOffset.y,
+					hitbox->worldOffset.z
+				};
+				hitboxTransform->scale = hitbox->worldSize;
+
+				if (hitbox->drawDebug) {
+					const NoEngine::Math::Color color = hitboxCollider->isColliding
+						? NoEngine::Math::Color(1.0f, 0.2f, 0.2f, 1.0f)
+						: NoEngine::Math::Color(0.2f, 0.9f, 1.0f, 1.0f);
+					No::Primitive::DrawCube(hitboxTransform->translate, hitboxTransform->scale, color);
+				}
+			}
 		}
 	}
 }
