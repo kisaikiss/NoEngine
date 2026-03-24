@@ -162,12 +162,12 @@
     <ClCompile Include="application\CommentBout\System\TitleSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\TitleViewSystem.cpp" />
     <ClCompile Include="application\CommentBout\Spawner\TitleMenuSpawner.cpp" />
-    <ClCompile Include="application\CommentBout\System\RailCameraSystem.cpp" />
     <ClCompile Include="application\CommentBout\Spawner\PauseMenuSpawner.cpp" />
     <ClCompile Include="application\CommentBout\Editor\GameEventEditor.cpp" />
     <ClCompile Include="application\CommentBout\Editor\RailCameraEditor.cpp" />
     <ClCompile Include="application\CommentBout\Data\RailDataIO.cpp" />
     <ClCompile Include="application\CommentBout\System\EnemySystem.cpp" />
+    <ClCompile Include="application\CommentBout\System\RailCameraSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="application\TestApp\Scene\TestScene2.h" />

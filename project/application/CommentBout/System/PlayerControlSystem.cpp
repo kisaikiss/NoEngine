@@ -12,12 +12,39 @@
 #include "application/CommentBout/GameTag.h"
 #include "application/TestApp/Component/Collider2DComponent.h"
 #include "application/TestApp/Component/Collider3DComponent.h"
+#include "engine/Functions/ECS/Component/CameraComponent.h"
 #include "engine/Functions/Renderer/Primitive.h"
 #include "engine/Runtime/GraphicsCore.h"
 #include <algorithm>
+#include <cmath>
 
 namespace No {
 using ::NoEngine::Primitive;
+}
+
+namespace {
+bool ScreenToWorldOnPlane(const No::Matrix4x4& viewProjection, float screenX, float screenY, float viewportWidth, float viewportHeight, float planeZ, No::Vector3& outWorld) {
+	if (viewportWidth <= 0.0f || viewportHeight <= 0.0f) {
+		return false;
+	}
+
+	const float ndcX = (screenX / viewportWidth) * 2.0f - 1.0f;
+	const float ndcY = 1.0f - (screenY / viewportHeight) * 2.0f;
+
+	No::Matrix4x4 inv = viewProjection;
+	inv.Inverse();
+
+	const No::Vector3 nearPoint = inv.Transform({ ndcX, ndcY, 0.0f });
+	const No::Vector3 farPoint = inv.Transform({ ndcX, ndcY, 1.0f });
+	No::Vector3 dir = farPoint - nearPoint;
+	if (std::abs(dir.z) <= 0.000001f) {
+		return false;
+	}
+
+	const float t = (planeZ - nearPoint.z) / dir.z;
+	outWorld = nearPoint + dir * t;
+	return true;
+}
 }
 
 void PlayerControlSystem::Update(No::Registry& registry, float deltaTime)
@@ -144,19 +171,68 @@ void PlayerControlSystem::Update(No::Registry& registry, float deltaTime)
 					continue;
 				}
 
-				const float worldX = (transform2D->translate.x - (windowWidth * 0.5f)) / 120.0f;
-				const float worldY = ((windowHeight * 0.5f) - transform2D->translate.y) / 120.0f;
-				hitboxTransform->translate = {
-					worldX + hitbox->worldOffset.x,
-					1.0f + worldY + hitbox->worldOffset.y,
-					hitbox->worldOffset.z
-				};
-				hitboxTransform->scale = hitbox->worldSize;
+				bool fitted = false;
+				if (hitbox->fitToSprite) {
+					No::CameraComponent* camera = nullptr;
+					auto activeCameraView = registry.View<No::CameraComponent, No::ActiveCameraTag>();
+					auto cameraIt = activeCameraView.begin();
+					if (cameraIt != activeCameraView.end()) {
+						camera = registry.GetComponent<No::CameraComponent>(*cameraIt);
+					}
+					if (camera) {
+						const float halfW = transform2D->scale.x * 0.5f;
+						const float halfH = transform2D->scale.y * 0.5f;
+						const float left = transform2D->translate.x - halfW;
+						const float right = transform2D->translate.x + halfW;
+						const float top = transform2D->translate.y - halfH;
+						const float bottom = transform2D->translate.y + halfH;
+
+						No::Vector3 p0{}, p1{}, p2{}, p3{};
+						const bool ok0 = ScreenToWorldOnPlane(camera->forGPU.viewProjection, left, top, windowWidth, windowHeight, hitbox->spritePlaneZ, p0);
+						const bool ok1 = ScreenToWorldOnPlane(camera->forGPU.viewProjection, right, top, windowWidth, windowHeight, hitbox->spritePlaneZ, p1);
+						const bool ok2 = ScreenToWorldOnPlane(camera->forGPU.viewProjection, right, bottom, windowWidth, windowHeight, hitbox->spritePlaneZ, p2);
+						const bool ok3 = ScreenToWorldOnPlane(camera->forGPU.viewProjection, left, bottom, windowWidth, windowHeight, hitbox->spritePlaneZ, p3);
+
+						if (ok0 && ok1 && ok2 && ok3) {
+							const float minX = std::min(std::min(p0.x, p1.x), std::min(p2.x, p3.x));
+							const float maxX = std::max(std::max(p0.x, p1.x), std::max(p2.x, p3.x));
+							const float minY = std::min(std::min(p0.y, p1.y), std::min(p2.y, p3.y));
+							const float maxY = std::max(std::max(p0.y, p1.y), std::max(p2.y, p3.y));
+
+							hitboxTransform->translate = {
+								((minX + maxX) * 0.5f) + hitbox->worldOffset.x,
+								((minY + maxY) * 0.5f) + hitbox->worldOffset.y,
+								hitbox->spritePlaneZ + hitbox->worldOffset.z
+							};
+							hitboxTransform->scale = {
+								std::max(0.01f, (maxX - minX) * hitbox->sizeMultiplier.x),
+								std::max(0.01f, (maxY - minY) * hitbox->sizeMultiplier.y),
+								std::max(0.01f, hitbox->worldSize.z * hitbox->sizeMultiplier.z)
+							};
+							fitted = true;
+						}
+					}
+				}
+
+				if (!fitted) {
+					const float worldX = (transform2D->translate.x - (windowWidth * 0.5f)) / 120.0f;
+					const float worldY = ((windowHeight * 0.5f) - transform2D->translate.y) / 120.0f;
+					hitboxTransform->translate = {
+						worldX + hitbox->worldOffset.x,
+						1.0f + worldY + hitbox->worldOffset.y,
+						hitbox->spritePlaneZ + hitbox->worldOffset.z
+					};
+					hitboxTransform->scale = {
+						hitbox->worldSize.x * hitbox->sizeMultiplier.x,
+						hitbox->worldSize.y * hitbox->sizeMultiplier.y,
+						hitbox->worldSize.z * hitbox->sizeMultiplier.z
+					};
+				}
 
 				if (hitbox->drawDebug) {
 					const NoEngine::Math::Color color = hitboxCollider->isColliding
 						? NoEngine::Math::Color(1.0f, 0.2f, 0.2f, 1.0f)
-						: NoEngine::Math::Color(0.2f, 0.9f, 1.0f, 1.0f);
+						: NoEngine::Math::Color(0.9f, 0.9f, 1.0f, 1.0f);
 					No::Primitive::DrawCube(hitboxTransform->translate, hitboxTransform->scale, color);
 				}
 			}

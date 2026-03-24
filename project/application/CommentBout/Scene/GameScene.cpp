@@ -196,7 +196,7 @@ void GameScene::Setup() {
 	playerTransform->scale = { 128.f, 200.f };
 	auto* playerSprite = registry.AddComponent<No::SpriteComponent>(playerEntity);
 	playerSprite->layer = CommentBout::ToLayer(CommentBout::SpriteLayer::Gameplay);
-	playerSprite->color = { 1.f, 1.f, 1.f, 1.f };
+	playerSprite->color = { 1.f, 1.f, 1.f, 0.5f };
 	playerSprite->textureHandle = whiteTexture;
 
 	auto playerHitboxEntity = registry.GenerateEntity();
@@ -204,11 +204,14 @@ void GameScene::Setup() {
 	registry.AddComponent<No::EditTag>(playerHitboxEntity)->name = "PlayerHitbox";
 	auto* playerHitboxComp = registry.AddComponent<PlayerHitboxComponent>(playerHitboxEntity);
 	playerHitboxComp->playerEntity = playerEntity;
-	playerHitboxComp->worldOffset = { 0.0f, 0.0f, 0.8f };
+	playerHitboxComp->fitToSprite = true;
+	playerHitboxComp->spritePlaneZ = 0.8f;
+	playerHitboxComp->worldOffset = { 0.0f, 0.0f, 0.0f };
 	playerHitboxComp->worldSize = { 0.8f, 1.2f, 0.8f };
+	playerHitboxComp->sizeMultiplier = { 1.0f, 1.0f, 1.0f };
 	playerHitboxComp->drawDebug = true;
 	auto* playerHitboxTransform = registry.AddComponent<No::TransformComponent>(playerHitboxEntity);
-	playerHitboxTransform->translate = { 0.0f, 1.0f, 0.8f };
+	playerHitboxTransform->translate = { 0.0f, 1.0f, playerHitboxComp->spritePlaneZ };
 	playerHitboxTransform->scale = playerHitboxComp->worldSize;
 	auto* playerHitboxCollider = registry.AddComponent<TestApp::Collider3DComponent>(playerHitboxEntity);
 	playerHitboxCollider->shapeType = TestApp::ShapeType3D::Box;
