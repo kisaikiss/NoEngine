@@ -30,8 +30,8 @@ void TestScene::Setup() {
 	m->materials = No::ModelLoader::GetMaterial("magiclash");
 	m->drawOutline = true;
 	m->enableSkinning = true;
-	registry.AddComponent<No::StartPositionComponent>(entity);
-	registry.AddComponent<No::StartPosition2DComponent>(entity);
+	registry.AddComponent<No::StartTransformComponent>(entity);
+	registry.AddComponent<No::StartTransform2DComponent>(entity);
 	
 	m->psoName = L"Renderer : DefaultSkinned PSO";
 	m->psoId = NoEngine::Render::GetPSOID(m->psoName);

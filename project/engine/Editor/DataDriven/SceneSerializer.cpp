@@ -3,7 +3,7 @@
 #include "engine/Functions/Scene/SceneNameComponent.h"
 #include "engine/Functions/ECS/Component/TransformComponent.h"
 #include "engine/Functions/ECS/Component/Transform2DComponent.h"
-#include "engine/Functions/ECS/Component/StartPositionComponent.h"
+#include "engine/Functions/ECS/Component/StartTransformComponent.h"
 #include "../EditUtils.h"
 
 namespace NoEngine {
@@ -84,16 +84,20 @@ void LoadScene(ECS::Registry& registry, const json& scene) {
 
 		// Componentを復元
 		LoadEntityFromJson(registry, e, entityJson);
-		auto* startPosition = registry.GetComponent<Component::StartPositionComponent>(e);
+		auto* startTransform = registry.GetComponent<Component::StartTransformComponent>(e);
 		auto* transform = registry.GetComponent<Component::TransformComponent>(e);
-		if (startPosition && transform) {
-			transform->translate = startPosition->startPosition;
+		if (startTransform && transform) {
+			transform->translate = startTransform->translate;
+			transform->rotation = startTransform->rotation;
+			transform->scale = startTransform->scale;
 		}
 
-		auto* startPosition2d = registry.GetComponent<Component::StartPosition2DComponent>(e);
+		auto* startTransform2d = registry.GetComponent<Component::StartTransform2DComponent>(e);
 		auto* transform2d = registry.GetComponent<Component::Transform2DComponent>(e);
-		if (startPosition2d && transform2d) {
-			transform2d->translate = startPosition2d->startPosition;
+		if (startTransform2d && transform2d) {
+			transform2d->translate = startTransform2d->translate;
+			transform2d->rotation = startTransform2d->rotation;
+			transform2d->scale = startTransform2d->scale;
 		}
 	}
 
