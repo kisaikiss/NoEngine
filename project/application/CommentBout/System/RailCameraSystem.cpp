@@ -256,7 +256,7 @@ void DrawControlPointDebug(const RailCameraComponent& rail) {
 	for (size_t i = 0; i < rail.controlPoints.size(); ++i) {
 		const bool isSelected = (static_cast<int>(i) == rail.selectedControlPointIndex);
 		const NoEngine::Math::Color color = isSelected
-			? NoEngine::Math::Color(1.0f, 1.0f, 0.0f, 1.0f)
+			? NoEngine::Math::Color(1.0f, 0.0f, 0.0f, 1.0f)
 			: NoEngine::Math::Color(0.2f, 1.0f, 0.2f, 1.0f);
 		No::Primitive::DrawSphere(rail.controlPoints[i], radius, color, 10, 10);
 	}

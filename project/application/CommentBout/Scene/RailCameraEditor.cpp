@@ -143,15 +143,60 @@ void RailCameraEditor::DrawRailEditorImGui(No::Registry* registry, No::Entity ra
 		}
 	}
 
+	const int selectedIndex = rail->selectedControlPointIndex;
+	const bool canAddAfterSelected =
+		(selectedIndex >= 0) &&
+		(selectedIndex < static_cast<int>(rail->controlPoints.size()));
+	if (!canAddAfterSelected) {
+		ImGui::BeginDisabled();
+	}
+	if (ImGui::Button("選択点の次に追加")) {
+		const int insertIndex = selectedIndex + 1;
+		const No::Vector3& selectedPoint = rail->controlPoints[static_cast<size_t>(selectedIndex)];
+
+		No::Vector3 direction = { 0.0f, 0.0f, 1.0f };
+		if ((selectedIndex + 1) < static_cast<int>(rail->controlPoints.size())) {
+			direction = rail->controlPoints[static_cast<size_t>(selectedIndex + 1)] - selectedPoint;
+		} else if (selectedIndex > 0) {
+			direction = selectedPoint - rail->controlPoints[static_cast<size_t>(selectedIndex - 1)];
+		}
+
+		if (direction.LengthSquared() <= 0.000001f) {
+			direction = { 0.0f, 0.0f, 1.0f };
+		} else {
+			direction = direction.Normalize();
+		}
+
+		const float addDistance = 0.1f;
+		const No::Vector3 newPoint = selectedPoint + direction * addDistance;
+		rail->controlPoints.insert(rail->controlPoints.begin() + insertIndex, newPoint);
+		rail->selectedControlPointIndex = insertIndex;
+		rail->isLoaded = false;
+		rail->needsRebuildArcLength = true;
+	}
+	if (!canAddAfterSelected) {
+		ImGui::EndDisabled();
+	}
+
 	if (!rail->controlPoints.empty()) {
 		ImGui::Separator();
+		ImGui::Text("Control Points");
+		ImGui::BeginChild("ControlPointList", ImVec2(0.0f, 220.0f), true);
 		for (int i = 0; i < static_cast<int>(rail->controlPoints.size()); ++i) {
-			char label[32];
-			std::snprintf(label, sizeof(label), "制御点 %d", i);
-			if (ImGui::Selectable(label, rail->selectedControlPointIndex == i)) {
+			char label[48];
+			std::snprintf(label, sizeof(label), "Control Point %d", i);
+			const bool isSelected = (rail->selectedControlPointIndex == i);
+			if (isSelected) {
+				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 1.0f, 0.0f, 1.0f));
+			}
+			if (ImGui::Selectable(label, isSelected)) {
 				rail->selectedControlPointIndex = i;
 			}
+			if (isSelected) {
+				ImGui::PopStyleColor();
+			}
 		}
+		ImGui::EndChild();
 
 		const int selected = rail->selectedControlPointIndex;
 		if (selected >= 0 && selected < static_cast<int>(rail->controlPoints.size())) {
