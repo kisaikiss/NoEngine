@@ -28,6 +28,8 @@ struct RailEnemySpawnEventParams {
 struct RailEventData {
 	RailEventType type = RailEventType::SpawnEnemy;
 	float triggerDistance = 0.0f;
+	No::Vector3 anchorWorldPos = { 0.0f, 0.0f, 0.0f };
+	bool hasAnchorWorldPos = false;
 
 	RailResumeConditionType resumeCondition = RailResumeConditionType::None;
 	float resumeAfterSeconds = 1.0f;
@@ -38,14 +40,6 @@ struct RailEventData {
 	bool fired = false;
 	bool waitingCondition = false;
 	float waitingElapsedSeconds = 0.0f;
-};
-
-struct RailEnemyComponent {
-	int hp = 3;
-	float moveSpeed = 3.0f;
-	No::Vector3 moveDirection = { 0.0f, 0.0f, -1.0f };
-	int groupId = 0;
-	bool wasCollidingWithAttack = false;
 };
 
 struct RailCameraComponent {
@@ -68,8 +62,10 @@ struct RailCameraComponent {
 	bool drawRailDebug = true;
 	bool drawCameraDebug = true;
 	bool drawControlPointsDebug = true;
+	bool drawEventPointsDebug = true;
 	int selectedControlPointIndex = -1;
 	float controlPointDebugRadius = 0.1f;
+	float eventPointDebugRadius = 0.12f;
 	int samplesPerSegment = 24;
 	int debugRailSamplesPerSegment = 12;
 };

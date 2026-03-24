@@ -1,53 +1,101 @@
 {
-  "stageName": "Stage_01",
   "events": [
     {
-      "type": "SpawnEnemy",
-      "triggerDistance": 6.0,
-      "resumeCondition": "None",
       "resumeAfterSeconds": 0.0,
-      "targetGroupId": 0,
+      "resumeCondition": "None",
       "spawn": {
         "count": 3,
         "hp": 3,
+        "moveDirection": [
+          0.0,
+          0.0,
+          -1.0
+        ],
         "moveSpeed": 2.5,
-        "spawnSpacing": 1.5,
-        "spawnPosition": [0.0, 1.0, 20.0],
-        "moveDirection": [0.0, 0.0, -1.0],
-        "spawnGroupId": 1
-      }
-    },
-    {
-      "type": "RailStop",
-      "triggerDistance": 12.0,
-      "resumeCondition": "None",
-      "resumeAfterSeconds": 0.0,
+        "spawnGroupId": 1,
+        "spawnPosition": [
+          0.0,
+          1.0,
+          20.0
+        ],
+        "spawnSpacing": 1.5
+      },
       "targetGroupId": 0,
-      "spawn": {
-        "count": 1,
-        "hp": 3,
-        "moveSpeed": 3.0,
-        "spawnSpacing": 1.0,
-        "spawnPosition": [0.0, 1.0, 20.0],
-        "moveDirection": [0.0, 0.0, -1.0],
-        "spawnGroupId": 0
-      }
+      "triggerDistance": 6.0,
+      "type": "SpawnEnemy"
     },
     {
-      "type": "RailResume",
-      "triggerDistance": 12.0,
-      "resumeCondition": "EnemiesCleared",
       "resumeAfterSeconds": 0.0,
-      "targetGroupId": 1,
+      "resumeCondition": "None",
       "spawn": {
         "count": 1,
         "hp": 3,
+        "moveDirection": [
+          0.0,
+          0.0,
+          -1.0
+        ],
         "moveSpeed": 3.0,
-        "spawnSpacing": 1.0,
-        "spawnPosition": [0.0, 1.0, 20.0],
-        "moveDirection": [0.0, 0.0, -1.0],
-        "spawnGroupId": 0
-      }
+        "spawnGroupId": 0,
+        "spawnPosition": [
+          0.0,
+          1.0,
+          20.0
+        ],
+        "spawnSpacing": 1.0
+      },
+      "targetGroupId": 0,
+      "triggerDistance": 12.0,
+      "type": "RailStop"
+    },
+    {
+      "resumeAfterSeconds": 5.0,
+      "resumeCondition": "AfterSeconds",
+      "spawn": {
+        "count": 1,
+        "hp": 3,
+        "moveDirection": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "moveSpeed": 3.0,
+        "spawnGroupId": 0,
+        "spawnPosition": [
+          0.0,
+          1.0,
+          20.0
+        ],
+        "spawnSpacing": 1.0
+      },
+      "targetGroupId": 1,
+      "triggerDistance": 12.0,
+      "type": "RailResume"
+    },
+    {
+      "resumeAfterSeconds": 1.0,
+      "resumeCondition": "None",
+      "spawn": {
+        "count": 2,
+        "hp": 3,
+        "moveDirection": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "moveSpeed": 3.0,
+        "spawnGroupId": 0,
+        "spawnPosition": [
+          0.0,
+          1.0,
+          10.0
+        ],
+        "spawnSpacing": 1.0
+      },
+      "targetGroupId": 0,
+      "triggerDistance": 14.310999870300293,
+      "type": "SpawnEnemy"
     }
-  ]
+  ],
+  "stageName": "Stage_01"
 }

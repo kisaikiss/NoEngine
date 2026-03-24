@@ -1,5 +1,7 @@
 #pragma once
 #include "engine/NoEngine.h"
+#include "RailCameraEditor.h"
+#include "GameEventEditor.h"
 #include <array>
 
 class GameScene : public No::IScene {
@@ -10,13 +12,15 @@ private:
 	void CameraImGui();
 	void RailCameraImGui();
 	void RailEditorImGui();
-
+	void ChangeSceneImGui();
 	void SpawnGrass(const No::Vector3& position, const No::Vector3& size);
-	void CreatePauseMenuSprites(const NoEngine::TextureRef& whiteTexture);
 
 	No::Entity activeCameraEntity_{};
 	No::Entity debugCameraEntity_{};
 	No::Entity railCameraEntity_{};
+
+	RailCameraEditor railCameraEditor_{};
+	GameEventEditor gameEventEditor_{};
 
 	int grassNameIndex_ = 0;
 };

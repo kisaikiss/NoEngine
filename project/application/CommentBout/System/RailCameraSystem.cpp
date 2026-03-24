@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "RailCameraSystem.h"
 #include "application/CommentBout/Component/RailCameraComponent.h"
+#include "application/CommentBout/Component/EnemyComponent.h"
 #include "application/CommentBout/GameTag.h"
 #include "application/CommentBout/Utility/CBCollisionMask.h"
 #include "application/TestApp/Component/Collider2DComponent.h"
@@ -261,6 +262,32 @@ void DrawControlPointDebug(const RailCameraComponent& rail) {
 	}
 }
 
+void DrawEventPointDebug(const RailCameraComponent& rail) {
+	if (!rail.drawEventPointsDebug || rail.events.empty() || rail.totalLength <= 0.0f) {
+		return;
+	}
+
+	const float radius = (rail.eventPointDebugRadius > 0.0f) ? rail.eventPointDebugRadius : 0.12f;
+	for (size_t i = 0; i < rail.events.size(); ++i) {
+		const RailEventData& eventData = rail.events[i];
+		float distance = eventData.triggerDistance;
+		if (distance < 0.0f) {
+			distance = 0.0f;
+		}
+		if (distance > rail.totalLength) {
+			distance = rail.totalLength;
+		}
+
+		const float t = DistanceToNormalizedT(rail, distance);
+		const No::Vector3 position = EvaluatePositionByT(rail, t);
+		const bool selected = (static_cast<int>(i) == rail.selectedEventIndex);
+		const NoEngine::Math::Color color = selected
+			? NoEngine::Math::Color(1.0f, 1.0f, 0.2f, 1.0f)
+			: NoEngine::Math::Color(0.2f, 0.6f, 1.0f, 1.0f);
+		No::Primitive::DrawSphere(position, radius, color, 10, 10);
+	}
+}
+
 void DrawRailCameraGizmo(RailCameraComponent& rail, No::TransformComponent* transform) {
 	if (!rail.drawCameraDebug || !transform) {
 		return;
@@ -301,7 +328,7 @@ void DrawRailCameraGizmo(RailCameraComponent& rail, No::TransformComponent* tran
 
 int CountAliveRailEnemies(No::Registry& registry) {
 	int count = 0;
-	auto enemyView = registry.View<CBRailEnemyTag, RailEnemyComponent>();
+	auto enemyView = registry.View<CBRailEnemyTag, EnemyComponent>();
 	for (auto entity : enemyView) {
 		(void)entity;
 		++count;
@@ -311,9 +338,9 @@ int CountAliveRailEnemies(No::Registry& registry) {
 
 int CountAliveRailEnemiesByGroup(No::Registry& registry, int groupId) {
 	int count = 0;
-	auto enemyView = registry.View<CBRailEnemyTag, RailEnemyComponent>();
+	auto enemyView = registry.View<CBRailEnemyTag, EnemyComponent>();
 	for (auto entity : enemyView) {
-		auto* enemy = registry.GetComponent<RailEnemyComponent>(entity);
+		auto* enemy = registry.GetComponent<EnemyComponent>(entity);
 		if (!enemy) {
 			continue;
 		}
@@ -345,7 +372,7 @@ void SpawnEnemies(No::Registry& registry, const RailEnemySpawnEventParams& param
 		material->psoId = NoEngine::Render::GetPSOID(material->psoName);
 		material->rootSigId = NoEngine::Render::GetRootSignatureID(material->psoName);
 
-		auto* enemy = registry.AddComponent<RailEnemyComponent>(enemyEntity);
+		auto* enemy = registry.AddComponent<EnemyComponent>(enemyEntity);
 		enemy->hp = std::max(1, params.hp);
 		enemy->moveSpeed = std::max(0.0f, params.moveSpeed);
 		enemy->moveDirection = direction;
@@ -364,9 +391,9 @@ void SpawnEnemies(No::Registry& registry, const RailEnemySpawnEventParams& param
 }
 
 void UpdateRailEnemies(No::Registry& registry, float deltaTime) {
-	auto view = registry.View<CBRailEnemyTag, RailEnemyComponent, No::TransformComponent, TestApp::Collider3DComponent>();
+	auto view = registry.View<CBRailEnemyTag, EnemyComponent, No::TransformComponent, TestApp::Collider3DComponent>();
 	for (auto entity : view) {
-		auto* enemy = registry.GetComponent<RailEnemyComponent>(entity);
+		auto* enemy = registry.GetComponent<EnemyComponent>(entity);
 		auto* transform = registry.GetComponent<No::TransformComponent>(entity);
 		auto* collider3D = registry.GetComponent<TestApp::Collider3DComponent>(entity);
 		if (!enemy || !transform || !collider3D) {
@@ -485,6 +512,7 @@ void RailCameraSystem::Update(No::Registry& registry, float deltaTime) {
 		ApplyTransformFromDistance(*rail, transform);
 		DrawRailDebug(*rail);
 		DrawControlPointDebug(*rail);
+		DrawEventPointDebug(*rail);
 		DrawRailCameraGizmo(*rail, transform);
 	}
 }

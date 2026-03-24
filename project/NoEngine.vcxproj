@@ -323,7 +323,10 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </ClCompile>
     <ClCompile Include="application\CommentBout\Component\HitBalloonComponent.cpp" />
     <ClCompile Include="application\CommentBout\System\HitBalloonSystem.cpp" />
+    <ClCompile Include="application\CommentBout\Scene\GameEventEditor.cpp" />
     <ClCompile Include="application\CommentBout\Scene\GameScene.cpp" />
+    <ClCompile Include="application\CommentBout\Scene\RailCameraEditor.cpp" />
+    <ClCompile Include="application\CommentBout\Scene\RailDataIO.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="application\CommentBout\Spawner\OptionMenuSpawner.cpp" />
     <ClCompile Include="application\CommentBout\Spawner\PauseMenuSpawner.cpp" />
@@ -578,7 +581,10 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </ClInclude>
     <ClInclude Include="application\CommentBout\Component\HitBalloonComponent.h" />
     <ClInclude Include="application\CommentBout\System\HitBalloonSystem.h" />
+    <ClInclude Include="application\CommentBout\Scene\GameEventEditor.h" />
     <ClInclude Include="application\CommentBout\Scene\GameScene.h" />
+    <ClInclude Include="application\CommentBout\Scene\RailCameraEditor.h" />
+    <ClInclude Include="application\CommentBout\Scene\RailDataIO.h" />
     <ClInclude Include="application\CommentBout\Spawner\OptionMenuSpawner.h" />
     <ClInclude Include="application\CommentBout\Spawner\PauseMenuSpawner.h" />
     <ClInclude Include="resource.h" />
@@ -738,3 +744,5 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
 </Project>
+
+
