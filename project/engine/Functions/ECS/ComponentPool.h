@@ -82,6 +82,8 @@ public:
 	/// <returns>コンポーネントのポインタ</returns>
 	inline CompType* GetComponent(const Entity entity) noexcept {
 		// エンティティが有効なら
+		if (entityToIndex_.size() <= entity) return nullptr;
+
 		int32_t index = entityToIndex_[entity];
 		if (index >= 0) {
 			return &components_[index];

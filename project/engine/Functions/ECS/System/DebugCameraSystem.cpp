@@ -87,10 +87,14 @@ void DebugCameraSystem::Update(Registry& registry, float deltaTime) {
 		if (debugCamera->isDistanceMove) {
 			//ホイールで奥や手前に移動できる
 			//球面座標系での中心点からの距離が遠いほど早く移動できる
-			debugCamera->distance += (debugCamera->preMouseWheelY - debugCamera->mouseWheelY) / 500.0f * debugCamera->distance;
-			if (debugCamera->distance < 0.0f) {
-				debugCamera->distance = 0.0f;
+			float deltaMouseWheel = debugCamera->preMouseWheelY - debugCamera->mouseWheelY;
+			if (std::fabs(deltaMouseWheel) < 140.f) {
+				debugCamera->distance += (deltaMouseWheel) / 500.0f * debugCamera->distance;
+				if (debugCamera->distance < 0.1f) {
+					debugCamera->distance = 0.1f;
+				}
 			}
+			
 		} else {
 			Math::Vector3 velocity{};
 			//距離が遠いほど早く移動できる

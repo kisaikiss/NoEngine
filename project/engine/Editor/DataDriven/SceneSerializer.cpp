@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include "SceneSerializer.h"
 #include "engine/Functions/Scene/SceneNameComponent.h"
+#include "engine/Functions/ECS/Component/TransformComponent.h"
+#include "engine/Functions/ECS/Component/Transform2DComponent.h"
+#include "engine/Functions/ECS/Component/StartPositionComponent.h"
 #include "../EditUtils.h"
 
 namespace NoEngine {
@@ -81,6 +84,17 @@ void LoadScene(ECS::Registry& registry, const json& scene) {
 
 		// Componentを復元
 		LoadEntityFromJson(registry, e, entityJson);
+		auto* startPosition = registry.GetComponent<Component::StartPositionComponent>(e);
+		auto* transform = registry.GetComponent<Component::TransformComponent>(e);
+		if (startPosition && transform) {
+			transform->translate = startPosition->startPosition;
+		}
+
+		auto* startPosition2d = registry.GetComponent<Component::StartPosition2DComponent>(e);
+		auto* transform2d = registry.GetComponent<Component::Transform2DComponent>(e);
+		if (startPosition2d && transform2d) {
+			transform2d->translate = startPosition2d->startPosition;
+		}
 	}
 
 }

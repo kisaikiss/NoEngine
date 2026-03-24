@@ -126,6 +126,7 @@
     <ClCompile Include="engine\Functions\Renderer\RenderPass\ParticlePass.cpp" />
     <ClCompile Include="application\TestApp\System\ParticleTestSystem.cpp" />
     <ClCompile Include="engine\Utilities\Random.cpp" />
+    <ClCompile Include="engine\Functions\ECS\Component\StartPositionComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -274,6 +275,7 @@
     <ClInclude Include="engine\Functions\ECS\Component\ParticleEmitterComponent.h" />
     <ClInclude Include="application\TestApp\System\ParticleTestSystem.h" />
     <ClInclude Include="engine\Utilities\Random.h" />
+    <ClInclude Include="engine\Functions\ECS\Component\StartPositionComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />
