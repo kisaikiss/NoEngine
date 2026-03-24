@@ -1,6 +1,7 @@
 #pragma once
 #include "engine/Functions/ECS/Registry.h"
 #include "engine/Functions/ECS/System/SystemManager.h"
+#include "engine/Functions/ECS/Component/PauseComponent.h"
 #include "SceneNameComponent.h"
 
 namespace NoEngine {
@@ -16,6 +17,7 @@ public:
 		registry_(std::make_unique<ECS::Registry>()),
 		systemManager_(std::make_unique<ECS::SystemManager>()) { 
 		registry_->AddComponent<SceneNameComponent>(registry_->GenerateEntity());
+		registry_->AddComponent<ECS::PauseComponent>(registry_->GenerateEntity());
 	}
 	virtual ~IScene() = default;
 

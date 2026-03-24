@@ -310,6 +310,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\TestApp\System\ParticleTestSystem.h" />
     <ClInclude Include="application\TestApp\TestApp.h" />
     <ClInclude Include="engine\Functions\ECS\Component\ParticleEmitterComponent.h" />
+    <ClInclude Include="engine\Functions\ECS\Component\PauseComponent.h" />
     <ClInclude Include="engine\Functions\ECS\Component\StartTransformComponent.h" />
     <ClInclude Include="engine\Functions\ECS\System\CameraSystem.h" />
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
