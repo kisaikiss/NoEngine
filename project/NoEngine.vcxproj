@@ -164,6 +164,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\TD3\OneSide.cpp" />
     <ClCompile Include="application\TD3\Scene\SampleScene.cpp" />
     <ClCompile Include="application\TestApp\Scene\TestScene2.cpp" />
+    <ClCompile Include="application\TestApp\System\ParticleTestSystem.cpp" />
     <ClCompile Include="application\TestApp\TestApp.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\CameraComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\CameraSystem.cpp" />
@@ -187,6 +188,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="engine\Functions\Renderer\RenderContext.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\LightPass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\MeshPass.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\RenderPass\ParticlePass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PrimitivePass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\RenderPassScheduler.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderSystem.cpp" />
@@ -249,6 +251,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="engine\Math\Types\Vector4.cpp" />
     <ClCompile Include="engine\Utilities\Conversion\ConvertString.cpp" />
     <ClCompile Include="engine\Utilities\FileUtilities.cpp" />
+    <ClCompile Include="engine\Utilities\Random.cpp" />
     <ClCompile Include="engine\Window\Event\Default\CloseEvent.cpp" />
     <ClCompile Include="engine\Window\Event\Default\EnterSizeMoveEvent.cpp" />
     <ClCompile Include="engine\Window\Event\Default\GetMinMaxInfoEvent.cpp" />
@@ -301,7 +304,9 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\TD3\OneSide.h" />
     <ClInclude Include="application\TD3\Scene\SampleScene.h" />
     <ClInclude Include="application\TestApp\Scene\TestScene2.h" />
+    <ClInclude Include="application\TestApp\System\ParticleTestSystem.h" />
     <ClInclude Include="application\TestApp\TestApp.h" />
+    <ClInclude Include="engine\Functions\ECS\Component\ParticleEmitterComponent.h" />
     <ClInclude Include="engine\Functions\ECS\System\CameraSystem.h" />
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
     <ClInclude Include="engine\Editor\ComponentRegistry.h" />
@@ -339,6 +344,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="engine\Functions\Renderer\RenderContext.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\LightPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\MeshPass.h" />
+    <ClInclude Include="engine\Functions\Renderer\RenderPass\ParticlePass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PrimitivePass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\RenderPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\RenderPassScheduler.h" />
@@ -417,6 +423,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="engine\Utilities\Hash.h" />
     <ClInclude Include="engine\Utilities\NonCopyable.h" />
     <ClInclude Include="engine\Utilities\PassKeys.h" />
+    <ClInclude Include="engine\Utilities\Random.h" />
     <ClInclude Include="engine\Utilities\TypeIndex.h" />
     <ClInclude Include="engine\Window\Event\Default\CloseEvent.h" />
     <ClInclude Include="engine\Window\Event\Default\EnterSizeMoveEvent.h" />
@@ -540,6 +547,22 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Development|x64'">Vertex</ShaderType>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="resources\engine\Shaders\Particle.PS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Development|x64'">Pixel</ShaderType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="resources\engine\Shaders\Particle.VS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Development|x64'">Vertex</ShaderType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="resources\engine\Shaders\Primitive.PS.hlsl">

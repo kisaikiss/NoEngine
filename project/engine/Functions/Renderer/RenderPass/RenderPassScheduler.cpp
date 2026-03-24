@@ -3,6 +3,7 @@
 #include "MeshPass.h"
 #include "PrimitivePass.h"
 #include "LightPass.h"
+#include "ParticlePass.h"
 
 namespace NoEngine {
 namespace Render {
@@ -10,6 +11,7 @@ void RenderPassScheduler::Initialize() {
 	passes_.push_back(std::make_unique<LightPass>());
 	passes_.push_back(std::make_unique<MeshPass>());
 	passes_.push_back(std::make_unique<PrimitivePass>());
+	passes_.push_back(std::make_unique<ParticlePass>());
 	passes_.push_back(std::make_unique<SpritePass>());
 }
 

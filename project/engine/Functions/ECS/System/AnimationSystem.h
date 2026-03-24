@@ -2,6 +2,8 @@
 #include "ISystem.h"
 #include "../Component/AnimatorComponent.h"
 #include "../Component/MeshComponent.h" 
+#include "engine/Runtime/PipelineStateObject/RootSignature.h"
+#include "engine/Runtime/PipelineStateObject/ComputePSO.h"
 
 namespace NoEngine {
 namespace ECS {
@@ -22,6 +24,8 @@ private:
 	Math::Vector3 CalculateValue(const std::vector<KeyframeVector3>& keyframes, float time);
 	Math::Quaternion CalculateValue(const std::vector<KeyframeQuaternion>& keyframes, float time);
 
+	ComputePSO pso_;
+	RootSignature rootSignature_;
 };
 
 }

@@ -2,17 +2,35 @@
 #include "engine/Functions/Renderer/Primitive.h"
 #include "engine/Math/Types/Calculations/Matrix4x4Calculations.h"
 #include "engine/Math/Types/Calculations/QuaternionCalculations.h"
-#include "engine/Runtime/PipelineStateObject/ComputePSO.h"
 #include "engine/Functions/Shader/ShaderModule.h"
+#include "engine/Utilities/Conversion/ConvertString.h"
 
 
 namespace NoEngine {
 namespace ECS {
 using namespace Math;
 
+namespace {
+std::wstring sPsoName = L"Animation PSO";
+}
+
 
 AnimationSystem::AnimationSystem() {
 	ShaderModule animationCS(ShaderStage::Compute, L"resources/engine/Shaders/Compute/Skinning.CS.hlsl", L"cs_6_0");
+
+	const ShaderReflection& csReflection = animationCS.GetReflection();
+
+	
+	pso_ = ComputePSO(sPsoName);
+
+	pso_.SetComputeShader(animationCS.GetBytecode());
+
+	std::vector<ShaderReflection> reflections;
+	reflections.push_back(csReflection);
+	RootSignatureBuilder::BuildFromReflection(reflections, rootSignature_, ConvertString(sPsoName));
+	pso_.SetRootSignature(rootSignature_);
+
+	pso_.Finalize();
 }
 
 void AnimationSystem::Update(ComputeContext& ctx, Registry& registry, float deltaTime) {

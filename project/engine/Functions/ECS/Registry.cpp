@@ -41,7 +41,7 @@ void* Registry::GetComponent(const size_t& typeId, const Entity& entity) {
 }
 
 bool Registry::Has(size_t typeID, Entity e) const {
-	return componentPools_[typeID]->Has(e);
+	return componentPools_[typeID] && componentPools_[typeID]->Has(e);
 }
 
 bool Registry::Empty() {
