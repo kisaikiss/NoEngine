@@ -340,6 +340,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\CommentBout\Scene\TitleScene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="application\CommentBout\Component\EnemyComponent.h" />
     <ClInclude Include="application\CommentBout\Component\GameResourceComponent.h" />
     <ClInclude Include="application\CommentBout\Component\GrassReactionComponent.h" />
     <ClInclude Include="application\CommentBout\Component\GroundComponent.h" />
@@ -744,5 +745,3 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
 </Project>
-
-
