@@ -163,11 +163,18 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   <ItemGroup>
     <ClCompile Include="application\CommentBout\Collision\Utility\CoordinateConverter.cpp" />
     <ClCompile Include="application\CommentBout\Component\PlayerAttackComponent.cpp" />
+    <ClCompile Include="application\CommentBout\FieldObject\System\GrassReactionSystem.cpp" />
+    <ClCompile Include="application\CommentBout\FieldObject\System\HitBalloonSystem.cpp" />
     <ClCompile Include="application\CommentBout\Spawner\TitleMenuSpawner.cpp" />
+    <ClCompile Include="application\CommentBout\System\DamageApplySystem.cpp" />
+    <ClCompile Include="application\CommentBout\System\EnemyContactDamageSystem.cpp" />
+    <ClCompile Include="application\CommentBout\System\EnemyMoveSystem.cpp" />
+    <ClCompile Include="application\CommentBout\System\EnemySpawnSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\EnemySystem.cpp" />
-    <ClCompile Include="application\CommentBout\System\GrassReactionSystem.cpp" />
+    <ClCompile Include="application\CommentBout\System\EnemyVisualSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\LifetimeSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\OptionSystem.cpp" />
+    <ClCompile Include="application\CommentBout\System\PlayerAttackResolveSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\RailCameraSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\TitleSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\TitleViewSystem.cpp" />
@@ -326,7 +333,6 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="application\CommentBout\Component\HitBalloonComponent.cpp" />
-    <ClCompile Include="application\CommentBout\System\HitBalloonSystem.cpp" />
     <ClCompile Include="application\CommentBout\Editor\GameEventEditor.cpp" />
     <ClCompile Include="application\CommentBout\Scene\GameScene.cpp" />
     <ClCompile Include="application\CommentBout\Editor\RailCameraEditor.cpp" />
@@ -345,10 +351,11 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   <ItemGroup>
     <ClInclude Include="application\CommentBout\Collision\Utility\CoordinateConverter.h" />
     <ClInclude Include="application\CommentBout\Component\AttackDamageComponent.h" />
+    <ClInclude Include="application\CommentBout\Component\DamageRequestComponent.h" />
     <ClInclude Include="application\CommentBout\Component\EnemyComponent.h" />
     <ClInclude Include="application\CommentBout\Component\GameResourceComponent.h" />
-    <ClInclude Include="application\CommentBout\Component\GrassReactionComponent.h" />
-    <ClInclude Include="application\CommentBout\Component\GroundComponent.h" />
+    <ClInclude Include="application\CommentBout\Component\HealthComponent.h" />
+    <ClInclude Include="application\CommentBout\Component\InvincibleComponent.h" />
     <ClInclude Include="application\CommentBout\Component\LifetimeComponent.h" />
     <ClInclude Include="application\CommentBout\Component\OptionMenuConfigComponent.h" />
     <ClInclude Include="application\CommentBout\Component\OptionMenuViewComponent.h" />
@@ -356,11 +363,23 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\CommentBout\Component\PlayerHealthComponent.h" />
     <ClInclude Include="application\CommentBout\Component\PlayerHitboxComponent.h" />
     <ClInclude Include="application\CommentBout\Component\RailCameraComponent.h" />
+    <ClInclude Include="application\CommentBout\Component\SpawnEnemyRequestComponent.h" />
     <ClInclude Include="application\CommentBout\Component\TitleMenuConfigComponent.h" />
     <ClInclude Include="application\CommentBout\Component\TitleMenuStateComponent.h" />
     <ClInclude Include="application\CommentBout\Component\TitleMenuViewComponent.h" />
+    <ClInclude Include="application\CommentBout\FieldObject\Component\GrassReactionComponent.h" />
+    <ClInclude Include="application\CommentBout\FieldObject\Component\GroundComponent.h" />
+    <ClInclude Include="application\CommentBout\FieldObject\Component\HitBalloonComponent.h" />
+    <ClInclude Include="application\CommentBout\FieldObject\System\GrassReactionSystem.h" />
+    <ClInclude Include="application\CommentBout\FieldObject\System\HitBalloonSystem.h" />
     <ClInclude Include="application\CommentBout\Spawner\TitleMenuSpawner.h" />
+    <ClInclude Include="application\CommentBout\System\DamageApplySystem.h" />
+    <ClInclude Include="application\CommentBout\System\EnemyContactDamageSystem.h" />
+    <ClInclude Include="application\CommentBout\System\EnemyMoveSystem.h" />
+    <ClInclude Include="application\CommentBout\System\EnemySpawnSystem.h" />
     <ClInclude Include="application\CommentBout\System\EnemySystem.h" />
+    <ClInclude Include="application\CommentBout\System\EnemyVisualSystem.h" />
+    <ClInclude Include="application\CommentBout\System\PlayerAttackResolveSystem.h" />
     <ClInclude Include="application\CommentBout\System\RailCameraSystem.h" />
     <ClInclude Include="application\CommentBout\System\TitleSystem.h" />
     <ClInclude Include="application\CommentBout\System\TitleViewSystem.h" />
@@ -376,7 +395,6 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\CommentBout\Component\PlayerComponent.h" />
     <ClInclude Include="application\CommentBout\Event\OptionMenuEvent.h" />
     <ClInclude Include="application\CommentBout\GameTag.h" />
-    <ClInclude Include="application\CommentBout\System\GrassReactionSystem.h" />
     <ClInclude Include="application\CommentBout\System\LifetimeSystem.h" />
     <ClInclude Include="application\CommentBout\System\OptionSystem.h" />
     <ClInclude Include="application\\CommentBout\\System\\OptionViewSystem.h" />
@@ -588,8 +606,6 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">false</ExcludedFromBuild>
     </ClInclude>
-    <ClInclude Include="application\CommentBout\Component\HitBalloonComponent.h" />
-    <ClInclude Include="application\CommentBout\System\HitBalloonSystem.h" />
     <ClInclude Include="application\CommentBout\Editor\GameEventEditor.h" />
     <ClInclude Include="application\CommentBout\Scene\GameScene.h" />
     <ClInclude Include="application\CommentBout\Editor\RailCameraEditor.h" />

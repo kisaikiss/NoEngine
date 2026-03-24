@@ -1,3 +1,5 @@
+// cSpell:disable
+// spell-checker: disable
 #pragma once
 #include "Entity.h"
 namespace NoEngine {
@@ -17,8 +19,8 @@ public:
 
 /// <summary>
 /// コンポーネントを管理するコンテナクラス
+/// CompType: コンポーネント構造体
 /// </summary>
-/// <typeparam name="CompType">コンポーネント構造体</typeparam>
 template<typename CompType>
 class ComponentPool : public IComponentPool {
 public:
@@ -49,6 +51,9 @@ public:
 	/// </summary>
 	/// <param name="entity">コンポーネントを取り外したいエンティティ</param>
 	inline void RemoveComponent(Entity entity) {
+		if (entity >= entityToIndex_.size()) {
+			return;
+		}
 		int32_t idx = entityToIndex_[entity];
 		if (idx < 0) return;
 
@@ -81,7 +86,9 @@ public:
 	/// <param name="entity">コンポーネントと関連付けられたエンティティ</param>
 	/// <returns>コンポーネントのポインタ</returns>
 	inline CompType* GetComponent(const Entity entity) noexcept {
-		// エンティティが有効なら
+		if (entity >= entityToIndex_.size()) {
+			return nullptr;
+		}
 		int32_t index = entityToIndex_[entity];
 		if (index >= 0) {
 			return &components_[index];
@@ -91,7 +98,9 @@ public:
 	}
 
 	inline void* GetVoidPointerComponent(Entity entity) override {
-		// エンティティが有効なら
+		if (entity >= entityToIndex_.size()) {
+			return nullptr;
+		}
 		int32_t index = entityToIndex_[entity];
 		if (index >= 0) {
 			return static_cast<void*>(&components_[index]);

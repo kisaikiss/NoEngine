@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "GrassReactionSystem.h"
-#include "application/CommentBout/Component/GrassReactionComponent.h"
-#include "application/CommentBout/Component/HitBalloonComponent.h"
+#include "application/CommentBout/FieldObject/Component/GrassReactionComponent.h"
+#include "application/CommentBout/FieldObject/Component/HitBalloonComponent.h"
 #include "application/CommentBout/Component/LifetimeComponent.h"
 #include "application/CommentBout/Component/GameResourceComponent.h"
 #include "application/CommentBout/GameTag.h"
@@ -29,15 +29,12 @@ void GrassReactionSystem::Update(No::Registry& registry, float deltaTime)
 		const bool hitPrev = reaction->wasColliding;
 
 		if (hitNow && !hitPrev && projected->isVisible && gameResource) {
-
 			No::Vector2 anchor{ projected->screenMax.x, projected->screenMin.y };
 
 			auto effectEntity = registry.GenerateEntity();
 
 			auto* transform2D = registry.AddComponent<No::Transform2DComponent>(effectEntity);
 			transform2D->translate = anchor + reaction->effectOffset;
-			// scale 初期値は effectSize（固定ピクセル）
-			// sizeRatio が {0,0} 以外なら HitBalloonSystem が草の投影サイズ比率で上書きする
 			transform2D->scale = reaction->effectSize;
 
 			auto* sprite = registry.AddComponent<No::SpriteComponent>(effectEntity);
@@ -51,7 +48,7 @@ void GrassReactionSystem::Update(No::Registry& registry, float deltaTime)
 			auto* balloon = registry.AddComponent<HitBalloonComponent>(effectEntity);
 			balloon->sourceEntity = entity;
 			balloon->localOffset = reaction->effectOffset;
-			balloon->sizeRatio = reaction->sizeRatio;    // GrassReactionComponent と1対1で対応
+			balloon->sizeRatio = reaction->sizeRatio;
 			balloon->anchorType = HitBalloonComponent::AnchorType::TopRight;
 
 			registry.AddComponent<CBGrassHitEffectTag>(effectEntity);

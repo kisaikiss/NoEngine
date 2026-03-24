@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "RailCameraSystem.h"
-#include "application/CommentBout/System/EnemySystem.h"
+#include "application/CommentBout/Component/SpawnEnemyRequestComponent.h"
 #include "application/CommentBout/Component/RailCameraComponent.h"
 #include "application/CommentBout/Component/EnemyComponent.h"
 #include "application/CommentBout/GameTag.h"
@@ -16,6 +16,12 @@ namespace No {
 }
 
 namespace {
+	No::Vector3 InterpolateSplinePoint(const No::Vector3& p0, const No::Vector3& p1, const No::Vector3& p2, const No::Vector3& p3, float t) {
+		const float t2 = t * t;
+		const float t3 = t2 * t;
+		return 0.5f * ((2.0f * p1) + (-p0 + p2) * t + (2.0f * p0 - 5.0f * p1 + 4.0f * p2 - p3) * t2 + (-p0 + 3.0f * p1 - 3.0f * p2 + p3) * t3);
+	}
+
 	No::Vector3 CatmullRom(const No::Vector3& p0, const No::Vector3& p1, const No::Vector3& p2, const No::Vector3& p3, float t) {
 		const float t2 = t * t;
 		const float t3 = t2 * t;
@@ -58,7 +64,7 @@ namespace {
 		const int i2 = std::min(seg + 1, segmentCount);
 		const int i3 = std::min(seg + 2, segmentCount);
 
-		return CatmullRom(
+		return InterpolateSplinePoint(
 			rail.controlPoints[static_cast<size_t>(i0)],
 			rail.controlPoints[static_cast<size_t>(i1)],
 			rail.controlPoints[static_cast<size_t>(i2)],
@@ -349,7 +355,13 @@ namespace {
 	}
 
 	void SpawnEnemies(No::Registry& registry, const RailEnemySpawnEventParams& params) {
-		SpawnRailEnemies(registry, params);
+		auto requestEntity = registry.GenerateEntity();
+		auto* request = registry.AddComponent<SpawnEnemyRequestComponent>(requestEntity);
+		if (!request) {
+			registry.DestroyEntity(requestEntity);
+			return;
+		}
+		request->params = params;
 	}
 
 	void UpdateRailEvents(No::Registry& registry, RailCameraComponent& rail, float deltaTime) {

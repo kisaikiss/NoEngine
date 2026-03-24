@@ -1,6 +1,10 @@
 #pragma once
 #include "engine/NoEngine.h"
 
+/// <summary>
+/// 草オブジェクトの反応状態とヒット演出設定。
+/// FieldObject 層で管理する。
+/// </summary>
 struct GrassReactionComponent {
 	bool wasColliding = false;
 
@@ -14,8 +18,6 @@ struct GrassReactionComponent {
 	// 吹き出しの固定ピクセルサイズ（sizeRatio が {0,0} のときに使用）
 	No::Vector2 effectSize{ 120.0f, 60.0f };
 
-	// 草のスクリーン投影サイズに対する吹き出しサイズの比率
-	// x: 草のスクリーン幅に対する割合、y: 草のスクリーン高さに対する割合
-	// {0, 0} → 距離スケールなし、effectSize の固定ピクセルで表示
+	// 草のスクリーン投影サイズに対する吹き出しサイズ比率
 	No::Vector2 sizeRatio{ 1.f, 0.8f };
 };

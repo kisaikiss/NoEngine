@@ -5,6 +5,8 @@
 #include "application/CommentBout/Component/PlayerComponent.h"
 #include "application/CommentBout/Component/PlayerAttackComponent.h"
 #include "application/CommentBout/Component/PlayerHealthComponent.h"
+#include "application/CommentBout/Component/HealthComponent.h"
+#include "application/CommentBout/Component/InvincibleComponent.h"
 #include "application/CommentBout/Component/PlayerHitboxComponent.h"
 #include "application/CommentBout/Component/PauseStateComponent.h"
 #include "application/CommentBout/Component/PauseMenuConfigComponent.h"
@@ -12,24 +14,29 @@
 #include "application/CommentBout/Component/OptionStateComponent.h"
 #include "application/CommentBout/Component/OptionMenuConfigComponent.h"
 #include "application/CommentBout/Component/OptionMenuViewComponent.h"
-#include "application/CommentBout/Component/GrassReactionComponent.h"
+#include "application/CommentBout/FieldObject/Component/GrassReactionComponent.h"
 #include "application/CommentBout/Component/GameResourceComponent.h"
-#include "application/CommentBout/Component/GroundComponent.h"
+#include "application/CommentBout/FieldObject/Component/GroundComponent.h"
 #include "application/CommentBout/Component/RailCameraComponent.h"
 #include "application/CommentBout/Component/EnemyComponent.h"
 #include "application/CommentBout/Utility/CBCollisionMask.h"
 #include "application/CommentBout/Utility/CBSpriteLayer.h"
 #include "application/CommentBout/Utility/CBGameAudio.h"
 #include "application/CommentBout/System/PlayerControlSystem.h"
-#include "application/CommentBout/System/GrassReactionSystem.h"
-#include "application/CommentBout/System/HitBalloonSystem.h"
+#include "application/CommentBout/FieldObject/System/GrassReactionSystem.h"
+#include "application/CommentBout/FieldObject/System/HitBalloonSystem.h"
 #include "application/CommentBout/System/LifetimeSystem.h"
 #include "application/CommentBout/System/PauseSystem.h"
 #include "application/CommentBout/System/PauseViewSystem.h"
 #include "application/CommentBout/System/OptionSystem.h"
 #include "application/CommentBout/System/OptionViewSystem.h"
 #include "application/CommentBout/System/RailCameraSystem.h"
-#include "application/CommentBout/System/EnemySystem.h"
+#include "application/CommentBout/System/EnemySpawnSystem.h"
+#include "application/CommentBout/System/EnemyMoveSystem.h"
+#include "application/CommentBout/System/EnemyContactDamageSystem.h"
+#include "application/CommentBout/System/EnemyVisualSystem.h"
+#include "application/CommentBout/System/PlayerAttackResolveSystem.h"
+#include "application/CommentBout/System/DamageApplySystem.h"
 #include "application/CommentBout/Spawner/OptionMenuSpawner.h"
 #include "application/CommentBout/Spawner/PauseMenuSpawner.h"
 #include "application/CommentBout/Collision/System/CollisionSystem.h"
@@ -56,9 +63,14 @@ void GameScene::Setup() {
 	AddSystem(std::make_unique<PlayerControlSystem>());
 	AddSystem(std::make_unique<No::DebugCameraSystem>());
 	AddSystem(std::make_unique<RailCameraSystem>());
+	AddSystem(std::make_unique<EnemySpawnSystem>());
 	AddSystem(std::make_unique<No::CameraSystem>());
 	AddSystem(std::make_unique<CommentBoutCollision::CollisionSystem>());
-	AddSystem(std::make_unique<EnemySystem>());
+	AddSystem(std::make_unique<EnemyMoveSystem>());
+	AddSystem(std::make_unique<EnemyContactDamageSystem>());
+	AddSystem(std::make_unique<PlayerAttackResolveSystem>());
+	AddSystem(std::make_unique<DamageApplySystem>());
+	AddSystem(std::make_unique<EnemyVisualSystem>());
 	AddSystem(std::make_unique<GrassReactionSystem>());
 	AddSystem(std::make_unique<HitBalloonSystem>());
 	AddSystem(std::make_unique<LifetimeSystem>());
@@ -73,7 +85,6 @@ void GameScene::Setup() {
 	CommentBout::GameAudio::PlayTestBGM(true);
 
 	const auto whiteTexture = NoEngine::TextureManager::LoadCovertTexture("resources/engine/white1x1.png");
-
 	// 共有リソース
 	auto gameResourceEntity = registry.GenerateEntity();
 	registry.AddComponent<CBGameResourceTag>(gameResourceEntity);
@@ -122,7 +133,7 @@ void GameScene::Setup() {
 
 	auto optionConfigEntity = registry.GenerateEntity();
 	registry.AddComponent<CBOptionConfigTag>(optionConfigEntity);
-	registry.AddComponent<OptionMenuConfigComponent>(optionConfigEntity); // デフォルト値 = JSON値
+	registry.AddComponent<OptionMenuConfigComponent>(optionConfigEntity); // 繝・ヵ繧ｩ繝ｫ繝亥､ = JSON蛟､
 	registry.AddComponent<No::EditTag>(optionConfigEntity)->name = "OptionMenuConfig";
 
 
@@ -191,6 +202,14 @@ void GameScene::Setup() {
 	playerHealth->isDead = false;
 	playerHealth->deathHandled = false;
 	playerHealth->lastDamageTaken = 0;
+	auto* playerCommonHealth = registry.AddComponent<HealthComponent>(playerEntity);
+	playerCommonHealth->hp = playerHealth->hp;
+	playerCommonHealth->maxHp = playerHealth->maxHp;
+	playerCommonHealth->isDead = playerHealth->isDead;
+	playerCommonHealth->lastDamageTaken = playerHealth->lastDamageTaken;
+	auto* playerInvincible = registry.AddComponent<InvincibleComponent>(playerEntity);
+	playerInvincible->time = playerHealth->invincibleTime;
+	playerInvincible->duration = playerHealth->invincibleDuration;
 	auto* playerTransform = registry.AddComponent<No::Transform2DComponent>(playerEntity);
 	playerTransform->translate = { 640.f, 600.f };
 	playerTransform->scale = { 128.f, 200.f };
@@ -372,5 +391,19 @@ void GameScene::ChangeSceneImGui()
 	ImGui::End();
 #endif
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
