@@ -4,7 +4,6 @@
 #include "application/CommentBout/Component/EnemyComponent.h"
 #include "application/CommentBout/GameTag.h"
 #include "application/CommentBout/Utility/CBCollisionMask.h"
-#include "application/TestApp/Component/Collider2DComponent.h"
 #include "application/TestApp/Component/Collider3DComponent.h"
 #include "application/TestApp/Component/ProjectedColliderComponent.h"
 #include "engine/Functions/ECS/Component/CameraComponent.h"
@@ -390,38 +389,6 @@ void SpawnEnemies(No::Registry& registry, const RailEnemySpawnEventParams& param
 	}
 }
 
-void UpdateRailEnemies(No::Registry& registry, float deltaTime) {
-	auto view = registry.View<CBRailEnemyTag, EnemyComponent, No::TransformComponent, TestApp::Collider3DComponent>();
-	for (auto entity : view) {
-		auto* enemy = registry.GetComponent<EnemyComponent>(entity);
-		auto* transform = registry.GetComponent<No::TransformComponent>(entity);
-		auto* collider3D = registry.GetComponent<TestApp::Collider3DComponent>(entity);
-		if (!enemy || !transform || !collider3D) {
-			continue;
-		}
-
-		const No::Vector3 moveDir = NormalizeOrDefault(enemy->moveDirection, No::Vector3(0.0f, 0.0f, -1.0f));
-		transform->translate += moveDir * enemy->moveSpeed * deltaTime;
-
-		bool isHitByPlayerAttack = false;
-		if (collider3D->isColliding) {
-			auto* hit2D = registry.GetComponent<TestApp::Collider2DComponent>(collider3D->collidedEntity);
-			if (hit2D && hit2D->collisionLayer == CommentBout::CollisionLayer::CBPlayerAttack) {
-				isHitByPlayerAttack = true;
-			}
-		}
-
-		if (isHitByPlayerAttack && !enemy->wasCollidingWithAttack) {
-			enemy->hp -= 1;
-		}
-		enemy->wasCollidingWithAttack = isHitByPlayerAttack;
-
-		if (enemy->hp <= 0) {
-			registry.DestroyEntity(entity);
-		}
-	}
-}
-
 void UpdateRailEvents(No::Registry& registry, RailCameraComponent& rail, float deltaTime) {
 	for (auto& eventData : rail.events) {
 		if (!eventData.fired && !eventData.waitingCondition && rail.distance >= eventData.triggerDistance) {
@@ -474,8 +441,6 @@ void UpdateRailEvents(No::Registry& registry, RailCameraComponent& rail, float d
 }
 
 void RailCameraSystem::Update(No::Registry& registry, float deltaTime) {
-	UpdateRailEnemies(registry, deltaTime);
-
 	auto view = registry.View<RailCameraComponent, No::TransformComponent>();
 	for (auto entity : view) {
 		auto* rail = registry.GetComponent<RailCameraComponent>(entity);

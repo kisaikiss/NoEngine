@@ -1,7 +1,7 @@
 #pragma once
 #include "engine/NoEngine.h"
-#include "RailCameraEditor.h"
-#include "GameEventEditor.h"
+#include "application/CommentBout/Editor/RailCameraEditor.h"
+#include "application/CommentBout/Editor/GameEventEditor.h"
 #include <array>
 
 class GameScene : public No::IScene {

@@ -1,11 +1,7 @@
 #include "stdafx.h"
 #include "GameScene.h"
-#include "RailDataIO.h"
-#include <vector>
-#include <utility>
-#include <array>
-#include <algorithm>
 #include "application/CommentBout/GameTag.h"
+#include "application/CommentBout/Data/RailDataIO.h"
 #include "application/CommentBout/Component/PlayerComponent.h"
 #include "application/CommentBout/Component/PlayerAttackComponent.h"
 #include "application/CommentBout/Component/PauseStateComponent.h"
@@ -31,6 +27,7 @@
 #include "application/CommentBout/System/OptionSystem.h"
 #include "application/CommentBout/System/OptionViewSystem.h"
 #include "application/CommentBout/System/RailCameraSystem.h"
+#include "application/CommentBout/System/EnemySystem.h"
 #include "application/CommentBout/Spawner/OptionMenuSpawner.h"
 #include "application/CommentBout/Spawner/PauseMenuSpawner.h"
 #include "application/TestApp/System/CollisionTestSystem.h"
@@ -63,6 +60,7 @@ void GameScene::Setup() {
 	AddSystem(std::make_unique<PauseViewSystem>());
 	AddSystem(std::make_unique<OptionViewSystem>());
 	AddSystem(std::make_unique<No::DebugCameraSystem>());
+	AddSystem(std::make_unique<EnemySystem>());
 	AddSystem(std::make_unique<RailCameraSystem>());
 	AddSystem(std::make_unique<No::CameraSystem>());
 	AddSystem(std::make_unique<No::EditSystem>());

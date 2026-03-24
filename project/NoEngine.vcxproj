@@ -163,6 +163,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   <ItemGroup>
     <ClCompile Include="application\CommentBout\Component\PlayerAttackComponent.cpp" />
     <ClCompile Include="application\CommentBout\Spawner\TitleMenuSpawner.cpp" />
+    <ClCompile Include="application\CommentBout\System\EnemySystem.cpp" />
     <ClCompile Include="application\CommentBout\System\GrassReactionSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\LifetimeSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\OptionSystem.cpp" />
@@ -323,10 +324,10 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </ClCompile>
     <ClCompile Include="application\CommentBout\Component\HitBalloonComponent.cpp" />
     <ClCompile Include="application\CommentBout\System\HitBalloonSystem.cpp" />
-    <ClCompile Include="application\CommentBout\Scene\GameEventEditor.cpp" />
+    <ClCompile Include="application\CommentBout\Editor\GameEventEditor.cpp" />
     <ClCompile Include="application\CommentBout\Scene\GameScene.cpp" />
-    <ClCompile Include="application\CommentBout\Scene\RailCameraEditor.cpp" />
-    <ClCompile Include="application\CommentBout\Scene\RailDataIO.cpp" />
+    <ClCompile Include="application\CommentBout\Editor\RailCameraEditor.cpp" />
+    <ClCompile Include="application\CommentBout\Data\RailDataIO.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="application\CommentBout\Spawner\OptionMenuSpawner.cpp" />
     <ClCompile Include="application\CommentBout\Spawner\PauseMenuSpawner.cpp" />
@@ -353,6 +354,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\CommentBout\Component\TitleMenuStateComponent.h" />
     <ClInclude Include="application\CommentBout\Component\TitleMenuViewComponent.h" />
     <ClInclude Include="application\CommentBout\Spawner\TitleMenuSpawner.h" />
+    <ClInclude Include="application\CommentBout\System\EnemySystem.h" />
     <ClInclude Include="application\CommentBout\System\RailCameraSystem.h" />
     <ClInclude Include="application\CommentBout\System\TitleSystem.h" />
     <ClInclude Include="application\CommentBout\System\TitleViewSystem.h" />
@@ -582,10 +584,10 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </ClInclude>
     <ClInclude Include="application\CommentBout\Component\HitBalloonComponent.h" />
     <ClInclude Include="application\CommentBout\System\HitBalloonSystem.h" />
-    <ClInclude Include="application\CommentBout\Scene\GameEventEditor.h" />
+    <ClInclude Include="application\CommentBout\Editor\GameEventEditor.h" />
     <ClInclude Include="application\CommentBout\Scene\GameScene.h" />
-    <ClInclude Include="application\CommentBout\Scene\RailCameraEditor.h" />
-    <ClInclude Include="application\CommentBout\Scene\RailDataIO.h" />
+    <ClInclude Include="application\CommentBout\Editor\RailCameraEditor.h" />
+    <ClInclude Include="application\CommentBout\Data\RailDataIO.h" />
     <ClInclude Include="application\CommentBout\Spawner\OptionMenuSpawner.h" />
     <ClInclude Include="application\CommentBout\Spawner\PauseMenuSpawner.h" />
     <ClInclude Include="resource.h" />
