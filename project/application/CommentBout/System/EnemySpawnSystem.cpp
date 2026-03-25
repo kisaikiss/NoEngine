@@ -3,6 +3,9 @@
 #include "application/CommentBout/Component/SpawnEnemyRequestComponent.h"
 #include "application/CommentBout/Component/RailCameraComponent.h"
 #include "application/CommentBout/Component/EnemyComponent.h"
+#include "application/CommentBout/Component/EnemyShooterComponent.h"
+#include "application/CommentBout/Component/EnemyRewardSourceComponent.h"
+#include "application/CommentBout/Component/BossComponent.h"
 #include "application/CommentBout/Component/HealthComponent.h"
 #include "application/CommentBout/Utility/CBCollisionMask.h"
 #include "application/CommentBout/GameTag.h"
@@ -47,6 +50,10 @@ void SpawnRailEnemies(No::Registry& registry, const RailEnemySpawnEventParams& p
 		enemy->moveDirection = direction;
 		enemy->groupId = params.spawnGroupId;
 
+		auto* rewardSource = registry.AddComponent<EnemyRewardSourceComponent>(enemyEntity);
+		rewardSource->worldSizeForReward = 0.7f;
+		rewardSource->spawned = false;
+
 		auto* commonHealth = registry.AddComponent<HealthComponent>(enemyEntity);
 		commonHealth->hp = enemy->hp;
 		commonHealth->maxHp = enemy->maxHp;
@@ -62,6 +69,41 @@ void SpawnRailEnemies(No::Registry& registry, const RailEnemySpawnEventParams& p
 
 		auto* projected = registry.AddComponent<CommentBoutCollision::ProjectedColliderComponent>(enemyEntity);
 		projected->source3DEntity = enemyEntity;
+
+		switch (params.enemyType) {
+		case RailEnemyType::MoveAndShoot:
+		{
+			auto* shooter = registry.AddComponent<EnemyShooterComponent>(enemyEntity);
+			shooter->shootInterval = 1.0f;
+			shooter->bulletSpeed = 15.0f;
+			shooter->bulletDamage = 1;
+			shooter->targetDepthFromCamera = 1.0f;
+			shooter->bulletLifetime = 4.0f;
+			break;
+		}
+		case RailEnemyType::Boss:
+		{
+			registry.AddComponent<CBBossTag>(enemyEntity);
+			auto* boss = registry.AddComponent<BossComponent>(enemyEntity);
+			boss->behavior = params.boss;
+			auto* shooter = registry.AddComponent<EnemyShooterComponent>(enemyEntity);
+			shooter->shootInterval = std::max(0.05f, params.boss.burstShotInterval);
+			shooter->bulletSpeed = 12.0f;
+			shooter->bulletDamage = 2;
+			shooter->targetDepthFromCamera = 1.0f;
+			shooter->bulletLifetime = 5.0f;
+			transform->scale = { 1.6f, 1.6f, 1.6f };
+			rewardSource->worldSizeForReward = 1.6f;
+			enemy->maxHp = std::max(enemy->maxHp, 100);
+			enemy->hp = enemy->maxHp;
+			commonHealth->hp = enemy->hp;
+			commonHealth->maxHp = enemy->maxHp;
+			break;
+		}
+		case RailEnemyType::MoveOnly:
+		default:
+			break;
+		}
 	}
 }
 }

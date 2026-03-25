@@ -16,6 +16,7 @@
 #include "application/CommentBout/Component/OptionMenuViewComponent.h"
 #include "application/CommentBout/FieldObject/Component/GrassReactionComponent.h"
 #include "application/CommentBout/Component/GameResourceComponent.h"
+#include "application/CommentBout/Component/BossHpBarComponent.h"
 #include "application/CommentBout/FieldObject/Component/GroundComponent.h"
 #include "application/CommentBout/Component/RailCameraComponent.h"
 #include "application/CommentBout/Component/EnemyComponent.h"
@@ -33,9 +34,14 @@
 #include "application/CommentBout/System/OptionViewSystem.h"
 #include "application/CommentBout/System/RailCameraSystem.h"
 #include "application/CommentBout/System/EnemySpawnSystem.h"
+#include "application/CommentBout/System/EnemyShootSystem.h"
 #include "application/CommentBout/System/EnemyMoveSystem.h"
+#include "application/CommentBout/System/BossBehaviorSystem.h"
+#include "application/CommentBout/System/EnemyBulletHitSystem.h"
 #include "application/CommentBout/System/EnemyContactDamageSystem.h"
 #include "application/CommentBout/System/EnemyVisualSystem.h"
+#include "application/CommentBout/System/BossHpBarViewSystem.h"
+#include "application/CommentBout/System/EnemyRewardToBossSystem.h"
 #include "application/CommentBout/System/PlayerAttackResolveSystem.h"
 #include "application/CommentBout/System/DamageApplySystem.h"
 #include "application/CommentBout/Spawner/OptionMenuSpawner.h"
@@ -53,11 +59,11 @@ void GameScene::Setup() {
 	grassNameIndex_ = 0;
 
 	// ---- システム登録（順序が重要）----------------------------------------------　//
-	// 1. PlayerControlSystem : 入力処理・攻撃エンティティのスポawn
-	// 2. CollisionTestSystem : コライダー更新・投影・衝突判定→ projected->isColliding をセット
-	// 3. GrassReactionSystem : 衝突開始を検出しエフェクトエンティティをスポーン→ HitBalloonComponent を付与
-	// 4. HitBalloonSystem    : HitBalloonComponent が指す投影位置からエフェクトの Transform2D を毎フレーム更新
-	// 5. LifetimeSystem      : 時間切れエンティティを削除	
+	// 1.PlayerControlSystem : 入力処理・攻撃エンティティのスポawn
+	// 2.CollisionTestSystem : コライダー更新・投影・衝突判定 → projected -> isColliding をセット
+	// 3.GrassReactionSystem : 衝突開始を検出しエフェクトエンティティをスポーン→ HitBalloonComponent を付与
+	// 4.HitBalloonSystem    : HitBalloonComponent が指す投影位置からエフェクトの Transform2D を毎フレーム更新
+	// 5.LifetimeSystem		 : 時間切れエンティティを削除	
 	// --------------------------------------------------------------------------- //
 
 	AddSystem(std::make_unique<PauseSystem>());
@@ -67,11 +73,16 @@ void GameScene::Setup() {
 	AddSystem(std::make_unique<RailCameraSystem>());
 	AddSystem(std::make_unique<EnemySpawnSystem>());
 	AddSystem(std::make_unique<No::CameraSystem>());
-	AddSystem(std::make_unique<CommentBoutCollision::CollisionSystem>());
+	AddSystem(std::make_unique<BossBehaviorSystem>());
 	AddSystem(std::make_unique<EnemyMoveSystem>());
+	AddSystem(std::make_unique<EnemyShootSystem>());
+	AddSystem(std::make_unique<CommentBoutCollision::CollisionSystem>());
+	AddSystem(std::make_unique<EnemyBulletHitSystem>());
 	AddSystem(std::make_unique<EnemyContactDamageSystem>());
 	AddSystem(std::make_unique<PlayerAttackResolveSystem>());
+	AddSystem(std::make_unique<EnemyRewardToBossSystem>());
 	AddSystem(std::make_unique<DamageApplySystem>());
+	AddSystem(std::make_unique<BossHpBarViewSystem>());
 	AddSystem(std::make_unique<EnemyVisualSystem>());
 	AddSystem(std::make_unique<GrassReactionSystem>());
 	AddSystem(std::make_unique<HitBalloonSystem>());
@@ -92,6 +103,12 @@ void GameScene::Setup() {
 	registry.AddComponent<CBGameResourceTag>(gameResourceEntity);
 	auto* gameResource = registry.AddComponent<GameResourceComponent>(gameResourceEntity);
 	gameResource->whiteTexture = whiteTexture;
+
+	auto bossHpBarEntity = registry.GenerateEntity();
+	registry.AddComponent<CBBossHpBarTag>(bossHpBarEntity);
+	auto* bossHpBar = registry.AddComponent<BossHpBarComponent>(bossHpBarEntity);
+	bossHpBar->anchor = { 640.0f, 64.0f };
+	bossHpBar->size = { 420.0f, 28.0f };
 
 
 	auto pauseStateEntity = registry.GenerateEntity();
@@ -393,6 +410,63 @@ void GameScene::ChangeSceneImGui()
 	ImGui::End();
 #endif
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

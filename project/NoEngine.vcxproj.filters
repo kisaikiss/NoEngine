@@ -175,6 +175,11 @@
     <ClCompile Include="application\CommentBout\System\EnemyContactDamageSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\EnemyVisualSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\PlayerInfoDebugSystem.cpp" />
+    <ClCompile Include="application\CommentBout\System\BossBehaviorSystem.cpp" />
+    <ClCompile Include="application\CommentBout\System\EnemyShootSystem.cpp" />
+    <ClCompile Include="application\CommentBout\System\EnemyBulletHitSystem.cpp" />
+    <ClCompile Include="application\CommentBout\System\BossHpBarViewSystem.cpp" />
+    <ClCompile Include="application\CommentBout\System\EnemyRewardToBossSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Functions\ECS\System\CameraSystem.h" />
@@ -415,6 +420,17 @@
     <ClInclude Include="application\CommentBout\System\EnemyContactDamageSystem.h" />
     <ClInclude Include="application\CommentBout\System\EnemyVisualSystem.h" />
     <ClInclude Include="application\CommentBout\System\PlayerInfoDebugSystem.h" />
+    <ClInclude Include="application\CommentBout\Component\EnemyShooterComponent.h" />
+    <ClInclude Include="application\CommentBout\Component\BossComponent.h" />
+    <ClInclude Include="application\CommentBout\System\BossBehaviorSystem.h" />
+    <ClInclude Include="application\CommentBout\Component\BossHpBarComponent.h" />
+    <ClInclude Include="application\CommentBout\Component\EnemyRewardOrbComponent.h" />
+    <ClInclude Include="application\CommentBout\Component\EnemyBulletComponent.h" />
+    <ClInclude Include="application\CommentBout\Component\EnemyRewardSourceComponent.h" />
+    <ClInclude Include="application\CommentBout\System\EnemyShootSystem.h" />
+    <ClInclude Include="application\CommentBout\System\EnemyBulletHitSystem.h" />
+    <ClInclude Include="application\CommentBout\System\BossHpBarViewSystem.h" />
+    <ClInclude Include="application\CommentBout\System\EnemyRewardToBossSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

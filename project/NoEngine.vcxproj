@@ -166,9 +166,14 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\CommentBout\FieldObject\System\GrassReactionSystem.cpp" />
     <ClCompile Include="application\CommentBout\FieldObject\System\HitBalloonSystem.cpp" />
     <ClCompile Include="application\CommentBout\Spawner\TitleMenuSpawner.cpp" />
+    <ClCompile Include="application\CommentBout\System\BossBehaviorSystem.cpp" />
+    <ClCompile Include="application\CommentBout\System\BossHpBarViewSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\DamageApplySystem.cpp" />
+    <ClCompile Include="application\CommentBout\System\EnemyBulletHitSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\EnemyContactDamageSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\EnemyMoveSystem.cpp" />
+    <ClCompile Include="application\CommentBout\System\EnemyRewardToBossSystem.cpp" />
+    <ClCompile Include="application\CommentBout\System\EnemyShootSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\EnemySpawnSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\EnemySystem.cpp" />
     <ClCompile Include="application\CommentBout\System\EnemyVisualSystem.cpp" />
@@ -352,8 +357,14 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   <ItemGroup>
     <ClInclude Include="application\CommentBout\Collision\Utility\CoordinateConverter.h" />
     <ClInclude Include="application\CommentBout\Component\AttackDamageComponent.h" />
+    <ClInclude Include="application\CommentBout\Component\BossComponent.h" />
+    <ClInclude Include="application\CommentBout\Component\BossHpBarComponent.h" />
     <ClInclude Include="application\CommentBout\Component\DamageRequestComponent.h" />
+    <ClInclude Include="application\CommentBout\Component\EnemyBulletComponent.h" />
     <ClInclude Include="application\CommentBout\Component\EnemyComponent.h" />
+    <ClInclude Include="application\CommentBout\Component\EnemyRewardOrbComponent.h" />
+    <ClInclude Include="application\CommentBout\Component\EnemyRewardSourceComponent.h" />
+    <ClInclude Include="application\CommentBout\Component\EnemyShooterComponent.h" />
     <ClInclude Include="application\CommentBout\Component\GameResourceComponent.h" />
     <ClInclude Include="application\CommentBout\Component\HealthComponent.h" />
     <ClInclude Include="application\CommentBout\Component\InvincibleComponent.h" />
@@ -374,9 +385,14 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\CommentBout\FieldObject\System\GrassReactionSystem.h" />
     <ClInclude Include="application\CommentBout\FieldObject\System\HitBalloonSystem.h" />
     <ClInclude Include="application\CommentBout\Spawner\TitleMenuSpawner.h" />
+    <ClInclude Include="application\CommentBout\System\BossBehaviorSystem.h" />
+    <ClInclude Include="application\CommentBout\System\BossHpBarViewSystem.h" />
     <ClInclude Include="application\CommentBout\System\DamageApplySystem.h" />
+    <ClInclude Include="application\CommentBout\System\EnemyBulletHitSystem.h" />
     <ClInclude Include="application\CommentBout\System\EnemyContactDamageSystem.h" />
     <ClInclude Include="application\CommentBout\System\EnemyMoveSystem.h" />
+    <ClInclude Include="application\CommentBout\System\EnemyRewardToBossSystem.h" />
+    <ClInclude Include="application\CommentBout\System\EnemyShootSystem.h" />
     <ClInclude Include="application\CommentBout\System\EnemySpawnSystem.h" />
     <ClInclude Include="application\CommentBout\System\EnemySystem.h" />
     <ClInclude Include="application\CommentBout\System\EnemyVisualSystem.h" />

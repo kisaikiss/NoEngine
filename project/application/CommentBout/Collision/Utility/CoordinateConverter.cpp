@@ -148,4 +148,32 @@ namespace CommentBoutCollision {
 			screenPos.y >= -margin &&
 			screenPos.y <= static_cast<float>(windowSize.clientHeight) + margin;
 	}
+
+	No::Vector3 CoordinateConverter::ScreenToWorldNearCamera(
+		const No::Vector2& screenPos,
+		float depthFromCamera,
+		No::CameraComponent& camera,
+		No::TransformComponent& cameraTransform,
+		const NoEngine::WindowSize& windowSize
+	) {
+		const float width = std::max(1.0f, static_cast<float>(windowSize.clientWidth));
+		const float height = std::max(1.0f, static_cast<float>(windowSize.clientHeight));
+		const float depth = std::max(0.01f, depthFromCamera);
+
+		const float ndcX = (screenPos.x / width) * 2.0f - 1.0f;
+		const float ndcY = 1.0f - (screenPos.y / height) * 2.0f;
+
+		const float tanHalfFovY = std::tan(std::max(0.01f, camera.fov) * 0.5f);
+		const float aspect = (camera.aspect > 0.0f) ? camera.aspect : (width / height);
+		const float viewX = ndcX * depth * tanHalfFovY * aspect;
+		const float viewY = ndcY * depth * tanHalfFovY;
+
+		No::Matrix4x4 cameraWorld = cameraTransform.MakeAffineMatrix4x4();
+		No::Vector3 right = cameraWorld.TransformNormal(No::Vector3::RIGHT).Normalize();
+		No::Vector3 up = cameraWorld.TransformNormal(No::Vector3::UP).Normalize();
+		No::Vector3 forward = cameraWorld.TransformNormal(No::Vector3::FORWARD).Normalize();
+		No::Vector3 cameraPos = cameraTransform.GetWorldPosition();
+
+		return cameraPos + forward * depth + right * viewX + up * viewY;
+	}
 }

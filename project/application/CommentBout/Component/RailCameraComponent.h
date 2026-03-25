@@ -15,6 +15,20 @@ enum class RailResumeConditionType {
 	EnemiesCleared = 2
 };
 
+enum class RailEnemyType {
+	MoveOnly = 0,
+	MoveAndShoot = 1,
+	Boss = 2
+};
+
+struct BossBehaviorParams {
+	No::Vector3 offsetLocal = { 0.0f, 0.0f, 8.0f };
+	No::Vector2 figure8Amplitude = { 2.0f, 1.0f };
+	float figure8Period = 4.0f;
+	float stopDuration = 1.2f;
+	float burstShotInterval = 0.25f;
+};
+
 struct RailEnemySpawnEventParams {
 	int count = 1;
 	int hp = 10;
@@ -23,6 +37,9 @@ struct RailEnemySpawnEventParams {
 	No::Vector3 spawnPosition = { 0.0f, 1.0f, 10.0f };
 	No::Vector3 moveDirection = { 0.0f, 0.0f, -1.0f };
 	int spawnGroupId = 0;
+
+	RailEnemyType enemyType = RailEnemyType::MoveOnly;
+	BossBehaviorParams boss;
 };
 
 struct RailEventData {

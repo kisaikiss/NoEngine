@@ -43,6 +43,25 @@ RailResumeConditionType ParseResumeCondition(const std::string& conditionName) {
 	}
 	return RailResumeConditionType::None;
 }
+
+const char* ToEnemyTypeString(RailEnemyType type) {
+	switch (type) {
+	case RailEnemyType::MoveOnly: return "MoveOnly";
+	case RailEnemyType::MoveAndShoot: return "MoveAndShoot";
+	case RailEnemyType::Boss: return "Boss";
+	default: return "MoveOnly";
+	}
+}
+
+RailEnemyType ParseEnemyType(const std::string& typeName) {
+	if (typeName == "MoveAndShoot") {
+		return RailEnemyType::MoveAndShoot;
+	}
+	if (typeName == "Boss") {
+		return RailEnemyType::Boss;
+	}
+	return RailEnemyType::MoveOnly;
+}
 }
 
 std::string MakeRailFilePath(const std::string& stageName) {
@@ -97,7 +116,15 @@ bool SaveEventsToJson(const RailCameraComponent& rail, const std::string& stageN
 			{ "spawnSpacing", e.spawn.spawnSpacing },
 			{ "spawnPosition", { e.spawn.spawnPosition.x, e.spawn.spawnPosition.y, e.spawn.spawnPosition.z } },
 			{ "moveDirection", { e.spawn.moveDirection.x, e.spawn.moveDirection.y, e.spawn.moveDirection.z } },
-			{ "spawnGroupId", e.spawn.spawnGroupId }
+			{ "spawnGroupId", e.spawn.spawnGroupId },
+			{ "enemyType", ToEnemyTypeString(e.spawn.enemyType) },
+			{ "boss", {
+				{ "offsetLocal", { e.spawn.boss.offsetLocal.x, e.spawn.boss.offsetLocal.y, e.spawn.boss.offsetLocal.z } },
+				{ "figure8Amplitude", { e.spawn.boss.figure8Amplitude.x, e.spawn.boss.figure8Amplitude.y } },
+				{ "figure8Period", e.spawn.boss.figure8Period },
+				{ "stopDuration", e.spawn.boss.stopDuration },
+				{ "burstShotInterval", e.spawn.boss.burstShotInterval }
+			} }
 		};
 		json["events"].push_back(eventJson);
 	}
@@ -232,6 +259,36 @@ bool LoadEventsToComponent(RailCameraComponent& rail, const std::string& stageNa
 			const auto spawnGroupIt = spawnIt->find("spawnGroupId");
 			if (spawnGroupIt != spawnIt->end() && spawnGroupIt->is_number_integer()) {
 				eventData.spawn.spawnGroupId = spawnGroupIt->get<int>();
+			}
+			const auto enemyTypeIt = spawnIt->find("enemyType");
+			if (enemyTypeIt != spawnIt->end() && enemyTypeIt->is_string()) {
+				eventData.spawn.enemyType = ParseEnemyType(enemyTypeIt->get<std::string>());
+			}
+			const auto bossIt = spawnIt->find("boss");
+			if (bossIt != spawnIt->end() && bossIt->is_object()) {
+				const auto offsetIt = bossIt->find("offsetLocal");
+				if (offsetIt != bossIt->end() && offsetIt->is_array() && offsetIt->size() >= 3) {
+					eventData.spawn.boss.offsetLocal.x = (*offsetIt)[0].get<float>();
+					eventData.spawn.boss.offsetLocal.y = (*offsetIt)[1].get<float>();
+					eventData.spawn.boss.offsetLocal.z = (*offsetIt)[2].get<float>();
+				}
+				const auto ampIt = bossIt->find("figure8Amplitude");
+				if (ampIt != bossIt->end() && ampIt->is_array() && ampIt->size() >= 2) {
+					eventData.spawn.boss.figure8Amplitude.x = (*ampIt)[0].get<float>();
+					eventData.spawn.boss.figure8Amplitude.y = (*ampIt)[1].get<float>();
+				}
+				const auto periodIt = bossIt->find("figure8Period");
+				if (periodIt != bossIt->end() && periodIt->is_number()) {
+					eventData.spawn.boss.figure8Period = periodIt->get<float>();
+				}
+				const auto stopIt = bossIt->find("stopDuration");
+				if (stopIt != bossIt->end() && stopIt->is_number()) {
+					eventData.spawn.boss.stopDuration = stopIt->get<float>();
+				}
+				const auto burstIt = bossIt->find("burstShotInterval");
+				if (burstIt != bossIt->end() && burstIt->is_number()) {
+					eventData.spawn.boss.burstShotInterval = burstIt->get<float>();
+				}
 			}
 		}
 

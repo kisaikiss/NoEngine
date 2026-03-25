@@ -3,9 +3,14 @@
 #include "application/CommentBout/Component/EnemyComponent.h"
 #include "application/CommentBout/Component/HealthComponent.h"
 #include "application/CommentBout/Component/PlayerHitboxComponent.h"
+#include "application/CommentBout/Component/EnemyRewardSourceComponent.h"
+#include "application/CommentBout/Component/EnemyRewardOrbComponent.h"
+#include "application/CommentBout/Component/BossHpBarComponent.h"
+#include "application/CommentBout/Component/GameResourceComponent.h"
 #include "application/CommentBout/Collision/Component/Collider3DComponent.h"
 #include "application/CommentBout/Collision/Component/ProjectedColliderComponent.h"
 #include "application/CommentBout/Collision/Utility/CollisionAlgorithms.h"
+#include "application/CommentBout/Collision/Utility/CoordinateConverter.h"
 #include "application/CommentBout/GameTag.h"
 #include "engine/Functions/ECS/Component/CameraComponent.h"
 #include "engine/Functions/ECS/Component/MaterialComponent.h"
@@ -13,10 +18,7 @@
 #include "engine/Functions/Renderer/Primitive.h"
 #include <algorithm>
 #include <cmath>
-
-#ifdef USE_IMGUI
-#include "externals/imgui/imgui.h"
-#endif
+#include "engine/Runtime/GraphicsCore.h"
 
 namespace No {
 using ::NoEngine::Primitive;
@@ -211,6 +213,62 @@ void DrawSpriteGateDebugOverlay(
 #endif
 }
 
+void SpawnRewardOrbFromEnemy(
+	No::Registry& registry,
+	No::Entity enemyEntity,
+	CommentBoutCollision::Collider3DComponent& collider3D,
+	No::CameraComponent& camera,
+	const NoEngine::WindowSize& windowSize,
+	const No::Vector2& bossBarAnchor,
+	NoEngine::TextureRef whiteTexture
+) {
+	const float worldSize = (collider3D.shapeType == CommentBoutCollision::ShapeType3D::Box)
+		? std::max({ collider3D.worldBoxSize.x, collider3D.worldBoxSize.y, collider3D.worldBoxSize.z })
+		: collider3D.worldRadius * 2.0f;
+
+	No::Vector2 start = CommentBoutCollision::CoordinateConverter::WorldToScreen(
+		collider3D.worldPosition,
+		camera.forGPU.viewProjection,
+		windowSize
+	);
+	if (!CommentBoutCollision::CoordinateConverter::IsValidProjection(start)) {
+		return;
+	}
+
+	const float projectedRadius = CommentBoutCollision::CoordinateConverter::WorldRadiusToScreen(
+		collider3D.worldPosition,
+		std::max(0.1f, worldSize * 0.5f),
+		camera.forGPU.viewProjection,
+		windowSize
+	);
+	const float spriteSize = std::max(24.0f, std::min(180.0f, projectedRadius * 2.2f));
+	const int attackPower = std::max(1, std::min(30, static_cast<int>(spriteSize / 18.0f)));
+
+	auto orb = registry.GenerateEntity();
+	registry.AddComponent<CBEnemyRewardOrbTag>(orb);
+	auto* t2d = registry.AddComponent<No::Transform2DComponent>(orb);
+	t2d->translate = start;
+	t2d->scale = { spriteSize, spriteSize };
+	auto* sprite = registry.AddComponent<No::SpriteComponent>(orb);
+	sprite->textureHandle = whiteTexture;
+	sprite->layer = 91;
+	sprite->orderInLayer = 20;
+	sprite->color = { 1.0f, 0.9f, 0.2f, 0.95f };
+
+	auto* reward = registry.AddComponent<EnemyRewardOrbComponent>(orb);
+	reward->start = start;
+	reward->end = bossBarAnchor;
+	reward->control = { (start.x + bossBarAnchor.x) * 0.5f, std::min(start.y, bossBarAnchor.y) - 120.0f };
+	reward->duration = 0.9f;
+	reward->elapsed = 0.0f;
+	reward->attackPower = attackPower;
+
+	auto* src = registry.GetComponent<EnemyRewardSourceComponent>(enemyEntity);
+	if (src) {
+		src->spawned = true;
+	}
+}
+
 void EnemyVisualSystem::Update(No::Registry& registry, float deltaTime)
 {
 	static bool drawColliderDebug = true;
@@ -231,6 +289,31 @@ void EnemyVisualSystem::Update(No::Registry& registry, float deltaTime)
 	auto debugHitboxIt = debugHitboxView.begin();
 	if (debugHitboxIt != debugHitboxView.end()) {
 		debugHitbox = registry.GetComponent<PlayerHitboxComponent>(*debugHitboxIt);
+	}
+
+	GameResourceComponent* gameResource = nullptr;
+	auto resourceView = registry.View<CBGameResourceTag, GameResourceComponent>();
+	for (auto e : resourceView) {
+		gameResource = registry.GetComponent<GameResourceComponent>(e);
+		if (gameResource) {
+			break;
+		}
+	}
+
+	No::Vector2 bossBarAnchor = { 640.0f, 64.0f };
+	auto bossBarView = registry.View<CBBossHpBarTag, BossHpBarComponent>();
+	for (auto e : bossBarView) {
+		auto* bar = registry.GetComponent<BossHpBarComponent>(e);
+		if (bar) {
+			bossBarAnchor = bar->anchor;
+			break;
+		}
+	}
+
+	auto* mainWindow = NoEngine::GraphicsCore::gWindowManager.GetMainWindow();
+	NoEngine::WindowSize windowSize{};
+	if (mainWindow) {
+		windowSize = mainWindow->GetWindowSize();
 	}
 
 #ifdef USE_IMGUI
@@ -262,6 +345,7 @@ void EnemyVisualSystem::Update(No::Registry& registry, float deltaTime)
 		auto* health = registry.GetComponent<HealthComponent>(entity);
 		auto* material = registry.GetComponent<No::MaterialComponent>(entity);
 		auto* collider3D = registry.GetComponent<CommentBoutCollision::Collider3DComponent>(entity);
+		auto* rewardSource = registry.GetComponent<EnemyRewardSourceComponent>(entity);
 		if (!enemy || !health || !material || !collider3D) {
 			continue;
 		}
@@ -271,6 +355,9 @@ void EnemyVisualSystem::Update(No::Registry& registry, float deltaTime)
 		enemy->lastDamageTaken = health->lastDamageTaken;
 
 		if (health->isDead || health->hp <= 0) {
+			if (!registry.Has<CBBossTag>(entity) && activeCamera && gameResource && mainWindow && rewardSource && !rewardSource->spawned) {
+				SpawnRewardOrbFromEnemy(registry, entity, *collider3D, *activeCamera, windowSize, bossBarAnchor, gameResource->whiteTexture);
+			}
 			registry.DestroyEntity(entity);
 			continue;
 		}

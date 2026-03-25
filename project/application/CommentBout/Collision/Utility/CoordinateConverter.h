@@ -68,6 +68,17 @@ namespace CommentBoutCollision {
 		/// <returns>有効な投影であれば true</returns>
 		static bool IsValidProjection(const No::Vector2& screenPos);
 
+		/// <summary>
+		/// スクリーン座標をカメラ相対の指定深度にある3D座標へ変換
+		/// </summary>
+		static No::Vector3 ScreenToWorldNearCamera(
+			const No::Vector2& screenPos,
+			float depthFromCamera,
+			No::CameraComponent& camera,
+			No::TransformComponent& cameraTransform,
+			const NoEngine::WindowSize& windowSize
+		);
+
 	private:
 
 		// 画面外を示す特殊な座標値

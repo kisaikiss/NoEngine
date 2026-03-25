@@ -17,6 +17,9 @@ void EnemyMoveSystem::Update(No::Registry& registry, float deltaTime)
 {
 	auto view = registry.View<CBRailEnemyTag, EnemyComponent, HealthComponent, No::TransformComponent>();
 	for (auto entity : view) {
+		if (registry.Has<CBBossTag>(entity)) {
+			continue;
+		}
 		auto* enemy = registry.GetComponent<EnemyComponent>(entity);
 		auto* health = registry.GetComponent<HealthComponent>(entity);
 		auto* transform = registry.GetComponent<No::TransformComponent>(entity);
