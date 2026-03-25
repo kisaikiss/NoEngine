@@ -6,7 +6,7 @@ namespace NoEngine {
 namespace ECS {
 class DebugCameraSystem : public ISystem {
 public:
-	DebugCameraSystem() { SetStopInGameStop(false); }
+	DebugCameraSystem() { SetStopInGameStop(false); SetStopInPause(false); }
 	void Update(Registry& registry, float deltaTime) override;
 };
 }
