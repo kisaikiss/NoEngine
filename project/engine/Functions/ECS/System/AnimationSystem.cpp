@@ -16,8 +16,6 @@ std::wstring sPsoName = L"Animation PSO";
 
 
 AnimationSystem::AnimationSystem() {
-	SetStopInPause(true);
-
 	ShaderModule animationCS(ShaderStage::Compute, L"resources/engine/Shaders/Compute/Skinning.CS.hlsl", L"cs_6_0");
 
 	const ShaderReflection& csReflection = animationCS.GetReflection();

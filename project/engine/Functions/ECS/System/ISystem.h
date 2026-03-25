@@ -20,7 +20,7 @@ protected:
 	void SetStopInGameStop(bool stopInGameStop) { stopInGameStop_ = stopInGameStop; }
 
 private:
-	bool stopInPause_ = false;
+	bool stopInPause_ = true;
 	bool stopInGameStop_ = true;
 };
 }
