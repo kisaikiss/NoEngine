@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include "SceneSerializer.h"
 #include "engine/Functions/Scene/SceneNameComponent.h"
+#include "engine/Functions/ECS/Component/TransformComponent.h"
+#include "engine/Functions/ECS/Component/Transform2DComponent.h"
+#include "engine/Functions/ECS/Component/StartTransformComponent.h"
 #include "../EditUtils.h"
 
 namespace NoEngine {
@@ -79,9 +82,24 @@ namespace NoEngine {
 					continue;
 				}
 
-				// Componentを復元
-				LoadEntityFromJson(registry, e, entityJson);
-			}
+		// Componentを復元
+		LoadEntityFromJson(registry, e, entityJson);
+		auto* startTransform = registry.GetComponent<Component::StartTransformComponent>(e);
+		auto* transform = registry.GetComponent<Component::TransformComponent>(e);
+		if (startTransform && transform) {
+			transform->translate = startTransform->translate;
+			transform->rotation = startTransform->rotation;
+			transform->scale = startTransform->scale;
+		}
+
+		auto* startTransform2d = registry.GetComponent<Component::StartTransform2DComponent>(e);
+		auto* transform2d = registry.GetComponent<Component::Transform2DComponent>(e);
+		if (startTransform2d && transform2d) {
+			transform2d->translate = startTransform2d->translate;
+			transform2d->rotation = startTransform2d->rotation;
+			transform2d->scale = startTransform2d->scale;
+		}
+	}
 
 		}
 

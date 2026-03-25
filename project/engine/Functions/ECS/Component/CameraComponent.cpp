@@ -12,3 +12,7 @@ REFLECT_FIELD(theta),
 REFLECT_FIELD(phi),
 REFLECT_FIELD(drawCenter)
 REFLECT_STRUCT_END(NoEngine::Component::DebugCameraComponent)
+
+REFLECT_STRUCT_BEGIN(NoEngine::Component::CameraComponent)
+REFLECT_FIELD(fov)
+REFLECT_STRUCT_END(NoEngine::Component::CameraComponent)

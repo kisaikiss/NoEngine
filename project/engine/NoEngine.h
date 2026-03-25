@@ -8,6 +8,8 @@
 #include "Functions/ECS/Component/MaterialComponent.h"
 #include "Functions/ECS/Component/LightComponent.h"
 #include "Functions/ECS/Component/CameraComponent.h"
+#include "Functions/ECS/Component/ParticleEmitterComponent.h"
+#include "Functions/ECS/Component/StartTransformComponent.h"
 #include "Functions/ECS/Event/SceneChangeEvent.h"
 #include "Editor/EditUtils.h"
 #include "Editor/ReflectionMacros.h"
@@ -25,6 +27,8 @@
 
 #include "Math/MathInclude.h"
 
+#include "Utilities/Random.h"
+
 #ifdef USE_IMGUI
 #include <externals/imgui/imgui.h>
 #endif // USE_IMGUI
@@ -41,4 +45,5 @@ using namespace NoEngine::Asset;
 using namespace NoEngine::Easing;
 using namespace NoEngine::Math;
 using namespace NoEngine::Editor;
+using namespace NoEngine::Random;
 }

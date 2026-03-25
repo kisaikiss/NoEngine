@@ -1,6 +1,7 @@
 #pragma once
 #include "engine/Functions/ECS/Registry.h"
 #include "engine/Functions/ECS/System/SystemManager.h"
+#include "engine/Functions/ECS/Component/PauseComponent.h"
 #include "SceneNameComponent.h"
 
 namespace NoEngine {
@@ -16,6 +17,7 @@ public:
 		registry_(std::make_unique<ECS::Registry>()),
 		systemManager_(std::make_unique<ECS::SystemManager>()) { 
 		registry_->AddComponent<SceneNameComponent>(registry_->GenerateEntity());
+		registry_->AddComponent<ECS::PauseComponent>(registry_->GenerateEntity());
 	}
 	virtual ~IScene() = default;
 
@@ -38,11 +40,7 @@ public:
 	/// レジストリ内のすべてのシステムを、指定した経過時間で更新します。
 	/// </summary>
 	/// <param name="deltaTime">前フレームからの経過時間。システムの更新に使用されます。</param>
-	void Update(ComputeContext& ctx, float deltaTime) {
-		NotSystemUpdate();
-		systemManager_->UpdateAll(ctx, *registry_, deltaTime);
-		registry_->FlushDestroy();
-	}
+	void Update(ComputeContext& ctx, float deltaTime);
 
 	ECS::Registry* GetRegistry() { return registry_.get(); }
 
