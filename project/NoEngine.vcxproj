@@ -175,6 +175,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\CommentBout\System\LifetimeSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\OptionSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\PlayerAttackResolveSystem.cpp" />
+    <ClCompile Include="application\CommentBout\System\PlayerInfoDebugSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\RailCameraSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\TitleSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\TitleViewSystem.cpp" />
@@ -380,6 +381,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\CommentBout\System\EnemySystem.h" />
     <ClInclude Include="application\CommentBout\System\EnemyVisualSystem.h" />
     <ClInclude Include="application\CommentBout\System\PlayerAttackResolveSystem.h" />
+    <ClInclude Include="application\CommentBout\System\PlayerInfoDebugSystem.h" />
     <ClInclude Include="application\CommentBout\System\RailCameraSystem.h" />
     <ClInclude Include="application\CommentBout\System\TitleSystem.h" />
     <ClInclude Include="application\CommentBout\System\TitleViewSystem.h" />

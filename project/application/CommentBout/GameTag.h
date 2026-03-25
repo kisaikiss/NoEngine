@@ -1,20 +1,20 @@
 #pragma once
 
-struct CBPlayerTag {};
-struct CBGrassTag {};
-struct CBGroundTag {};
-struct CBAttackEffectTag {};
-struct CBGrassHitEffectTag {};
-struct CBGameResourceTag {};
-struct CBPauseStateTag {};
-struct CBPauseConfigTag {};
-struct CBPauseDimTag {};
-struct CBPauseViewTag {};
-struct CBOptionStateTag {};
-struct CBOptionConfigTag {};
-struct CBOptionViewTag {};
-struct CBTitleStateTag {};
-struct CBTitleConfigTag {};
-struct CBTitleViewTag {};
-struct CBRailEnemyTag {};
+struct CBPlayerTag {};			//自機
+struct CBGrassTag {};			//草
+struct CBGroundTag {};			//地面
+struct CBAttackEffectTag {};	//攻撃エフェクト
+struct CBGrassHitEffectTag {};	//草から出るコメント
+struct CBGameResourceTag {};	//ゲーム全体で共有するリソースを持つEntityに付与するタグ
+struct CBPauseStateTag {};		//
+struct CBPauseConfigTag {};		//
+struct CBPauseDimTag {};		//
+struct CBPauseViewTag {};;		//
+struct CBOptionStateTag {};;	//
+struct CBOptionConfigTag {};;	//
+struct CBOptionViewTag {};;		//
+struct CBTitleStateTag {};;		//
+struct CBTitleConfigTag {};;	//
+struct CBTitleViewTag {};;		//
+struct CBRailEnemyTag {};;		//
 struct CBPlayerHitboxTag {};

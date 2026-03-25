@@ -15,6 +15,7 @@
 
 void PlayerControlSystem::Update(No::Registry& registry, float deltaTime)
 {
+	// ポーズ中はプレイヤー操作・攻撃生成を停止。
 	bool isPaused = false;
 	auto pauseView = registry.View<CBPauseStateTag, PauseStateComponent>();
 	for (auto pauseEntity : pauseView) {
@@ -28,6 +29,7 @@ void PlayerControlSystem::Update(No::Registry& registry, float deltaTime)
 		return;
 	}
 
+	// 攻撃エフェクト生成に使う共有リソース。
 	GameResourceComponent* gameResource = nullptr;
 	auto resourceView = registry.View<CBGameResourceTag, GameResourceComponent>();
 	for (auto entity : resourceView) {
@@ -67,6 +69,7 @@ void PlayerControlSystem::Update(No::Registry& registry, float deltaTime)
 			continue;
 		}
 
+		// WASD入力を移動ベクトルへ変換。
 		No::Vector2 input{ 0.0f, 0.0f };
 		if (No::Keyboard::IsPress('W')) { input.y -= 1.0f; }
 		if (No::Keyboard::IsPress('S')) { input.y += 1.0f; }
@@ -120,4 +123,5 @@ void PlayerControlSystem::Update(No::Registry& registry, float deltaTime)
 		}
 	}
 }
+
 

@@ -23,6 +23,7 @@
 #include "application/CommentBout/Utility/CBSpriteLayer.h"
 #include "application/CommentBout/Utility/CBGameAudio.h"
 #include "application/CommentBout/System/PlayerControlSystem.h"
+#include "application/CommentBout/System/PlayerInfoDebugSystem.h"
 #include "application/CommentBout/FieldObject/System/GrassReactionSystem.h"
 #include "application/CommentBout/FieldObject/System/HitBalloonSystem.h"
 #include "application/CommentBout/System/LifetimeSystem.h"
@@ -61,6 +62,7 @@ void GameScene::Setup() {
 
 	AddSystem(std::make_unique<PauseSystem>());
 	AddSystem(std::make_unique<PlayerControlSystem>());
+	AddSystem(std::make_unique<PlayerInfoDebugSystem>());
 	AddSystem(std::make_unique<No::DebugCameraSystem>());
 	AddSystem(std::make_unique<RailCameraSystem>());
 	AddSystem(std::make_unique<EnemySpawnSystem>());
@@ -133,7 +135,7 @@ void GameScene::Setup() {
 
 	auto optionConfigEntity = registry.GenerateEntity();
 	registry.AddComponent<CBOptionConfigTag>(optionConfigEntity);
-	registry.AddComponent<OptionMenuConfigComponent>(optionConfigEntity); // 繝・ヵ繧ｩ繝ｫ繝亥､ = JSON蛟､
+	registry.AddComponent<OptionMenuConfigComponent>(optionConfigEntity); // 郢昴・繝ｵ郢ｧ・ｩ郢晢ｽｫ郢昜ｺ･ﾂ・､ = JSON陋滂ｽ､
 	registry.AddComponent<No::EditTag>(optionConfigEntity)->name = "OptionMenuConfig";
 
 
@@ -391,6 +393,10 @@ void GameScene::ChangeSceneImGui()
 	ImGui::End();
 #endif
 }
+
+
+
+
 
 
 

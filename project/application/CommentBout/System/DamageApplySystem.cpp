@@ -32,6 +32,7 @@ void SyncToLegacyPlayerHealth(PlayerHealthComponent* legacy, const HealthCompone
 	legacy->hp = health->hp;
 	legacy->maxHp = health->maxHp;
 	legacy->isDead = health->isDead;
+	legacy->deathHandled = health->deathHandled;
 	legacy->lastDamageTaken = health->lastDamageTaken;
 }
 

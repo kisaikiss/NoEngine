@@ -8,5 +8,6 @@ struct HealthComponent {
 	int hp = 10;
 	int maxHp = 10;
 	bool isDead = false;
+	bool deathHandled = false;
 	int lastDamageTaken = 0;
 };
