@@ -105,7 +105,24 @@ bool CheckEnemyInCameraGate(
 
 void EnemyContactDamageSystem::Update(No::Registry& registry, float deltaTime)
 {
+	static float playerFlashTimer = 0.0f;
 	static_cast<void>(deltaTime);
+
+	{
+		auto playerView = registry.View<CBPlayerTag, No::SpriteComponent>();
+		for (auto e : playerView) {
+			auto* sprite = registry.GetComponent<No::SpriteComponent>(e);
+			if (!sprite) {
+				continue;
+			}
+			if (playerFlashTimer > 0.0f) {
+				playerFlashTimer -= deltaTime;
+				sprite->color = { 1.0f, 0.35f, 0.35f, 0.75f };
+			} else {
+				sprite->color = { 1.0f, 1.0f, 1.0f, 0.5f };
+			}
+		}
+	}
 
 	No::CameraComponent* activeCamera = nullptr;
 	No::TransformComponent* activeCameraTransform = nullptr;
@@ -159,6 +176,7 @@ void EnemyContactDamageSystem::Update(No::Registry& registry, float deltaTime)
 
 				if (canTakeDamage && !enemy->wasCollidingWithPlayer) {
 					EmitDamageRequest(registry, hitbox->playerEntity, entity, 1, false);
+					playerFlashTimer = 0.16f;
 				}
 			}
 		}

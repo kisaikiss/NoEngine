@@ -9,7 +9,22 @@
 
 void EnemyBulletHitSystem::Update(No::Registry& registry, float deltaTime)
 {
+	static float playerFlashTimer = 0.0f;
 	static_cast<void>(deltaTime);
+
+	{
+		auto playerView = registry.View<CBPlayerTag, No::SpriteComponent>();
+		for (auto e : playerView) {
+			auto* sprite = registry.GetComponent<No::SpriteComponent>(e);
+			if (!sprite) {
+				continue;
+			}
+			if (playerFlashTimer > 0.0f) {
+				playerFlashTimer -= deltaTime;
+				sprite->color = { 1.0f, 0.35f, 0.35f, 0.75f };
+			}
+		}
+	}
 
 	auto view = registry.View<CBEnemyBulletTag, EnemyBulletComponent, CommentBoutCollision::Collider3DComponent>();
 	for (auto bulletEntity : view) {
@@ -36,6 +51,7 @@ void EnemyBulletHitSystem::Update(No::Registry& registry, float deltaTime)
 			damage->target = target;
 			damage->amount = std::max(1, bullet->damage);
 			damage->ignoreInvincible = false;
+			playerFlashTimer = 0.16f;
 		}
 
 		registry.DestroyEntity(bulletEntity);

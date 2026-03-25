@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "EnemyRewardToBossSystem.h"
 #include "application/CommentBout/Component/EnemyRewardOrbComponent.h"
-#include "application/CommentBout/Component/BossHpBarComponent.h"
+#include "application/CommentBout/Component/HpBarComponent.h"
 #include "application/CommentBout/Component/DamageRequestComponent.h"
 #include "application/CommentBout/GameTag.h"
 #include <algorithm>
@@ -16,11 +16,11 @@ No::Vector2 Bezier2(const No::Vector2& p0, const No::Vector2& p1, const No::Vect
 void EnemyRewardToBossSystem::Update(No::Registry& registry, float deltaTime)
 {
 	No::Entity bossEntity = No::nullEntity;
-	auto barView = registry.View<CBBossHpBarTag, BossHpBarComponent>();
+	auto barView = registry.View<CBBossHpBarTag, HpBarComponent>();
 	for (auto e : barView) {
-		auto* bar = registry.GetComponent<BossHpBarComponent>(e);
-		if (bar && bar->bossEntity != No::nullEntity) {
-			bossEntity = bar->bossEntity;
+		auto* bar = registry.GetComponent<HpBarComponent>(e);
+		if (bar && bar->targetEntity != No::nullEntity) {
+			bossEntity = bar->targetEntity;
 			break;
 		}
 	}

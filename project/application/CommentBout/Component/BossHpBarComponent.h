@@ -1,6 +1,10 @@
 #pragma once
 #include "engine/NoEngine.h"
 
+/// <summary>
+/// ボスHPバー表示のランタイム状態。
+/// BossHpBarViewSystem が通常ゲージ/遅延赤ゲージ/シェイクを更新する
+/// </summary>
 struct BossHpBarComponent {
 	No::Entity bossEntity = No::nullEntity;
 	No::Entity backEntity = No::nullEntity;

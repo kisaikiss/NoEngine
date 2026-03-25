@@ -99,7 +99,8 @@ void DamageApplySystem::Update(No::Registry& registry, float deltaTime)
 			registry.DestroyEntity(request->target);
 		}
 
-		// 互換維持: 既存の個別コンポーネントにも反映。
+		// 互換維持: 旧個別コンポーネントへ同期。
+		// 主系は Health/Invincible で、移行完了後に段階的に削除予定。
 		auto* legacyPlayerHealth = registry.GetComponent<PlayerHealthComponent>(request->target);
 		if (legacyPlayerHealth) {
 			if (inv && request->amount > 0) {

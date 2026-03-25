@@ -1,9 +1,8 @@
 #pragma once
 
 /// <summary>
-/// 旧プレイヤーHP表現。
-/// 現在は HealthComponent / InvincibleComponent が主系で、
-/// この構造体は互換表示・段階移行のために保持する。
+/// 旧プレイヤーHP表現（互換用）。
+/// 主系は HealthComponent / InvincibleComponent で、本コンポーネントは段階移行中の同期先として保持する
 /// </summary>
 struct PlayerHealthComponent {
 	int hp = 10;

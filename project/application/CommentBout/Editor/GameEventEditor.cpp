@@ -83,13 +83,28 @@ void GameEventEditor::DrawGameEventEditorImGui(No::Registry* registry, No::Entit
 		ImGui::DragFloat("発生距離", &e.triggerDistance, 0.1f, 0.0f, (rail->totalLength > 0.0f) ? rail->totalLength : 10000.0f);
 
 		if (e.type == RailEventType::SpawnEnemy) {
+			int enemyType = static_cast<int>(e.spawn.enemyType);
+			if (ImGui::Combo("敵種類", &enemyType, "MoveOnly\0MoveAndShoot\0Boss\0")) {
+				e.spawn.enemyType = static_cast<RailEnemyType>(enemyType);
+			}
+
 			ImGui::DragInt("生成数", &e.spawn.count, 1.0f, 1, 32);
-			ImGui::DragInt("敵HP", &e.spawn.hp, 1.0f, 1, 100);
+			ImGui::DragInt("敵HP", &e.spawn.hp, 1.0f, 1, 500);
 			ImGui::DragFloat("敵速度", &e.spawn.moveSpeed, 0.1f, 0.0f, 100.0f);
 			ImGui::DragFloat("生成間隔", &e.spawn.spawnSpacing, 0.1f, 0.0f, 20.0f);
 			ImGui::DragFloat3("生成位置", &e.spawn.spawnPosition.x, 0.1f);
 			ImGui::DragFloat3("移動方向", &e.spawn.moveDirection.x, 0.05f);
 			ImGui::DragInt("生成グループID", &e.spawn.spawnGroupId, 1.0f, 0, 999);
+
+			if (e.spawn.enemyType == RailEnemyType::Boss) {
+				ImGui::Separator();
+				ImGui::Text("Boss Params");
+				ImGui::DragFloat3("Offset Local", &e.spawn.boss.offsetLocal.x, 0.05f);
+				ImGui::DragFloat2("Figure8 Amplitude", &e.spawn.boss.figure8Amplitude.x, 0.05f, 0.0f, 20.0f);
+				ImGui::DragFloat("Figure8 Period", &e.spawn.boss.figure8Period, 0.05f, 0.1f, 20.0f);
+				ImGui::DragFloat("Stop Duration", &e.spawn.boss.stopDuration, 0.05f, 0.0f, 10.0f);
+				ImGui::DragFloat("Burst Shot Interval", &e.spawn.boss.burstShotInterval, 0.01f, 0.05f, 2.0f);
+			}
 		}
 		if (e.type == RailEventType::RailResume) {
 			int conditionType = static_cast<int>(e.resumeCondition);

@@ -163,6 +163,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   <ItemGroup>
     <ClCompile Include="application\CommentBout\Collision\Utility\CoordinateConverter.cpp" />
     <ClCompile Include="application\CommentBout\Component\PlayerAttackComponent.cpp" />
+    <ClCompile Include="application\CommentBout\Data\EnemyTypePresetIO.cpp" />
     <ClCompile Include="application\CommentBout\FieldObject\System\GrassReactionSystem.cpp" />
     <ClCompile Include="application\CommentBout\FieldObject\System\HitBalloonSystem.cpp" />
     <ClCompile Include="application\CommentBout\Spawner\TitleMenuSpawner.cpp" />
@@ -177,6 +178,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\CommentBout\System\EnemySpawnSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\EnemySystem.cpp" />
     <ClCompile Include="application\CommentBout\System\EnemyVisualSystem.cpp" />
+    <ClCompile Include="application\CommentBout\System\HpBarViewSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\LifetimeSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\OptionSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\PlayerAttackResolveSystem.cpp" />
@@ -367,11 +369,13 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\CommentBout\Component\EnemyShooterComponent.h" />
     <ClInclude Include="application\CommentBout\Component\GameResourceComponent.h" />
     <ClInclude Include="application\CommentBout\Component\HealthComponent.h" />
+    <ClInclude Include="application\CommentBout\Component\HpBarComponent.h" />
     <ClInclude Include="application\CommentBout\Component\InvincibleComponent.h" />
     <ClInclude Include="application\CommentBout\Component\LifetimeComponent.h" />
     <ClInclude Include="application\CommentBout\Component\OptionMenuConfigComponent.h" />
     <ClInclude Include="application\CommentBout\Component\OptionMenuViewComponent.h" />
     <ClInclude Include="application\CommentBout\Component\OptionStateComponent.h" />
+    <ClInclude Include="application\CommentBout\Component\PlayerDamageFlashComponent.h" />
     <ClInclude Include="application\CommentBout\Component\PlayerHealthComponent.h" />
     <ClInclude Include="application\CommentBout\Component\PlayerHitboxComponent.h" />
     <ClInclude Include="application\CommentBout\Component\RailCameraComponent.h" />
@@ -379,6 +383,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\CommentBout\Component\TitleMenuConfigComponent.h" />
     <ClInclude Include="application\CommentBout\Component\TitleMenuStateComponent.h" />
     <ClInclude Include="application\CommentBout\Component\TitleMenuViewComponent.h" />
+    <ClInclude Include="application\CommentBout\Data\EnemyTypePresetIO.h" />
     <ClInclude Include="application\CommentBout\FieldObject\Component\GrassReactionComponent.h" />
     <ClInclude Include="application\CommentBout\FieldObject\Component\GroundComponent.h" />
     <ClInclude Include="application\CommentBout\FieldObject\Component\HitBalloonComponent.h" />
@@ -396,6 +401,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\CommentBout\System\EnemySpawnSystem.h" />
     <ClInclude Include="application\CommentBout\System\EnemySystem.h" />
     <ClInclude Include="application\CommentBout\System\EnemyVisualSystem.h" />
+    <ClInclude Include="application\CommentBout\System\HpBarViewSystem.h" />
     <ClInclude Include="application\CommentBout\System\PlayerAttackResolveSystem.h" />
     <ClInclude Include="application\CommentBout\System\PlayerInfoDebugSystem.h" />
     <ClInclude Include="application\CommentBout\System\RailCameraSystem.h" />
@@ -769,9 +775,11 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="engine\Functions\ECS\Registry.hpp">
       <FileType>Document</FileType>
     </ClInclude>
+    <None Include="application\CommentBout\ARCHITECTURE_NOTES.md" />
     <None Include="resources\engine\Shaders\Default.hlsli" />
     <None Include="resources\game\Shaders\ShaderMathUtil.hlsli" />
     <None Include="resources\game\td_2304\Json\tdSpriteConfig.json" />
+    <None Include="resources\game\td_3105\RailData\EnemyTypePreset.json" />
     <None Include="resources\game\td_3105\RailData\sample_rail.json" />
     <None Include="resources\game\td_3105\RailData\Stage_01_events.json" />
     <None Include="resources\game\td_3105\RailData\Stage_01_rail.json" />

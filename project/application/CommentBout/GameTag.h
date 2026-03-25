@@ -17,8 +17,9 @@ struct CBTitleStateTag {};;		//
 struct CBTitleConfigTag {};;	//
 struct CBTitleViewTag {};;		//
 struct CBRailEnemyTag {};;		//
-struct CBBossTag {};
-struct CBEnemyBulletTag {};
-struct CBEnemyRewardOrbTag {};
-struct CBBossHpBarTag {};
-struct CBPlayerHitboxTag {};
+struct CBBossTag {};			//
+struct CBEnemyBulletTag {};		//
+struct CBEnemyRewardOrbTag {};	//
+struct CBBossHpBarTag {};		//
+struct CBPlayerHpBarTag {};		//
+struct CBPlayerHitboxTag {};	//

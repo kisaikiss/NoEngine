@@ -16,7 +16,7 @@
 #include "application/CommentBout/Component/OptionMenuViewComponent.h"
 #include "application/CommentBout/FieldObject/Component/GrassReactionComponent.h"
 #include "application/CommentBout/Component/GameResourceComponent.h"
-#include "application/CommentBout/Component/BossHpBarComponent.h"
+#include "application/CommentBout/Component/HpBarComponent.h"
 #include "application/CommentBout/FieldObject/Component/GroundComponent.h"
 #include "application/CommentBout/Component/RailCameraComponent.h"
 #include "application/CommentBout/Component/EnemyComponent.h"
@@ -40,7 +40,7 @@
 #include "application/CommentBout/System/EnemyBulletHitSystem.h"
 #include "application/CommentBout/System/EnemyContactDamageSystem.h"
 #include "application/CommentBout/System/EnemyVisualSystem.h"
-#include "application/CommentBout/System/BossHpBarViewSystem.h"
+#include "application/CommentBout/System/HpBarViewSystem.h"
 #include "application/CommentBout/System/EnemyRewardToBossSystem.h"
 #include "application/CommentBout/System/PlayerAttackResolveSystem.h"
 #include "application/CommentBout/System/DamageApplySystem.h"
@@ -58,12 +58,28 @@ void GameScene::Setup() {
 
 	grassNameIndex_ = 0;
 
-	// ---- システム登録（順序が重要）----------------------------------------------　//
-	// 1.PlayerControlSystem : 入力処理・攻撃エンティティのスポawn
-	// 2.CollisionTestSystem : コライダー更新・投影・衝突判定 → projected -> isColliding をセット
-	// 3.GrassReactionSystem : 衝突開始を検出しエフェクトエンティティをスポーン→ HitBalloonComponent を付与
-	// 4.HitBalloonSystem    : HitBalloonComponent が指す投影位置からエフェクトの Transform2D を毎フレーム更新
-	// 5.LifetimeSystem		 : 時間切れエンティティを削除	
+	// ----システム登録・--------------------------------------------- //
+	// Input / Camera
+	//  - PauseSystem
+	//  - PlayerControlSystem
+	//  - DebugCamera / RailCamera / Camera
+	// Spawn / Behavior
+	//  - EnemySpawnSystem
+	//  - BossBehaviorSystem
+	//  - EnemyMoveSystem
+	//  - EnemyShootSystem
+	// Collision / Resolve
+	//  - CollisionSystem
+	//  - EnemyBulletHitSystem
+	//  - EnemyContactDamageSystem
+	//  - PlayerAttackResolveSystem
+	// Damage / UI
+	//  - EnemyRewardToBossSystem
+	//  - DamageApplySystem
+	//  - BossHpBarViewSystem
+	//  - EnemyVisualSystem
+	// そのほか
+	//  - GrassReaction / HitBalloon / Lifetime / Option / PauseView / OptionView / Edit
 	// --------------------------------------------------------------------------- //
 
 	AddSystem(std::make_unique<PauseSystem>());
@@ -82,7 +98,7 @@ void GameScene::Setup() {
 	AddSystem(std::make_unique<PlayerAttackResolveSystem>());
 	AddSystem(std::make_unique<EnemyRewardToBossSystem>());
 	AddSystem(std::make_unique<DamageApplySystem>());
-	AddSystem(std::make_unique<BossHpBarViewSystem>());
+	AddSystem(std::make_unique<HpBarViewSystem>());
 	AddSystem(std::make_unique<EnemyVisualSystem>());
 	AddSystem(std::make_unique<GrassReactionSystem>());
 	AddSystem(std::make_unique<HitBalloonSystem>());
@@ -98,7 +114,7 @@ void GameScene::Setup() {
 	CommentBout::GameAudio::PlayTestBGM(true);
 
 	const auto whiteTexture = NoEngine::TextureManager::LoadCovertTexture("resources/engine/white1x1.png");
-	// 共有リソース
+	// 蜈ｱ譛峨Μ繧ｽ繝ｼ繧ｹ
 	auto gameResourceEntity = registry.GenerateEntity();
 	registry.AddComponent<CBGameResourceTag>(gameResourceEntity);
 	auto* gameResource = registry.AddComponent<GameResourceComponent>(gameResourceEntity);
@@ -106,7 +122,7 @@ void GameScene::Setup() {
 
 	auto bossHpBarEntity = registry.GenerateEntity();
 	registry.AddComponent<CBBossHpBarTag>(bossHpBarEntity);
-	auto* bossHpBar = registry.AddComponent<BossHpBarComponent>(bossHpBarEntity);
+	auto* bossHpBar = registry.AddComponent<HpBarComponent>(bossHpBarEntity);
 	bossHpBar->anchor = { 640.0f, 64.0f };
 	bossHpBar->size = { 420.0f, 28.0f };
 
@@ -152,7 +168,7 @@ void GameScene::Setup() {
 
 	auto optionConfigEntity = registry.GenerateEntity();
 	registry.AddComponent<CBOptionConfigTag>(optionConfigEntity);
-	registry.AddComponent<OptionMenuConfigComponent>(optionConfigEntity); // 郢昴・繝ｵ郢ｧ・ｩ郢晢ｽｫ郢昜ｺ･ﾂ・､ = JSON陋滂ｽ､
+	registry.AddComponent<OptionMenuConfigComponent>(optionConfigEntity); // 驛｢譏ｴ繝ｻ郢晢ｽｵ驛｢・ｧ繝ｻ・ｩ驛｢譎｢・ｽ・ｫ驛｢譏懶ｽｺ・･・つ繝ｻ・､ = JSON髯区ｻゑｽｽ・､
 	registry.AddComponent<No::EditTag>(optionConfigEntity)->name = "OptionMenuConfig";
 
 
@@ -410,80 +426,3 @@ void GameScene::ChangeSceneImGui()
 	ImGui::End();
 #endif
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

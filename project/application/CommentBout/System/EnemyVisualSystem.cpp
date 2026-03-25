@@ -6,6 +6,7 @@
 #include "application/CommentBout/Component/EnemyRewardSourceComponent.h"
 #include "application/CommentBout/Component/EnemyRewardOrbComponent.h"
 #include "application/CommentBout/Component/BossHpBarComponent.h"
+#include "application/CommentBout/Component/HpBarComponent.h"
 #include "application/CommentBout/Component/GameResourceComponent.h"
 #include "application/CommentBout/Collision/Component/Collider3DComponent.h"
 #include "application/CommentBout/Collision/Component/ProjectedColliderComponent.h"
@@ -301,9 +302,9 @@ void EnemyVisualSystem::Update(No::Registry& registry, float deltaTime)
 	}
 
 	No::Vector2 bossBarAnchor = { 640.0f, 64.0f };
-	auto bossBarView = registry.View<CBBossHpBarTag, BossHpBarComponent>();
+	auto bossBarView = registry.View<CBBossHpBarTag, HpBarComponent>();
 	for (auto e : bossBarView) {
-		auto* bar = registry.GetComponent<BossHpBarComponent>(e);
+		auto* bar = registry.GetComponent<HpBarComponent>(e);
 		if (bar) {
 			bossBarAnchor = bar->anchor;
 			break;

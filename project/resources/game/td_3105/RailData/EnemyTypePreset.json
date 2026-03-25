@@ -1,0 +1,24 @@
+{
+  "MoveOnly": {
+    "modelScale": 0.7,
+    "minHp": 10
+  },
+  "MoveAndShoot": {
+    "modelScale": 0.8,
+    "shootInterval": 0.9,
+    "bulletSpeed": 15.0,
+    "bulletDamage": 1,
+    "bulletLifetime": 4.0,
+    "targetDepthFromCamera": 1.0,
+    "minHp": 16
+  },
+  "Boss": {
+    "modelScale": 1.6,
+    "shootInterval": 0.22,
+    "bulletSpeed": 12.0,
+    "bulletDamage": 2,
+    "bulletLifetime": 5.0,
+    "targetDepthFromCamera": 1.0,
+    "minHp": 150
+  }
+}
