@@ -6,6 +6,7 @@
 #include "application/CommentBout/Collision/Component/Collider3DComponent.h"
 #include "application/CommentBout/Collision/Component/ProjectedColliderComponent.h"
 #include "application/CommentBout/Collision/Utility/CollisionAlgorithms.h"
+#include "application/CommentBout/Utility/EnemyVisibilityUtility.h"
 #include "application/CommentBout/GameTag.h"
 #include "engine/Functions/ECS/Component/CameraComponent.h"
 #include "engine/Functions/ECS/Component/Transform2DComponent.h"
@@ -133,12 +134,31 @@ void EnemyBulletHitSystem::Update(No::Registry& registry, float deltaTime)
 {
 	static_cast<void>(deltaTime);
 
-	auto view = registry.View<CBEnemyBulletTag, EnemyBulletComponent, CommentBoutCollision::Collider3DComponent>();
+	No::TransformComponent* activeCameraTransform = nullptr;
+	{
+		auto cameraView = registry.View<No::CameraComponent, No::TransformComponent, No::ActiveCameraTag>();
+		auto cameraIt = cameraView.begin();
+		if (cameraIt != cameraView.end()) {
+			activeCameraTransform = registry.GetComponent<No::TransformComponent>(*cameraIt);
+		}
+	}
+
+	auto view = registry.View<CBEnemyBulletTag, EnemyBulletComponent, CommentBoutCollision::Collider3DComponent, No::TransformComponent>();
 	for (auto bulletEntity : view) {
 		auto* bullet = registry.GetComponent<EnemyBulletComponent>(bulletEntity);
 		auto* collider = registry.GetComponent<CommentBoutCollision::Collider3DComponent>(bulletEntity);
-		if (!bullet || !collider) {
+		auto* bulletTransform = registry.GetComponent<No::TransformComponent>(bulletEntity);
+		if (!bullet || !collider || !bulletTransform) {
 			continue;
+		}
+
+		if (activeCameraTransform) {
+			// 敵弾も敵と同様に、カメラ基準で十分後方へ流れたら削除する。
+			const float forwardDistance = CommentBoutVisibility::ComputeForwardDistanceFromCamera(*bulletTransform, *activeCameraTransform);
+			if (forwardDistance < -10.0f) {
+				registry.DestroyEntity(bulletEntity);
+				continue;
+			}
 		}
 
 		No::Entity playerEntity = No::nullEntity;

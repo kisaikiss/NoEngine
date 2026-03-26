@@ -37,6 +37,8 @@ void DrawEnemyTypePresetEditor() {
 			ImGui::DragInt("Bullet Damage", &preset.bulletDamage, 1.0f, 1, 999);
 			ImGui::DragFloat("Bullet Lifetime", &preset.bulletLifetime, 0.05f, 0.1f, 30.0f);
 			ImGui::DragFloat("Target Depth", &preset.targetDepthFromCamera, 0.01f, 0.1f, 20.0f);
+			ImGui::DragFloat("Shoot Distance Max", &preset.shootDistanceMax, 0.05f, 0.0f, 200.0f);
+			ImGui::DragFloat("Despawn Behind Distance", &preset.despawnBehindDistance, 0.05f, 0.0f, 200.0f);
 			presets[type] = preset;
 			ImGui::TreePop();
 		}

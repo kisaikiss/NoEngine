@@ -176,6 +176,7 @@
     <ClCompile Include="application\CommentBout\Component\OutGame\PauseMenuConfigComponent.cpp" />
     <ClCompile Include="application\CommentBout\Component\OutGame\PauseStateComponent.cpp" />
     <ClCompile Include="application\CommentBout\System\DamageFlashSystem.cpp" />
+    <ClCompile Include="application\CommentBout\System\RailProgressBarSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Functions\ECS\System\CameraSystem.h" />
@@ -407,6 +408,7 @@
     <ClInclude Include="application\CommentBout\System\DamageFlashSystem.h" />
     <ClInclude Include="application\CommentBout\Component\RailProgressBarComponent.h" />
     <ClInclude Include="application\CommentBout\System\RailProgressBarSystem.h" />
+    <ClInclude Include="application\CommentBout\Utility\EnemyVisibilityUtility.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

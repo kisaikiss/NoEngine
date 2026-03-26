@@ -246,14 +246,13 @@ void PlayerAttackResolveSystem::Update(No::Registry& registry, float deltaTime)
 		if (!attackCollider || !attackDamage) {
 			continue;
 		}
-		if (attackDamage->isFirstFrameConsumed) {
-			continue;
-		}
 		if (attackCollider->collisionLayer != CommentBout::CollisionLayer::CBPlayerAttack) {
-			attackDamage->isFirstFrameConsumed = true;
 			continue;
 		}
 
+		// 攻撃判定は寿命中ずっと行う。
+		// 以前の「初回フレームのみ」判定は更新順の影響で取りこぼしを生みやすかったため廃止する。
+		// 同一敵への多重ヒットは hitEnemies で抑止し、敵同士遮蔽は従来通り維持する。
 		for (auto& target : attackTargets) {
 			if (!target.enemy || !target.health || target.health->isDead || target.health->hp <= 0) {
 				continue;
@@ -304,7 +303,5 @@ void PlayerAttackResolveSystem::Update(No::Registry& registry, float deltaTime)
 			EmitDamageRequest(registry, target.entity, attackEntity, damage, false);
 			attackDamage->hitEnemies.push_back(target.entity);
 		}
-
-		attackDamage->isFirstFrameConsumed = true;
 	}
 }

@@ -10,6 +10,7 @@
 #include "application/CommentBout/Collision/Component/Collider3DComponent.h"
 #include "application/CommentBout/Collision/Component/ProjectedColliderComponent.h"
 #include "application/CommentBout/Collision/Utility/CoordinateConverter.h"
+#include "application/CommentBout/Utility/EnemyVisibilityUtility.h"
 #include "application/CommentBout/Utility/CBCollisionMask.h"
 #include "application/CommentBout/GameTag.h"
 #include "engine/Runtime/GraphicsCore.h"
@@ -29,7 +30,8 @@ No::Vector3 ComputeAimDirection(
 	No::TransformComponent& fromTransform,
 	No::CameraComponent& camera,
 	No::TransformComponent& cameraTransform,
-	float depthFromCamera
+	float depthFromCamera,
+	No::Vector3* outAimTarget
 ) {
 	// ここで求めるのは「照準点」までの進行方向のみ。
 	// 被弾判定は EnemyBulletHitSystem 側の投影+ゲート判定で処理する。
@@ -54,6 +56,9 @@ No::Vector3 ComputeAimDirection(
 		cameraTransform,
 		mainWindow->GetWindowSize()
 	);
+	if (outAimTarget) {
+		*outAimTarget = targetWorld;
+	}
 	return NormalizeOrDefault(targetWorld - fromTransform.GetWorldPosition(), No::Vector3::FORWARD);
 }
 
@@ -129,6 +134,12 @@ void EnemyShootSystem::Update(No::Registry& registry, float deltaTime)
 		return;
 	}
 
+	auto* mainWindow = NoEngine::GraphicsCore::gWindowManager.GetMainWindow();
+	if (!mainWindow) {
+		return;
+	}
+	const NoEngine::WindowSize windowSize = mainWindow->GetWindowSize();
+
 	auto shooterView = registry.View<CBRailEnemyTag, EnemyShooterComponent, EnemyComponent, HealthComponent, No::TransformComponent>();
 	for (auto entity : shooterView) {
 		if (registry.Has<CBBossTag>(entity)) {
@@ -145,9 +156,21 @@ void EnemyShootSystem::Update(No::Registry& registry, float deltaTime)
 		if (shooter->shootCooldown > 0.0f) {
 			continue;
 		}
-		shooter->shootCooldown = std::max(0.05f, shooter->shootInterval);
 
-		No::Vector3 dir = ComputeAimDirection(registry, *transform, *camera, *cameraTransform, shooter->targetDepthFromCamera);
+		if (!CommentBoutVisibility::IsWorldPositionVisibleOnScreen(transform->GetWorldPosition(), *camera, windowSize)) {
+			continue;
+		}
+
+		No::Vector3 aimTarget{};
+		No::Vector3 dir = ComputeAimDirection(registry, *transform, *camera, *cameraTransform, shooter->targetDepthFromCamera, &aimTarget);
+		if (shooter->shootDistanceMax > 0.0f) {
+			const float distanceToPlayer = (aimTarget - transform->GetWorldPosition()).Length();
+			if (distanceToPlayer > shooter->shootDistanceMax) {
+				continue;
+			}
+		}
+
+		shooter->shootCooldown = std::max(0.05f, shooter->shootInterval);
 		SpawnEnemyBullet(registry, entity, *transform, dir, shooter->bulletSpeed, shooter->bulletDamage, shooter->bulletLifetime, gameResource);
 	}
 
@@ -164,8 +187,20 @@ void EnemyShootSystem::Update(No::Registry& registry, float deltaTime)
 			continue;
 		}
 
+		if (!CommentBoutVisibility::IsWorldPositionVisibleOnScreen(transform->GetWorldPosition(), *camera, windowSize)) {
+			continue;
+		}
+
+		No::Vector3 aimTarget{};
+		No::Vector3 dir = ComputeAimDirection(registry, *transform, *camera, *cameraTransform, shooter->targetDepthFromCamera, &aimTarget);
+		if (shooter->shootDistanceMax > 0.0f) {
+			const float distanceToPlayer = (aimTarget - transform->GetWorldPosition()).Length();
+			if (distanceToPlayer > shooter->shootDistanceMax) {
+				continue;
+			}
+		}
+
 		while (boss->shotsSpawnedInBurst < boss->shotsFiredInBurst) {
-			No::Vector3 dir = ComputeAimDirection(registry, *transform, *camera, *cameraTransform, shooter->targetDepthFromCamera);
 			SpawnEnemyBullet(registry, entity, *transform, dir, shooter->bulletSpeed, shooter->bulletDamage, shooter->bulletLifetime, gameResource);
 			boss->shotsSpawnedInBurst += 1;
 		}

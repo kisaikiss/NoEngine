@@ -68,7 +68,9 @@ void SpawnRailEnemies(No::Registry& registry, const RailEnemySpawnEventParams& p
 		enemy->hp = enemy->maxHp;
 		enemy->moveSpeed = std::max(0.0f, params.moveSpeed);
 		enemy->moveDirection = direction;
+		enemy->despawnBehindDistance = std::max(0.0f, preset.despawnBehindDistance);
 		enemy->groupId = params.spawnGroupId;
+		enemy->removeReason = EnemyRemoveReason::None;
 
 		auto* rewardSource = registry.AddComponent<EnemyRewardSourceComponent>(enemyEntity);
 		rewardSource->worldSizeForReward = preset.modelScale;
@@ -103,6 +105,7 @@ void SpawnRailEnemies(No::Registry& registry, const RailEnemySpawnEventParams& p
 			shooter->bulletDamage = std::max(1, preset.bulletDamage);
 			shooter->targetDepthFromCamera = std::max(0.1f, preset.targetDepthFromCamera);
 			shooter->bulletLifetime = std::max(0.1f, preset.bulletLifetime);
+			shooter->shootDistanceMax = std::max(0.0f, preset.shootDistanceMax);
 			break;
 		}
 		case RailEnemyType::Boss:
@@ -116,6 +119,7 @@ void SpawnRailEnemies(No::Registry& registry, const RailEnemySpawnEventParams& p
 			shooter->bulletDamage = std::max(1, preset.bulletDamage);
 			shooter->targetDepthFromCamera = std::max(0.1f, preset.targetDepthFromCamera);
 			shooter->bulletLifetime = std::max(0.1f, preset.bulletLifetime);
+			shooter->shootDistanceMax = std::max(0.0f, preset.shootDistanceMax);
 			break;
 		}
 		case RailEnemyType::MoveOnly:

@@ -2,6 +2,16 @@
 #include "engine/NoEngine.h"
 
 /// <summary>
+/// 敵の削除理由。
+/// 撃破か自然消滅かを明示し、報酬生成判定に利用する
+/// </summary>
+enum class EnemyRemoveReason {
+	None = 0,
+	Defeated = 1,
+	NaturalDespawn = 2
+};
+
+/// <summary>
 /// 敵共通の行動・デバッグ状態。
 /// 主HPは HealthComponent に保持し、本コンポーネントは移動設定と接触フラグを保持する
 /// </summary>
@@ -10,8 +20,10 @@ struct EnemyComponent {
 	int maxHp = 10;
 	float moveSpeed = 3.0f;
 	No::Vector3 moveDirection = { 0.0f, 0.0f, -1.0f };
+	float despawnBehindDistance = 12.0f;
 	int groupId = 0;
 	bool wasCollidingWithAttack = false;
 	bool wasCollidingWithPlayer = false;
 	int lastDamageTaken = 0;
+	EnemyRemoveReason removeReason = EnemyRemoveReason::None;
 };

@@ -13,6 +13,8 @@ struct EnemyTypePreset {
 	int bulletDamage = 1;
 	float bulletLifetime = 4.0f;
 	float targetDepthFromCamera = 1.0f;
+	float shootDistanceMax = 25.0f;
+	float despawnBehindDistance = 12.0f;
 	int minHp = 1;
 };
 

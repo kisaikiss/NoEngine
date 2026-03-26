@@ -356,7 +356,11 @@ void EnemyVisualSystem::Update(No::Registry& registry, float deltaTime)
 		enemy->lastDamageTaken = health->lastDamageTaken;
 
 		if (health->isDead || health->hp <= 0) {
-			if (!registry.Has<CBBossTag>(entity) && activeCamera && gameResource && mainWindow && rewardSource && !rewardSource->spawned) {
+			if (enemy->removeReason == EnemyRemoveReason::None) {
+				enemy->removeReason = EnemyRemoveReason::Defeated;
+			}
+			const bool defeated = (enemy->removeReason == EnemyRemoveReason::Defeated);
+			if (defeated && !registry.Has<CBBossTag>(entity) && activeCamera && gameResource && mainWindow && rewardSource && !rewardSource->spawned) {
 				SpawnRewardOrbFromEnemy(
 					registry,
 					entity,

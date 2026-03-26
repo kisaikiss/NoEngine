@@ -117,6 +117,10 @@ void DamageApplySystem::Update(No::Registry& registry, float deltaTime)
 			ApplyDamageFlash(registry, request->target);
 		}
 
+		auto* legacyEnemy = registry.GetComponent<EnemyComponent>(request->target);
+		if (health && health->isDead && legacyEnemy) {
+			legacyEnemy->removeReason = EnemyRemoveReason::Defeated;
+		}
 		if (health && health->isDead && registry.Has<CBRailEnemyTag>(request->target)) {
 			registry.DestroyEntity(request->target);
 		}
@@ -125,7 +129,6 @@ void DamageApplySystem::Update(No::Registry& registry, float deltaTime)
 			inv->time = std::max(inv->time, inv->duration);
 		}
 
-		auto* legacyEnemy = registry.GetComponent<EnemyComponent>(request->target);
 		if (legacyEnemy) {
 			SyncToLegacyEnemy(legacyEnemy, health);
 		}

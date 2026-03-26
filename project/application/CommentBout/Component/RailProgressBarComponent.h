@@ -8,8 +8,9 @@ struct RailProgressBarComponent {
 	No::Entity barFillEntity = No::nullEntity;
 	No::Entity playerMarkerEntity = No::nullEntity;
 
-	No::Vector2 startPosition = { 220.0f, 23.0f };
-	No::Vector2 goalPosition = { 1060.0f, 23.0f };
+	No::Vector2 startPosition = { 220.0f, 56.0f };
+	No::Vector2 goalPosition = { 1060.0f, 56.0f };
+	No::Vector2 startGoalSize = { 20.0f, 20.0f };
 	float barHeight = 12.0f;
 	No::Vector2 markerSize = { 26.0f, 26.0f };
 

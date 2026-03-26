@@ -11,7 +11,9 @@
     "bulletSpeed": 10.0,
     "bulletDamage": 1,
     "bulletLifetime": 4.0,
-    "targetDepthFromCamera": 1.0
+    "targetDepthFromCamera": 1.0,
+    "shootDistanceMax": 25.0,
+    "despawnBehindDistance": 12.0
   },
   "MoveAndShoot": {
     "modelScale": 0.8,
@@ -25,6 +27,8 @@
     "bulletDamage": 1,
     "bulletLifetime": 4.0,
     "targetDepthFromCamera": 1.0,
+    "shootDistanceMax": 25.0,
+    "despawnBehindDistance": 12.0,
     "minHp": 16
   },
   "Boss": {
@@ -39,6 +43,8 @@
     "bulletDamage": 2,
     "bulletLifetime": 5.0,
     "targetDepthFromCamera": 1.0,
+    "shootDistanceMax": 35.0,
+    "despawnBehindDistance": 20.0,
     "minHp": 150
   }
 }

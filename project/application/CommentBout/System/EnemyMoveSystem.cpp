@@ -1,7 +1,9 @@
 #include "stdafx.h"
 #include "EnemyMoveSystem.h"
 #include "application/CommentBout/Component/EnemyComponent.h"
+#include "application/CommentBout/Component/EnemyRewardSourceComponent.h"
 #include "application/CommentBout/Component/HealthComponent.h"
+#include "application/CommentBout/Utility/EnemyVisibilityUtility.h"
 #include "application/CommentBout/GameTag.h"
 
 namespace {
@@ -15,11 +17,15 @@ No::Vector3 NormalizeOrDefault(const No::Vector3& v, const No::Vector3& fallback
 
 void EnemyMoveSystem::Update(No::Registry& registry, float deltaTime)
 {
+	No::TransformComponent* cameraTransform = nullptr;
+	auto cameraView = registry.View<No::ActiveCameraTag, No::TransformComponent>();
+	auto cameraIt = cameraView.begin();
+	if (cameraIt != cameraView.end()) {
+		cameraTransform = registry.GetComponent<No::TransformComponent>(*cameraIt);
+	}
+
 	auto view = registry.View<CBRailEnemyTag, EnemyComponent, HealthComponent, No::TransformComponent>();
 	for (auto entity : view) {
-		if (registry.Has<CBBossTag>(entity)) {
-			continue;
-		}
 		auto* enemy = registry.GetComponent<EnemyComponent>(entity);
 		auto* health = registry.GetComponent<HealthComponent>(entity);
 		auto* transform = registry.GetComponent<No::TransformComponent>(entity);
@@ -30,7 +36,21 @@ void EnemyMoveSystem::Update(No::Registry& registry, float deltaTime)
 			continue;
 		}
 
+		// 敵移動は種類に依存せず共通で適用する（通常敵/射撃敵/ボス）。
 		const No::Vector3 moveDir = NormalizeOrDefault(enemy->moveDirection, No::Vector3(0.0f, 0.0f, -1.0f));
 		transform->translate += moveDir * enemy->moveSpeed * deltaTime;
+
+		if (cameraTransform && enemy->despawnBehindDistance > 0.0f) {
+			const float forwardDistance = CommentBoutVisibility::ComputeForwardDistanceFromCamera(*transform, *cameraTransform);
+			if (forwardDistance < -enemy->despawnBehindDistance) {
+				// 自機より十分後方へ流れた敵は「自然消滅」として削除する。
+				// 撃破ではないため、報酬オーブは生成しない。
+				enemy->removeReason = EnemyRemoveReason::NaturalDespawn;
+				if (auto* rewardSource = registry.GetComponent<EnemyRewardSourceComponent>(entity)) {
+					rewardSource->spawned = true;
+				}
+				registry.DestroyEntity(entity);
+			}
+		}
 	}
 }

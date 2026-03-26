@@ -401,6 +401,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\CommentBout\System\OutGame\TitleSystem.h" />
     <ClInclude Include="application\CommentBout\System\OutGame\TitleViewSystem.h" />
     <ClInclude Include="application\CommentBout\System\RailProgressBarSystem.h" />
+    <ClInclude Include="application\CommentBout\Utility\EnemyVisibilityUtility.h" />
     <ClInclude Include="application\TestApp\Scene\TestScene.h" />
     <ClInclude Include="application\TestApp\Scene\TestScene2.h" />
     <ClInclude Include="application\TestApp\Scene\TestScene3.h" />

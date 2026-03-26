@@ -11,4 +11,5 @@ struct EnemyShooterComponent {
 	int bulletDamage = 1;
 	float targetDepthFromCamera = 1.0f;
 	float bulletLifetime = 4.0f;
+	float shootDistanceMax = 25.0f;
 };

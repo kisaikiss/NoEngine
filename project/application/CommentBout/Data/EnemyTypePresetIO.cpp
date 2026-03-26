@@ -75,6 +75,8 @@ bool LoadEnemyTypePresetMap(EnemyTypePresetMap& outPresets) {
 		if (obj.contains("bulletDamage") && obj["bulletDamage"].is_number_integer()) preset.bulletDamage = obj["bulletDamage"].get<int>();
 		if (obj.contains("bulletLifetime") && obj["bulletLifetime"].is_number()) preset.bulletLifetime = obj["bulletLifetime"].get<float>();
 		if (obj.contains("targetDepthFromCamera") && obj["targetDepthFromCamera"].is_number()) preset.targetDepthFromCamera = obj["targetDepthFromCamera"].get<float>();
+		if (obj.contains("shootDistanceMax") && obj["shootDistanceMax"].is_number()) preset.shootDistanceMax = obj["shootDistanceMax"].get<float>();
+		if (obj.contains("despawnBehindDistance") && obj["despawnBehindDistance"].is_number()) preset.despawnBehindDistance = obj["despawnBehindDistance"].get<float>();
 		if (obj.contains("minHp") && obj["minHp"].is_number_integer()) preset.minHp = obj["minHp"].get<int>();
 
 		outPresets[ParseEnemyType(it.key())] = preset;
@@ -96,6 +98,8 @@ bool SaveEnemyTypePresetMap(const EnemyTypePresetMap& presets) {
 		node["bulletDamage"] = preset.bulletDamage;
 		node["bulletLifetime"] = preset.bulletLifetime;
 		node["targetDepthFromCamera"] = preset.targetDepthFromCamera;
+		node["shootDistanceMax"] = preset.shootDistanceMax;
+		node["despawnBehindDistance"] = preset.despawnBehindDistance;
 		node["minHp"] = preset.minHp;
 	}
 
