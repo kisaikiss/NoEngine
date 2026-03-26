@@ -110,12 +110,11 @@ void GameScene::Setup() {
 	CommentBout::GameAudio::StopTestBGM();
 	CommentBout::GameAudio::PlayTestBGM(true);
 
-	const auto whiteTexture = NoEngine::TextureManager::LoadCovertTexture("resources/engine/white1x1.png");
 	//ゲームリソース
 	auto gameResourceEntity = registry.GenerateEntity();
 	registry.AddComponent<CBGameResourceTag>(gameResourceEntity);
 	auto* gameResource = registry.AddComponent<GameResourceComponent>(gameResourceEntity);
-	gameResource->whiteTexture = whiteTexture;
+	InitializeCommentBoutGameResources(*gameResource);
 
 	auto bossHpBarEntity = registry.GenerateEntity();
 	registry.AddComponent<CBBossHpBarTag>(bossHpBarEntity);
@@ -180,8 +179,8 @@ void GameScene::Setup() {
 	registry.AddComponent<No::EditTag>(optionConfigEntity)->name = "OptionMenuConfig";
 
 
-	PauseMenuSpawner::Create(registry, whiteTexture);
-	OptionMenuSpawner::Create(registry, whiteTexture);
+	PauseMenuSpawner::Create(registry, *gameResource);
+	OptionMenuSpawner::Create(registry, *gameResource);
 
 
 	// ライト
@@ -252,7 +251,7 @@ void GameScene::Setup() {
 	auto* playerSprite = registry.AddComponent<No::SpriteComponent>(playerEntity);
 	playerSprite->layer = CommentBout::ToLayer(CommentBout::SpriteLayer::Gameplay);
 	playerSprite->color = { 1.f, 1.f, 1.f, 0.5f };
-	playerSprite->textureHandle = whiteTexture;
+	playerSprite->textureHandle = GetGameTextureOrWhite(*gameResource, CommentBoutResourceKey::kPlayerSprite);
 	playerHpBar->targetEntity = playerEntity;
 
 	auto playerHitboxEntity = registry.GenerateEntity();
@@ -289,12 +288,10 @@ void GameScene::Setup() {
 	registry.AddComponent<No::EditTag>(groundEntity)->name = "Ground";
 	auto* groundMesh = registry.AddComponent<No::MeshComponent>(groundEntity);
 	auto* groundMaterial = registry.AddComponent<No::MaterialComponent>(groundEntity);
-	NoEngine::Asset::ModelLoader::LoadModel(
-		"commentbout_ground_cube",
-		"resources/game/td_3105/Model/cube/cube.obj",
-		groundMesh
-	);
-	groundMaterial->materials = NoEngine::Asset::ModelLoader::GetMaterial("commentbout_ground_cube");
+	if (const auto* groundModel = FindGameModel(*gameResource, CommentBoutResourceKey::kGroundModel)) {
+		NoEngine::Asset::ModelLoader::GetModel(groundModel->assetName, groundMesh);
+		groundMaterial->materials = NoEngine::Asset::ModelLoader::GetMaterial(groundModel->assetName);
+	}
 	groundMaterial->color = { 0.35f, 0.35f, 0.35f, 1.f };
 	groundMaterial->psoName = L"Renderer : Default PSO";
 	groundMaterial->psoId = NoEngine::Render::GetPSOID(groundMaterial->psoName);
@@ -305,6 +302,15 @@ void GameScene::SpawnGrass(const No::Vector3& position, const No::Vector3& size)
 {
 	No::Registry& registry = *GetRegistry();
 
+	GameResourceComponent* gameResource = nullptr;
+	auto resourceView = registry.View<CBGameResourceTag, GameResourceComponent>();
+	for (auto entity : resourceView) {
+		gameResource = registry.GetComponent<GameResourceComponent>(entity);
+		if (gameResource) {
+			break;
+		}
+	}
+
 	auto grassEntity = registry.GenerateEntity();
 	registry.AddComponent<CBGrassTag>(grassEntity);
 	registry.AddComponent<GrassReactionComponent>(grassEntity);
@@ -314,12 +320,12 @@ void GameScene::SpawnGrass(const No::Vector3& position, const No::Vector3& size)
 	registry.AddComponent<No::EditTag>(grassEntity)->name = "Grass_" + std::to_string(grassNameIndex_++);
 	auto* grassMesh = registry.AddComponent<No::MeshComponent>(grassEntity);
 	auto* grassMaterial = registry.AddComponent<No::MaterialComponent>(grassEntity);
-	NoEngine::Asset::ModelLoader::LoadModel(
-		"commentbout_grass_cube",
-		"resources/game/td_3105/Model/cube/cube.obj",
-		grassMesh
-	);
-	grassMaterial->materials = NoEngine::Asset::ModelLoader::GetMaterial("commentbout_grass_cube");
+	if (gameResource) {
+		if (const auto* grassModel = FindGameModel(*gameResource, CommentBoutResourceKey::kGrassModel)) {
+			NoEngine::Asset::ModelLoader::GetModel(grassModel->assetName, grassMesh);
+			grassMaterial->materials = NoEngine::Asset::ModelLoader::GetMaterial(grassModel->assetName);
+		}
+	}
 	grassMaterial->color = { 0.2f, 0.8f, 0.2f, 1.f };
 	grassMaterial->psoName = L"Renderer : Default PSO";
 	grassMaterial->psoId = NoEngine::Render::GetPSOID(grassMaterial->psoName);

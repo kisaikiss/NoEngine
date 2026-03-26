@@ -253,7 +253,7 @@ void HpBarViewSystem::Update(No::Registry& registry, float deltaTime)
 			bar->targetEntity = ResolveTargetEntity(registry, e);
 		}
 
-		EnsureBarSprites(registry, *bar, resource->whiteTexture);
+		EnsureBarSprites(registry, *bar, GetGameTextureOrWhite(*resource, CommentBoutResourceKey::kWhiteTexture));
 		SyncBarVisualProps(registry, *bar);
 
 		const bool hasTarget = (bar->targetEntity != No::nullEntity) && registry.Has<HealthComponent>(bar->targetEntity);

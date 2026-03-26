@@ -7,6 +7,7 @@
 #include "application/CommentBout/Component/EnemyRewardSourceComponent.h"
 #include "application/CommentBout/Component/BossComponent.h"
 #include "application/CommentBout/Component/HealthComponent.h"
+#include "application/CommentBout/Component/GameResourceComponent.h"
 #include "application/CommentBout/Data/EnemyTypePresetIO.h"
 #include "application/CommentBout/Utility/CBCollisionMask.h"
 #include "application/CommentBout/GameTag.h"
@@ -23,7 +24,7 @@ No::Vector3 NormalizeOrDefault(const No::Vector3& v, const No::Vector3& fallback
 	return v.Normalize();
 }
 
-void SpawnRailEnemies(No::Registry& registry, const RailEnemySpawnEventParams& params) {
+void SpawnRailEnemies(No::Registry& registry, const RailEnemySpawnEventParams& params, const GameResourceComponent* gameResource) {
 	static EnemyTypePresetMap presetMap;
 	static bool presetLoaded = false;
 	if (!presetLoaded) {
@@ -45,8 +46,18 @@ void SpawnRailEnemies(No::Registry& registry, const RailEnemySpawnEventParams& p
 
 		auto* mesh = registry.AddComponent<No::MeshComponent>(enemyEntity);
 		auto* material = registry.AddComponent<No::MaterialComponent>(enemyEntity);
-		No::ModelLoader::LoadModel("commentbout_rail_enemy_cube", "resources/game/td_3105/Model/cube/cube.obj", mesh);
-		material->materials = No::ModelLoader::GetMaterial("commentbout_rail_enemy_cube");
+		if (gameResource) {
+			const char* modelKey = CommentBoutResourceKey::kEnemyModel;
+			if (params.enemyType == RailEnemyType::MoveAndShoot) {
+				modelKey = CommentBoutResourceKey::kShootEnemyModel;
+			} else if (params.enemyType == RailEnemyType::Boss) {
+				modelKey = CommentBoutResourceKey::kBossModel;
+			}
+			if (const auto* model = FindGameModel(*gameResource, modelKey)) {
+				No::ModelLoader::GetModel(model->assetName, mesh);
+				material->materials = No::ModelLoader::GetMaterial(model->assetName);
+			}
+		}
 		material->color = { 1.0f, 1.0f, 1.0f, 1.0f };
 		material->psoName = L"Renderer : Default PSO";
 		material->psoId = NoEngine::Render::GetPSOID(material->psoName);
@@ -119,6 +130,15 @@ void EnemySpawnSystem::Update(No::Registry& registry, float deltaTime)
 {
 	static_cast<void>(deltaTime);
 
+	GameResourceComponent* gameResource = nullptr;
+	auto resourceView = registry.View<CBGameResourceTag, GameResourceComponent>();
+	for (auto entity : resourceView) {
+		gameResource = registry.GetComponent<GameResourceComponent>(entity);
+		if (gameResource) {
+			break;
+		}
+	}
+
 	std::vector<No::Entity> consumed;
 	auto view = registry.View<SpawnEnemyRequestComponent>();
 	for (auto entity : view) {
@@ -132,7 +152,7 @@ void EnemySpawnSystem::Update(No::Registry& registry, float deltaTime)
 			continue;
 		}
 
-		SpawnRailEnemies(registry, request->params);
+		SpawnRailEnemies(registry, request->params, gameResource);
 		consumed.push_back(entity);
 	}
 

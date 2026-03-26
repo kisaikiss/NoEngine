@@ -105,7 +105,7 @@ void PlayerControlSystem::Update(No::Registry& registry, float deltaTime)
 			auto* attackSprite = registry.AddComponent<No::SpriteComponent>(attackEntity);
 			attackSprite->layer = attack->attackLayer;
 			attackSprite->orderInLayer = 1000;
-			attackSprite->textureHandle = gameResource->whiteTexture;
+			attackSprite->textureHandle = GetGameTextureOrWhite(*gameResource, CommentBoutResourceKey::kPlayerAttackSprite);
 			attackSprite->color = { 1.0f, 1.0f, 0.0f, 1.0f };
 
 			auto* collider2D = registry.AddComponent<CommentBoutCollision::Collider2DComponent>(attackEntity);

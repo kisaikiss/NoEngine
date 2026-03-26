@@ -1,5 +1,6 @@
 #include "TitleScene.h"
 #include "application/CommentBout/GameTag.h"
+#include "application/CommentBout/Component/GameResourceComponent.h"
 #include "application/CommentBout/Component/OutGame/TitleMenuStateComponent.h"
 #include "application/CommentBout/Component/OutGame/TitleMenuConfigComponent.h"
 #include "application/CommentBout/Component/OutGame/OptionStateComponent.h"
@@ -26,6 +27,12 @@ void TitleScene::Setup()
 	AddSystem(std::make_unique<No::CameraSystem>());
 
 	No::Registry& registry = *GetRegistry();
+
+	auto gameResourceEntity = registry.GenerateEntity();
+	registry.AddComponent<CBGameResourceTag>(gameResourceEntity);
+	auto* gameResource = registry.AddComponent<GameResourceComponent>(gameResourceEntity);
+	InitializeCommentBoutGameResources(*gameResource);
+
 	auto light = registry.GenerateEntity();
 	auto* dir = registry.AddComponent<No::DirectionalLightComponent>(light);
 	dir->color = { 1.f, 1.f, 1.f, 1.f };
@@ -80,9 +87,8 @@ void TitleScene::Setup()
 	registry.AddComponent<OptionMenuConfigComponent>(optionConfigEntity);
 	registry.AddComponent<No::EditTag>(optionConfigEntity)->name = "TitleOptionMenuConfig";
 
-	const auto whiteTexture = NoEngine::TextureManager::LoadCovertTexture("resources/engine/white1x1.png");
-	TitleMenuSpawner::Create(registry, whiteTexture);
-	OptionMenuSpawner::Create(registry, whiteTexture);
+	TitleMenuSpawner::Create(registry, *gameResource);
+	OptionMenuSpawner::Create(registry, *gameResource);
 }
 
 void TitleScene::NotSystemUpdate()
@@ -102,7 +108,7 @@ void TitleScene::NotSystemUpdate()
 		event.owner = CommentBout::OptionMenuOwner::Title;
 		GetRegistry()->EmitEvent(event);
 	}
-	if ((!optionState || !optionState->isOpen) && ImGui::Button("SceneChange")) {
+	if (ImGui::Button("SceneChange")) {
 		No::SceneChangeEvent event;
 		event.nextScene = "GameScene";
 		GetRegistry()->EmitEvent(event);

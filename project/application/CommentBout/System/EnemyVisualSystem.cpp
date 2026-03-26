@@ -220,7 +220,7 @@ void SpawnRewardOrbFromEnemy(
 	No::CameraComponent& camera,
 	const NoEngine::WindowSize& windowSize,
 	const No::Vector2& bossBarAnchor,
-	NoEngine::TextureRef whiteTexture
+	NoEngine::TextureRef rewardOrbTexture
 ) {
 	const float worldSize = (collider3D.shapeType == CommentBoutCollision::ShapeType3D::Box)
 		? std::max({ collider3D.worldBoxSize.x, collider3D.worldBoxSize.y, collider3D.worldBoxSize.z })
@@ -250,7 +250,7 @@ void SpawnRewardOrbFromEnemy(
 	t2d->translate = start;
 	t2d->scale = { spriteSize, spriteSize };
 	auto* sprite = registry.AddComponent<No::SpriteComponent>(orb);
-	sprite->textureHandle = whiteTexture;
+	sprite->textureHandle = rewardOrbTexture;
 	sprite->layer = 91;
 	sprite->orderInLayer = 20;
 	sprite->color = { 1.0f, 0.9f, 0.2f, 0.95f };
@@ -357,7 +357,15 @@ void EnemyVisualSystem::Update(No::Registry& registry, float deltaTime)
 
 		if (health->isDead || health->hp <= 0) {
 			if (!registry.Has<CBBossTag>(entity) && activeCamera && gameResource && mainWindow && rewardSource && !rewardSource->spawned) {
-				SpawnRewardOrbFromEnemy(registry, entity, *collider3D, *activeCamera, windowSize, bossBarAnchor, gameResource->whiteTexture);
+				SpawnRewardOrbFromEnemy(
+					registry,
+					entity,
+					*collider3D,
+					*activeCamera,
+					windowSize,
+					bossBarAnchor,
+					GetGameTextureOrWhite(*gameResource, CommentBoutResourceKey::kRewardOrbSprite)
+				);
 			}
 			registry.DestroyEntity(entity);
 			continue;

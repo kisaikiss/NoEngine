@@ -23,3 +23,4 @@ struct CBEnemyRewardOrbTag {};	//
 struct CBBossHpBarTag {};		//
 struct CBPlayerHpBarTag {};		//
 struct CBPlayerHitboxTag {};	//
+struct CBRailProgressBarTag {};	//

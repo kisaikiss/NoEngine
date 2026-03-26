@@ -39,7 +39,7 @@ void GrassReactionSystem::Update(No::Registry& registry, float deltaTime)
 
 			auto* sprite = registry.AddComponent<No::SpriteComponent>(effectEntity);
 			sprite->layer = reaction->effectLayer;
-			sprite->textureHandle = gameResource->whiteTexture;
+			sprite->textureHandle = GetGameTextureOrWhite(*gameResource, CommentBoutResourceKey::kWhiteTexture);
 			sprite->color = { 0.0f, 1.0f, 0.0f, 1.0f };
 
 			auto* lifetime = registry.AddComponent<LifetimeComponent>(effectEntity);

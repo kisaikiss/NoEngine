@@ -3,12 +3,13 @@
 #include "application/CommentBout/Component/OutGame/TitleMenuViewComponent.h"
 #include "application/CommentBout/GameTag.h"
 
-void TitleMenuSpawner::Create(No::Registry& registry, const NoEngine::TextureRef& whiteTexture)
+void TitleMenuSpawner::Create(No::Registry& registry, const GameResourceComponent& resources)
 {
-	const auto logoTexture = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_3105/Sprite/TitleRogo.png");
-	const auto startTexture = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_3105/Sprite/GameStart.png");
-	const auto optionTexture = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_3105/Sprite/OptionMenu.png");
-	const auto endTexture = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_3105/Sprite/GameEnd.png");
+	const auto& logoTexture = GetGameTextureOrWhite(resources, CommentBoutResourceKey::kTitleLogo);
+	const auto& startTexture = GetGameTextureOrWhite(resources, CommentBoutResourceKey::kGameStart);
+	const auto& optionTexture = GetGameTextureOrWhite(resources, CommentBoutResourceKey::kOptionMenu);
+	const auto& endTexture = GetGameTextureOrWhite(resources, CommentBoutResourceKey::kGameEnd);
+	const auto& whiteTexture = GetGameTextureOrWhite(resources, CommentBoutResourceKey::kWhiteTexture);
 
 	auto viewEntity = registry.GenerateEntity();
 	registry.AddComponent<CBTitleViewTag>(viewEntity);

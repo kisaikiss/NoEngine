@@ -3,17 +3,17 @@
 #include "application/CommentBout/GameTag.h"
 #include "application/CommentBout/Component/OutGame/OptionMenuViewComponent.h"
 
-void OptionMenuSpawner::Create(No::Registry& registry, const NoEngine::TextureRef& whiteTexture)
+void OptionMenuSpawner::Create(No::Registry& registry, const GameResourceComponent& resources)
 {
-
-	const auto optionTitleTexture = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_3105/Sprite/OptionMenu.png");
-	const auto masterTexture = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_3105/Sprite/Master.png");
-	const auto bgmTexture = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_3105/Sprite/BGM.png");
-	const auto seTexture = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_3105/Sprite/SE.png");
-	const auto vibrationTexture = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_3105/Sprite/Vibration.png");
-	const auto backTexture = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_3105/Sprite/Back.png");
-	const auto onTexture = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_3105/Sprite/On.png");
-	const auto offTexture = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_3105/Sprite/Off.png");
+	const auto& optionTitleTexture = GetGameTextureOrWhite(resources, CommentBoutResourceKey::kOptionMenu);
+	const auto& masterTexture = GetGameTextureOrWhite(resources, CommentBoutResourceKey::kMaster);
+	const auto& bgmTexture = GetGameTextureOrWhite(resources, CommentBoutResourceKey::kBGM);
+	const auto& seTexture = GetGameTextureOrWhite(resources, CommentBoutResourceKey::kSE);
+	const auto& vibrationTexture = GetGameTextureOrWhite(resources, CommentBoutResourceKey::kVibration);
+	const auto& backTexture = GetGameTextureOrWhite(resources, CommentBoutResourceKey::kBack);
+	const auto& onTexture = GetGameTextureOrWhite(resources, CommentBoutResourceKey::kOn);
+	const auto& offTexture = GetGameTextureOrWhite(resources, CommentBoutResourceKey::kOff);
+	const auto& whiteTexture = GetGameTextureOrWhite(resources, CommentBoutResourceKey::kWhiteTexture);
 
 
 	const auto optionViewEntity = registry.GenerateEntity();

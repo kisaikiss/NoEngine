@@ -6,6 +6,7 @@
 #include "application/CommentBout/Component/BossComponent.h"
 #include "application/CommentBout/Component/HealthComponent.h"
 #include "application/CommentBout/Component/LifetimeComponent.h"
+#include "application/CommentBout/Component/GameResourceComponent.h"
 #include "application/CommentBout/Collision/Component/Collider3DComponent.h"
 #include "application/CommentBout/Collision/Component/ProjectedColliderComponent.h"
 #include "application/CommentBout/Collision/Utility/CoordinateConverter.h"
@@ -63,7 +64,8 @@ void SpawnEnemyBullet(
 	const No::Vector3& direction,
 	float bulletSpeed,
 	int bulletDamage,
-	float lifetimeSec
+	float lifetimeSec,
+	const GameResourceComponent* gameResource
 ) {
 	auto bullet = registry.GenerateEntity();
 	registry.AddComponent<CBEnemyBulletTag>(bullet);
@@ -74,8 +76,12 @@ void SpawnEnemyBullet(
 
 	auto* mesh = registry.AddComponent<No::MeshComponent>(bullet);
 	auto* material = registry.AddComponent<No::MaterialComponent>(bullet);
-	No::ModelLoader::LoadModel("commentbout_enemy_bullet_cube", "resources/game/td_3105/Model/cube/cube.obj", mesh);
-	material->materials = No::ModelLoader::GetMaterial("commentbout_enemy_bullet_cube");
+	if (gameResource) {
+		if (const auto* bulletModel = FindGameModel(*gameResource, CommentBoutResourceKey::kEnemyBulletModel)) {
+			No::ModelLoader::GetModel(bulletModel->assetName, mesh);
+			material->materials = No::ModelLoader::GetMaterial(bulletModel->assetName);
+		}
+	}
 	material->color = { 1.0f, 0.4f, 0.2f, 1.0f };
 	material->psoName = L"Renderer : Default PSO";
 	material->psoId = NoEngine::Render::GetPSOID(material->psoName);
@@ -103,6 +109,15 @@ void SpawnEnemyBullet(
 
 void EnemyShootSystem::Update(No::Registry& registry, float deltaTime)
 {
+	GameResourceComponent* gameResource = nullptr;
+	auto resourceView = registry.View<CBGameResourceTag, GameResourceComponent>();
+	for (auto entity : resourceView) {
+		gameResource = registry.GetComponent<GameResourceComponent>(entity);
+		if (gameResource) {
+			break;
+		}
+	}
+
 	auto cameraView = registry.View<No::ActiveCameraTag, No::CameraComponent, No::TransformComponent>();
 	auto cameraIt = cameraView.begin();
 	if (cameraIt == cameraView.end()) {
@@ -133,7 +148,7 @@ void EnemyShootSystem::Update(No::Registry& registry, float deltaTime)
 		shooter->shootCooldown = std::max(0.05f, shooter->shootInterval);
 
 		No::Vector3 dir = ComputeAimDirection(registry, *transform, *camera, *cameraTransform, shooter->targetDepthFromCamera);
-		SpawnEnemyBullet(registry, entity, *transform, dir, shooter->bulletSpeed, shooter->bulletDamage, shooter->bulletLifetime);
+		SpawnEnemyBullet(registry, entity, *transform, dir, shooter->bulletSpeed, shooter->bulletDamage, shooter->bulletLifetime, gameResource);
 	}
 
 	auto bossView = registry.View<CBBossTag, BossComponent, EnemyShooterComponent, HealthComponent, No::TransformComponent>();
@@ -151,7 +166,7 @@ void EnemyShootSystem::Update(No::Registry& registry, float deltaTime)
 
 		while (boss->shotsSpawnedInBurst < boss->shotsFiredInBurst) {
 			No::Vector3 dir = ComputeAimDirection(registry, *transform, *camera, *cameraTransform, shooter->targetDepthFromCamera);
-			SpawnEnemyBullet(registry, entity, *transform, dir, shooter->bulletSpeed, shooter->bulletDamage, shooter->bulletLifetime);
+			SpawnEnemyBullet(registry, entity, *transform, dir, shooter->bulletSpeed, shooter->bulletDamage, shooter->bulletLifetime, gameResource);
 			boss->shotsSpawnedInBurst += 1;
 		}
 	}

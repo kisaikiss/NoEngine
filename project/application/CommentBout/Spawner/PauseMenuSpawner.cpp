@@ -4,20 +4,18 @@
 #include "application/CommentBout/Component/OutGame/PauseMenuViewComponent.h"
 #include "application/CommentBout/GameTag.h"
 
-void PauseMenuSpawner::Create(No::Registry& registry, const NoEngine::TextureRef& whiteTexture)
+void PauseMenuSpawner::Create(No::Registry& registry, const GameResourceComponent& resources)
 {
-	registry;
-	whiteTexture;
-
 	auto pauseViewEntity = registry.GenerateEntity();
 	registry.AddComponent<CBPauseViewTag>(pauseViewEntity);
 	auto* pauseView = registry.AddComponent<PauseMenuViewComponent>(pauseViewEntity);
 
-	const auto pauseTitleTexture = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_3105/Sprite/Pause.png");
-	const auto pauseToGameTexture = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_3105/Sprite/PauseToGame.png");
-	const auto restartTexture = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_3105/Sprite/Restart.png");
-	const auto optionTexture = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_3105/Sprite/OptionMenu.png");
-	const auto pauseToTitleTexture = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_3105/Sprite/PauseToTitle.png");
+	const auto& whiteTexture = GetGameTextureOrWhite(resources, CommentBoutResourceKey::kWhiteTexture);
+	const auto& pauseTitleTexture = GetGameTextureOrWhite(resources, CommentBoutResourceKey::kPauseTitle);
+	const auto& pauseToGameTexture = GetGameTextureOrWhite(resources, CommentBoutResourceKey::kPauseToGame);
+	const auto& restartTexture = GetGameTextureOrWhite(resources, CommentBoutResourceKey::kRestart);
+	const auto& optionTexture = GetGameTextureOrWhite(resources, CommentBoutResourceKey::kOptionMenu);
+	const auto& pauseToTitleTexture = GetGameTextureOrWhite(resources, CommentBoutResourceKey::kPauseToTitle);
 
 	auto pauseDimEntity_ = registry.GenerateEntity();
 	registry.AddComponent<CBPauseDimTag>(pauseDimEntity_);
