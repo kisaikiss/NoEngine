@@ -13,6 +13,7 @@
 #include "application/CommentBout/Component/HpBarComponent.h"
 #include "application/CommentBout/FieldObject/Component/GroundComponent.h"
 #include "application/CommentBout/Component/RailCameraComponent.h"
+#include "application/CommentBout/Component/RailProgressBarComponent.h"
 #include "application/CommentBout/Component/EnemyComponent.h"
 #include "application/CommentBout/Utility/CBCollisionMask.h"
 #include "application/CommentBout/Utility/CBSpriteLayer.h"
@@ -27,6 +28,7 @@
 #include "application/CommentBout/System/OutGame/OptionSystem.h"
 #include "application/CommentBout/System/OutGame/OptionViewSystem.h"
 #include "application/CommentBout/System/RailCameraSystem.h"
+#include "application/CommentBout/System/RailProgressBarSystem.h"
 #include "application/CommentBout/System/EnemySpawnSystem.h"
 #include "application/CommentBout/System/EnemyShootSystem.h"
 #include "application/CommentBout/System/EnemyMoveSystem.h"
@@ -83,6 +85,7 @@ void GameScene::Setup() {
 	AddSystem(std::make_unique<PlayerInfoDebugSystem>());
 	AddSystem(std::make_unique<No::DebugCameraSystem>());
 	AddSystem(std::make_unique<RailCameraSystem>());
+	AddSystem(std::make_unique<RailProgressBarSystem>());
 	AddSystem(std::make_unique<EnemySpawnSystem>());
 	AddSystem(std::make_unique<No::CameraSystem>());
 	AddSystem(std::make_unique<BossBehaviorSystem>());
@@ -132,6 +135,16 @@ void GameScene::Setup() {
 	playerHpBar->fillColor = No::Color(0.2f, 0.7f, 1.0f, 0.95f);
 	playerHpBar->layer = 90;
 	playerHpBar->orderBase = 100;
+
+	auto railProgressBarEntity = registry.GenerateEntity();
+	registry.AddComponent<CBRailProgressBarTag>(railProgressBarEntity);
+	auto* railProgressBar = registry.AddComponent<RailProgressBarComponent>(railProgressBarEntity);
+	railProgressBar->layer = static_cast<int>(CommentBout::ToLayer(CommentBout::SpriteLayer::Gameplay));
+	railProgressBar->orderBase = 100;
+	railProgressBar->startPosition = { 230.0f, 23.0f };
+	railProgressBar->goalPosition = { 1050.0f, 23.0f };
+	railProgressBar->barHeight = 10.0f;
+	railProgressBar->markerSize = { 22.0f, 22.0f };
 
 
 	auto pauseStateEntity = registry.GenerateEntity();

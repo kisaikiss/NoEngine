@@ -205,10 +205,10 @@ void HpBarViewSystem::Update(No::Registry& registry, float deltaTime)
 		return;
 	}
 
-	static bool loadedFromFile = false;
-	if (!loadedFromFile) {
+	static const No::Registry* loadedRegistry = nullptr;
+	if (loadedRegistry != &registry) {
 		LoadBars(registry);
-		loadedFromFile = true;
+		loadedRegistry = &registry;
 	}
 
 #ifdef USE_IMGUI

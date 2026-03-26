@@ -189,6 +189,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\CommentBout\System\PlayerAttackResolveSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\PlayerInfoDebugSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\RailCameraSystem.cpp" />
+    <ClCompile Include="application\CommentBout\System\RailProgressBarSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\OutGame\TitleSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\OutGame\TitleViewSystem.cpp" />
     <ClCompile Include="application\TestApp\Scene\TestScene.cpp" />
@@ -370,6 +371,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\CommentBout\Component\OutGame\OutGameComponets.h" />
     <ClInclude Include="application\CommentBout\Component\PlayerHitboxComponent.h" />
     <ClInclude Include="application\CommentBout\Component\RailCameraComponent.h" />
+    <ClInclude Include="application\CommentBout\Component\RailProgressBarComponent.h" />
     <ClInclude Include="application\CommentBout\Component\SpawnEnemyRequestComponent.h" />
     <ClInclude Include="application\CommentBout\Component\OutGame\TitleMenuConfigComponent.h" />
     <ClInclude Include="application\CommentBout\Component\OutGame\TitleMenuStateComponent.h" />
@@ -398,6 +400,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\CommentBout\System\RailCameraSystem.h" />
     <ClInclude Include="application\CommentBout\System\OutGame\TitleSystem.h" />
     <ClInclude Include="application\CommentBout\System\OutGame\TitleViewSystem.h" />
+    <ClInclude Include="application\CommentBout\System\RailProgressBarSystem.h" />
     <ClInclude Include="application\TestApp\Scene\TestScene.h" />
     <ClInclude Include="application\TestApp\Scene\TestScene2.h" />
     <ClInclude Include="application\TestApp\Scene\TestScene3.h" />

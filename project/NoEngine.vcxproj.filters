@@ -405,6 +405,8 @@
     <ClInclude Include="application\CommentBout\Component\OutGame\OutGameComponets.h" />
     <ClInclude Include="application\CommentBout\Component\DamageFlashComponent.h" />
     <ClInclude Include="application\CommentBout\System\DamageFlashSystem.h" />
+    <ClInclude Include="application\CommentBout\Component\RailProgressBarComponent.h" />
+    <ClInclude Include="application\CommentBout\System\RailProgressBarSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

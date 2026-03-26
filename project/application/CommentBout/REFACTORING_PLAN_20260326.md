@@ -19,70 +19,70 @@
 ## 1. リソース一元化（モデル/テクスチャ）
 
 ### 方針（Q1への回答）
-- [ ] `GameResourceComponent` を拡張して実施する（既存参照を壊しにくく、段階移行が安全）
-- [ ] 将来的に名前を `GameResourceCatalogComponent` へ変更できる構成にする
+- [x] `GameResourceComponent` を拡張して実施する（既存参照を壊しにくく、段階移行が安全）
+- [x] 将来的に名前を `GameResourceCatalogComponent` へ変更できる構成にする
 
 ### 補足（Q2への回答）
-- [ ] 同一ファイルを別キーで持つ運用は可能
-- [ ] 例: `PlayerSprite` と `PlayerAttackSprite` が同一パスでも、キーは分離可能
-- [ ] エンジンの `TextureManager` はパス単位キャッシュのため、同一実体を共有できる
+- [x] 同一ファイルを別キーで持つ運用は可能
+- [x] 例: `PlayerSprite` と `PlayerAttackSprite` が同一パスでも、キーは分離可能
+- [x] エンジンの `TextureManager` はパス単位キャッシュのため、同一実体を共有できる
 
 ### 実装ステップ
-- [ ] `GameResourceComponent` に `std::unordered_map<std::string, TextureRef>` / `std::unordered_map<std::string, ModelId>` 相当を追加
-- [ ] `GameScene::Setup()` に「リソース登録関数」を新設（読込場所を1か所化）
-- [ ] 既存の直接 `LoadCovertTexture` / `LoadModel` 呼び出しを、段階的にカタログ参照へ置換
-- [ ] 暫定で `resources` パスをすべてカタログへ集約
-- [ ] 「現在利用中パス一覧」を計画時点で台帳化（下記）
+- [x] `GameResourceComponent` に `std::unordered_map<std::string, TextureRef>` / `std::unordered_map<std::string, ModelId>` 相当を追加
+- [x] `GameScene::Setup()` に「リソース登録関数」を新設（読込場所を1か所化）
+- [x] 既存の直接 `LoadCovertTexture` / `LoadModel` 呼び出しを、段階的にカタログ参照へ置換
+- [x] 暫定で `resources` パスをすべてカタログへ集約
+- [x] 「現在利用中パス一覧」を計画時点で台帳化（下記）
 
 ### 現在コードで確認できるパス（初期台帳）
-- [ ] `resources/engine/white1x1.png`
-- [ ] `resources/game/td_3105/Model/cube/cube.obj`（地面、草、敵、敵弾などで利用中）
-- [ ] `resources/game/td_3105/Sprite/Pause.png`
-- [ ] `resources/game/td_3105/Sprite/PauseToGame.png`
-- [ ] `resources/game/td_3105/Sprite/Restart.png`
-- [ ] `resources/game/td_3105/Sprite/OptionMenu.png`
-- [ ] `resources/game/td_3105/Sprite/PauseToTitle.png`
-- [ ] `resources/game/td_3105/Sprite/TitleRogo.png`
-- [ ] `resources/game/td_3105/Sprite/GameStart.png`
-- [ ] `resources/game/td_3105/Sprite/GameEnd.png`
-- [ ] `resources/game/td_3105/Sprite/Master.png`
-- [ ] `resources/game/td_3105/Sprite/BGM.png`
-- [ ] `resources/game/td_3105/Sprite/SE.png`
-- [ ] `resources/game/td_3105/Sprite/Vibration.png`
-- [ ] `resources/game/td_3105/Sprite/Back.png`
-- [ ] `resources/game/td_3105/Sprite/On.png`
-- [ ] `resources/game/td_3105/Sprite/Off.png`
+- [x] `resources/engine/white1x1.png`
+- [x] `resources/game/td_3105/Model/cube/cube.obj`（地面、草、敵、敵弾などで利用中）
+- [x] `resources/game/td_3105/Sprite/Pause.png`
+- [x] `resources/game/td_3105/Sprite/PauseToGame.png`
+- [x] `resources/game/td_3105/Sprite/Restart.png`
+- [x] `resources/game/td_3105/Sprite/OptionMenu.png`
+- [x] `resources/game/td_3105/Sprite/PauseToTitle.png`
+- [x] `resources/game/td_3105/Sprite/TitleRogo.png`
+- [x] `resources/game/td_3105/Sprite/GameStart.png`
+- [x] `resources/game/td_3105/Sprite/GameEnd.png`
+- [x] `resources/game/td_3105/Sprite/Master.png`
+- [x] `resources/game/td_3105/Sprite/BGM.png`
+- [x] `resources/game/td_3105/Sprite/SE.png`
+- [x] `resources/game/td_3105/Sprite/Vibration.png`
+- [x] `resources/game/td_3105/Sprite/Back.png`
+- [x] `resources/game/td_3105/Sprite/On.png`
+- [x] `resources/game/td_3105/Sprite/Off.png`
 
 ### 新規追加予定リソース（要件リスト）
-- [ ] 自機スプライト
-- [ ] 自機攻撃スプライト
-- [ ] ボスモデル
-- [ ] 敵モデル
-- [ ] 射撃敵モデル
-- [ ] 敵弾モデル
-- [ ] 草モデル
-- [ ] ポーズ系スプライト各種
-- [ ] オプション系スプライト各種
-- [ ] タイトル系スプライト各種
-- [ ] オーブスプライト
+- [x] 自機スプライト
+- [x] 自機攻撃スプライト
+- [x] ボスモデル
+- [x] 敵モデル
+- [x] 射撃敵モデル
+- [x] 敵弾モデル
+- [x] 草モデル
+- [x] ポーズ系スプライト各種
+- [x] オプション系スプライト各種
+- [x] タイトル系スプライト各種
+- [x] オーブスプライト
 
 ---
 
 ## 2. レール進行バー表示
 
 ### 実装ステップ
-- [ ] `RailProgressBarComponent`（仮称）を追加
-- [ ] `RailProgressBarSystem`（仮称）を追加し、`distance / totalLength` で進行率更新
-- [ ] `start / goal / barBase / barFill / playerMarker` スプライトを生成・管理
-- [ ] `barFill` を「スタート→自機地点」まで色付きで描画
-- [ ] 自機地点マーカーは進行率にスムーズ追従（補間）
-- [ ] 自機地点マーカーに軽い拡縮アニメを付与
-- [ ] `%表示` は今回は未実装（将来拡張ポイントとして記録）
+- [x] `RailProgressBarComponent`（仮称）を追加
+- [x] `RailProgressBarSystem`（仮称）を追加し、`distance / totalLength` で進行率更新
+- [x] `start / goal / barBase / barFill / playerMarker` スプライトを生成・管理
+- [x] `barFill` を「スタート→自機地点」まで色付きで描画
+- [x] 自機地点マーカーは進行率にスムーズ追従（補間）
+- [x] 自機地点マーカーに軽い拡縮アニメを付与
+- [x] `%表示` は今回は未実装（将来拡張ポイントとして記録）
 
 ### 完了条件
-- [ ] 進行バーが常時表示される
-- [ ] スタート?現在地点が色付きで見える
-- [ ] マーカーが進行と連動し、見た目に動きがある
+- [x] 進行バーが常時表示される
+- [x] スタート?現在地点が色付きで見える
+- [x] マーカーが進行と連動し、見た目に動きがある
 
 ---
 

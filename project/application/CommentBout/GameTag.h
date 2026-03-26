@@ -24,3 +24,4 @@ struct CBBossHpBarTag {};		//
 struct CBPlayerHpBarTag {};		//
 struct CBPlayerHitboxTag {};	//
 struct CBRailProgressBarTag {};	//
+struct CBRailProgressBarDisplayTag {};	//
