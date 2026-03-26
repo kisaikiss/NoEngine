@@ -17,10 +17,12 @@
 #include <vector>
 
 namespace {
+	// プレイヤーの攻撃が当たる可能性のある敵を列挙するためのクエリ
 bool ContainsEntity(const std::vector<No::Entity>& entities, No::Entity entity) {
 	return std::find(entities.begin(), entities.end(), entity) != entities.end();
 }
 
+// ダメージリクエストを発行するユーティリティ関数
 void EmitDamageRequest(
 	No::Registry& registry,
 	No::Entity target,
@@ -44,6 +46,7 @@ void EmitDamageRequest(
 	request->ignoreInvincible = ignoreInvincible;
 }
 
+// AABB 内に点があるか判定するユーティリティ関数
 bool IsPointInAABB(
 	const No::Vector2& point,
 	const No::Vector2& rectCenter,
@@ -56,6 +59,7 @@ bool IsPointInAABB(
 		point.y <= rectCenter.y + half.y;
 }
 
+// 凸多角形の内部に点があるか判定するユーティリティ関数
 bool IsPointInConvexHull(const std::vector<No::Vector2>& hull, const No::Vector2& point) {
 	const size_t n = hull.size();
 	if (n < 3) {
@@ -80,7 +84,7 @@ bool IsPointInConvexHull(const std::vector<No::Vector2>& hull, const No::Vector2
 	}
 	return true;
 }
-
+// 投影されたコライダーに点が含まれているか判定するユーティリティ関数
 bool IsPointInsideProjected(
 	const CommentBoutCollision::ProjectedColliderComponent& projected,
 	const No::Vector2& point
@@ -94,7 +98,7 @@ bool IsPointInsideProjected(
 	const No::Vector2 d = point - projected.screenPosition;
 	return d.LengthSquared() <= projected.screenRadius * projected.screenRadius;
 }
-
+// 投影されたコライダーと攻撃のAABBが重なっているか判定するユーティリティ関数
 bool CheckProjectedVsAttack(
 	const CommentBoutCollision::ProjectedColliderComponent& projected,
 	const CommentBoutCollision::Collider2DComponent& attackCollider
@@ -116,7 +120,7 @@ bool CheckProjectedVsAttack(
 		attackCollider.worldSize
 	);
 }
-
+// 投影されたコライダーの衝突判定に使用するサンプル点を収集するユーティリティ関数
 void GatherProjectedSamplePoints(
 	const CommentBoutCollision::ProjectedColliderComponent& projected,
 	std::vector<No::Vector2>& outPoints
@@ -141,7 +145,7 @@ void GatherProjectedSamplePoints(
 	outPoints.push_back(projected.screenPosition + No::Vector2(0.0f, r));
 	outPoints.push_back(projected.screenPosition + No::Vector2(0.0f, -r));
 }
-
+// ワールド座標の点がカメラからどれだけ離れているか（カメラ空間でのZ値）を計算するユーティリティ関数
 float ComputeCameraDepth(
 	const No::Vector3& worldPos,
 	const No::CameraComponent* camera

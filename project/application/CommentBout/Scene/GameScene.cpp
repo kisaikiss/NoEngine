@@ -114,7 +114,7 @@ void GameScene::Setup() {
 	CommentBout::GameAudio::PlayTestBGM(true);
 
 	const auto whiteTexture = NoEngine::TextureManager::LoadCovertTexture("resources/engine/white1x1.png");
-	// 蜈ｱ譛峨Μ繧ｽ繝ｼ繧ｹ
+	//ゲームリソース
 	auto gameResourceEntity = registry.GenerateEntity();
 	registry.AddComponent<CBGameResourceTag>(gameResourceEntity);
 	auto* gameResource = registry.AddComponent<GameResourceComponent>(gameResourceEntity);

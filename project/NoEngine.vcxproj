@@ -162,7 +162,12 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="application\CommentBout\Collision\Utility\CoordinateConverter.cpp" />
+    <ClCompile Include="application\CommentBout\Component\OptionMenuConfigComponent.cpp" />
+    <ClCompile Include="application\CommentBout\Component\OptionStateComponent.cpp" />
+    <ClCompile Include="application\CommentBout\Component\PauseMenuConfigComponent.cpp" />
+    <ClCompile Include="application\CommentBout\Component\PauseStateComponent.cpp" />
     <ClCompile Include="application\CommentBout\Component\PlayerAttackComponent.cpp" />
+    <ClCompile Include="application\CommentBout\Component\TitleMenuConfigComponent.cpp" />
     <ClCompile Include="application\CommentBout\Data\EnemyTypePresetIO.cpp" />
     <ClCompile Include="application\CommentBout\FieldObject\System\GrassReactionSystem.cpp" />
     <ClCompile Include="application\CommentBout\FieldObject\System\HitBalloonSystem.cpp" />
@@ -346,7 +351,6 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">false</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="application\CommentBout\Component\HitBalloonComponent.cpp" />
     <ClCompile Include="application\CommentBout\Editor\GameEventEditor.cpp" />
     <ClCompile Include="application\CommentBout\Scene\GameScene.cpp" />
     <ClCompile Include="application\CommentBout\Editor\RailCameraEditor.cpp" />
@@ -803,7 +807,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="engine\Functions\ECS\Registry.hpp">
       <FileType>Document</FileType>
     </ClInclude>
-    <None Include="application\CommentBout\ARCHITECTURE_NOTES.md" />
+    <None Include="application\CommentBout\IMPLEMENTATION_PLAN.md" />
     <None Include="resources\engine\Shaders\Default.hlsli" />
     <None Include="resources\game\Shaders\ShaderMathUtil.hlsli" />
     <None Include="resources\game\td_2304\Json\tdSpriteConfig.json" />

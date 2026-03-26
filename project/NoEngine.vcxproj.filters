@@ -16,6 +16,8 @@
     <FxCompile Include="resources\game\Shaders\BackGround.VS.hlsl" />
     <FxCompile Include="resources\game\Shaders\BallTrail.PS.hlsl" />
     <FxCompile Include="resources\game\Shaders\BallTrail.VS.hlsl" />
+    <FxCompile Include="resources\engine\Shaders\Particle.PS.hlsl" />
+    <FxCompile Include="resources\engine\Shaders\Particle.VS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="engine\Functions\ECS\System\CameraSystem.cpp" />
@@ -149,7 +151,6 @@
     <ClCompile Include="application\CommentBout\Collision\System\CollisionSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\LifetimeSystem.cpp" />
     <ClCompile Include="application\CommentBout\Component\PlayerAttackComponent.cpp" />
-    <ClCompile Include="application\CommentBout\Component\HitBalloonComponent.cpp" />
     <ClCompile Include="application\CommentBout\Scene\TitleScene.cpp" />
     <ClCompile Include="application\CommentBout\System\OptionSystem.cpp" />
     <ClCompile Include="application\\CommentBout\\System\\OptionViewSystem.cpp" />
@@ -188,6 +189,11 @@
     <ClCompile Include="application\CommentBout\System\EnemyRewardToBossSystem.cpp" />
     <ClCompile Include="application\CommentBout\Data\EnemyTypePresetIO.cpp" />
     <ClCompile Include="application\CommentBout\System\HpBarViewSystem.cpp" />
+    <ClCompile Include="application\CommentBout\Component\TitleMenuConfigComponent.cpp" />
+    <ClCompile Include="application\CommentBout\Component\OptionMenuConfigComponent.cpp" />
+    <ClCompile Include="application\CommentBout\Component\OptionStateComponent.cpp" />
+    <ClCompile Include="application\CommentBout\Component\PauseMenuConfigComponent.cpp" />
+    <ClCompile Include="application\CommentBout\Component\PauseStateComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Functions\ECS\System\CameraSystem.h" />
@@ -466,7 +472,7 @@
     <None Include="resources\game\td_3105\RailData\sample_rail.json" />
     <None Include="resources\game\td_3105\RailData\Stage_01_rail.json" />
     <None Include="resources\game\td_3105\RailData\Stage_01_events.json" />
-    <None Include="application\CommentBout\ARCHITECTURE_NOTES.md" />
     <None Include="resources\game\td_3105\RailData\EnemyTypePreset.json" />
+    <None Include="application\CommentBout\IMPLEMENTATION_PLAN.md" />
   </ItemGroup>
 </Project>

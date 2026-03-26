@@ -13,7 +13,6 @@ private:
 	void RailCameraImGui();
 	void RailEditorImGui();
 	void ChangeSceneImGui();
-	void HpBarImGui();
 	void SpawnGrass(const No::Vector3& position, const No::Vector3& size);
 
 	No::Entity activeCameraEntity_{};

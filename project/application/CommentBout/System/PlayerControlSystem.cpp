@@ -1,4 +1,4 @@
-﻿#include "stdafx.h"
+#include "stdafx.h"
 #include "PlayerControlSystem.h"
 #include "application/CommentBout/Component/PlayerComponent.h"
 #include "application/CommentBout/Component/PlayerAttackComponent.h"
@@ -15,7 +15,7 @@
 
 void PlayerControlSystem::Update(No::Registry& registry, float deltaTime)
 {
-	// ポーズ中はプレイヤー操作・攻撃生成を停止。
+	// ポーズ中はプレイヤー操作・攻撃生成を停止
 	bool isPaused = false;
 	auto pauseView = registry.View<CBPauseStateTag, PauseStateComponent>();
 	for (auto pauseEntity : pauseView) {
@@ -29,7 +29,7 @@ void PlayerControlSystem::Update(No::Registry& registry, float deltaTime)
 		return;
 	}
 
-	// 攻撃エフェクト生成に使う共有リソース。
+	// 攻撃エフェクト生成に使う共有リソース
 	GameResourceComponent* gameResource = nullptr;
 	auto resourceView = registry.View<CBGameResourceTag, GameResourceComponent>();
 	for (auto entity : resourceView) {
@@ -56,11 +56,12 @@ void PlayerControlSystem::Update(No::Registry& registry, float deltaTime)
 			}
 		}
 
+		// HPが0以下でまだ死亡処理がされていない場合、死亡処理を行う
 		if (health->hp <= 0 && !health->deathHandled) {
 			health->isDead = true;
 			health->deathHandled = true;
 			No::SceneChangeEvent event;
-			event.nextScene = "GameScene";
+			event.nextScene = "TitleScene";
 			registry.EmitEvent(event);
 			continue;
 		}
