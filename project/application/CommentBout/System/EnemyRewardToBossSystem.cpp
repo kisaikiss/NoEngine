@@ -19,7 +19,7 @@ void EnemyRewardToBossSystem::Update(No::Registry& registry, float deltaTime)
 	auto barView = registry.View<CBBossHpBarTag, HpBarComponent>();
 	for (auto e : barView) {
 		auto* bar = registry.GetComponent<HpBarComponent>(e);
-		if (bar && bar->targetEntity != No::nullEntity) {
+		if (bar && bar->targetEntity != No::nullEntity && registry.Has<CBBossTag>(bar->targetEntity)) {
 			bossEntity = bar->targetEntity;
 			break;
 		}

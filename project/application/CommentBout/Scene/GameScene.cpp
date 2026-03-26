@@ -71,7 +71,7 @@ void GameScene::Setup() {
 	// Damage / UI
 	//  - EnemyRewardToBossSystem
 	//  - DamageApplySystem
-	//  - BossHpBarViewSystem
+	//  - HpBarViewSystem
 	//  - EnemyVisualSystem
 	// そのほか
 	//  - GrassReaction / HitBalloon / Lifetime / Option / PauseView / OptionView / Edit
@@ -120,6 +120,17 @@ void GameScene::Setup() {
 	auto* bossHpBar = registry.AddComponent<HpBarComponent>(bossHpBarEntity);
 	bossHpBar->anchor = { 640.0f, 64.0f };
 	bossHpBar->size = { 420.0f, 28.0f };
+	bossHpBar->layer = 90;
+	bossHpBar->orderBase = 100;
+
+	auto playerHpBarEntity = registry.GenerateEntity();
+	registry.AddComponent<CBPlayerHpBarTag>(playerHpBarEntity);
+	auto* playerHpBar = registry.AddComponent<HpBarComponent>(playerHpBarEntity);
+	playerHpBar->anchor = { 170.0f, 670.0f };
+	playerHpBar->size = { 280.0f, 22.0f };
+	playerHpBar->fillColor = No::Color(0.2f, 0.7f, 1.0f, 0.95f);
+	playerHpBar->layer = 90;
+	playerHpBar->orderBase = 100;
 
 
 	auto pauseStateEntity = registry.GenerateEntity();
@@ -247,6 +258,7 @@ void GameScene::Setup() {
 	playerSprite->layer = CommentBout::ToLayer(CommentBout::SpriteLayer::Gameplay);
 	playerSprite->color = { 1.f, 1.f, 1.f, 0.5f };
 	playerSprite->textureHandle = whiteTexture;
+	playerHpBar->targetEntity = playerEntity;
 
 	auto playerHitboxEntity = registry.GenerateEntity();
 	registry.AddComponent<CBPlayerHitboxTag>(playerHitboxEntity);

@@ -5,7 +5,6 @@
 #include "application/CommentBout/Component/PlayerHitboxComponent.h"
 #include "application/CommentBout/Component/EnemyRewardSourceComponent.h"
 #include "application/CommentBout/Component/EnemyRewardOrbComponent.h"
-#include "application/CommentBout/Component/BossHpBarComponent.h"
 #include "application/CommentBout/Component/HpBarComponent.h"
 #include "application/CommentBout/Component/GameResourceComponent.h"
 #include "application/CommentBout/Collision/Component/Collider3DComponent.h"

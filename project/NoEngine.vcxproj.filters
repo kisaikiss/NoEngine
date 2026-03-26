@@ -185,7 +185,6 @@
     <ClCompile Include="application\CommentBout\System\BossBehaviorSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\EnemyShootSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\EnemyBulletHitSystem.cpp" />
-    <ClCompile Include="application\CommentBout\System\BossHpBarViewSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\EnemyRewardToBossSystem.cpp" />
     <ClCompile Include="application\CommentBout\Data\EnemyTypePresetIO.cpp" />
     <ClCompile Include="application\CommentBout\System\HpBarViewSystem.cpp" />
@@ -446,13 +445,11 @@
     <ClInclude Include="application\CommentBout\Component\EnemyShooterComponent.h" />
     <ClInclude Include="application\CommentBout\Component\BossComponent.h" />
     <ClInclude Include="application\CommentBout\System\BossBehaviorSystem.h" />
-    <ClInclude Include="application\CommentBout\Component\BossHpBarComponent.h" />
     <ClInclude Include="application\CommentBout\Component\EnemyRewardOrbComponent.h" />
     <ClInclude Include="application\CommentBout\Component\EnemyBulletComponent.h" />
     <ClInclude Include="application\CommentBout\Component\EnemyRewardSourceComponent.h" />
     <ClInclude Include="application\CommentBout\System\EnemyShootSystem.h" />
     <ClInclude Include="application\CommentBout\System\EnemyBulletHitSystem.h" />
-    <ClInclude Include="application\CommentBout\System\BossHpBarViewSystem.h" />
     <ClInclude Include="application\CommentBout\System\EnemyRewardToBossSystem.h" />
     <ClInclude Include="application\CommentBout\Data\EnemyTypePresetIO.h" />
     <ClInclude Include="application\CommentBout\Component\HpBarComponent.h" />

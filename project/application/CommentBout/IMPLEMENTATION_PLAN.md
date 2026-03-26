@@ -40,42 +40,33 @@
 ## Phase 2: HPバー系の安定化と汎用化
 
 ### 2-1. `HpBarComponent` / `HpBarViewSystem` への移行完了
-- [ ] Boss/Playerとも `HpBarComponent` に統一
-- [ ] 旧 `BossHpBarComponent` 依存を削除
-- [ ] 参照先 (`EnemyRewardToBossSystem`, `EnemyVisualSystem`) を統一
-
-**完了条件**
-- コード上で `BossHpBarComponent` 参照が残っていない。
+- [x] Boss/Playerとも `HpBarComponent` に統一
+- [x] 旧 `BossHpBarComponent` 依存を削除
+- [x] 参照先 (`EnemyRewardToBossSystem`, `EnemyVisualSystem`) を統一
 
 ### 2-2. ボス未出現時ゲージ減少バグ修正
-- [ ] target未設定時の表示ポリシーを固定（非表示 or 0固定）
-- [ ] `delayedRatio` 初期化と再取得時初期化を修正
-
-**完了条件**
-- ボス出現前にゲージが減らない。
+- [x] target未設定時の表示ポリシーを固定（非表示 or 0固定）
+- [x] `delayedRatio` 初期化と再取得時初期化を修正
 
 ### 2-3. プレイヤーHPバー表示修正
-- [ ] `CBPlayerHpBarTag` エンティティ生成を確認
-- [ ] `targetEntity=player` の設定を保証
-- [ ] layer/order/anchor/pivot を見える設定に固定
-
-**完了条件**
-- 左下（指定位置）に常時表示される。
+- [x] `CBPlayerHpBarTag` エンティティ生成を確認
+- [x] `targetEntity=player` の設定を保証
+- [x] layer/order/anchor/pivot を見える設定に固定
 
 ### 2-4. HPバー編集UI + JSON保存
-- [ ] Boss/Playerそれぞれの `anchor/size/layer/order/color/delayedSpeed` 編集UI
-- [ ] `Stage_01_hpbar.json` へ保存/読込
-
-**完了条件**
-- 両バーの編集値が保存・復元される。
+- [x] Boss/Playerそれぞれの `anchor/size/layer/order/color/delayedSpeed` 編集UI
+- [x] `Stage_01_hpbar.json` へ保存/読込
 
 ### 2-5. シェイク適用範囲修正
-- [ ] 外枠・赤遅延・緑ゲージを同一オフセットで移動
-- [ ] 親子構造で揺らす方式に整理（可能なら）
+- [x] 外枠・赤遅延・緑ゲージを同一オフセットで移動
+- [x] 親子構造で揺らす方式に整理（可能なら）
 
-**完了条件**
-- 被弾時にバー全体が揺れる。
-- 
+## 実装ログ（進捗記録）
+- [x] Phase 1 完了
+- [x] Phase 2 完了
+- [ ] Phase 3 完了
+- [ ] Phase 4 完了
+- [ ] 最終ビルド成功
 
 ---
 
@@ -84,17 +75,21 @@
 ### 3-1. 自機被ダメリアクション
 - [ ] 接触被弾・敵弾被弾の双方で同一フラッシュ制御
 - [ ] 既存色復帰を保証
+- [ ] プレイヤーフラッシュは「プレイヤーが被弾した時のみ」発火するように対象を限定
 
 **完了条件**
 - 被弾時のみ短時間赤くなり、復帰する。
+- 敵被弾時にプレイヤーは点滅しない。
 
 ### 3-2. 自機と敵弾の当たり判定修正
 - [ ] `PlayerHitbox` 3D位置が自機2Dと同期しているか確認
 - [ ] `CollisionLayer/Mask` の双方向一致を確認
 - [ ] `collidedEntity` 上書き問題がある場合は複数ヒット対応に改善
+- [ ] 敵弾判定は「プレイヤーに命中時のみ消滅」にするか、消滅ポリシーを明文化して実装
 
 **完了条件**
 - 敵弾が自機に安定して命中し、`DamageRequest` が発行される。
+- 命中時の点滅が取りこぼしなく再現される。
 
 ### 3-3. 被ダメフラッシュ共通化
 - [ ] `PlayerDamageFlashComponent` を廃止方向にし、`DamageFlashComponent` を追加
@@ -104,6 +99,15 @@
 
 **完了条件**
 - 敵と自機が同一仕組みでフラッシュする。
+- 命中した対象のみがフラッシュする。
+
+### 3-4. 報酬オーブダメージ対象の固定
+- [ ] オーブ到達時ダメージは `CBBossTag` 保持Entityのみに適用
+- [ ] ボス不在時はダメージを発行しない
+
+**完了条件**
+- オーブでプレイヤーHPが減らない。
+- オーブダメージはボスにのみ入る。
 
 ---
 
@@ -146,7 +150,7 @@
 
 ## 実装ログ（進捗記録）
 - [x] Phase 1 完了
-- [ ] Phase 2 完了
+- [x] Phase 2 完了
 - [ ] Phase 3 完了
 - [ ] Phase 4 完了
 - [ ] 最終ビルド成功

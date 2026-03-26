@@ -11,8 +11,8 @@ struct HpBarComponent {
 	No::Entity delayedEntity = No::nullEntity;
 	No::Entity fillEntity = No::nullEntity;
 
-	float displayRatio = 1.0f;
-	float delayedRatio = 1.0f;
+	float displayRatio = 0.0f;
+	float delayedRatio = 0.0f;
 	float shakeTime = 0.0f;
 	float delayedLerpSpeed = 1.8f;
 	float prevHp = -1.0f;
