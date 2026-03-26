@@ -211,3 +211,93 @@
 ### コメント方針（運用明記）
 - [x] 判定ロジック変更時は「なぜその判定が必要か」を日本語コメントで残す
 - [x] 削除理由（撃破/自然消滅）は挙動差分が分かるコメントを付ける
+
+---
+
+## 8. フィールドオブジェクト統合（日本語UI / Ground追加 / 草廃止 / 敵弾遮蔽 / デバッグ表示）
+
+### 実装ステップ
+- [ ] Field EditorのImGui表示文言を日本語化する（`typeKey` とJSONキーは英語のまま維持）
+- [ ] フィールド種別に `Ground` を追加する（`typeKey` は `Ground`）
+- [ ] `GameScene::Setup()` の手動 `groundEntity` 生成を削除し、フィールドオブジェクト管理へ一本化する
+- [ ] 草関連を撤去する（`SpawnGrass` / `CBGrassTag` / `GrassReactionSystem` / `HitBalloonSystem` / `GrassReactionComponent`）
+- [ ] `hasCollision=true` の全フィールドオブジェクトを敵弾衝突対象にする
+- [ ] 敵弾がフィールドオブジェクトと衝突したら即消滅する（演出差し込み可能な拡張ポイントを残す）
+- [ ] `FieldEditorSystem` に当たり判定デバッグ表示トグルを追加する
+
+### 完了条件
+- [ ] Field Editorが日本語UIで操作できる
+- [ ] Groundがフィールドオブジェクトとして配置/保存/再読込できる
+- [ ] 手動Ground生成がなくても従来と同等にプレイ可能
+- [ ] 草関連コードが除去され、ビルドエラーが出ない
+- [ ] 敵弾が `hasCollision=true` のフィールドオブジェクトで消滅する
+- [ ] フィールドオブジェクトの当たり判定をトグルで可視化できる
+
+---
+
+## 9. 自機関連パラメータのJSON保存・配布コンポーネント化
+
+### 実装ステップ
+- [ ] `PlayerConfigComponent`（仮称）を追加し、設定保持専用Entity（`CBPlayerConfigTag`）を導入する
+- [ ] 保存対象を定義する（`PlayerComponent` / `PlayerAttackComponent` / `HealthComponent.maxHp` / `InvincibleComponent.duration` / `PlayerHitboxComponent`）
+- [ ] `resources/game/td_3105/RailData/PlayerConfig.json` の読込/保存処理を実装する
+- [ ] `GameScene::Setup()` でPlayer設定Entityを生成し、各コンポーネントへ配布する
+- [ ] 自機の初期2D座標は `StartTransform2DComponent` で管理し、`Transform2DComponent` は保存対象から除外する
+- [ ] 必要に応じて編集UI（ImGui）を追加し、保存/読込の動作確認を行う
+
+### 完了条件
+- [ ] 自機関連設定がJSONで復元される
+- [ ] 自機生成時に設定専用Entityから値が反映される
+- [ ] `Transform2DComponent` を直接保存しなくても初期座標が再現される
+
+---
+
+## 10. スプライトレイヤー管理の一元化（CommentBout内限定）
+
+### 実装ステップ
+- [ ] `CBSpriteLayer.h` を拡張し、用途別レイヤー定数を追加する
+- [ ] `application/CommentBout` 配下のスプライトlayer直書きを棚卸しする
+- [ ] layerのハードコード値を `CBSpriteLayer.h` 経由に置換する
+- [ ] `OptionMenuConfigComponent` などのlayer可変設定を廃止し、固定定数参照に統一する
+- [ ] 関連する読込/保存/ViewSystem側のlayer処理を整理する
+
+### 完了条件
+- [ ] `application/CommentBout` 内のスプライトlayer直書きが解消される
+- [ ] layer管理が `CBSpriteLayer.h` から追える状態になる
+- [ ] Option系を含め、layerがコード側固定方針で統一される
+
+---
+
+## 11. ファイル分割方針（設計手順の明文化フェーズ）
+
+### 実装ステップ
+- [ ] `Component` を `Player` / `Enemy` 軸で再配置する手順を策定する
+- [ ] `System` を `Player` / `Enemy` 軸で再配置する手順を策定する
+- [ ] `HPシステム` / `レールカメラ` は現状位置維持の例外ルールを明文化する
+- [ ] `FieldObject` の再配置方針を明文化する（Editor系は `application/CommentBout/Editor`、System系は `application/CommentBout/System/FieldObject/*`）
+- [ ] 依存include更新・段階移行・ビルド確認のチェックリストを作る
+
+### 完了条件
+- [ ] 物理移動前に、実施順と影響範囲がmdで共有されている
+- [ ] 例外ルール（HP/レールカメラ維持）が明記されている
+- [ ] FieldObjectの移設先ルールが明記されている
+
+---
+
+## 12. 衝突管理見直し検討（新規検討フェーズ）
+
+### 検討テーマ
+- [ ] Q1: 当たり判定デバッグ表示（敵/自機/フィールド）を一括管理する方式の可否を評価する
+- [ ] Q2: 衝突判定を `CollisionSystem` に集約し、`OnCollision` 的な通知で各System責務を分離する方式を評価する
+
+### 検討ステップ
+- [ ] 現行の衝突関連責務を棚卸しする（判定/命中処理/演出/デバッグ表示）
+- [ ] 一括デバッグ表示の導入コストと既存影響を見積もる
+- [ ] `OnCollision` イベント方式の最小導入案を作る
+- [ ] 過分離による煩雑化を避ける責務境界案を作る
+- [ ] 採用/不採用を判断し、採用時は次フェーズへ昇格する
+
+### 完了条件
+- [ ] 一括デバッグ表示を「採用 / 非採用」で判断できる
+- [ ] 衝突処理の集約方針を「段階導入案」まで落とし込める
+- [ ] 次の実装フェーズへ進める判断材料が揃う

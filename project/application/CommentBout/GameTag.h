@@ -1,10 +1,8 @@
 #pragma once
 
 struct CBPlayerTag {};			//自機
-struct CBGrassTag {};			//草
 struct CBGroundTag {};			//地面
 struct CBAttackEffectTag {};	//攻撃エフェクト
-struct CBGrassHitEffectTag {};	//草から出るコメント
 struct CBGameResourceTag {};	//ゲーム全体で共有するリソースを持つEntityに付与するタグ
 struct CBPauseStateTag {};		//
 struct CBPauseConfigTag {};		//

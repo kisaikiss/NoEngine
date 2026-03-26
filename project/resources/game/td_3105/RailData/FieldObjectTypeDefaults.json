@@ -12,6 +12,17 @@
       ]
     },
     {
+      "typeKey": "Ground",
+      "modelKey": "GroundModel",
+      "hasCollision": true,
+      "occludesPlayerAttack": false,
+      "baseColliderAtUnitScale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
       "typeKey": "Skydome",
       "modelKey": "SkydomeModel",
       "hasCollision": false,

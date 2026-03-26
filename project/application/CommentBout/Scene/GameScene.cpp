@@ -8,10 +8,8 @@
 #include "application/CommentBout/Component/InvincibleComponent.h"
 #include "application/CommentBout/Component/PlayerHitboxComponent.h"
 #include "application/CommentBout/Component/OutGame/OutGameComponets.h"	//アウトゲーム関連
-#include "application/CommentBout/FieldObject/Component/GrassReactionComponent.h"
 #include "application/CommentBout/Component/GameResourceComponent.h"
 #include "application/CommentBout/Component/HpBarComponent.h"
-#include "application/CommentBout/FieldObject/Component/GroundComponent.h"
 #include "application/CommentBout/Component/RailCameraComponent.h"
 #include "application/CommentBout/Component/RailProgressBarComponent.h"
 #include "application/CommentBout/Component/EnemyComponent.h"
@@ -20,8 +18,6 @@
 #include "application/CommentBout/Utility/CBGameAudio.h"
 #include "application/CommentBout/System/PlayerControlSystem.h"
 #include "application/CommentBout/System/PlayerInfoDebugSystem.h"
-#include "application/CommentBout/FieldObject/System/GrassReactionSystem.h"
-#include "application/CommentBout/FieldObject/System/HitBalloonSystem.h"
 #include "application/CommentBout/FieldObject/System/FieldEditorSystem.h"
 #include "application/CommentBout/System/LifetimeSystem.h"
 #include "application/CommentBout/System/OutGame/PauseSystem.h"
@@ -54,8 +50,6 @@
 
 void GameScene::Setup() {
 
-	grassNameIndex_ = 0;
-
 	// ----システム登録・--------------------------------------------- //
 	// Input / Camera
 	//  - PauseSystem
@@ -78,7 +72,7 @@ void GameScene::Setup() {
 	//  - HpBarViewSystem
 	//  - EnemyVisualSystem
 	// Others
-	//  - GrassReactionSystem / HitBalloonSystem / LifetimeSystem / OptionSystem / PauseViewSystem / OptionViewSystem / EditSystem
+	//  - LifetimeSystem / OptionSystem / PauseViewSystem / OptionViewSystem / EditSystem
 	// --------------------------------------------------------------------------- //
 
 	AddSystem(std::make_unique<PauseSystem>());
@@ -102,8 +96,6 @@ void GameScene::Setup() {
 	AddSystem(std::make_unique<DamageFlashSystem>());
 	AddSystem(std::make_unique<HpBarViewSystem>());
 	AddSystem(std::make_unique<EnemyVisualSystem>());
-	AddSystem(std::make_unique<GrassReactionSystem>());
-	AddSystem(std::make_unique<HitBalloonSystem>());
 	AddSystem(std::make_unique<LifetimeSystem>());
 	AddSystem(std::make_unique<OptionSystem>());
 	AddSystem(std::make_unique<PauseViewSystem>());
@@ -287,75 +279,7 @@ void GameScene::Setup() {
 	playerHitboxCollider->collisionLayer = CommentBout::CollisionLayer::CBPlayer;
 	playerHitboxCollider->collisionMask = CommentBout::CollisionMask::CBPlayer;
 
-	const std::vector<std::pair<No::Vector3, No::Vector3>> grassSpawnParams = {
-		{{0.f, 0.f, 6.f},   {2.f, 1.5f, 2.f}},
-		{{-2.8f, 0.f, 8.f}, {1.7f, 1.3f, 1.7f}},
-		{{2.6f, 0.f, 10.f}, {2.3f, 1.7f, 2.3f}}
-	};
-	for (const auto& p : grassSpawnParams) {
-		SpawnGrass(p.first, p.second);
-	}
-
-	// 地面（3D AABB, 現在は何とも当たらない）
-	auto groundEntity = registry.GenerateEntity();
-	registry.AddComponent<CBGroundTag>(groundEntity);
-	registry.AddComponent<GroundComponent>(groundEntity);
-	auto* groundTransform = registry.AddComponent<No::TransformComponent>(groundEntity);
-	groundTransform->translate = { 0.f, -5.f, 0.f };
-	groundTransform->scale = { 10.f, 1.f, 300.f };
-	registry.AddComponent<No::EditTag>(groundEntity)->name = "Ground";
-	auto* groundMesh = registry.AddComponent<No::MeshComponent>(groundEntity);
-	auto* groundMaterial = registry.AddComponent<No::MaterialComponent>(groundEntity);
-	if (const auto* groundModel = FindGameModel(*gameResource, CommentBoutResourceKey::kGroundModel)) {
-		NoEngine::Asset::ModelLoader::GetModel(groundModel->assetName, groundMesh);
-		groundMaterial->materials = NoEngine::Asset::ModelLoader::GetMaterial(groundModel->assetName);
-	}
-	groundMaterial->color = { 0.35f, 0.35f, 0.35f, 1.f };
-	groundMaterial->psoName = L"Renderer : Default PSO";
-	groundMaterial->psoId = NoEngine::Render::GetPSOID(groundMaterial->psoName);
-	groundMaterial->rootSigId = NoEngine::Render::GetRootSignatureID(groundMaterial->psoName);
-}
-
-void GameScene::SpawnGrass(const No::Vector3& position, const No::Vector3& size)
-{
-	No::Registry& registry = *GetRegistry();
-
-	GameResourceComponent* gameResource = nullptr;
-	auto resourceView = registry.View<CBGameResourceTag, GameResourceComponent>();
-	for (auto entity : resourceView) {
-		gameResource = registry.GetComponent<GameResourceComponent>(entity);
-		if (gameResource) {
-			break;
-		}
-	}
-
-	auto grassEntity = registry.GenerateEntity();
-	registry.AddComponent<CBGrassTag>(grassEntity);
-	registry.AddComponent<GrassReactionComponent>(grassEntity);
-	auto* grassTransform = registry.AddComponent<No::TransformComponent>(grassEntity);
-	grassTransform->translate = position;
-	grassTransform->scale = size;
-	registry.AddComponent<No::EditTag>(grassEntity)->name = "Grass_" + std::to_string(grassNameIndex_++);
-	auto* grassMesh = registry.AddComponent<No::MeshComponent>(grassEntity);
-	auto* grassMaterial = registry.AddComponent<No::MaterialComponent>(grassEntity);
-	if (gameResource) {
-		if (const auto* grassModel = FindGameModel(*gameResource, CommentBoutResourceKey::kGrassModel)) {
-			NoEngine::Asset::ModelLoader::GetModel(grassModel->assetName, grassMesh);
-			grassMaterial->materials = NoEngine::Asset::ModelLoader::GetMaterial(grassModel->assetName);
-		}
-	}
-	grassMaterial->color = { 0.2f, 0.8f, 0.2f, 1.f };
-	grassMaterial->psoName = L"Renderer : Default PSO";
-	grassMaterial->psoId = NoEngine::Render::GetPSOID(grassMaterial->psoName);
-	grassMaterial->rootSigId = NoEngine::Render::GetRootSignatureID(grassMaterial->psoName);
-	auto* grassCollider = registry.AddComponent<CommentBoutCollision::Collider3DComponent>(grassEntity);
-	grassCollider->shapeType = CommentBoutCollision::ShapeType3D::Box;
-	grassCollider->useScaleAsBox = true;
-	grassCollider->boxSizeMultiplier = { 1.f, 1.f, 1.f };
-	grassCollider->collisionLayer = CommentBout::CollisionLayer::CBGrass;
-	grassCollider->collisionMask = CommentBout::CollisionMask::CBGrass;
-	auto* projected = registry.AddComponent<CommentBoutCollision::ProjectedColliderComponent>(grassEntity);
-	projected->source3DEntity = grassEntity;
+	// 地面はFieldObject側（Ground typeKey）で管理する。
 }
 
 void GameScene::NotSystemUpdate()

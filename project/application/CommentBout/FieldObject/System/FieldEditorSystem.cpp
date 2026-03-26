@@ -15,6 +15,7 @@
 #include <cstdio>
 #include <fstream>
 #include <unordered_map>
+#include "engine/Functions/Renderer/Primitive.h"
 
 #ifdef USE_IMGUI
 #include "externals/imgui/imgui.h"
@@ -62,6 +63,15 @@ std::unordered_map<std::string, FieldObjectTypeDefinition> BuildDefaultTypeDefin
 	building.baseColliderAtUnitScale = { 1.0f, 1.0f, 1.0f };
 	defs[building.typeKey] = building;
 
+	FieldObjectTypeDefinition ground{};
+	ground.type = FieldObjectType::Ground;
+	ground.typeKey = "Ground";
+	ground.modelKey = CommentBoutResourceKey::kGroundModel;
+	ground.hasCollision = true;
+	ground.occludesPlayerAttack = false;
+	ground.baseColliderAtUnitScale = { 1.0f, 1.0f, 1.0f };
+	defs[ground.typeKey] = ground;
+
 	return defs;
 }
 
@@ -99,6 +109,8 @@ void LoadTypeDefinitions(std::unordered_map<std::string, FieldObjectTypeDefiniti
 			def.type = FieldObjectType::Skydome;
 		} else if (def.typeKey == "Building") {
 			def.type = FieldObjectType::Building;
+		} else if (def.typeKey == "Ground") {
+			def.type = FieldObjectType::Ground;
 		} else {
 			def.type = FieldObjectType::Unknown;
 		}
@@ -201,7 +213,7 @@ void ApplyFieldObjectCollision(No::Registry& registry, No::Entity entity, const 
 		collider->useScaleAsBox = true;
 		collider->boxSizeMultiplier = placement.colliderBaseAtUnitScale;
 		collider->collisionLayer = CommentBout::CollisionLayer::CBGround;
-		collider->collisionMask = CommentBout::CollisionMask::CBGround;
+		collider->collisionMask = CommentBout::CollisionLayer::CBEnemyBullet;
 
 		auto* projected = registry.GetComponent<CommentBoutCollision::ProjectedColliderComponent>(entity);
 		if (!projected) {
@@ -417,6 +429,7 @@ void FieldEditorSystem::Update(No::Registry& registry, float deltaTime)
 	static No::Entity selectedEntity = No::nullEntity;
 	static int addTypeIndex = 0;
 	static int idCounter = 0;
+	static bool drawCollisionDebug = false;
 
 	if (loadedRegistry != &registry || loadedStageName != stageName) {
 		LoadTypeDefinitions(typeDefinitions);
@@ -428,26 +441,42 @@ void FieldEditorSystem::Update(No::Registry& registry, float deltaTime)
 
 	UpdateLoadedFieldObjects(registry, *resources, typeDefinitions);
 
+	if (drawCollisionDebug) {
+		for (auto entity : registry.View<CBFieldObjectTag, FieldPlacementComponent, CommentBoutCollision::Collider3DComponent>()) {
+			auto* placement = registry.GetComponent<FieldPlacementComponent>(entity);
+			auto* collider = registry.GetComponent<CommentBoutCollision::Collider3DComponent>(entity);
+			if (!placement || !collider || !placement->hasCollision) {
+				continue;
+			}
+			const No::Color color = collider->isColliding
+				? No::Color(1.0f, 0.2f, 0.2f, 1.0f)
+				: No::Color(0.2f, 1.0f, 0.2f, 1.0f);
+			NoEngine::Primitive::DrawCube(collider->worldPosition, collider->worldBoxSize, color);
+		}
+	}
+
 #ifdef USE_IMGUI
 	ImGui::Begin("Field Editor");
-	ImGui::Text("Stage: %s", stageName.c_str());
+	ImGui::Text("ステージ: %s", stageName.c_str());
 
-	if (ImGui::Button("Load Field Objects")) {
+	if (ImGui::Button("フィールド読込")) {
 		LoadFieldPlacements(registry, *resources, typeDefinitions, stageName, idCounter);
 		selectedEntity = No::nullEntity;
 	}
 	ImGui::SameLine();
-	if (ImGui::Button("Save Field Objects")) {
+	if (ImGui::Button("フィールド保存")) {
 		SaveFieldPlacements(registry, stageName);
 	}
 
-	if (ImGui::Button("Load Type Defaults")) {
+	if (ImGui::Button("種別デフォルト読込")) {
 		LoadTypeDefinitions(typeDefinitions);
 	}
 	ImGui::SameLine();
-	if (ImGui::Button("Save Type Defaults")) {
+	if (ImGui::Button("種別デフォルト保存")) {
 		SaveTypeDefinitions(typeDefinitions);
 	}
+
+	ImGui::Checkbox("当たり判定デバッグ表示", &drawCollisionDebug);
 
 	std::vector<std::string> typeKeys;
 	for (const auto& pair : typeDefinitions) {
@@ -463,8 +492,8 @@ void FieldEditorSystem::Update(No::Registry& registry, float deltaTime)
 		for (const auto& key : typeKeys) {
 			labels.push_back(key.c_str());
 		}
-		ImGui::Combo("Add Type", &addTypeIndex, labels.data(), static_cast<int>(labels.size()));
-		if (ImGui::Button("Add Field Object")) {
+		ImGui::Combo("追加種別", &addTypeIndex, labels.data(), static_cast<int>(labels.size()));
+		if (ImGui::Button("フィールドオブジェクト追加")) {
 			const std::string& key = typeKeys[addTypeIndex];
 			auto it = typeDefinitions.find(key);
 			if (it != typeDefinitions.end()) {
@@ -485,7 +514,7 @@ void FieldEditorSystem::Update(No::Registry& registry, float deltaTime)
 	}
 
 	ImGui::Separator();
-	ImGui::Text("Placed Objects");
+	ImGui::Text("配置済みオブジェクト");
 	std::vector<No::Entity> entities;
 	for (auto entity : registry.View<CBFieldObjectTag, FieldPlacementComponent>()) {
 		entities.push_back(entity);
@@ -516,20 +545,20 @@ void FieldEditorSystem::Update(No::Registry& registry, float deltaTime)
 		auto* transform = registry.GetComponent<No::TransformComponent>(selectedEntity);
 		if (placement && transform) {
 			ImGui::Separator();
-			ImGui::Text("Selected Object");
+			ImGui::Text("選択中オブジェクト");
 
 			char nameBuffer[128];
 			std::snprintf(nameBuffer, sizeof(nameBuffer), "%s", placement->displayName.c_str());
-			if (ImGui::InputText("Display Name", nameBuffer, sizeof(nameBuffer))) {
+			if (ImGui::InputText("表示名", nameBuffer, sizeof(nameBuffer))) {
 				placement->displayName = nameBuffer;
 			}
 
-			ImGui::Text("Type: %s", placement->typeKey.c_str());
-			ImGui::DragFloat3("Position", &transform->translate.x, 0.05f);
-			ImGui::DragFloat3("Scale", &transform->scale.x, 0.05f, 0.01f, 500.0f);
-			ImGui::DragFloat3("Rotation (deg)", &placement->rotationEulerDeg.x, 0.1f, -360.0f, 360.0f);
+			ImGui::Text("種別: %s", placement->typeKey.c_str());
+			ImGui::DragFloat3("位置", &transform->translate.x, 0.05f);
+			ImGui::DragFloat3("スケール", &transform->scale.x, 0.05f, 0.01f, 500.0f);
+			ImGui::DragFloat3("回転 (deg)", &placement->rotationEulerDeg.x, 0.1f, -360.0f, 360.0f);
 
-			if (ImGui::Button("Delete Selected")) {
+			if (ImGui::Button("選択オブジェクト削除")) {
 				registry.DestroyEntity(selectedEntity);
 				selectedEntity = No::nullEntity;
 			}
@@ -537,18 +566,18 @@ void FieldEditorSystem::Update(No::Registry& registry, float deltaTime)
 	}
 
 	ImGui::Separator();
-	ImGui::Text("Type Defaults");
+	ImGui::Text("種別デフォルト設定");
 	for (auto& pair : typeDefinitions) {
 		FieldObjectTypeDefinition& def = pair.second;
 		if (ImGui::TreeNode(def.typeKey.c_str())) {
 			char modelKeyBuffer[128];
 			std::snprintf(modelKeyBuffer, sizeof(modelKeyBuffer), "%s", def.modelKey.c_str());
-			if (ImGui::InputText("ModelKey", modelKeyBuffer, sizeof(modelKeyBuffer))) {
+			if (ImGui::InputText("モデルキー", modelKeyBuffer, sizeof(modelKeyBuffer))) {
 				def.modelKey = modelKeyBuffer;
 			}
-			ImGui::Checkbox("Has Collision", &def.hasCollision);
-			ImGui::Checkbox("Occludes Player Attack", &def.occludesPlayerAttack);
-			ImGui::DragFloat3("Base AABB @scale(1)", &def.baseColliderAtUnitScale.x, 0.01f, 0.01f, 100.0f);
+			ImGui::Checkbox("当たり判定あり", &def.hasCollision);
+			ImGui::Checkbox("プレイヤー攻撃を遮蔽", &def.occludesPlayerAttack);
+			ImGui::DragFloat3("基準AABB @scale(1)", &def.baseColliderAtUnitScale.x, 0.01f, 0.01f, 100.0f);
 			ImGui::TreePop();
 		}
 	}

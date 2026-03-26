@@ -9,7 +9,8 @@
 enum class FieldObjectType {
 	Unknown = 0,
 	Skydome,
-	Building
+	Building,
+	Ground
 };
 
 /// <summary>

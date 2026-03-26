@@ -158,8 +158,6 @@
     <ClCompile Include="application\CommentBout\System\DamageApplySystem.cpp" />
     <ClCompile Include="application\CommentBout\System\PlayerAttackResolveSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\EnemySpawnSystem.cpp" />
-    <ClCompile Include="application\CommentBout\FieldObject\System\GrassReactionSystem.cpp" />
-    <ClCompile Include="application\CommentBout\FieldObject\System\HitBalloonSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\EnemyMoveSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\EnemyContactDamageSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\EnemyVisualSystem.cpp" />
@@ -383,11 +381,6 @@
     <ClInclude Include="application\CommentBout\System\PlayerAttackResolveSystem.h" />
     <ClInclude Include="application\CommentBout\Component\SpawnEnemyRequestComponent.h" />
     <ClInclude Include="application\CommentBout\System\EnemySpawnSystem.h" />
-    <ClInclude Include="application\CommentBout\FieldObject\Component\GrassReactionComponent.h" />
-    <ClInclude Include="application\CommentBout\FieldObject\Component\GroundComponent.h" />
-    <ClInclude Include="application\CommentBout\FieldObject\System\GrassReactionSystem.h" />
-    <ClInclude Include="application\CommentBout\FieldObject\Component\HitBalloonComponent.h" />
-    <ClInclude Include="application\CommentBout\FieldObject\System\HitBalloonSystem.h" />
     <ClInclude Include="application\CommentBout\System\EnemyMoveSystem.h" />
     <ClInclude Include="application\CommentBout\System\EnemyContactDamageSystem.h" />
     <ClInclude Include="application\CommentBout\System\EnemyVisualSystem.h" />

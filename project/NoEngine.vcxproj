@@ -170,8 +170,6 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\CommentBout\Component\OutGame\TitleMenuConfigComponent.cpp" />
     <ClCompile Include="application\CommentBout\Data\EnemyTypePresetIO.cpp" />
     <ClCompile Include="application\CommentBout\FieldObject\System\FieldEditorSystem.cpp" />
-    <ClCompile Include="application\CommentBout\FieldObject\System\GrassReactionSystem.cpp" />
-    <ClCompile Include="application\CommentBout\FieldObject\System\HitBalloonSystem.cpp" />
     <ClCompile Include="application\CommentBout\Spawner\TitleMenuSpawner.cpp" />
     <ClCompile Include="application\CommentBout\System\BossBehaviorSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\DamageApplySystem.cpp" />
@@ -379,12 +377,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\CommentBout\Component\OutGame\TitleMenuViewComponent.h" />
     <ClInclude Include="application\CommentBout\Data\EnemyTypePresetIO.h" />
     <ClInclude Include="application\CommentBout\FieldObject\Component\FieldPlacementComponent.h" />
-    <ClInclude Include="application\CommentBout\FieldObject\Component\GrassReactionComponent.h" />
-    <ClInclude Include="application\CommentBout\FieldObject\Component\GroundComponent.h" />
-    <ClInclude Include="application\CommentBout\FieldObject\Component\HitBalloonComponent.h" />
     <ClInclude Include="application\CommentBout\FieldObject\System\FieldEditorSystem.h" />
-    <ClInclude Include="application\CommentBout\FieldObject\System\GrassReactionSystem.h" />
-    <ClInclude Include="application\CommentBout\FieldObject\System\HitBalloonSystem.h" />
     <ClInclude Include="application\CommentBout\Spawner\TitleMenuSpawner.h" />
     <ClInclude Include="application\CommentBout\System\BossBehaviorSystem.h" />
     <ClInclude Include="application\CommentBout\System\DamageApplySystem.h" />

@@ -39,6 +39,26 @@
         2.0
       ],
       "typeKey": "Building"
+    },
+    {
+      "displayName": "Ground_0",
+      "objectId": "field_obj_2",
+      "position": [
+        0.0,
+        -5.0,
+        0.0
+      ],
+      "rotationEulerDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        10.0,
+        1.0,
+        300.0
+      ],
+      "typeKey": "Ground"
     }
   ],
   "stageName": "Stage_01"

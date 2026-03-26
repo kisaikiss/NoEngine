@@ -13,7 +13,6 @@ private:
 	void RailCameraImGui();
 	void RailEditorImGui();
 	void ChangeSceneImGui();
-	void SpawnGrass(const No::Vector3& position, const No::Vector3& size);
 
 	No::Entity activeCameraEntity_{};
 	No::Entity debugCameraEntity_{};
@@ -21,6 +20,4 @@ private:
 
 	RailCameraEditor railCameraEditor_{};
 	GameEventEditor gameEventEditor_{};
-
-	int grassNameIndex_ = 0;
 };
