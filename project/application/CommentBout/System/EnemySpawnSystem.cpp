@@ -7,6 +7,7 @@
 #include "application/CommentBout/Component/EnemyRewardSourceComponent.h"
 #include "application/CommentBout/Component/BossComponent.h"
 #include "application/CommentBout/Component/HealthComponent.h"
+#include "application/CommentBout/Data/EnemyTypePresetIO.h"
 #include "application/CommentBout/Utility/CBCollisionMask.h"
 #include "application/CommentBout/GameTag.h"
 #include "application/CommentBout/Collision/Component/Collider3DComponent.h"
@@ -23,6 +24,14 @@ No::Vector3 NormalizeOrDefault(const No::Vector3& v, const No::Vector3& fallback
 }
 
 void SpawnRailEnemies(No::Registry& registry, const RailEnemySpawnEventParams& params) {
+	static EnemyTypePresetMap presetMap;
+	static bool presetLoaded = false;
+	if (!presetLoaded) {
+		LoadEnemyTypePresetMap(presetMap);
+		presetLoaded = true;
+	}
+	const EnemyTypePreset preset = GetEnemyTypePresetOrDefault(presetMap, params.enemyType);
+
 	const No::Vector3 direction = NormalizeOrDefault(params.moveDirection, No::Vector3(0.0f, 0.0f, -1.0f));
 	const int spawnCount = std::max(1, params.count);
 
@@ -32,7 +41,7 @@ void SpawnRailEnemies(No::Registry& registry, const RailEnemySpawnEventParams& p
 
 		auto* transform = registry.AddComponent<No::TransformComponent>(enemyEntity);
 		transform->translate = params.spawnPosition + direction * (params.spawnSpacing * static_cast<float>(i));
-		transform->scale = { 0.7f, 0.7f, 0.7f };
+		transform->scale = { preset.modelScale, preset.modelScale, preset.modelScale };
 
 		auto* mesh = registry.AddComponent<No::MeshComponent>(enemyEntity);
 		auto* material = registry.AddComponent<No::MaterialComponent>(enemyEntity);
@@ -44,14 +53,14 @@ void SpawnRailEnemies(No::Registry& registry, const RailEnemySpawnEventParams& p
 		material->rootSigId = NoEngine::Render::GetRootSignatureID(material->psoName);
 
 		auto* enemy = registry.AddComponent<EnemyComponent>(enemyEntity);
-		enemy->maxHp = std::max(1, params.hp);
+		enemy->maxHp = std::max(1, preset.minHp);
 		enemy->hp = enemy->maxHp;
 		enemy->moveSpeed = std::max(0.0f, params.moveSpeed);
 		enemy->moveDirection = direction;
 		enemy->groupId = params.spawnGroupId;
 
 		auto* rewardSource = registry.AddComponent<EnemyRewardSourceComponent>(enemyEntity);
-		rewardSource->worldSizeForReward = 0.7f;
+		rewardSource->worldSizeForReward = preset.modelScale;
 		rewardSource->spawned = false;
 
 		auto* commonHealth = registry.AddComponent<HealthComponent>(enemyEntity);
@@ -63,7 +72,11 @@ void SpawnRailEnemies(No::Registry& registry, const RailEnemySpawnEventParams& p
 		auto* collider3D = registry.AddComponent<CommentBoutCollision::Collider3DComponent>(enemyEntity);
 		collider3D->shapeType = CommentBoutCollision::ShapeType3D::Box;
 		collider3D->useScaleAsBox = true;
-		collider3D->boxSizeMultiplier = { 1.0f, 1.0f, 1.0f };
+		collider3D->boxSizeMultiplier = {
+			std::max(0.01f, preset.baseColliderBox.x),
+			std::max(0.01f, preset.baseColliderBox.y),
+			std::max(0.01f, preset.baseColliderBox.z)
+		};
 		collider3D->collisionLayer = CommentBout::CollisionLayer::CBEnemy;
 		collider3D->collisionMask = CommentBout::CollisionLayer::CBPlayerAttack;
 
@@ -74,11 +87,11 @@ void SpawnRailEnemies(No::Registry& registry, const RailEnemySpawnEventParams& p
 		case RailEnemyType::MoveAndShoot:
 		{
 			auto* shooter = registry.AddComponent<EnemyShooterComponent>(enemyEntity);
-			shooter->shootInterval = 1.0f;
-			shooter->bulletSpeed = 15.0f;
-			shooter->bulletDamage = 1;
-			shooter->targetDepthFromCamera = 1.0f;
-			shooter->bulletLifetime = 4.0f;
+			shooter->shootInterval = std::max(0.05f, preset.shootInterval);
+			shooter->bulletSpeed = std::max(0.1f, preset.bulletSpeed);
+			shooter->bulletDamage = std::max(1, preset.bulletDamage);
+			shooter->targetDepthFromCamera = std::max(0.1f, preset.targetDepthFromCamera);
+			shooter->bulletLifetime = std::max(0.1f, preset.bulletLifetime);
 			break;
 		}
 		case RailEnemyType::Boss:
@@ -87,17 +100,11 @@ void SpawnRailEnemies(No::Registry& registry, const RailEnemySpawnEventParams& p
 			auto* boss = registry.AddComponent<BossComponent>(enemyEntity);
 			boss->behavior = params.boss;
 			auto* shooter = registry.AddComponent<EnemyShooterComponent>(enemyEntity);
-			shooter->shootInterval = std::max(0.05f, params.boss.burstShotInterval);
-			shooter->bulletSpeed = 12.0f;
-			shooter->bulletDamage = 2;
-			shooter->targetDepthFromCamera = 1.0f;
-			shooter->bulletLifetime = 5.0f;
-			transform->scale = { 1.6f, 1.6f, 1.6f };
-			rewardSource->worldSizeForReward = 1.6f;
-			enemy->maxHp = std::max(enemy->maxHp, 100);
-			enemy->hp = enemy->maxHp;
-			commonHealth->hp = enemy->hp;
-			commonHealth->maxHp = enemy->maxHp;
+			shooter->shootInterval = std::max(0.05f, preset.shootInterval);
+			shooter->bulletSpeed = std::max(0.1f, preset.bulletSpeed);
+			shooter->bulletDamage = std::max(1, preset.bulletDamage);
+			shooter->targetDepthFromCamera = std::max(0.1f, preset.targetDepthFromCamera);
+			shooter->bulletLifetime = std::max(0.1f, preset.bulletLifetime);
 			break;
 		}
 		case RailEnemyType::MoveOnly:

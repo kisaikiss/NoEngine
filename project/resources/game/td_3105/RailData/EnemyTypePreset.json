@@ -1,10 +1,25 @@
 {
   "MoveOnly": {
     "modelScale": 0.7,
-    "minHp": 10
+    "baseColliderBox": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "minHp": 10,
+    "shootInterval": 1.0,
+    "bulletSpeed": 10.0,
+    "bulletDamage": 1,
+    "bulletLifetime": 4.0,
+    "targetDepthFromCamera": 1.0
   },
   "MoveAndShoot": {
     "modelScale": 0.8,
+    "baseColliderBox": [
+      1.0,
+      1.0,
+      1.0
+    ],
     "shootInterval": 0.9,
     "bulletSpeed": 15.0,
     "bulletDamage": 1,
@@ -14,6 +29,11 @@
   },
   "Boss": {
     "modelScale": 1.6,
+    "baseColliderBox": [
+      1.2,
+      1.2,
+      1.2
+    ],
     "shootInterval": 0.22,
     "bulletSpeed": 12.0,
     "bulletDamage": 2,

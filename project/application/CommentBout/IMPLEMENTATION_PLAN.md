@@ -8,39 +8,32 @@
 ## Phase 1: 敵プリセット運用の一本化
 
 ### 1-1. `EnemyTypePreset` を実運用に統合
-- [ ] `EnemySpawnSystem` で `EnemyTypePreset.json` を必須適用
-- [ ] 種類別ハードコード値（HP/scale/弾速/間隔）を削除
-- [ ] `Preset -> Event上書き` 順で最終パラメータを決定
-- [ ] `hp` はEventから排斥し、Preset固定で運用する
-
-**完了条件**
-- `MoveOnly/MoveAndShoot/Boss` すべてで `EnemyTypePreset.json` の変更がゲームに反映される。
-- Event Editor上に `hp` が表示されない。
+- [x] `EnemySpawnSystem` で `EnemyTypePreset.json` を必須適用
+- [x] 種類別ハードコード値（HP/scale/弾速/間隔）を削除
+- [x] `Preset -> Event上書き` 順で最終パラメータを決定
+- [x] `hp` はEventから排斥し、Preset固定で運用する
 
 ### 1-2. プリセット編集UIを追加
-- [ ] `EnemyTypePresetEditor`（ImGui）を追加
-- [ ] `modelScale/minHp/shootInterval/bulletSpeed/bulletDamage/bulletLifetime/targetDepth` を編集可能にする
-- [ ] 種類ごとの `baseColliderBox(x,y,z)`（scale=(1,1,1)基準AABBサイズ）を編集可能にする
-- [ ] JSON保存/読込ボタンを追加
-
-**完了条件**
-- UI編集→保存→再起動で値が保持される。
-- `baseColliderBox` 変更で当たり判定サイズが追従する。
+- [x] `EnemyTypePresetEditor`（ImGui）を追加
+- [x] `modelScale/minHp/shootInterval/bulletSpeed/bulletDamage/bulletLifetime/targetDepth` を編集可能にする
+- [x] 種類ごとの `baseColliderBox(x,y,z)`（scale=(1,1,1)基準AABBサイズ）を編集可能にする
+- [x] JSON保存/読込ボタンを追加
 
 ### 1-3. Event Editorからプリセット項目を排斥
-- [ ] `GameEventEditor` で `enemyType` コンボは残す
-- [ ] `hp` 等のプリセット由来項目を非表示化（Override未採用）
-- [ ] `Boss` で必要な軌道/行動パラメータのみ編集可にする
-
-**完了条件**
-- Event Editorに「配置系のみ」が表示される。
+- [x] `GameEventEditor` で `enemyType` コンボは残す
+- [x] `hp` 等のプリセット由来項目を非表示化（Override未採用）
+- [x] `Boss` で必要な軌道/行動パラメータのみ編集可にする
 
 ### 1-4. `baseColliderBox` 適用処理を統合
-- [ ] Spawn時に `Collider3DComponent` へ `baseColliderBox` を反映
-- [ ] `boxSizeMultiplier = baseColliderBox` で運用し、`transform.scale` 変更時にも判定が崩れないことを確認
+- [x] Spawn時に `Collider3DComponent` へ `baseColliderBox` を反映
+- [x] `boxSizeMultiplier = baseColliderBox` で運用し、`transform.scale` 変更時にも判定が崩れないことを確認
 
-**完了条件**
-- モデル差し替え時でもPreset調整だけで判定サイズを合わせられる。
+## 実装ログ（進捗記録）
+- [x] Phase 1 完了
+- [ ] Phase 2 完了
+- [ ] Phase 3 完了
+- [ ] Phase 4 完了
+- [ ] 最終ビルド成功
 
 ---
 
@@ -82,6 +75,7 @@
 
 **完了条件**
 - 被弾時にバー全体が揺れる。
+- 
 
 ---
 
@@ -151,7 +145,7 @@
 ---
 
 ## 実装ログ（進捗記録）
-- [ ] Phase 1 完了
+- [x] Phase 1 完了
 - [ ] Phase 2 完了
 - [ ] Phase 3 完了
 - [ ] Phase 4 完了

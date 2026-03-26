@@ -2,7 +2,51 @@
 #include "GameEventEditor.h"
 
 #include "application/CommentBout/Component/RailCameraComponent.h"
+#include "application/CommentBout/Data/EnemyTypePresetIO.h"
 #include <cstdio>
+
+namespace {
+void DrawEnemyTypePresetEditor() {
+	static EnemyTypePresetMap presets;
+	static bool loaded = false;
+	if (!loaded) {
+		LoadEnemyTypePresetMap(presets);
+		loaded = true;
+	}
+
+	if (!ImGui::CollapsingHeader("EnemyType Preset", ImGuiTreeNodeFlags_DefaultOpen)) {
+		return;
+	}
+
+	if (ImGui::Button("Preset Load")) {
+		LoadEnemyTypePresetMap(presets);
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("Preset Save")) {
+		SaveEnemyTypePresetMap(presets);
+	}
+
+	auto drawType = [&](RailEnemyType type, const char* label) {
+		EnemyTypePreset preset = GetEnemyTypePresetOrDefault(presets, type);
+		if (ImGui::TreeNode(label)) {
+			ImGui::DragFloat("Model Scale", &preset.modelScale, 0.01f, 0.1f, 10.0f);
+			ImGui::DragFloat3("Base Collider Box", &preset.baseColliderBox.x, 0.01f, 0.01f, 20.0f);
+			ImGui::DragInt("Min HP", &preset.minHp, 1.0f, 1, 9999);
+			ImGui::DragFloat("Shoot Interval", &preset.shootInterval, 0.01f, 0.05f, 10.0f);
+			ImGui::DragFloat("Bullet Speed", &preset.bulletSpeed, 0.05f, 0.1f, 100.0f);
+			ImGui::DragInt("Bullet Damage", &preset.bulletDamage, 1.0f, 1, 999);
+			ImGui::DragFloat("Bullet Lifetime", &preset.bulletLifetime, 0.05f, 0.1f, 30.0f);
+			ImGui::DragFloat("Target Depth", &preset.targetDepthFromCamera, 0.01f, 0.1f, 20.0f);
+			presets[type] = preset;
+			ImGui::TreePop();
+		}
+	};
+
+	drawType(RailEnemyType::MoveOnly, "MoveOnly");
+	drawType(RailEnemyType::MoveAndShoot, "MoveAndShoot");
+	drawType(RailEnemyType::Boss, "Boss");
+}
+}
 
 void GameEventEditor::DrawGameEventEditorImGui(No::Registry* registry, No::Entity railCameraEntity)
 {
@@ -17,6 +61,8 @@ void GameEventEditor::DrawGameEventEditorImGui(No::Registry* registry, No::Entit
 	}
 
 	ImGui::Begin("ゲームイベント編集");
+	DrawEnemyTypePresetEditor();
+	ImGui::Separator();
 	ImGui::Text("ステージイベント");
 	if (ImGui::Button("敵生成イベント追加")) {
 		RailEventData newEvent;
@@ -89,7 +135,7 @@ void GameEventEditor::DrawGameEventEditorImGui(No::Registry* registry, No::Entit
 			}
 
 			ImGui::DragInt("生成数", &e.spawn.count, 1.0f, 1, 32);
-			ImGui::DragInt("敵HP", &e.spawn.hp, 1.0f, 1, 500);
+			// HPはEnemyTypePresetで管理するため、イベント側では編集しない。
 			ImGui::DragFloat("敵速度", &e.spawn.moveSpeed, 0.1f, 0.0f, 100.0f);
 			ImGui::DragFloat("生成間隔", &e.spawn.spawnSpacing, 0.1f, 0.0f, 20.0f);
 			ImGui::DragFloat3("生成位置", &e.spawn.spawnPosition.x, 0.1f);
