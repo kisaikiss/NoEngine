@@ -176,7 +176,7 @@ void GameScene::Setup() {
 
 	auto optionConfigEntity = registry.GenerateEntity();
 	registry.AddComponent<CBOptionConfigTag>(optionConfigEntity);
-	registry.AddComponent<OptionMenuConfigComponent>(optionConfigEntity); // 驛｢譏ｴ繝ｻ郢晢ｽｵ驛｢・ｧ繝ｻ・ｩ驛｢譎｢・ｽ・ｫ驛｢譏懶ｽｺ・･・つ繝ｻ・､ = JSON髯区ｻゑｽｽ・､
+	registry.AddComponent<OptionMenuConfigComponent>(optionConfigEntity);
 	registry.AddComponent<No::EditTag>(optionConfigEntity)->name = "OptionMenuConfig";
 
 

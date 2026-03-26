@@ -205,24 +205,6 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\CommentBout\Collision\System\CollisionSystem.cpp">
       <ObjectFileName>$(IntDir)CommentBout_CollisionSystem.obj</ObjectFileName>
     </ClCompile>
-    <ClCompile Include="application\TD3\Component\DeathEffectComponent.cpp" />
-    <ClCompile Include="application\TD3\Editor\MapEditor.cpp" />
-    <ClCompile Include="application\TD3\MapData\MapLoader.cpp" />
-    <ClCompile Include="application\TD3\OneSide.cpp" />
-    <ClCompile Include="application\TD3\Scene\SampleScene.cpp" />
-    <ClCompile Include="application\TD3\System\AmmoItemSystem.cpp" />
-    <ClCompile Include="application\TD3\System\CollisionSystem.cpp" />
-    <ClCompile Include="application\TD3\System\DeathEffectSystem.cpp" />
-    <ClCompile Include="application\TD3\System\EnemyCollisionSystem.cpp" />
-    <ClCompile Include="application\TD3\System\EnemyMovementSystem.cpp" />
-    <ClCompile Include="application\TD3\System\EnemySpawnerSystem.cpp" />
-    <ClCompile Include="application\TD3\System\EnemyToEnemyCollisionSystem.cpp" />
-    <ClCompile Include="application\TD3\System\GridRenderSystem.cpp" />
-    <ClCompile Include="application\TD3\System\PlayerBulletSystem.cpp" />
-    <ClCompile Include="application\TD3\System\PlayerMovementSystem.cpp" />
-    <ClCompile Include="application\TD3\System\PlayerWeaponSystem.cpp" />
-    <ClCompile Include="application\TD3\System\ShockwaveSystem.cpp" />
-    <ClCompile Include="application\TD3\Utility\CameraBounds.cpp" />
     <ClCompile Include="application\CommentBout\CommentBout.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\CameraComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\StartTransformComponent.cpp" />
@@ -443,40 +425,6 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\CommentBout\Utility\CBCollisionMask.h" />
     <ClInclude Include="application\CommentBout\Utility\CBGameAudio.h" />
     <ClInclude Include="application\CommentBout\Utility\CBSpriteLayer.h" />
-    <ClInclude Include="application\TD3\Component\AmmoItemComponent.h" />
-    <ClInclude Include="application\TD3\Component\ColliderComponent.h" />
-    <ClInclude Include="application\TD3\Component\DeathEffectComponent.h" />
-    <ClInclude Include="application\TD3\Component\EnemyComponent.h" />
-    <ClInclude Include="application\TD3\Component\EnemySpawnerComponent.h" />
-    <ClInclude Include="application\TD3\Component\GridCellComponent.h" />
-    <ClInclude Include="application\TD3\Component\HealthComponent.h" />
-    <ClInclude Include="application\TD3\Component\PlayerBulletComponent.h" />
-    <ClInclude Include="application\TD3\Component\PlayerComponent.h" />
-    <ClInclude Include="application\TD3\Component\ShockwaveComponent.h" />
-    <ClInclude Include="application\TD3\Config\PlayerBulletConfig.h" />
-    <ClInclude Include="application\TD3\Editor\MapEditor.h" />
-    <ClInclude Include="application\TD3\GameTag.h" />
-    <ClInclude Include="application\TD3\MapData\MapLoader.h" />
-    <ClInclude Include="application\TD3\MapData\ShinMapData.h" />
-    <ClInclude Include="application\TD3\MapData\StageData.h" />
-    <ClInclude Include="application\TD3\OneSide.h" />
-    <ClInclude Include="application\TD3\Scene\SampleScene.h" />
-    <ClInclude Include="application\TD3\System\AmmoItemSystem.h" />
-    <ClInclude Include="application\TD3\System\CollisionSystem.h" />
-    <ClInclude Include="application\TD3\System\DeathEffectSystem.h" />
-    <ClInclude Include="application\TD3\System\EnemyCollisionSystem.h" />
-    <ClInclude Include="application\TD3\System\EnemyMovementSystem.h" />
-    <ClInclude Include="application\TD3\System\EnemySpawnerSystem.h" />
-    <ClInclude Include="application\TD3\System\EnemyToEnemyCollisionSystem.h" />
-    <ClInclude Include="application\TD3\System\GameTimer.h" />
-    <ClInclude Include="application\TD3\System\GameTimerSystem.h" />
-    <ClInclude Include="application\TD3\System\GridRenderSystem.h" />
-    <ClInclude Include="application\TD3\System\PlayerBulletSystem.h" />
-    <ClInclude Include="application\TD3\System\PlayerMovementSystem.h" />
-    <ClInclude Include="application\TD3\System\PlayerWeaponSystem.h" />
-    <ClInclude Include="application\TD3\System\ShockwaveSystem.h" />
-    <ClInclude Include="application\TD3\Utility\CameraBounds.h" />
-    <ClInclude Include="application\TD3\Utility\GridUtils.h" />
     <ClInclude Include="application\CommentBout\CommentBout.h" />
     <ClInclude Include="application\TestApp\System\ParticleTestSystem.h" />
     <ClInclude Include="engine\Functions\ECS\Component\ParticleEmitterComponent.h" />
@@ -807,6 +755,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <FileType>Document</FileType>
     </ClInclude>
     <None Include="application\CommentBout\IMPLEMENTATION_PLAN.md" />
+    <None Include="application\CommentBout\REFACTORING_PLAN_20260326.md" />
     <None Include="resources\engine\Shaders\Default.hlsli" />
     <None Include="resources\game\Shaders\ShaderMathUtil.hlsli" />
     <None Include="resources\game\td_2304\Json\tdSpriteConfig.json" />
