@@ -6,6 +6,7 @@
 #include "application/CommentBout/Component/EnemyRewardSourceComponent.h"
 #include "application/CommentBout/Component/EnemyRewardOrbComponent.h"
 #include "application/CommentBout/Component/HpBarComponent.h"
+#include "application/CommentBout/Component/DamageFlashComponent.h"
 #include "application/CommentBout/Component/GameResourceComponent.h"
 #include "application/CommentBout/Collision/Component/Collider3DComponent.h"
 #include "application/CommentBout/Collision/Component/ProjectedColliderComponent.h"
@@ -13,7 +14,6 @@
 #include "application/CommentBout/Collision/Utility/CoordinateConverter.h"
 #include "application/CommentBout/GameTag.h"
 #include "engine/Functions/ECS/Component/CameraComponent.h"
-#include "engine/Functions/ECS/Component/MaterialComponent.h"
 #include "engine/Functions/ECS/Component/Transform2DComponent.h"
 #include "engine/Functions/Renderer/Primitive.h"
 #include <algorithm>
@@ -271,6 +271,7 @@ void SpawnRewardOrbFromEnemy(
 
 void EnemyVisualSystem::Update(No::Registry& registry, float deltaTime)
 {
+	static_cast<void>(deltaTime);
 	static bool drawColliderDebug = true;
 	static bool drawSpriteGateDebug = true;
 	static bool drawCameraGateDebugFlag = true;
@@ -339,14 +340,14 @@ void EnemyVisualSystem::Update(No::Registry& registry, float deltaTime)
 		DrawCameraGateDebug(*activeCameraTransform, *debugHitbox);
 	}
 
-	auto view = registry.View<CBRailEnemyTag, EnemyComponent, HealthComponent, No::MaterialComponent, CommentBoutCollision::Collider3DComponent>();
+	auto view = registry.View<CBRailEnemyTag, EnemyComponent, HealthComponent, CommentBoutCollision::Collider3DComponent>();
 	for (auto entity : view) {
 		auto* enemy = registry.GetComponent<EnemyComponent>(entity);
 		auto* health = registry.GetComponent<HealthComponent>(entity);
-		auto* material = registry.GetComponent<No::MaterialComponent>(entity);
 		auto* collider3D = registry.GetComponent<CommentBoutCollision::Collider3DComponent>(entity);
 		auto* rewardSource = registry.GetComponent<EnemyRewardSourceComponent>(entity);
-		if (!enemy || !health || !material || !collider3D) {
+		auto* flash = registry.GetComponent<DamageFlashComponent>(entity);
+		if (!enemy || !health || !collider3D) {
 			continue;
 		}
 
@@ -362,15 +363,7 @@ void EnemyVisualSystem::Update(No::Registry& registry, float deltaTime)
 			continue;
 		}
 
-		if (enemy->damageFlashTimer > 0.0f) {
-			enemy->damageFlashTimer -= deltaTime;
-			enemy->wasCollidingWithAttack = true;
-			material->color = { 1.0f, 0.2f, 0.2f, 1.0f };
-		} else {
-			enemy->damageFlashTimer = 0.0f;
-			enemy->wasCollidingWithAttack = false;
-			material->color = { 1.0f, 1.0f, 1.0f, 1.0f };
-		}
+		enemy->wasCollidingWithAttack = (flash && flash->timer > 0.0f);
 
 		bool gatePassForDebug = true;
 		if (activeCameraTransform && debugHitbox && debugHitbox->useCameraGateForPlayerHit) {
@@ -417,11 +410,12 @@ void EnemyVisualSystem::Update(No::Registry& registry, float deltaTime)
 			DrawSpriteGateDebugOverlay(*enemyProjected, *spritePlayerTransform, overlayState);
 		}
 
+		const float flashTime = flash ? flash->timer : 0.0f;
 		ImGui::Text("Enemy %llu hp=%d/%d flash=%.2f playerHit=%s",
 			static_cast<unsigned long long>(entity),
 			enemy->hp,
 			enemy->maxHp,
-			enemy->damageFlashTimer,
+			flashTime,
 			enemy->wasCollidingWithPlayer ? "true" : "false");
 		ImGui::Text("Collider pos(%.2f, %.2f, %.2f)", collider3D->worldPosition.x, collider3D->worldPosition.y, collider3D->worldPosition.z);
 		if (collider3D->shapeType == CommentBoutCollision::ShapeType3D::Box) {

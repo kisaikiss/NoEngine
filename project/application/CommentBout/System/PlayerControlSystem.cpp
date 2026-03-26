@@ -6,7 +6,8 @@
 #include "application/CommentBout/Component/LifetimeComponent.h"
 #include "application/CommentBout/Component/GameResourceComponent.h"
 #include "application/CommentBout/Component/AttackDamageComponent.h"
-#include "application/CommentBout/Component/PlayerHealthComponent.h"
+#include "application/CommentBout/Component/HealthComponent.h"
+#include "application/CommentBout/Component/InvincibleComponent.h"
 #include "application/CommentBout/Utility/CBCollisionMask.h"
 #include "application/CommentBout/GameTag.h"
 #include "application/CommentBout/Collision/Component/Collider2DComponent.h"
@@ -39,21 +40,19 @@ void PlayerControlSystem::Update(No::Registry& registry, float deltaTime)
 		}
 	}
 
-	auto playerView = registry.View<CBPlayerTag, PlayerComponent, PlayerAttackComponent, PlayerHealthComponent, No::Transform2DComponent>();
+	auto playerView = registry.View<CBPlayerTag, PlayerComponent, PlayerAttackComponent, HealthComponent, InvincibleComponent, No::Transform2DComponent>();
 	for (auto entity : playerView) {
 		auto* player = registry.GetComponent<PlayerComponent>(entity);
 		auto* attack = registry.GetComponent<PlayerAttackComponent>(entity);
-		auto* health = registry.GetComponent<PlayerHealthComponent>(entity);
+		auto* health = registry.GetComponent<HealthComponent>(entity);
+		auto* invincible = registry.GetComponent<InvincibleComponent>(entity);
 		auto* transform2D = registry.GetComponent<No::Transform2DComponent>(entity);
-		if (!player || !attack || !health || !transform2D) {
+		if (!player || !attack || !health || !invincible || !transform2D) {
 			continue;
 		}
 
-		if (health->invincibleTime > 0.0f) {
-			health->invincibleTime -= deltaTime;
-			if (health->invincibleTime < 0.0f) {
-				health->invincibleTime = 0.0f;
-			}
+		if (invincible->duration <= 0.0f) {
+			invincible->duration = std::max(0.01f, player->invincibleDurationDefault);
 		}
 
 		// HPが0以下でまだ死亡処理がされていない場合、死亡処理を行う

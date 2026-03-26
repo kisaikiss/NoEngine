@@ -193,6 +193,7 @@
     <ClCompile Include="application\CommentBout\Component\OutGame\OptionStateComponent.cpp" />
     <ClCompile Include="application\CommentBout\Component\OutGame\PauseMenuConfigComponent.cpp" />
     <ClCompile Include="application\CommentBout\Component\OutGame\PauseStateComponent.cpp" />
+    <ClCompile Include="application\CommentBout\System\DamageFlashSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Functions\ECS\System\CameraSystem.h" />
@@ -409,7 +410,6 @@
     <ClInclude Include="application\CommentBout\Component\EnemyComponent.h" />
     <ClInclude Include="application\CommentBout\System\EnemySystem.h" />
     <ClInclude Include="application\CommentBout\Component\AttackDamageComponent.h" />
-    <ClInclude Include="application\CommentBout\Component\PlayerHealthComponent.h" />
     <ClInclude Include="application\CommentBout\Component\PlayerHitboxComponent.h" />
     <ClInclude Include="application\TestApp\Scene\TestScene.h" />
     <ClInclude Include="application\TestApp\Scene\TestScene2.h" />
@@ -454,8 +454,9 @@
     <ClInclude Include="application\CommentBout\Data\EnemyTypePresetIO.h" />
     <ClInclude Include="application\CommentBout\Component\HpBarComponent.h" />
     <ClInclude Include="application\CommentBout\System\HpBarViewSystem.h" />
-    <ClInclude Include="application\CommentBout\Component\PlayerDamageFlashComponent.h" />
     <ClInclude Include="application\CommentBout\Component\OutGame\OutGameComponets.h" />
+    <ClInclude Include="application\CommentBout\Component\DamageFlashComponent.h" />
+    <ClInclude Include="application\CommentBout\System\DamageFlashSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

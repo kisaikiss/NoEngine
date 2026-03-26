@@ -70,71 +70,67 @@
 
 ---
 
-## Phase 3: 被ダメ演出と当たり判定
+## Phase 3: 被ダメ演出と当たり判定（再設計）
 
-### 3-1. 自機被ダメリアクション
-- [ ] 接触被弾・敵弾被弾の双方で同一フラッシュ制御
-- [ ] 既存色復帰を保証
-- [ ] プレイヤーフラッシュは「プレイヤーが被弾した時のみ」発火するように対象を限定
+### 3-1. 判定責務の分離（照準点と被弾判定）
+- [x] 自機前方点は「敵弾の照準計算専用」であることを明文化
+- [x] 被弾判定は照準点を参照しない
+- [x] 被弾判定は `EnemyContactDamageSystem` と同一思想（投影 + ゲート）に統一
 
-**完了条件**
-- 被弾時のみ短時間赤くなり、復帰する。
-- 敵被弾時にプレイヤーは点滅しない。
+### 3-2. 敵弾判定を投影ベースへ統一
+- [x] `EnemyBulletHitSystem` の判定を 3D hitbox 依存から撤去
+- [x] `ProjectedCollider`（敵弾） vs `PlayerSpriteAABB` + `CameraGate` で命中判定
+- [x] 判定ヘルパーは接触判定と同等ロジックを使う（重複最小）
 
-### 3-2. 自機と敵弾の当たり判定修正
-- [ ] `PlayerHitbox` 3D位置が自機2Dと同期しているか確認
-- [ ] `CollisionLayer/Mask` の双方向一致を確認
-- [ ] `collidedEntity` 上書き問題がある場合は複数ヒット対応に改善
-- [ ] 敵弾判定は「プレイヤーに命中時のみ消滅」にするか、消滅ポリシーを明文化して実装
+### 3-3. 敵弾消滅ポリシーの固定
+- [x] 敵弾は「時間経過（Lifetime）」または「衝突時」で消滅
+- [x] プレイヤー命中時のみ `DamageRequest` 発行
+- [x] プレイヤー非命中の衝突ではダメージは発行しない
 
-**完了条件**
-- 敵弾が自機に安定して命中し、`DamageRequest` が発行される。
-- 命中時の点滅が取りこぼしなく再現される。
+### 3-4. 被ダメフラッシュ共通化
+- [x] `DamageFlashComponent` + `DamageFlashSystem` を唯一のフラッシュ経路にする
+- [x] 敵/自機とも `DamageApplySystem` 経由で対象限定フラッシュ
+- [x] 命中した対象以外はフラッシュしない
 
-### 3-3. 被ダメフラッシュ共通化
-- [ ] `PlayerDamageFlashComponent` を廃止方向にし、`DamageFlashComponent` を追加
-- [ ] `timer/duration/flashColor/baseColor/affectSprite/affectMaterial` を持たせる
-- [ ] 敵/自機とも同じ被ダメ経路（DamageRequest反映後）で制御
-- [ ] 既存 `EnemyComponent::damageFlashTimer` は段階移行で最終削除
+### 3-5. 不要依存の整理
+- [x] 弾被弾判定用途の `PlayerHitboxSyncSystem` を撤去
+- [x] 弾判定で不要になった `PlayerHitboxComponent` 3D同期項目を整理
 
-**完了条件**
-- 敵と自機が同一仕組みでフラッシュする。
-- 命中した対象のみがフラッシュする。
+### 3-6. 報酬オーブダメージ対象の固定
+- [x] オーブ到達時ダメージは `CBBossTag` 保持Entityのみに適用
+- [x] ボス不在時はダメージを発行しない
 
-### 3-4. 報酬オーブダメージ対象の固定
-- [ ] オーブ到達時ダメージは `CBBossTag` 保持Entityのみに適用
-- [ ] ボス不在時はダメージを発行しない
-
-**完了条件**
-- オーブでプレイヤーHPが減らない。
-- オーブダメージはボスにのみ入る。
+## 実装ログ（進捗記録）
+- [x] Phase 1 完了
+- [x] Phase 2 完了
+- [x] Phase 3 完了
+- [ ] Phase 4 完了
+- [ ] 最終ビルド成功
 
 ---
 
 ## Phase 4: コメントと保守性整備
 
 ### 4-1. 全コンポーネントコメント統一
-- [ ] 役割
-- [ ] 主更新System
-- [ ] ランタイム/保存対象
-
-**完了条件**
-- `application/CommentBout/Component` / `FieldObject/Component` / `Collision/Component` の全 `.h` に責務コメントがある。
+- [x] 役割
+- [x] 主更新System
+- [x] ランタイム/保存対象
 
 ### 4-2. System依存コメントの整備
-- [ ] `GameScene` の実行順コメントを最新化
-- [ ] 依存（前段/後段）を明記
-
-**完了条件**
-- 更新順の意図がコメントのみで追える。
+- [x] `GameScene` の実行順コメントを最新化
+- [x] 依存（前段/後段）を明記
 
 ### 4-3. Playerヘルス系の統合
-- [ ] `HealthComponent + InvincibleComponent` を主系に統一
-- [ ] `PlayerComponent` へプレイヤー固有設定（例: invincibleDurationDefault）を集約
-- [ ] `PlayerHealthComponent` を段階廃止（互換同期コードを削除）
+- [x] `HealthComponent + InvincibleComponent` を主系に統一
+- [x] `PlayerComponent` へプレイヤー固有設定（例: invincibleDurationDefault）を集約
+- [x] `PlayerHealthComponent` を段階廃止（互換同期コードを削除）
 
-**完了条件**
-- `PlayerHealthComponent` 参照が主処理から消え、互換コードが撤去される。
+## 実装ログ（進捗記録）
+- [x] Phase 1 完了
+- [x] Phase 2 完了
+- [x] Phase 3 完了
+- [x] Phase 4 完了
+- [x] 最終ビルド成功
 
 ---
 
@@ -151,6 +147,6 @@
 ## 実装ログ（進捗記録）
 - [x] Phase 1 完了
 - [x] Phase 2 完了
-- [ ] Phase 3 完了
-- [ ] Phase 4 完了
-- [ ] 最終ビルド成功
+- [x] Phase 3 完了
+- [x] Phase 4 完了
+- [x] 最終ビルド成功

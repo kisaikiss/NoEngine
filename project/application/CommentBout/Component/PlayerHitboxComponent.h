@@ -1,6 +1,10 @@
 #pragma once
 #include "engine/NoEngine.h"
 
+/// <summary>
+/// プレイヤー被弾判定の補助設定。
+/// EnemyContactDamageSystem / EnemyBulletHitSystem が投影+カメラゲート判定に使用する
+/// </summary>
 struct PlayerHitboxComponent {
     No::Entity playerEntity = No::nullEntity;
 

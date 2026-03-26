@@ -302,7 +302,6 @@ void PlayerAttackResolveSystem::Update(No::Registry& registry, float deltaTime)
 
 			const int damage = std::max(1, attackDamage->damage);
 			EmitDamageRequest(registry, target.entity, attackEntity, damage, false);
-			target.enemy->damageFlashTimer = target.enemy->damageFlashDuration;
 			attackDamage->hitEnemies.push_back(target.entity);
 		}
 

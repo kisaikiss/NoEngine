@@ -3,8 +3,8 @@
 #include "application/CommentBout/Component/DamageRequestComponent.h"
 #include "application/CommentBout/Component/HealthComponent.h"
 #include "application/CommentBout/Component/InvincibleComponent.h"
-#include "application/CommentBout/Component/PlayerHealthComponent.h"
 #include "application/CommentBout/Component/EnemyComponent.h"
+#include "application/CommentBout/Component/DamageFlashComponent.h"
 #include "application/CommentBout/GameTag.h"
 #include <algorithm>
 
@@ -25,17 +25,6 @@ void ApplyToHealth(HealthComponent* health, int amount) {
 	health->isDead = (health->hp <= 0);
 }
 
-void SyncToLegacyPlayerHealth(PlayerHealthComponent* legacy, const HealthComponent* health) {
-	if (!legacy || !health) {
-		return;
-	}
-	legacy->hp = health->hp;
-	legacy->maxHp = health->maxHp;
-	legacy->isDead = health->isDead;
-	legacy->deathHandled = health->deathHandled;
-	legacy->lastDamageTaken = health->lastDamageTaken;
-}
-
 void SyncToLegacyEnemy(EnemyComponent* legacy, const HealthComponent* health) {
 	if (!legacy || !health) {
 		return;
@@ -43,6 +32,35 @@ void SyncToLegacyEnemy(EnemyComponent* legacy, const HealthComponent* health) {
 	legacy->hp = health->hp;
 	legacy->maxHp = health->maxHp;
 	legacy->lastDamageTaken = health->lastDamageTaken;
+}
+
+void ApplyDamageFlash(No::Registry& registry, No::Entity target) {
+	if (target == No::nullEntity) {
+		return;
+	}
+
+	if (!registry.Has<DamageFlashComponent>(target)) {
+		registry.AddComponent<DamageFlashComponent>(target);
+	}
+	auto* flash = registry.GetComponent<DamageFlashComponent>(target);
+	if (!flash) {
+		return;
+	}
+
+	if (registry.Has<CBPlayerTag>(target)) {
+		flash->duration = 0.16f;
+		flash->flashColor = No::Color(1.0f, 0.35f, 0.35f, 0.75f);
+		flash->baseColor = No::Color(1.0f, 1.0f, 1.0f, 0.5f);
+		flash->affectSprite = true;
+		flash->affectMaterial = false;
+	} else {
+		flash->duration = 0.12f;
+		flash->flashColor = No::Color(1.0f, 0.2f, 0.2f, 1.0f);
+		flash->baseColor = No::Color(1.0f, 1.0f, 1.0f, 1.0f);
+		flash->affectSprite = false;
+		flash->affectMaterial = true;
+	}
+	flash->timer = std::max(flash->timer, flash->duration);
 }
 }
 
@@ -87,28 +105,24 @@ void DamageApplySystem::Update(No::Registry& registry, float deltaTime)
 			inv = registry.GetComponent<InvincibleComponent>(request->target);
 		}
 
-		const bool isInvincible = (inv && inv->time > 0.0f);
+		const bool useInvincible = registry.Has<CBPlayerTag>(request->target);
+		const bool isInvincible = useInvincible && (inv && inv->time > 0.0f);
 		if (isInvincible && !request->ignoreInvincible) {
 			consumedRequests.push_back(requestEntity);
 			continue;
 		}
 
 		ApplyToHealth(health, request->amount);
+		if (health && request->amount > 0 && !health->isDead) {
+			ApplyDamageFlash(registry, request->target);
+		}
 
 		if (health && health->isDead && registry.Has<CBRailEnemyTag>(request->target)) {
 			registry.DestroyEntity(request->target);
 		}
 
-		// 互換維持: 旧個別コンポーネントへ同期。
-		// 主系は Health/Invincible で、移行完了後に段階的に削除予定。
-		auto* legacyPlayerHealth = registry.GetComponent<PlayerHealthComponent>(request->target);
-		if (legacyPlayerHealth) {
-			if (inv && request->amount > 0) {
-				inv->duration = legacyPlayerHealth->invincibleDuration;
-				inv->time = std::max(inv->time, inv->duration);
-				legacyPlayerHealth->invincibleTime = std::max(legacyPlayerHealth->invincibleTime, legacyPlayerHealth->invincibleDuration);
-			}
-			SyncToLegacyPlayerHealth(legacyPlayerHealth, health);
+		if (registry.Has<CBPlayerTag>(request->target) && inv && request->amount > 0) {
+			inv->time = std::max(inv->time, inv->duration);
 		}
 
 		auto* legacyEnemy = registry.GetComponent<EnemyComponent>(request->target);

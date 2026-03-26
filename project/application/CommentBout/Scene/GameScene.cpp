@@ -4,7 +4,6 @@
 #include "application/CommentBout/Data/RailDataIO.h"
 #include "application/CommentBout/Component/PlayerComponent.h"
 #include "application/CommentBout/Component/PlayerAttackComponent.h"
-#include "application/CommentBout/Component/PlayerHealthComponent.h"
 #include "application/CommentBout/Component/HealthComponent.h"
 #include "application/CommentBout/Component/InvincibleComponent.h"
 #include "application/CommentBout/Component/PlayerHitboxComponent.h"
@@ -39,6 +38,7 @@
 #include "application/CommentBout/System/EnemyRewardToBossSystem.h"
 #include "application/CommentBout/System/PlayerAttackResolveSystem.h"
 #include "application/CommentBout/System/DamageApplySystem.h"
+#include "application/CommentBout/System/DamageFlashSystem.h"
 #include "application/CommentBout/Spawner/OptionMenuSpawner.h"
 #include "application/CommentBout/Spawner/PauseMenuSpawner.h"
 #include "application/CommentBout/Collision/System/CollisionSystem.h"
@@ -57,7 +57,7 @@ void GameScene::Setup() {
 	// Input / Camera
 	//  - PauseSystem
 	//  - PlayerControlSystem
-	//  - DebugCamera / RailCamera / Camera
+	//  - DebugCameraSystem / RailCameraSystem / CameraSystem
 	// Spawn / Behavior
 	//  - EnemySpawnSystem
 	//  - BossBehaviorSystem
@@ -71,10 +71,11 @@ void GameScene::Setup() {
 	// Damage / UI
 	//  - EnemyRewardToBossSystem
 	//  - DamageApplySystem
+	//  - DamageFlashSystem (must run after DamageApplySystem)
 	//  - HpBarViewSystem
 	//  - EnemyVisualSystem
-	// そのほか
-	//  - GrassReaction / HitBalloon / Lifetime / Option / PauseView / OptionView / Edit
+	// Others
+	//  - GrassReactionSystem / HitBalloonSystem / LifetimeSystem / OptionSystem / PauseViewSystem / OptionViewSystem / EditSystem
 	// --------------------------------------------------------------------------- //
 
 	AddSystem(std::make_unique<PauseSystem>());
@@ -93,6 +94,7 @@ void GameScene::Setup() {
 	AddSystem(std::make_unique<PlayerAttackResolveSystem>());
 	AddSystem(std::make_unique<EnemyRewardToBossSystem>());
 	AddSystem(std::make_unique<DamageApplySystem>());
+	AddSystem(std::make_unique<DamageFlashSystem>());
 	AddSystem(std::make_unique<HpBarViewSystem>());
 	AddSystem(std::make_unique<EnemyVisualSystem>());
 	AddSystem(std::make_unique<GrassReactionSystem>());
@@ -229,28 +231,21 @@ void GameScene::Setup() {
 	registry.AddComponent<No::EditTag>(playerEntity)->name = "Player";
 	auto* playerComp = registry.AddComponent<PlayerComponent>(playerEntity);
 	playerComp->moveSpeed = 480.0f;
+	playerComp->invincibleDurationDefault = 0.35f;
 	auto* playerAttack = registry.AddComponent<PlayerAttackComponent>(playerEntity);
 	playerAttack->spawnOffset = { 0.0f, -80.0f };
 	playerAttack->attackSize = { 140.0f, 140.0f };
 	playerAttack->visibleTime = 0.35f;
 	playerAttack->attackLayer = 30;
 	playerAttack->attackPower = 10;
-	auto* playerHealth = registry.AddComponent<PlayerHealthComponent>(playerEntity);
-	playerHealth->hp = 10;
-	playerHealth->maxHp = 10;
-	playerHealth->invincibleDuration = 0.35f;
-	playerHealth->invincibleTime = 0.0f;
-	playerHealth->isDead = false;
-	playerHealth->deathHandled = false;
-	playerHealth->lastDamageTaken = 0;
 	auto* playerCommonHealth = registry.AddComponent<HealthComponent>(playerEntity);
-	playerCommonHealth->hp = playerHealth->hp;
-	playerCommonHealth->maxHp = playerHealth->maxHp;
-	playerCommonHealth->isDead = playerHealth->isDead;
-	playerCommonHealth->lastDamageTaken = playerHealth->lastDamageTaken;
+	playerCommonHealth->hp = 10;
+	playerCommonHealth->maxHp = 10;
+	playerCommonHealth->isDead = false;
+	playerCommonHealth->lastDamageTaken = 0;
 	auto* playerInvincible = registry.AddComponent<InvincibleComponent>(playerEntity);
-	playerInvincible->time = playerHealth->invincibleTime;
-	playerInvincible->duration = playerHealth->invincibleDuration;
+	playerInvincible->time = 0.0f;
+	playerInvincible->duration = playerComp->invincibleDurationDefault;
 	auto* playerTransform = registry.AddComponent<No::Transform2DComponent>(playerEntity);
 	playerTransform->translate = { 640.f, 600.f };
 	playerTransform->scale = { 128.f, 200.f };

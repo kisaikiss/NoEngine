@@ -174,6 +174,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\CommentBout\Spawner\TitleMenuSpawner.cpp" />
     <ClCompile Include="application\CommentBout\System\BossBehaviorSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\DamageApplySystem.cpp" />
+    <ClCompile Include="application\CommentBout\System\DamageFlashSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\EnemyBulletHitSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\EnemyContactDamageSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\EnemyMoveSystem.cpp" />
@@ -369,6 +370,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\CommentBout\Collision\Utility\CoordinateConverter.h" />
     <ClInclude Include="application\CommentBout\Component\AttackDamageComponent.h" />
     <ClInclude Include="application\CommentBout\Component\BossComponent.h" />
+    <ClInclude Include="application\CommentBout\Component\DamageFlashComponent.h" />
     <ClInclude Include="application\CommentBout\Component\DamageRequestComponent.h" />
     <ClInclude Include="application\CommentBout\Component\EnemyBulletComponent.h" />
     <ClInclude Include="application\CommentBout\Component\EnemyComponent.h" />
@@ -384,8 +386,6 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\CommentBout\Component\OutGame\OptionMenuViewComponent.h" />
     <ClInclude Include="application\CommentBout\Component\OutGame\OptionStateComponent.h" />
     <ClInclude Include="application\CommentBout\Component\OutGame\OutGameComponets.h" />
-    <ClInclude Include="application\CommentBout\Component\PlayerDamageFlashComponent.h" />
-    <ClInclude Include="application\CommentBout\Component\PlayerHealthComponent.h" />
     <ClInclude Include="application\CommentBout\Component\PlayerHitboxComponent.h" />
     <ClInclude Include="application\CommentBout\Component\RailCameraComponent.h" />
     <ClInclude Include="application\CommentBout\Component\SpawnEnemyRequestComponent.h" />
@@ -401,6 +401,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\CommentBout\Spawner\TitleMenuSpawner.h" />
     <ClInclude Include="application\CommentBout\System\BossBehaviorSystem.h" />
     <ClInclude Include="application\CommentBout\System\DamageApplySystem.h" />
+    <ClInclude Include="application\CommentBout\System\DamageFlashSystem.h" />
     <ClInclude Include="application\CommentBout\System\EnemyBulletHitSystem.h" />
     <ClInclude Include="application\CommentBout\System\EnemyContactDamageSystem.h" />
     <ClInclude Include="application\CommentBout\System\EnemyMoveSystem.h" />

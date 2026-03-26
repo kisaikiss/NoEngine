@@ -30,6 +30,8 @@ No::Vector3 ComputeAimDirection(
 	No::TransformComponent& cameraTransform,
 	float depthFromCamera
 ) {
+	// ここで求めるのは「照準点」までの進行方向のみ。
+	// 被弾判定は EnemyBulletHitSystem 側の投影+ゲート判定で処理する。
 	auto playerView = registry.View<CBPlayerTag, No::Transform2DComponent>();
 	auto playerIt = playerView.begin();
 	if (playerIt == playerView.end()) {
