@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "PauseViewSystem.h"
-#include "application/CommentBout/Component/PauseStateComponent.h"
-#include "application/CommentBout/Component/PauseMenuConfigComponent.h"
-#include "application/CommentBout/Component/PauseMenuViewComponent.h"
+#include "application/CommentBout/Component/OutGame/PauseStateComponent.h"
+#include "application/CommentBout/Component/OutGame/PauseMenuConfigComponent.h"
+#include "application/CommentBout/Component/OutGame/PauseMenuViewComponent.h"
 #include "application/CommentBout/GameTag.h"
 #include "engine/Runtime/GraphicsCore.h"
 #include <algorithm>

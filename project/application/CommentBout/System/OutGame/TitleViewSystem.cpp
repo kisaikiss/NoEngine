@@ -1,9 +1,9 @@
 #include "stdafx.h"
 #include "TitleViewSystem.h"
-#include "application/CommentBout/Component/TitleMenuStateComponent.h"
-#include "application/CommentBout/Component/TitleMenuConfigComponent.h"
-#include "application/CommentBout/Component/TitleMenuViewComponent.h"
-#include "application/CommentBout/Component/OptionStateComponent.h"
+#include "application/CommentBout/Component/OutGame/TitleMenuStateComponent.h"
+#include "application/CommentBout/Component/OutGame/TitleMenuConfigComponent.h"
+#include "application/CommentBout/Component/OutGame/TitleMenuViewComponent.h"
+#include "application/CommentBout/Component/OutGame/OptionStateComponent.h"
 #include "application/CommentBout/GameTag.h"
 #include <algorithm>
 #include <cmath>

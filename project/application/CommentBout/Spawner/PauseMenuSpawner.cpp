@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "PauseMenuSpawner.h"
 #include "application/CommentBout/Utility/CBSpriteLayer.h"
-#include "application/CommentBout/Component/PauseMenuViewComponent.h"
+#include "application/CommentBout/Component/OutGame/PauseMenuViewComponent.h"
 #include "application/CommentBout/GameTag.h"
 
 void PauseMenuSpawner::Create(No::Registry& registry, const NoEngine::TextureRef& whiteTexture)

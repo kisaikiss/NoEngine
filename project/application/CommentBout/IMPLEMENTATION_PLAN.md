@@ -11,25 +11,36 @@
 - [ ] `EnemySpawnSystem` で `EnemyTypePreset.json` を必須適用
 - [ ] 種類別ハードコード値（HP/scale/弾速/間隔）を削除
 - [ ] `Preset -> Event上書き` 順で最終パラメータを決定
+- [ ] `hp` はEventから排斥し、Preset固定で運用する
 
 **完了条件**
 - `MoveOnly/MoveAndShoot/Boss` すべてで `EnemyTypePreset.json` の変更がゲームに反映される。
+- Event Editor上に `hp` が表示されない。
 
 ### 1-2. プリセット編集UIを追加
 - [ ] `EnemyTypePresetEditor`（ImGui）を追加
 - [ ] `modelScale/minHp/shootInterval/bulletSpeed/bulletDamage/bulletLifetime/targetDepth` を編集可能にする
+- [ ] 種類ごとの `baseColliderBox(x,y,z)`（scale=(1,1,1)基準AABBサイズ）を編集可能にする
 - [ ] JSON保存/読込ボタンを追加
 
 **完了条件**
 - UI編集→保存→再起動で値が保持される。
+- `baseColliderBox` 変更で当たり判定サイズが追従する。
 
 ### 1-3. Event Editorからプリセット項目を排斥
 - [ ] `GameEventEditor` で `enemyType` コンボは残す
-- [ ] `hp` 等のプリセット由来項目を非表示化（またはOverride方式へ統一）
+- [ ] `hp` 等のプリセット由来項目を非表示化（Override未採用）
 - [ ] `Boss` で必要な軌道/行動パラメータのみ編集可にする
 
 **完了条件**
 - Event Editorに「配置系のみ」が表示される。
+
+### 1-4. `baseColliderBox` 適用処理を統合
+- [ ] Spawn時に `Collider3DComponent` へ `baseColliderBox` を反映
+- [ ] `boxSizeMultiplier = baseColliderBox` で運用し、`transform.scale` 変更時にも判定が崩れないことを確認
+
+**完了条件**
+- モデル差し替え時でもPreset調整だけで判定サイズを合わせられる。
 
 ---
 
@@ -91,6 +102,15 @@
 **完了条件**
 - 敵弾が自機に安定して命中し、`DamageRequest` が発行される。
 
+### 3-3. 被ダメフラッシュ共通化
+- [ ] `PlayerDamageFlashComponent` を廃止方向にし、`DamageFlashComponent` を追加
+- [ ] `timer/duration/flashColor/baseColor/affectSprite/affectMaterial` を持たせる
+- [ ] 敵/自機とも同じ被ダメ経路（DamageRequest反映後）で制御
+- [ ] 既存 `EnemyComponent::damageFlashTimer` は段階移行で最終削除
+
+**完了条件**
+- 敵と自機が同一仕組みでフラッシュする。
+
 ---
 
 ## Phase 4: コメントと保守性整備
@@ -109,6 +129,14 @@
 
 **完了条件**
 - 更新順の意図がコメントのみで追える。
+
+### 4-3. Playerヘルス系の統合
+- [ ] `HealthComponent + InvincibleComponent` を主系に統一
+- [ ] `PlayerComponent` へプレイヤー固有設定（例: invincibleDurationDefault）を集約
+- [ ] `PlayerHealthComponent` を段階廃止（互換同期コードを削除）
+
+**完了条件**
+- `PlayerHealthComponent` 参照が主処理から消え、互換コードが撤去される。
 
 ---
 

@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "TitleMenuSpawner.h"
-#include "application/CommentBout/Component/TitleMenuViewComponent.h"
+#include "application/CommentBout/Component/OutGame/TitleMenuViewComponent.h"
 #include "application/CommentBout/GameTag.h"
 
 void TitleMenuSpawner::Create(No::Registry& registry, const NoEngine::TextureRef& whiteTexture)

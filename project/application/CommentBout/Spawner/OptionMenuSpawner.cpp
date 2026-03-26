@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "OptionMenuSpawner.h"
 #include "application/CommentBout/GameTag.h"
-#include "application/CommentBout/Component/OptionMenuViewComponent.h"
+#include "application/CommentBout/Component/OutGame/OptionMenuViewComponent.h"
 
 void OptionMenuSpawner::Create(No::Registry& registry, const NoEngine::TextureRef& whiteTexture)
 {

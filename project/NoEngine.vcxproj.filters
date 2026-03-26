@@ -152,14 +152,14 @@
     <ClCompile Include="application\CommentBout\System\LifetimeSystem.cpp" />
     <ClCompile Include="application\CommentBout\Component\PlayerAttackComponent.cpp" />
     <ClCompile Include="application\CommentBout\Scene\TitleScene.cpp" />
-    <ClCompile Include="application\CommentBout\System\OptionSystem.cpp" />
-    <ClCompile Include="application\\CommentBout\\System\\OptionViewSystem.cpp" />
-    <ClCompile Include="application\\CommentBout\\System\\PauseSystem.cpp" />
-    <ClCompile Include="application\\CommentBout\\System\\PauseViewSystem.cpp" />
+    <ClCompile Include="application\CommentBout\System\OutGame\OptionSystem.cpp" />
+    <ClCompile Include="application\CommentBout\System\OutGame\OptionViewSystem.cpp" />
+    <ClCompile Include="application\CommentBout\System\OutGame\PauseSystem.cpp" />
+    <ClCompile Include="application\CommentBout\System\OutGame\PauseViewSystem.cpp" />
     <ClCompile Include="application\CommentBout\Scene\GameScene.cpp" />
     <ClCompile Include="application\CommentBout\Spawner\OptionMenuSpawner.cpp" />
-    <ClCompile Include="application\CommentBout\System\TitleSystem.cpp" />
-    <ClCompile Include="application\CommentBout\System\TitleViewSystem.cpp" />
+    <ClCompile Include="application\CommentBout\System\OutGame\TitleSystem.cpp" />
+    <ClCompile Include="application\CommentBout\System\OutGame\TitleViewSystem.cpp" />
     <ClCompile Include="application\CommentBout\Spawner\TitleMenuSpawner.cpp" />
     <ClCompile Include="application\CommentBout\Spawner\PauseMenuSpawner.cpp" />
     <ClCompile Include="application\CommentBout\Editor\GameEventEditor.cpp" />
@@ -189,11 +189,11 @@
     <ClCompile Include="application\CommentBout\System\EnemyRewardToBossSystem.cpp" />
     <ClCompile Include="application\CommentBout\Data\EnemyTypePresetIO.cpp" />
     <ClCompile Include="application\CommentBout\System\HpBarViewSystem.cpp" />
-    <ClCompile Include="application\CommentBout\Component\TitleMenuConfigComponent.cpp" />
-    <ClCompile Include="application\CommentBout\Component\OptionMenuConfigComponent.cpp" />
-    <ClCompile Include="application\CommentBout\Component\OptionStateComponent.cpp" />
-    <ClCompile Include="application\CommentBout\Component\PauseMenuConfigComponent.cpp" />
-    <ClCompile Include="application\CommentBout\Component\PauseStateComponent.cpp" />
+    <ClCompile Include="application\CommentBout\Component\OutGame\TitleMenuConfigComponent.cpp" />
+    <ClCompile Include="application\CommentBout\Component\OutGame\OptionMenuConfigComponent.cpp" />
+    <ClCompile Include="application\CommentBout\Component\OutGame\OptionStateComponent.cpp" />
+    <ClCompile Include="application\CommentBout\Component\OutGame\PauseMenuConfigComponent.cpp" />
+    <ClCompile Include="application\CommentBout\Component\OutGame\PauseStateComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Functions\ECS\System\CameraSystem.h" />
@@ -380,26 +380,26 @@
     <ClInclude Include="application\CommentBout\Utility\CBCollisionMask.h" />
     <ClInclude Include="application\CommentBout\Component\LifetimeComponent.h" />
     <ClInclude Include="application\CommentBout\Scene\TitleScene.h" />
-    <ClInclude Include="application\CommentBout\Component\PauseStateComponent.h" />
+    <ClInclude Include="application\CommentBout\Component\OutGame\PauseStateComponent.h" />
     <ClInclude Include="application\CommentBout\Utility\CBSpriteLayer.h" />
-    <ClInclude Include="application\CommentBout\Component\OptionStateComponent.h" />
-    <ClInclude Include="application\CommentBout\Component\OptionMenuConfigComponent.h" />
+    <ClInclude Include="application\CommentBout\Component\OutGame\OptionStateComponent.h" />
+    <ClInclude Include="application\CommentBout\Component\OutGame\OptionMenuConfigComponent.h" />
     <ClInclude Include="application\CommentBout\Utility\CBGameAudio.h" />
     <ClInclude Include="application\CommentBout\Event\OptionMenuEvent.h" />
-    <ClInclude Include="application\CommentBout\System\OptionSystem.h" />
-    <ClInclude Include="application\CommentBout\Component\OptionMenuViewComponent.h" />
-    <ClInclude Include="application\\CommentBout\\Component\\PauseMenuConfigComponent.h" />
-    <ClInclude Include="application\\CommentBout\\Component\\PauseMenuViewComponent.h" />
-    <ClInclude Include="application\\CommentBout\\System\\OptionViewSystem.h" />
-    <ClInclude Include="application\\CommentBout\\System\\PauseSystem.h" />
-    <ClInclude Include="application\\CommentBout\\System\\PauseViewSystem.h" />
+    <ClInclude Include="application\CommentBout\System\OutGame\OptionSystem.h" />
+    <ClInclude Include="application\CommentBout\Component\OutGame\OptionMenuViewComponent.h" />
+    <ClInclude Include="application\CommentBout\Component\OutGame\PauseMenuConfigComponent.h" />
+    <ClInclude Include="application\CommentBout\Component\OutGame\PauseMenuViewComponent.h" />
+    <ClInclude Include="application\CommentBout\System\OutGame\OptionViewSystem.h" />
+    <ClInclude Include="application\CommentBout\System\OutGame\PauseSystem.h" />
+    <ClInclude Include="application\CommentBout\System\OutGame\PauseViewSystem.h" />
     <ClInclude Include="application\CommentBout\Scene\GameScene.h" />
     <ClInclude Include="application\CommentBout\Spawner\OptionMenuSpawner.h" />
-    <ClInclude Include="application\CommentBout\Component\TitleMenuStateComponent.h" />
-    <ClInclude Include="application\CommentBout\Component\TitleMenuConfigComponent.h" />
-    <ClInclude Include="application\CommentBout\Component\TitleMenuViewComponent.h" />
-    <ClInclude Include="application\CommentBout\System\TitleSystem.h" />
-    <ClInclude Include="application\CommentBout\System\TitleViewSystem.h" />
+    <ClInclude Include="application\CommentBout\Component\OutGame\TitleMenuStateComponent.h" />
+    <ClInclude Include="application\CommentBout\Component\OutGame\TitleMenuConfigComponent.h" />
+    <ClInclude Include="application\CommentBout\Component\OutGame\TitleMenuViewComponent.h" />
+    <ClInclude Include="application\CommentBout\System\OutGame\TitleSystem.h" />
+    <ClInclude Include="application\CommentBout\System\OutGame\TitleViewSystem.h" />
     <ClInclude Include="application\CommentBout\Spawner\TitleMenuSpawner.h" />
     <ClInclude Include="application\CommentBout\Component\RailCameraComponent.h" />
     <ClInclude Include="application\CommentBout\System\RailCameraSystem.h" />
@@ -458,6 +458,7 @@
     <ClInclude Include="application\CommentBout\Component\HpBarComponent.h" />
     <ClInclude Include="application\CommentBout\System\HpBarViewSystem.h" />
     <ClInclude Include="application\CommentBout\Component\PlayerDamageFlashComponent.h" />
+    <ClInclude Include="application\CommentBout\Component\OutGame\OutGameComponets.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

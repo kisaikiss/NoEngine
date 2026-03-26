@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "PauseSystem.h"
-#include "application/CommentBout/Component/PauseStateComponent.h"
-#include "application/CommentBout/Component/PauseMenuConfigComponent.h"
-#include "application/CommentBout/Component/OptionStateComponent.h"
+#include "application/CommentBout/Component/OutGame/PauseStateComponent.h"
+#include "application/CommentBout/Component/OutGame/PauseMenuConfigComponent.h"
+#include "application/CommentBout/Component/OutGame/OptionStateComponent.h"
 #include "application/CommentBout/Event/OptionMenuEvent.h"
 #include "application/CommentBout/GameTag.h"
 

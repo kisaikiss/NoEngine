@@ -2,7 +2,7 @@
 #include "PlayerControlSystem.h"
 #include "application/CommentBout/Component/PlayerComponent.h"
 #include "application/CommentBout/Component/PlayerAttackComponent.h"
-#include "application/CommentBout/Component/PauseStateComponent.h"
+#include "application/CommentBout/Component/OutGame/PauseStateComponent.h"
 #include "application/CommentBout/Component/LifetimeComponent.h"
 #include "application/CommentBout/Component/GameResourceComponent.h"
 #include "application/CommentBout/Component/AttackDamageComponent.h"

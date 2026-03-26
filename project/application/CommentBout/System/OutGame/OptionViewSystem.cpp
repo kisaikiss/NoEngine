@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "OptionViewSystem.h"
-#include "application/CommentBout/Component/OptionStateComponent.h"
-#include "application/CommentBout/Component/OptionMenuConfigComponent.h"
-#include "application/CommentBout/Component/OptionMenuViewComponent.h"
+#include "application/CommentBout/Component/OutGame/OptionStateComponent.h"
+#include "application/CommentBout/Component/OutGame/OptionMenuConfigComponent.h"
+#include "application/CommentBout/Component/OutGame/OptionMenuViewComponent.h"
 #include "application/CommentBout/GameTag.h"
 #include <array>
 #include <algorithm>
