@@ -13,6 +13,22 @@
 #include "application/CommentBout/Collision/Component/Collider2DComponent.h"
 #include "engine/Runtime/GraphicsCore.h"
 #include <algorithm>
+#include <cmath>
+
+namespace {
+No::Vector2 NormalizeOrZero(const No::Vector2& v) {
+	const float lengthSq = v.x * v.x + v.y * v.y;
+	if (lengthSq <= 0.000001f) {
+		return { 0.0f, 0.0f };
+	}
+	const float invLen = 1.0f / std::sqrt(lengthSq);
+	return { v.x * invLen, v.y * invLen };
+}
+
+float VectorLength(const No::Vector2& v) {
+	return std::sqrt(v.x * v.x + v.y * v.y);
+}
+}
 
 void PlayerControlSystem::Update(No::Registry& registry, float deltaTime)
 {
@@ -55,6 +71,17 @@ void PlayerControlSystem::Update(No::Registry& registry, float deltaTime)
 			invincible->duration = std::max(0.01f, player->invincibleDurationDefault);
 		}
 
+		const bool shiftToggle =
+			(No::Keyboard::IsTrigger(VK_LSHIFT) && No::Keyboard::IsPress(VK_RSHIFT)) ||
+			(No::Keyboard::IsTrigger(VK_RSHIFT) && No::Keyboard::IsPress(VK_LSHIFT));
+		if (shiftToggle) {
+			player->debugInvincible = !player->debugInvincible;
+		}
+		if (player->debugInvincible) {
+			// デバッグ無敵中は常に無敵時間を維持して、被弾で途切れないようにする。
+			invincible->time = std::max(invincible->time, 0.2f);
+		}
+
 		// HPが0以下でまだ死亡処理がされていない場合、死亡処理を行う
 		if (health->hp <= 0 && !health->deathHandled) {
 			health->isDead = true;
@@ -69,15 +96,40 @@ void PlayerControlSystem::Update(No::Registry& registry, float deltaTime)
 			continue;
 		}
 
-		// WASD入力を移動ベクトルへ変換。
 		No::Vector2 input{ 0.0f, 0.0f };
 		if (No::Keyboard::IsPress('W')) { input.y -= 1.0f; }
 		if (No::Keyboard::IsPress('S')) { input.y += 1.0f; }
 		if (No::Keyboard::IsPress('A')) { input.x -= 1.0f; }
 		if (No::Keyboard::IsPress('D')) { input.x += 1.0f; }
+		const No::Vector2 inputDir = NormalizeOrZero(input);
 
-		transform2D->translate.x += input.x * player->moveSpeed * deltaTime;
-		transform2D->translate.y += input.y * player->moveSpeed * deltaTime;
+		const float maxSpeed = std::max(1.0f, (player->maxSpeed > 0.0f) ? player->maxSpeed : player->moveSpeed);
+		const float acceleration = std::max(0.0f, player->acceleration);
+		const float deceleration = std::max(0.0f, player->deceleration);
+
+		if (inputDir.x != 0.0f || inputDir.y != 0.0f) {
+			const No::Vector2 targetVelocity = inputDir * maxSpeed;
+			No::Vector2 delta = targetVelocity - player->velocity;
+			const float deltaLen = VectorLength(delta);
+			const float maxStep = acceleration * std::max(0.0f, deltaTime);
+			if (deltaLen <= maxStep || deltaLen <= 0.000001f) {
+				player->velocity = targetVelocity;
+			} else {
+				delta = NormalizeOrZero(delta);
+				player->velocity += delta * maxStep;
+			}
+		} else {
+			const float speed = VectorLength(player->velocity);
+			const float drop = deceleration * std::max(0.0f, deltaTime);
+			const float nextSpeed = std::max(0.0f, speed - drop);
+			if (nextSpeed <= 0.000001f || speed <= 0.000001f) {
+				player->velocity = { 0.0f, 0.0f };
+			} else {
+				player->velocity = NormalizeOrZero(player->velocity) * nextSpeed;
+			}
+		}
+
+		transform2D->translate += player->velocity * deltaTime;
 
 		float windowWidth = 1280.0f;
 		float windowHeight = 720.0f;
@@ -89,9 +141,48 @@ void PlayerControlSystem::Update(No::Registry& registry, float deltaTime)
 			const float halfWidth = transform2D->scale.x * 0.5f;
 			const float halfHeight = transform2D->scale.y * 0.5f;
 
-			transform2D->translate.x = std::max(halfWidth, std::min(windowWidth - halfWidth, transform2D->translate.x));
-			transform2D->translate.y = std::max(halfHeight, std::min(windowHeight - halfHeight, transform2D->translate.y));
+			const float clampedX = std::max(halfWidth, std::min(windowWidth - halfWidth, transform2D->translate.x));
+			const float clampedY = std::max(halfHeight, std::min(windowHeight - halfHeight, transform2D->translate.y));
+			if (clampedX != transform2D->translate.x) {
+				player->velocity.x = 0.0f;
+			}
+			if (clampedY != transform2D->translate.y) {
+				player->velocity.y = 0.0f;
+			}
+			transform2D->translate.x = clampedX;
+			transform2D->translate.y = clampedY;
 		}
+
+#ifdef USE_IMGUI
+		ImGui::Begin("Player Move Debug");
+		ImGui::DragFloat("Acceleration", &player->acceleration, 10.0f, 0.0f, 10000.0f);
+		ImGui::DragFloat("Deceleration", &player->deceleration, 10.0f, 0.0f, 10000.0f);
+		ImGui::DragFloat("Max Speed", &player->maxSpeed, 1.0f, 1.0f, 2000.0f);
+		ImGui::Text("Velocity: (%.1f, %.1f)", player->velocity.x, player->velocity.y);
+		ImGui::Text("Shift(L+R) Trigger: DebugInvincible Toggle");
+		ImGui::End();
+
+		if (player->debugInvincible) {
+			const ImGuiViewport* viewport = ImGui::GetMainViewport();
+			if (viewport) {
+				ImGui::SetNextWindowPos(
+					ImVec2(viewport->WorkPos.x + viewport->WorkSize.x - 16.0f, viewport->WorkPos.y + 16.0f),
+					ImGuiCond_Always,
+					ImVec2(1.0f, 0.0f)
+				);
+			}
+			ImGui::SetNextWindowBgAlpha(0.35f);
+			ImGui::Begin("PlayerInvincibleOverlay", nullptr,
+				ImGuiWindowFlags_NoDecoration |
+				ImGuiWindowFlags_AlwaysAutoResize |
+				ImGuiWindowFlags_NoSavedSettings |
+				ImGuiWindowFlags_NoMove |
+				ImGuiWindowFlags_NoFocusOnAppearing |
+				ImGuiWindowFlags_NoNav);
+			ImGui::TextColored(ImVec4(1.0f, 0.3f, 0.3f, 1.0f), "自機無敵中");
+			ImGui::End();
+		}
+#endif
 
 		if (No::Keyboard::IsTrigger(VK_SPACE) && gameResource) {
 			auto attackEntity = registry.GenerateEntity();

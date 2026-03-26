@@ -109,39 +109,39 @@
 ## 4. ポーズ統合（エンジン `PauseComponent` 一本化）
 
 ### 実装ステップ
-- [ ] `PauseSystem` でエンジン `PauseComponent::isPause` を更新する責務に統一
-- [ ] `PauseStateComponent::isPaused` は同期用または廃止のどちらかに整理
-- [ ] ポーズ解除時/シーン遷移時に `PauseComponent::isPause=false` を明示
-- [ ] 各システムの `SetStopInPause(false)` をコンストラクタで設定
+- [x] `PauseSystem` でエンジン `PauseComponent::isPause` を更新する責務に統一
+- [x] `PauseStateComponent::isPaused` は同期用または廃止のどちらかに整理
+- [x] ポーズ解除時/シーン遷移時に `PauseComponent::isPause=false` を明示
+- [x] 各システムの `SetStopInPause(false)` をコンストラクタで設定
 
 ### `SetStopInPause(false)` 対象（現時点推奨）
-- [ ] `PauseSystem`
-- [ ] `OptionSystem`
-- [ ] `PauseViewSystem`
-- [ ] `OptionViewSystem`
-- [ ] （必要なら）`TitleSystem` / `TitleViewSystem` も同様に方針統一
+- [x] `PauseSystem`
+- [x] `OptionSystem`
+- [x] `PauseViewSystem`
+- [x] `OptionViewSystem`
+- [x] （必要なら）`TitleSystem` / `TitleViewSystem` も同様に方針統一
 
 ### 完了条件
-- [ ] ポーズ開閉がエンジンpauseに一致する
-- [ ] ポーズメニュー中に必要なUI系Systemのみ動く
-- [ ] ポーズ解除漏れでゲームが止まり続ける事象がない
+- [x] ポーズ開閉がエンジンpauseに一致する
+- [x] ポーズメニュー中に必要なUI系Systemのみ動く
+- [x] ポーズ解除漏れでゲームが止まり続ける事象がない
 
 ---
 
 ## 5. 自機慣性・無敵デバッグ
 
 ### 実装ステップ
-- [ ] `PlayerComponent` に `acceleration / deceleration / maxSpeed` を追加
-- [ ] `PlayerControlSystem` を速度ベース移動へ変更（慣性挙動）
-- [ ] ImGuiで移動パラメータ調整UIを追加
-- [ ] 左右Shift同時押しトグルで無敵状態を切替
-- [ ] 無敵状態を示すフラグをコンポーネントに追加
-- [ ] 無敵中は右上ImGuiに「自機無敵中」を表示
+- [x] `PlayerComponent` に `acceleration / deceleration / maxSpeed` を追加
+- [x] `PlayerControlSystem` を速度ベース移動へ変更（慣性挙動）
+- [x] ImGuiで移動パラメータ調整UIを追加
+- [x] 左右Shift同時押しトグルで無敵状態を切替
+- [x] 無敵状態を示すフラグをコンポーネントに追加
+- [x] 無敵中は右上ImGuiに「自機無敵中」を表示
 
 ### 完了条件
-- [ ] 慣性ありの移動になり、停止時は減速で止まる
-- [ ] パラメータをImGuiで調整できる
-- [ ] 無敵トグルが機能し、状態表示される
+- [x] 慣性ありの移動になり、停止時は減速で止まる
+- [x] パラメータをImGuiで調整できる
+- [x] 無敵トグルが機能し、状態表示される
 
 ---
 

@@ -1,50 +1,50 @@
 {
-  "MoveOnly": {
-    "modelScale": 0.7,
-    "baseColliderBox": [
-      1.0,
-      1.0,
-      1.0
-    ],
-    "minHp": 10,
-    "shootInterval": 1.0,
-    "bulletSpeed": 10.0,
-    "bulletDamage": 1,
-    "bulletLifetime": 4.0,
-    "targetDepthFromCamera": 1.0,
-    "shootDistanceMax": 25.0,
-    "despawnBehindDistance": 12.0
-  },
-  "MoveAndShoot": {
-    "modelScale": 0.8,
-    "baseColliderBox": [
-      1.0,
-      1.0,
-      1.0
-    ],
-    "shootInterval": 0.9,
-    "bulletSpeed": 15.0,
-    "bulletDamage": 1,
-    "bulletLifetime": 4.0,
-    "targetDepthFromCamera": 1.0,
-    "shootDistanceMax": 25.0,
-    "despawnBehindDistance": 12.0,
-    "minHp": 16
-  },
   "Boss": {
-    "modelScale": 1.6,
     "baseColliderBox": [
-      1.2,
-      1.2,
-      1.2
+      1.0,
+      1.0,
+      1.0
     ],
-    "shootInterval": 0.22,
-    "bulletSpeed": 12.0,
     "bulletDamage": 2,
     "bulletLifetime": 5.0,
-    "targetDepthFromCamera": 1.0,
-    "shootDistanceMax": 35.0,
+    "bulletSpeed": 12.0,
     "despawnBehindDistance": 20.0,
-    "minHp": 150
+    "minHp": 150,
+    "modelScale": 1.600000023841858,
+    "shootDistanceMax": 35.0,
+    "shootInterval": 0.2199999988079071,
+    "targetDepthFromCamera": 1.0
+  },
+  "MoveAndShoot": {
+    "baseColliderBox": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "bulletDamage": 1,
+    "bulletLifetime": 4.0,
+    "bulletSpeed": 10.0,
+    "despawnBehindDistance": 12.0,
+    "minHp": 16,
+    "modelScale": 0.800000011920929,
+    "shootDistanceMax": 25.0,
+    "shootInterval": 0.8999999761581421,
+    "targetDepthFromCamera": 1.0
+  },
+  "MoveOnly": {
+    "baseColliderBox": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "bulletDamage": 1,
+    "bulletLifetime": 4.0,
+    "bulletSpeed": 10.0,
+    "despawnBehindDistance": 12.0,
+    "minHp": 10,
+    "modelScale": 0.699999988079071,
+    "shootDistanceMax": 25.0,
+    "shootInterval": 1.0,
+    "targetDepthFromCamera": 1.0
   }
 }

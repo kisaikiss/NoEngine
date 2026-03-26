@@ -5,6 +5,7 @@
 #include "application/CommentBout/Component/OutGame/OptionStateComponent.h"
 #include "application/CommentBout/Event/OptionMenuEvent.h"
 #include "application/CommentBout/GameTag.h"
+#include "engine/Functions/ECS/Component/PauseComponent.h"
 
 namespace {
 	float SafeDuration(float d) {
@@ -16,6 +17,37 @@ namespace {
 		state->phaseTime = 0.0f;
 		state->phaseDuration = SafeDuration(duration);
 	}
+
+	No::PauseComponent* FindEnginePauseComponent(No::Registry& registry) {
+		auto pauseView = registry.View<No::PauseComponent>();
+		auto it = pauseView.begin();
+		if (it == pauseView.end()) {
+			return nullptr;
+		}
+		return registry.GetComponent<No::PauseComponent>(*it);
+	}
+
+	void SyncPauseState(PauseStateComponent* pauseState, No::PauseComponent* enginePause) {
+		const bool isPaused = (pauseState->phase != PauseStateComponent::Closed);
+		pauseState->isPaused = isPaused;
+		if (enginePause) {
+			enginePause->isPause = isPaused;
+		}
+	}
+
+	void ClearPauseState(PauseStateComponent* pauseState, No::PauseComponent* enginePause) {
+		pauseState->isPaused = false;
+		pauseState->phase = PauseStateComponent::Closed;
+		pauseState->phaseTime = 0.0f;
+		pauseState->phaseDuration = 1.0f;
+		pauseState->isConfirmAnimating = false;
+		pauseState->confirmAnimTime = 0.0f;
+		pauseState->confirmIndex = -1;
+		pauseState->requestedAction = PauseStateComponent::None;
+		if (enginePause) {
+			enginePause->isPause = false;
+		}
+	}
 }
 
 void PauseSystem::Update(No::Registry& registry, float deltaTime)
@@ -23,6 +55,7 @@ void PauseSystem::Update(No::Registry& registry, float deltaTime)
 	PauseStateComponent* pauseState = nullptr;
 	PauseMenuConfigComponent* pauseConfig = nullptr;
 	OptionStateComponent* optionState = nullptr;
+	No::PauseComponent* enginePause = FindEnginePauseComponent(registry);
 
 	auto pauseView = registry.View<CBPauseStateTag, PauseStateComponent>();
 	for (auto entity : pauseView) {
@@ -49,6 +82,9 @@ void PauseSystem::Update(No::Registry& registry, float deltaTime)
 	}
 
 	if (!pauseState || !pauseConfig) {
+		if (enginePause) {
+			enginePause->isPause = false;
+		}
 		return;
 	}
 
@@ -69,6 +105,8 @@ void PauseSystem::Update(No::Registry& registry, float deltaTime)
 				break;
 			case PauseStateComponent::Restart:
 			{
+				// シーン遷移前にポーズ状態を明示解除して、停止状態の持ち越しを防ぐ。
+				ClearPauseState(pauseState, enginePause);
 				No::SceneChangeEvent event;
 				event.nextScene = "GameScene";
 				registry.EmitEvent(event);
@@ -83,6 +121,8 @@ void PauseSystem::Update(No::Registry& registry, float deltaTime)
 			break;
 			case PauseStateComponent::BackToTitle:
 			{
+				// シーン遷移前にポーズ状態を明示解除して、停止状態の持ち越しを防ぐ。
+				ClearPauseState(pauseState, enginePause);
 				No::SceneChangeEvent event;
 				event.nextScene = "TitleScene";
 				registry.EmitEvent(event);
@@ -98,7 +138,6 @@ void PauseSystem::Update(No::Registry& registry, float deltaTime)
 	if (pauseState->phase == PauseStateComponent::Closed) {
 		pauseState->isPaused = false;
 		if (No::Keyboard::IsTrigger(VK_TAB)) {
-			pauseState->isPaused = true;
 			pauseState->justEnteredPause = true;
 			pauseState->selectedIndex = 0;
 			pauseState->requestedAction = PauseStateComponent::None;
@@ -107,6 +146,7 @@ void PauseSystem::Update(No::Registry& registry, float deltaTime)
 			pauseState->confirmIndex = -1;
 			StartPhase(pauseState, PauseStateComponent::Opening, pauseConfig->openDuration);
 		}
+		SyncPauseState(pauseState, enginePause);
 		return;
 	}
 
@@ -130,18 +170,22 @@ void PauseSystem::Update(No::Registry& registry, float deltaTime)
 				break;
 			}
 		}
+		SyncPauseState(pauseState, enginePause);
 		return;
 	}
 
 	if (optionState && optionState->isOpen) {
+		SyncPauseState(pauseState, enginePause);
 		return;
 	}
 
 	if (pauseState->isConfirmAnimating) {
+		SyncPauseState(pauseState, enginePause);
 		return;
 	}
 
 	if (pauseState->phase != PauseStateComponent::Open) {
+		SyncPauseState(pauseState, enginePause);
 		return;
 	}
 
@@ -187,4 +231,6 @@ void PauseSystem::Update(No::Registry& registry, float deltaTime)
 			pauseState->requestedAction = action;
 		}
 	}
+
+	SyncPauseState(pauseState, enginePause);
 }

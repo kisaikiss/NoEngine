@@ -243,6 +243,9 @@ void GameScene::Setup() {
 	registry.AddComponent<No::EditTag>(playerEntity)->name = "Player";
 	auto* playerComp = registry.AddComponent<PlayerComponent>(playerEntity);
 	playerComp->moveSpeed = 480.0f;
+	playerComp->acceleration = 2400.0f;
+	playerComp->deceleration = 3000.0f;
+	playerComp->maxSpeed = 480.0f;
 	playerComp->invincibleDurationDefault = 0.35f;
 	auto* playerAttack = registry.AddComponent<PlayerAttackComponent>(playerEntity);
 	playerAttack->spawnOffset = { 0.0f, -80.0f };
