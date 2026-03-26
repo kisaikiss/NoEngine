@@ -1,0 +1,26 @@
+{
+  "types": [
+    {
+      "typeKey": "Building",
+      "modelKey": "BuildingModel",
+      "hasCollision": true,
+      "occludesPlayerAttack": true,
+      "baseColliderAtUnitScale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "typeKey": "Skydome",
+      "modelKey": "SkydomeModel",
+      "hasCollision": false,
+      "occludesPlayerAttack": false,
+      "baseColliderAtUnitScale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    }
+  ]
+}

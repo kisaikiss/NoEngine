@@ -22,6 +22,7 @@
 #include "application/CommentBout/System/PlayerInfoDebugSystem.h"
 #include "application/CommentBout/FieldObject/System/GrassReactionSystem.h"
 #include "application/CommentBout/FieldObject/System/HitBalloonSystem.h"
+#include "application/CommentBout/FieldObject/System/FieldEditorSystem.h"
 #include "application/CommentBout/System/LifetimeSystem.h"
 #include "application/CommentBout/System/OutGame/PauseSystem.h"
 #include "application/CommentBout/System/OutGame/PauseViewSystem.h"
@@ -91,6 +92,7 @@ void GameScene::Setup() {
 	AddSystem(std::make_unique<BossBehaviorSystem>());
 	AddSystem(std::make_unique<EnemyMoveSystem>());
 	AddSystem(std::make_unique<EnemyShootSystem>());
+	AddSystem(std::make_unique<FieldEditorSystem>());
 	AddSystem(std::make_unique<CommentBoutCollision::CollisionSystem>());
 	AddSystem(std::make_unique<EnemyBulletHitSystem>());
 	AddSystem(std::make_unique<EnemyContactDamageSystem>());

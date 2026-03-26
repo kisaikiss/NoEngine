@@ -177,6 +177,7 @@
     <ClCompile Include="application\CommentBout\Component\OutGame\PauseStateComponent.cpp" />
     <ClCompile Include="application\CommentBout\System\DamageFlashSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\RailProgressBarSystem.cpp" />
+    <ClCompile Include="application\CommentBout\FieldObject\System\FieldEditorSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Functions\ECS\System\CameraSystem.h" />
@@ -409,6 +410,8 @@
     <ClInclude Include="application\CommentBout\Component\RailProgressBarComponent.h" />
     <ClInclude Include="application\CommentBout\System\RailProgressBarSystem.h" />
     <ClInclude Include="application\CommentBout\Utility\EnemyVisibilityUtility.h" />
+    <ClInclude Include="application\CommentBout\FieldObject\Component\FieldPlacementComponent.h" />
+    <ClInclude Include="application\CommentBout\FieldObject\System\FieldEditorSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />
@@ -426,5 +429,7 @@
     <None Include="resources\game\td_3105\RailData\EnemyTypePreset.json" />
     <None Include="application\CommentBout\IMPLEMENTATION_PLAN.md" />
     <None Include="application\CommentBout\REFACTORING_PLAN_20260326.md" />
+    <None Include="resources\game\td_3105\RailData\FieldObjectTypeDefaults.json" />
+    <None Include="resources\game\td_3105\RailData\Stage_01_field_objects.json" />
   </ItemGroup>
 </Project>

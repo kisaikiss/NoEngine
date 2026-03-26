@@ -227,10 +227,16 @@ void PlayerAttackResolveSystem::Update(No::Registry& registry, float deltaTime)
 		if (!projected || !collider3D || !projected->isVisible) {
 			continue;
 		}
-		if (projected->collisionLayer != CommentBout::CollisionLayer::CBEnemy) {
+
+		const bool enemyOccluder = (projected->collisionLayer == CommentBout::CollisionLayer::CBEnemy);
+		const bool fieldOccluder = registry.Has<CBFieldOccluderTag>(entity);
+		if (!enemyOccluder && !fieldOccluder) {
 			continue;
 		}
 
+		// 第1段階仕様:
+		//  - プレイヤー攻撃のみ、敵 + Buildingオブジェクトで遮蔽する
+		//  - 敵弾遮蔽は将来拡張で対応する
 		Occluder occluder{};
 		occluder.entity = entity;
 		occluder.projected = projected;

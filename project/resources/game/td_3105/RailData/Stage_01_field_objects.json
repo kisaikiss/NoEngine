@@ -1,0 +1,45 @@
+{
+  "objects": [
+    {
+      "displayName": "Skydome_0",
+      "objectId": "field_obj_0",
+      "position": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotationEulerDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        40.0,
+        40.0,
+        40.0
+      ],
+      "typeKey": "Skydome"
+    },
+    {
+      "displayName": "Building_0",
+      "objectId": "field_obj_1",
+      "position": [
+        0.0,
+        0.0,
+        -4.349999904632568
+      ],
+      "rotationEulerDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        2.0,
+        3.0,
+        2.0
+      ],
+      "typeKey": "Building"
+    }
+  ],
+  "stageName": "Stage_01"
+}
