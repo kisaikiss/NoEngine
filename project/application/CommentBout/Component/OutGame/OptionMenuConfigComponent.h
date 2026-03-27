@@ -67,15 +67,4 @@ struct OptionMenuConfigComponent {
 	float volumeStep = 0.05f;
 	float confirmDuration = 0.12f;
 	float confirmScale = 1.08f;
-
-	int dimLayer = 940;
-	int bgLayer = 945;
-	int lineLayer = 958;
-	int itemLayer = 950;
-	int labelLayer = 951;
-	int cursorLayer = 952;
-	int barBaseLayer = 955;
-	int barFillLayer = 956;
-	int toggleLayer = 957;
-	int itemOverlayLayer = 959;
 };

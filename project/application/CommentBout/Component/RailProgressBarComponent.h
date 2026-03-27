@@ -1,5 +1,6 @@
 #pragma once
 #include "engine/NoEngine.h"
+#include "application/CommentBout/Utility/CBSpriteLayer.h"
 
 struct RailProgressBarComponent {
 	No::Entity startEntity = No::nullEntity;
@@ -26,7 +27,7 @@ struct RailProgressBarComponent {
 	float markerPulseSpeed = 6.0f;
 	float markerPulseScaleAmplitude = 0.12f;
 
-	int layer = 60;
+	int layer = static_cast<int>(CommentBout::ToLayer(CommentBout::SpriteLayer::RailProgressBar));
 	int orderBase = 0;
 };
 

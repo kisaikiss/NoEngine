@@ -4,6 +4,7 @@
 #include "application/CommentBout/Component/OutGame/PauseMenuConfigComponent.h"
 #include "application/CommentBout/Component/OutGame/PauseMenuViewComponent.h"
 #include "application/CommentBout/GameTag.h"
+#include "application/CommentBout/Utility/CBSpriteLayer.h"
 #include "engine/Runtime/GraphicsCore.h"
 #include <algorithm>
 #include <cmath>
@@ -162,7 +163,7 @@ void PauseViewSystem::Update(No::Registry& registry, float deltaTime)
 		}
 
 		alpha = std::max(0.0f, std::min(1.0f, alpha));
-		dimSprite->layer = static_cast<uint32_t>(std::max(0, pauseConfig->dimLayer));
+		dimSprite->layer = CommentBout::ToLayer(CommentBout::SpriteLayer::PauseDim);
 		dimSprite->isVisible = (alpha > 0.0001f);
 		dimSprite->color = { 0.0f, 0.0f, 0.0f, alpha };
 	}
@@ -184,7 +185,7 @@ void PauseViewSystem::Update(No::Registry& registry, float deltaTime)
 		auto* bgSprite = registry.GetComponent<No::SpriteComponent>(pauseView->menuBgEntity);
 		bgTransform->translate = LerpVec2(pauseConfig->menuBgStartPosition, pauseConfig->menuBgEndPosition, menuMotionT);
 		bgTransform->scale = LerpVec2(pauseConfig->menuBgStartSize, pauseConfig->menuBgEndSize, menuMotionT);
-		bgSprite->layer = static_cast<uint32_t>(std::max(0, pauseConfig->menuBgLayer));
+		bgSprite->layer = CommentBout::ToLayer(CommentBout::SpriteLayer::PauseMenuBackground);
 		bgSprite->isVisible = (menuVisibility > 0.0001f);
 		bgSprite->color = {
 			pauseConfig->menuBgColor.r,
@@ -201,7 +202,7 @@ void PauseViewSystem::Update(No::Registry& registry, float deltaTime)
 		auto* lineSprite = registry.GetComponent<No::SpriteComponent>(pauseView->panelLineEntity);
 		lineTransform->translate = LerpVec2(pauseConfig->panelLineStartPosition, pauseConfig->panelLineEndPosition, menuMotionT);
 		lineTransform->scale = LerpVec2(pauseConfig->panelLineStartSize, pauseConfig->panelLineEndSize, menuMotionT);
-		lineSprite->layer = static_cast<uint32_t>(std::max(0, pauseConfig->panelLineLayer));
+		lineSprite->layer = CommentBout::ToLayer(CommentBout::SpriteLayer::PausePanelLine);
 		lineSprite->isVisible = (menuVisibility > 0.0001f);
 		lineSprite->color = {
 			pauseConfig->panelLineColor.r,
@@ -218,7 +219,7 @@ void PauseViewSystem::Update(No::Registry& registry, float deltaTime)
 		auto* titleSprite = registry.GetComponent<No::SpriteComponent>(pauseView->titleEntity);
 		titleTransform->translate = LerpVec2(pauseConfig->titleStartPosition, pauseConfig->titleEndPosition, menuMotionT);
 		titleTransform->scale = pauseConfig->titleSize;
-		titleSprite->layer = static_cast<uint32_t>(std::max(0, pauseConfig->titleLayer));
+		titleSprite->layer = CommentBout::ToLayer(CommentBout::SpriteLayer::PauseTitle);
 		titleSprite->isVisible = (menuVisibility > 0.0001f);
 		titleSprite->color = { 1.0f, 1.0f, 1.0f, menuVisibility };
 	}
@@ -253,7 +254,7 @@ void PauseViewSystem::Update(No::Registry& registry, float deltaTime)
 			pauseConfig->itemSize.y * itemScale
 		};
 
-		itemSprite->layer = static_cast<uint32_t>(std::max(0, pauseConfig->itemLayer));
+		itemSprite->layer = CommentBout::ToLayer(CommentBout::SpriteLayer::PauseItem);
 		itemSprite->orderInLayer = static_cast<uint32_t>(i);
 		itemSprite->isVisible = (menuVisibility > 0.0001f);
 		if (isSelected || (pauseState->isConfirmAnimating && static_cast<int>(i) == pauseState->confirmIndex)) {
@@ -276,7 +277,7 @@ void PauseViewSystem::Update(No::Registry& registry, float deltaTime)
 			cursorY + cursorOffset.y
 		};
 		cursorTransform->scale = pauseConfig->cursorSize;
-		cursorSprite->layer = static_cast<uint32_t>(std::max(0, pauseConfig->cursorLayer));
+		cursorSprite->layer = CommentBout::ToLayer(CommentBout::SpriteLayer::PauseCursor);
 		cursorSprite->isVisible = (!pauseState->isConfirmAnimating && pauseState->phase == PauseStateComponent::Open && menuVisibility > 0.0001f);
 		cursorSprite->color = { 1.0f, 0.95f, 0.35f, menuVisibility };
 	}

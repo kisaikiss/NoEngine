@@ -13,6 +13,7 @@
 #include "application/CommentBout/Collision/Utility/CollisionAlgorithms.h"
 #include "application/CommentBout/Collision/Utility/CoordinateConverter.h"
 #include "application/CommentBout/GameTag.h"
+#include "application/CommentBout/Utility/CBSpriteLayer.h"
 #include "engine/Functions/ECS/Component/CameraComponent.h"
 #include "engine/Functions/ECS/Component/Transform2DComponent.h"
 #include "engine/Functions/Renderer/Primitive.h"
@@ -251,7 +252,7 @@ void SpawnRewardOrbFromEnemy(
 	t2d->scale = { spriteSize, spriteSize };
 	auto* sprite = registry.AddComponent<No::SpriteComponent>(orb);
 	sprite->textureHandle = rewardOrbTexture;
-	sprite->layer = 91;
+	sprite->layer = CommentBout::ToLayer(CommentBout::SpriteLayer::RewardOrb);
 	sprite->orderInLayer = 20;
 	sprite->color = { 1.0f, 0.9f, 0.2f, 0.95f };
 
@@ -366,7 +367,7 @@ void EnemyVisualSystem::Update(No::Registry& registry, float deltaTime)
 					*activeCamera,
 					windowSize,
 					bossBarAnchor,
-					GetGameTextureOrWhite(*gameResource, CommentBoutResourceKey::kRewardOrbSprite)
+					GetGameTextureOrWhite(*gameResource, CommentBoutResourceKey::kAttackOrbEffectSmall)
 				);
 			}
 			registry.DestroyEntity(entity);

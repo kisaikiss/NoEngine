@@ -46,6 +46,12 @@ namespace CommentBoutResourceKey {
 	static const char* kRailProgressBarFill = "RailProgressBarFill";
 	static const char* kRailProgressPlayerMarker = "RailProgressPlayerMarker";
 
+	//吹き出し
+	static const char* kAttackOrbEffectSmall = "AttackOrbEffectSmall";
+	static const char* kAttackOrbEffectMedium = "AttackOrbEffectMedium";
+	static const char* kAttackOrbEffectBig = "AttackOrbEffectBig";
+
+
 	// ---- Model -------------------------------------------------------------
 	static const char* kEnemyModel = "EnemyModel";
 	static const char* kShootEnemyModel = "ShootEnemyModel";
@@ -94,11 +100,11 @@ inline void InitializeCommentBoutGameResources(GameResourceComponent& resources)
 	auto addTexture = [&resources](const std::string& key, const std::string& path) {
 		resources.textureFilePaths[key] = path;
 		resources.textures[key] = NoEngine::TextureManager::LoadCovertTexture(path);
-	};
+		};
 	auto addModel = [&resources](const std::string& key, const std::string& assetName, const std::string& path) {
 		resources.models[key] = { assetName, path };
 		No::ModelLoader::LoadModel(assetName, path);
-	};
+		};
 
 	// ---- Texture path catalog --------------------------------------------
 	addTexture(CommentBoutResourceKey::kWhiteTexture, "resources/engine/white1x1.png");
@@ -125,14 +131,19 @@ inline void InitializeCommentBoutGameResources(GameResourceComponent& resources)
 	addTexture(CommentBoutResourceKey::kRailProgressBarBase, "resources/engine/white1x1.png");
 	addTexture(CommentBoutResourceKey::kRailProgressBarFill, "resources/engine/white1x1.png");
 	addTexture(CommentBoutResourceKey::kRailProgressPlayerMarker, "resources/engine/white1x1.png");
+	//吹き出し
+	addTexture(CommentBoutResourceKey::kAttackOrbEffectSmall, "resources/game/td_3105/Sprite/OH.png");
+	addTexture(CommentBoutResourceKey::kAttackOrbEffectMedium, "resources/game/td_3105/Sprite/BOOM.png");
+	addTexture(CommentBoutResourceKey::kAttackOrbEffectBig, "resources/game/td_3105/Sprite/POW.png");
 
 	// ---- Model path catalog ----------------------------------------------
 	addModel(CommentBoutResourceKey::kEnemyModel, "commentbout_enemy_model", "resources/game/td_3105/Model/Enemy/Enemy.obj");
 	addModel(CommentBoutResourceKey::kShootEnemyModel, "commentbout_shoot_enemy_model", "resources/game/td_3105/Model/cube/cube.obj");
 	addModel(CommentBoutResourceKey::kBossModel, "commentbout_boss_model", "resources/game/td_3105/Model/cube/cube.obj");
-	addModel(CommentBoutResourceKey::kEnemyBulletModel, "commentbout_enemy_bullet_model", "resources/game/td_3105/Model/cube/cube.obj");
+	addModel(CommentBoutResourceKey::kEnemyBulletModel, "commentbout_enemy_bullet_model", "resources/game/td_3105/Model/Bullet/Bullet.obj");
 	addModel(CommentBoutResourceKey::kGrassModel, "commentbout_grass_model", "resources/game/td_3105/Model/cube/cube.obj");
 	addModel(CommentBoutResourceKey::kGroundModel, "commentbout_ground_model", "resources/game/td_3105/Model/cube/cube.obj");
+	//	addModel(CommentBoutResourceKey::kGroundModel, "commentbout_ground_model", "resources/game/td_3105/Model/Field/Field.obj");
 	addModel(CommentBoutResourceKey::kBuildingModel, "commentbout_building_model", "resources/game/td_3105/Model/cube/cube.obj");
 	addModel(CommentBoutResourceKey::kSkydomeModel, "commentbout_skydome_model", "resources/game/td_3105/Model/skydome/skydome.gltf");
 }

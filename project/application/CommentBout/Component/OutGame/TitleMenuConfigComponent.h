@@ -37,10 +37,4 @@ struct TitleMenuConfigComponent {
 	float logoMotionScaleSpeed = 1.5f;
 	float logoMotionRotateAmplitude = 0.02f;
 	float logoMotionRotateSpeed = 1.2f;
-
-	int backgroundLayer = 880;
-	int panelLayer = 885;
-	int logoLayer = 890;
-	int itemLayer = 900;
-	int cursorLayer = 910;
 };

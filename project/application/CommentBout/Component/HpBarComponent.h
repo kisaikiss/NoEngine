@@ -1,5 +1,6 @@
 #pragma once
 #include "engine/NoEngine.h"
+#include "application/CommentBout/Utility/CBSpriteLayer.h"
 
 /// <summary>
 /// 汎用HPバー表示状態。
@@ -22,7 +23,7 @@ struct HpBarComponent {
 	No::Color backColor = No::Color(0.1f, 0.1f, 0.1f, 0.75f);
 	No::Color delayedColor = No::Color(0.95f, 0.2f, 0.2f, 0.9f);
 	No::Color fillColor = No::Color(0.2f, 0.9f, 0.25f, 0.95f);
-	int layer = 90;
+	int layer = static_cast<int>(CommentBout::ToLayer(CommentBout::SpriteLayer::HpBar));
 	int orderBase = 0;
 	bool followToZeroWhenDead = true;
 };

@@ -87,7 +87,7 @@ void SpawnEnemyBullet(
 			material->materials = No::ModelLoader::GetMaterial(bulletModel->assetName);
 		}
 	}
-	material->color = { 1.0f, 0.4f, 0.2f, 1.0f };
+	material->color = { 1.0f, 1.0f, 1.0f, 1.0f };
 	material->psoName = L"Renderer : Default PSO";
 	material->psoId = NoEngine::Render::GetPSOID(material->psoName);
 	material->rootSigId = NoEngine::Render::GetRootSignatureID(material->psoName);

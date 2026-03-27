@@ -32,12 +32,7 @@ REFLECT_FIELD(logoMotionPosSpeed),
 REFLECT_FIELD(logoMotionScaleAmplitude),
 REFLECT_FIELD(logoMotionScaleSpeed),
 REFLECT_FIELD(logoMotionRotateAmplitude),
-REFLECT_FIELD(logoMotionRotateSpeed),
-REFLECT_FIELD(backgroundLayer),
-REFLECT_FIELD(panelLayer),
-REFLECT_FIELD(logoLayer),
-REFLECT_FIELD(itemLayer),
-REFLECT_FIELD(cursorLayer)
+REFLECT_FIELD(logoMotionRotateSpeed)
 REFLECT_STRUCT_END(TitleMenuConfigComponent)
 
 REFLECT_STRUCT_BEGIN(TitleMenuStateComponent)

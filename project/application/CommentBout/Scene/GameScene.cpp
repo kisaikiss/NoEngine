@@ -124,7 +124,7 @@ void GameScene::Setup() {
 	auto* bossHpBar = registry.AddComponent<HpBarComponent>(bossHpBarEntity);
 	bossHpBar->anchor = { 640.0f, 64.0f };
 	bossHpBar->size = { 420.0f, 28.0f };
-	bossHpBar->layer = 90;
+	bossHpBar->layer = static_cast<int>(CommentBout::ToLayer(CommentBout::SpriteLayer::HpBar));
 	bossHpBar->orderBase = 100;
 
 	auto playerHpBarEntity = registry.GenerateEntity();
@@ -133,13 +133,13 @@ void GameScene::Setup() {
 	playerHpBar->anchor = { 170.0f, 670.0f };
 	playerHpBar->size = { 280.0f, 22.0f };
 	playerHpBar->fillColor = No::Color(0.2f, 0.7f, 1.0f, 0.95f);
-	playerHpBar->layer = 90;
+	playerHpBar->layer = static_cast<int>(CommentBout::ToLayer(CommentBout::SpriteLayer::HpBar));
 	playerHpBar->orderBase = 100;
 
 	auto railProgressBarEntity = registry.GenerateEntity();
 	registry.AddComponent<CBRailProgressBarTag>(railProgressBarEntity);
 	auto* railProgressBar = registry.AddComponent<RailProgressBarComponent>(railProgressBarEntity);
-	railProgressBar->layer = static_cast<int>(CommentBout::ToLayer(CommentBout::SpriteLayer::Gameplay));
+	railProgressBar->layer = static_cast<int>(CommentBout::ToLayer(CommentBout::SpriteLayer::RailProgressBar));
 	railProgressBar->orderBase = 100;
 	railProgressBar->startPosition = { 230.0f, 23.0f };
 	railProgressBar->goalPosition = { 1050.0f, 23.0f };
@@ -163,13 +163,7 @@ void GameScene::Setup() {
 
 	auto pauseConfigEntity = registry.GenerateEntity();
 	registry.AddComponent<CBPauseConfigTag>(pauseConfigEntity);
-	auto* pauseConfig = registry.AddComponent<PauseMenuConfigComponent>(pauseConfigEntity);
-	pauseConfig->dimLayer = static_cast<int>(CommentBout::ToLayer(CommentBout::SpriteLayer::PauseDim));
-	pauseConfig->menuBgLayer = static_cast<int>(CommentBout::ToLayer(CommentBout::SpriteLayer::PauseMenuBackground));
-	pauseConfig->panelLineLayer = static_cast<int>(CommentBout::ToLayer(CommentBout::SpriteLayer::PausePanelLine));
-	pauseConfig->titleLayer = static_cast<int>(CommentBout::ToLayer(CommentBout::SpriteLayer::PauseTitle));
-	pauseConfig->itemLayer = static_cast<int>(CommentBout::ToLayer(CommentBout::SpriteLayer::PauseItem));
-	pauseConfig->cursorLayer = static_cast<int>(CommentBout::ToLayer(CommentBout::SpriteLayer::PauseCursor));
+	registry.AddComponent<PauseMenuConfigComponent>(pauseConfigEntity);
 	registry.AddComponent<No::EditTag>(pauseConfigEntity)->name = "PauseMenuConfig";
 
 

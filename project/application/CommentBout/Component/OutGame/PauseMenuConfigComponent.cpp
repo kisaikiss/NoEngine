@@ -31,11 +31,5 @@ REFLECT_FIELD(optionCloseDuration),
 REFLECT_FIELD(confirmDuration),
 REFLECT_FIELD(selectedScale),
 REFLECT_FIELD(confirmScale),
-REFLECT_FIELD(easeType),
-REFLECT_FIELD(dimLayer),
-REFLECT_FIELD(menuBgLayer),
-REFLECT_FIELD(panelLineLayer),
-REFLECT_FIELD(titleLayer),
-REFLECT_FIELD(itemLayer),
-REFLECT_FIELD(cursorLayer)
+REFLECT_FIELD(easeType)
 REFLECT_STRUCT_END(PauseMenuConfigComponent)

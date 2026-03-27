@@ -35,11 +35,4 @@ struct PauseMenuConfigComponent {
 	float selectedScale = 1.08f;
 	float confirmScale = 1.18f;
 	int easeType = 0;
-
-	int dimLayer = 900;
-	int menuBgLayer = 905;
-	int panelLineLayer = 907;
-	int titleLayer = 910;
-	int itemLayer = 920;
-	int cursorLayer = 930;
 };

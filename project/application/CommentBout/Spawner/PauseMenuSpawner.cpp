@@ -50,7 +50,7 @@ void PauseMenuSpawner::Create(No::Registry& registry, const GameResourceComponen
 	lineSp->textureHandle = whiteTexture;
 	lineSp->isVisible = false;
 	lineSp->color = { 1.0f, 1.0f, 1.0f, 0.0f };
-	lineSp->layer = 0;
+	lineSp->layer = CommentBout::ToLayer(CommentBout::SpriteLayer::PausePanelLine);
 	registry.AddComponent<No::EditTag>(pausePanelLineEntity_)->name = "PausePanelLineSprite";
 
 	auto pauseTitleEntity_ = registry.GenerateEntity();

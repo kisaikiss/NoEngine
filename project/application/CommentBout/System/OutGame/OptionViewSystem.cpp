@@ -4,6 +4,7 @@
 #include "application/CommentBout/Component/OutGame/OptionMenuConfigComponent.h"
 #include "application/CommentBout/Component/OutGame/OptionMenuViewComponent.h"
 #include "application/CommentBout/GameTag.h"
+#include "application/CommentBout/Utility/CBSpriteLayer.h"
 #include <array>
 #include <algorithm>
 #include <cmath>
@@ -82,7 +83,7 @@ void OptionViewSystem::Update(No::Registry& registry, float deltaTime)
 		tr->translate = LerpVec2(optionConfig->dimStartPosition, optionConfig->dimEndPosition, t);
 		tr->scale = optionConfig->dimSize;
 		tr->rotation = optionConfig->dimRotation;
-		sp->layer = static_cast<uint32_t>(std::max(0, optionConfig->dimLayer));
+		sp->layer = CommentBout::ToLayer(CommentBout::SpriteLayer::OptionDim);
 		sp->isVisible = (t > 0.0001f);
 		sp->color = { optionConfig->dimColor.r, optionConfig->dimColor.g, optionConfig->dimColor.b, optionConfig->dimColor.a * t };
 	}
@@ -97,7 +98,7 @@ void OptionViewSystem::Update(No::Registry& registry, float deltaTime)
 		tr->translate = LerpVec2(optionConfig->bgStartPosition, optionConfig->bgEndPosition, t);
 		tr->scale = LerpVec2(optionConfig->bgStartSize, optionConfig->bgEndSize, t);
 		tr->rotation = optionConfig->bgRotation;
-		sp->layer = static_cast<uint32_t>(std::max(0, optionConfig->bgLayer));
+		sp->layer = CommentBout::ToLayer(CommentBout::SpriteLayer::OptionBackground);
 		sp->isVisible = (t > 0.0001f);
 		sp->color = { optionConfig->bgColor.r, optionConfig->bgColor.g, optionConfig->bgColor.b, optionConfig->bgColor.a * t };
 	}
@@ -112,7 +113,7 @@ void OptionViewSystem::Update(No::Registry& registry, float deltaTime)
 		tr->translate = LerpVec2(optionConfig->lineStartPosition, optionConfig->lineEndPosition, t);
 		tr->scale = optionConfig->lineSize;
 		tr->rotation = optionConfig->lineRotation;
-		sp->layer = static_cast<uint32_t>(std::max(0, optionConfig->lineLayer));
+		sp->layer = CommentBout::ToLayer(CommentBout::SpriteLayer::OptionLine);
 		sp->isVisible = (t > 0.0001f);
 		sp->color = { optionConfig->lineColor.r, optionConfig->lineColor.g, optionConfig->lineColor.b, optionConfig->lineColor.a * t };
 	}
@@ -127,7 +128,7 @@ void OptionViewSystem::Update(No::Registry& registry, float deltaTime)
 		tr->translate = LerpVec2(optionConfig->titleStartPosition, optionConfig->titleEndPosition, t);
 		tr->scale = optionConfig->titleSize;
 		tr->rotation = optionConfig->titleRotation;  // ★ rotation 追加
-		sp->layer = static_cast<uint32_t>(std::max(0, optionConfig->labelLayer));
+		sp->layer = CommentBout::ToLayer(CommentBout::SpriteLayer::OptionLabel);
 		sp->isVisible = (t > 0.0001f);
 		sp->color = { 1.0f, 1.0f, 1.0f, t };
 	}
@@ -159,7 +160,7 @@ void OptionViewSystem::Update(No::Registry& registry, float deltaTime)
 			}
 			tr->translate = baseTranslate;
 			tr->scale = { baseSize.x * scale, baseSize.y * scale };
-			sp->layer = static_cast<uint32_t>(std::max(0, optionConfig->itemLayer));
+			sp->layer = CommentBout::ToLayer(CommentBout::SpriteLayer::OptionItem);
 			sp->orderInLayer = static_cast<uint32_t>(i);
 			sp->isVisible = (t > 0.0001f);
 			sp->color = { optionConfig->itemColor.r, optionConfig->itemColor.g, optionConfig->itemColor.b, optionConfig->itemColor.a * t };
@@ -180,7 +181,7 @@ void OptionViewSystem::Update(No::Registry& registry, float deltaTime)
 				tr->translate = { basePos.x + optionConfig->labelOffset.x, basePos.y + optionConfig->itemSpacing * static_cast<float>(i) + optionConfig->labelOffset.y };
 				tr->scale = optionConfig->labelSize;
 			}
-			sp->layer = static_cast<uint32_t>(std::max(0, optionConfig->labelLayer));
+			sp->layer = CommentBout::ToLayer(CommentBout::SpriteLayer::OptionLabel);
 			sp->isVisible = (t > 0.0001f);
 			sp->color = { 1.0f, 1.0f, 1.0f, t };
 		}
@@ -198,7 +199,7 @@ void OptionViewSystem::Update(No::Registry& registry, float deltaTime)
 				auto* sp = registry.GetComponent<No::SpriteComponent>(baseE);
 				tr->translate = { basePos.x + optionConfig->barOffset.x, rowY + optionConfig->barOffset.y };
 				tr->scale = optionConfig->barBaseSize;
-				sp->layer = static_cast<uint32_t>(std::max(0, optionConfig->barBaseLayer));
+				sp->layer = CommentBout::ToLayer(CommentBout::SpriteLayer::OptionBarBase);
 				sp->isVisible = (t > 0.0001f);
 				sp->color = { optionConfig->barBaseColor.r, optionConfig->barBaseColor.g, optionConfig->barBaseColor.b, optionConfig->barBaseColor.a * t };
 			}
@@ -212,7 +213,7 @@ void OptionViewSystem::Update(No::Registry& registry, float deltaTime)
 					(optionConfig->barBaseSize.x - optionConfig->barFillMinSize.x) * Clamp01(volumes[i]);
 				tr->translate = { basePos.x + optionConfig->barOffset.x - (optionConfig->barBaseSize.x - fillW) * 0.5f, rowY + optionConfig->barOffset.y };
 				tr->scale = { fillW, optionConfig->barFillMinSize.y };
-				sp->layer = static_cast<uint32_t>(std::max(0, optionConfig->barFillLayer));
+				sp->layer = CommentBout::ToLayer(CommentBout::SpriteLayer::OptionBarFill);
 				sp->isVisible = (t > 0.0001f);
 				sp->color = { optionConfig->barFillColor.r, optionConfig->barFillColor.g, optionConfig->barFillColor.b, optionConfig->barFillColor.a * t };
 			}
@@ -229,7 +230,7 @@ void OptionViewSystem::Update(No::Registry& registry, float deltaTime)
 			auto* sp = registry.GetComponent<No::SpriteComponent>(overlayE);
 			tr->translate = baseTranslate;
 			tr->scale = baseSize;
-			sp->layer = static_cast<uint32_t>(std::max(0, optionConfig->itemOverlayLayer));
+			sp->layer = CommentBout::ToLayer(CommentBout::SpriteLayer::OptionItemOverlay);
 			const bool isSelected = (static_cast<int>(i) == optionState->selectedIndex);
 			// 選択行には出さない / 編集中のみ表示
 			sp->isVisible = inEdit && !isSelected && (t > 0.0001f);
@@ -253,7 +254,7 @@ void OptionViewSystem::Update(No::Registry& registry, float deltaTime)
 		auto* sp = registry.GetComponent<No::SpriteComponent>(optionView->toggleEntity);
 		tr->translate = { basePos.x + optionConfig->toggleOffset.x, toggleY + optionConfig->toggleOffset.y };
 		tr->scale = optionConfig->toggleSize;
-		sp->layer = static_cast<uint32_t>(std::max(0, optionConfig->toggleLayer));
+		sp->layer = CommentBout::ToLayer(CommentBout::SpriteLayer::OptionToggle);
 		sp->isVisible = (t > 0.0001f);
 		sp->color = { optionConfig->itemColor.r, optionConfig->itemColor.g, optionConfig->itemColor.b, 0.35f * t };
 	}
@@ -265,7 +266,7 @@ void OptionViewSystem::Update(No::Registry& registry, float deltaTime)
 		auto* sp = registry.GetComponent<No::SpriteComponent>(optionView->toggleOnEntity);
 		tr->translate = { basePos.x + optionConfig->toggleOffset.x, toggleY + optionConfig->toggleOffset.y };
 		tr->scale = optionConfig->toggleSize;
-		sp->layer = static_cast<uint32_t>(std::max(0, optionConfig->toggleLayer));
+		sp->layer = CommentBout::ToLayer(CommentBout::SpriteLayer::OptionToggle);
 		sp->isVisible = (t > 0.0001f) && optionState->vibrationEnabled;
 		sp->color = { optionConfig->toggleOnColor.r, optionConfig->toggleOnColor.g, optionConfig->toggleOnColor.b, optionConfig->toggleOnColor.a * t };
 	}
@@ -277,7 +278,7 @@ void OptionViewSystem::Update(No::Registry& registry, float deltaTime)
 		auto* sp = registry.GetComponent<No::SpriteComponent>(optionView->toggleOffEntity);
 		tr->translate = { basePos.x + optionConfig->toggleOffset.x, toggleY + optionConfig->toggleOffset.y };
 		tr->scale = optionConfig->toggleSize;
-		sp->layer = static_cast<uint32_t>(std::max(0, optionConfig->toggleLayer));
+		sp->layer = CommentBout::ToLayer(CommentBout::SpriteLayer::OptionToggle);
 		sp->isVisible = (t > 0.0001f) && !optionState->vibrationEnabled;
 		sp->color = { optionConfig->toggleOffColor.r, optionConfig->toggleOffColor.g, optionConfig->toggleOffColor.b, optionConfig->toggleOffColor.a * t };
 	}
@@ -295,7 +296,7 @@ void OptionViewSystem::Update(No::Registry& registry, float deltaTime)
 		const No::Vector2 anchor = isBackSel ? backItemPos : No::Vector2(basePos.x, rowY);
 		tr->translate = { anchor.x + offset.x, anchor.y + offset.y };
 		tr->scale = optionConfig->cursorSize;
-		sp->layer = static_cast<uint32_t>(std::max(0, optionConfig->cursorLayer));
+		sp->layer = CommentBout::ToLayer(CommentBout::SpriteLayer::OptionCursor);
 		sp->isVisible = (t > 0.0001f) &&
 			(optionState->phase == OptionStateComponent::OpenSelect ||
 				optionState->phase == OptionStateComponent::OpenEdit);

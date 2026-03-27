@@ -275,16 +275,16 @@
 ## 10. スプライトレイヤー管理の一元化（CommentBout内限定）
 
 ### 実装ステップ
-- [ ] `CBSpriteLayer.h` を拡張し、用途別レイヤー定数を追加する
-- [ ] `application/CommentBout` 配下のスプライトlayer直書きを棚卸しする
-- [ ] layerのハードコード値を `CBSpriteLayer.h` 経由に置換する
-- [ ] `OptionMenuConfigComponent` などのlayer可変設定を廃止し、固定定数参照に統一する
-- [ ] 関連する読込/保存/ViewSystem側のlayer処理を整理する
+- [x] `CBSpriteLayer.h` を拡張し、用途別レイヤー定数を追加する
+- [x] `application/CommentBout` 配下のスプライトlayer直書きを棚卸しする
+- [x] layerのハードコード値を `CBSpriteLayer.h` 経由に置換する
+- [x] `OptionMenuConfigComponent` などのlayer可変設定を廃止し、固定定数参照に統一する
+- [x] 関連する読込/保存/ViewSystem側のlayer処理を整理する
 
 ### 完了条件
-- [ ] `application/CommentBout` 内のスプライトlayer直書きが解消される
-- [ ] layer管理が `CBSpriteLayer.h` から追える状態になる
-- [ ] Option系を含め、layerがコード側固定方針で統一される
+- [x] `application/CommentBout` 内のスプライトlayer直書きが解消される
+- [x] layer管理が `CBSpriteLayer.h` から追える状態になる
+- [x] Option系を含め、layerがコード側固定方針で統一される
 
 ---
 

@@ -28,7 +28,7 @@
     "minHp": 16,
     "modelScale": 0.5,
     "shootDistanceMax": 25.0,
-    "shootInterval": 0.8999999761581421,
+    "shootInterval": 2.0,
     "targetDepthFromCamera": 1.0
   },
   "MoveOnly": {

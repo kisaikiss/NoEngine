@@ -5,6 +5,7 @@
 #include "application/CommentBout/Component/OutGame/TitleMenuViewComponent.h"
 #include "application/CommentBout/Component/OutGame/OptionStateComponent.h"
 #include "application/CommentBout/GameTag.h"
+#include "application/CommentBout/Utility/CBSpriteLayer.h"
 #include <algorithm>
 #include <cmath>
 
@@ -79,7 +80,7 @@ void TitleViewSystem::Update(No::Registry& registry, float deltaTime)
 		tr->translate = titleConfig->backgroundPosition;
 		tr->scale = titleConfig->backgroundSize;
 		tr->rotation = titleConfig->backgroundRotation;
-		sp->layer = static_cast<uint32_t>(std::max(0, titleConfig->backgroundLayer));
+		sp->layer = CommentBout::ToLayer(CommentBout::SpriteLayer::TitleBackground);
 		sp->isVisible = true;
 		sp->color = titleConfig->backgroundColor;
 	}
@@ -92,7 +93,7 @@ void TitleViewSystem::Update(No::Registry& registry, float deltaTime)
 		tr->translate = titleConfig->panelPosition;
 		tr->scale = titleConfig->panelSize;
 		tr->rotation = titleConfig->panelRotation;
-		sp->layer = static_cast<uint32_t>(std::max(0, titleConfig->panelLayer));
+		sp->layer = CommentBout::ToLayer(CommentBout::SpriteLayer::TitlePanel);
 		sp->isVisible = true;
 		sp->color = titleConfig->panelColor;
 	}
@@ -117,7 +118,7 @@ void TitleViewSystem::Update(No::Registry& registry, float deltaTime)
 			titleConfig->logoSize.y * (1.0f + scaleOffset)
 		};
 		tr->rotation = titleConfig->logoBaseRotation + rotationOffset;
-		sp->layer = static_cast<uint32_t>(std::max(0, titleConfig->logoLayer));
+		sp->layer = CommentBout::ToLayer(CommentBout::SpriteLayer::TitleLogo);
 		sp->isVisible = true;
 		sp->color = No::Color::WHITE;
 	}
@@ -150,7 +151,7 @@ void TitleViewSystem::Update(No::Registry& registry, float deltaTime)
 			titleConfig->itemSize.x * scale,
 			titleConfig->itemSize.y * scale
 		};
-		sp->layer = static_cast<uint32_t>(std::max(0, titleConfig->itemLayer));
+		sp->layer = CommentBout::ToLayer(CommentBout::SpriteLayer::TitleItem);
 		sp->orderInLayer = static_cast<uint32_t>(i);
 		sp->isVisible = true;
 		sp->color = isSelected ? titleConfig->selectedItemColor : titleConfig->itemColor;
@@ -167,7 +168,7 @@ void TitleViewSystem::Update(No::Registry& registry, float deltaTime)
 			cursorY + titleConfig->cursorOffset.y
 		};
 		tr->scale = titleConfig->cursorSize;
-		sp->layer = static_cast<uint32_t>(std::max(0, titleConfig->cursorLayer));
+		sp->layer = CommentBout::ToLayer(CommentBout::SpriteLayer::TitleCursor);
 		sp->isVisible = !titleState->isConfirmAnimating && !(optionState && optionState->isOpen);
 		sp->color = titleConfig->cursorColor;
 	}

@@ -1,5 +1,6 @@
 #pragma once
 #include "engine/NoEngine.h"
+#include "application/CommentBout/Utility/CBSpriteLayer.h"
 #include "externals/nlohmann/json.hpp"
 #include <fstream>
 
@@ -15,7 +16,7 @@ struct PlayerConfigComponent {
 	No::Vector2 attackSpawnOffset = { 0.0f, -80.0f };
 	No::Vector2 attackSize = { 140.0f, 140.0f };
 	float attackVisibleTime = 0.35f;
-	int attackLayer = 30;
+	int attackLayer = static_cast<int>(CommentBout::ToLayer(CommentBout::SpriteLayer::Effect));
 	int attackPower = 10;
 
 	// Health / Invincible

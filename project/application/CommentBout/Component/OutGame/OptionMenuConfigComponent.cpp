@@ -55,15 +55,5 @@ REFLECT_FIELD(openDuration),
 REFLECT_FIELD(closeDuration),
 REFLECT_FIELD(volumeStep),
 REFLECT_FIELD(confirmDuration),
-REFLECT_FIELD(confirmScale),
-REFLECT_FIELD(dimLayer),
-REFLECT_FIELD(bgLayer),
-REFLECT_FIELD(lineLayer),
-REFLECT_FIELD(itemLayer),
-REFLECT_FIELD(labelLayer),
-REFLECT_FIELD(cursorLayer),
-REFLECT_FIELD(barBaseLayer),
-REFLECT_FIELD(barFillLayer),
-REFLECT_FIELD(toggleLayer),
-REFLECT_FIELD(itemOverlayLayer)
+REFLECT_FIELD(confirmScale)
 REFLECT_STRUCT_END(OptionMenuConfigComponent)
