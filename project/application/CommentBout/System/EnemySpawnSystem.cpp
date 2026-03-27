@@ -25,12 +25,8 @@ No::Vector3 NormalizeOrDefault(const No::Vector3& v, const No::Vector3& fallback
 }
 
 void SpawnRailEnemies(No::Registry& registry, const RailEnemySpawnEventParams& params, const GameResourceComponent* gameResource) {
-	static EnemyTypePresetMap presetMap;
-	static bool presetLoaded = false;
-	if (!presetLoaded) {
-		LoadEnemyTypePresetMap(presetMap);
-		presetLoaded = true;
-	}
+	EnemyTypePresetMap presetMap;
+	LoadEnemyTypePresetMap(presetMap);
 	const EnemyTypePreset preset = GetEnemyTypePresetOrDefault(presetMap, params.enemyType);
 
 	const No::Vector3 direction = NormalizeOrDefault(params.moveDirection, No::Vector3(0.0f, 0.0f, -1.0f));

@@ -16,7 +16,7 @@
             0.0,
             8.0
           ],
-          "stopDuration": 1.2
+          "stopDuration": 1.2000000476837158
         },
         "count": 3,
         "enemyType": "MoveOnly",
@@ -26,10 +26,10 @@
           0.0,
           -1.0
         ],
-        "moveSpeed": 2.2,
+        "moveSpeed": 0.0,
         "spawnGroupId": 1,
         "spawnPosition": [
-          -1.8,
+          -1.7999999523162842,
           1.0,
           18.0
         ],
@@ -55,7 +55,7 @@
             0.0,
             8.0
           ],
-          "stopDuration": 1.2
+          "stopDuration": 1.2000000476837158
         },
         "count": 2,
         "enemyType": "MoveAndShoot",
@@ -65,14 +65,14 @@
           0.0,
           -1.0
         ],
-        "moveSpeed": 2.8,
+        "moveSpeed": 2.799999952316284,
         "spawnGroupId": 2,
         "spawnPosition": [
           1.5,
           1.0,
           16.0
         ],
-        "spawnSpacing": 1.2
+        "spawnSpacing": 1.2000000476837158
       },
       "targetGroupId": 0,
       "triggerDistance": 12.0,
@@ -83,15 +83,15 @@
       "resumeCondition": "None",
       "spawn": {
         "boss": {
-          "burstShotInterval": 0.22,
+          "burstShotInterval": 0.2199999988079071,
           "figure8Amplitude": [
-            2.8,
-            1.4
+            2.799999952316284,
+            1.399999976158142
           ],
           "figure8Period": 4.5,
           "offsetLocal": [
             0.0,
-            0.2,
+            0.20000000298023224,
             9.5
           ],
           "stopDuration": 1.0
@@ -133,7 +133,7 @@
             0.0,
             8.0
           ],
-          "stopDuration": 1.2
+          "stopDuration": 1.2000000476837158
         },
         "count": 1,
         "enemyType": "MoveOnly",
@@ -172,7 +172,7 @@
             0.0,
             8.0
           ],
-          "stopDuration": 1.2
+          "stopDuration": 1.2000000476837158
         },
         "count": 1,
         "enemyType": "MoveOnly",

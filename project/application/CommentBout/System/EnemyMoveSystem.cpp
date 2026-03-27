@@ -40,6 +40,18 @@ void EnemyMoveSystem::Update(No::Registry& registry, float deltaTime)
 		const No::Vector3 moveDir = NormalizeOrDefault(enemy->moveDirection, No::Vector3(0.0f, 0.0f, -1.0f));
 		transform->translate += moveDir * enemy->moveSpeed * deltaTime;
 
+		//敵は移動方向の方を向く
+		if (moveDir.LengthSquared() > 0.000001f) {
+			No::Vector3 forward = transform->rotation.RotateVector(No::Vector3::FORWARD);
+			forward.y = 0.0f; // 水平方向のみで向きを決める
+			forward = NormalizeOrDefault(forward, No::Vector3(0.0f, 0.0f, -1.0f));
+			const float angle = std::atan2(moveDir.x, moveDir.z) - std::atan2(forward.x, forward.z);
+			No::Quaternion rotY;
+			rotY.FromAxisAngle(No::Vector3::UP, angle);
+			transform->rotation = rotY * transform->rotation;
+		}
+		
+
 		if (cameraTransform && enemy->despawnBehindDistance > 0.0f) {
 			const float forwardDistance = CommentBoutVisibility::ComputeForwardDistanceFromCamera(*transform, *cameraTransform);
 			if (forwardDistance < -enemy->despawnBehindDistance) {

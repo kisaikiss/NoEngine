@@ -9,7 +9,7 @@
     "bulletLifetime": 5.0,
     "bulletSpeed": 12.0,
     "despawnBehindDistance": 20.0,
-    "minHp": 150,
+    "minHp": 1500,
     "modelScale": 1.600000023841858,
     "shootDistanceMax": 35.0,
     "shootInterval": 0.2199999988079071,
@@ -26,7 +26,7 @@
     "bulletSpeed": 10.0,
     "despawnBehindDistance": 12.0,
     "minHp": 16,
-    "modelScale": 0.800000011920929,
+    "modelScale": 0.5,
     "shootDistanceMax": 25.0,
     "shootInterval": 0.8999999761581421,
     "targetDepthFromCamera": 1.0
@@ -34,15 +34,15 @@
   "MoveOnly": {
     "baseColliderBox": [
       1.0,
-      1.0,
-      1.0
+      0.5,
+      0.5
     ],
     "bulletDamage": 1,
     "bulletLifetime": 4.0,
     "bulletSpeed": 10.0,
     "despawnBehindDistance": 12.0,
     "minHp": 10,
-    "modelScale": 0.699999988079071,
+    "modelScale": 1.0,
     "shootDistanceMax": 25.0,
     "shootInterval": 1.0,
     "targetDepthFromCamera": 1.0

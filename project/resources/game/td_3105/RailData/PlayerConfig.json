@@ -1,7 +1,7 @@
 {
   "acceleration": 2400.0,
   "attackLayer": 30,
-  "attackPower": 10,
+  "attackPower": 5,
   "attackSize": [
     140.0,
     140.0

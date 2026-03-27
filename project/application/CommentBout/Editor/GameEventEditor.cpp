@@ -2,11 +2,69 @@
 #include "GameEventEditor.h"
 
 #include "application/CommentBout/Component/RailCameraComponent.h"
+#include "application/CommentBout/Component/EnemyComponent.h"
+#include "application/CommentBout/Component/EnemyShooterComponent.h"
+#include "application/CommentBout/Component/EnemyRewardSourceComponent.h"
+#include "application/CommentBout/Component/HealthComponent.h"
+#include "application/CommentBout/Collision/Component/Collider3DComponent.h"
+#include "application/CommentBout/GameTag.h"
 #include "application/CommentBout/Data/EnemyTypePresetIO.h"
 #include <cstdio>
+#include <algorithm>
 
 namespace {
-void DrawEnemyTypePresetEditor() {
+void ApplyEnemyTypePresetToAliveEnemies(No::Registry& registry, const EnemyTypePresetMap& presets) {
+	auto view = registry.View<CBRailEnemyTag, EnemyComponent, HealthComponent, No::TransformComponent>();
+	for (auto entity : view) {
+		auto* enemy = registry.GetComponent<EnemyComponent>(entity);
+		auto* health = registry.GetComponent<HealthComponent>(entity);
+		auto* transform = registry.GetComponent<No::TransformComponent>(entity);
+		if (!enemy || !health || !transform) {
+			continue;
+		}
+
+		RailEnemyType enemyType = RailEnemyType::MoveOnly;
+		if (registry.Has<CBBossTag>(entity)) {
+			enemyType = RailEnemyType::Boss;
+		} else if (registry.Has<EnemyShooterComponent>(entity)) {
+			enemyType = RailEnemyType::MoveAndShoot;
+		}
+
+		const EnemyTypePreset preset = GetEnemyTypePresetOrDefault(presets, enemyType);
+
+		transform->scale = { preset.modelScale, preset.modelScale, preset.modelScale };
+		enemy->despawnBehindDistance = std::max(0.0f, preset.despawnBehindDistance);
+		enemy->maxHp = std::max(1, preset.minHp);
+		enemy->hp = std::min(enemy->hp, enemy->maxHp);
+		health->maxHp = enemy->maxHp;
+		health->hp = std::min(health->hp, health->maxHp);
+
+		if (auto* rewardSource = registry.GetComponent<EnemyRewardSourceComponent>(entity)) {
+			rewardSource->worldSizeForReward = preset.modelScale;
+		}
+
+		if (auto* collider3D = registry.GetComponent<CommentBoutCollision::Collider3DComponent>(entity)) {
+			collider3D->shapeType = CommentBoutCollision::ShapeType3D::Box;
+			collider3D->useScaleAsBox = true;
+			collider3D->boxSizeMultiplier = {
+				std::max(0.01f, preset.baseColliderBox.x),
+				std::max(0.01f, preset.baseColliderBox.y),
+				std::max(0.01f, preset.baseColliderBox.z)
+			};
+		}
+
+		if (auto* shooter = registry.GetComponent<EnemyShooterComponent>(entity)) {
+			shooter->shootInterval = std::max(0.05f, preset.shootInterval);
+			shooter->bulletSpeed = std::max(0.1f, preset.bulletSpeed);
+			shooter->bulletDamage = std::max(1, preset.bulletDamage);
+			shooter->targetDepthFromCamera = std::max(0.1f, preset.targetDepthFromCamera);
+			shooter->bulletLifetime = std::max(0.1f, preset.bulletLifetime);
+			shooter->shootDistanceMax = std::max(0.0f, preset.shootDistanceMax);
+		}
+	}
+}
+
+void DrawEnemyTypePresetEditor(No::Registry* registry) {
 	static EnemyTypePresetMap presets;
 	static bool loaded = false;
 	if (!loaded) {
@@ -20,6 +78,9 @@ void DrawEnemyTypePresetEditor() {
 
 	if (ImGui::Button("Preset Load")) {
 		LoadEnemyTypePresetMap(presets);
+		if (registry) {
+			ApplyEnemyTypePresetToAliveEnemies(*registry, presets);
+		}
 	}
 	ImGui::SameLine();
 	if (ImGui::Button("Preset Save")) {
@@ -63,7 +124,7 @@ void GameEventEditor::DrawGameEventEditorImGui(No::Registry* registry, No::Entit
 	}
 
 	ImGui::Begin("ゲームイベント編集");
-	DrawEnemyTypePresetEditor();
+	DrawEnemyTypePresetEditor(registry);
 	ImGui::Separator();
 	ImGui::Text("ステージイベント");
 	if (ImGui::Button("敵生成イベント追加")) {
