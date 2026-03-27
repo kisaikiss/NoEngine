@@ -127,7 +127,7 @@ inline void InitializeCommentBoutGameResources(GameResourceComponent& resources)
 	addTexture(CommentBoutResourceKey::kRailProgressPlayerMarker, "resources/engine/white1x1.png");
 
 	// ---- Model path catalog ----------------------------------------------
-	addModel(CommentBoutResourceKey::kEnemyModel, "commentbout_enemy_model", "resources/game/td_3105/Model/cube/cube.obj");
+	addModel(CommentBoutResourceKey::kEnemyModel, "commentbout_enemy_model", "resources/game/td_3105/Model/Enemy/Enemy.obj");
 	addModel(CommentBoutResourceKey::kShootEnemyModel, "commentbout_shoot_enemy_model", "resources/game/td_3105/Model/cube/cube.obj");
 	addModel(CommentBoutResourceKey::kBossModel, "commentbout_boss_model", "resources/game/td_3105/Model/cube/cube.obj");
 	addModel(CommentBoutResourceKey::kEnemyBulletModel, "commentbout_enemy_bullet_model", "resources/game/td_3105/Model/cube/cube.obj");
