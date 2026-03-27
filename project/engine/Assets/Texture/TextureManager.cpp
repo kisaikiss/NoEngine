@@ -275,6 +275,12 @@ TextureRef& TextureRef::operator=(TextureRef&& rhs) noexcept {
 bool TextureRef::IsValid() const {
 	return ref_ && ref_->IsValid();
 }
+uint32_t TextureRef::GetWidth() {
+	return ref_ ? ref_->GetWidth() : 0;
+}
+uint32_t TextureRef::GetHeight() {
+	return ref_ ? ref_->GetHeight() : 0;
+}
 const Texture* TextureRef::Get(void) const {
 	return ref_;
 }

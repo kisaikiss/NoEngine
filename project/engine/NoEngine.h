@@ -2,6 +2,7 @@
 #include "Runtime/GameCore.h"
 
 #include "Functions/ECS/Component/MeshComponent.h"
+#include "Functions/ECS/Component/Animator2DComponent.h"
 #include "Functions/ECS/Component/SpriteComponent.h"
 #include "Functions/ECS/Component/TransformComponent.h"
 #include "Functions/ECS/Component/Transform2DComponent.h"
@@ -15,6 +16,7 @@
 #include "Editor/ReflectionMacros.h"
 
 #include "Functions/ECS/System/AnimationSystem.h"
+#include "Functions/ECS/System/SpriteAnimationSystem.h"
 #include "Functions/ECS/System/EditSystem.h"
 #include "Functions/ECS/System/CameraSystem.h"
 #include "Functions/ECS/System/DebugCameraSystem.h"

@@ -40,6 +40,18 @@ public:
     // これが有効なテクスチャ（正常にロードされたもの）を指していることを確認します。
     bool IsValid() const;
 
+    /// <summary>
+    /// 画像の横幅を返します
+    /// </summary>
+    /// <returns>uint32_t型の画像の横幅</returns>
+    uint32_t GetWidth();
+
+    /// <summary>
+    /// 画像の縦幅を返します
+    /// </summary>
+    /// <returns>uint32_t型の画像の縦幅</returns>
+    uint32_t GetHeight();
+
     // SRV記述子ハンドルを取得します。参照が無効な場合、
     // 有効な記述子ハンドル（フォールバックで指定）を返します。
     D3D12_CPU_DESCRIPTOR_HANDLE GetSRV() const;

@@ -129,6 +129,7 @@
     <ClCompile Include="engine\Functions\ECS\Component\StartTransformComponent.cpp" />
     <ClCompile Include="engine\Functions\Scene\IScene.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\SystemManager.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\SpriteAnimationSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -279,6 +280,8 @@
     <ClInclude Include="engine\Utilities\Random.h" />
     <ClInclude Include="engine\Functions\ECS\Component\StartTransformComponent.h" />
     <ClInclude Include="engine\Functions\ECS\Component\PauseComponent.h" />
+    <ClInclude Include="engine\Functions\ECS\Component\Animator2DComponent.h" />
+    <ClInclude Include="engine\Functions\ECS\System\SpriteAnimationSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

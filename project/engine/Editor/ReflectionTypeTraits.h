@@ -40,6 +40,12 @@ struct FieldTypeResolver<Math::Quaternion> {
     static constexpr FieldType value = FieldType::Float4;
 };
 
+
+template<>
+struct FieldTypeResolver<Rect> {
+    static constexpr FieldType value = FieldType::Float4;
+};
+
 template<>
 struct FieldTypeResolver<int> {
     static constexpr FieldType value = FieldType::Int;
