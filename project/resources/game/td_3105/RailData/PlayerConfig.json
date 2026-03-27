@@ -1,0 +1,44 @@
+{
+  "acceleration": 2400.0,
+  "attackLayer": 30,
+  "attackPower": 10,
+  "attackSize": [
+    140.0,
+    140.0
+  ],
+  "attackSpawnOffset": [
+    0.0,
+    -80.0
+  ],
+  "attackVisibleTime": 0.3499999940395355,
+  "cameraGateDepth": 0.5,
+  "cameraGateHalfHeight": 0.3199999928474426,
+  "cameraGateHalfWidth": 0.6000000238418579,
+  "cameraGateNear": 0.0,
+  "deceleration": 3000.0,
+  "flashBlinkEnabled": true,
+  "flashBlinkHz": 14.0,
+  "flashColorRGB": [
+    1.0,
+    0.3499999940395355,
+    0.3499999940395355
+  ],
+  "flashDuration": 0.1599999964237213,
+  "flashMaxAlpha": 0.75,
+  "flashMinAlpha": 0.3499999940395355,
+  "invincibleDuration": 0.3499999940395355,
+  "invincibleDurationDefault": 0.3499999940395355,
+  "maxSpeed": 480.0,
+  "moveSpeed": 480.0,
+  "playerMaxHp": 10,
+  "startPosition": [
+    640.0,
+    600.0
+  ],
+  "startRotation": 0.0,
+  "startScale": [
+    128.0,
+    200.0
+  ],
+  "useCameraGateForPlayerHit": true
+}

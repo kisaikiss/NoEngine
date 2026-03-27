@@ -78,6 +78,7 @@ void SceneManager::DestroyOverlay() {
 }
 
 void SceneManager::ChangeScene(const std::string& name, bool immediate) {
+
 	auto it = factories_.find(name);
 	if (it == factories_.end()) return;
 

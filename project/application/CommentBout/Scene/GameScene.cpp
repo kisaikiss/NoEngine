@@ -7,6 +7,7 @@
 #include "application/CommentBout/Component/HealthComponent.h"
 #include "application/CommentBout/Component/InvincibleComponent.h"
 #include "application/CommentBout/Component/PlayerHitboxComponent.h"
+#include "application/CommentBout/Component/PlayerConfigComponent.h"
 #include "application/CommentBout/Component/OutGame/OutGameComponets.h"	//アウトゲーム関連
 #include "application/CommentBout/Component/GameResourceComponent.h"
 #include "application/CommentBout/Component/HpBarComponent.h"
@@ -112,6 +113,11 @@ void GameScene::Setup() {
 	registry.AddComponent<CBGameResourceTag>(gameResourceEntity);
 	auto* gameResource = registry.AddComponent<GameResourceComponent>(gameResourceEntity);
 	InitializeCommentBoutGameResources(*gameResource);
+
+	auto playerConfigEntity = registry.GenerateEntity();
+	registry.AddComponent<CBPlayerConfigTag>(playerConfigEntity);
+	auto* playerConfig = registry.AddComponent<PlayerConfigComponent>(playerConfigEntity);
+	LoadPlayerConfig(*playerConfig);
 
 	auto bossHpBarEntity = registry.GenerateEntity();
 	registry.AddComponent<CBBossHpBarTag>(bossHpBarEntity);
@@ -234,30 +240,34 @@ void GameScene::Setup() {
 	// 自機スプライト
 	auto playerEntity = registry.GenerateEntity();
 	registry.AddComponent<CBPlayerTag>(playerEntity);
-	registry.AddComponent<No::EditTag>(playerEntity)->name = "Player";
 	auto* playerComp = registry.AddComponent<PlayerComponent>(playerEntity);
-	playerComp->moveSpeed = 480.0f;
-	playerComp->acceleration = 2400.0f;
-	playerComp->deceleration = 3000.0f;
-	playerComp->maxSpeed = 480.0f;
-	playerComp->invincibleDurationDefault = 0.35f;
+	playerComp->moveSpeed = playerConfig->moveSpeed;
+	playerComp->acceleration = playerConfig->acceleration;
+	playerComp->deceleration = playerConfig->deceleration;
+	playerComp->maxSpeed = playerConfig->maxSpeed;
+	playerComp->invincibleDurationDefault = playerConfig->invincibleDurationDefault;
 	auto* playerAttack = registry.AddComponent<PlayerAttackComponent>(playerEntity);
-	playerAttack->spawnOffset = { 0.0f, -80.0f };
-	playerAttack->attackSize = { 140.0f, 140.0f };
-	playerAttack->visibleTime = 0.35f;
-	playerAttack->attackLayer = 30;
-	playerAttack->attackPower = 10;
+	playerAttack->spawnOffset = playerConfig->attackSpawnOffset;
+	playerAttack->attackSize = playerConfig->attackSize;
+	playerAttack->visibleTime = playerConfig->attackVisibleTime;
+	playerAttack->attackLayer = playerConfig->attackLayer;
+	playerAttack->attackPower = playerConfig->attackPower;
 	auto* playerCommonHealth = registry.AddComponent<HealthComponent>(playerEntity);
-	playerCommonHealth->hp = 10;
-	playerCommonHealth->maxHp = 10;
+	playerCommonHealth->hp = playerConfig->playerMaxHp;
+	playerCommonHealth->maxHp = playerConfig->playerMaxHp;
 	playerCommonHealth->isDead = false;
 	playerCommonHealth->lastDamageTaken = 0;
 	auto* playerInvincible = registry.AddComponent<InvincibleComponent>(playerEntity);
 	playerInvincible->time = 0.0f;
-	playerInvincible->duration = playerComp->invincibleDurationDefault;
+	playerInvincible->duration = playerConfig->invincibleDuration;
+	auto* playerStartTransform = registry.AddComponent<No::StartTransform2DComponent>(playerEntity);
+	playerStartTransform->translate = playerConfig->startPosition;
+	playerStartTransform->rotation = playerConfig->startRotation;
+	playerStartTransform->scale = playerConfig->startScale;
 	auto* playerTransform = registry.AddComponent<No::Transform2DComponent>(playerEntity);
-	playerTransform->translate = { 640.f, 600.f };
-	playerTransform->scale = { 128.f, 200.f };
+	playerTransform->translate = playerStartTransform->translate;
+	playerTransform->rotation = playerStartTransform->rotation;
+	playerTransform->scale = playerStartTransform->scale;
 	auto* playerSprite = registry.AddComponent<No::SpriteComponent>(playerEntity);
 	playerSprite->layer = CommentBout::ToLayer(CommentBout::SpriteLayer::Gameplay);
 	playerSprite->color = { 1.f, 1.f, 1.f, 0.5f };
@@ -266,20 +276,14 @@ void GameScene::Setup() {
 
 	auto playerHitboxEntity = registry.GenerateEntity();
 	registry.AddComponent<CBPlayerHitboxTag>(playerHitboxEntity);
-	registry.AddComponent<No::EditTag>(playerHitboxEntity)->name = "PlayerHitbox";
 	auto* playerHitboxComp = registry.AddComponent<PlayerHitboxComponent>(playerHitboxEntity);
 	playerHitboxComp->playerEntity = playerEntity;
-	auto* playerHitboxTransform = registry.AddComponent<No::TransformComponent>(playerHitboxEntity);
-	playerHitboxTransform->translate = { 0.0f, 1.0f, 0.8f };
-	playerHitboxTransform->scale = { 0.8f, 1.2f, 0.8f };
-	auto* playerHitboxCollider = registry.AddComponent<CommentBoutCollision::Collider3DComponent>(playerHitboxEntity);
-	playerHitboxCollider->shapeType = CommentBoutCollision::ShapeType3D::Box;
-	playerHitboxCollider->useScaleAsBox = true;
-	playerHitboxCollider->boxSizeMultiplier = { 1.0f, 1.0f, 1.0f };
-	playerHitboxCollider->collisionLayer = CommentBout::CollisionLayer::CBPlayer;
-	playerHitboxCollider->collisionMask = CommentBout::CollisionMask::CBPlayer;
+	playerHitboxComp->useCameraGateForPlayerHit = playerConfig->useCameraGateForPlayerHit;
+	playerHitboxComp->cameraGateNear = playerConfig->cameraGateNear;
+	playerHitboxComp->cameraGateDepth = playerConfig->cameraGateDepth;
+	playerHitboxComp->cameraGateHalfWidth = playerConfig->cameraGateHalfWidth;
+	playerHitboxComp->cameraGateHalfHeight = playerConfig->cameraGateHalfHeight;
 
-	// 地面はFieldObject側（Ground typeKey）で管理する。
 }
 
 void GameScene::NotSystemUpdate()

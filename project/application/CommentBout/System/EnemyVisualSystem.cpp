@@ -324,14 +324,12 @@ void EnemyVisualSystem::Update(No::Registry& registry, float deltaTime)
 	ImGui::Checkbox("ゲートワイヤー表示", &drawCameraGateDebugFlag);
 	ImGui::Separator();
 	if (debugHitbox) {
-		ImGui::Text("[カメラゲート設定]");
-		ImGui::Checkbox("ゲート判定を使用", &debugHitbox->useCameraGateForPlayerHit);
-		ImGui::DragFloat("Near", &debugHitbox->cameraGateNear, 0.01f, 0.0f, 10.0f, "%.2f");
-		ImGui::DragFloat("Depth", &debugHitbox->cameraGateDepth, 0.01f, 0.01f, 10.0f, "%.2f");
-		ImGui::DragFloat("Half Width", &debugHitbox->cameraGateHalfWidth, 0.01f, 0.01f, 10.0f, "%.2f");
-		ImGui::DragFloat("Half Height", &debugHitbox->cameraGateHalfHeight, 0.01f, 0.01f, 10.0f, "%.2f");
-		ImGui::Text("Z: %.2f .. %.2f", debugHitbox->cameraGateNear, debugHitbox->cameraGateNear + debugHitbox->cameraGateDepth);
-		ImGui::Text("Half: x=%.2f y=%.2f", debugHitbox->cameraGateHalfWidth, debugHitbox->cameraGateHalfHeight);
+		ImGui::Text("[カメラゲート設定(表示のみ)]");
+		ImGui::Text("ゲート判定: %s", debugHitbox->useCameraGateForPlayerHit ? "ON" : "OFF");
+		ImGui::Text("Near: %.2f", debugHitbox->cameraGateNear);
+		ImGui::Text("Depth: %.2f", debugHitbox->cameraGateDepth);
+		ImGui::Text("Half Width: %.2f", debugHitbox->cameraGateHalfWidth);
+		ImGui::Text("Half Height: %.2f", debugHitbox->cameraGateHalfHeight);
 		ImGui::Separator();
 	}
 #endif

@@ -368,6 +368,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\CommentBout\Component\OutGame\OptionMenuViewComponent.h" />
     <ClInclude Include="application\CommentBout\Component\OutGame\OptionStateComponent.h" />
     <ClInclude Include="application\CommentBout\Component\OutGame\OutGameComponets.h" />
+    <ClInclude Include="application\CommentBout\Component\PlayerConfigComponent.h" />
     <ClInclude Include="application\CommentBout\Component\PlayerHitboxComponent.h" />
     <ClInclude Include="application\CommentBout\Component\RailCameraComponent.h" />
     <ClInclude Include="application\CommentBout\Component\RailProgressBarComponent.h" />
@@ -761,6 +762,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <None Include="resources\game\td_2304\Json\tdSpriteConfig.json" />
     <None Include="resources\game\td_3105\RailData\EnemyTypePreset.json" />
     <None Include="resources\game\td_3105\RailData\FieldObjectTypeDefaults.json" />
+    <None Include="resources\game\td_3105\RailData\PlayerConfig.json" />
     <None Include="resources\game\td_3105\RailData\sample_rail.json" />
     <None Include="resources\game\td_3105\RailData\Stage_01_events.json" />
     <None Include="resources\game\td_3105\RailData\Stage_01_field_objects.json" />

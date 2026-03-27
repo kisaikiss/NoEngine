@@ -4,6 +4,7 @@
 #include "application/CommentBout/Component/HealthComponent.h"
 #include "application/CommentBout/Component/InvincibleComponent.h"
 #include "application/CommentBout/Component/EnemyComponent.h"
+#include "application/CommentBout/Component/PlayerConfigComponent.h"
 #include "application/CommentBout/Component/DamageFlashComponent.h"
 #include "application/CommentBout/GameTag.h"
 #include <algorithm>
@@ -34,6 +35,17 @@ void SyncToLegacyEnemy(EnemyComponent* legacy, const HealthComponent* health) {
 	legacy->lastDamageTaken = health->lastDamageTaken;
 }
 
+const PlayerConfigComponent* FindPlayerConfig(const No::Registry& registry) {
+	auto view = const_cast<No::Registry&>(registry).View<CBPlayerConfigTag, PlayerConfigComponent>();
+	for (auto entity : view) {
+		auto* cfg = const_cast<No::Registry&>(registry).GetComponent<PlayerConfigComponent>(entity);
+		if (cfg) {
+			return cfg;
+		}
+	}
+	return nullptr;
+}
+
 void ApplyDamageFlash(No::Registry& registry, No::Entity target) {
 	if (target == No::nullEntity) {
 		return;
@@ -48,17 +60,28 @@ void ApplyDamageFlash(No::Registry& registry, No::Entity target) {
 	}
 
 	if (registry.Has<CBPlayerTag>(target)) {
-		flash->duration = 0.16f;
-		flash->flashColor = No::Color(1.0f, 0.35f, 0.35f, 0.75f);
+		const PlayerConfigComponent* cfg = FindPlayerConfig(registry);
+		flash->duration = cfg ? std::max(0.01f, cfg->flashDuration) : 0.16f;
+		flash->flashColor = cfg
+			? No::Color(cfg->flashColorRGB.x, cfg->flashColorRGB.y, cfg->flashColorRGB.z, cfg->flashMaxAlpha)
+			: No::Color(1.0f, 0.35f, 0.35f, 0.75f);
 		flash->baseColor = No::Color(1.0f, 1.0f, 1.0f, 0.5f);
 		flash->affectSprite = true;
 		flash->affectMaterial = false;
+		flash->blinkEnabled = cfg ? cfg->flashBlinkEnabled : true;
+		flash->blinkHz = cfg ? cfg->flashBlinkHz : 14.0f;
+		flash->minAlpha = cfg ? cfg->flashMinAlpha : 0.35f;
+		flash->maxAlpha = cfg ? cfg->flashMaxAlpha : 0.75f;
 	} else {
 		flash->duration = 0.12f;
 		flash->flashColor = No::Color(1.0f, 0.2f, 0.2f, 1.0f);
 		flash->baseColor = No::Color(1.0f, 1.0f, 1.0f, 1.0f);
 		flash->affectSprite = false;
 		flash->affectMaterial = true;
+		flash->blinkEnabled = false;
+		flash->blinkHz = 12.0f;
+		flash->minAlpha = 0.35f;
+		flash->maxAlpha = 0.9f;
 	}
 	flash->timer = std::max(flash->timer, flash->duration);
 }

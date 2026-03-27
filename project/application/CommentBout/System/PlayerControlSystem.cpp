@@ -154,14 +154,6 @@ void PlayerControlSystem::Update(No::Registry& registry, float deltaTime)
 		}
 
 #ifdef USE_IMGUI
-		ImGui::Begin("Player Move Debug");
-		ImGui::DragFloat("Acceleration", &player->acceleration, 10.0f, 0.0f, 10000.0f);
-		ImGui::DragFloat("Deceleration", &player->deceleration, 10.0f, 0.0f, 10000.0f);
-		ImGui::DragFloat("Max Speed", &player->maxSpeed, 1.0f, 1.0f, 2000.0f);
-		ImGui::Text("Velocity: (%.1f, %.1f)", player->velocity.x, player->velocity.y);
-		ImGui::Text("Shift(L+R) Trigger: DebugInvincible Toggle");
-		ImGui::End();
-
 		if (player->debugInvincible) {
 			const ImGuiViewport* viewport = ImGui::GetMainViewport();
 			if (viewport) {

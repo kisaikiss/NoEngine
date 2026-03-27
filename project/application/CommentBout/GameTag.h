@@ -4,6 +4,7 @@ struct CBPlayerTag {};			//自機
 struct CBGroundTag {};			//地面
 struct CBAttackEffectTag {};	//攻撃エフェクト
 struct CBGameResourceTag {};	//ゲーム全体で共有するリソースを持つEntityに付与するタグ
+struct CBPlayerConfigTag {};	//自機設定JSON保持Entity
 struct CBPauseStateTag {};		//
 struct CBPauseConfigTag {};		//
 struct CBPauseDimTag {};		//

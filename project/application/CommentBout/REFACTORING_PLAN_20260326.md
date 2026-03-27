@@ -217,38 +217,58 @@
 ## 8. フィールドオブジェクト統合（日本語UI / Ground追加 / 草廃止 / 敵弾遮蔽 / デバッグ表示）
 
 ### 実装ステップ
-- [ ] Field EditorのImGui表示文言を日本語化する（`typeKey` とJSONキーは英語のまま維持）
-- [ ] フィールド種別に `Ground` を追加する（`typeKey` は `Ground`）
-- [ ] `GameScene::Setup()` の手動 `groundEntity` 生成を削除し、フィールドオブジェクト管理へ一本化する
-- [ ] 草関連を撤去する（`SpawnGrass` / `CBGrassTag` / `GrassReactionSystem` / `HitBalloonSystem` / `GrassReactionComponent`）
-- [ ] `hasCollision=true` の全フィールドオブジェクトを敵弾衝突対象にする
-- [ ] 敵弾がフィールドオブジェクトと衝突したら即消滅する（演出差し込み可能な拡張ポイントを残す）
-- [ ] `FieldEditorSystem` に当たり判定デバッグ表示トグルを追加する
+- [x] Field EditorのImGui表示文言を日本語化する（`typeKey` とJSONキーは英語のまま維持）
+- [x] フィールド種別に `Ground` を追加する（`typeKey` は `Ground`）
+- [x] `GameScene::Setup()` の手動 `groundEntity` 生成を削除し、フィールドオブジェクト管理へ一本化する
+- [x] 草関連を撤去する（`SpawnGrass` / `CBGrassTag` / `GrassReactionSystem` / `HitBalloonSystem` / `GrassReactionComponent`）
+- [x] `hasCollision=true` の全フィールドオブジェクトを敵弾衝突対象にする
+- [x] 敵弾がフィールドオブジェクトと衝突したら即消滅する（演出差し込み可能な拡張ポイントを残す）
+- [x] `FieldEditorSystem` に当たり判定デバッグ表示トグルを追加する
 
 ### 完了条件
-- [ ] Field Editorが日本語UIで操作できる
-- [ ] Groundがフィールドオブジェクトとして配置/保存/再読込できる
-- [ ] 手動Ground生成がなくても従来と同等にプレイ可能
-- [ ] 草関連コードが除去され、ビルドエラーが出ない
-- [ ] 敵弾が `hasCollision=true` のフィールドオブジェクトで消滅する
-- [ ] フィールドオブジェクトの当たり判定をトグルで可視化できる
+- [x] Field Editorが日本語UIで操作できる
+- [x] Groundがフィールドオブジェクトとして配置/保存/再読込できる
+- [x] 手動Ground生成がなくても従来と同等にプレイ可能
+- [x] 草関連コードが除去され、ビルドエラーが出ない
+- [x] 敵弾が `hasCollision=true` のフィールドオブジェクトで消滅する
+- [x] フィールドオブジェクトの当たり判定をトグルで可視化できる
 
 ---
 
 ## 9. 自機関連パラメータのJSON保存・配布コンポーネント化
 
 ### 実装ステップ
-- [ ] `PlayerConfigComponent`（仮称）を追加し、設定保持専用Entity（`CBPlayerConfigTag`）を導入する
-- [ ] 保存対象を定義する（`PlayerComponent` / `PlayerAttackComponent` / `HealthComponent.maxHp` / `InvincibleComponent.duration` / `PlayerHitboxComponent`）
-- [ ] `resources/game/td_3105/RailData/PlayerConfig.json` の読込/保存処理を実装する
-- [ ] `GameScene::Setup()` でPlayer設定Entityを生成し、各コンポーネントへ配布する
-- [ ] 自機の初期2D座標は `StartTransform2DComponent` で管理し、`Transform2DComponent` は保存対象から除外する
-- [ ] 必要に応じて編集UI（ImGui）を追加し、保存/読込の動作確認を行う
+- [x] `PlayerConfigComponent`（仮称）を追加し、設定保持専用Entity（`CBPlayerConfigTag`）を導入する
+- [x] 保存対象を定義する（`PlayerComponent` / `PlayerAttackComponent` / `HealthComponent.maxHp` / `InvincibleComponent.duration` / `PlayerHitboxComponent`）
+- [x] `resources/game/td_3105/RailData/PlayerConfig.json` の読込/保存処理を実装する
+- [x] `GameScene::Setup()` でPlayer設定Entityを生成し、各コンポーネントへ配布する
+- [x] 自機の初期2D座標は `StartTransform2DComponent` で管理し、`Transform2DComponent` は保存対象から除外する
+- [x] 必要に応じて編集UI（ImGui）を追加し、保存/読込の動作確認を行う
 
 ### 完了条件
-- [ ] 自機関連設定がJSONで復元される
-- [ ] 自機生成時に設定専用Entityから値が反映される
-- [ ] `Transform2DComponent` を直接保存しなくても初期座標が再現される
+- [x] 自機関連設定がJSONで復元される
+- [x] 自機生成時に設定専用Entityから値が反映される
+- [x] `Transform2DComponent` を直接保存しなくても初期座標が再現される
+
+---
+
+## 9.5 自機設定UI統合・日本語化・点滅設定拡張
+
+### 実装ステップ
+- [x] 自機関連ImGuiを `PlayerInfoDebugSystem` に統合する（移動・攻撃・当たり判定・JSON操作）
+- [x] `PlayerControlSystem` の移動デバッグUIを削除する
+- [x] `EnemyVisualSystem` の `PlayerHitbox` カメラゲート編集UIを削除する
+- [x] `PlayerInfoDebugSystem` の項目名を日本語化し、カテゴリごとに整理する
+- [x] `PlayerConfigComponent` / `PlayerConfig.json` に被弾点滅（フラッシュ）関連設定を追加する
+- [x] 点滅設定をダメージ表示処理（`DamageApplySystem` / `DamageFlashSystem`）へ反映する
+- [x] `Load JSON` 実行時にプレイヤーへ即時反映されることを確認する
+
+### 完了条件
+- [x] 自機設定が1つのImGuiウィンドウで完結して調整できる
+- [x] 自機関連の変数表示名が日本語で分かりやすい
+- [x] カメラゲート設定が自機側UIで編集できる
+- [x] 点滅設定がJSONで保存/読込され、被弾表示へ反映される
+- [x] JSONロード後に値が即座にプレイヤー挙動へ反映される
 
 ---
 

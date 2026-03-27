@@ -11,4 +11,9 @@ struct DamageFlashComponent {
 	No::Color baseColor = No::Color(1.0f, 1.0f, 1.0f, 1.0f);
 	bool affectSprite = true;
 	bool affectMaterial = true;
+
+	bool blinkEnabled = false;
+	float blinkHz = 12.0f;
+	float minAlpha = 0.35f;
+	float maxAlpha = 0.9f;
 };
