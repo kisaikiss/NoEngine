@@ -12,6 +12,28 @@ public:
 	static void InitializeForCommentBout() {
 		RegisterBGMClip("cb_test_bgm", L"resources/game/td_2304/Audio/BGM/titleBGM.mp3", 1.0f);
 		RegisterSEClip("cb_test_se", L"resources/game/td_2304/Audio/SE/select.mp3", 1.0f);
+
+		// BGM
+		RegisterBGMClip("BGMInGame", L"resources/game/td_3105/Audio/BGM/InGameBGM01.mp3", 1.0f);
+		RegisterBGMClip("BGMTitle",  L"resources/game/td_3105/Audio/BGM/TitleBGM01.mp3",  1.0f);
+
+		// SE - 戦闘
+		RegisterSEClip("SEBossDamage",   L"resources/game/td_3105/Audio/SE/BossDamage.mp3",   1.0f);
+		RegisterSEClip("SEPlayerDamage", L"resources/game/td_3105/Audio/SE/PlayerDamage.mp3", 1.0f);
+		RegisterSEClip("SEEnemyDamage",  L"resources/game/td_3105/Audio/SE/EnemyDamage.mp3",  1.0f);
+		RegisterSEClip("SEEnemyShot",    L"resources/game/td_3105/Audio/SE/EnemyShot.mp3",    1.0f);
+		RegisterSEClip("SEBossShot",     L"resources/game/td_3105/Audio/SE/BossShot.mp3",     1.0f);
+		RegisterSEClip("SEPlayerPunch",  L"resources/game/td_3105/Audio/SE/PlayerPunch.mp3",  1.0f);
+
+		// SE - 吹き出し
+		RegisterSEClip("SESpeechBubbleL", L"resources/game/td_3105/Audio/SE/SpeechBubbleL.mp3", 1.0f);
+		RegisterSEClip("SESpeechBubbleM", L"resources/game/td_3105/Audio/SE/SpeechBubbleM.mp3", 1.0f);
+		RegisterSEClip("SESpeechBubbleS", L"resources/game/td_3105/Audio/SE/SpeechBubbleS.mp3", 1.0f);
+
+		// SE - システム
+		RegisterSEClip("SESystemDecision",   L"resources/game/td_3105/Audio/SE/SystemDecision.mp3",   10.0f);
+		RegisterSEClip("SESystemMoveCursor", L"resources/game/td_3105/Audio/SE/SystemMoveCursor.mp3", 10.0f);
+		RegisterSEClip("SESystemOpen",       L"resources/game/td_3105/Audio/SE/SystemOpen.mp3",       10.0f);
 	}
 
 	// -------- 登録API --------

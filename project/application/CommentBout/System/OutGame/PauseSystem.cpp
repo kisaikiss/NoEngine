@@ -6,6 +6,8 @@
 #include "application/CommentBout/Event/OptionMenuEvent.h"
 #include "application/CommentBout/GameTag.h"
 #include "application/CommentBout/Utility/InputHelper.h"
+#include "application/CommentBout/Utility/CBGameAudio.h"
+#include "application/CommentBout/Component/GameResourceComponent.h"
 #include "engine/Functions/ECS/Component/PauseComponent.h"
 
 namespace {
@@ -141,6 +143,7 @@ void PauseSystem::Update(No::Registry& registry, float deltaTime)
 	if (pauseState->phase == PauseStateComponent::Closed) {
 		pauseState->isPaused = false;
 		if (InputHelper::IsPauseTrigger()) {
+			CommentBout::GameAudio::PlaySEClip(CommentBoutResourceKey::kSESystemOpen);
 			pauseState->justEnteredPause = true;
 			pauseState->selectedIndex = 0;
 			pauseState->requestedAction = PauseStateComponent::None;
@@ -198,12 +201,14 @@ void PauseSystem::Update(No::Registry& registry, float deltaTime)
 			if (pauseState->selectedIndex < 0) {
 				pauseState->selectedIndex = pauseState->itemCount - 1;
 			}
+			CommentBout::GameAudio::PlaySEClip(CommentBoutResourceKey::kSESystemMoveCursor);
 		}
 		if (InputHelper::IsMoveDownTrigger()) {
 			pauseState->selectedIndex++;
 			if (pauseState->selectedIndex >= pauseState->itemCount) {
 				pauseState->selectedIndex = 0;
 			}
+			CommentBout::GameAudio::PlaySEClip(CommentBoutResourceKey::kSESystemMoveCursor);
 		}
 	}
 
@@ -228,6 +233,7 @@ void PauseSystem::Update(No::Registry& registry, float deltaTime)
 		}
 
 		if (action != PauseStateComponent::None) {
+			CommentBout::GameAudio::PlaySEClip(CommentBoutResourceKey::kSESystemDecision);
 			pauseState->confirmIndex = pauseState->selectedIndex;
 			pauseState->confirmAnimTime = 0.0f;
 			pauseState->isConfirmAnimating = true;

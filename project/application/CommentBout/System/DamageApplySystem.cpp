@@ -7,6 +7,8 @@
 #include "application/CommentBout/Data/PlayerConfig.h"
 #include "application/CommentBout/Component/DamageFlashComponent.h"
 #include "application/CommentBout/GameTag.h"
+#include "application/CommentBout/Utility/CBGameAudio.h"
+#include "application/CommentBout/Component/GameResourceComponent.h"
 #include <algorithm>
 
 namespace {
@@ -136,8 +138,17 @@ void DamageApplySystem::Update(No::Registry& registry, float deltaTime)
 		}
 
 		ApplyToHealth(health, request->amount);
-		if (health && request->amount > 0 && !health->isDead) {
-			ApplyDamageFlash(registry, request->target);
+		if (health && request->amount > 0) {
+			if (registry.Has<CBBossTag>(request->target)) {
+				CommentBout::GameAudio::PlaySEClip(CommentBoutResourceKey::kSEBossDamage);
+			} else if (registry.Has<CBPlayerTag>(request->target)) {
+				CommentBout::GameAudio::PlaySEClip(CommentBoutResourceKey::kSEPlayerDamage);
+			} else if (registry.Has<CBRailEnemyTag>(request->target)) {
+				CommentBout::GameAudio::PlaySEClip(CommentBoutResourceKey::kSEEnemyDamage);
+			}
+			if (!health->isDead) {
+				ApplyDamageFlash(registry, request->target);
+			}
 		}
 
 		auto* legacyEnemy = registry.GetComponent<EnemyComponent>(request->target);

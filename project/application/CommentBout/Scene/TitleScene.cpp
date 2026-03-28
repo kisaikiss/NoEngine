@@ -1,6 +1,7 @@
 #include "TitleScene.h"
 #include "application/CommentBout/GameTag.h"
 #include "application/CommentBout/Component/GameResourceComponent.h"
+#include "application/CommentBout/Utility/CBGameAudio.h"
 #include "application/CommentBout/Component/OutGame/TitleMenuStateComponent.h"
 #include "application/CommentBout/Component/OutGame/TitleMenuConfigComponent.h"
 #include "application/CommentBout/Component/OutGame/OptionStateComponent.h"
@@ -29,6 +30,10 @@ void TitleScene::Setup()
 	AddSystem(std::make_unique<No::CameraSystem>());
 
 	No::Registry& registry = *GetRegistry();
+
+	CommentBout::GameAudio::InitializeForCommentBout();
+	CommentBout::GameAudio::StopBGMClip(CommentBoutResourceKey::kBGMInGame);
+	CommentBout::GameAudio::PlayBGMClip(CommentBoutResourceKey::kBGMTitle, true);
 
 	auto gameResourceEntity = registry.GenerateEntity();
 	registry.AddComponent<CBGameResourceTag>(gameResourceEntity);

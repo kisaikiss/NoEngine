@@ -56,6 +56,28 @@ namespace CommentBoutResourceKey {
 	static const char* kSpeechBubbleMedium = "SpeechBubbleMedium";
 	static const char* kSpeechBubbleSmall = "SpeechBubbleSmall";
 
+	// ---- Audio : BGM -------------------------------------------------------
+	static const char* kBGMInGame = "BGMInGame";
+	static const char* kBGMTitle  = "BGMTitle";
+
+	// ---- Audio : SE 戦闘 ---------------------------------------------------
+	static const char* kSEBossDamage   = "SEBossDamage";
+	static const char* kSEPlayerDamage = "SEPlayerDamage";
+	static const char* kSEEnemyDamage  = "SEEnemyDamage";
+	static const char* kSEEnemyShot    = "SEEnemyShot";
+	static const char* kSEBossShot     = "SEBossShot";
+	static const char* kSEPlayerPunch  = "SEPlayerPunch";
+
+	// ---- Audio : SE 吹き出し -----------------------------------------------
+	static const char* kSESpeechBubbleL = "SESpeechBubbleL";
+	static const char* kSESpeechBubbleM = "SESpeechBubbleM";
+	static const char* kSESpeechBubbleS = "SESpeechBubbleS";
+
+	// ---- Audio : SE システム -----------------------------------------------
+	static const char* kSESystemDecision   = "SESystemDecision";
+	static const char* kSESystemMoveCursor = "SESystemMoveCursor";
+	static const char* kSESystemOpen       = "SESystemOpen";
+
 	// ---- Model -------------------------------------------------------------
 	static const char* kEnemyModel = "EnemyModel";
 	static const char* kShootEnemyModel = "ShootEnemyModel";

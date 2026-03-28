@@ -10,6 +10,7 @@
 #include "application/CommentBout/Component/InvincibleComponent.h"
 #include "application/CommentBout/Utility/CBCollisionMask.h"
 #include "application/CommentBout/Utility/InputHelper.h"
+#include "application/CommentBout/Utility/CBGameAudio.h"
 #include "application/CommentBout/GameTag.h"
 #include "application/CommentBout/Collision/Component/Collider2DComponent.h"
 #include "engine/Runtime/GraphicsCore.h"
@@ -173,6 +174,7 @@ void PlayerControlSystem::Update(No::Registry& registry, float deltaTime)
 #endif
 
 		if (InputHelper::IsConfirmTrigger() && gameResource) {
+			CommentBout::GameAudio::PlaySEClip(CommentBoutResourceKey::kSEPlayerPunch);
 			auto attackEntity = registry.GenerateEntity();
 			auto* attackTransform = registry.AddComponent<No::Transform2DComponent>(attackEntity);
 			attackTransform->translate = {

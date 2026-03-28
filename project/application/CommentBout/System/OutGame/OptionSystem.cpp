@@ -5,6 +5,7 @@
 #include "application/CommentBout/Event/OptionMenuEvent.h"
 #include "application/CommentBout/Utility/CBGameAudio.h"
 #include "application/CommentBout/Utility/InputHelper.h"
+#include "application/CommentBout/Component/GameResourceComponent.h"
 #include "application/CommentBout/GameTag.h"
 #include <algorithm>
 
@@ -143,7 +144,7 @@ void OptionSystem::Update(No::Registry& registry, float deltaTime)
 			(beforeBGM != optionState->bgmVolume) ||
 			(beforeSE != optionState->seVolume);
 		if (volumeChanged) {
-			CommentBout::GameAudio::PlayTestSE();
+			CommentBout::GameAudio::PlaySEClip(CommentBoutResourceKey::kSESystemMoveCursor);
 		}
 
 		if (InputHelper::IsConfirmTrigger()) {
@@ -158,15 +159,18 @@ void OptionSystem::Update(No::Registry& registry, float deltaTime)
 		if (optionState->selectedIndex < 0) {
 			optionState->selectedIndex = optionState->itemCount - 1;
 		}
+		CommentBout::GameAudio::PlaySEClip(CommentBoutResourceKey::kSESystemMoveCursor);
 	}
 	if (InputHelper::IsMoveDownTrigger()) {
 		optionState->selectedIndex++;
 		if (optionState->selectedIndex >= optionState->itemCount) {
 			optionState->selectedIndex = 0;
 		}
+		CommentBout::GameAudio::PlaySEClip(CommentBoutResourceKey::kSESystemMoveCursor);
 	}
 
 	if (InputHelper::IsConfirmTrigger()) {
+		CommentBout::GameAudio::PlaySEClip(CommentBoutResourceKey::kSESystemDecision);
 		optionState->isConfirmAnimating = true;
 		optionState->confirmIndex = optionState->selectedIndex;
 		optionState->confirmAnimTime = 0.0f;

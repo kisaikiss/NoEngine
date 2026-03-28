@@ -13,6 +13,7 @@
 #include "application/CommentBout/Utility/EnemyVisibilityUtility.h"
 #include "application/CommentBout/Utility/CBCollisionMask.h"
 #include "application/CommentBout/GameTag.h"
+#include "application/CommentBout/Utility/CBGameAudio.h"
 #include "engine/Runtime/GraphicsCore.h"
 #include "engine/Functions/ECS/Component/MaterialComponent.h"
 #include <algorithm>
@@ -172,6 +173,7 @@ void EnemyShootSystem::Update(No::Registry& registry, float deltaTime)
 
 		shooter->shootCooldown = std::max(0.05f, shooter->shootInterval);
 		SpawnEnemyBullet(registry, entity, *transform, dir, shooter->bulletSpeed, shooter->bulletDamage, shooter->bulletLifetime, gameResource);
+		CommentBout::GameAudio::PlaySEClip(CommentBoutResourceKey::kSEEnemyShot);
 	}
 
 	auto bossView = registry.View<CBBossTag, BossComponent, EnemyShooterComponent, HealthComponent, No::TransformComponent>();
@@ -200,9 +202,13 @@ void EnemyShootSystem::Update(No::Registry& registry, float deltaTime)
 			}
 		}
 
+		const int prevShots = boss->shotsSpawnedInBurst;
 		while (boss->shotsSpawnedInBurst < boss->shotsFiredInBurst) {
 			SpawnEnemyBullet(registry, entity, *transform, dir, shooter->bulletSpeed, shooter->bulletDamage, shooter->bulletLifetime, gameResource);
 			boss->shotsSpawnedInBurst += 1;
+		}
+		if (boss->shotsSpawnedInBurst > prevShots) {
+			CommentBout::GameAudio::PlaySEClip(CommentBoutResourceKey::kSEBossShot);
 		}
 	}
 

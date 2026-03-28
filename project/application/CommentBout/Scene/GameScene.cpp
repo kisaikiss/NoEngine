@@ -133,8 +133,8 @@ void GameScene::Setup() {
 
 	No::Registry& registry = *GetRegistry();
 	CommentBout::GameAudio::InitializeForCommentBout();
-	CommentBout::GameAudio::StopTestBGM();
-	CommentBout::GameAudio::PlayTestBGM(true);
+	CommentBout::GameAudio::StopBGMClip(CommentBoutResourceKey::kBGMTitle);
+	CommentBout::GameAudio::PlayBGMClip(CommentBoutResourceKey::kBGMInGame, true);
 
 	//ゲームリソース
 	auto gameResourceEntity = registry.GenerateEntity();

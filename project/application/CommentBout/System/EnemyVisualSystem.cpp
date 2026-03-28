@@ -15,6 +15,7 @@
 #include "application/CommentBout/Collision/Utility/CoordinateConverter.h"
 #include "application/CommentBout/GameTag.h"
 #include "application/CommentBout/Utility/CBSpriteLayer.h"
+#include "application/CommentBout/Utility/CBGameAudio.h"
 #include "engine/Functions/ECS/Component/CameraComponent.h"
 #include "engine/Functions/ECS/Component/Transform2DComponent.h"
 #include "engine/Functions/Renderer/Primitive.h"
@@ -264,6 +265,13 @@ void SpawnSpeechBubbleFromEnemy(
 		break;
 	default:
 		break;
+	}
+
+	// 吹き出し SE
+	switch (sizeCategory) {
+	case 0: CommentBout::GameAudio::PlaySEClip(CommentBoutResourceKey::kSESpeechBubbleL); break;
+	case 1: CommentBout::GameAudio::PlaySEClip(CommentBoutResourceKey::kSESpeechBubbleM); break;
+	default: CommentBout::GameAudio::PlaySEClip(CommentBoutResourceKey::kSESpeechBubbleS); break;
 	}
 
 	// 吹き出しエンティティ生成

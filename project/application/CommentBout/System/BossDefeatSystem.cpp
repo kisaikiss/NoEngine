@@ -6,6 +6,8 @@
 #include "application/CommentBout/Component/GameResourceComponent.h"
 #include "application/CommentBout/GameTag.h"
 #include "application/CommentBout/Utility/CBSpriteLayer.h"
+#include "application/CommentBout/Utility/CBGameAudio.h"
+#include "application/CommentBout/Component/GameResourceComponent.h"
 #include "engine/Functions/ECS/Component/Transform2DComponent.h"
 #include "engine/Functions/ECS/Component/SpriteComponent.h"
 
@@ -20,6 +22,7 @@ void ActivateClearOver(No::Registry& registry) {
 	for (auto e : clearOverView) {
 		auto* state = registry.GetComponent<ClearOverStateComponent>(e);
 		if (state && state->phase == ClearOverStateComponent::Phase::Inactive) {
+			CommentBout::GameAudio::StopBGMClip(CommentBoutResourceKey::kBGMInGame);
 			state->result = ClearOverStateComponent::Result::Clear;
 			state->phase = ClearOverStateComponent::Phase::FadeIn;
 			state->phaseTimer = 0.f;

@@ -4,6 +4,8 @@
 #include "application/CommentBout/Component/ClearOverConfigComponent.h"
 #include "application/CommentBout/GameTag.h"
 #include "application/CommentBout/Utility/InputHelper.h"
+#include "application/CommentBout/Utility/CBGameAudio.h"
+#include "application/CommentBout/Component/GameResourceComponent.h"
 #include "engine/Functions/ECS/Event/SceneChangeEvent.h"
 
 #ifdef _MSC_VER
@@ -79,6 +81,7 @@ void ClearOverSystem::Update(No::Registry& registry, float deltaTime)
 
 	case ClearOverStateComponent::Phase::LogoAppear:
 		if (state->phaseTimer >= SafeDuration(config->logoAppearDuration)) {
+			CommentBout::GameAudio::PlaySEClip(CommentBoutResourceKey::kSESystemOpen);
 			state->phase = ClearOverStateComponent::Phase::MenuAppear;
 			state->phaseTimer = 0.f;
 		}
@@ -95,12 +98,15 @@ void ClearOverSystem::Update(No::Registry& registry, float deltaTime)
 	{
 		if (InputHelper::IsMoveUpTrigger() && state->selectedIndex > 0) {
 			state->selectedIndex--;
+			CommentBout::GameAudio::PlaySEClip(CommentBoutResourceKey::kSESystemMoveCursor);
 		}
 		if (InputHelper::IsMoveDownTrigger() && state->selectedIndex < 1) {
 			state->selectedIndex++;
+			CommentBout::GameAudio::PlaySEClip(CommentBoutResourceKey::kSESystemMoveCursor);
 		}
 
 		if (InputHelper::IsConfirmTrigger()) {
+			CommentBout::GameAudio::PlaySEClip(CommentBoutResourceKey::kSESystemDecision);
 			state->confirmIndex = state->selectedIndex;
 			state->confirmAnimTime = 0.f;
 			state->isConfirmAnimating = true;

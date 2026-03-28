@@ -5,6 +5,8 @@
 #include "application/CommentBout/Component/BossDefeatSequenceComponent.h"
 #include "application/CommentBout/Component/ClearOverStateComponent.h"
 #include "application/CommentBout/GameTag.h"
+#include "application/CommentBout/Utility/CBGameAudio.h"
+#include "application/CommentBout/Component/GameResourceComponent.h"
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -17,6 +19,7 @@ void ActivateClearOver(No::Registry& registry, ClearOverStateComponent::Result r
 	for (auto e : view) {
 		auto* state = registry.GetComponent<ClearOverStateComponent>(e);
 		if (state && state->phase == ClearOverStateComponent::Phase::Inactive) {
+			CommentBout::GameAudio::StopBGMClip(CommentBoutResourceKey::kBGMInGame);
 			state->result = result;
 			state->phase = ClearOverStateComponent::Phase::FadeIn;
 			state->phaseTimer = 0.f;
