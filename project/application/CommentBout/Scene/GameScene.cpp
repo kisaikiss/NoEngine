@@ -42,6 +42,7 @@
 #include "application/CommentBout/Spawner/OptionMenuSpawner.h"
 #include "application/CommentBout/Spawner/PauseMenuSpawner.h"
 #include "application/CommentBout/Collision/System/CollisionSystem.h"
+#include "application/CommentBout/Collision/System/CollisionDebugRenderSystem.h"
 #include "application/CommentBout/Collision/Component/Collider2DComponent.h"
 #include "application/CommentBout/Collision/Component/Collider3DComponent.h"
 #include "application/CommentBout/Collision/Component/ProjectedColliderComponent.h"
@@ -89,6 +90,7 @@ void GameScene::Setup() {
 	AddSystem(std::make_unique<EnemyShootSystem>());
 	AddSystem(std::make_unique<FieldEditorSystem>());
 	AddSystem(std::make_unique<CommentBoutCollision::CollisionSystem>());
+	AddSystem(std::make_unique<CommentBoutCollision::CollisionDebugRenderSystem>());
 	AddSystem(std::make_unique<EnemyBulletHitSystem>());
 	AddSystem(std::make_unique<EnemyContactDamageSystem>());
 	AddSystem(std::make_unique<PlayerAttackResolveSystem>());
@@ -206,7 +208,7 @@ void GameScene::Setup() {
 	cameraTransform->translate.z = -5.f;
 	activeCameraEntity_ = camera;
 	debugCameraEntity_ = camera;
-
+	registry.AddComponent<No::EditTag>(camera)->name = "camera";
 
 	railCameraEntity_ = registry.GenerateEntity();
 	registry.AddComponent<No::CameraComponent>(railCameraEntity_);
@@ -266,6 +268,12 @@ void GameScene::Setup() {
 	playerSprite->layer = CommentBout::ToLayer(CommentBout::SpriteLayer::Gameplay);
 	playerSprite->color = { 1.f, 1.f, 1.f, 0.5f };
 	playerSprite->textureHandle = GetGameTextureOrWhite(*gameResource, CommentBoutResourceKey::kPlayerSprite);
+	// Phase13: 接触イベントへ段階移行するため、自機にも2Dコライダーを持たせる。
+	auto* playerCollider2D = registry.AddComponent<CommentBoutCollision::Collider2DComponent>(playerEntity);
+	playerCollider2D->useTransformAsSize = true;
+	playerCollider2D->sizeMultiplier = { 1.0f, 1.0f };
+	playerCollider2D->collisionLayer = CommentBout::CollisionLayer::CBPlayer;
+	playerCollider2D->collisionMask = CommentBout::CollisionMask::CBPlayer;
 	playerHpBar->targetEntity = playerEntity;
 
 	auto playerHitboxEntity = registry.GenerateEntity();

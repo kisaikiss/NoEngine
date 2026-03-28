@@ -161,6 +161,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="application\CommentBout\Collision\System\CollisionDebugRenderSystem.cpp" />
     <ClCompile Include="application\CommentBout\Collision\Utility\CoordinateConverter.cpp" />
     <ClCompile Include="application\CommentBout\Component\OutGame\OptionMenuConfigComponent.cpp" />
     <ClCompile Include="application\CommentBout\Component\OutGame\OptionStateComponent.cpp" />
@@ -194,7 +195,6 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\TestApp\Scene\TestScene.cpp" />
     <ClCompile Include="application\TestApp\Scene\TestScene2.cpp" />
     <ClCompile Include="application\TestApp\System\ParticleTestSystem.cpp" />
-    <ClCompile Include="application\TestApp\Scene\TestScene3.cpp" />
     <ClCompile Include="application\TestApp\System\TestSystem.cpp" />
     <ClCompile Include="application\TestApp\TestApp.cpp" />
     <ClCompile Include="application\CommentBout\System\OutGame\OptionViewSystem.cpp" />
@@ -350,6 +350,9 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\CommentBout\Scene\TitleScene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="application\CommentBout\Collision\Component\CollisionDebugConfigComponent.h" />
+    <ClInclude Include="application\CommentBout\Collision\Event\CollisionEvent.h" />
+    <ClInclude Include="application\CommentBout\Collision\System\CollisionDebugRenderSystem.h" />
     <ClInclude Include="application\CommentBout\Collision\Utility\CoordinateConverter.h" />
     <ClInclude Include="application\CommentBout\Component\AttackDamageComponent.h" />
     <ClInclude Include="application\CommentBout\Component\BossComponent.h" />
@@ -402,7 +405,6 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\CommentBout\Utility\EnemyVisibilityUtility.h" />
     <ClInclude Include="application\TestApp\Scene\TestScene.h" />
     <ClInclude Include="application\TestApp\Scene\TestScene2.h" />
-    <ClInclude Include="application\TestApp\Scene\TestScene3.h" />
     <ClInclude Include="application\TestApp\System\TestSystem.h" />
     <ClInclude Include="application\TestApp\TestApp.h" />
     <ClInclude Include="application\CommentBout\Component\OutGame\PauseMenuConfigComponent.h" />

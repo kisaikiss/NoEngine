@@ -1,9 +1,9 @@
 {
   "Boss": {
     "baseColliderBox": [
-      1.0,
-      1.0,
-      1.0
+      0.4000000059604645,
+      0.800000011920929,
+      0.5
     ],
     "bulletDamage": 2,
     "bulletLifetime": 5.0,

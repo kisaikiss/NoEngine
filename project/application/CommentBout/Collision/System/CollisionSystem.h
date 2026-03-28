@@ -1,5 +1,6 @@
 #pragma once
 #include "engine/NoEngine.h"
+#include "application/CommentBout/Collision/Event/CollisionEvent.h"
 
 namespace CommentBoutCollision {
 	/// <summary>
@@ -16,6 +17,23 @@ namespace CommentBoutCollision {
 		void Update(No::Registry& registry, float deltaTime) override;
 
 	private:
+		/// <summary>
+		/// 前フレームの衝突イベントEntityを削除する。
+		/// </summary>
+		void ClearCollisionEvents(No::Registry& registry);
+
+		/// <summary>
+		/// 衝突イベントEntityを生成して通知情報を格納する。
+		/// </summary>
+		void EmitCollisionEvent(
+			No::Registry& registry,
+			CollisionEventType type,
+			No::Entity entityA,
+			No::Entity entityB,
+			CollisionType layerA,
+			CollisionType layerB
+		);
+
 		// ========================================
 		// コライダー更新
 		// ========================================

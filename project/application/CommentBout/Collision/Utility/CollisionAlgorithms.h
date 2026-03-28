@@ -4,6 +4,19 @@
 
 namespace CommentBoutCollision {
 
+	struct ProjectedColliderComponent;
+
+	/// <summary>
+	/// カメラゲート判定用の共通パラメータ。
+	/// </summary>
+	struct CameraGateParams {
+		bool useCameraGate = true;
+		float nearZ = 0.0f;
+		float depth = 0.5f;
+		float halfWidth = 0.6f;
+		float halfHeight = 0.32f;
+	};
+
 	/// <summary>
 	/// 衝突判定アルゴリズム集
 	/// 2D/3Dの各種形状同士の衝突判定を提供する
@@ -139,6 +152,34 @@ namespace CommentBoutCollision {
 			const std::vector<No::Vector2>& hull,
 			const No::Vector2& rectCenter,
 			const No::Vector2& rectSize
+		);
+
+		/// <summary>
+		/// 投影3Dコライダーとプレイヤースプライト(AABB)の重なり判定。
+		/// </summary>
+		static bool CheckProjectedVsSpriteAABB(
+			const ProjectedColliderComponent& projected,
+			const No::Transform2DComponent& spriteTransform
+		);
+
+		/// <summary>
+		/// ワールド座標点がカメラゲート内にあるか判定。
+		/// </summary>
+		static bool CheckPointInCameraGate(
+			const No::Vector3& worldPos,
+			No::TransformComponent& cameraTransform,
+			const CameraGateParams& gate
+		);
+
+		/// <summary>
+		/// 「投影重なり + カメラゲート」を同時に判定する自機被弾共通関数。
+		/// </summary>
+		static bool CheckProjectedVsSpriteAndCameraGate(
+			const ProjectedColliderComponent& projected,
+			const No::Vector3& worldPos,
+			const No::Transform2DComponent& spriteTransform,
+			No::TransformComponent& cameraTransform,
+			const CameraGateParams& gate
 		);
 	};
 

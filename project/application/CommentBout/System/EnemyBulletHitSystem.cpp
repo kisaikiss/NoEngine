@@ -11,80 +11,15 @@
 #include "engine/Functions/ECS/Component/CameraComponent.h"
 #include "engine/Functions/ECS/Component/Transform2DComponent.h"
 #include <algorithm>
-#include <cmath>
 
-namespace {
-No::Vector3 NormalizeOrDefault(const No::Vector3& v, const No::Vector3& fallback) {
-	if (v.LengthSquared() <= 0.000001f) {
-		return fallback;
-	}
-	return v.Normalize();
-}
-
-bool CheckProjectedVsPlayerSprite(
-	const CommentBoutCollision::ProjectedColliderComponent& projected,
-	const No::Transform2DComponent& playerTransform2D
-) {
-	if (!projected.isVisible) {
-		return false;
-	}
-
-	if (projected.isBox) {
-		return CommentBoutCollision::CollisionAlgorithms::CheckConvexHullAABB(
-			projected.convexHull,
-			playerTransform2D.translate,
-			playerTransform2D.scale
-		);
-	}
-
-	return CommentBoutCollision::CollisionAlgorithms::CheckCircleAABB(
-		projected.screenPosition,
-		projected.screenRadius,
-		playerTransform2D.translate,
-		playerTransform2D.scale
-	);
-}
-
-bool CheckInCameraGate(
-	const No::Vector3& worldPos,
-	No::TransformComponent& cameraTransform,
-	const PlayerHitboxComponent& hitbox
-) {
-	No::Matrix4x4 cameraWorld = cameraTransform.MakeAffineMatrix4x4();
-	const No::Vector3 cameraPos = cameraTransform.GetWorldPosition();
-	No::Vector3 right = NormalizeOrDefault(cameraWorld.TransformNormal(No::Vector3::RIGHT), No::Vector3::RIGHT);
-	No::Vector3 up = NormalizeOrDefault(cameraWorld.TransformNormal(No::Vector3::UP), No::Vector3::UP);
-	No::Vector3 forward = NormalizeOrDefault(cameraWorld.TransformNormal(No::Vector3::FORWARD), No::Vector3::FORWARD);
-
-	const No::Vector3 toTarget = worldPos - cameraPos;
-	const float camX = toTarget.Dot(right);
-	const float camY = toTarget.Dot(up);
-	const float camZ = toTarget.Dot(forward);
-
-	const float nearZ = std::max(0.0f, hitbox.cameraGateNear);
-	const float depth = std::max(0.001f, hitbox.cameraGateDepth);
-	const float halfW = std::max(0.001f, hitbox.cameraGateHalfWidth);
-	const float halfH = std::max(0.001f, hitbox.cameraGateHalfHeight);
-
-	if (camZ < nearZ || camZ > nearZ + depth) {
-		return false;
-	}
-	if (std::abs(camX) > halfW) {
-		return false;
-	}
-	if (std::abs(camY) > halfH) {
-		return false;
-	}
-	return true;
-}
-
-bool IsBulletHitPlayerByProjected(
+bool EnemyBulletHitSystem::IsPlayerHitByUnifiedRule(
 	No::Registry& registry,
 	No::Entity bulletEntity,
 	const CommentBoutCollision::Collider3DComponent& bulletCollider,
 	No::Entity& outPlayerEntity
-) {
+) const {
 	outPlayerEntity = No::nullEntity;
+
 	auto* projected = registry.GetComponent<CommentBoutCollision::ProjectedColliderComponent>(bulletEntity);
 	if (!projected) {
 		return false;
@@ -95,6 +30,9 @@ bool IsBulletHitPlayerByProjected(
 	auto cameraIt = cameraView.begin();
 	if (cameraIt != cameraView.end()) {
 		activeCameraTransform = registry.GetComponent<No::TransformComponent>(*cameraIt);
+	}
+	if (!activeCameraTransform) {
+		return false;
 	}
 
 	auto hitboxView = registry.View<CBPlayerHitboxTag, PlayerHitboxComponent>();
@@ -109,25 +47,76 @@ bool IsBulletHitPlayerByProjected(
 			continue;
 		}
 
-		const bool spriteOverlap = CheckProjectedVsPlayerSprite(*projected, *playerTransform2D);
-		if (!spriteOverlap) {
-			continue;
-		}
+		CommentBoutCollision::CameraGateParams gate{};
+		gate.useCameraGate = hitbox->useCameraGateForPlayerHit;
+		gate.nearZ = hitbox->cameraGateNear;
+		gate.depth = hitbox->cameraGateDepth;
+		gate.halfWidth = hitbox->cameraGateHalfWidth;
+		gate.halfHeight = hitbox->cameraGateHalfHeight;
 
-		bool gatePass = true;
-		if (hitbox->useCameraGateForPlayerHit && activeCameraTransform) {
-			gatePass = CheckInCameraGate(bulletCollider.worldPosition, *activeCameraTransform, *hitbox);
+		const bool hit = CommentBoutCollision::CollisionAlgorithms::CheckProjectedVsSpriteAndCameraGate(
+			*projected,
+			bulletCollider.worldPosition,
+			*playerTransform2D,
+			*activeCameraTransform,
+			gate
+		);
+		if (hit) {
+			outPlayerEntity = hitbox->playerEntity;
+			return true;
 		}
-		if (!gatePass) {
-			continue;
-		}
-
-		outPlayerEntity = hitbox->playerEntity;
-		return true;
 	}
 
 	return false;
 }
+
+bool EnemyBulletHitSystem::IsFieldHitByBullet(
+	No::Registry& registry,
+	No::Entity bulletEntity,
+	const CommentBoutCollision::Collider3DComponent& bulletCollider
+) const {
+	for (auto fieldEntity : registry.View<CBFieldObjectTag, CommentBoutCollision::Collider3DComponent>()) {
+		if (fieldEntity == bulletEntity) {
+			continue;
+		}
+
+		auto* fieldCollider = registry.GetComponent<CommentBoutCollision::Collider3DComponent>(fieldEntity);
+		if (!fieldCollider) {
+			continue;
+		}
+
+		bool hit = false;
+		if (bulletCollider.shapeType == CommentBoutCollision::ShapeType3D::Sphere &&
+			fieldCollider->shapeType == CommentBoutCollision::ShapeType3D::Box) {
+			hit = CommentBoutCollision::CollisionAlgorithms::CheckSphereAABB3D(
+				bulletCollider.worldPosition,
+				bulletCollider.worldRadius,
+				fieldCollider->worldPosition,
+				fieldCollider->worldBoxSize
+			);
+		} else if (bulletCollider.shapeType == CommentBoutCollision::ShapeType3D::Sphere &&
+			fieldCollider->shapeType == CommentBoutCollision::ShapeType3D::Sphere) {
+			hit = CommentBoutCollision::CollisionAlgorithms::CheckSphereSphere(
+				bulletCollider.worldPosition,
+				bulletCollider.worldRadius,
+				fieldCollider->worldPosition,
+				fieldCollider->worldRadius
+			);
+		} else {
+			hit = CommentBoutCollision::CollisionAlgorithms::CheckAABB3DAABB3D(
+				bulletCollider.worldPosition,
+				bulletCollider.worldBoxSize,
+				fieldCollider->worldPosition,
+				fieldCollider->worldBoxSize
+			);
+		}
+
+		if (hit) {
+			return true;
+		}
+	}
+
+	return false;
 }
 
 void EnemyBulletHitSystem::Update(No::Registry& registry, float deltaTime)
@@ -153,7 +142,6 @@ void EnemyBulletHitSystem::Update(No::Registry& registry, float deltaTime)
 		}
 
 		if (activeCameraTransform) {
-			// 敵弾も敵と同様に、カメラ基準で十分後方へ流れたら削除する。
 			const float forwardDistance = CommentBoutVisibility::ComputeForwardDistanceFromCamera(*bulletTransform, *activeCameraTransform);
 			if (forwardDistance < -10.0f) {
 				registry.DestroyEntity(bulletEntity);
@@ -162,9 +150,8 @@ void EnemyBulletHitSystem::Update(No::Registry& registry, float deltaTime)
 		}
 
 		No::Entity playerEntity = No::nullEntity;
-		// 被弾判定は照準点（targetDepthFromCamera）を使わず、
-		// 接触判定と同じ投影+ゲート方式で判定する。
-		const bool hitPlayer = IsBulletHitPlayerByProjected(registry, bulletEntity, *collider, playerEntity);
+		const bool hitPlayer = IsPlayerHitByUnifiedRule(registry, bulletEntity, *collider, playerEntity);
+		const bool hitField = IsFieldHitByBullet(registry, bulletEntity, *collider);
 
 		if (hitPlayer && playerEntity != No::nullEntity) {
 			auto req = registry.GenerateEntity();
@@ -174,9 +161,12 @@ void EnemyBulletHitSystem::Update(No::Registry& registry, float deltaTime)
 			damage->ignoreInvincible = false;
 		}
 
-		if (hitPlayer || collider->isColliding) {
-			// 敵弾は「時間経過(LifetimeSystem)」または「衝突時」に消える。
+		if (hitPlayer || hitField) {
+			// 自機被弾とフィールド衝突を明示的に分離し、広域isColliding依存での誤消滅を防ぐ。
 			registry.DestroyEntity(bulletEntity);
 		}
 	}
+
+	// Phase14コメント:
+	// 自機被弾は「投影重なり + カメラゲート」に一本化し、判定ぶれをなくしている。
 }

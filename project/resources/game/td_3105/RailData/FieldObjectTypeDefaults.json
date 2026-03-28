@@ -1,37 +1,37 @@
 {
   "types": [
     {
-      "typeKey": "Building",
+      "baseColliderAtUnitScale": [
+        1.0800000429153442,
+        0.3799999952316284,
+        0.8399999737739563
+      ],
+      "hasCollision": true,
       "modelKey": "BuildingModel",
-      "hasCollision": true,
       "occludesPlayerAttack": true,
+      "typeKey": "Building"
+    },
+    {
       "baseColliderAtUnitScale": [
         1.0,
         1.0,
         1.0
-      ]
-    },
-    {
-      "typeKey": "Ground",
-      "modelKey": "GroundModel",
+      ],
       "hasCollision": true,
+      "modelKey": "GroundModel",
       "occludesPlayerAttack": false,
-      "baseColliderAtUnitScale": [
-        1.0,
-        1.0,
-        1.0
-      ]
+      "typeKey": "Ground"
     },
     {
-      "typeKey": "Skydome",
-      "modelKey": "SkydomeModel",
-      "hasCollision": false,
-      "occludesPlayerAttack": false,
       "baseColliderAtUnitScale": [
         1.0,
         1.0,
         1.0
-      ]
+      ],
+      "hasCollision": false,
+      "modelKey": "SkydomeModel",
+      "occludesPlayerAttack": false,
+      "typeKey": "Skydome"
     }
   ]
 }

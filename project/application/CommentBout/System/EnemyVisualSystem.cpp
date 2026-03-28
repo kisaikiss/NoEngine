@@ -273,9 +273,6 @@ void SpawnRewardOrbFromEnemy(
 void EnemyVisualSystem::Update(No::Registry& registry, float deltaTime)
 {
 	static_cast<void>(deltaTime);
-	static bool drawColliderDebug = true;
-	static bool drawSpriteGateDebug = true;
-	static bool drawCameraGateDebugFlag = true;
 
 	No::CameraComponent* activeCamera = nullptr;
 	No::TransformComponent* activeCameraTransform = nullptr;
@@ -320,9 +317,7 @@ void EnemyVisualSystem::Update(No::Registry& registry, float deltaTime)
 
 #ifdef USE_IMGUI
 	ImGui::Begin("Enemy Debug");
-	ImGui::Checkbox("敵コライダー表示", &drawColliderDebug);
-	ImGui::Checkbox("重なりオーバーレイ表示", &drawSpriteGateDebug);
-	ImGui::Checkbox("ゲートワイヤー表示", &drawCameraGateDebugFlag);
+	ImGui::Text("衝突デバッグ描画は CollisionDebugRenderSystem に統合済み");
 	ImGui::Separator();
 	if (debugHitbox) {
 		ImGui::Text("[カメラゲート設定(表示のみ)]");
@@ -335,9 +330,8 @@ void EnemyVisualSystem::Update(No::Registry& registry, float deltaTime)
 	}
 #endif
 
-	if (drawCameraGateDebugFlag && activeCameraTransform && debugHitbox && debugHitbox->useCameraGateForPlayerHit) {
-		DrawCameraGateDebug(*activeCameraTransform, *debugHitbox);
-	}
+
+	// 敵Systemは見た目更新と敵状態デバッグに専念
 
 	auto view = registry.View<CBRailEnemyTag, EnemyComponent, HealthComponent, CommentBoutCollision::Collider3DComponent>();
 	for (auto entity : view) {
@@ -376,51 +370,7 @@ void EnemyVisualSystem::Update(No::Registry& registry, float deltaTime)
 
 		enemy->wasCollidingWithAttack = (flash && flash->timer > 0.0f);
 
-		bool gatePassForDebug = true;
-		if (activeCameraTransform && debugHitbox && debugHitbox->useCameraGateForPlayerHit) {
-			float gateCamX = 0.0f;
-			float gateCamY = 0.0f;
-			float gateCamZ = 0.0f;
-			gatePassForDebug = CheckEnemyInCameraGate(collider3D->worldPosition, *activeCameraTransform, *debugHitbox, gateCamX, gateCamY, gateCamZ);
-		}
-
-		HitDebugState debugState = HitDebugState::None;
-		if (collider3D->isColliding || enemy->wasCollidingWithAttack) {
-			debugState = gatePassForDebug ? HitDebugState::InRangeHit : HitDebugState::OutOfRangeHit;
-		}
-
-		auto* enemyProjected = registry.GetComponent<CommentBoutCollision::ProjectedColliderComponent>(entity);
-		const No::Transform2DComponent* spritePlayerTransform = nullptr;
-		bool spriteOverlap = false;
-		bool spriteGatePass = false;
-		auto hitboxView = registry.View<CBPlayerHitboxTag, PlayerHitboxComponent>();
-		for (auto hitboxEntity : hitboxView) {
-			auto* hitbox = registry.GetComponent<PlayerHitboxComponent>(hitboxEntity);
-			if (!hitbox || !hitbox->useCameraGateForPlayerHit || !enemyProjected || !activeCamera || !activeCameraTransform) {
-				continue;
-			}
-			auto* playerTransform2D = registry.GetComponent<No::Transform2DComponent>(hitbox->playerEntity);
-			if (!playerTransform2D) {
-				continue;
-			}
-			spritePlayerTransform = playerTransform2D;
-			spriteOverlap = CheckProjectedVsPlayerSprite(*enemyProjected, *playerTransform2D);
-			float gateCamX = 0.0f;
-			float gateCamY = 0.0f;
-			float gateCamZ = 0.0f;
-			spriteGatePass = CheckEnemyInCameraGate(collider3D->worldPosition, *activeCameraTransform, *hitbox, gateCamX, gateCamY, gateCamZ);
-			break;
-		}
-
 #ifdef USE_IMGUI
-		if (drawSpriteGateDebug && enemyProjected && spritePlayerTransform && debugHitbox && debugHitbox->useCameraGateForPlayerHit) {
-			HitDebugState overlayState = HitDebugState::None;
-			if (spriteOverlap) {
-				overlayState = spriteGatePass ? HitDebugState::InRangeHit : HitDebugState::OutOfRangeHit;
-			}
-			DrawSpriteGateDebugOverlay(*enemyProjected, *spritePlayerTransform, overlayState);
-		}
-
 		const float flashTime = flash ? flash->timer : 0.0f;
 		ImGui::Text("Enemy %llu hp=%d/%d flash=%.2f playerHit=%s",
 			static_cast<unsigned long long>(entity),
@@ -436,10 +386,6 @@ void EnemyVisualSystem::Update(No::Registry& registry, float deltaTime)
 		}
 		ImGui::Separator();
 #endif
-
-		if (drawColliderDebug) {
-			DrawColliderDebug(*collider3D, ToColliderDebugColor(debugState));
-		}
 	}
 
 #ifdef USE_IMGUI

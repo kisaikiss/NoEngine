@@ -25,7 +25,7 @@
       "objectId": "field_obj_1",
       "position": [
         0.0,
-        -2.75,
+        1.0,
         13.25
       ],
       "rotationEulerDeg": [
@@ -34,9 +34,9 @@
         0.0
       ],
       "scale": [
-        2.0,
-        3.0,
-        2.0
+        4.0,
+        4.0,
+        4.0
       ],
       "typeKey": "Building"
     },
@@ -45,7 +45,7 @@
       "objectId": "field_obj_2",
       "position": [
         0.0,
-        -5.0,
+        0.0,
         0.0
       ],
       "rotationEulerDeg": [

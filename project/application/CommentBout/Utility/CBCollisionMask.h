@@ -3,39 +3,24 @@
 
 namespace CommentBout {
 
+	// 互換維持用:
+	// 段階移行中は旧名前空間を残しつつ、実体は CollisionMask 側の統一プリセットを参照する。
 	namespace CollisionLayer {
-		constexpr CommentBoutCollision::CollisionType CBPlayer = CommentBoutCollision::CollisionType::Player;
-		constexpr CommentBoutCollision::CollisionType CBPlayerAttack = CommentBoutCollision::CollisionType::PlayerBullet;
-		constexpr CommentBoutCollision::CollisionType CBGrass = CommentBoutCollision::CollisionType::Item;
-		constexpr CommentBoutCollision::CollisionType CBGround = CommentBoutCollision::CollisionType::Block;
-		constexpr CommentBoutCollision::CollisionType CBEnemy = CommentBoutCollision::CollisionType::Enemy;
-		constexpr CommentBoutCollision::CollisionType CBEnemyBullet = CommentBoutCollision::CollisionType::EnemyBullet;
+		constexpr CommentBoutCollision::CollisionType CBPlayer = CommentBoutCollision::LayerPreset::Player;
+		constexpr CommentBoutCollision::CollisionType CBPlayerAttack = CommentBoutCollision::LayerPreset::PlayerAttack;
+		constexpr CommentBoutCollision::CollisionType CBGrass = CommentBoutCollision::LayerPreset::Item;
+		constexpr CommentBoutCollision::CollisionType CBGround = CommentBoutCollision::LayerPreset::Ground;
+		constexpr CommentBoutCollision::CollisionType CBEnemy = CommentBoutCollision::LayerPreset::Enemy;
+		constexpr CommentBoutCollision::CollisionType CBEnemyBullet = CommentBoutCollision::LayerPreset::EnemyBullet;
 	}
 
 	namespace CollisionMask {
-		constexpr CommentBoutCollision::CollisionType CBPlayer =
-			CollisionLayer::CBEnemy |
-			CollisionLayer::CBEnemyBullet |
-			CollisionLayer::CBGround;
-
-		constexpr CommentBoutCollision::CollisionType CBPlayerAttack =
-			CollisionLayer::CBGrass |
-			CollisionLayer::CBEnemy;
-
-		constexpr CommentBoutCollision::CollisionType CBGrass =
-			CollisionLayer::CBPlayerAttack;
-
-		constexpr CommentBoutCollision::CollisionType CBGround =
-			CommentBoutCollision::CollisionType::None;
-
-		constexpr CommentBoutCollision::CollisionType CBEnemy =
-			CollisionLayer::CBPlayer |
-			CollisionLayer::CBPlayerAttack;
-
-
-		constexpr CommentBoutCollision::CollisionType CBEnemyBullet =
-			CollisionLayer::CBPlayer |
-			CollisionLayer::CBGround;
+		constexpr CommentBoutCollision::CollisionType CBPlayer = CommentBoutCollision::MaskPreset::Player;
+		constexpr CommentBoutCollision::CollisionType CBPlayerAttack = CommentBoutCollision::MaskPreset::PlayerAttack;
+		constexpr CommentBoutCollision::CollisionType CBGrass = CommentBoutCollision::LayerPreset::PlayerAttack;
+		constexpr CommentBoutCollision::CollisionType CBGround = CommentBoutCollision::MaskPreset::Ground;
+		constexpr CommentBoutCollision::CollisionType CBEnemy = CommentBoutCollision::MaskPreset::Enemy;
+		constexpr CommentBoutCollision::CollisionType CBEnemyBullet = CommentBoutCollision::MaskPreset::EnemyBullet;
 	}
 
 }

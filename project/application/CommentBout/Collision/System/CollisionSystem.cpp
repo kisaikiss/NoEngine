@@ -14,6 +14,9 @@ namespace CommentBoutCollision {
 		// 未使用の警告を抑制
 		static_cast<void>(deltaTime);
 
+		// 衝突イベントEntityは毎フレーム再生成するため、最初に前フレーム分を掃除する。
+		ClearCollisionEvents(registry);
+
 		//コライダーの更新
 		// TransformやTransform2Dの変更を各コライダーに反映
 		UpdateCollider3D(registry);
@@ -274,7 +277,7 @@ namespace CommentBoutCollision {
 				bool isColliding = false;
 				if (projected->isBox) {
 
-					// 投影された凸包 vs 2D AABB（SAT判定）
+					// 投影された convex hull vs 2D AABB（SAT 判定）
 					// 外接 AABB ではなく実際のシルエット形状で判定
 					isColliding = CollisionAlgorithms::CheckConvexHullAABB(
 						projected->convexHull,
@@ -305,6 +308,16 @@ namespace CommentBoutCollision {
 						collider3D->isColliding = true;
 						collider3D->collidedEntity = collider2DEntity;
 					}
+
+					// 判定結果をイベントEntityとして発行し、Resolver系Systemで共通参照できるようにする。
+					EmitCollisionEvent(
+						registry,
+						CollisionEventType::Projected3DVs2D,
+						projectedEntity,
+						collider2DEntity,
+						projected->collisionLayer,
+						collider2D->collisionLayer
+					);
 				}
 			}
 		}
@@ -367,6 +380,16 @@ namespace CommentBoutCollision {
 					c1->collidedEntity = entity2;
 					c2->isColliding = true;
 					c2->collidedEntity = entity1;
+
+					// 3D同士の接触もイベント化して、将来的な責務分離に使えるようにする。
+					EmitCollisionEvent(
+						registry,
+						CollisionEventType::Collider3DVs3D,
+						entity1,
+						entity2,
+						c1->collisionLayer,
+						c2->collisionLayer
+					);
 				}
 			}
 		}
@@ -411,6 +434,40 @@ namespace CommentBoutCollision {
 				}
 			}
 		}
+	}
+
+
+	void CollisionSystem::ClearCollisionEvents(No::Registry& registry) {
+		std::vector<No::Entity> oldEvents;
+		for (auto e : registry.View<CollisionEventTag, CollisionEventComponent>()) {
+			oldEvents.push_back(e);
+		}
+		for (auto e : oldEvents) {
+			registry.DestroyEntity(e);
+		}
+	}
+
+
+	void CollisionSystem::EmitCollisionEvent(
+		No::Registry& registry,
+		CollisionEventType type,
+		No::Entity entityA,
+		No::Entity entityB,
+		CollisionType layerA,
+		CollisionType layerB
+	) {
+		auto eventEntity = registry.GenerateEntity();
+		registry.AddComponent<CollisionEventTag>(eventEntity);
+		auto* eventComp = registry.AddComponent<CollisionEventComponent>(eventEntity);
+		if (!eventComp) {
+			registry.DestroyEntity(eventEntity);
+			return;
+		}
+		eventComp->type = type;
+		eventComp->entityA = entityA;
+		eventComp->entityB = entityB;
+		eventComp->layerA = layerA;
+		eventComp->layerB = layerB;
 	}
 
 

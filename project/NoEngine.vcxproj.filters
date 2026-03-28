@@ -151,7 +151,6 @@
     <ClCompile Include="application\CommentBout\System\RailCameraSystem.cpp" />
     <ClCompile Include="application\TestApp\Scene\TestScene.cpp" />
     <ClCompile Include="application\TestApp\Scene\TestScene2.cpp" />
-    <ClCompile Include="application\TestApp\Scene\TestScene3.cpp" />
     <ClCompile Include="application\TestApp\System\TestSystem.cpp" />
     <ClCompile Include="application\TestApp\TestApp.cpp" />
     <ClCompile Include="application\CommentBout\Collision\Utility\CoordinateConverter.cpp" />
@@ -177,6 +176,7 @@
     <ClCompile Include="application\CommentBout\System\RailProgressBarSystem.cpp" />
     <ClCompile Include="application\CommentBout\FieldObject\System\FieldEditorSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\SpriteAnimationSystem.cpp" />
+    <ClCompile Include="application\CommentBout\Collision\System\CollisionDebugRenderSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Functions\ECS\System\CameraSystem.h" />
@@ -371,7 +371,6 @@
     <ClInclude Include="engine\Utilities\Random.h" />
     <ClInclude Include="engine\Functions\ECS\Component\StartTransformComponent.h" />
     <ClInclude Include="engine\Functions\ECS\Component\PauseComponent.h" />
-    <ClInclude Include="application\TestApp\Scene\TestScene3.h" />
     <ClInclude Include="application\TestApp\System\TestSystem.h" />
     <ClInclude Include="application\TestApp\TestApp.h" />
     <ClInclude Include="application\CommentBout\Collision\Utility\CoordinateConverter.h" />
@@ -409,6 +408,9 @@
     <ClInclude Include="application\CommentBout\Component\PlayerConfigComponent.h" />
     <ClInclude Include="engine\Functions\ECS\Component\Animator2DComponent.h" />
     <ClInclude Include="engine\Functions\ECS\System\SpriteAnimationSystem.h" />
+    <ClInclude Include="application\CommentBout\Collision\Event\CollisionEvent.h" />
+    <ClInclude Include="application\CommentBout\Collision\Component\CollisionDebugConfigComponent.h" />
+    <ClInclude Include="application\CommentBout\Collision\System\CollisionDebugRenderSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

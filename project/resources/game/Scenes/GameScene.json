@@ -1,93 +1,5 @@
 {
     "entities": {
-        "Grass_0": {
-            "components": {
-                "TransformComponent": {
-                    "rotation": [
-                        0.0,
-                        0.0,
-                        0.0,
-                        1.0
-                    ],
-                    "scale": [
-                        2.0,
-                        0.5,
-                        2.0
-                    ],
-                    "translate": [
-                        -3.5,
-                        -4.199999809265137,
-                        10.5
-                    ]
-                }
-            }
-        },
-        "Grass_1": {
-            "components": {
-                "TransformComponent": {
-                    "rotation": [
-                        0.0,
-                        0.0,
-                        0.0,
-                        1.0
-                    ],
-                    "scale": [
-                        2.0,
-                        0.4000000059604645,
-                        2.0
-                    ],
-                    "translate": [
-                        3.0999999046325684,
-                        -3.9000000953674316,
-                        20.899999618530273
-                    ]
-                }
-            }
-        },
-        "Grass_2": {
-            "components": {
-                "TransformComponent": {
-                    "rotation": [
-                        0.0,
-                        0.0,
-                        0.0,
-                        1.0
-                    ],
-                    "scale": [
-                        2.0,
-                        0.20000000298023224,
-                        2.0
-                    ],
-                    "translate": [
-                        0.10000000149011612,
-                        -4.400000095367432,
-                        44.20000076293945
-                    ]
-                }
-            }
-        },
-        "Ground": {
-            "components": {
-                "TransformComponent": {
-                    "rotation": [
-                        0.0,
-                        0.0,
-                        0.0,
-                        1.0
-                    ],
-                    "scale": [
-                        10.0,
-                        1.0,
-                        300.0
-                    ],
-                    "translate": [
-                        0.0,
-                        -5.0,
-                        0.0
-                    ]
-                }
-            }
-        },
         "OptionBackground": {
             "components": {
                 "SpriteComponent": {
@@ -102,6 +14,12 @@
                     "pivot": [
                         0.5,
                         0.5
+                    ],
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
                     ]
                 },
                 "Transform2DComponent": {
@@ -131,6 +49,12 @@
                     "pivot": [
                         0.5,
                         0.5
+                    ],
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
                     ]
                 },
                 "Transform2DComponent": {
@@ -140,8 +64,8 @@
                         28.0
                     ],
                     "translate": [
-                        579.0,
-                        1138.4000244140625
+                        363.79998779296875,
+                        860.0
                     ]
                 }
             }
@@ -160,6 +84,12 @@
                     "pivot": [
                         0.5,
                         0.5
+                    ],
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
                     ]
                 },
                 "Transform2DComponent": {
@@ -189,6 +119,12 @@
                     "pivot": [
                         0.5,
                         0.5
+                    ],
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
                     ]
                 },
                 "Transform2DComponent": {
@@ -218,6 +154,12 @@
                     "pivot": [
                         0.5,
                         0.5
+                    ],
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
                     ]
                 },
                 "Transform2DComponent": {
@@ -247,6 +189,12 @@
                     "pivot": [
                         0.5,
                         0.5
+                    ],
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
                     ]
                 },
                 "Transform2DComponent": {
@@ -276,6 +224,12 @@
                     "pivot": [
                         0.5,
                         0.5
+                    ],
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
                     ]
                 },
                 "Transform2DComponent": {
@@ -305,6 +259,12 @@
                     "pivot": [
                         0.5,
                         0.5
+                    ],
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
                     ]
                 },
                 "Transform2DComponent": {
@@ -334,6 +294,12 @@
                     "pivot": [
                         0.5,
                         0.5
+                    ],
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
                     ]
                 },
                 "Transform2DComponent": {
@@ -363,6 +329,12 @@
                     "pivot": [
                         0.5,
                         0.5
+                    ],
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
                     ]
                 },
                 "Transform2DComponent": {
@@ -392,6 +364,12 @@
                     "pivot": [
                         0.5,
                         0.5
+                    ],
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
                     ]
                 },
                 "Transform2DComponent": {
@@ -421,6 +399,12 @@
                     "pivot": [
                         0.5,
                         0.5
+                    ],
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
                     ]
                 },
                 "Transform2DComponent": {
@@ -450,6 +434,12 @@
                     "pivot": [
                         0.5,
                         0.5
+                    ],
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
                     ]
                 },
                 "Transform2DComponent": {
@@ -479,6 +469,12 @@
                     "pivot": [
                         0.5,
                         0.5
+                    ],
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
                     ]
                 },
                 "Transform2DComponent": {
@@ -527,7 +523,6 @@
                         0.10000000149011612,
                         0.949999988079071
                     ],
-                    "barBaseLayer": 955,
                     "barBaseSize": [
                         360.0,
                         16.0
@@ -538,7 +533,6 @@
                         0.2800000011920929,
                         0.949999988079071
                     ],
-                    "barFillLayer": 956,
                     "barFillMinSize": [
                         8.0,
                         16.0
@@ -561,7 +555,6 @@
                         979.2999877929688,
                         652.4000244140625
                     ],
-                    "bgLayer": 945,
                     "bgRotation": -0.2800000011920929,
                     "bgStartPosition": [
                         640.0,
@@ -590,7 +583,6 @@
                         0.25,
                         1.0
                     ],
-                    "cursorLayer": 952,
                     "cursorSelectOffset": [
                         -276.20001220703125,
                         0.0
@@ -609,7 +601,6 @@
                         198.6999969482422,
                         430.0
                     ],
-                    "dimLayer": 940,
                     "dimRotation": -9.699999809265137,
                     "dimSize": [
                         621.2999877929688,
@@ -633,20 +624,17 @@
                         0.23999999463558197,
                         0.8999999761581421
                     ],
-                    "itemLayer": 950,
                     "itemOverlayColor": [
                         0.0,
                         0.0,
                         0.0,
                         0.6700000166893005
                     ],
-                    "itemOverlayLayer": 959,
                     "itemSize": [
                         620.0,
                         52.70000076293945
                     ],
                     "itemSpacing": 69.5999984741211,
-                    "labelLayer": 951,
                     "labelOffset": [
                         -191.5,
                         0.0
@@ -665,7 +653,6 @@
                         943.0,
                         179.8000030517578
                     ],
-                    "lineLayer": 958,
                     "lineRotation": -0.2800000011920929,
                     "lineSize": [
                         919.7000122070313,
@@ -695,7 +682,6 @@
                         1383.199951171875,
                         248.39999389648438
                     ],
-                    "toggleLayer": 957,
                     "toggleOffColor": [
                         0.699999988079071,
                         0.20000000298023224,
@@ -734,6 +720,12 @@
                     "pivot": [
                         0.5,
                         0.5
+                    ],
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
                     ]
                 },
                 "Transform2DComponent": {
@@ -763,6 +755,12 @@
                     "pivot": [
                         0.5,
                         0.5
+                    ],
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
                     ]
                 },
                 "Transform2DComponent": {
@@ -792,6 +790,12 @@
                     "pivot": [
                         0.5,
                         0.5
+                    ],
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
                     ]
                 },
                 "Transform2DComponent": {
@@ -821,6 +825,12 @@
                     "pivot": [
                         0.5,
                         0.5
+                    ],
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
                     ]
                 },
                 "Transform2DComponent": {
@@ -850,6 +860,12 @@
                     "pivot": [
                         0.5,
                         0.5
+                    ],
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
                     ]
                 },
                 "Transform2DComponent": {
@@ -862,27 +878,6 @@
                         640.0,
                         1138.4000244140625
                     ]
-                }
-            }
-        },
-        "OptionState": {
-            "components": {
-                "OptionStateComponent": {
-                    "bgmVolume": 0.49999988079071045,
-                    "confirmAnimTime": 0.0,
-                    "confirmIndex": -1,
-                    "isConfirmAnimating": false,
-                    "isEditing": false,
-                    "isOpen": false,
-                    "itemCount": 5,
-                    "masterVolume": 0.49999988079071045,
-                    "phase": 0,
-                    "phaseDuration": 1.0,
-                    "phaseTime": 0.0,
-                    "requestedAction": 0,
-                    "seVolume": 0.49999988079071045,
-                    "selectedIndex": 4,
-                    "vibrationEnabled": true
                 }
             }
         },
@@ -900,6 +895,12 @@
                     "pivot": [
                         0.5,
                         0.5
+                    ],
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
                     ]
                 },
                 "Transform2DComponent": {
@@ -929,6 +930,12 @@
                     "pivot": [
                         0.5,
                         0.5
+                    ],
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
                     ]
                 },
                 "Transform2DComponent": {
@@ -958,6 +965,12 @@
                     "pivot": [
                         0.5,
                         0.5
+                    ],
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
                     ]
                 },
                 "Transform2DComponent": {
@@ -987,6 +1000,12 @@
                     "pivot": [
                         0.5,
                         0.5
+                    ],
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
                     ]
                 },
                 "Transform2DComponent": {
@@ -1016,6 +1035,12 @@
                     "pivot": [
                         0.5,
                         0.5
+                    ],
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
                     ]
                 },
                 "Transform2DComponent": {
@@ -1045,6 +1070,12 @@
                     "pivot": [
                         0.5,
                         0.5
+                    ],
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
                     ]
                 },
                 "Transform2DComponent": {
@@ -1074,6 +1105,12 @@
                     "pivot": [
                         0.5,
                         0.5
+                    ],
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
                     ]
                 },
                 "Transform2DComponent": {
@@ -1103,6 +1140,12 @@
                     "pivot": [
                         0.5,
                         0.5
+                    ],
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
                     ]
                 },
                 "Transform2DComponent": {
@@ -1132,6 +1175,12 @@
                     "pivot": [
                         0.5,
                         0.5
+                    ],
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
                     ]
                 },
                 "Transform2DComponent": {
@@ -1157,7 +1206,6 @@
                         -163.8000030517578,
                         0.0
                     ],
-                    "cursorLayer": 930,
                     "cursorSize": [
                         32.0,
                         32.0
@@ -1167,7 +1215,6 @@
                         0.0
                     ],
                     "dimAlpha": 0.8999999761581421,
-                    "dimLayer": 900,
                     "easeType": 0,
                     "itemBaseEndPosition": [
                         224.10000610351563,
@@ -1177,7 +1224,6 @@
                         639.4000244140625,
                         520.0
                     ],
-                    "itemLayer": 920,
                     "itemSize": [
                         240.0,
                         49.400001525878906
@@ -1197,7 +1243,6 @@
                         621.2999877929688,
                         952.0999755859375
                     ],
-                    "menuBgLayer": 905,
                     "menuBgStartPosition": [
                         198.6999969482422,
                         430.0
@@ -1223,7 +1268,6 @@
                         16.0,
                         923.0999755859375
                     ],
-                    "panelLineLayer": 907,
                     "panelLineStartPosition": [
                         459.20001220703125,
                         -40.0
@@ -1237,7 +1281,6 @@
                         188.10000610351563,
                         128.89999389648438
                     ],
-                    "titleLayer": 910,
                     "titleSize": [
                         415.3999938964844,
                         100.80000305175781
@@ -1263,6 +1306,12 @@
                     "pivot": [
                         0.5,
                         0.5
+                    ],
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
                     ]
                 },
                 "Transform2DComponent": {
@@ -1275,24 +1324,6 @@
                         459.20001220703125,
                         -40.0
                     ]
-                }
-            }
-        },
-        "PauseState": {
-            "components": {
-                "PauseStateComponent": {
-                    "confirmAnimTime": 0.0,
-                    "confirmIndex": -1,
-                    "isConfirmAnimating": false,
-                    "isPaused": false,
-                    "itemCount": 4,
-                    "justEnteredPause": false,
-                    "justExitedPause": false,
-                    "phase": 0,
-                    "phaseDuration": 1.0,
-                    "phaseTime": 0.0,
-                    "requestedAction": 0,
-                    "selectedIndex": 0
                 }
             }
         },
@@ -1310,6 +1341,12 @@
                     "pivot": [
                         0.5,
                         0.5
+                    ],
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
                     ]
                 },
                 "Transform2DComponent": {
@@ -1325,43 +1362,41 @@
                 }
             }
         },
-        "Player": {
+        "camera": {
             "components": {
-                "PlayerAttackComponent": {
-                    "attackLayer": 5,
-                    "attackSize": [
-                        140.0,
-                        140.0
-                    ],
-                    "spawnOffset": [
-                        0.0,
-                        -80.0
-                    ],
-                    "visibleTime": 0.3499999940395355
+                "CameraComponent": {
+                    "fov": 0.44999998807907104
                 },
-                "SpriteComponent": {
-                    "color": [
-                        1.0,
+                "DebugCameraComponent": {
+                    "center": [
+                        0.015436242334544659,
+                        1.9841150045394897,
+                        -0.0001599359093233943
+                    ],
+                    "distance": 6.111090660095215,
+                    "drawCenter": false,
+                    "mousePositionX": 654,
+                    "mousePositionY": 441,
+                    "mouseWheelY": -120.0,
+                    "phi": 1.560625672340393,
+                    "theta": -1.5806444883346558
+                },
+                "TransformComponent": {
+                    "rotation": [
+                        0.005085246171802282,
+                        0.004923997912555933,
+                        -2.5040368200279772e-05,
+                        0.9999749660491943
+                    ],
+                    "scale": [
                         1.0,
                         1.0,
                         1.0
                     ],
-                    "flipX": false,
-                    "flipY": false,
-                    "pivot": [
-                        0.5,
-                        0.5
-                    ]
-                },
-                "Transform2DComponent": {
-                    "rotation": 0.0,
-                    "scale": [
-                        128.0,
-                        200.0
-                    ],
                     "translate": [
-                        536.4638671875,
-                        443.8494873046875
+                        -0.04474267736077309,
+                        2.0462677478790283,
+                        -6.110637664794922
                     ]
                 }
             }

@@ -1,8 +1,20 @@
 #include "CollisionAlgorithms.h"
+#include "application/CommentBout/Collision/Component/ProjectedColliderComponent.h"
+#include "engine/Functions/ECS/Component/Transform2DComponent.h"
+#include "engine/Functions/ECS/Component/TransformComponent.h"
 #include <algorithm>
 #include <cmath>
 
 namespace CommentBoutCollision {
+
+	namespace {
+	No::Vector3 NormalizeOrDefault(const No::Vector3& v, const No::Vector3& fallback) {
+		if (v.LengthSquared() <= 0.000001f) {
+			return fallback;
+		}
+		return v.Normalize();
+	}
+	}
 
 	bool CollisionAlgorithms::CheckCircleCircle(
 		const No::Vector2& center1, float radius1,
@@ -328,4 +340,79 @@ namespace CommentBoutCollision {
 		return true;
 	}
 
+	bool CollisionAlgorithms::CheckProjectedVsSpriteAABB(
+		const ProjectedColliderComponent& projected,
+		const No::Transform2DComponent& spriteTransform
+	) {
+		if (!projected.isVisible) {
+			return false;
+		}
+
+		if (projected.isBox) {
+			return CheckConvexHullAABB(
+				projected.convexHull,
+				spriteTransform.translate,
+				spriteTransform.scale
+			);
+		}
+
+		return CheckCircleAABB(
+			projected.screenPosition,
+			projected.screenRadius,
+			spriteTransform.translate,
+			spriteTransform.scale
+		);
+	}
+
+	bool CollisionAlgorithms::CheckPointInCameraGate(
+		const No::Vector3& worldPos,
+		No::TransformComponent& cameraTransform,
+		const CameraGateParams& gate
+	) {
+		if (!gate.useCameraGate) {
+			return true;
+		}
+
+		No::Matrix4x4 cameraWorld = cameraTransform.MakeAffineMatrix4x4();
+		const No::Vector3 cameraPos = cameraTransform.GetWorldPosition();
+		No::Vector3 right = NormalizeOrDefault(cameraWorld.TransformNormal(No::Vector3::RIGHT), No::Vector3::RIGHT);
+		No::Vector3 up = NormalizeOrDefault(cameraWorld.TransformNormal(No::Vector3::UP), No::Vector3::UP);
+		No::Vector3 forward = NormalizeOrDefault(cameraWorld.TransformNormal(No::Vector3::FORWARD), No::Vector3::FORWARD);
+
+		const No::Vector3 toTarget = worldPos - cameraPos;
+		const float camX = toTarget.Dot(right);
+		const float camY = toTarget.Dot(up);
+		const float camZ = toTarget.Dot(forward);
+
+		const float nearZ = std::max(0.0f, gate.nearZ);
+		const float depth = std::max(0.001f, gate.depth);
+		const float halfW = std::max(0.001f, gate.halfWidth);
+		const float halfH = std::max(0.001f, gate.halfHeight);
+
+		if (camZ < nearZ || camZ > nearZ + depth) {
+			return false;
+		}
+		if (std::abs(camX) > halfW) {
+			return false;
+		}
+		if (std::abs(camY) > halfH) {
+			return false;
+		}
+		return true;
+	}
+
+	bool CollisionAlgorithms::CheckProjectedVsSpriteAndCameraGate(
+		const ProjectedColliderComponent& projected,
+		const No::Vector3& worldPos,
+		const No::Transform2DComponent& spriteTransform,
+		No::TransformComponent& cameraTransform,
+		const CameraGateParams& gate
+	) {
+		const bool spriteOverlap = CheckProjectedVsSpriteAABB(projected, spriteTransform);
+		if (!spriteOverlap) {
+			return false;
+		}
+
+		return CheckPointInCameraGate(worldPos, cameraTransform, gate);
+	}
 }

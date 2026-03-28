@@ -266,6 +266,7 @@ void PlayerAttackResolveSystem::Update(No::Registry& registry, float deltaTime)
 			if (ContainsEntity(attackDamage->hitEnemies, target.entity)) {
 				continue;
 			}
+
 			if (!CheckProjectedVsAttack(*target.projected, *attackCollider)) {
 				continue;
 			}
@@ -310,4 +311,6 @@ void PlayerAttackResolveSystem::Update(No::Registry& registry, float deltaTime)
 			attackDamage->hitEnemies.push_back(target.entity);
 		}
 	}
+
+	// 自機攻撃側は遮蔽判定を優先し、イベント多経路を排除して命中条件の追跡性を高めている。
 }

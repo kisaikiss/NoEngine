@@ -12,16 +12,8 @@
 #include "engine/Functions/ECS/Component/CameraComponent.h"
 #include "engine/Functions/ECS/Component/Transform2DComponent.h"
 #include <algorithm>
-#include <cmath>
 
 namespace {
-No::Vector3 NormalizeOrDefault(const No::Vector3& v, const No::Vector3& fallback) {
-	if (v.LengthSquared() <= 0.000001f) {
-		return fallback;
-	}
-	return v.Normalize();
-}
-
 void EmitDamageRequest(
 	No::Registry& registry,
 	No::Entity target,
@@ -44,75 +36,16 @@ void EmitDamageRequest(
 	request->amount = amount;
 	request->ignoreInvincible = ignoreInvincible;
 }
-
-bool CheckProjectedVsPlayerSprite(
-	const CommentBoutCollision::ProjectedColliderComponent& projected,
-	const No::Transform2DComponent& playerTransform2D
-) {
-	if (!projected.isVisible) {
-		return false;
-	}
-
-	if (projected.isBox) {
-		return CommentBoutCollision::CollisionAlgorithms::CheckConvexHullAABB(
-			projected.convexHull,
-			playerTransform2D.translate,
-			playerTransform2D.scale
-		);
-	}
-
-	return CommentBoutCollision::CollisionAlgorithms::CheckCircleAABB(
-		projected.screenPosition,
-		projected.screenRadius,
-		playerTransform2D.translate,
-		playerTransform2D.scale
-	);
-}
-
-bool CheckEnemyInCameraGate(
-	const No::Vector3& enemyWorldPos,
-	No::TransformComponent& cameraTransform,
-	const PlayerHitboxComponent& hitbox
-) {
-	No::Matrix4x4 cameraWorld = cameraTransform.MakeAffineMatrix4x4();
-	const No::Vector3 cameraPos = cameraTransform.GetWorldPosition();
-	No::Vector3 right = NormalizeOrDefault(cameraWorld.TransformNormal(No::Vector3::RIGHT), No::Vector3::RIGHT);
-	No::Vector3 up = NormalizeOrDefault(cameraWorld.TransformNormal(No::Vector3::UP), No::Vector3::UP);
-	No::Vector3 forward = NormalizeOrDefault(cameraWorld.TransformNormal(No::Vector3::FORWARD), No::Vector3::FORWARD);
-
-	const No::Vector3 toEnemy = enemyWorldPos - cameraPos;
-	const float camX = toEnemy.Dot(right);
-	const float camY = toEnemy.Dot(up);
-	const float camZ = toEnemy.Dot(forward);
-
-	const float nearZ = std::max(0.0f, hitbox.cameraGateNear);
-	const float depth = std::max(0.001f, hitbox.cameraGateDepth);
-	const float halfW = std::max(0.001f, hitbox.cameraGateHalfWidth);
-	const float halfH = std::max(0.001f, hitbox.cameraGateHalfHeight);
-
-	if (camZ < nearZ || camZ > nearZ + depth) {
-		return false;
-	}
-	if (std::abs(camX) > halfW) {
-		return false;
-	}
-	if (std::abs(camY) > halfH) {
-		return false;
-	}
-	return true;
-}
 }
 
 void EnemyContactDamageSystem::Update(No::Registry& registry, float deltaTime)
 {
 	static_cast<void>(deltaTime);
 
-	No::CameraComponent* activeCamera = nullptr;
 	No::TransformComponent* activeCameraTransform = nullptr;
 	auto activeCameraView = registry.View<No::CameraComponent, No::TransformComponent, No::ActiveCameraTag>();
 	auto activeCameraIt = activeCameraView.begin();
 	if (activeCameraIt != activeCameraView.end()) {
-		activeCamera = registry.GetComponent<No::CameraComponent>(*activeCameraIt);
 		activeCameraTransform = registry.GetComponent<No::TransformComponent>(*activeCameraIt);
 	}
 
@@ -122,7 +55,7 @@ void EnemyContactDamageSystem::Update(No::Registry& registry, float deltaTime)
 		auto* health = registry.GetComponent<HealthComponent>(entity);
 		auto* collider3D = registry.GetComponent<CommentBoutCollision::Collider3DComponent>(entity);
 		auto* enemyProjected = registry.GetComponent<CommentBoutCollision::ProjectedColliderComponent>(entity);
-		if (!enemy || !health || !collider3D) {
+		if (!enemy || !health || !collider3D || !enemyProjected) {
 			continue;
 		}
 		if (health->isDead || health->hp <= 0) {
@@ -134,35 +67,49 @@ void EnemyContactDamageSystem::Update(No::Registry& registry, float deltaTime)
 		auto hitboxView = registry.View<CBPlayerHitboxTag, PlayerHitboxComponent>();
 		for (auto hitboxEntity : hitboxView) {
 			auto* hitbox = registry.GetComponent<PlayerHitboxComponent>(hitboxEntity);
-			if (!hitbox) {
+			if (!hitbox || hitbox->playerEntity == No::nullEntity) {
 				continue;
 			}
 
-			bool hit = false;
-			if (hitbox->useCameraGateForPlayerHit && enemyProjected && activeCamera && activeCameraTransform) {
-				auto* playerTransform2D = registry.GetComponent<No::Transform2DComponent>(hitbox->playerEntity);
-				if (playerTransform2D) {
-					const bool spriteOverlap = CheckProjectedVsPlayerSprite(*enemyProjected, *playerTransform2D);
-					const bool spriteGatePass = CheckEnemyInCameraGate(collider3D->worldPosition, *activeCameraTransform, *hitbox);
-					hit = spriteOverlap && spriteGatePass;
-				}
+			auto* playerTransform2D = registry.GetComponent<No::Transform2DComponent>(hitbox->playerEntity);
+			if (!playerTransform2D || !activeCameraTransform) {
+				continue;
 			}
 
-			if (hit) {
-				isTouchingPlayerHitbox = true;
-				auto* playerHealth = registry.GetComponent<HealthComponent>(hitbox->playerEntity);
-				auto* playerInvincible = registry.GetComponent<InvincibleComponent>(hitbox->playerEntity);
-				const bool canTakeDamage =
-					playerHealth &&
-					!playerHealth->isDead &&
-					(!playerInvincible || playerInvincible->time <= 0.0f);
+			CommentBoutCollision::CameraGateParams gate{};
+			gate.useCameraGate = hitbox->useCameraGateForPlayerHit;
+			gate.nearZ = hitbox->cameraGateNear;
+			gate.depth = hitbox->cameraGateDepth;
+			gate.halfWidth = hitbox->cameraGateHalfWidth;
+			gate.halfHeight = hitbox->cameraGateHalfHeight;
 
-				if (canTakeDamage && !enemy->wasCollidingWithPlayer) {
-					EmitDamageRequest(registry, hitbox->playerEntity, entity, 1, false);
-				}
+			const bool hit = CommentBoutCollision::CollisionAlgorithms::CheckProjectedVsSpriteAndCameraGate(
+				*enemyProjected,
+				collider3D->worldPosition,
+				*playerTransform2D,
+				*activeCameraTransform,
+				gate
+			);
+			if (!hit) {
+				continue;
+			}
+
+			isTouchingPlayerHitbox = true;
+			auto* playerHealth = registry.GetComponent<HealthComponent>(hitbox->playerEntity);
+			auto* playerInvincible = registry.GetComponent<InvincibleComponent>(hitbox->playerEntity);
+			const bool canTakeDamage =
+				playerHealth &&
+				!playerHealth->isDead &&
+				(!playerInvincible || playerInvincible->time <= 0.0f);
+
+			if (canTakeDamage && !enemy->wasCollidingWithPlayer) {
+				EmitDamageRequest(registry, hitbox->playerEntity, entity, 1, false);
 			}
 		}
 
 		enemy->wasCollidingWithPlayer = isTouchingPlayerHitbox;
 	}
+
+	// Phase14コメント:
+	// 敵接触被弾も敵弾被弾と同じ共通判定関数を使い、条件不一致をなくしている。
 }

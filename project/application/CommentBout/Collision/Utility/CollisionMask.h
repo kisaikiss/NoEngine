@@ -84,6 +84,51 @@ namespace CommentBoutCollision {
 
 	}
 
+	/// <summary>
+	/// CommentBoutで使用する衝突レイヤーの統一プリセット。
+	/// 旧CBCollisionMaskの命名をCollisionMask側へ集約する。
+	/// </summary>
+	namespace LayerPreset {
+		constexpr CollisionType Player = CollisionType::Player;
+		constexpr CollisionType Enemy = CollisionType::Enemy;
+		constexpr CollisionType PlayerAttack = CollisionType::PlayerBullet;
+		constexpr CollisionType EnemyBullet = CollisionType::EnemyBullet;
+		constexpr CollisionType Ground = CollisionType::Block;
+		constexpr CollisionType FieldObject = CollisionType::Block;
+		constexpr CollisionType Item = CollisionType::Item;
+	}
+
+	/// <summary>
+	/// CommentBoutで使用する衝突マスクの統一プリセット。
+	/// </summary>
+	namespace MaskPreset {
+		constexpr CollisionType Player =
+			static_cast<CollisionType>(
+				static_cast<uint32_t>(LayerPreset::Enemy) |
+				static_cast<uint32_t>(LayerPreset::EnemyBullet) |
+				static_cast<uint32_t>(LayerPreset::Ground)
+			);
+
+		constexpr CollisionType PlayerAttack =
+			static_cast<CollisionType>(
+				static_cast<uint32_t>(LayerPreset::Enemy) |
+				static_cast<uint32_t>(LayerPreset::Item)
+			);
+
+		constexpr CollisionType Enemy =
+			static_cast<CollisionType>(
+				static_cast<uint32_t>(LayerPreset::Player) |
+				static_cast<uint32_t>(LayerPreset::PlayerAttack)
+			);
+
+		constexpr CollisionType EnemyBullet =
+			static_cast<CollisionType>(
+				static_cast<uint32_t>(LayerPreset::Player) |
+				static_cast<uint32_t>(LayerPreset::Ground)
+			);
+
+		constexpr CollisionType Ground = CollisionType::None;
+	}
 
 
 

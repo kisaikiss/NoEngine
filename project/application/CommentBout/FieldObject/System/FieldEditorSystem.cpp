@@ -429,7 +429,6 @@ void FieldEditorSystem::Update(No::Registry& registry, float deltaTime)
 	static No::Entity selectedEntity = No::nullEntity;
 	static int addTypeIndex = 0;
 	static int idCounter = 0;
-	static bool drawCollisionDebug = false;
 
 	if (loadedRegistry != &registry || loadedStageName != stageName) {
 		LoadTypeDefinitions(typeDefinitions);
@@ -440,21 +439,6 @@ void FieldEditorSystem::Update(No::Registry& registry, float deltaTime)
 	}
 
 	UpdateLoadedFieldObjects(registry, *resources, typeDefinitions);
-
-	if (drawCollisionDebug) {
-		for (auto entity : registry.View<CBFieldObjectTag, FieldPlacementComponent, CommentBoutCollision::Collider3DComponent>()) {
-			auto* placement = registry.GetComponent<FieldPlacementComponent>(entity);
-			auto* collider = registry.GetComponent<CommentBoutCollision::Collider3DComponent>(entity);
-			if (!placement || !collider || !placement->hasCollision) {
-				continue;
-			}
-			const No::Color color = collider->isColliding
-				? No::Color(1.0f, 0.2f, 0.2f, 1.0f)
-				: No::Color(0.2f, 1.0f, 0.2f, 1.0f);
-			NoEngine::Primitive::DrawCube(collider->worldPosition, collider->worldBoxSize, color);
-		}
-	}
-
 #ifdef USE_IMGUI
 	ImGui::Begin("Field Editor");
 	ImGui::Text("ステージ: %s", stageName.c_str());
@@ -475,9 +459,6 @@ void FieldEditorSystem::Update(No::Registry& registry, float deltaTime)
 	if (ImGui::Button("種別デフォルト保存")) {
 		SaveTypeDefinitions(typeDefinitions);
 	}
-
-	ImGui::Checkbox("当たり判定デバッグ表示", &drawCollisionDebug);
-
 	std::vector<std::string> typeKeys;
 	for (const auto& pair : typeDefinitions) {
 		typeKeys.push_back(pair.first);

@@ -138,12 +138,12 @@ inline void InitializeCommentBoutGameResources(GameResourceComponent& resources)
 
 	// ---- Model path catalog ----------------------------------------------
 	addModel(CommentBoutResourceKey::kEnemyModel, "commentbout_enemy_model", "resources/game/td_3105/Model/Enemy/Enemy.obj");
-	addModel(CommentBoutResourceKey::kShootEnemyModel, "commentbout_shoot_enemy_model", "resources/game/td_3105/Model/cube/cube.obj");
-	addModel(CommentBoutResourceKey::kBossModel, "commentbout_boss_model", "resources/game/td_3105/Model/cube/cube.obj");
+	addModel(CommentBoutResourceKey::kShootEnemyModel, "commentbout_shoot_enemy_model", "resources/game/td_3105/Model/Enemy/Enemy.obj");
+	addModel(CommentBoutResourceKey::kBossModel, "commentbout_boss_model", "resources/game/td_3105/Model/Boss/Boss.obj");
 	addModel(CommentBoutResourceKey::kEnemyBulletModel, "commentbout_enemy_bullet_model", "resources/game/td_3105/Model/Bullet/Bullet.obj");
 	addModel(CommentBoutResourceKey::kGrassModel, "commentbout_grass_model", "resources/game/td_3105/Model/cube/cube.obj");
 	addModel(CommentBoutResourceKey::kGroundModel, "commentbout_ground_model", "resources/game/td_3105/Model/cube/cube.obj");
 	//	addModel(CommentBoutResourceKey::kGroundModel, "commentbout_ground_model", "resources/game/td_3105/Model/Field/Field.obj");
-	addModel(CommentBoutResourceKey::kBuildingModel, "commentbout_building_model", "resources/game/td_3105/Model/cube/cube.obj");
+	addModel(CommentBoutResourceKey::kBuildingModel, "commentbout_building_model", "resources/game/td_3105/Model/Build/Build.obj");
 	addModel(CommentBoutResourceKey::kSkydomeModel, "commentbout_skydome_model", "resources/game/td_3105/Model/skydome/skydome.gltf");
 }
