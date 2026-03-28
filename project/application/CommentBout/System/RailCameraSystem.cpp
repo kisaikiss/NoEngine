@@ -3,6 +3,7 @@
 #include "application/CommentBout/Component/SpawnEnemyRequestComponent.h"
 #include "application/CommentBout/Component/RailCameraComponent.h"
 #include "application/CommentBout/Component/EnemyComponent.h"
+#include "application/CommentBout/Component/GameResultComponent.h"
 #include "application/CommentBout/GameTag.h"
 #include "engine/Functions/ECS/Component/CameraComponent.h"
 #include "engine/Functions/Renderer/Primitive.h"
@@ -445,6 +446,14 @@ void RailCameraSystem::Update(No::Registry& registry, float deltaTime) {
 				rail->distance = rail->totalLength;
 				rail->isPlaying = false;
 				rail->isFinished = true;
+
+				auto resultView = registry.View<CBGameResultTag, GameResultComponent>();
+				for (auto resultEntity : resultView) {
+					auto* gameResult = registry.GetComponent<GameResultComponent>(resultEntity);
+					if (gameResult) {
+						gameResult->railReachedEnd = true;
+					}
+				}
 			}
 		}
 

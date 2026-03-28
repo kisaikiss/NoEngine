@@ -114,7 +114,7 @@
         "spawnSpacing": 1.0
       },
       "targetGroupId": 0,
-      "triggerDistance": 19.0,
+      "triggerDistance": 0.0,
       "type": "SpawnEnemy"
     },
     {

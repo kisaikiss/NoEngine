@@ -3,6 +3,7 @@
 #include "application/CommentBout/Component/EnemyComponent.h"
 #include "application/CommentBout/Component/EnemyRewardSourceComponent.h"
 #include "application/CommentBout/Component/HealthComponent.h"
+#include "application/CommentBout/Component/RailCameraComponent.h"
 #include "application/CommentBout/Utility/EnemyVisibilityUtility.h"
 #include "application/CommentBout/GameTag.h"
 
@@ -13,16 +14,20 @@ No::Vector3 NormalizeOrDefault(const No::Vector3& v, const No::Vector3& fallback
 	}
 	return v.Normalize();
 }
+
+No::TransformComponent* FindRailCameraTransform(No::Registry& registry) {
+	auto railCameraView = registry.View<RailCameraComponent, No::TransformComponent>();
+	auto it = railCameraView.begin();
+	if (it == railCameraView.end()) {
+		return nullptr;
+	}
+	return registry.GetComponent<No::TransformComponent>(*it);
+}
 }
 
 void EnemyMoveSystem::Update(No::Registry& registry, float deltaTime)
 {
-	No::TransformComponent* cameraTransform = nullptr;
-	auto cameraView = registry.View<No::ActiveCameraTag, No::TransformComponent>();
-	auto cameraIt = cameraView.begin();
-	if (cameraIt != cameraView.end()) {
-		cameraTransform = registry.GetComponent<No::TransformComponent>(*cameraIt);
-	}
+	No::TransformComponent* railCameraTransform = FindRailCameraTransform(registry);
 
 	auto view = registry.View<CBRailEnemyTag, EnemyComponent, HealthComponent, No::TransformComponent>();
 	for (auto entity : view) {
@@ -52,8 +57,9 @@ void EnemyMoveSystem::Update(No::Registry& registry, float deltaTime)
 		}
 		
 
-		if (cameraTransform && enemy->despawnBehindDistance > 0.0f) {
-			const float forwardDistance = CommentBoutVisibility::ComputeForwardDistanceFromCamera(*transform, *cameraTransform);
+		// 後方消滅はRailCamera基準に統一する。ボスは後方でも消滅させない。
+		if (!registry.Has<CBBossTag>(entity) && railCameraTransform && enemy->despawnBehindDistance > 0.0f) {
+			const float forwardDistance = CommentBoutVisibility::ComputeForwardDistanceFromCamera(*transform, *railCameraTransform);
 			if (forwardDistance < -enemy->despawnBehindDistance) {
 				// 自機より十分後方へ流れた敵は「自然消滅」として削除する。
 				// 撃破ではないため、報酬オーブは生成しない。

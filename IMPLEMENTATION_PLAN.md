@@ -27,10 +27,11 @@
 5. [Phase 3 — E: StageData 構造整備](#phase-3--e-stagedata-構造整備)
 6. [Phase 4 — A: コントローラー対応](#phase-4--a-コントローラー対応)
 7. [Phase 5 — G: エディタ管理クラス](#phase-5--g-エディタ管理クラス)
-8. [Phase 6 — H前半: ボス構造変更](#phase-6--h前半-ボス構造変更)
-9. [Phase 7 — H後半: クリア/オーバー演出](#phase-7--h後半-クリアオーバー演出)
-10. [Phase 8 — I: 音実装](#phase-8--i-音実装)
-11. [Phase 9 — F: フォルダ精査・整理](#phase-9--f-フォルダ精査整理)
+8. [Phase 5.5 — G2: エディタ大幅リファクタリング](#phase-55--g2-エディタ大幅リファクタリング)
+9. [Phase 6 — H前半: ボス構造変更](#phase-6--h前半-ボス構造変更)
+10. [Phase 7 — H後半: クリア/オーバー演出](#phase-7--h後半-クリアオーバー演出)
+11. [Phase 8 — I: 音実装](#phase-8--i-音実装)
+12. [Phase 9 — F: フォルダ精査・整理](#phase-9--f-フォルダ精査整理)
 
 ---
 
@@ -67,15 +68,16 @@
 ## 実装順序一覧
 
 ```
-Phase 1  C  命名統一 + コライダーオフセット（基盤）
-Phase 2  D  吹き出しリネーム + サイズ分け
-Phase 3  E  StageData 構造整備
-Phase 4  A  コントローラー対応
-Phase 5  G  エディタ管理クラス
-Phase 6  H前半  ボス構造変更
-Phase 7  H後半  クリア/オーバー演出
-Phase 8  I  音実装
-Phase 9  F  フォルダ精査・整理
+Phase 1    C    命名統一 + コライダーオフセット（基盤）          ✅ 完了
+Phase 2    D    吹き出しリネーム + サイズ分け                  ✅ 完了
+Phase 3    E    StageData 構造整備                            ✅ 完了
+Phase 4    A    コントローラー対応                             ✅ 完了
+Phase 5    G    エディタ管理クラス                             ✅ 完了
+Phase 5.5  G2   エディタ大幅リファクタリング                    ✅ 完了
+Phase 6    H前半 ボス構造変更                              ✅ 完了
+Phase 7    H後半 クリア/オーバー演出
+Phase 8    I    音実装
+Phase 9    F    フォルダ精査・整理
 ```
 
 ---
@@ -782,17 +784,13 @@ private:
 
 ---
 
-### 5-3. エディタモード切り替え実装
+### 5-3. エディタモード切り替え実装 ※Phase 5.5 で設計変更
 
-`EditorManager::SetEditorMode(bool enabled)`:
-1. `No::PauseComponent* pause = FindEnginePause(registry);`
-2. `pause->isPause = enabled;`
-3. `isEditorMode_ = enabled;`
-4. `enabled` なら `CreateSpawnDebugEntities()` を呼ぶ
-5. `!enabled` なら `DestroySpawnDebugEntities()` を呼ぶ
+> **変更:** F1 トグル / SetEditorMode() / isEditorMode_ は Phase 5.5 で廃止。
+> 代わりに常時表示 + "ゲームポーズ" チェックボックスを採用。
 
-- [x] `SetEditorMode()` 実装 (F1 トグル、`PauseComponent::isPause` 制御)
-- [ ] エンジンポーズ ON/OFF の動作確認
+- [x] ~~`SetEditorMode()` 実装~~ → Phase 5.5 で廃止し "ゲームポーズ" チェックボックスに置換
+- [x] エンジンポーズ ON/OFF の動作 (チェックボックス方式で確認)
 
 ---
 
@@ -896,21 +894,210 @@ void GameScene::NotSystemUpdate() {
 
 ### Phase 5 完了確認
 
-- [ ] EditorManager でエディタモードに入るとゲームが停止する (F1 キー)
-- [ ] タブで Rail / Event / Field / 敵設定 / 吹き出し エディタが切り替えられる
-- [ ] エディタモードに入るとスポーン位置に黒モデルが表示される
-- [ ] エディタモードを解除するとモデルが消えてゲームが再開する
-- [ ] 既存の Load/Save 機能が正常に動作する
+- [x] EditorManager のタブ UI で Rail / Event / Field / 敵設定 / 吹き出し エディタが切り替えられる
+- [x] スポーン位置に黒モデルが表示される (showSpawnDebug_ チェック時)
+- [x] EnemyConfigEditorSystem / SpeechBubbleConfigEditorSystem を AddSystem から削除し EditorManager に統合
+- [x] 既存の Load/Save 機能が EditorManager 経由で動作する
+
+> **注:** Phase 5.5 で EditorManager の設計を大幅変更。エディタモード(F1 トグル)は廃止し常時表示に変更。詳細は Phase 5.5 を参照。
+
+---
+
+## Phase 5.5 — G2: エディタ大幅リファクタリング
+
+> **目的:** Phase 5 で作成した EditorManager を全面再設計。エディタモード概念を廃止し、常時表示 + 手動ポーズ方式に移行。デバッグ機能の強化とレールデバッグ描画を専用 System に分離。
+> **完了日:** 2026-03-29
+> **影響ファイル:**
+> - 変更: `Editor/EditorManager.h/.cpp` (全面リワーク)
+> - 変更: `Editor/RailCameraEditor.h/.cpp` (インラインコンテンツメソッド追加)
+> - 変更: `FieldObject/Editor/FieldObjectEditor.h/.cpp` (DrawTypeDefaultsImGui / ForceReload / Save 追加)
+> - 変更: `FieldObject/System/FieldEditorSystem.h/.cpp` (SetStopInPause(false) 追加)
+> - 新規: `System/RailCameraEditorSystem.h/.cpp` (レールデバッグ描画専用 System)
+> - 変更: `System/RailCameraSystem.cpp` (デバッグ描画呼び出しを削除)
+> - 変更: `Scene/GameScene.h/.cpp` (RailCameraEditorSystem 追加)
+> - 変更: `Component/OutGame/PauseStateComponent.h` (`editorForcePause` フィールド確認済み)
+
+---
+
+### 5.5-1. エディタモード廃止・常時表示化
+
+**変更内容:**
+- F1 トグル / `isEditorMode_` / `SetEditorMode()` を全廃
+- `EditorManager::DrawImGui()` は常時 `ImGui::Begin("Editor##EditorManager")` ウィンドウを表示
+- ゲームポーズは手動チェックボックスで制御
+
+**ポーズチェックボックスの実装方針:**
+- `ImGui::Checkbox("ゲームポーズ", &isPauseEnabled_)` が変更を返したときだけ `PauseComponent::isPause` を書き換える
+- `PauseSystem` が isPause=true 時に停止するため、チェック ON 中は PauseSystem も止まり競合しない
+- `PauseStateComponent::editorForcePause` に状態を永続保存 (フレーム開始時に同期読み込み)
+
+- [x] エディタモード (F1 / isEditorMode_) 廃止
+- [x] `DrawImGui()` の常時表示化
+- [x] ゲームポーズチェックボックス実装 (`isPauseEnabled_` + `PauseComponent::isPause`)
+- [x] `PauseStateComponent::editorForcePause` との同期
+
+---
+
+### 5.5-2. ステージ名入力 + すべて読込/保存ボタン
+
+**EditorManager のウィンドウ上部:**
+```
+[ステージ名: ________] [すべて読込] [すべて保存]
+```
+
+- `LoadAll(registry)`: rail->stageName 設定 → LoadRailData → LoadRailEvents → `fieldObjectEditor_.ForceReload()`
+- `SaveAll(registry)`: SaveRailData → SaveRailEvents → `fieldObjectEditor_.Save(registry)`
+- `fieldObjectEditor_.ForceReload()` は `loadedRegistry_ = nullptr; loadedStageName_ = ""` をクリアし次フレームで自動再読込させる
+
+- [x] `stageNameBuffer_[64]` + `ImGui::InputText` 実装
+- [x] "すべて読込" / "すべて保存" ボタン実装
+- [x] `LoadAll()` / `SaveAll()` 実装
+
+---
+
+### 5.5-3. デバッグ表示 CollapsingHeader
+
+`ImGui::CollapsingHeader("デバッグ表示")` 内に以下を実装:
+
+**スポーンデバッグ:**
+- `ImGui::Checkbox("スポーンデバッグ", &showSpawnDebug_)` — チェック変更時に CreateSpawnDebugEntities / DestroySpawnDebugEntities
+- showSpawnDebug_ が true の間、毎フレーム `ComputeSpawnEventSignature()` でシグネチャを計算し変化検知時に再生成 (イベント編集中のリアルタイム更新)
+
+```cpp
+// シグネチャ計算例
+int sig = static_cast<int>(rail->events.size()) * 97;
+for (SpawnEnemy events: ...) { sig += count*31 + posX*7 + posY*11 + posZ*13 + ...; }
+```
+
+**レールデバッグ:**
+- `ImGui::Checkbox("レール描画", &rail->drawRailDebug)`
+- `ImGui::Checkbox("カメラギズモ", &rail->drawCameraDebug)`
+- `ImGui::Checkbox("制御点", &rail->drawControlPointsDebug)`
+- `ImGui::Checkbox("イベント点", &rail->drawEventPointsDebug)`
+- `ImGui::DragFloat("デバッグ半径", ...)` — `controlPointDebugRadius` と `eventPointDebugRadius` を同時更新
+
+- [x] スポーンデバッグチェックボックス + 変化検知リアルタイム再生成
+- [x] `ComputeSpawnEventSignature()` 実装
+- [x] レールデバッグチェックボックス群実装 (RailCameraComponent のフラグを直接操作)
+- [x] "デバッグ半径" DragFloat (controlPointDebugRadius / eventPointDebugRadius 共有)
+
+---
+
+### 5.5-4. タブ構成変更 (フィールドオブジェクト設定タブ分離)
+
+**タブ一覧 (順序固定):**
+
+| タブ名 | 内容 |
+|--------|------|
+| レール | LoadRail/SaveRail/LoadEvents/SaveEventsボタン + RailCameraContent (インライン) + CollapsingHeader"制御点編集" |
+| イベント | gameEventEditor_.DrawGameEventEditorImGui (※フローティングウィンドウを開く) |
+| フィールド | fieldObjectEditor_.DrawImGui (配置UI、種別設定は別タブへ) |
+| 敵設定 | EnemyConfig の ImGui (Phase 5 から引き継ぎ) |
+| フィールドオブジェクト設定 | fieldObjectEditor_.DrawTypeDefaultsImGui (種別デフォルト設定) |
+| 吹き出し | SpeechBubble の ImGui (Phase 5 から引き継ぎ) |
+
+- [x] "フィールドオブジェクト設定" タブを "敵設定" の後に新設
+- [x] `FieldObjectEditor::DrawTypeDefaultsImGui()` をそのタブから呼ぶ
+- [x] フィールドタブから種別デフォルト設定 UI を除去し `ImGui::TextDisabled` ヒントを表示
+
+---
+
+### 5.5-5. RailCameraEditor インラインコンテンツメソッド追加
+
+**変更前:** `DrawRailCameraImGui` / `DrawRailEditorImGui` (ImGui::Begin/End 付きフローティング)
+**変更後:** 以下を追加 (Begin/End なし、タブ内インライン用)
+
+```cpp
+void DrawRailCameraContent(No::Registry*, No::Entity, ResetEventRuntimeFn);  // 再生/停止/進行率UI
+void DrawRailEditorContent(No::Registry*, No::Entity);                        // 制御点編集UI
+```
+
+- [x] `DrawRailCameraContent()` 追加 (Begin/End なし版)
+- [x] `DrawRailEditorContent()` 追加 (Begin/End なし版、BeginChild 高さ 200)
+- [x] `EditorManager::DrawRailTab()` からこれらを呼ぶよう変更
+
+---
+
+### 5.5-6. RailCameraEditorSystem 新規作成
+
+**目的:** レール/制御点/イベント点/カメラギズモのデバッグ描画を `RailCameraSystem` から分離し、ポーズ中も描画が継続するようにする。
+
+**重要:** `SetStopInPause(false)` はコンストラクタ内で呼ぶこと (NoEngine の仕様)。
+ポーズ中もデバッグ描画が必要な全システムに適用が必要。
+
+```cpp
+// System/RailCameraEditorSystem.h
+class RailCameraEditorSystem : public No::ISystem {
+public:
+    RailCameraEditorSystem() { SetStopInPause(false); }
+    void Update(No::Registry& registry, float deltaTime) override;
+};
+```
+
+- `Update()` は `View<RailCameraComponent, TransformComponent>` でイテレートし、
+  `rail->drawRailDebug` 等のフラグに応じて DrawRailDebug / DrawControlPointDebug / DrawEventPointDebug / DrawRailCameraGizmo を呼ぶ
+- ヘルパー関数 (InterpolateSplinePoint, EvaluatePositionByT, DistanceToNormalizedT) は anonymous namespace 内に複製
+
+**RailCameraSystem.cpp の変更:**
+- DrawRailDebug / DrawControlPointDebug / DrawEventPointDebug / DrawRailCameraGizmo の呼び出しを削除
+- ヘルパー関数は RailCameraSystem 側でも保持 (計算用)
+
+**FieldEditorSystem の変更:**
+- コンストラクタ内に `SetStopInPause(false)` 追加 (フィールド配置もポーズ中に更新が必要なため)
+
+- [x] `System/RailCameraEditorSystem.h/.cpp` 新規作成
+- [x] `SetStopInPause(false)` をコンストラクタで設定
+- [x] デバッグ描画の 4 関数を RailCameraEditorSystem.cpp に移植
+- [x] `RailCameraSystem.cpp` からデバッグ描画呼び出しを削除
+- [x] `FieldEditorSystem` コンストラクタに `SetStopInPause(false)` 追加
+- [x] `GameScene::Setup()` に `AddSystem(make_unique<RailCameraEditorSystem>())` 追加
+
+---
+
+### 5.5-7. vcxproj / filters 更新
+
+**追加エントリ:**
+
+| 種別 | パス |
+|------|------|
+| ClCompile | `application\CommentBout\System\RailCameraEditorSystem.cpp` |
+| ClInclude | `application\CommentBout\System\RailCameraEditorSystem.h` |
+
+(EditorManager.cpp / FieldObjectEditor.cpp の ClCompile は Phase 5 で追加済み)
+
+- [x] `NoEngine.vcxproj` に RailCameraEditorSystem エントリ追加
+- [x] `NoEngine.vcxproj.filters` に RailCameraEditorSystem エントリ追加
+
+---
+
+### Phase 5.5 完了確認
+
+- [x] エディタウィンドウが常時表示される (F1 不要)
+- [x] "ゲームポーズ" チェックボックスでゲームを停止/再開できる
+- [x] ステージ名入力後に "すべて読込/保存" でレール+イベント+フィールドを一括操作できる
+- [x] デバッグ表示セクションでスポーンデバッグとレールデバッグを個別に ON/OFF できる
+- [x] イベントを編集中にスポーンデバッグが自動更新される (シグネチャ変化検知)
+- [x] ポーズ中もレールデバッグ描画が継続する (RailCameraEditorSystem が SetStopInPause(false))
+- [x] "フィールドオブジェクト設定" タブが "敵設定" の後に存在する
+
+> **未解決:** GameEventEditor の DrawGameEventEditorImGui は現状フローティングウィンドウを開く。
+> イベントタブからフローティングウィンドウが開くため UX が若干不整合。次の機会にインライン化を検討。
 
 ---
 
 ## Phase 6 — H前半: ボス構造変更
 
 > **目的:** ボスの位置計算をレールカメラ基準に変更し、ゲーム開始時から存在するようにする。
+> **前提:** Phase 5.5 完了 (EditorManager + GameEventEditor でイベントデータを編集可能)
 > **影響ファイル:**
 > - `System/BossBehaviorSystem.cpp`
 > - `resources/game/td_3105/Data/StageData/Stage_01/EventData/Stage_01_events.json`
-> - (Phase 5 完了後は GameEventEditor から編集可能)
+>   (EditorManager の "イベント" タブ → GameEventEditor ウィンドウから編集可能)
+>
+> **アーキテクチャ注記 (Phase 5.5 後):**
+> - `EditorManager::DrawImGui()` は `GameScene::NotSystemUpdate()` から呼ばれる
+> - ゲームシーン AddSystem 順: `...RailCameraSystem → RailCameraEditorSystem → FieldEditorSystem...`
+> - `FieldEditorSystem` は `editorManager_.GetFieldObjectEditor()` のポインタを受け取る
 
 ---
 
@@ -930,8 +1117,8 @@ auto cameraView = registry.View<RailCameraComponent, No::TransformComponent>();
 
 これにより、デバッグカメラに切り替えてもボスがレールカメラ基準の位置に留まる。
 
-- [ ] `BossBehaviorSystem.cpp` のカメラ取得ロジックを `RailCameraComponent` 検索に変更
-- [ ] 他のボス関連システム (`BossPhase` の射撃ターゲット計算など) も同様に確認
+- [x] `BossBehaviorSystem.cpp` のカメラ取得ロジックを `RailCameraComponent` 検索に変更
+- [x] 他のボス関連システム (`BossPhase` の射撃ターゲット計算など) も同様に確認
 
 ---
 
@@ -964,7 +1151,7 @@ auto cameraView = registry.View<RailCameraComponent, No::TransformComponent>();
 }
 ```
 
-- [ ] `Stage_01_events.json` を直接編集 (または EditorManager 完成後はエディタから)
+- [x] `Stage_01_events.json` を直接編集 (または EditorManager 完成後はエディタから)
 - [ ] ゲーム起動直後にボスが適切な位置にスポーンするか確認
 - [ ] レールカメラからの `offsetLocal` 値が正しく適用されるか確認
 
@@ -990,8 +1177,8 @@ struct GameResultComponent {
 };
 ```
 
-- [ ] `Component/GameResultComponent.h` 新規作成
-- [ ] `GameScene::Setup()` でシングルトン的にエンティティに追加
+- [x] `Component/GameResultComponent.h` 新規作成
+- [x] `GameScene::Setup()` でシングルトン的にエンティティに追加
 
 ---
 
@@ -1007,7 +1194,7 @@ if (rail->traveledDistance >= rail->GetTotalLength()) {
 }
 ```
 
-- [ ] `RailCameraSystem.cpp` にレール終端フラグ設定処理を追加 (または `GameResultSystem` で監視)
+- [x] `RailCameraSystem.cpp` にレール終端フラグ設定処理を追加 (または `GameResultSystem` で監視)
 - [ ] レール終端判定のログ確認
 
 ---

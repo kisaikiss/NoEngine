@@ -14,6 +14,7 @@
 #include "application/CommentBout/Component/HpBarComponent.h"
 #include "application/CommentBout/Component/RailCameraComponent.h"
 #include "application/CommentBout/Component/RailProgressBarComponent.h"
+#include "application/CommentBout/Component/GameResultComponent.h"
 #include "application/CommentBout/Component/EnemyComponent.h"
 #include "application/CommentBout/Utility/CBCollisionMask.h"
 #include "application/CommentBout/Utility/CBSpriteLayer.h"
@@ -162,6 +163,10 @@ void GameScene::Setup() {
 	railProgressBar->markerSize = { 22.0f, 22.0f };
 
 
+	auto gameResultEntity = registry.GenerateEntity();
+	registry.AddComponent<CBGameResultTag>(gameResultEntity);
+	registry.AddComponent<GameResultComponent>(gameResultEntity);
+
 	auto pauseStateEntity = registry.GenerateEntity();
 	registry.AddComponent<CBPauseStateTag>(pauseStateEntity);
 	auto* pauseState = registry.AddComponent<PauseStateComponent>(pauseStateEntity);
@@ -214,7 +219,6 @@ void GameScene::Setup() {
 
 	// カメラ
 	auto camera = registry.GenerateEntity();
-	registry.AddComponent<No::ActiveCameraTag>(camera);
 	registry.AddComponent<No::CameraComponent>(camera);
 	registry.AddComponent<No::DebugCameraComponent>(camera);
 	auto* cameraTransform = registry.AddComponent<No::TransformComponent>(camera);
@@ -224,6 +228,7 @@ void GameScene::Setup() {
 	registry.AddComponent<No::EditTag>(camera)->name = "camera";
 
 	railCameraEntity_ = registry.GenerateEntity();
+	registry.AddComponent<No::ActiveCameraTag>(railCameraEntity_);
 	registry.AddComponent<No::CameraComponent>(railCameraEntity_);
 	auto* railCameraTransform = registry.AddComponent<No::TransformComponent>(railCameraEntity_);
 	railCameraTransform->translate = { 0.0f, 2.0f, -10.0f };

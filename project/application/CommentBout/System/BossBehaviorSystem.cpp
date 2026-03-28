@@ -3,6 +3,7 @@
 #include "application/CommentBout/Component/BossComponent.h"
 #include "application/CommentBout/Component/EnemyComponent.h"
 #include "application/CommentBout/Component/HealthComponent.h"
+#include "application/CommentBout/Component/RailCameraComponent.h"
 #include "application/CommentBout/GameTag.h"
 #include <cmath>
 
@@ -32,7 +33,7 @@ void FaceToCamera(No::TransformComponent& bossTransform, No::TransformComponent&
 
 void BossBehaviorSystem::Update(No::Registry& registry, float deltaTime)
 {
-	auto cameraView = registry.View<No::ActiveCameraTag, No::TransformComponent>();
+	auto cameraView = registry.View<RailCameraComponent, No::TransformComponent>();
 	auto cameraIt = cameraView.begin();
 	if (cameraIt == cameraView.end()) {
 		return;

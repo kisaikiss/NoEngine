@@ -27,3 +27,4 @@ struct CBRailProgressBarTag {}; 	//
 struct CBRailProgressBarDisplayTag {};	//
 struct CBFieldObjectTag {};		//
 struct CBFieldOccluderTag {};	//
+struct CBGameResultTag {};		// ゲーム結果状態
