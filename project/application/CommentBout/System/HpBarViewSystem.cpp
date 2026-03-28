@@ -14,7 +14,7 @@
 #endif
 
 namespace {
-const char* kHpBarConfigPath = "resources/game/td_3105/RailData/Stage_01_hpbar.json";
+const char* kHpBarConfigPath = "resources/game/td_3105/Data/StageData/Stage_01/FieldObjectData/Stage_01_hpbar.json";
 
 No::Entity ResolveTargetEntity(No::Registry& registry, No::Entity barEntity) {
 	if (registry.Has<CBBossHpBarTag>(barEntity)) {

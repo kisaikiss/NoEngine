@@ -67,11 +67,11 @@ RailEnemyType ParseEnemyType(const std::string& typeName) {
 }
 
 std::string MakeRailFilePath(const std::string& stageName) {
-	return "resources/game/td_3105/RailData/" + stageName + "_rail.json";
+	return "resources/game/td_3105/Data/StageData/" + stageName + "/RailData/" + stageName + "_rail.json";
 }
 
 std::string MakeEventFilePath(const std::string& stageName) {
-	return "resources/game/td_3105/RailData/" + stageName + "_events.json";
+	return "resources/game/td_3105/Data/StageData/" + stageName + "/EventData/" + stageName + "_events.json";
 }
 
 void ResetEventRuntime(RailCameraComponent& rail) {

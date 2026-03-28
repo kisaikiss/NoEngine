@@ -22,10 +22,10 @@
 #endif
 
 namespace {
-const char* kFieldTypeDefaultsPath = "resources/game/td_3105/RailData/FieldObjectTypeDefaults.json";
+const char* kFieldTypeDefaultsPath = "resources/game/td_3105/Data/Config/FieldObjectTypeDefaults.json";
 
 std::string MakeFieldPlacementPath(const std::string& stageName) {
-	return "resources/game/td_3105/RailData/" + stageName + "_field_objects.json";
+	return "resources/game/td_3105/Data/StageData/" + stageName + "/FieldObjectData/" + stageName + "_field_objects.json";
 }
 
 float ToRadian(float degree) {

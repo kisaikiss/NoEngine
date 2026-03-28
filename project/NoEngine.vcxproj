@@ -775,13 +775,6 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <None Include="resources\engine\Shaders\Default.hlsli" />
     <None Include="resources\game\Shaders\ShaderMathUtil.hlsli" />
     <None Include="resources\game\td_2304\Json\tdSpriteConfig.json" />
-    <None Include="resources\game\td_3105\RailData\EnemyTypePreset.json" />
-    <None Include="resources\game\td_3105\RailData\FieldObjectTypeDefaults.json" />
-    <None Include="resources\game\td_3105\RailData\PlayerConfig.json" />
-    <None Include="resources\game\td_3105\RailData\sample_rail.json" />
-    <None Include="resources\game\td_3105\RailData\Stage_01_events.json" />
-    <None Include="resources\game\td_3105\RailData\Stage_01_field_objects.json" />
-    <None Include="resources\game\td_3105\RailData\Stage_01_rail.json" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />
