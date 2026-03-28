@@ -172,6 +172,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\CommentBout\Data\PlayerDataIO.cpp" />
     <ClCompile Include="application\CommentBout\Data\EnemyDataIO.cpp" />
     <ClCompile Include="application\CommentBout\FieldObject\System\FieldEditorSystem.cpp" />
+    <ClCompile Include="application\CommentBout\FieldObject\Editor\FieldObjectEditor.cpp" />
     <ClCompile Include="application\CommentBout\Spawner\TitleMenuSpawner.cpp" />
     <ClCompile Include="application\CommentBout\System\BossBehaviorSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\DamageApplySystem.cpp" />
@@ -193,6 +194,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\CommentBout\System\PlayerAttackResolveSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\PlayerInfoDebugSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\RailCameraSystem.cpp" />
+    <ClCompile Include="application\CommentBout\System\RailCameraEditorSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\RailProgressBarSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\OutGame\TitleSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\OutGame\TitleViewSystem.cpp" />
@@ -342,6 +344,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\CommentBout\Editor\GameEventEditor.cpp" />
     <ClCompile Include="application\CommentBout\Scene\GameScene.cpp" />
     <ClCompile Include="application\CommentBout\Editor\RailCameraEditor.cpp" />
+    <ClCompile Include="application\CommentBout\Editor\EditorManager.cpp" />
     <ClCompile Include="application\CommentBout\Data\RailDataIO.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="application\CommentBout\Spawner\OptionMenuSpawner.cpp" />
@@ -411,6 +414,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\CommentBout\System\PlayerAttackResolveSystem.h" />
     <ClInclude Include="application\CommentBout\System\PlayerInfoDebugSystem.h" />
     <ClInclude Include="application\CommentBout\System\RailCameraSystem.h" />
+    <ClInclude Include="application\CommentBout\System\RailCameraEditorSystem.h" />
     <ClInclude Include="application\CommentBout\System\OutGame\TitleSystem.h" />
     <ClInclude Include="application\CommentBout\System\OutGame\TitleViewSystem.h" />
     <ClInclude Include="application\CommentBout\System\RailProgressBarSystem.h" />
@@ -441,6 +445,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\CommentBout\Collision\System\CollisionSystem.h" />
     <ClInclude Include="application\CommentBout\Utility\CBCollisionMask.h" />
     <ClInclude Include="application\CommentBout\Utility\CBGameAudio.h" />
+    <ClInclude Include="application\CommentBout\Utility\InputHelper.h" />
     <ClInclude Include="application\CommentBout\Utility\CBSpriteLayer.h" />
     <ClInclude Include="application\CommentBout\CommentBout.h" />
     <ClInclude Include="application\TestApp\System\ParticleTestSystem.h" />
@@ -615,6 +620,8 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\CommentBout\Editor\GameEventEditor.h" />
     <ClInclude Include="application\CommentBout\Scene\GameScene.h" />
     <ClInclude Include="application\CommentBout\Editor\RailCameraEditor.h" />
+    <ClInclude Include="application\CommentBout\Editor\EditorManager.h" />
+    <ClInclude Include="application\CommentBout\FieldObject\Editor\FieldObjectEditor.h" />
     <ClInclude Include="application\CommentBout\Data\RailDataIO.h" />
     <ClInclude Include="application\CommentBout\Spawner\OptionMenuSpawner.h" />
     <ClInclude Include="application\CommentBout\Spawner\PauseMenuSpawner.h" />

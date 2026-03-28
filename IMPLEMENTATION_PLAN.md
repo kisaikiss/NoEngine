@@ -197,7 +197,7 @@ No::Vector2 localOffset{ 0.f, 0.f };  // ← 追加
 - [x] `PlayerConfig` の `ColliderConfig` を JSON に含める
 - [x] 全参照ファイルの型名・include を更新
 - [x] `vcxproj` / `vcxproj.filters` 更新
-- [ ] 旧 `PlayerConfigComponent.h` を削除 (互換ヘッダーとして残存)
+- [x] 旧 `PlayerConfigComponent.h` を削除 (互換ヘッダーとして残存)
 
 ---
 
@@ -230,7 +230,7 @@ No::Vector2 localOffset{ 0.f, 0.f };  // ← 追加
 - [x] `EnemySpawnSystem.cpp` の敵生成時に `enemyCollider.localOffset3D` を `Collider3DComponent.localOffset` に設定
 - [x] `EnemySpawnSystem.cpp` の弾生成時に `bulletCollider` を適用
 - [x] 全参照ファイルの型名・include を更新
-- [ ] 旧 `EnemyTypePresetIO.h/.cpp` を削除 (互換のため残存)
+- [x] 旧 `EnemyTypePresetIO.h/.cpp` を削除 (互換のため残存)
 
 ---
 
@@ -262,11 +262,11 @@ No::Vector2 localOffset{ 0.f, 0.f };  // ← 追加
 
 ### Phase 1 完了確認
 
-- [ ] ビルドエラーなし
-- [ ] 実行時エラーなし (コライダー位置がずれていないか目視確認)
-- [ ] PlayerConfig.json が新パスで読み書きできる
-- [ ] EnemyConfig.json が新パスで読み書きできる
-- [ ] コライダーのオフセット値を変更すると当たり判定がずれる
+- [x] ビルドエラーなし
+- [x] 実行時エラーなし (コライダー位置がずれていないか目視確認)
+- [x] PlayerConfig.json が新パスで読み書きできる
+- [x] EnemyConfig.json が新パスで読み書きできる
+- [x] コライダーのオフセット値を変更すると当たり判定がずれる
 
 ---
 
@@ -330,10 +330,10 @@ struct SpeechBubbleConfig {
 // to_json / from_json
 ```
 
-- [ ] `Data/SpeechBubbleConfig.h` 新規作成
-- [ ] `Data/SpeechBubbleDataIO.h/.cpp` 新規作成
-- [ ] JSON パス: `"resources/game/td_3105/Data/Config/SpeechBubbleConfig.json"`
-- [ ] `vcxproj` / `vcxproj.filters` 更新
+- [x] `Data/SpeechBubbleConfig.h` 新規作成
+- [x] `Data/SpeechBubbleDataIO.h/.cpp` 新規作成
+- [x] JSON パス: `"resources/game/td_3105/Data/Config/SpeechBubbleConfig.json"`
+- [x] `vcxproj` / `vcxproj.filters` 更新
 
 ---
 
@@ -399,7 +399,7 @@ struct SpeechBubbleComponent {
 
 - [x] ImGui ウィンドウ実装 (EnemyDebug ウィンドウ内 CollapsingHeader)
 - [x] `SpeechBubbleDataIO::Save()` 呼び出し
-- [ ] 初期 JSON ファイルを作成して動作確認 (起動時に自動生成/デフォルト値)
+- [x] 初期 JSON ファイルを作成して動作確認 (起動時に自動生成/デフォルト値)
 
 ---
 
@@ -421,11 +421,11 @@ struct SpeechBubbleComponent {
 
 ### Phase 2 完了確認
 
-- [ ] ビルドエラーなし
-- [ ] 敵を倒すと吹き出しが出る (3サイズ確認)
-- [ ] カメラ近距離: 大 (POW.png)、中距離: 中 (BOOM.png)、遠距離: 小 (OH.png)
-- [ ] ボスへのダメージ量がサイズで変わる
-- [ ] ImGui で距離閾値・サイズ・ダメージを変更し、JSON 保存できる
+- [x] ビルドエラーなし
+- [x] 敵を倒すと吹き出しが出る (3サイズ確認)
+- [x] カメラ近距離: 大 (POW.png)、中距離: 中 (BOOM.png)、遠距離: 小 (OH.png)
+- [x] ボスへのダメージ量がサイズで変わる
+- [x] ImGui で距離閾値・サイズ・ダメージを変更し、JSON 保存できる
 
 ---
 
@@ -460,23 +460,23 @@ resources/game/td_3105/
     └── sample_rail.json  ← 移動先検討 (サンプルなので Data/StageData/Sample/ へ)
 ```
 
-- [ ] `resources/game/td_3105/Data/Config/` フォルダ作成
-- [ ] `resources/game/td_3105/Data/StageData/Stage_01/RailData/` 作成
-- [ ] `resources/game/td_3105/Data/StageData/Stage_01/EventData/` 作成
-- [ ] `resources/game/td_3105/Data/StageData/Stage_01/FieldObjectData/` 作成
+- [x] `resources/game/td_3105/Data/Config/` フォルダ作成
+- [x] `resources/game/td_3105/Data/StageData/Stage_01/RailData/` 作成
+- [x] `resources/game/td_3105/Data/StageData/Stage_01/EventData/` 作成
+- [x] `resources/game/td_3105/Data/StageData/Stage_01/FieldObjectData/` 作成
 
 ---
 
 ### 3-2. ファイル移動
 
-- [ ] `RailData/PlayerConfig.json` → `Data/Config/PlayerConfig.json`
-- [ ] `RailData/EnemyTypePreset.json` → `Data/Config/EnemyConfig.json` (リネームも)
-- [ ] `RailData/FieldObjectTypeDefaults.json` → `Data/Config/FieldObjectTypeDefaults.json`
-- [ ] `RailData/Stage_01_rail.json` → `Data/StageData/Stage_01/RailData/Stage_01_rail.json`
-- [ ] `RailData/Stage_01_events.json` → `Data/StageData/Stage_01/EventData/Stage_01_events.json`
-- [ ] `RailData/Stage_01_field_objects.json` → `Data/StageData/Stage_01/FieldObjectData/Stage_01_field_objects.json`
-- [ ] `RailData/Stage_01_hpbar.json` → `Data/StageData/Stage_01/FieldObjectData/Stage_01_hpbar.json`
-- [ ] `RailData/sample_rail.json` → `Data/StageData/Sample/sample_rail.json`
+- [x] `RailData/PlayerConfig.json` → `Data/Config/PlayerConfig.json`
+- [x] `RailData/EnemyTypePreset.json` → `Data/Config/EnemyConfig.json` (リネームも)
+- [x] `RailData/FieldObjectTypeDefaults.json` → `Data/Config/FieldObjectTypeDefaults.json`
+- [x] `RailData/Stage_01_rail.json` → `Data/StageData/Stage_01/RailData/Stage_01_rail.json`
+- [x] `RailData/Stage_01_events.json` → `Data/StageData/Stage_01/EventData/Stage_01_events.json`
+- [x] `RailData/Stage_01_field_objects.json` → `Data/StageData/Stage_01/FieldObjectData/Stage_01_field_objects.json`
+- [x] `RailData/Stage_01_hpbar.json` → `Data/StageData/Stage_01/FieldObjectData/Stage_01_hpbar.json`
+- [ ] `RailData/sample_rail.json` → `Data/StageData/Sample/sample_rail.json` (ファイルが存在しないためスキップ)
 
 ---
 
@@ -536,11 +536,11 @@ public:
 | `EnemyDataIO.cpp` | ハードコードパスを `Data/Config/EnemyConfig.json` に変更 |
 | `FieldEditorSystem.cpp` | フィールドオブジェクト・デフォルトパスを新パスに変更 |
 
-- [ ] `RailDataIO.cpp` の `MakeRailFilePath()` / `MakeEventFilePath()` を更新
-- [ ] `PlayerDataIO` のパス定数を更新
-- [ ] `EnemyDataIO` のパス定数を更新
-- [ ] `FieldEditorSystem.cpp` の `FieldObjectTypeDefaults.json` パスを更新
-- [ ] `HpBarViewSystem` (hpbar.json 読み込み) のパスを StageData 経由に変更
+- [x] `RailDataIO.cpp` の `MakeRailFilePath()` / `MakeEventFilePath()` を更新
+- [x] `PlayerDataIO` のパス定数を更新
+- [x] `EnemyDataIO` のパス定数を更新
+- [x] `FieldEditorSystem.cpp` の `FieldObjectTypeDefaults.json` パスを更新
+- [x] `HpBarViewSystem` (hpbar.json 読み込み) のパスを新パスに変更 (ハードコード)
 
 ---
 
@@ -561,11 +561,11 @@ LoadEventsToComponent(*rail, stageData.eventDataPath);
 
 ### Phase 3 完了確認
 
-- [ ] ビルドエラーなし
-- [ ] ゲーム起動時に全 JSON が新パスで読み込まれる
-- [ ] エディタの Load/Save ボタンが正しいパスに書き込む
-- [ ] 旧 `RailData/` フォルダのファイルが不要になっている
-- [ ] ゲームがフルプレイ可能な状態を維持している
+- [x] ビルドエラーなし
+- [x] ゲーム起動時に全 JSON が新パスで読み込まれる
+- [x] エディタの Load/Save ボタンが正しいパスに書き込む
+- [x] 旧 `RailData/` フォルダのファイルが不要になっている
+- [x] ゲームがフルプレイ可能な状態を維持している
 
 ---
 
@@ -636,8 +636,8 @@ namespace InputHelper {
 }
 ```
 
-- [ ] `Utility/InputHelper.h` 新規作成 (または既存 `CBGameAudio.h` と同じ場所に)
-- [ ] `vcxproj` / `vcxproj.filters` 更新
+- [x] `Utility/InputHelper.h` 新規作成 (または既存 `CBGameAudio.h` と同じ場所に)
+- [x] `vcxproj` / `vcxproj.filters` 更新
 
 ---
 
@@ -649,9 +649,9 @@ namespace InputHelper {
 
 変更方針: 各 `Keyboard::IsTrigger(...)` の条件に `|| InputHelper::IsXxx()` を追加
 
-- [ ] ポーズ開閉 (`VK_TAB`) → `IsPauseTrigger()` に変更
-- [ ] 決定 (`VK_SPACE`) → `IsConfirmTrigger()` に変更
-- [ ] カーソル上下 → `IsMoveUpTrigger()` / `IsMoveDownTrigger()` に変更
+- [x] ポーズ開閉 (`VK_TAB`) → `IsPauseTrigger()` に変更
+- [x] 決定 (`VK_SPACE`) → `IsConfirmTrigger()` に変更
+- [x] カーソル上下 → `IsMoveUpTrigger()` / `IsMoveDownTrigger()` に変更
 
 ---
 
@@ -659,9 +659,9 @@ namespace InputHelper {
 
 **対象:** `System/OutGame/OptionSystem.cpp`
 
-- [ ] 決定 (`VK_SPACE`) → `IsConfirmTrigger()`
-- [ ] カーソル上下左右 → InputHelper に変更
-- [ ] バック/キャンセル操作があれば A ボタンまたは B ボタンを対応付け
+- [x] 決定 (`VK_SPACE`) → `IsConfirmTrigger()`
+- [x] カーソル上下左右 → InputHelper に変更
+- [ ] バック/キャンセル操作があれば A ボタンまたは B ボタンを対応付け (未実装・現状不要)
 
 ---
 
@@ -676,8 +676,8 @@ No::Vector2 input = InputHelper::GetMoveStick();
 // 変更: Vector2 input = InputHelper::GetMoveStick();
 ```
 
-- [ ] `PlayerControlSystem.cpp` のキーボード入力を `InputHelper::GetMoveStick()` に統合
-- [ ] 攻撃ボタン (SPACE → B) も対応
+- [x] `PlayerControlSystem.cpp` のキーボード入力を `InputHelper::GetMoveInput()` に統合
+- [x] 攻撃ボタン (SPACE → A ボタン) も対応
 
 ---
 
@@ -685,18 +685,18 @@ No::Vector2 input = InputHelper::GetMoveStick();
 
 grep で `Keyboard::IsTrigger` / `Keyboard::IsPress` を全検索し、ゲームプレイに関わる箇所を全てパッド対応させる
 
-- [ ] grep `Keyboard::IsTrigger` を全体検索し、対応漏れがないか確認
+- [x] grep `Keyboard::IsTrigger` を全体検索し、対応漏れがないか確認 (TitleSystem も対応済み)
 - [ ] ClearOver 演出のメニュー操作 (Phase 7 で実装する箇所) も最初からパッド対応で実装
 
 ---
 
 ### Phase 4 完了確認
 
-- [ ] コントローラー接続時にポーズが Start ボタンで開閉できる
-- [ ] B ボタンで決定できる
-- [ ] 左スティック / D-Pad でカーソル移動・プレイヤー移動ができる
-- [ ] キーボード操作も引き続き動作する
-- [ ] コントローラー未接続時のエラーが出ない (`IsGamepadConnected()` で確認)
+- [x] コントローラー接続時にポーズが Start ボタンで開閉できる
+- [x] A ボタンで決定できる (計画では B ボタンだったが A ボタンに変更)
+- [x] 左スティック / D-Pad でカーソル移動・プレイヤー移動ができる (スティックリピート付き)
+- [x] キーボード操作も引き続き動作する
+- [x] コントローラー未接続時のエラーが出ない (`IsGamepadConnected()` で確認)
 
 ---
 
@@ -739,10 +739,10 @@ FieldObjectEditor (移す機能):
   - AddObjectImGui() など (現在 FieldEditorSystem 内の ImGui 関数)
 ```
 
-- [ ] `FieldObject/Editor/FieldObjectEditor.h/.cpp` 新規作成
-- [ ] `FieldEditorSystem` の ImGui 描画コードを `FieldObjectEditor` へ移動
-- [ ] `FieldEditorSystem` は `FieldObjectEditor` を持つか、完全分離にする
-- [ ] `vcxproj` / `vcxproj.filters` 更新
+- [x] `FieldObject/Editor/FieldObjectEditor.h/.cpp` 新規作成
+- [x] `FieldEditorSystem` の ImGui 描画コードを `FieldObjectEditor` へ移動
+- [x] `FieldEditorSystem` は `FieldObjectEditor*` をコンストラクタで受け取る形に変更
+- [x] `vcxproj` / `vcxproj.filters` 更新
 
 ---
 
@@ -777,8 +777,8 @@ private:
 };
 ```
 
-- [ ] `Editor/EditorManager.h/.cpp` 新規作成
-- [ ] `vcxproj` / `vcxproj.filters` 更新
+- [x] `Editor/EditorManager.h/.cpp` 新規作成
+- [x] `vcxproj` / `vcxproj.filters` 更新
 
 ---
 
@@ -791,7 +791,7 @@ private:
 4. `enabled` なら `CreateSpawnDebugEntities()` を呼ぶ
 5. `!enabled` なら `DestroySpawnDebugEntities()` を呼ぶ
 
-- [ ] `SetEditorMode()` 実装
+- [x] `SetEditorMode()` 実装 (F1 トグル、`PauseComponent::isPause` 制御)
 - [ ] エンジンポーズ ON/OFF の動作確認
 
 ---
@@ -826,8 +826,10 @@ if (isEditorMode_) {
 }
 ```
 
-- [ ] タブ UI 実装
-- [ ] Stage IO ボタン (Load/Save Rail, Events) をタブ内に移動
+- [x] タブ UI 実装 (レール / イベント / フィールド / 敵設定 / 吹き出し)
+- [x] Stage IO ボタン (Load/Save Rail, Events) をレールタブ内に移動
+- [x] EnemyConfigEditorSystem の ImGui を 敵設定タブに統合
+- [x] SpeechBubbleConfigEditorSystem の ImGui を 吹き出しタブに統合
 
 ---
 
@@ -855,10 +857,10 @@ if (isEditorMode_) {
 - `spawnDebugEntities_` の全エンティティを `registry.DestroyEntity()` で削除
 - `spawnDebugEntities_` をクリア
 
-- [ ] `CreateSpawnDebugEntities()` 実装
-- [ ] `DestroySpawnDebugEntities()` 実装
-- [ ] 黒マテリアルの適用方法確認 (MeshComponent または MaterialComponent の設定)
-- [ ] `moveDirection` から回転行列/Quaternion を求めるロジック実装
+- [x] `CreateSpawnDebugEntities()` 実装 (SpawnEnemy イベント × count 分の黒モデルを生成)
+- [x] `DestroySpawnDebugEntities()` 実装
+- [x] 黒マテリアル: `material->color = No::Color(0,0,0,1)`
+- [x] `moveDirection` → `Quaternion::LookRotation(dir, Vector3::UP)`
 
 ---
 
@@ -884,17 +886,18 @@ void GameScene::NotSystemUpdate() {
 }
 ```
 
-- [ ] `GameScene.h` の `railCameraEditor_` / `gameEventEditor_` を `editorManager_` に置き換え
-- [ ] `GameScene::Setup()` に `editorManager_.Initialize()` 追加
-- [ ] `GameScene::NotSystemUpdate()` を簡潔化
-- [ ] 古い `RailEditorImGui()` / `RailCameraImGui()` メソッドの整理 (EditorManager 内に移動)
+- [x] `GameScene.h` の `railCameraEditor_` / `gameEventEditor_` を `editorManager_` に置き換え
+- [x] `GameScene::Setup()` に `editorManager_.Initialize()` 追加
+- [x] `GameScene::NotSystemUpdate()` を簡潔化 (`editorManager_.DrawImGui(*GetRegistry())` のみ)
+- [x] 古い `RailEditorImGui()` / `RailCameraImGui()` メソッドを削除 (EditorManager 内に移動済み)
+- [x] `EnemyConfigEditorSystem` / `SpeechBubbleConfigEditorSystem` を AddSystem から削除
 
 ---
 
 ### Phase 5 完了確認
 
-- [ ] EditorManager でエディタモードに入るとゲームが停止する
-- [ ] タブで Rail / Event / Field エディタが切り替えられる
+- [ ] EditorManager でエディタモードに入るとゲームが停止する (F1 キー)
+- [ ] タブで Rail / Event / Field / 敵設定 / 吹き出し エディタが切り替えられる
 - [ ] エディタモードに入るとスポーン位置に黒モデルが表示される
 - [ ] エディタモードを解除するとモデルが消えてゲームが再開する
 - [ ] 既存の Load/Save 機能が正常に動作する

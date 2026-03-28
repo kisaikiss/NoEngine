@@ -28,6 +28,7 @@
 #include "application/CommentBout/System/OutGame/OptionSystem.h"
 #include "application/CommentBout/System/OutGame/OptionViewSystem.h"
 #include "application/CommentBout/System/RailCameraSystem.h"
+#include "application/CommentBout/System/RailCameraEditorSystem.h"
 #include "application/CommentBout/System/RailProgressBarSystem.h"
 #include "application/CommentBout/System/EnemySpawnSystem.h"
 #include "application/CommentBout/System/EnemyShootSystem.h"
@@ -38,8 +39,6 @@
 #include "application/CommentBout/System/EnemyVisualSystem.h"
 #include "application/CommentBout/System/HpBarViewSystem.h"
 #include "application/CommentBout/System/SpeechBubbleToBossSystem.h"
-#include "application/CommentBout/System/EnemyConfigEditorSystem.h"
-#include "application/CommentBout/System/SpeechBubbleConfigEditorSystem.h"
 #include "application/CommentBout/Data/SpeechBubbleConfig.h"
 #include "application/CommentBout/Data/SpeechBubbleDataIO.h"
 #include "application/CommentBout/System/PlayerAttackResolveSystem.h"
@@ -89,21 +88,20 @@ void GameScene::Setup() {
 	AddSystem(std::make_unique<PlayerInfoDebugSystem>());
 	AddSystem(std::make_unique<No::DebugCameraSystem>());
 	AddSystem(std::make_unique<RailCameraSystem>());
+	AddSystem(std::make_unique<RailCameraEditorSystem>());
 	AddSystem(std::make_unique<RailProgressBarSystem>());
 	AddSystem(std::make_unique<EnemySpawnSystem>());
 	AddSystem(std::make_unique<No::CameraSystem>());
 	AddSystem(std::make_unique<BossBehaviorSystem>());
 	AddSystem(std::make_unique<EnemyMoveSystem>());
 	AddSystem(std::make_unique<EnemyShootSystem>());
-	AddSystem(std::make_unique<FieldEditorSystem>());
+	AddSystem(std::make_unique<FieldEditorSystem>(&editorManager_.GetFieldObjectEditor()));
 	AddSystem(std::make_unique<CommentBoutCollision::CollisionSystem>());
 	AddSystem(std::make_unique<CommentBoutCollision::CollisionDebugRenderSystem>());
 	AddSystem(std::make_unique<EnemyBulletHitSystem>());
 	AddSystem(std::make_unique<EnemyContactDamageSystem>());
 	AddSystem(std::make_unique<PlayerAttackResolveSystem>());
 	AddSystem(std::make_unique<SpeechBubbleToBossSystem>());
-	AddSystem(std::make_unique<EnemyConfigEditorSystem>());
-	AddSystem(std::make_unique<SpeechBubbleConfigEditorSystem>());
 	AddSystem(std::make_unique<DamageApplySystem>());
 	AddSystem(std::make_unique<DamageFlashSystem>());
 	AddSystem(std::make_unique<HpBarViewSystem>());
@@ -248,6 +246,8 @@ void GameScene::Setup() {
 		railCamera->selectedEventIndex = 0;
 	}
 
+	editorManager_.Initialize(registry, railCameraEntity_);
+
 	// 自機スプライト
 	auto playerEntity = registry.GenerateEntity();
 	registry.AddComponent<CBPlayerTag>(playerEntity);
@@ -306,10 +306,8 @@ void GameScene::Setup() {
 void GameScene::NotSystemUpdate()
 {
 	CameraImGui();
-	RailCameraImGui();
-	RailEditorImGui();
+	editorManager_.DrawImGui(*GetRegistry());
 	ChangeSceneImGui();
-
 }
 
 void GameScene::CameraImGui()
@@ -329,56 +327,6 @@ void GameScene::CameraImGui()
 #endif
 }
 
-void GameScene::RailCameraImGui()
-{
-	railCameraEditor_.DrawRailCameraImGui(GetRegistry(), railCameraEntity_, &ResetEventRuntime);
-}
-
-void GameScene::RailEditorImGui()
-{
-#ifdef USE_IMGUI
-	if (railCameraEntity_ == No::nullEntity) {
-		return;
-	}
-
-	auto* rail = GetRegistry()->GetComponent<RailCameraComponent>(railCameraEntity_);
-	if (!rail) {
-		return;
-	}
-
-	static char stageNameBuffer[64] = "";
-	if (stageNameBuffer[0] == '\0') {
-		std::snprintf(stageNameBuffer, sizeof(stageNameBuffer), "%s", rail->stageName.c_str());
-	}
-
-	ImGui::Begin("Stage IO");
-	ImGui::InputText("StageName", stageNameBuffer, sizeof(stageNameBuffer));
-
-	const std::string stageName(stageNameBuffer);
-	if (ImGui::Button("Load Rail") && !stageName.empty()) {
-		LoadRailToComponent(*rail, stageName);
-	}
-	ImGui::SameLine();
-	if (ImGui::Button("Save Rail") && !stageName.empty()) {
-		rail->stageName = stageName;
-		rail->railFilePath = MakeRailFilePath(stageName);
-		SaveRailToJson(*rail, stageName);
-	}
-
-	if (ImGui::Button("Load Events") && !stageName.empty()) {
-		LoadEventsToComponent(*rail, stageName);
-	}
-	ImGui::SameLine();
-	if (ImGui::Button("Save Events") && !stageName.empty()) {
-		rail->stageName = stageName;
-		SaveEventsToJson(*rail, stageName);
-	}
-	ImGui::End();
-#endif
-
-	railCameraEditor_.DrawRailEditorImGui(GetRegistry(), railCameraEntity_);
-	gameEventEditor_.DrawGameEventEditorImGui(GetRegistry(), railCameraEntity_);
-}
 
 void GameScene::ChangeSceneImGui()
 {

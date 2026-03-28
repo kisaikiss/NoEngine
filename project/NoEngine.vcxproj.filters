@@ -146,9 +146,11 @@
     <ClCompile Include="application\CommentBout\Spawner\PauseMenuSpawner.cpp" />
     <ClCompile Include="application\CommentBout\Editor\GameEventEditor.cpp" />
     <ClCompile Include="application\CommentBout\Editor\RailCameraEditor.cpp" />
+    <ClCompile Include="application\CommentBout\Editor\EditorManager.cpp" />
     <ClCompile Include="application\CommentBout\Data\RailDataIO.cpp" />
     <ClCompile Include="application\CommentBout\System\EnemySystem.cpp" />
     <ClCompile Include="application\CommentBout\System\RailCameraSystem.cpp" />
+    <ClCompile Include="application\CommentBout\System\RailCameraEditorSystem.cpp" />
     <ClCompile Include="application\TestApp\Scene\TestScene.cpp" />
     <ClCompile Include="application\TestApp\Scene\TestScene2.cpp" />
     <ClCompile Include="application\TestApp\System\TestSystem.cpp" />
@@ -179,6 +181,7 @@
     <ClCompile Include="application\CommentBout\System\DamageFlashSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\RailProgressBarSystem.cpp" />
     <ClCompile Include="application\CommentBout\FieldObject\System\FieldEditorSystem.cpp" />
+    <ClCompile Include="application\CommentBout\FieldObject\Editor\FieldObjectEditor.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\SpriteAnimationSystem.cpp" />
     <ClCompile Include="application\CommentBout\Collision\System\CollisionDebugRenderSystem.cpp" />
   </ItemGroup>
@@ -356,9 +359,11 @@
     <ClInclude Include="application\CommentBout\Spawner\TitleMenuSpawner.h" />
     <ClInclude Include="application\CommentBout\Component\RailCameraComponent.h" />
     <ClInclude Include="application\CommentBout\System\RailCameraSystem.h" />
+    <ClInclude Include="application\CommentBout\System\RailCameraEditorSystem.h" />
     <ClInclude Include="application\CommentBout\Spawner\PauseMenuSpawner.h" />
     <ClInclude Include="application\CommentBout\Editor\GameEventEditor.h" />
     <ClInclude Include="application\CommentBout\Editor\RailCameraEditor.h" />
+    <ClInclude Include="application\CommentBout\Editor\EditorManager.h" />
     <ClInclude Include="application\CommentBout\Data\RailDataIO.h" />
     <ClInclude Include="application\CommentBout\Component\EnemyComponent.h" />
     <ClInclude Include="application\CommentBout\System\EnemySystem.h" />
@@ -412,6 +417,7 @@
     <ClInclude Include="application\CommentBout\Utility\EnemyVisibilityUtility.h" />
     <ClInclude Include="application\CommentBout\FieldObject\Component\FieldPlacementComponent.h" />
     <ClInclude Include="application\CommentBout\FieldObject\System\FieldEditorSystem.h" />
+    <ClInclude Include="application\CommentBout\FieldObject\Editor\FieldObjectEditor.h" />
     <ClInclude Include="application\CommentBout\Collision\Component\ColliderConfig.h" />
     <ClInclude Include="application\CommentBout\Data\PlayerConfig.h" />
     <ClInclude Include="application\CommentBout\Data\PlayerDataIO.h" />

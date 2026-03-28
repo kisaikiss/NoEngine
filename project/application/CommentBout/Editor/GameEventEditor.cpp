@@ -17,7 +17,6 @@ void GameEventEditor::DrawGameEventEditorImGui(No::Registry* registry, No::Entit
 		return;
 	}
 
-	ImGui::Begin("ゲームイベント編集");
 	ImGui::Text("ステージイベント");
 	if (ImGui::Button("敵生成イベント追加")) {
 		RailEventData newEvent;
@@ -123,7 +122,6 @@ void GameEventEditor::DrawGameEventEditorImGui(No::Registry* registry, No::Entit
 		ImGui::Text("実行状態: fired=%s waiting=%s elapsed=%.2f", e.fired ? "true" : "false", e.waitingCondition ? "true" : "false", e.waitingElapsedSeconds);
 	}
 
-	ImGui::End();
 #else
 	static_cast<void>(registry);
 	static_cast<void>(railCameraEntity);

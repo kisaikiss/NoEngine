@@ -450,10 +450,6 @@ void RailCameraSystem::Update(No::Registry& registry, float deltaTime) {
 
 		UpdateRailEvents(registry, *rail, deltaTime);
 		ApplyTransformFromDistance(*rail, transform);
-		DrawRailDebug(*rail);
-		DrawControlPointDebug(*rail);
-		DrawEventPointDebug(*rail);
-		DrawRailCameraGizmo(*rail, transform);
 	}
 }
 

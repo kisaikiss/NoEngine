@@ -1,8 +1,6 @@
 #pragma once
 #include "engine/NoEngine.h"
-#include "application/CommentBout/Editor/RailCameraEditor.h"
-#include "application/CommentBout/Editor/GameEventEditor.h"
-#include <array>
+#include "application/CommentBout/Editor/EditorManager.h"
 
 class GameScene : public No::IScene {
 public:
@@ -10,14 +8,11 @@ public:
 private:
 	void NotSystemUpdate() override;
 	void CameraImGui();
-	void RailCameraImGui();
-	void RailEditorImGui();
 	void ChangeSceneImGui();
 
 	No::Entity activeCameraEntity_{};
 	No::Entity debugCameraEntity_{};
 	No::Entity railCameraEntity_{};
 
-	RailCameraEditor railCameraEditor_{};
-	GameEventEditor gameEventEditor_{};
+	EditorManager editorManager_{};
 };

@@ -202,9 +202,6 @@ void CollisionDebugRenderSystem::Update(No::Registry& registry, float deltaTime)
 	DrawFieldColliderDebug(registry, *config);
 	DrawPlayerHitboxDebug(registry, *config);
 	DrawCameraGateDebug(registry, *config);
-
-	// Phase13コメント:
-	// 衝突デバッグ表示はこのSystemに集約し、敵System/FieldEditor側の描画責務を分離している。
 }
 
 }

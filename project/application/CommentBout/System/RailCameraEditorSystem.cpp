@@ -1,0 +1,161 @@
+#include "stdafx.h"
+#include "RailCameraEditorSystem.h"
+#include "application/CommentBout/Component/RailCameraComponent.h"
+#include "engine/Functions/Renderer/Primitive.h"
+#include <algorithm>
+#include <cmath>
+
+namespace No {
+	using ::NoEngine::Primitive;
+}
+
+namespace {
+	No::Vector3 InterpolateSplinePoint(const No::Vector3& p0, const No::Vector3& p1, const No::Vector3& p2, const No::Vector3& p3, float t) {
+		const float t2 = t * t;
+		const float t3 = t2 * t;
+		return 0.5f * ((2.0f * p1) + (-p0 + p2) * t + (2.0f * p0 - 5.0f * p1 + 4.0f * p2 - p3) * t2 + (-p0 + 3.0f * p1 - 3.0f * p2 + p3) * t3);
+	}
+
+	No::Vector3 EvaluatePositionByT(const RailCameraComponent& rail, float t) {
+		const size_t pointCount = rail.controlPoints.size();
+		if (pointCount == 0) return No::Vector3::ZERO;
+		if (pointCount == 1) return rail.controlPoints[0];
+
+		if (t < 0.0f) t = 0.0f;
+		else if (t > 1.0f) t = 1.0f;
+
+		const int segmentCount = static_cast<int>(pointCount) - 1;
+		float scaled = t * static_cast<float>(segmentCount);
+		int seg = static_cast<int>(std::floor(scaled));
+		if (seg >= segmentCount) { seg = segmentCount - 1; scaled = static_cast<float>(segmentCount); }
+		const float localT = scaled - static_cast<float>(seg);
+
+		const int i0 = std::max(seg - 1, 0);
+		const int i1 = seg;
+		const int i2 = std::min(seg + 1, segmentCount);
+		const int i3 = std::min(seg + 2, segmentCount);
+
+		return InterpolateSplinePoint(
+			rail.controlPoints[static_cast<size_t>(i0)],
+			rail.controlPoints[static_cast<size_t>(i1)],
+			rail.controlPoints[static_cast<size_t>(i2)],
+			rail.controlPoints[static_cast<size_t>(i3)],
+			localT
+		);
+	}
+
+	float DistanceToNormalizedT(const RailCameraComponent& rail, float distance) {
+		if (rail.arcLengthTable.empty() || rail.totalLength <= 0.0f) return 0.0f;
+		if (distance <= 0.0f) return 0.0f;
+		if (distance >= rail.totalLength) return 1.0f;
+
+		auto it = std::lower_bound(rail.arcLengthTable.begin(), rail.arcLengthTable.end(), distance);
+		if (it == rail.arcLengthTable.begin()) return 0.0f;
+		if (it == rail.arcLengthTable.end()) return 1.0f;
+
+		const size_t highIndex = static_cast<size_t>(it - rail.arcLengthTable.begin());
+		const size_t lowIndex = highIndex - 1;
+		const float span = rail.arcLengthTable[highIndex] - rail.arcLengthTable[lowIndex];
+		float lerpT = span > 0.00001f ? (distance - rail.arcLengthTable[lowIndex]) / span : 0.0f;
+		const float sampleCount = static_cast<float>(rail.arcLengthTable.size() - 1);
+		const float tLow  = static_cast<float>(lowIndex)  / sampleCount;
+		const float tHigh = static_cast<float>(highIndex) / sampleCount;
+		return tLow + (tHigh - tLow) * lerpT;
+	}
+
+	void DrawRailDebug(const RailCameraComponent& rail) {
+		if (!rail.drawRailDebug || rail.controlPoints.size() < 2) return;
+
+		const int segmentCount = static_cast<int>(rail.controlPoints.size()) - 1;
+		const int samplesPerSegment = std::max(rail.debugRailSamplesPerSegment, 2);
+		const int sampleCount = segmentCount * samplesPerSegment;
+		if (sampleCount <= 0) return;
+
+		No::Vector3 prev = EvaluatePositionByT(rail, 0.0f);
+		for (int i = 1; i <= sampleCount; ++i) {
+			const float t = static_cast<float>(i) / static_cast<float>(sampleCount);
+			const No::Vector3 current = EvaluatePositionByT(rail, t);
+			No::Primitive::DrawLine(prev, current, NoEngine::Math::Color(1.0f, 0.0f, 0.0f, 1.0f));
+			prev = current;
+		}
+	}
+
+	void DrawControlPointDebug(const RailCameraComponent& rail) {
+		if (!rail.drawControlPointsDebug) return;
+
+		const float radius = (rail.controlPointDebugRadius > 0.0f) ? rail.controlPointDebugRadius : 0.1f;
+		for (size_t i = 0; i < rail.controlPoints.size(); ++i) {
+			const bool isSelected = (static_cast<int>(i) == rail.selectedControlPointIndex);
+			const NoEngine::Math::Color color = isSelected
+				? NoEngine::Math::Color(1.0f, 0.0f, 0.0f, 1.0f)
+				: NoEngine::Math::Color(0.2f, 1.0f, 0.2f, 1.0f);
+			No::Primitive::DrawSphere(rail.controlPoints[i], radius, color, 10, 10);
+		}
+	}
+
+	void DrawEventPointDebug(const RailCameraComponent& rail) {
+		if (!rail.drawEventPointsDebug || rail.events.empty() || rail.totalLength <= 0.0f) return;
+
+		const float radius = (rail.eventPointDebugRadius > 0.0f) ? rail.eventPointDebugRadius : 0.12f;
+		for (size_t i = 0; i < rail.events.size(); ++i) {
+			float distance = rail.events[i].triggerDistance;
+			if (distance < 0.0f) distance = 0.0f;
+			if (distance > rail.totalLength) distance = rail.totalLength;
+			const No::Vector3 position = EvaluatePositionByT(rail, DistanceToNormalizedT(rail, distance));
+			const bool selected = (static_cast<int>(i) == rail.selectedEventIndex);
+			const NoEngine::Math::Color color = selected
+				? NoEngine::Math::Color(1.0f, 1.0f, 0.2f, 1.0f)
+				: NoEngine::Math::Color(0.2f, 0.6f, 1.0f, 1.0f);
+			No::Primitive::DrawSphere(position, radius, color, 10, 10);
+		}
+	}
+
+	void DrawRailCameraGizmo(const RailCameraComponent& rail, No::TransformComponent* transform) {
+		if (!rail.drawCameraDebug || !transform) return;
+
+		No::Matrix4x4 world = transform->MakeAffineMatrix4x4();
+		No::Vector3 origin  = transform->GetWorldPosition();
+		No::Vector3 forward = world.TransformNormal(No::Vector3::FORWARD);
+		No::Vector3 right   = world.TransformNormal(No::Vector3::RIGHT);
+		No::Vector3 up      = world.TransformNormal(No::Vector3::UP);
+
+		if (forward.LengthSquared() <= 0.000001f || right.LengthSquared() <= 0.000001f || up.LengthSquared() <= 0.000001f) return;
+		forward = forward.Normalize();
+		right   = right.Normalize();
+		up      = up.Normalize();
+
+		const float bodyLength = 0.9f;
+		const float halfWidth  = 0.28f;
+		const float halfHeight = 0.20f;
+		const No::Vector3 tip = origin + forward * bodyLength;
+		const No::Vector3 c0 = tip + up * halfHeight - right * halfWidth;
+		const No::Vector3 c1 = tip + up * halfHeight + right * halfWidth;
+		const No::Vector3 c2 = tip - up * halfHeight + right * halfWidth;
+		const No::Vector3 c3 = tip - up * halfHeight - right * halfWidth;
+
+		const NoEngine::Math::Color cameraColor(1.0f, 0.95f, 0.2f, 1.0f);
+		No::Primitive::DrawLine(origin, c0, cameraColor);
+		No::Primitive::DrawLine(origin, c1, cameraColor);
+		No::Primitive::DrawLine(origin, c2, cameraColor);
+		No::Primitive::DrawLine(origin, c3, cameraColor);
+		No::Primitive::DrawLine(c0, c1, cameraColor);
+		No::Primitive::DrawLine(c1, c2, cameraColor);
+		No::Primitive::DrawLine(c2, c3, cameraColor);
+		No::Primitive::DrawLine(c3, c0, cameraColor);
+	}
+} // namespace
+
+void RailCameraEditorSystem::Update(No::Registry& registry, float /*deltaTime*/)
+{
+	auto view = registry.View<RailCameraComponent, No::TransformComponent>();
+	for (auto entity : view) {
+		auto* rail      = registry.GetComponent<RailCameraComponent>(entity);
+		auto* transform = registry.GetComponent<No::TransformComponent>(entity);
+		if (!rail || !transform) continue;
+
+		DrawRailDebug(*rail);
+		DrawControlPointDebug(*rail);
+		DrawEventPointDebug(*rail);
+		DrawRailCameraGizmo(*rail, transform);
+	}
+}

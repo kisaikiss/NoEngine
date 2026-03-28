@@ -127,9 +127,9 @@
         1.0
       ]
     },
-    "bulletDamage": 1,
-    "bulletLifetime": 4.0,
-    "bulletSpeed": 10.0,
+    "bulletDamage": 0,
+    "bulletLifetime": 0.0,
+    "bulletSpeed": 0.0,
     "despawnBehindDistance": 12.0,
     "enemyCollider": {
       "boxSizeMultiplier": [
@@ -154,8 +154,8 @@
     },
     "minHp": 10,
     "modelScale": 1.0,
-    "shootDistanceMax": 25.0,
-    "shootInterval": 1.0,
-    "targetDepthFromCamera": 1.0
+    "shootDistanceMax": 0.0,
+    "shootInterval": 0.0,
+    "targetDepthFromCamera": 0.0
   }
 }

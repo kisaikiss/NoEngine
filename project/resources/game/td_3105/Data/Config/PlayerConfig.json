@@ -1,5 +1,26 @@
 {
   "acceleration": 2400.0,
+  "attackCollider": {
+    "boxSizeMultiplier": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "localOffset2D": [
+      0.0,
+      0.0
+    ],
+    "localOffset3D": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "radiusMultiplier": 1.0,
+    "sizeMultiplier2D": [
+      1.0,
+      1.0
+    ]
+  },
   "attackLayer": 30,
   "attackPower": 5,
   "attackSize": [
@@ -29,7 +50,28 @@
   "invincibleDuration": 0.3499999940395355,
   "invincibleDurationDefault": 0.3499999940395355,
   "maxSpeed": 480.0,
-  "moveSpeed": 480.0,
+  "moveSpeed": 1.0,
+  "playerCollider2D": {
+    "boxSizeMultiplier": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "localOffset2D": [
+      0.0,
+      0.0
+    ],
+    "localOffset3D": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "radiusMultiplier": 1.0,
+    "sizeMultiplier2D": [
+      1.0,
+      1.0
+    ]
+  },
   "playerMaxHp": 10,
   "startPosition": [
     640.0,
