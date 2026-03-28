@@ -9,6 +9,7 @@
 #include "application/CommentBout/Component/HealthComponent.h"
 #include "application/CommentBout/Component/InvincibleComponent.h"
 #include "application/CommentBout/Utility/CBCollisionMask.h"
+#include "application/CommentBout/Utility/InputHelper.h"
 #include "application/CommentBout/GameTag.h"
 #include "application/CommentBout/Collision/Component/Collider2DComponent.h"
 #include "engine/Runtime/GraphicsCore.h"
@@ -96,12 +97,7 @@ void PlayerControlSystem::Update(No::Registry& registry, float deltaTime)
 			continue;
 		}
 
-		No::Vector2 input{ 0.0f, 0.0f };
-		if (No::Keyboard::IsPress('W')) { input.y -= 1.0f; }
-		if (No::Keyboard::IsPress('S')) { input.y += 1.0f; }
-		if (No::Keyboard::IsPress('A')) { input.x -= 1.0f; }
-		if (No::Keyboard::IsPress('D')) { input.x += 1.0f; }
-		const No::Vector2 inputDir = NormalizeOrZero(input);
+		const No::Vector2 inputDir = NormalizeOrZero(InputHelper::GetMoveInput());
 
 		const float maxSpeed = std::max(1.0f, (player->maxSpeed > 0.0f) ? player->maxSpeed : player->moveSpeed);
 		const float acceleration = std::max(0.0f, player->acceleration);
@@ -176,7 +172,7 @@ void PlayerControlSystem::Update(No::Registry& registry, float deltaTime)
 		}
 #endif
 
-		if (No::Keyboard::IsTrigger(VK_SPACE) && gameResource) {
+		if (InputHelper::IsConfirmTrigger() && gameResource) {
 			auto attackEntity = registry.GenerateEntity();
 			auto* attackTransform = registry.AddComponent<No::Transform2DComponent>(attackEntity);
 			attackTransform->translate = {

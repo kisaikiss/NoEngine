@@ -5,6 +5,7 @@
 #include "application/CommentBout/Component/OutGame/OptionStateComponent.h"
 #include "application/CommentBout/Event/OptionMenuEvent.h"
 #include "application/CommentBout/GameTag.h"
+#include "application/CommentBout/Utility/InputHelper.h"
 #include "engine/Runtime/GraphicsCore.h"
 
 namespace {
@@ -92,13 +93,13 @@ void TitleSystem::Update(No::Registry& registry, float deltaTime)
 	}
 
 	if (titleState->itemCount > 0) {
-		if (No::Keyboard::IsTrigger('W') || No::Keyboard::IsTrigger(VK_UP)) {
+		if (InputHelper::IsMoveUpTrigger()) {
 			titleState->selectedIndex--;
 			if (titleState->selectedIndex < 0) {
 				titleState->selectedIndex = titleState->itemCount - 1;
 			}
 		}
-		if (No::Keyboard::IsTrigger('S') || No::Keyboard::IsTrigger(VK_DOWN)) {
+		if (InputHelper::IsMoveDownTrigger()) {
 			titleState->selectedIndex++;
 			if (titleState->selectedIndex >= titleState->itemCount) {
 				titleState->selectedIndex = 0;
@@ -106,7 +107,7 @@ void TitleSystem::Update(No::Registry& registry, float deltaTime)
 		}
 	}
 
-	if (No::Keyboard::IsTrigger(VK_SPACE)) {
+	if (InputHelper::IsConfirmTrigger()) {
 		int action = TitleMenuStateComponent::None;
 		switch (titleState->selectedIndex) {
 		case 0:

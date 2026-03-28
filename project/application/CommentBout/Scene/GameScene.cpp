@@ -18,6 +18,7 @@
 #include "application/CommentBout/Utility/CBCollisionMask.h"
 #include "application/CommentBout/Utility/CBSpriteLayer.h"
 #include "application/CommentBout/Utility/CBGameAudio.h"
+#include "application/CommentBout/System/InputHelperSystem.h"
 #include "application/CommentBout/System/PlayerControlSystem.h"
 #include "application/CommentBout/System/PlayerInfoDebugSystem.h"
 #include "application/CommentBout/FieldObject/System/FieldEditorSystem.h"
@@ -82,6 +83,7 @@ void GameScene::Setup() {
 	//  - LifetimeSystem / OptionSystem / PauseViewSystem / OptionViewSystem / EditSystem
 	// --------------------------------------------------------------------------- //
 
+	AddSystem(std::make_unique<InputHelperSystem>());
 	AddSystem(std::make_unique<PauseSystem>());
 	AddSystem(std::make_unique<PlayerControlSystem>());
 	AddSystem(std::make_unique<PlayerInfoDebugSystem>());

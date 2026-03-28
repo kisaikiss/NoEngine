@@ -4,6 +4,7 @@
 #include "application/CommentBout/Component/OutGame/OptionMenuConfigComponent.h"
 #include "application/CommentBout/Event/OptionMenuEvent.h"
 #include "application/CommentBout/Utility/CBGameAudio.h"
+#include "application/CommentBout/Utility/InputHelper.h"
 #include "application/CommentBout/GameTag.h"
 #include <algorithm>
 
@@ -113,8 +114,8 @@ void OptionSystem::Update(No::Registry& registry, float deltaTime)
 
 	if (optionState->phase == OptionStateComponent::OpenEdit) {
 		const float step = std::max(0.01f, optionConfig->volumeStep);
-		const bool dec = No::Keyboard::IsTrigger('A') || No::Keyboard::IsTrigger(VK_LEFT);
-		const bool inc = No::Keyboard::IsTrigger('D') || No::Keyboard::IsTrigger(VK_RIGHT);
+		const bool dec = InputHelper::IsMoveLeftTrigger();
+		const bool inc = InputHelper::IsMoveRightTrigger();
 		const float beforeMaster = optionState->masterVolume;
 		const float beforeBGM = optionState->bgmVolume;
 		const float beforeSE = optionState->seVolume;
@@ -145,27 +146,27 @@ void OptionSystem::Update(No::Registry& registry, float deltaTime)
 			CommentBout::GameAudio::PlayTestSE();
 		}
 
-		if (No::Keyboard::IsTrigger(VK_SPACE)) {
+		if (InputHelper::IsConfirmTrigger()) {
 			optionState->isEditing = false;
 			StartOptionPhase(optionState, OptionStateComponent::OpenSelect, 1.0f);
 		}
 		return;
 	}
 
-	if (No::Keyboard::IsTrigger('W') || No::Keyboard::IsTrigger(VK_UP)) {
+	if (InputHelper::IsMoveUpTrigger()) {
 		optionState->selectedIndex--;
 		if (optionState->selectedIndex < 0) {
 			optionState->selectedIndex = optionState->itemCount - 1;
 		}
 	}
-	if (No::Keyboard::IsTrigger('S') || No::Keyboard::IsTrigger(VK_DOWN)) {
+	if (InputHelper::IsMoveDownTrigger()) {
 		optionState->selectedIndex++;
 		if (optionState->selectedIndex >= optionState->itemCount) {
 			optionState->selectedIndex = 0;
 		}
 	}
 
-	if (No::Keyboard::IsTrigger(VK_SPACE)) {
+	if (InputHelper::IsConfirmTrigger()) {
 		optionState->isConfirmAnimating = true;
 		optionState->confirmIndex = optionState->selectedIndex;
 		optionState->confirmAnimTime = 0.0f;

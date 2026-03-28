@@ -204,6 +204,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\CommentBout\System\OutGame\OptionViewSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\OutGame\PauseSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\OutGame\PauseViewSystem.cpp" />
+    <ClCompile Include="application\CommentBout\System\InputHelperSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\PlayerControlSystem.cpp" />
     <ClCompile Include="application\CommentBout\Collision\Utility\CollisionAlgorithms.cpp" />
     <ClCompile Include="application\CommentBout\Collision\System\CollisionSystem.cpp">
@@ -430,6 +431,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\CommentBout\System\OutGame\OptionViewSystem.h" />
     <ClInclude Include="application\CommentBout\System\OutGame\PauseSystem.h" />
     <ClInclude Include="application\CommentBout\System\OutGame\PauseViewSystem.h" />
+    <ClInclude Include="application\CommentBout\System\InputHelperSystem.h" />
     <ClInclude Include="application\CommentBout\System\PlayerControlSystem.h" />
     <ClInclude Include="application\CommentBout\Collision\Utility\CollisionMask.h" />
     <ClInclude Include="application\CommentBout\Collision\Utility\CollisionAlgorithms.h" />

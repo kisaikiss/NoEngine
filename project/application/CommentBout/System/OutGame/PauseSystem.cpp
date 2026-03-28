@@ -5,6 +5,7 @@
 #include "application/CommentBout/Component/OutGame/OptionStateComponent.h"
 #include "application/CommentBout/Event/OptionMenuEvent.h"
 #include "application/CommentBout/GameTag.h"
+#include "application/CommentBout/Utility/InputHelper.h"
 #include "engine/Functions/ECS/Component/PauseComponent.h"
 
 namespace {
@@ -137,7 +138,7 @@ void PauseSystem::Update(No::Registry& registry, float deltaTime)
 
 	if (pauseState->phase == PauseStateComponent::Closed) {
 		pauseState->isPaused = false;
-		if (No::Keyboard::IsTrigger(VK_TAB)) {
+		if (InputHelper::IsPauseTrigger()) {
 			pauseState->justEnteredPause = true;
 			pauseState->selectedIndex = 0;
 			pauseState->requestedAction = PauseStateComponent::None;
@@ -190,13 +191,13 @@ void PauseSystem::Update(No::Registry& registry, float deltaTime)
 	}
 
 	if (pauseState->itemCount > 0) {
-		if (No::Keyboard::IsTrigger('W') || No::Keyboard::IsTrigger(VK_UP)) {
+		if (InputHelper::IsMoveUpTrigger()) {
 			pauseState->selectedIndex--;
 			if (pauseState->selectedIndex < 0) {
 				pauseState->selectedIndex = pauseState->itemCount - 1;
 			}
 		}
-		if (No::Keyboard::IsTrigger('S') || No::Keyboard::IsTrigger(VK_DOWN)) {
+		if (InputHelper::IsMoveDownTrigger()) {
 			pauseState->selectedIndex++;
 			if (pauseState->selectedIndex >= pauseState->itemCount) {
 				pauseState->selectedIndex = 0;
@@ -204,7 +205,7 @@ void PauseSystem::Update(No::Registry& registry, float deltaTime)
 		}
 	}
 
-	if (No::Keyboard::IsTrigger(VK_SPACE)) {
+	if (InputHelper::IsConfirmTrigger()) {
 		int action = PauseStateComponent::None;
 		switch (pauseState->selectedIndex) {
 		case 0:
