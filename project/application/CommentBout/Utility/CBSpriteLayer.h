@@ -3,6 +3,7 @@
 
 namespace CommentBout {
 	enum class SpriteLayer : uint32_t {
+		PlayerAttack = 19,
 		Gameplay = 20,
 		Effect = 30,
 		RailProgressBar = 60,

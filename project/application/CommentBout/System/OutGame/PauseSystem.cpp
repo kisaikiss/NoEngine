@@ -112,6 +112,7 @@ void PauseSystem::Update(No::Registry& registry, float deltaTime)
 			{
 				// シーン遷移前にポーズ状態を明示解除して、停止状態の持ち越しを防ぐ。
 				ClearPauseState(pauseState, enginePause);
+				pauseState->isSceneChanging = true;
 				No::SceneChangeEvent event;
 				event.nextScene = "GameScene";
 				registry.EmitEvent(event);
@@ -128,6 +129,7 @@ void PauseSystem::Update(No::Registry& registry, float deltaTime)
 			{
 				// シーン遷移前にポーズ状態を明示解除して、停止状態の持ち越しを防ぐ。
 				ClearPauseState(pauseState, enginePause);
+				pauseState->isSceneChanging = true;
 				No::SceneChangeEvent event;
 				event.nextScene = "TitleScene";
 				registry.EmitEvent(event);
@@ -142,6 +144,10 @@ void PauseSystem::Update(No::Registry& registry, float deltaTime)
 
 	if (pauseState->phase == PauseStateComponent::Closed) {
 		pauseState->isPaused = false;
+		if (pauseState->isSceneChanging) {
+			SyncPauseState(pauseState, enginePause, forcePause);
+			return;
+		}
 		if (InputHelper::IsPauseTrigger()) {
 			CommentBout::GameAudio::PlaySEClip(CommentBoutResourceKey::kSESystemOpen);
 			pauseState->justEnteredPause = true;

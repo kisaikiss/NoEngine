@@ -67,7 +67,7 @@ void ApplyDamageFlash(No::Registry& registry, No::Entity target) {
 		flash->flashColor = cfg
 			? No::Color(cfg->flashColorRGB.x, cfg->flashColorRGB.y, cfg->flashColorRGB.z, cfg->flashMaxAlpha)
 			: No::Color(1.0f, 0.35f, 0.35f, 0.75f);
-		flash->baseColor = No::Color(1.0f, 1.0f, 1.0f, 0.5f);
+		flash->baseColor = No::Color(1.0f, 1.0f, 1.0f, 1.0f);
 		flash->affectSprite = true;
 		flash->affectMaterial = false;
 		flash->blinkEnabled = cfg ? cfg->flashBlinkEnabled : true;

@@ -45,10 +45,12 @@
 #include "application/CommentBout/System/PlayerAttackResolveSystem.h"
 #include "application/CommentBout/System/DamageApplySystem.h"
 #include "application/CommentBout/System/DamageFlashSystem.h"
+#include "application/CommentBout/System/PlayerAnimSystem.h"
 #include "application/CommentBout/System/GameResultSystem.h"
 #include "application/CommentBout/System/BossDefeatSystem.h"
 #include "application/CommentBout/System/ClearOverSystem.h"
 #include "application/CommentBout/System/ClearOverViewSystem.h"
+#include "application/CommentBout/Component/PlayerAnimStateComponent.h"
 #include "application/CommentBout/Component/BossDefeatSequenceComponent.h"
 #include "application/CommentBout/Component/ClearOverStateComponent.h"
 #include "application/CommentBout/Component/ClearOverConfigComponent.h"
@@ -119,6 +121,8 @@ void GameScene::Setup() {
 	AddSystem(std::make_unique<SpeechBubbleToBossSystem>());
 	AddSystem(std::make_unique<DamageApplySystem>());
 	AddSystem(std::make_unique<DamageFlashSystem>());
+	AddSystem(std::make_unique<PlayerAnimSystem>());
+	AddSystem(std::make_unique<No::SpriteAnimationSystem>());
 	AddSystem(std::make_unique<GameResultSystem>());
 	AddSystem(std::make_unique<BossDefeatSystem>());
 	AddSystem(std::make_unique<ClearOverSystem>());
@@ -317,12 +321,20 @@ void GameScene::Setup() {
 	playerTransform->scale = playerStartTransform->scale;
 	auto* playerSprite = registry.AddComponent<No::SpriteComponent>(playerEntity);
 	playerSprite->layer = CommentBout::ToLayer(CommentBout::SpriteLayer::Gameplay);
-	playerSprite->color = { 1.f, 1.f, 1.f, 0.5f };
+	playerSprite->color = { 1.f, 1.f, 1.f, 1.f };
 	playerSprite->textureHandle = GetGameTextureOrWhite(*gameResource, CommentBoutResourceKey::kPlayerSprite);
-	// Phase13: 接触イベントへ段階移行するため、自機にも2Dコライダーを持たせる。
+	auto* playerAnimator = registry.AddComponent<No::Animator2DComponent>(playerEntity);
+	playerAnimator->animeFrameWidth  = playerConfig->animFrameSize;
+	playerAnimator->animeFrameHeight = playerConfig->animFrameSize;
+	playerAnimator->currentAnimation = 0;
+	playerAnimator->framesNum        = static_cast<uint32_t>(std::max(1, playerConfig->animIdleFrameCount));
+	playerAnimator->frameByFrameTime = playerConfig->animIdleFrameTime;
+	registry.AddComponent<PlayerAnimStateComponent>(playerEntity);
+	// 移行するため、自機にも2Dコライダーを持たせる。
 	auto* playerCollider2D = registry.AddComponent<CommentBoutCollision::Collider2DComponent>(playerEntity);
 	playerCollider2D->useTransformAsSize = true;
-	playerCollider2D->sizeMultiplier = { 1.0f, 1.0f };
+	playerCollider2D->localOffset    = playerConfig->playerCollider2D.localOffset2D;
+	playerCollider2D->sizeMultiplier = playerConfig->playerCollider2D.sizeMultiplier2D;
 	playerCollider2D->collisionLayer = CommentBout::CollisionLayer::CBPlayer;
 	playerCollider2D->collisionMask = CommentBout::CollisionMask::CBPlayer;
 	playerHpBar->targetEntity = playerEntity;

@@ -8,6 +8,9 @@
 #include "application/CommentBout/Data/PlayerConfig.h"
 #include "application/CommentBout/Data/PlayerDataIO.h"
 #include "application/CommentBout/Component/DamageFlashComponent.h"
+#include "application/CommentBout/Component/PlayerAnimStateComponent.h"
+#include "application/CommentBout/Collision/Component/Collider2DComponent.h"
+#include "engine/Functions/ECS/Component/Animator2DComponent.h"
 #include "application/CommentBout/Component/GameResultComponent.h"
 #include "application/CommentBout/Component/ClearOverStateComponent.h"
 #include "application/CommentBout/GameTag.h"
@@ -159,7 +162,7 @@ void PlayerInfoDebugSystem::Update(No::Registry& registry, float deltaTime)
 			continue;
 		}
 
-		if (ImGui::Button("JSON読込（即時反映）")) {
+		if (ImGui::Button("JSON読込")) {
 			*playerConfig = PlayerDataIO::Load();
 			ApplyConfigToRuntime(registry, entity, *playerConfig, *player, *attack, *health, *invincible, *transform, startTransform, hitbox);
 		}
@@ -230,7 +233,9 @@ void PlayerInfoDebugSystem::Update(No::Registry& registry, float deltaTime)
 
 		if (ImGui::CollapsingHeader("初期配置設定") && startTransform) {
 			ImGui::DragFloat2("開始位置", &startTransform->translate.x, 1.0f, -5000.0f, 5000.0f);
-			ImGui::DragFloat2("開始スケール", &startTransform->scale.x, 1.0f, 1.0f, 5000.0f);
+			if (ImGui::DragFloat2("開始スケール", &startTransform->scale.x, 1.0f, 1.0f, 5000.0f)) {
+				transform->scale = startTransform->scale;
+			}
 			ImGui::DragFloat("開始回転", &startTransform->rotation, 0.01f, -6.28318f, 6.28318f);
 			if (ImGui::Button("開始配置を現在位置へ反映")) {
 				transform->translate = startTransform->translate;
@@ -242,11 +247,45 @@ void PlayerInfoDebugSystem::Update(No::Registry& registry, float deltaTime)
 		if (ImGui::CollapsingHeader("コライダー設定（自機 2D）")) {
 			ImGui::DragFloat2("ローカルオフセット##player2D", &playerConfig->playerCollider2D.localOffset2D.x, 0.5f, -500.0f, 500.0f);
 			ImGui::DragFloat2("サイズ倍率##player2D", &playerConfig->playerCollider2D.sizeMultiplier2D.x, 0.01f, 0.01f, 10.0f);
+			auto* col2D = registry.GetComponent<CommentBoutCollision::Collider2DComponent>(entity);
+			if (col2D) {
+				col2D->localOffset    = playerConfig->playerCollider2D.localOffset2D;
+				col2D->sizeMultiplier = playerConfig->playerCollider2D.sizeMultiplier2D;
+			}
 		}
 
 		if (ImGui::CollapsingHeader("コライダー設定（攻撃 2D）")) {
 			ImGui::DragFloat2("ローカルオフセット##attack2D", &playerConfig->attackCollider.localOffset2D.x, 0.5f, -500.0f, 500.0f);
 			ImGui::DragFloat2("サイズ倍率##attack2D", &playerConfig->attackCollider.sizeMultiplier2D.x, 0.01f, 0.01f, 10.0f);
+			ImGui::TextDisabled("※ 変更は次回スポーンの攻撃から反映されます");
+		}
+
+		if (ImGui::CollapsingHeader("アニメーション設定")) {
+			auto* animator = registry.GetComponent<No::Animator2DComponent>(entity);
+			if (ImGui::DragFloat("スプライト1コマサイズ(px)", &playerConfig->animFrameSize, 1.0f, 1.0f, 4096.0f)) {
+				if (animator) {
+					animator->animeFrameWidth  = playerConfig->animFrameSize;
+					animator->animeFrameHeight = playerConfig->animFrameSize;
+				}
+			}
+			ImGui::Separator();
+			ImGui::Text("待機 (行0)");
+			ImGui::DragFloat("1コマ時間(待機)##idle", &playerConfig->animIdleFrameTime, 0.005f, 0.005f, 2.0f);
+			ImGui::DragInt("コマ数(待機)##idle", &playerConfig->animIdleFrameCount, 1.0f, 1, 32);
+			ImGui::Separator();
+			ImGui::Text("移動 (行1)");
+			ImGui::DragFloat("1コマ時間(移動)##move", &playerConfig->animMoveFrameTime, 0.005f, 0.005f, 2.0f);
+			ImGui::DragInt("コマ数(移動)##move", &playerConfig->animMoveFrameCount, 1.0f, 1, 32);
+			ImGui::Separator();
+			ImGui::Text("攻撃 (行2)");
+			ImGui::DragFloat("1コマ時間(攻撃)##atk", &playerConfig->animAttackFrameTime, 0.005f, 0.005f, 2.0f);
+			ImGui::DragInt("コマ数(攻撃)##atk", &playerConfig->animAttackFrameCount, 1.0f, 1, 32);
+		}
+
+		if (ImGui::CollapsingHeader("無敵点滅設定")) {
+			ImGui::DragFloat("開始点滅速度(Hz)", &playerConfig->invincibleBlinkBaseHz, 0.1f, 0.1f, 60.0f);
+			ImGui::DragFloat("終了点滅速度(Hz)", &playerConfig->invincibleBlinkMaxHz, 0.1f, 0.1f, 60.0f);
+			ImGui::DragFloat("最小透明度", &playerConfig->invincibleBlinkMinAlpha, 0.01f, 0.0f, 1.0f);
 		}
 
 		if (ImGui::Button("コライダー設定を JSON 保存")) {

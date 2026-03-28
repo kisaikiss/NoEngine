@@ -11,11 +11,18 @@
 #include "application/CommentBout/Utility/CBCollisionMask.h"
 #include "application/CommentBout/Utility/InputHelper.h"
 #include "application/CommentBout/Utility/CBGameAudio.h"
+#include "application/CommentBout/Component/PlayerAnimStateComponent.h"
+#include "application/CommentBout/Data/PlayerConfig.h"
 #include "application/CommentBout/GameTag.h"
 #include "application/CommentBout/Collision/Component/Collider2DComponent.h"
 #include "engine/Runtime/GraphicsCore.h"
 #include <algorithm>
 #include <cmath>
+
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable:4702)
+#endif
 
 namespace {
 No::Vector2 NormalizeOrZero(const No::Vector2& v) {
@@ -58,14 +65,21 @@ void PlayerControlSystem::Update(No::Registry& registry, float deltaTime)
 		}
 	}
 
-	auto playerView = registry.View<CBPlayerTag, PlayerComponent, PlayerAttackComponent, HealthComponent, InvincibleComponent, No::Transform2DComponent>();
+	const PlayerConfig* playerConfig = nullptr;
+	for (auto e : registry.View<CBPlayerConfigTag, PlayerConfig>()) {
+		playerConfig = registry.GetComponent<PlayerConfig>(e);
+		break;
+	}
+
+	auto playerView = registry.View<CBPlayerTag, PlayerComponent, PlayerAttackComponent, PlayerAnimStateComponent, HealthComponent, InvincibleComponent, No::Transform2DComponent>();
 	for (auto entity : playerView) {
 		auto* player = registry.GetComponent<PlayerComponent>(entity);
 		auto* attack = registry.GetComponent<PlayerAttackComponent>(entity);
+		auto* animState = registry.GetComponent<PlayerAnimStateComponent>(entity);
 		auto* health = registry.GetComponent<HealthComponent>(entity);
 		auto* invincible = registry.GetComponent<InvincibleComponent>(entity);
 		auto* transform2D = registry.GetComponent<No::Transform2DComponent>(entity);
-		if (!player || !attack || !health || !invincible || !transform2D) {
+		if (!player || !attack || !animState || !health || !invincible || !transform2D) {
 			continue;
 		}
 
@@ -173,7 +187,9 @@ void PlayerControlSystem::Update(No::Registry& registry, float deltaTime)
 		}
 #endif
 
-		if (InputHelper::IsConfirmTrigger() && gameResource) {
+		if (InputHelper::IsConfirmTrigger() && !animState->isAttacking && gameResource) {
+			// 攻撃モーション開始 (タイマーは PlayerAnimSystem が PlayerConfig から設定)
+			animState->isAttacking = true;
 			CommentBout::GameAudio::PlaySEClip(CommentBoutResourceKey::kSEPlayerPunch);
 			auto attackEntity = registry.GenerateEntity();
 			auto* attackTransform = registry.AddComponent<No::Transform2DComponent>(attackEntity);
@@ -191,7 +207,8 @@ void PlayerControlSystem::Update(No::Registry& registry, float deltaTime)
 
 			auto* collider2D = registry.AddComponent<CommentBoutCollision::Collider2DComponent>(attackEntity);
 			collider2D->useTransformAsSize = true;
-			collider2D->sizeMultiplier = { 1.0f, 1.0f };
+			collider2D->localOffset    = playerConfig ? playerConfig->attackCollider.localOffset2D    : No::Vector2{ 0.f, 0.f };
+			collider2D->sizeMultiplier = playerConfig ? playerConfig->attackCollider.sizeMultiplier2D : No::Vector2{ 1.f, 1.f };
 			collider2D->collisionLayer = CommentBout::CollisionLayer::CBPlayerAttack;
 			collider2D->collisionMask = CommentBout::CollisionMask::CBPlayerAttack;
 
@@ -204,5 +221,9 @@ void PlayerControlSystem::Update(No::Registry& registry, float deltaTime)
 		}
 	}
 }
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 

@@ -2,6 +2,7 @@
 #include "CollisionDebugRenderSystem.h"
 #include "application/CommentBout/Collision/Component/CollisionDebugConfigComponent.h"
 #include "application/CommentBout/Collision/Component/Collider3DComponent.h"
+#include "application/CommentBout/Collision/Component/Collider2DComponent.h"
 #include "application/CommentBout/Component/PlayerHitboxComponent.h"
 #include "application/CommentBout/FieldObject/Component/FieldPlacementComponent.h"
 #include "application/CommentBout/GameTag.h"
@@ -52,6 +53,7 @@ void CollisionDebugRenderSystem::DrawConfigImGui(CollisionDebugConfigComponent& 
 		ImGui::Checkbox("フィールドコライダー", &config.showFieldCollider);
 		ImGui::Checkbox("自機ヒットボックス(2D)", &config.showPlayerHitboxOverlay);
 		ImGui::Checkbox("カメラゲート", &config.showCameraGateWire);
+		ImGui::Checkbox("攻撃コライダー", &config.showPlayerAttackCollider);
 	}
 	ImGui::End();
 #else
@@ -112,15 +114,14 @@ void CollisionDebugRenderSystem::DrawPlayerHitboxDebug(No::Registry& registry, c
 			continue;
 		}
 
-		auto* transform2D = registry.GetComponent<No::Transform2DComponent>(hitbox->playerEntity);
-		if (!transform2D) {
-			continue;
+		// 自機の実際の 2D コライダー bounds を描画
+		auto* col2D = registry.GetComponent<CommentBoutCollision::Collider2DComponent>(hitbox->playerEntity);
+		if (col2D) {
+			const No::Vector2 half = col2D->worldSize * 0.5f;
+			const ImVec2 pMin(col2D->screenPosition.x - half.x, col2D->screenPosition.y - half.y);
+			const ImVec2 pMax(col2D->screenPosition.x + half.x, col2D->screenPosition.y + half.y);
+			drawList->AddRect(pMin, pMax, IM_COL32(64, 255, 64, 255), 0.0f, 0, 2.0f);
 		}
-
-		const No::Vector2 half = transform2D->scale * 0.5f;
-		const ImVec2 pMin(transform2D->translate.x - half.x, transform2D->translate.y - half.y);
-		const ImVec2 pMax(transform2D->translate.x + half.x, transform2D->translate.y + half.y);
-		drawList->AddRect(pMin, pMax, IM_COL32(64, 255, 64, 255), 0.0f, 0, 2.0f);
 	}
 #else
 	static_cast<void>(registry);
@@ -189,6 +190,36 @@ void CollisionDebugRenderSystem::DrawCameraGateDebug(No::Registry& registry, con
 	}
 }
 
+void CollisionDebugRenderSystem::DrawPlayerAttackColliderDebug(No::Registry& registry, const CollisionDebugConfigComponent& config) {
+	if (!config.enableCollisionDebug || !config.showPlayerAttackCollider) {
+		return;
+	}
+
+#ifdef USE_IMGUI
+	ImDrawList* drawList = ImGui::GetForegroundDrawList();
+	if (!drawList) {
+		return;
+	}
+
+	for (auto entity : registry.View<CBAttackEffectTag, CommentBoutCollision::Collider2DComponent>()) {
+		auto* collider = registry.GetComponent<CommentBoutCollision::Collider2DComponent>(entity);
+		if (!collider) {
+			continue;
+		}
+
+		const No::Vector2 half = collider->worldSize * 0.5f;
+		const ImVec2 pMin(collider->screenPosition.x - half.x, collider->screenPosition.y - half.y);
+		const ImVec2 pMax(collider->screenPosition.x + half.x, collider->screenPosition.y + half.y);
+		const ImU32 color = collider->isColliding
+			? IM_COL32(255, 64, 64, 255)
+			: IM_COL32(255, 220, 64, 255);
+		drawList->AddRect(pMin, pMax, color, 0.0f, 0, 2.0f);
+	}
+#else
+	static_cast<void>(registry);
+#endif
+}
+
 void CollisionDebugRenderSystem::Update(No::Registry& registry, float deltaTime) {
 	static_cast<void>(deltaTime);
 
@@ -201,6 +232,7 @@ void CollisionDebugRenderSystem::Update(No::Registry& registry, float deltaTime)
 	DrawEnemyColliderDebug(registry, *config);
 	DrawFieldColliderDebug(registry, *config);
 	DrawPlayerHitboxDebug(registry, *config);
+	DrawPlayerAttackColliderDebug(registry, *config);
 	DrawCameraGateDebug(registry, *config);
 }
 

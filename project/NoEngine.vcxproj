@@ -182,6 +182,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\CommentBout\Data\ClearOverConfigDataIO.cpp" />
     <ClCompile Include="application\CommentBout\System\DamageApplySystem.cpp" />
     <ClCompile Include="application\CommentBout\System\DamageFlashSystem.cpp" />
+    <ClCompile Include="application\CommentBout\System\PlayerAnimSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\EnemyBulletHitSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\EnemyContactDamageSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\EnemyMoveSystem.cpp" />
@@ -415,6 +416,8 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\CommentBout\Data\ClearOverConfigDataIO.h" />
     <ClInclude Include="application\CommentBout\System\DamageApplySystem.h" />
     <ClInclude Include="application\CommentBout\System\DamageFlashSystem.h" />
+    <ClInclude Include="application\CommentBout\System\PlayerAnimSystem.h" />
+    <ClInclude Include="application\CommentBout\Component\PlayerAnimStateComponent.h" />
     <ClInclude Include="application\CommentBout\System\EnemyBulletHitSystem.h" />
     <ClInclude Include="application\CommentBout\System\EnemyContactDamageSystem.h" />
     <ClInclude Include="application\CommentBout\System\EnemyMoveSystem.h" />

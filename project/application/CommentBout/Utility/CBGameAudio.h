@@ -159,11 +159,11 @@ private:
 	}
 
 	static void RegisterBGM(const std::string& name, float clipVolume) {
-		RegisteredBGMVolumes()[name] = Clamp01(clipVolume);
+		RegisteredBGMVolumes()[name] = std::max(0.0f, clipVolume);
 	}
 
 	static void RegisterSE(const std::string& name, float clipVolume) {
-		RegisteredSEVolumes()[name] = Clamp01(clipVolume);
+		RegisteredSEVolumes()[name] = std::max(0.0f, clipVolume);
 	}
 
 	static void EnsureBGMRegistered(const std::string& name) {

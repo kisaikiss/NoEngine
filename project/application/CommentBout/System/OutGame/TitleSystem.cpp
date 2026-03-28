@@ -6,6 +6,8 @@
 #include "application/CommentBout/Event/OptionMenuEvent.h"
 #include "application/CommentBout/GameTag.h"
 #include "application/CommentBout/Utility/InputHelper.h"
+#include "application/CommentBout/Utility/CBGameAudio.h"
+#include "application/CommentBout/Component/GameResourceComponent.h"
 #include "engine/Runtime/GraphicsCore.h"
 
 namespace {
@@ -98,12 +100,14 @@ void TitleSystem::Update(No::Registry& registry, float deltaTime)
 			if (titleState->selectedIndex < 0) {
 				titleState->selectedIndex = titleState->itemCount - 1;
 			}
+			CommentBout::GameAudio::PlaySEClip(CommentBoutResourceKey::kSESystemMoveCursor);
 		}
 		if (InputHelper::IsMoveDownTrigger()) {
 			titleState->selectedIndex++;
 			if (titleState->selectedIndex >= titleState->itemCount) {
 				titleState->selectedIndex = 0;
 			}
+			CommentBout::GameAudio::PlaySEClip(CommentBoutResourceKey::kSESystemMoveCursor);
 		}
 	}
 
@@ -124,6 +128,7 @@ void TitleSystem::Update(No::Registry& registry, float deltaTime)
 		}
 
 		if (action != TitleMenuStateComponent::None) {
+			CommentBout::GameAudio::PlaySEClip(CommentBoutResourceKey::kSESystemDecision);
 			titleState->confirmIndex = titleState->selectedIndex;
 			titleState->confirmAnimTime = 0.0f;
 			titleState->isConfirmAnimating = true;

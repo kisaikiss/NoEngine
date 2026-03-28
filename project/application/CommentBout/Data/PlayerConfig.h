@@ -49,4 +49,21 @@ struct PlayerConfig {
     // コライダー設定
     ColliderConfig playerCollider2D;  // 自機の2Dコライダー設定
     ColliderConfig attackCollider;    // 攻撃の2Dコライダー設定
+
+    // Animation (スプライトシート: 1コマ = animFrameSize × animFrameSize px)
+    float animFrameSize      = 512.f;  // 1コマのピクセルサイズ (正方形)
+    // 通常アニメーション (行 0)
+    float animIdleFrameTime  = 0.1f;
+    int   animIdleFrameCount = 4;
+    // 移動アニメーション (行 1)
+    float animMoveFrameTime  = 0.08f;
+    int   animMoveFrameCount = 4;
+    // 攻撃アニメーション (行 2)
+    float animAttackFrameTime  = 0.1f;
+    int   animAttackFrameCount = 4;
+
+    // 無敵点滅 (ダメージ後の無敵期間中の透明/不透明点滅)
+    float invincibleBlinkBaseHz   = 4.f;   // 無敵開始時の点滅速度
+    float invincibleBlinkMaxHz    = 20.f;  // 無敵終了直前の点滅速度
+    float invincibleBlinkMinAlpha = 0.0f;  // 点滅の最小透明度
 };

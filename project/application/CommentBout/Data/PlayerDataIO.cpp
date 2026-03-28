@@ -73,6 +73,18 @@ PlayerConfig PlayerDataIO::Load(const std::string& path) {
         from_json(j["attackCollider"], config.attackCollider);
     }
 
+    if (j.contains("animFrameSize") && j["animFrameSize"].is_number()) config.animFrameSize = j["animFrameSize"].get<float>();
+    if (j.contains("animIdleFrameTime") && j["animIdleFrameTime"].is_number()) config.animIdleFrameTime = j["animIdleFrameTime"].get<float>();
+    if (j.contains("animIdleFrameCount") && j["animIdleFrameCount"].is_number_integer()) config.animIdleFrameCount = j["animIdleFrameCount"].get<int>();
+    if (j.contains("animMoveFrameTime") && j["animMoveFrameTime"].is_number()) config.animMoveFrameTime = j["animMoveFrameTime"].get<float>();
+    if (j.contains("animMoveFrameCount") && j["animMoveFrameCount"].is_number_integer()) config.animMoveFrameCount = j["animMoveFrameCount"].get<int>();
+    if (j.contains("animAttackFrameTime") && j["animAttackFrameTime"].is_number()) config.animAttackFrameTime = j["animAttackFrameTime"].get<float>();
+    if (j.contains("animAttackFrameCount") && j["animAttackFrameCount"].is_number_integer()) config.animAttackFrameCount = j["animAttackFrameCount"].get<int>();
+
+    if (j.contains("invincibleBlinkBaseHz") && j["invincibleBlinkBaseHz"].is_number()) config.invincibleBlinkBaseHz = j["invincibleBlinkBaseHz"].get<float>();
+    if (j.contains("invincibleBlinkMaxHz") && j["invincibleBlinkMaxHz"].is_number()) config.invincibleBlinkMaxHz = j["invincibleBlinkMaxHz"].get<float>();
+    if (j.contains("invincibleBlinkMinAlpha") && j["invincibleBlinkMinAlpha"].is_number()) config.invincibleBlinkMinAlpha = j["invincibleBlinkMinAlpha"].get<float>();
+
     return config;
 }
 
@@ -113,6 +125,18 @@ void PlayerDataIO::Save(const PlayerConfig& config, const std::string& path) {
     // ColliderConfig フィールドの書き込み
     to_json(j["playerCollider2D"], config.playerCollider2D);
     to_json(j["attackCollider"], config.attackCollider);
+
+    j["animFrameSize"]      = config.animFrameSize;
+    j["animIdleFrameTime"]  = config.animIdleFrameTime;
+    j["animIdleFrameCount"] = config.animIdleFrameCount;
+    j["animMoveFrameTime"]  = config.animMoveFrameTime;
+    j["animMoveFrameCount"] = config.animMoveFrameCount;
+    j["animAttackFrameTime"]  = config.animAttackFrameTime;
+    j["animAttackFrameCount"] = config.animAttackFrameCount;
+
+    j["invincibleBlinkBaseHz"]   = config.invincibleBlinkBaseHz;
+    j["invincibleBlinkMaxHz"]    = config.invincibleBlinkMaxHz;
+    j["invincibleBlinkMinAlpha"] = config.invincibleBlinkMinAlpha;
 
     std::ofstream ofs(path);
     if (!ofs) {

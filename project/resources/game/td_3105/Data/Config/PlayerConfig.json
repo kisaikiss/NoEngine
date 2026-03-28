@@ -1,5 +1,12 @@
 {
   "acceleration": 2400.0,
+  "animAttackFrameCount": 1,
+  "animAttackFrameTime": 0.10000000149011612,
+  "animFrameSize": 512.0,
+  "animIdleFrameCount": 4,
+  "animIdleFrameTime": 0.10000000149011612,
+  "animMoveFrameCount": 4,
+  "animMoveFrameTime": 0.07999999821186066,
   "attackCollider": {
     "boxSizeMultiplier": [
       1.0,
@@ -21,7 +28,7 @@
       1.0
     ]
   },
-  "attackLayer": 30,
+  "attackLayer": 19,
   "attackPower": 5,
   "attackSize": [
     140.0,
@@ -38,15 +45,18 @@
   "cameraGateNear": 0.0,
   "deceleration": 3000.0,
   "flashBlinkEnabled": true,
-  "flashBlinkHz": 14.0,
+  "flashBlinkHz": 12.0,
   "flashColorRGB": [
     1.0,
-    0.3499999940395355,
-    0.3499999940395355
+    0.0,
+    0.0
   ],
-  "flashDuration": 0.1599999964237213,
-  "flashMaxAlpha": 0.75,
-  "flashMinAlpha": 0.3499999940395355,
+  "flashDuration": 0.6000000238418579,
+  "flashMaxAlpha": 0.8999999761581421,
+  "flashMinAlpha": 0.75,
+  "invincibleBlinkBaseHz": 4.0,
+  "invincibleBlinkMaxHz": 20.0,
+  "invincibleBlinkMinAlpha": 0.0,
   "invincibleDuration": 0.3499999940395355,
   "invincibleDurationDefault": 0.3499999940395355,
   "maxSpeed": 480.0,
@@ -59,7 +69,7 @@
     ],
     "localOffset2D": [
       0.0,
-      0.0
+      20.5
     ],
     "localOffset3D": [
       0.0,
@@ -68,8 +78,8 @@
     ],
     "radiusMultiplier": 1.0,
     "sizeMultiplier2D": [
-      1.0,
-      1.0
+      0.3799999952316284,
+      0.6399999856948853
     ]
   },
   "playerMaxHp": 10,
@@ -79,7 +89,7 @@
   ],
   "startRotation": 0.0,
   "startScale": [
-    128.0,
+    200.0,
     200.0
   ],
   "useCameraGateForPlayerHit": true

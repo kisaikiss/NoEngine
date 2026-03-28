@@ -11,6 +11,7 @@ namespace CommentBoutCollision {
 		bool showFieldCollider = true;
 		bool showPlayerHitboxOverlay = true;
 		bool showCameraGateWire = true;
+		bool showPlayerAttackCollider = true;
 	};
 
 	/// <summary>

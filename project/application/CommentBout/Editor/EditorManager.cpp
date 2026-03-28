@@ -339,15 +339,7 @@ void EditorManager::DrawRailTab(No::Registry& registry)
 		rail->railFilePath = MakeRailFilePath(stageName);
 		SaveRailToJson(*rail, stageName);
 	}
-	if (ImGui::Button("Load Events") && !stageName.empty()) {
-		LoadEventsToComponent(*rail, stageName);
-	}
-	ImGui::SameLine();
-	if (ImGui::Button("Save Events") && !stageName.empty()) {
-		rail->stageName = stageName;
-		SaveEventsToJson(*rail, stageName);
-	}
-	ImGui::Separator();
+
 	// 制御点編集	
 	ImGui::SeparatorText("制御点編集");
 	railCameraEditor_.DrawRailEditorContent(&registry, railCameraEntity_);
@@ -367,6 +359,21 @@ void EditorManager::DrawRailTab(No::Registry& registry)
 void EditorManager::DrawEventTab(No::Registry& registry)
 {
 #ifdef USE_IMGUI
+	const std::string stageName(stageNameBuffer_);
+	auto* rail = registry.GetComponent<RailCameraComponent>(railCameraEntity_);
+	if (!rail) {
+		ImGui::TextDisabled("RailCameraComponent が見つかりません");
+		return;
+	}
+	if (ImGui::Button("JSONから再読み込み") && !stageName.empty()) {
+		LoadEventsToComponent(*rail, stageName);
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("JSONへ保存") && !stageName.empty()) {
+		rail->stageName = stageName;
+		SaveEventsToJson(*rail, stageName);
+	}
+	ImGui::Separator();
 	gameEventEditor_.DrawGameEventEditorImGui(&registry, railCameraEntity_);
 #else
 	static_cast<void>(registry);

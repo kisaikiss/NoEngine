@@ -134,7 +134,7 @@ inline void InitializeCommentBoutGameResources(GameResourceComponent& resources)
 
 	// ---- Texture path catalog --------------------------------------------
 	addTexture(CommentBoutResourceKey::kWhiteTexture, "resources/engine/white1x1.png");
-	addTexture(CommentBoutResourceKey::kPlayerSprite, "resources/engine/white1x1.png");
+	addTexture(CommentBoutResourceKey::kPlayerSprite, "resources/game/td_3105/Sprite/Player.png");
 	addTexture(CommentBoutResourceKey::kPlayerAttackSprite, "resources/engine/white1x1.png");
 	addTexture(CommentBoutResourceKey::kPauseTitle, "resources/game/td_3105/Sprite/Pause.png");
 	addTexture(CommentBoutResourceKey::kPauseToGame, "resources/game/td_3105/Sprite/PauseToGame.png");
