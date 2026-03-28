@@ -218,6 +218,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="engine\Functions\ECS\Component\TransformComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\DebugCameraSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\EditSystem.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\SpriteAnimationSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\SystemManager.cpp" />
     <ClCompile Include="engine\Functions\Renderer\Primitive.cpp" />
     <ClCompile Include="engine\Assets\ModelLoader.cpp" />
@@ -428,6 +429,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\CommentBout\Utility\CBSpriteLayer.h" />
     <ClInclude Include="application\CommentBout\CommentBout.h" />
     <ClInclude Include="application\TestApp\System\ParticleTestSystem.h" />
+    <ClInclude Include="engine\Functions\ECS\Component\Animator2DComponent.h" />
     <ClInclude Include="engine\Functions\ECS\Component\ParticleEmitterComponent.h" />
     <ClInclude Include="engine\Functions\ECS\Component\PauseComponent.h" />
     <ClInclude Include="engine\Functions\ECS\Component\StartTransformComponent.h" />
@@ -445,6 +447,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="engine\Functions\ECS\Event\SceneChangeEvent.h" />
     <ClInclude Include="engine\Functions\ECS\System\DebugCameraSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\EditSystem.h" />
+    <ClInclude Include="engine\Functions\ECS\System\SpriteAnimationSystem.h" />
     <ClInclude Include="engine\Functions\Renderer\Primitive.h" />
     <ClInclude Include="engine\Assets\Animation.h" />
     <ClInclude Include="engine\Assets\ModelLoader.h" />

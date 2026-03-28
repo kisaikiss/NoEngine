@@ -176,6 +176,7 @@
     <ClCompile Include="application\CommentBout\System\DamageFlashSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\RailProgressBarSystem.cpp" />
     <ClCompile Include="application\CommentBout\FieldObject\System\FieldEditorSystem.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\SpriteAnimationSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Functions\ECS\System\CameraSystem.h" />
@@ -406,6 +407,8 @@
     <ClInclude Include="application\CommentBout\FieldObject\Component\FieldPlacementComponent.h" />
     <ClInclude Include="application\CommentBout\FieldObject\System\FieldEditorSystem.h" />
     <ClInclude Include="application\CommentBout\Component\PlayerConfigComponent.h" />
+    <ClInclude Include="engine\Functions\ECS\Component\Animator2DComponent.h" />
+    <ClInclude Include="engine\Functions\ECS\System\SpriteAnimationSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

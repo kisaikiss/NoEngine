@@ -9,6 +9,7 @@ No::Entity cameraE;
 void TestScene::Setup() {
 	AddSystem(std::make_unique<TestSystem>());
 	AddSystem(std::make_unique<No::AnimationSystem>());
+	AddSystem(std::make_unique<No::SpriteAnimationSystem>());
 	AddSystem(std::make_unique<ParticleTestSystem>());
 	AddSystem(std::make_unique<No::EditSystem>());
 	AddSystem(std::make_unique<No::DebugCameraSystem>());
@@ -43,7 +44,14 @@ void TestScene::Setup() {
 	sprite->layer = 1;
 
 	t2d->scale = { 100.f, 100.f };
-	sprite->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/engine/Model/enemy.png");
+	sprite->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/engine/Texture/player.png");
+
+	auto* anime2d = registry.AddComponent<No::Animator2DComponent>(entity);
+	anime2d->animeFrameHeight = 256.f;
+	anime2d->animeFrameWidth = 512.f;
+	anime2d->frameByFrameTime = 0.2f;
+	anime2d->currentAnimation = 1;
+	anime2d->framesNum = 6;
 
 	auto light = registry.GenerateEntity();
 	auto* dir = registry.AddComponent<No::DirectionalLightComponent>(light);
@@ -57,7 +65,7 @@ void TestScene::Setup() {
 	sprite2->layer = 1;
 
 	t2d2->scale = { 100.f, 100.f };
-	sprite2->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/engine/Model/enemy.png");
+	sprite2->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/engine/uvChecker.png");
 
 	auto light2 = registry.GenerateEntity();
 	auto* dir2 = registry.AddComponent<No::DirectionalLightComponent>(light2);
