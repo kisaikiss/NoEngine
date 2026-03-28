@@ -28,8 +28,8 @@ namespace {
 		return registry.GetComponent<No::PauseComponent>(*it);
 	}
 
-	void SyncPauseState(PauseStateComponent* pauseState, No::PauseComponent* enginePause) {
-		const bool isPaused = (pauseState->phase != PauseStateComponent::Closed);
+	void SyncPauseState(PauseStateComponent* pauseState, No::PauseComponent* enginePause, bool forcePause) {
+		const bool isPaused = forcePause || (pauseState->phase != PauseStateComponent::Closed);
 		pauseState->isPaused = isPaused;
 		if (enginePause) {
 			enginePause->isPause = isPaused;
@@ -89,6 +89,8 @@ void PauseSystem::Update(No::Registry& registry, float deltaTime)
 		return;
 	}
 
+	const bool forcePause = pauseState->editorForcePause;
+
 	pauseState->justEnteredPause = false;
 	pauseState->justExitedPause = false;
 
@@ -147,7 +149,7 @@ void PauseSystem::Update(No::Registry& registry, float deltaTime)
 			pauseState->confirmIndex = -1;
 			StartPhase(pauseState, PauseStateComponent::Opening, pauseConfig->openDuration);
 		}
-		SyncPauseState(pauseState, enginePause);
+		SyncPauseState(pauseState, enginePause, forcePause);
 		return;
 	}
 
@@ -171,22 +173,22 @@ void PauseSystem::Update(No::Registry& registry, float deltaTime)
 				break;
 			}
 		}
-		SyncPauseState(pauseState, enginePause);
+		SyncPauseState(pauseState, enginePause, forcePause);
 		return;
 	}
 
 	if (optionState && optionState->isOpen) {
-		SyncPauseState(pauseState, enginePause);
+		SyncPauseState(pauseState, enginePause, forcePause);
 		return;
 	}
 
 	if (pauseState->isConfirmAnimating) {
-		SyncPauseState(pauseState, enginePause);
+		SyncPauseState(pauseState, enginePause, forcePause);
 		return;
 	}
 
 	if (pauseState->phase != PauseStateComponent::Open) {
-		SyncPauseState(pauseState, enginePause);
+		SyncPauseState(pauseState, enginePause, forcePause);
 		return;
 	}
 
@@ -233,5 +235,5 @@ void PauseSystem::Update(No::Registry& registry, float deltaTime)
 		}
 	}
 
-	SyncPauseState(pauseState, enginePause);
+	SyncPauseState(pauseState, enginePause, forcePause);
 }

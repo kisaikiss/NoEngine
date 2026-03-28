@@ -12,6 +12,7 @@
 #include "application/CommentBout/Component/EnemyRewardSourceComponent.h"
 #include "application/CommentBout/Collision/Component/Collider3DComponent.h"
 #include "application/CommentBout/GameTag.h"
+#include "application/CommentBout/Component/OutGame/PauseStateComponent.h"
 #include "engine/Functions/ECS/Component/MeshComponent.h"
 #include "engine/Functions/ECS/Component/MaterialComponent.h"
 #include <algorithm>
@@ -75,8 +76,22 @@ void EditorManager::DrawImGui(No::Registry& registry)
 		SaveAll(registry);
 	}
 
+	PauseStateComponent* pauseState = nullptr;
+	for (auto entity : registry.View<CBPauseStateTag, PauseStateComponent>()) {
+		pauseState = registry.GetComponent<PauseStateComponent>(entity);
+		if (pauseState) {
+			break;
+		}
+	}
+	if (pauseState) {
+		isPauseEnabled_ = pauseState->editorForcePause;
+	}
+
 	// ---- ゲームポーズチェックボックス ----
 	if (ImGui::Checkbox("ゲームポーズ", &isPauseEnabled_)) {
+		if (pauseState) {
+			pauseState->editorForcePause = isPauseEnabled_;
+		}
 		for (auto entity : registry.View<NoEngine::ECS::PauseComponent>()) {
 			if (auto* pause = registry.GetComponent<NoEngine::ECS::PauseComponent>(entity)) {
 				pause->isPause = isPauseEnabled_;

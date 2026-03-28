@@ -21,6 +21,7 @@ struct PauseStateComponent {
 	};
 
 	bool isPaused = false;
+	bool editorForcePause = false;
 	bool justEnteredPause = false;
 	bool justExitedPause = false;
 	int selectedIndex = 0;
