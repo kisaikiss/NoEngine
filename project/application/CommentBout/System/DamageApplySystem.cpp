@@ -144,7 +144,8 @@ void DamageApplySystem::Update(No::Registry& registry, float deltaTime)
 		if (health && health->isDead && legacyEnemy) {
 			legacyEnemy->removeReason = EnemyRemoveReason::Defeated;
 		}
-		if (health && health->isDead && registry.Has<CBRailEnemyTag>(request->target)) {
+		if (health && health->isDead && !health->deathHandled && registry.Has<CBRailEnemyTag>(request->target)) {
+			health->deathHandled = true;
 			registry.DestroyEntity(request->target);
 		}
 

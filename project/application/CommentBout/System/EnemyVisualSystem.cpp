@@ -379,7 +379,10 @@ void EnemyVisualSystem::Update(No::Registry& registry, float deltaTime)
 					*gameResource
 				);
 			}
-			registry.DestroyEntity(entity);
+			if (!health->deathHandled) {
+				health->deathHandled = true;
+				registry.DestroyEntity(entity);
+			}
 			continue;
 		}
 
