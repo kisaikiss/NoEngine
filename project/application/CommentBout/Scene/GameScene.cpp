@@ -45,6 +45,15 @@
 #include "application/CommentBout/System/PlayerAttackResolveSystem.h"
 #include "application/CommentBout/System/DamageApplySystem.h"
 #include "application/CommentBout/System/DamageFlashSystem.h"
+#include "application/CommentBout/System/GameResultSystem.h"
+#include "application/CommentBout/System/BossDefeatSystem.h"
+#include "application/CommentBout/System/ClearOverSystem.h"
+#include "application/CommentBout/System/ClearOverViewSystem.h"
+#include "application/CommentBout/Component/BossDefeatSequenceComponent.h"
+#include "application/CommentBout/Component/ClearOverStateComponent.h"
+#include "application/CommentBout/Component/ClearOverConfigComponent.h"
+#include "application/CommentBout/Component/ClearOverViewComponent.h"
+#include "application/CommentBout/Data/ClearOverConfigDataIO.h"
 #include "application/CommentBout/Spawner/OptionMenuSpawner.h"
 #include "application/CommentBout/Spawner/PauseMenuSpawner.h"
 #include "application/CommentBout/Collision/System/CollisionSystem.h"
@@ -55,6 +64,11 @@
 #include "engine/Runtime/GraphicsCore.h"
 #include <algorithm>
 #include <cstdio>
+
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable:4702)
+#endif
 
 void GameScene::Setup() {
 
@@ -105,6 +119,10 @@ void GameScene::Setup() {
 	AddSystem(std::make_unique<SpeechBubbleToBossSystem>());
 	AddSystem(std::make_unique<DamageApplySystem>());
 	AddSystem(std::make_unique<DamageFlashSystem>());
+	AddSystem(std::make_unique<GameResultSystem>());
+	AddSystem(std::make_unique<BossDefeatSystem>());
+	AddSystem(std::make_unique<ClearOverSystem>());
+	AddSystem(std::make_unique<ClearOverViewSystem>());
 	AddSystem(std::make_unique<HpBarViewSystem>());
 	AddSystem(std::make_unique<EnemyVisualSystem>());
 	AddSystem(std::make_unique<LifetimeSystem>());
@@ -166,6 +184,19 @@ void GameScene::Setup() {
 	auto gameResultEntity = registry.GenerateEntity();
 	registry.AddComponent<CBGameResultTag>(gameResultEntity);
 	registry.AddComponent<GameResultComponent>(gameResultEntity);
+
+	auto bossDefeatEntity = registry.GenerateEntity();
+	registry.AddComponent<CBBossDefeatTag>(bossDefeatEntity);
+	registry.AddComponent<BossDefeatSequenceComponent>(bossDefeatEntity);
+
+	auto clearOverStateEntity = registry.GenerateEntity();
+	registry.AddComponent<CBClearOverStateTag>(clearOverStateEntity);
+	registry.AddComponent<ClearOverStateComponent>(clearOverStateEntity);
+
+	auto clearOverConfigEntity = registry.GenerateEntity();
+	registry.AddComponent<CBClearOverConfigTag>(clearOverConfigEntity);
+	auto* clearOverConfig = registry.AddComponent<ClearOverConfigComponent>(clearOverConfigEntity);
+	*clearOverConfig = ClearOverConfigDataIO::Load();
 
 	auto pauseStateEntity = registry.GenerateEntity();
 	registry.AddComponent<CBPauseStateTag>(pauseStateEntity);
@@ -313,6 +344,7 @@ void GameScene::NotSystemUpdate()
 	CameraImGui();
 	editorManager_.DrawImGui(*GetRegistry());
 	ChangeSceneImGui();
+	ClearOverConfigImGui();
 }
 
 void GameScene::CameraImGui()
@@ -350,3 +382,59 @@ void GameScene::ChangeSceneImGui()
 	ImGui::End();
 #endif
 }
+
+void GameScene::ClearOverConfigImGui()
+{
+#ifdef USE_IMGUI
+	ClearOverConfigComponent* config = nullptr;
+	auto clearOverConfigView = GetRegistry()->View<CBClearOverConfigTag, ClearOverConfigComponent>();
+	for (auto e : clearOverConfigView) {
+		config = GetRegistry()->GetComponent<ClearOverConfigComponent>(e);
+		break;
+	}
+	if (!config) {
+		return;
+	}
+
+	ImGui::Begin("ClearOverConfig");
+
+	if (ImGui::CollapsingHeader("Fade")) {
+		ImGui::DragFloat("fadeDuration",    &config->fadeDuration,    0.01f, 0.f, 5.f);
+		ImGui::DragFloat("fadeTargetAlpha", &config->fadeTargetAlpha, 0.01f, 0.f, 1.f);
+	}
+	if (ImGui::CollapsingHeader("Logo")) {
+		ImGui::DragFloat2("logoStartPos",       &config->logoStartPos.x, 1.f);
+		ImGui::DragFloat2("logoEndPos",         &config->logoEndPos.x,   1.f);
+		ImGui::DragFloat2("logoSize",           &config->logoSize.x,     1.f);
+		ImGui::DragFloat("logoAppearDuration",  &config->logoAppearDuration, 0.01f, 0.f, 5.f);
+		ImGui::DragInt("logoEaseType",          &config->logoEaseType, 1, 0, 10);
+	}
+	if (ImGui::CollapsingHeader("Menu")) {
+		ImGui::DragFloat2("itemBaseStartPos",   &config->itemBaseStartPos.x, 1.f);
+		ImGui::DragFloat2("itemBaseEndPos",     &config->itemBaseEndPos.x,   1.f);
+		ImGui::DragFloat2("itemSize",           &config->itemSize.x,         1.f);
+		ImGui::DragFloat("itemSpacing",         &config->itemSpacing,         1.f);
+		ImGui::DragFloat("menuAppearDuration",  &config->menuAppearDuration,  0.01f, 0.f, 5.f);
+	}
+	if (ImGui::CollapsingHeader("Confirm Animation")) {
+		ImGui::DragFloat("confirmDuration", &config->confirmDuration, 0.01f, 0.f, 1.f);
+		ImGui::DragFloat("selectedScale",   &config->selectedScale,   0.01f, 1.f, 2.f);
+		ImGui::DragFloat("confirmScale",    &config->confirmScale,    0.01f, 1.f, 2.f);
+	}
+
+	ImGui::Separator();
+	if (ImGui::Button("Save JSON")) {
+		ClearOverConfigDataIO::Save(*config);
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("Load JSON")) {
+		*config = ClearOverConfigDataIO::Load();
+	}
+
+	ImGui::End();
+#endif
+}
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif

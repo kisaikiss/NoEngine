@@ -46,7 +46,7 @@
         1.0
       ]
     },
-    "minHp": 1500,
+    "minHp": 100,
     "modelScale": 1.5,
     "shootDistanceMax": 35.0,
     "shootInterval": 0.2199999988079071,

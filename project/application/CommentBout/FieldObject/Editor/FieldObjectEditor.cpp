@@ -21,381 +21,381 @@
 #endif
 
 namespace {
-const char* kFieldTypeDefaultsPath = "resources/game/td_3105/Data/Config/FieldObjectTypeDefaults.json";
+	const char* kFieldTypeDefaultsPath = "resources/game/td_3105/Data/Config/FieldObjectTypeDefaults.json";
 
-std::string MakeFieldPlacementPath(const std::string& stageName) {
-	return "resources/game/td_3105/Data/StageData/" + stageName + "/FieldObjectData/" + stageName + "_field_objects.json";
-}
-
-float ToRadian(float degree) {
-	return degree * 3.14159265f / 180.0f;
-}
-
-No::Quaternion MakeRotationFromEulerDeg(const No::Vector3& eulerDeg) {
-	No::Quaternion qx;
-	qx.FromAxisAngle(No::Vector3::RIGHT, ToRadian(eulerDeg.x));
-	No::Quaternion qy;
-	qy.FromAxisAngle(No::Vector3::UP, ToRadian(eulerDeg.y));
-	No::Quaternion qz;
-	qz.FromAxisAngle(No::Vector3::FORWARD, ToRadian(eulerDeg.z));
-	return qx * qy * qz;
-}
-
-std::unordered_map<std::string, FieldObjectTypeDefinition> BuildDefaultTypeDefinitions() {
-	std::unordered_map<std::string, FieldObjectTypeDefinition> defs;
-
-	FieldObjectTypeDefinition skydome{};
-	skydome.type = FieldObjectType::Skydome;
-	skydome.typeKey = "Skydome";
-	skydome.modelKey = CommentBoutResourceKey::kSkydomeModel;
-	skydome.hasCollision = false;
-	skydome.occludesPlayerAttack = false;
-	skydome.baseColliderAtUnitScale = { 1.0f, 1.0f, 1.0f };
-	defs[skydome.typeKey] = skydome;
-
-	FieldObjectTypeDefinition building{};
-	building.type = FieldObjectType::Building;
-	building.typeKey = "Building";
-	building.modelKey = CommentBoutResourceKey::kBuildingModel;
-	building.hasCollision = true;
-	building.occludesPlayerAttack = true;
-	building.baseColliderAtUnitScale = { 1.0f, 1.0f, 1.0f };
-	defs[building.typeKey] = building;
-
-	FieldObjectTypeDefinition ground{};
-	ground.type = FieldObjectType::Ground;
-	ground.typeKey = "Ground";
-	ground.modelKey = CommentBoutResourceKey::kGroundModel;
-	ground.hasCollision = true;
-	ground.occludesPlayerAttack = false;
-	ground.baseColliderAtUnitScale = { 1.0f, 1.0f, 1.0f };
-	defs[ground.typeKey] = ground;
-
-	return defs;
-}
-
-void EnsureRequiredDefinitions(std::unordered_map<std::string, FieldObjectTypeDefinition>& defs) {
-	const auto required = BuildDefaultTypeDefinitions();
-	for (const auto& pair : required) {
-		if (defs.find(pair.first) == defs.end()) {
-			defs[pair.first] = pair.second;
-		}
-	}
-}
-
-void LoadTypeDefinitions(std::unordered_map<std::string, FieldObjectTypeDefinition>& defs) {
-	defs = BuildDefaultTypeDefinitions();
-
-	std::ifstream ifs(kFieldTypeDefaultsPath);
-	if (!ifs) {
-		return;
+	std::string MakeFieldPlacementPath(const std::string& stageName) {
+		return "resources/game/td_3105/Data/StageData/" + stageName + "/FieldObjectData/" + stageName + "_field_objects.json";
 	}
 
-	nlohmann::json json;
-	ifs >> json;
-	if (!json.is_object() || !json.contains("types") || !json["types"].is_array()) {
-		return;
+	float ToRadian(float degree) {
+		return degree * 3.14159265f / 180.0f;
 	}
 
-	for (const auto& node : json["types"]) {
-		if (!node.is_object() || !node.contains("typeKey") || !node["typeKey"].is_string()) {
-			continue;
-		}
+	No::Quaternion MakeRotationFromEulerDeg(const No::Vector3& eulerDeg) {
+		No::Quaternion qx;
+		qx.FromAxisAngle(No::Vector3::RIGHT, ToRadian(eulerDeg.x));
+		No::Quaternion qy;
+		qy.FromAxisAngle(No::Vector3::UP, ToRadian(eulerDeg.y));
+		No::Quaternion qz;
+		qz.FromAxisAngle(No::Vector3::FORWARD, ToRadian(eulerDeg.z));
+		return qx * qy * qz;
+	}
 
-		FieldObjectTypeDefinition def{};
-		def.typeKey = node["typeKey"].get<std::string>();
-		if (def.typeKey == "Skydome") {
-			def.type = FieldObjectType::Skydome;
-		} else if (def.typeKey == "Building") {
-			def.type = FieldObjectType::Building;
-		} else if (def.typeKey == "Ground") {
-			def.type = FieldObjectType::Ground;
-		} else {
-			def.type = FieldObjectType::Unknown;
-		}
+	std::unordered_map<std::string, FieldObjectTypeDefinition> BuildDefaultTypeDefinitions() {
+		std::unordered_map<std::string, FieldObjectTypeDefinition> defs;
 
-		if (node.contains("modelKey") && node["modelKey"].is_string()) {
-			def.modelKey = node["modelKey"].get<std::string>();
-		}
-		if (node.contains("hasCollision") && node["hasCollision"].is_boolean()) {
-			def.hasCollision = node["hasCollision"].get<bool>();
-		}
-		if (node.contains("occludesPlayerAttack") && node["occludesPlayerAttack"].is_boolean()) {
-			def.occludesPlayerAttack = node["occludesPlayerAttack"].get<bool>();
-		}
-		if (node.contains("baseColliderAtUnitScale") && node["baseColliderAtUnitScale"].is_array() && node["baseColliderAtUnitScale"].size() >= 3) {
-			def.baseColliderAtUnitScale.x = node["baseColliderAtUnitScale"][0].get<float>();
-			def.baseColliderAtUnitScale.y = node["baseColliderAtUnitScale"][1].get<float>();
-			def.baseColliderAtUnitScale.z = node["baseColliderAtUnitScale"][2].get<float>();
-		}
+		FieldObjectTypeDefinition skydome{};
+		skydome.type = FieldObjectType::Skydome;
+		skydome.typeKey = "Skydome";
+		skydome.modelKey = CommentBoutResourceKey::kSkydomeModel;
+		skydome.hasCollision = false;
+		skydome.occludesPlayerAttack = false;
+		skydome.baseColliderAtUnitScale = { 1.0f, 1.0f, 1.0f };
+		defs[skydome.typeKey] = skydome;
 
-		if (!def.typeKey.empty()) {
-			defs[def.typeKey] = def;
+		FieldObjectTypeDefinition building{};
+		building.type = FieldObjectType::Building;
+		building.typeKey = "Building";
+		building.modelKey = CommentBoutResourceKey::kBuildingModel;
+		building.hasCollision = true;
+		building.occludesPlayerAttack = true;
+		building.baseColliderAtUnitScale = { 1.0f, 1.0f, 1.0f };
+		defs[building.typeKey] = building;
+
+		FieldObjectTypeDefinition ground{};
+		ground.type = FieldObjectType::Ground;
+		ground.typeKey = "Ground";
+		ground.modelKey = CommentBoutResourceKey::kGroundModel;
+		ground.hasCollision = true;
+		ground.occludesPlayerAttack = false;
+		ground.baseColliderAtUnitScale = { 1.0f, 1.0f, 1.0f };
+		defs[ground.typeKey] = ground;
+
+		return defs;
+	}
+
+	void EnsureRequiredDefinitions(std::unordered_map<std::string, FieldObjectTypeDefinition>& defs) {
+		const auto required = BuildDefaultTypeDefinitions();
+		for (const auto& pair : required) {
+			if (defs.find(pair.first) == defs.end()) {
+				defs[pair.first] = pair.second;
+			}
 		}
 	}
 
-	EnsureRequiredDefinitions(defs);
-}
+	void LoadTypeDefinitions(std::unordered_map<std::string, FieldObjectTypeDefinition>& defs) {
+		defs = BuildDefaultTypeDefinitions();
 
-void SaveTypeDefinitions(const std::unordered_map<std::string, FieldObjectTypeDefinition>& defs) {
-	nlohmann::json json;
-	auto& arr = json["types"];
-	arr = nlohmann::json::array();
-
-	std::vector<std::string> keys;
-	keys.reserve(defs.size());
-	for (const auto& pair : defs) {
-		keys.push_back(pair.first);
-	}
-	std::sort(keys.begin(), keys.end());
-
-	for (const auto& key : keys) {
-		const auto it = defs.find(key);
-		if (it == defs.end()) {
-			continue;
+		std::ifstream ifs(kFieldTypeDefaultsPath);
+		if (!ifs) {
+			return;
 		}
-		const FieldObjectTypeDefinition& def = it->second;
-		nlohmann::json node;
-		node["typeKey"] = def.typeKey;
-		node["modelKey"] = def.modelKey;
-		node["hasCollision"] = def.hasCollision;
-		node["occludesPlayerAttack"] = def.occludesPlayerAttack;
-		node["baseColliderAtUnitScale"] = {
-			def.baseColliderAtUnitScale.x,
-			def.baseColliderAtUnitScale.y,
-			def.baseColliderAtUnitScale.z
-		};
-		arr.push_back(node);
-	}
 
-	std::ofstream ofs(kFieldTypeDefaultsPath);
-	if (ofs) {
-		ofs << json.dump(2);
-	}
-}
-
-void ApplyFieldObjectVisual(
-	No::Registry& registry,
-	No::Entity entity,
-	FieldPlacementComponent& placement,
-	No::TransformComponent& transform,
-	const GameResourceComponent& resources
-) {
-	transform.rotation = MakeRotationFromEulerDeg(placement.rotationEulerDeg);
-
-	auto* mesh = registry.GetComponent<No::MeshComponent>(entity);
-	if (!mesh) {
-		mesh = registry.AddComponent<No::MeshComponent>(entity);
-	}
-	auto* material = registry.GetComponent<No::MaterialComponent>(entity);
-	if (!material) {
-		material = registry.AddComponent<No::MaterialComponent>(entity);
-	}
-
-	if (const auto* model = FindGameModel(resources, placement.modelKey)) {
-		NoEngine::Asset::ModelLoader::GetModel(model->assetName, mesh);
-		material->materials = NoEngine::Asset::ModelLoader::GetMaterial(model->assetName);
-	}
-
-	material->psoName = L"Renderer : Default PSO";
-	material->psoId = NoEngine::Render::GetPSOID(material->psoName);
-	material->rootSigId = NoEngine::Render::GetRootSignatureID(material->psoName);
-}
-
-void ApplyFieldObjectCollision(No::Registry& registry, No::Entity entity, const FieldPlacementComponent& placement) {
-	if (placement.hasCollision) {
-		auto* collider = registry.GetComponent<CommentBoutCollision::Collider3DComponent>(entity);
-		if (!collider) {
-			collider = registry.AddComponent<CommentBoutCollision::Collider3DComponent>(entity);
+		nlohmann::json json;
+		ifs >> json;
+		if (!json.is_object() || !json.contains("types") || !json["types"].is_array()) {
+			return;
 		}
-		collider->shapeType = CommentBoutCollision::ShapeType3D::Box;
-		collider->useScaleAsBox = true;
-		collider->boxSizeMultiplier = placement.colliderBaseAtUnitScale;
-		collider->collisionLayer = CommentBout::CollisionLayer::CBGround;
-		collider->collisionMask = CommentBout::CollisionLayer::CBEnemyBullet;
 
-		auto* projected = registry.GetComponent<CommentBoutCollision::ProjectedColliderComponent>(entity);
-		if (!projected) {
-			projected = registry.AddComponent<CommentBoutCollision::ProjectedColliderComponent>(entity);
+		for (const auto& node : json["types"]) {
+			if (!node.is_object() || !node.contains("typeKey") || !node["typeKey"].is_string()) {
+				continue;
+			}
+
+			FieldObjectTypeDefinition def{};
+			def.typeKey = node["typeKey"].get<std::string>();
+			if (def.typeKey == "Skydome") {
+				def.type = FieldObjectType::Skydome;
+			} else if (def.typeKey == "Building") {
+				def.type = FieldObjectType::Building;
+			} else if (def.typeKey == "Ground") {
+				def.type = FieldObjectType::Ground;
+			} else {
+				def.type = FieldObjectType::Unknown;
+			}
+
+			if (node.contains("modelKey") && node["modelKey"].is_string()) {
+				def.modelKey = node["modelKey"].get<std::string>();
+			}
+			if (node.contains("hasCollision") && node["hasCollision"].is_boolean()) {
+				def.hasCollision = node["hasCollision"].get<bool>();
+			}
+			if (node.contains("occludesPlayerAttack") && node["occludesPlayerAttack"].is_boolean()) {
+				def.occludesPlayerAttack = node["occludesPlayerAttack"].get<bool>();
+			}
+			if (node.contains("baseColliderAtUnitScale") && node["baseColliderAtUnitScale"].is_array() && node["baseColliderAtUnitScale"].size() >= 3) {
+				def.baseColliderAtUnitScale.x = node["baseColliderAtUnitScale"][0].get<float>();
+				def.baseColliderAtUnitScale.y = node["baseColliderAtUnitScale"][1].get<float>();
+				def.baseColliderAtUnitScale.z = node["baseColliderAtUnitScale"][2].get<float>();
+			}
+
+			if (!def.typeKey.empty()) {
+				defs[def.typeKey] = def;
+			}
 		}
-		projected->source3DEntity = entity;
 
-		if (placement.occludesPlayerAttack) {
-			if (!registry.Has<CBFieldOccluderTag>(entity)) {
-				registry.AddComponent<CBFieldOccluderTag>(entity);
+		EnsureRequiredDefinitions(defs);
+	}
+
+	void SaveTypeDefinitions(const std::unordered_map<std::string, FieldObjectTypeDefinition>& defs) {
+		nlohmann::json json;
+		auto& arr = json["types"];
+		arr = nlohmann::json::array();
+
+		std::vector<std::string> keys;
+		keys.reserve(defs.size());
+		for (const auto& pair : defs) {
+			keys.push_back(pair.first);
+		}
+		std::sort(keys.begin(), keys.end());
+
+		for (const auto& key : keys) {
+			const auto it = defs.find(key);
+			if (it == defs.end()) {
+				continue;
+			}
+			const FieldObjectTypeDefinition& def = it->second;
+			nlohmann::json node;
+			node["typeKey"] = def.typeKey;
+			node["modelKey"] = def.modelKey;
+			node["hasCollision"] = def.hasCollision;
+			node["occludesPlayerAttack"] = def.occludesPlayerAttack;
+			node["baseColliderAtUnitScale"] = {
+				def.baseColliderAtUnitScale.x,
+				def.baseColliderAtUnitScale.y,
+				def.baseColliderAtUnitScale.z
+			};
+			arr.push_back(node);
+		}
+
+		std::ofstream ofs(kFieldTypeDefaultsPath);
+		if (ofs) {
+			ofs << json.dump(2);
+		}
+	}
+
+	void ApplyFieldObjectVisual(
+		No::Registry& registry,
+		No::Entity entity,
+		FieldPlacementComponent& placement,
+		No::TransformComponent& transform,
+		const GameResourceComponent& resources
+	) {
+		transform.rotation = MakeRotationFromEulerDeg(placement.rotationEulerDeg);
+
+		auto* mesh = registry.GetComponent<No::MeshComponent>(entity);
+		if (!mesh) {
+			mesh = registry.AddComponent<No::MeshComponent>(entity);
+		}
+		auto* material = registry.GetComponent<No::MaterialComponent>(entity);
+		if (!material) {
+			material = registry.AddComponent<No::MaterialComponent>(entity);
+		}
+
+		if (const auto* model = FindGameModel(resources, placement.modelKey)) {
+			NoEngine::Asset::ModelLoader::GetModel(model->assetName, mesh);
+			material->materials = NoEngine::Asset::ModelLoader::GetMaterial(model->assetName);
+		}
+
+		material->psoName = L"Renderer : Default PSO";
+		material->psoId = NoEngine::Render::GetPSOID(material->psoName);
+		material->rootSigId = NoEngine::Render::GetRootSignatureID(material->psoName);
+	}
+
+	void ApplyFieldObjectCollision(No::Registry& registry, No::Entity entity, const FieldPlacementComponent& placement) {
+		if (placement.hasCollision) {
+			auto* collider = registry.GetComponent<CommentBoutCollision::Collider3DComponent>(entity);
+			if (!collider) {
+				collider = registry.AddComponent<CommentBoutCollision::Collider3DComponent>(entity);
+			}
+			collider->shapeType = CommentBoutCollision::ShapeType3D::Box;
+			collider->useScaleAsBox = true;
+			collider->boxSizeMultiplier = placement.colliderBaseAtUnitScale;
+			collider->collisionLayer = CommentBout::CollisionLayer::CBGround;
+			collider->collisionMask = CommentBout::CollisionLayer::CBEnemyBullet;
+
+			auto* projected = registry.GetComponent<CommentBoutCollision::ProjectedColliderComponent>(entity);
+			if (!projected) {
+				projected = registry.AddComponent<CommentBoutCollision::ProjectedColliderComponent>(entity);
+			}
+			projected->source3DEntity = entity;
+
+			if (placement.occludesPlayerAttack) {
+				if (!registry.Has<CBFieldOccluderTag>(entity)) {
+					registry.AddComponent<CBFieldOccluderTag>(entity);
+				}
+			} else {
+				if (registry.Has<CBFieldOccluderTag>(entity)) {
+					registry.RemoveComponent<CBFieldOccluderTag>(entity);
+				}
 			}
 		} else {
+			if (registry.Has<CommentBoutCollision::ProjectedColliderComponent>(entity)) {
+				registry.RemoveComponent<CommentBoutCollision::ProjectedColliderComponent>(entity);
+			}
+			if (registry.Has<CommentBoutCollision::Collider3DComponent>(entity)) {
+				registry.RemoveComponent<CommentBoutCollision::Collider3DComponent>(entity);
+			}
 			if (registry.Has<CBFieldOccluderTag>(entity)) {
 				registry.RemoveComponent<CBFieldOccluderTag>(entity);
 			}
 		}
-	} else {
-		if (registry.Has<CommentBoutCollision::ProjectedColliderComponent>(entity)) {
-			registry.RemoveComponent<CommentBoutCollision::ProjectedColliderComponent>(entity);
-		}
-		if (registry.Has<CommentBoutCollision::Collider3DComponent>(entity)) {
-			registry.RemoveComponent<CommentBoutCollision::Collider3DComponent>(entity);
-		}
-		if (registry.Has<CBFieldOccluderTag>(entity)) {
-			registry.RemoveComponent<CBFieldOccluderTag>(entity);
-		}
-	}
-}
-
-No::Entity CreateFieldObjectEntity(
-	No::Registry& registry,
-	const GameResourceComponent& resources,
-	const FieldObjectTypeDefinition& def,
-	const std::string& objectId,
-	const std::string& displayName,
-	const No::Vector3& position,
-	const No::Vector3& scale,
-	const No::Vector3& rotationEulerDeg
-) {
-	No::Entity entity = registry.GenerateEntity();
-	registry.AddComponent<CBFieldObjectTag>(entity);
-
-	auto* placement = registry.AddComponent<FieldPlacementComponent>(entity);
-	placement->objectId = objectId;
-	placement->displayName = displayName;
-	placement->typeKey = def.typeKey;
-	placement->modelKey = def.modelKey;
-	placement->hasCollision = def.hasCollision;
-	placement->occludesPlayerAttack = def.occludesPlayerAttack;
-	placement->colliderBaseAtUnitScale = def.baseColliderAtUnitScale;
-	placement->rotationEulerDeg = rotationEulerDeg;
-
-	auto* transform = registry.AddComponent<No::TransformComponent>(entity);
-	transform->translate = position;
-	transform->scale = scale;
-
-	ApplyFieldObjectVisual(registry, entity, *placement, *transform, resources);
-	ApplyFieldObjectCollision(registry, entity, *placement);
-
-	return entity;
-}
-
-void DestroyAllFieldObjects(No::Registry& registry) {
-	std::vector<No::Entity> entities;
-	for (auto entity : registry.View<CBFieldObjectTag, FieldPlacementComponent>()) {
-		entities.push_back(entity);
-	}
-	for (auto entity : entities) {
-		registry.DestroyEntity(entity);
-	}
-}
-
-void SaveFieldPlacements(No::Registry& registry, const std::string& stageName) {
-	nlohmann::json json;
-	json["stageName"] = stageName;
-	auto& arr = json["objects"];
-	arr = nlohmann::json::array();
-
-	for (auto entity : registry.View<CBFieldObjectTag, FieldPlacementComponent, No::TransformComponent>()) {
-		auto* placement = registry.GetComponent<FieldPlacementComponent>(entity);
-		auto* transform = registry.GetComponent<No::TransformComponent>(entity);
-		if (!placement || !transform) {
-			continue;
-		}
-		nlohmann::json node;
-		node["objectId"] = placement->objectId;
-		node["displayName"] = placement->displayName;
-		node["typeKey"] = placement->typeKey;
-		node["position"] = { transform->translate.x, transform->translate.y, transform->translate.z };
-		node["scale"] = { transform->scale.x, transform->scale.y, transform->scale.z };
-		node["rotationEulerDeg"] = { placement->rotationEulerDeg.x, placement->rotationEulerDeg.y, placement->rotationEulerDeg.z };
-		arr.push_back(node);
 	}
 
-	std::ofstream ofs(MakeFieldPlacementPath(stageName));
-	if (ofs) {
-		ofs << json.dump(2);
-	}
-}
+	No::Entity CreateFieldObjectEntity(
+		No::Registry& registry,
+		const GameResourceComponent& resources,
+		const FieldObjectTypeDefinition& def,
+		const std::string& objectId,
+		const std::string& displayName,
+		const No::Vector3& position,
+		const No::Vector3& scale,
+		const No::Vector3& rotationEulerDeg
+	) {
+		No::Entity entity = registry.GenerateEntity();
+		registry.AddComponent<CBFieldObjectTag>(entity);
 
-void LoadFieldPlacements(
-	No::Registry& registry,
-	const GameResourceComponent& resources,
-	const std::unordered_map<std::string, FieldObjectTypeDefinition>& defs,
-	const std::string& stageName,
-	int& idCounter
-) {
-	DestroyAllFieldObjects(registry);
+		auto* placement = registry.AddComponent<FieldPlacementComponent>(entity);
+		placement->objectId = objectId;
+		placement->displayName = displayName;
+		placement->typeKey = def.typeKey;
+		placement->modelKey = def.modelKey;
+		placement->hasCollision = def.hasCollision;
+		placement->occludesPlayerAttack = def.occludesPlayerAttack;
+		placement->colliderBaseAtUnitScale = def.baseColliderAtUnitScale;
+		placement->rotationEulerDeg = rotationEulerDeg;
 
-	std::ifstream ifs(MakeFieldPlacementPath(stageName));
-	if (!ifs) {
-		return;
-	}
-
-	nlohmann::json json;
-	ifs >> json;
-	if (!json.is_object() || !json.contains("objects") || !json["objects"].is_array()) {
-		return;
-	}
-
-	for (const auto& node : json["objects"]) {
-		if (!node.is_object()) {
-			continue;
-		}
-		std::string typeKey = "";
-		if (node.contains("typeKey") && node["typeKey"].is_string()) {
-			typeKey = node["typeKey"].get<std::string>();
-		}
-		auto defIt = defs.find(typeKey);
-		if (defIt == defs.end()) {
-			continue;
-		}
-
-		No::Vector3 pos = No::Vector3::ZERO;
-		No::Vector3 scale = No::Vector3::UNIT_SCALE;
-		No::Vector3 rot = No::Vector3::ZERO;
-		if (node.contains("position") && node["position"].is_array() && node["position"].size() >= 3) {
-			pos = { node["position"][0].get<float>(), node["position"][1].get<float>(), node["position"][2].get<float>() };
-		}
-		if (node.contains("scale") && node["scale"].is_array() && node["scale"].size() >= 3) {
-			scale = { node["scale"][0].get<float>(), node["scale"][1].get<float>(), node["scale"][2].get<float>() };
-		}
-		if (node.contains("rotationEulerDeg") && node["rotationEulerDeg"].is_array() && node["rotationEulerDeg"].size() >= 3) {
-			rot = { node["rotationEulerDeg"][0].get<float>(), node["rotationEulerDeg"][1].get<float>(), node["rotationEulerDeg"][2].get<float>() };
-		}
-
-		std::string objectId = "field_obj_" + std::to_string(idCounter++);
-		if (node.contains("objectId") && node["objectId"].is_string()) {
-			objectId = node["objectId"].get<std::string>();
-		}
-		std::string displayName = objectId;
-		if (node.contains("displayName") && node["displayName"].is_string()) {
-			displayName = node["displayName"].get<std::string>();
-		}
-
-		CreateFieldObjectEntity(registry, resources, defIt->second, objectId, displayName, pos, scale, rot);
-	}
-}
-
-void UpdateLoadedFieldObjects(
-	No::Registry& registry,
-	const GameResourceComponent& resources,
-	const std::unordered_map<std::string, FieldObjectTypeDefinition>& defs
-) {
-	for (auto entity : registry.View<CBFieldObjectTag, FieldPlacementComponent, No::TransformComponent>()) {
-		auto* placement = registry.GetComponent<FieldPlacementComponent>(entity);
-		auto* transform = registry.GetComponent<No::TransformComponent>(entity);
-		if (!placement || !transform) {
-			continue;
-		}
-
-		auto it = defs.find(placement->typeKey);
-		if (it != defs.end()) {
-			placement->modelKey = it->second.modelKey;
-			placement->hasCollision = it->second.hasCollision;
-			placement->occludesPlayerAttack = it->second.occludesPlayerAttack;
-			placement->colliderBaseAtUnitScale = it->second.baseColliderAtUnitScale;
-		}
+		auto* transform = registry.AddComponent<No::TransformComponent>(entity);
+		transform->translate = position;
+		transform->scale = scale;
 
 		ApplyFieldObjectVisual(registry, entity, *placement, *transform, resources);
 		ApplyFieldObjectCollision(registry, entity, *placement);
+
+		return entity;
 	}
-}
+
+	void DestroyAllFieldObjects(No::Registry& registry) {
+		std::vector<No::Entity> entities;
+		for (auto entity : registry.View<CBFieldObjectTag, FieldPlacementComponent>()) {
+			entities.push_back(entity);
+		}
+		for (auto entity : entities) {
+			registry.DestroyEntity(entity);
+		}
+	}
+
+	void SaveFieldPlacements(No::Registry& registry, const std::string& stageName) {
+		nlohmann::json json;
+		json["stageName"] = stageName;
+		auto& arr = json["objects"];
+		arr = nlohmann::json::array();
+
+		for (auto entity : registry.View<CBFieldObjectTag, FieldPlacementComponent, No::TransformComponent>()) {
+			auto* placement = registry.GetComponent<FieldPlacementComponent>(entity);
+			auto* transform = registry.GetComponent<No::TransformComponent>(entity);
+			if (!placement || !transform) {
+				continue;
+			}
+			nlohmann::json node;
+			node["objectId"] = placement->objectId;
+			node["displayName"] = placement->displayName;
+			node["typeKey"] = placement->typeKey;
+			node["position"] = { transform->translate.x, transform->translate.y, transform->translate.z };
+			node["scale"] = { transform->scale.x, transform->scale.y, transform->scale.z };
+			node["rotationEulerDeg"] = { placement->rotationEulerDeg.x, placement->rotationEulerDeg.y, placement->rotationEulerDeg.z };
+			arr.push_back(node);
+		}
+
+		std::ofstream ofs(MakeFieldPlacementPath(stageName));
+		if (ofs) {
+			ofs << json.dump(2);
+		}
+	}
+
+	void LoadFieldPlacements(
+		No::Registry& registry,
+		const GameResourceComponent& resources,
+		const std::unordered_map<std::string, FieldObjectTypeDefinition>& defs,
+		const std::string& stageName,
+		int& idCounter
+	) {
+		DestroyAllFieldObjects(registry);
+
+		std::ifstream ifs(MakeFieldPlacementPath(stageName));
+		if (!ifs) {
+			return;
+		}
+
+		nlohmann::json json;
+		ifs >> json;
+		if (!json.is_object() || !json.contains("objects") || !json["objects"].is_array()) {
+			return;
+		}
+
+		for (const auto& node : json["objects"]) {
+			if (!node.is_object()) {
+				continue;
+			}
+			std::string typeKey = "";
+			if (node.contains("typeKey") && node["typeKey"].is_string()) {
+				typeKey = node["typeKey"].get<std::string>();
+			}
+			auto defIt = defs.find(typeKey);
+			if (defIt == defs.end()) {
+				continue;
+			}
+
+			No::Vector3 pos = No::Vector3::ZERO;
+			No::Vector3 scale = No::Vector3::UNIT_SCALE;
+			No::Vector3 rot = No::Vector3::ZERO;
+			if (node.contains("position") && node["position"].is_array() && node["position"].size() >= 3) {
+				pos = { node["position"][0].get<float>(), node["position"][1].get<float>(), node["position"][2].get<float>() };
+			}
+			if (node.contains("scale") && node["scale"].is_array() && node["scale"].size() >= 3) {
+				scale = { node["scale"][0].get<float>(), node["scale"][1].get<float>(), node["scale"][2].get<float>() };
+			}
+			if (node.contains("rotationEulerDeg") && node["rotationEulerDeg"].is_array() && node["rotationEulerDeg"].size() >= 3) {
+				rot = { node["rotationEulerDeg"][0].get<float>(), node["rotationEulerDeg"][1].get<float>(), node["rotationEulerDeg"][2].get<float>() };
+			}
+
+			std::string objectId = "field_obj_" + std::to_string(idCounter++);
+			if (node.contains("objectId") && node["objectId"].is_string()) {
+				objectId = node["objectId"].get<std::string>();
+			}
+			std::string displayName = objectId;
+			if (node.contains("displayName") && node["displayName"].is_string()) {
+				displayName = node["displayName"].get<std::string>();
+			}
+
+			CreateFieldObjectEntity(registry, resources, defIt->second, objectId, displayName, pos, scale, rot);
+		}
+	}
+
+	void UpdateLoadedFieldObjects(
+		No::Registry& registry,
+		const GameResourceComponent& resources,
+		const std::unordered_map<std::string, FieldObjectTypeDefinition>& defs
+	) {
+		for (auto entity : registry.View<CBFieldObjectTag, FieldPlacementComponent, No::TransformComponent>()) {
+			auto* placement = registry.GetComponent<FieldPlacementComponent>(entity);
+			auto* transform = registry.GetComponent<No::TransformComponent>(entity);
+			if (!placement || !transform) {
+				continue;
+			}
+
+			auto it = defs.find(placement->typeKey);
+			if (it != defs.end()) {
+				placement->modelKey = it->second.modelKey;
+				placement->hasCollision = it->second.hasCollision;
+				placement->occludesPlayerAttack = it->second.occludesPlayerAttack;
+				placement->colliderBaseAtUnitScale = it->second.baseColliderAtUnitScale;
+			}
+
+			ApplyFieldObjectVisual(registry, entity, *placement, *transform, resources);
+			ApplyFieldObjectCollision(registry, entity, *placement);
+		}
+	}
 } // namespace
 
 void FieldObjectEditor::Update(No::Registry& registry)
@@ -496,7 +496,7 @@ void FieldObjectEditor::DrawImGui(No::Registry& registry)
 			return a < b;
 		}
 		return ca->displayName < cb->displayName;
-	});
+		});
 
 	for (auto entity : entities) {
 		auto* placement = registry.GetComponent<FieldPlacementComponent>(entity);
@@ -536,6 +536,8 @@ void FieldObjectEditor::DrawImGui(No::Registry& registry)
 	}
 
 	ImGui::TextDisabled("種別デフォルト設定は「フィールドオブジェクト設定」タブへ");
+#else
+	static_cast<void>(registry);
 #endif
 }
 

@@ -46,6 +46,11 @@ namespace CommentBoutResourceKey {
 	static const char* kRailProgressBarFill = "RailProgressBarFill";
 	static const char* kRailProgressPlayerMarker = "RailProgressPlayerMarker";
 
+	// クリア/オーバー演出
+	static const char* kClearLogo    = "ClearLogo";    // TitleRogo.png (仮)
+	static const char* kOverLogo     = "OverLogo";     // TitleRogo.png (仮)
+	static const char* kFadeOverlay  = "FadeOverlay";  // white1x1.png (黒着色)
+
 	// 吹き出し
 	static const char* kSpeechBubbleLarge = "SpeechBubbleLarge";
 	static const char* kSpeechBubbleMedium = "SpeechBubbleMedium";
@@ -130,6 +135,11 @@ inline void InitializeCommentBoutGameResources(GameResourceComponent& resources)
 	addTexture(CommentBoutResourceKey::kRailProgressBarBase, "resources/engine/white1x1.png");
 	addTexture(CommentBoutResourceKey::kRailProgressBarFill, "resources/engine/white1x1.png");
 	addTexture(CommentBoutResourceKey::kRailProgressPlayerMarker, "resources/engine/white1x1.png");
+	// クリア/オーバー演出
+	addTexture(CommentBoutResourceKey::kClearLogo,   "resources/game/td_3105/Sprite/TitleRogo.png");  // 仮
+	addTexture(CommentBoutResourceKey::kOverLogo,    "resources/game/td_3105/Sprite/TitleRogo.png");  // 仮
+	addTexture(CommentBoutResourceKey::kFadeOverlay, "resources/engine/white1x1.png");
+
 	// 吹き出し (Speech Bubble)
 	addTexture(CommentBoutResourceKey::kSpeechBubbleLarge, "resources/game/td_3105/Sprite/POW.png");
 	addTexture(CommentBoutResourceKey::kSpeechBubbleMedium, "resources/game/td_3105/Sprite/BOOM.png");

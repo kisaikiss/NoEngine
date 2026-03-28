@@ -8,6 +8,7 @@ void SpeechBubbleConfigEditorSystem::Update(No::Registry& registry, float deltaT
 {
 	static_cast<void>(deltaTime);
 
+
 #ifdef USE_IMGUI
 	SpeechBubbleConfig* cfg = nullptr;
 	auto view = registry.View<CBSpeechBubbleConfigTag, SpeechBubbleConfig>();
@@ -46,5 +47,7 @@ void SpeechBubbleConfigEditorSystem::Update(No::Registry& registry, float deltaT
 	}
 
 	ImGui::End();
+#else
+	static_cast<void>(registry);
 #endif
 }

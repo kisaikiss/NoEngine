@@ -184,6 +184,12 @@
     <ClCompile Include="application\CommentBout\FieldObject\Editor\FieldObjectEditor.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\SpriteAnimationSystem.cpp" />
     <ClCompile Include="application\CommentBout\Collision\System\CollisionDebugRenderSystem.cpp" />
+    <ClCompile Include="application\CommentBout\System\GameResultSystem.cpp" />
+    <ClCompile Include="application\CommentBout\System\BossDefeatSystem.cpp" />
+    <ClCompile Include="application\CommentBout\System\ClearOverSystem.cpp" />
+    <ClCompile Include="application\CommentBout\System\ClearOverViewSystem.cpp" />
+    <ClCompile Include="application\CommentBout\Data\ClearOverConfigDataIO.cpp" />
+    <ClCompile Include="application\CommentBout\System\InputHelperSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Functions\ECS\System\CameraSystem.h" />
@@ -428,6 +434,18 @@
     <ClInclude Include="application\CommentBout\Collision\Event\CollisionEvent.h" />
     <ClInclude Include="application\CommentBout\Collision\Component\CollisionDebugConfigComponent.h" />
     <ClInclude Include="application\CommentBout\Collision\System\CollisionDebugRenderSystem.h" />
+    <ClInclude Include="application\CommentBout\System\GameResultSystem.h" />
+    <ClInclude Include="application\CommentBout\System\BossDefeatSystem.h" />
+    <ClInclude Include="application\CommentBout\System\ClearOverSystem.h" />
+    <ClInclude Include="application\CommentBout\System\ClearOverViewSystem.h" />
+    <ClInclude Include="application\CommentBout\Component\BossDefeatSequenceComponent.h" />
+    <ClInclude Include="application\CommentBout\Component\ClearOverStateComponent.h" />
+    <ClInclude Include="application\CommentBout\Component\ClearOverConfigComponent.h" />
+    <ClInclude Include="application\CommentBout\Component\ClearOverViewComponent.h" />
+    <ClInclude Include="application\CommentBout\Data\ClearOverConfigDataIO.h" />
+    <ClInclude Include="application\CommentBout\System\InputHelperSystem.h" />
+    <ClInclude Include="application\CommentBout\Utility\InputHelper.h" />
+    <ClInclude Include="application\CommentBout\Component\GameResultComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

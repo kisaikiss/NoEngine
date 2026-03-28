@@ -9,6 +9,7 @@ private:
 	void NotSystemUpdate() override;
 	void CameraImGui();
 	void ChangeSceneImGui();
+	void ClearOverConfigImGui();
 
 	No::Entity activeCameraEntity_{};
 	No::Entity debugCameraEntity_{};

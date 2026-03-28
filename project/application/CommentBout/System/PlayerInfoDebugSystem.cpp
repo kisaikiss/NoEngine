@@ -8,8 +8,15 @@
 #include "application/CommentBout/Data/PlayerConfig.h"
 #include "application/CommentBout/Data/PlayerDataIO.h"
 #include "application/CommentBout/Component/DamageFlashComponent.h"
+#include "application/CommentBout/Component/GameResultComponent.h"
+#include "application/CommentBout/Component/ClearOverStateComponent.h"
 #include "application/CommentBout/GameTag.h"
 #include <algorithm>
+
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable:4702)
+#endif
 
 #ifdef USE_IMGUI
 #include "externals/imgui/imgui.h"
@@ -129,7 +136,8 @@ void PlayerInfoDebugSystem::Update(No::Registry& registry, float deltaTime)
 	ImGui::Begin("自機設定");
 
 	PlayerConfig* playerConfig = nullptr;
-	for (auto configEntity : registry.View<CBPlayerConfigTag, PlayerConfig>()) {
+	auto playerConfigView = registry.View<CBPlayerConfigTag, PlayerConfig>();
+	for (auto configEntity : playerConfigView) {
 		playerConfig = registry.GetComponent<PlayerConfig>(configEntity);
 		if (playerConfig) {
 			break;
@@ -257,7 +265,69 @@ void PlayerInfoDebugSystem::Update(No::Registry& registry, float deltaTime)
 		ImGui::Text("自機が見つかりません。");
 	}
 	ImGui::End();
+
+	// ── Game Result デバッグ ─────────────────────────────────
+	ImGui::Begin("Game Result Debug");
+	GameResultComponent* gameResult = nullptr;
+	auto gameResultView = registry.View<CBGameResultTag, GameResultComponent>();
+	for (auto e : gameResultView) {
+		gameResult = registry.GetComponent<GameResultComponent>(e);
+		break;
+	}
+	if (gameResult) {
+		const char* resultStr = (gameResult->result == GameResult::None) ? "None"
+			: (gameResult->result == GameResult::Clear) ? "Clear" : "Over";
+		ImGui::Text("Result: %s", resultStr);
+		ImGui::Checkbox("クリア無効化 (debugDisableClear)", &gameResult->debugDisableClear);
+		ImGui::Checkbox("オーバー無効化 (debugDisableOver)", &gameResult->debugDisableOver);
+		ImGui::Separator();
+		if (ImGui::Button("強制クリア")) {
+			if (!gameResult->debugDisableClear && gameResult->result == GameResult::None) {
+				gameResult->result = GameResult::Clear;
+				auto clearOverStateView = registry.View<CBClearOverStateTag, ClearOverStateComponent>();
+				for (auto e : clearOverStateView) {
+					auto* st = registry.GetComponent<ClearOverStateComponent>(e);
+					if (st && st->phase == ClearOverStateComponent::Phase::Inactive) {
+						st->result = ClearOverStateComponent::Result::Clear;
+						st->phase = ClearOverStateComponent::Phase::FadeIn;
+						st->phaseTimer = 0.f;
+						st->selectedIndex = 0;
+						st->isConfirmAnimating = false;
+						st->confirmAnimTime = 0.f;
+						st->confirmIndex = -1;
+						st->requestedAction = ClearOverStateComponent::Action::None;
+					}
+					break;
+				}
+			}
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("強制オーバー")) {
+			if (!gameResult->debugDisableOver && gameResult->result == GameResult::None) {
+				gameResult->result = GameResult::Over;
+				auto clearOverStateView = registry.View<CBClearOverStateTag, ClearOverStateComponent>();
+				for (auto e : clearOverStateView) {
+					auto* st = registry.GetComponent<ClearOverStateComponent>(e);
+					if (st && st->phase == ClearOverStateComponent::Phase::Inactive) {
+						st->result = ClearOverStateComponent::Result::Over;
+						st->phase = ClearOverStateComponent::Phase::FadeIn;
+						st->phaseTimer = 0.f;
+						st->selectedIndex = 0;
+						st->isConfirmAnimating = false;
+						st->confirmAnimTime = 0.f;
+						st->confirmIndex = -1;
+						st->requestedAction = ClearOverStateComponent::Action::None;
+					}
+					break;
+				}
+			}
+		}
+	} else {
+		ImGui::Text("GameResultComponent が見つかりません。");
+	}
+	ImGui::End();
 #else
 	static_cast<void>(registry);
 #endif
 }
+

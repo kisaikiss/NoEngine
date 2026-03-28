@@ -72,24 +72,11 @@ void PlayerControlSystem::Update(No::Registry& registry, float deltaTime)
 			invincible->duration = std::max(0.01f, player->invincibleDurationDefault);
 		}
 
-		const bool shiftToggle =
-			(No::Keyboard::IsTrigger(VK_LSHIFT) && No::Keyboard::IsPress(VK_RSHIFT)) ||
-			(No::Keyboard::IsTrigger(VK_RSHIFT) && No::Keyboard::IsPress(VK_LSHIFT));
-		if (shiftToggle) {
-			player->debugInvincible = !player->debugInvincible;
-		}
-		if (player->debugInvincible) {
-			// デバッグ無敵中は常に無敵時間を維持して、被弾で途切れないようにする。
-			invincible->time = std::max(invincible->time, 0.2f);
-		}
-
-		// HPが0以下でまだ死亡処理がされていない場合、死亡処理を行う
+		// HPが0以下でまだ死亡処理がされていない場合、死亡フラグを立てる
+		// (シーン遷移は GameResultSystem が担当)
 		if (health->hp <= 0 && !health->deathHandled) {
 			health->isDead = true;
 			health->deathHandled = true;
-			No::SceneChangeEvent event;
-			event.nextScene = "TitleScene";
-			registry.EmitEvent(event);
 			continue;
 		}
 
@@ -150,6 +137,19 @@ void PlayerControlSystem::Update(No::Registry& registry, float deltaTime)
 		}
 
 #ifdef USE_IMGUI
+
+		// デバッグ用無敵トグル（左右Shift同時押し）
+		const bool shiftToggle =
+			(No::Keyboard::IsTrigger(VK_LSHIFT) && No::Keyboard::IsPress(VK_RSHIFT)) ||
+			(No::Keyboard::IsTrigger(VK_RSHIFT) && No::Keyboard::IsPress(VK_LSHIFT));
+		if (shiftToggle) {
+			player->debugInvincible = !player->debugInvincible;
+		}
+		if (player->debugInvincible) {
+			// デバッグ無敵中は常に無敵時間を維持して、被弾で途切れないようにする。
+			invincible->time = std::max(invincible->time, 0.2f);
+		}
+
 		if (player->debugInvincible) {
 			const ImGuiViewport* viewport = ImGui::GetMainViewport();
 			if (viewport) {

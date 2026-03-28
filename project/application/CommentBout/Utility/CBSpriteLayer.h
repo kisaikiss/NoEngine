@@ -32,6 +32,10 @@ namespace CommentBout {
 		OptionToggle = 957,
 		OptionLine = 958,
 		OptionItemOverlay = 959,
+
+		ClearOverFade   = 960,
+		ClearOverLogo   = 965,
+		ClearOverItem   = 970,
 	};
 
 	inline uint32_t ToLayer(SpriteLayer layer) {

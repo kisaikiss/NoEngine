@@ -4,6 +4,7 @@
 #include "application/CommentBout/Component/RailCameraComponent.h"
 #include "application/CommentBout/Component/EnemyComponent.h"
 #include "application/CommentBout/Component/GameResultComponent.h"
+#include "application/CommentBout/Component/ClearOverStateComponent.h"
 #include "application/CommentBout/GameTag.h"
 #include "engine/Functions/ECS/Component/CameraComponent.h"
 #include "engine/Functions/Renderer/Primitive.h"
@@ -416,7 +417,22 @@ namespace {
 	}
 }
 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable:4702)
+#endif
+
 void RailCameraSystem::Update(No::Registry& registry, float deltaTime) {
+	// クリア/オーバー確定後はレール更新を停止
+	auto gameResultView = registry.View<CBGameResultTag, GameResultComponent>();
+	for (auto e : gameResultView) {
+		const auto* gameResult = registry.GetComponent<GameResultComponent>(e);
+		if (gameResult && gameResult->result != GameResult::None) {
+			return;
+		}
+		break;
+	}
+
 	auto view = registry.View<RailCameraComponent, No::TransformComponent>();
 	for (auto entity : view) {
 		auto* rail = registry.GetComponent<RailCameraComponent>(entity);

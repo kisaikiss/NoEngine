@@ -75,7 +75,7 @@ Phase 4    A    コントローラー対応                             ✅ 完�
 Phase 5    G    エディタ管理クラス                             ✅ 完了
 Phase 5.5  G2   エディタ大幅リファクタリング                    ✅ 完了
 Phase 6    H前半 ボス構造変更                              ✅ 完了
-Phase 7    H後半 クリア/オーバー演出
+Phase 7    H後半 クリア/オーバー演出                          ✅ 完了
 Phase 8    I    音実装
 Phase 9    F    フォルダ精査・整理
 ```
@@ -1239,9 +1239,9 @@ result が None 以外になったら:
   → ClearOverState をアクティブ化
 ```
 
-- [ ] `System/GameResultSystem.h/.cpp` 新規作成
-- [ ] `GameScene::Setup()` に追加 (適切な順序で)
-- [ ] `vcxproj` / `vcxproj.filters` 更新
+- [x] `System/GameResultSystem.h/.cpp` 新規作成
+- [x] `GameScene::Setup()` に追加 (適切な順序で)
+- [x] `vcxproj` / `vcxproj.filters` 更新
 
 ---
 
@@ -1291,11 +1291,11 @@ Update():
                     → ClearOverStateComponent をアクティブ化 (Clear)
 ```
 
-- [ ] `Component/BossDefeatSequenceComponent.h` 新規作成
-- [ ] `System/BossDefeatSystem.h/.cpp` 新規作成
-- [ ] ボスの BOOM スプライト生成: ボスのスクリーン位置に `SpriteComponent` を追加
-- [ ] `GameResultSystem` が result=Clear を検知したら `BossDefeatSequenceComponent.phase = PreExplosionWait` に設定
-- [ ] `vcxproj` / `vcxproj.filters` 更新
+- [x] `Component/BossDefeatSequenceComponent.h` 新規作成
+- [x] `System/BossDefeatSystem.h/.cpp` 新規作成
+- [x] ボスの BOOM スプライト生成: ボスのスクリーン位置に `SpriteComponent` を追加
+- [x] `GameResultSystem` が result=Clear を検知したら `BossDefeatSequenceComponent.phase = PreExplosionWait` に設定
+- [x] `vcxproj` / `vcxproj.filters` 更新
 
 ---
 
@@ -1364,10 +1364,10 @@ struct ClearOverConfigComponent {
 };
 ```
 
-- [ ] `Component/ClearOverStateComponent.h` 新規作成
-- [ ] `Component/ClearOverConfigComponent.h` 新規作成
-- [ ] JSON シリアライズ対応 (ClearOverConfig の各値を保存可能に)
-- [ ] `vcxproj` / `vcxproj.filters` 更新
+- [x] `Component/ClearOverStateComponent.h` 新規作成
+- [x] `Component/ClearOverConfigComponent.h` 新規作成
+- [x] JSON シリアライズ対応 (ClearOverConfig の各値を保存可能に)
+- [x] `vcxproj` / `vcxproj.filters` 更新
 
 ---
 
@@ -1405,10 +1405,10 @@ Update():
         BackToTitle → SceneChangeEvent("TitleScene")
 ```
 
-- [ ] `System/ClearOverSystem.h/.cpp` 新規作成
-- [ ] SceneChangeEvent の発火を PauseSystem と同じパターンで実装
-- [ ] `GameScene::Setup()` に追加 (PauseSystem より後の順序で)
-- [ ] `vcxproj` / `vcxproj.filters` 更新
+- [x] `System/ClearOverSystem.h/.cpp` 新規作成
+- [x] SceneChangeEvent の発火を PauseSystem と同じパターンで実装
+- [x] `GameScene::Setup()` に追加 (PauseSystem より後の順序で)
+- [x] `vcxproj` / `vcxproj.filters` 更新
 
 ---
 
@@ -1441,15 +1441,10 @@ Update():
 Inactive になったら全エンティティを DestroyEntity
 ```
 
-- [ ] `System/ClearOverViewSystem.h/.cpp` 新規作成
-- [ ] `GameResourceComponent.h` にキー追加:
-  ```cpp
-  static const char* kClearLogo  = "ClearLogo";   // TitleRogo.png (仮)
-  static const char* kOverLogo   = "OverLogo";    // TitleRogo.png (仮)
-  static const char* kFadeOverlay = "FadeOverlay"; // white1x1
-  ```
-- [ ] `InitializeCommentBoutGameResources()` にロード処理追加
-- [ ] `vcxproj` / `vcxproj.filters` 更新
+- [x] `System/ClearOverViewSystem.h/.cpp` 新規作成
+- [x] `GameResourceComponent.h` にキー追加 (kClearLogo / kOverLogo / kFadeOverlay)
+- [x] `InitializeCommentBoutGameResources()` にロード処理追加
+- [x] `vcxproj` / `vcxproj.filters` 更新
 
 ---
 
@@ -1467,7 +1462,7 @@ if (gameResult && gameResult->result != GameResult::None) {
 }
 ```
 
-- [ ] `RailCameraSystem::Update()` にゲーム結果チェックを追加
+- [x] `RailCameraSystem::Update()` にゲーム結果チェックを追加
 
 ---
 
@@ -1481,15 +1476,15 @@ if (gameResult && gameResult->result != GameResult::None) {
   [Force Clear]  [Force Over]  ← ボタンで強制実行
 ```
 
-- [ ] デバッグ用 ImGui 追加 (PlayerInfoDebugSystem 推奨)
+- [x] デバッグ用 ImGui 追加 (PlayerInfoDebugSystem 推奨)
 
 ---
 
 ### 7-8. ClearOverConfig を JSON 保存可能にする
 
-- [ ] `ClearOverConfig` の IO クラス or インライン save/load 実装
-- [ ] JSON パス: `"resources/game/td_3105/Data/Config/ClearOverConfig.json"`
-- [ ] ImGui ウィンドウ: フェード時間、ロゴ位置・サイズ、イージングタイプなど編集可能に
+- [x] `ClearOverConfig` の IO クラス or インライン save/load 実装 (ClearOverConfigDataIO)
+- [x] JSON パス: `"resources/game/td_3105/Data/Config/ClearOverConfig.json"`
+- [ ] ImGui ウィンドウ: フェード時間、ロゴ位置・サイズ、イージングタイプなど編集可能に (Phase 9 以降)
 
 ---
 

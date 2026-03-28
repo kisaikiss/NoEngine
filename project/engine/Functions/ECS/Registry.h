@@ -91,6 +91,10 @@ public:
 	/// クエリ。レジストリと基準プールを保持し、基準プールのエンティティを走査しながらHasAllをチェックします。
 	/// </summary>
 	/// <typeparam name="...Components">複数のコンポーネント</typeparam>
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable:4702)
+#endif
 	template<typename... Components>
 	class Query {
 	public:
@@ -153,6 +157,9 @@ public:
 		IComponentPool* base_;
 		bool empty_ = false;
 	};
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 	/// <summary>
 	/// クエリを取得します。クエリはイテレータを持っており、指定した複数のコンポーネントを持つエンティティを得てコンポーネント同士の操作をすることに使用します。

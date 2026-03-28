@@ -175,6 +175,11 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\CommentBout\FieldObject\Editor\FieldObjectEditor.cpp" />
     <ClCompile Include="application\CommentBout\Spawner\TitleMenuSpawner.cpp" />
     <ClCompile Include="application\CommentBout\System\BossBehaviorSystem.cpp" />
+    <ClCompile Include="application\CommentBout\System\GameResultSystem.cpp" />
+    <ClCompile Include="application\CommentBout\System\BossDefeatSystem.cpp" />
+    <ClCompile Include="application\CommentBout\System\ClearOverSystem.cpp" />
+    <ClCompile Include="application\CommentBout\System\ClearOverViewSystem.cpp" />
+    <ClCompile Include="application\CommentBout\Data\ClearOverConfigDataIO.cpp" />
     <ClCompile Include="application\CommentBout\System\DamageApplySystem.cpp" />
     <ClCompile Include="application\CommentBout\System\DamageFlashSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\EnemyBulletHitSystem.cpp" />
@@ -368,6 +373,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\CommentBout\Component\DamageRequestComponent.h" />
     <ClInclude Include="application\CommentBout\Component\EnemyBulletComponent.h" />
     <ClInclude Include="application\CommentBout\Component\EnemyComponent.h" />
+    <ClInclude Include="application\CommentBout\Component\GameResultComponent.h" />
     <ClInclude Include="application\CommentBout\Component\SpeechBubbleComponent.h" />
     <ClInclude Include="application\CommentBout\Data\SpeechBubbleConfig.h" />
     <ClInclude Include="application\CommentBout\Data\SpeechBubbleDataIO.h" />
@@ -398,6 +404,15 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\CommentBout\FieldObject\System\FieldEditorSystem.h" />
     <ClInclude Include="application\CommentBout\Spawner\TitleMenuSpawner.h" />
     <ClInclude Include="application\CommentBout\System\BossBehaviorSystem.h" />
+    <ClInclude Include="application\CommentBout\System\GameResultSystem.h" />
+    <ClInclude Include="application\CommentBout\System\BossDefeatSystem.h" />
+    <ClInclude Include="application\CommentBout\System\ClearOverSystem.h" />
+    <ClInclude Include="application\CommentBout\System\ClearOverViewSystem.h" />
+    <ClInclude Include="application\CommentBout\Component\BossDefeatSequenceComponent.h" />
+    <ClInclude Include="application\CommentBout\Component\ClearOverStateComponent.h" />
+    <ClInclude Include="application\CommentBout\Component\ClearOverConfigComponent.h" />
+    <ClInclude Include="application\CommentBout\Component\ClearOverViewComponent.h" />
+    <ClInclude Include="application\CommentBout\Data\ClearOverConfigDataIO.h" />
     <ClInclude Include="application\CommentBout\System\DamageApplySystem.h" />
     <ClInclude Include="application\CommentBout\System\DamageFlashSystem.h" />
     <ClInclude Include="application\CommentBout\System\EnemyBulletHitSystem.h" />

@@ -166,6 +166,8 @@ void EditorManager::DrawImGui(No::Registry& registry)
 	}
 
 	ImGui::End();
+#else
+	static_cast<void>(registry);
 #endif
 }
 
@@ -357,7 +359,8 @@ void EditorManager::DrawRailTab(No::Registry& registry)
 
 
 
-
+#else
+	static_cast<void>(registry);
 #endif
 }
 
@@ -365,6 +368,8 @@ void EditorManager::DrawEventTab(No::Registry& registry)
 {
 #ifdef USE_IMGUI
 	gameEventEditor_.DrawGameEventEditorImGui(&registry, railCameraEntity_);
+#else
+	static_cast<void>(registry);
 #endif
 }
 
@@ -421,6 +426,8 @@ void EditorManager::DrawEnemyTab(No::Registry& registry)
 	drawType(RailEnemyType::MoveOnly, "通常敵 (MoveOnly)");
 	drawType(RailEnemyType::MoveAndShoot, "射撃敵 (MoveAndShoot)");
 	drawType(RailEnemyType::Boss, "ボス (Boss)");
+#else
+	static_cast<void>(registry);
 #endif
 }
 
@@ -467,6 +474,8 @@ void EditorManager::DrawSpeechBubbleTab(No::Registry& registry)
 	editSize("大 (POW.png)", cfg->sizeLarge);
 	editSize("中 (BOOM.png)", cfg->sizeMedium);
 	editSize("小 (OH.png)", cfg->sizeSmall);
+#else
+	static_cast<void>(registry);
 #endif
 }
 

@@ -28,3 +28,6 @@ struct CBRailProgressBarDisplayTag {};	//
 struct CBFieldObjectTag {};		//
 struct CBFieldOccluderTag {};	//
 struct CBGameResultTag {};		// ゲーム結果状態
+struct CBBossDefeatTag {};		// ボス撃破シーケンス
+struct CBClearOverStateTag {};	// クリア/オーバー状態
+struct CBClearOverConfigTag {};	// クリア/オーバー設定
