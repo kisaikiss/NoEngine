@@ -17,4 +17,5 @@ struct TitleMenuStateComponent {
 	int requestedAction = None;
 
 	float logoMotionTime = 0.0f;
+	bool isSceneChangePending = false;  // シーン遷移待機中 (フェード完了まで入力を遮断)
 };

@@ -62,6 +62,7 @@ void TitleSystem::Update(No::Registry& registry, float deltaTime)
 			switch (titleState->requestedAction) {
 			case TitleMenuStateComponent::StartGame:
 			{
+				titleState->isSceneChangePending = true;
 				No::SceneChangeEvent event;
 				event.nextScene = "GameScene";
 				registry.EmitEvent(event);
@@ -90,7 +91,7 @@ void TitleSystem::Update(No::Registry& registry, float deltaTime)
 		}
 	}
 
-	if ((optionState && optionState->isOpen) || titleState->isConfirmAnimating) {
+	if ((optionState && optionState->isOpen) || titleState->isConfirmAnimating || titleState->isSceneChangePending) {
 		return;
 	}
 

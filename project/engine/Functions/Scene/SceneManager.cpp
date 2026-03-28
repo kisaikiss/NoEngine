@@ -4,6 +4,7 @@
 #include "engine/Assets/Texture/TextureManager.h"
 #include "engine/Functions/ECS/Component/SpriteComponent.h"
 #include "engine/Functions/ECS/Component/Transform2DComponent.h"
+#include "engine/Functions/ECS/Component/PauseComponent.h"
 #include "engine/Math/Easing.h"
 
 #include <algorithm>
@@ -77,6 +78,18 @@ void SceneManager::DestroyOverlay() {
 	overlayEntity_ = 0;
 }
 
+void SceneManager::ReleasePauseIfHeld() {
+	if (!currentScene_) return;
+	auto* registry = currentScene_->GetRegistry();
+	if (!registry) return;
+	for (auto entity : registry->View<ECS::PauseComponent>()) {
+		auto* pause = registry->GetComponent<ECS::PauseComponent>(entity);
+		if (pause) {
+			pause->isPause = false;
+		}
+	}
+}
+
 void SceneManager::ChangeScene(const std::string& name, bool immediate) {
 
 	auto it = factories_.find(name);
@@ -90,6 +103,7 @@ void SceneManager::ChangeScene(const std::string& name, bool immediate) {
 	// 即時切替（従来通り）
 	if (immediate || !currentScene_) {
 		if (currentScene_) {
+			ReleasePauseIfHeld();
 			currentScene_->OnExit();
 		}
 
@@ -138,6 +152,7 @@ void SceneManager::Update(ComputeContext& ctx, float deltaTime) {
 
 			if (transitionTimer_ >= half) {
 				// シーン切替
+				ReleasePauseIfHeld();
 				if (currentScene_) currentScene_->OnExit();
 
 				auto it = factories_.find(pendingName_);

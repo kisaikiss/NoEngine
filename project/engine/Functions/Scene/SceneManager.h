@@ -26,6 +26,7 @@ private:
 	void CreateCircleOverlay(float initialAlpha, float initialScale);
 	void UpdateOverlay(float alpha, float scale);
 	void DestroyOverlay();
+	void ReleasePauseIfHeld();// シーン切替前にエンジンのポーズ状態を解除して、遷移中の停止状態の持ち越しを防止する。
 
 private:
 	std::unordered_map<std::string, SceneFactory> factories_;

@@ -3,6 +3,7 @@
 #include "application/CommentBout/Component/OutGame/PauseStateComponent.h"
 #include "application/CommentBout/Component/OutGame/PauseMenuConfigComponent.h"
 #include "application/CommentBout/Component/OutGame/OptionStateComponent.h"
+#include "application/CommentBout/Component/OutGame/OptionMenuConfigComponent.h"
 #include "application/CommentBout/Event/OptionMenuEvent.h"
 #include "application/CommentBout/GameTag.h"
 #include "application/CommentBout/Utility/InputHelper.h"
@@ -37,20 +38,6 @@ namespace {
 			enginePause->isPause = isPaused;
 		}
 	}
-
-	void ClearPauseState(PauseStateComponent* pauseState, No::PauseComponent* enginePause) {
-		pauseState->isPaused = false;
-		pauseState->phase = PauseStateComponent::Closed;
-		pauseState->phaseTime = 0.0f;
-		pauseState->phaseDuration = 1.0f;
-		pauseState->isConfirmAnimating = false;
-		pauseState->confirmAnimTime = 0.0f;
-		pauseState->confirmIndex = -1;
-		pauseState->requestedAction = PauseStateComponent::None;
-		if (enginePause) {
-			enginePause->isPause = false;
-		}
-	}
 }
 
 void PauseSystem::Update(No::Registry& registry, float deltaTime)
@@ -58,6 +45,7 @@ void PauseSystem::Update(No::Registry& registry, float deltaTime)
 	PauseStateComponent* pauseState = nullptr;
 	PauseMenuConfigComponent* pauseConfig = nullptr;
 	OptionStateComponent* optionState = nullptr;
+	OptionMenuConfigComponent* optionConfig = nullptr;
 	No::PauseComponent* enginePause = FindEnginePauseComponent(registry);
 
 	auto pauseView = registry.View<CBPauseStateTag, PauseStateComponent>();
@@ -84,10 +72,24 @@ void PauseSystem::Update(No::Registry& registry, float deltaTime)
 		}
 	}
 
+	auto optionConfigView = registry.View<CBOptionConfigTag, OptionMenuConfigComponent>();
+	for (auto entity : optionConfigView) {
+		optionConfig = registry.GetComponent<OptionMenuConfigComponent>(entity);
+		if (optionConfig) {
+			break;
+		}
+	}
+
 	if (!pauseState || !pauseConfig) {
 		if (enginePause) {
 			enginePause->isPause = false;
 		}
+		return;
+	}
+
+	// ── シーン遷移待機中 ─────────────────────────────────────────────
+	// エンジン層がシーン切替直前にポーズを自動解除するため、ここでは入力を遮断するだけ。
+	if (pauseState->isSceneChangePending) {
 		return;
 	}
 
@@ -96,6 +98,7 @@ void PauseSystem::Update(No::Registry& registry, float deltaTime)
 	pauseState->justEnteredPause = false;
 	pauseState->justExitedPause = false;
 
+	// ── 確定アニメーション中 ─────────────────────────────────────────
 	if (pauseState->isConfirmAnimating) {
 		pauseState->confirmAnimTime += deltaTime;
 		const float confirmDuration = SafeDuration(pauseConfig->confirmDuration);
@@ -110,9 +113,9 @@ void PauseSystem::Update(No::Registry& registry, float deltaTime)
 				break;
 			case PauseStateComponent::Restart:
 			{
-				// シーン遷移前にポーズ状態を明示解除して、停止状態の持ち越しを防ぐ。
-				ClearPauseState(pauseState, enginePause);
-				pauseState->isSceneChanging = true;
+				// シーン遷移: UIはそのまま維持
+				// エンジン層がシーン切替時にポーズを自動解除する。
+				pauseState->isSceneChangePending = true;
 				No::SceneChangeEvent event;
 				event.nextScene = "GameScene";
 				registry.EmitEvent(event);
@@ -127,9 +130,9 @@ void PauseSystem::Update(No::Registry& registry, float deltaTime)
 			break;
 			case PauseStateComponent::BackToTitle:
 			{
-				// シーン遷移前にポーズ状態を明示解除して、停止状態の持ち越しを防ぐ。
-				ClearPauseState(pauseState, enginePause);
-				pauseState->isSceneChanging = true;
+				// シーン遷移: UIはそのまま維持
+				// エンジン層がシーン切替時にポーズを自動解除する。
+				pauseState->isSceneChangePending = true;
 				No::SceneChangeEvent event;
 				event.nextScene = "TitleScene";
 				registry.EmitEvent(event);
@@ -139,15 +142,17 @@ void PauseSystem::Update(No::Registry& registry, float deltaTime)
 				break;
 			}
 			pauseState->requestedAction = PauseStateComponent::None;
+
+			// シーン遷移が開始された場合は当フレームの以降処理をスキップ
+			if (pauseState->isSceneChangePending) {
+				return;
+			}
 		}
 	}
 
+	// ── Closed: ポーズ開始待ち ───────────────────────────────────────
 	if (pauseState->phase == PauseStateComponent::Closed) {
 		pauseState->isPaused = false;
-		if (pauseState->isSceneChanging) {
-			SyncPauseState(pauseState, enginePause, forcePause);
-			return;
-		}
 		if (InputHelper::IsPauseTrigger()) {
 			CommentBout::GameAudio::PlaySEClip(CommentBoutResourceKey::kSESystemOpen);
 			pauseState->justEnteredPause = true;
@@ -164,6 +169,7 @@ void PauseSystem::Update(No::Registry& registry, float deltaTime)
 
 	pauseState->isPaused = true;
 
+	// ── Opening / Closing アニメーション ────────────────────────────
 	if (pauseState->phase == PauseStateComponent::Opening ||
 		pauseState->phase == PauseStateComponent::Closing) {
 		pauseState->phaseTime += deltaTime;
@@ -186,6 +192,26 @@ void PauseSystem::Update(No::Registry& registry, float deltaTime)
 		return;
 	}
 
+	// ── Pause ボタンで全て閉じる (phase == Open かつ非アニメーション時) ──
+	if (pauseState->phase == PauseStateComponent::Open && !pauseState->isConfirmAnimating) {
+		if (InputHelper::IsPauseTrigger()) {
+			// オプションが開いていれば強制クローズ開始
+			if (optionState && optionState->isOpen &&
+				optionState->phase != OptionStateComponent::Closed &&
+				optionState->phase != OptionStateComponent::Closing) {
+				optionState->isConfirmAnimating = false;
+				optionState->phase = OptionStateComponent::Closing;
+				optionState->phaseTime = 0.0f;
+				optionState->phaseDuration = SafeDuration(optionConfig ? optionConfig->closeDuration : 0.18f);
+			}
+			CommentBout::GameAudio::PlaySEClip(CommentBoutResourceKey::kSESystemOpen);
+			StartPhase(pauseState, PauseStateComponent::Closing, pauseConfig->closeDuration);
+			SyncPauseState(pauseState, enginePause, forcePause);
+			return;
+		}
+	}
+
+	// ── オプション表示中はポーズの入力を委譲 ────────────────────────
 	if (optionState && optionState->isOpen) {
 		SyncPauseState(pauseState, enginePause, forcePause);
 		return;
@@ -201,6 +227,7 @@ void PauseSystem::Update(No::Registry& registry, float deltaTime)
 		return;
 	}
 
+	// ── Open: カーソル操作・決定 ─────────────────────────────────────
 	if (pauseState->itemCount > 0) {
 		if (InputHelper::IsMoveUpTrigger()) {
 			pauseState->selectedIndex--;

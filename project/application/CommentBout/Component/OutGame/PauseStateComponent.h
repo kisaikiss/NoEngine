@@ -24,7 +24,7 @@ struct PauseStateComponent {
 	bool editorForcePause = false;
 	bool justEnteredPause = false;
 	bool justExitedPause = false;
-	bool isSceneChanging = false;  // シーン遷移中フラグ (遷移完了まで Pause 再オープン禁止)
+	bool isSceneChangePending = false;  // シーン遷移待機中 (入力を遮断し、エンジンポーズを解除して遷移を妨げない)
 	int selectedIndex = 0;
 	int itemCount = 4;
 
