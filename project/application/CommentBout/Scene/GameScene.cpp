@@ -7,7 +7,8 @@
 #include "application/CommentBout/Component/HealthComponent.h"
 #include "application/CommentBout/Component/InvincibleComponent.h"
 #include "application/CommentBout/Component/PlayerHitboxComponent.h"
-#include "application/CommentBout/Component/PlayerConfigComponent.h"
+#include "application/CommentBout/Data/PlayerConfig.h"
+#include "application/CommentBout/Data/PlayerDataIO.h"
 #include "application/CommentBout/Component/OutGame/OutGameComponets.h"	//アウトゲーム関連
 #include "application/CommentBout/Component/GameResourceComponent.h"
 #include "application/CommentBout/Component/HpBarComponent.h"
@@ -118,8 +119,8 @@ void GameScene::Setup() {
 
 	auto playerConfigEntity = registry.GenerateEntity();
 	registry.AddComponent<CBPlayerConfigTag>(playerConfigEntity);
-	auto* playerConfig = registry.AddComponent<PlayerConfigComponent>(playerConfigEntity);
-	LoadPlayerConfig(*playerConfig);
+	auto* playerConfig = registry.AddComponent<PlayerConfig>(playerConfigEntity);
+	*playerConfig = PlayerDataIO::Load();
 
 	auto bossHpBarEntity = registry.GenerateEntity();
 	registry.AddComponent<CBBossHpBarTag>(bossHpBarEntity);

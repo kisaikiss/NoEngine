@@ -8,7 +8,8 @@
 #include "application/CommentBout/Component/BossComponent.h"
 #include "application/CommentBout/Component/HealthComponent.h"
 #include "application/CommentBout/Component/GameResourceComponent.h"
-#include "application/CommentBout/Data/EnemyTypePresetIO.h"
+#include "application/CommentBout/Data/EnemyConfig.h"
+#include "application/CommentBout/Data/EnemyDataIO.h"
 #include "application/CommentBout/Utility/CBCollisionMask.h"
 #include "application/CommentBout/GameTag.h"
 #include "application/CommentBout/Collision/Component/Collider3DComponent.h"
@@ -25,9 +26,8 @@ No::Vector3 NormalizeOrDefault(const No::Vector3& v, const No::Vector3& fallback
 }
 
 void SpawnRailEnemies(No::Registry& registry, const RailEnemySpawnEventParams& params, const GameResourceComponent* gameResource) {
-	EnemyTypePresetMap presetMap;
-	LoadEnemyTypePresetMap(presetMap);
-	const EnemyTypePreset preset = GetEnemyTypePresetOrDefault(presetMap, params.enemyType);
+	EnemyConfigMap configMap = EnemyDataIO::Load();
+	const EnemyConfig preset = EnemyDataIO::GetOrDefault(configMap, params.enemyType);
 
 	const No::Vector3 direction = NormalizeOrDefault(params.moveDirection, No::Vector3(0.0f, 0.0f, -1.0f));
 	const int spawnCount = std::max(1, params.count);
@@ -82,10 +82,11 @@ void SpawnRailEnemies(No::Registry& registry, const RailEnemySpawnEventParams& p
 		collider3D->shapeType = CommentBoutCollision::ShapeType3D::Box;
 		collider3D->useScaleAsBox = true;
 		collider3D->boxSizeMultiplier = {
-			std::max(0.01f, preset.baseColliderBox.x),
-			std::max(0.01f, preset.baseColliderBox.y),
-			std::max(0.01f, preset.baseColliderBox.z)
+			std::max(0.01f, preset.enemyCollider.boxSizeMultiplier.x),
+			std::max(0.01f, preset.enemyCollider.boxSizeMultiplier.y),
+			std::max(0.01f, preset.enemyCollider.boxSizeMultiplier.z)
 		};
+		collider3D->localOffset = preset.enemyCollider.localOffset3D;
 		collider3D->collisionLayer = CommentBout::CollisionLayer::CBEnemy;
 		collider3D->collisionMask = CommentBout::CollisionLayer::CBPlayerAttack;
 

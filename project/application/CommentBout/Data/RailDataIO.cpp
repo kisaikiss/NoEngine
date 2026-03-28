@@ -2,7 +2,8 @@
 #include "RailDataIO.h"
 
 #include "application/CommentBout/Component/RailCameraComponent.h"
-#include "application/CommentBout/Data/EnemyTypePresetIO.h"
+#include "application/CommentBout/Data/EnemyConfig.h"
+#include "application/CommentBout/Data/EnemyDataIO.h"
 #include "externals/nlohmann/json.hpp"
 #include <fstream>
 
@@ -193,8 +194,7 @@ bool LoadEventsToComponent(RailCameraComponent& rail, const std::string& stageNa
 		return false;
 	}
 
-	EnemyTypePresetMap presets;
-	LoadEnemyTypePresetMap(presets);
+	EnemyConfigMap presets = EnemyDataIO::Load();
 
 	nlohmann::json json;
 	ifs >> json;
@@ -268,7 +268,7 @@ bool LoadEventsToComponent(RailCameraComponent& rail, const std::string& stageNa
 			if (enemyTypeIt != spawnIt->end() && enemyTypeIt->is_string()) {
 				eventData.spawn.enemyType = ParseEnemyType(enemyTypeIt->get<std::string>());
 			}
-			const EnemyTypePreset preset = GetEnemyTypePresetOrDefault(presets, eventData.spawn.enemyType);
+			const EnemyConfig preset = EnemyDataIO::GetOrDefault(presets, eventData.spawn.enemyType);
 			if (eventData.spawn.hp <= 0) {
 				eventData.spawn.hp = std::max(1, preset.minHp);
 			}

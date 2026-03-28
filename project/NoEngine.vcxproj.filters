@@ -166,6 +166,8 @@
     <ClCompile Include="application\CommentBout\System\EnemyBulletHitSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\EnemyRewardToBossSystem.cpp" />
     <ClCompile Include="application\CommentBout\Data\EnemyTypePresetIO.cpp" />
+    <ClCompile Include="application\CommentBout\Data\PlayerDataIO.cpp" />
+    <ClCompile Include="application\CommentBout\Data\EnemyDataIO.cpp" />
     <ClCompile Include="application\CommentBout\System\HpBarViewSystem.cpp" />
     <ClCompile Include="application\CommentBout\Component\OutGame\TitleMenuConfigComponent.cpp" />
     <ClCompile Include="application\CommentBout\Component\OutGame\OptionMenuConfigComponent.cpp" />
@@ -406,6 +408,11 @@
     <ClInclude Include="application\CommentBout\FieldObject\Component\FieldPlacementComponent.h" />
     <ClInclude Include="application\CommentBout\FieldObject\System\FieldEditorSystem.h" />
     <ClInclude Include="application\CommentBout\Component\PlayerConfigComponent.h" />
+    <ClInclude Include="application\CommentBout\Collision\Component\ColliderConfig.h" />
+    <ClInclude Include="application\CommentBout\Data\PlayerConfig.h" />
+    <ClInclude Include="application\CommentBout\Data\PlayerDataIO.h" />
+    <ClInclude Include="application\CommentBout\Data\EnemyConfig.h" />
+    <ClInclude Include="application\CommentBout\Data\EnemyDataIO.h" />
     <ClInclude Include="engine\Functions\ECS\Component\Animator2DComponent.h" />
     <ClInclude Include="engine\Functions\ECS\System\SpriteAnimationSystem.h" />
     <ClInclude Include="application\CommentBout\Collision\Event\CollisionEvent.h" />

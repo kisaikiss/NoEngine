@@ -49,8 +49,8 @@ namespace CommentBoutCollision {
 			auto* transform = registry.GetComponent<No::TransformComponent>(entity);
 
 			if (!collider || !transform) continue;
-			// ワールド座標を更新
-			collider->worldPosition = transform->GetWorldPosition();
+			// ワールド座標を更新（localOffsetはワールド軸方向の平行移動として加算）
+			collider->worldPosition = transform->GetWorldPosition() + collider->localOffset;
 
 			// ワールド空間での半径を計算
 			if (collider->useScaleAsRadius) {
@@ -94,8 +94,8 @@ namespace CommentBoutCollision {
 			auto* collider = registry.GetComponent<Collider2DComponent>(entity);
 			auto* transform2D = registry.GetComponent<No::Transform2DComponent>(entity);
 			if (!collider || !transform2D) continue;
-			// スクリーン座標を更新
-			collider->screenPosition = transform2D->translate;
+			// スクリーン座標を更新（localOffsetを加算）
+			collider->screenPosition = transform2D->translate + collider->localOffset;
 			// スクリーン空間でのサイズを計算
 			if (collider->useTransformAsSize) {
 				// Transform2Dのscaleをサイズとして使用

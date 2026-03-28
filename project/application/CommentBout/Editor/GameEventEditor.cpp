@@ -8,12 +8,13 @@
 #include "application/CommentBout/Component/HealthComponent.h"
 #include "application/CommentBout/Collision/Component/Collider3DComponent.h"
 #include "application/CommentBout/GameTag.h"
-#include "application/CommentBout/Data/EnemyTypePresetIO.h"
+#include "application/CommentBout/Data/EnemyConfig.h"
+#include "application/CommentBout/Data/EnemyDataIO.h"
 #include <cstdio>
 #include <algorithm>
 
 namespace {
-void ApplyEnemyTypePresetToAliveEnemies(No::Registry& registry, const EnemyTypePresetMap& presets) {
+void ApplyEnemyTypePresetToAliveEnemies(No::Registry& registry, const EnemyConfigMap& presets) {
 	auto view = registry.View<CBRailEnemyTag, EnemyComponent, HealthComponent, No::TransformComponent>();
 	for (auto entity : view) {
 		auto* enemy = registry.GetComponent<EnemyComponent>(entity);
@@ -30,7 +31,7 @@ void ApplyEnemyTypePresetToAliveEnemies(No::Registry& registry, const EnemyTypeP
 			enemyType = RailEnemyType::MoveAndShoot;
 		}
 
-		const EnemyTypePreset preset = GetEnemyTypePresetOrDefault(presets, enemyType);
+		const EnemyConfig preset = EnemyDataIO::GetOrDefault(presets, enemyType);
 
 		transform->scale = { preset.modelScale, preset.modelScale, preset.modelScale };
 		enemy->despawnBehindDistance = std::max(0.0f, preset.despawnBehindDistance);
@@ -47,10 +48,11 @@ void ApplyEnemyTypePresetToAliveEnemies(No::Registry& registry, const EnemyTypeP
 			collider3D->shapeType = CommentBoutCollision::ShapeType3D::Box;
 			collider3D->useScaleAsBox = true;
 			collider3D->boxSizeMultiplier = {
-				std::max(0.01f, preset.baseColliderBox.x),
-				std::max(0.01f, preset.baseColliderBox.y),
-				std::max(0.01f, preset.baseColliderBox.z)
+				std::max(0.01f, preset.enemyCollider.boxSizeMultiplier.x),
+				std::max(0.01f, preset.enemyCollider.boxSizeMultiplier.y),
+				std::max(0.01f, preset.enemyCollider.boxSizeMultiplier.z)
 			};
+			collider3D->localOffset = preset.enemyCollider.localOffset3D;
 		}
 
 		if (auto* shooter = registry.GetComponent<EnemyShooterComponent>(entity)) {
@@ -65,10 +67,10 @@ void ApplyEnemyTypePresetToAliveEnemies(No::Registry& registry, const EnemyTypeP
 }
 
 void DrawEnemyTypePresetEditor(No::Registry* registry) {
-	static EnemyTypePresetMap presets;
+	static EnemyConfigMap presets;
 	static bool loaded = false;
 	if (!loaded) {
-		LoadEnemyTypePresetMap(presets);
+		presets = EnemyDataIO::Load();
 		loaded = true;
 	}
 
@@ -77,21 +79,22 @@ void DrawEnemyTypePresetEditor(No::Registry* registry) {
 	}
 
 	if (ImGui::Button("Preset Load")) {
-		LoadEnemyTypePresetMap(presets);
+		presets = EnemyDataIO::Load();
 		if (registry) {
 			ApplyEnemyTypePresetToAliveEnemies(*registry, presets);
 		}
 	}
 	ImGui::SameLine();
 	if (ImGui::Button("Preset Save")) {
-		SaveEnemyTypePresetMap(presets);
+		EnemyDataIO::Save(presets);
 	}
 
 	auto drawType = [&](RailEnemyType type, const char* label) {
-		EnemyTypePreset preset = GetEnemyTypePresetOrDefault(presets, type);
+		EnemyConfig preset = EnemyDataIO::GetOrDefault(presets, type);
 		if (ImGui::TreeNode(label)) {
 			ImGui::DragFloat("Model Scale", &preset.modelScale, 0.01f, 0.1f, 10.0f);
-			ImGui::DragFloat3("Base Collider Box", &preset.baseColliderBox.x, 0.01f, 0.01f, 20.0f);
+			ImGui::DragFloat3("Enemy Collider Box", &preset.enemyCollider.boxSizeMultiplier.x, 0.01f, 0.01f, 20.0f);
+			ImGui::DragFloat3("Enemy Collider Offset", &preset.enemyCollider.localOffset3D.x, 0.01f, -10.0f, 10.0f);
 			ImGui::DragInt("Min HP", &preset.minHp, 1.0f, 1, 9999);
 			ImGui::DragFloat("Shoot Interval", &preset.shootInterval, 0.01f, 0.05f, 10.0f);
 			ImGui::DragFloat("Bullet Speed", &preset.bulletSpeed, 0.05f, 0.1f, 100.0f);

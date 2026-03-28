@@ -22,6 +22,10 @@ namespace CommentBoutCollision {
 		/// ワールド座標での中心位置（UpdateCollider3Dで自動更新）
 		No::Vector3 worldPosition{ 0.f, 0.f, 0.f };
 
+		/// ローカルオフセット (TransformからのずれをAddして適用)
+		/// ワールド軸方向に平行移動する（回転は考慮しない）
+		No::Vector3 localOffset{ 0.f, 0.f, 0.f };
+
 
 		// Sphere 用パラメータ
 		/// モデル空間での半径（useScaleAsRadius = false の場合に使用）

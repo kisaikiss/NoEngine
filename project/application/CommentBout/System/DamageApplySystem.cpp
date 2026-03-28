@@ -4,7 +4,7 @@
 #include "application/CommentBout/Component/HealthComponent.h"
 #include "application/CommentBout/Component/InvincibleComponent.h"
 #include "application/CommentBout/Component/EnemyComponent.h"
-#include "application/CommentBout/Component/PlayerConfigComponent.h"
+#include "application/CommentBout/Data/PlayerConfig.h"
 #include "application/CommentBout/Component/DamageFlashComponent.h"
 #include "application/CommentBout/GameTag.h"
 #include <algorithm>
@@ -35,10 +35,10 @@ void SyncToLegacyEnemy(EnemyComponent* legacy, const HealthComponent* health) {
 	legacy->lastDamageTaken = health->lastDamageTaken;
 }
 
-const PlayerConfigComponent* FindPlayerConfig(const No::Registry& registry) {
-	auto view = const_cast<No::Registry&>(registry).View<CBPlayerConfigTag, PlayerConfigComponent>();
+const PlayerConfig* FindPlayerConfig(const No::Registry& registry) {
+	auto view = const_cast<No::Registry&>(registry).View<CBPlayerConfigTag, PlayerConfig>();
 	for (auto entity : view) {
-		auto* cfg = const_cast<No::Registry&>(registry).GetComponent<PlayerConfigComponent>(entity);
+		auto* cfg = const_cast<No::Registry&>(registry).GetComponent<PlayerConfig>(entity);
 		if (cfg) {
 			return cfg;
 		}
@@ -60,7 +60,7 @@ void ApplyDamageFlash(No::Registry& registry, No::Entity target) {
 	}
 
 	if (registry.Has<CBPlayerTag>(target)) {
-		const PlayerConfigComponent* cfg = FindPlayerConfig(registry);
+		const PlayerConfig* cfg = FindPlayerConfig(registry);
 		flash->duration = cfg ? std::max(0.01f, cfg->flashDuration) : 0.16f;
 		flash->flashColor = cfg
 			? No::Color(cfg->flashColorRGB.x, cfg->flashColorRGB.y, cfg->flashColorRGB.z, cfg->flashMaxAlpha)

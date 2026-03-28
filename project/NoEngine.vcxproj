@@ -170,6 +170,8 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\CommentBout\Component\PlayerAttackComponent.cpp" />
     <ClCompile Include="application\CommentBout\Component\OutGame\TitleMenuConfigComponent.cpp" />
     <ClCompile Include="application\CommentBout\Data\EnemyTypePresetIO.cpp" />
+    <ClCompile Include="application\CommentBout\Data\PlayerDataIO.cpp" />
+    <ClCompile Include="application\CommentBout\Data\EnemyDataIO.cpp" />
     <ClCompile Include="application\CommentBout\FieldObject\System\FieldEditorSystem.cpp" />
     <ClCompile Include="application\CommentBout\Spawner\TitleMenuSpawner.cpp" />
     <ClCompile Include="application\CommentBout\System\BossBehaviorSystem.cpp" />
@@ -373,6 +375,11 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\CommentBout\Component\OutGame\OptionStateComponent.h" />
     <ClInclude Include="application\CommentBout\Component\OutGame\OutGameComponets.h" />
     <ClInclude Include="application\CommentBout\Component\PlayerConfigComponent.h" />
+    <ClInclude Include="application\CommentBout\Collision\Component\ColliderConfig.h" />
+    <ClInclude Include="application\CommentBout\Data\PlayerConfig.h" />
+    <ClInclude Include="application\CommentBout\Data\PlayerDataIO.h" />
+    <ClInclude Include="application\CommentBout\Data\EnemyConfig.h" />
+    <ClInclude Include="application\CommentBout\Data\EnemyDataIO.h" />
     <ClInclude Include="application\CommentBout\Component\PlayerHitboxComponent.h" />
     <ClInclude Include="application\CommentBout\Component\RailCameraComponent.h" />
     <ClInclude Include="application\CommentBout\Component\RailProgressBarComponent.h" />

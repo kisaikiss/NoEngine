@@ -13,6 +13,9 @@ namespace CommentBoutCollision {
 		/// スクリーン座標での中心位置（UpdateCollider2Dで自動更新）
 		No::Vector2 screenPosition{ 0.f, 0.f };
 
+		/// ローカルオフセット (Transform2DのtranslateからのずれをAddして適用)
+		No::Vector2 localOffset{ 0.f, 0.f };
+
 		/// スクリーン空間での実際のサイズ（自動計算）
 		No::Vector2 worldSize{ 100.f, 100.f };
 

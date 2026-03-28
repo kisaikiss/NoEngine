@@ -5,7 +5,8 @@
 #include "application/CommentBout/Component/HealthComponent.h"
 #include "application/CommentBout/Component/InvincibleComponent.h"
 #include "application/CommentBout/Component/PlayerHitboxComponent.h"
-#include "application/CommentBout/Component/PlayerConfigComponent.h"
+#include "application/CommentBout/Data/PlayerConfig.h"
+#include "application/CommentBout/Data/PlayerDataIO.h"
 #include "application/CommentBout/Component/DamageFlashComponent.h"
 #include "application/CommentBout/GameTag.h"
 #include <algorithm>
@@ -28,7 +29,7 @@ PlayerHitboxComponent* FindPlayerHitbox(No::Registry& registry, No::Entity playe
 void ApplyConfigToRuntime(
 	No::Registry& registry,
 	No::Entity playerEntity,
-	PlayerConfigComponent& config,
+	PlayerConfig& config,
 	PlayerComponent& player,
 	PlayerAttackComponent& attack,
 	HealthComponent& health,
@@ -88,7 +89,7 @@ void CaptureRuntimeToConfig(
 	const InvincibleComponent& invincible,
 	const No::StartTransform2DComponent* startTransform,
 	const PlayerHitboxComponent* hitbox,
-	PlayerConfigComponent& config
+	PlayerConfig& config
 ) {
 	config.moveSpeed = player.moveSpeed;
 	config.acceleration = player.acceleration;
@@ -127,9 +128,9 @@ void PlayerInfoDebugSystem::Update(No::Registry& registry, float deltaTime)
 #ifdef USE_IMGUI
 	ImGui::Begin("自機設定");
 
-	PlayerConfigComponent* playerConfig = nullptr;
-	for (auto configEntity : registry.View<CBPlayerConfigTag, PlayerConfigComponent>()) {
-		playerConfig = registry.GetComponent<PlayerConfigComponent>(configEntity);
+	PlayerConfig* playerConfig = nullptr;
+	for (auto configEntity : registry.View<CBPlayerConfigTag, PlayerConfig>()) {
+		playerConfig = registry.GetComponent<PlayerConfig>(configEntity);
 		if (playerConfig) {
 			break;
 		}
@@ -151,14 +152,13 @@ void PlayerInfoDebugSystem::Update(No::Registry& registry, float deltaTime)
 		}
 
 		if (ImGui::Button("JSON読込（即時反映）")) {
-			if (LoadPlayerConfig(*playerConfig)) {
-				ApplyConfigToRuntime(registry, entity, *playerConfig, *player, *attack, *health, *invincible, *transform, startTransform, hitbox);
-			}
+			*playerConfig = PlayerDataIO::Load();
+			ApplyConfigToRuntime(registry, entity, *playerConfig, *player, *attack, *health, *invincible, *transform, startTransform, hitbox);
 		}
 		ImGui::SameLine();
 		if (ImGui::Button("JSON保存")) {
 			CaptureRuntimeToConfig(*player, *attack, *health, *invincible, startTransform, hitbox, *playerConfig);
-			SavePlayerConfig(*playerConfig);
+			PlayerDataIO::Save(*playerConfig);
 		}
 		ImGui::Separator();
 
@@ -229,6 +229,21 @@ void PlayerInfoDebugSystem::Update(No::Registry& registry, float deltaTime)
 				transform->scale = startTransform->scale;
 				transform->rotation = startTransform->rotation;
 			}
+		}
+
+		if (ImGui::CollapsingHeader("コライダー設定（自機 2D）", ImGuiTreeNodeFlags_DefaultOpen)) {
+			ImGui::DragFloat2("ローカルオフセット##player2D", &playerConfig->playerCollider2D.localOffset2D.x, 0.5f, -500.0f, 500.0f);
+			ImGui::DragFloat2("サイズ倍率##player2D", &playerConfig->playerCollider2D.sizeMultiplier2D.x, 0.01f, 0.01f, 10.0f);
+		}
+
+		if (ImGui::CollapsingHeader("コライダー設定（攻撃 2D）", ImGuiTreeNodeFlags_DefaultOpen)) {
+			ImGui::DragFloat2("ローカルオフセット##attack2D", &playerConfig->attackCollider.localOffset2D.x, 0.5f, -500.0f, 500.0f);
+			ImGui::DragFloat2("サイズ倍率##attack2D", &playerConfig->attackCollider.sizeMultiplier2D.x, 0.01f, 0.01f, 10.0f);
+		}
+
+		if (ImGui::Button("コライダー設定を JSON 保存")) {
+			CaptureRuntimeToConfig(*player, *attack, *health, *invincible, startTransform, hitbox, *playerConfig);
+			PlayerDataIO::Save(*playerConfig);
 		}
 
 		CaptureRuntimeToConfig(*player, *attack, *health, *invincible, startTransform, hitbox, *playerConfig);
