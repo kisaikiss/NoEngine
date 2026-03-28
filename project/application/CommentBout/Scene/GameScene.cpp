@@ -36,7 +36,11 @@
 #include "application/CommentBout/System/EnemyContactDamageSystem.h"
 #include "application/CommentBout/System/EnemyVisualSystem.h"
 #include "application/CommentBout/System/HpBarViewSystem.h"
-#include "application/CommentBout/System/EnemyRewardToBossSystem.h"
+#include "application/CommentBout/System/SpeechBubbleToBossSystem.h"
+#include "application/CommentBout/System/EnemyConfigEditorSystem.h"
+#include "application/CommentBout/System/SpeechBubbleConfigEditorSystem.h"
+#include "application/CommentBout/Data/SpeechBubbleConfig.h"
+#include "application/CommentBout/Data/SpeechBubbleDataIO.h"
 #include "application/CommentBout/System/PlayerAttackResolveSystem.h"
 #include "application/CommentBout/System/DamageApplySystem.h"
 #include "application/CommentBout/System/DamageFlashSystem.h"
@@ -69,7 +73,7 @@ void GameScene::Setup() {
 	//  - EnemyContactDamageSystem
 	//  - PlayerAttackResolveSystem
 	// Damage / UI
-	//  - EnemyRewardToBossSystem
+	//  - SpeechBubbleToBossSystem
 	//  - DamageApplySystem
 	//  - DamageFlashSystem (must run after DamageApplySystem)
 	//  - HpBarViewSystem
@@ -95,7 +99,9 @@ void GameScene::Setup() {
 	AddSystem(std::make_unique<EnemyBulletHitSystem>());
 	AddSystem(std::make_unique<EnemyContactDamageSystem>());
 	AddSystem(std::make_unique<PlayerAttackResolveSystem>());
-	AddSystem(std::make_unique<EnemyRewardToBossSystem>());
+	AddSystem(std::make_unique<SpeechBubbleToBossSystem>());
+	AddSystem(std::make_unique<EnemyConfigEditorSystem>());
+	AddSystem(std::make_unique<SpeechBubbleConfigEditorSystem>());
 	AddSystem(std::make_unique<DamageApplySystem>());
 	AddSystem(std::make_unique<DamageFlashSystem>());
 	AddSystem(std::make_unique<HpBarViewSystem>());
@@ -121,6 +127,12 @@ void GameScene::Setup() {
 	registry.AddComponent<CBPlayerConfigTag>(playerConfigEntity);
 	auto* playerConfig = registry.AddComponent<PlayerConfig>(playerConfigEntity);
 	*playerConfig = PlayerDataIO::Load();
+
+	// 吹き出し設定エンティティ
+	auto sbConfigEntity = registry.GenerateEntity();
+	registry.AddComponent<CBSpeechBubbleConfigTag>(sbConfigEntity);
+	auto* sbConfig = registry.AddComponent<SpeechBubbleConfig>(sbConfigEntity);
+	*sbConfig = SpeechBubbleDataIO::Load();
 
 	auto bossHpBarEntity = registry.GenerateEntity();
 	registry.AddComponent<CBBossHpBarTag>(bossHpBarEntity);

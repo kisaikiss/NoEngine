@@ -1,0 +1,28 @@
+{
+  "largeMaxDistance": 10.0,
+  "mediumMaxDistance": 50.0,
+  "sizeLarge": {
+    "attackPower": 10,
+    "duration": 0.8999999761581421,
+    "spriteSize": [
+      240.0,
+      240.0
+    ]
+  },
+  "sizeMedium": {
+    "attackPower": 20,
+    "duration": 0.8999999761581421,
+    "spriteSize": [
+      120.0,
+      120.0
+    ]
+  },
+  "sizeSmall": {
+    "attackPower": 10,
+    "duration": 0.8999999761581421,
+    "spriteSize": [
+      64.0,
+      64.0
+    ]
+  }
+}

@@ -1,6 +1,6 @@
 #include "stdafx.h"
-#include "EnemyRewardToBossSystem.h"
-#include "application/CommentBout/Component/EnemyRewardOrbComponent.h"
+#include "SpeechBubbleToBossSystem.h"
+#include "application/CommentBout/Component/SpeechBubbleComponent.h"
 #include "application/CommentBout/Component/HpBarComponent.h"
 #include "application/CommentBout/Component/DamageRequestComponent.h"
 #include "application/CommentBout/GameTag.h"
@@ -13,7 +13,7 @@ No::Vector2 Bezier2(const No::Vector2& p0, const No::Vector2& p1, const No::Vect
 }
 }
 
-void EnemyRewardToBossSystem::Update(No::Registry& registry, float deltaTime)
+void SpeechBubbleToBossSystem::Update(No::Registry& registry, float deltaTime)
 {
 	No::Entity bossEntity = No::nullEntity;
 	auto barView = registry.View<CBBossHpBarTag, HpBarComponent>();
@@ -25,28 +25,28 @@ void EnemyRewardToBossSystem::Update(No::Registry& registry, float deltaTime)
 		}
 	}
 
-	auto rewardView = registry.View<CBEnemyRewardOrbTag, EnemyRewardOrbComponent, No::Transform2DComponent>();
+	auto rewardView = registry.View<CBSpeechBubbleTag, SpeechBubbleComponent, No::Transform2DComponent>();
 	for (auto entity : rewardView) {
-		auto* reward = registry.GetComponent<EnemyRewardOrbComponent>(entity);
-		auto* t = registry.GetComponent<No::Transform2DComponent>(entity);
-		if (!reward || !t) {
+		auto* bubble = registry.GetComponent<SpeechBubbleComponent>(entity);
+		auto* t      = registry.GetComponent<No::Transform2DComponent>(entity);
+		if (!bubble || !t) {
 			continue;
 		}
 
-		reward->elapsed += deltaTime;
-		const float duration = std::max(0.05f, reward->duration);
-		const float rate = std::min(1.0f, reward->elapsed / duration);
-		t->translate = Bezier2(reward->start, reward->control, reward->end, rate);
+		bubble->elapsed += deltaTime;
+		const float duration = std::max(0.05f, bubble->duration);
+		const float rate     = std::min(1.0f, bubble->elapsed / duration);
+		t->translate = Bezier2(bubble->start, bubble->control, bubble->end, rate);
 
 		if (rate < 1.0f) {
 			continue;
 		}
 
 		if (bossEntity != No::nullEntity) {
-			auto req = registry.GenerateEntity();
+			auto req    = registry.GenerateEntity();
 			auto* damage = registry.AddComponent<DamageRequestComponent>(req);
-			damage->target = bossEntity;
-			damage->amount = std::max(1, reward->attackPower);
+			damage->target          = bossEntity;
+			damage->amount          = std::max(1, bubble->attackPower);
 			damage->ignoreInvincible = true;
 		}
 

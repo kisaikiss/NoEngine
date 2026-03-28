@@ -4,7 +4,8 @@
 #include "application/CommentBout/Component/HealthComponent.h"
 #include "application/CommentBout/Component/PlayerHitboxComponent.h"
 #include "application/CommentBout/Component/EnemyRewardSourceComponent.h"
-#include "application/CommentBout/Component/EnemyRewardOrbComponent.h"
+#include "application/CommentBout/Component/SpeechBubbleComponent.h"
+#include "application/CommentBout/Data/SpeechBubbleConfig.h"
 #include "application/CommentBout/Component/HpBarComponent.h"
 #include "application/CommentBout/Component/DamageFlashComponent.h"
 #include "application/CommentBout/Component/GameResourceComponent.h"
@@ -214,19 +215,21 @@ void DrawSpriteGateDebugOverlay(
 #endif
 }
 
-void SpawnRewardOrbFromEnemy(
+/// <summary>
+/// 吹き出しスポーン関数。カメラからの距離で大中小を決定する。
+/// </summary>
+void SpawnSpeechBubbleFromEnemy(
 	No::Registry& registry,
 	No::Entity enemyEntity,
 	CommentBoutCollision::Collider3DComponent& collider3D,
 	No::CameraComponent& camera,
+	No::TransformComponent& cameraTransform,
 	const NoEngine::WindowSize& windowSize,
 	const No::Vector2& bossBarAnchor,
-	NoEngine::TextureRef rewardOrbTexture
+	const SpeechBubbleConfig& sbConfig,
+	const GameResourceComponent& gameResource
 ) {
-	const float worldSize = (collider3D.shapeType == CommentBoutCollision::ShapeType3D::Box)
-		? std::max({ collider3D.worldBoxSize.x, collider3D.worldBoxSize.y, collider3D.worldBoxSize.z })
-		: collider3D.worldRadius * 2.0f;
-
+	// 敵のスクリーン座標を計算
 	No::Vector2 start = CommentBoutCollision::CoordinateConverter::WorldToScreen(
 		collider3D.worldPosition,
 		camera.forGPU.viewProjection,
@@ -236,33 +239,55 @@ void SpawnRewardOrbFromEnemy(
 		return;
 	}
 
-	const float projectedRadius = CommentBoutCollision::CoordinateConverter::WorldRadiusToScreen(
-		collider3D.worldPosition,
-		std::max(0.1f, worldSize * 0.5f),
-		camera.forGPU.viewProjection,
-		windowSize
-	);
-	const float spriteSize = std::max(24.0f, std::min(180.0f, projectedRadius * 2.2f));
-	const int attackPower = std::max(1, std::min(30, static_cast<int>(spriteSize / 18.0f)));
+	// カメラ距離でサイズを決定
+	const No::Vector3 cameraPos = cameraTransform.GetWorldPosition();
+	const float dist = (collider3D.worldPosition - cameraPos).Length();
 
-	auto orb = registry.GenerateEntity();
-	registry.AddComponent<CBEnemyRewardOrbTag>(orb);
-	auto* t2d = registry.AddComponent<No::Transform2DComponent>(orb);
+	int sizeCategory = 2; // 2=Small（デフォルト）
+	if (dist <= sbConfig.largeMaxDistance) {
+		sizeCategory = 0; // Large
+	} else if (dist <= sbConfig.mediumMaxDistance) {
+		sizeCategory = 1; // Medium
+	}
+
+	// サイズ別設定・テクスチャ取得
+	const SpeechBubbleSizeConfig* sizeCfg = &sbConfig.sizeSmall;
+	const char* textureKey = CommentBoutResourceKey::kSpeechBubbleSmall;
+	switch (sizeCategory) {
+	case 0:
+		sizeCfg    = &sbConfig.sizeLarge;
+		textureKey = CommentBoutResourceKey::kSpeechBubbleLarge;
+		break;
+	case 1:
+		sizeCfg    = &sbConfig.sizeMedium;
+		textureKey = CommentBoutResourceKey::kSpeechBubbleMedium;
+		break;
+	default:
+		break;
+	}
+
+	// 吹き出しエンティティ生成
+	auto bubble = registry.GenerateEntity();
+	registry.AddComponent<CBSpeechBubbleTag>(bubble);
+
+	auto* t2d = registry.AddComponent<No::Transform2DComponent>(bubble);
 	t2d->translate = start;
-	t2d->scale = { spriteSize, spriteSize };
-	auto* sprite = registry.AddComponent<No::SpriteComponent>(orb);
-	sprite->textureHandle = rewardOrbTexture;
-	sprite->layer = CommentBout::ToLayer(CommentBout::SpriteLayer::RewardOrb);
-	sprite->orderInLayer = 20;
-	sprite->color = { 1.0f, 0.9f, 0.2f, 0.95f };
+	t2d->scale     = sizeCfg->spriteSize;
 
-	auto* reward = registry.AddComponent<EnemyRewardOrbComponent>(orb);
-	reward->start = start;
-	reward->end = bossBarAnchor;
-	reward->control = { (start.x + bossBarAnchor.x) * 0.5f, std::min(start.y, bossBarAnchor.y) - 120.0f };
-	reward->duration = 0.9f;
-	reward->elapsed = 0.0f;
-	reward->attackPower = attackPower;
+	auto* sprite = registry.AddComponent<No::SpriteComponent>(bubble);
+	sprite->textureHandle = GetGameTextureOrWhite(gameResource, textureKey);
+	sprite->layer        = CommentBout::ToLayer(CommentBout::SpriteLayer::RewardOrb);
+	sprite->orderInLayer = 20;
+	sprite->color        = { 1.0f, 1.0f, 1.0f, 0.95f };
+
+	auto* comp = registry.AddComponent<SpeechBubbleComponent>(bubble);
+	comp->start        = start;
+	comp->end          = bossBarAnchor;
+	comp->control      = { (start.x + bossBarAnchor.x) * 0.5f, std::min(start.y, bossBarAnchor.y) - 120.0f };
+	comp->duration     = sizeCfg->duration;
+	comp->elapsed      = 0.0f;
+	comp->attackPower  = sizeCfg->attackPower;
+	comp->sizeCategory = sizeCategory;
 
 	auto* src = registry.GetComponent<EnemyRewardSourceComponent>(enemyEntity);
 	if (src) {
@@ -283,13 +308,6 @@ void EnemyVisualSystem::Update(No::Registry& registry, float deltaTime)
 		activeCameraTransform = registry.GetComponent<No::TransformComponent>(*activeCameraIt);
 	}
 
-	PlayerHitboxComponent* debugHitbox = nullptr;
-	auto debugHitboxView = registry.View<CBPlayerHitboxTag, PlayerHitboxComponent>();
-	auto debugHitboxIt = debugHitboxView.begin();
-	if (debugHitboxIt != debugHitboxView.end()) {
-		debugHitbox = registry.GetComponent<PlayerHitboxComponent>(*debugHitboxIt);
-	}
-
 	GameResourceComponent* gameResource = nullptr;
 	auto resourceView = registry.View<CBGameResourceTag, GameResourceComponent>();
 	for (auto e : resourceView) {
@@ -297,6 +315,18 @@ void EnemyVisualSystem::Update(No::Registry& registry, float deltaTime)
 		if (gameResource) {
 			break;
 		}
+	}
+
+	// 吹き出し設定取得
+	SpeechBubbleConfig* sbConfig = nullptr;
+	auto sbConfigView = registry.View<CBSpeechBubbleConfigTag, SpeechBubbleConfig>();
+	for (auto e : sbConfigView) {
+		sbConfig = registry.GetComponent<SpeechBubbleConfig>(e);
+		if (sbConfig) break;
+	}
+	static SpeechBubbleConfig sSpeechBubbleConfigDefault; // ファイルがなければデフォルト
+	if (!sbConfig) {
+		sbConfig = &sSpeechBubbleConfigDefault;
 	}
 
 	No::Vector2 bossBarAnchor = { 640.0f, 64.0f };
@@ -315,37 +345,20 @@ void EnemyVisualSystem::Update(No::Registry& registry, float deltaTime)
 		windowSize = mainWindow->GetWindowSize();
 	}
 
-#ifdef USE_IMGUI
-	ImGui::Begin("Enemy Debug");
-	ImGui::Text("衝突デバッグ描画は CollisionDebugRenderSystem に統合済み");
-	ImGui::Separator();
-	if (debugHitbox) {
-		ImGui::Text("[カメラゲート設定(表示のみ)]");
-		ImGui::Text("ゲート判定: %s", debugHitbox->useCameraGateForPlayerHit ? "ON" : "OFF");
-		ImGui::Text("Near: %.2f", debugHitbox->cameraGateNear);
-		ImGui::Text("Depth: %.2f", debugHitbox->cameraGateDepth);
-		ImGui::Text("Half Width: %.2f", debugHitbox->cameraGateHalfWidth);
-		ImGui::Text("Half Height: %.2f", debugHitbox->cameraGateHalfHeight);
-		ImGui::Separator();
-	}
-#endif
-
-
-	// 敵Systemは見た目更新と敵状態デバッグに専念
-
+	// 敵の状態更新・死亡時の吹き出しスポーン
 	auto view = registry.View<CBRailEnemyTag, EnemyComponent, HealthComponent, CommentBoutCollision::Collider3DComponent>();
 	for (auto entity : view) {
-		auto* enemy = registry.GetComponent<EnemyComponent>(entity);
-		auto* health = registry.GetComponent<HealthComponent>(entity);
+		auto* enemy      = registry.GetComponent<EnemyComponent>(entity);
+		auto* health     = registry.GetComponent<HealthComponent>(entity);
 		auto* collider3D = registry.GetComponent<CommentBoutCollision::Collider3DComponent>(entity);
 		auto* rewardSource = registry.GetComponent<EnemyRewardSourceComponent>(entity);
-		auto* flash = registry.GetComponent<DamageFlashComponent>(entity);
+		auto* flash      = registry.GetComponent<DamageFlashComponent>(entity);
 		if (!enemy || !health || !collider3D) {
 			continue;
 		}
 
-		enemy->hp = health->hp;
-		enemy->maxHp = health->maxHp;
+		enemy->hp             = health->hp;
+		enemy->maxHp          = health->maxHp;
 		enemy->lastDamageTaken = health->lastDamageTaken;
 
 		if (health->isDead || health->hp <= 0) {
@@ -353,15 +366,17 @@ void EnemyVisualSystem::Update(No::Registry& registry, float deltaTime)
 				enemy->removeReason = EnemyRemoveReason::Defeated;
 			}
 			const bool defeated = (enemy->removeReason == EnemyRemoveReason::Defeated);
-			if (defeated && !registry.Has<CBBossTag>(entity) && activeCamera && gameResource && mainWindow && rewardSource && !rewardSource->spawned) {
-				SpawnRewardOrbFromEnemy(
+			if (defeated && !registry.Has<CBBossTag>(entity) && activeCamera && activeCameraTransform && gameResource && mainWindow && rewardSource && !rewardSource->spawned) {
+				SpawnSpeechBubbleFromEnemy(
 					registry,
 					entity,
 					*collider3D,
 					*activeCamera,
+					*activeCameraTransform,
 					windowSize,
 					bossBarAnchor,
-					GetGameTextureOrWhite(*gameResource, CommentBoutResourceKey::kAttackOrbEffectSmall)
+					*sbConfig,
+					*gameResource
 				);
 			}
 			registry.DestroyEntity(entity);
@@ -369,26 +384,5 @@ void EnemyVisualSystem::Update(No::Registry& registry, float deltaTime)
 		}
 
 		enemy->wasCollidingWithAttack = (flash && flash->timer > 0.0f);
-
-#ifdef USE_IMGUI
-		const float flashTime = flash ? flash->timer : 0.0f;
-		ImGui::Text("Enemy %llu hp=%d/%d flash=%.2f playerHit=%s",
-			static_cast<unsigned long long>(entity),
-			enemy->hp,
-			enemy->maxHp,
-			flashTime,
-			enemy->wasCollidingWithPlayer ? "true" : "false");
-		ImGui::Text("Collider pos(%.2f, %.2f, %.2f)", collider3D->worldPosition.x, collider3D->worldPosition.y, collider3D->worldPosition.z);
-		if (collider3D->shapeType == CommentBoutCollision::ShapeType3D::Box) {
-			ImGui::Text("Collider box(%.2f, %.2f, %.2f)", collider3D->worldBoxSize.x, collider3D->worldBoxSize.y, collider3D->worldBoxSize.z);
-		} else {
-			ImGui::Text("Collider radius=%.2f", collider3D->worldRadius);
-		}
-		ImGui::Separator();
-#endif
 	}
-
-#ifdef USE_IMGUI
-	ImGui::End();
-#endif
 }

@@ -2,117 +2,8 @@
 #include "GameEventEditor.h"
 
 #include "application/CommentBout/Component/RailCameraComponent.h"
-#include "application/CommentBout/Component/EnemyComponent.h"
-#include "application/CommentBout/Component/EnemyShooterComponent.h"
-#include "application/CommentBout/Component/EnemyRewardSourceComponent.h"
-#include "application/CommentBout/Component/HealthComponent.h"
-#include "application/CommentBout/Collision/Component/Collider3DComponent.h"
 #include "application/CommentBout/GameTag.h"
-#include "application/CommentBout/Data/EnemyConfig.h"
-#include "application/CommentBout/Data/EnemyDataIO.h"
 #include <cstdio>
-#include <algorithm>
-
-namespace {
-void ApplyEnemyTypePresetToAliveEnemies(No::Registry& registry, const EnemyConfigMap& presets) {
-	auto view = registry.View<CBRailEnemyTag, EnemyComponent, HealthComponent, No::TransformComponent>();
-	for (auto entity : view) {
-		auto* enemy = registry.GetComponent<EnemyComponent>(entity);
-		auto* health = registry.GetComponent<HealthComponent>(entity);
-		auto* transform = registry.GetComponent<No::TransformComponent>(entity);
-		if (!enemy || !health || !transform) {
-			continue;
-		}
-
-		RailEnemyType enemyType = RailEnemyType::MoveOnly;
-		if (registry.Has<CBBossTag>(entity)) {
-			enemyType = RailEnemyType::Boss;
-		} else if (registry.Has<EnemyShooterComponent>(entity)) {
-			enemyType = RailEnemyType::MoveAndShoot;
-		}
-
-		const EnemyConfig preset = EnemyDataIO::GetOrDefault(presets, enemyType);
-
-		transform->scale = { preset.modelScale, preset.modelScale, preset.modelScale };
-		enemy->despawnBehindDistance = std::max(0.0f, preset.despawnBehindDistance);
-		enemy->maxHp = std::max(1, preset.minHp);
-		enemy->hp = std::min(enemy->hp, enemy->maxHp);
-		health->maxHp = enemy->maxHp;
-		health->hp = std::min(health->hp, health->maxHp);
-
-		if (auto* rewardSource = registry.GetComponent<EnemyRewardSourceComponent>(entity)) {
-			rewardSource->worldSizeForReward = preset.modelScale;
-		}
-
-		if (auto* collider3D = registry.GetComponent<CommentBoutCollision::Collider3DComponent>(entity)) {
-			collider3D->shapeType = CommentBoutCollision::ShapeType3D::Box;
-			collider3D->useScaleAsBox = true;
-			collider3D->boxSizeMultiplier = {
-				std::max(0.01f, preset.enemyCollider.boxSizeMultiplier.x),
-				std::max(0.01f, preset.enemyCollider.boxSizeMultiplier.y),
-				std::max(0.01f, preset.enemyCollider.boxSizeMultiplier.z)
-			};
-			collider3D->localOffset = preset.enemyCollider.localOffset3D;
-		}
-
-		if (auto* shooter = registry.GetComponent<EnemyShooterComponent>(entity)) {
-			shooter->shootInterval = std::max(0.05f, preset.shootInterval);
-			shooter->bulletSpeed = std::max(0.1f, preset.bulletSpeed);
-			shooter->bulletDamage = std::max(1, preset.bulletDamage);
-			shooter->targetDepthFromCamera = std::max(0.1f, preset.targetDepthFromCamera);
-			shooter->bulletLifetime = std::max(0.1f, preset.bulletLifetime);
-			shooter->shootDistanceMax = std::max(0.0f, preset.shootDistanceMax);
-		}
-	}
-}
-
-void DrawEnemyTypePresetEditor(No::Registry* registry) {
-	static EnemyConfigMap presets;
-	static bool loaded = false;
-	if (!loaded) {
-		presets = EnemyDataIO::Load();
-		loaded = true;
-	}
-
-	if (!ImGui::CollapsingHeader("EnemyType Preset", ImGuiTreeNodeFlags_DefaultOpen)) {
-		return;
-	}
-
-	if (ImGui::Button("Preset Load")) {
-		presets = EnemyDataIO::Load();
-		if (registry) {
-			ApplyEnemyTypePresetToAliveEnemies(*registry, presets);
-		}
-	}
-	ImGui::SameLine();
-	if (ImGui::Button("Preset Save")) {
-		EnemyDataIO::Save(presets);
-	}
-
-	auto drawType = [&](RailEnemyType type, const char* label) {
-		EnemyConfig preset = EnemyDataIO::GetOrDefault(presets, type);
-		if (ImGui::TreeNode(label)) {
-			ImGui::DragFloat("Model Scale", &preset.modelScale, 0.01f, 0.1f, 10.0f);
-			ImGui::DragFloat3("Enemy Collider Box", &preset.enemyCollider.boxSizeMultiplier.x, 0.01f, 0.01f, 20.0f);
-			ImGui::DragFloat3("Enemy Collider Offset", &preset.enemyCollider.localOffset3D.x, 0.01f, -10.0f, 10.0f);
-			ImGui::DragInt("Min HP", &preset.minHp, 1.0f, 1, 9999);
-			ImGui::DragFloat("Shoot Interval", &preset.shootInterval, 0.01f, 0.05f, 10.0f);
-			ImGui::DragFloat("Bullet Speed", &preset.bulletSpeed, 0.05f, 0.1f, 100.0f);
-			ImGui::DragInt("Bullet Damage", &preset.bulletDamage, 1.0f, 1, 999);
-			ImGui::DragFloat("Bullet Lifetime", &preset.bulletLifetime, 0.05f, 0.1f, 30.0f);
-			ImGui::DragFloat("Target Depth", &preset.targetDepthFromCamera, 0.01f, 0.1f, 20.0f);
-			ImGui::DragFloat("Shoot Distance Max", &preset.shootDistanceMax, 0.05f, 0.0f, 200.0f);
-			ImGui::DragFloat("Despawn Behind Distance", &preset.despawnBehindDistance, 0.05f, 0.0f, 200.0f);
-			presets[type] = preset;
-			ImGui::TreePop();
-		}
-	};
-
-	drawType(RailEnemyType::MoveOnly, "MoveOnly");
-	drawType(RailEnemyType::MoveAndShoot, "MoveAndShoot");
-	drawType(RailEnemyType::Boss, "Boss");
-}
-}
 
 void GameEventEditor::DrawGameEventEditorImGui(No::Registry* registry, No::Entity railCameraEntity)
 {
@@ -127,8 +18,6 @@ void GameEventEditor::DrawGameEventEditorImGui(No::Registry* registry, No::Entit
 	}
 
 	ImGui::Begin("ゲームイベント編集");
-	DrawEnemyTypePresetEditor(registry);
-	ImGui::Separator();
 	ImGui::Text("ステージイベント");
 	if (ImGui::Button("敵生成イベント追加")) {
 		RailEventData newEvent;
@@ -201,7 +90,7 @@ void GameEventEditor::DrawGameEventEditorImGui(No::Registry* registry, No::Entit
 			}
 
 			ImGui::DragInt("生成数", &e.spawn.count, 1.0f, 1, 32);
-			// HPはEnemyTypePresetで管理するため、イベント側では編集しない。
+			// HPはEnemyConfigEditorSystemで管理するため、イベント側では編集しない。
 			ImGui::DragFloat("敵速度", &e.spawn.moveSpeed, 0.1f, 0.0f, 100.0f);
 			ImGui::DragFloat("生成間隔", &e.spawn.spawnSpacing, 0.1f, 0.0f, 20.0f);
 			ImGui::DragFloat3("生成位置", &e.spawn.spawnPosition.x, 0.1f);

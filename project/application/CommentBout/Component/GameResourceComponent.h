@@ -46,11 +46,10 @@ namespace CommentBoutResourceKey {
 	static const char* kRailProgressBarFill = "RailProgressBarFill";
 	static const char* kRailProgressPlayerMarker = "RailProgressPlayerMarker";
 
-	//吹き出し
-	static const char* kAttackOrbEffectSmall = "AttackOrbEffectSmall";
-	static const char* kAttackOrbEffectMedium = "AttackOrbEffectMedium";
-	static const char* kAttackOrbEffectBig = "AttackOrbEffectBig";
-
+	// 吹き出し
+	static const char* kSpeechBubbleLarge = "SpeechBubbleLarge";
+	static const char* kSpeechBubbleMedium = "SpeechBubbleMedium";
+	static const char* kSpeechBubbleSmall = "SpeechBubbleSmall";
 
 	// ---- Model -------------------------------------------------------------
 	static const char* kEnemyModel = "EnemyModel";
@@ -131,10 +130,10 @@ inline void InitializeCommentBoutGameResources(GameResourceComponent& resources)
 	addTexture(CommentBoutResourceKey::kRailProgressBarBase, "resources/engine/white1x1.png");
 	addTexture(CommentBoutResourceKey::kRailProgressBarFill, "resources/engine/white1x1.png");
 	addTexture(CommentBoutResourceKey::kRailProgressPlayerMarker, "resources/engine/white1x1.png");
-	//吹き出し
-	addTexture(CommentBoutResourceKey::kAttackOrbEffectSmall, "resources/game/td_3105/Sprite/OH.png");
-	addTexture(CommentBoutResourceKey::kAttackOrbEffectMedium, "resources/game/td_3105/Sprite/BOOM.png");
-	addTexture(CommentBoutResourceKey::kAttackOrbEffectBig, "resources/game/td_3105/Sprite/POW.png");
+	// 吹き出し (Speech Bubble)
+	addTexture(CommentBoutResourceKey::kSpeechBubbleLarge, "resources/game/td_3105/Sprite/POW.png");
+	addTexture(CommentBoutResourceKey::kSpeechBubbleMedium, "resources/game/td_3105/Sprite/BOOM.png");
+	addTexture(CommentBoutResourceKey::kSpeechBubbleSmall, "resources/game/td_3105/Sprite/OH.png");
 
 	// ---- Model path catalog ----------------------------------------------
 	addModel(CommentBoutResourceKey::kEnemyModel, "commentbout_enemy_model", "resources/game/td_3105/Model/Enemy/Enemy.obj");

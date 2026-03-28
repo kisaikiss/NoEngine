@@ -18,7 +18,8 @@ struct CBTitleViewTag {};;		//
 struct CBRailEnemyTag {};;		//
 struct CBBossTag {};			//
 struct CBEnemyBulletTag {};		//
-struct CBEnemyRewardOrbTag {};	//
+struct CBSpeechBubbleTag {};	// 吹き出し
+struct CBSpeechBubbleConfigTag {}; // 吹き出し設定エンティティ
 struct CBBossHpBarTag {};		//
 struct CBPlayerHpBarTag {};		//
 struct CBPlayerHitboxTag {}; 	//

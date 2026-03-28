@@ -284,12 +284,12 @@ No::Vector2 localOffset{ 0.f, 0.f };  // ← 追加
 | `kAttackOrbEffectBig` | `kSpeechBubbleLarge` |
 | `kRewardOrbSprite` | `kSpeechBubbleSprite` (使用停止 or 削除) |
 
-- [ ] `EnemyRewardOrbComponent.h` をリネーム → `SpeechBubbleComponent.h`
-- [ ] struct 名・タグ名を変更
-- [ ] `EnemyRewardToBossSystem.h/.cpp` をリネーム → `SpeechBubbleToBossSystem.h/.cpp`
-- [ ] `GameResourceComponent.h` のキー定数をリネーム
-- [ ] `EnemyVisualSystem.cpp` の関数名・タグ参照を更新
-- [ ] `vcxproj` / `vcxproj.filters` 更新
+- [x] `SpeechBubbleComponent.h` 新規作成 (EnemyRewardOrbComponent は互換ヘッダーとして残存)
+- [x] struct 名・タグ名を変更 (CBSpeechBubbleTag, CBSpeechBubbleConfigTag 追加)
+- [x] `SpeechBubbleToBossSystem.h/.cpp` 新規作成
+- [x] `GameResourceComponent.h` のキー定数をリネーム (kSpeechBubbleLarge/Medium/Small)
+- [x] `EnemyVisualSystem.cpp` の関数名・タグ参照を更新
+- [x] `vcxproj` / `vcxproj.filters` 更新
 
 ---
 
@@ -337,7 +337,7 @@ struct SpeechBubbleComponent {
 };
 ```
 
-- [ ] `SpeechBubbleComponent.h` に `sizeCategory` フィールド追加
+- [x] `SpeechBubbleComponent.h` に `sizeCategory` フィールド追加
 
 ---
 
@@ -357,18 +357,17 @@ struct SpeechBubbleComponent {
 6. 対応するスプライトキー (kSpeechBubbleLarge/Medium/Small) でテクスチャ設定
 ```
 
-- [ ] `SpawnSpeechBubbleFromEnemy()` の引数に `SpeechBubbleConfig` を追加
-- [ ] 距離計算ロジック実装
-- [ ] サイズ選択 + スプライト選択ロジック実装
-- [ ] `sizeCategory` を `SpeechBubbleComponent` に設定
+- [x] `SpawnSpeechBubbleFromEnemy()` の引数に `SpeechBubbleConfig` を追加
+- [x] 距離計算ロジック実装
+- [x] サイズ選択 + スプライト選択ロジック実装
+- [x] `sizeCategory` を `SpeechBubbleComponent` に設定
 
 ---
 
 ### 2-5. GameScene に SpeechBubbleConfig のロードを追加
 
-- [ ] `GameScene::Setup()` で `SpeechBubbleDataIO::Load()` を呼び出す
-- [ ] ロードした Config をどのエンティティ (GameResource や専用エンティティ) に持たせるか決定
-  - 推奨: `GameResourceComponent` エンティティに `SpeechBubbleConfig` コンポーネントとして追加
+- [x] `GameScene::Setup()` で `SpeechBubbleDataIO::Load()` を呼び出す
+- [x] `CBSpeechBubbleConfigTag` エンティティに `SpeechBubbleConfig` コンポーネントとして追加
 
 ---
 
@@ -386,9 +385,9 @@ struct SpeechBubbleComponent {
   [Save]
 ```
 
-- [ ] ImGui ウィンドウ実装
-- [ ] `SpeechBubbleDataIO::Save()` 呼び出し
-- [ ] 初期 JSON ファイルを作成して動作確認
+- [x] ImGui ウィンドウ実装 (EnemyDebug ウィンドウ内 CollapsingHeader)
+- [x] `SpeechBubbleDataIO::Save()` 呼び出し
+- [ ] 初期 JSON ファイルを作成して動作確認 (起動時に自動生成/デフォルト値)
 
 ---
 
@@ -402,9 +401,9 @@ struct SpeechBubbleComponent {
 // kSpeechBubbleSmall → OH.png
 ```
 
-- [ ] キー定数追加 (kSpeechBubbleLarge / Medium / Small)
-- [ ] テクスチャロード処理を `InitializeCommentBoutGameResources()` に追加
-- [ ] 旧 `kAttackOrbEffectXxx` の参照を新キーに切り替え
+- [x] キー定数追加 (kSpeechBubbleLarge / Medium / Small)
+- [x] テクスチャロード処理を `InitializeCommentBoutGameResources()` に追加
+- [x] 旧 `kAttackOrbEffectXxx` を新キーのエイリアスに変更 (後方互換)
 
 ---
 
@@ -700,6 +699,14 @@ grep で `Keyboard::IsTrigger` / `Keyboard::IsPress` を全検索し、ゲーム
 > - 変更: `Scene/GameScene.h/.cpp`
 
 ---
+
+### 5-0. Phase 2.5 で追加した個別エディタ System の統合
+
+Phase 2.5 で以下のエディタ System が追加済み。Phase 5 で EditorManager のタブに統合する:
+- `EnemyConfigEditorSystem` → "敵プリセット設定" ウィンドウ
+- `SpeechBubbleConfigEditorSystem` → "吹き出し設定" ウィンドウ
+
+統合時は `EditorManager::Update()` のタブに移動し、個別 System として GameScene への AddSystem は削除する。
 
 ### 5-1. FieldObjectEditor クラスを新規作成 (ImGui 分離)
 
@@ -1513,10 +1520,10 @@ switch (sizeCategory) {
 | 1 | PlayerConfigComponent → PlayerConfig リネーム | [x] |
 | 1 | EnemyTypePreset → EnemyConfig リネーム | [x] |
 | 1 | ImGui + JSON 保存 (コライダー設定) | [x] |
-| 2 | Orb → 吹き出し リネーム | [ ] |
-| 2 | SpeechBubbleConfig 作成 | [ ] |
-| 2 | カメラ距離による大中小判定 | [ ] |
-| 2 | ImGui + JSON 保存 (吹き出し設定) | [ ] |
+| 2 | Orb → 吹き出し リネーム | [x] |
+| 2 | SpeechBubbleConfig 作成 | [x] |
+| 2 | カメラ距離による大中小判定 | [x] |
+| 2 | ImGui + JSON 保存 (吹き出し設定) | [x] |
 | 3 | Data/Config/ / Data/StageData/ フォルダ作成 | [ ] |
 | 3 | 全 JSON ファイル移動 | [ ] |
 | 3 | StageDataIO クラス作成 | [ ] |

@@ -169,7 +169,6 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\CommentBout\Component\OutGame\PauseStateComponent.cpp" />
     <ClCompile Include="application\CommentBout\Component\PlayerAttackComponent.cpp" />
     <ClCompile Include="application\CommentBout\Component\OutGame\TitleMenuConfigComponent.cpp" />
-    <ClCompile Include="application\CommentBout\Data\EnemyTypePresetIO.cpp" />
     <ClCompile Include="application\CommentBout\Data\PlayerDataIO.cpp" />
     <ClCompile Include="application\CommentBout\Data\EnemyDataIO.cpp" />
     <ClCompile Include="application\CommentBout\FieldObject\System\FieldEditorSystem.cpp" />
@@ -180,7 +179,10 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\CommentBout\System\EnemyBulletHitSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\EnemyContactDamageSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\EnemyMoveSystem.cpp" />
-    <ClCompile Include="application\CommentBout\System\EnemyRewardToBossSystem.cpp" />
+    <ClCompile Include="application\CommentBout\System\SpeechBubbleToBossSystem.cpp" />
+    <ClCompile Include="application\CommentBout\System\EnemyConfigEditorSystem.cpp" />
+    <ClCompile Include="application\CommentBout\System\SpeechBubbleConfigEditorSystem.cpp" />
+    <ClCompile Include="application\CommentBout\Data\SpeechBubbleDataIO.cpp" />
     <ClCompile Include="application\CommentBout\System\EnemyShootSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\EnemySpawnSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\EnemySystem.cpp" />
@@ -362,7 +364,9 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\CommentBout\Component\DamageRequestComponent.h" />
     <ClInclude Include="application\CommentBout\Component\EnemyBulletComponent.h" />
     <ClInclude Include="application\CommentBout\Component\EnemyComponent.h" />
-    <ClInclude Include="application\CommentBout\Component\EnemyRewardOrbComponent.h" />
+    <ClInclude Include="application\CommentBout\Component\SpeechBubbleComponent.h" />
+    <ClInclude Include="application\CommentBout\Data\SpeechBubbleConfig.h" />
+    <ClInclude Include="application\CommentBout\Data\SpeechBubbleDataIO.h" />
     <ClInclude Include="application\CommentBout\Component\EnemyRewardSourceComponent.h" />
     <ClInclude Include="application\CommentBout\Component\EnemyShooterComponent.h" />
     <ClInclude Include="application\CommentBout\Component\GameResourceComponent.h" />
@@ -374,7 +378,6 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\CommentBout\Component\OutGame\OptionMenuViewComponent.h" />
     <ClInclude Include="application\CommentBout\Component\OutGame\OptionStateComponent.h" />
     <ClInclude Include="application\CommentBout\Component\OutGame\OutGameComponets.h" />
-    <ClInclude Include="application\CommentBout\Component\PlayerConfigComponent.h" />
     <ClInclude Include="application\CommentBout\Collision\Component\ColliderConfig.h" />
     <ClInclude Include="application\CommentBout\Data\PlayerConfig.h" />
     <ClInclude Include="application\CommentBout\Data\PlayerDataIO.h" />
@@ -387,7 +390,6 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\CommentBout\Component\OutGame\TitleMenuConfigComponent.h" />
     <ClInclude Include="application\CommentBout\Component\OutGame\TitleMenuStateComponent.h" />
     <ClInclude Include="application\CommentBout\Component\OutGame\TitleMenuViewComponent.h" />
-    <ClInclude Include="application\CommentBout\Data\EnemyTypePresetIO.h" />
     <ClInclude Include="application\CommentBout\FieldObject\Component\FieldPlacementComponent.h" />
     <ClInclude Include="application\CommentBout\FieldObject\System\FieldEditorSystem.h" />
     <ClInclude Include="application\CommentBout\Spawner\TitleMenuSpawner.h" />
@@ -397,7 +399,9 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\CommentBout\System\EnemyBulletHitSystem.h" />
     <ClInclude Include="application\CommentBout\System\EnemyContactDamageSystem.h" />
     <ClInclude Include="application\CommentBout\System\EnemyMoveSystem.h" />
-    <ClInclude Include="application\CommentBout\System\EnemyRewardToBossSystem.h" />
+    <ClInclude Include="application\CommentBout\System\SpeechBubbleToBossSystem.h" />
+    <ClInclude Include="application\CommentBout\System\EnemyConfigEditorSystem.h" />
+    <ClInclude Include="application\CommentBout\System\SpeechBubbleConfigEditorSystem.h" />
     <ClInclude Include="application\CommentBout\System\EnemyShootSystem.h" />
     <ClInclude Include="application\CommentBout\System\EnemySpawnSystem.h" />
     <ClInclude Include="application\CommentBout\System\EnemySystem.h" />

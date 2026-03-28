@@ -162,7 +162,7 @@ void PlayerInfoDebugSystem::Update(No::Registry& registry, float deltaTime)
 		}
 		ImGui::Separator();
 
-		if (ImGui::CollapsingHeader("移動設定", ImGuiTreeNodeFlags_DefaultOpen)) {
+		if (ImGui::CollapsingHeader("移動設定")) {
 			ImGui::DragFloat("移動速度", &player->moveSpeed, 1.0f, 1.0f, 3000.0f);
 			ImGui::DragFloat("加速度", &player->acceleration, 10.0f, 0.0f, 10000.0f);
 			ImGui::DragFloat("減速度", &player->deceleration, 10.0f, 0.0f, 10000.0f);
@@ -171,14 +171,14 @@ void PlayerInfoDebugSystem::Update(No::Registry& registry, float deltaTime)
 			ImGui::Text("現在位置: (%.1f, %.1f)", transform->translate.x, transform->translate.y);
 		}
 
-		if (ImGui::CollapsingHeader("無敵設定", ImGuiTreeNodeFlags_DefaultOpen)) {
+		if (ImGui::CollapsingHeader("無敵設定")) {
 			ImGui::DragFloat("無敵時間(標準)", &player->invincibleDurationDefault, 0.01f, 0.01f, 10.0f);
 			ImGui::DragFloat("無敵時間(現在運用)", &invincible->duration, 0.01f, 0.01f, 10.0f);
 			ImGui::Checkbox("デバッグ無敵", &player->debugInvincible);
 			ImGui::Text("無敵タイマー残り: %.2f", invincible->time);
 		}
 
-		if (ImGui::CollapsingHeader("被弾点滅設定", ImGuiTreeNodeFlags_DefaultOpen)) {
+		if (ImGui::CollapsingHeader("被弾点滅設定")) {
 			ImGui::DragFloat("点滅時間", &playerConfig->flashDuration, 0.01f, 0.01f, 2.0f);
 			ImGui::Checkbox("点滅有効", &playerConfig->flashBlinkEnabled);
 			ImGui::DragFloat("点滅周波数(Hz)", &playerConfig->flashBlinkHz, 0.1f, 0.0f, 60.0f);
@@ -197,7 +197,7 @@ void PlayerInfoDebugSystem::Update(No::Registry& registry, float deltaTime)
 			}
 		}
 
-		if (ImGui::CollapsingHeader("攻撃設定", ImGuiTreeNodeFlags_DefaultOpen)) {
+		if (ImGui::CollapsingHeader("攻撃設定")) {
 			ImGui::DragFloat2("攻撃生成オフセット", &attack->spawnOffset.x, 1.0f, -1000.0f, 1000.0f);
 			ImGui::DragFloat2("攻撃サイズ", &attack->attackSize.x, 1.0f, 1.0f, 2000.0f);
 			ImGui::DragFloat("攻撃表示時間", &attack->visibleTime, 0.01f, 0.01f, 5.0f);
@@ -205,14 +205,14 @@ void PlayerInfoDebugSystem::Update(No::Registry& registry, float deltaTime)
 			ImGui::DragInt("攻撃力", &attack->attackPower, 1.0f, 1, 999);
 		}
 
-		if (ImGui::CollapsingHeader("耐久設定", ImGuiTreeNodeFlags_DefaultOpen)) {
+		if (ImGui::CollapsingHeader("耐久設定")) {
 			ImGui::DragInt("最大HP", &health->maxHp, 1.0f, 1, 999);
 			health->maxHp = std::max(1, health->maxHp);
 			health->hp = std::min(health->hp, health->maxHp);
 			ImGui::Text("現在HP: %d", health->hp);
 		}
 
-		if (ImGui::CollapsingHeader("当たり判定設定（カメラゲート）", ImGuiTreeNodeFlags_DefaultOpen) && hitbox) {
+		if (ImGui::CollapsingHeader("当たり判定設定（カメラゲート）") && hitbox) {
 			ImGui::Checkbox("カメラゲート判定を使用", &hitbox->useCameraGateForPlayerHit);
 			ImGui::DragFloat("Near", &hitbox->cameraGateNear, 0.01f, 0.0f, 10.0f);
 			ImGui::DragFloat("Depth", &hitbox->cameraGateDepth, 0.01f, 0.01f, 10.0f);
@@ -220,7 +220,7 @@ void PlayerInfoDebugSystem::Update(No::Registry& registry, float deltaTime)
 			ImGui::DragFloat("Half Height", &hitbox->cameraGateHalfHeight, 0.01f, 0.01f, 10.0f);
 		}
 
-		if (ImGui::CollapsingHeader("初期配置設定", ImGuiTreeNodeFlags_DefaultOpen) && startTransform) {
+		if (ImGui::CollapsingHeader("初期配置設定") && startTransform) {
 			ImGui::DragFloat2("開始位置", &startTransform->translate.x, 1.0f, -5000.0f, 5000.0f);
 			ImGui::DragFloat2("開始スケール", &startTransform->scale.x, 1.0f, 1.0f, 5000.0f);
 			ImGui::DragFloat("開始回転", &startTransform->rotation, 0.01f, -6.28318f, 6.28318f);
@@ -231,12 +231,12 @@ void PlayerInfoDebugSystem::Update(No::Registry& registry, float deltaTime)
 			}
 		}
 
-		if (ImGui::CollapsingHeader("コライダー設定（自機 2D）", ImGuiTreeNodeFlags_DefaultOpen)) {
+		if (ImGui::CollapsingHeader("コライダー設定（自機 2D）")) {
 			ImGui::DragFloat2("ローカルオフセット##player2D", &playerConfig->playerCollider2D.localOffset2D.x, 0.5f, -500.0f, 500.0f);
 			ImGui::DragFloat2("サイズ倍率##player2D", &playerConfig->playerCollider2D.sizeMultiplier2D.x, 0.01f, 0.01f, 10.0f);
 		}
 
-		if (ImGui::CollapsingHeader("コライダー設定（攻撃 2D）", ImGuiTreeNodeFlags_DefaultOpen)) {
+		if (ImGui::CollapsingHeader("コライダー設定（攻撃 2D）")) {
 			ImGui::DragFloat2("ローカルオフセット##attack2D", &playerConfig->attackCollider.localOffset2D.x, 0.5f, -500.0f, 500.0f);
 			ImGui::DragFloat2("サイズ倍率##attack2D", &playerConfig->attackCollider.sizeMultiplier2D.x, 0.01f, 0.01f, 10.0f);
 		}
