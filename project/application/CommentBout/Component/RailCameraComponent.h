@@ -63,7 +63,7 @@ enum class RailRuntimeState {
 };
 
 struct RailCameraComponent {
-	std::string railFilePath = "resources/game/td_3105/RailData/sample_rail.json";
+	std::string railFilePath = "resources/game/td_3105/Data/StageData/RailData/Stage_01_rail.json";
 	std::string stageName = "Stage_01";
 	std::vector<No::Vector3> controlPoints;
 	std::vector<float> arcLengthTable;

@@ -8,12 +8,13 @@
 #include <algorithm>
 #include <cmath>
 #include <fstream>
+#include <filesystem>
 #ifdef USE_IMGUI
 #include "externals/imgui/imgui.h"
 #endif
 
 namespace {
-const char* kRailProgressBarConfigPath = "resources/game/td_3105/RailData/Stage_01_rail_progressbar.json";
+const char* kRailProgressBarConfigPath = "resources/game/td_3105/Data/StageData/RailData/Stage_01_rail_progressbar.json";
 
 float Clamp01(float v) {
 	if (v < 0.0f) { return 0.0f; }
@@ -39,6 +40,7 @@ void SaveRailProgressBar(const RailProgressBarComponent& bar) {
 	j["barFillColor"] = { bar.barFillColor.r, bar.barFillColor.g, bar.barFillColor.b, bar.barFillColor.a };
 	j["markerColor"] = { bar.markerColor.r, bar.markerColor.g, bar.markerColor.b, bar.markerColor.a };
 
+	std::filesystem::create_directories(std::filesystem::path(kRailProgressBarConfigPath).parent_path());
 	std::ofstream ofs(kRailProgressBarConfigPath);
 	if (ofs) {
 		ofs << j.dump(2);

@@ -4,12 +4,12 @@
 #include "application/CommentBout/Component/DamageRequestComponent.h"
 #include "application/CommentBout/Component/Player/PlayerHitboxComponent.h"
 #include "application/CommentBout/Collision/Component/Collider3DComponent.h"
+#include "application/CommentBout/Collision/Component/Collider2DComponent.h"
 #include "application/CommentBout/Collision/Component/ProjectedColliderComponent.h"
 #include "application/CommentBout/Collision/Utility/CollisionAlgorithms.h"
 #include "application/CommentBout/Utility/EnemyVisibilityUtility.h"
 #include "application/CommentBout/GameTag.h"
 #include "engine/Functions/ECS/Component/CameraComponent.h"
-#include "engine/Functions/ECS/Component/Transform2DComponent.h"
 #include <algorithm>
 
 bool EnemyBulletHitSystem::IsPlayerHitByUnifiedRule(
@@ -42,8 +42,8 @@ bool EnemyBulletHitSystem::IsPlayerHitByUnifiedRule(
 			continue;
 		}
 
-		auto* playerTransform2D = registry.GetComponent<No::Transform2DComponent>(hitbox->playerEntity);
-		if (!playerTransform2D) {
+		auto* playerCollider2D = registry.GetComponent<CommentBoutCollision::Collider2DComponent>(hitbox->playerEntity);
+		if (!playerCollider2D) {
 			continue;
 		}
 
@@ -54,10 +54,10 @@ bool EnemyBulletHitSystem::IsPlayerHitByUnifiedRule(
 		gate.halfWidth = hitbox->cameraGateHalfWidth;
 		gate.halfHeight = hitbox->cameraGateHalfHeight;
 
-		const bool hit = CommentBoutCollision::CollisionAlgorithms::CheckProjectedVsSpriteAndCameraGate(
+		const bool hit = CommentBoutCollision::CollisionAlgorithms::CheckProjectedVsCollider2DAndCameraGate(
 			*projected,
-			bulletCollider.worldPosition,
-			*playerTransform2D,
+			*playerCollider2D,
+			bulletCollider,
 			*activeCameraTransform,
 			gate
 		);

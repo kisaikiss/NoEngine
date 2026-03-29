@@ -7,10 +7,10 @@
 #include "application/CommentBout/Component/Player/PlayerHitboxComponent.h"
 #include "application/CommentBout/GameTag.h"
 #include "application/CommentBout/Collision/Component/Collider3DComponent.h"
+#include "application/CommentBout/Collision/Component/Collider2DComponent.h"
 #include "application/CommentBout/Collision/Component/ProjectedColliderComponent.h"
 #include "application/CommentBout/Collision/Utility/CollisionAlgorithms.h"
 #include "engine/Functions/ECS/Component/CameraComponent.h"
-#include "engine/Functions/ECS/Component/Transform2DComponent.h"
 #include <algorithm>
 
 namespace {
@@ -71,8 +71,8 @@ void EnemyContactDamageSystem::Update(No::Registry& registry, float deltaTime)
 				continue;
 			}
 
-			auto* playerTransform2D = registry.GetComponent<No::Transform2DComponent>(hitbox->playerEntity);
-			if (!playerTransform2D || !activeCameraTransform) {
+			auto* playerCollider2D = registry.GetComponent<CommentBoutCollision::Collider2DComponent>(hitbox->playerEntity);
+			if (!playerCollider2D || !activeCameraTransform) {
 				continue;
 			}
 
@@ -83,10 +83,10 @@ void EnemyContactDamageSystem::Update(No::Registry& registry, float deltaTime)
 			gate.halfWidth = hitbox->cameraGateHalfWidth;
 			gate.halfHeight = hitbox->cameraGateHalfHeight;
 
-			const bool hit = CommentBoutCollision::CollisionAlgorithms::CheckProjectedVsSpriteAndCameraGate(
+			const bool hit = CommentBoutCollision::CollisionAlgorithms::CheckProjectedVsCollider2DAndCameraGate(
 				*enemyProjected,
-				collider3D->worldPosition,
-				*playerTransform2D,
+				*playerCollider2D,
+				*collider3D,
 				*activeCameraTransform,
 				gate
 			);

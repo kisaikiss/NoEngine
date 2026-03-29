@@ -464,5 +464,6 @@
     <None Include="resources\game\Shaders\ShaderMathUtil.hlsli" />
     <None Include="resources\game\td_2304\Json\tdSpriteConfig.json" />
     <None Include="application\CommentBout\IMPLEMENTATION_PLAN.md" />
+    <None Include="docs\CommentBout_PathAndCollision_Phases.md" />
   </ItemGroup>
 </Project>

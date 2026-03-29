@@ -1,6 +1,7 @@
 #include "CollisionAlgorithms.h"
 #include "application/CommentBout/Collision/Component/ProjectedColliderComponent.h"
-#include "engine/Functions/ECS/Component/Transform2DComponent.h"
+#include "application/CommentBout/Collision/Component/Collider2DComponent.h"
+#include "application/CommentBout/Collision/Component/Collider3DComponent.h"
 #include "engine/Functions/ECS/Component/TransformComponent.h"
 #include <algorithm>
 #include <cmath>
@@ -13,6 +14,12 @@ namespace CommentBoutCollision {
 			return fallback;
 		}
 		return v.Normalize();
+	}
+
+	float ComputeAABBProjectedExtentOnAxis(const No::Vector3& halfSize, const No::Vector3& axis) {
+		return std::abs(axis.x) * halfSize.x +
+			std::abs(axis.y) * halfSize.y +
+			std::abs(axis.z) * halfSize.z;
 	}
 	}
 
@@ -340,9 +347,9 @@ namespace CommentBoutCollision {
 		return true;
 	}
 
-	bool CollisionAlgorithms::CheckProjectedVsSpriteAABB(
+	bool CollisionAlgorithms::CheckProjectedVsCollider2D(
 		const ProjectedColliderComponent& projected,
-		const No::Transform2DComponent& spriteTransform
+		const Collider2DComponent& collider2D
 	) {
 		if (!projected.isVisible) {
 			return false;
@@ -351,21 +358,21 @@ namespace CommentBoutCollision {
 		if (projected.isBox) {
 			return CheckConvexHullAABB(
 				projected.convexHull,
-				spriteTransform.translate,
-				spriteTransform.scale
+				collider2D.screenPosition,
+				collider2D.worldSize
 			);
 		}
 
 		return CheckCircleAABB(
 			projected.screenPosition,
 			projected.screenRadius,
-			spriteTransform.translate,
-			spriteTransform.scale
+			collider2D.screenPosition,
+			collider2D.worldSize
 		);
 	}
 
-	bool CollisionAlgorithms::CheckPointInCameraGate(
-		const No::Vector3& worldPos,
+	bool CollisionAlgorithms::CheckCollider3DInCameraGate(
+		const Collider3DComponent& collider3D,
 		No::TransformComponent& cameraTransform,
 		const CameraGateParams& gate
 	) {
@@ -379,7 +386,7 @@ namespace CommentBoutCollision {
 		No::Vector3 up = NormalizeOrDefault(cameraWorld.TransformNormal(No::Vector3::UP), No::Vector3::UP);
 		No::Vector3 forward = NormalizeOrDefault(cameraWorld.TransformNormal(No::Vector3::FORWARD), No::Vector3::FORWARD);
 
-		const No::Vector3 toTarget = worldPos - cameraPos;
+		const No::Vector3 toTarget = collider3D.worldPosition - cameraPos;
 		const float camX = toTarget.Dot(right);
 		const float camY = toTarget.Dot(up);
 		const float camZ = toTarget.Dot(forward);
@@ -388,31 +395,47 @@ namespace CommentBoutCollision {
 		const float depth = std::max(0.001f, gate.depth);
 		const float halfW = std::max(0.001f, gate.halfWidth);
 		const float halfH = std::max(0.001f, gate.halfHeight);
+		const float farZ = nearZ + depth;
 
-		if (camZ < nearZ || camZ > nearZ + depth) {
+		float extentX = 0.0f;
+		float extentY = 0.0f;
+		float extentZ = 0.0f;
+
+		if (collider3D.shapeType == ShapeType3D::Sphere) {
+			extentX = collider3D.worldRadius;
+			extentY = collider3D.worldRadius;
+			extentZ = collider3D.worldRadius;
+		} else {
+			const No::Vector3 halfSize = collider3D.worldBoxSize * 0.5f;
+			extentX = ComputeAABBProjectedExtentOnAxis(halfSize, right);
+			extentY = ComputeAABBProjectedExtentOnAxis(halfSize, up);
+			extentZ = ComputeAABBProjectedExtentOnAxis(halfSize, forward);
+		}
+
+		if (camZ + extentZ < nearZ || camZ - extentZ > farZ) {
 			return false;
 		}
-		if (std::abs(camX) > halfW) {
+		if (std::abs(camX) > (halfW + extentX)) {
 			return false;
 		}
-		if (std::abs(camY) > halfH) {
+		if (std::abs(camY) > (halfH + extentY)) {
 			return false;
 		}
 		return true;
 	}
 
-	bool CollisionAlgorithms::CheckProjectedVsSpriteAndCameraGate(
+	bool CollisionAlgorithms::CheckProjectedVsCollider2DAndCameraGate(
 		const ProjectedColliderComponent& projected,
-		const No::Vector3& worldPos,
-		const No::Transform2DComponent& spriteTransform,
+		const Collider2DComponent& collider2D,
+		const Collider3DComponent& collider3D,
 		No::TransformComponent& cameraTransform,
 		const CameraGateParams& gate
 	) {
-		const bool spriteOverlap = CheckProjectedVsSpriteAABB(projected, spriteTransform);
+		const bool spriteOverlap = CheckProjectedVsCollider2D(projected, collider2D);
 		if (!spriteOverlap) {
 			return false;
 		}
 
-		return CheckPointInCameraGate(worldPos, cameraTransform, gate);
+		return CheckCollider3DInCameraGate(collider3D, cameraTransform, gate);
 	}
 }

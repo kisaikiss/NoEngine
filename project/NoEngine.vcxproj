@@ -802,6 +802,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <FileType>Document</FileType>
     </ClInclude>
     <None Include="application\CommentBout\IMPLEMENTATION_PLAN.md" />
+    <None Include="docs\CommentBout_PathAndCollision_Phases.md" />
     <None Include="resources\engine\Shaders\Default.hlsli" />
     <None Include="resources\game\Shaders\ShaderMathUtil.hlsli" />
     <None Include="resources\game\td_2304\Json\tdSpriteConfig.json" />
