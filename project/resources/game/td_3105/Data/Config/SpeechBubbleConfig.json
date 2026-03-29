@@ -1,28 +1,35 @@
 {
+  "initialScalePercent": 0.30000001192092896,
   "largeMaxDistance": 10.0,
   "mediumMaxDistance": 50.0,
   "sizeLarge": {
-    "attackPower": 10,
+    "appearDuration": 0.3499999940395355,
+    "attackPower": 100,
     "duration": 0.8999999761581421,
     "spriteSize": [
       240.0,
       240.0
-    ]
+    ],
+    "stopDuration": 0.6000000238418579
   },
   "sizeMedium": {
-    "attackPower": 20,
+    "appearDuration": 0.3499999940395355,
+    "attackPower": 30,
     "duration": 0.8999999761581421,
     "spriteSize": [
       120.0,
       120.0
-    ]
+    ],
+    "stopDuration": 0.6000000238418579
   },
   "sizeSmall": {
+    "appearDuration": 0.3499999940395355,
     "attackPower": 10,
     "duration": 0.8999999761581421,
     "spriteSize": [
       64.0,
       64.0
-    ]
+    ],
+    "stopDuration": 0.20000000298023224
   }
 }

@@ -280,7 +280,9 @@ void SpawnSpeechBubbleFromEnemy(
 
 	auto* t2d = registry.AddComponent<No::Transform2DComponent>(bubble);
 	t2d->translate = start;
-	t2d->scale     = sizeCfg->spriteSize;
+	// 出現開始時は縮小スケール。SpeechBubbleToBossSystem の Appearing フェーズがバウンス拡大する。
+	const float initScale = std::max(0.01f, sbConfig.initialScalePercent);
+	t2d->scale     = sizeCfg->spriteSize * initScale;
 
 	auto* sprite = registry.AddComponent<No::SpriteComponent>(bubble);
 	sprite->textureHandle = GetGameTextureOrWhite(gameResource, textureKey);

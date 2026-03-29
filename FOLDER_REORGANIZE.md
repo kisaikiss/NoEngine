@@ -309,28 +309,28 @@ changed |= ImGui::DragFloat("弾モデルスケール", &cfg.bulletModelScale, 0
 ### チェックリスト
 
 **Step 8-A:**
-- [ ] `showEnemyBulletCollider` 存在確認・追加
-- [ ] `DrawEnemyBulletColliderDebug()` 存在確認・追加
-- [ ] `Update()` からの呼び出し確認
+- [x] `showEnemyBulletCollider` 存在確認・追加（実装済み）
+- [x] `DrawEnemyBulletColliderDebug()` 存在確認・追加（実装済み）
+- [x] `Update()` からの呼び出し確認（実装済み）
 
 **Step 8-B:**
-- [ ] EnemyShooterComponent 2フィールド確認・追加
-- [ ] EnemySpawnSystem コピー処理確認・追加
-- [ ] EnemyShootSystem 引数追加・コライダー反映
-- [ ] 呼び出し元2箇所（通常敵・ボス）更新
-- [ ] EditorManager 弾コライダーUI追加
-- [ ] ApplyEnemyPresetsToAliveEnemies 更新
+- [x] EnemyShooterComponent 2フィールド確認・追加（実装済み）
+- [x] EnemySpawnSystem コピー処理確認・追加（実装済み）
+- [x] EnemyShootSystem 引数追加・コライダー反映（実装済み）
+- [x] 呼び出し元2箇所（通常敵・ボス）更新（実装済み）
+- [x] EditorManager 弾コライダーUI追加（実装済み）
+- [x] ApplyEnemyPresetsToAliveEnemies 更新（実装済み）
 
 **Step 8-C:**
-- [ ] EnemyConfig に `bulletModelScale` 追加
-- [ ] EnemyDataIO Save/Load に追加
-- [ ] EnemyShooterComponent に `bulletModelScale` 追加
-- [ ] EnemySpawnSystem でコピー
-- [ ] EnemyShootSystem で使用
-- [ ] EditorManager UI追加
-- [ ] ApplyEnemyPresetsToAliveEnemies 更新
+- [x] EnemyConfig に `bulletModelScale` 追加
+- [x] EnemyDataIO Save/Load に追加
+- [x] EnemyShooterComponent に `bulletModelScale` 追加
+- [x] EnemySpawnSystem でコピー
+- [x] EnemyShootSystem で使用（ハードコード 0.25f を削除）
+- [x] EditorManager UI追加（弾モデルスケール DragFloat）
+- [x] ApplyEnemyPresetsToAliveEnemies 更新
 
-- [ ] **ビルド確認**
+- [x] **ビルド確認**
 - [ ] JSON保存 → 再起動後に値が保持されること確認
 - [ ] Phase 8-A のデバッグ表示で弾コライダーサイズが変化することを確認
 
@@ -469,14 +469,14 @@ ImGui::DragFloat("停止時間",          &sizeCfg.stopDuration,   0.01f, 0.0f, 
 
 ### チェックリスト
 
-- [ ] `SpeechBubbleSizeConfig` に `appearDuration` / `stopDuration` 追加
-- [ ] `SpeechBubbleConfig` に `initialScalePercent` 追加
-- [ ] `SpeechBubbleSizeConfig` / `SpeechBubbleConfig` の `to_json` / `from_json` 更新
-- [ ] `SpeechBubbleComponent.h` に `SpeechBubblePhase` enum + 3フィールド追加
-- [ ] `EnemyVisualSystem.cpp`: 初期スケールを `initialScalePercent * spriteSize` に変更
-- [ ] `SpeechBubbleToBossSystem.cpp`: `EaseBounceOut` 追加 + 3フェーズ処理に更新
-- [ ] `EditorManager.cpp`: 吹き出しタブに `appearDuration / stopDuration / initialScalePercent` UI追加
-- [ ] **ビルド確認**
+- [x] `SpeechBubbleSizeConfig` に `appearDuration` / `stopDuration` 追加
+- [x] `SpeechBubbleConfig` に `initialScalePercent` 追加
+- [x] `SpeechBubbleSizeConfig` / `SpeechBubbleConfig` の `to_json` / `from_json` 更新
+- [x] `SpeechBubbleComponent.h` に `SpeechBubblePhase` enum + 3フィールド追加
+- [x] `EnemyVisualSystem.cpp`: 初期スケールを `initialScalePercent * spriteSize` に変更
+- [x] `SpeechBubbleToBossSystem.cpp`: `EaseBounceOut` 追加 + 3フェーズ処理に更新
+- [x] `EditorManager.cpp`: 吹き出しタブに `appearDuration / stopDuration / initialScalePercent` UI追加
+- [x] **ビルド確認**
 - [ ] 動作確認: バウンス出現 → 停止 → 移動 → ダメージの流れを確認
 - [ ] 動作確認: ImGui で `stopDuration=0` にするとすぐ移動開始することを確認
 

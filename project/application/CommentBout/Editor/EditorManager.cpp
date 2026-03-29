@@ -586,12 +586,19 @@ void EditorManager::DrawSpeechBubbleTab(No::Registry& registry)
 	}
 	ImGui::TextDisabled("中距離 〜 ∞ → 小サイズ");
 
+	ImGui::SeparatorText("出現演出（共通）");
+	ImGui::DragFloat("出現開始スケール比率", &cfg->initialScalePercent, 0.01f, 0.05f, 1.0f);
+	ImGui::TextDisabled("0.3 = 最大サイズの 30% から出現");
+
 	ImGui::Separator();
 	auto editSize = [](const char* label, SpeechBubbleSizeConfig& s) {
 		if (!ImGui::TreeNode(label)) return;
 		ImGui::DragFloat2("スプライトサイズ", &s.spriteSize.x, 1.f, 4.f, 512.f);
 		ImGui::DragInt("ダメージ量", &s.attackPower, 1, 1, 100);
 		ImGui::DragFloat("飛翔時間(秒)", &s.duration, 0.01f, 0.1f, 5.f);
+		ImGui::SeparatorText("出現演出");
+		ImGui::DragFloat("出現イージング時間(秒)", &s.appearDuration, 0.01f, 0.05f, 3.0f);
+		ImGui::DragFloat("停止時間(秒)",           &s.stopDuration,   0.01f, 0.0f,  5.0f);
 		ImGui::TreePop();
 		};
 	editSize("大 (POW.png)", cfg->sizeLarge);
