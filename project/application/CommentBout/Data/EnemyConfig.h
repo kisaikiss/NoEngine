@@ -18,6 +18,8 @@ struct EnemyConfig {
     float despawnBehindDistance = 12.0f;       // カメラより後ろにこの距離以上離れたらスポーンしている敵を消す
     int minHp = 1;
 
+    float bulletModelScale = 0.25f;  // 弾モデルのスケール（旧ハードコード値 0.25f を初期値とする）
+
     // コライダー設定（旧 baseColliderBox は enemyCollider.boxSizeMultiplier へ移行）
     ColliderConfig enemyCollider;    // 敵本体のコライダー設定
     ColliderConfig bulletCollider;   // 敵の弾のコライダー設定

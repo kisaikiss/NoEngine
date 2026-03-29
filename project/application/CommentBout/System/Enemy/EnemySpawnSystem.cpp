@@ -103,6 +103,7 @@ void SpawnRailEnemies(No::Registry& registry, const RailEnemySpawnEventParams& p
 			shooter->targetDepthFromCamera = std::max(0.1f, preset.targetDepthFromCamera);
 			shooter->bulletLifetime = std::max(0.1f, preset.bulletLifetime);
 			shooter->shootDistanceMax = std::max(0.0f, preset.shootDistanceMax);
+			shooter->bulletModelScale               = std::max(0.01f, preset.bulletModelScale);
 			shooter->bulletColliderRadiusMultiplier = std::max(0.01f, preset.bulletCollider.radiusMultiplier);
 			shooter->bulletColliderLocalOffset      = preset.bulletCollider.localOffset3D;
 			break;
@@ -119,6 +120,7 @@ void SpawnRailEnemies(No::Registry& registry, const RailEnemySpawnEventParams& p
 			shooter->targetDepthFromCamera = std::max(0.1f, preset.targetDepthFromCamera);
 			shooter->bulletLifetime = std::max(0.1f, preset.bulletLifetime);
 			shooter->shootDistanceMax = std::max(0.0f, preset.shootDistanceMax);
+			shooter->bulletModelScale               = std::max(0.01f, preset.bulletModelScale);
 			shooter->bulletColliderRadiusMultiplier = std::max(0.01f, preset.bulletCollider.radiusMultiplier);
 			shooter->bulletColliderLocalOffset      = preset.bulletCollider.localOffset3D;
 			break;

@@ -61,6 +61,7 @@ EnemyConfigMap EnemyDataIO::Load(const std::string& path) {
         EnemyConfig config;
         const auto& obj = it.value();
         if (obj.contains("modelScale") && obj["modelScale"].is_number()) config.modelScale = obj["modelScale"].get<float>();
+        if (obj.contains("bulletModelScale") && obj["bulletModelScale"].is_number()) config.bulletModelScale = obj["bulletModelScale"].get<float>();
 
         // 旧フォーマット互換: baseColliderBox を enemyCollider.boxSizeMultiplier として読み込む
         if (obj.contains("baseColliderBox") && obj["baseColliderBox"].is_array() && obj["baseColliderBox"].size() >= 3) {
@@ -98,6 +99,7 @@ void EnemyDataIO::Save(const EnemyConfigMap& configs, const std::string& path) {
         const EnemyConfig config = GetOrDefault(configs, type);
         auto& node = json[ToEnemyTypeName(type)];
         node["modelScale"] = config.modelScale;
+        node["bulletModelScale"] = config.bulletModelScale;
         // 新フォーマットで保存（旧 baseColliderBox キーは書かない）
         to_json(node["enemyCollider"], config.enemyCollider);
         to_json(node["bulletCollider"], config.bulletCollider);
