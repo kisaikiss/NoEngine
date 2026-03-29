@@ -167,11 +167,19 @@ namespace {
 		if (resetPlayState) {
 			rail.distance = 0.0f;
 			rail.isFinished = false;
+			rail.runtimeState = RailRuntimeState::Playing;
+			rail.isPlaying = true;
+			rail.waitingResumeCondition = RailResumeConditionType::None;
+			rail.waitingResumeAfterSeconds = 0.0f;
+			rail.waitingTargetGroupId = 0;
+			rail.waitingResumeElapsedSeconds = 0.0f;
+			rail.waitingSourceEventIndex = -1;
 		} else {
 			rail.distance = std::max(0.0f, std::min(rail.distance, rail.totalLength));
 			if (rail.distance >= rail.totalLength) {
 				rail.isFinished = true;
 				rail.isPlaying = false;
+				rail.runtimeState = RailRuntimeState::Stopped;
 			}
 		}
 
@@ -366,52 +374,104 @@ namespace {
 		request->params = params;
 	}
 
+	void SetRailPlaying(RailCameraComponent& rail) {
+		rail.runtimeState = RailRuntimeState::Playing;
+		rail.isPlaying = true;
+		rail.isFinished = false;
+		rail.waitingResumeCondition = RailResumeConditionType::None;
+		rail.waitingResumeAfterSeconds = 0.0f;
+		rail.waitingTargetGroupId = 0;
+		rail.waitingResumeElapsedSeconds = 0.0f;
+		rail.waitingSourceEventIndex = -1;
+	}
+
+	void SetRailStopped(RailCameraComponent& rail, int sourceEventIndex) {
+		rail.runtimeState = RailRuntimeState::Stopped;
+		rail.isPlaying = false;
+		rail.waitingResumeCondition = RailResumeConditionType::None;
+		rail.waitingResumeAfterSeconds = 0.0f;
+		rail.waitingTargetGroupId = 0;
+		rail.waitingResumeElapsedSeconds = 0.0f;
+		rail.waitingSourceEventIndex = sourceEventIndex;
+	}
+
+	void SetRailWaitingCondition(
+		RailCameraComponent& rail,
+		RailResumeConditionType condition,
+		float afterSeconds,
+		int targetGroupId,
+		int sourceEventIndex
+	) {
+		rail.runtimeState = RailRuntimeState::WaitingResumeCondition;
+		rail.isPlaying = false;
+		rail.waitingResumeCondition = condition;
+		rail.waitingResumeAfterSeconds = std::max(0.0f, afterSeconds);
+		rail.waitingTargetGroupId = targetGroupId;
+		rail.waitingResumeElapsedSeconds = 0.0f;
+		rail.waitingSourceEventIndex = sourceEventIndex;
+	}
+
+	void UpdateRailWaitingState(No::Registry& registry, RailCameraComponent& rail, float deltaTime) {
+		if (rail.runtimeState != RailRuntimeState::WaitingResumeCondition) {
+			return;
+		}
+
+		bool shouldResume = false;
+		switch (rail.waitingResumeCondition) {
+		case RailResumeConditionType::AfterSeconds:
+			rail.waitingResumeElapsedSeconds += deltaTime;
+			shouldResume = (rail.waitingResumeElapsedSeconds >= rail.waitingResumeAfterSeconds);
+			break;
+		case RailResumeConditionType::EnemiesCleared:
+			shouldResume = (CountAliveRailEnemiesByGroup(registry, rail.waitingTargetGroupId) == 0);
+			break;
+		case RailResumeConditionType::None:
+		default:
+			shouldResume = true;
+			break;
+		}
+
+		if (shouldResume) {
+			SetRailPlaying(rail);
+		}
+	}
+
 	void UpdateRailEvents(No::Registry& registry, RailCameraComponent& rail, float deltaTime) {
-		for (auto& eventData : rail.events) {
-			if (!eventData.fired && !eventData.waitingCondition && rail.distance >= eventData.triggerDistance) {
-				switch (eventData.type) {
-				case RailEventType::SpawnEnemy:
-					SpawnEnemies(registry, eventData.spawn);
-					eventData.fired = true;
-					break;
-				case RailEventType::RailStop:
-					rail.isPlaying = false;
-					eventData.fired = true;
-					break;
-				case RailEventType::RailResume:
-					if (eventData.resumeCondition == RailResumeConditionType::None) {
-						rail.isPlaying = true;
-						rail.isFinished = false;
-						eventData.fired = true;
-					} else {
-						eventData.waitingCondition = true;
-						eventData.waitingElapsedSeconds = 0.0f;
-					}
-					break;
-				}
+		UpdateRailWaitingState(registry, rail, deltaTime);
+
+		// Pass1: Spawnを先に処理（同距離での実行順を安定化）
+		for (size_t i = 0; i < rail.events.size(); ++i) {
+			auto& eventData = rail.events[i];
+			if (eventData.fired || rail.distance < eventData.triggerDistance) {
+				continue;
+			}
+			if (eventData.type != RailEventType::SpawnEnemy) {
+				continue;
+			}
+			SpawnEnemies(registry, eventData.spawn);
+			eventData.fired = true;
+		}
+
+		// Pass2: Stopを後で処理
+		for (size_t i = 0; i < rail.events.size(); ++i) {
+			auto& eventData = rail.events[i];
+			if (eventData.fired || rail.distance < eventData.triggerDistance) {
+				continue;
+			}
+			if (eventData.type != RailEventType::RailStop) {
+				continue;
 			}
 
-			if (eventData.waitingCondition && !eventData.fired) {
-				bool shouldResume = false;
-				switch (eventData.resumeCondition) {
-				case RailResumeConditionType::AfterSeconds:
-					eventData.waitingElapsedSeconds += deltaTime;
-					shouldResume = (eventData.waitingElapsedSeconds >= std::max(0.0f, eventData.resumeAfterSeconds));
-					break;
-				case RailResumeConditionType::EnemiesCleared:
-					shouldResume = (CountAliveRailEnemiesByGroup(registry, eventData.targetGroupId) == 0);
-					break;
-				default:
-					shouldResume = true;
-					break;
-				}
-
-				if (shouldResume) {
-					rail.isPlaying = true;
-					rail.isFinished = false;
-					eventData.fired = true;
-					eventData.waitingCondition = false;
-				}
+			eventData.fired = true;
+			if (eventData.resumeCondition == RailResumeConditionType::None) {
+				SetRailStopped(rail, static_cast<int>(i));
+			} else {
+				SetRailWaitingCondition(
+					rail,
+					eventData.resumeCondition,
+					eventData.resumeAfterSeconds,
+					eventData.targetGroupId,
+					static_cast<int>(i));
 			}
 		}
 	}
@@ -462,6 +522,7 @@ void RailCameraSystem::Update(No::Registry& registry, float deltaTime) {
 				rail->distance = rail->totalLength;
 				rail->isPlaying = false;
 				rail->isFinished = true;
+				rail->runtimeState = RailRuntimeState::Stopped;
 
 				auto resultView = registry.View<CBGameResultTag, GameResultComponent>();
 				for (auto resultEntity : resultView) {
@@ -477,5 +538,36 @@ void RailCameraSystem::Update(No::Registry& registry, float deltaTime) {
 		ApplyTransformFromDistance(*rail, transform);
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

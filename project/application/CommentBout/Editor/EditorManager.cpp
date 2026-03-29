@@ -8,6 +8,8 @@
 #include "application/CommentBout/Data/SpeechBubbleDataIO.h"
 #include "application/CommentBout/Component/Enemy/EnemyComponent.h"
 #include "application/CommentBout/Component/Enemy/EnemyShooterComponent.h"
+#include "application/CommentBout/Component/Enemy/SpawnEnemyRequestComponent.h"
+#include "application/CommentBout/Component/Enemy/EnemyBulletComponent.h"
 #include "application/CommentBout/Component/HealthComponent.h"
 #include "application/CommentBout/Component/Enemy/EnemyRewardSourceComponent.h"
 #include "application/CommentBout/Collision/Component/Collider3DComponent.h"
@@ -22,6 +24,11 @@
 #ifdef USE_IMGUI
 #include "externals/imgui/imgui.h"
 #endif
+
+namespace {
+void DestroyRuntimeEnemyEntities(No::Registry& registry);
+void MarkPastEventsFiredByDistance(RailCameraComponent& rail, float distance);
+}
 
 // ---------------------------------------------------------------------------
 // Initialize
@@ -81,8 +88,16 @@ void EditorManager::DrawImGui(No::Registry& registry)
 					rail->stageName = activeStageName_;
 				}
 			}
+
 			const bool exists = LoadStageWrapper(activeStageName_);
-			stageWrapperExists_ = exists;
+			if (exists) {
+				LoadAll(registry);
+				stageWrapperExists_ = true;
+			} else {
+				SaveAll(registry);
+				LoadAll(registry);
+				stageWrapperExists_ = LoadStageWrapper(activeStageName_);
+			}
 		}
 		if (stageWrapperExists_) {
 			ImGui::TextDisabled("ステージデータが見つかりました");
@@ -215,6 +230,7 @@ void EditorManager::LoadAll(No::Registry& registry)
 	rail->railFilePath = MakeRailFilePath(stageName);
 	LoadRailToComponent(*rail, stageName);
 	LoadEventsToComponent(*rail, stageName);
+	DestroyRuntimeEnemyEntities(registry);
 
 	// FieldObjectEditor は次の Update() で自動リロード
 	fieldObjectEditor_.ForceReload();
@@ -354,6 +370,7 @@ void EditorManager::DrawRailTab(No::Registry& registry)
 
 	const std::string stageName(activeStageName_);
 	if (ImGui::Button("JSONから再読み込み") && !stageName.empty()) {
+		DestroyRuntimeEnemyEntities(registry);
 		rail->stageName = stageName;
 		rail->railFilePath = MakeRailFilePath(stageName);
 		LoadRailToComponent(*rail, stageName);
@@ -391,7 +408,9 @@ void EditorManager::DrawEventTab(No::Registry& registry)
 		return;
 	}
 	if (ImGui::Button("JSONから再読み込み") && !stageName.empty()) {
+		const float currentDistance = rail->distance;
 		LoadEventsToComponent(*rail, stageName);
+		MarkPastEventsFiredByDistance(*rail, currentDistance);
 	}
 	ImGui::SameLine();
 	if (ImGui::Button("JSONへ保存") && !stageName.empty()) {
@@ -561,4 +580,57 @@ void EditorManager::ApplyEnemyPresetsToAliveEnemies(No::Registry& registry)
 			shooter->bulletColliderLocalOffset      = cfg.bulletCollider.localOffset3D;
 		}
 	}
+}
+
+namespace {
+void DestroyRuntimeEnemyEntities(No::Registry& registry) {
+	std::vector<No::Entity> entities;
+	for (auto e : registry.View<CBRailEnemyTag>()) {
+		entities.push_back(e);
+	}
+	for (auto e : registry.View<CBEnemyBulletTag>()) {
+		entities.push_back(e);
+	}
+	for (auto e : registry.View<SpawnEnemyRequestComponent>()) {
+		entities.push_back(e);
+	}
+	for (auto e : entities) {
+		registry.DestroyEntity(e);
+	}
+}
+
+void MarkPastEventsFiredByDistance(RailCameraComponent& rail, float distance) {
+	ResetEventRuntime(rail);
+	if (distance < 0.0f) {
+		distance = 0.0f;
+	}
+
+	for (size_t i = 0; i < rail.events.size(); ++i) {
+		auto& eventData = rail.events[i];
+		if (eventData.triggerDistance > distance) {
+			continue;
+		}
+
+		switch (eventData.type) {
+		case RailEventType::SpawnEnemy:
+			eventData.fired = true;
+			break;
+		case RailEventType::RailStop:
+			eventData.fired = true;
+			rail.runtimeState = RailRuntimeState::Stopped;
+			rail.isPlaying = false;
+			rail.waitingSourceEventIndex = static_cast<int>(i);
+			if (eventData.resumeCondition != RailResumeConditionType::None) {
+				rail.runtimeState = RailRuntimeState::WaitingResumeCondition;
+				rail.waitingResumeCondition = eventData.resumeCondition;
+				rail.waitingResumeAfterSeconds = std::max(0.0f, eventData.resumeAfterSeconds);
+				rail.waitingTargetGroupId = eventData.targetGroupId;
+				rail.waitingResumeElapsedSeconds = 0.0f;
+			}
+			break;
+		}
+	}
+
+	rail.distance = distance;
+}
 }

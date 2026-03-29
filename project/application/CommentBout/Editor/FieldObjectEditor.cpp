@@ -586,7 +586,16 @@ void FieldObjectEditor::ForceReload()
 
 void FieldObjectEditor::Save(No::Registry& registry)
 {
-	if (!loadedStageName_.empty()) {
-		SaveFieldPlacements(registry, loadedStageName_);
+	std::string stageName = loadedStageName_;
+	for (auto entity : registry.View<RailCameraComponent>()) {
+		auto* rail = registry.GetComponent<RailCameraComponent>(entity);
+		if (rail && !rail->stageName.empty()) {
+			stageName = rail->stageName;
+			break;
+		}
+	}
+
+	if (!stageName.empty()) {
+		SaveFieldPlacements(registry, stageName);
 	}
 }

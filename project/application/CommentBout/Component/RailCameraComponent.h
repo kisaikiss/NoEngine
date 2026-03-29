@@ -5,8 +5,7 @@
 
 enum class RailEventType {
 	SpawnEnemy = 0,
-	RailStop = 1,
-	RailResume = 2
+	RailStop = 1
 };
 
 enum class RailResumeConditionType {
@@ -55,8 +54,12 @@ struct RailEventData {
 	RailEnemySpawnEventParams spawn;
 
 	bool fired = false;
-	bool waitingCondition = false;
-	float waitingElapsedSeconds = 0.0f;
+};
+
+enum class RailRuntimeState {
+	Playing = 0,
+	Stopped = 1,
+	WaitingResumeCondition = 2
 };
 
 struct RailCameraComponent {
@@ -76,6 +79,12 @@ struct RailCameraComponent {
 	bool needsRebuildArcLength = false;
 	bool isPlaying = true;
 	bool isFinished = false;
+	RailRuntimeState runtimeState = RailRuntimeState::Playing;
+	RailResumeConditionType waitingResumeCondition = RailResumeConditionType::None;
+	float waitingResumeAfterSeconds = 0.0f;
+	int waitingTargetGroupId = 0;
+	float waitingResumeElapsedSeconds = 0.0f;
+	int waitingSourceEventIndex = -1;
 	bool drawRailDebug = true;
 	bool drawCameraDebug = true;
 	bool drawControlPointsDebug = true;

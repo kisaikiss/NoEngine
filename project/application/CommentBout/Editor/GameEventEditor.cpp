@@ -33,16 +33,6 @@ void GameEventEditor::DrawGameEventEditorImGui(No::Registry* registry, No::Entit
 		rail->events.push_back(newEvent);
 		rail->selectedEventIndex = static_cast<int>(rail->events.size()) - 1;
 	}
-	ImGui::SameLine();
-	if (ImGui::Button("再開イベント追加")) {
-		RailEventData newEvent;
-		newEvent.type = RailEventType::RailResume;
-		newEvent.triggerDistance = rail->distance;
-		newEvent.resumeCondition = RailResumeConditionType::AfterSeconds;
-		newEvent.resumeAfterSeconds = 1.0f;
-		rail->events.push_back(newEvent);
-		rail->selectedEventIndex = static_cast<int>(rail->events.size()) - 1;
-	}
 
 	if (ImGui::Button("選択イベント削除")) {
 		const int selected = rail->selectedEventIndex;
@@ -61,12 +51,10 @@ void GameEventEditor::DrawGameEventEditorImGui(No::Registry* registry, No::Entit
 		char label[160];
 		if (e.type == RailEventType::SpawnEnemy) {
 			std::snprintf(label, sizeof(label), "イベント %d : 敵生成 [G%d] @ %.2f", i, e.spawn.spawnGroupId, e.triggerDistance);
-		} else if (e.type == RailEventType::RailResume && e.resumeCondition == RailResumeConditionType::EnemiesCleared) {
-			std::snprintf(label, sizeof(label), "イベント %d : 再開 [TargetG%d] @ %.2f", i, e.targetGroupId, e.triggerDistance);
-		} else if (e.type == RailEventType::RailStop) {
-			std::snprintf(label, sizeof(label), "イベント %d : 停止 @ %.2f", i, e.triggerDistance);
+		} else if (e.type == RailEventType::RailStop && e.resumeCondition != RailResumeConditionType::None) {
+			std::snprintf(label, sizeof(label), "イベント %d : 停止(条件付き再開) @ %.2f", i, e.triggerDistance);
 		} else {
-			std::snprintf(label, sizeof(label), "イベント %d : 再開 @ %.2f", i, e.triggerDistance);
+			std::snprintf(label, sizeof(label), "イベント %d : 停止 @ %.2f", i, e.triggerDistance);
 		}
 		if (ImGui::Selectable(label, rail->selectedEventIndex == i)) {
 			rail->selectedEventIndex = i;
@@ -77,7 +65,7 @@ void GameEventEditor::DrawGameEventEditorImGui(No::Registry* registry, No::Entit
 		RailEventData& e = rail->events[static_cast<size_t>(rail->selectedEventIndex)];
 		ImGui::Separator();
 		int eventType = static_cast<int>(e.type);
-		if (ImGui::Combo("イベント種別", &eventType, "敵生成\0レール停止\0レール再開\0")) {
+		if (ImGui::Combo("イベント種別", &eventType, "敵生成\0レール停止\0")) {
 			e.type = static_cast<RailEventType>(eventType);
 		}
 		ImGui::DragFloat("発生距離", &e.triggerDistance, 0.1f, 0.0f, (rail->totalLength > 0.0f) ? rail->totalLength : 10000.0f);
@@ -106,20 +94,21 @@ void GameEventEditor::DrawGameEventEditorImGui(No::Registry* registry, No::Entit
 				ImGui::DragFloat("Burst Shot Interval", &e.spawn.boss.burstShotInterval, 0.01f, 0.05f, 2.0f);
 			}
 		}
-		if (e.type == RailEventType::RailResume) {
+		if (e.type == RailEventType::RailStop) {
+			ImGui::SeparatorText("停止イベント再開設定 (C案)");
 			int conditionType = static_cast<int>(e.resumeCondition);
-			if (ImGui::Combo("再開条件", &conditionType, "なし\0秒数\0敵全滅\0")) {
+			if (ImGui::Combo("停止後再開条件", &conditionType, "なし(停止維持)\0秒数\0敵全滅\0")) {
 				e.resumeCondition = static_cast<RailResumeConditionType>(conditionType);
 			}
 			if (e.resumeCondition == RailResumeConditionType::AfterSeconds) {
-				ImGui::DragFloat("再開秒数", &e.resumeAfterSeconds, 0.05f, 0.0f, 120.0f);
+				ImGui::DragFloat("停止後再開秒数", &e.resumeAfterSeconds, 0.05f, 0.0f, 120.0f);
 			}
 			if (e.resumeCondition == RailResumeConditionType::EnemiesCleared) {
-				ImGui::DragInt("対象グループID", &e.targetGroupId, 1.0f, 0, 999);
+				ImGui::DragInt("停止後対象グループID", &e.targetGroupId, 1.0f, 0, 999);
 			}
 		}
 
-		ImGui::Text("実行状態: fired=%s waiting=%s elapsed=%.2f", e.fired ? "true" : "false", e.waitingCondition ? "true" : "false", e.waitingElapsedSeconds);
+		ImGui::Text("実行状態: fired=%s", e.fired ? "true" : "false");
 	}
 
 #else

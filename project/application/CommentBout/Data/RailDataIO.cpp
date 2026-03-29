@@ -7,25 +7,27 @@
 #include "externals/nlohmann/json.hpp"
 #include <filesystem>
 #include <fstream>
+#include <algorithm>
 
 namespace {
 const char* ToEventTypeString(RailEventType type) {
 	switch (type) {
 	case RailEventType::SpawnEnemy: return "SpawnEnemy";
 	case RailEventType::RailStop: return "RailStop";
-	case RailEventType::RailResume: return "RailResume";
 	default: return "SpawnEnemy";
 	}
 }
 
-RailEventType ParseEventType(const std::string& typeName) {
+bool TryParseEventType(const std::string& typeName, RailEventType& outType) {
+	if (typeName == "SpawnEnemy") {
+		outType = RailEventType::SpawnEnemy;
+		return true;
+	}
 	if (typeName == "RailStop") {
-		return RailEventType::RailStop;
+		outType = RailEventType::RailStop;
+		return true;
 	}
-	if (typeName == "RailResume") {
-		return RailEventType::RailResume;
-	}
-	return RailEventType::SpawnEnemy;
+	return false;
 }
 
 const char* ToResumeConditionString(RailResumeConditionType condition) {
@@ -65,6 +67,65 @@ RailEnemyType ParseEnemyType(const std::string& typeName) {
 	}
 	return RailEnemyType::MoveOnly;
 }
+
+struct LegacyResumeEventData {
+	float triggerDistance = 0.0f;
+	RailResumeConditionType resumeCondition = RailResumeConditionType::None;
+	float resumeAfterSeconds = 0.0f;
+	int targetGroupId = 0;
+};
+
+void SortEventsByTriggerAndType(std::vector<RailEventData>& events) {
+	std::stable_sort(events.begin(), events.end(), [](const RailEventData& a, const RailEventData& b) {
+		if (a.triggerDistance != b.triggerDistance) {
+			return a.triggerDistance < b.triggerDistance;
+		}
+		if (a.type == b.type) {
+			return false;
+		}
+		if (a.type == RailEventType::SpawnEnemy && b.type == RailEventType::RailStop) {
+			return true;
+		}
+		return false;
+	});
+}
+
+void ApplyLegacyResumeMigration(std::vector<RailEventData>& events, const std::vector<LegacyResumeEventData>& legacyResumes) {
+	for (const auto& legacy : legacyResumes) {
+		int bestStopIndex = -1;
+		float bestDistance = -1.0f;
+		for (size_t i = 0; i < events.size(); ++i) {
+			const auto& e = events[i];
+			if (e.type != RailEventType::RailStop) {
+				continue;
+			}
+			if (e.triggerDistance > legacy.triggerDistance) {
+				continue;
+			}
+			if (bestStopIndex < 0 || e.triggerDistance >= bestDistance) {
+				bestStopIndex = static_cast<int>(i);
+				bestDistance = e.triggerDistance;
+			}
+		}
+
+		if (bestStopIndex >= 0) {
+			auto& stopEvent = events[static_cast<size_t>(bestStopIndex)];
+			stopEvent.resumeCondition = legacy.resumeCondition;
+			stopEvent.resumeAfterSeconds = legacy.resumeAfterSeconds;
+			stopEvent.targetGroupId = legacy.targetGroupId;
+		} else {
+			RailEventData stopEvent;
+			stopEvent.type = RailEventType::RailStop;
+			stopEvent.triggerDistance = legacy.triggerDistance;
+			stopEvent.resumeCondition = legacy.resumeCondition;
+			stopEvent.resumeAfterSeconds = legacy.resumeAfterSeconds;
+			stopEvent.targetGroupId = legacy.targetGroupId;
+			events.push_back(stopEvent);
+		}
+	}
+
+	SortEventsByTriggerAndType(events);
+}
 }
 
 static const char* kStageDataBase = "resources/game/td_3105/Data/StageData/";
@@ -84,9 +145,14 @@ std::string MakeStageWrapperPath(const std::string& stageName) {
 void ResetEventRuntime(RailCameraComponent& rail) {
 	for (auto& eventData : rail.events) {
 		eventData.fired = false;
-		eventData.waitingCondition = false;
-		eventData.waitingElapsedSeconds = 0.0f;
 	}
+	rail.runtimeState = RailRuntimeState::Playing;
+	rail.isPlaying = true;
+	rail.waitingResumeCondition = RailResumeConditionType::None;
+	rail.waitingResumeAfterSeconds = 0.0f;
+	rail.waitingTargetGroupId = 0;
+	rail.waitingResumeElapsedSeconds = 0.0f;
+	rail.waitingSourceEventIndex = -1;
 }
 
 bool SaveRailToJson(const RailCameraComponent& rail, const std::string& stageName) {
@@ -238,14 +304,19 @@ bool LoadEventsToComponent(RailCameraComponent& rail, const std::string& stageNa
 		return false;
 	}
 
+	bool hasLegacyResumeEvent = false;
+	std::vector<LegacyResumeEventData> legacyResumes;
+
 	rail.events.clear();
 	for (const auto& eventJson : *eventsIt) {
 		RailEventData eventData;
+		std::string typeName = "SpawnEnemy";
 
 		const auto typeIt = eventJson.find("type");
 		if (typeIt != eventJson.end() && typeIt->is_string()) {
-			eventData.type = ParseEventType(typeIt->get<std::string>());
+			typeName = typeIt->get<std::string>();
 		}
+
 		const auto triggerIt = eventJson.find("triggerDistance");
 		if (triggerIt != eventJson.end() && triggerIt->is_number()) {
 			eventData.triggerDistance = triggerIt->get<float>();
@@ -262,6 +333,21 @@ bool LoadEventsToComponent(RailCameraComponent& rail, const std::string& stageNa
 		const auto targetGroupIt = eventJson.find("targetGroupId");
 		if (targetGroupIt != eventJson.end() && targetGroupIt->is_number_integer()) {
 			eventData.targetGroupId = targetGroupIt->get<int>();
+		}
+
+		if (typeName == "RailResume") {
+			hasLegacyResumeEvent = true;
+			LegacyResumeEventData legacy;
+			legacy.triggerDistance = eventData.triggerDistance;
+			legacy.resumeCondition = eventData.resumeCondition;
+			legacy.resumeAfterSeconds = eventData.resumeAfterSeconds;
+			legacy.targetGroupId = eventData.targetGroupId;
+			legacyResumes.push_back(legacy);
+			continue;
+		}
+
+		if (!TryParseEventType(typeName, eventData.type)) {
+			continue;
 		}
 
 		const auto spawnIt = eventJson.find("spawn");
@@ -342,6 +428,14 @@ bool LoadEventsToComponent(RailCameraComponent& rail, const std::string& stageNa
 		}
 
 		rail.events.push_back(eventData);
+	}
+
+	if (!legacyResumes.empty()) {
+		ApplyLegacyResumeMigration(rail.events, legacyResumes);
+	}
+
+	if (hasLegacyResumeEvent) {
+		SaveEventsToJson(rail, stageName);
 	}
 
 	rail.selectedEventIndex = rail.events.empty() ? -1 : 0;

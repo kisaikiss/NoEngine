@@ -274,14 +274,9 @@ void GameScene::Setup() {
 		RailEventData stopEvent;
 		stopEvent.type = RailEventType::RailStop;
 		stopEvent.triggerDistance = 8.0f;
+		stopEvent.resumeCondition = RailResumeConditionType::AfterSeconds;
+		stopEvent.resumeAfterSeconds = 2.0f;
 		railCamera->events.push_back(stopEvent);
-
-		RailEventData resumeEvent;
-		resumeEvent.type = RailEventType::RailResume;
-		resumeEvent.triggerDistance = 8.0f;
-		resumeEvent.resumeCondition = RailResumeConditionType::AfterSeconds;
-		resumeEvent.resumeAfterSeconds = 2.0f;
-		railCamera->events.push_back(resumeEvent);
 
 		railCamera->selectedEventIndex = 0;
 	}
