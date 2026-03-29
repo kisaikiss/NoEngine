@@ -148,16 +148,52 @@ void EditorManager::DrawImGui(No::Registry& registry)
 	}
 
 	// ---- デバッグ表示 CollapsingHeader ----
-	// DebugShortcutStateComponent の debugDisplayAll フラグで強制開閉
-	{
-		DebugShortcutStateComponent* shortcut = nullptr;
-		for (auto se : registry.View<DebugShortcutStateTag, DebugShortcutStateComponent>()) {
-			shortcut = registry.GetComponent<DebugShortcutStateComponent>(se);
+	DebugShortcutStateComponent* shortcut = nullptr;
+	for (auto se : registry.View<DebugShortcutStateComponent>()) {
+		shortcut = registry.GetComponent<DebugShortcutStateComponent>(se);
+		if (shortcut) {
 			break;
 		}
-		if (shortcut) {
-			ImGui::SetNextItemOpen(shortcut->debugDisplayAll, ImGuiCond_Always);
+	}
+	CommentBoutCollision::CollisionDebugConfigComponent* colConfig = nullptr;
+	for (auto ce : registry.View<CommentBoutCollision::CollisionDebugConfigComponent>()) {
+		colConfig = registry.GetComponent<CommentBoutCollision::CollisionDebugConfigComponent>(ce);
+		if (colConfig) {
+			break;
 		}
+	}
+	RailCameraComponent* railForDebug = nullptr;
+	if (railCameraEntity_ != No::nullEntity) {
+		railForDebug = registry.GetComponent<RailCameraComponent>(railCameraEntity_);
+	}
+
+	if (shortcut && shortcut->applyDebugDisplayAll) {
+		const bool enable = shortcut->debugDisplayAll;
+		showSpawnDebug_ = enable;
+		if (showSpawnDebug_) {
+			CreateSpawnDebugEntities(registry);
+			lastSpawnDebugSig_ = ComputeSpawnEventSignature(registry);
+		} else {
+			DestroySpawnDebugEntities(registry);
+			lastSpawnDebugSig_ = -1;
+		}
+
+		if (railForDebug) {
+			railForDebug->drawRailDebug = enable;
+			railForDebug->drawCameraDebug = enable;
+			railForDebug->drawControlPointsDebug = enable;
+			railForDebug->drawEventPointsDebug = enable;
+		}
+		if (colConfig) {
+			colConfig->enableCollisionDebug = enable;
+			colConfig->showEnemyCollider = enable;
+			colConfig->showEnemyBulletCollider = enable;
+			colConfig->showFieldCollider = enable;
+			colConfig->showPlayerHitboxOverlay = enable;
+			colConfig->showCameraGateWire = enable;
+			colConfig->showPlayerAttackCollider = enable;
+		}
+		shortcut->applyDebugDisplayAll = false;
 	}
 	if (ImGui::CollapsingHeader("デバッグ表示")) {
 		// 1. スポーンデバッグ
@@ -172,29 +208,21 @@ void EditorManager::DrawImGui(No::Registry& registry)
 		}
 		ImGui::SameLine();
 		// 2. レールカメラ描画チェックボックス
-		if (railCameraEntity_ != No::nullEntity) {
-			auto* rail = registry.GetComponent<RailCameraComponent>(railCameraEntity_);
-			if (rail) {
-				ImGui::Checkbox("レール描画", &rail->drawRailDebug);
-				ImGui::SameLine();
-				ImGui::Checkbox("カメラギズモ", &rail->drawCameraDebug);
-				ImGui::SameLine();
-				ImGui::Checkbox("制御点", &rail->drawControlPointsDebug);
-				ImGui::SameLine();
-				ImGui::Checkbox("イベント点", &rail->drawEventPointsDebug);
+		if (railForDebug) {
+			ImGui::Checkbox("レール描画", &railForDebug->drawRailDebug);
+			ImGui::SameLine();
+			ImGui::Checkbox("カメラギズモ", &railForDebug->drawCameraDebug);
+			ImGui::SameLine();
+			ImGui::Checkbox("制御点", &railForDebug->drawControlPointsDebug);
+			ImGui::SameLine();
+			ImGui::Checkbox("イベント点", &railForDebug->drawEventPointsDebug);
 
-				// 制御点半径とイベント点半径を同一値で管理
-				if (ImGui::DragFloat("デバッグ半径", &rail->controlPointDebugRadius, 0.005f, 0.01f, 1.0f)) {
-					rail->eventPointDebugRadius = rail->controlPointDebugRadius;
-				}
+			// 制御点半径とイベント点半径を同一値で管理
+			if (ImGui::DragFloat("デバッグ半径", &railForDebug->controlPointDebugRadius, 0.005f, 0.01f, 1.0f)) {
+				railForDebug->eventPointDebugRadius = railForDebug->controlPointDebugRadius;
 			}
 		}
 		// 3. コリジョンデバッグ設定（CollisionDebugRenderSystem から移植）
-		CommentBoutCollision::CollisionDebugConfigComponent* colConfig = nullptr;
-		for (auto ce : registry.View<CommentBoutCollision::CollisionDebugConfigTag, CommentBoutCollision::CollisionDebugConfigComponent>()) {
-			colConfig = registry.GetComponent<CommentBoutCollision::CollisionDebugConfigComponent>(ce);
-			break;
-		}
 		if (colConfig) {
 			ImGui::Separator();
 			ImGui::Checkbox("衝突デバッグ表示", &colConfig->enableCollisionDebug);

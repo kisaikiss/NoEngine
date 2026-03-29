@@ -7,9 +7,9 @@
 ///
 /// ショートカット一覧:
 ///   LeftShift + 1  : デバッグカメラ / レールカメラ切り替え (useDebugCamera)
-///   LeftShift + 2  : デバッグ表示 全展開 / 全折り畳みトグル (debugDisplayAll)
-///   LeftCtrl  + I  : 自機無敵トグル (debugInvincible)
-///   LeftCtrl  + R  : クリア/オーバー無効トグル (debugDisableResult)
+///   LeftShift + 2  : デバッグ表示項目の全ON / 全OFFを一括適用 (debugDisplayAll)
+///   LeftCtrl  + 3  : 自機無敵トグル (debugInvincible)
+///   LeftCtrl  + 4  : クリア/オーバー無効トグル (debugDisableResult)
 /// </summary>
 class DebugShortcutSystem : public No::ISystem {
 public:

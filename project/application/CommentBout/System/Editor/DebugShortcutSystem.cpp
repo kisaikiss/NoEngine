@@ -16,9 +16,11 @@ void DebugShortcutSystem::Update(No::Registry& registry, float deltaTime)
 	static_cast<void>(deltaTime);
 
 	DebugShortcutStateComponent* shortcut = nullptr;
-	for (auto entity : registry.View<DebugShortcutStateTag, DebugShortcutStateComponent>()) {
+	for (auto entity : registry.View<DebugShortcutStateComponent>()) {
 		shortcut = registry.GetComponent<DebugShortcutStateComponent>(entity);
-		break;
+		if (shortcut) {
+			break;
+		}
 	}
 	if (!shortcut) {
 		return;
@@ -30,11 +32,11 @@ void DebugShortcutSystem::Update(No::Registry& registry, float deltaTime)
 		shortcut->useDebugCamera = !shortcut->useDebugCamera;
 	}
 
-	// LeftShift + 2 : デバッグ表示 全展開 / 全折り畳み
+	// LeftShift + 2 : デバッグ表示項目 全ON / 全OFF
 	if (No::Keyboard::IsPress(VK_LSHIFT) && No::Keyboard::IsTrigger('2')) {
 		shortcut->debugDisplayAll = !shortcut->debugDisplayAll;
+		shortcut->applyDebugDisplayAll = true;
 	}
-
 	// LeftShift + 3 : 自機無敵トグル
 	if (No::Keyboard::IsPress(VK_LSHIFT) && No::Keyboard::IsTrigger('3')) {
 		shortcut->debugInvincible = !shortcut->debugInvincible;
