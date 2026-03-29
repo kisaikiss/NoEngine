@@ -2,7 +2,7 @@
 #include "GameResultSystem.h"
 #include "application/CommentBout/Component/OutGame/GameResultComponent.h"
 #include "application/CommentBout/Component/HealthComponent.h"
-#include "application/CommentBout/Component/BossDefeatSequenceComponent.h"
+#include "application/CommentBout/Component/Enemy/BossDefeatSequenceComponent.h"
 #include "application/CommentBout/Component/OutGame/ClearOverStateComponent.h"
 #include "application/CommentBout/GameTag.h"
 #include "application/CommentBout/Utility/CBGameAudio.h"

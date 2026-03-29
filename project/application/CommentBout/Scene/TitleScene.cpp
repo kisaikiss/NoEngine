@@ -6,7 +6,7 @@
 #include "application/CommentBout/Component/OutGame/TitleMenuConfigComponent.h"
 #include "application/CommentBout/Component/OutGame/OptionStateComponent.h"
 #include "application/CommentBout/Component/OutGame/OptionMenuConfigComponent.h"
-#include "application/CommentBout/System/InputHelperSystem.h"
+#include "application/CommentBout/System/Common/InputHelperSystem.h"
 #include "application/CommentBout/System/OutGame/TitleSystem.h"
 #include "application/CommentBout/System/OutGame/TitleViewSystem.h"
 #include "application/CommentBout/System/OutGame/OptionSystem.h"

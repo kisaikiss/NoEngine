@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "SpeechBubbleToBossSystem.h"
-#include "application/CommentBout/Component/SpeechBubbleComponent.h"
+#include "application/CommentBout/Component/Enemy/SpeechBubbleComponent.h"
 #include "application/CommentBout/Component/HpBarComponent.h"
 #include "application/CommentBout/Component/DamageRequestComponent.h"
 #include "application/CommentBout/GameTag.h"

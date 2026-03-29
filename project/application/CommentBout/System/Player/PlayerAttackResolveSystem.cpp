@@ -3,7 +3,7 @@
 
 #include "application/CommentBout/Component/AttackDamageComponent.h"
 #include "application/CommentBout/Component/DamageRequestComponent.h"
-#include "application/CommentBout/Component/EnemyComponent.h"
+#include "application/CommentBout/Component/Enemy/EnemyComponent.h"
 #include "application/CommentBout/Component/HealthComponent.h"
 #include "application/CommentBout/GameTag.h"
 #include "application/CommentBout/Utility/CBCollisionMask.h"

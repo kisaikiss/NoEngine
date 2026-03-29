@@ -2,7 +2,7 @@
 #include "RailCameraEditor.h"
 
 #include "application/CommentBout/Component/RailCameraComponent.h"
-#include "application/CommentBout/Component/EnemyComponent.h"
+#include "application/CommentBout/Component/Enemy/EnemyComponent.h"
 #include "application/CommentBout/GameTag.h"
 #include <cstdio>
 

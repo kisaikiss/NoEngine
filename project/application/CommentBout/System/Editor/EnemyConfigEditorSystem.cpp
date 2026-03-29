@@ -1,10 +1,10 @@
 #include "stdafx.h"
 #include "EnemyConfigEditorSystem.h"
 #include "application/CommentBout/Data/EnemyDataIO.h"
-#include "application/CommentBout/Component/EnemyComponent.h"
-#include "application/CommentBout/Component/EnemyShooterComponent.h"
+#include "application/CommentBout/Component/Enemy/EnemyComponent.h"
+#include "application/CommentBout/Component/Enemy/EnemyShooterComponent.h"
 #include "application/CommentBout/Component/HealthComponent.h"
-#include "application/CommentBout/Component/EnemyRewardSourceComponent.h"
+#include "application/CommentBout/Component/Enemy/EnemyRewardSourceComponent.h"
 #include "application/CommentBout/Collision/Component/Collider3DComponent.h"
 #include "application/CommentBout/GameTag.h"
 #include <algorithm>
