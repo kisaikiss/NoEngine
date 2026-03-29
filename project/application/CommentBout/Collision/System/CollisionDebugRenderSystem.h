@@ -18,6 +18,7 @@ namespace CommentBoutCollision {
 		CollisionDebugConfigComponent* EnsureConfig(No::Registry& registry);
 		void DrawConfigImGui(CollisionDebugConfigComponent& config);
 		void DrawEnemyColliderDebug(No::Registry& registry, const CollisionDebugConfigComponent& config);		//敵の当たり判定表示
+		void DrawEnemyBulletColliderDebug(No::Registry& registry, const CollisionDebugConfigComponent& config);	//敵弾の当たり判定表示
 		void DrawFieldColliderDebug(No::Registry& registry, const CollisionDebugConfigComponent& config);		//フィールドの当たり判定表示
 		void DrawPlayerHitboxDebug(No::Registry& registry, const CollisionDebugConfigComponent& config);		//自機の当たり判定表示
 		void DrawPlayerAttackColliderDebug(No::Registry& registry, const CollisionDebugConfigComponent& config);	//攻撃の当たり判定表示

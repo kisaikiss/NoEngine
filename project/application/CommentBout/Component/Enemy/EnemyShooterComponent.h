@@ -12,4 +12,8 @@ struct EnemyShooterComponent {
 	float targetDepthFromCamera = 1.0f;
 	float bulletLifetime = 4.0f;
 	float shootDistanceMax = 25.0f;
+
+	// 弾コライダー設定（EnemyConfig::bulletCollider から EnemySpawnSystem でコピーされる）
+	float       bulletColliderRadiusMultiplier = 0.5f;
+	No::Vector3 bulletColliderLocalOffset      = { 0.0f, 0.0f, 0.0f };
 };

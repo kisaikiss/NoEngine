@@ -28,12 +28,16 @@
         ],
         "moveSpeed": 0.0,
         "spawnGroupId": 1,
+        "spawnOffset": [
+          -0.5,
+          0.4000000059604645,
+          1.5
+        ],
         "spawnPosition": [
           -1.7999999523162842,
           1.0,
           18.0
-        ],
-        "spawnSpacing": 1.5
+        ]
       },
       "targetGroupId": 0,
       "triggerDistance": 6.0,
@@ -65,14 +69,18 @@
           0.0,
           -1.0
         ],
-        "moveSpeed": 2.799999952316284,
+        "moveSpeed": 0.0,
         "spawnGroupId": 2,
+        "spawnOffset": [
+          2.0,
+          0.0,
+          0.0
+        ],
         "spawnPosition": [
           1.5,
-          1.0,
+          3.200000047683716,
           16.0
-        ],
-        "spawnSpacing": 1.2000000476837158
+        ]
       },
       "targetGroupId": 0,
       "triggerDistance": 12.0,
@@ -106,12 +114,16 @@
         ],
         "moveSpeed": 0.0,
         "spawnGroupId": 99,
+        "spawnOffset": [
+          0.0,
+          0.0,
+          1.0
+        ],
         "spawnPosition": [
           0.0,
           1.5,
           12.0
-        ],
-        "spawnSpacing": 1.0
+        ]
       },
       "targetGroupId": 0,
       "triggerDistance": 0.0,
@@ -145,12 +157,16 @@
         ],
         "moveSpeed": 3.0,
         "spawnGroupId": 0,
+        "spawnOffset": [
+          0.0,
+          0.0,
+          1.0
+        ],
         "spawnPosition": [
           0.0,
           1.0,
           20.0
-        ],
-        "spawnSpacing": 1.0
+        ]
       },
       "targetGroupId": 0,
       "triggerDistance": 20.0,
@@ -184,12 +200,16 @@
         ],
         "moveSpeed": 3.0,
         "spawnGroupId": 0,
+        "spawnOffset": [
+          0.0,
+          0.0,
+          1.0
+        ],
         "spawnPosition": [
           0.0,
           1.0,
           20.0
-        ],
-        "spawnSpacing": 1.0
+        ]
       },
       "targetGroupId": 0,
       "triggerDistance": 20.0,

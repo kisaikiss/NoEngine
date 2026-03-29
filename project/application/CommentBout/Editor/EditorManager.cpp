@@ -31,16 +31,20 @@ void EditorManager::Initialize(No::Registry& registry, No::Entity railCameraEnti
 {
 	railCameraEntity_ = railCameraEntity;
 
-	// stageNameBuffer をレールカメラのステージ名で初期化
+	// stageNameBuffer / activeStageName をレールカメラのステージ名で初期化
 	if (railCameraEntity_ != No::nullEntity) {
 		auto* rail = registry.GetComponent<RailCameraComponent>(railCameraEntity_);
 		if (rail && !rail->stageName.empty()) {
-			std::snprintf(stageNameBuffer_, sizeof(stageNameBuffer_), "%s", rail->stageName.c_str());
+			std::snprintf(stageNameBuffer_,  sizeof(stageNameBuffer_),  "%s", rail->stageName.c_str());
+			std::snprintf(activeStageName_,  sizeof(activeStageName_),  "%s", rail->stageName.c_str());
 		}
 	}
 	if (stageNameBuffer_[0] == '\0') {
 		std::snprintf(stageNameBuffer_, sizeof(stageNameBuffer_), "Stage_01");
+		std::snprintf(activeStageName_, sizeof(activeStageName_), "Stage_01");
 	}
+
+	stageWrapperExists_ = LoadStageWrapper(activeStageName_);
 
 	enemyPresets_ = EnemyDataIO::Load();
 	enemyPresetsLoaded_ = true;
@@ -64,9 +68,32 @@ void EditorManager::DrawImGui(No::Registry& registry)
 
 	ImGui::Begin("Editor##EditorManager");
 
-	// ---- トップ: ステージ名 + 一括 IO ----
-	ImGui::SetNextItemWidth(160.0f);
-	ImGui::InputText("StageName", stageNameBuffer_, sizeof(stageNameBuffer_));
+	// ---- ステージ変更（デフォルト閉じ） ----
+	if (ImGui::CollapsingHeader("ステージ変更")) {
+		ImGui::SetNextItemWidth(160.0f);
+		ImGui::InputText("StageName##buf", stageNameBuffer_, sizeof(stageNameBuffer_));
+		ImGui::SameLine();
+		if (ImGui::Button("ステージ名確定")) {
+			std::snprintf(activeStageName_, sizeof(activeStageName_), "%s", stageNameBuffer_);
+			if (railCameraEntity_ != No::nullEntity) {
+				auto* rail = registry.GetComponent<RailCameraComponent>(railCameraEntity_);
+				if (rail) {
+					rail->stageName = activeStageName_;
+				}
+			}
+			const bool exists = LoadStageWrapper(activeStageName_);
+			stageWrapperExists_ = exists;
+		}
+		if (stageWrapperExists_) {
+			ImGui::TextDisabled("ステージデータが見つかりました");
+		} else {
+			ImGui::TextColored(ImVec4(1.0f, 0.8f, 0.0f, 1.0f), "新規ステージ (保存で作成)");
+		}
+		ImGui::TextDisabled("確定するまでファイル操作には影響しません");
+	}
+
+	// ---- 一括 IO ----
+	ImGui::Text("使用中: %s", activeStageName_);
 	ImGui::SameLine();
 	if (ImGui::Button("すべて読込")) {
 		LoadAll(registry);
@@ -112,8 +139,6 @@ void EditorManager::DrawImGui(No::Registry& registry)
 			}
 		}
 		ImGui::SameLine();
-		ImGui::TextDisabled("ON中はイベント変更を即反映");
-
 		// 2. レールカメラ描画チェックボックス
 		if (railCameraEntity_ != No::nullEntity) {
 			auto* rail = registry.GetComponent<RailCameraComponent>(railCameraEntity_);
@@ -132,6 +157,8 @@ void EditorManager::DrawImGui(No::Registry& registry)
 				}
 			}
 		}
+		//3.コリジョンデバッグの表示をここに移植
+
 	}
 
 	ImGui::Separator();
@@ -181,7 +208,7 @@ void EditorManager::LoadAll(No::Registry& registry)
 	auto* rail = registry.GetComponent<RailCameraComponent>(railCameraEntity_);
 	if (!rail) return;
 
-	const std::string stageName(stageNameBuffer_);
+	const std::string stageName(activeStageName_);
 	if (stageName.empty()) return;
 
 	rail->stageName = stageName;
@@ -205,10 +232,11 @@ void EditorManager::SaveAll(No::Registry& registry)
 	auto* rail = registry.GetComponent<RailCameraComponent>(railCameraEntity_);
 	if (!rail) return;
 
-	const std::string stageName(stageNameBuffer_);
+	const std::string stageName(activeStageName_);
 	if (stageName.empty()) return;
 
 	rail->stageName = stageName;
+	SaveStageWrapper(stageName);
 	SaveRailToJson(*rail, stageName);
 	SaveEventsToJson(*rail, stageName);
 	fieldObjectEditor_.Save(registry);
@@ -324,7 +352,7 @@ void EditorManager::DrawRailTab(No::Registry& registry)
 		return;
 	}
 
-	const std::string stageName(stageNameBuffer_);
+	const std::string stageName(activeStageName_);
 	if (ImGui::Button("JSONから再読み込み") && !stageName.empty()) {
 		rail->stageName = stageName;
 		rail->railFilePath = MakeRailFilePath(stageName);
@@ -356,7 +384,7 @@ void EditorManager::DrawRailTab(No::Registry& registry)
 void EditorManager::DrawEventTab(No::Registry& registry)
 {
 #ifdef USE_IMGUI
-	const std::string stageName(stageNameBuffer_);
+	const std::string stageName(activeStageName_);
 	auto* rail = registry.GetComponent<RailCameraComponent>(railCameraEntity_);
 	if (!rail) {
 		ImGui::TextDisabled("RailCameraComponent が見つかりません");
@@ -421,6 +449,9 @@ void EditorManager::DrawEnemyTab(No::Registry& registry)
 		changed |= ImGui::DragFloat("弾の寿命(秒)", &cfg.bulletLifetime, 0.05f, 0.1f, 30.0f);
 		changed |= ImGui::DragFloat("カメラからの射撃深度", &cfg.targetDepthFromCamera, 0.01f, 0.1f, 20.0f);
 		changed |= ImGui::DragFloat("射撃最大距離", &cfg.shootDistanceMax, 0.05f, 0.0f, 200.0f);
+		ImGui::SeparatorText("弾コライダー");
+		changed |= ImGui::DragFloat("弾コライダー半径倍率", &cfg.bulletCollider.radiusMultiplier, 0.01f, 0.01f, 5.0f);
+		changed |= ImGui::DragFloat3("弾コライダーオフセット", &cfg.bulletCollider.localOffset3D.x, 0.01f, -5.0f, 5.0f);
 
 		enemyPresets_[type] = cfg;
 		if (changed) ApplyEnemyPresetsToAliveEnemies(registry);
@@ -526,6 +557,8 @@ void EditorManager::ApplyEnemyPresetsToAliveEnemies(No::Registry& registry)
 			shooter->targetDepthFromCamera = std::max(0.1f, cfg.targetDepthFromCamera);
 			shooter->bulletLifetime = std::max(0.1f, cfg.bulletLifetime);
 			shooter->shootDistanceMax = std::max(0.0f, cfg.shootDistanceMax);
+			shooter->bulletColliderRadiusMultiplier = std::max(0.01f, cfg.bulletCollider.radiusMultiplier);
+			shooter->bulletColliderLocalOffset      = cfg.bulletCollider.localOffset3D;
 		}
 	}
 }

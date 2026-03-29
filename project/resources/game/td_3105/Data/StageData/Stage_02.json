@@ -1,0 +1,6 @@
+{
+  "eventDataPath": "resources/game/td_3105/Data/StageData/EventData/Stage_02_events.json",
+  "fieldObjectDataPath": "resources/game/td_3105/Data/StageData/FieldObjectData/Stage_02_field_objects.json",
+  "railDataPath": "resources/game/td_3105/Data/StageData/RailData/Stage_02_rail.json",
+  "stageName": "Stage_02"
+}

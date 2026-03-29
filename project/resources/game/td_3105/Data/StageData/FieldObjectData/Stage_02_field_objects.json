@@ -1,0 +1,65 @@
+{
+  "objects": [
+    {
+      "displayName": "Skydome_0",
+      "objectId": "field_obj_0",
+      "position": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotationEulerDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        40.0,
+        40.0,
+        40.0
+      ],
+      "typeKey": "Skydome"
+    },
+    {
+      "displayName": "Building_0",
+      "objectId": "field_obj_1",
+      "position": [
+        0.0,
+        1.4500000476837158,
+        -19.799999237060547
+      ],
+      "rotationEulerDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        4.0,
+        4.0,
+        4.0
+      ],
+      "typeKey": "Building"
+    },
+    {
+      "displayName": "Ground_0",
+      "objectId": "field_obj_2",
+      "position": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotationEulerDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        10.0,
+        1.0,
+        300.0
+      ],
+      "typeKey": "Ground"
+    }
+  ],
+  "stageName": "Stage_02"
+}

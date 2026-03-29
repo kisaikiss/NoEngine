@@ -2,21 +2,34 @@
 #include <string>
 
 struct RailCameraComponent;
-///レールカメらの制御点やイベントのデータをJSONファイルファイルパス
-std::string MakeRailFilePath(const std::string& stageName);
-///ゲームイベントをJSONファイルファイルパス
-std::string MakeEventFilePath(const std::string& stageName);
 
-/// <summary>
-/// レールイベントの実行状態をリセットします。
-/// </summary>
-/// <param name="rail"></param>
+// ---------------------------------------------------------------------------
+// パス生成
+// ---------------------------------------------------------------------------
+/// StageData/RailData/StageName_rail.json
+std::string MakeRailFilePath(const std::string& stageName);
+/// StageData/EventData/StageName_events.json
+std::string MakeEventFilePath(const std::string& stageName);
+/// StageData/StageName.json  （ラッパーJSON）
+std::string MakeStageWrapperPath(const std::string& stageName);
+
+// ---------------------------------------------------------------------------
+// ランタイムリセット
+// ---------------------------------------------------------------------------
 void ResetEventRuntime(RailCameraComponent& rail);
 
-///情報のセーブ
+// ---------------------------------------------------------------------------
+// セーブ
+// ---------------------------------------------------------------------------
 bool SaveRailToJson(const RailCameraComponent& rail, const std::string& stageName);
 bool SaveEventsToJson(const RailCameraComponent& rail, const std::string& stageName);
+/// ステージラッパーJSONを保存する。SaveAll 時に呼ぶ。
+bool SaveStageWrapper(const std::string& stageName);
 
-///情報のロード
+// ---------------------------------------------------------------------------
+// ロード
+// ---------------------------------------------------------------------------
 bool LoadRailToComponent(RailCameraComponent& rail, const std::string& stageName);
 bool LoadEventsToComponent(RailCameraComponent& rail, const std::string& stageName);
+/// ラッパーJSONの存在確認。ファイルがなくてもクラッシュしない（新ステージ作成用）。
+bool LoadStageWrapper(const std::string& stageName);

@@ -5,6 +5,7 @@
 #include "application/CommentBout/Data/EnemyConfig.h"
 #include "application/CommentBout/Data/EnemyDataIO.h"
 #include "externals/nlohmann/json.hpp"
+#include <filesystem>
 #include <fstream>
 
 namespace {
@@ -66,12 +67,18 @@ RailEnemyType ParseEnemyType(const std::string& typeName) {
 }
 }
 
+static const char* kStageDataBase = "resources/game/td_3105/Data/StageData/";
+
 std::string MakeRailFilePath(const std::string& stageName) {
-	return "resources/game/td_3105/Data/StageData/" + stageName + "/RailData/" + stageName + "_rail.json";
+	return std::string(kStageDataBase) + "RailData/" + stageName + "_rail.json";
 }
 
 std::string MakeEventFilePath(const std::string& stageName) {
-	return "resources/game/td_3105/Data/StageData/" + stageName + "/EventData/" + stageName + "_events.json";
+	return std::string(kStageDataBase) + "EventData/" + stageName + "_events.json";
+}
+
+std::string MakeStageWrapperPath(const std::string& stageName) {
+	return std::string(kStageDataBase) + stageName + ".json";
 }
 
 void ResetEventRuntime(RailCameraComponent& rail) {
@@ -91,7 +98,9 @@ bool SaveRailToJson(const RailCameraComponent& rail, const std::string& stageNam
 		json["controlPoints"].push_back({ p.x, p.y, p.z });
 	}
 
-	std::ofstream ofs(MakeRailFilePath(stageName));
+	const std::string filePath = MakeRailFilePath(stageName);
+	std::filesystem::create_directories(std::filesystem::path(filePath).parent_path());
+	std::ofstream ofs(filePath);
 	if (!ofs) {
 		return false;
 	}
@@ -131,12 +140,37 @@ bool SaveEventsToJson(const RailCameraComponent& rail, const std::string& stageN
 		json["events"].push_back(eventJson);
 	}
 
-	std::ofstream ofs(MakeEventFilePath(stageName));
+	const std::string filePath = MakeEventFilePath(stageName);
+	std::filesystem::create_directories(std::filesystem::path(filePath).parent_path());
+	std::ofstream ofs(filePath);
 	if (!ofs) {
 		return false;
 	}
 	ofs << json.dump(2);
 	return true;
+}
+
+bool SaveStageWrapper(const std::string& stageName) {
+	const std::string filePath = MakeStageWrapperPath(stageName);
+	nlohmann::json json;
+	json["stageName"]        = stageName;
+	json["railDataPath"]        = MakeRailFilePath(stageName);
+	json["eventDataPath"]       = MakeEventFilePath(stageName);
+	json["fieldObjectDataPath"] = std::string(kStageDataBase) + "FieldObjectData/" + stageName + "_field_objects.json";
+
+	std::filesystem::create_directories(std::filesystem::path(filePath).parent_path());
+	std::ofstream ofs(filePath);
+	if (!ofs) {
+		return false;
+	}
+	ofs << json.dump(2);
+	return true;
+}
+
+bool LoadStageWrapper(const std::string& stageName) {
+	const std::string filePath = MakeStageWrapperPath(stageName);
+	std::ifstream ifs(filePath);
+	return ifs.good();
 }
 
 bool LoadRailToComponent(RailCameraComponent& rail, const std::string& stageName) {

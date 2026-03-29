@@ -8,6 +8,7 @@ namespace CommentBoutCollision {
 	struct CollisionDebugConfigComponent {
 		bool enableCollisionDebug = false;
 		bool showEnemyCollider = true;
+		bool showEnemyBulletCollider = true;
 		bool showFieldCollider = true;
 		bool showPlayerHitboxOverlay = true;
 		bool showCameraGateWire = true;

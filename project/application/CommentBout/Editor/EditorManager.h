@@ -48,10 +48,12 @@ private:
     EnemyConfigMap enemyPresets_;
     bool enemyPresetsLoaded_ = false;
 
-    char stageNameBuffer_[64] = "";
+    char stageNameBuffer_[64]  = "";   // ImGui InputText 編集バッファ（入力中の値）
+    char activeStageName_[64] = "";   // 確定済みステージ名（ファイルアクセスに使用）
+    bool stageWrapperExists_  = false; // 確定時にラッパーJSONが存在したか
 
     bool isPauseEnabled_     = false;
-    bool showSpawnDebug_     = false;
+    bool showSpawnDebug_     = true;
     int  lastSpawnDebugSig_  = -1;
 
     std::vector<No::Entity> spawnDebugEntities_;

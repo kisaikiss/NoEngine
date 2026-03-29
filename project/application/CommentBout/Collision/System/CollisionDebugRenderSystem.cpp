@@ -50,6 +50,7 @@ void CollisionDebugRenderSystem::DrawConfigImGui(CollisionDebugConfigComponent& 
 	ImGui::Checkbox("衝突デバッグ表示", &config.enableCollisionDebug);
 	if (config.enableCollisionDebug) {
 		ImGui::Checkbox("敵コライダー", &config.showEnemyCollider);
+		ImGui::Checkbox("敵弾コライダー", &config.showEnemyBulletCollider);
 		ImGui::Checkbox("フィールドコライダー", &config.showFieldCollider);
 		ImGui::Checkbox("自機ヒットボックス(2D)", &config.showPlayerHitboxOverlay);
 		ImGui::Checkbox("カメラゲート", &config.showCameraGateWire);
@@ -67,6 +68,26 @@ void CollisionDebugRenderSystem::DrawEnemyColliderDebug(No::Registry& registry, 
 	}
 
 	for (auto entity : registry.View<CBRailEnemyTag, Collider3DComponent>()) {
+		auto* collider = registry.GetComponent<Collider3DComponent>(entity);
+		if (!collider) {
+			continue;
+		}
+
+		const No::Color color = MakeColliderColor(collider->isColliding);
+		if (collider->shapeType == ShapeType3D::Box) {
+			NoEngine::Primitive::DrawCube(collider->worldPosition, collider->worldBoxSize, color);
+		} else {
+			NoEngine::Primitive::DrawSphere(collider->worldPosition, collider->worldRadius, color, 10, 10);
+		}
+	}
+}
+
+void CollisionDebugRenderSystem::DrawEnemyBulletColliderDebug(No::Registry& registry, const CollisionDebugConfigComponent& config) {
+	if (!config.enableCollisionDebug || !config.showEnemyBulletCollider) {
+		return;
+	}
+
+	for (auto entity : registry.View<CBEnemyBulletTag, Collider3DComponent>()) {
 		auto* collider = registry.GetComponent<Collider3DComponent>(entity);
 		if (!collider) {
 			continue;
@@ -230,6 +251,7 @@ void CollisionDebugRenderSystem::Update(No::Registry& registry, float deltaTime)
 
 	DrawConfigImGui(*config);
 	DrawEnemyColliderDebug(registry, *config);
+	DrawEnemyBulletColliderDebug(registry, *config);
 	DrawFieldColliderDebug(registry, *config);
 	DrawPlayerHitboxDebug(registry, *config);
 	DrawPlayerAttackColliderDebug(registry, *config);

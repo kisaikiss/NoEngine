@@ -13,6 +13,7 @@
 #include <algorithm>
 #include <cmath>
 #include <cstdio>
+#include <filesystem>
 #include <fstream>
 #include <unordered_map>
 
@@ -24,7 +25,7 @@ namespace {
 	const char* kFieldTypeDefaultsPath = "resources/game/td_3105/Data/Config/FieldObjectTypeDefaults.json";
 
 	std::string MakeFieldPlacementPath(const std::string& stageName) {
-		return "resources/game/td_3105/Data/StageData/" + stageName + "/FieldObjectData/" + stageName + "_field_objects.json";
+		return "resources/game/td_3105/Data/StageData/FieldObjectData/" + stageName + "_field_objects.json";
 	}
 
 	float ToRadian(float degree) {
@@ -307,7 +308,9 @@ namespace {
 			arr.push_back(node);
 		}
 
-		std::ofstream ofs(MakeFieldPlacementPath(stageName));
+		const std::string filePath = MakeFieldPlacementPath(stageName);
+		std::filesystem::create_directories(std::filesystem::path(filePath).parent_path());
+		std::ofstream ofs(filePath);
 		if (ofs) {
 			ofs << json.dump(2);
 		}
@@ -320,8 +323,8 @@ namespace {
 		const std::string& stageName,
 		int& idCounter
 	) {
-		DestroyAllFieldObjects(registry);
-
+		// ファイル・パースの確認を先に行い、成功した場合のみ既存エンティティを削除する。
+		// 先に削除するとファイルが存在しない場合にオブジェクトが消えたまま残る問題を防ぐ。
 		std::ifstream ifs(MakeFieldPlacementPath(stageName));
 		if (!ifs) {
 			return;
@@ -332,6 +335,8 @@ namespace {
 		if (!json.is_object() || !json.contains("objects") || !json["objects"].is_array()) {
 			return;
 		}
+
+		DestroyAllFieldObjects(registry);
 
 		for (const auto& node : json["objects"]) {
 			if (!node.is_object()) {

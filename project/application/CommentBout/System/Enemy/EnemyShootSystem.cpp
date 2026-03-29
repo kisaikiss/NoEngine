@@ -71,6 +71,8 @@ void SpawnEnemyBullet(
 	float bulletSpeed,
 	int bulletDamage,
 	float lifetimeSec,
+	float bulletRadiusMultiplier,
+	const No::Vector3& bulletLocalOffset,
 	const GameResourceComponent* gameResource
 ) {
 	auto bullet = registry.GenerateEntity();
@@ -101,7 +103,8 @@ void SpawnEnemyBullet(
 	auto* collider = registry.AddComponent<CommentBoutCollision::Collider3DComponent>(bullet);
 	collider->shapeType = CommentBoutCollision::ShapeType3D::Sphere;
 	collider->useScaleAsRadius = true;
-	collider->radiusMultiplier = 0.5f;
+	collider->radiusMultiplier = bulletRadiusMultiplier;
+	collider->localOffset = bulletLocalOffset;
 	collider->collisionLayer = CommentBout::CollisionLayer::CBEnemyBullet;
 	collider->collisionMask = CommentBout::CollisionMask::CBEnemyBullet;
 
@@ -172,7 +175,8 @@ void EnemyShootSystem::Update(No::Registry& registry, float deltaTime)
 		}
 
 		shooter->shootCooldown = std::max(0.05f, shooter->shootInterval);
-		SpawnEnemyBullet(registry, entity, *transform, dir, shooter->bulletSpeed, shooter->bulletDamage, shooter->bulletLifetime, gameResource);
+		SpawnEnemyBullet(registry, entity, *transform, dir, shooter->bulletSpeed, shooter->bulletDamage, shooter->bulletLifetime,
+			shooter->bulletColliderRadiusMultiplier, shooter->bulletColliderLocalOffset, gameResource);
 		CommentBout::GameAudio::PlaySEClip(CommentBoutResourceKey::kSEEnemyShot);
 	}
 
@@ -204,7 +208,8 @@ void EnemyShootSystem::Update(No::Registry& registry, float deltaTime)
 
 		const int prevShots = boss->shotsSpawnedInBurst;
 		while (boss->shotsSpawnedInBurst < boss->shotsFiredInBurst) {
-			SpawnEnemyBullet(registry, entity, *transform, dir, shooter->bulletSpeed, shooter->bulletDamage, shooter->bulletLifetime, gameResource);
+			SpawnEnemyBullet(registry, entity, *transform, dir, shooter->bulletSpeed, shooter->bulletDamage, shooter->bulletLifetime,
+				shooter->bulletColliderRadiusMultiplier, shooter->bulletColliderLocalOffset, gameResource);
 			boss->shotsSpawnedInBurst += 1;
 		}
 		if (boss->shotsSpawnedInBurst > prevShots) {

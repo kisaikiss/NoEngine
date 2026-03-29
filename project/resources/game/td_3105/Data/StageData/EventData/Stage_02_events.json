@@ -1,0 +1,220 @@
+{
+  "events": [
+    {
+      "resumeAfterSeconds": 0.0,
+      "resumeCondition": "None",
+      "spawn": {
+        "boss": {
+          "burstShotInterval": 0.25,
+          "figure8Amplitude": [
+            2.0,
+            1.0
+          ],
+          "figure8Period": 4.0,
+          "offsetLocal": [
+            0.0,
+            0.0,
+            8.0
+          ],
+          "stopDuration": 1.2000000476837158
+        },
+        "count": 3,
+        "enemyType": "MoveOnly",
+        "hp": 12,
+        "moveDirection": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "moveSpeed": 0.0,
+        "spawnGroupId": 1,
+        "spawnOffset": [
+          -2.0,
+          0.0,
+          0.0
+        ],
+        "spawnPosition": [
+          7.800000190734863,
+          7.599999904632568,
+          18.0
+        ]
+      },
+      "targetGroupId": 0,
+      "triggerDistance": 6.0,
+      "type": "SpawnEnemy"
+    },
+    {
+      "resumeAfterSeconds": 0.0,
+      "resumeCondition": "None",
+      "spawn": {
+        "boss": {
+          "burstShotInterval": 0.25,
+          "figure8Amplitude": [
+            2.0,
+            1.0
+          ],
+          "figure8Period": 4.0,
+          "offsetLocal": [
+            0.0,
+            0.0,
+            8.0
+          ],
+          "stopDuration": 1.2000000476837158
+        },
+        "count": 2,
+        "enemyType": "MoveAndShoot",
+        "hp": 18,
+        "moveDirection": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "moveSpeed": 0.0,
+        "spawnGroupId": 2,
+        "spawnOffset": [
+          2.0,
+          0.0,
+          0.0
+        ],
+        "spawnPosition": [
+          1.5,
+          3.200000047683716,
+          16.0
+        ]
+      },
+      "targetGroupId": 0,
+      "triggerDistance": 12.0,
+      "type": "SpawnEnemy"
+    },
+    {
+      "resumeAfterSeconds": 0.0,
+      "resumeCondition": "None",
+      "spawn": {
+        "boss": {
+          "burstShotInterval": 0.2199999988079071,
+          "figure8Amplitude": [
+            2.799999952316284,
+            1.399999976158142
+          ],
+          "figure8Period": 4.5,
+          "offsetLocal": [
+            0.0,
+            0.20000000298023224,
+            9.5
+          ],
+          "stopDuration": 1.0
+        },
+        "count": 1,
+        "enemyType": "Boss",
+        "hp": 150,
+        "moveDirection": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "moveSpeed": 0.0,
+        "spawnGroupId": 99,
+        "spawnOffset": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "spawnPosition": [
+          0.0,
+          1.5,
+          12.0
+        ]
+      },
+      "targetGroupId": 0,
+      "triggerDistance": 0.0,
+      "type": "SpawnEnemy"
+    },
+    {
+      "resumeAfterSeconds": 2.0,
+      "resumeCondition": "AfterSeconds",
+      "spawn": {
+        "boss": {
+          "burstShotInterval": 0.25,
+          "figure8Amplitude": [
+            2.0,
+            1.0
+          ],
+          "figure8Period": 4.0,
+          "offsetLocal": [
+            0.0,
+            0.0,
+            8.0
+          ],
+          "stopDuration": 1.2000000476837158
+        },
+        "count": 1,
+        "enemyType": "MoveOnly",
+        "hp": 10,
+        "moveDirection": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "moveSpeed": 3.0,
+        "spawnGroupId": 0,
+        "spawnOffset": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "spawnPosition": [
+          0.0,
+          1.0,
+          20.0
+        ]
+      },
+      "targetGroupId": 0,
+      "triggerDistance": 20.0,
+      "type": "RailStop"
+    },
+    {
+      "resumeAfterSeconds": 4.0,
+      "resumeCondition": "AfterSeconds",
+      "spawn": {
+        "boss": {
+          "burstShotInterval": 0.25,
+          "figure8Amplitude": [
+            2.0,
+            1.0
+          ],
+          "figure8Period": 4.0,
+          "offsetLocal": [
+            0.0,
+            0.0,
+            8.0
+          ],
+          "stopDuration": 1.2000000476837158
+        },
+        "count": 1,
+        "enemyType": "MoveOnly",
+        "hp": 10,
+        "moveDirection": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "moveSpeed": 3.0,
+        "spawnGroupId": 0,
+        "spawnOffset": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "spawnPosition": [
+          0.0,
+          1.0,
+          20.0
+        ]
+      },
+      "targetGroupId": 0,
+      "triggerDistance": 20.0,
+      "type": "RailResume"
+    }
+  ],
+  "stageName": "Stage_02"
+}
