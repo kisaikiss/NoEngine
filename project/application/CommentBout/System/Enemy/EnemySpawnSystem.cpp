@@ -37,7 +37,7 @@ void SpawnRailEnemies(No::Registry& registry, const RailEnemySpawnEventParams& p
 		registry.AddComponent<CBRailEnemyTag>(enemyEntity);
 
 		auto* transform = registry.AddComponent<No::TransformComponent>(enemyEntity);
-		transform->translate = params.spawnPosition + direction * (params.spawnSpacing * static_cast<float>(i));
+		transform->translate = params.spawnPosition + params.spawnOffset * static_cast<float>(i);
 		transform->scale = { preset.modelScale, preset.modelScale, preset.modelScale };
 
 		auto* mesh = registry.AddComponent<No::MeshComponent>(enemyEntity);

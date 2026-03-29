@@ -236,7 +236,9 @@ int EditorManager::ComputeSpawnEventSignature(No::Registry& registry) const
 		sig += static_cast<int>(e.spawn.moveDirection.z * 23.0f);
 		sig += static_cast<int>(e.triggerDistance * 5.0f);
 		sig += static_cast<int>(e.spawn.enemyType) * 37;
-		sig += static_cast<int>(e.spawn.spawnSpacing * 41.0f);
+		sig += static_cast<int>(e.spawn.spawnOffset.x * 41.0f);
+		sig += static_cast<int>(e.spawn.spawnOffset.y * 43.0f);
+		sig += static_cast<int>(e.spawn.spawnOffset.z * 47.0f);
 	}
 	return sig;
 }
@@ -266,12 +268,7 @@ void EditorManager::CreateSpawnDebugEntities(No::Registry& registry)
 		if (hasDir) { dir.x /= dirLen; dir.y /= dirLen; dir.z /= dirLen; }
 
 		for (int i = 0; i < sp.count; ++i) {
-			const float offset = static_cast<float>(i) * sp.spawnSpacing;
-			const No::Vector3 pos = {
-				sp.spawnPosition.x + dir.x * offset,
-				sp.spawnPosition.y + dir.y * offset,
-				sp.spawnPosition.z + dir.z * offset
-			};
+			const No::Vector3 pos = sp.spawnPosition + sp.spawnOffset * static_cast<float>(i);
 
 			No::Entity e = registry.GenerateEntity();
 			auto* transform = registry.AddComponent<No::TransformComponent>(e);

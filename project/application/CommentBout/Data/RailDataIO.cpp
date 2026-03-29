@@ -115,7 +115,7 @@ bool SaveEventsToJson(const RailCameraComponent& rail, const std::string& stageN
 			{ "count", e.spawn.count },
 			{ "hp", e.spawn.hp },
 			{ "moveSpeed", e.spawn.moveSpeed },
-			{ "spawnSpacing", e.spawn.spawnSpacing },
+			{ "spawnOffset", { e.spawn.spawnOffset.x, e.spawn.spawnOffset.y, e.spawn.spawnOffset.z } },
 			{ "spawnPosition", { e.spawn.spawnPosition.x, e.spawn.spawnPosition.y, e.spawn.spawnPosition.z } },
 			{ "moveDirection", { e.spawn.moveDirection.x, e.spawn.moveDirection.y, e.spawn.moveDirection.z } },
 			{ "spawnGroupId", e.spawn.spawnGroupId },
@@ -244,9 +244,16 @@ bool LoadEventsToComponent(RailCameraComponent& rail, const std::string& stageNa
 			if (speedIt != spawnIt->end() && speedIt->is_number()) {
 				eventData.spawn.moveSpeed = speedIt->get<float>();
 			}
-			const auto spacingIt = spawnIt->find("spawnSpacing");
-			if (spacingIt != spawnIt->end() && spacingIt->is_number()) {
-				eventData.spawn.spawnSpacing = spacingIt->get<float>();
+			const auto spawnOffsetIt = spawnIt->find("spawnOffset");
+			if (spawnOffsetIt != spawnIt->end() && spawnOffsetIt->is_array() && spawnOffsetIt->size() >= 3) {
+				eventData.spawn.spawnOffset.x = (*spawnOffsetIt)[0].get<float>();
+				eventData.spawn.spawnOffset.y = (*spawnOffsetIt)[1].get<float>();
+				eventData.spawn.spawnOffset.z = (*spawnOffsetIt)[2].get<float>();
+			} else {
+				const auto spacingIt = spawnIt->find("spawnSpacing");
+				if (spacingIt != spawnIt->end() && spacingIt->is_number()) {
+					eventData.spawn.spawnOffset = { 0.0f, 0.0f, spacingIt->get<float>() };
+				}
 			}
 			const auto spawnPosIt = spawnIt->find("spawnPosition");
 			if (spawnPosIt != spawnIt->end() && spawnPosIt->is_array() && spawnPosIt->size() >= 3) {

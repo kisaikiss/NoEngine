@@ -91,7 +91,7 @@ void GameEventEditor::DrawGameEventEditorImGui(No::Registry* registry, No::Entit
 			ImGui::DragInt("生成数", &e.spawn.count, 1.0f, 1, 32);
 			// HPはEnemyConfigEditorSystemで管理するため、イベント側では編集しない。
 			ImGui::DragFloat("敵速度", &e.spawn.moveSpeed, 0.1f, 0.0f, 100.0f);
-			ImGui::DragFloat("生成間隔", &e.spawn.spawnSpacing, 0.1f, 0.0f, 20.0f);
+			ImGui::DragFloat3("敵間隔オフセット", &e.spawn.spawnOffset.x, 0.1f);
 			ImGui::DragFloat3("生成位置", &e.spawn.spawnPosition.x, 0.1f);
 			ImGui::DragFloat3("移動方向", &e.spawn.moveDirection.x, 0.05f);
 			ImGui::DragInt("生成グループID", &e.spawn.spawnGroupId, 1.0f, 0, 999);
