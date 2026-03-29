@@ -11,8 +11,8 @@
 #include "application/CommentBout/System/OutGame/TitleViewSystem.h"
 #include "application/CommentBout/System/OutGame/OptionSystem.h"
 #include "application/CommentBout/System/OutGame/OptionViewSystem.h"
-#include "application/CommentBout/Spawner/TitleMenuSpawner.h"
-#include "application/CommentBout/Spawner/OptionMenuSpawner.h"
+#include "application/CommentBout/Spawner/OutGame/TitleMenuSpawner.h"
+#include "application/CommentBout/Spawner/OutGame/OptionMenuSpawner.h"
 
 namespace {
 	No::Entity cameraE;

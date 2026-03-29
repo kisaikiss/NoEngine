@@ -2,7 +2,7 @@
 #include "FieldObjectEditor.h"
 #include "application/CommentBout/Component/GameResourceComponent.h"
 #include "application/CommentBout/Component/RailCameraComponent.h"
-#include "application/CommentBout/FieldObject/Component/FieldPlacementComponent.h"
+#include "application/CommentBout/Component/FieldObject/FieldPlacementComponent.h"
 #include "application/CommentBout/Collision/Component/Collider3DComponent.h"
 #include "application/CommentBout/Collision/Component/ProjectedColliderComponent.h"
 #include "application/CommentBout/Utility/CBCollisionMask.h"

@@ -1,6 +1,6 @@
 #pragma once
 #include "engine/NoEngine.h"
-#include "application/CommentBout/Component/GameResultComponent.h"
+#include "application/CommentBout/Component/OutGame/GameResultComponent.h"
 
 /// <summary>
 /// クリア/オーバー条件を監視して GameResultComponent.result を更新するシステム。

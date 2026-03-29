@@ -11,8 +11,8 @@
 #include "application/CommentBout/Component/PlayerAnimStateComponent.h"
 #include "application/CommentBout/Collision/Component/Collider2DComponent.h"
 #include "engine/Functions/ECS/Component/Animator2DComponent.h"
-#include "application/CommentBout/Component/GameResultComponent.h"
-#include "application/CommentBout/Component/ClearOverStateComponent.h"
+#include "application/CommentBout/Component/OutGame/GameResultComponent.h"
+#include "application/CommentBout/Component/OutGame/ClearOverStateComponent.h"
 #include "application/CommentBout/GameTag.h"
 #include <algorithm>
 

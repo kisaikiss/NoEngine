@@ -1,9 +1,9 @@
 #include "stdafx.h"
 #include "GameResultSystem.h"
-#include "application/CommentBout/Component/GameResultComponent.h"
+#include "application/CommentBout/Component/OutGame/GameResultComponent.h"
 #include "application/CommentBout/Component/HealthComponent.h"
 #include "application/CommentBout/Component/BossDefeatSequenceComponent.h"
-#include "application/CommentBout/Component/ClearOverStateComponent.h"
+#include "application/CommentBout/Component/OutGame/ClearOverStateComponent.h"
 #include "application/CommentBout/GameTag.h"
 #include "application/CommentBout/Utility/CBGameAudio.h"
 #include "application/CommentBout/Component/GameResourceComponent.h"
@@ -137,11 +137,10 @@ void GameResultSystem::DebugToggleClearOver(GameResultComponent* gameResult)
 			ImGui::TextColored(ImVec4(1.0f, 0.3f, 0.3f, 1.0f), "オーバー無効");
 		}
 
-	
+
 		ImGui::End();
 	}
 #else
 	static_cast<void>(gameResult);
 #endif
 }
-

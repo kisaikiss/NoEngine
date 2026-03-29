@@ -76,7 +76,7 @@ Phase 5    G    エディタ管理クラス                             ✅ 完�
 Phase 5.5  G2   エディタ大幅リファクタリング                    ✅ 完了
 Phase 6    H前半 ボス構造変更                              ✅ 完了
 Phase 7    H後半 クリア/オーバー演出                          ✅ 完了
-Phase 8    I    音実装
+Phase 8    I    音実装                                             ✅ 完了
 Phase 9    F    フォルダ精査・整理
 ```
 
@@ -1669,40 +1669,210 @@ switch (sizeCategory) {
 ## Phase 9 — F: フォルダ精査・整理
 
 > **目的:** 全機能の実装完了後、フォルダ構造・ファイル配置を見直し整理する。
-> **前提:** Phase 1〜8 が全て完了している
+> **前提:** Phase 1〜8 が全て完了していること。
+> **方針:**
+> - `FieldObject` は `Editor/` を除き `Component/FieldObject/` と `System/FieldObject/` に吸収する
+> - `Collision/` は例外として現状のサブフォルダ構造（Component/Event/System/Utility）のまま維持する
+> - `Spawner/` は OutGame 系のみなので `Spawner/OutGame/` にサブフォルダ化する
+> - `Component/` と `System/` はサブフォルダで機能ドメインを分割する
+> - 作業は **1ステップずつビルド確認しながら**進める（一括移動しない）
 
 ---
 
-### 9-1. 精査フェーズ (実装前に確認)
+### 現状のフォルダ構造（Phase 8 完了時点）
 
-このフェーズに入る前に以下を確認・洗い出す:
-
-- [ ] 全ソースファイルのフォルダ配置を一覧化
-- [ ] Editor フォルダ: `RailCameraEditor`, `GameEventEditor`, `EditorManager`, `FieldObjectEditor` が揃っているか
-- [ ] System フォルダ: 肥大化していないか、サブフォルダ分けが必要か
-  - `OutGame/` に PauseSystem があるが、`ClearOverSystem` / `GameResultSystem` もここに入れるか検討
-- [ ] Component フォルダ: 肥大化確認
-- [ ] Data フォルダ: 全 IO クラスが揃っているか
-- [ ] `FieldObject/` フォルダの構造が `Editor/` `System/` `Component/` に揃っているか
+```
+CommentBout/
+├── Collision/                   ← 例外: このまま維持
+│   ├── Component/
+│   ├── Event/
+│   ├── System/
+│   └── Utility/
+├── Component/
+│   ├── OutGame/                 ← Pause/Option/Title 系
+│   └── *.h (多数)              ← 敵/プレイヤー/ClearOver 等が混在
+├── Data/                        ← DataIO / Config
+├── Editor/                      ← EditorManager, RailCameraEditor, GameEventEditor
+├── Event/                       ← OptionMenuEvent
+├── FieldObject/                 ← ここを解体する
+│   ├── Component/
+│   ├── Editor/
+│   └── System/
+├── Scene/
+├── Spawner/                     ← OutGame 系スポナーが 3 つ
+├── System/
+│   ├── OutGame/                 ← Pause/Option/Title 系
+│   └── *.cpp, *.h (多数)      ← 敵/プレイヤー/ClearOver/エディタ等が混在
+└── Utility/
+```
 
 ---
 
-### 9-2. 整理実行
+### 9-1. FieldObject の解体（最優先・ユーザー指定）
 
-精査結果に基づいて実施:
+**移動対象:**
 
-- [ ] OutGame フォルダを `System/OutGame/` に確立し、ClearOverSystem/GameResultSystem を移動
-- [ ] 不要になったファイル・空ファイルの削除
-- [ ] `vcxproj` / `vcxproj.filters` を全ファイルの移動に追従させる
-- [ ] include パスが全て正しいか確認 (ビルドエラーで検出)
-- [ ] 旧 `RailData/` フォルダが空になっていれば削除
+| 移動前 | 移動後 |
+|--------|--------|
+| `FieldObject/Component/FieldPlacementComponent.h` | `Component/FieldObject/FieldPlacementComponent.h` |
+| `FieldObject/System/FieldEditorSystem.h` | `System/FieldObject/FieldEditorSystem.h` |
+| `FieldObject/System/FieldEditorSystem.cpp` | `System/FieldObject/FieldEditorSystem.cpp` |
+| `FieldObject/Editor/FieldObjectEditor.h` | `Editor/FieldObjectEditor.h` |
+| `FieldObject/Editor/FieldObjectEditor.cpp` | `Editor/FieldObjectEditor.cpp` |
+
+**手順:**
+1. `Component/FieldObject/` フォルダ作成、ファイルを移動
+2. `FieldPlacementComponent.h` を include している全ファイルの include パスを更新
+   - 現在: `application/CommentBout/FieldObject/Component/FieldPlacementComponent.h`
+   - 変更後: `application/CommentBout/Component/FieldObject/FieldPlacementComponent.h`
+3. `System/FieldObject/` フォルダ作成、FieldEditorSystem を移動
+4. `FieldEditorSystem.h` を include している全ファイルの include パスを更新
+5. `Editor/` に FieldObjectEditor を移動
+6. `FieldObjectEditor.h` を include している全ファイルの include パスを更新
+7. `FieldObject/` フォルダを削除
+8. `vcxproj` / `vcxproj.filters` 更新 → **ビルド確認**
+
+- [ ] `Component/FieldObject/FieldPlacementComponent.h` に移動
+- [ ] `System/FieldObject/FieldEditorSystem.cpp, .h` に移動
+- [ ] `Editor/FieldObjectEditor.cpp, .h` に移動
+- [ ] `FieldObject/` ディレクトリ削除
+- [ ] include パス全更新
+- [ ] vcxproj/filters 更新・ビルド確認
+
+---
+
+### 9-2. System/ のサブフォルダ整理
+
+**移動対象と分類:**
+
+| 移動前 (System/) | 移動後 |
+|-----------------|--------|
+| `ClearOverSystem.cpp, .h` | `System/OutGame/` |
+| `ClearOverViewSystem.cpp, .h` | `System/OutGame/` |
+| `GameResultSystem.cpp, .h` | `System/OutGame/` |
+| `EnemyConfigEditorSystem.cpp, .h` | `System/Editor/` |
+| `SpeechBubbleConfigEditorSystem.cpp, .h` | `System/Editor/` |
+| `RailCameraEditorSystem.cpp, .h` | `System/Editor/` |
+| `PlayerInfoDebugSystem.cpp, .h` | `System/Editor/` |
+| `BossBehaviorSystem.cpp, .h` | `System/Enemy/` |
+| `BossDefeatSystem.cpp, .h` | `System/Enemy/` |
+| `EnemyBulletHitSystem.cpp, .h` | `System/Enemy/` |
+| `EnemyContactDamageSystem.cpp, .h` | `System/Enemy/` |
+| `EnemyMoveSystem.cpp, .h` | `System/Enemy/` |
+| `EnemyShootSystem.cpp, .h` | `System/Enemy/` |
+| `EnemySpawnSystem.cpp, .h` | `System/Enemy/` |
+| `EnemySystem.cpp, .h` | `System/Enemy/` |
+| `EnemyVisualSystem.cpp, .h` | `System/Enemy/` |
+| `SpeechBubbleToBossSystem.cpp, .h` | `System/Enemy/` |
+| `PlayerAnimSystem.cpp, .h` | `System/Player/` |
+| `PlayerAttackResolveSystem.cpp, .h` | `System/Player/` |
+| `PlayerControlSystem.cpp, .h` | `System/Player/` |
+| `DamageApplySystem.cpp, .h` | `System/Player/` |
+| `DamageFlashSystem.cpp, .h` | `System/Player/` |
+| `HpBarViewSystem.cpp, .h` | `System/UI/` |
+| `RailProgressBarSystem.cpp, .h` | `System/UI/` |
+| `RailCameraSystem.cpp, .h` | `System/` 直下のまま |
+| `InputHelperSystem.cpp, .h` | `System/` 直下のまま |
+| `LifetimeSystem.cpp, .h` | `System/` 直下のまま |
+
+**手順:**
+- 1 サブフォルダずつ移動・include パス更新・ビルド確認を繰り返す
+- 推奨順: OutGame → Editor → Enemy → Player → UI
+
+- [ ] `System/OutGame/` に ClearOver系/GameResult を移動
+- [ ] `System/Editor/` を作成し、エディタ系 System を移動
+- [ ] `System/Enemy/` を作成し、敵/ボス系 System を移動
+- [ ] `System/Player/` を作成し、プレイヤー/ダメージ系 System を移動
+- [ ] `System/UI/` を作成し、HpBar/RailProgressBar を移動
+- [ ] include パス全更新・ビルド確認
+
+---
+
+### 9-3. Component/ のサブフォルダ整理
+
+**移動対象と分類:**
+
+| 移動前 (Component/) | 移動後 |
+|--------------------|--------|
+| `ClearOverConfigComponent.h` | `Component/OutGame/` |
+| `ClearOverStateComponent.h` | `Component/OutGame/` |
+| `ClearOverViewComponent.h` | `Component/OutGame/` |
+| `GameResultComponent.h` | `Component/OutGame/` |
+| `EnemyBulletComponent.h` | `Component/Enemy/` |
+| `EnemyComponent.h` | `Component/Enemy/` |
+| `EnemyRewardSourceComponent.h` | `Component/Enemy/` |
+| `EnemyShooterComponent.h` | `Component/Enemy/` |
+| `SpawnEnemyRequestComponent.h` | `Component/Enemy/` |
+| `SpeechBubbleComponent.h` | `Component/Enemy/` |
+| `BossComponent.h` | `Component/Enemy/` |
+| `BossDefeatSequenceComponent.h` | `Component/Enemy/` |
+| `PlayerComponent.h` | `Component/Player/` |
+| `PlayerAnimStateComponent.h` | `Component/Player/` |
+| `PlayerAttackComponent.cpp, .h` | `Component/Player/` |
+| `PlayerHitboxComponent.h` | `Component/Player/` |
+| `AttackDamageComponent.h` | `Component/Player/` |
+| `DamageFlashComponent.h` | `Component/Player/` |
+| `DamageRequestComponent.h` | `Component/Player/` |
+| `InvincibleComponent.h` | `Component/Player/` |
+| `HpBarComponent.h` | `Component/UI/` |
+| `RailProgressBarComponent.h` | `Component/UI/` |
+| `RailCameraComponent.h` | `Component/` 直下のまま |
+| `GameResourceComponent.h` | `Component/` 直下のまま |
+| `LifetimeComponent.h` | `Component/` 直下のまま |
+| `HealthComponent.h` | `Component/` 直下のまま |
+
+**手順:**
+- 1 サブフォルダずつ移動・include パス更新・ビルド確認を繰り返す
+- 推奨順: OutGame → Enemy → Player → UI
+
+- [ ] `Component/OutGame/` に ClearOver系/GameResult を移動
+- [ ] `Component/Enemy/` を作成し、敵/ボス/吹き出し系 Component を移動
+- [ ] `Component/Player/` を作成し、プレイヤー/ダメージ系 Component を移動
+- [ ] `Component/UI/` を作成し、HpBar/RailProgressBar を移動
+- [ ] include パス全更新・ビルド確認
+
+---
+
+### 9-4. Spawner/ のサブフォルダ整理
+
+**移動対象:**
+
+| 移動前 | 移動後 |
+|--------|--------|
+| `Spawner/OptionMenuSpawner.cpp, .h` | `Spawner/OutGame/` |
+| `Spawner/PauseMenuSpawner.cpp, .h` | `Spawner/OutGame/` |
+| `Spawner/TitleMenuSpawner.cpp, .h` | `Spawner/OutGame/` |
+
+- [ ] `Spawner/OutGame/` に全スポナーを移動
+- [ ] include パス更新・ビルド確認
+
+---
+
+### 9-5. 最終確認・クリーンアップ
+
+- [ ] `FieldObject/` が完全に削除されているか確認
+- [ ] `vcxproj` / `vcxproj.filters` が全移動に追従しているか確認
+- [ ] 空になったフォルダがないか確認
+- [ ] 全ファイルの include パスが正しいか確認 (ビルドエラーで検出)
+- [ ] ゲームの正常動作確認
+
+---
+
+### 作業時の注意事項
+
+- **1 サブフォルダずつビルド確認する。** 複数フォルダを同時に移動すると include エラーの特定が困難になる。
+- **vcxproj/filters はファイル移動直後に更新する。** Visual Studio のソリューションエクスプローラーで「削除→追加」するのが最も確実。
+- **include パスは相対パスではなくプロジェクトルートからの絶対パスで統一する。** 例: `application/CommentBout/Component/FieldObject/FieldPlacementComponent.h`
+- **GameScene.cpp / TitleScene.cpp は多数の System/Component を include しているため、移動後のパス更新漏れが発生しやすい。**
 
 ---
 
 ### Phase 9 完了確認
 
 - [ ] ビルドエラーなし
-- [ ] フォルダ構造が命名規則と一致している
+- [ ] `FieldObject/` ディレクトリが存在しない
+- [ ] `Component/`, `System/` にサブフォルダが作成されている
+- [ ] フォルダ構造が上記方針と一致している
 - [ ] 不要ファイルがない
 - [ ] ゲームが正常にプレイ可能
 
@@ -1741,11 +1911,11 @@ switch (sizeCategory) {
 | 7 | ClearOverSystem 作成 | [ ] |
 | 7 | ClearOverViewSystem 作成 | [ ] |
 | 7 | クリア/オーバー全フロー動作確認 | [ ] |
-| 8 | 全音声ファイル登録 | [ ] |
-| 8 | BGM 再生 (ゲーム/タイトル) | [ ] |
-| 8 | 戦闘 SE 実装 | [ ] |
-| 8 | 吹き出し SE 実装 | [ ] |
-| 8 | システム SE 実装 | [ ] |
+| 8 | 全音声ファイル登録 | [x] |
+| 8 | BGM 再生 (ゲーム/タイトル) | [x] |
+| 8 | 戦闘 SE 実装 | [x] |
+| 8 | 吹き出し SE 実装 | [x] |
+| 8 | システム SE 実装 | [x] |
 | 9 | フォルダ構造精査 | [ ] |
 | 9 | 整理・不要ファイル削除 | [ ] |
 

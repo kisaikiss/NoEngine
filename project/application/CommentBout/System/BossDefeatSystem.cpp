@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "BossDefeatSystem.h"
 #include "application/CommentBout/Component/BossDefeatSequenceComponent.h"
-#include "application/CommentBout/Component/ClearOverStateComponent.h"
+#include "application/CommentBout/Component/OutGame/ClearOverStateComponent.h"
 #include "application/CommentBout/Component/InvincibleComponent.h"
 #include "application/CommentBout/Component/GameResourceComponent.h"
 #include "application/CommentBout/GameTag.h"

@@ -1,5 +1,5 @@
 #pragma once
-#include "application/CommentBout/Component/ClearOverConfigComponent.h"
+#include "application/CommentBout/Component/OutGame/ClearOverConfigComponent.h"
 #include <string>
 
 class ClearOverConfigDataIO {

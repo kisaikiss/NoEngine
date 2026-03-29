@@ -2,7 +2,7 @@
 #include "engine/NoEngine.h"
 #include "application/CommentBout/Editor/RailCameraEditor.h"
 #include "application/CommentBout/Editor/GameEventEditor.h"
-#include "application/CommentBout/FieldObject/Editor/FieldObjectEditor.h"
+#include "application/CommentBout/Editor/FieldObjectEditor.h"
 #include "application/CommentBout/Data/EnemyConfig.h"
 #include <vector>
 
