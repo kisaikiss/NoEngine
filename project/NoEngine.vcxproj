@@ -199,6 +199,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\CommentBout\System\OutGame\OptionSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\Player\PlayerAttackResolveSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\Editor\PlayerInfoDebugSystem.cpp" />
+    <ClCompile Include="application\CommentBout\System\Editor\DebugShortcutSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\Common\RailCameraSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\Editor\RailCameraEditorSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\RailProgressBarSystem.cpp" />
@@ -431,6 +432,8 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\CommentBout\System\HpBarViewSystem.h" />
     <ClInclude Include="application\CommentBout\System\Player\PlayerAttackResolveSystem.h" />
     <ClInclude Include="application\CommentBout\System\Editor\PlayerInfoDebugSystem.h" />
+    <ClInclude Include="application\CommentBout\System\Editor\DebugShortcutSystem.h" />
+    <ClInclude Include="application\CommentBout\Component\Editor\DebugShortcutStateComponent.h" />
     <ClInclude Include="application\CommentBout\System\Common\RailCameraSystem.h" />
     <ClInclude Include="application\CommentBout\System\Editor\RailCameraEditorSystem.h" />
     <ClInclude Include="application\CommentBout\System\OutGame\TitleSystem.h" />

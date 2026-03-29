@@ -12,6 +12,7 @@
 #include "application/CommentBout/Collision/Component/Collider2DComponent.h"
 #include "engine/Functions/ECS/Component/Animator2DComponent.h"
 #include "application/CommentBout/Component/OutGame/GameResultComponent.h"
+#include "application/CommentBout/Component/Editor/DebugShortcutStateComponent.h"
 #include "application/CommentBout/Component/OutGame/ClearOverStateComponent.h"
 #include "application/CommentBout/GameTag.h"
 #include <algorithm>
@@ -313,15 +314,28 @@ void PlayerInfoDebugSystem::Update(No::Registry& registry, float deltaTime)
 		gameResult = registry.GetComponent<GameResultComponent>(e);
 		break;
 	}
+	// DebugShortcutStateComponent からデバッグ無効フラグを取得
+	bool debugDisableResult = false;
+	for (auto se : registry.View<DebugShortcutStateTag, DebugShortcutStateComponent>()) {
+		auto* sc = registry.GetComponent<DebugShortcutStateComponent>(se);
+		if (sc) { debugDisableResult = sc->debugDisableResult; }
+		break;
+	}
+
 	if (gameResult) {
 		const char* resultStr = (gameResult->result == GameResult::None) ? "None"
 			: (gameResult->result == GameResult::Clear) ? "Clear" : "Over";
 		ImGui::Text("Result: %s", resultStr);
-		ImGui::Checkbox("クリア無効化 (debugDisableClear)", &gameResult->debugDisableClear);
-		ImGui::Checkbox("オーバー無効化 (debugDisableOver)", &gameResult->debugDisableOver);
+		ImGui::Checkbox("クリア/オーバー無効化 (debugDisableResult)", &debugDisableResult);
+		// 変更をコンポーネントに書き戻す
+		for (auto se : registry.View<DebugShortcutStateTag, DebugShortcutStateComponent>()) {
+			auto* sc = registry.GetComponent<DebugShortcutStateComponent>(se);
+			if (sc) { sc->debugDisableResult = debugDisableResult; }
+			break;
+		}
 		ImGui::Separator();
 		if (ImGui::Button("強制クリア")) {
-			if (!gameResult->debugDisableClear && gameResult->result == GameResult::None) {
+			if (!debugDisableResult && gameResult->result == GameResult::None) {
 				gameResult->result = GameResult::Clear;
 				auto clearOverStateView = registry.View<CBClearOverStateTag, ClearOverStateComponent>();
 				for (auto e : clearOverStateView) {
@@ -342,7 +356,7 @@ void PlayerInfoDebugSystem::Update(No::Registry& registry, float deltaTime)
 		}
 		ImGui::SameLine();
 		if (ImGui::Button("強制オーバー")) {
-			if (!gameResult->debugDisableOver && gameResult->result == GameResult::None) {
+			if (!debugDisableResult && gameResult->result == GameResult::None) {
 				gameResult->result = GameResult::Over;
 				auto clearOverStateView = registry.View<CBClearOverStateTag, ClearOverStateComponent>();
 				for (auto e : clearOverStateView) {

@@ -249,7 +249,7 @@ void CollisionDebugRenderSystem::Update(No::Registry& registry, float deltaTime)
 		return;
 	}
 
-	DrawConfigImGui(*config);
+	// DrawConfigImGui は EditorManager のデバッグ表示セクションに移植済み
 	DrawEnemyColliderDebug(registry, *config);
 	DrawEnemyBulletColliderDebug(registry, *config);
 	DrawFieldColliderDebug(registry, *config);

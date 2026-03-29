@@ -7,6 +7,7 @@
 #include "application/CommentBout/GameTag.h"
 #include "application/CommentBout/Utility/CBGameAudio.h"
 #include "application/CommentBout/Component/GameResourceComponent.h"
+#include "application/CommentBout/Component/Editor/DebugShortcutStateComponent.h"
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -50,8 +51,16 @@ void GameResultSystem::Update(No::Registry& registry, float deltaTime)
 		return;
 	}
 
+	// DebugShortcutStateComponent からデバッグ無効フラグを取得
+	bool debugDisableResult = false;
+	for (auto se : registry.View<DebugShortcutStateTag, DebugShortcutStateComponent>()) {
+		auto* sc = registry.GetComponent<DebugShortcutStateComponent>(se);
+		if (sc) { debugDisableResult = sc->debugDisableResult; }
+		break;
+	}
+
 	// ── クリア判定: ボスが死亡 ──────────────────────────────
-	if (!gameResult->debugDisableClear) {
+	if (!debugDisableResult) {
 		auto bossView = registry.View<CBBossTag, HealthComponent>();
 		for (auto bossEntity : bossView) {
 			auto* health = registry.GetComponent<HealthComponent>(bossEntity);
@@ -76,7 +85,7 @@ void GameResultSystem::Update(No::Registry& registry, float deltaTime)
 	}
 
 	// ── オーバー判定: プレイヤーが死亡 ──────────────────────
-	if (!gameResult->debugDisableOver) {
+	if (!debugDisableResult) {
 		auto playerView = registry.View<CBPlayerTag, HealthComponent>();
 		for (auto playerEntity : playerView) {
 			auto* health = registry.GetComponent<HealthComponent>(playerEntity);
@@ -95,52 +104,8 @@ void GameResultSystem::Update(No::Registry& registry, float deltaTime)
 		}
 	}
 
-	DebugToggleClearOver(gameResult);
 }
 
-void GameResultSystem::DebugToggleClearOver(GameResultComponent* gameResult)
-{
-
-#ifdef USE_IMGUI
-
-	// デバッグ用無敵トグル（左右Shift同時押し）
-	const bool shiftToggle =
-		(No::Keyboard::IsTrigger(VK_LSHIFT) && No::Keyboard::IsPress(VK_RSHIFT)) ||
-		(No::Keyboard::IsTrigger(VK_RSHIFT) && No::Keyboard::IsPress(VK_LSHIFT));
-	if (shiftToggle) {
-		gameResult->debugDisableOver = !gameResult->debugDisableOver;
-		gameResult->debugDisableClear = !gameResult->debugDisableClear;
-	}
-
-	if (gameResult->debugDisableOver || gameResult->debugDisableClear) {
-		const ImGuiViewport* viewport = ImGui::GetMainViewport();
-		if (viewport) {
-			ImGui::SetNextWindowPos(
-				ImVec2(viewport->WorkPos.x + viewport->WorkSize.x - 16.0f, viewport->WorkPos.y + 32.0f),
-				ImGuiCond_Always,
-				ImVec2(1.0f, 0.0f)
-			);
-		}
-		ImGui::SetNextWindowBgAlpha(0.35f);
-		ImGui::Begin("PlayerInvincibleOverlay", nullptr,
-			ImGuiWindowFlags_NoDecoration |
-			ImGuiWindowFlags_AlwaysAutoResize |
-			ImGuiWindowFlags_NoSavedSettings |
-			ImGuiWindowFlags_NoMove |
-			ImGuiWindowFlags_NoFocusOnAppearing |
-			ImGuiWindowFlags_NoNav);
-		if (gameResult->debugDisableClear && gameResult->debugDisableOver) {
-			ImGui::TextColored(ImVec4(1.0f, 0.3f, 0.3f, 1.0f), "クリアオーバー無効");
-		} else if (gameResult->debugDisableClear) {
-			ImGui::TextColored(ImVec4(1.0f, 0.3f, 0.3f, 1.0f), "クリア無効");
-		} else {
-			ImGui::TextColored(ImVec4(1.0f, 0.3f, 0.3f, 1.0f), "オーバー無効");
-		}
-
-
-		ImGui::End();
-	}
-#else
-	static_cast<void>(gameResult);
+#ifdef _MSC_VER
+#pragma warning(pop)
 #endif
-}

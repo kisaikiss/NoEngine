@@ -164,6 +164,7 @@
     <ClCompile Include="application\CommentBout\System\Enemy\EnemyContactDamageSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\Enemy\EnemyVisualSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\Editor\PlayerInfoDebugSystem.cpp" />
+    <ClCompile Include="application\CommentBout\System\Editor\DebugShortcutSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\Enemy\BossBehaviorSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\Enemy\EnemyShootSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\Enemy\EnemyBulletHitSystem.cpp" />
@@ -403,6 +404,8 @@
     <ClInclude Include="application\CommentBout\System\Enemy\EnemyContactDamageSystem.h" />
     <ClInclude Include="application\CommentBout\System\Enemy\EnemyVisualSystem.h" />
     <ClInclude Include="application\CommentBout\System\Editor\PlayerInfoDebugSystem.h" />
+    <ClInclude Include="application\CommentBout\System\Editor\DebugShortcutSystem.h" />
+    <ClInclude Include="application\CommentBout\Component\Editor\DebugShortcutStateComponent.h" />
     <ClInclude Include="application\CommentBout\Component\Enemy\EnemyShooterComponent.h" />
     <ClInclude Include="application\CommentBout\Component\Enemy\BossComponent.h" />
     <ClInclude Include="application\CommentBout\System\Enemy\BossBehaviorSystem.h" />

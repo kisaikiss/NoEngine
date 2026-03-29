@@ -12,6 +12,7 @@
 #include "application/CommentBout/Utility/InputHelper.h"
 #include "application/CommentBout/Utility/CBGameAudio.h"
 #include "application/CommentBout/Component/Player/PlayerAnimStateComponent.h"
+#include "application/CommentBout/Component/Editor/DebugShortcutStateComponent.h"
 #include "application/CommentBout/Data/PlayerConfig.h"
 #include "application/CommentBout/GameTag.h"
 #include "application/CommentBout/Collision/Component/Collider2DComponent.h"
@@ -152,38 +153,17 @@ void PlayerControlSystem::Update(No::Registry& registry, float deltaTime)
 		}
 
 #ifdef USE_IMGUI
-
-		// デバッグ用無敵トグル（左右Shift同時押し）
-		const bool shiftToggle =
-			(No::Keyboard::IsTrigger(VK_LSHIFT) && No::Keyboard::IsPress(VK_RSHIFT)) ||
-			(No::Keyboard::IsTrigger(VK_RSHIFT) && No::Keyboard::IsPress(VK_LSHIFT));
-		if (shiftToggle) {
-			player->debugInvincible = !player->debugInvincible;
+		// DebugShortcutStateComponent の debugInvincible フラグを参照して無敵を管理する
+		// トグル入力は DebugShortcutSystem が担当（LeftCtrl+I）
+		bool debugInvincible = false;
+		for (auto se : registry.View<DebugShortcutStateTag, DebugShortcutStateComponent>()) {
+			auto* sc = registry.GetComponent<DebugShortcutStateComponent>(se);
+			if (sc) { debugInvincible = sc->debugInvincible; }
+			break;
 		}
-		if (player->debugInvincible) {
+		if (debugInvincible) {
 			// デバッグ無敵中は常に無敵時間を維持して、被弾で途切れないようにする。
 			invincible->time = std::max(invincible->time, 0.2f);
-		}
-
-		if (player->debugInvincible) {
-			const ImGuiViewport* viewport = ImGui::GetMainViewport();
-			if (viewport) {
-				ImGui::SetNextWindowPos(
-					ImVec2(viewport->WorkPos.x + viewport->WorkSize.x - 16.0f, viewport->WorkPos.y + 16.0f),
-					ImGuiCond_Always,
-					ImVec2(1.0f, 0.0f)
-				);
-			}
-			ImGui::SetNextWindowBgAlpha(0.35f);
-			ImGui::Begin("PlayerInvincibleOverlay", nullptr,
-				ImGuiWindowFlags_NoDecoration |
-				ImGuiWindowFlags_AlwaysAutoResize |
-				ImGuiWindowFlags_NoSavedSettings |
-				ImGuiWindowFlags_NoMove |
-				ImGuiWindowFlags_NoFocusOnAppearing |
-				ImGuiWindowFlags_NoNav);
-			ImGui::TextColored(ImVec4(1.0f, 0.3f, 0.3f, 1.0f), "自機無敵中");
-			ImGui::End();
 		}
 #endif
 

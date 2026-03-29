@@ -20,6 +20,8 @@
 #include "application/CommentBout/Utility/CBSpriteLayer.h"
 #include "application/CommentBout/Utility/CBGameAudio.h"
 #include "application/CommentBout/System/Common/InputHelperSystem.h"
+#include "application/CommentBout/System/Editor/DebugShortcutSystem.h"
+#include "application/CommentBout/Component/Editor/DebugShortcutStateComponent.h"
 #include "application/CommentBout/System/Player/PlayerControlSystem.h"
 #include "application/CommentBout/System/Editor/PlayerInfoDebugSystem.h"
 #include "application/CommentBout/System/FieldObject/FieldEditorSystem.h"
@@ -100,6 +102,7 @@ void GameScene::Setup() {
 	// --------------------------------------------------------------------------- //
 
 	AddSystem(std::make_unique<InputHelperSystem>());
+	AddSystem(std::make_unique<DebugShortcutSystem>());
 	AddSystem(std::make_unique<PauseSystem>());
 	AddSystem(std::make_unique<PlayerControlSystem>());
 	AddSystem(std::make_unique<PlayerInfoDebugSystem>());
@@ -150,6 +153,11 @@ void GameScene::Setup() {
 	registry.AddComponent<CBPlayerConfigTag>(playerConfigEntity);
 	auto* playerConfig = registry.AddComponent<PlayerConfig>(playerConfigEntity);
 	*playerConfig = PlayerDataIO::Load();
+
+	// デバッグショートカット状態エンティティ
+	auto debugShortcutEntity = registry.GenerateEntity();
+	registry.AddComponent<DebugShortcutStateTag>(debugShortcutEntity);
+	registry.AddComponent<DebugShortcutStateComponent>(debugShortcutEntity);
 
 	// 吹き出し設定エンティティ
 	auto sbConfigEntity = registry.GenerateEntity();
@@ -357,16 +365,37 @@ void GameScene::NotSystemUpdate()
 void GameScene::CameraImGui()
 {
 #ifdef USE_IMGUI
+	// DebugShortcutSystem が更新した useDebugCamera フラグでカメラを切り替える
+	DebugShortcutStateComponent* shortcut = nullptr;
+	for (auto entity : GetRegistry()->View<DebugShortcutStateTag, DebugShortcutStateComponent>()) {
+		shortcut = GetRegistry()->GetComponent<DebugShortcutStateComponent>(entity);
+		break;
+	}
+	if (shortcut) {
+		const bool wantDebug = shortcut->useDebugCamera;
+		const bool isDebugNow = (activeCameraEntity_ == debugCameraEntity_);
+		if (wantDebug && !isDebugNow) {
+			GetRegistry()->AddComponent<No::ActiveCameraTag>(debugCameraEntity_);
+			activeCameraEntity_ = debugCameraEntity_;
+		} else if (!wantDebug && isDebugNow) {
+			GetRegistry()->AddComponent<No::ActiveCameraTag>(railCameraEntity_);
+			activeCameraEntity_ = railCameraEntity_;
+		}
+	}
+
 	ImGui::Begin("CameraControl");
 	if (ImGui::Button("Use Debug Camera")) {
 		GetRegistry()->AddComponent<No::ActiveCameraTag>(debugCameraEntity_);
 		activeCameraEntity_ = debugCameraEntity_;
+		if (shortcut) shortcut->useDebugCamera = true;
 	}
 	if (ImGui::Button("Use Rail Camera")) {
 		GetRegistry()->AddComponent<No::ActiveCameraTag>(railCameraEntity_);
 		activeCameraEntity_ = railCameraEntity_;
+		if (shortcut) shortcut->useDebugCamera = false;
 	}
 	ImGui::Text("Active: %s", (activeCameraEntity_ == railCameraEntity_) ? "Rail" : "Debug");
+	ImGui::Text("[LeftShift+1] でカメラ切替");
 	ImGui::End();
 #endif
 }

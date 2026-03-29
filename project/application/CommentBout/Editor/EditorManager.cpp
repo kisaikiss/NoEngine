@@ -13,6 +13,8 @@
 #include "application/CommentBout/Component/HealthComponent.h"
 #include "application/CommentBout/Component/Enemy/EnemyRewardSourceComponent.h"
 #include "application/CommentBout/Collision/Component/Collider3DComponent.h"
+#include "application/CommentBout/Collision/Component/CollisionDebugConfigComponent.h"
+#include "application/CommentBout/Component/Editor/DebugShortcutStateComponent.h"
 #include "application/CommentBout/GameTag.h"
 #include "application/CommentBout/Component/OutGame/PauseStateComponent.h"
 #include "engine/Functions/ECS/Component/MeshComponent.h"
@@ -61,6 +63,10 @@ void EditorManager::Initialize(No::Registry& registry, No::Entity railCameraEnti
 // DrawImGui — メインエントリ (毎フレーム NotSystemUpdate から呼ぶ)
 // ---------------------------------------------------------------------------
 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable:4702)
+#endif
 void EditorManager::DrawImGui(No::Registry& registry)
 {
 #ifdef USE_IMGUI
@@ -142,6 +148,17 @@ void EditorManager::DrawImGui(No::Registry& registry)
 	}
 
 	// ---- デバッグ表示 CollapsingHeader ----
+	// DebugShortcutStateComponent の debugDisplayAll フラグで強制開閉
+	{
+		DebugShortcutStateComponent* shortcut = nullptr;
+		for (auto se : registry.View<DebugShortcutStateTag, DebugShortcutStateComponent>()) {
+			shortcut = registry.GetComponent<DebugShortcutStateComponent>(se);
+			break;
+		}
+		if (shortcut) {
+			ImGui::SetNextItemOpen(shortcut->debugDisplayAll, ImGuiCond_Always);
+		}
+	}
 	if (ImGui::CollapsingHeader("デバッグ表示")) {
 		// 1. スポーンデバッグ
 		if (ImGui::Checkbox("スポーンデバッグ", &showSpawnDebug_)) {
@@ -172,8 +189,26 @@ void EditorManager::DrawImGui(No::Registry& registry)
 				}
 			}
 		}
-		//3.コリジョンデバッグの表示をここに移植
-
+		// 3. コリジョンデバッグ設定（CollisionDebugRenderSystem から移植）
+		CommentBoutCollision::CollisionDebugConfigComponent* colConfig = nullptr;
+		for (auto ce : registry.View<CommentBoutCollision::CollisionDebugConfigTag, CommentBoutCollision::CollisionDebugConfigComponent>()) {
+			colConfig = registry.GetComponent<CommentBoutCollision::CollisionDebugConfigComponent>(ce);
+			break;
+		}
+		if (colConfig) {
+			ImGui::Separator();
+			ImGui::Checkbox("衝突デバッグ表示", &colConfig->enableCollisionDebug);
+			if (colConfig->enableCollisionDebug) {
+				ImGui::Indent();
+				ImGui::Checkbox("敵コライダー",        &colConfig->showEnemyCollider);
+				ImGui::Checkbox("敵弾コライダー",      &colConfig->showEnemyBulletCollider);
+				ImGui::Checkbox("フィールドコライダー",&colConfig->showFieldCollider);
+				ImGui::Checkbox("自機ヒットボックス",  &colConfig->showPlayerHitboxOverlay);
+				ImGui::Checkbox("カメラゲート",        &colConfig->showCameraGateWire);
+				ImGui::Checkbox("攻撃コライダー",      &colConfig->showPlayerAttackCollider);
+				ImGui::Unindent();
+			}
+		}
 	}
 
 	ImGui::Separator();
@@ -212,6 +247,10 @@ void EditorManager::DrawImGui(No::Registry& registry)
 	static_cast<void>(registry);
 #endif
 }
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 // ---------------------------------------------------------------------------
 // 一括 IO

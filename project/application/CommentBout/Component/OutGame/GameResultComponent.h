@@ -8,8 +8,5 @@ struct GameResultComponent {
 	// Over の理由
 	bool playerDied = false;
 	bool railReachedEnd = false;
-
-	// デバッグ設定
-	bool debugDisableClear = false;  // クリア条件を無効化
-	bool debugDisableOver  = false;  // オーバー条件を無効化
+	// デバッグ無効フラグは DebugShortcutStateComponent::debugDisableResult に移植済み
 };
