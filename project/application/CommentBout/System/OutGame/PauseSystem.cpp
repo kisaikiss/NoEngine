@@ -1,5 +1,10 @@
 #include "stdafx.h"
 #include "PauseSystem.h"
+
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable:4702)
+#endif
 #include "application/CommentBout/Component/OutGame/PauseStateComponent.h"
 #include "application/CommentBout/Component/OutGame/PauseMenuConfigComponent.h"
 #include "application/CommentBout/Component/OutGame/OptionStateComponent.h"
@@ -94,6 +99,20 @@ void PauseSystem::Update(No::Registry& registry, float deltaTime)
 	}
 
 	const bool forcePause = pauseState->editorForcePause;
+
+	// ── カットシーン中はポーズ入力を受け付けない ────────────────────
+	{
+		bool inCutscene = false;
+		for (auto e : registry.View<CBGameResourceTag, GameResourceComponent>()) {
+			auto* res = registry.GetComponent<GameResourceComponent>(e);
+			if (res) { inCutscene = res->inCutscene; }
+			break;
+		}
+		if (inCutscene && pauseState->phase == PauseStateComponent::Closed) {
+			SyncPauseState(pauseState, enginePause, forcePause);
+			return;
+		}
+	}
 
 	pauseState->justEnteredPause = false;
 	pauseState->justExitedPause = false;
@@ -276,3 +295,7 @@ void PauseSystem::Update(No::Registry& registry, float deltaTime)
 
 	SyncPauseState(pauseState, enginePause, forcePause);
 }
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif

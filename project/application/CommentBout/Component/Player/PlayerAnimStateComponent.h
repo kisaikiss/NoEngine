@@ -1,6 +1,6 @@
 #pragma once
 
-enum class PlayerAnimState { Idle, Move, Attack };
+enum class PlayerAnimState { Idle, Move, Attack, Dead };
 
 /// <summary>
 /// プレイヤーのアニメーション状態を保持するコンポーネント。

@@ -17,6 +17,8 @@ struct GameResourceComponent {
 	std::unordered_map<std::string, NoEngine::TextureRef> textures;
 	std::unordered_map<std::string, std::string> textureFilePaths;
 	std::unordered_map<std::string, GameModelResource> models;
+
+	bool inCutscene = false;  // カットシーン中フラグ。true の間はポーズメニューを開けない。
 };
 
 namespace CommentBoutResourceKey {

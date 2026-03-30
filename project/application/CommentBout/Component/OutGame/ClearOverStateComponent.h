@@ -19,7 +19,9 @@ struct ClearOverStateComponent {
 	float phaseTimer = 0.f;
 	int   selectedIndex = 0;  // 0=リスタート, 1=タイトルへ
 
-	bool  isConfirmAnimating = false;
-	float confirmAnimTime    = 0.f;
-	int   confirmIndex       = -1;
+	bool  isConfirmAnimating  = false;
+	float confirmAnimTime     = 0.f;
+	int   confirmIndex        = -1;
+
+	bool  isSceneChangePending = false;
 };

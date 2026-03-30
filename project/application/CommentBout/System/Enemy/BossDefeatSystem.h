@@ -8,5 +8,6 @@
 /// </summary>
 class BossDefeatSystem : public No::ISystem {
 public:
+	BossDefeatSystem() { SetStopInPause(false); }
 	void Update(No::Registry& registry, float deltaTime) override;
 };

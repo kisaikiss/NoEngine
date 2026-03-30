@@ -10,6 +10,7 @@ private:
 	void CameraImGui();
 	void ChangeSceneImGui();
 	void ClearOverConfigImGui();
+	void PlayerDeathConfigImGui();
 
 	No::Entity activeCameraEntity_{};
 	No::Entity debugCameraEntity_{};

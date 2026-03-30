@@ -3,7 +3,7 @@
 #include "application/CommentBout/Component/OutGame/GameResultComponent.h"
 #include "application/CommentBout/Component/HealthComponent.h"
 #include "application/CommentBout/Component/Enemy/BossDefeatSequenceComponent.h"
-#include "application/CommentBout/Component/OutGame/ClearOverStateComponent.h"
+#include "application/CommentBout/Component/Player/PlayerAnimStateComponent.h"
 #include "application/CommentBout/GameTag.h"
 #include "application/CommentBout/Utility/CBGameAudio.h"
 #include "application/CommentBout/Component/GameResourceComponent.h"
@@ -13,28 +13,6 @@
 #pragma warning(push)
 #pragma warning(disable:4702)
 #endif
-
-namespace {
-void ActivateClearOver(No::Registry& registry, ClearOverStateComponent::Result result) {
-	auto view = registry.View<CBClearOverStateTag, ClearOverStateComponent>();
-	for (auto e : view) {
-		auto* state = registry.GetComponent<ClearOverStateComponent>(e);
-		if (state && state->phase == ClearOverStateComponent::Phase::Inactive) {
-			CommentBout::GameAudio::StopBGMClip(CommentBoutResourceKey::kBGMInGame);
-			state->result = result;
-			state->phase = ClearOverStateComponent::Phase::FadeIn;
-			state->phaseTimer = 0.f;
-			state->selectedIndex = 0;
-			state->isConfirmAnimating = false;
-			state->confirmAnimTime = 0.f;
-			state->confirmIndex = -1;
-			state->requestedAction = ClearOverStateComponent::Action::None;
-		}
-		break;
-	}
-}
-
-}
 
 void GameResultSystem::Update(No::Registry& registry, float deltaTime)
 {
@@ -92,7 +70,12 @@ void GameResultSystem::Update(No::Registry& registry, float deltaTime)
 			if (health && health->isDead) {
 				gameResult->result = GameResult::Over;
 				gameResult->playerDied = true;
-				ActivateClearOver(registry, ClearOverStateComponent::Result::Over);
+				// PlayerDeathSystem が落下カットシーンを管理し、完了後に ClearOverState を起動する。
+				// ここでは PlayerAnimState::Dead をセットして PlayerDeathSystem に通知するだけ。
+				auto* animState = registry.GetComponent<PlayerAnimStateComponent>(playerEntity);
+				if (animState) {
+					animState->state = PlayerAnimState::Dead;
+				}
 				return;
 			}
 		}
@@ -100,7 +83,13 @@ void GameResultSystem::Update(No::Registry& registry, float deltaTime)
 		// ── オーバー判定: レール終端 ──────────────────────────
 		if (gameResult->railReachedEnd) {
 			gameResult->result = GameResult::Over;
-			ActivateClearOver(registry, ClearOverStateComponent::Result::Over);
+			gameResult->playerDied = true;
+			// HP0 と同様に PlayerDeathSystem へ委譲（落下カットシーン → オーバー画面）
+			for (auto playerEntity : registry.View<CBPlayerTag, PlayerAnimStateComponent>()) {
+				auto* animState = registry.GetComponent<PlayerAnimStateComponent>(playerEntity);
+				if (animState) { animState->state = PlayerAnimState::Dead; }
+				break;
+			}
 		}
 	}
 

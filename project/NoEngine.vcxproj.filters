@@ -159,6 +159,7 @@
     <ClCompile Include="application\CommentBout\System\DamageApplySystem.cpp" />
     <ClCompile Include="application\CommentBout\System\Player\PlayerAttackResolveSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\Player\PlayerAnimSystem.cpp" />
+    <ClCompile Include="application\CommentBout\System\Player\PlayerDeathSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\Enemy\EnemySpawnSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\Enemy\EnemyMoveSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\Enemy\EnemyContactDamageSystem.cpp" />
@@ -398,6 +399,8 @@
     <ClInclude Include="application\CommentBout\System\DamageApplySystem.h" />
     <ClInclude Include="application\CommentBout\System\Player\PlayerAttackResolveSystem.h" />
     <ClInclude Include="application\CommentBout\System\Player\PlayerAnimSystem.h" />
+    <ClInclude Include="application\CommentBout\System\Player\PlayerDeathSystem.h" />
+    <ClInclude Include="application\CommentBout\Data\PlayerDeathConfig.h" />
     <ClInclude Include="application\CommentBout\Component\Enemy\SpawnEnemyRequestComponent.h" />
     <ClInclude Include="application\CommentBout\System\Enemy\EnemySpawnSystem.h" />
     <ClInclude Include="application\CommentBout\System\Enemy\EnemyMoveSystem.h" />

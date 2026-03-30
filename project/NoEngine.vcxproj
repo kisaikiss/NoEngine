@@ -183,6 +183,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\CommentBout\System\DamageApplySystem.cpp" />
     <ClCompile Include="application\CommentBout\System\DamageFlashSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\Player\PlayerAnimSystem.cpp" />
+    <ClCompile Include="application\CommentBout\System\Player\PlayerDeathSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\Enemy\EnemyBulletHitSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\Enemy\EnemyContactDamageSystem.cpp" />
     <ClCompile Include="application\CommentBout\System\Enemy\EnemyMoveSystem.cpp" />
@@ -418,6 +419,8 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\CommentBout\System\DamageApplySystem.h" />
     <ClInclude Include="application\CommentBout\System\DamageFlashSystem.h" />
     <ClInclude Include="application\CommentBout\System\Player\PlayerAnimSystem.h" />
+    <ClInclude Include="application\CommentBout\System\Player\PlayerDeathSystem.h" />
+    <ClInclude Include="application\CommentBout\Data\PlayerDeathConfig.h" />
     <ClInclude Include="application\CommentBout\Component\Player\PlayerAnimStateComponent.h" />
     <ClInclude Include="application\CommentBout\System\Enemy\EnemyBulletHitSystem.h" />
     <ClInclude Include="application\CommentBout\System\Enemy\EnemyContactDamageSystem.h" />

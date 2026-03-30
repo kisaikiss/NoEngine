@@ -48,6 +48,8 @@
 #include "application/CommentBout/System/DamageApplySystem.h"
 #include "application/CommentBout/System/DamageFlashSystem.h"
 #include "application/CommentBout/System/Player/PlayerAnimSystem.h"
+#include "application/CommentBout/System/Player/PlayerDeathSystem.h"
+#include "application/CommentBout/Data/PlayerDeathConfig.h"
 #include "application/CommentBout/System/OutGame/GameResultSystem.h"
 #include "application/CommentBout/System/Enemy/BossDefeatSystem.h"
 #include "application/CommentBout/System/OutGame/ClearOverSystem.h"
@@ -68,6 +70,8 @@
 #include "engine/Runtime/GraphicsCore.h"
 #include <algorithm>
 #include <cstdio>
+#include <fstream>
+#include "externals/nlohmann/json.hpp"
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -125,6 +129,7 @@ void GameScene::Setup() {
 	AddSystem(std::make_unique<DamageApplySystem>());
 	AddSystem(std::make_unique<DamageFlashSystem>());
 	AddSystem(std::make_unique<PlayerAnimSystem>());
+	AddSystem(std::make_unique<PlayerDeathSystem>());
 	AddSystem(std::make_unique<No::SpriteAnimationSystem>());
 	AddSystem(std::make_unique<GameResultSystem>());
 	AddSystem(std::make_unique<BossDefeatSystem>());
@@ -158,6 +163,22 @@ void GameScene::Setup() {
 	auto debugShortcutEntity = registry.GenerateEntity();
 	registry.AddComponent<DebugShortcutStateTag>(debugShortcutEntity);
 	registry.AddComponent<DebugShortcutStateComponent>(debugShortcutEntity);
+
+	// プレイヤー死亡カットシーン設定エンティティ
+	{
+		auto deathConfigEntity = registry.GenerateEntity();
+		registry.AddComponent<CBPlayerDeathConfigTag>(deathConfigEntity);
+		auto* deathCfg = registry.AddComponent<PlayerDeathConfig>(deathConfigEntity);
+		// JSON があれば読み込む（なければデフォルト値を使用）
+		{
+			nlohmann::json j;
+			std::ifstream ifs("resources/game/td_3105/Data/Config/PlayerDeathConfig.json");
+			if (ifs) {
+				ifs >> j;
+				from_json(j, *deathCfg);
+			}
+		}
+	}
 
 	// 吹き出し設定エンティティ
 	auto sbConfigEntity = registry.GenerateEntity();
@@ -360,6 +381,7 @@ void GameScene::NotSystemUpdate()
 	editorManager_.DrawImGui(*GetRegistry());
 	ChangeSceneImGui();
 	ClearOverConfigImGui();
+	PlayerDeathConfigImGui();
 }
 
 void GameScene::CameraImGui()
@@ -467,6 +489,39 @@ void GameScene::ClearOverConfigImGui()
 		*config = ClearOverConfigDataIO::Load();
 	}
 
+	ImGui::End();
+#endif
+}
+
+void GameScene::PlayerDeathConfigImGui()
+{
+#ifdef USE_IMGUI
+	PlayerDeathConfig* config = nullptr;
+	for (auto e : GetRegistry()->View<CBPlayerDeathConfigTag, PlayerDeathConfig>()) {
+		config = GetRegistry()->GetComponent<PlayerDeathConfig>(e);
+		if (config) break;
+	}
+	if (!config) { return; }
+
+	ImGui::Begin("PlayerDeathConfig");
+	ImGui::DragFloat("落下速度 (px/s)", &config->fallSpeed,       1.f, 1.f, 2000.f);
+	ImGui::DragFloat("画面外オフセット", &config->offscreenOffset, 1.f, 0.f, 500.f);
+	ImGui::Separator();
+	if (ImGui::Button("JSON保存")) {
+		nlohmann::json j;
+		to_json(j, *config);
+		std::ofstream ofs("resources/game/td_3105/Data/Config/PlayerDeathConfig.json");
+		if (ofs) { ofs << j.dump(2); }
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("JSON読込")) {
+		std::ifstream ifs("resources/game/td_3105/Data/Config/PlayerDeathConfig.json");
+		if (ifs) {
+			nlohmann::json j;
+			ifs >> j;
+			from_json(j, *config);
+		}
+	}
 	ImGui::End();
 #endif
 }

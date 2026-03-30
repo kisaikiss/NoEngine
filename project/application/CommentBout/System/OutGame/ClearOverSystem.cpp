@@ -40,6 +40,11 @@ void ClearOverSystem::Update(No::Registry& registry, float deltaTime)
 		return;
 	}
 
+	// ── シーン遷移待機中はすべての処理をスキップ ─────────────
+	if (state->isSceneChangePending) {
+		return;
+	}
+
 	// ── 確認アニメーション処理 ────────────────────────────────
 	if (state->isConfirmAnimating) {
 		state->confirmAnimTime += deltaTime;
@@ -50,7 +55,8 @@ void ClearOverSystem::Update(No::Registry& registry, float deltaTime)
 
 			const auto action = state->requestedAction;
 			state->requestedAction = ClearOverStateComponent::Action::None;
-			state->phase = ClearOverStateComponent::Phase::Inactive;
+			// phase は Inactive にしない — スプライトはシーン破棄時にエンジンが解放する
+			state->isSceneChangePending = true;
 
 			No::SceneChangeEvent event;
 			switch (action) {

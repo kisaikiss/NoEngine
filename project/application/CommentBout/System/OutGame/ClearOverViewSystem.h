@@ -7,6 +7,6 @@
 /// </summary>
 class ClearOverViewSystem : public No::ISystem {
 public:
+	ClearOverViewSystem() { SetStopInPause(false); }
 	void Update(No::Registry& registry, float deltaTime) override;
-
 };

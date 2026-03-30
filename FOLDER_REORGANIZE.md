@@ -710,31 +710,106 @@ void GameScene::PlayerDeathConfigImGui() {
 ### チェックリスト
 
 **準備:**
-- [ ] `ClearOverSystem` / `ClearOverViewSystem` の SetStopInPause(false) 確認・追加
+- [x] `ClearOverSystem` / `ClearOverViewSystem` の SetStopInPause(false) 追加
 
 **Step 10-A〜C:**
-- [ ] `GameResourceComponent.h` に `inCutscene` 追加
-- [ ] `PauseSystem.cpp`: inCutscene 中はポーズ入力を無視
-- [ ] `PlayerAnimStateComponent.h`: `Dead` ステート追加
-- [ ] `PlayerAnimSystem.cpp`: Dead ステートのハンドリング追加
+- [x] `GameResourceComponent.h` に `inCutscene` 追加
+- [x] `PauseSystem.cpp`: inCutscene 中はポーズ入力を無視（#pragma warning ガードも追加）
+- [x] `PlayerAnimStateComponent.h`: `Dead` ステート追加
+- [x] `PlayerAnimSystem.cpp`: Dead ステート中は他ステートへ遷移しないガード追加
 
 **Step 10-D〜E:**
-- [ ] `GameResultSystem.cpp`: Over 判定を `PlayerAnimState=Dead` セットに変更
-- [ ] `GameResultSystem.cpp`: debugDisableResult（Phase 7）対応
-- [ ] `BossDefeatSystem.cpp`: `SetStopInPause(false)` 追加 + inCutscene/isPause セット
+- [x] `GameResultSystem.cpp`: Over 判定を `PlayerAnimState=Dead` セットに変更（ClearOver 起動は PlayerDeathSystem へ委譲）
+- [x] `BossDefeatSystem.h/.cpp`: `SetStopInPause(false)` 追加 + inCutscene/isPause セット
+- [x] `BossDefeatSequenceComponent.h`: `cutsceneStarted` フラグ追加
 
 **Step 10-F〜G:**
-- [ ] `System/Player/PlayerDeathSystem.h/.cpp` 新規作成
-- [ ] `Data/PlayerDeathConfig.h` 新規作成（struct + JSON シリアライズ）
-- [ ] `GameScene.cpp`: PlayerDeathSystem 登録 + PlayerDeathConfig 読み込み追加
-- [ ] `GameScene.cpp`: PlayerDeathConfigImGui() 追加
+- [x] `System/Player/PlayerDeathSystem.h/.cpp` 新規作成
+- [x] `Data/PlayerDeathConfig.h` 新規作成（struct + JSON シリアライズ）
+- [x] `GameTag.h`: `CBPlayerDeathConfigTag` 追加
+- [x] `GameScene.cpp`: PlayerDeathSystem 登録 + PlayerDeathConfig エンティティ生成・JSON読込追加
+- [x] `GameScene.cpp`: PlayerDeathConfigImGui() 追加
 
 **vcxproj:**
-- [ ] vcxproj / vcxproj.filters 更新（PlayerDeathSystem.h/.cpp、PlayerDeathConfig.h）
+- [x] vcxproj / vcxproj.filters 更新（PlayerDeathSystem.h/.cpp、PlayerDeathConfig.h）
 
 **ビルド・動作確認:**
-- [ ] **ビルド確認**
+- [x] **ビルド確認**
 - [ ] 動作確認（Over）: HP0 → 落下アニメーション → 画面外 → オーバー画面表示
 - [ ] 動作確認（Clear）: ボス死亡 → 演出中にポーズメニューが開かない → クリア画面表示
 - [ ] 動作確認: TAB キーを演出中に押してもポーズメニューが開かないこと
 - [ ] 動作確認: クリア/オーバー後のリスタートで cutsceneStarted_ がリセットされること
+
+---
+
+## Phase 9.5 — 演出バグ修正 3件
+
+> Phase 9 / Phase 10 の実装後に発覚したバグをまとめて修正する。
+
+---
+
+### 問題 1: ロゴが消えてから再スライドインする
+
+**症状:** Over/Clear 画面で Restart または BackToTitle を選択するとシーン遷移フェード中にロゴ・メニュースプライトが一瞬消え、TitleScene/GameScene のフェードイン中に再スライドインして見える。
+
+**原因:** `ClearOverSystem.cpp` の確認アニメーション完了処理で `state->phase = Inactive` をセットしてから `EmitEvent(SceneChangeEvent)` を呼んでいる。同フレームに `ClearOverViewSystem` が `phase == Inactive` を検出してスプライトを全破棄してしまう。
+
+**修正方針:**
+- `ClearOverStateComponent` に `bool isSceneChangePending = false;` を追加
+- `ClearOverSystem`: `state->phase = Inactive` の行を削除し、代わりに `state->isSceneChangePending = true` をセット
+- `ClearOverSystem`: 先頭に `isSceneChangePending` ガードを追加（入力と状態更新をすべてスキップ）
+- スプライトはシーン遷移完了時にエンジンが ECS ごと破棄するため、ゲーム側で明示的に破棄しなくてよい
+
+**変更ファイル:**
+- `Component/OutGame/ClearOverStateComponent.h`
+- `System/OutGame/ClearOverSystem.cpp`
+
+---
+
+### 問題 2: レール終端でプレイヤーが動き続ける
+
+**症状:** `gameResult->railReachedEnd == true` になると即座に `ClearOverState` が起動するが、PlayerDeathSystem による落下カットシーンを経ずにオーバー画面が表示される。またポーズも掛からないため、プレイヤーが動き続ける。
+
+**修正方針:**
+- `GameResultSystem.cpp` のレール終端処理（`railReachedEnd` ブランチ）を `PlayerAnimState::Dead` のセットに変更
+- `ActivateClearOver` の直接呼び出しを削除（PlayerDeathSystem が担当）
+- `GameResultSystem` 内の `ActivateClearOver` 関数定義も削除（BossDefeatSystem は独自定義を持つ）
+
+**変更ファイル:**
+- `System/OutGame/GameResultSystem.cpp`
+
+---
+
+### 問題 3: エンジンフェードイン中に TitleScene が入力を受け付ける
+
+**症状:** GameScene → TitleScene への切り替え（`CommentBout::Update` が `immediate=false` で遷移を開始）後、エンジンの CircleScale フェードイン（約 0.75 秒）中に TitleScene が起動済みで入力を受け付ける。この間に GameStart を押すと `SceneChangeEvent` が発火するが、`SceneManager::isChanging_=true` のため却下され、TitleScene が `isSceneChangePending=true` のままスタックする。
+
+**修正方針:**
+- `TitleSystem` にエントリーブロックタイマー `float entryBlockTimer_` を追加（初期値 `0.75f`）
+- `TitleSystem::Update()` の先頭でタイマーを `deltaTime` 分だけ減算し、0 より大きければすべての入力処理を早期 return する
+- 値 `0.75f` は `SceneManager::transitionDuration_（1.5f）/ 2` に対応
+
+**変更ファイル:**
+- `System/OutGame/TitleSystem.h`
+- `System/OutGame/TitleSystem.cpp`
+
+---
+
+### チェックリスト
+
+**問題 1:**
+- [x] `ClearOverStateComponent.h`: `isSceneChangePending` 追加
+- [x] `ClearOverSystem.cpp`: `phase=Inactive` 削除 + `isSceneChangePending=true` + ガード追加
+
+**問題 2:**
+- [x] `GameResultSystem.cpp`: `railReachedEnd` ブランチを `PlayerAnimState::Dead` セットに変更
+- [x] `GameResultSystem.cpp`: `ActivateClearOver` 関数定義を削除
+
+**問題 3:**
+- [x] `TitleSystem.h`: `entryBlockTimer_` メンバー追加
+- [x] `TitleSystem.cpp`: タイマーのデクリメントと早期 return 追加
+
+- [ ] **ビルド確認**
+- [ ] 動作確認（問題 1）: Restart/BackToTitle 後のロゴが最後まで表示されてからシーン切替わること
+- [ ] 動作確認（問題 2）: レール終端でプレイヤー落下カットシーンが再生されること
+- [ ] 動作確認（問題 3）: TitleScene 遷移直後にボタンを連打してもバグが起きないこと

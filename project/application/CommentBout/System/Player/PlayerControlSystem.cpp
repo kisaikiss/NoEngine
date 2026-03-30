@@ -95,8 +95,11 @@ void PlayerControlSystem::Update(No::Registry& registry, float deltaTime)
 			health->deathHandled = true;
 			continue;
 		}
-
+		//死亡処理
 		if (health->isDead) {
+			continue;
+		}
+		if (animState->state == PlayerAnimState::Dead) {
 			continue;
 		}
 

@@ -19,4 +19,6 @@ struct BossDefeatSequenceComponent {
 
 	No::Entity bossEntity         = No::nullEntity;
 	No::Entity effectSpriteEntity = No::nullEntity;
+
+	bool cutsceneStarted = false;  // カットシーン開始フラグ（inCutscene/isPause を一度だけセットするため）
 };

@@ -46,6 +46,11 @@ void PlayerAnimSystem::Update(No::Registry& registry, float deltaTime)
             continue;
         }
 
+        // Dead ステートは他ステートへ遷移しない（PlayerDeathSystem が管理）
+        if (animState->state == PlayerAnimState::Dead) {
+            continue;
+        }
+
         // ── アニメーション状態の決定 ────────────────────────────────
         const No::Vector2 inputDir = InputHelper::GetMoveInput();
         const bool moving = (inputDir.x != 0.f || inputDir.y != 0.f);

@@ -5,6 +5,7 @@
 #include "application/CommentBout/Component/Player/InvincibleComponent.h"
 #include "application/CommentBout/Component/GameResourceComponent.h"
 #include "application/CommentBout/GameTag.h"
+#include "engine/Functions/ECS/Component/PauseComponent.h"
 #include "application/CommentBout/Utility/CBSpriteLayer.h"
 #include "application/CommentBout/Utility/CBGameAudio.h"
 #include "application/CommentBout/Component/GameResourceComponent.h"
@@ -59,6 +60,21 @@ void BossDefeatSystem::Update(No::Registry& registry, float deltaTime)
 	}
 
 	defeat->phaseTimer += deltaTime;
+
+	// ── カットシーン開始: 最初のフレームで isPause / inCutscene を設定 ──────
+	if (!defeat->cutsceneStarted) {
+		defeat->cutsceneStarted = true;
+		for (auto e : registry.View<CBGameResourceTag, GameResourceComponent>()) {
+			auto* res = registry.GetComponent<GameResourceComponent>(e);
+			if (res) { res->inCutscene = true; }
+			break;
+		}
+		for (auto e : registry.View<No::PauseComponent>()) {
+			auto* pause = registry.GetComponent<No::PauseComponent>(e);
+			if (pause) { pause->isPause = true; }
+			break;
+		}
+	}
 
 	switch (defeat->phase) {
 	case BossDefeatSequenceComponent::Phase::PreExplosionWait:

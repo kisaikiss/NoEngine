@@ -52,6 +52,12 @@ void TitleSystem::Update(No::Registry& registry, float deltaTime)
 
 	titleState->logoMotionTime += deltaTime;
 
+	// エンジンのシーン遷移フェードイン中は入力を受け付けない
+	if (entryBlockTimer_ > 0.0f) {
+		entryBlockTimer_ -= deltaTime;
+		return;
+	}
+
 	if (titleState->isConfirmAnimating) {
 		titleState->confirmAnimTime += deltaTime;
 		if (titleState->confirmAnimTime >= SafeDuration(titleConfig->confirmDuration)) {
