@@ -13,7 +13,7 @@ struct TitleMenuConfigComponent {
 	No::Color panelColor{ 0.95f, 0.55f, 0.12f, 0.92f };
 
 	No::Vector2 logoPosition{ 640.0f, 180.0f };
-	No::Vector2 logoSize{ 620.0f, 180.0f };
+	No::Vector2 logoSize{ 512.0f, 384.0f };
 	float logoBaseRotation = 0.0f;
 
 	No::Vector2 itemBasePosition{ 640.0f, 395.0f };
