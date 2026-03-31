@@ -94,6 +94,8 @@ void TitleScene::Setup()
 	registry.AddComponent<OptionMenuConfigComponent>(optionConfigEntity);
 	registry.AddComponent<No::EditTag>(optionConfigEntity)->name = "TitleOptionMenuConfig";
 
+	TitleIllustrationInit();
+
 	TitleMenuSpawner::Create(registry, *gameResource);
 	OptionMenuSpawner::Create(registry, *gameResource);
 }
@@ -125,4 +127,21 @@ void TitleScene::NotSystemUpdate()
 	}
 	ImGui::End();
 #endif
+}
+
+void TitleScene::TitleIllustrationInit() {
+	No::Registry& registry = *GetRegistry();
+	auto entity = registry.GenerateEntity();
+
+	auto* t = registry.AddComponent<No::Transform2DComponent>(entity);
+	t->scale = No::Vector2(1280, 720);
+
+	auto* s = registry.AddComponent<No::SpriteComponent>(entity);
+	s->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/td_3105/Sprite/titleCard1.png");
+	s->pivot = No::Vector2(0, 0);
+	s->layer = 886;
+
+	auto* e = registry.AddComponent<No::EditTag>(entity);
+	e->name = "greatManIllust";
+
 }

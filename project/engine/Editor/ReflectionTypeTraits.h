@@ -52,6 +52,11 @@ struct FieldTypeResolver<int> {
 };
 
 template<>
+struct FieldTypeResolver<uint32_t> {
+    static constexpr FieldType value = FieldType::Int;
+};
+
+template<>
 struct FieldTypeResolver<bool> {
     static constexpr FieldType value = FieldType::Bool;
 };

@@ -6,5 +6,7 @@ REFLECT_FIELD(pivot),
 REFLECT_FIELD(flipX),
 REFLECT_FIELD(flipY),
 REFLECT_FIELD(color),
-REFLECT_FIELD(uv)
+REFLECT_FIELD(uv),
+REFLECT_FIELD(layer),
+REFLECT_FIELD(orderInLayer)
 REFLECT_STRUCT_END(NoEngine::Component::SpriteComponent)
