@@ -65,7 +65,7 @@ void AudioShutdown() {
 namespace Asset {
 
 void SoundLoad(std::wstring filePath, std::string name) {
-	Log::DebugPrint("Sound lord begin. filePath : " + ConvertString(filePath) + ", name : " + name + "\n");
+	Log::DebugPrint("Sound load begin. filePath : " + ConvertString(filePath) + ", name : " + name + "\n");
 
 	//まだ読み込んでいなければ
 	if (soundData[name].filePath != filePath) {
@@ -138,7 +138,7 @@ void SoundLoad(std::wstring filePath, std::string name) {
 	//波形フォーマットを元にSourceVoiceの生成
 	hr = xAudio2->CreateSourceVoice(&soundData[name].pSourceVoice, soundData[name].waveFormat);
 	assert(SUCCEEDED(hr));
-	Log::DebugPrint("Sound lord Succes! filePath : " + ConvertString(filePath) + ", name : " + name + "\n");
+	Log::DebugPrint("Sound load Succes! filePath : " + ConvertString(filePath) + ", name : " + name + "\n");
 }
 
 void SoundUnload(std::string name) {
