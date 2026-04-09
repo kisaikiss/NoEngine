@@ -39,7 +39,7 @@ void TestScene::Setup() {
 
 	No::Entity background = registry.GenerateEntity();
 	auto* bm = registry.AddComponent<No::MeshComponent>(background);
-	No::ModelLoader::LoadModel("background", "resources/engine/Model/test/bunny.obj");
+	No::ModelLoader::LoadModel("background", "resources/engine/Model/terrain/terrain.obj");
 	No::ModelLoader::GetModel("background", bm);
 	auto* bmm = registry.AddComponent<No::MaterialComponent>(background);
 	bmm->materials = No::ModelLoader::GetMaterial("background");
@@ -81,6 +81,8 @@ void TestScene::Setup() {
 	point->intensity = 1.f;
 	auto* pointTransform = registry.AddComponent<No::TransformComponent>(pointLight);
 	pointTransform = {};
+	auto* pointLightTag = registry.AddComponent<No::EditTag>(pointLight);
+	pointLightTag->name = "pointLight";
 
 	auto* t2d2 = registry.AddComponent<No::Transform2DComponent>(light);
 	t2d2->translate = { 100.f, 200.f };

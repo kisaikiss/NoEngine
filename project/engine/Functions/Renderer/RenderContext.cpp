@@ -31,7 +31,7 @@ void RenderContext::SetPointLight(GraphicsContext& gfx, UploadBuffer& pointLight
 	if (recreate) {
 		lightNums_.pointLightNum = pointLightNum;
 		pointLightBuffer_.Create(
-			L"DirectionalLights",
+			L"PointLights",
 			pointLightNum,
 			sizeof(PointLightForGPU),
 			pointLightUpload

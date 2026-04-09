@@ -22,6 +22,7 @@ void LightPass::Collect(ECS::Registry& registry) {
 
 	// ポイントライトの収集
 	auto pointLightView = registry.View<PointLightComponent, TransformComponent>();
+	pointLights_.clear();
 	for (auto entity : pointLightView) {
 		// コンポーネントの取得
 		auto* pointLightComponent = registry.GetComponent<PointLightComponent>(entity);

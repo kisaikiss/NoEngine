@@ -16,9 +16,9 @@ struct DirectionalLightComponent {
 /// </summary>
 struct PointLightComponent {
 	Math::Color color;
-	float intensity;
-	float radius;
-	float decay;
+	float intensity = 1.f;
+	float radius = 1.f;
+	float decay = 1.5f;
 };
 
 /// <summary>

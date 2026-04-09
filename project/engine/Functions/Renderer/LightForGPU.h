@@ -10,7 +10,6 @@ struct PointLightForGPU {
 	float intensity;
 	float radius;
 	float decay;
-	float padding[2];
 };
 
 

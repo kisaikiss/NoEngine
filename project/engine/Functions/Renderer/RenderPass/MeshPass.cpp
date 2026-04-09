@@ -88,6 +88,7 @@ void MeshPass::Render(GraphicsContext& context) {
 		context.SetDynamicConstantBufferView(rootIndex["gWorldMatrix"], sizeof(MeshConstants), &m);
 		context.SetDynamicConstantBufferView(rootIndex["gCameraMatrix"], sizeof(Component::CameraForGPU), &camera_->forGPU);
 		context.SetDynamicDescriptor(rootIndex["gDirectionalLights"], 0, GetRenderContext()->GetDirectionalLightSRV());
+		context.SetDynamicDescriptor(rootIndex["gPointLights"], 0, GetRenderContext()->GetPointLightSRV());
 		{
 			_declspec(align(16)) struct {
 				uint32_t directionalLightNum;
@@ -96,6 +97,7 @@ void MeshPass::Render(GraphicsContext& context) {
 				uint32_t pad;
 			}constants;
 			constants.directionalLightNum = GetRenderContext()->GetLightNums()->directionalLightNum;
+			constants.pointLightNum = GetRenderContext()->GetLightNums()->pointLightNum;
 			context.SetDynamicConstantBufferView(rootIndex["gLightNums"], sizeof(constants), &constants);
 		}
 		context.SetVertexBuffer(0, item.mesh->mesh->vertexBuffer.VertexBufferView());

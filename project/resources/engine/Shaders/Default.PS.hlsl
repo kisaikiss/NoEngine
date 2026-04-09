@@ -49,6 +49,9 @@ PixelShaderOutput main(VertexShaderOutput input)
     
     float3 toEye = normalize(gCameraMatrix.worldPosition - input.worldPosition);
     
+    float4 lightColor = 0;
+    
+    // 方向ライトの計算
     for (int i = 0; i < gLightNums.directionalLightNum; i++)
     {
         // 拡散反射
@@ -66,10 +69,35 @@ PixelShaderOutput main(VertexShaderOutput input)
         float4 color = 0;
         color.rgb = diffuse.rgb + specular;
         
-        output.color += gMaterial.color * textureColor * color;
+        lightColor += color;
     }
     
-        
-        output.color.a = gMaterial.color.a * textureColor.a;
+    // ポイントライトの計算
+    for (int j = 0; j < gLightNums.pointLightNum; j++)
+    {
+        float3 pointLightDirection = normalize(input.worldPosition - gPointLights[j].position);
+        float distance = length(gPointLights[j].position - input.worldPosition); //ポイントライトへの距離
+        float factor = pow(saturate(-distance / gPointLights[j].radius + 1.0), gPointLights[j].decay); //逆二乗則による減衰係数
+    
+       //拡散反射
+        float3 pointHalfVector = normalize(-pointLightDirection + toEye);
+        float pointNdotH = dot(normalize(input.normal), pointHalfVector);
+        float pointCos = pow(pointNdotH * 0.5f + 0.5f, 2.0f);
+        float4 pointDiffuse = gPointLights[j].color * pointCos * gPointLights[j].intensity * factor;
+        ////鏡面反射
+        float3 pointReflectLight = reflect(pointLightDirection, normalize(input.normal));
+        float pointRdotE = dot(pointReflectLight, toEye);
+        float pointSpecularPow = pow(saturate(pointRdotE), gMaterial.shininess) * factor; //反射強度
+  
+        float3 pointSpecular = gPointLights[j].color.rgb * gPointLights[j].intensity * pointSpecularPow * float3(1.f, 1.f, 1.f);
+    
+        //拡散反射*鏡面反射
+        float4 pointColor = 0;
+        pointColor.rgb = pointDiffuse.rgb + pointSpecular;
+        lightColor += pointColor;
+    }
+    
+    output.color += gMaterial.color * textureColor * lightColor;
+    output.color.a = gMaterial.color.a * textureColor.a;
     return output;
 }
