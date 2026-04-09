@@ -3,6 +3,10 @@
 
 namespace NoEngine {
 namespace Component {
+/// <summary>
+/// マテリアルを表すコンポーネント。
+/// マルチマテリアルなのでメッシュごとのマテリアルはstd::spanでこのコンポーネントに管理されている
+/// </summary>
 struct MaterialComponent {
 	std::span<Material> materials;
 	Math::Color color = Math::Color::WHITE;
@@ -11,6 +15,7 @@ struct MaterialComponent {
 	std::wstring psoName;
 	bool drawOutline = false;
 	bool enableSkinning = false;
+	float shininess = 60.f;
 };
 }
 }

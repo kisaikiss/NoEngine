@@ -15,6 +15,7 @@ void PrimitivePass::Execute(GraphicsContext& gfx, ECS::Registry& registry) {
 	for (auto entity : cameraView) {
 		camera = registry.GetComponent<CameraComponent>(entity);
 	}
+	if (!camera) return;
 	Primitive::Render(gfx, camera->forGPU.viewProjection);
 }
 }

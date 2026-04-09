@@ -1,5 +1,37 @@
 {
     "entities": {
+        "background": {
+            "components": {
+                "MaterialComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "shininess": 60.0
+                },
+                "TransformComponent": {
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
         "camera": {
             "components": {
                 "CameraComponent": {
@@ -11,20 +43,20 @@
                         0.5654023885726929,
                         2.2338647842407227
                     ],
-                    "distance": 66.86168670654297,
+                    "distance": 26.459339141845703,
                     "drawCenter": false,
-                    "mousePositionX": 424,
-                    "mousePositionY": 285,
-                    "mouseWheelY": 0.0,
-                    "phi": 1.21356201171875,
-                    "theta": -5.1996169090271
+                    "mousePositionX": 709,
+                    "mousePositionY": 303,
+                    "mouseWheelY": 480.0,
+                    "phi": 1.0117897987365723,
+                    "theta": -4.90140438079834
                 },
                 "TransformComponent": {
                     "rotation": [
-                        -0.042855773121118546,
-                        0.9550327062606812,
-                        -0.17242281138896942,
-                        -0.23737384378910065
+                        -0.02603381685912609,
+                        0.9569032788276672,
+                        -0.274647057056427,
+                        -0.09070493280887604
                     ],
                     "scale": [
                         1.0,
@@ -32,9 +64,58 @@
                         1.0
                     ],
                     "translate": [
-                        27.782779693603516,
-                        23.945898056030273,
-                        57.58518600463867
+                        2.6705899238586426,
+                        14.5979585647583,
+                        24.26611328125
+                    ]
+                }
+            }
+        },
+        "directionalLight": {
+            "components": {
+                "DirectionalLightComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "direction": [
+                        0.0,
+                        -1.0,
+                        0.0
+                    ],
+                    "intensity": 1.0
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        100.0,
+                        100.0
+                    ],
+                    "translate": [
+                        100.0,
+                        200.0
                     ]
                 }
             }
@@ -54,7 +135,7 @@
                         1.0
                     ],
                     "translate": [
-                        0.0,
+                        -27.5,
                         0.0,
                         0.0
                     ]
@@ -77,7 +158,7 @@
                     ],
                     "translate": [
                         4.0,
-                        0.0,
+                        13.100000381469727,
                         0.0
                     ]
                 }
@@ -98,7 +179,7 @@
                         1.0
                     ],
                     "translate": [
-                        -4.0,
+                        21.600000381469727,
                         0.0,
                         0.0
                     ]
@@ -107,6 +188,16 @@
         },
         "girl": {
             "components": {
+                "MaterialComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": true,
+                    "shininess": 60.0
+                },
                 "SpriteComponent": {
                     "color": [
                         1.0,
@@ -121,10 +212,10 @@
                         0.5
                     ],
                     "uv": [
-                        0.0,
-                        0.0,
-                        0.25,
-                        1.0
+                        0.375,
+                        0.06666667014360428,
+                        0.125,
+                        0.06666667014360428
                     ]
                 },
                 "StartTransform2DComponent": {
@@ -163,7 +254,7 @@
                         512.0
                     ],
                     "translate": [
-                        86.19999694824219,
+                        291.70001220703125,
                         174.6999969482422
                     ]
                 },

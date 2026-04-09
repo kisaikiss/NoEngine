@@ -167,6 +167,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\TestApp\System\ParticleTestSystem.cpp" />
     <ClCompile Include="application\TestApp\TestApp.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\CameraComponent.cpp" />
+    <ClCompile Include="engine\Functions\ECS\Component\MaterialComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\StartTransformComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\CameraSystem.cpp" />
     <ClCompile Include="engine\Assets\Audio\Audio.cpp" />
@@ -329,6 +330,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="engine\Functions\ECS\System\DebugCameraSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\EditSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\SpriteAnimationSystem.h" />
+    <ClInclude Include="engine\Functions\Renderer\LightForGPU.h" />
     <ClInclude Include="engine\Functions\Renderer\Primitive.h" />
     <ClInclude Include="application\TestApp\Scene\TestScene.h" />
     <ClInclude Include="application\TestApp\System\TestSystem.h" />

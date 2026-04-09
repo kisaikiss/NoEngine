@@ -130,6 +130,7 @@
     <ClCompile Include="engine\Functions\Scene\IScene.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\SystemManager.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\SpriteAnimationSystem.cpp" />
+    <ClCompile Include="engine\Functions\ECS\Component\MaterialComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -282,6 +283,7 @@
     <ClInclude Include="engine\Functions\ECS\Component\PauseComponent.h" />
     <ClInclude Include="engine\Functions\ECS\Component\Animator2DComponent.h" />
     <ClInclude Include="engine\Functions\ECS\System\SpriteAnimationSystem.h" />
+    <ClInclude Include="engine\Functions\Renderer\LightForGPU.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

@@ -17,7 +17,6 @@ void TestScene::Setup() {
 
 	No::Registry& registry = *GetRegistry();
 	No::Entity entity = registry.GenerateEntity();
-	
 	auto* model = registry.AddComponent<No::MeshComponent>(entity);
 	auto* t = registry.AddComponent<No::TransformComponent>(entity);
 	auto* imguiName = registry.AddComponent<No::EditTag>(entity);
@@ -33,10 +32,24 @@ void TestScene::Setup() {
 	m->enableSkinning = true;
 	registry.AddComponent<No::StartTransformComponent>(entity);
 	registry.AddComponent<No::StartTransform2DComponent>(entity);
-	
+
 	m->psoName = L"Renderer : DefaultSkinned PSO";
 	m->psoId = NoEngine::Render::GetPSOID(m->psoName);
 	m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
+
+	No::Entity background = registry.GenerateEntity();
+	auto* bm = registry.AddComponent<No::MeshComponent>(background);
+	No::ModelLoader::LoadModel("background", "resources/engine/Model/test/bunny.obj");
+	No::ModelLoader::GetModel("background", bm);
+	auto* bmm = registry.AddComponent<No::MaterialComponent>(background);
+	bmm->materials = No::ModelLoader::GetMaterial("background");
+	bmm->psoName = L"Renderer : Default PSO";
+	bmm->psoId = NoEngine::Render::GetPSOID(bmm->psoName);
+	bmm->rootSigId = NoEngine::Render::GetRootSignatureID(bmm->psoName);
+	registry.AddComponent<No::TransformComponent>(background);
+	auto* backgroundTag = registry.AddComponent<No::EditTag>(background);
+	backgroundTag->name = "background";
+
 
 	auto* t2d = registry.AddComponent<No::Transform2DComponent>(entity);
 	t2d->translate = { 100.f, 200.f };
@@ -57,7 +70,17 @@ void TestScene::Setup() {
 	auto* dir = registry.AddComponent<No::DirectionalLightComponent>(light);
 	dir->color = { 1.f,1.f,1.f,1.f };
 	dir->direction = { 0.f,-1.f,0.f };
-	dir->intensity = 1.f;
+	dir->intensity = 0.1f;
+	auto* lightTag = registry.AddComponent<No::EditTag>(light);
+	lightTag->name = "directionalLight";
+
+	auto pointLight = registry.GenerateEntity();
+	auto* point = registry.AddComponent<No::PointLightComponent>(pointLight);
+	point->color = { 1.f,1.f,1.f,1.f };
+	point->radius = 1.f;
+	point->intensity = 1.f;
+	auto* pointTransform = registry.AddComponent<No::TransformComponent>(pointLight);
+	pointTransform = {};
 
 	auto* t2d2 = registry.AddComponent<No::Transform2DComponent>(light);
 	t2d2->translate = { 100.f, 200.f };
@@ -66,12 +89,6 @@ void TestScene::Setup() {
 
 	t2d2->scale = { 100.f, 100.f };
 	sprite2->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/engine/uvChecker.png");
-
-	auto light2 = registry.GenerateEntity();
-	auto* dir2 = registry.AddComponent<No::DirectionalLightComponent>(light2);
-	dir2->color = { 1.f,1.f,1.f,1.f };
-	dir2->direction = { 0.f,-1.f,0.f };
-	dir2->intensity = 1.f;
 
 	auto camera = registry.GenerateEntity();
 	registry.AddComponent<No::ActiveCameraTag>(camera);

@@ -3,6 +3,7 @@
 struct Material
 {
     float4 color;
+    float shininess;
 };
 ConstantBuffer<Material> gMaterial : register(b0);
 

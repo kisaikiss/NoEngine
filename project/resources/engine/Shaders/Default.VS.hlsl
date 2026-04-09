@@ -2,6 +2,7 @@
 struct WorldMatrix
 {
     float4x4 world;
+    float4x4 worldIT;
 };
 ConstantBuffer<WorldMatrix> gWorldMatrix : register(b1);
 
@@ -52,6 +53,7 @@ VertexShaderOutput main(VertexShaderInput input)
     
     output.position = mul(worldPos, gCameraMatrix.viewProjection);
     output.texcoord = input.texcoord;
-    output.normal = normalize(mul(normal, (float3x3) gWorldMatrix.world));
+    output.normal = normalize(mul(normal, (float3x3) gWorldMatrix.worldIT));
+    output.worldPosition = mul(input.position, gWorldMatrix.world).xyz;
     return output;
 }

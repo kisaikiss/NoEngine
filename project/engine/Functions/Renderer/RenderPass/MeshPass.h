@@ -7,13 +7,27 @@
 
 namespace NoEngine {
 namespace Render {
+/// <summary>
+/// メッシュを描画するレンダーパス
+/// </summary>
 class MeshPass :
     public RenderPass {
 public:
+    /// <summary>
+    /// メッシュパスのコンストラクタ
+    /// </summary>
     MeshPass();
+
+    /// <summary>
+    /// メッシュ描画を実行する
+    /// </summary>
+	/// <param name="gfx">描画用コマンドリストのラッパークラスの参照</param>
+	/// <param name="registry">ECSレジストリ</param>
     void Execute(GraphicsContext& gfx, ECS::Registry& registry) override;
 private:
-
+    /// <summary>
+    /// 描画に必要な変数
+    /// </summary>
     struct DrawItem {
         Component::MeshComponent* mesh;
         Component::MaterialComponent* material;
@@ -32,9 +46,25 @@ private:
     uint32_t outlinePSOID_;
     uint32_t outlineSkinnedPSOID_;
 
+    /// <summary>
+    /// DrawItemを収集します
+    /// </summary>
+    /// <param name="registry">ECSレジストリ</param>
     void Collect(ECS::Registry& registry);
+    /// <summary>
+    /// DrawItemの中身をソートします。
+    /// </summary>
     void Sort();
+    /// <summary>
+    /// 収集したDrawItemの情報から描画します
+    /// </summary>
+    /// <param name="gfx">描画用コマンドリストのラッパークラスの参照</param>
     void Render(GraphicsContext& gfx);
+
+    /// <summary>
+    /// GraphicsContext を使用してアウトラインを描画する関数。
+    /// </summary>
+    /// <param name="gfx">描画操作に使用する GraphicsContext への参照。</param>
     void RenderOutline(GraphicsContext& gfx);
 };
 }

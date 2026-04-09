@@ -76,8 +76,16 @@ void MeshPass::Render(GraphicsContext& context) {
 			currentPSO = item.psoId;
 		}
 
-		Math::Matrix4x4 worldData = item.transform->MakeAffineMatrix4x4();
-		context.SetDynamicConstantBufferView(rootIndex["gWorldMatrix"], sizeof(Math::Matrix4x4), &worldData);
+		struct MeshConstants {
+			Math::Matrix4x4 world;
+			Math::Matrix4x4 worldIT;
+		};
+		MeshConstants m;
+		m.world = item.transform->MakeAffineMatrix4x4();
+		m.worldIT = m.world;
+		m.worldIT.Inverse();
+		m.worldIT.Transpose();
+		context.SetDynamicConstantBufferView(rootIndex["gWorldMatrix"], sizeof(MeshConstants), &m);
 		context.SetDynamicConstantBufferView(rootIndex["gCameraMatrix"], sizeof(Component::CameraForGPU), &camera_->forGPU);
 		context.SetDynamicDescriptor(rootIndex["gDirectionalLights"], 0, GetRenderContext()->GetDirectionalLightSRV());
 		{
@@ -104,8 +112,11 @@ void MeshPass::Render(GraphicsContext& context) {
 
 			_declspec(align(16)) struct {
 				Math::Color color;
+				float shininess;
+				float padding[3];
 			}constants;
 			constants.color = item.material->color;
+			constants.shininess = item.material->shininess;
 			context.SetDynamicConstantBufferView(rootIndex["gMaterial"], sizeof(constants), &constants);
 			context.SetDynamicDescriptor(rootIndex["gTexture"], 0, item.material->materials[subMesh.materialIndex].textureHandle.GetSRV());
 
