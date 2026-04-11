@@ -83,6 +83,47 @@ void Quaternion::LookRotation(const Vector3& forward, const Vector3& up) {
 
 }
 
+Vector3 Quaternion::xAxis() const {
+	float ty = 2.0f * y;
+	float tz = 2.0f * z;
+	float twy = ty * w;
+	float twz = tz * w;
+	float txy = ty * x;
+	float txz = tz * x;
+	float tyy = ty * y;
+	float tzz = tz * z;
+
+	return Vector3(1.0f - (tyy + tzz), txy + twz, txz - twy);
+}
+//-----------------------------------------------------------------------
+Vector3 Quaternion::yAxis() const {
+	float tx = 2.0f * x;
+	float ty = 2.0f * y;
+	float tz = 2.0f * z;
+	float twx = tx * w;
+	float twz = tz * w;
+	float txx = tx * x;
+	float txy = ty * x;
+	float tyz = tz * y;
+	float tzz = tz * z;
+
+	return Vector3(txy - twz, 1.0f - (txx + tzz), tyz + twx);
+}
+//-----------------------------------------------------------------------
+Vector3 Quaternion::zAxis() const {
+	float tx = 2.0f * x;
+	float ty = 2.0f * y;
+	float tz = 2.0f * z;
+	float twx = tx * w;
+	float twy = ty * w;
+	float txx = tx * x;
+	float txz = tz * x;
+	float tyy = ty * y;
+	float tyz = tz * y;
+
+	return Vector3(txz + twy, tyz - twx, 1.0f - (txx + tyy));
+}
+
 Quaternion Quaternion::Slerp(const Quaternion& q0, const Quaternion& q1, float t) {
 	return MathCalculations::Slerp(q0, q1, t);
 }

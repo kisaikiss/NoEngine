@@ -37,6 +37,14 @@ public:
 	void SetPointLight(GraphicsContext& gfx, UploadBuffer& pointLightUpload, uint32_t pointLightNum);
 
 	/// <summary>
+	/// スポットライトをセットします。
+	/// </summary>
+	/// <param name="gfx">描画用コマンドリストのラッパークラス</param>
+	/// <param name="spotLightUpload">スポットライトののUploadバッファ</param>
+	/// <param name="spotLightNum">スポットライトの数</param>
+	void SetSpotLight(GraphicsContext& gfx, UploadBuffer& spotLightUpload, uint32_t spotLightNum);
+
+	/// <summary>
 	/// それぞれのライトの数を取得します。
 	/// </summary>
 	/// <returns>それぞれのライトの数</returns>
@@ -44,9 +52,12 @@ public:
 
 	D3D12_CPU_DESCRIPTOR_HANDLE GetDirectionalLightSRV() { return directionalLightBuffer_.GetSRV(); }
 	D3D12_CPU_DESCRIPTOR_HANDLE GetPointLightSRV() { return pointLightBuffer_.GetSRV(); }
+	D3D12_CPU_DESCRIPTOR_HANDLE GetSpotLightSRV() { return spotLightBuffer_.GetSRV(); }
+
 private:
 	StructuredBuffer directionalLightBuffer_;
 	StructuredBuffer pointLightBuffer_;
+	StructuredBuffer spotLightBuffer_;
 	LightNums lightNums_;
 };
 }

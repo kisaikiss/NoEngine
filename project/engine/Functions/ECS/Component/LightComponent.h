@@ -26,11 +26,11 @@ struct PointLightComponent {
 /// </summary>
 struct SpotLightComponent {
 	Math::Color color;
-	float intensity;
-	float distance;
-	float decay;
-	float cosAngle;
-	float cosFalloffStart;
+	float intensity = 1.f;
+	float distance = 5.f;
+	float decay = 1.5f;
+	float cosAngle = 0.8f;
+	float cosFalloffStart = 1.f;
 };
 
 }

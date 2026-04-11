@@ -27,6 +27,25 @@ struct Quaternion {
 	Vector3 RotateVector(const Vector3& vector);
 	void LookRotation(const Vector3& forward, const Vector3& up);
 
+	/// <summary>
+	/// オブジェクトのローカルX軸方向を表す3次元ベクトルを返します。メソッドはオブジェクトの状態を変更しません。
+	/// </summary>
+	/// <returns>X軸方向を表すVector3。</returns>
+	Vector3 xAxis() const;
+
+	/// <summary>
+	/// オブジェクトのローカル座標系における Y 軸を表す Vector3 を返します。メソッドはオブジェクトの状態を変更しません。
+	/// </summary>
+	/// <returns>オブジェクトのローカル Y 軸を表す Vector3 値。</returns>
+	Vector3 yAxis() const;
+
+	/// <summary>
+	/// オブジェクトのZ軸を表す3次元ベクトルを返します。メソッドはオブジェクトの状態を変更しません。
+	/// </summary>
+	/// <returns>Z軸を表すVector3。</returns>
+	Vector3 zAxis() const;
+
+
 	static Quaternion Slerp(const Quaternion& q0, const Quaternion& q1, float t);
 
 	static const Quaternion ZERO;

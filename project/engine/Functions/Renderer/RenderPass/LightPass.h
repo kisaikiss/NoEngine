@@ -18,11 +18,6 @@ public:
 	/// <param name="registry">ECSレジストリ</param>
 	void Execute(GraphicsContext& gfx, ECS::Registry& registry) override;
 
-	/// <summary>
-	/// DirectionalLightのアップロードバッファを取得
-	/// </summary>
-	/// <returns>UploadBuffer</returns>
-	const UploadBuffer& GetDirectionalLightUpload() { return directionalLightUpload_; }
 private:
 	/// <summary>
 	/// ライトのアップロードに必要なものを収集する
@@ -39,13 +34,16 @@ private:
 	// Lightのアップロードバッファ
 	UploadBuffer directionalLightUpload_;
 	UploadBuffer pointLightUpload_;
+	UploadBuffer spotLightUpload_;
 
 	// Registryから収集したLightの配列
 	std::vector<Component::DirectionalLightComponent> directionalLights_;
 	std::vector<PointLightForGPU> pointLights_;
+	std::vector<SpotLightForGPU> spotLights_;
 	// Light配列のサイズ
 	size_t directionalLightsSize_;
 	size_t pointLightsSize_;
+	size_t spotLightsSize_;
 };
 }
 }

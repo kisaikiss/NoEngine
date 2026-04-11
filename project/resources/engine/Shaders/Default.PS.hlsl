@@ -40,6 +40,19 @@ struct PointLight
 };
 StructuredBuffer<PointLight> gPointLights : register(t3);
 
+struct SpotLight
+{
+    float4 color;
+    float3 position;
+    float intensity;
+    float3 direction;
+    float distance;
+    float decay;
+    float cosAngle;
+    float cosFalloffStart;
+};
+StructuredBuffer<SpotLight> gSpotLights : register(t4);
+
 PixelShaderOutput main(VertexShaderOutput input)
 {
     PixelShaderOutput output;
@@ -95,6 +108,34 @@ PixelShaderOutput main(VertexShaderOutput input)
         float4 pointColor = 0;
         pointColor.rgb = pointDiffuse.rgb + pointSpecular;
         lightColor += pointColor;
+    }
+    
+    // スポットライトの計算
+    for (int k = 0; k < gLightNums.spotLightNum; k++)
+    {
+        float3 spotLightDirectionOnSurface = normalize(input.worldPosition - gSpotLights[k].position);
+        float cosAngle = dot(spotLightDirectionOnSurface, gSpotLights[k].direction);
+        float falloffFactor = saturate((cosAngle - gSpotLights[k].cosAngle) / (gSpotLights[k].cosFalloffStart - gSpotLights[k].cosAngle));
+        float distance = length(gSpotLights[k].position - input.worldPosition); // スポットライトライトへの距離
+        float attenuationFactor = pow(saturate(-distance / gSpotLights[k].distance + 1.0), gSpotLights[k].decay); // 逆二乗則による減衰係数
+        
+        // 拡散反射
+        float3 halfVector = normalize(-spotLightDirectionOnSurface + toEye);
+        float NdotH = dot(normalize(input.normal), halfVector);
+        float cos = pow(NdotH * 0.5f + 0.5f, 2.0f);
+        float4 diffuse = gSpotLights[k].color * cos * gSpotLights[k].intensity;
+        
+        // 鏡面反射
+        float3 reflectLight = reflect(spotLightDirectionOnSurface, normalize(input.normal));
+        float RdotE = dot(reflectLight, toEye);
+        float specularPow = pow(saturate(RdotE), gMaterial.shininess); // 反射強度
+  
+        float3 specular = gSpotLights[k].color.rgb * gSpotLights[k].intensity * specularPow * float3(1.f, 1.f, 1.f);
+    
+        // 拡散反射*鏡面反射
+        float4 color = 0;
+        color.rgb = (diffuse.rgb + specular) * falloffFactor * attenuationFactor;
+        lightColor += color;
     }
     
     output.color += gMaterial.color * textureColor * lightColor;

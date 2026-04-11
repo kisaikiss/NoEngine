@@ -84,6 +84,14 @@ void TestScene::Setup() {
 	auto* pointLightTag = registry.AddComponent<No::EditTag>(pointLight);
 	pointLightTag->name = "pointLight";
 
+	auto spotLight = registry.GenerateEntity();
+	auto* spot = registry.AddComponent<No::SpotLightComponent>(spotLight);
+	spot->color = No::Color::WHITE;
+	auto* spotTransform = registry.AddComponent<No::TransformComponent>(spotLight);
+	spotTransform = {};
+	auto* spotTag = registry.AddComponent<No::EditTag>(spotLight);
+	spotTag->name = "SpotLight";
+
 	auto* t2d2 = registry.AddComponent<No::Transform2DComponent>(light);
 	t2d2->translate = { 100.f, 200.f };
 	auto* sprite2 = registry.AddComponent<No::SpriteComponent>(light);

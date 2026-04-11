@@ -43,4 +43,23 @@ void RenderContext::SetPointLight(GraphicsContext& gfx, UploadBuffer& pointLight
 
 }
 
+void RenderContext::SetSpotLight(GraphicsContext& gfx, UploadBuffer& spotLightUpload, uint32_t spotLightNum) {
+	bool recreate = false;
+	if (lightNums_.spotLightNum != spotLightNum) recreate = true;
+	if (spotLightNum == 0) return;
+
+	if (recreate) {
+		lightNums_.spotLightNum = spotLightNum;
+		spotLightBuffer_.Create(
+			L"SpotLights",
+			spotLightNum,
+			sizeof(SpotLightForGPU),
+			spotLightUpload
+		);
+	}
+
+
+	gfx.CopyBufferRegion(spotLightBuffer_, 0, spotLightUpload, 0, sizeof(SpotLightForGPU) * spotLightNum);
+}
+
 }

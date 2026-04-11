@@ -37,6 +37,28 @@ void LightPass::Collect(ECS::Registry& registry) {
 		pointLight.position = transformComponent->GetWorldPosition();
 		pointLights_.push_back(pointLight);
 	}
+
+	// スポットライトの収集
+	auto spotLightView = registry.View<SpotLightComponent, TransformComponent>();
+	spotLights_.clear();
+	for (auto entity : spotLightView) {
+		// コンポーネントの取得
+		auto* spotLightComponent = registry.GetComponent<SpotLightComponent>(entity);
+		auto* transformComponent = registry.GetComponent<TransformComponent>(entity);
+
+		// 取得したコンポーネントからGPUへ送るための構造体の中身を構築する
+		SpotLightForGPU spotLight;
+		spotLight.color = spotLightComponent->color;
+		spotLight.intensity = spotLightComponent->intensity;
+		spotLight.decay = spotLightComponent->decay;
+		spotLight.cosAngle = spotLightComponent->cosAngle;
+		spotLight.cosFalloffStart = spotLightComponent->cosFalloffStart;
+		spotLight.distance = spotLightComponent->distance;
+		spotLight.position = transformComponent->GetWorldPosition();
+		spotLight.direction = transformComponent->rotation.zAxis();
+
+		spotLights_.push_back(spotLight);
+	}
 	
 }
 
@@ -61,6 +83,19 @@ void LightPass::UploadToGpu(GraphicsContext& gfx) {
 
 		renderContext->SetPointLight(gfx, pointLightUpload_, static_cast<uint32_t>(pointLightsSize_));
 	}
+
+	// スポットライトをGPUへ送る
+	if (spotLights_.size() != 0) {
+		if (spotLights_.size() != spotLightsSize_) {
+			spotLightsSize_ = spotLights_.size();
+			spotLightUpload_.Create(L"SpotLight Upload", sizeof(SpotLightForGPU) * spotLightsSize_);
+		}
+		memcpy(spotLightUpload_.Map(), spotLights_.data(), sizeof(SpotLightForGPU) * spotLightsSize_);
+
+		renderContext->SetSpotLight(gfx, spotLightUpload_, static_cast<uint32_t>(spotLightsSize_));
+	}
+	
+
 	
 }
 
