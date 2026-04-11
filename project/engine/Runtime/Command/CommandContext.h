@@ -14,7 +14,6 @@ class Texture;
 class GraphicsContext;
 class ComputeContext;
 class UploadBuffer;
-class ReadbackBuffer;
 
 /// <summary>
 /// 描画・計算・リソース操作を抽象化するクラス

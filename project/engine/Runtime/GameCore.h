@@ -36,10 +36,16 @@ public:
 		UpdateScene(ctx, deltaT);
 	};
 
-	virtual void RenderScene(void) {};
-
+	/// <summary>
+	/// ゲームを閉じるかどうか取得します。
+	/// </summary>
+	/// <returns>true : ゲームを閉じる、false : ゲームを閉じない</returns>
 	virtual bool Exit();
 
+	/// <summary>
+	/// 秘匿されたメンバ変数であるECSレジストリの参照を取得します。
+	/// </summary>
+	/// <returns>ECSレジストリ</returns>
 	ECS::Registry& GetRegistry() { return *sceneManager_->GetRegistry(); }
 
 	/// <summary>
@@ -57,12 +63,30 @@ public:
 	void SetRenderPassScheduler(Render::RenderPassScheduler* scheduler) { renderPassScheduler_ = scheduler; }
 
 protected:
+	/// <summary>
+	/// シーンを登録します。
+	/// </summary>
+	/// <param name="name">シーン変更時などに使用する名前を設定します。</param>
+	/// <param name="factory">シーンを生成する関数を登録します。(std::make_unique<>())</param>
 	void RegisterScene(const std::string& name, Scene::SceneManager::SceneFactory factory) { sceneManager_->RegisterScene(name, factory); }
 
+	/// <summary>
+	/// シーンを変更します。
+	/// </summary>
+	/// <param name="name">変更先のシーン名</param>
+	/// <param name="immediate">遷移演出(ture : 演出なし、false : 演出あり)</param>
 	void ChangeScene(const std::string& name, bool immediate = true) { sceneManager_->ChangeScene(name,immediate); }
 
+	/// <summary>
+	/// シーンの更新を行います
+	/// </summary>
+	/// <param name="ctx">コンピュートシェーダー用のコマンドリストラッパークラス</param>
+	/// <param name="deltaTime">前フレームからの経過時間</param>
 	void UpdateScene(ComputeContext& ctx, float deltaTime) { sceneManager_->Update(ctx, deltaTime); }
 
+	/// <summary>
+	/// シーンマネージャーをリセットします。
+	/// </summary>
 	void ShutdownSceneManager() { sceneManager_.reset(); }
 
 private:
