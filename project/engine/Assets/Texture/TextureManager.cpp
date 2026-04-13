@@ -192,7 +192,7 @@ ManagedTexture* TextureManager::FindOrLoadTexture(const std::wstring& fileName, 
 	// これは初めての要求なので、呼び出し側がファイルを読み取る必要があることを示します。
 	return tex;
 }
-DirectX::ScratchImage TextureManager::LordTexture(const std::string& filePath) {
+DirectX::ScratchImage TextureManager::LoadTexture(const std::string& filePath) {
 	//テクスチャファイルを読んでプログラムを扱えるようにする
 	DirectX::ScratchImage image{};
 	std::wstring filePathW = ConvertString(filePath);

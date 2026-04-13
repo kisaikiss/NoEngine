@@ -21,7 +21,7 @@ public:
     static TextureRef LoadCovertTexture(const std::string& filePath, Graphics::eDefaultTexture fallback = Graphics::kMagenta2D, bool sRGB = false);
 
 private:
-	static DirectX::ScratchImage LordTexture(const std::string& filePath);
+	static DirectX::ScratchImage LoadTexture(const std::string& filePath);
     static ManagedTexture* FindOrLoadTexture(const std::wstring& fileName, Graphics::eDefaultTexture fallback, bool forceSRGB = false);
 };
 
