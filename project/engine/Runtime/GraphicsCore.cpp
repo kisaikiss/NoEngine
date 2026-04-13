@@ -35,6 +35,11 @@ D3D12_VIEWPORT sViewport;
 D3D12_RECT sScissorRect;
 
 UINT sBackBufferIndex;
+
+// WindowSize
+float sWindowWidth;
+float sWindowHeight;
+
 }
 
 DescriptorAllocator GraphicsCore::sDescriptorAllocator[D3D12_DESCRIPTOR_HEAP_TYPE_NUM_TYPES] =
@@ -45,19 +50,17 @@ DescriptorAllocator GraphicsCore::sDescriptorAllocator[D3D12_DESCRIPTOR_HEAP_TYP
 	D3D12_DESCRIPTOR_HEAP_TYPE_DSV
 };
 
-void GraphicsCore::Initialize() {
+void GraphicsCore::Initialize(float windowWidth, float windowHeight) {
 	EnableDebugLayer();
 	sGraphicsInfrastructures = make_unique<Graphics::GraphicsInfrastructures>();
 	sGraphicsDevice = make_unique<Graphics::GraphicsDevice>(sGraphicsInfrastructures->GetDXGIAdapter());
 	sCommandListManager.Create();
 	SettingDebugLayer();
 	Render::Initialize();
-	GraphicsCore::sWindowManager.Create(L"NoEngine", 1280, 720, L"resources/engine/noicon.ico");
+	GraphicsCore::sWindowManager.Create(L"NoEngine", UINT(windowWidth), UINT(windowHeight), L"resources/engine/noicon.ico");
 	GraphicsCore::sWindowManager.SetMainWindowName(L"NoEngine");
 
-	uint32_t windowWidth = 1280;
-	uint32_t windowHeight = 720;
-	sSwapChain = make_unique<Graphics::GraphicsSwapChain>(sWindowManager.GetMainWindow()->GetWindowHandle(),1280.f, 720.f, sSwapChainBufferCount);
+	sSwapChain = make_unique<Graphics::GraphicsSwapChain>(sWindowManager.GetMainWindow()->GetWindowHandle(), windowWidth, windowHeight, sSwapChainBufferCount);
 
 	// viewportをウィンドウサイズと同じにします。
 	sViewport.Width = static_cast<FLOAT>(windowWidth);
@@ -69,9 +72,12 @@ void GraphicsCore::Initialize() {
 
 	// シザー矩形はビューポートと同じ大きさにします。
 	sScissorRect.left = 0;
-	sScissorRect.right = windowWidth;
+	sScissorRect.right = static_cast<LONG>(windowWidth);
 	sScissorRect.top = 0;
-	sScissorRect.bottom = windowHeight;
+	sScissorRect.bottom = static_cast<LONG>(windowHeight);
+
+	sWindowWidth = windowWidth;
+	sWindowHeight = windowHeight;
 
 	CreatePixelBuffer();
 }
@@ -182,8 +188,8 @@ void GraphicsCore::CreatePixelBuffer() {
 		sColorBuffers[i]->CreateFromSwapChain(L"Primary SwapChain Buffer", displayPlane.Detach());
 	}
 	sDepthBuffer = std::make_unique<DepthBuffer>(1.f);
-	// ToDo : ウィンドウサイズがマジックナンバーになっている
-	sDepthBuffer->Create(L"Window Depth Buffer", 1280, 720, DXGI_FORMAT_D24_UNORM_S8_UINT);
+	
+	sDepthBuffer->Create(L"Window Depth Buffer", static_cast<uint32_t>(sWindowWidth), static_cast<uint32_t>(sWindowHeight), DXGI_FORMAT_D24_UNORM_S8_UINT);
 
 	Log::DebugPrint("create pixel buffers");
 }

@@ -12,7 +12,7 @@ namespace NoEngine {
 /// </summary>
 class GraphicsCore {
 public:
-	static void Initialize();
+	static void Initialize(float windowWidth = 1280.f, float windowHeight = 720.f);
 	static void Shutdown(void);
 
 	static std::unique_ptr<Graphics::GraphicsInfrastructures> sGraphicsInfrastructures;
