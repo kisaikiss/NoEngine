@@ -153,7 +153,7 @@ void RootSignature::Finalize(const std::wstring& name, D3D12_ROOT_SIGNATURE_FLAG
             assert(false);
         }
 
-        hr = (GraphicsCore::gGraphicsDevice->GetDevice()->CreateRootSignature(0, pOutBlob->GetBufferPointer(), pOutBlob->GetBufferSize(),
+        hr = (GraphicsCore::sGraphicsDevice->GetDevice()->CreateRootSignature(0, pOutBlob->GetBufferPointer(), pOutBlob->GetBufferSize(),
             IID_PPV_ARGS(&signature_)));
         if (FAILED(hr)) {
             assert(false);

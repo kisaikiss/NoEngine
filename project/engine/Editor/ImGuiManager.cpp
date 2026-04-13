@@ -79,12 +79,12 @@ void ImGuiManager::Initialize() {
 	colors[ImGuiCol_HeaderActive] = ImColor(70, 0, 50, 255);
 	colors[ImGuiCol_CheckMark] = ImColor(0, 150, 80, 255);
 
-	Window* window = GraphicsCore::gWindowManager.GetMainWindow();
+	Window* window = GraphicsCore::sWindowManager.GetMainWindow();
 	ImGui_ImplWin32_Init(window->GetWindowHandle());
 
 	ImGui_ImplDX12_InitInfo initInfo = {};
-	initInfo.Device = GraphicsCore::gGraphicsDevice->GetDevice();
-	initInfo.CommandQueue = GraphicsCore::gCommandListManager.GetGraphicsQueue().GetCommandQueue();
+	initInfo.Device = GraphicsCore::sGraphicsDevice->GetDevice();
+	initInfo.CommandQueue = GraphicsCore::sCommandListManager.GetGraphicsQueue().GetCommandQueue();
 	initInfo.NumFramesInFlight = 2;
 	initInfo.RTVFormat = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
 	initInfo.DSVFormat = DXGI_FORMAT_UNKNOWN;

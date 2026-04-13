@@ -10,7 +10,7 @@ void DescriptorHeap::Create(const std::wstring& debugHeapName, D3D12_DESCRIPTOR_
     heapDesc_.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
     heapDesc_.NodeMask = 1;
 
-    HRESULT hr = GraphicsCore::gGraphicsDevice->GetDevice()->CreateDescriptorHeap(&heapDesc_, IID_PPV_ARGS(heap_.ReleaseAndGetAddressOf()));
+    HRESULT hr = GraphicsCore::sGraphicsDevice->GetDevice()->CreateDescriptorHeap(&heapDesc_, IID_PPV_ARGS(heap_.ReleaseAndGetAddressOf()));
     if (FAILED(hr)) {
         assert(false);
     }
@@ -22,7 +22,7 @@ void DescriptorHeap::Create(const std::wstring& debugHeapName, D3D12_DESCRIPTOR_
     heap_->SetName(debugHeapName.c_str());
 #endif
 
-    descriptorSize_ = GraphicsCore::gGraphicsDevice->GetDevice()->GetDescriptorHandleIncrementSize(heapDesc_.Type);
+    descriptorSize_ = GraphicsCore::sGraphicsDevice->GetDevice()->GetDescriptorHandleIncrementSize(heapDesc_.Type);
     numFreeDescriptors_ = heapDesc_.NumDescriptors;
     firstHandle_ = DescriptorHandle(
         heap_->GetCPUDescriptorHandleForHeapStart(),

@@ -42,16 +42,6 @@ public:
 	void Create(WNDPROC windowProc, std::wstring title, uint32_t width, uint32_t height, const std::wstring& iconPath = L"");
 
 	/// <summary>
-	/// ウィンドウに表示されている画面をクリアします。
-	/// </summary>
-	void Clear(GraphicsContext& context);
-
-	/// <summary>
-	/// ウィンドウ
-	/// </summary>
-	void EndFrame(GraphicsContext& context);
-
-	/// <summary>
 	/// ウィンドウハンドルを取得
 	/// </summary>
 	/// <returns>ウィンドウハンドル</returns>
@@ -103,12 +93,6 @@ public:
 
 private:
 	std::unordered_map<UINT,std::unique_ptr<IWindowEvent>> eventMap_;
-
-	static inline const uint32_t sSwapChainBufferCount = 2;
-
-	std::unique_ptr<Graphics::GraphicsSwapChain> swapChain_;
-	std::array<std::unique_ptr<ColorBuffer>,sSwapChainBufferCount> colorBuffers_;
-	std::unique_ptr<DepthBuffer> depthBuffer_;
 	
 	SizeChangeMode sizeChangeMode_ = SizeChangeMode::kNormal;
 	WindowMode windowMode_ = WindowMode::kWindow;
@@ -118,17 +102,8 @@ private:
 	WindowCore core_;
 	bool isDead_;
 	bool isResize_;
-
-	// ビューポート
-	D3D12_VIEWPORT viewport_;
-	// シザー矩形
-	D3D12_RECT scissorRect_;
-
-	UINT backBufferIndex_;
-
+	 
 	void AdjustWindowSize();
-	void CreatePixelBuffer();
-	void DestroyPixelBuffer();
 	void ResizeSignal();
 	void Resize();
 };

@@ -87,22 +87,6 @@ Window* WindowManager::GetMainWindow() {
 	return sWindowMap[sHWNDMap[sMainWindowName]].get();
 }
 
-void WindowManager::Clear(GraphicsContext& context) {
-	for (auto& window : sWindowMap) {
-		if (!window.second->IsDead()) {
-			window.second->Clear(context);
-		}
-	}
-}
-
-void WindowManager::EndFrame(GraphicsContext& context){
-	for (auto& window : sWindowMap) {
-		if (!window.second->IsDead()) {
-			window.second->EndFrame(context);
-		}
-	}
-}
-
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
 #ifdef USE_IMGUI
 	// ImGuiにメッセージを渡します。ImGuiが処理中なら後続の処理を打ち切ります。

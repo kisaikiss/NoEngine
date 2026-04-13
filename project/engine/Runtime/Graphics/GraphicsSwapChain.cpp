@@ -74,9 +74,9 @@ void GraphicsSwapChain::Initialize(HWND hwnd, UINT windowWidth, UINT windowHeigh
 	fsSwapChainDesc.Windowed = TRUE;
 
 
-	HRESULT hr = GraphicsCore::gGraphicsInfrastructures->GetDXGIFactory()->
+	HRESULT hr = GraphicsCore::sGraphicsInfrastructures->GetDXGIFactory()->
 		CreateSwapChainForHwnd(
-			GraphicsCore::gCommandListManager.GetCommandQueue(),
+			GraphicsCore::sCommandListManager.GetCommandQueue(),
 			hwnd,
 			&swapChainDesc,
 			&fsSwapChainDesc,

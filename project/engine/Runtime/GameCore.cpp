@@ -49,10 +49,10 @@ int RunApplication(std::unique_ptr<IGameApp> game) {
 	RenderContext renderContext;
 	CalculateDeltaTime();
 	// メインループ
-	while (GraphicsCore::gWindowManager.ProcessMessage() == 0) {
+	while (GraphicsCore::sWindowManager.ProcessMessage() == 0) {
 
 		GraphicsContext& context = GraphicsContext::Begin();
-		GraphicsCore::gWindowManager.Clear(context);
+		GraphicsCore::StartFrame(context);
 		ComputeContext& ctx = ComputeContext::Begin(L"MainComputeContext", true);
 
 		InputUpdate();
@@ -72,7 +72,7 @@ int RunApplication(std::unique_ptr<IGameApp> game) {
 #endif // USE_IMGUI
 
 		ctx.Finish(true);
-		GraphicsCore::gWindowManager.EndFrame(context);
+		GraphicsCore::EndFrame(context);
 		if (game->Exit()) break;
 	}
 
@@ -100,11 +100,10 @@ void EngineInitialize() {
 	GraphicsCore::Initialize();
 
 	// ウィンドウの生成、初期化を行います。
-	GraphicsCore::gWindowManager.Create(L"NoEngine", 1280, 720, L"resources/engine/noicon.ico");
-	GraphicsCore::gWindowManager.SetMainWindowName(L"NoEngine");
+	
 #ifdef RELEASE
 	// ToDo : チーム制作用にリリースでフルスクリーンを強制しています。ウィンドウモード変更のバグは修正すべきです。
-	auto* window = GraphicsCore::gWindowManager.GetMainWindow();
+	auto* window = GraphicsCore::sWindowManager.GetMainWindow();
 	window->SetWindowMode(Window::WindowMode::kFullScreen);
 	window->SetWindowMode(Window::WindowMode::kWindow);
 #endif // RELEASE

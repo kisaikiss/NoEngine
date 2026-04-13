@@ -13,7 +13,7 @@ D3D12_CPU_DESCRIPTOR_HANDLE DescriptorAllocator::Allocate(uint32_t count) {
 		remainingFreeHandles_ = sNumDescriptorsPerHeap;
 
 		if (descriptorSize_ == 0)
-			descriptorSize_ = GraphicsCore::gGraphicsDevice->GetDevice()->GetDescriptorHandleIncrementSize(type_);
+			descriptorSize_ = GraphicsCore::sGraphicsDevice->GetDevice()->GetDescriptorHandleIncrementSize(type_);
 	}
 
 	D3D12_CPU_DESCRIPTOR_HANDLE ret = currentHandle_;
@@ -36,7 +36,7 @@ ID3D12DescriptorHeap* DescriptorAllocator::RequestNewHeap(D3D12_DESCRIPTOR_HEAP_
 	desc.NodeMask = 1;
 
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> heap;
-	HRESULT hr = GraphicsCore::gGraphicsDevice->GetDevice()->CreateDescriptorHeap(&desc, IID_PPV_ARGS(&heap));
+	HRESULT hr = GraphicsCore::sGraphicsDevice->GetDevice()->CreateDescriptorHeap(&desc, IID_PPV_ARGS(&heap));
 	if (FAILED(hr)) {
 		assert(false);
 	}

@@ -16,7 +16,7 @@ void SceneManager::CreateCircleOverlay(float initialAlpha, float initialScale) {
 	auto registry = currentScene_->GetRegistry();
 	if (!registry) return;
 
-	auto winSize = GraphicsCore::gWindowManager.GetMainWindow()->GetWindowSize();
+	auto winSize = GraphicsCore::sWindowManager.GetMainWindow()->GetWindowSize();
 	float winW = static_cast<float>(winSize.clientWidth);
 	float winH = static_cast<float>(winSize.clientHeight);
 
@@ -46,7 +46,7 @@ void SceneManager::UpdateOverlay(float alpha, float scale) {
 	if (!registry->Has<Component::SpriteComponent>(overlayEntity_)) return;
 	if (!registry->Has<Component::Transform2DComponent>(overlayEntity_)) return;
 
-	auto winSize = GraphicsCore::gWindowManager.GetMainWindow()->GetWindowSize();
+	auto winSize = GraphicsCore::sWindowManager.GetMainWindow()->GetWindowSize();
 	float winW = static_cast<float>(winSize.clientWidth);
 	float winH = static_cast<float>(winSize.clientHeight);
 

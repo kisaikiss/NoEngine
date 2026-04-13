@@ -101,61 +101,18 @@ void Window::Create(WNDPROC windowProc, std::wstring title, uint32_t width, uint
 	RegisterWindowEvent(make_unique<SizeEvent>());
 	RegisterWindowEvent(make_unique<SizingEvent>());
 
-	// ウィンドウ専用のスワップチェーンを生成します。
-	swapChain_ = std::make_unique<Graphics::GraphicsSwapChain>(core_.hwnd, width, height, sSwapChainBufferCount);
-
-	// viewportをウィンドウサイズと同じにします。
-	viewport_.Width = static_cast<FLOAT>(width);
-	viewport_.Height = static_cast<FLOAT>(height);
-	viewport_.TopLeftX = 0.f;
-	viewport_.TopLeftY = 0.f;
-	viewport_.MinDepth = 0.f;
-	viewport_.MaxDepth = 1.f;
-
-	// シザー矩形はビューポートと同じ大きさにします。
-	scissorRect_.left = 0;
-	scissorRect_.right = width;
-	scissorRect_.top = 0;
-	scissorRect_.bottom = height;
-
-	CreatePixelBuffer();
-
 	// ウィンドウを表示します。
 	ShowWindow(core_.hwnd, SW_SHOW);
 
 	Log::DebugPrint("Window_WindowCreated title : " + ConvertString(title), VerbosityLevel::kInfo);
 }
 
-void Window::Clear(GraphicsContext& context) {	
-	backBufferIndex_ = swapChain_->GetSwapChain()->GetCurrentBackBufferIndex();
-	context.TransitionResource(*colorBuffers_[backBufferIndex_].get(), D3D12_RESOURCE_STATE_RENDER_TARGET);
-	context.TransitionResource(*depthBuffer_, D3D12_RESOURCE_STATE_DEPTH_WRITE);
-	context.SetRenderTarget(colorBuffers_[backBufferIndex_]->GetRTV(),depthBuffer_->GetDSV());
-
-	context.SetViewportAndScissor(viewport_, scissorRect_);
-	context.ClearColor(*colorBuffers_[backBufferIndex_].get());
-	context.ClearDepthAndStencil(*depthBuffer_);
-}
-
-void Window::EndFrame(GraphicsContext& context) {
-	context.TransitionResource(*colorBuffers_[backBufferIndex_].get(), D3D12_RESOURCE_STATE_PRESENT);
-	context.Finish(true);
-#ifdef USE_IMGUI
-	if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-	{
-		ImGui::UpdatePlatformWindows();
-		ImGui::RenderPlatformWindowsDefault();
-	}
-#endif
-	swapChain_->GetSwapChain()->Present(1, 0);
-	Resize();
-}
 
 void Window::Destroy() {
 	if (core_.hwnd) {
 		DestroyWindow(core_.hwnd);
 	}
-	GraphicsCore::gCommandListManager.IdleGPU();
+	GraphicsCore::sCommandListManager.IdleGPU();
 	isDead_ = true;
 }
 
@@ -289,54 +246,14 @@ void Window::AdjustWindowSize() {
 		return;
 	}
 	Log::DebugPrint("AdjustWindowSize", VerbosityLevel::kInfo);
-
-	// SwapChainを更新します。
-	if (swapChain_) {
-		if (size_.clientWidth <= 0) size_.clientWidth = 1;
-		if (size_.clientHeight <= 0) size_.clientHeight = 1;
-		
-		ResizeSignal();
-	}
 }
 
-void Window::CreatePixelBuffer() {
-	if (colorBuffers_[0]) return;
-
-	// ウィンドウ専用のカラーバッファを生成します。
-	for (uint32_t i = 0; i < sSwapChainBufferCount; i++) {
-		Microsoft::WRL::ComPtr<ID3D12Resource> displayPlane;
-		HRESULT hr = swapChain_->GetSwapChain()->GetBuffer(i, IID_PPV_ARGS(&displayPlane));
-		if (FAILED(hr)) {
-			Log::DebugPrint("swap chain GetBuffer() failed", VerbosityLevel::kCritical);
-			assert(false);
-		}
-		colorBuffers_[i] = std::make_unique<ColorBuffer>();
-		colorBuffers_[i]->CreateFromSwapChain(L"Primary SwapChain Buffer", displayPlane.Detach());
-	}
-	depthBuffer_ = std::make_unique<DepthBuffer>(1.f);
-	depthBuffer_->Create(L"Window Depth Buffer", static_cast<uint32_t>(size_.clientWidth), static_cast<uint32_t>(size_.clientHeight), DXGI_FORMAT_D24_UNORM_S8_UINT);
-
-	Log::DebugPrint("create pixel buffers");
-}
-
-void Window::DestroyPixelBuffer() {
-	GraphicsCore::gCommandListManager.IdleGPU();
-	for (auto& colorBuffer : colorBuffers_) {
-		colorBuffer.reset();
-	}
-	depthBuffer_.reset();
-	Log::DebugPrint("destroy pixel buffers");
-}
 void Window::ResizeSignal() {
 	isResize_ = true;
-	swapChain_->ResizeSignal(size_.clientWidth, size_.clientHeight);
 }
 
 void Window::Resize() {
 	if (!isResize_) return;
-	DestroyPixelBuffer();
-	swapChain_->Resize();
-	CreatePixelBuffer();
 	isResize_ = false;
 }
 }

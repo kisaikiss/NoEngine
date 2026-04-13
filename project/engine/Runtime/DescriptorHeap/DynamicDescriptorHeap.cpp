@@ -16,7 +16,7 @@ DynamicDescriptorHeap::DynamicDescriptorHeap(CommandContext& owningContext, D3D1
 	descriptorType_(heapType) {
 	currentHeapPtr_ = nullptr;
 	currentOffset_ = 0;
-	descriptorSize_ = GraphicsCore::gGraphicsDevice->GetDevice()->GetDescriptorHandleIncrementSize(heapType);
+	descriptorSize_ = GraphicsCore::sGraphicsDevice->GetDevice()->GetDescriptorHandleIncrementSize(heapType);
 }
 
 DynamicDescriptorHeap::~DynamicDescriptorHeap() {}
@@ -39,7 +39,7 @@ D3D12_GPU_DESCRIPTOR_HANDLE DynamicDescriptorHeap::UploadDirect(D3D12_CPU_DESCRI
 	DescriptorHandle destHandle = firstDescriptor_ + currentOffset_ * descriptorSize_;
 	currentOffset_ += 1;
 
-	GraphicsCore::gGraphicsDevice->GetDevice()->CopyDescriptorsSimple(1, destHandle, handles, descriptorType_);
+	GraphicsCore::sGraphicsDevice->GetDevice()->CopyDescriptorsSimple(1, destHandle, handles, descriptorType_);
 
 	return destHandle;
 }
@@ -49,7 +49,7 @@ ID3D12DescriptorHeap* DynamicDescriptorHeap::RequestDescriptorHeap(D3D12_DESCRIP
 
     uint32_t idx = heapType == D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER ? 1 : 0;
 
-    while (!sRetiredDescriptorHeaps[idx].empty() && GraphicsCore::gCommandListManager.IsFenceComplete(sRetiredDescriptorHeaps[idx].front().first)) {
+    while (!sRetiredDescriptorHeaps[idx].empty() && GraphicsCore::sCommandListManager.IsFenceComplete(sRetiredDescriptorHeaps[idx].front().first)) {
         sAvailableDescriptorHeaps[idx].push(sRetiredDescriptorHeaps[idx].front().second);
         sRetiredDescriptorHeaps[idx].pop();
     }
@@ -65,7 +65,7 @@ ID3D12DescriptorHeap* DynamicDescriptorHeap::RequestDescriptorHeap(D3D12_DESCRIP
         heapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
         heapDesc.NodeMask = 1;
         Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> heapPtr;
-        HRESULT hr = GraphicsCore::gGraphicsDevice->GetDevice()->CreateDescriptorHeap(&heapDesc, IID_PPV_ARGS(&heapPtr));
+        HRESULT hr = GraphicsCore::sGraphicsDevice->GetDevice()->CreateDescriptorHeap(&heapDesc, IID_PPV_ARGS(&heapPtr));
         if (FAILED(hr)) {
             assert(false);
         }
@@ -209,7 +209,7 @@ void DynamicDescriptorHeap::DescriptorHandleCache::CopyAndBindStaleTables(D3D12_
 
             // 仮部屋が足りなくなったら、今までのものをコピーします。
             if (NumSrcDescriptorRanges + DescriptorCount > kMaxDescriptorsPerCopy) {
-                GraphicsCore::gGraphicsDevice->GetDevice()->CopyDescriptors(
+                GraphicsCore::sGraphicsDevice->GetDevice()->CopyDescriptors(
                     NumDestDescriptorRanges, pDestDescriptorRangeStarts, pDestDescriptorRangeSizes,
                     NumSrcDescriptorRanges, pSrcDescriptorRangeStarts, pSrcDescriptorRangeSizes,
                     type);
@@ -236,7 +236,7 @@ void DynamicDescriptorHeap::DescriptorHandleCache::CopyAndBindStaleTables(D3D12_
         }
     }
 
-    GraphicsCore::gGraphicsDevice->GetDevice()->CopyDescriptors(
+    GraphicsCore::sGraphicsDevice->GetDevice()->CopyDescriptors(
         NumDestDescriptorRanges, pDestDescriptorRangeStarts, pDestDescriptorRangeSizes,
         NumSrcDescriptorRanges, pSrcDescriptorRangeStarts, pSrcDescriptorRangeSizes,
         type);

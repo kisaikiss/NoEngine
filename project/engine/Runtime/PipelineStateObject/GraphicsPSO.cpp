@@ -112,7 +112,7 @@ void GraphicsPSO::Finalize() {
 
 	if (firstCompile) {
 		assert(psoDesc_.DepthStencilState.DepthEnable != (psoDesc_.DSVFormat == DXGI_FORMAT_UNKNOWN));
-		HRESULT hr = GraphicsCore::gGraphicsDevice->GetDevice()->CreateGraphicsPipelineState(&psoDesc_, IID_PPV_ARGS(&pso_));
+		HRESULT hr = GraphicsCore::sGraphicsDevice->GetDevice()->CreateGraphicsPipelineState(&psoDesc_, IID_PPV_ARGS(&pso_));
 		if (FAILED(hr)) {
 			assert(false);
 		}

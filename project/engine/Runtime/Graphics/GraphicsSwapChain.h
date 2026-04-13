@@ -11,6 +11,7 @@ public:
 	~GraphicsSwapChain();
 
 	IDXGISwapChain4* GetSwapChain() { return swapChain_.Get(); }
+	IDXGISwapChain4* Get() { return swapChain_.Get(); }
 
 	void ResizeSignal(UINT newWidth, UINT newHeight);
 	void Resize();

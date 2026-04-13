@@ -37,7 +37,7 @@ void CommandListManager::CreateNewCommandList(D3D12_COMMAND_LIST_TYPE type, ID3D
 	case D3D12_COMMAND_LIST_TYPE_COPY: *allocator = copyQueue_.RequestAllocator(); break;
 	}
 
-	HRESULT hr = GraphicsCore::gGraphicsDevice->GetDevice()->CreateCommandList(1, type, *allocator, nullptr, IID_PPV_ARGS(list));
+	HRESULT hr = GraphicsCore::sGraphicsDevice->GetDevice()->CreateCommandList(1, type, *allocator, nullptr, IID_PPV_ARGS(list));
 	if (FAILED(hr)) {
 		assert(false);
 	}
@@ -45,7 +45,7 @@ void CommandListManager::CreateNewCommandList(D3D12_COMMAND_LIST_TYPE type, ID3D
 }
 
 void CommandListManager::WaitForFence(uint64_t FenceValue) {
-	CommandQueue& producer = GraphicsCore::gCommandListManager.GetQueue((D3D12_COMMAND_LIST_TYPE)(FenceValue >> 56));
+	CommandQueue& producer = GraphicsCore::sCommandListManager.GetQueue((D3D12_COMMAND_LIST_TYPE)(FenceValue >> 56));
 	producer.WaitForFence(FenceValue);
 }
 

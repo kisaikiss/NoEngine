@@ -30,7 +30,7 @@ void Texture::Create2D(size_t rowPitchBytes, size_t width, size_t height, DXGI_F
     HeapProps.CreationNodeMask = 1;
     HeapProps.VisibleNodeMask = 1;
 
-    HRESULT hr = GraphicsCore::gGraphicsDevice->GetDevice()->CreateCommittedResource(&HeapProps, D3D12_HEAP_FLAG_NONE, &texDesc,
+    HRESULT hr = GraphicsCore::sGraphicsDevice->GetDevice()->CreateCommittedResource(&HeapProps, D3D12_HEAP_FLAG_NONE, &texDesc,
         usageState_, nullptr, IID_PPV_ARGS(resource_.ReleaseAndGetAddressOf()));
     if (FAILED(hr)) {
         assert(false);
@@ -47,6 +47,6 @@ void Texture::Create2D(size_t rowPitchBytes, size_t width, size_t height, DXGI_F
 
     if (cpuDescriptorHandle_.ptr == D3D12_GPU_VIRTUAL_ADDRESS_UNKNOWN)
         cpuDescriptorHandle_ = GraphicsCore::AllocateDescriptor(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-    GraphicsCore::gGraphicsDevice->GetDevice()->CreateShaderResourceView(resource_.Get(), nullptr, cpuDescriptorHandle_);
+    GraphicsCore::sGraphicsDevice->GetDevice()->CreateShaderResourceView(resource_.Get(), nullptr, cpuDescriptorHandle_);
 }
 }

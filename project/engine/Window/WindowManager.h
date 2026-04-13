@@ -22,9 +22,6 @@ public:
 
 	Window* GetMainWindow();
 
-	void Clear(GraphicsContext& context);
-
-	void EndFrame(GraphicsContext& context);
 private:
 	bool isDead_ = false;
 };

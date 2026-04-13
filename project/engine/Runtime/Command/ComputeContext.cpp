@@ -5,7 +5,7 @@
 namespace NoEngine {
 
 ComputeContext& ComputeContext::Begin(const std::wstring& id, bool async) {
-    ComputeContext& NewContext = GraphicsCore::gContextManager.AllocateContext(
+    ComputeContext& NewContext = GraphicsCore::sContextManager.AllocateContext(
         async ? D3D12_COMMAND_LIST_TYPE_COMPUTE : D3D12_COMMAND_LIST_TYPE_DIRECT)->GetComputeContext();
     NewContext.SetID(id);
     return NewContext;

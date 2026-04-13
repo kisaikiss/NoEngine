@@ -17,7 +17,7 @@ Matrix4x4 sOrthographicMatrix;
 
 NoEngine::Render::SpritePass::SpritePass() {
 
-	auto size = GraphicsCore::gWindowManager.GetMainWindow()->GetWindowSize();
+	auto size = GraphicsCore::sWindowManager.GetMainWindow()->GetWindowSize();
 	sOrthographicMatrix = MathCalculations::MakeOrthographicMatrix(0.f, 0.f, static_cast<float>(size.clientWidth), static_cast<float>(size.clientHeight), 0.1f, 100.f);
 
 }

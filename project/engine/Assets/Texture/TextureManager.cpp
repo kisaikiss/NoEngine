@@ -50,21 +50,21 @@ void ManagedTexture::CreateFromMemory(ByteArray ba, eDefaultTexture fallback, bo
 
 	HRESULT hr = DirectX::LoadFromDDSMemory(ba->data(), ba->size(), DirectX::DDS_FLAGS_NONE, &metadata, scratch);
 	if (FAILED(hr)) {
-		GraphicsCore::gGraphicsDevice->GetDevice()->CopyDescriptorsSimple(1, cpuDescriptorHandle_,
+		GraphicsCore::sGraphicsDevice->GetDevice()->CopyDescriptorsSimple(1, cpuDescriptorHandle_,
 			GetDefaultTexture(fallback), D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 		return;
 	}
 	if (forceSRGB) metadata.format = DirectX::MakeSRGB(metadata.format);
 
-	hr = DirectX::CreateTexture(GraphicsCore::gGraphicsDevice->GetDevice(), metadata, resource_.GetAddressOf());
+	hr = DirectX::CreateTexture(GraphicsCore::sGraphicsDevice->GetDevice(), metadata, resource_.GetAddressOf());
 	if (FAILED(hr)) {
-		GraphicsCore::gGraphicsDevice->GetDevice()->CopyDescriptorsSimple(1, cpuDescriptorHandle_,
+		GraphicsCore::sGraphicsDevice->GetDevice()->CopyDescriptorsSimple(1, cpuDescriptorHandle_,
 			GetDefaultTexture(fallback), D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 		return;
 	}
 
 	std::vector<D3D12_SUBRESOURCE_DATA> subresources;
-	hr = DirectX::PrepareUpload(GraphicsCore::gGraphicsDevice->GetDevice(),
+	hr = DirectX::PrepareUpload(GraphicsCore::sGraphicsDevice->GetDevice(),
 		scratch.GetImages(), scratch.GetImageCount(), metadata, subresources);
 	if (FAILED(hr)) return;
 
@@ -113,7 +113,7 @@ void ManagedTexture::CreateFromMemory(ByteArray ba, eDefaultTexture fallback, bo
 		break;
 	}
 
-	GraphicsCore::gGraphicsDevice->GetDevice()->CreateShaderResourceView(resource_.Get(), &srvDesc, cpuDescriptorHandle_);
+	GraphicsCore::sGraphicsDevice->GetDevice()->CreateShaderResourceView(resource_.Get(), &srvDesc, cpuDescriptorHandle_);
 
 	usageState_ = D3D12_RESOURCE_STATE_GENERIC_READ;
 	isValid_ = true;

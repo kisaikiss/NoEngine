@@ -10,28 +10,41 @@ namespace NoEngine {
 /// <summary>
 /// Direct3D 12のグラフィックス関連の基盤
 /// </summary>
-namespace GraphicsCore {
-	void Initialize();
-	void Shutdown(void);
+class GraphicsCore {
+public:
+	static void Initialize();
+	static void Shutdown(void);
 
-	extern std::unique_ptr<Graphics::GraphicsInfrastructures> gGraphicsInfrastructures;
-	extern std::unique_ptr<Graphics::GraphicsDevice> gGraphicsDevice;
-	extern CommandListManager gCommandListManager;
-	extern ContextManager gContextManager;
-	extern WindowManager gWindowManager;
+	static std::unique_ptr<Graphics::GraphicsInfrastructures> sGraphicsInfrastructures;
+	static std::unique_ptr<Graphics::GraphicsDevice> sGraphicsDevice;
+	static CommandListManager sCommandListManager;
+	static ContextManager sContextManager;
+	static WindowManager sWindowManager;
 
 	// ディスクリプタアロケータ(ディスクリプタのメモリ管理)配列。数はD3D12_DESCRIPTOR_HEAP_TYPE
-	extern DescriptorAllocator gDescriptorAllocator[];
+	static DescriptorAllocator sDescriptorAllocator[];
 
 	/// <summary>
 	/// デバッグレイヤーを有効化
 	/// </summary>
-	void EnableDebugLayer();
+	static void EnableDebugLayer();
 
 	/// <summary>
 	/// デバッグレイヤーの設定
 	/// </summary>
-	void SettingDebugLayer();
+	static void SettingDebugLayer();
+
+	/// <summary>
+	/// フレーム開始
+	/// </summary>
+	/// <param name="context">グラフィックス用のコマンドリストラッパークラス</param>
+	static void StartFrame(GraphicsContext& context);
+
+	/// <summary>
+	/// フレーム終了
+	/// </summary>
+	/// <param name="context">グラフィックス用のコマンドリストラッパークラス</param>
+	static void EndFrame(GraphicsContext& context);
 
 	/// <summary>
 	/// ディスクリプタを割り当てます。
@@ -39,8 +52,18 @@ namespace GraphicsCore {
 	/// <param name="Type">ディスクリプタヒープのタイプ</param>
 	/// <param name="Count">割り当てる数</param>
 	/// <returns>割り当てたディスクリプタのハンドル</returns>
-	inline D3D12_CPU_DESCRIPTOR_HANDLE AllocateDescriptor(D3D12_DESCRIPTOR_HEAP_TYPE Type, UINT Count = 1) {
-		return gDescriptorAllocator[Type].Allocate(Count);
+	static inline D3D12_CPU_DESCRIPTOR_HANDLE AllocateDescriptor(D3D12_DESCRIPTOR_HEAP_TYPE Type, UINT Count = 1) {
+		return sDescriptorAllocator[Type].Allocate(Count);
 	}
-}
+private:
+	/// <summary>
+	/// 描画用のバッファ作成
+	/// </summary>
+	static void CreatePixelBuffer();
+	
+	/// <summary>
+	/// 描画用バッファの破棄
+	/// </summary>
+	static void DestroyPixelBuffer();
+};
 }

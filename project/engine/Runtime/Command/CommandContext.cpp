@@ -30,7 +30,7 @@ void CommandContext::Reset(void) {
 	// Reset() は、以前に解放されたコンテキストに対してのみ呼び出します。コマンドリストは保持されますが、
 	// 新しいアロケータを要求する必要があります。
 	assert(commandList_ != nullptr && currentAllocator_ == nullptr);
-	currentAllocator_ = GraphicsCore::gCommandListManager.GetQueue(type_).RequestAllocator();
+	currentAllocator_ = GraphicsCore::sCommandListManager.GetQueue(type_).RequestAllocator();
 	commandList_->Reset(currentAllocator_, nullptr);
 
 	curGraphicsRootSignature_ = nullptr;
@@ -50,11 +50,11 @@ CommandContext::~CommandContext(void) {
 void CommandContext::DestroyAllContexts(void) {
 	LinearAllocator::DestroyAll();
 	DynamicDescriptorHeap::DestroyAll();
-	GraphicsCore::gContextManager.DestroyAllContexts();
+	GraphicsCore::sContextManager.DestroyAllContexts();
 }
 
 CommandContext& CommandContext::Begin(const std::wstring id) {
-	CommandContext* newContext = GraphicsCore::gContextManager.AllocateContext(D3D12_COMMAND_LIST_TYPE_DIRECT);
+	CommandContext* newContext = GraphicsCore::sContextManager.AllocateContext(D3D12_COMMAND_LIST_TYPE_DIRECT);
 	newContext->SetID(id);
 	return *newContext;
 }
@@ -70,7 +70,7 @@ uint64_t CommandContext::Finish(bool WaitForCompletion) {
 
 	assert(currentAllocator_ != nullptr);
 
-	CommandQueue& queue = GraphicsCore::gCommandListManager.GetQueue(type_);
+	CommandQueue& queue = GraphicsCore::sCommandListManager.GetQueue(type_);
 	uint64_t fenceValue = queue.ExecuteCommandList(commandList_);
 
 	queue.DiscardAllocator(fenceValue, currentAllocator_);
@@ -81,16 +81,16 @@ uint64_t CommandContext::Finish(bool WaitForCompletion) {
 	dynamicSamplerDescriptorHeap_.CleanupUsedHeaps(fenceValue);
 
 	if (WaitForCompletion) {
-		GraphicsCore::gCommandListManager.WaitForFence(fenceValue);
+		GraphicsCore::sCommandListManager.WaitForFence(fenceValue);
 	}
 
-	GraphicsCore::gContextManager.FreeContext(this);
+	GraphicsCore::sContextManager.FreeContext(this);
 
 	return fenceValue;
 }
 
 void CommandContext::Initialize(void) {
-	GraphicsCore::gCommandListManager.CreateNewCommandList(type_, &commandList_, &currentAllocator_);
+	GraphicsCore::sCommandListManager.CreateNewCommandList(type_, &commandList_, &currentAllocator_);
 }
 
 GraphicsContext& CommandContext::GetGraphicsContext() {

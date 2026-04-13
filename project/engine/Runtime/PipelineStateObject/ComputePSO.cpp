@@ -34,7 +34,7 @@ void ComputePSO::Finalize() {
     }
 
     if (firstCompile) {
-        HRESULT hr = GraphicsCore::gGraphicsDevice->GetDevice()->CreateComputePipelineState(&psoDesc_, IID_PPV_ARGS(&pso_));
+        HRESULT hr = GraphicsCore::sGraphicsDevice->GetDevice()->CreateComputePipelineState(&psoDesc_, IID_PPV_ARGS(&pso_));
         if (FAILED(hr)) {
             assert(false);
         }

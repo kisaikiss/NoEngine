@@ -7,18 +7,37 @@
 #include "Graphics/GraphicsCommon.h"
 
 #include "engine/Functions/Debug/Logger/Log.h"
+#ifdef USE_IMGUI
+#include "externals/imgui/imgui.h"
+#endif // USE_IMGUI
+
+
 
 namespace NoEngine {
 using namespace std;
 
-namespace GraphicsCore {
-std::unique_ptr<Graphics::GraphicsInfrastructures> gGraphicsInfrastructures;
-std::unique_ptr<Graphics::GraphicsDevice> gGraphicsDevice;
-CommandListManager gCommandListManager;
-ContextManager gContextManager;
-WindowManager gWindowManager;
+std::unique_ptr<Graphics::GraphicsInfrastructures> GraphicsCore::sGraphicsInfrastructures;
+std::unique_ptr<Graphics::GraphicsDevice> GraphicsCore::sGraphicsDevice;
+CommandListManager GraphicsCore::sCommandListManager;
+ContextManager GraphicsCore::sContextManager;
+WindowManager GraphicsCore::sWindowManager;
 
-DescriptorAllocator gDescriptorAllocator[D3D12_DESCRIPTOR_HEAP_TYPE_NUM_TYPES] =
+namespace {
+const uint32_t sSwapChainBufferCount = 2;
+
+std::unique_ptr<Graphics::GraphicsSwapChain> sSwapChain;
+std::array<std::unique_ptr<ColorBuffer>, sSwapChainBufferCount> sColorBuffers;
+std::unique_ptr<DepthBuffer> sDepthBuffer;
+
+// ビューポート
+D3D12_VIEWPORT sViewport;
+// シザー矩形
+D3D12_RECT sScissorRect;
+
+UINT sBackBufferIndex;
+}
+
+DescriptorAllocator GraphicsCore::sDescriptorAllocator[D3D12_DESCRIPTOR_HEAP_TYPE_NUM_TYPES] =
 {
 	D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
 	D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER,
@@ -26,32 +45,56 @@ DescriptorAllocator gDescriptorAllocator[D3D12_DESCRIPTOR_HEAP_TYPE_NUM_TYPES] =
 	D3D12_DESCRIPTOR_HEAP_TYPE_DSV
 };
 
-void Initialize() {
+void GraphicsCore::Initialize() {
 	EnableDebugLayer();
-	gGraphicsInfrastructures = make_unique<Graphics::GraphicsInfrastructures>();
-	gGraphicsDevice = make_unique<Graphics::GraphicsDevice>(gGraphicsInfrastructures->GetDXGIAdapter());
-	gCommandListManager.Create();
+	sGraphicsInfrastructures = make_unique<Graphics::GraphicsInfrastructures>();
+	sGraphicsDevice = make_unique<Graphics::GraphicsDevice>(sGraphicsInfrastructures->GetDXGIAdapter());
+	sCommandListManager.Create();
 	SettingDebugLayer();
 	Render::Initialize();
+	GraphicsCore::sWindowManager.Create(L"NoEngine", 1280, 720, L"resources/engine/noicon.ico");
+	GraphicsCore::sWindowManager.SetMainWindowName(L"NoEngine");
+
+	uint32_t windowWidth = 1280;
+	uint32_t windowHeight = 720;
+	sSwapChain = make_unique<Graphics::GraphicsSwapChain>(sWindowManager.GetMainWindow()->GetWindowHandle(),1280.f, 720.f, sSwapChainBufferCount);
+
+	// viewportをウィンドウサイズと同じにします。
+	sViewport.Width = static_cast<FLOAT>(windowWidth);
+	sViewport.Height = static_cast<FLOAT>(windowHeight);
+	sViewport.TopLeftX = 0.f;
+	sViewport.TopLeftY = 0.f;
+	sViewport.MinDepth = 0.f;
+	sViewport.MaxDepth = 1.f;
+
+	// シザー矩形はビューポートと同じ大きさにします。
+	sScissorRect.left = 0;
+	sScissorRect.right = windowWidth;
+	sScissorRect.top = 0;
+	sScissorRect.bottom = windowHeight;
+
+	CreatePixelBuffer();
 }
 
-void Shutdown(void) {
-	gWindowManager.Shutdown();
+void GraphicsCore::Shutdown(void) {
+	DestroyPixelBuffer();
+	sSwapChain.reset();
+	sWindowManager.Shutdown();
 	Render::Shutdown();
 	CommandContext::DestroyAllContexts();
 
-	for (auto& descriptorAllocator : gDescriptorAllocator) {
+	for (auto& descriptorAllocator : sDescriptorAllocator) {
 		descriptorAllocator.DestroyAll();
 	}
 
 
-	gCommandListManager.Shutdown();
+	sCommandListManager.Shutdown();
 
-	gGraphicsDevice.reset();
-	gGraphicsInfrastructures.reset();
+	sGraphicsDevice.reset();
+	sGraphicsInfrastructures.reset();
 }
 
-void EnableDebugLayer() {
+void GraphicsCore::EnableDebugLayer() {
 #ifdef _DEBUG
 	Microsoft::WRL::ComPtr<ID3D12Debug1> debugController;
 	if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController)))) {
@@ -63,14 +106,14 @@ void EnableDebugLayer() {
 #endif
 }
 
-void SettingDebugLayer() {
+void GraphicsCore::SettingDebugLayer() {
 #ifdef _DEBUG
-	if (!gGraphicsDevice) {
+	if (!sGraphicsDevice) {
 		Log::DebugPrint("GraphicsDevice is nulptr!!!", VerbosityLevel::kCritical);
 		assert(false);
 	}
 	ID3D12InfoQueue* infoQueue = nullptr;
-	if (SUCCEEDED(gGraphicsDevice->GetDevice()->QueryInterface(IID_PPV_ARGS(&infoQueue)))) {
+	if (SUCCEEDED(sGraphicsDevice->GetDevice()->QueryInterface(IID_PPV_ARGS(&infoQueue)))) {
 		// ヤバイエラー時に止まる
 		infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_CORRUPTION, true);
 		// エラー時に止まる
@@ -100,5 +143,58 @@ void SettingDebugLayer() {
 	}
 #endif
 }
+
+void GraphicsCore::StartFrame(GraphicsContext& context) {
+	sBackBufferIndex = sSwapChain->GetSwapChain()->GetCurrentBackBufferIndex();
+	context.TransitionResource(*sColorBuffers[sBackBufferIndex].get(), D3D12_RESOURCE_STATE_RENDER_TARGET);
+	context.TransitionResource(*sDepthBuffer, D3D12_RESOURCE_STATE_DEPTH_WRITE);
+	context.SetRenderTarget(sColorBuffers[sBackBufferIndex]->GetRTV(), sDepthBuffer->GetDSV());
+
+	context.SetViewportAndScissor(sViewport, sScissorRect);
+	context.ClearColor(*sColorBuffers[sBackBufferIndex].get());
+	context.ClearDepthAndStencil(*sDepthBuffer);
 }
+
+void GraphicsCore::EndFrame(GraphicsContext& context) {
+	context.TransitionResource(*sColorBuffers[sBackBufferIndex].get(), D3D12_RESOURCE_STATE_PRESENT);
+	context.Finish(true);
+#ifdef USE_IMGUI
+	if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+		ImGui::UpdatePlatformWindows();
+		ImGui::RenderPlatformWindowsDefault();
+	}
+#endif
+	sSwapChain->Get()->Present(1, 0);
+}
+
+void GraphicsCore::CreatePixelBuffer() {
+	if (sColorBuffers[0]) return;
+
+	// ウィンドウ専用のカラーバッファを生成します。
+	for (uint32_t i = 0; i < sSwapChainBufferCount; i++) {
+		Microsoft::WRL::ComPtr<ID3D12Resource> displayPlane;
+		HRESULT hr = sSwapChain->Get()->GetBuffer(i, IID_PPV_ARGS(&displayPlane));
+		if (FAILED(hr)) {
+			Log::DebugPrint("swap chain GetBuffer() failed", VerbosityLevel::kCritical);
+			assert(false);
+		}
+		sColorBuffers[i] = std::make_unique<ColorBuffer>();
+		sColorBuffers[i]->CreateFromSwapChain(L"Primary SwapChain Buffer", displayPlane.Detach());
+	}
+	sDepthBuffer = std::make_unique<DepthBuffer>(1.f);
+	// ToDo : ウィンドウサイズがマジックナンバーになっている
+	sDepthBuffer->Create(L"Window Depth Buffer", 1280, 720, DXGI_FORMAT_D24_UNORM_S8_UINT);
+
+	Log::DebugPrint("create pixel buffers");
+}
+
+void GraphicsCore::DestroyPixelBuffer() {
+	GraphicsCore::sCommandListManager.IdleGPU();
+	for (auto& colorBuffer : sColorBuffers) {
+		colorBuffer.reset();
+	}
+	sDepthBuffer.reset();
+	Log::DebugPrint("destroy pixel buffers");
+}
+
 }

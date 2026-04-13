@@ -15,7 +15,7 @@ LinearAllocatorPageManager::LinearAllocatorPageManager() {
 LinearAllocationPage* LinearAllocatorPageManager::RequestPage() {
     std::lock_guard<std::mutex> LockGuard(mutex_);
 
-    while (!retiredPages_.empty() && GraphicsCore::gCommandListManager.IsFenceComplete(retiredPages_.front().first)) {
+    while (!retiredPages_.empty() && GraphicsCore::sCommandListManager.IsFenceComplete(retiredPages_.front().first)) {
         availablePages_.push(retiredPages_.front().second);
         retiredPages_.pop();
     }
@@ -66,7 +66,7 @@ LinearAllocationPage* LinearAllocatorPageManager::CreateNewPage(size_t pageSize)
     }
 
     ID3D12Resource* pBuffer;
-    HRESULT hr = (GraphicsCore::gGraphicsDevice->GetDevice()->CreateCommittedResource(&heapProps, D3D12_HEAP_FLAG_NONE,
+    HRESULT hr = (GraphicsCore::sGraphicsDevice->GetDevice()->CreateCommittedResource(&heapProps, D3D12_HEAP_FLAG_NONE,
         &resourceDesc, defaultUsage, nullptr, IID_PPV_ARGS(&pBuffer)));
 
     if (FAILED(hr)) {
@@ -87,7 +87,7 @@ void LinearAllocatorPageManager::DiscardPages(uint64_t fenceValue, const std::ve
 void LinearAllocatorPageManager::FreeLargePages(uint64_t fenceValue, const std::vector<LinearAllocationPage*>& largePages) {
     std::lock_guard<std::mutex> LockGuard(mutex_);
 
-    while (!deletionQueue_.empty() && GraphicsCore::gCommandListManager.IsFenceComplete(deletionQueue_.front().first)) {
+    while (!deletionQueue_.empty() && GraphicsCore::sCommandListManager.IsFenceComplete(deletionQueue_.front().first)) {
         delete deletionQueue_.front().second;
         deletionQueue_.pop();
     }

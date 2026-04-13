@@ -171,7 +171,7 @@ bool Mouse::GetPosition(int* mouseX, int* mouseY) {
 		// スクリーンを座標系からウィンドウ座標に変換
 		POINT cursorPos;
 		GetCursorPos(&cursorPos); // スクリーンを得る
-		ScreenToClient(GraphicsCore::gWindowManager.GetMainWindow()->GetWindowHandle(), &cursorPos); // ウィンドウ座標に変換
+		ScreenToClient(GraphicsCore::sWindowManager.GetMainWindow()->GetWindowHandle(), &cursorPos); // ウィンドウ座標に変換
 
 		*mouseX = static_cast<int>(cursorPos.x);
 		*mouseY = static_cast<int>(cursorPos.y);

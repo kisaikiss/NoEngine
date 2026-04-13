@@ -14,8 +14,8 @@ void DepthBuffer::Create(const std::wstring& name, uint32_t width, uint32_t heig
     ClearValue.Format = format;
     ClearValue.DepthStencil.Depth = clearDepth_;
     ClearValue.DepthStencil.Stencil = clearStencil_;
-    CreateTextureResource(GraphicsCore::gGraphicsDevice->GetDevice(), name, ResourceDesc, ClearValue);
-    CreateDerivedViews(GraphicsCore::gGraphicsDevice->GetDevice(), format);
+    CreateTextureResource(GraphicsCore::sGraphicsDevice->GetDevice(), name, ResourceDesc, ClearValue);
+    CreateDerivedViews(GraphicsCore::sGraphicsDevice->GetDevice(), format);
 }
 
 void DepthBuffer::CreateDerivedViews(ID3D12Device* device, DXGI_FORMAT format) {
