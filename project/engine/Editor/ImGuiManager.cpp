@@ -129,12 +129,6 @@ void ImGuiManager::BeginFrame() {
 
 }
 
-void ImGuiManager::Render(GraphicsContext& context) {
-	ImGui::Render();
-	context.SetDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, Render::gTextureHeap.GetHeapPointer());
-	ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), context.GetCommandList());
-}
-
 void ImGuiManager::Shutdown() {
 	ImGui_ImplDX12_Shutdown();
 	ImGui_ImplWin32_Shutdown();

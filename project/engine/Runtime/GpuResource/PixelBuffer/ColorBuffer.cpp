@@ -32,6 +32,26 @@ void ColorBuffer::Create(const std::wstring& name, uint32_t width, uint32_t heig
     CreateDerivedViews(GraphicsCore::sGraphicsDevice->GetDevice(), format, 1, numMips);
 }
 
+void ColorBuffer::CreateImGuiSRV() {
+#ifdef USE_IMGUI
+    auto& device = GraphicsCore::sGraphicsDevice;
+
+    D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
+    srvDesc.Format = format_;
+    srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+    srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+    UINT mipLevels = (numMipMaps_ == 0) ? 1 : numMipMaps_;
+    srvDesc.Texture2D.MipLevels = mipLevels;
+
+    imguiSRV_ = GraphicsCore::AllocateDescriptor(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV); // CPU-visible descriptor heap
+    device->GetDevice()->CreateShaderResourceView(resource_.Get(), &srvDesc, imguiSRV_);
+#endif
+}
+//
+//D3D12_GPU_DESCRIPTOR_HANDLE ColorBuffer::GetImGuiSRV(GraphicsContext& gfx) const {
+//    return gfx.GetViewDynamicDescriptorHeap().UploadDirect(imguiSRV_);
+//}
+
 void ColorBuffer::CreateDerivedViews(ID3D12Device* Device, DXGI_FORMAT Format, uint32_t ArraySize, uint32_t NumMips) {
     Log::DebugPrint("We don't support auto-mips on mTexture arrays", VerbosityLevel::kCritical);
     assert(ArraySize == 1 || NumMips == 1);

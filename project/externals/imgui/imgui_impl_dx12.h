@@ -77,4 +77,9 @@ struct ImGui_ImplDX12_RenderState
     ID3D12GraphicsCommandList*  CommandList;
 };
 
+//-----------------------------------------------------------------------------
+// [USER EXTENSION] AddTexture: Register a user SRV into ImGui's descriptor heap
+//-----------------------------------------------------------------------------
+ImTextureID ImGui_ImplDX12_AddTexture(D3D12_CPU_DESCRIPTOR_HANDLE cpuSrvHandle);
+
 #endif // #ifndef IMGUI_DISABLE

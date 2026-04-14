@@ -14,8 +14,6 @@ public:
     uint32_t GetDepth(void) const { return arraySize_; }
     const DXGI_FORMAT& GetFormat(void) const { return format_; }
 
-    
-
 protected:
     /// <summary>
     /// D3D12_RESOURCE_DESCを作成します。

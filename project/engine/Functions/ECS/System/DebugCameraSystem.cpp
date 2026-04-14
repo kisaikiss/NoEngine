@@ -18,6 +18,8 @@ void DebugCameraSystem::Update(Registry& registry, float deltaTime) {
 		auto* transform = registry.GetComponent<TransformComponent>(entity);
 
 		if (Input::Keyboard::IsPress(VK_LSHIFT)) {
+			debugCamera->preMousePositionX = debugCamera->mousePositionX;
+			debugCamera->preMousePositionY = debugCamera->mousePositionY;
 			if (Input::Mouse::IsPress(Input::MouseButton::Middle)) {
 				if (Input::Mouse::IsTrigger(Input::MouseButton::Middle)) {
 					debugCamera->mousePositionX = 0;
@@ -25,8 +27,7 @@ void DebugCameraSystem::Update(Registry& registry, float deltaTime) {
 					debugCamera->preMousePositionX = 0;
 					debugCamera->preMousePositionY = 0;
 				} else {
-					debugCamera->preMousePositionX = debugCamera->mousePositionX;
-					debugCamera->preMousePositionY = debugCamera->mousePositionY;
+					
 					Input::Mouse::GetPosition(&debugCamera->mousePositionX, &debugCamera->mousePositionY);
 				}
 			}

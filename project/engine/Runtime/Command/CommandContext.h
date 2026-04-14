@@ -100,6 +100,8 @@ public:
 	void SetDescriptorHeaps(UINT heapCount, D3D12_DESCRIPTOR_HEAP_TYPE type[], ID3D12DescriptorHeap* heapPtrs[]);
 	void SetPipelineState(const PSO& PSO);
 
+	DynamicDescriptorHeap& GetViewDynamicDescriptorHeap() { return dynamicViewDescriptorHeap_; }
+
 	ID3D12GraphicsCommandList4* GetCommandList() const { return commandList_; }
 protected:
 

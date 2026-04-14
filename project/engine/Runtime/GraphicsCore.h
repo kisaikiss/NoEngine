@@ -65,5 +65,12 @@ private:
 	/// 描画用バッファの破棄
 	/// </summary>
 	static void DestroyPixelBuffer();
+
+	/// <summary>
+	/// 最終的なフルスクリーン描画
+	/// </summary>
+	static void FullScreenDraw(GraphicsContext& context);
+
+	static void InitPostEffect();
 };
 }

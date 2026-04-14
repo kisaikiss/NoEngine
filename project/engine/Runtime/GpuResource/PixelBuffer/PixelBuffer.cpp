@@ -3,6 +3,8 @@
 #include "engine/Functions/Debug/Logger/Log.h"
 
 namespace NoEngine {
+
+
 D3D12_RESOURCE_DESC PixelBuffer::DescribeTex2D(uint32_t width, uint32_t height, uint32_t depthOrArraySize, uint32_t numMips, DXGI_FORMAT format, UINT flags) {
 	width_ = width;
 	height_ = height;

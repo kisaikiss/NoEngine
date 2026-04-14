@@ -67,10 +67,6 @@ int RunApplication(std::unique_ptr<IGameApp> game) {
 		renderPassScheduler->SetRenderContext(renderContext);
 		renderPassScheduler->Render(context, game->GetRegistry());
 
-#ifdef USE_IMGUI
-		imguiManager.Render(context);
-#endif // USE_IMGUI
-
 		ctx.Finish(true);
 		GraphicsCore::EndFrame(context);
 		if (game->Exit()) break;

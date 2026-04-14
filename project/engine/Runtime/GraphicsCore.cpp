@@ -5,10 +5,13 @@
 #include "engine/Functions/Renderer/RenderSystem.h"
 #include "engine/Runtime/GpuResource/LinearAllocator/LinearAllocator.h"
 #include "Graphics/GraphicsCommon.h"
+#include "engine/Functions/Shader/ShaderModule.h"
 
 #include "engine/Functions/Debug/Logger/Log.h"
+#include "engine/Utilities/Conversion/ConvertString.h"
 #ifdef USE_IMGUI
 #include "externals/imgui/imgui.h"
+#include "externals/imgui/imgui_impl_dx12.h"
 #endif // USE_IMGUI
 
 
@@ -26,8 +29,9 @@ namespace {
 const uint32_t sSwapChainBufferCount = 2;
 
 std::unique_ptr<Graphics::GraphicsSwapChain> sSwapChain;
-std::array<std::unique_ptr<ColorBuffer>, sSwapChainBufferCount> sColorBuffers;
-std::unique_ptr<DepthBuffer> sDepthBuffer;
+std::array<std::unique_ptr<ColorBuffer>, sSwapChainBufferCount> sFrameBuffers; // 実際に描画するカラーバッファ
+std::unique_ptr<DepthBuffer> sDepthBuffer;									   // 深度バッファ
+ColorBuffer sPostEffectBuffer;												   // ポストエフェクト用カラーバッファ
 
 // ビューポート
 D3D12_VIEWPORT sViewport;
@@ -39,6 +43,13 @@ UINT sBackBufferIndex;
 // WindowSize
 float sWindowWidth;
 float sWindowHeight;
+
+GraphicsPSO defaultPSO(L"CopyImage");
+std::unique_ptr<RootSignature> defaultRootSignature;
+#ifdef USE_IMGUI
+ImTextureID sPostEffectTexture;
+#endif // USE_IMGUI
+
 
 }
 
@@ -79,12 +90,19 @@ void GraphicsCore::Initialize(float windowWidth, float windowHeight) {
 	sWindowWidth = windowWidth;
 	sWindowHeight = windowHeight;
 
+	sPostEffectBuffer = ColorBuffer();
+	sPostEffectBuffer.Create(L"PostEffect Buffer", static_cast<uint32_t>(windowWidth), static_cast<uint32_t>(windowHeight), 1, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
+	sPostEffectBuffer.CreateImGuiSRV();
+
 	CreatePixelBuffer();
+
+	InitPostEffect();
 }
 
 void GraphicsCore::Shutdown(void) {
 	DestroyPixelBuffer();
 	sSwapChain.reset();
+	sPostEffectBuffer.Destroy();
 	sWindowManager.Shutdown();
 	Render::Shutdown();
 	CommandContext::DestroyAllContexts();
@@ -151,19 +169,51 @@ void GraphicsCore::SettingDebugLayer() {
 }
 
 void GraphicsCore::StartFrame(GraphicsContext& context) {
-	sBackBufferIndex = sSwapChain->GetSwapChain()->GetCurrentBackBufferIndex();
-	context.TransitionResource(*sColorBuffers[sBackBufferIndex].get(), D3D12_RESOURCE_STATE_RENDER_TARGET);
+	// オブジェクトの描画開始
+	context.TransitionResource(sPostEffectBuffer, D3D12_RESOURCE_STATE_RENDER_TARGET);
 	context.TransitionResource(*sDepthBuffer, D3D12_RESOURCE_STATE_DEPTH_WRITE);
-	context.SetRenderTarget(sColorBuffers[sBackBufferIndex]->GetRTV(), sDepthBuffer->GetDSV());
+	context.SetRenderTarget(sPostEffectBuffer.GetRTV(), sDepthBuffer->GetDSV());
 
 	context.SetViewportAndScissor(sViewport, sScissorRect);
-	context.ClearColor(*sColorBuffers[sBackBufferIndex].get());
+	context.ClearColor(sPostEffectBuffer);
 	context.ClearDepthAndStencil(*sDepthBuffer);
 }
 
 void GraphicsCore::EndFrame(GraphicsContext& context) {
-	context.TransitionResource(*sColorBuffers[sBackBufferIndex].get(), D3D12_RESOURCE_STATE_PRESENT);
+	context.TransitionResource(sPostEffectBuffer, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+
+	// 本描画
+	sBackBufferIndex = sSwapChain->GetSwapChain()->GetCurrentBackBufferIndex();
+	context.TransitionResource(*sFrameBuffers[sBackBufferIndex].get(), D3D12_RESOURCE_STATE_RENDER_TARGET);
+	context.SetRenderTarget(sFrameBuffers[sBackBufferIndex]->GetRTV());
+
+	context.SetViewportAndScissor(sViewport, sScissorRect);
+	context.ClearColor(*sFrameBuffers[sBackBufferIndex].get());
+
+	FullScreenDraw(context);
+
+#ifdef USE_IMGUI
+	static bool isInitFrame = true;
+	if (isInitFrame) {
+
+		sPostEffectTexture = ImGui_ImplDX12_AddTexture(sPostEffectBuffer.GetImGuiSRV());
+		isInitFrame = false;
+	}
+
+	ImGui::Begin("Game");
+	ImGui::Image(
+		sPostEffectTexture,
+		ImVec2(sWindowWidth * 2 / 3, sWindowHeight * 2 / 3) // 表示サイズ
+	);
+	ImGui::End();
+	ImGui::Render();
+	context.SetDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, Render::gTextureHeap.GetHeapPointer());
+	ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), context.GetCommandList());
+#endif
+
+	context.TransitionResource(*sFrameBuffers[sBackBufferIndex].get(), D3D12_RESOURCE_STATE_PRESENT);
 	context.Finish(true);
+
 #ifdef USE_IMGUI
 	if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
 		ImGui::UpdatePlatformWindows();
@@ -174,9 +224,9 @@ void GraphicsCore::EndFrame(GraphicsContext& context) {
 }
 
 void GraphicsCore::CreatePixelBuffer() {
-	if (sColorBuffers[0]) return;
+	if (sFrameBuffers[0]) return;
 
-	// ウィンドウ専用のカラーバッファを生成します。
+	// スワップチェーンからバッファを生成します。
 	for (uint32_t i = 0; i < sSwapChainBufferCount; i++) {
 		Microsoft::WRL::ComPtr<ID3D12Resource> displayPlane;
 		HRESULT hr = sSwapChain->Get()->GetBuffer(i, IID_PPV_ARGS(&displayPlane));
@@ -184,8 +234,8 @@ void GraphicsCore::CreatePixelBuffer() {
 			Log::DebugPrint("swap chain GetBuffer() failed", VerbosityLevel::kCritical);
 			assert(false);
 		}
-		sColorBuffers[i] = std::make_unique<ColorBuffer>();
-		sColorBuffers[i]->CreateFromSwapChain(L"Primary SwapChain Buffer", displayPlane.Detach());
+		sFrameBuffers[i] = std::make_unique<ColorBuffer>();
+		sFrameBuffers[i]->CreateFromSwapChain(L"Primary SwapChain Buffer", displayPlane.Detach());
 	}
 	sDepthBuffer = std::make_unique<DepthBuffer>(1.f);
 	
@@ -196,11 +246,59 @@ void GraphicsCore::CreatePixelBuffer() {
 
 void GraphicsCore::DestroyPixelBuffer() {
 	GraphicsCore::sCommandListManager.IdleGPU();
-	for (auto& colorBuffer : sColorBuffers) {
+	for (auto& colorBuffer : sFrameBuffers) {
 		colorBuffer.reset();
 	}
 	sDepthBuffer.reset();
 	Log::DebugPrint("destroy pixel buffers");
+}
+
+void GraphicsCore::FullScreenDraw(GraphicsContext& context) {
+	auto& rootIndex = RootSignatureBuilder::GetRootIndexMap("CopyImage");
+
+	context.SetPipelineState(defaultPSO);
+	context.SetRootSignature(*defaultRootSignature.get());
+	context.SetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	context.SetDynamicDescriptor(rootIndex["gTexture"], 0, sPostEffectBuffer.GetSRV());
+	context.Draw(3);
+}
+
+void GraphicsCore::InitPostEffect() {
+	ShaderModule defaultVS(ShaderStage::Vertex, L"resources/engine/Shaders/FullScreen.VS.hlsl", L"vs_6_0");
+	ShaderModule defaultPS(ShaderStage::Pixel, L"resources/engine/Shaders/CopyImage.PS.hlsl", L"ps_6_0");
+
+	const ShaderReflection& vsReflection = defaultVS.GetReflection();
+	const ShaderReflection& psReflection = defaultPS.GetReflection();
+	std::vector<ShaderReflection> refls;
+	refls.push_back(vsReflection);
+	refls.push_back(psReflection);
+
+	 defaultRootSignature = std::make_unique<RootSignature>();
+	RootSignatureBuilder::BuildFromReflection(refls, *defaultRootSignature, ConvertString(L"CopyImage"));
+
+	D3D12_RASTERIZER_DESC rasterizerDesc{};
+	rasterizerDesc.CullMode = D3D12_CULL_MODE_BACK;
+	rasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
+
+	D3D12_BLEND_DESC blendDesc{};
+	blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
+
+	D3D12_DEPTH_STENCIL_DESC depthStencilDesc{};
+	depthStencilDesc.DepthEnable = false;
+
+	defaultPSO.SetRootSignature(*defaultRootSignature);
+	defaultPSO.SetRasterizerState(rasterizerDesc);
+	defaultPSO.SetBlendState(blendDesc);
+	defaultPSO.SetDepthStencilState(depthStencilDesc);
+	defaultPSO.SetPrimitiveTopologyType(D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
+	DXGI_FORMAT rtvFormat[] = { DXGI_FORMAT_R8G8B8A8_UNORM_SRGB };
+	defaultPSO.SetRenderTargetFormats(1, rtvFormat, DXGI_FORMAT_UNKNOWN);
+	defaultPSO.SetVertexShader(defaultVS.GetBytecode());
+	defaultPSO.SetPixelShader(defaultPS.GetBytecode());
+	defaultPSO.SetSampleMask(D3D12_DEFAULT_SAMPLE_MASK);
+	defaultPSO.Finalize();
+	
+
 }
 
 }
