@@ -114,6 +114,15 @@ void TestScene::Setup() {
 	auto* cameraTransform2 = registry.AddComponent<No::TransformComponent>(cameraE);
 	cameraTransform2->translate.z = -5.f;
 
+	{
+		auto camera2d = registry.GenerateEntity();
+		registry.AddComponent<No::ActiveCamera2DTag>(camera2d);
+		registry.AddComponent<No::Camera2DComponent>(camera2d);
+		registry.AddComponent<No::Transform2DComponent>(camera2d);
+		auto* camera2dTag = registry.AddComponent<No::EditTag>(camera2d);
+		camera2dTag->name = "CAMERA2D";
+	}
+
 	auto emitterE = registry.GenerateEntity();
 	auto* emitter = registry.AddComponent<No::ParticleEmitterComponent>(emitterE);
 	emitter->texture = NoEngine::TextureManager::LoadCovertTexture("resources/engine/uvChecker.png");

@@ -4,7 +4,10 @@
 #include "engine/Math/Types/Calculations/Matrix3x3Calculations.h"
 #include "engine/Math/Types/Calculations/Matrix4x4Calculations.h"
 #include "engine/Functions/Renderer/RenderSystem.h"
+#include "engine/Functions/ECS/Component/CameraComponent.h"
 #include "engine/Runtime/GraphicsCore.h"
+
+#include "engine/Functions/Input/Input.h"
 
 namespace NoEngine {
 namespace Render {
@@ -12,23 +15,51 @@ namespace Render {
 using namespace Component;
 using namespace Math;
 namespace {
-Matrix4x4 sOrthographicMatrix;
+Matrix4x4 sCameraMatrix;
 }
 
 NoEngine::Render::SpritePass::SpritePass() {
 
 	auto size = GraphicsCore::sWindowManager.GetMainWindow()->GetWindowSize();
-	sOrthographicMatrix = MathCalculations::MakeOrthographicMatrix(0.f, 0.f, static_cast<float>(size.clientWidth), static_cast<float>(size.clientHeight), 0.1f, 100.f);
+	sCameraMatrix = MathCalculations::MakeOrthographicMatrix(0.f, 0.f, static_cast<float>(size.clientWidth), static_cast<float>(size.clientHeight), 0.1f, 100.f);
 
 }
 
 SpritePass::~SpritePass() {}
 
 void SpritePass::Execute(GraphicsContext& gfx, ECS::Registry& registry) {
+	CameraUpdate(registry);
 	Collect(registry);
 	Sort();
 	GenerateVertices();
 	Render(gfx);
+}
+
+void SpritePass::CameraUpdate(ECS::Registry& registry) {
+	auto cameraView = registry.View<ActiveCamera2DTag>();
+	for (auto entity : cameraView) {
+		auto* camera = registry.GetComponent<Camera2DComponent>(entity);
+		auto* transform = registry.GetComponent<Transform2DComponent>(entity);
+		// ToDo : カメラの移動がローカル座標で行われてしまう。
+
+		// 画面中央
+		Math::Vector2 screenCenter = { camera->width / 2.f, camera->height / 2.f };
+		// ビュー行列を作成
+		Matrix4x4 view = transform->MakeAffineMatrix4x4();
+		view.Inverse();
+
+		// 画面中央を基準とするための補正
+		Matrix4x4 centerToOrigin;
+		centerToOrigin.MakeTranslate(Vector3(-screenCenter.x, -screenCenter.y, 0.f));
+		Matrix4x4 originToCenter;
+		originToCenter.MakeTranslate(Vector3(screenCenter.x, screenCenter.y, 0.f));
+
+		// ビュー行列の計算
+		view = centerToOrigin * view * originToCenter;
+
+		camera->projection = MathCalculations::MakeOrthographicMatrix(0.f, 0.f, camera->width, camera->height, camera->zNear, camera->zFar);
+		sCameraMatrix = view * camera->projection;
+	}
 }
 
 void SpritePass::Collect(ECS::Registry& registry) {
@@ -130,7 +161,7 @@ void SpritePass::Render(GraphicsContext& gfx) {
 	gfx.SetPipelineState(GetPSO(Render::GetPSOID(L"Renderer : Default Sprite PSO")));
 	gfx.SetRootSignature(GetRootSignature(Render::GetRootSignatureID(L"Renderer : Default Sprite PSO")));
 	gfx.SetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	gfx.SetDynamicConstantBufferView(rootIndex["gCameraMatrix"], sizeof(Matrix4x4), &sOrthographicMatrix);
+	gfx.SetDynamicConstantBufferView(rootIndex["gCameraMatrix"], sizeof(Matrix4x4), &sCameraMatrix);
 	gfx.SetDynamicVB(0, vertices_.size(), sizeof(SpriteVertex), vertices_.data());
 	gfx.SetDynamicIB(indices_.size(), indices_.data());
 	size_t start = 0;

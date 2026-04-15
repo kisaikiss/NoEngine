@@ -1,6 +1,7 @@
 #pragma once
 #include "Vector2.h"
 #include "Matrix3x3.h"
+#include "Matrix4x4.h"
 
 namespace NoEngine {
 struct Transform2D {
@@ -17,5 +18,6 @@ struct Transform2D {
 	}
 
 	Math::Matrix3x3 MakeAffineMatrix3x3() const;
+	Math::Matrix4x4 MakeAffineMatrix4x4() const;
 };
 }

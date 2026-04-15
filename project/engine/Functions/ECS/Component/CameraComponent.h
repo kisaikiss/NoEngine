@@ -6,6 +6,7 @@ namespace Component {
 /// 使用中のカメラを示すタグ
 /// </summary>
 struct ActiveCameraTag{};
+struct ActiveCamera2DTag{};
 
 struct CameraForGPU {
     Math::Matrix4x4 viewProjection;
@@ -24,6 +25,15 @@ struct CameraComponent {
     Math::Matrix4x4 view;
     Math::Matrix4x4 projection;
     CameraForGPU forGPU;
+};
+
+struct Camera2DComponent {
+    float width = 1280.f;
+    float height = 720.f;
+    float zNear = 0.f;
+    float zFar = 100.f;
+
+    Math::Matrix4x4 projection;
 };
 
 /// <summary>

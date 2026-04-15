@@ -52,6 +52,29 @@ inline Component::ActiveCameraTag* Registry::AddComponent<Component::ActiveCamer
 	return AddComponentInternal<Component::ActiveCameraTag>(e);
 }
 
+/// <summary>
+/// コンポーネント追加のカメラタグについての特殊化。アクティブカメラタグはただ一つとなるように動作します。
+/// </summary>
+/// <param name="e">エンティティ</param>
+/// <returns>カメラタグ</returns>
+template<>
+inline Component::ActiveCamera2DTag* Registry::AddComponent<Component::ActiveCamera2DTag>(const Entity e) {
+	// すでに付いているなら何もしない
+	if (Has<Component::ActiveCamera2DTag>(e))
+		return GetComponent<Component::ActiveCamera2DTag>(e);
+
+	// 他の Entity から ActiveCamera2DTag を外す
+	auto view = View<Component::ActiveCamera2DTag>();
+	for (Entity other : view) {
+		if (other != e && Has<Component::ActiveCamera2DTag>(other)) {
+			RemoveComponent<Component::ActiveCamera2DTag>(other);
+		}
+	}
+
+	// この Entity に付ける
+	return AddComponentInternal<Component::ActiveCamera2DTag>(e);
+}
+
 template<typename CompType>
 void Registry::RemoveComponent(const Entity entity) {
 	// 削除するコンポーネントを格納するコンテナクラスを取得

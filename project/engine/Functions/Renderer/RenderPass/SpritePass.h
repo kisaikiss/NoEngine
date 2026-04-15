@@ -29,6 +29,7 @@ private:
     std::vector<SpriteVertex> vertices_;
     std::vector<uint16_t> indices_;
 
+    void CameraUpdate(ECS::Registry& registry);
     void Collect(ECS::Registry& registry);
     void Sort();
     void MakeLocalQuad(const DrawItem& item , Math::Vector2 out[4]);
