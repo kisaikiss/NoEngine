@@ -65,13 +65,16 @@ void LightPass::Collect(ECS::Registry& registry) {
 void LightPass::UploadToGpu(GraphicsContext& gfx) {
 	RenderContext* renderContext = GetRenderContext();
 	// 方向ライトをGPUへ送る
-	if (directionalLights_.size() != directionalLightsSize_) {
-		directionalLightsSize_ = directionalLights_.size();
-		directionalLightUpload_.Create(L"DirectionalLight Upload", sizeof(DirectionalLightComponent) * directionalLightsSize_);
-	}
-	memcpy(directionalLightUpload_.Map(), directionalLights_.data(), sizeof(DirectionalLightComponent) * directionalLightsSize_);
+	if (directionalLights_.size() != 0) {
+		if (directionalLights_.size() != directionalLightsSize_) {
+			directionalLightsSize_ = directionalLights_.size();
+			directionalLightUpload_.Create(L"DirectionalLight Upload", sizeof(DirectionalLightComponent) * directionalLightsSize_);
+		}
+		memcpy(directionalLightUpload_.Map(), directionalLights_.data(), sizeof(DirectionalLightComponent) * directionalLightsSize_);
 
-	renderContext->SetDirectionalLight(gfx, directionalLightUpload_, static_cast<uint32_t>(directionalLightsSize_));
+		renderContext->SetDirectionalLight(gfx, directionalLightUpload_, static_cast<uint32_t>(directionalLightsSize_));
+	}
+	
 
 	// ポイントライトをGPUへ送る
 	if (pointLights_.size() != 0) {

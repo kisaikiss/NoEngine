@@ -13,12 +13,6 @@ void SystemManager::UpdateAll(ComputeContext& ctx, Registry& registry, float del
 	bool isPause = false;
 	for(auto entity : pauseView){
 		auto* pauseComp = registry.GetComponent<PauseComponent>(entity);
-#ifdef USE_IMGUI
-		ImGui::Begin("Pause");
-		ImGui::Checkbox("isPause", &pauseComp->isPause);
-		ImGui::End();
-#endif // USE_IMGUI
-
 		isPause = pauseComp->isPause;
 	}
 

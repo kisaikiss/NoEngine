@@ -1,4 +1,4 @@
-#include "TestScene.h"
+#include "EngineTestScene.h"
 #include "application/TestApp/System/TestSystem.h"
 #include "application/TestApp/System/ParticleTestSystem.h"
 
@@ -6,7 +6,7 @@ namespace {
 No::Entity cameraE;
 }
 
-void TestScene::Setup() {
+void EngineTestScene::Setup() {
 	AddSystem(std::make_unique<TestSystem>());
 	AddSystem(std::make_unique<No::AnimationSystem>());
 	AddSystem(std::make_unique<No::SpriteAnimationSystem>());
@@ -153,20 +153,9 @@ void TestScene::Setup() {
 	emitterTag3->name = "emitter3";
 }
 
-void TestScene::NotSystemUpdate() {
+void EngineTestScene::NotSystemUpdate() {
 #ifdef USE_IMGUI
-	ImGui::Begin("ChangeScene");
-	if (ImGui::Button("SceneChange")) {
-		No::SceneChangeEvent event;
-		event.nextScene = "TestScene2";
-		GetRegistry()->EmitEvent(event);
-	}
-
-	if (ImGui::Button("CameraChange")) {
-		GetRegistry()->AddComponent<No::ActiveCameraTag>(cameraE);
-	}
-
-	ImGui::End();
+	
 
 #endif // USE_IMGUI
 }

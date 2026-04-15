@@ -87,12 +87,10 @@ void MeshPass::Render(GraphicsContext& context) {
 		m.worldIT.Transpose();
 		context.SetDynamicConstantBufferView(rootIndex["gWorldMatrix"], sizeof(MeshConstants), &m);
 		context.SetDynamicConstantBufferView(rootIndex["gCameraMatrix"], sizeof(Component::CameraForGPU), &camera_->forGPU);
-		context.SetDynamicDescriptor(rootIndex["gDirectionalLights"], 0, GetRenderContext()->GetDirectionalLightSRV());
-		context.SetDynamicDescriptor(rootIndex["gPointLights"], 0, GetRenderContext()->GetPointLightSRV());
-		context.SetDynamicDescriptor(rootIndex["gSpotLights"], 0, GetRenderContext()->GetSpotLightSRV());
+
 		{
 			_declspec(align(16)) struct {
-				uint32_t directionalLightNum;
+				uint32_t directionalLightNum = 0;
 				uint32_t pointLightNum = 0;
 				uint32_t spotLightNum = 0;
 				uint32_t pad;
@@ -101,6 +99,13 @@ void MeshPass::Render(GraphicsContext& context) {
 			constants.pointLightNum = GetRenderContext()->GetLightNums()->pointLightNum;
 			constants.spotLightNum = GetRenderContext()->GetLightNums()->spotLightNum;
 			context.SetDynamicConstantBufferView(rootIndex["gLightNums"], sizeof(constants), &constants);
+
+			if (constants.directionalLightNum)
+				context.SetDynamicDescriptor(rootIndex["gDirectionalLights"], 0, GetRenderContext()->GetDirectionalLightSRV());
+			if (constants.pointLightNum)
+				context.SetDynamicDescriptor(rootIndex["gPointLights"], 0, GetRenderContext()->GetPointLightSRV());
+			if (constants.spotLightNum)
+				context.SetDynamicDescriptor(rootIndex["gSpotLights"], 0, GetRenderContext()->GetSpotLightSRV());
 		}
 		context.SetVertexBuffer(0, item.mesh->mesh->vertexBuffer.VertexBufferView());
 		context.SetIndexBuffer(item.mesh->mesh->indexBuffer.IndexBufferView());
@@ -154,13 +159,13 @@ void MeshPass::RenderOutline(GraphicsContext& context) {
 				context.SetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 			}
 		}
-	
+
 		auto& rootIndex = RootSignatureBuilder::GetRootIndexMap(currentPSOName);
 
 		Math::Matrix4x4 worldData = item.transform->MakeAffineMatrix4x4();
 		context.SetDynamicConstantBufferView(rootIndex["gWorldMatrix"], sizeof(Math::Matrix4x4), &worldData);
 		context.SetDynamicConstantBufferView(rootIndex["gCameraMatrix"], sizeof(Component::CameraForGPU), &camera_->forGPU);
-		
+
 		context.SetVertexBuffer(0, item.mesh->mesh->vertexBuffer.VertexBufferView());
 		context.SetIndexBuffer(item.mesh->mesh->indexBuffer.IndexBufferView());
 

@@ -161,9 +161,8 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="application\TD3\OneSide.cpp" />
-    <ClCompile Include="application\TD3\Scene\SampleScene.cpp" />
-    <ClCompile Include="application\TestApp\Scene\TestScene2.cpp" />
+    <ClCompile Include="application\ClockworksDisease\ClockworksDisease.cpp" />
+    <ClCompile Include="application\ClockworksDisease\Scene\TestScene.cpp" />
     <ClCompile Include="application\TestApp\System\ParticleTestSystem.cpp" />
     <ClCompile Include="application\TestApp\TestApp.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\CameraComponent.cpp" />
@@ -182,7 +181,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="engine\Functions\ECS\System\SpriteAnimationSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\SystemManager.cpp" />
     <ClCompile Include="engine\Functions\Renderer\Primitive.cpp" />
-    <ClCompile Include="application\TestApp\Scene\TestScene.cpp" />
+    <ClCompile Include="application\TestApp\Scene\EngineTestScene.cpp" />
     <ClCompile Include="application\TestApp\System\TestSystem.cpp" />
     <ClCompile Include="engine\Assets\ModelLoader.cpp" />
     <ClCompile Include="engine\Assets\Texture\TexUtil.cpp" />
@@ -306,9 +305,8 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="engine\Assets\Texture\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="application\TD3\OneSide.h" />
-    <ClInclude Include="application\TD3\Scene\SampleScene.h" />
-    <ClInclude Include="application\TestApp\Scene\TestScene2.h" />
+    <ClInclude Include="application\ClockworksDisease\ClockworksDisease.h" />
+    <ClInclude Include="application\ClockworksDisease\Scene\TestScene.h" />
     <ClInclude Include="application\TestApp\System\ParticleTestSystem.h" />
     <ClInclude Include="application\TestApp\TestApp.h" />
     <ClInclude Include="engine\Functions\ECS\Component\Animator2DComponent.h" />
@@ -332,7 +330,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="engine\Functions\ECS\System\SpriteAnimationSystem.h" />
     <ClInclude Include="engine\Functions\Renderer\LightForGPU.h" />
     <ClInclude Include="engine\Functions\Renderer\Primitive.h" />
-    <ClInclude Include="application\TestApp\Scene\TestScene.h" />
+    <ClInclude Include="application\TestApp\Scene\EngineTestScene.h" />
     <ClInclude Include="application\TestApp\System\TestSystem.h" />
     <ClInclude Include="engine\Assets\Animation.h" />
     <ClInclude Include="engine\Assets\ModelLoader.h" />
