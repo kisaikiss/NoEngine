@@ -39,24 +39,24 @@
                 },
                 "DebugCameraComponent": {
                     "center": [
-                        -1.5441570281982422,
-                        0.5654023885726929,
-                        2.2338647842407227
+                        0.0,
+                        0.0,
+                        0.0
                     ],
-                    "distance": 26.459339141845703,
+                    "distance": 15.728891372680664,
                     "drawCenter": false,
-                    "mousePositionX": 709,
-                    "mousePositionY": 303,
-                    "mouseWheelY": 480.0,
-                    "phi": 1.0117897987365723,
-                    "theta": -4.90140438079834
+                    "mousePositionX": 504,
+                    "mousePositionY": 296,
+                    "mouseWheelY": -960.0,
+                    "phi": 1.4116933345794678,
+                    "theta": -1.058453917503357
                 },
                 "TransformComponent": {
                     "rotation": [
-                        -0.02603381685912609,
-                        0.9569032788276672,
-                        -0.274647057056427,
-                        -0.09070493280887604
+                        0.07687436789274216,
+                        -0.2525772452354431,
+                        0.020135391503572464,
+                        0.9643078446388245
                     ],
                     "scale": [
                         1.0,
@@ -64,9 +64,9 @@
                         1.0
                     ],
                     "translate": [
-                        2.6705899238586426,
-                        14.5979585647583,
-                        24.26611328125
+                        7.61323356628418,
+                        2.491968870162964,
+                        -13.536128044128418
                     ]
                 }
             }
@@ -86,107 +86,10 @@
                         0.0
                     ],
                     "intensity": 1.0
-                },
-                "SpriteComponent": {
-                    "color": [
-                        1.0,
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "flipX": false,
-                    "flipY": false,
-                    "pivot": [
-                        0.5,
-                        0.5
-                    ],
-                    "uv": [
-                        0.0,
-                        0.0,
-                        1.0,
-                        1.0
-                    ]
-                },
-                "Transform2DComponent": {
-                    "rotation": 0.0,
-                    "scale": [
-                        100.0,
-                        100.0
-                    ],
-                    "translate": [
-                        100.0,
-                        200.0
-                    ]
                 }
             }
         },
-        "emitter": {
-            "components": {
-                "TransformComponent": {
-                    "rotation": [
-                        0.0,
-                        0.0,
-                        0.0,
-                        1.0
-                    ],
-                    "scale": [
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "translate": [
-                        -27.5,
-                        0.0,
-                        0.0
-                    ]
-                }
-            }
-        },
-        "emitter2": {
-            "components": {
-                "TransformComponent": {
-                    "rotation": [
-                        0.0,
-                        0.0,
-                        0.0,
-                        1.0
-                    ],
-                    "scale": [
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "translate": [
-                        4.0,
-                        13.100000381469727,
-                        0.0
-                    ]
-                }
-            }
-        },
-        "emitter3": {
-            "components": {
-                "TransformComponent": {
-                    "rotation": [
-                        0.0,
-                        0.0,
-                        0.0,
-                        1.0
-                    ],
-                    "scale": [
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "translate": [
-                        21.600000381469727,
-                        0.0,
-                        0.0
-                    ]
-                }
-            }
-        },
-        "girl": {
+        "player": {
             "components": {
                 "MaterialComponent": {
                     "color": [
@@ -198,72 +101,12 @@
                     "drawOutline": true,
                     "shininess": 60.0
                 },
-                "SpriteComponent": {
-                    "color": [
-                        1.0,
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "flipX": false,
-                    "flipY": false,
-                    "pivot": [
-                        0.5,
-                        0.5
-                    ],
-                    "uv": [
-                        0.375,
-                        0.06666667014360428,
-                        0.125,
-                        0.06666667014360428
-                    ]
-                },
-                "StartTransform2DComponent": {
-                    "rotation": 0.0,
-                    "scale": [
-                        512.0,
-                        512.0
-                    ],
-                    "translate": [
-                        291.70001220703125,
-                        174.6999969482422
-                    ]
-                },
-                "StartTransformComponent": {
-                    "rotation": [
-                        0.0,
-                        0.0,
-                        0.0,
-                        1.0
-                    ],
-                    "scale": [
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "translate": [
-                        6.5,
-                        3.299999952316284,
-                        0.0
-                    ]
-                },
-                "Transform2DComponent": {
-                    "rotation": 0.0,
-                    "scale": [
-                        512.0,
-                        512.0
-                    ],
-                    "translate": [
-                        291.70001220703125,
-                        174.6999969482422
-                    ]
-                },
                 "TransformComponent": {
                     "rotation": [
                         0.0,
+                        1.0,
                         0.0,
-                        0.0,
-                        1.0
+                        -4.371138828673793e-08
                     ],
                     "scale": [
                         1.0,
@@ -271,8 +114,8 @@
                         1.0
                     ],
                     "translate": [
-                        6.5,
-                        3.299999952316284,
+                        0.0,
+                        0.0,
                         0.0
                     ]
                 }

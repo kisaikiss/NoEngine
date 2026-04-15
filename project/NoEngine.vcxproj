@@ -163,6 +163,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   <ItemGroup>
     <ClCompile Include="application\ClockworksDisease\ClockworksDisease.cpp" />
     <ClCompile Include="application\ClockworksDisease\Scene\TestScene.cpp" />
+    <ClCompile Include="application\ClockworksDisease\System\PlayerMoveSystem.cpp" />
     <ClCompile Include="application\TestApp\System\ParticleTestSystem.cpp" />
     <ClCompile Include="application\TestApp\TestApp.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\CameraComponent.cpp" />
@@ -306,7 +307,9 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="application\ClockworksDisease\ClockworksDisease.h" />
+    <ClInclude Include="application\ClockworksDisease\Component\Player\PlayerComponent.h" />
     <ClInclude Include="application\ClockworksDisease\Scene\TestScene.h" />
+    <ClInclude Include="application\ClockworksDisease\System\PlayerMoveSystem.h" />
     <ClInclude Include="application\TestApp\System\ParticleTestSystem.h" />
     <ClInclude Include="application\TestApp\TestApp.h" />
     <ClInclude Include="engine\Functions\ECS\Component\Animator2DComponent.h" />

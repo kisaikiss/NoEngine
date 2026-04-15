@@ -132,6 +132,7 @@
     <ClCompile Include="engine\Functions\ECS\Component\MaterialComponent.cpp" />
     <ClCompile Include="application\ClockworksDisease\ClockworksDisease.cpp" />
     <ClCompile Include="application\ClockworksDisease\Scene\TestScene.cpp" />
+    <ClCompile Include="application\ClockworksDisease\System\PlayerMoveSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -284,6 +285,8 @@
     <ClInclude Include="engine\Functions\Renderer\LightForGPU.h" />
     <ClInclude Include="application\ClockworksDisease\ClockworksDisease.h" />
     <ClInclude Include="application\ClockworksDisease\Scene\TestScene.h" />
+    <ClInclude Include="application\ClockworksDisease\Component\Player\PlayerComponent.h" />
+    <ClInclude Include="application\ClockworksDisease\System\PlayerMoveSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />
