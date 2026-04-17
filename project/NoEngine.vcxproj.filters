@@ -134,6 +134,8 @@
     <ClCompile Include="application\ClockworksDisease\Scene\TestScene.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\PlayerMoveSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Camera\FollowCameraSystem.cpp" />
+    <ClCompile Include="engine\Functions\ECS\Component\VelocityComponent.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\MovementSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -291,6 +293,8 @@
     <ClInclude Include="application\ClockworksDisease\System\Camera\FollowCameraSystem.h" />
     <ClInclude Include="application\ClockworksDisease\Component\Camera\FollowCameraComponent.h" />
     <ClInclude Include="engine\Math\Collision\ColliderComponent.h" />
+    <ClInclude Include="engine\Functions\ECS\Component\VelocityComponent.h" />
+    <ClInclude Include="engine\Functions\ECS\System\MovementSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

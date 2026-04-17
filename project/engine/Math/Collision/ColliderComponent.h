@@ -4,12 +4,12 @@
 namespace NoEngine {
 namespace Collision {
 
-struct AABBColliderComponent {
+struct AABBCollider {
 	Math::Vector3 min;
 	Math::Vector3 max;
 };
 
-struct CapsuleColliderComponent {
+struct CapsuleCollider {
 	Math::Vector3 localP0;
 	Math::Vector3 localP1;
 	float radius;

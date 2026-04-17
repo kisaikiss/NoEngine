@@ -32,6 +32,7 @@ void TestScene::Setup() {
 		m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
 		
 		registry.AddComponent<PlayerComponent>(player);
+		registry.AddComponent<No::VelocityComponent>(player);
 	}
 
 	// 地面
@@ -78,6 +79,7 @@ void TestScene::AddSystems() {
 	AddSystem(std::make_unique<PlayerMoveSystem>());
 	AddSystem(std::make_unique<FollowCameraSystem>());
 
+	AddSystem(std::make_unique<No::MovementSystem>());
 	AddSystem(std::make_unique<No::AnimationSystem>());
 	AddSystem(std::make_unique<No::SpriteAnimationSystem>());
 	AddSystem(std::make_unique<No::EditSystem>());
