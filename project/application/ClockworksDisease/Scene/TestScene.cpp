@@ -1,7 +1,10 @@
 #include "TestScene.h"
 
 #include "../System/PlayerMoveSystem.h"
+#include "../System/Camera/FollowCameraSystem.h"
+
 #include "../Component/Player/PlayerComponent.h"
+#include "../Component/Camera/FollowCameraComponent.h"
 
 void TestScene::Setup() {
 	AddSystems();
@@ -52,7 +55,8 @@ void TestScene::Setup() {
 	auto camera = registry.GenerateEntity();
 	registry.AddComponent<No::ActiveCameraTag>(camera);
 	registry.AddComponent<No::CameraComponent>(camera);
-	registry.AddComponent<No::DebugCameraComponent>(camera);
+	//registry.AddComponent<No::DebugCameraComponent>(camera);
+	registry.AddComponent<FollowCameraComponent>(camera);
 	auto* cameraEditTag = registry.AddComponent<No::EditTag>(camera);
 	cameraEditTag->name = "camera";
 	registry.AddComponent<No::TransformComponent>(camera);
@@ -72,6 +76,7 @@ void TestScene::NotSystemUpdate() {
 
 void TestScene::AddSystems() {
 	AddSystem(std::make_unique<PlayerMoveSystem>());
+	AddSystem(std::make_unique<FollowCameraSystem>());
 
 	AddSystem(std::make_unique<No::AnimationSystem>());
 	AddSystem(std::make_unique<No::SpriteAnimationSystem>());

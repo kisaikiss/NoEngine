@@ -2,6 +2,6 @@
 #include "Scene/EngineTestScene.h"
 
 void TestApp::Startup(void) {
-	RegisterScene("TestScene", []() { return std::make_unique<EngineTestScene>();	});
-	ChangeScene("TestScene");
+	RegisterScene("EngineTestScene", []() { return std::make_unique<EngineTestScene>();	});
+	ChangeScene("EngineTestScene");
 }

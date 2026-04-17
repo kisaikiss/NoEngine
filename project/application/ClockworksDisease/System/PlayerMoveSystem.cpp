@@ -1,9 +1,19 @@
 #include "PlayerMoveSystem.h"
 #include "application/ClockworksDisease/Component/Player/PlayerComponent.h"
+#include "application/ClockworksDisease/Component/Camera/FollowCameraComponent.h"
 
 using namespace std;
 
 void PlayerMoveSystem::Update(No::Registry& registry, float deltaTime) {
+	No::Quaternion cameraRotate{};
+
+	auto cameraView = registry.View<FollowCameraComponent>();
+	for (auto entity : cameraView) {
+		cameraRotate = registry.GetComponent<No::TransformComponent>(entity)->rotation;
+	}
+
+
+
 	auto view = registry.View<PlayerComponent>();
 	for (auto entity : view) {
 		auto* transform = registry.GetComponent<No::TransformComponent>(entity);
@@ -26,6 +36,11 @@ void PlayerMoveSystem::Update(No::Registry& registry, float deltaTime) {
 
 		// 入力がされていた場合
 		if (playerVariables->velocity.x || playerVariables->velocity.z) {
+			
+			No::Vector3 rotateVelocity = cameraRotate.RotateVector(playerVariables->velocity);
+			playerVariables->velocity.x = rotateVelocity.x;
+			playerVariables->velocity.z = rotateVelocity.z;
+
 			// 移動成分を正規化
 			playerVariables->velocity = playerVariables->velocity.Normalize() * deltaTime;
 
