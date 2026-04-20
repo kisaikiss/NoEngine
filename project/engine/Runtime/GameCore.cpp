@@ -25,6 +25,9 @@ namespace GameCore {
 
 namespace {
 std::chrono::steady_clock::time_point sLastTickTime{ std::chrono::steady_clock::now() };
+
+static float sFrameTimes[120] = {};
+static int sFrameIndex = 0;
 }
 
 
@@ -66,6 +69,8 @@ int RunApplication(std::unique_ptr<IGameApp> game) {
 
 		renderPassScheduler->SetRenderContext(renderContext);
 		renderPassScheduler->Render(context, game->GetRegistry());
+
+		DrawPerformance(deltaTime);
 
 		ctx.Finish(true);
 		GraphicsCore::EndFrame(context);
@@ -135,6 +140,32 @@ float CalculateDeltaTime() {
 		sLastTickTime = tickTimePoint;
 	}
 	return deltaTime;
+}
+
+void DrawPerformance(float deltaTime) {
+#ifdef USE_IMGUI
+
+	sFrameTimes[sFrameIndex] = deltaTime * 1000.0f; // msに変換
+	sFrameIndex = (sFrameIndex + 1) % IM_ARRAYSIZE(sFrameTimes);
+
+	ImGui::Begin("Performance");
+	ImGui::Text("FPS: %.1f", ImGui::GetIO().Framerate);
+	ImGui::Text("Frame Time (ms)");
+	ImGui::PlotLines(
+		" ",
+		sFrameTimes,
+		IM_ARRAYSIZE(sFrameTimes),
+		sFrameIndex,
+		nullptr,
+		0.0f,
+		40.0f,   // Y軸の最大値（40ms = 25FPS）
+		ImVec2(0, 80)
+	);
+	ImGui::End();
+#else
+	static_cast<void>(deltaTime);
+#endif // USE_IMGUI
+
 }
 
 }

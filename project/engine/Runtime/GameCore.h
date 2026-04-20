@@ -116,5 +116,11 @@ void EngineFinalize();
 /// </summary>
 /// <returns>経過時間を秒単位で表す float 値。</returns>
 float CalculateDeltaTime();
+
+/// <summary>
+/// FPSなどのパフォーマンスをImGuiで表示します。
+/// </summary>
+/// <param name="deltaTime">前フレームからの経過時間</param>
+void DrawPerformance(float deltaTime);
 };
 }
