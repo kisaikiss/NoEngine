@@ -1298,44 +1298,4 @@ void ImGui_ImplDX12_ShutdownMultiViewportSupport()
     ImGui::DestroyPlatformWindows();
 }
 
-//-----------------------------------------------------------------------------
-// [USER EXTENSION] AddTexture: Register a user SRV into ImGui's descriptor heap
-//-----------------------------------------------------------------------------
-ImTextureID ImGui_ImplDX12_AddTexture(D3D12_CPU_DESCRIPTOR_HANDLE cpuSrvHandle) {
-    ImGui_ImplDX12_Data* bd = ImGui_ImplDX12_GetBackendData();
-    IM_ASSERT(bd && bd->pd3dSrvDescHeap);
-
-    ID3D12Device* device = bd->pd3dDevice;
-    ID3D12DescriptorHeap* heap = bd->pd3dSrvDescHeap;
-
-    const UINT descriptorSize =
-        device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-
-    // 0番目はフォントなので、ユーザー用は1番目から
-    static UINT nextIndex = 1;
-
-    // CPU 側コピー先
-    D3D12_CPU_DESCRIPTOR_HANDLE destCpu = heap->GetCPUDescriptorHandleForHeapStart();
-    destCpu.ptr += nextIndex * descriptorSize;
-
-    // GPU 側ハンドル
-    D3D12_GPU_DESCRIPTOR_HANDLE destGpu = heap->GetGPUDescriptorHandleForHeapStart();
-    destGpu.ptr += nextIndex * descriptorSize;
-
-    // CPU → ImGui ヒープへコピー
-    device->CopyDescriptorsSimple(
-        1,
-        destCpu,
-        cpuSrvHandle,
-        D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV
-    );
-
-    nextIndex++;
-
-    return (ImTextureID)destGpu.ptr;
-}
-
-
-//-----------------------------------------------------------------------------
-
 #endif // #ifndef IMGUI_DISABLE

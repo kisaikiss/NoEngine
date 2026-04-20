@@ -195,8 +195,14 @@ void GraphicsCore::EndFrame(GraphicsContext& context) {
 #ifdef USE_IMGUI
 	static bool isInitFrame = true;
 	if (isInitFrame) {
-
-		sPostEffectTexture = ImGui_ImplDX12_AddTexture(sPostEffectBuffer.GetImGuiSRV());
+		// gTextureHeap.Alloc() で空きスロットを確保。
+		NoEngine::DescriptorHandle slot = Render::gTextureHeap.Alloc();
+		sGraphicsDevice->GetDevice()->CopyDescriptorsSimple(
+			1,
+			static_cast<D3D12_CPU_DESCRIPTOR_HANDLE>(slot),
+			sPostEffectBuffer.GetImGuiSRV(),
+			D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+		sPostEffectTexture = static_cast<ImTextureID>(slot.GetGpuPtr());
 		isInitFrame = false;
 	}
 
