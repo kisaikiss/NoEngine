@@ -30,6 +30,11 @@ void TestScene::Setup() {
 		m->psoName = L"Renderer : ToonSkinned PSO";
 		m->psoId = NoEngine::Render::GetPSOID(m->psoName);
 		m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
+
+		auto* collider = registry.AddComponent<No::CapsuleCollider>(player);
+		collider->radius = 0.5f;
+		collider->localP0.y = 0.5f;
+		collider->localP1.y = 1.5f;
 		
 		registry.AddComponent<PlayerComponent>(player);
 		registry.AddComponent<No::VelocityComponent>(player);
@@ -49,6 +54,26 @@ void TestScene::Setup() {
 		registry.AddComponent<No::TransformComponent>(background);
 		auto* backgroundTag = registry.AddComponent<No::EditTag>(background);
 		backgroundTag->name = "background";
+	}
+
+	// 箱
+	{
+		No::Entity box = registry.GenerateEntity();
+		auto* bm = registry.AddComponent<No::MeshComponent>(box);
+		No::ModelLoader::LoadModel("box", "resources/engine/Model/block/block.obj");
+		No::ModelLoader::GetModel("box", bm);
+		auto* bmm = registry.AddComponent<No::MaterialComponent>(box);
+		bmm->materials = No::ModelLoader::GetMaterial("box");
+		bmm->psoName = L"Renderer : Default PSO";
+		bmm->psoId = NoEngine::Render::GetPSOID(bmm->psoName);
+		bmm->rootSigId = NoEngine::Render::GetRootSignatureID(bmm->psoName);
+		auto* boxT = registry.AddComponent<No::TransformComponent>(box);
+		boxT->translate.x = 2.f;
+		boxT->translate.y = 0.5f;
+		registry.AddComponent<No::EditTag>(box)->name = "box";
+		auto* collider = registry.AddComponent<No::AABBCollider>(box);
+		collider->max = 0.5f;
+		collider->min = -0.5f;
 	}
 
 
@@ -79,6 +104,8 @@ void TestScene::AddSystems() {
 	AddSystem(std::make_unique<PlayerMoveSystem>());
 	AddSystem(std::make_unique<FollowCameraSystem>());
 
+	AddSystem(std::make_unique<No::NarrowPhaseSystem>());
+	AddSystem(std::make_unique<No::CollisionResolutionSystem>());
 	AddSystem(std::make_unique<No::MovementSystem>());
 	AddSystem(std::make_unique<No::AnimationSystem>());
 	AddSystem(std::make_unique<No::SpriteAnimationSystem>());

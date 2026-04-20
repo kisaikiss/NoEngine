@@ -23,9 +23,9 @@ public:
 		translate = temp.GetTranslate();
 	}
 
-	Math::Matrix4x4 MakeAffineMatrix4x4();
+	Math::Matrix4x4 MakeAffineMatrix4x4() const;
 
-	Math::Vector3 GetWorldPosition();
+	Math::Vector3 GetWorldPosition() const;
 };
 
 

@@ -136,6 +136,11 @@
     <ClCompile Include="application\ClockworksDisease\System\Camera\FollowCameraSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\VelocityComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\MovementSystem.cpp" />
+    <ClCompile Include="engine\Math\Collision\CollisionHelper.cpp" />
+    <ClCompile Include="engine\Math\MathUtility.cpp" />
+    <ClCompile Include="engine\Math\Collision\CollisionFanc.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\NarrowPhaseSystem.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\CollisionResolutionSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -295,6 +300,12 @@
     <ClInclude Include="engine\Math\Collision\ColliderComponent.h" />
     <ClInclude Include="engine\Functions\ECS\Component\VelocityComponent.h" />
     <ClInclude Include="engine\Functions\ECS\System\MovementSystem.h" />
+    <ClInclude Include="engine\Math\Collision\CollisionHelper.h" />
+    <ClInclude Include="engine\Math\MathUtility.h" />
+    <ClInclude Include="engine\Math\Collision\CollisionFanc.h" />
+    <ClInclude Include="engine\Functions\ECS\Event\CollisionEvents.h" />
+    <ClInclude Include="engine\Functions\ECS\System\NarrowPhaseSystem.h" />
+    <ClInclude Include="engine\Functions\ECS\System\CollisionResolutionSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

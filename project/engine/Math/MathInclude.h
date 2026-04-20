@@ -5,3 +5,4 @@
 #include "Types/Transform.h"
 #include "Types/Transform2D.h"
 #include "Easing.h"
+#include "Collision/CollisionFanc.h"

@@ -179,6 +179,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="engine\Functions\ECS\Component\SpriteComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Transform2DComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\TransformComponent.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\CollisionResolutionSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\DebugCameraSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\EditSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\MovementSystem.cpp" />
@@ -202,8 +203,11 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="engine\Functions\Renderer\RenderPass\SpritePass.cpp" />
     <ClCompile Include="engine\Functions\Scene\IScene.cpp" />
     <ClCompile Include="engine\Functions\Scene\SceneManager.cpp" />
+    <ClCompile Include="engine\Math\Collision\CollisionFanc.cpp" />
+    <ClCompile Include="engine\Math\Collision\CollisionHelper.cpp" />
     <ClCompile Include="engine\Math\Color\Color.cpp" />
     <ClCompile Include="engine\Math\Easing.cpp" />
+    <ClCompile Include="engine\Math\MathUtility.cpp" />
     <ClCompile Include="engine\Math\Types\Calculations\Matrix3x3Calculations.cpp" />
     <ClCompile Include="engine\Math\Types\Calculations\Vector2Calculations.cpp" />
     <ClCompile Include="engine\Math\Types\Transform2D.cpp" />
@@ -301,6 +305,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\NarrowPhaseSystem.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -322,6 +327,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="engine\Functions\ECS\Component\PauseComponent.h" />
     <ClInclude Include="engine\Functions\ECS\Component\StartTransformComponent.h" />
     <ClInclude Include="engine\Functions\ECS\Component\VelocityComponent.h" />
+    <ClInclude Include="engine\Functions\ECS\Event\CollisionEvents.h" />
     <ClInclude Include="engine\Functions\ECS\System\CameraSystem.h" />
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
     <ClInclude Include="engine\Editor\ComponentRegistry.h" />
@@ -334,6 +340,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="engine\Functions\ECS\Component\LightComponent.h" />
     <ClInclude Include="engine\Functions\ECS\EventBus.h" />
     <ClInclude Include="engine\Functions\ECS\Event\SceneChangeEvent.h" />
+    <ClInclude Include="engine\Functions\ECS\System\CollisionResolutionSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\DebugCameraSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\EditSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\MovementSystem.h" />
@@ -372,7 +379,10 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="engine\Functions\Scene\SceneManager.h" />
     <ClInclude Include="engine\Functions\Scene\SceneNameComponent.h" />
     <ClInclude Include="engine\Math\Collision\ColliderComponent.h" />
+    <ClInclude Include="engine\Math\Collision\CollisionFanc.h" />
+    <ClInclude Include="engine\Math\Collision\CollisionHelper.h" />
     <ClInclude Include="engine\Math\Easing.h" />
+    <ClInclude Include="engine\Math\MathUtility.h" />
     <ClInclude Include="engine\Math\Types\Calculations\Matrix3x3Calculations.h" />
     <ClInclude Include="engine\Math\Types\Calculations\Vector2Calculations.h" />
     <ClInclude Include="engine\Math\Types\Rect.h" />
@@ -491,6 +501,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">false</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="engine\Functions\ECS\System\NarrowPhaseSystem.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="engine\Assets\Texture\Texture.h" />

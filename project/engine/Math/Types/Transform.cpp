@@ -2,7 +2,7 @@
 
 namespace NoEngine {
 
-Math::Matrix4x4 Transform::MakeAffineMatrix4x4() {
+Math::Matrix4x4 Transform::MakeAffineMatrix4x4() const {
     Math::Matrix4x4 result;
     result.MakeAffine(scale, rotation, translate);
     if (parent) {
@@ -11,7 +11,7 @@ Math::Matrix4x4 Transform::MakeAffineMatrix4x4() {
     return result;
 }
 
-Math::Vector3 Transform::GetWorldPosition() {
+Math::Vector3 Transform::GetWorldPosition() const {
     return MakeAffineMatrix4x4().GetTranslate();
 }
 }

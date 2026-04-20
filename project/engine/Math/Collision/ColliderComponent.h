@@ -2,7 +2,7 @@
 #include "../Types/Vector3.h"
 
 namespace NoEngine {
-namespace Collision {
+namespace Math {
 
 struct AABBCollider {
 	Math::Vector3 min;
