@@ -206,6 +206,8 @@ void GraphicsCore::EndFrame(GraphicsContext& context) {
 		isInitFrame = false;
 	}
 
+
+
 	ImGui::Begin("Game");
 	ImGui::Image(
 		sPostEffectTexture,

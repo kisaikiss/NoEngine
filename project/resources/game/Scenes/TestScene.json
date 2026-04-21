@@ -1,0 +1,150 @@
+{
+    "entities": {
+        "background": {
+            "components": {
+                "MaterialComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "shininess": 60.0
+                },
+                "TransformComponent": {
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "box": {
+            "components": {
+                "MaterialComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "shininess": 60.0
+                },
+                "TransformComponent": {
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        2.0,
+                        0.5,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "camera": {
+            "components": {
+                "CameraComponent": {
+                    "fov": 0.44999998807907104
+                },
+                "TransformComponent": {
+                    "rotation": [
+                        0.1990785300731659,
+                        -0.6785040497779846,
+                        0.1990785300731659,
+                        0.6785040497779846
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        12.952676773071289,
+                        8.104534149169922,
+                        -0.9116809964179993
+                    ]
+                }
+            }
+        },
+        "directionalLight": {
+            "components": {
+                "DirectionalLightComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "direction": [
+                        0.0,
+                        -1.0,
+                        0.0
+                    ],
+                    "intensity": 1.0
+                }
+            }
+        },
+        "player": {
+            "components": {
+                "MaterialComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": true,
+                    "shininess": 60.0
+                },
+                "TransformComponent": {
+                    "rotation": [
+                        0.0,
+                        1.0,
+                        0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        0.33061176538467407,
+                        0.0,
+                        -0.9116809964179993
+                    ]
+                },
+                "VelocityComponent": {
+                    "linear": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        }
+    }
+}

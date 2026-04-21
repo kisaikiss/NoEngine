@@ -110,7 +110,7 @@ void ImGuiManager::BeginFrame() {
 	ImGui::SetNextWindowSize(viewport->Size);
 	ImGui::SetNextWindowViewport(viewport->ID);
 
-	ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar |
+	ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking |
 		ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize |
 		ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus |
 		ImGuiWindowFlags_NoNavFocus;
@@ -121,12 +121,12 @@ void ImGuiManager::BeginFrame() {
 	ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0, 0, 0, 0));
 	ImGui::PushStyleColor(ImGuiCol_DockingEmptyBg, ImVec4(0, 0, 0, 0));
 	ImGui::Begin("MainDockSpace", nullptr, window_flags);
+
 	ImGui::PopStyleVar(3);
 	ImGui::PopStyleColor(2);
 	ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
 	ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_PassthruCentralNode);
 	ImGui::End();
-
 }
 
 void ImGuiManager::Shutdown() {

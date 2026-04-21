@@ -5,6 +5,7 @@ namespace NoEngine {
 namespace ECS {
 class SystemManager {
 public:
+	SystemManager();
 	void AddSystem(std::unique_ptr<ISystem> system) { systems_.push_back(std::move(system)); }
 
 	void UpdateAll(ComputeContext& ctx, Registry& registry, float deltaTime);

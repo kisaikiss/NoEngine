@@ -31,14 +31,19 @@ void EditSystem::Update(Registry& registry, float deltaTime) {
         ImGui::End();
     }
 
-    ImGui::Begin("file");
-    if (ImGui::Button("SaveAll")) {
-        SaveFile(registry, Editor::SaveScene(registry));
+    if (ImGui::BeginMainMenuBar()) {
+        if (ImGui::BeginMenu("File")) {
+            if (ImGui::MenuItem("Save")) {
+                SaveFile(registry, Editor::SaveScene(registry));
+            }
+            if (ImGui::MenuItem("Load")) {
+                LoadFile(registry);
+            }
+            ImGui::EndMenu();
+        }
+        ImGui::EndMainMenuBar();
     }
-    if (ImGui::Button("LoadAll")) {
-        LoadFile(registry);
-    }
-    ImGui::End();
+
 
 #else
 	static_cast<void>(registry);
