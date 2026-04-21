@@ -12,6 +12,8 @@ private:
     void SaveFile(Registry& registry, nlohmann::json j);
     void LoadFile(Registry& registry);
 
+    void DrawHierarchyWindow(Registry& registry);
+
     bool FirstLoaded_ = false;
 };
 }

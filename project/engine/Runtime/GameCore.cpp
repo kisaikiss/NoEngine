@@ -150,9 +150,8 @@ void DrawPerformance(float deltaTime) {
 
 	ImGui::Begin("Performance");
 	ImGui::Text("FPS: %.1f", ImGui::GetIO().Framerate);
-	ImGui::Text("Frame Time (ms)");
 	ImGui::PlotLines(
-		" ",
+		"Frame Time (ms)",
 		sFrameTimes,
 		IM_ARRAYSIZE(sFrameTimes),
 		sFrameIndex,

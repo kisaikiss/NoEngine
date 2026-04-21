@@ -40,7 +40,7 @@ void ImGuiManager::Initialize() {
 	colors[ImGuiCol_Text] = ImVec4(0.0f, 0.0f, 0.0f, 1.00f);
 	colors[ImGuiCol_TextDisabled] = ImVec4(1.f, 0.0f, 1.0f, 1.00f);
 	colors[ImGuiCol_WindowBg] = ImColor(25, 175, 85, 255);
-	colors[ImGuiCol_ChildBg] = ImColor(1.00f, 0.98f, 0.99f, 1.00f);
+	colors[ImGuiCol_ChildBg] = ImColor(20, 105, 55, 255);
 	colors[ImGuiCol_PopupBg] = ImColor(1.00f, 0.90f, 0.95f, 1.00f);
 
 
