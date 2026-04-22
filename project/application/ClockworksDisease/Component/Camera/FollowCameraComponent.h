@@ -1,5 +1,4 @@
 #pragma once
-#include "engine/NoEngine.h"
 
 struct FollowCameraComponent {
 	float distance = 15.f;

@@ -162,6 +162,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="application\ClockworksDisease\ClockworksDisease.cpp" />
+    <ClCompile Include="application\ClockworksDisease\Component\Camera\FollowCameraComponent.cpp" />
     <ClCompile Include="application\ClockworksDisease\Scene\TestScene.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Camera\FollowCameraSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Game\CollisionEventSystem.cpp" />

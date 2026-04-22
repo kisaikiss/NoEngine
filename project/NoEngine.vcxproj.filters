@@ -145,6 +145,7 @@
     <ClCompile Include="application\ClockworksDisease\System\Game\CollisionEventSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Player\PlayerPushBackSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Object\BoxColliderUpdateSystem.cpp" />
+    <ClCompile Include="application\ClockworksDisease\Component\Camera\FollowCameraComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />

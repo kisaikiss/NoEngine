@@ -37,9 +37,14 @@ void FollowCameraSystem::Update(No::Registry& registry, float deltaTime) {
 			}
 		}
 
-		transform->translate.x = playerPos.x + followCameraVariables->distance * std::sin(followCameraVariables->phi) * std::cos(followCameraVariables->theta);
-		transform->translate.y = playerPos.y + followCameraVariables->distance * std::cos(followCameraVariables->phi);
-		transform->translate.z = playerPos.z + followCameraVariables->distance * std::sin(followCameraVariables->phi) * std::sin(followCameraVariables->theta);
+		No::Vector3 nextPosition;
+
+
+		nextPosition.x = playerPos.x + followCameraVariables->distance * std::sin(followCameraVariables->phi) * std::cos(followCameraVariables->theta);
+		nextPosition.y = playerPos.y + followCameraVariables->distance * std::cos(followCameraVariables->phi);
+		nextPosition.z = playerPos.z + followCameraVariables->distance * std::sin(followCameraVariables->phi) * std::sin(followCameraVariables->theta);
+
+		transform->translate = No::Lerp(transform->translate, nextPosition, 0.1f);
 
 		transform->rotation.LookRotation(playerPos - transform->GetWorldPosition(), No::Vector3::UP);
 		
