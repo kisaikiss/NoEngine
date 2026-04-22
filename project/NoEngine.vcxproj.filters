@@ -132,7 +132,7 @@
     <ClCompile Include="engine\Functions\ECS\Component\MaterialComponent.cpp" />
     <ClCompile Include="application\ClockworksDisease\ClockworksDisease.cpp" />
     <ClCompile Include="application\ClockworksDisease\Scene\TestScene.cpp" />
-    <ClCompile Include="application\ClockworksDisease\System\PlayerMoveSystem.cpp" />
+    <ClCompile Include="application\ClockworksDisease\System\Player\PlayerMoveSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Camera\FollowCameraSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\VelocityComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\MovementSystem.cpp" />
@@ -141,6 +141,10 @@
     <ClCompile Include="engine\Math\Collision\CollisionFanc.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\NarrowPhaseSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\CollisionResolutionSystem.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\GroundResetSystem.cpp" />
+    <ClCompile Include="application\ClockworksDisease\System\Game\CollisionEventSystem.cpp" />
+    <ClCompile Include="application\ClockworksDisease\System\Player\PlayerPushBackSystem.cpp" />
+    <ClCompile Include="application\ClockworksDisease\System\Object\BoxColliderUpdateSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -294,7 +298,7 @@
     <ClInclude Include="application\ClockworksDisease\ClockworksDisease.h" />
     <ClInclude Include="application\ClockworksDisease\Scene\TestScene.h" />
     <ClInclude Include="application\ClockworksDisease\Component\Player\PlayerComponent.h" />
-    <ClInclude Include="application\ClockworksDisease\System\PlayerMoveSystem.h" />
+    <ClInclude Include="application\ClockworksDisease\System\Player\PlayerMoveSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Camera\FollowCameraSystem.h" />
     <ClInclude Include="application\ClockworksDisease\Component\Camera\FollowCameraComponent.h" />
     <ClInclude Include="engine\Math\Collision\ColliderComponent.h" />
@@ -306,6 +310,12 @@
     <ClInclude Include="engine\Functions\ECS\Event\CollisionEvents.h" />
     <ClInclude Include="engine\Functions\ECS\System\NarrowPhaseSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\CollisionResolutionSystem.h" />
+    <ClInclude Include="engine\Functions\ECS\System\GroundResetSystem.h" />
+    <ClInclude Include="application\ClockworksDisease\System\Game\CollisionEventSystem.h" />
+    <ClInclude Include="application\ClockworksDisease\System\Game\CollisionLayer.h" />
+    <ClInclude Include="application\ClockworksDisease\System\Game\CollisionEvents.h" />
+    <ClInclude Include="application\ClockworksDisease\System\Player\PlayerPushBackSystem.h" />
+    <ClInclude Include="application\ClockworksDisease\System\Object\BoxColliderUpdateSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

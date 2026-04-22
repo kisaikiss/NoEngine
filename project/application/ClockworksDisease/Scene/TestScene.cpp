@@ -1,10 +1,14 @@
 #include "TestScene.h"
 
-#include "../System/PlayerMoveSystem.h"
+#include "../System/Player/PlayerMoveSystem.h"
 #include "../System/Camera/FollowCameraSystem.h"
+#include "../System/Game/CollisionEventSystem.h"
+#include "../System/Player/PlayerPushBackSystem.h"
+#include "../System/Object/BoxColliderUpdateSystem.h"
 
 #include "../Component/Player/PlayerComponent.h"
 #include "../Component/Camera/FollowCameraComponent.h"
+#include "../System/Game/CollisionLayer.h"
 
 void TestScene::Setup() {
 	AddSystems();
@@ -32,28 +36,16 @@ void TestScene::Setup() {
 		m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
 
 		auto* collider = registry.AddComponent<No::CapsuleCollider>(player);
-		collider->radius = 0.5f;
-		collider->localP0.y = 0.5f;
-		collider->localP1.y = 1.5f;
-		
+		collider->radius = 0.25f;
+		collider->localP0.y = 0.25f;
+		collider->localP1.y = 1.25f;
+
+		registry.AddComponent<No::GroundStateComponent>(player);
+		registry.AddComponent<No::CollisionBody>(player)->type = No::BodyType::Dynamic;
+
 		registry.AddComponent<PlayerComponent>(player);
 		registry.AddComponent<No::VelocityComponent>(player);
-	}
-
-	// 地面
-	{
-		No::Entity background = registry.GenerateEntity();
-		auto* bm = registry.AddComponent<No::MeshComponent>(background);
-		No::ModelLoader::LoadModel("background", "resources/game/ClockworksDisease/Model/ground/ground.obj");
-		No::ModelLoader::GetModel("background", bm);
-		auto* bmm = registry.AddComponent<No::MaterialComponent>(background);
-		bmm->materials = No::ModelLoader::GetMaterial("background");
-		bmm->psoName = L"Renderer : Default PSO";
-		bmm->psoId = NoEngine::Render::GetPSOID(bmm->psoName);
-		bmm->rootSigId = NoEngine::Render::GetRootSignatureID(bmm->psoName);
-		registry.AddComponent<No::TransformComponent>(background);
-		auto* backgroundTag = registry.AddComponent<No::EditTag>(background);
-		backgroundTag->name = "background";
+		registry.AddComponent<CollisionLayerComponent>(player)->layer = CollisionLayerComponent::Player;
 	}
 
 	// 箱
@@ -74,6 +66,7 @@ void TestScene::Setup() {
 		auto* collider = registry.AddComponent<No::AABBCollider>(box);
 		collider->max = 0.5f;
 		collider->min = -0.5f;
+		registry.AddComponent<CollisionLayerComponent>(box)->layer = CollisionLayerComponent::Terrain;
 	}
 
 
@@ -101,11 +94,14 @@ void TestScene::NotSystemUpdate() {
 }
 
 void TestScene::AddSystems() {
+	AddSystem(std::make_unique<BoxColliderUpdateSystem>());
 	AddSystem(std::make_unique<PlayerMoveSystem>());
 	AddSystem(std::make_unique<FollowCameraSystem>());
 
 	AddSystem(std::make_unique<No::NarrowPhaseSystem>());
 	AddSystem(std::make_unique<No::CollisionResolutionSystem>());
+	AddSystem(std::make_unique<CollisionEventSystem>());
+	AddSystem(std::make_unique<PlayerPushBackSystem>());
 	AddSystem(std::make_unique<No::MovementSystem>());
 	AddSystem(std::make_unique<No::AnimationSystem>());
 	AddSystem(std::make_unique<No::SpriteAnimationSystem>());

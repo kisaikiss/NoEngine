@@ -20,6 +20,20 @@ public:
         return e;
     }
 
+    template<typename Event>
+    std::vector<Event> PollAll() {
+        auto& q = queues_[Utilities::TypeID<Event>()];
+        std::vector<Event> result;
+        result.reserve(q.size());
+
+        while (!q.empty()) {
+            result.push_back(std::any_cast<Event>(q.front()));
+            q.pop_front();
+        }
+        return result;
+    }
+
+
 private:
     std::unordered_map<size_t, std::deque<std::any>> queues_;
 };

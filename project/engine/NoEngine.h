@@ -24,6 +24,7 @@
 #include "Functions/ECS/System/MovementSystem.h"
 #include "Functions/ECS/System/CollisionResolutionSystem.h"
 #include "Functions/ECS/System/NarrowPhaseSystem.h"
+#include "Functions/ECS/System/GroundResetSystem.h"
 
 #include "Assets/ModelLoader.h"
 #include "Assets/Audio/Audio.h"

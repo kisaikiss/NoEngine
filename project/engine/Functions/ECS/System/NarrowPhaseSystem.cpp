@@ -8,9 +8,15 @@
 
 namespace NoEngine {
 namespace ECS {
+using namespace Math;
+
 void NarrowPhaseSystem::Update(Registry& registry, float deltaTime) {
 	// 前フレームからの経過時間は使用しない
 	static_cast<void>(deltaTime);
+
+	// CollisionResolutionSystemからゲームへ送られるはずのイベントを消費しておく
+	// ゲームアプリケーション用衝突応答のシステムが存在しない場合の対策
+	registry.PollEvent<Event::ContactEvent>();
 
 	// 衝突情報
 	Event::ContactEvent contactEvent;
@@ -26,10 +32,10 @@ void NarrowPhaseSystem::Update(Registry& registry, float deltaTime) {
 		for (auto boxE : boxView) {
 			auto* boxTransform = registry.GetComponent<Component::TransformComponent>(boxE);
 			auto* boxCollider = registry.GetComponent<Math::AABBCollider>(boxE);
-			
+
 			// 衝突判定を行う
 			auto collide = Math::TestCapsuleAABB(capsuleTransform, capsuleCollider, boxTransform, boxCollider);
-			
+
 			if (!collide.hit) continue;
 
 			// 衝突情報を格納
@@ -38,9 +44,7 @@ void NarrowPhaseSystem::Update(Registry& registry, float deltaTime) {
 			contact.b = boxE;
 			contact.normal = collide.normal;
 			contact.penetration = collide.penetration;
-
-			Primitive::DrawSphere(capsuleCollider->localP0 + capsuleTransform->GetWorldPosition(), capsuleCollider->radius, Math::Color::WHITE);
-			Primitive::DrawSphere(capsuleCollider->localP1 + capsuleTransform->GetWorldPosition(), capsuleCollider->radius, Math::Color::WHITE);
+			contact.constactPosition = ClassifyContact(collide.normal);
 
 			contactEvent.contacts.push_back(contact);
 		}
@@ -50,6 +54,12 @@ void NarrowPhaseSystem::Update(Registry& registry, float deltaTime) {
 		registry.EmitEvent(contactEvent);
 	}
 
+}
+
+ContactPosition NarrowPhaseSystem::ClassifyContact(const Math::Vector3& normal) {
+	if (normal.y > 0.5f) return ContactPosition::UP;
+	if (normal.y < -0.5f) return ContactPosition::DOWN;
+	return ContactPosition::SIDE;
 }
 }
 }

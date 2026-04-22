@@ -2,5 +2,6 @@
 #include "engine/NoEngine.h"
 
 struct PlayerComponent {
-	float moveSpeed = 2.f;
+	float moveSpeed = 5.f;
+	float yVelocity = 0.f;
 };

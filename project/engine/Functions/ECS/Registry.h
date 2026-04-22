@@ -177,6 +177,11 @@ public:
 		return eventBus_.Poll<Event>();
 	}
 
+	template<typename Event>
+	std::vector<Event> PollAllEvents() {
+		return eventBus_.PollAll<Event>();
+	}
+
 
 	bool Empty();
 private:

@@ -44,7 +44,7 @@ CapsuleAABBCollision TestCapsuleAABB(const Transform* capsuleTransform, const Ma
     float r = cap.radius;
 
     // 衝突判定(最近接点間の距離が半径より小さいか)
-    if (dist < r) {
+    if (dist <= r) {
         // 衝突している
         result.hit = true;
         // 貫通量

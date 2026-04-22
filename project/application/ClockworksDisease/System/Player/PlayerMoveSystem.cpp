@@ -53,5 +53,20 @@ void PlayerMoveSystem::Update(No::Registry& registry, float deltaTime) {
 			transform->rotation.LookRotation(velocity->linear, No::Vector3::UP);
 
 		}
+
+		// jump(後にSystemを分ける)
+
+		static const float kGravity = -9.8f;
+		if (No::Keyboard::IsTrigger(VK_SPACE)) {
+			playerVariables->yVelocity = 6.f;
+		}
+
+		playerVariables->yVelocity += kGravity * deltaTime;
+
+		velocity->linear.y = playerVariables->yVelocity;
+
+		
+
+
 	}
 }

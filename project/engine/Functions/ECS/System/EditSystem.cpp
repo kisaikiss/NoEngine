@@ -108,7 +108,7 @@ void EditSystem::DrawHierarchyWindow(Registry& registry) {
 #ifdef USE_IMGUI
 	ImGui::Begin("Hierarchy");
 
-	auto view = registry.View<Editor::EditTag>(); // あるいは全 Entity
+	auto view = registry.View<Editor::EditTag>();
 
 	for (auto e : view) {
 		bool selected = (sEditorState.selectedEntity == e);
