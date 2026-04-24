@@ -331,6 +331,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\ClockworksDisease\System\Player\PlayerMoveSystem.h" />
     <ClInclude Include="application\TestApp\System\ParticleTestSystem.h" />
     <ClInclude Include="application\TestApp\TestApp.h" />
+    <ClInclude Include="engine\Assets\RaytracingMesh.h" />
     <ClInclude Include="engine\Functions\ECS\Component\Animator2DComponent.h" />
     <ClInclude Include="engine\Functions\ECS\Component\ParticleEmitterComponent.h" />
     <ClInclude Include="engine\Functions\ECS\Component\PauseComponent.h" />

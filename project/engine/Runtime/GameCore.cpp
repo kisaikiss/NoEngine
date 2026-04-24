@@ -54,6 +54,8 @@ int RunApplication(std::unique_ptr<IGameApp> game) {
 	// メインループ
 	while (GraphicsCore::sWindowManager.ProcessMessage() == 0) {
 
+		GraphicsCore::CheckDeviceStatus();
+
 		GraphicsContext& context = GraphicsContext::Begin();
 		GraphicsCore::StartFrame(context);
 		ComputeContext& ctx = ComputeContext::Begin(L"MainComputeContext", true);

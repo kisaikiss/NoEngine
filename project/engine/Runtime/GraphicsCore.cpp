@@ -3,8 +3,6 @@
 #include "Command/CommandListManager.h"
 #include "ContextManager.h"
 #include "engine/Functions/Renderer/RenderSystem.h"
-#include "engine/Runtime/GpuResource/LinearAllocator/LinearAllocator.h"
-#include "Graphics/GraphicsCommon.h"
 #include "engine/Functions/Shader/ShaderModule.h"
 
 #include "engine/Functions/Debug/Logger/Log.h"
@@ -50,6 +48,8 @@ std::unique_ptr<RootSignature> defaultRootSignature;
 ImTextureID sPostEffectTexture;
 #endif // USE_IMGUI
 
+// レイトレーシングが有効か
+bool sIsEnableRaytracing = false;
 
 }
 
@@ -67,6 +67,7 @@ void GraphicsCore::Initialize(float windowWidth, float windowHeight) {
 	sGraphicsDevice = make_unique<Graphics::GraphicsDevice>(sGraphicsInfrastructures->GetDXGIAdapter());
 	sCommandListManager.Create();
 	SettingDebugLayer();
+	CheckRaytracingEnable();
 	Render::Initialize();
 	GraphicsCore::sWindowManager.Create(L"NoEngine", UINT(windowWidth), UINT(windowHeight), L"resources/engine/noicon.ico");
 	GraphicsCore::sWindowManager.SetMainWindowName(L"NoEngine");
@@ -231,6 +232,21 @@ void GraphicsCore::EndFrame(GraphicsContext& context) {
 	sSwapChain->Get()->Present(1, 0);
 }
 
+bool GraphicsCore::IsEnableRaytracing() {
+	return sIsEnableRaytracing;
+}
+
+void GraphicsCore::CheckDeviceStatus() {
+	HRESULT hr = sGraphicsDevice->GetDevice()->GetDeviceRemovedReason();
+
+	if (SUCCEEDED(hr)) {
+		return; //!< 正常
+	}
+
+	Log::DebugPrint(GetHResultMessage(hr), VerbosityLevel::kCritical);
+	assert(false);
+}
+
 void GraphicsCore::CreatePixelBuffer() {
 	if (sFrameBuffers[0]) return;
 
@@ -307,6 +323,17 @@ void GraphicsCore::InitPostEffect() {
 	defaultPSO.Finalize();
 	
 
+}
+
+void GraphicsCore::CheckRaytracingEnable() {
+	D3D12_FEATURE_DATA_D3D12_OPTIONS5 option = {};
+	HRESULT hr = sGraphicsDevice->GetDevice()->CheckFeatureSupport(D3D12_FEATURE_D3D12_OPTIONS5, &option, sizeof(option));
+
+	if (FAILED(hr) || option.RaytracingTier == D3D12_RAYTRACING_TIER_NOT_SUPPORTED) {
+		sIsEnableRaytracing =  false; // Raytracingがサポートされていない
+	}
+
+	sIsEnableRaytracing = true; // Raytracingがサポートされていたら有効にする。
 }
 
 }

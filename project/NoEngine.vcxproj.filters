@@ -317,6 +317,7 @@
     <ClInclude Include="application\ClockworksDisease\System\Game\CollisionEvents.h" />
     <ClInclude Include="application\ClockworksDisease\System\Player\PlayerPushBackSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Object\BoxColliderUpdateSystem.h" />
+    <ClInclude Include="engine\Assets\RaytracingMesh.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

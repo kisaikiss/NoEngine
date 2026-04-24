@@ -39,4 +39,8 @@ std::string FormatToString(DXGI_FORMAT fmt) {
     }
 }
 
+std::string GetHResultMessage(HRESULT hr) {
+    return std::system_category().message(hr);
+}
+
 }
