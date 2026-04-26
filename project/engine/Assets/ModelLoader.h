@@ -22,8 +22,10 @@ private:
 	static Node ReadNode(aiNode* node);
 	static void ProcessAnimation(const std::string& name, const aiScene* scene);
 	static void ProcessSkeleton(const std::string& name, const Node& rootNode);
-	
+	static RaytracingMesh ProcessRaytracingMesh(const Mesh& mesh);
 	static int32_t CreateJoint(const Node& node, const std::optional<int32_t>& parent, std::vector<Joint>& joints);
+
+	static RaytracingGeometry MakeGeometryDesc(const Mesh& mesh, const SubMesh& sm);
 };
 
 }

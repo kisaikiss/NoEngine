@@ -7,6 +7,7 @@ struct RaytracingGeometry {
 struct RaytracingMesh {
     // BLAS
     Microsoft::WRL::ComPtr<ID3D12Resource> blas;
+    Microsoft::WRL::ComPtr<ID3D12Resource> scratch;
     D3D12_BUILD_RAYTRACING_ACCELERATION_STRUCTURE_INPUTS inputs;
     std::vector<RaytracingGeometry> geometries;
 };
