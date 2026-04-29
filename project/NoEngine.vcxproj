@@ -203,6 +203,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="engine\Functions\Renderer\RenderPass\ParticlePass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PrimitivePass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\RenderPassScheduler.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\RenderPass\TLASBuildPass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderSystem.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\SpritePass.cpp" />
     <ClCompile Include="engine\Functions\Scene\IScene.cpp" />
@@ -385,6 +386,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="engine\Functions\Renderer\RenderPass\RenderPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\RenderPassScheduler.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\SpritePass.h" />
+    <ClInclude Include="engine\Functions\Renderer\RenderPass\TLASBuildPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderSystem.h" />
     <ClInclude Include="engine\Functions\Scene\IScene.h" />
     <ClInclude Include="engine\Functions\Scene\SceneManager.h" />

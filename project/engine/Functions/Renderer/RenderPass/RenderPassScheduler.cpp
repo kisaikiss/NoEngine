@@ -4,10 +4,12 @@
 #include "PrimitivePass.h"
 #include "LightPass.h"
 #include "ParticlePass.h"
+#include "TLASBuildPass.h"
 
 namespace NoEngine {
 namespace Render {
 void RenderPassScheduler::Initialize() {
+	passes_.push_back(std::make_unique<TLASBuildPass>());
 	passes_.push_back(std::make_unique<LightPass>());
 	passes_.push_back(std::make_unique<MeshPass>());
 	passes_.push_back(std::make_unique<PrimitivePass>());
