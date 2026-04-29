@@ -13,5 +13,9 @@ GraphicsPSO& GetPSO(uint32_t psoId);
 RootSignature& GetRootSignature(uint32_t rootSigId);
 uint32_t GetPSOID(std::wstring psoName);
 uint32_t GetRootSignatureID(std::wstring rootSigName);
+
+
+void InitRaytracingGlobalRootSignature();
+void InitRaytracingLocalRootSignature();
 }
 }

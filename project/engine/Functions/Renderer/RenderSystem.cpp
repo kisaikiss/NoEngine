@@ -422,6 +422,9 @@ void Initialize() {
 		sRootSignatureIndexMap[defaultPrimitivePSOName] = static_cast<uint32_t>(sRootSignatures.size()) - 1;
 
 	}
+
+	InitRaytracingGlobalRootSignature();
+	InitRaytracingLocalRootSignature();
 }
 
 void Shutdown() {
@@ -446,6 +449,71 @@ uint32_t GetPSOID(std::wstring psoName) {
 
 uint32_t GetRootSignatureID(std::wstring rootSigName) {
 	return sRootSignatureIndexMap[rootSigName];
+}
+
+void InitRaytracingGlobalRootSignature() {
+	std::unique_ptr<RootSignature> rtGlobalRSptr = std::make_unique<RootSignature>();
+	auto& rtGlobalRS = *rtGlobalRSptr.get();
+
+	rtGlobalRS.Reset(5, 0);
+
+	// 0: TLAS を置く SRV (t0)
+	rtGlobalRS[0].InitAsDescriptorRange(
+		D3D12_DESCRIPTOR_RANGE_TYPE_SRV,
+		0,      // t0
+		1       // TLAS 1 個
+	);
+
+	// 1: SRV テーブル（t1〜）
+	rtGlobalRS[1].InitAsDescriptorRange(
+		D3D12_DESCRIPTOR_RANGE_TYPE_SRV,
+		/*BaseShaderRegister=*/1, 
+		/*NumDescriptors=*/16  // 将来拡張前提で多めに
+	);
+
+	// 2: UAV テーブル（u0〜）
+	rtGlobalRS[2].InitAsDescriptorRange(
+		D3D12_DESCRIPTOR_RANGE_TYPE_UAV,
+		/*BaseShaderRegister=*/0,
+		/*NumDescriptors=*/8
+	);
+
+	// 3: PerFrame CBV（b0）
+	rtGlobalRS[3].InitAsConstantBuffer(
+		/*ShaderRegister=*/0
+	);
+
+	// 4: PerLight CBV（b1）
+	rtGlobalRS[4].InitAsConstantBuffer(
+		/*ShaderRegister=*/1
+	);
+
+	rtGlobalRS.Finalize(L"RT Global RootSignature");
+	sRootSignatures.push_back(std::move(rtGlobalRSptr));
+	sRootSignatureIndexMap[L"RT Global RootSignature"] = static_cast<uint32_t>(sRootSignatures.size()) - 1;
+}
+
+void InitRaytracingLocalRootSignature() {
+	std::unique_ptr<RootSignature> rtLocalRSptr = std::make_unique<RootSignature>();
+	auto& rtLocalRS = *rtLocalRSptr.get();
+
+	rtLocalRS.Reset(1, 0);
+
+	// materialIndex, instanceID の 2 つを渡す
+	rtLocalRS[0].InitAsConstants(
+		0,      // b0
+		2,      // 2 DWORD
+		D3D12_SHADER_VISIBILITY_ALL,
+		1       // space1 (local root)
+	);
+
+	rtLocalRS.Finalize(
+		L"RT Local RootSignature",
+		D3D12_ROOT_SIGNATURE_FLAG_LOCAL_ROOT_SIGNATURE
+	);
+
+	sRootSignatures.push_back(std::move(rtLocalRSptr));
+	sRootSignatureIndexMap[L"RT Local RootSignature"] = static_cast<uint32_t>(sRootSignatures.size()) - 1;
 }
 
 }

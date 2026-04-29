@@ -29,6 +29,7 @@ const uint32_t sSwapChainBufferCount = 2;
 std::unique_ptr<Graphics::GraphicsSwapChain> sSwapChain;
 std::array<std::unique_ptr<ColorBuffer>, sSwapChainBufferCount> sFrameBuffers; // 実際に描画するカラーバッファ
 std::unique_ptr<DepthBuffer> sDepthBuffer;									   // 深度バッファ
+ColorBuffer sShadowMaskBuffer;
 ColorBuffer sPostEffectBuffer;												   // ポストエフェクト用カラーバッファ
 
 // ビューポート
@@ -263,8 +264,8 @@ void GraphicsCore::CreatePixelBuffer() {
 	}
 	sDepthBuffer = std::make_unique<DepthBuffer>(1.f);
 	
-	sDepthBuffer->Create(L"Window Depth Buffer", static_cast<uint32_t>(sWindowWidth), static_cast<uint32_t>(sWindowHeight), DXGI_FORMAT_D24_UNORM_S8_UINT);
-
+	sDepthBuffer->Create(L"GraphicsCore Depth Buffer", static_cast<uint32_t>(sWindowWidth), static_cast<uint32_t>(sWindowHeight), DXGI_FORMAT_D24_UNORM_S8_UINT);
+	sShadowMaskBuffer.Create(L"ShadowMask", static_cast<uint32_t>(sWindowWidth), static_cast<uint32_t>(sWindowHeight), 1, DXGI_FORMAT_R8_UNORM);
 	Log::DebugPrint("create pixel buffers");
 }
 
@@ -274,6 +275,7 @@ void GraphicsCore::DestroyPixelBuffer() {
 		colorBuffer.reset();
 	}
 	sDepthBuffer.reset();
+	sShadowMaskBuffer.Destroy();
 	Log::DebugPrint("destroy pixel buffers");
 }
 
