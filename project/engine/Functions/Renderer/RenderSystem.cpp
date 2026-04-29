@@ -408,10 +408,10 @@ void Initialize() {
 		defaultPrimitivePSO.SetRootSignature(*primitiveRootSignature);
 		defaultPrimitivePSO.SetRasterizerState(primitiveRasterizerDesc);
 		defaultPrimitivePSO.SetBlendState(blendPrimitiveDesc);
-		defaultPrimitivePSO.SetDepthStencilState(primitiveDepthStencilDesc);
+		defaultPrimitivePSO.SetDepthStencilState(depthStencilDesc);
 		defaultPrimitivePSO.SetInputLayout(primitiveInputLayout);
 		defaultPrimitivePSO.SetPrimitiveTopologyType(D3D12_PRIMITIVE_TOPOLOGY_TYPE_LINE);
-		defaultPrimitivePSO.SetRenderTargetFormats(1, rtvFormat, DXGI_FORMAT_UNKNOWN);
+		defaultPrimitivePSO.SetRenderTargetFormats(1, rtvFormat, DXGI_FORMAT_D24_UNORM_S8_UINT);
 		defaultPrimitivePSO.SetVertexShader(primitiveVS.GetBytecode());
 		defaultPrimitivePSO.SetPixelShader(primitivePS.GetBytecode());
 		defaultPrimitivePSO.SetSampleMask(D3D12_DEFAULT_SAMPLE_MASK);
