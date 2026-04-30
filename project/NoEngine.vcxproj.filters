@@ -20,6 +20,9 @@
     <FxCompile Include="resources\engine\Shaders\Particle.VS.hlsl" />
     <FxCompile Include="resources\engine\Shaders\FullScreen.VS.hlsl" />
     <FxCompile Include="resources\engine\Shaders\CopyImage.PS.hlsl" />
+    <FxCompile Include="resources\engine\Shaders\Raytracing\RayGenShadow.hlsl" />
+    <FxCompile Include="resources\engine\Shaders\Raytracing\MissShadow.hlsl" />
+    <FxCompile Include="resources\engine\Shaders\Raytracing\ClosestHitShadow.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="engine\Assets\Audio\Audio.cpp" />

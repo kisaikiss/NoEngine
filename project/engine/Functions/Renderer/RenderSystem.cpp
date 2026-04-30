@@ -423,8 +423,15 @@ void Initialize() {
 
 	}
 
-	InitRaytracingGlobalRootSignature();
-	InitRaytracingLocalRootSignature();
+	// RayShadow
+	{
+		ShaderModule RayGen(ShaderStage::RayGen, L"resources/engine/Shaders/Raytracing/RayGenShadow.hlsl", L"lib_6_3", true);
+		ShaderModule Miss(ShaderStage::Miss, L"resources/engine/Shaders/Raytracing/MissShadow.hlsl", L"lib_6_3", true);
+		ShaderModule Hit(ShaderStage::ClosestHit, L"resources/engine/Shaders/Raytracing/ClosestHitShadow.hlsl", L"lib_6_3", true);
+		InitRaytracingGlobalRootSignature();
+		InitRaytracingLocalRootSignature();
+	}
+	
 }
 
 void Shutdown() {

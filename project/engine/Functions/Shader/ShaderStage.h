@@ -7,6 +7,9 @@ enum class ShaderStage {
 	Compute,
 	Geometry,
 	Hull,
-	Domain
+	Domain,
+	RayGen,
+	Miss,
+	ClosestHit
 };
 }
