@@ -8,8 +8,6 @@ enum class ShaderStage {
 	Geometry,
 	Hull,
 	Domain,
-	RayGen,
-	Miss,
-	ClosestHit
+	RaytraceLib
 };
 }

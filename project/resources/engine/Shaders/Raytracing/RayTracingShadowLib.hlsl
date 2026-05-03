@@ -1,3 +1,5 @@
+// RayTracingShadowLib.hlsl
+
 struct ShadowPayload
 {
     bool occluded;
@@ -26,7 +28,7 @@ struct LightNums
     int pointLightNum;
     int spotLightNum;
 };
-ConstantBuffer<LightNums> gLightNums : register(b2);
+ConstantBuffer<LightNums> gLightNums : register(b1);
 
 struct DirectionalLight
 {
@@ -96,4 +98,16 @@ void RayGen_Shadow()
     }
 
     gShadowMask[pixel] = shadowed ? 0.0f : 1.0f;
+}
+
+[shader("miss")]
+void Miss_Shadow(inout ShadowPayload payload)
+{
+    payload.occluded = false;
+}
+
+[shader("closesthit")]
+void ClosestHit_Shadow(inout ShadowPayload payload, in BuiltInTriangleIntersectionAttributes attribs)
+{
+    payload.occluded = true;
 }

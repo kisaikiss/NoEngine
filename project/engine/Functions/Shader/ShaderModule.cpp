@@ -248,10 +248,11 @@ bool ShaderModule::CompileShader(Microsoft::WRL::ComPtr<IDxcBlob>& outBlob) {
 	std::vector<LPCWSTR> arguments;
 	if (isRaytracingShader_) {
 		arguments = {
-			filePath_.c_str(),
-			L"-T", profile_.c_str(),
-			L"-Zi",L"Qembed_debug",
-			L"-Zpr",
+		filePath_.c_str(),
+		L"-T", profile_.c_str(),       // lib_6_3
+		L"-Zi", L"-Qembed_debug",
+		L"-Od",
+		L"-Zpr"
 		};
 	} else {
 		arguments = {				// コンパイルオプション

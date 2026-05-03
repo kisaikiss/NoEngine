@@ -2,6 +2,7 @@
 #include "engine/Assets/ModelLoader.h"
 #include "engine/Utilities/Conversion/ConvertString.h"
 #include "engine/Functions/Shader/ShaderModule.h"
+#include "engine/Runtime/GraphicsCore.h"
 
 namespace NoEngine {
 namespace Render {
@@ -13,6 +14,8 @@ std::unordered_map<std::wstring, uint32_t> sGraphicsPSOIndexMap;
 
 std::vector<std::unique_ptr<RootSignature>> sRootSignatures;
 std::unordered_map<std::wstring, uint32_t> sRootSignatureIndexMap;
+
+Microsoft::WRL::ComPtr<ID3D12StateObject> sRtShadowStateObject;
 }
 
 void Initialize() {
@@ -425,16 +428,110 @@ void Initialize() {
 
 	// RayShadow
 	{
-		ShaderModule RayGen(ShaderStage::RayGen, L"resources/engine/Shaders/Raytracing/RayGenShadow.hlsl", L"lib_6_3", true);
-		ShaderModule Miss(ShaderStage::Miss, L"resources/engine/Shaders/Raytracing/MissShadow.hlsl", L"lib_6_3", true);
-		ShaderModule Hit(ShaderStage::ClosestHit, L"resources/engine/Shaders/Raytracing/ClosestHitShadow.hlsl", L"lib_6_3", true);
+		
+		ShaderModule raytracingLib(
+			ShaderStage::RaytraceLib, 
+			L"resources/engine/Shaders/Raytracing/RayTracingShadowLib.hlsl",
+			L"lib_6_3",
+			true);
+	
 		InitRaytracingGlobalRootSignature();
-		InitRaytracingLocalRootSignature();
+
+		std::vector<D3D12_STATE_SUBOBJECT> subobjects;
+		subobjects.reserve(8);
+
+		// 1. DXIL ライブラリ
+		D3D12_EXPORT_DESC exports[3] = {};
+
+		// RayGen
+		exports[0].Name = L"RayGen_Shadow";
+		exports[0].ExportToRename = nullptr;
+		exports[0].Flags = D3D12_EXPORT_FLAG_NONE;
+
+		// Miss
+		exports[1].Name = L"Miss_Shadow";
+		exports[1].ExportToRename = nullptr;
+		exports[1].Flags = D3D12_EXPORT_FLAG_NONE;
+
+		// ClosestHit
+		exports[2].Name = L"ClosestHit_Shadow";
+		exports[2].ExportToRename = nullptr;
+		exports[2].Flags = D3D12_EXPORT_FLAG_NONE;
+
+
+		D3D12_DXIL_LIBRARY_DESC dxilLib = {};
+		dxilLib.DXILLibrary = raytracingLib.GetBytecode();
+		dxilLib.NumExports = _countof(exports);
+		dxilLib.pExports = exports;
+
+		D3D12_STATE_SUBOBJECT libSubobject = {};
+		libSubobject.Type = D3D12_STATE_SUBOBJECT_TYPE_DXIL_LIBRARY;
+		libSubobject.pDesc = &dxilLib;
+		subobjects.push_back(libSubobject);
+
+		// 2. HitGroup
+		static const wchar_t* kHitGroupExport = L"ShadowHitGroup";
+		static const wchar_t* kClosestHitExport = L"ClosestHit_Shadow";
+
+		D3D12_HIT_GROUP_DESC hitGroup = {};
+		hitGroup.HitGroupExport = kHitGroupExport;
+		hitGroup.ClosestHitShaderImport = kClosestHitExport;
+		hitGroup.AnyHitShaderImport = nullptr;
+		hitGroup.IntersectionShaderImport = nullptr;
+		hitGroup.Type = D3D12_HIT_GROUP_TYPE_TRIANGLES;
+
+		D3D12_STATE_SUBOBJECT hitGroupSubobject = {};
+		hitGroupSubobject.Type = D3D12_STATE_SUBOBJECT_TYPE_HIT_GROUP;
+		hitGroupSubobject.pDesc = &hitGroup;
+		subobjects.push_back(hitGroupSubobject);
+
+		// 3. ShaderConfig（Association なし＝全シェーダーに適用）
+		D3D12_RAYTRACING_SHADER_CONFIG shaderConfig = {};
+		shaderConfig.MaxPayloadSizeInBytes = 4;                 // bool 1つ
+		shaderConfig.MaxAttributeSizeInBytes = sizeof(float) * 2; // barycentrics
+
+		D3D12_STATE_SUBOBJECT shaderConfigSubobject = {};
+		shaderConfigSubobject.Type = D3D12_STATE_SUBOBJECT_TYPE_RAYTRACING_SHADER_CONFIG;
+		shaderConfigSubobject.pDesc = &shaderConfig;
+		subobjects.push_back(shaderConfigSubobject);
+
+		// 4. Global RootSignature
+		// 構造体を作成し、そこにRootSignatureのポインタをセットする
+		D3D12_GLOBAL_ROOT_SIGNATURE globalRSDesc = {};
+		globalRSDesc.pGlobalRootSignature = sRootSignatures[sRootSignatureIndexMap[L"RT Global RootSignature"]]->GetSignature();
+
+		D3D12_STATE_SUBOBJECT globalRSSubobject = {};
+		globalRSSubobject.Type = D3D12_STATE_SUBOBJECT_TYPE_GLOBAL_ROOT_SIGNATURE;
+		// 構造体のアドレスを渡す
+		globalRSSubobject.pDesc = &globalRSDesc;
+		subobjects.push_back(globalRSSubobject);
+
+		// 5. PipelineConfig
+		D3D12_RAYTRACING_PIPELINE_CONFIG pipelineConfig = {};
+		pipelineConfig.MaxTraceRecursionDepth = 1;
+
+		D3D12_STATE_SUBOBJECT pipelineConfigSubobject = {};
+		pipelineConfigSubobject.Type = D3D12_STATE_SUBOBJECT_TYPE_RAYTRACING_PIPELINE_CONFIG;
+		pipelineConfigSubobject.pDesc = &pipelineConfig;
+		subobjects.push_back(pipelineConfigSubobject);
+
+		// 6. StateObject 生成
+		D3D12_STATE_OBJECT_DESC desc = {};
+		desc.Type = D3D12_STATE_OBJECT_TYPE_RAYTRACING_PIPELINE;
+		desc.NumSubobjects = static_cast<UINT>(subobjects.size());
+		desc.pSubobjects = subobjects.data();
+
+		HRESULT hr = GraphicsCore::sGraphicsDevice->GetDevice()->CreateStateObject(&desc, IID_PPV_ARGS(&sRtShadowStateObject));
+
+		if (FAILED(hr)) {
+			assert(false);
+		}
 	}
 	
 }
 
 void Shutdown() {
+	sRtShadowStateObject.Reset();
 	gTextureHeap.Destroy();
 	Asset::ModelLoader::DeleteAll();
 	PSO::DestroyAll();
@@ -458,42 +555,31 @@ uint32_t GetRootSignatureID(std::wstring rootSigName) {
 	return sRootSignatureIndexMap[rootSigName];
 }
 
+Microsoft::WRL::ComPtr<ID3D12StateObject>& GetShadowRtStateObject() {
+	return sRtShadowStateObject;
+}
+
 void InitRaytracingGlobalRootSignature() {
 	std::unique_ptr<RootSignature> rtGlobalRSptr = std::make_unique<RootSignature>();
 	auto& rtGlobalRS = *rtGlobalRSptr.get();
 
 	rtGlobalRS.Reset(5, 0);
 
-	// 0: TLAS を置く SRV (t0)
-	rtGlobalRS[0].InitAsDescriptorRange(
-		D3D12_DESCRIPTOR_RANGE_TYPE_SRV,
-		0,      // t0
-		1       // TLAS 1 個
-	);
+	// TLAS
+	rtGlobalRS[0].InitAsDescriptorRange(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 0, 1);
 
-	// 1: SRV テーブル（t1〜）
-	rtGlobalRS[1].InitAsDescriptorRange(
-		D3D12_DESCRIPTOR_RANGE_TYPE_SRV,
-		/*BaseShaderRegister=*/1, 
-		/*NumDescriptors=*/16  // 将来拡張前提で多めに
-	);
+	// SRV テーブル（Depth, Lights）
+	rtGlobalRS[1].InitAsDescriptorRange(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 2);
 
-	// 2: UAV テーブル（u0〜）
-	rtGlobalRS[2].InitAsDescriptorRange(
-		D3D12_DESCRIPTOR_RANGE_TYPE_UAV,
-		/*BaseShaderRegister=*/0,
-		/*NumDescriptors=*/8
-	);
+	// UAV
+	rtGlobalRS[2].InitAsDescriptorRange(D3D12_DESCRIPTOR_RANGE_TYPE_UAV, 0, 1);
 
-	// 3: PerFrame CBV（b0）
-	rtGlobalRS[3].InitAsConstantBuffer(
-		/*ShaderRegister=*/0
-	);
+	// CBV b0
+	rtGlobalRS[3].InitAsConstantBuffer(0);
 
-	// 4: PerLight CBV（b1）
-	rtGlobalRS[4].InitAsConstantBuffer(
-		/*ShaderRegister=*/1
-	);
+	// CBV b1
+	rtGlobalRS[4].InitAsConstantBuffer(1);
+
 
 	rtGlobalRS.Finalize(L"RT Global RootSignature");
 	sRootSignatures.push_back(std::move(rtGlobalRSptr));
@@ -522,6 +608,5 @@ void InitRaytracingLocalRootSignature() {
 	sRootSignatures.push_back(std::move(rtLocalRSptr));
 	sRootSignatureIndexMap[L"RT Local RootSignature"] = static_cast<uint32_t>(sRootSignatures.size()) - 1;
 }
-
 }
 }
