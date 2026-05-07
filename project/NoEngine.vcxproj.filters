@@ -146,17 +146,10 @@
     <ClCompile Include="application\ClockworksDisease\System\Player\PlayerPushBackSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Object\BoxColliderUpdateSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\Component\Camera\FollowCameraComponent.cpp" />
-    <ClCompile Include="application\TD3\Utility\InputHelperSystem.cpp" />
-    <ClCompile Include="application\TD3\Celetste.cpp" />
-    <ClCompile Include="application\TD3\System\Player\RabbitSystem.cpp" />
-    <ClCompile Include="application\TD3\Stage\MapDataIO.cpp" />
-    <ClCompile Include="application\TD3\Stage\MapEditorSystem.cpp" />
-    <ClCompile Include="application\TD3\Stage\MapManager.cpp" />
-    <ClCompile Include="application\TD3\Stage\MapTileRenderSystem.cpp" />
-    <ClCompile Include="application\TD3\Scene\GameScene.cpp" />
-    <ClCompile Include="application\TD3\Scene\SampleScene.cpp" />
-    <ClCompile Include="application\TD3\Component\Player\RabbitComponent.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\RabbitdokuOdyssey3Plus.cpp" />
+    <ClCompile Include="application\RabbitdokuOdyssey3Plus\Scene\RabbitdokuScene.cpp" />
+    <ClCompile Include="application\RabbitdokuOdyssey3Plus\Component\RabbitdokuComponent.cpp" />
+    <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\RabbitdokuMoveSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -328,27 +321,10 @@
     <ClInclude Include="application\ClockworksDisease\System\Game\CollisionEvents.h" />
     <ClInclude Include="application\ClockworksDisease\System\Player\PlayerPushBackSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Object\BoxColliderUpdateSystem.h" />
-    <ClInclude Include="application\TD3\Utility\GameAudio.h" />
-    <ClInclude Include="application\TD3\Utility\GameResourceComponent.h" />
-    <ClInclude Include="application\TD3\Utility\GameTag.h" />
-    <ClInclude Include="application\TD3\Utility\InputHelper.h" />
-    <ClInclude Include="application\TD3\Utility\InputHelperSystem.h" />
-    <ClInclude Include="application\TD3\Utility\SpriteLayer.h" />
-    <ClInclude Include="application\TD3\Celetste.h" />
-    <ClInclude Include="application\TD3\System\Player\RabbitSystem.h" />
-    <ClInclude Include="application\TD3\Stage\GameStateComponent.h" />
-    <ClInclude Include="application\TD3\Stage\MapData.h" />
-    <ClInclude Include="application\TD3\Stage\MapDataIO.h" />
-    <ClInclude Include="application\TD3\Stage\MapEditorSystem.h" />
-    <ClInclude Include="application\TD3\Stage\MapLayerDef.h" />
-    <ClInclude Include="application\TD3\Stage\MapManager.h" />
-    <ClInclude Include="application\TD3\Stage\MapRenderDirtyComponent.h" />
-    <ClInclude Include="application\TD3\Stage\MapTileRenderSystem.h" />
-    <ClInclude Include="application\TD3\Scene\GameScene.h" />
-    <ClInclude Include="application\TD3\Scene\SampleScene.h" />
-    <ClInclude Include="application\TD3\Component\Player\RabbitComponent.h" />
-    <ClInclude Include="application\TD3\Component\GravityComponent.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\RabbitdokuOdyssey3Plus.h" />
+    <ClInclude Include="application\RabbitdokuOdyssey3Plus\Scene\RabbitdokuScene.h" />
+    <ClInclude Include="application\RabbitdokuOdyssey3Plus\Component\RabbitdokuComponent.h" />
+    <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\RabbitdokuMoveSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />
