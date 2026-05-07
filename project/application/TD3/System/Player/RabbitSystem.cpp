@@ -1,5 +1,5 @@
-#include "application/TD3/System/Player/PlayerSystem.h"
-#include "application/TD3/Component/Player/PlayerComponent.h"
+#include "application/TD3/System/Player/RabbitSystem.h"
+#include "application/TD3/Component/Player/RabbitComponent.h"
 #include "application/TD3/Component/GravityComponent.h"
 #include "application/TD3/Stage/MapData.h"
 #include "application/TD3/Stage/MapManager.h"
@@ -15,7 +15,7 @@ namespace {
 #ifdef USE_IMGUI
 	//自機のimgui表示
 	void DrawPlayerDebugWindow(No::Registry& registry, No::Entity playerEntity) {
-		auto* p = registry.GetComponent<PlayerComponent>(playerEntity);
+		auto* p = registry.GetComponent<RabbitComponent>(playerEntity);
 		if (!p) return;
 
 		ImGui::SetNextWindowPos(ImVec2(10.f, 10.f), ImGuiCond_FirstUseEver);
@@ -39,7 +39,7 @@ namespace {
 #endif
 }
 
-void PlayerSystem::Initialize(No::Entity managerEntity, No::Entity playerEntity,
+void RabbitSystem::Initialize(No::Entity managerEntity, No::Entity playerEntity,
 	No::Entity cam2dEntity, Stage::MapManager* mapManager) {
 	managerEntity_ = managerEntity;
 	playerEntity_ = playerEntity;
@@ -47,7 +47,7 @@ void PlayerSystem::Initialize(No::Entity managerEntity, No::Entity playerEntity,
 	mapMgr_ = mapManager;
 }
 
-void PlayerSystem::Update(No::Registry& registry, float dt) {
+void RabbitSystem::Update(No::Registry& registry, float dt) {
 #ifdef USE_IMGUI
 	DrawPlayerDebugWindow(registry, playerEntity_);
 #endif
@@ -58,7 +58,7 @@ void PlayerSystem::Update(No::Registry& registry, float dt) {
 	// マップが切り替わっていたら respawnX/Y を initialSpawn で初期化
 	SyncRespawnToInitialSpawn(registry);
 
-	auto* p = registry.GetComponent<PlayerComponent>(playerEntity_);
+	auto* p = registry.GetComponent<RabbitComponent>(playerEntity_);
 	auto* t = registry.GetComponent<No::Transform2DComponent>(playerEntity_);
 
 	// 死亡処理: isDead == true のフレームでリスポーン地点へワープ
@@ -87,9 +87,9 @@ void PlayerSystem::Update(No::Registry& registry, float dt) {
 	CheckTransition(registry);
 }
 
-void PlayerSystem::Move(No::Registry& registry, float dt) {
+void RabbitSystem::Move(No::Registry& registry, float dt) {
 	auto* t = registry.GetComponent<No::Transform2DComponent>(playerEntity_);
-	auto* p = registry.GetComponent<PlayerComponent>(playerEntity_);
+	auto* p = registry.GetComponent<RabbitComponent>(playerEntity_);
 	auto* grav = registry.GetComponent<GravityComponent>(playerEntity_);
 	auto* mapData = registry.GetComponent<Stage::MapData>(managerEntity_);
 	if (!t || !p || !mapData) return;
@@ -255,7 +255,7 @@ void PlayerSystem::Move(No::Registry& registry, float dt) {
 	}
 }
 
-void PlayerSystem::UpdateCamera(No::Registry& registry) {
+void RabbitSystem::UpdateCamera(No::Registry& registry) {
 	auto* playerT = registry.GetComponent<No::Transform2DComponent>(playerEntity_);
 	auto* camT    = registry.GetComponent<No::Transform2DComponent>(cam2dEntity_);
 	if (!playerT || !camT) return;
@@ -274,10 +274,10 @@ void PlayerSystem::UpdateCamera(No::Registry& registry) {
 	camT->translate.y = camY;
 }
 
-void PlayerSystem::SyncRespawnToInitialSpawn(No::Registry& registry) {
+void RabbitSystem::SyncRespawnToInitialSpawn(No::Registry& registry) {
 	auto* mapData = registry.GetComponent<Stage::MapData>(managerEntity_);
 	if (!mapData) return;
-	auto* p = registry.GetComponent<PlayerComponent>(playerEntity_);
+	auto* p = registry.GetComponent<RabbitComponent>(playerEntity_);
 	if (!p) return;
 
 	if (mapData->stageNo == lastStageNo_) {
@@ -293,9 +293,9 @@ void PlayerSystem::SyncRespawnToInitialSpawn(No::Registry& registry) {
 	p->respawnMap = mapData->GetMapName();
 }
 
-void PlayerSystem::CheckRespawnPoint(No::Registry& registry) {
+void RabbitSystem::CheckRespawnPoint(No::Registry& registry) {
 	auto* t = registry.GetComponent<No::Transform2DComponent>(playerEntity_);
-	auto* p = registry.GetComponent<PlayerComponent>(playerEntity_);
+	auto* p = registry.GetComponent<RabbitComponent>(playerEntity_);
 	auto* mapData = registry.GetComponent<Stage::MapData>(managerEntity_);
 	if (!t || !p || !mapData) return;
 
@@ -314,7 +314,7 @@ void PlayerSystem::CheckRespawnPoint(No::Registry& registry) {
 	}
 }
 
-void PlayerSystem::CheckTransition(No::Registry& registry) {
+void RabbitSystem::CheckTransition(No::Registry& registry) {
 	if (!mapMgr_) return;
 	auto* t = registry.GetComponent<No::Transform2DComponent>(playerEntity_);
 	auto* mapData = registry.GetComponent<Stage::MapData>(managerEntity_);

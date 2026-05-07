@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 
-struct PlayerComponent {
+struct RabbitComponent {
 	float speed = 200.f;					// 最大横移動速度 (px/s)
 	float accelX = 1500.f;					// 横加速度 (px/s^2, 入力時)
 	float frictionX = 900.f;				// 横摩擦 (px/s^2, 入力なし時の減速)

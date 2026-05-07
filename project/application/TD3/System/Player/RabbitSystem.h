@@ -4,7 +4,7 @@
 
 namespace Stage { class MapManager; }
 
-class PlayerSystem : public No::ISystem {
+class RabbitSystem : public No::ISystem {
 public:
 	void Initialize(No::Entity managerEntity, No::Entity playerEntity,
 		No::Entity cam2dEntity, Stage::MapManager* mapManager);

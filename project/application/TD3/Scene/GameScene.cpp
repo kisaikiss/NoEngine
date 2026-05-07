@@ -5,8 +5,8 @@
 #include "application/TD3/Stage/MapTileRenderSystem.h"
 #include "application/TD3/Stage/MapManager.h"
 
-#include "application/TD3/Component/Player/PlayerComponent.h"
-#include "application/TD3/System/Player/PlayerSystem.h"
+#include "application/TD3/Component/Player/RabbitComponent.h"
+#include "application/TD3/System/Player/RabbitSystem.h"
 #include "application/TD3/Component/GravityComponent.h"
 
 #include "application/TD3/Utility/GameResourceComponent.h"
@@ -30,7 +30,7 @@ void GameScene::Setup() {
 #ifdef USE_IMGUI
 	auto* editorSys = AddSystem(std::make_unique<MapEditorSystem>());
 #endif
-	auto* playerSys = AddSystem(std::make_unique<PlayerSystem>());
+	auto* playerSys = AddSystem(std::make_unique<RabbitSystem>());
 	auto* tileSys = AddSystem(std::make_unique<Stage::MapTileRenderSystem>());
 	AddSystem(std::make_unique<No::EditSystem>());
 
@@ -62,7 +62,7 @@ void GameScene::Setup() {
 	ps->textureHandle = GetGameTextureOrWhite(*res, GameResourceKey::kWhiteTexture);
 	ps->layer = ToLayer(SpriteLayer::Player);
 	ps->color = { 0.f, 0.8f, 1.f, 1.f };
-	registry.AddComponent<PlayerComponent>(playerE);
+	registry.AddComponent<RabbitComponent>(playerE);
 	registry.AddComponent<GravityComponent>(playerE);
 
 	// ---- System 初期化 ----

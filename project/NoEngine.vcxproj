@@ -175,7 +175,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\TD3\Stage\MapEditorSystem.cpp" />
     <ClCompile Include="application\TD3\Stage\MapManager.cpp" />
     <ClCompile Include="application\TD3\Stage\MapTileRenderSystem.cpp" />
-    <ClCompile Include="application\TD3\System\Player\PlayerSystem.cpp" />
+    <ClCompile Include="application\TD3\System\Player\RabbitSystem.cpp" />
     <ClCompile Include="application\TD3\Utility\InputHelperSystem.cpp" />
     <ClCompile Include="application\TestApp\System\ParticleTestSystem.cpp" />
     <ClCompile Include="application\TestApp\TestApp.cpp" />
@@ -340,7 +340,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\ClockworksDisease\System\Player\PlayerMoveSystem.h" />
     <ClInclude Include="application\TD3\Celetste.h" />
     <ClInclude Include="application\TD3\Component\GravityComponent.h" />
-    <ClInclude Include="application\TD3\Component\Player\PlayerComponent.h" />
+    <ClInclude Include="application\TD3\Component\Player\RabbitComponent.h" />
     <ClInclude Include="application\TD3\Scene\GameScene.h" />
     <ClInclude Include="application\TD3\Scene\SampleScene.h" />
     <ClInclude Include="application\TD3\Stage\GameStateComponent.h" />
@@ -351,7 +351,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\TD3\Stage\MapManager.h" />
     <ClInclude Include="application\TD3\Stage\MapRenderDirtyComponent.h" />
     <ClInclude Include="application\TD3\Stage\MapTileRenderSystem.h" />
-    <ClInclude Include="application\TD3\System\Player\PlayerSystem.h" />
+    <ClInclude Include="application\TD3\System\Player\RabbitSystem.h" />
     <ClInclude Include="application\TD3\Utility\GameAudio.h" />
     <ClInclude Include="application\TD3\Utility\GameResourceComponent.h" />
     <ClInclude Include="application\TD3\Utility\GameTag.h" />

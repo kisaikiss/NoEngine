@@ -148,7 +148,7 @@
     <ClCompile Include="application\ClockworksDisease\Component\Camera\FollowCameraComponent.cpp" />
     <ClCompile Include="application\TD3\Utility\InputHelperSystem.cpp" />
     <ClCompile Include="application\TD3\Celetste.cpp" />
-    <ClCompile Include="application\TD3\System\Player\PlayerSystem.cpp" />
+    <ClCompile Include="application\TD3\System\Player\RabbitSystem.cpp" />
     <ClCompile Include="application\TD3\Stage\MapDataIO.cpp" />
     <ClCompile Include="application\TD3\Stage\MapEditorSystem.cpp" />
     <ClCompile Include="application\TD3\Stage\MapManager.cpp" />
@@ -333,7 +333,7 @@
     <ClInclude Include="application\TD3\Utility\InputHelperSystem.h" />
     <ClInclude Include="application\TD3\Utility\SpriteLayer.h" />
     <ClInclude Include="application\TD3\Celetste.h" />
-    <ClInclude Include="application\TD3\System\Player\PlayerSystem.h" />
+    <ClInclude Include="application\TD3\System\Player\RabbitSystem.h" />
     <ClInclude Include="application\TD3\Stage\GameStateComponent.h" />
     <ClInclude Include="application\TD3\Stage\MapData.h" />
     <ClInclude Include="application\TD3\Stage\MapDataIO.h" />
@@ -344,7 +344,7 @@
     <ClInclude Include="application\TD3\Stage\MapTileRenderSystem.h" />
     <ClInclude Include="application\TD3\Scene\GameScene.h" />
     <ClInclude Include="application\TD3\Scene\SampleScene.h" />
-    <ClInclude Include="application\TD3\Component\Player\PlayerComponent.h" />
+    <ClInclude Include="application\TD3\Component\Player\RabbitComponent.h" />
     <ClInclude Include="application\TD3\Component\GravityComponent.h" />
   </ItemGroup>
   <ItemGroup>
