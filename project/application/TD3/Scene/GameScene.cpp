@@ -64,6 +64,7 @@ void GameScene::Setup() {
 	ps->color = { 0.f, 0.8f, 1.f, 1.f };
 	registry.AddComponent<RabbitComponent>(playerE);
 	registry.AddComponent<GravityComponent>(playerE);
+	registry.AddComponent<No::EditTag>(playerE)->name = "Player";
 
 	// ---- System 初期化 ----
 	tileSys->Initialize(managerE);

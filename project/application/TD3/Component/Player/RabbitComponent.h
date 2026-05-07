@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include "engine/NoEngine.h"
 
 struct RabbitComponent {
 	float speed = 200.f;					// 最大横移動速度 (px/s)

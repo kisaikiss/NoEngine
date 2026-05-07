@@ -168,7 +168,9 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\ClockworksDisease\System\Game\CollisionEventSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Object\BoxColliderUpdateSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Player\PlayerMoveSystem.cpp" />
+    <ClCompile Include="application\RabbitdokuOdyssey3Plus\RabbitdokuOdyssey3Plus.cpp" />
     <ClCompile Include="application\TD3\Celetste.cpp" />
+    <ClCompile Include="application\TD3\Component\Player\RabbitComponent.cpp" />
     <ClCompile Include="application\TD3\Scene\GameScene.cpp" />
     <ClCompile Include="application\TD3\Scene\SampleScene.cpp" />
     <ClCompile Include="application\TD3\Stage\MapDataIO.cpp" />
@@ -338,6 +340,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\ClockworksDisease\System\Game\CollisionLayer.h" />
     <ClInclude Include="application\ClockworksDisease\System\Object\BoxColliderUpdateSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Player\PlayerMoveSystem.h" />
+    <ClInclude Include="application\RabbitdokuOdyssey3Plus\RabbitdokuOdyssey3Plus.h" />
     <ClInclude Include="application\TD3\Celetste.h" />
     <ClInclude Include="application\TD3\Component\GravityComponent.h" />
     <ClInclude Include="application\TD3\Component\Player\RabbitComponent.h" />

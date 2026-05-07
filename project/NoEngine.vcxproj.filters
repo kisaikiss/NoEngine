@@ -155,6 +155,8 @@
     <ClCompile Include="application\TD3\Stage\MapTileRenderSystem.cpp" />
     <ClCompile Include="application\TD3\Scene\GameScene.cpp" />
     <ClCompile Include="application\TD3\Scene\SampleScene.cpp" />
+    <ClCompile Include="application\TD3\Component\Player\RabbitComponent.cpp" />
+    <ClCompile Include="application\RabbitdokuOdyssey3Plus\RabbitdokuOdyssey3Plus.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -346,6 +348,7 @@
     <ClInclude Include="application\TD3\Scene\SampleScene.h" />
     <ClInclude Include="application\TD3\Component\Player\RabbitComponent.h" />
     <ClInclude Include="application\TD3\Component\GravityComponent.h" />
+    <ClInclude Include="application\RabbitdokuOdyssey3Plus\RabbitdokuOdyssey3Plus.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

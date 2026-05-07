@@ -269,25 +269,25 @@ void MapEditorSystem::DrawEditorWindow(No::Registry& registry) {
 	ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoCollapse;
 	if (isCanvasDragging_ || isPanning_) windowFlags |= ImGuiWindowFlags_NoMove;
 
+	ImGui::Begin("MapTools");
+	DrawSection_File(registry);
+	DrawSection_MapSettings(registry);
+	DrawSection_Layer(registry);
+	DrawSection_Camera(registry);
+	ImGui::End();
+
 	if (!ImGui::Begin("MapEditor", nullptr, windowFlags)) { ImGui::End(); return; }
 
 	if (ImGui::BeginTable("EditorLayout", 2,
 		ImGuiTableFlags_BordersInnerV | ImGuiTableFlags_Resizable)) {
 
-		ImGui::TableSetupColumn("Tools", ImGuiTableColumnFlags_WidthFixed, 280.f);
-		ImGui::TableSetupColumn("Canvas", ImGuiTableColumnFlags_WidthStretch);
-
+	
 		// ---- 左ペイン: ツール（縦スクロール可） ----
-		ImGui::TableNextColumn();
-		ImGui::BeginChild("MapTools", ImVec2(0.f, 0.f), false);
-		DrawSection_File(registry);
-		DrawSection_MapSettings(registry);
-		DrawSection_Layer(registry);
-		DrawSection_Camera(registry);
-		ImGui::EndChild();
+	
+	
 
 		// ---- 右ペイン: マップキャンバス ----
-		ImGui::TableNextColumn();
+		
 		ImVec2 avail = ImGui::GetContentRegionAvail();
 		if (ImGui::BeginChild("MapCanvas", avail, true,
 			ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse)) {

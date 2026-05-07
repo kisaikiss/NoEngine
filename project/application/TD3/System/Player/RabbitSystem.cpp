@@ -49,7 +49,7 @@ void RabbitSystem::Initialize(No::Entity managerEntity, No::Entity playerEntity,
 
 void RabbitSystem::Update(No::Registry& registry, float dt) {
 #ifdef USE_IMGUI
-	DrawPlayerDebugWindow(registry, playerEntity_);
+	//DrawPlayerDebugWindow(registry, playerEntity_);
 #endif
 
 	auto* state = registry.GetComponent<GameStateComponent>(managerEntity_);

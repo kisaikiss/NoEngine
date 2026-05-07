@@ -21,7 +21,7 @@ namespace Stage {
 	/// </summary>
 	class MapTileRenderSystem : public No::ISystem {
 	public:
-		MapTileRenderSystem() = default;
+		MapTileRenderSystem() { SetStopInGameStop(false); SetStopInPause(false); };
 
 		void Initialize(No::Entity managerEntity);
 		void Update(No::Registry& registry, float dt) override;

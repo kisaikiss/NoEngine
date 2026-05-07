@@ -16,7 +16,7 @@ namespace Stage { class MapManager; }
 /// </summary>
 class MapEditorSystem : public No::ISystem {
 public:
-	MapEditorSystem() = default;
+	MapEditorSystem() { SetStopInGameStop(false); SetStopInPause(false); };
 
 	/// <summary>
 	/// GameManagerエンティティと Camera2D エンティティを設定する。
