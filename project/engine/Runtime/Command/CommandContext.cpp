@@ -59,10 +59,6 @@ CommandContext& CommandContext::Begin(const std::wstring id) {
 	return *newContext;
 }
 
-//uint64_t CommandContext::Flush(bool WaitForCompletion) {
-//	return 0;
-//}
-
 uint64_t CommandContext::Finish(bool WaitForCompletion) {
 	assert(type_ == D3D12_COMMAND_LIST_TYPE_DIRECT || type_ == D3D12_COMMAND_LIST_TYPE_COMPUTE);
 

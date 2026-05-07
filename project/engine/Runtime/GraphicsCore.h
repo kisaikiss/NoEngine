@@ -23,6 +23,7 @@ public:
 	static CommandListManager sCommandListManager;
 	static ContextManager sContextManager;
 	static WindowManager sWindowManager;
+	
 
 	// ディスクリプタアロケータ(ディスクリプタのメモリ管理)配列。数はD3D12_DESCRIPTOR_HEAP_TYPE
 	static DescriptorAllocator sDescriptorAllocator[];
@@ -58,6 +59,9 @@ public:
 	static inline D3D12_CPU_DESCRIPTOR_HANDLE AllocateDescriptor(D3D12_DESCRIPTOR_HEAP_TYPE Type, UINT Count = 1) {
 		return sDescriptorAllocator[Type].Allocate(Count);
 	}
+
+	static ColorBuffer& GetShadowMask();
+	static DepthBuffer& GetDepth();
 
 	/// <summary>
 	/// レイトレーシングが有効かどうかを判定する静的関数です。

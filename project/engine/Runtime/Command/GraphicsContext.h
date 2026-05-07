@@ -3,6 +3,9 @@
 
 namespace NoEngine {
 
+/// <summary>
+/// グラフィックスキューを利用したコマンドリストラッパークラス
+/// </summary>
 class GraphicsContext : public CommandContext {
 public:
     static GraphicsContext& Begin(const std::wstring& ID = L"") {
@@ -16,6 +19,7 @@ public:
     void ClearDepthAndStencil(DepthBuffer& target);
 
     void SetRootSignature(const RootSignature& rootSig);
+    void SetRaytracingRootSignature(const RootSignature& rootSig);
 
     void SetRenderTargets(UINT NumRTVs, const D3D12_CPU_DESCRIPTOR_HANDLE RTVs[]);
     void SetRenderTargets(UINT NumRTVs, const D3D12_CPU_DESCRIPTOR_HANDLE RTVs[], D3D12_CPU_DESCRIPTOR_HANDLE DSV);
@@ -46,6 +50,7 @@ public:
     void SetDynamicIB(size_t IndexCount, const uint16_t* IBData);
     void SetDynamicSRV(UINT RootIndex, size_t BufferSize, const void* BufferData);
     
+    void SetStateObject(ID3D12StateObject* stateObject);
 
     void Draw(UINT vertexCount, UINT vertexStartOffset = 0);
     void DrawIndexed(UINT indexCount, UINT startIndexLocation = 0, INT baseVertexLocation = 0);
@@ -53,5 +58,13 @@ public:
         UINT StartVertexLocation = 0, UINT startInstanceLocation = 0);
     void DrawIndexedInstanced(UINT indexCountPerInstance, UINT instanceCount, UINT startIndexLocation,
         INT baseVertexLocation, UINT startInstanceLocation);
+
+    /// <summary>
+    /// D3D12_DISPATCH_RAYS_DESCで指定された設定に基づき、レイトレーシング用のレイをディスパッチする。
+    /// </summary>
+    /// <param name="desc">レイのディスパッチ範囲、シェーダーテーブル、その他関連パラメータを含むD3D12_DISPATCH_RAYS_DESC構造体への参照。</param>
+    void DispatchRays(const D3D12_DISPATCH_RAYS_DESC& desc);
+private:
+    ID3D12StateObject* curStateObject_ = nullptr;
 };
 }

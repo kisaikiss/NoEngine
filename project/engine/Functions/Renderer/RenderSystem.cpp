@@ -16,6 +16,7 @@ std::vector<std::unique_ptr<RootSignature>> sRootSignatures;
 std::unordered_map<std::wstring, uint32_t> sRootSignatureIndexMap;
 
 Microsoft::WRL::ComPtr<ID3D12StateObject> sRtShadowStateObject;
+D3D12_DISPATCH_RAYS_DESC sShadowDispatchRaysDesc;
 }
 
 void Initialize() {
@@ -438,7 +439,7 @@ void Initialize() {
 		InitRaytracingGlobalRootSignature();
 
 		std::vector<D3D12_STATE_SUBOBJECT> subobjects;
-		subobjects.reserve(8);
+		subobjects.reserve(5);
 
 		// 1. DXIL ライブラリ
 		D3D12_EXPORT_DESC exports[3] = {};
@@ -526,6 +527,7 @@ void Initialize() {
 		if (FAILED(hr)) {
 			assert(false);
 		}
+		CreateShadowShaderTable();
 	}
 	
 }
@@ -559,26 +561,104 @@ Microsoft::WRL::ComPtr<ID3D12StateObject>& GetShadowRtStateObject() {
 	return sRtShadowStateObject;
 }
 
+D3D12_DISPATCH_RAYS_DESC& GetShadowDispatchRaysDesc() {
+	return sShadowDispatchRaysDesc;
+}
+
+void CreateShadowShaderTable() {
+	using namespace Microsoft::WRL;
+	// 1. シェーダー識別子を取る
+	ComPtr<ID3D12StateObjectProperties> props;
+	sRtShadowStateObject.As(&props);
+
+	void* raygenId = props->GetShaderIdentifier(L"RayGen_Shadow");
+	void* missId = props->GetShaderIdentifier(L"Miss_Shadow");
+	void* hitId = props->GetShaderIdentifier(L"ShadowHitGroup");
+
+	// 2.ShaderTableバッファ作成
+	const UINT recordSize = D3D12_SHADER_IDENTIFIER_SIZE_IN_BYTES;
+	const UINT tableSize = recordSize * 3;
+
+	ComPtr<ID3D12Resource> shaderTable;
+
+	CD3DX12_HEAP_PROPERTIES heapProps(D3D12_HEAP_TYPE_UPLOAD);
+	CD3DX12_RESOURCE_DESC   bufferDesc = CD3DX12_RESOURCE_DESC::Buffer(tableSize);
+
+	GraphicsCore::sGraphicsDevice->GetDevice()->CreateCommittedResource(
+		&heapProps,
+		D3D12_HEAP_FLAG_NONE,
+		&bufferDesc,
+		D3D12_RESOURCE_STATE_GENERIC_READ,
+		nullptr,
+		IID_PPV_ARGS(&shaderTable)
+	);
+
+
+	
+	// 3.ShaderTable に識別子を書き込む
+	struct ShaderRecord {
+		uint8_t identifier[D3D12_SHADER_IDENTIFIER_SIZE_IN_BYTES];
+	};
+
+	uint8_t* mapped = nullptr;
+	shaderTable->Map(0, nullptr, (void**)&mapped);
+
+	// RayGen
+	memcpy(mapped + 0 * recordSize, raygenId, recordSize);
+
+	// Miss
+	memcpy(mapped + 1 * recordSize, missId, recordSize);
+
+	// HitGroup
+	memcpy(mapped + 2 * recordSize, hitId, recordSize);
+
+	shaderTable->Unmap(0, nullptr);
+
+	// 4.DispatchRaysの設定
+	D3D12_DISPATCH_RAYS_DESC desc = {};
+
+	desc.RayGenerationShaderRecord.StartAddress = shaderTable->GetGPUVirtualAddress();
+	desc.RayGenerationShaderRecord.SizeInBytes = recordSize;
+
+	desc.MissShaderTable.StartAddress = shaderTable->GetGPUVirtualAddress() + recordSize;
+	desc.MissShaderTable.SizeInBytes = recordSize;
+	desc.MissShaderTable.StrideInBytes = recordSize;
+
+	desc.HitGroupTable.StartAddress = shaderTable->GetGPUVirtualAddress() + recordSize * 2;
+	desc.HitGroupTable.SizeInBytes = recordSize;
+	desc.HitGroupTable.StrideInBytes = recordSize;
+
+	desc.Width = 1280;
+	desc.Height = 720;
+	desc.Depth = 1;
+
+
+
+}
+
 void InitRaytracingGlobalRootSignature() {
 	std::unique_ptr<RootSignature> rtGlobalRSptr = std::make_unique<RootSignature>();
 	auto& rtGlobalRS = *rtGlobalRSptr.get();
 
-	rtGlobalRS.Reset(5, 0);
+	rtGlobalRS.Reset(6, 0);
 
 	// TLAS
 	rtGlobalRS[0].InitAsDescriptorRange(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 0, 1);
 
-	// SRV テーブル（Depth, Lights）
-	rtGlobalRS[1].InitAsDescriptorRange(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 2);
+	// SRV テーブル（Depth）
+	rtGlobalRS[1].InitAsDescriptorRange(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 1);
+
+	// Lights
+	rtGlobalRS[2].InitAsDescriptorRange(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 2, 1);
 
 	// UAV
-	rtGlobalRS[2].InitAsDescriptorRange(D3D12_DESCRIPTOR_RANGE_TYPE_UAV, 0, 1);
+	rtGlobalRS[3].InitAsDescriptorRange(D3D12_DESCRIPTOR_RANGE_TYPE_UAV, 0, 1);
 
 	// CBV b0
-	rtGlobalRS[3].InitAsConstantBuffer(0);
+	rtGlobalRS[4].InitAsConstantBuffer(0);
 
 	// CBV b1
-	rtGlobalRS[4].InitAsConstantBuffer(1);
+	rtGlobalRS[5].InitAsConstantBuffer(1);
 
 
 	rtGlobalRS.Finalize(L"RT Global RootSignature");

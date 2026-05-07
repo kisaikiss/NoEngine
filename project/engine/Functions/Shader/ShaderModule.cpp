@@ -241,11 +241,12 @@ bool ShaderModule::CompileShader(Microsoft::WRL::ComPtr<IDxcBlob>& outBlob) {
 	DxcBuffer shaderSourceBuffer{};
 	shaderSourceBuffer.Ptr = shaderSource->GetBufferPointer();
 	shaderSourceBuffer.Size = shaderSource->GetBufferSize();
-	shaderSourceBuffer.Encoding = DXC_CP_UTF8;	//UTF8の文字コードであることを通知
+	shaderSourceBuffer.Encoding = DXC_CP_UTF8;	// UTF8の文字コードであることを通知
 #pragma endregion
 
 #pragma region 2.Compileする
 	std::vector<LPCWSTR> arguments;
+	// Raytracingと通常のシェーダーで設定を変えます。
 	if (isRaytracingShader_) {
 		arguments = {
 		filePath_.c_str(),
@@ -258,7 +259,7 @@ bool ShaderModule::CompileShader(Microsoft::WRL::ComPtr<IDxcBlob>& outBlob) {
 		arguments = {				// コンパイルオプション
 		filePath_.c_str(),			// コンパイル対象のhlslファイル名
 		L"-E", L"main",				// エントリーポイントの指定、基本的にmain以外にはしません。
-		L"-T", profile_.c_str(),				// ShaderProfileの設定
+		L"-T", profile_.c_str(),	// ShaderProfileの設定
 		L"-Zi", L"-Qembed_debug",	// デバッグ用の情報を埋め込みます。
 		L"-Od",						// 最適化を外しておきます。
 		L"-Zpr",					// メモリレイアウトは行優先にします。

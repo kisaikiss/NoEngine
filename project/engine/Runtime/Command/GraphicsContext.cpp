@@ -42,6 +42,16 @@ void GraphicsContext::SetRootSignature(const RootSignature& rootSig) {
 	dynamicSamplerDescriptorHeap_.ParseGraphicsRootSignature(rootSig);
 }
 
+void GraphicsContext::SetRaytracingRootSignature(const RootSignature& rootSig) {
+	if (rootSig.GetSignature() == curGraphicsRootSignature_)
+		return;
+
+	commandList_->SetComputeRootSignature(curGraphicsRootSignature_ = rootSig.GetSignature());
+
+	dynamicViewDescriptorHeap_.ParseGraphicsRootSignature(rootSig);
+	dynamicSamplerDescriptorHeap_.ParseGraphicsRootSignature(rootSig);
+}
+
 void GraphicsContext::SetRenderTargets(UINT NumRTVs, const D3D12_CPU_DESCRIPTOR_HANDLE RTVs[]) {
 	commandList_->OMSetRenderTargets(NumRTVs, RTVs, FALSE, nullptr);
 }
@@ -162,6 +172,13 @@ void GraphicsContext::SetDynamicSRV(UINT RootIndex, size_t BufferSize, const voi
 	commandList_->SetGraphicsRootShaderResourceView(RootIndex, cb.GpuAddress);
 }
 
+void GraphicsContext::SetStateObject(ID3D12StateObject* stateObject) {
+	if (stateObject == curStateObject_) return;
+
+	curStateObject_ = stateObject;
+	commandList_->SetPipelineState1(stateObject);
+}
+
 void GraphicsContext::Draw(UINT vertexCount, UINT vertexStartOffset) {
 	DrawInstanced(vertexCount, 1, vertexStartOffset, 0);
 }
@@ -182,5 +199,12 @@ void GraphicsContext::DrawIndexedInstanced(UINT indexCountPerInstance, UINT inst
 	dynamicViewDescriptorHeap_.CommitGraphicsRootDescriptorTables(commandList_);
 	dynamicSamplerDescriptorHeap_.CommitGraphicsRootDescriptorTables(commandList_);
 	commandList_->DrawIndexedInstanced(indexCountPerInstance, instanceCount, startIndexLocation, baseVertexLocation, startInstanceLocation);
+}
+
+void GraphicsContext::DispatchRays(const D3D12_DISPATCH_RAYS_DESC& desc) {
+	FlushResourceBarriers();
+	dynamicViewDescriptorHeap_.CommitGraphicsRootDescriptorTables(commandList_);
+	dynamicSamplerDescriptorHeap_.CommitGraphicsRootDescriptorTables(commandList_);
+	commandList_->DispatchRays(&desc);
 }
 }

@@ -67,6 +67,8 @@ public:
 	D3D12_CPU_DESCRIPTOR_HANDLE GetPointLightSRV() { return pointLightBuffer_.GetSRV(); }
 	D3D12_CPU_DESCRIPTOR_HANDLE GetSpotLightSRV() { return spotLightBuffer_.GetSRV(); }
 
+	StructuredBuffer& GetDirectionalLightBuffer() { return directionalLightBuffer_; }
+
 	Microsoft::WRL::ComPtr<ID3D12Resource>& GetRaytraceInstanceBuffer() { return instanceBuffer_; }
 	Microsoft::WRL::ComPtr<ID3D12Resource>& GetTLAS() { return tlas_; }
 private:

@@ -28,8 +28,6 @@ const uint32_t sSwapChainBufferCount = 2;
 
 std::unique_ptr<Graphics::GraphicsSwapChain> sSwapChain;
 std::array<std::unique_ptr<ColorBuffer>, sSwapChainBufferCount> sFrameBuffers; // 実際に描画するカラーバッファ
-std::unique_ptr<DepthBuffer> sDepthBuffer;									   // 深度バッファ
-ColorBuffer sShadowMaskBuffer;
 ColorBuffer sPostEffectBuffer;												   // ポストエフェクト用カラーバッファ
 
 // ビューポート
@@ -42,6 +40,9 @@ UINT sBackBufferIndex;
 // WindowSize
 float sWindowWidth;
 float sWindowHeight;
+
+std::unique_ptr<DepthBuffer> sDepthBuffer;									   // 深度バッファ
+ColorBuffer sShadowMaskBuffer;
 
 GraphicsPSO defaultPSO(L"CopyImage");
 std::unique_ptr<RootSignature> defaultRootSignature;
@@ -231,6 +232,14 @@ void GraphicsCore::EndFrame(GraphicsContext& context) {
 	}
 #endif
 	sSwapChain->Get()->Present(1, 0);
+}
+
+ColorBuffer& GraphicsCore::GetShadowMask() {
+	return sShadowMaskBuffer;
+}
+
+DepthBuffer& GraphicsCore::GetDepth() {
+	return *sDepthBuffer;
 }
 
 bool GraphicsCore::IsEnableRaytracing() {

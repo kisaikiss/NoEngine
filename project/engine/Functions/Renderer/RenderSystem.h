@@ -17,6 +17,9 @@ uint32_t GetPSOID(std::wstring psoName);
 uint32_t GetRootSignatureID(std::wstring rootSigName);
 
 Microsoft::WRL::ComPtr<ID3D12StateObject>& GetShadowRtStateObject();
+D3D12_DISPATCH_RAYS_DESC& GetShadowDispatchRaysDesc();
+
+void CreateShadowShaderTable();
 
 void InitRaytracingGlobalRootSignature();
 void InitRaytracingLocalRootSignature();
