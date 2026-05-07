@@ -45,7 +45,8 @@ public:
 	ECS::Registry* GetRegistry() { return registry_.get(); }
 
 protected:
-	void AddSystem(std::unique_ptr<ECS::ISystem> system) { systemManager_->AddSystem(std::move(system)); }
+	template<typename T>
+	T* AddSystem(std::unique_ptr<T> system) { return systemManager_->AddSystem(std::move(system)); }
 
 	/// <summary>
 	/// Systemではない更新処理。主にテスト用に使用します。
