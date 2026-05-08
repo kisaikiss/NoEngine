@@ -22,8 +22,11 @@
 #include "Functions/ECS/System/CameraSystem.h"
 #include "Functions/ECS/System/DebugCameraSystem.h"
 #include "Functions/ECS/System/MovementSystem.h"
-#include "Functions/ECS/System/CollisionResolutionSystem.h"
-#include "Functions/ECS/System/NarrowPhaseSystem.h"
+#include "Functions/ECS/System/Movement2DSystem.h"
+#include "Functions/ECS/System/Collision/CollisionResolutionSystem.h"
+#include "Functions/ECS/System/Collision/NarrowPhaseSystem.h"
+#include "Functions/ECS/System/Collision/CollisionResolution2DSystem.h"
+#include "Functions/ECS/System/Collision/NarrowPhase2DSystem.h"
 #include "Functions/ECS/System/GroundResetSystem.h"
 
 #include "Assets/ModelLoader.h"

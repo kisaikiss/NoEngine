@@ -19,5 +19,7 @@ struct Transform2D {
 
 	Math::Matrix3x3 MakeAffineMatrix3x3() const;
 	Math::Matrix4x4 MakeAffineMatrix4x4() const;
+
+	Math::Vector2 GetWorldPosition() const;
 };
 }

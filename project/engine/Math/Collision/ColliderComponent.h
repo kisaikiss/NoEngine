@@ -1,5 +1,6 @@
 #pragma once
 #include "../Types/Vector3.h"
+#include "../Types/Vector2.h"
 
 namespace NoEngine {
 namespace Math {
@@ -10,6 +11,14 @@ namespace Math {
 struct AABBCollider {
 	Math::Vector3 min;
 	Math::Vector3 max;
+};
+
+/// <summary>
+/// 2D の軸整列境界ボックス (AABB) を表すコライダー構造体。衝突判定や領域表現に使用される。
+/// </summary>
+struct AABBCollider2D {
+	Math::Vector2 min;
+	Math::Vector2 max;
 };
 
 /// <summary>

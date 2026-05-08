@@ -10,6 +10,15 @@ AABBWorld GetWorldAABB(const Transform* transform, const Math::AABBCollider* aab
     return result;
 }
 
+AABBWorld2D GetWorldAABB2D(const Transform2D* transform, const Math::AABBCollider2D* aabb) {
+    AABBWorld2D result;
+    Math::Vector2 worldPos = transform->translate;
+    result.max = worldPos + aabb->max;
+    result.min = worldPos + aabb->min;
+
+    return result;
+}
+
 CapsuleWorld GetWorldCapsule(const Transform* transform, const Math::CapsuleCollider* capsule) {
     CapsuleWorld result;
     Math::Vector3 worldPos = transform->GetWorldPosition();

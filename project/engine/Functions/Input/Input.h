@@ -17,6 +17,9 @@ public:
 	static bool IsTrigger(uint8_t keyCode);
 
 	static bool IsPress(uint8_t keyCode);
+
+	static bool PreIsTrigger(uint8_t keyCode);
+	static bool PreIsPress(uint8_t keyCode);
 private:
 	static void Update();
 };

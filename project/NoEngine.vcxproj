@@ -171,9 +171,12 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\Component\RabbitdokuComponent.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\RabbitdokuOdyssey3Plus.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\Scene\RabbitdokuScene.cpp" />
+    <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\RabbitdokuCollisionEventSystem.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\RabbitdokuMoveSystem.cpp" />
+    <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\RabbitdokuPushBackSystem.cpp" />
     <ClCompile Include="application\TestApp\System\ParticleTestSystem.cpp" />
     <ClCompile Include="application\TestApp\TestApp.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\Collision\CollisionResolution2DSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\CameraComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\MaterialComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\StartTransformComponent.cpp" />
@@ -186,11 +189,13 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="engine\Functions\ECS\Component\SpriteComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Transform2DComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\TransformComponent.cpp" />
-    <ClCompile Include="engine\Functions\ECS\System\CollisionResolutionSystem.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\Collision\CollisionResolutionSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\DebugCameraSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\EditSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\GroundResetSystem.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\Movement2DSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\MovementSystem.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\Collision\NarrowPhase2DSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\SpriteAnimationSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\SystemManager.cpp" />
     <ClCompile Include="engine\Functions\Renderer\Primitive.cpp" />
@@ -313,7 +318,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="engine\Functions\ECS\System\NarrowPhaseSystem.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\Collision\NarrowPhaseSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Player\PlayerPushBackSystem.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -334,11 +339,15 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\ClockworksDisease\System\Object\BoxColliderUpdateSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Player\PlayerMoveSystem.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\Component\RabbitdokuComponent.h" />
+    <ClInclude Include="application\RabbitdokuOdyssey3Plus\Game\RabbitdokuCollisionLayer.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\RabbitdokuOdyssey3Plus.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\Scene\RabbitdokuScene.h" />
+    <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\RabbitdokuCollisionEventSystem.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\RabbitdokuMoveSystem.h" />
+    <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\RabbitdokuPushBackSystem.h" />
     <ClInclude Include="application\TestApp\System\ParticleTestSystem.h" />
     <ClInclude Include="application\TestApp\TestApp.h" />
+    <ClInclude Include="engine\Functions\ECS\System\Collision\CollisionResolution2DSystem.h" />
     <ClInclude Include="engine\Functions\ECS\Component\Animator2DComponent.h" />
     <ClInclude Include="engine\Functions\ECS\Component\ParticleEmitterComponent.h" />
     <ClInclude Include="engine\Functions\ECS\Component\PauseComponent.h" />
@@ -357,11 +366,13 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="engine\Functions\ECS\Component\LightComponent.h" />
     <ClInclude Include="engine\Functions\ECS\EventBus.h" />
     <ClInclude Include="engine\Functions\ECS\Event\SceneChangeEvent.h" />
-    <ClInclude Include="engine\Functions\ECS\System\CollisionResolutionSystem.h" />
+    <ClInclude Include="engine\Functions\ECS\System\Collision\CollisionResolutionSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\DebugCameraSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\EditSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\GroundResetSystem.h" />
+    <ClInclude Include="engine\Functions\ECS\System\Movement2DSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\MovementSystem.h" />
+    <ClInclude Include="engine\Functions\ECS\System\Collision\NarrowPhase2DSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\SpriteAnimationSystem.h" />
     <ClInclude Include="engine\Functions\Renderer\LightForGPU.h" />
     <ClInclude Include="engine\Functions\Renderer\Primitive.h" />
@@ -519,7 +530,7 @@ copy "$(windowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">false</ExcludedFromBuild>
     </ClInclude>
-    <ClInclude Include="engine\Functions\ECS\System\NarrowPhaseSystem.h" />
+    <ClInclude Include="engine\Functions\ECS\System\Collision\NarrowPhaseSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Player\PlayerPushBackSystem.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />

@@ -31,6 +31,12 @@ Vector2& Vector2::operator/=(float s) {
     return *this;
 }
 
+Vector2& Vector2::operator=(const float s) {
+    x = s;
+    y = s;
+    return *this;
+}
+
 Vector2 operator+(const Vector2& v1, const Vector2& v2) {
     return Vector2(v1.x + v2.x, v1.y + v2.y);
 }
@@ -49,6 +55,10 @@ Vector2 operator*(const Vector2& v, float s) {
 
 Vector2 operator/(const Vector2& v, float s) {
     return Vector2(v.x / s, v.y / s);
+}
+
+Vector2 operator-(const Vector2& v) {
+    return Vector2(-v.x, -v.y);
 }
 
 float Vector2::Closs(const Vector2& other) const noexcept {

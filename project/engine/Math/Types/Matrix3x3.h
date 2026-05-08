@@ -17,6 +17,8 @@ public:
 	void MakeAffine(const Vector2& scale, const float& rotate, const Vector2& translate);
 	void Inverse();
 
+	Vector2 GetTranslate() const { return Vector2(m[2][0], m[2][1]); }
+
 	static const Matrix3x3 ZERO;
 	static const Matrix3x3 IDENTITY;
 };

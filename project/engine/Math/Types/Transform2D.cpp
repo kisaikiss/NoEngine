@@ -24,4 +24,7 @@ Math::Matrix4x4 Transform2D::MakeAffineMatrix4x4() const {
     }
     return result;
 }
+Math::Vector2 Transform2D::GetWorldPosition() const {
+    return MakeAffineMatrix3x3().GetTranslate();
+}
 }
