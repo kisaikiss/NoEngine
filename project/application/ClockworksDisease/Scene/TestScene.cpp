@@ -29,7 +29,7 @@ void TestScene::Setup() {
 		No::ModelLoader::LoadModel("magiclash", "resources/game/ClockworksDisease/Model/player/magiclash2.gltf");
 		No::ModelLoader::GetModel("magiclash", model, a);
 		m->materials = No::ModelLoader::GetMaterial("magiclash");
-		m->drawOutline = true;
+		m->drawOutline = false;
 		m->enableSkinning = true;
 		m->psoName = L"Renderer : ToonSkinned PSO";
 		m->psoId = NoEngine::Render::GetPSOID(m->psoName);

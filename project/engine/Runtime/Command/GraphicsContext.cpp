@@ -43,13 +43,13 @@ void GraphicsContext::SetRootSignature(const RootSignature& rootSig) {
 }
 
 void GraphicsContext::SetRaytracingRootSignature(const RootSignature& rootSig) {
-	if (rootSig.GetSignature() == curGraphicsRootSignature_)
+	if (rootSig.GetSignature() == curComputeRootSignature_)
 		return;
 
-	commandList_->SetComputeRootSignature(curGraphicsRootSignature_ = rootSig.GetSignature());
+	commandList_->SetComputeRootSignature(curComputeRootSignature_ = rootSig.GetSignature());
 
-	dynamicViewDescriptorHeap_.ParseGraphicsRootSignature(rootSig);
-	dynamicSamplerDescriptorHeap_.ParseGraphicsRootSignature(rootSig);
+	dynamicViewDescriptorHeap_.ParseComputeRootSignature(rootSig);
+	dynamicSamplerDescriptorHeap_.ParseComputeRootSignature(rootSig);
 }
 
 void GraphicsContext::SetRenderTargets(UINT NumRTVs, const D3D12_CPU_DESCRIPTOR_HANDLE RTVs[]) {
@@ -104,6 +104,13 @@ void GraphicsContext::SetDynamicConstantBufferView(UINT RootIndex, size_t Buffer
 	commandList_->SetGraphicsRootConstantBufferView(RootIndex, cb.GpuAddress);
 }
 
+void GraphicsContext::SetRaytracingDynamicConstantBufferView(UINT RootIndex, size_t BufferSize, const void* BufferData) {
+	assert(BufferData != nullptr && Math::IsAligned(BufferData, 16));
+	DynAlloc cb = cpuLinearAllocator_.Allocate(BufferSize);
+	memcpy(cb.DataPtr, BufferData, BufferSize);
+	commandList_->SetComputeRootConstantBufferView(RootIndex, cb.GpuAddress);
+}
+
 void GraphicsContext::SetBufferSRV(UINT RootIndex, const GpuBuffer& SRV, UINT64 Offset) {
 	assert((SRV.usageState_ & (D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE | D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE)) != 0);
 	commandList_->SetGraphicsRootShaderResourceView(RootIndex, SRV.GetGpuVirtualAddress() + Offset);
@@ -113,12 +120,24 @@ void GraphicsContext::SetDescriptorTable(UINT RootIndex, D3D12_GPU_DESCRIPTOR_HA
 	commandList_->SetGraphicsRootDescriptorTable(RootIndex, FirstHandle);
 }
 
+void GraphicsContext::SetComputeSRV(UINT RootIndex, D3D12_GPU_VIRTUAL_ADDRESS virtualAddress) {
+	commandList_->SetComputeRootShaderResourceView(RootIndex, virtualAddress);
+}
+
 void GraphicsContext::SetDynamicDescriptor(UINT RootIndex, UINT Offset, D3D12_CPU_DESCRIPTOR_HANDLE Handle) {
 	SetDynamicDescriptors(RootIndex, Offset, 1, &Handle);
 }
 
 void GraphicsContext::SetDynamicDescriptors(UINT RootIndex, UINT Offset, UINT Count, const D3D12_CPU_DESCRIPTOR_HANDLE Handles[]) {
 	dynamicViewDescriptorHeap_.SetGraphicsDescriptorHandles(RootIndex, Offset, Count, Handles);
+}
+
+void GraphicsContext::SetRaytracingDynamicDescriptor(UINT RootIndex, UINT Offset, D3D12_CPU_DESCRIPTOR_HANDLE Handle) {
+	SetRaytracingDynamicDescriptors(RootIndex, Offset, 1, &Handle);
+}
+
+void GraphicsContext::SetRaytracingDynamicDescriptors(UINT RootIndex, UINT Offset, UINT Count, const D3D12_CPU_DESCRIPTOR_HANDLE Handles[]) {
+	dynamicViewDescriptorHeap_.SetComputeDescriptorHandles(RootIndex, Offset, Count, Handles);
 }
 
 void GraphicsContext::SetIndexBuffer(const D3D12_INDEX_BUFFER_VIEW& ibview) {
@@ -172,13 +191,6 @@ void GraphicsContext::SetDynamicSRV(UINT RootIndex, size_t BufferSize, const voi
 	commandList_->SetGraphicsRootShaderResourceView(RootIndex, cb.GpuAddress);
 }
 
-void GraphicsContext::SetStateObject(ID3D12StateObject* stateObject) {
-	if (stateObject == curStateObject_) return;
-
-	curStateObject_ = stateObject;
-	commandList_->SetPipelineState1(stateObject);
-}
-
 void GraphicsContext::Draw(UINT vertexCount, UINT vertexStartOffset) {
 	DrawInstanced(vertexCount, 1, vertexStartOffset, 0);
 }
@@ -203,8 +215,9 @@ void GraphicsContext::DrawIndexedInstanced(UINT indexCountPerInstance, UINT inst
 
 void GraphicsContext::DispatchRays(const D3D12_DISPATCH_RAYS_DESC& desc) {
 	FlushResourceBarriers();
-	dynamicViewDescriptorHeap_.CommitGraphicsRootDescriptorTables(commandList_);
-	dynamicSamplerDescriptorHeap_.CommitGraphicsRootDescriptorTables(commandList_);
+	dynamicViewDescriptorHeap_.CommitComputeRootDescriptorTables(commandList_);
+	dynamicSamplerDescriptorHeap_.CommitComputeRootDescriptorTables(commandList_);
+
 	commandList_->DispatchRays(&desc);
 }
 }

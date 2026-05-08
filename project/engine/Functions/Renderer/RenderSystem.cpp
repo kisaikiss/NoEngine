@@ -17,6 +17,8 @@ std::unordered_map<std::wstring, uint32_t> sRootSignatureIndexMap;
 
 Microsoft::WRL::ComPtr<ID3D12StateObject> sRtShadowStateObject;
 D3D12_DISPATCH_RAYS_DESC sShadowDispatchRaysDesc;
+
+Microsoft::WRL::ComPtr<ID3D12Resource> sShadowShaderTable;
 }
 
 void Initialize() {
@@ -533,6 +535,7 @@ void Initialize() {
 }
 
 void Shutdown() {
+	sShadowShaderTable.Reset();
 	sRtShadowStateObject.Reset();
 	gTextureHeap.Destroy();
 	Asset::ModelLoader::DeleteAll();
@@ -576,64 +579,69 @@ void CreateShadowShaderTable() {
 	void* hitId = props->GetShaderIdentifier(L"ShadowHitGroup");
 
 	// 2.ShaderTableバッファ作成
-	const UINT recordSize = D3D12_SHADER_IDENTIFIER_SIZE_IN_BYTES;
-	const UINT tableSize = recordSize * 3;
+	const UINT shaderIdSize = D3D12_SHADER_IDENTIFIER_SIZE_IN_BYTES; // 32
+	const UINT recordStride = (shaderIdSize + (D3D12_RAYTRACING_SHADER_RECORD_BYTE_ALIGNMENT - 1))
+		& ~(D3D12_RAYTRACING_SHADER_RECORD_BYTE_ALIGNMENT - 1); // 32
 
-	ComPtr<ID3D12Resource> shaderTable;
+	const UINT tableAlignment = D3D12_RAYTRACING_SHADER_TABLE_BYTE_ALIGNMENT; // 64
 
+	// 各テーブルが64バイトアライメントの境界から始まるようにセクションサイズを計算
+	const UINT rayGenSectionSize = (recordStride + tableAlignment - 1) & ~(tableAlignment - 1);   // 64
+	const UINT missSectionSize = (recordStride + tableAlignment - 1) & ~(tableAlignment - 1);   // 64
+	const UINT hitGroupSectionSize = (recordStride + tableAlignment - 1) & ~(tableAlignment - 1); // 64
+
+	// オフセットの計算
+	const UINT rayGenOffset = 0;
+	const UINT missOffset = rayGenOffset + rayGenSectionSize;     // 64
+	const UINT hitGroupOffset = missOffset + missSectionSize;         // 128
+
+	const UINT totalTableSizeUnaligned = hitGroupOffset + hitGroupSectionSize; // 192
+
+	// バッファ先頭のアライメント調整用の余白(+64)を含めたサイズ
+	const UINT tableSize = totalTableSizeUnaligned + tableAlignment;
+
+	// Create upload buffer
 	CD3DX12_HEAP_PROPERTIES heapProps(D3D12_HEAP_TYPE_UPLOAD);
-	CD3DX12_RESOURCE_DESC   bufferDesc = CD3DX12_RESOURCE_DESC::Buffer(tableSize);
+	CD3DX12_RESOURCE_DESC bufferDesc = CD3DX12_RESOURCE_DESC::Buffer(tableSize);
+	GraphicsCore::sGraphicsDevice->GetDevice()->CreateCommittedResource(&heapProps, D3D12_HEAP_FLAG_NONE, &bufferDesc,
+		D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&sShadowShaderTable));
 
-	GraphicsCore::sGraphicsDevice->GetDevice()->CreateCommittedResource(
-		&heapProps,
-		D3D12_HEAP_FLAG_NONE,
-		&bufferDesc,
-		D3D12_RESOURCE_STATE_GENERIC_READ,
-		nullptr,
-		IID_PPV_ARGS(&shaderTable)
-	);
-
-
-	
-	// 3.ShaderTable に識別子を書き込む
-	struct ShaderRecord {
-		uint8_t identifier[D3D12_SHADER_IDENTIFIER_SIZE_IN_BYTES];
-	};
-
+	// Map and write identifiers at offsets relative to an aligned base
 	uint8_t* mapped = nullptr;
-	shaderTable->Map(0, nullptr, (void**)&mapped);
+	sShadowShaderTable->Map(0, nullptr, reinterpret_cast<void**>(&mapped));
+	UINT64 gpuBase = sShadowShaderTable->GetGPUVirtualAddress();
 
-	// RayGen
-	memcpy(mapped + 0 * recordSize, raygenId, recordSize);
+	// compute aligned GPU base (>= gpuBase) aligned to 64
+	UINT64 alignedGpuBase = (gpuBase + (tableAlignment - 1)) & ~(UINT64)(tableAlignment - 1);
 
-	// Miss
-	memcpy(mapped + 1 * recordSize, missId, recordSize);
+	// compute CPU offset corresponding to alignedGpuBase
+	SIZE_T cpuOffset = static_cast<SIZE_T>(alignedGpuBase - gpuBase);
 
-	// HitGroup
-	memcpy(mapped + 2 * recordSize, hitId, recordSize);
+	// 計算したアライメント済みのオフセットを使って書き込む
+	memcpy(mapped + cpuOffset + rayGenOffset, raygenId, shaderIdSize);
+	memcpy(mapped + cpuOffset + missOffset, missId, shaderIdSize);
+	memcpy(mapped + cpuOffset + hitGroupOffset, hitId, shaderIdSize);
 
-	shaderTable->Unmap(0, nullptr);
+	sShadowShaderTable->Unmap(0, nullptr);
 
-	// 4.DispatchRaysの設定
-	D3D12_DISPATCH_RAYS_DESC desc = {};
+	// Fill dispatch desc using alignedGpuBase
+	auto& desc = sShadowDispatchRaysDesc;
 
-	desc.RayGenerationShaderRecord.StartAddress = shaderTable->GetGPUVirtualAddress();
-	desc.RayGenerationShaderRecord.SizeInBytes = recordSize;
+	// 各StartAddressに計算したオフセットを足す
+	desc.RayGenerationShaderRecord.StartAddress = alignedGpuBase + rayGenOffset;
+	desc.RayGenerationShaderRecord.SizeInBytes = recordStride;
 
-	desc.MissShaderTable.StartAddress = shaderTable->GetGPUVirtualAddress() + recordSize;
-	desc.MissShaderTable.SizeInBytes = recordSize;
-	desc.MissShaderTable.StrideInBytes = recordSize;
+	desc.MissShaderTable.StartAddress = alignedGpuBase + missOffset;
+	desc.MissShaderTable.SizeInBytes = recordStride;
+	desc.MissShaderTable.StrideInBytes = recordStride;
 
-	desc.HitGroupTable.StartAddress = shaderTable->GetGPUVirtualAddress() + recordSize * 2;
-	desc.HitGroupTable.SizeInBytes = recordSize;
-	desc.HitGroupTable.StrideInBytes = recordSize;
+	desc.HitGroupTable.StartAddress = alignedGpuBase + hitGroupOffset;
+	desc.HitGroupTable.SizeInBytes = recordStride;
+	desc.HitGroupTable.StrideInBytes = recordStride;
 
 	desc.Width = 1280;
 	desc.Height = 720;
 	desc.Depth = 1;
-
-
-
 }
 
 void InitRaytracingGlobalRootSignature() {
@@ -643,7 +651,7 @@ void InitRaytracingGlobalRootSignature() {
 	rtGlobalRS.Reset(6, 0);
 
 	// TLAS
-	rtGlobalRS[0].InitAsDescriptorRange(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 0, 1);
+	rtGlobalRS[0].InitAsBufferSRV(0);
 
 	// SRV テーブル（Depth）
 	rtGlobalRS[1].InitAsDescriptorRange(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 1);
