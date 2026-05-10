@@ -71,6 +71,8 @@ void RaytracingShadowPass::Dispatch(GraphicsContext& gfx) {
 	dxrCommandList->SetPipelineState1(stateObject.Get());
 
 	gfx.DispatchRays(GetShadowDispatchRaysDesc());
+
+	gfx.TransitionResource(GraphicsCore::GetDepth(), D3D12_RESOURCE_STATE_DEPTH_WRITE);
 }
 }
 }

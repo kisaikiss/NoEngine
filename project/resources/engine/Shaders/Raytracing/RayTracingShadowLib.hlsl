@@ -48,18 +48,18 @@ void RayGen_Shadow()
     uint2 pixel = DispatchRaysIndex().xy;
     uint2 size = DispatchRaysDimensions().xy;
 
-    float2 uv = (pixel + 0.5) / size;
+    float2 uv = (pixel + 0.5f) / size;
 
     // Depth 読み取り
     float depth = gDepth.Load(int3(pixel, 0));
     if (depth >= 1.0f)
     {
-        gShadowMask[pixel] = 1.0f; // 遠平面 → 非影
+        gShadowMask[pixel] = 1.0f; // 遠平面（背景） → 非影
         return;
     }
 
-    // NDC → World
-    float4 ndc = float4(uv * 2.0 - 1.0, depth, 1.0);
+    // NDC → World (Y軸の反転を修正)
+    float4 ndc = float4(uv.x * 2.0f - 1.0f, 1.0f - uv.y * 2.0f, depth, 1.0f);
     float4 world = mul(ndc, gInvViewProj);
     world /= world.w;
 
@@ -70,12 +70,14 @@ void RayGen_Shadow()
 
     for (uint i = 0; i < gLightNums.directionalLightNum; i++)
     {
-        float3 lightDir = normalize(gLights[i].direction);
+        // 光源へ向かうベクトル（逆方向）
+        float3 toLight = -normalize(gLights[i].direction);
 
         RayDesc ray;
-        ray.Origin = worldPos + lightDir * 0.01; // アーティファクト防止
-        ray.Direction = lightDir;
-        ray.TMin = 0.0;
+        // 光源側にオフセットをかける
+        ray.Origin = worldPos + toLight * 0.01f;
+        ray.Direction = toLight;
+        ray.TMin = 0.0f;
         ray.TMax = gShadowMaxDistance;
 
         ShadowPayload payload;
@@ -93,7 +95,7 @@ void RayGen_Shadow()
         if (payload.occluded)
         {
             shadowed = true;
-            break; // 1つでも影なら影
+            break;
         }
     }
 

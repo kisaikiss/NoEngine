@@ -133,3 +133,6 @@ Assimp
 Catmull
 aabb
 tlas
+Assimp
+texcoord
+blas
