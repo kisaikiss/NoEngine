@@ -18,7 +18,7 @@ void TestScene::Setup() {
 	// プレイヤー
 	{
 		No::Entity player = registry.GenerateEntity();
-		//auto* model = registry.AddComponent<No::MeshComponent>(player);
+		auto* model = registry.AddComponent<No::MeshComponent>(player);
 		auto* t = registry.AddComponent<No::TransformComponent>(player);
 		auto* imguiName = registry.AddComponent<No::EditTag>(player);
 		imguiName->name = "player";
@@ -26,12 +26,13 @@ void TestScene::Setup() {
 		t->translate = { 0.f, -0.f, 0.f };
 		auto* m = registry.AddComponent<No::MaterialComponent>(player);
 		//auto* a = registry.AddComponent<No::AnimatorComponent>(player);
-		No::ModelLoader::LoadModel("magiclash", "resources/game/ClockworksDisease/Model/player/magiclash2.gltf");
-		//No::ModelLoader::GetModel("magiclash", model, a);
+		//No::ModelLoader::LoadModel("magiclash", "resources/game/ClockworksDisease/Model/player/magiclash2.gltf");
+		No::ModelLoader::LoadModel("magiclash", "resources/engine/Model/enemy.obj");
+		No::ModelLoader::GetModel("magiclash", model);
 		m->materials = No::ModelLoader::GetMaterial("magiclash");
 		m->drawOutline = false;
-		m->enableSkinning = true;
-		m->psoName = L"Renderer : ToonSkinned PSO";
+		m->enableSkinning = false;
+		m->psoName = L"Renderer : Toon PSO";
 		m->psoId = NoEngine::Render::GetPSOID(m->psoName);
 		m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
 

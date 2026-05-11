@@ -24,19 +24,24 @@ void RaytracingTestPass::Execute(GraphicsContext& gfx, ECS::Registry& registry) 
 	// tlas
 	gfx.SetComputeSRV(0, renderContext->GetTLAS()->GetGPUVirtualAddress());
 
-	// shadow Mask UAV
+	// UAV
 	gfx.TransitionResource(GraphicsCore::GetRaytracingBuffer(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 	gfx.SetRaytracingDynamicDescriptor(1, 0, GraphicsCore::GetRaytracingBuffer().GetUAV());
 
 	// camera
 	_declspec(align(16)) struct {
-		Math::Matrix4x4 invViewProj{};
 		Math::Vector3 cameraPos{};
-		float pad = {};
-	}cameraData;
-	cameraData.invViewProj = camera_->forGPU.viewProjection;
-	cameraData.invViewProj.Inverse();
-	cameraData.invViewProj.Transpose();
+		float pad0;
+		Math::Vector3 cameraForward{}; // カメラの正面方向ベクトル
+		float pad1;
+		Math::Vector3 cameraRight{};   // カメラの右方向ベクトル
+		float pad2;
+		Math::Vector3 cameraUp{};      // カメラの上方向ベクトル
+		float pad3;
+	} cameraData;
+	cameraData.cameraForward = cameraRotate_.zAxis();
+	cameraData.cameraRight = cameraRotate_.xAxis();
+	cameraData.cameraUp = cameraRotate_.yAxis();
 	cameraData.cameraPos = camera_->forGPU.worldPosition;
 
 	gfx.SetRaytracingDynamicConstantBufferView(2, sizeof(cameraData), &cameraData);
