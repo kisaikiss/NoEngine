@@ -123,14 +123,10 @@ void Initialize() {
 		std::wstring toonPSOName = L"Renderer : Toon PSO";
 		RootSignatureBuilder::BuildFromReflection(reflectionToon, *toonRootSignature, ConvertString(toonPSOName));
 
-		D3D12_RASTERIZER_DESC rasterizerOutlineDesc{};
-		rasterizerOutlineDesc.CullMode = D3D12_CULL_MODE_FRONT;
-		rasterizerOutlineDesc.FillMode = D3D12_FILL_MODE_SOLID;
-
 		GraphicsPSO toonPSO(toonPSOName);
 
 		toonPSO.SetRootSignature(*toonRootSignature);
-		toonPSO.SetRasterizerState(rasterizerOutlineDesc);
+		toonPSO.SetRasterizerState(rasterizerDesc);
 		toonPSO.SetBlendState(blendDesc);
 		toonPSO.SetDepthStencilState(depthStencilDesc);
 		toonPSO.SetInputLayout(inputLayout);

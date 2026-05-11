@@ -1,6 +1,6 @@
 #include "RaytracingShadowPass.h"
 
-#include "../RenderSystem.h"
+#include "../../RenderSystem.h"
 #include "engine/Runtime/GraphicsCore.h"
 
 namespace NoEngine {

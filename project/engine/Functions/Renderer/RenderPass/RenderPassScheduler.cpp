@@ -5,7 +5,7 @@
 #include "LightPass.h"
 #include "ParticlePass.h"
 #include "TLASBuildPass.h"
-#include "RaytracingShadowPass.h"
+#include "Raytracing/RaytracingShadowPass.h"
 #include "Raytracing/RaytracingTestPass.h"
 
 namespace NoEngine {

@@ -1,5 +1,5 @@
 #pragma once
-#include "RenderPass.h"
+#include "../RenderPass.h"
 namespace NoEngine {
 namespace Render {
 class RaytracingShadowPass : public RenderPass {

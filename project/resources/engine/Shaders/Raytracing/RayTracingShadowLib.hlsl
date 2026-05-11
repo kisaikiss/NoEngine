@@ -41,7 +41,6 @@ StructuredBuffer<DirectionalLight> gLights : register(t2);
 // ShadowRay の最大距離
 static const float gShadowMaxDistance = 1000.0f;
 
-
 [shader("raygeneration")]
 void RayGen_Shadow()
 {
@@ -58,34 +57,38 @@ void RayGen_Shadow()
         return;
     }
 
-    // NDC → World (Y軸の反転を修正)
+    // NDC → World
     float4 ndc = float4(uv.x * 2.0f - 1.0f, 1.0f - uv.y * 2.0f, depth, 1.0f);
     float4 world = mul(ndc, gInvViewProj);
     world /= world.w;
 
     float3 worldPos = world.xyz;
 
-    // 複数ライト対応：1つでも occluded なら影
     bool shadowed = false;
 
     for (uint i = 0; i < gLightNums.directionalLightNum; i++)
     {
-        // 光源へ向かうベクトル（逆方向）
         float3 toLight = -normalize(gLights[i].direction);
 
         RayDesc ray;
-        // 光源側にオフセットをかける
-        ray.Origin = worldPos + toLight * 0.01f;
+        ray.Origin = worldPos;
         ray.Direction = toLight;
-        ray.TMin = 0.0f;
+        // Originに直接オフセットを足すよりも、TMinを設定する方が安全かつ一般的です
+        ray.TMin = 0.01f;
         ray.TMax = gShadowMaxDistance;
 
         ShadowPayload payload;
-        payload.occluded = false;
+        // 【修正】初期値を true (遮蔽されている) にする
+        payload.occluded = true;
+
+        // 【修正】フラグの追加: カリングとClosestHitスキップで自己交差を回避・最適化
+        uint rayFlags = RAY_FLAG_ACCEPT_FIRST_HIT_AND_END_SEARCH |
+                        RAY_FLAG_CULL_BACK_FACING_TRIANGLES |
+                        RAY_FLAG_SKIP_CLOSEST_HIT_SHADER;
 
         TraceRay(
             gSceneTLAS,
-            RAY_FLAG_ACCEPT_FIRST_HIT_AND_END_SEARCH,
+            rayFlags,
             0xFF,
             0, 0, 0,
             ray,
@@ -105,11 +108,13 @@ void RayGen_Shadow()
 [shader("miss")]
 void Miss_Shadow(inout ShadowPayload payload)
 {
+    // 【修正】どこにも当たらなかった(光が届いた)場合のみ false
     payload.occluded = false;
 }
 
+// 【修正】ClosestHit_Shadow はスキップされるため、中身を空にするか削除して構いません
+// ※C++側でHitGroupにClosestHitをバインドしている場合は、エラーを防ぐため関数自体は残しておいてください
 [shader("closesthit")]
 void ClosestHit_Shadow(inout ShadowPayload payload, in BuiltInTriangleIntersectionAttributes attribs)
 {
-    payload.occluded = true;
 }

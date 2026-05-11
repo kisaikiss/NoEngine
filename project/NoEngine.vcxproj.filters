@@ -149,7 +149,7 @@
     <ClCompile Include="application\ClockworksDisease\System\Object\BoxColliderUpdateSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\Component\Camera\FollowCameraComponent.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\TLASBuildPass.cpp" />
-    <ClCompile Include="engine\Functions\Renderer\RenderPass\RaytracingShadowPass.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\RenderPass\Raytracing\RaytracingShadowPass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\Raytracing\RaytracingTestPass.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -324,7 +324,7 @@
     <ClInclude Include="application\ClockworksDisease\System\Object\BoxColliderUpdateSystem.h" />
     <ClInclude Include="engine\Assets\RaytracingMesh.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\TLASBuildPass.h" />
-    <ClInclude Include="engine\Functions\Renderer\RenderPass\RaytracingShadowPass.h" />
+    <ClInclude Include="engine\Functions\Renderer\RenderPass\Raytracing\RaytracingShadowPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\Raytracing\RaytracingTestPass.h" />
   </ItemGroup>
   <ItemGroup>
