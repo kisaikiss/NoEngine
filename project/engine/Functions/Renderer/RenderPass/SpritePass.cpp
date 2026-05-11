@@ -40,12 +40,13 @@ void SpritePass::CameraUpdate(ECS::Registry& registry) {
 	for (auto entity : cameraView) {
 		auto* camera = registry.GetComponent<Camera2DComponent>(entity);
 		auto* transform = registry.GetComponent<Transform2DComponent>(entity);
-		// ToDo : カメラの移動がローカル座標で行われてしまう。
-
+	
 		// 画面中央
 		Math::Vector2 screenCenter = { camera->width / 2.f, camera->height / 2.f };
 		// ビュー行列を作成
-		Matrix4x4 view = transform->MakeAffineMatrix4x4();
+		Transform2DComponent t = *transform;
+		t.translate -= screenCenter;
+		Matrix4x4 view = t.MakeAffineMatrix4x4();
 		view.Inverse();
 
 		// 画面中央を基準とするための補正

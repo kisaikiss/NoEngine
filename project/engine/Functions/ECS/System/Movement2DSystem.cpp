@@ -6,7 +6,7 @@
 namespace NoEngine {
 namespace ECS {
 void Movement2DSystem::Update(Registry& registry, float deltaTime) {
-
+	if (deltaTime > 0.1f) return;
 	auto view2d = registry.View<Component::Transform2DComponent, Component::Velocity2DComponent>();
 	for (auto entity : view2d) {
 		auto* transform = registry.GetComponent<Component::Transform2DComponent>(entity);

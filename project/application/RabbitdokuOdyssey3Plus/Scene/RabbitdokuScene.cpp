@@ -1,15 +1,21 @@
 #include "stdafx.h"
 #include "RabbitdokuScene.h"
-#include "../System/RabbitdokuMoveSystem.h"
+
+#include "../System/Player/RabbitdokuMoveSystem.h"
 #include "../System/RabbitdokuCollisionEventSystem.h"
-#include "../System/RabbitdokuPushBackSystem.h"
+#include "../System/Player/RabbitdokuPushBackSystem.h"
+#include "../System/FollowCamera2DSystem.h"
+
 #include "../Component/RabbitdokuComponent.h"
+#include "../Component/FollowCamera2DComponent.h"
+#include "../Component/RoomComponent.h"
 #include "../Game/RabbitdokuCollisionLayer.h"
 
 void RabbitdokuScene::Setup() {
 	auto& registry = *GetRegistry();
 	AddSystems();
 	InitPlayer(registry);
+	InitCamera(registry);
 	InitBlock(registry);
 }
 
@@ -17,6 +23,9 @@ void RabbitdokuScene::AddSystems() {
 	AddSystem(std::make_unique<No::EditSystem>());
 
 	AddSystem(std::make_unique<RabbitdokuMoveSystem>());
+	AddSystem(std::make_unique<FollowCamera2DSystem>());
+
+	AddSystem(std::make_unique<No::GroundResetSystem>());
 
 	AddSystem(std::make_unique<No::Movement2DSystem>(No::Movement2DSystem::MovementAxis::Horizontal));
 	AddSystem(std::make_unique<No::NarrowPhase2DSystem>(No::NarrowPhase2DSystem::TestAxis::Horizontal));
@@ -48,8 +57,22 @@ void RabbitdokuScene::InitPlayer(No::Registry& registry) {
 	registry.AddComponent<RabbitdokuCollisionLayerComponent>(e)->layer = RabbitdokuCollisionLayerComponent::Player;
 	auto* sprite = registry.AddComponent<No::SpriteComponent>(e);
 	sprite->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/RabbitdokuOdyssey3Plus/Sprite/Player.png");
-	transform->scale.x = static_cast<float>(sprite->textureHandle.GetWidth());
-	transform->scale.y = static_cast<float>(sprite->textureHandle.GetHeight());
+	transform->scale.x = 64.f;
+	transform->scale.y = 64.f;
+	auto* animator = registry.AddComponent<No::Animator2DComponent>(e);
+	animator->animeFrameHeight = 64.f;
+	animator->animeFrameWidth = 64.f;
+	animator->framesNum = 2;
+	animator->frameByFrameTime = 0.3f;
+}
+
+void RabbitdokuScene::InitCamera(No::Registry& registry) {
+	No::Entity e = registry.GenerateEntity();
+	registry.AddComponent<No::Transform2DComponent>(e);
+	registry.AddComponent<No::EditTag>(e)->name = "Camera";
+	registry.AddComponent<No::Camera2DComponent>(e);
+	registry.AddComponent<No::ActiveCamera2DTag>(e);
+	registry.AddComponent<FollowCamera2DComponent>(e);
 }
 
 void RabbitdokuScene::InitBlock(No::Registry& registry) {

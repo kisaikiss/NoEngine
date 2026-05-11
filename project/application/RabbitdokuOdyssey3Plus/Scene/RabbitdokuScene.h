@@ -8,6 +8,8 @@ private:
     void AddSystems();
     
     void InitPlayer(No::Registry& registry);
+    void InitCamera(No::Registry& registry);
+
     void InitBlock(No::Registry& registry);
 };
 

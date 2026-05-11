@@ -21,6 +21,15 @@ namespace Easing {
 Math::Vector3 Lerp(Math::Vector3 start, Math::Vector3 end, float t);
 
 /// <summary>
+/// 線形補間Vector2版
+/// </summary>
+/// <param name="start"></param>
+/// <param name="end"></param>
+/// <param name="t"></param>
+/// <returns></returns>
+Math::Vector2 Lerp(Math::Vector2 start, Math::Vector2 end, float t);
+
+/// <summary>
 /// 線形補間Quaternion版
 /// </summary>
 /// <param name="start"></param>

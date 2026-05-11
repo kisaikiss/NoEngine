@@ -3,54 +3,15 @@
         "Rabbitdoku": {
             "components": {
                 "Rabbitdoku": {
+                    "doubleJumpSpeed": 450.0,
                     "jumpSpeed": 600.0,
-                    "yVelocity": 0.0,
+                    "moveSpeed": 300.0,
                     "respawnPoint": [
                         0.0,
                         0.0
-                    ]
-                },
-                "SpriteComponent": {
-                    "color": [
-                        1.0,
-                        1.0,
-                        1.0,
-                        1.0
                     ],
-                    "flipX": true,
-                    "flipY": false,
-                    "pivot": [
-                        0.5,
-                        0.5
-                    ],
-                    "uv": [
-                        0.0,
-                        0.0,
-                        1.0,
-                        1.0
-                    ]
+                    "yVelocity": 364.5697021484375
                 },
-                "Transform2DComponent": {
-                    "rotation": 0.0,
-                    "scale": [
-                        64.0,
-                        64.0
-                    ],
-                    "translate": [
-                        166.04559326171875,
-                        516.0
-                    ]
-                },
-                "Velocity2DComponent": {
-                    "linear": [
-                        0.0,
-                        0.0
-                    ]
-                }
-            }
-        },
-        "TestBlock": {
-            "components": {
                 "SpriteComponent": {
                     "color": [
                         1.0,
@@ -78,8 +39,14 @@
                         64.0
                     ],
                     "translate": [
-                        167.0,
-                        580.0
+                        570.0790405273438,
+                        511.52886962890625
+                    ]
+                },
+                "Velocity2DComponent": {
+                    "linear": [
+                        0.0,
+                        364.5697021484375
                     ]
                 }
             }

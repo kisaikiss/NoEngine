@@ -10,7 +10,6 @@
 #include "Functions/ECS/Component/LightComponent.h"
 #include "Functions/ECS/Component/CameraComponent.h"
 #include "Functions/ECS/Component/ParticleEmitterComponent.h"
-#include "Functions/ECS/Component/StartTransformComponent.h"
 #include "Functions/ECS/Component/VelocityComponent.h"
 #include "Functions/ECS/Event/SceneChangeEvent.h"
 #include "Editor/EditUtils.h"

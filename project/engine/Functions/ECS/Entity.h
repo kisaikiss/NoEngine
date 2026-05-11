@@ -3,6 +3,6 @@ namespace NoEngine {
 namespace ECS {
 // エンティティ
 using Entity = size_t;
-static inline const Entity nullEntity = SIZE_MAX;
+static inline const Entity INVALID_ENTITY = SIZE_MAX;
 }
 }

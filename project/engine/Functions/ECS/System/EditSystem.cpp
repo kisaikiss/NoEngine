@@ -16,7 +16,7 @@ namespace ECS {
 
 namespace {
 struct EditorState {
-	Entity selectedEntity = nullEntity;
+	Entity selectedEntity = INVALID_ENTITY;
 };
 
 static EditorState sEditorState;
@@ -46,7 +46,7 @@ void EditSystem::Update(Registry& registry, float deltaTime) {
 	DrawHierarchyWindow(registry);
 
 	ImGui::Begin("Inspector");
-	if (sEditorState.selectedEntity != nullEntity) {
+	if (sEditorState.selectedEntity != INVALID_ENTITY) {
 		auto* tag = registry.GetComponent<Editor::EditTag>(sEditorState.selectedEntity);
 		ImGui::BeginChild(tag->name.c_str());
 		ImGui::Text(tag->name.c_str());
@@ -111,8 +111,10 @@ void EditSystem::DrawHierarchyWindow(Registry& registry) {
 	auto view = registry.View<Editor::EditTag>();
 
 	for (auto e : view) {
-		bool selected = (sEditorState.selectedEntity == e);
 		auto* tag = registry.GetComponent<Editor::EditTag>(e);
+		if (!tag->isDrawHierarchy) continue;
+
+		bool selected = (sEditorState.selectedEntity == e);
 		if (ImGui::Selectable(tag->name.c_str(), selected)) {
 			sEditorState.selectedEntity = e;
 		}

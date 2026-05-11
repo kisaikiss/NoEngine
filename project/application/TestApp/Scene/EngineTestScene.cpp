@@ -30,9 +30,6 @@ void EngineTestScene::Setup() {
 	m->materials = No::ModelLoader::GetMaterial("magiclash");
 	m->drawOutline = true;
 	m->enableSkinning = true;
-	registry.AddComponent<No::StartTransformComponent>(entity);
-	registry.AddComponent<No::StartTransform2DComponent>(entity);
-
 	m->psoName = L"Renderer : DefaultSkinned PSO";
 	m->psoId = NoEngine::Render::GetPSOID(m->psoName);
 	m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
