@@ -9,13 +9,14 @@ class TLASBuildPass :
     public RenderPass {
 public:
     void Execute(GraphicsContext& gfx, ECS::Registry& registry) override;
+   
 private:
     struct RaytracingInstance {
         D3D12_RAYTRACING_INSTANCE_DESC desc;
         RaytracingMesh* rtMesh;
     };
     std::vector<RaytracingInstance> instances_;
-
+    Microsoft::WRL::ComPtr<ID3D12Resource> tlasScratch_;
     void BuildRaytracingInstances(ECS::Registry& registry);
     void BuildTLAS(GraphicsContext& gfx);
 

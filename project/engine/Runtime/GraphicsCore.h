@@ -61,6 +61,7 @@ public:
 	}
 
 	static ColorBuffer& GetShadowMask();
+	static ColorBuffer& GetRaytracingBuffer();
 	static DepthBuffer& GetDepth();
 
 	/// <summary>

@@ -6,6 +6,7 @@
 
 namespace NoEngine {
 namespace Render {
+
 void TLASBuildPass::Execute(GraphicsContext& gfx, ECS::Registry& registry) {
 	if (!GraphicsCore::IsEnableRaytracing()) return;
 	BuildRaytracingInstances(registry);
@@ -88,24 +89,23 @@ void TLASBuildPass::BuildTLAS(GraphicsContext& gfx) {
 	defaultHeap.Type = D3D12_HEAP_TYPE_DEFAULT;
 
 	renderContext->CreateTLAS(tlasDesc);
-
-	Microsoft::WRL::ComPtr<ID3D12Resource> tlasScratch;
+	tlasScratch_.Reset();
 	GraphicsCore::sGraphicsDevice->GetDevice()->CreateCommittedResource(
 		&defaultHeap,
 		D3D12_HEAP_FLAG_NONE,
 		&scratchDesc,
 		D3D12_RESOURCE_STATE_COMMON,
 		nullptr,
-		IID_PPV_ARGS(&tlasScratch)
+		IID_PPV_ARGS(&tlasScratch_)
 	);
 
 	// Build TLAS
 	D3D12_BUILD_RAYTRACING_ACCELERATION_STRUCTURE_DESC build{};
 	build.Inputs = inputs;
-	build.ScratchAccelerationStructureData = tlasScratch->GetGPUVirtualAddress();
+	build.ScratchAccelerationStructureData = tlasScratch_->GetGPUVirtualAddress();
 	build.DestAccelerationStructureData = renderContext->GetTLAS()->GetGPUVirtualAddress();
 
-	gfx.BuildRaytracingAccelerationStructure(build, tlasScratch.Get());
+	gfx.BuildRaytracingAccelerationStructure(build, tlasScratch_.Get());
 }
 
 void TLASBuildPass::FillInstanceTransform(D3D12_RAYTRACING_INSTANCE_DESC& instance, const Transform& transform) {

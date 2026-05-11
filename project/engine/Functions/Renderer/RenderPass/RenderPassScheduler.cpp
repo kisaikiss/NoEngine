@@ -6,6 +6,7 @@
 #include "ParticlePass.h"
 #include "TLASBuildPass.h"
 #include "RaytracingShadowPass.h"
+#include "Raytracing/RaytracingTestPass.h"
 
 namespace NoEngine {
 namespace Render {
@@ -15,6 +16,7 @@ void RenderPassScheduler::Initialize() {
 	passes_.push_back(std::make_unique<MeshPass>());
 	passes_.push_back(std::make_unique<RaytracingShadowPass>());
 	passes_.push_back(std::make_unique<MeshPass>());
+	passes_.push_back(std::make_unique<RaytracingTestPass>());
 	passes_.push_back(std::make_unique<PrimitivePass>());
 	passes_.push_back(std::make_unique<ParticlePass>());
 	passes_.push_back(std::make_unique<SpritePass>());

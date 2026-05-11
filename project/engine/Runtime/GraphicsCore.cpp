@@ -43,11 +43,14 @@ float sWindowHeight;
 
 std::unique_ptr<DepthBuffer> sDepthBuffer;									   // 深度バッファ
 ColorBuffer sShadowMaskBuffer;
+ColorBuffer sRaytracingBuffer;
 
 GraphicsPSO defaultPSO(L"CopyImage");
 std::unique_ptr<RootSignature> defaultRootSignature;
 #ifdef USE_IMGUI
 ImTextureID sPostEffectTexture;
+
+ImTextureID sRaytracingTexture;
 #endif // USE_IMGUI
 
 // レイトレーシングが有効か
@@ -185,6 +188,7 @@ void GraphicsCore::StartFrame(GraphicsContext& context) {
 void GraphicsCore::EndFrame(GraphicsContext& context) {
 	context.TransitionResource(sPostEffectBuffer, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 
+	context.TransitionResource(sRaytracingBuffer, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 	// 本描画
 	sBackBufferIndex = sSwapChain->GetSwapChain()->GetCurrentBackBufferIndex();
 	context.TransitionResource(*sFrameBuffers[sBackBufferIndex].get(), D3D12_RESOURCE_STATE_RENDER_TARGET);
@@ -199,17 +203,36 @@ void GraphicsCore::EndFrame(GraphicsContext& context) {
 	static bool isInitFrame = true;
 	if (isInitFrame) {
 		// gTextureHeap.Alloc() で空きスロットを確保。
-		NoEngine::DescriptorHandle slot = Render::gTextureHeap.Alloc();
-		sGraphicsDevice->GetDevice()->CopyDescriptorsSimple(
-			1,
-			static_cast<D3D12_CPU_DESCRIPTOR_HANDLE>(slot),
-			sPostEffectBuffer.GetImGuiSRV(),
-			D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-		sPostEffectTexture = static_cast<ImTextureID>(slot.GetGpuPtr());
-		isInitFrame = false;
+		{
+			NoEngine::DescriptorHandle slot = Render::gTextureHeap.Alloc();
+			sGraphicsDevice->GetDevice()->CopyDescriptorsSimple(
+				1,
+				static_cast<D3D12_CPU_DESCRIPTOR_HANDLE>(slot),
+				sPostEffectBuffer.GetImGuiSRV(),
+				D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+			sPostEffectTexture = static_cast<ImTextureID>(slot.GetGpuPtr());
+		}
+	
+		{
+			sRaytracingBuffer.CreateImGuiSRV();
+			NoEngine::DescriptorHandle slot = Render::gTextureHeap.Alloc();
+			sGraphicsDevice->GetDevice()->CopyDescriptorsSimple(
+				1,
+				static_cast<D3D12_CPU_DESCRIPTOR_HANDLE>(slot),
+				sRaytracingBuffer.GetImGuiSRV(),
+				D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+			sRaytracingTexture = static_cast<ImTextureID>(slot.GetGpuPtr());
+			isInitFrame = false;
+		}
+	
 	}
 
-
+	ImGui::Begin("RaytracingTest");
+	ImGui::Image(
+		sRaytracingTexture,
+		ImVec2(sWindowWidth * 2 / 3, sWindowHeight * 2 / 3) // 表示サイズ
+	);
+	ImGui::End();
 
 	ImGui::Begin("Game");
 	ImGui::Image(
@@ -236,6 +259,10 @@ void GraphicsCore::EndFrame(GraphicsContext& context) {
 
 ColorBuffer& GraphicsCore::GetShadowMask() {
 	return sShadowMaskBuffer;
+}
+
+ColorBuffer& GraphicsCore::GetRaytracingBuffer() {
+	return sRaytracingBuffer;
 }
 
 DepthBuffer& GraphicsCore::GetDepth() {
@@ -275,6 +302,7 @@ void GraphicsCore::CreatePixelBuffer() {
 	
 	sDepthBuffer->Create(L"GraphicsCore Depth Buffer", static_cast<uint32_t>(sWindowWidth), static_cast<uint32_t>(sWindowHeight), DXGI_FORMAT_D24_UNORM_S8_UINT);
 	sShadowMaskBuffer.Create(L"ShadowMask", static_cast<uint32_t>(sWindowWidth), static_cast<uint32_t>(sWindowHeight), 1, DXGI_FORMAT_R8_UNORM);
+	sRaytracingBuffer.Create(L"RaytracingTest", static_cast<uint32_t>(sWindowWidth), static_cast<uint32_t>(sWindowHeight), 1, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
 	Log::DebugPrint("create pixel buffers");
 }
 
@@ -285,6 +313,7 @@ void GraphicsCore::DestroyPixelBuffer() {
 	}
 	sDepthBuffer.reset();
 	sShadowMaskBuffer.Destroy();
+	sRaytracingBuffer.Destroy();
 	Log::DebugPrint("destroy pixel buffers");
 }
 
