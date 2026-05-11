@@ -3,6 +3,7 @@
 
 void RabbitdokuMoveSystem::Update(No::Registry& registry, float deltaTime) {
 	auto view = registry.View<Rabbitdoku>();
+	static_cast<void>(deltaTime);
 	if (deltaTime > 0.1f) return;
 	for (auto e : view) {
 		auto* velocity = registry.GetComponent<No::Velocity2DComponent>(e);
@@ -22,7 +23,7 @@ void RabbitdokuMoveSystem::Update(No::Registry& registry, float deltaTime) {
 		}
 
 		if (velocity->linear.x) {
-			if(playerVariables->state != RabbitdokuState::Walk)
+			if (playerVariables->state != RabbitdokuState::Walk)
 				playerVariables->nextState = RabbitdokuState::Walk;
 		} else {
 			if (playerVariables->state != RabbitdokuState::Wait)
@@ -39,7 +40,7 @@ void RabbitdokuMoveSystem::Update(No::Registry& registry, float deltaTime) {
 					playerVariables->canDoubleJump = false;
 				}
 			}
-			
+
 		}
 
 
@@ -50,10 +51,14 @@ void RabbitdokuMoveSystem::Update(No::Registry& registry, float deltaTime) {
 			}
 		}
 
-		static const float kGravity = 980.f;
+		if (playerVariables->yVelocity) {
+			playerVariables->nextState = RabbitdokuState::Jump;
+		}
+
+		static const float kGravity = 9.8f;
 
 
-		playerVariables->yVelocity += kGravity * deltaTime;
+		playerVariables->yVelocity += kGravity;
 
 		velocity->linear.y = playerVariables->yVelocity;
 
@@ -72,11 +77,16 @@ void RabbitdokuMoveSystem::Update(No::Registry& registry, float deltaTime) {
 			animator->frameByFrameTime = 0.1f;
 			sprite->uv.x = 0.f;
 			break;
+		case RabbitdokuState::Jump:
+			playerVariables->state = RabbitdokuState::Jump;
+			animator->framesNum = 1;
+			animator->currentAnimation = 2;
+			sprite->uv.x = 0.f;
 		default:
 			break;
 		}
 
 
-	
+
 	}
 }
