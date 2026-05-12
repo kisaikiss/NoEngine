@@ -31,6 +31,8 @@ void RaytracingShadowPass::Dispatch(GraphicsContext& gfx) {
 	auto& stateObject = Render::GetShadowRtStateObject();
 	auto* renderContext = GetRenderContext();
 
+	if (!renderContext->GetTLAS().Get()) return;
+
 	gfx.SetRaytracingRootSignature(Render::GetRootSignature(Render::GetRootSignatureID(L"RT Global RootSignature")));
 	
 	// tlas

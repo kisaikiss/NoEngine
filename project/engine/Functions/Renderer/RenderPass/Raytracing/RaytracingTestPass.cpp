@@ -18,7 +18,7 @@ void RaytracingTestPass::Execute(GraphicsContext& gfx, ECS::Registry& registry) 
 
 	auto& stateObject = Render::GetRtStateObject();
 	auto* renderContext = GetRenderContext();
-
+	if (!renderContext->GetTLAS().Get()) return;
 	gfx.SetRaytracingRootSignature(Render::GetRootSignature(Render::GetRootSignatureID(L"RT Test Global RootSignature")));
 
 	// tlas

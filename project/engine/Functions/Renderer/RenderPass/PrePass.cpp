@@ -56,7 +56,7 @@ void PrePass::Execute(GraphicsContext& gfx, ECS::Registry& registry) {
 		camera = registry.GetComponent<CameraComponent>(entity);
 	}
 
-	if (camera == nullptr) assert(false);
+	if (camera == nullptr) return;
 
 	for (auto& item : items_) {
 		std::string currentPsoName;

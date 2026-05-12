@@ -228,26 +228,8 @@ void GraphicsCore::EndFrame(GraphicsContext& context) {
 			sPostEffectTexture = static_cast<ImTextureID>(slot.GetGpuPtr());
 		}
 	
-		{
-			sNormalGBuffer.CreateImGuiSRV();
-			NoEngine::DescriptorHandle slot = Render::gTextureHeap.Alloc();
-			sGraphicsDevice->GetDevice()->CopyDescriptorsSimple(
-				1,
-				static_cast<D3D12_CPU_DESCRIPTOR_HANDLE>(slot),
-				sNormalGBuffer.GetImGuiSRV(),
-				D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-			sRaytracingTexture = static_cast<ImTextureID>(slot.GetGpuPtr());
-			isInitFrame = false;
-		}
-	
 	}
 
-	ImGui::Begin("RaytracingTest");
-	ImGui::Image(
-		sRaytracingTexture,
-		ImVec2(sWindowWidth * 2 / 5, sWindowHeight * 2 / 5) // 表示サイズ
-	);
-	ImGui::End();
 
 	ImGui::Begin("Game");
 	ImGui::Image(
