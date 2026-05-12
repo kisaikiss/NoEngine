@@ -24,6 +24,10 @@ public:
 	static ContextManager sContextManager;
 	static WindowManager sWindowManager;
 	
+	static ColorBuffer sAlbedoGBuffer;
+	static ColorBuffer sNormalGBuffer;
+	static ColorBuffer sWorldPositionGBuffer;
+
 
 	// ディスクリプタアロケータ(ディスクリプタのメモリ管理)配列。数はD3D12_DESCRIPTOR_HEAP_TYPE
 	static DescriptorAllocator sDescriptorAllocator[];
@@ -61,6 +65,7 @@ public:
 	}
 
 	static ColorBuffer& GetShadowMask();
+	static ColorBuffer& GetPostEffectBuffer();
 	static ColorBuffer& GetRaytracingBuffer();
 	static DepthBuffer& GetDepth();
 

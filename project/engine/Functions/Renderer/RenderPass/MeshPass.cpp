@@ -18,6 +18,7 @@ MeshPass::MeshPass() {
 }
 
 void MeshPass::Execute(GraphicsContext& gfx, ECS::Registry& registry) {
+	gfx.SetRenderTarget(GraphicsCore::GetPostEffectBuffer().GetRTV(), GraphicsCore::GetDepth().GetDSV());
 	Collect(registry);
 	Sort();
 	Render(gfx);

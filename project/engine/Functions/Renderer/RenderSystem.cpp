@@ -30,18 +30,13 @@ void Initialize() {
 	gTextureHeap.Create(L"Scene Texture Descriptors", D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 4096);
 	// ToDo : 現在はシェーダーコンパイル、PSO生成をここで行っていますが、アプリケーション側で動的に行えるようにするべきです。
 	ShaderModule::Initialize();
+
+	// よく使う設定
 	ShaderModule defaultVS(ShaderStage::Vertex, L"resources/engine/Shaders/Default.VS.hlsl", L"vs_6_0");
 	ShaderModule defaultPS(ShaderStage::Pixel, L"resources/engine/Shaders/Default.PS.hlsl", L"ps_6_0");
 
 	const ShaderReflection& vsReflection = defaultVS.GetReflection();
 	const ShaderReflection& psReflection = defaultPS.GetReflection();
-	std::vector<ShaderReflection> refls;
-	refls.push_back(vsReflection);
-	refls.push_back(psReflection);
-
-	std::unique_ptr<RootSignature> defaultRootSignature = std::make_unique<RootSignature>();
-	std::wstring defaultPSOName = L"Renderer : Default PSO";
-	RootSignatureBuilder::BuildFromReflection(refls, *defaultRootSignature, ConvertString(defaultPSOName));
 
 	D3D12_RASTERIZER_DESC rasterizerDesc{};
 	rasterizerDesc.CullMode = D3D12_CULL_MODE_BACK;
@@ -54,27 +49,39 @@ void Initialize() {
 	depthStencilDesc.DepthEnable = true;
 	depthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
 	depthStencilDesc.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
+	DXGI_FORMAT rtvFormat[] = { DXGI_FORMAT_R8G8B8A8_UNORM_SRGB };
 
 	std::vector<D3D12_INPUT_ELEMENT_DESC> inputLayout = InputLayoutBuilder::BuildFromReflection(vsReflection);
 
+	// デフォルト描画
+	{
+		std::vector<ShaderReflection> refls;
+		refls.push_back(vsReflection);
+		refls.push_back(psReflection);
+
+		std::unique_ptr<RootSignature> defaultRootSignature = std::make_unique<RootSignature>();
+		std::wstring defaultPSOName = L"Renderer : Default PSO";
+		RootSignatureBuilder::BuildFromReflection(refls, *defaultRootSignature, ConvertString(defaultPSOName));
+
+		GraphicsPSO defaultPSO(defaultPSOName);
+		defaultPSO.SetRootSignature(*defaultRootSignature);
+		defaultPSO.SetRasterizerState(rasterizerDesc);
+		defaultPSO.SetBlendState(blendDesc);
+		defaultPSO.SetDepthStencilState(depthStencilDesc);
+		defaultPSO.SetInputLayout(inputLayout);
+		defaultPSO.SetPrimitiveTopologyType(D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
+		
+		defaultPSO.SetRenderTargetFormats(1, rtvFormat, DXGI_FORMAT_D24_UNORM_S8_UINT);
+		defaultPSO.SetVertexShader(defaultVS.GetBytecode());
+		defaultPSO.SetPixelShader(defaultPS.GetBytecode());
+		defaultPSO.SetSampleMask(D3D12_DEFAULT_SAMPLE_MASK);
+		defaultPSO.Finalize();
+		sGraphicsPSOs.push_back(defaultPSO);
+		sGraphicsPSOIndexMap[defaultPSOName] = static_cast<uint32_t>(sGraphicsPSOs.size()) - 1;
+		sRootSignatures.push_back(std::move(defaultRootSignature));
+		sRootSignatureIndexMap[defaultPSOName] = static_cast<uint32_t>(sRootSignatures.size()) - 1;
+	}
 	
-	GraphicsPSO defaultPSO(defaultPSOName);
-	defaultPSO.SetRootSignature(*defaultRootSignature);
-	defaultPSO.SetRasterizerState(rasterizerDesc);
-	defaultPSO.SetBlendState(blendDesc);
-	defaultPSO.SetDepthStencilState(depthStencilDesc);
-	defaultPSO.SetInputLayout(inputLayout);
-	defaultPSO.SetPrimitiveTopologyType(D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
-	DXGI_FORMAT rtvFormat[] = { DXGI_FORMAT_R8G8B8A8_UNORM_SRGB };
-	defaultPSO.SetRenderTargetFormats(1, rtvFormat, DXGI_FORMAT_D24_UNORM_S8_UINT);
-	defaultPSO.SetVertexShader(defaultVS.GetBytecode());
-	defaultPSO.SetPixelShader(defaultPS.GetBytecode());
-	defaultPSO.SetSampleMask(D3D12_DEFAULT_SAMPLE_MASK);
-	defaultPSO.Finalize();
-	sGraphicsPSOs.push_back(defaultPSO);
-	sGraphicsPSOIndexMap[defaultPSOName] = static_cast<uint32_t>(sGraphicsPSOs.size()) - 1;
-	sRootSignatures.push_back(std::move(defaultRootSignature));
-	sRootSignatureIndexMap[defaultPSOName] = static_cast<uint32_t>(sRootSignatures.size()) - 1;
 
 	// スキニング
 	{
@@ -110,6 +117,39 @@ void Initialize() {
 		sGraphicsPSOIndexMap[defaultSkinnedPSOName] = static_cast<uint32_t>(sGraphicsPSOs.size()) - 1;
 		sRootSignatures.push_back(std::move(defaultSkinnedRootSignature));
 		sRootSignatureIndexMap[defaultSkinnedPSOName] = static_cast<uint32_t>(sRootSignatures.size()) - 1;
+	}
+
+	// PreRenderPass
+	{
+		ShaderModule pixelShader(ShaderStage::Pixel, L"resources/engine/Shaders/PreRender.PS.hlsl", L"ps_6_0");
+
+		const ShaderReflection& prePSReflection = pixelShader.GetReflection();
+		std::vector<ShaderReflection> refls;
+		refls.push_back(vsReflection);
+		refls.push_back(prePSReflection);
+
+		std::unique_ptr<RootSignature> defaultRootSignature = std::make_unique<RootSignature>();
+		std::wstring defaultPSOName = L"Renderer : PreRender PSO";
+		RootSignatureBuilder::BuildFromReflection(refls, *defaultRootSignature, ConvertString(defaultPSOName));
+
+		GraphicsPSO defaultPSO(defaultPSOName);
+		defaultPSO.SetRootSignature(*defaultRootSignature);
+		defaultPSO.SetRasterizerState(rasterizerDesc);
+		defaultPSO.SetBlendState(blendDesc);
+		defaultPSO.SetDepthStencilState(depthStencilDesc);
+		defaultPSO.SetInputLayout(inputLayout);
+		defaultPSO.SetPrimitiveTopologyType(D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
+		DXGI_FORMAT preRenderRTVFormat[] = { DXGI_FORMAT_R32G32B32A32_FLOAT };
+
+		defaultPSO.SetRenderTargetFormats(1, preRenderRTVFormat, DXGI_FORMAT_D24_UNORM_S8_UINT);
+		defaultPSO.SetVertexShader(defaultVS.GetBytecode());
+		defaultPSO.SetPixelShader(pixelShader.GetBytecode());
+		defaultPSO.SetSampleMask(D3D12_DEFAULT_SAMPLE_MASK);
+		defaultPSO.Finalize();
+		sGraphicsPSOs.push_back(defaultPSO);
+		sGraphicsPSOIndexMap[defaultPSOName] = static_cast<uint32_t>(sGraphicsPSOs.size()) - 1;
+		sRootSignatures.push_back(std::move(defaultRootSignature));
+		sRootSignatureIndexMap[defaultPSOName] = static_cast<uint32_t>(sRootSignatures.size()) - 1;
 	}
 
 	// トゥーンレンダリング
