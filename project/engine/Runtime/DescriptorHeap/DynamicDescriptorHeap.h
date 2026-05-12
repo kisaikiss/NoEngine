@@ -73,7 +73,7 @@ private:
 
     // Describes a descriptor table entry:  a region of the handle cache and which handles have been set
     struct DescriptorTableCache {
-        DescriptorTableCache() : AssignedHandlesBitMap(0) {}
+        DescriptorTableCache() : AssignedHandlesBitMap(0), TableStart(nullptr), TableSize(0) {}
         uint32_t AssignedHandlesBitMap;
         D3D12_CPU_DESCRIPTOR_HANDLE* TableStart;
         uint32_t TableSize;

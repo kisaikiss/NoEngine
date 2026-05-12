@@ -1,5 +1,6 @@
 #include "RenderContext.h"
 #include "engine/Functions/ECS/Component/LightComponent.h"
+#include "engine/Runtime/GraphicsCore.h"
 
 namespace NoEngine {
 using namespace Component;
@@ -60,6 +61,31 @@ void RenderContext::SetSpotLight(GraphicsContext& gfx, UploadBuffer& spotLightUp
 
 
 	gfx.CopyBufferRegion(spotLightBuffer_, 0, spotLightUpload, 0, sizeof(SpotLightForGPU) * spotLightNum);
+}
+
+void RenderContext::CreateRaytraceInstanceBuffer(D3D12_HEAP_PROPERTIES& uploadHeap, CD3DX12_RESOURCE_DESC& instDesc) {
+	GraphicsCore::sGraphicsDevice->GetDevice()->CreateCommittedResource(
+		&uploadHeap,
+		D3D12_HEAP_FLAG_NONE,
+		&instDesc,
+		D3D12_RESOURCE_STATE_GENERIC_READ,
+		nullptr,
+		IID_PPV_ARGS(&instanceBuffer_)
+	);
+}
+
+void RenderContext::CreateTLAS(CD3DX12_RESOURCE_DESC& tlasDesc) {
+	D3D12_HEAP_PROPERTIES defaultHeap{};
+	defaultHeap.Type = D3D12_HEAP_TYPE_DEFAULT;
+
+	GraphicsCore::sGraphicsDevice->GetDevice()->CreateCommittedResource(
+		&defaultHeap,
+		D3D12_HEAP_FLAG_NONE,
+		&tlasDesc,
+		D3D12_RESOURCE_STATE_RAYTRACING_ACCELERATION_STRUCTURE,
+		nullptr,
+		IID_PPV_ARGS(&tlas_)
+	);
 }
 
 }

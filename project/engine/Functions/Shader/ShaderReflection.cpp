@@ -421,7 +421,6 @@ void RootSignatureBuilder::BuildFromReflection(
 		case ShaderReflection::ResourceType::kRWTexture:
 		case ShaderReflection::ResourceType::kRWStructuredBuffer:
 		case ShaderReflection::ResourceType::kRWByteAddressBuffer:
-			// 将来 UAV を入れたくなったとき用
 			param.InitAsDescriptorRange(
 				D3D12_DESCRIPTOR_RANGE_TYPE_UAV,
 				r.bindPoint,                 // uN

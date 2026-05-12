@@ -53,6 +53,8 @@ struct SpotLight
 };
 StructuredBuffer<SpotLight> gSpotLights : register(t4);
 
+Texture2D<float> gShadowMask : register(t5);
+
 PixelShaderOutput main(VertexShaderOutput input)
 {
     PixelShaderOutput output;
@@ -63,6 +65,9 @@ PixelShaderOutput main(VertexShaderOutput input)
     float3 toEye = normalize(gCameraMatrix.worldPosition - input.worldPosition);
     
     float4 lightColor = 0;
+    
+    int2 screenPos = int2(input.position.xy);
+    float shadowFactor = gShadowMask.Load(int3(screenPos, 0));
     
     // 方向ライトの計算
     for (int i = 0; i < gLightNums.directionalLightNum; i++)
@@ -80,7 +85,7 @@ PixelShaderOutput main(VertexShaderOutput input)
         
          //拡散反射*鏡面反射
         float4 color = 0;
-        color.rgb = diffuse.rgb + specular;
+        color.rgb = (diffuse.rgb + specular) * shadowFactor;
         
         lightColor += color;
     }

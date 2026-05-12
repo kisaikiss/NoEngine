@@ -1,12 +1,9 @@
 #include "GameCore.h"
 #include "engine/Window/WindowManager.h"
-#include "engine/Window/Event/MainEditor/MainEditorWindowCloseEvent.h"
-#include "engine/Window/Event/IWindowEvent.h"
 #include "engine/Functions/Debug/Logger/Log.h"
 #include "engine/Functions/Debug/CrashHandler/ExportDump.h"
 #include "engine/Functions/Debug/GraphicsResourceLeakChecker.h"
 #include "engine/Runtime/GraphicsCore.h"
-#include "engine/Runtime/GpuResource/GpuResource.h"
 #include "engine/Runtime/Command/GraphicsContext.h"
 #include "engine/Functions/Renderer/RenderPass/RenderPassScheduler.h"
 #include "engine/Functions/Input/input.h"
@@ -53,6 +50,8 @@ int RunApplication(std::unique_ptr<IGameApp> game) {
 	CalculateDeltaTime();
 	// メインループ
 	while (GraphicsCore::sWindowManager.ProcessMessage() == 0) {
+
+		GraphicsCore::CheckDeviceStatus();
 
 		GraphicsContext& context = GraphicsContext::Begin();
 		GraphicsCore::StartFrame(context);

@@ -3,6 +3,9 @@
 
 namespace NoEngine {
 
+/// <summary>
+/// グラフィックスキューを利用したコマンドリストラッパークラス
+/// </summary>
 class GraphicsContext : public CommandContext {
 public:
     static GraphicsContext& Begin(const std::wstring& ID = L"") {
@@ -16,6 +19,7 @@ public:
     void ClearDepthAndStencil(DepthBuffer& target);
 
     void SetRootSignature(const RootSignature& rootSig);
+    void SetRaytracingRootSignature(const RootSignature& rootSig);
 
     void SetRenderTargets(UINT NumRTVs, const D3D12_CPU_DESCRIPTOR_HANDLE RTVs[]);
     void SetRenderTargets(UINT NumRTVs, const D3D12_CPU_DESCRIPTOR_HANDLE RTVs[], D3D12_CPU_DESCRIPTOR_HANDLE DSV);
@@ -33,11 +37,17 @@ public:
 
     void SetConstantBuffer(UINT rootIndex, D3D12_GPU_VIRTUAL_ADDRESS cbv);
     void SetDynamicConstantBufferView(UINT RootIndex, size_t BufferSize, const void* BufferData);
+    void SetRaytracingDynamicConstantBufferView(UINT RootIndex, size_t BufferSize, const void* BufferData);
     void SetBufferSRV(UINT RootIndex, const GpuBuffer& SRV, UINT64 Offset = 0);
     void SetDescriptorTable(UINT RootIndex, D3D12_GPU_DESCRIPTOR_HANDLE FirstHandle);
 
+    void SetComputeSRV(UINT RootIndex, D3D12_GPU_VIRTUAL_ADDRESS virtualAddress);
+
     void SetDynamicDescriptor(UINT RootIndex, UINT Offset, D3D12_CPU_DESCRIPTOR_HANDLE Handle);
     void SetDynamicDescriptors(UINT RootIndex, UINT Offset, UINT Count, const D3D12_CPU_DESCRIPTOR_HANDLE Handles[]);
+
+    void SetRaytracingDynamicDescriptor(UINT RootIndex, UINT Offset, D3D12_CPU_DESCRIPTOR_HANDLE Handle);
+    void SetRaytracingDynamicDescriptors(UINT RootIndex, UINT Offset, UINT Count, const D3D12_CPU_DESCRIPTOR_HANDLE Handles[]);
 
     void SetIndexBuffer(const D3D12_INDEX_BUFFER_VIEW& ibview);
     void SetVertexBuffer(UINT slot, const D3D12_VERTEX_BUFFER_VIEW& vbview);
@@ -46,12 +56,19 @@ public:
     void SetDynamicIB(size_t IndexCount, const uint16_t* IBData);
     void SetDynamicSRV(UINT RootIndex, size_t BufferSize, const void* BufferData);
     
-
     void Draw(UINT vertexCount, UINT vertexStartOffset = 0);
     void DrawIndexed(UINT indexCount, UINT startIndexLocation = 0, INT baseVertexLocation = 0);
     void DrawInstanced(UINT vertexCountPerInstance, UINT instanceCount,
         UINT StartVertexLocation = 0, UINT startInstanceLocation = 0);
     void DrawIndexedInstanced(UINT indexCountPerInstance, UINT instanceCount, UINT startIndexLocation,
         INT baseVertexLocation, UINT startInstanceLocation);
+
+    /// <summary>
+    /// D3D12_DISPATCH_RAYS_DESCで指定された設定に基づき、レイトレーシング用のレイをディスパッチする。
+    /// </summary>
+    /// <param name="desc">レイのディスパッチ範囲、シェーダーテーブル、その他関連パラメータを含むD3D12_DISPATCH_RAYS_DESC構造体への参照。</param>
+    void DispatchRays(const D3D12_DISPATCH_RAYS_DESC& desc);
+private:
+    ID3D12StateObject* curStateObject_ = nullptr;
 };
 }

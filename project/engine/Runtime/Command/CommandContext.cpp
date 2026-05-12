@@ -59,10 +59,6 @@ CommandContext& CommandContext::Begin(const std::wstring id) {
 	return *newContext;
 }
 
-//uint64_t CommandContext::Flush(bool WaitForCompletion) {
-//	return 0;
-//}
-
 uint64_t CommandContext::Finish(bool WaitForCompletion) {
 	assert(type_ == D3D12_COMMAND_LIST_TYPE_DIRECT || type_ == D3D12_COMMAND_LIST_TYPE_COMPUTE);
 
@@ -167,6 +163,22 @@ void CommandContext::InitializeBuffer(GpuBuffer& dest, const UploadBuffer& src, 
 	InitContext.Finish(true);
 }
 
+void CommandContext::BuildRaytracingAccelerationStructure(const D3D12_BUILD_RAYTRACING_ACCELERATION_STRUCTURE_DESC& buildDesc,
+	ID3D12Resource* scratchResource) {
+
+	CommandContext& InitContext = CommandContext::Begin();
+	
+	auto barrier = CD3DX12_RESOURCE_BARRIER::Transition(
+		scratchResource,
+		D3D12_RESOURCE_STATE_COMMON,
+		D3D12_RESOURCE_STATE_UNORDERED_ACCESS
+	);
+	InitContext.commandList_->ResourceBarrier(1, &barrier);
+
+	InitContext.commandList_->BuildRaytracingAccelerationStructure(&buildDesc, 0, nullptr);
+	InitContext.Finish(true);
+}
+
 void CommandContext::TransitionResource(GpuResource& resource, D3D12_RESOURCE_STATES newState, bool flushImmediate) {
 	D3D12_RESOURCE_STATES oldState = resource.usageState_;
 
@@ -195,13 +207,26 @@ void CommandContext::TransitionResource(GpuResource& resource, D3D12_RESOURCE_ST
 		resource.usageState_ = newState;
 	} else {
 		if (newState == D3D12_RESOURCE_STATE_UNORDERED_ACCESS) {
-			//InsertUAVBarrier(Resource, FlushImmediate);
+			InsertUAVBarrier(resource, flushImmediate);
 		}
 	}
 
 	if (flushImmediate || numBarriersToFlush_ == 16) {
 		FlushResourceBarriers();
 	}
+}
+
+void CommandContext::InsertUAVBarrier(GpuResource& Resource, bool FlushImmediate) {
+	Log::DebugPrint("Exceeded arbitrary limit on buffered barriers", VerbosityLevel::kCritical);
+	assert(numBarriersToFlush_ < 16);
+	D3D12_RESOURCE_BARRIER& BarrierDesc = resourceBarrierBuffer_[numBarriersToFlush_++];
+
+	BarrierDesc.Type = D3D12_RESOURCE_BARRIER_TYPE_UAV;
+	BarrierDesc.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+	BarrierDesc.UAV.pResource = Resource.GetResource();
+
+	if (FlushImmediate)
+		FlushResourceBarriers();
 }
 
 void CommandContext::FlushResourceBarriers(void) {

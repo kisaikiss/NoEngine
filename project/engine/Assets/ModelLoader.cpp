@@ -1,6 +1,7 @@
 #include "ModelLoader.h"
 #include "engine/Math/Types/Transform.h"
 #include "engine/Runtime/GpuResource/UploadBuffer.h"
+#include "engine/Runtime/GraphicsCore.h"
 
 #include "engine/Functions/Debug/Logger/Log.h"
 #include "engine/Utilities/FileUtilities.h"
@@ -55,7 +56,7 @@ void ModelLoader::LoadModel(const std::string& name, const std::string& filePath
 			aiVector3D& normal = mesh->mNormals[vertexIndex];
 
 			Vertex vertex;
-			vertex.position = { -position.x, position.y, position.z, 1.0f };
+			vertex.position = { -position.x, position.y, position.z };
 			vertex.texcoord = { texcoord.x, texcoord.y };
 			vertex.normal = { normal.x, normal.y, normal.z };
 			sMeshes[name].vertices.push_back(vertex);
@@ -226,6 +227,12 @@ void ModelLoader::LoadModel(const std::string& name, const std::string& filePath
 		);
 	}
 
+	// RaytracingMesh
+	if (GraphicsCore::IsEnableRaytracing()) {
+		Log::DebugPrint("RaytracingMesh create start");
+		sMeshes[name].raytracingMesh = std::make_unique<RaytracingMesh>(ProcessRaytracingMesh(sMeshes[name]));
+	}
+
 	if (model) model->mesh = &sMeshes[name];
 }
 
@@ -347,6 +354,71 @@ void ModelLoader::ProcessSkeleton(const std::string& name, const Node& rootNode)
 
 }
 
+RaytracingMesh ModelLoader::ProcessRaytracingMesh(const Mesh& mesh) {
+	RaytracingMesh rtMesh;
+	rtMesh.geometries.reserve(mesh.subMeshes.size());
+
+	for (const SubMesh& sm : mesh.subMeshes) {
+		rtMesh.geometries.push_back(MakeGeometryDesc(mesh, sm));
+	}
+
+	// BLAS inputs
+	rtMesh.inputs.Type = D3D12_RAYTRACING_ACCELERATION_STRUCTURE_TYPE_BOTTOM_LEVEL;
+	rtMesh.inputs.Flags = D3D12_RAYTRACING_ACCELERATION_STRUCTURE_BUILD_FLAG_PREFER_FAST_TRACE;
+	rtMesh.inputs.NumDescs = (UINT)rtMesh.geometries.size();
+	rtMesh.inputs.DescsLayout = D3D12_ELEMENTS_LAYOUT_ARRAY;
+	rtMesh.inputs.pGeometryDescs = &rtMesh.geometries[0].geometryDesc;
+
+	// PrebuildInfoの取得
+	D3D12_RAYTRACING_ACCELERATION_STRUCTURE_PREBUILD_INFO prebuildInfo = {};
+	GraphicsCore::sGraphicsDevice->GetDevice()->GetRaytracingAccelerationStructurePrebuildInfo(
+		&rtMesh.inputs,
+		&prebuildInfo
+	);
+
+	// BLAS用のGPUリソース作成
+	auto resultDesc = CD3DX12_RESOURCE_DESC::Buffer(prebuildInfo.ResultDataMaxSizeInBytes,
+		D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
+
+	auto scratchDesc = CD3DX12_RESOURCE_DESC::Buffer(prebuildInfo.ScratchDataSizeInBytes,
+		D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
+
+	D3D12_HEAP_PROPERTIES defaultHeapProps{};
+	defaultHeapProps.Type = D3D12_HEAP_TYPE_DEFAULT;
+	defaultHeapProps.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
+	defaultHeapProps.MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN;
+	defaultHeapProps.CreationNodeMask = 1;
+	defaultHeapProps.VisibleNodeMask = 1;
+
+	GraphicsCore::sGraphicsDevice->GetDevice()->CreateCommittedResource(
+		&defaultHeapProps,
+		D3D12_HEAP_FLAG_NONE,
+		&resultDesc,
+		D3D12_RESOURCE_STATE_RAYTRACING_ACCELERATION_STRUCTURE,
+		nullptr,
+		IID_PPV_ARGS(&rtMesh.blas)
+	);
+
+	GraphicsCore::sGraphicsDevice->GetDevice()->CreateCommittedResource(
+		&defaultHeapProps,
+		D3D12_HEAP_FLAG_NONE,
+		&scratchDesc,
+		D3D12_RESOURCE_STATE_COMMON,
+		nullptr,
+		IID_PPV_ARGS(&rtMesh.scratch)
+	);
+
+	// BLASのビルドコマンド発行
+	D3D12_BUILD_RAYTRACING_ACCELERATION_STRUCTURE_DESC buildDesc = {};
+	buildDesc.Inputs = rtMesh.inputs;
+	buildDesc.ScratchAccelerationStructureData = rtMesh.scratch->GetGPUVirtualAddress();
+	buildDesc.DestAccelerationStructureData = rtMesh.blas->GetGPUVirtualAddress();
+
+	CommandContext::BuildRaytracingAccelerationStructure(buildDesc, rtMesh.scratch.Get());
+
+	return rtMesh;
+}
+
 int32_t ModelLoader::CreateJoint(const Node& node, const std::optional<int32_t>& parent, std::vector<Joint>& joints) {
 	Joint joint;
 	joint.name = node.name;
@@ -363,6 +435,35 @@ int32_t ModelLoader::CreateJoint(const Node& node, const std::optional<int32_t>&
 	}
 	// 自身のIndexを返します。
 	return joint.index;
+}
+
+RaytracingGeometry ModelLoader::MakeGeometryDesc(const Mesh& mesh, const SubMesh& sm) {
+	D3D12_RAYTRACING_GEOMETRY_DESC geom = {};
+	geom.Type = D3D12_RAYTRACING_GEOMETRY_TYPE_TRIANGLES;
+	geom.Flags = D3D12_RAYTRACING_GEOMETRY_FLAG_OPAQUE;
+
+	// Index
+	geom.Triangles.IndexBuffer =
+		mesh.indexBuffer.GetGpuVirtualAddress() +
+		sizeof(uint32_t) * sm.indexStart;
+
+	geom.Triangles.IndexCount = sm.indexCount;
+	geom.Triangles.IndexFormat = DXGI_FORMAT_R32_UINT;
+
+	// Vertex
+	geom.Triangles.VertexBuffer.StartAddress =
+		mesh.vertexBuffer.GetGpuVirtualAddress() +
+		sizeof(Vertex) * sm.vertexStart;
+
+	geom.Triangles.VertexBuffer.StrideInBytes = sizeof(Vertex);
+	geom.Triangles.VertexCount = sm.vertexCount;
+
+	geom.Triangles.VertexFormat = DXGI_FORMAT_R32G32B32_FLOAT;
+
+	RaytracingGeometry result;
+	result.geometryDesc = geom;
+
+	return result;
 }
 
 }

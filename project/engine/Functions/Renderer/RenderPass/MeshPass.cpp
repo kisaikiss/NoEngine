@@ -3,7 +3,7 @@
 #include "engine/Functions/Shader/ShaderReflection.h"
 #include "engine/Functions/Renderer/RenderSystem.h"
 #include "engine/Utilities/Conversion/ConvertString.h"
-
+#include "engine/Runtime/GraphicsCore.h"
 
 namespace NoEngine {
 namespace Render {
@@ -18,6 +18,7 @@ MeshPass::MeshPass() {
 }
 
 void MeshPass::Execute(GraphicsContext& gfx, ECS::Registry& registry) {
+	gfx.SetRenderTarget(GraphicsCore::GetPostEffectBuffer().GetRTV(), GraphicsCore::GetDepth().GetDSV());
 	Collect(registry);
 	Sort();
 	Render(gfx);
@@ -66,7 +67,7 @@ void MeshPass::Sort() {
 void MeshPass::Render(GraphicsContext& context) {
 	// ToDo : currentPsoの値は被りえない値にすべきです。
 	uint32_t currentPSO = 110;
-
+	context.TransitionResource(GraphicsCore::GetShadowMask(), D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 	for (auto& item : items_) {
 		auto& rootIndex = RootSignatureBuilder::GetRootIndexMap(item.psoName);
 		if (item.psoId != currentPSO) {
@@ -128,6 +129,7 @@ void MeshPass::Render(GraphicsContext& context) {
 			constants.shininess = item.material->shininess;
 			context.SetDynamicConstantBufferView(rootIndex["gMaterial"], sizeof(constants), &constants);
 			context.SetDynamicDescriptor(rootIndex["gTexture"], 0, item.material->materials[subMesh.materialIndex].textureHandle.GetSRV());
+			context.SetDynamicDescriptor(rootIndex["gShadowMask"], 0, GraphicsCore::GetShadowMask().GetSRV());
 
 			context.DrawIndexedInstanced(subMesh.indexCount, 1, subMesh.indexStart, subMesh.vertexStart, 0);
 		}

@@ -15,7 +15,7 @@ public:
 	/// <param name="stage">シェーダーの種類</param>
 	/// <param name="filePath">シェーダーのfilePath</param>
 	/// <param name="profile">シェーダーのprofile</param>
-	ShaderModule(ShaderStage stage, const std::wstring& filePath, const std::wstring& profile);
+	ShaderModule(ShaderStage stage, const std::wstring& filePath, const std::wstring& profile, bool isRaytracingShader = false);
 	~ShaderModule();
 
 	static void Initialize();
@@ -67,6 +67,8 @@ private:
 
 	std::time_t sourceTimestamp_ = 0;
 	size_t compileHash_ = 0;
+
+	bool isRaytracingShader_ = false;
 
 	/// <summary>
 	/// シェーダーのキャッシュ判定に使うハッシュを生成します。

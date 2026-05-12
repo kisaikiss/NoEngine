@@ -20,6 +20,9 @@
     <FxCompile Include="resources\engine\Shaders\Particle.VS.hlsl" />
     <FxCompile Include="resources\engine\Shaders\FullScreen.VS.hlsl" />
     <FxCompile Include="resources\engine\Shaders\CopyImage.PS.hlsl" />
+    <FxCompile Include="resources\engine\Shaders\Raytracing\RayTracingShadowLib.hlsl" />
+    <FxCompile Include="resources\engine\Shaders\Raytracing\RaytracingTestLib.hlsl" />
+    <FxCompile Include="resources\engine\Shaders\PreRender.PS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="engine\Assets\Audio\Audio.cpp" />
@@ -145,6 +148,10 @@
     <ClCompile Include="application\ClockworksDisease\System\Player\PlayerPushBackSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Object\BoxColliderUpdateSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\Component\Camera\FollowCameraComponent.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\RenderPass\TLASBuildPass.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\RenderPass\Raytracing\RaytracingShadowPass.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\RenderPass\Raytracing\RaytracingTestPass.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\RenderPass\PrePass.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\RabbitdokuOdyssey3Plus.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\Scene\RabbitdokuScene.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\Component\RabbitdokuComponent.cpp" />
@@ -327,6 +334,11 @@
     <ClInclude Include="application\ClockworksDisease\System\Game\CollisionEvents.h" />
     <ClInclude Include="application\ClockworksDisease\System\Player\PlayerPushBackSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Object\BoxColliderUpdateSystem.h" />
+    <ClInclude Include="engine\Assets\RaytracingMesh.h" />
+    <ClInclude Include="engine\Functions\Renderer\RenderPass\TLASBuildPass.h" />
+    <ClInclude Include="engine\Functions\Renderer\RenderPass\Raytracing\RaytracingShadowPass.h" />
+    <ClInclude Include="engine\Functions\Renderer\RenderPass\Raytracing\RaytracingTestPass.h" />
+    <ClInclude Include="engine\Functions\Renderer\RenderPass\PrePass.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\RabbitdokuOdyssey3Plus.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\Scene\RabbitdokuScene.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\Component\RabbitdokuComponent.h" />

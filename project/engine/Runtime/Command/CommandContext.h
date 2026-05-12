@@ -83,6 +83,10 @@ public:
 	/// <param name="destOffset">dest内で書き込みを開始するオフセット（バイト単位）。デフォルトは0。</param>
 	static void InitializeBuffer(GpuBuffer& dest, const UploadBuffer& src, size_t srcOffset, size_t numBytes = -1, size_t destOffset = 0);
 	
+	
+	static void BuildRaytracingAccelerationStructure(const D3D12_BUILD_RAYTRACING_ACCELERATION_STRUCTURE_DESC& buildDesc,
+		ID3D12Resource* scratchResource);
+
 	/// <summary>
 	/// リソースの状態遷移を行います。
 	/// </summary>
@@ -92,9 +96,18 @@ public:
 	void TransitionResource(GpuResource& resource, D3D12_RESOURCE_STATES newState, bool flushImmediate = false);
 
 	/// <summary>
+	/// UAV（Unordered Access View）に対するGPUバリアを挿入する。
+	/// </summary>
+	/// <param name="Resource">バリアを挿入する対象のGPUリソース（UAVを表す参照）。</param>
+	/// <param name="FlushImmediate">trueの場合、バリアを即時にフラッシュして待機する。既定はfalse。</param>
+	void InsertUAVBarrier(GpuResource& Resource, bool FlushImmediate = false);
+
+	/// <summary>
 	/// 溜めていた状態遷移要求をまとめて発行します。
 	/// </summary>
 	void FlushResourceBarriers(void);
+
+
 
 	void SetDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE type, ID3D12DescriptorHeap* heapPtr);
 	void SetDescriptorHeaps(UINT heapCount, D3D12_DESCRIPTOR_HEAP_TYPE type[], ID3D12DescriptorHeap* heapPtrs[]);

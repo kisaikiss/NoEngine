@@ -8,7 +8,7 @@ ConstantBuffer<WorldMatrix> gWorldMatrix : register(b1);
 
 struct VertexShaderInput
 {
-    float4 position : POSITION0;
+    float3 position : POSITION0;
     float2 texcoord : TEXCOORD0;
     float3 normal : NORMAL0;
 #ifdef ENABLE_SKINNING
@@ -31,7 +31,7 @@ VertexShaderOutput main(VertexShaderInput input)
     VertexShaderOutput output;
    
     
-    float4 position = input.position;
+    float4 position = float4(input.position, 1.0f);
     float3 normal = input.normal;
 #ifdef ENABLE_SKINNING
     float4 weights = input.jointWeights / dot(input.jointWeights, 1.0f);
@@ -54,6 +54,6 @@ VertexShaderOutput main(VertexShaderInput input)
     output.position = mul(worldPos, gCameraMatrix.viewProjection);
     output.texcoord = input.texcoord;
     output.normal = normalize(mul(normal, (float3x3) gWorldMatrix.worldIT));
-    output.worldPosition = mul(input.position, gWorldMatrix.world).xyz;
+    output.worldPosition = mul(float4(input.position, 1.0f), gWorldMatrix.world).xyz;
     return output;
 }

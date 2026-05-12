@@ -27,11 +27,12 @@ void TestScene::Setup() {
 		auto* m = registry.AddComponent<No::MaterialComponent>(player);
 		auto* a = registry.AddComponent<No::AnimatorComponent>(player);
 		No::ModelLoader::LoadModel("magiclash", "resources/game/ClockworksDisease/Model/player/magiclash2.gltf");
+		//No::ModelLoader::LoadModel("magiclash", "resources/engine/Model/enemy.obj");
 		No::ModelLoader::GetModel("magiclash", model, a);
 		m->materials = No::ModelLoader::GetMaterial("magiclash");
-		m->drawOutline = true;
+		m->drawOutline = false;
 		m->enableSkinning = true;
-		m->psoName = L"Renderer : ToonSkinned PSO";
+		m->psoName = L"Renderer : DefaultSkinned PSO";
 		m->psoId = NoEngine::Render::GetPSOID(m->psoName);
 		m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
 

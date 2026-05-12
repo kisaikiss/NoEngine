@@ -17,10 +17,6 @@ public:
     void Create(const std::wstring& name, uint32_t NumElements, uint32_t ElementSize,
         const UploadBuffer& srcData, uint32_t srcOffset = 0);
 
-    // 事前に割り当てられたヒープからバッファをサブ割り当てします。初期データが指定されている場合は、デフォルトのコマンドコンテキストを使用してバッファにコピーされます。
-   /* void CreatePlaced(const std::wstring& name, ID3D12Heap* pBackingHeap, uint32_t HeapOffset, uint32_t NumElements, uint32_t ElementSize,
-        const void* initialData = nullptr);*/
-
     const D3D12_CPU_DESCRIPTOR_HANDLE& GetUAV(void) const { return uav_; }
     const D3D12_CPU_DESCRIPTOR_HANDLE& GetSRV(void) const { return srv_; }
 

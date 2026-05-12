@@ -30,6 +30,8 @@ struct DirectionalLight
 };
 StructuredBuffer<DirectionalLight> gDirectionalLights : register(t2);
 
+Texture2D<float> gShadowMask : register(t5);
+
 PixelShaderOutput main(VertexShaderOutput input)
 {
     PixelShaderOutput output;
@@ -37,12 +39,15 @@ PixelShaderOutput main(VertexShaderOutput input)
 
     float4 textureColor = gTexture.Sample(gSampler, input.texcoord);
     
+    int2 screenPos = int2(input.position.xy);
+    float shadowFactor = gShadowMask.Load(int3(screenPos, 0));
+    
     for (int i = 0; i < gLightNums.directionalLightNum; i++)
     {
         float NdotL = dot(normalize(input.normal), -gDirectionalLights[i].direction);
         float toonIntensity = (NdotL > 0.6) ? 1.0 : 0.3;
         float totalIntensity = toonIntensity * gDirectionalLights[i].intensity;
-        output.color += gMaterial.color * textureColor * gDirectionalLights[i].color * totalIntensity;
+        output.color += gMaterial.color * textureColor * gDirectionalLights[i].color * totalIntensity * shadowFactor;
     }
         
     output.color.a = gMaterial.color.a;

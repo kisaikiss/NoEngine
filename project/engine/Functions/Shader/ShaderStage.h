@@ -7,6 +7,7 @@ enum class ShaderStage {
 	Compute,
 	Geometry,
 	Hull,
-	Domain
+	Domain,
+	RaytraceLib
 };
 }

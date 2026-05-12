@@ -3,9 +3,11 @@
 #include "engine/Runtime/GpuResource/GpuBuffer.h"
 #include "engine/Runtime/GpuResource/UploadBuffer.h"
 
+#include "RaytracingMesh.h"
+
 namespace NoEngine {
 struct Vertex {
-	Math::Vector4 position;
+	Math::Vector3 position;
 	Math::Vector2 texcoord;
 	Math::Vector3 normal;
 };
@@ -51,6 +53,8 @@ struct Mesh {
 	Node rootNode;
 	std::vector<SubMesh> subMeshes; // モデルに複数のメッシュが含まれている場合のaiMeshごとの範囲
 	uint32_t numJoints;
+
+	std::unique_ptr<RaytracingMesh> raytracingMesh; // レイトレーシング有効時のみ生成
 
 	// ToDo : スキニングの情報はメッシュが持つものではないので、別の構造体へ移動します。
 	std::vector<SkeletonWell> mappedPalette;

@@ -15,10 +15,11 @@ Microsoft::WRL::ComPtr <IDxcIncludeHandler> sIncludeHandler;
 bool isInitialized = false;
 }
 
-ShaderModule::ShaderModule(ShaderStage stage, const std::wstring& filePath, const std::wstring& profile) :
+ShaderModule::ShaderModule(ShaderStage stage, const std::wstring& filePath, const std::wstring& profile, bool isRaytracingShader) :
 	stage_(stage),
 	filePath_(filePath),
-	profile_(profile) {
+	profile_(profile),
+	isRaytracingShader_(isRaytracingShader) {
 	// ソースファイルのタイムスタンプを取得
 	namespace fs = std::filesystem;
 	auto ftime = fs::last_write_time(filePath_);
@@ -126,7 +127,8 @@ bool ShaderModule::CompileIfNeeded() {
 		(uint8_t*)compiled->GetBufferPointer() + compiled->GetBufferSize());
 
 	// リフレクションを実行
-	reflection_.ReflectShader(bytecode_, stage_);
+	if (!isRaytracingShader_)
+		reflection_.ReflectShader(bytecode_, stage_);
 
 	// キャッシュ保存
 	SaveBinary(cachePath_);
@@ -167,7 +169,8 @@ bool ShaderModule::LoadBinary(const std::wstring& path) {
 	ifs.read((char*)bytecode_.data(), size);
 
 	// リフレクションも再構築
-	reflection_.ReflectShader(bytecode_, stage_);
+	if (!isRaytracingShader_)
+		reflection_.ReflectShader(bytecode_, stage_);
 
 	return true;
 
@@ -238,25 +241,38 @@ bool ShaderModule::CompileShader(Microsoft::WRL::ComPtr<IDxcBlob>& outBlob) {
 	DxcBuffer shaderSourceBuffer{};
 	shaderSourceBuffer.Ptr = shaderSource->GetBufferPointer();
 	shaderSourceBuffer.Size = shaderSource->GetBufferSize();
-	shaderSourceBuffer.Encoding = DXC_CP_UTF8;	//UTF8の文字コードであることを通知
+	shaderSourceBuffer.Encoding = DXC_CP_UTF8;	// UTF8の文字コードであることを通知
 #pragma endregion
 
 #pragma region 2.Compileする
-	LPCWSTR arguments[] = {			// コンパイルオプション
+	std::vector<LPCWSTR> arguments;
+	// Raytracingと通常のシェーダーで設定を変えます。
+	if (isRaytracingShader_) {
+		arguments = {
+		filePath_.c_str(),
+		L"-T", profile_.c_str(),       // lib_6_3
+		L"-Zi", L"-Qembed_debug",
+		L"-Od",
+		L"-Zpr"
+		};
+	} else {
+		arguments = {				// コンパイルオプション
 		filePath_.c_str(),			// コンパイル対象のhlslファイル名
 		L"-E", L"main",				// エントリーポイントの指定、基本的にmain以外にはしません。
-		L"-T", profile_.c_str(),				// ShaderProfileの設定
+		L"-T", profile_.c_str(),	// ShaderProfileの設定
 		L"-Zi", L"-Qembed_debug",	// デバッグ用の情報を埋め込みます。
 		L"-Od",						// 最適化を外しておきます。
 		L"-Zpr",					// メモリレイアウトは行優先にします。
-	};
+		};
+	}
+
 
 	// 実際にShaderをコンパイルします。
 	Microsoft::WRL::ComPtr<IDxcResult> shaderResult = nullptr;
 	hr = sDxcCompiler->Compile(
 		&shaderSourceBuffer,		// 読み込んだファイル
-		arguments,					// コンパイルオプション
-		_countof(arguments),		// コンパイルオプションの数
+		arguments.data(),			// コンパイルオプション
+		UINT32(arguments.size()),	// コンパイルオプションの数
 		sIncludeHandler.Get(),		// includeが含まれた諸々
 		IID_PPV_ARGS(&shaderResult)	// コンパイル結果
 	);
