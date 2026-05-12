@@ -15,7 +15,6 @@ void RenderPassScheduler::Initialize() {
 	passes_.push_back(std::make_unique<TLASBuildPass>());
 	passes_.push_back(std::make_unique<LightPass>());
 	passes_.push_back(std::make_unique<PrePass>());
-	passes_.push_back(std::make_unique<MeshPass>());
 	passes_.push_back(std::make_unique<RaytracingShadowPass>());
 	passes_.push_back(std::make_unique<MeshPass>());
 	passes_.push_back(std::make_unique<RaytracingTestPass>());

@@ -36,9 +36,13 @@ void RaytracingShadowPass::Dispatch(GraphicsContext& gfx) {
 	// tlas
 	gfx.SetComputeSRV(0, renderContext->GetTLAS()->GetGPUVirtualAddress());
 	
-	// depth
-	gfx.TransitionResource(GraphicsCore::GetDepth(), D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE);
-	gfx.SetRaytracingDynamicDescriptor(1, 0, GraphicsCore::GetDepth().GetDepthSRV());
+	// worldPos
+	gfx.TransitionResource(GraphicsCore::sWorldPositionGBuffer, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE);
+	gfx.SetRaytracingDynamicDescriptor(1, 0, GraphicsCore::sWorldPositionGBuffer.GetSRV());
+
+	// normal
+	gfx.TransitionResource(GraphicsCore::sNormalGBuffer, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE);
+	gfx.SetRaytracingDynamicDescriptor(6, 0, GraphicsCore::sNormalGBuffer.GetSRV());
 	
 	// lights
 	gfx.SetRaytracingDynamicDescriptor(2, 0, renderContext->GetDirectionalLightSRV());
@@ -60,7 +64,7 @@ void RaytracingShadowPass::Dispatch(GraphicsContext& gfx) {
 	cameraData.invViewProj.Inverse();
 	cameraData.invViewProj.Transpose();
 	cameraData.cameraPos = camera_->forGPU.worldPosition;
-	cameraData.lightDir = lightDir_;
+	cameraData.lightDir = -lightDir_;
 
 	gfx.SetRaytracingDynamicConstantBufferView(4, sizeof(CameraCB), &cameraData);
 

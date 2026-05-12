@@ -105,7 +105,8 @@ void GraphicsCore::Initialize(float windowWidth, float windowHeight) {
 	sPostEffectBuffer.Create(L"PostEffect Buffer", static_cast<uint32_t>(windowWidth), static_cast<uint32_t>(windowHeight), 1, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
 	sPostEffectBuffer.CreateImGuiSRV();
 
-	sWorldPositionGBuffer.Create(L"PostEffect Buffer", static_cast<uint32_t>(windowWidth), static_cast<uint32_t>(windowHeight), 1, DXGI_FORMAT_R32G32B32A32_FLOAT);
+	sWorldPositionGBuffer.Create(L"WorldPosition Buffer", static_cast<uint32_t>(windowWidth), static_cast<uint32_t>(windowHeight), 1, DXGI_FORMAT_R32G32B32A32_FLOAT);
+	sNormalGBuffer.Create(L"Normal Buffer", static_cast<uint32_t>(windowWidth), static_cast<uint32_t>(windowHeight), 1, DXGI_FORMAT_R10G10B10A2_UNORM);
 
 	CreatePixelBuffer();
 
@@ -115,6 +116,7 @@ void GraphicsCore::Initialize(float windowWidth, float windowHeight) {
 void GraphicsCore::Shutdown(void) {
 	DestroyPixelBuffer();
 	sSwapChain.reset();
+	sNormalGBuffer.Destroy();
 	sWorldPositionGBuffer.Destroy();
 	sPostEffectBuffer.Destroy();
 	sWindowManager.Shutdown();
@@ -186,18 +188,21 @@ void GraphicsCore::StartFrame(GraphicsContext& context) {
 	// オブジェクトの描画開始
 	context.TransitionResource(sPostEffectBuffer, D3D12_RESOURCE_STATE_RENDER_TARGET);
 	context.TransitionResource(sWorldPositionGBuffer, D3D12_RESOURCE_STATE_RENDER_TARGET);
+	context.TransitionResource(sNormalGBuffer, D3D12_RESOURCE_STATE_RENDER_TARGET);
 	context.TransitionResource(*sDepthBuffer, D3D12_RESOURCE_STATE_DEPTH_WRITE);
 	
 
 	context.SetViewportAndScissor(sViewport, sScissorRect);
 	context.ClearColor(sPostEffectBuffer);
 	context.ClearColor(sWorldPositionGBuffer);
+	context.ClearColor(sNormalGBuffer);
 	context.ClearDepthAndStencil(*sDepthBuffer);
 }
 
 void GraphicsCore::EndFrame(GraphicsContext& context) {
 	context.TransitionResource(sPostEffectBuffer, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
-	context.TransitionResource(sWorldPositionGBuffer, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+	context.TransitionResource(sNormalGBuffer, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+	context.TransitionResource(sShadowMaskBuffer, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 	context.TransitionResource(sRaytracingBuffer, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 	// 本描画
 	sBackBufferIndex = sSwapChain->GetSwapChain()->GetCurrentBackBufferIndex();
@@ -224,12 +229,12 @@ void GraphicsCore::EndFrame(GraphicsContext& context) {
 		}
 	
 		{
-			sWorldPositionGBuffer.CreateImGuiSRV();
+			sNormalGBuffer.CreateImGuiSRV();
 			NoEngine::DescriptorHandle slot = Render::gTextureHeap.Alloc();
 			sGraphicsDevice->GetDevice()->CopyDescriptorsSimple(
 				1,
 				static_cast<D3D12_CPU_DESCRIPTOR_HANDLE>(slot),
-				sWorldPositionGBuffer.GetImGuiSRV(),
+				sNormalGBuffer.GetImGuiSRV(),
 				D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 			sRaytracingTexture = static_cast<ImTextureID>(slot.GetGpuPtr());
 			isInitFrame = false;

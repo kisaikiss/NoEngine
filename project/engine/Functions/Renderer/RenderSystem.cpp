@@ -139,9 +139,9 @@ void Initialize() {
 		defaultPSO.SetDepthStencilState(depthStencilDesc);
 		defaultPSO.SetInputLayout(inputLayout);
 		defaultPSO.SetPrimitiveTopologyType(D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
-		DXGI_FORMAT preRenderRTVFormat[] = { DXGI_FORMAT_R32G32B32A32_FLOAT };
+		DXGI_FORMAT preRenderRTVFormat[] = { DXGI_FORMAT_R32G32B32A32_FLOAT, DXGI_FORMAT_R10G10B10A2_UNORM, };
 
-		defaultPSO.SetRenderTargetFormats(1, preRenderRTVFormat, DXGI_FORMAT_D24_UNORM_S8_UINT);
+		defaultPSO.SetRenderTargetFormats(2, preRenderRTVFormat, DXGI_FORMAT_D24_UNORM_S8_UINT);
 		defaultPSO.SetVertexShader(defaultVS.GetBytecode());
 		defaultPSO.SetPixelShader(pixelShader.GetBytecode());
 		defaultPSO.SetSampleMask(D3D12_DEFAULT_SAMPLE_MASK);
@@ -150,6 +150,47 @@ void Initialize() {
 		sGraphicsPSOIndexMap[defaultPSOName] = static_cast<uint32_t>(sGraphicsPSOs.size()) - 1;
 		sRootSignatures.push_back(std::move(defaultRootSignature));
 		sRootSignatureIndexMap[defaultPSOName] = static_cast<uint32_t>(sRootSignatures.size()) - 1;
+	}
+
+	// PrePass Skining
+	{
+		ShaderModule defaultSkinnedVS(ShaderStage::Vertex, L"resources/engine/Shaders/DefaultSkinned.VS.hlsl", L"vs_6_0");
+		ShaderModule pixelShader(ShaderStage::Pixel, L"resources/engine/Shaders/PreRender.PS.hlsl", L"ps_6_0");
+
+		const ShaderReflection& prePSReflection = pixelShader.GetReflection();
+		const ShaderReflection& vsSkinnedReflection = defaultSkinnedVS.GetReflection();
+
+		std::vector<ShaderReflection> skinnedRefls;
+		skinnedRefls.push_back(vsSkinnedReflection);
+		skinnedRefls.push_back(prePSReflection);
+
+		std::unique_ptr<RootSignature> defaultSkinnedRootSignature = std::make_unique<RootSignature>();
+		std::wstring defaultSkinnedPSOName = L"Renderer : PreRenderSkinned PSO";
+		RootSignatureBuilder::BuildFromReflection(skinnedRefls, *defaultSkinnedRootSignature, ConvertString(defaultSkinnedPSOName));
+
+		std::vector<D3D12_INPUT_ELEMENT_DESC> skinnedInputLayout = InputLayoutBuilder::BuildFromReflection(vsSkinnedReflection);
+		// ToDo : inputLayoutのReflectionがUINT型のインプットが対応できていないので、このように後から入れる形になってしまっています。UINT型に対応すべきです。
+		skinnedInputLayout[4].Format = DXGI_FORMAT_R32G32B32A32_UINT;
+
+
+		GraphicsPSO defaultSkinnedPSO(defaultSkinnedPSOName);
+		defaultSkinnedPSO.SetRootSignature(*defaultSkinnedRootSignature);
+		defaultSkinnedPSO.SetRasterizerState(rasterizerDesc);
+		defaultSkinnedPSO.SetBlendState(blendDesc);
+		defaultSkinnedPSO.SetDepthStencilState(depthStencilDesc);
+		defaultSkinnedPSO.SetInputLayout(skinnedInputLayout);
+		defaultSkinnedPSO.SetPrimitiveTopologyType(D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
+		DXGI_FORMAT preRenderRTVFormat[] = { DXGI_FORMAT_R32G32B32A32_FLOAT, DXGI_FORMAT_R10G10B10A2_UNORM, };
+
+		defaultSkinnedPSO.SetRenderTargetFormats(2, preRenderRTVFormat, DXGI_FORMAT_D24_UNORM_S8_UINT);
+		defaultSkinnedPSO.SetVertexShader(defaultSkinnedVS.GetBytecode());
+		defaultSkinnedPSO.SetPixelShader(pixelShader.GetBytecode());
+		defaultSkinnedPSO.SetSampleMask(D3D12_DEFAULT_SAMPLE_MASK);
+		defaultSkinnedPSO.Finalize();
+		sGraphicsPSOs.push_back(defaultSkinnedPSO);
+		sGraphicsPSOIndexMap[defaultSkinnedPSOName] = static_cast<uint32_t>(sGraphicsPSOs.size()) - 1;
+		sRootSignatures.push_back(std::move(defaultSkinnedRootSignature));
+		sRootSignatureIndexMap[defaultSkinnedPSOName] = static_cast<uint32_t>(sRootSignatures.size()) - 1;
 	}
 
 	// トゥーンレンダリング
@@ -897,12 +938,12 @@ void InitRaytracingGlobalRootSignature() {
 	std::unique_ptr<RootSignature> rtGlobalRSptr = std::make_unique<RootSignature>();
 	auto& rtGlobalRS = *rtGlobalRSptr.get();
 
-	rtGlobalRS.Reset(6, 0);
+	rtGlobalRS.Reset(7, 0);
 
 	// TLAS
 	rtGlobalRS[0].InitAsBufferSRV(0);
 
-	// SRV テーブル（Depth）
+	// SRV テーブル（worldPos）
 	rtGlobalRS[1].InitAsDescriptorRange(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 1);
 
 	// Lights
@@ -916,6 +957,9 @@ void InitRaytracingGlobalRootSignature() {
 
 	// CBV b1
 	rtGlobalRS[5].InitAsConstantBuffer(1);
+
+	// Normal
+	rtGlobalRS[6].InitAsDescriptorRange(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 3, 1);
 
 
 	rtGlobalRS.Finalize(L"RT Global RootSignature");
