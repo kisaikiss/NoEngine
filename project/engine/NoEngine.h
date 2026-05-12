@@ -20,6 +20,7 @@
 #include "Functions/ECS/System/EditSystem.h"
 #include "Functions/ECS/System/CameraSystem.h"
 #include "Functions/ECS/System/DebugCameraSystem.h"
+#include "Functions/ECS/System/DebugCamera2DSystem.h"
 #include "Functions/ECS/System/MovementSystem.h"
 #include "Functions/ECS/System/Movement2DSystem.h"
 #include "Functions/ECS/System/Collision/CollisionResolutionSystem.h"

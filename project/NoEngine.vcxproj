@@ -204,6 +204,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\Component\RabbitdokuComponent.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\RabbitdokuOdyssey3Plus.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\Scene\RabbitdokuScene.cpp" />
+    <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\Camera2DChangeSystem.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\FollowCamera2DSystem.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\RabbitdokuCollisionEventSystem.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\Player\RabbitdokuMoveSystem.cpp" />
@@ -223,6 +224,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="engine\Functions\ECS\Component\Transform2DComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\TransformComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Collision\CollisionResolutionSystem.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\DebugCamera2DSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\DebugCameraSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\EditSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\GroundResetSystem.cpp" />
@@ -377,6 +379,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\Game\RabbitdokuCollisionLayer.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\RabbitdokuOdyssey3Plus.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\Scene\RabbitdokuScene.h" />
+    <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\Camera2DChangeSystem.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\FollowCamera2DSystem.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\RabbitdokuCollisionEventSystem.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\Player\RabbitdokuMoveSystem.h" />
@@ -402,6 +405,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="engine\Functions\ECS\EventBus.h" />
     <ClInclude Include="engine\Functions\ECS\Event\SceneChangeEvent.h" />
     <ClInclude Include="engine\Functions\ECS\System\Collision\CollisionResolutionSystem.h" />
+    <ClInclude Include="engine\Functions\ECS\System\DebugCamera2DSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\DebugCameraSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\EditSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\GroundResetSystem.h" />

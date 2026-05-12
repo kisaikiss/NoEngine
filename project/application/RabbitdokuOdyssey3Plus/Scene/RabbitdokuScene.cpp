@@ -5,11 +5,13 @@
 #include "../System/RabbitdokuCollisionEventSystem.h"
 #include "../System/Player/RabbitdokuPushBackSystem.h"
 #include "../System/FollowCamera2DSystem.h"
+#include "../System/Camera2DChangeSystem.h"
 
 #include "../Component/RabbitdokuComponent.h"
 #include "../Component/FollowCamera2DComponent.h"
 #include "../Component/RoomComponent.h"
 #include "../Game/RabbitdokuCollisionLayer.h"
+
 
 void RabbitdokuScene::Setup() {
 	auto& registry = *GetRegistry();
@@ -22,6 +24,8 @@ void RabbitdokuScene::Setup() {
 
 void RabbitdokuScene::AddSystems() {
 	AddSystem(std::make_unique<No::EditSystem>());
+	AddSystem(std::make_unique<No::DebugCamera2DSystem>());
+	AddSystem(std::make_unique<Camera2DChangeSystem>());
 
 	AddSystem(std::make_unique<RabbitdokuMoveSystem>());
 	AddSystem(std::make_unique<FollowCamera2DSystem>());
@@ -68,12 +72,23 @@ void RabbitdokuScene::InitPlayer(No::Registry& registry) {
 }
 
 void RabbitdokuScene::InitCamera(No::Registry& registry) {
-	No::Entity e = registry.GenerateEntity();
-	registry.AddComponent<No::Transform2DComponent>(e);
-	registry.AddComponent<No::EditTag>(e)->name = "Camera";
-	registry.AddComponent<No::Camera2DComponent>(e);
-	registry.AddComponent<No::ActiveCamera2DTag>(e);
-	registry.AddComponent<FollowCamera2DComponent>(e);
+	{
+		No::Entity e = registry.GenerateEntity();
+		registry.AddComponent<No::Transform2DComponent>(e);
+		registry.AddComponent<No::EditTag>(e)->name = "Camera";
+		registry.AddComponent<No::Camera2DComponent>(e);
+		registry.AddComponent<No::ActiveCamera2DTag>(e);
+		registry.AddComponent<FollowCamera2DComponent>(e);
+	}
+	
+	{
+		No::Entity e = registry.GenerateEntity();
+		registry.AddComponent<No::Transform2DComponent>(e);
+		registry.AddComponent<No::EditTag>(e)->name = "DebugCamera";
+		registry.AddComponent<No::Camera2DComponent>(e);
+		registry.AddComponent<No::DebugCamera2DComponent>(e);
+	}
+	
 }
 
 void RabbitdokuScene::InitBlock(No::Registry& registry) {

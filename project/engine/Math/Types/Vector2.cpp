@@ -31,6 +31,12 @@ Vector2& Vector2::operator/=(float s) {
     return *this;
 }
 
+Vector2& Vector2::operator+=(const float s) {
+    x += s;
+    y += s;
+    return *this;
+}
+
 Vector2& Vector2::operator=(const float s) {
     x = s;
     y = s;

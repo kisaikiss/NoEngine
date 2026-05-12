@@ -9,6 +9,7 @@ struct Vector2 final {
 	Vector2& operator-=(const Vector2& other);
 	Vector2& operator*=(const float s);
 	Vector2& operator/=(const float s);
+	Vector2& operator+=(const float s);
 	Vector2& operator=(const float s);
 
 	[[nodiscard]] float Dot(const Vector2& other)const noexcept;

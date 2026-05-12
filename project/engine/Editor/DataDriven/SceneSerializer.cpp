@@ -76,7 +76,7 @@ void LoadScene(ECS::Registry& registry, const json& scene) {
 		ECS::Entity e = FindEntityByName(registry, name);
 
 		if (e == ECS::INVALID_ENTITY) {
-			return;
+			continue;
 		}
 
 		// Componentを復元
