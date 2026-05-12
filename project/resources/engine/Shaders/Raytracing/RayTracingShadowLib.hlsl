@@ -19,6 +19,8 @@ cbuffer CameraCB : register(b0)
     float4x4 gInvViewProj;
     float3 gCameraPos;
     float pad0;
+    float3 gLightDir;
+    float pad1;
 };
 
 // Light list
@@ -39,82 +41,63 @@ struct DirectionalLight
 StructuredBuffer<DirectionalLight> gLights : register(t2);
 
 // ShadowRay の最大距離
-static const float gShadowMaxDistance = 1000.0f;
+static const float gShadowMaxDistance = asfloat(0x7F7FFFFF);
+
+
+float3 GetWorldPosition(float2 uv, float z)
+{
+    // DirectXの標準的なNDC変換
+    float x = uv.x * 2.0f - 1.0f;
+    float y = 1.0f - uv.y * 2.0f; // ここでYを反転しつつ-1～1にする
+    
+    float4 clipPos = float4(x, y, z, 1.0f);
+    float4 worldPos = mul(gInvViewProj, clipPos); // または mul(gInvViewProj, clipPos)
+    
+    return worldPos.xyz / worldPos.w;
+}
 
 [shader("raygeneration")]
 void RayGen_Shadow()
 {
-    uint2 pixel = DispatchRaysIndex().xy;
-    uint2 size = DispatchRaysDimensions().xy;
-
-    float2 uv = (pixel + 0.5f) / size;
-
-    // Depth 読み取り
-    float depth = gDepth.Load(int3(pixel, 0));
+    uint2 dispatchIdx = DispatchRaysIndex().xy;
+    float2 dispatchDim = DispatchRaysDimensions().xy;
+    
+    float depth = gDepth.Load(int3(dispatchIdx, 0));
     if (depth >= 1.0f)
     {
-        gShadowMask[pixel] = 1.0f; // 遠平面（背景） → 非影
+        gShadowMask[dispatchIdx] = 1.0; // Not shadowed
         return;
     }
 
-    // NDC → World
-    float4 ndc = float4(uv.x * 2.0f - 1.0f, 1.0f - uv.y * 2.0f, depth, 1.0f);
-    float4 world = mul(ndc, gInvViewProj);
-    world /= world.w;
+    float2 uv = (dispatchIdx + 0.5f) / dispatchDim;
+    float3 worldPosition = GetWorldPosition(uv, depth);
 
-    float3 worldPos = world.xyz;
+    float3 lightDir = float3(0, -1, 0);
+    RayDesc rayDesc;
+    rayDesc.Origin = worldPosition;
+    rayDesc.Direction = lightDir;
+    rayDesc.TMin = 0.01f;
+    rayDesc.TMax = gShadowMaxDistance;
 
-    bool shadowed = false;
+    ShadowPayload payload;
+    payload.occluded = false;
 
-    for (uint i = 0; i < gLightNums.directionalLightNum; i++)
-    {
-        float3 toLight = -normalize(gLights[i].direction);
+    TraceRay(gSceneTLAS, RAY_FLAG_ACCEPT_FIRST_HIT_AND_END_SEARCH, ~0, 0, 1, 0, rayDesc, payload);
 
-        RayDesc ray;
-        ray.Origin = worldPos;
-        ray.Direction = toLight;
-        // Originに直接オフセットを足すよりも、TMinを設定する方が安全かつ一般的です
-        ray.TMin = 0.01f;
-        ray.TMax = gShadowMaxDistance;
 
-        ShadowPayload payload;
-        // 【修正】初期値を true (遮蔽されている) にする
-        payload.occluded = true;
-
-        // 【修正】フラグの追加: カリングとClosestHitスキップで自己交差を回避・最適化
-        uint rayFlags = RAY_FLAG_ACCEPT_FIRST_HIT_AND_END_SEARCH |
-                        RAY_FLAG_CULL_BACK_FACING_TRIANGLES |
-                        RAY_FLAG_SKIP_CLOSEST_HIT_SHADER;
-
-        TraceRay(
-            gSceneTLAS,
-            rayFlags,
-            0xFF,
-            0, 0, 0,
-            ray,
-            payload
-        );
-
-        if (payload.occluded)
-        {
-            shadowed = true;
-            break;
-        }
-    }
-
-    gShadowMask[pixel] = shadowed ? 0.0f : 1.0f;
+    gShadowMask[dispatchIdx] = payload.occluded ? 0.0f : 1.0f;
 }
 
 [shader("miss")]
 void Miss_Shadow(inout ShadowPayload payload)
 {
-    // 【修正】どこにも当たらなかった(光が届いた)場合のみ false
     payload.occluded = false;
 }
 
-// 【修正】ClosestHit_Shadow はスキップされるため、中身を空にするか削除して構いません
-// ※C++側でHitGroupにClosestHitをバインドしている場合は、エラーを防ぐため関数自体は残しておいてください
+
 [shader("closesthit")]
 void ClosestHit_Shadow(inout ShadowPayload payload, in BuiltInTriangleIntersectionAttributes attribs)
 {
+    payload.occluded = true;
+
 }

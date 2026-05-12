@@ -230,7 +230,7 @@ void GraphicsCore::EndFrame(GraphicsContext& context) {
 	ImGui::Begin("RaytracingTest");
 	ImGui::Image(
 		sRaytracingTexture,
-		ImVec2(sWindowWidth * 2 / 3, sWindowHeight * 2 / 3) // 表示サイズ
+		ImVec2(sWindowWidth * 2 / 5, sWindowHeight * 2 / 5) // 表示サイズ
 	);
 	ImGui::End();
 

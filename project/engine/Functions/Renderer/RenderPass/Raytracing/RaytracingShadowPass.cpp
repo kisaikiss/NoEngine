@@ -2,6 +2,7 @@
 
 #include "../../RenderSystem.h"
 #include "engine/Runtime/GraphicsCore.h"
+#include "engine/Functions/ECS/Component/LightComponent.h"
 
 namespace NoEngine {
 namespace Render {
@@ -16,6 +17,12 @@ void RaytracingShadowPass::Collect(ECS::Registry& registry) {
 
 	for (auto entity : view) {
 		camera_ = registry.GetComponent<Component::CameraComponent>(entity);
+	}
+
+	auto lightView = registry.View<Component::DirectionalLightComponent>();
+	for (auto entity : lightView) {
+		lightDir_ = registry.GetComponent<Component::DirectionalLightComponent>(entity)->direction;
+
 	}
 
 }
@@ -44,13 +51,16 @@ void RaytracingShadowPass::Dispatch(GraphicsContext& gfx) {
 	struct CameraCB {
 		Math::Matrix4x4 invViewProj{};
 		Math::Vector3 cameraPos{};
-		float pad = 0.f;
+		float pad1 = 0.f;
+		Math::Vector3 lightDir{};
+		float pad2 = 0.f;
 	};
 	CameraCB cameraData;
 	cameraData.invViewProj = camera_->forGPU.viewProjection;
 	cameraData.invViewProj.Inverse();
 	cameraData.invViewProj.Transpose();
 	cameraData.cameraPos = camera_->forGPU.worldPosition;
+	cameraData.lightDir = lightDir_;
 
 	gfx.SetRaytracingDynamicConstantBufferView(4, sizeof(CameraCB), &cameraData);
 

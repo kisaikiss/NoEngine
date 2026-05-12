@@ -32,7 +32,7 @@ void TestScene::Setup() {
 		m->materials = No::ModelLoader::GetMaterial("magiclash");
 		m->drawOutline = false;
 		m->enableSkinning = false;
-		m->psoName = L"Renderer : Toon PSO";
+		m->psoName = L"Renderer : Default PSO";
 		m->psoId = NoEngine::Render::GetPSOID(m->psoName);
 		m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
 
