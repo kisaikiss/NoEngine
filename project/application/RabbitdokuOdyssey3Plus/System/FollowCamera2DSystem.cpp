@@ -2,6 +2,7 @@
 #include "FollowCamera2DSystem.h"
 #include "../Component/FollowCamera2DComponent.h"
 #include "../Component/RabbitdokuComponent.h"
+#include "../Component/RoomComponent.h"
 
 void FollowCamera2DSystem::Update(No::Registry& registry, float deltaTime) {
 	static_cast<void>(deltaTime);
@@ -18,4 +19,13 @@ void FollowCamera2DSystem::Update(No::Registry& registry, float deltaTime) {
 		transform->translate = No::Lerp(transform->translate, playerPosition, 0.1f);
 	}
 
+}
+
+No::Entity FollowCamera2DSystem::FindRoom(No::Registry& registry, const No::Vector2& pos) {
+	auto view = registry.View<RoomComponent>();
+	for (auto e : view) {
+		auto& room = registry.GetComponent<RoomComponent>(e)->bounds;
+		if (room.Contains(pos)) return e;
+	}
+	return No::INVALID_ENTITY;
 }

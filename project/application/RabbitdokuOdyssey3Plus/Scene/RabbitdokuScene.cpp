@@ -17,6 +17,7 @@ void RabbitdokuScene::Setup() {
 	InitPlayer(registry);
 	InitCamera(registry);
 	InitBlock(registry);
+	InitRoom(registry);
 }
 
 void RabbitdokuScene::AddSystems() {
@@ -183,4 +184,15 @@ void RabbitdokuScene::InitBlock(No::Registry& registry) {
 		transform->scale.x = static_cast<float>(sprite->textureHandle.GetWidth());
 		transform->scale.y = static_cast<float>(sprite->textureHandle.GetHeight());
 	}
+}
+
+void RabbitdokuScene::InitRoom(No::Registry& registry) {
+	auto e = registry.GenerateEntity();
+	auto* room = registry.AddComponent<RoomComponent>(e);
+	room->bounds.top = 0.0f;
+	room->bounds.left = 0.0f;
+	room->bounds.right = 1280.f;
+	room->bounds.bottom = 720.f;
+	
+	room->followZone = room->bounds;
 }

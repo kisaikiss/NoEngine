@@ -11,5 +11,6 @@ private:
     void InitCamera(No::Registry& registry);
 
     void InitBlock(No::Registry& registry);
+    void InitRoom(No::Registry& registry);
 };
 
