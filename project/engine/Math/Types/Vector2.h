@@ -9,6 +9,8 @@ struct Vector2 final {
 	Vector2& operator-=(const Vector2& other);
 	Vector2& operator*=(const float s);
 	Vector2& operator/=(const float s);
+	Vector2& operator+=(const float s);
+	Vector2& operator=(const float s);
 
 	[[nodiscard]] float Dot(const Vector2& other)const noexcept;
 	[[nodiscard]] float Closs(const Vector2& other)const noexcept;
@@ -30,5 +32,7 @@ Vector2 operator*(float s, const Vector2& v);
 Vector2 operator*(const Vector2& v, float s);
 
 Vector2 operator/(const Vector2& v, float s);
+
+Vector2 operator-(const Vector2& v);
 }
 }

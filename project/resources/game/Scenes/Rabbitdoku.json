@@ -1,0 +1,70 @@
+{
+    "entities": {
+        "Camera": {
+            "components": {
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        70.04106903076172,
+                        127.99996948242188
+                    ]
+                }
+            }
+        },
+        "Rabbitdoku": {
+            "components": {
+                "Rabbitdoku": {
+                    "doubleJumpSpeed": 350.0,
+                    "jumpSpeed": 450.0,
+                    "moveSpeed": 300.0,
+                    "respawnPoint": [
+                        0.0,
+                        0.0
+                    ],
+                    "yVelocity": 0.0
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": true,
+                    "flipY": false,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "uv": [
+                        0.3333333432674408,
+                        0.0,
+                        0.3333333432674408,
+                        0.25
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        64.0,
+                        64.0
+                    ],
+                    "translate": [
+                        70.0410385131836,
+                        128.0
+                    ]
+                },
+                "Velocity2DComponent": {
+                    "linear": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        }
+    }
+}

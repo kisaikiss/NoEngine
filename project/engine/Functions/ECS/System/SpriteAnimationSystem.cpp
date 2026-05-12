@@ -33,7 +33,7 @@ void SpriteAnimationSystem::Update(Registry& registry, float deltaTime) {
 			sprite->uv.x += animator->animeFrameWidth / static_cast<float>(width);
 			// もしアニメーションが終わりにたどり着いたら最初に戻す
 			if (sprite->uv.x > static_cast<float>(animator->framesNum - 1) * (animator->animeFrameWidth / static_cast<float>(width)) ||
-				sprite->uv.x > 1.f - (animator->animeFrameWidth / static_cast<float>(width))) {
+				sprite->uv.x > 1.f) {
 				sprite->uv.x = 0.f;
 				animator->isAnimationEnd = true;
 			}

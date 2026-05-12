@@ -25,7 +25,15 @@ struct Contact {
     ECS::Entity b;
     Math::Vector3 normal;      // b → a の方向
     float penetration;
-    Math::ContactPosition constactPosition;          // bから見たaの位置
+    Math::ContactPosition contactPosition;          // bから見たaの位置
+};
+
+struct Contact2D {
+    ECS::Entity a;
+    ECS::Entity b;
+    Math::Vector2 normal;      // b → a の方向
+    float penetration;
+    Math::ContactPosition contactPosition;          // bから見たaの位置
 };
 
 namespace Event {
@@ -35,6 +43,10 @@ struct PotentialPairEvent {
 
 struct ContactEvent {
     std::vector<Contact> contacts;
+};
+
+struct Contact2DEvent {
+    std::vector<Contact2D> contacts;
 };
 
 }

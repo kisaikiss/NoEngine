@@ -74,6 +74,15 @@ bool Keyboard::IsPress(uint8_t keyCode) {
 	return keys[keyCode];
 }
 
+
+bool Keyboard::IsRelease(uint8_t keyCode) {
+	return !keys[keyCode] && preKeys[keyCode];
+}
+
+bool Keyboard::PreIsPress(uint8_t keyCode) {
+	return preKeys[keyCode];
+}
+
 void Pad::Update() {
 	preGamepadState = gamepadState;
 

@@ -1,6 +1,6 @@
 #pragma once
-#include "ISystem.h"
-#include "../Event/CollisionEvents.h"
+#include "../ISystem.h"
+#include "../../Event/CollisionEvents.h"
 namespace NoEngine {
 namespace ECS {
 class NarrowPhaseSystem :

@@ -6,7 +6,13 @@ namespace ECS {
 class SystemManager {
 public:
 	SystemManager();
-	void AddSystem(std::unique_ptr<ISystem> system) { systems_.push_back(std::move(system)); }
+
+	template<typename T>
+	T* AddSystem(std::unique_ptr<T> system) {
+		T* ptr = system.get();
+		systems_.push_back(std::move(system));
+		return ptr;
+	}
 
 	void UpdateAll(ComputeContext& ctx, Registry& registry, float deltaTime);
 

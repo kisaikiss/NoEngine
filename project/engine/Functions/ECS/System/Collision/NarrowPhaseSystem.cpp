@@ -1,7 +1,7 @@
 #include "NarrowPhaseSystem.h"
-#include "../Event/CollisionEvents.h"
-#include "../Component/TransformComponent.h"
-#include "../Component/VelocityComponent.h"
+#include "../../Event/CollisionEvents.h"
+#include "../../Component/TransformComponent.h"
+#include "../../Component/VelocityComponent.h"
 
 #include "engine/Functions/Renderer/Primitive.h"
 #include "engine/Math/MathInclude.h"
@@ -44,7 +44,7 @@ void NarrowPhaseSystem::Update(Registry& registry, float deltaTime) {
 			contact.b = boxE;
 			contact.normal = collide.normal;
 			contact.penetration = collide.penetration;
-			contact.constactPosition = ClassifyContact(collide.normal);
+			contact.contactPosition = ClassifyContact(collide.normal);
 
 			contactEvent.contacts.push_back(contact);
 		}

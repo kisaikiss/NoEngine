@@ -128,7 +128,6 @@
     <ClCompile Include="engine\Functions\Renderer\RenderPass\ParticlePass.cpp" />
     <ClCompile Include="application\TestApp\System\ParticleTestSystem.cpp" />
     <ClCompile Include="engine\Utilities\Random.cpp" />
-    <ClCompile Include="engine\Functions\ECS\Component\StartTransformComponent.cpp" />
     <ClCompile Include="engine\Functions\Scene\IScene.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\SystemManager.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\SpriteAnimationSystem.cpp" />
@@ -142,8 +141,8 @@
     <ClCompile Include="engine\Math\Collision\CollisionHelper.cpp" />
     <ClCompile Include="engine\Math\MathUtility.cpp" />
     <ClCompile Include="engine\Math\Collision\CollisionFanc.cpp" />
-    <ClCompile Include="engine\Functions\ECS\System\NarrowPhaseSystem.cpp" />
-    <ClCompile Include="engine\Functions\ECS\System\CollisionResolutionSystem.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\Collision\NarrowPhaseSystem.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\Collision\CollisionResolutionSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\GroundResetSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Game\CollisionEventSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Player\PlayerPushBackSystem.cpp" />
@@ -153,6 +152,18 @@
     <ClCompile Include="engine\Functions\Renderer\RenderPass\Raytracing\RaytracingShadowPass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\Raytracing\RaytracingTestPass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PrePass.cpp" />
+    <ClCompile Include="application\RabbitdokuOdyssey3Plus\RabbitdokuOdyssey3Plus.cpp" />
+    <ClCompile Include="application\RabbitdokuOdyssey3Plus\Scene\RabbitdokuScene.cpp" />
+    <ClCompile Include="application\RabbitdokuOdyssey3Plus\Component\RabbitdokuComponent.cpp" />
+    <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\Player\RabbitdokuMoveSystem.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\Collision\NarrowPhase2DSystem.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\Collision\CollisionResolution2DSystem.cpp" />
+    <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\Player\RabbitdokuPushBackSystem.cpp" />
+    <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\RabbitdokuCollisionEventSystem.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\Movement2DSystem.cpp" />
+    <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\FollowCamera2DSystem.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\DebugCamera2DSystem.cpp" />
+    <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\Camera2DChangeSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -298,7 +309,6 @@
     <ClInclude Include="engine\Functions\ECS\Component\ParticleEmitterComponent.h" />
     <ClInclude Include="application\TestApp\System\ParticleTestSystem.h" />
     <ClInclude Include="engine\Utilities\Random.h" />
-    <ClInclude Include="engine\Functions\ECS\Component\StartTransformComponent.h" />
     <ClInclude Include="engine\Functions\ECS\Component\PauseComponent.h" />
     <ClInclude Include="engine\Functions\ECS\Component\Animator2DComponent.h" />
     <ClInclude Include="engine\Functions\ECS\System\SpriteAnimationSystem.h" />
@@ -316,8 +326,8 @@
     <ClInclude Include="engine\Math\MathUtility.h" />
     <ClInclude Include="engine\Math\Collision\CollisionFanc.h" />
     <ClInclude Include="engine\Functions\ECS\Event\CollisionEvents.h" />
-    <ClInclude Include="engine\Functions\ECS\System\NarrowPhaseSystem.h" />
-    <ClInclude Include="engine\Functions\ECS\System\CollisionResolutionSystem.h" />
+    <ClInclude Include="engine\Functions\ECS\System\Collision\NarrowPhaseSystem.h" />
+    <ClInclude Include="engine\Functions\ECS\System\Collision\CollisionResolutionSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\GroundResetSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Game\CollisionEventSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Game\CollisionLayer.h" />
@@ -329,6 +339,21 @@
     <ClInclude Include="engine\Functions\Renderer\RenderPass\Raytracing\RaytracingShadowPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\Raytracing\RaytracingTestPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PrePass.h" />
+    <ClInclude Include="application\RabbitdokuOdyssey3Plus\RabbitdokuOdyssey3Plus.h" />
+    <ClInclude Include="application\RabbitdokuOdyssey3Plus\Scene\RabbitdokuScene.h" />
+    <ClInclude Include="application\RabbitdokuOdyssey3Plus\Component\RabbitdokuComponent.h" />
+    <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\Player\RabbitdokuMoveSystem.h" />
+    <ClInclude Include="engine\Functions\ECS\System\Collision\NarrowPhase2DSystem.h" />
+    <ClInclude Include="engine\Functions\ECS\System\Collision\CollisionResolution2DSystem.h" />
+    <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\Player\RabbitdokuPushBackSystem.h" />
+    <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\RabbitdokuCollisionEventSystem.h" />
+    <ClInclude Include="application\RabbitdokuOdyssey3Plus\Game\RabbitdokuCollisionLayer.h" />
+    <ClInclude Include="engine\Functions\ECS\System\Movement2DSystem.h" />
+    <ClInclude Include="application\RabbitdokuOdyssey3Plus\Component\FollowCamera2DComponent.h" />
+    <ClInclude Include="application\RabbitdokuOdyssey3Plus\Component\RoomComponent.h" />
+    <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\FollowCamera2DSystem.h" />
+    <ClInclude Include="engine\Functions\ECS\System\DebugCamera2DSystem.h" />
+    <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\Camera2DChangeSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

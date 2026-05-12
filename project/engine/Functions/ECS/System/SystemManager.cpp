@@ -36,7 +36,13 @@ void SystemManager::UpdateAll(ComputeContext& ctx, Registry& registry, float del
 		
 	}
 #ifdef USE_IMGUI
-	ImGui::Begin("Game");
+
+
+	ImGui::Begin("Game", nullptr, ImGuiWindowFlags_NoTitleBar);
+	float windowWidth = ImGui::GetWindowSize().x;
+	float itemWidth = ImGui::CalcTextSize("Button").x + ImGui::GetStyle().FramePadding.x * 2;
+
+	ImGui::SetCursorPosX((windowWidth - itemWidth) * 0.5f);
 	if (ImGui::Button("■")) {
 		auto sceneView = registry.View<SceneNameComponent>();
 		for (auto e : sceneView) {

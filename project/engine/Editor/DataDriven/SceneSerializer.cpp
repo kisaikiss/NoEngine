@@ -1,9 +1,6 @@
 #include "stdafx.h"
 #include "SceneSerializer.h"
 #include "engine/Functions/Scene/SceneNameComponent.h"
-#include "engine/Functions/ECS/Component/TransformComponent.h"
-#include "engine/Functions/ECS/Component/Transform2DComponent.h"
-#include "engine/Functions/ECS/Component/StartTransformComponent.h"
 #include "../EditUtils.h"
 
 namespace NoEngine {
@@ -78,27 +75,12 @@ void LoadScene(ECS::Registry& registry, const json& scene) {
 		// 名前でEntityを探す
 		ECS::Entity e = FindEntityByName(registry, name);
 
-		if (e == ECS::nullEntity) {
-			return;
+		if (e == ECS::INVALID_ENTITY) {
+			continue;
 		}
 
 		// Componentを復元
 		LoadEntityFromJson(registry, e, entityJson);
-		auto* startTransform = registry.GetComponent<Component::StartTransformComponent>(e);
-		auto* transform = registry.GetComponent<Component::TransformComponent>(e);
-		if (startTransform && transform) {
-			transform->translate = startTransform->translate;
-			transform->rotation = startTransform->rotation;
-			transform->scale = startTransform->scale;
-		}
-
-		auto* startTransform2d = registry.GetComponent<Component::StartTransform2DComponent>(e);
-		auto* transform2d = registry.GetComponent<Component::Transform2DComponent>(e);
-		if (startTransform2d && transform2d) {
-			transform2d->translate = startTransform2d->translate;
-			transform2d->rotation = startTransform2d->rotation;
-			transform2d->scale = startTransform2d->scale;
-		}
 	}
 
 }
@@ -111,7 +93,7 @@ ECS::Entity FindEntityByName(ECS::Registry& registry, const std::string& name) {
 			return entity;
 		}
 	}
-	return ECS::nullEntity;
+	return ECS::INVALID_ENTITY;
 
 }
 
@@ -124,13 +106,13 @@ void LoadEntityFromJson(ECS::Registry& registry, ECS::Entity entity, const json&
 
 		for (auto& field : typeInfo->fields) {
 			uint8_t* base = (uint8_t*)compPtr + field.offset;
-			base;
 			ReadFieldFromJson(compJson, field, base);
 		}
 	}
 }
 
 void ReadFieldFromJson(const nlohmann::json& j, const FieldInfo& field, void* ptr) {
+	if (!j.contains(field.name)) return;
 	switch (field.type) {
 	case NoEngine::FieldType::Float:
 		*(float*)ptr = j[field.name].get<float>();

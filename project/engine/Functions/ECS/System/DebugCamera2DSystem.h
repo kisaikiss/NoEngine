@@ -1,16 +1,15 @@
 #pragma once
 #include "ISystem.h"
-
 namespace NoEngine {
 namespace ECS {
-class CollisionResolutionSystem :
+
+class DebugCamera2DSystem :
     public ISystem {
 public:
+    DebugCamera2DSystem() { SetStopInGameStop(false); SetStopInPause(false); }
     void Update(Registry& registry, float deltaTime) override;
-
-private:
-    void Slide(Math::Vector3& velocity, const Math::Vector3& normal);
 };
-}
-}
 
+
+}
+}

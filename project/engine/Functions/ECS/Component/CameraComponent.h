@@ -62,5 +62,14 @@ struct DebugCameraComponent {
     float phi = 1.5f;
 };
 
+struct DebugCamera2DComponent {
+    int preMousePositionX = 0;
+    int preMousePositionY = 0;
+    int mousePositionX = 0;
+    int mousePositionY = 0;
+    float preMouseWheelY = 0.0f;
+    float mouseWheelY = 0.0f;
+};
+
 }
 }
