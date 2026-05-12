@@ -95,7 +95,7 @@ void RabbitdokuScene::InitBlock(No::Registry& registry) {
 		transform->scale.y = static_cast<float>(sprite->textureHandle.GetHeight());
 	}
 
-	for (uint32_t i = 0; i < 21; i++) {
+	for (uint32_t i = 0; i < 41; i++) {
 
 		No::Entity e = registry.GenerateEntity();
 		auto* transform = registry.AddComponent<No::Transform2DComponent>(e);
@@ -167,7 +167,7 @@ void RabbitdokuScene::InitBlock(No::Registry& registry) {
 		transform->scale.y = static_cast<float>(sprite->textureHandle.GetHeight());
 	}
 
-	for (uint32_t i = 0; i < 11; i++) {
+	for (uint32_t i = 0; i < 6; i++) {
 
 		No::Entity e = registry.GenerateEntity();
 		auto* transform = registry.AddComponent<No::Transform2DComponent>(e);
@@ -187,12 +187,24 @@ void RabbitdokuScene::InitBlock(No::Registry& registry) {
 }
 
 void RabbitdokuScene::InitRoom(No::Registry& registry) {
-	auto e = registry.GenerateEntity();
-	auto* room = registry.AddComponent<RoomComponent>(e);
-	room->bounds.top = 0.0f;
-	room->bounds.left = 0.0f;
-	room->bounds.right = 1280.f;
-	room->bounds.bottom = 720.f;
+	// room1
+	{
+		auto e = registry.GenerateEntity();
+		auto* room = registry.AddComponent<RoomComponent>(e);
+		room->bounds.top = 0.0f;
+		room->bounds.left = 0.0f;
+		room->bounds.right = 1280.f;
+		room->bounds.bottom = 720.f;
+	}
 	
-	room->followZone = room->bounds;
+	// room2
+	{
+		auto e = registry.GenerateEntity();
+		auto* room = registry.AddComponent<RoomComponent>(e);
+		room->bounds.top = 0.0f;
+		room->bounds.left = 1280.f;
+		room->bounds.right = 3280.f;
+		room->bounds.bottom = 720.f;
+	}
+
 }

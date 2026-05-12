@@ -7,15 +7,20 @@ struct RoomRect {
 	float top;
 	float bottom;
 
-	bool Contains(No::Vector2 position) {
+	bool Contains(const No::Vector2& position) {
 		if (left < position.x && position.x < right) {
 			if (top < position.y && position.y < bottom) {
 				return true;
 			}
 		}
-
-
 		return false;
+	}
+
+	No::Vector2 Center() {
+		No::Vector2 result{};
+		result.x = (left + right) / 2.f;
+		result.y = (top + bottom) / 2.f;
+		return result;
 	}
 };
 
@@ -27,10 +32,8 @@ enum class RoomDirection {
 };
 
 struct RoomComponent {
-	RoomRect bounds;										// マップの矩形
-	RoomRect followZone;									// このマップでの追従範囲（DeadZone）
+	RoomRect bounds{};										// マップの矩形
 	uint32_t myID = 1;										// 自分のマップID
-	std::unordered_map<RoomDirection, uint32_t> neighbor;	// 上下左右の隣接マップのID（なければ 0）
 };
 
 namespace NoEngine {
