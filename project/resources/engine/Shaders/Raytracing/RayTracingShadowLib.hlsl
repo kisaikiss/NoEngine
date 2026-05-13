@@ -70,7 +70,7 @@ void RayGen_Shadow()
     RayDesc rayDesc;
     rayDesc.Origin = offsetPos;
     rayDesc.Direction = gLightDir;
-    rayDesc.TMin = 0.1f;
+    rayDesc.TMin = 0.01f;
     rayDesc.TMax = gShadowMaxDistance;
 
     ShadowPayload payload;

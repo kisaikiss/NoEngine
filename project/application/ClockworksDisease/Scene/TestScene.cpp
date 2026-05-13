@@ -25,14 +25,14 @@ void TestScene::Setup() {
 		t->rotation.FromAxisAngle(No::Vector3(0.f, 1.f, 0.f), PI);
 		t->translate = { 0.f, -0.f, 0.f };
 		auto* m = registry.AddComponent<No::MaterialComponent>(player);
-		auto* a = registry.AddComponent<No::AnimatorComponent>(player);
-		No::ModelLoader::LoadModel("magiclash", "resources/game/ClockworksDisease/Model/player/magiclash2.gltf");
-		//No::ModelLoader::LoadModel("magiclash", "resources/engine/Model/enemy.obj");
-		No::ModelLoader::GetModel("magiclash", model, a);
+		//auto* a = registry.AddComponent<No::AnimatorComponent>(player);
+		//No::ModelLoader::LoadModel("magiclash", "resources/game/ClockworksDisease/Model/player/magiclash2.gltf");
+		No::ModelLoader::LoadModel("magiclash", "resources/engine/Model/enemy.obj");
+		No::ModelLoader::GetModel("magiclash", model/*, a*/);
 		m->materials = No::ModelLoader::GetMaterial("magiclash");
 		m->drawOutline = false;
-		m->enableSkinning = true;
-		m->psoName = L"Renderer : DefaultSkinned PSO";
+		//m->enableSkinning = true;
+		m->psoName = L"Renderer : Default PSO";
 		m->psoId = NoEngine::Render::GetPSOID(m->psoName);
 		m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
 

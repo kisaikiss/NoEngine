@@ -226,6 +226,7 @@ void GraphicsCore::EndFrame(GraphicsContext& context) {
 				sPostEffectBuffer.GetImGuiSRV(),
 				D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 			sPostEffectTexture = static_cast<ImTextureID>(slot.GetGpuPtr());
+			isInitFrame = false;
 		}
 	
 	}
