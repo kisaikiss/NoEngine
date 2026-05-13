@@ -27,7 +27,7 @@ void TestScene::Setup() {
 		auto* m = registry.AddComponent<No::MaterialComponent>(player);
 		//auto* a = registry.AddComponent<No::AnimatorComponent>(player);
 		//No::ModelLoader::LoadModel("magiclash", "resources/game/ClockworksDisease/Model/player/magiclash2.gltf");
-		No::ModelLoader::LoadModel("magiclash", "resources/engine/Model/enemy.obj");
+		No::ModelLoader::LoadModel("magiclash", "resources/engine/Model/monkey.obj");
 		No::ModelLoader::GetModel("magiclash", model/*, a*/);
 		m->materials = No::ModelLoader::GetMaterial("magiclash");
 		m->drawOutline = false;
