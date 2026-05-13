@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "PrePass.h"
+#include "PreRenderPass.h"
 
 #include "engine/Runtime/GraphicsCore.h"
 #include "engine/Functions/Renderer/RenderSystem.h"
@@ -17,14 +17,14 @@ uint32_t sPSOSkinnedID;
 uint32_t sRootSignatureSkinnedID;
 }
 
-PrePass::PrePass() {
+PreRenderPass::PreRenderPass() {
 	sPSOID = GetPSOID(L"Renderer : PreRender PSO");
 	sRootSignatureID = GetRootSignatureID(L"Renderer : PreRender PSO");
 	sPSOSkinnedID = GetPSOID(L"Renderer : PreRenderSkinned PSO");
 	sRootSignatureSkinnedID = GetRootSignatureID(L"Renderer : PreRenderSkinned PSO");
 }
 
-void PrePass::Execute(GraphicsContext& gfx, ECS::Registry& registry) {
+void PreRenderPass::Execute(GraphicsContext& gfx, ECS::Registry& registry) {
 	D3D12_CPU_DESCRIPTOR_HANDLE renderTargetViews[] = {
 		GraphicsCore::sWorldPositionGBuffer.GetRTV(),
 		GraphicsCore::sNormalGBuffer.GetRTV()

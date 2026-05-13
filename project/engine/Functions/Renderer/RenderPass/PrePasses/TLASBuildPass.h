@@ -1,7 +1,7 @@
 #pragma once
-#include "RenderPass.h"
+#include "../RenderPass.h"
 
-#include "../../../Assets/RaytracingMesh.h"
+#include "../../../../Assets/RaytracingMesh.h"
 
 namespace NoEngine {
 namespace Render {

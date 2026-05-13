@@ -1,8 +1,8 @@
 #pragma once
-#include "RenderPass.h"
+#include "../RenderPass.h"
 #include "engine/Runtime/GpuResource/UploadBuffer.h"
 #include "engine/Functions/ECS/Component/LightComponent.h"
-#include "../LightForGPU.h"
+#include "../../LightForGPU.h"
 
 namespace NoEngine {
 namespace Render {

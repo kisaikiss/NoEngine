@@ -152,7 +152,7 @@ void Initialize() {
 		sRootSignatureIndexMap[defaultPSOName] = static_cast<uint32_t>(sRootSignatures.size()) - 1;
 	}
 
-	// PrePass Skining
+	// PreRenderPass Skining
 	{
 		ShaderModule defaultSkinnedVS(ShaderStage::Vertex, L"resources/engine/Shaders/DefaultSkinned.VS.hlsl", L"vs_6_0");
 		ShaderModule pixelShader(ShaderStage::Pixel, L"resources/engine/Shaders/PreRender.PS.hlsl", L"ps_6_0");

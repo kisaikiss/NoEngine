@@ -35,7 +35,7 @@
     <ClCompile Include="engine\Functions\ECS\System\AnimationSystem.cpp" />
     <ClCompile Include="engine\Functions\Input\Input.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderContext.cpp" />
-    <ClCompile Include="engine\Functions\Renderer\RenderPass\LightPass.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\RenderPass\PrePasses\LightPass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\MeshPass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PrimitivePass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\RenderPassScheduler.cpp" />
@@ -148,10 +148,10 @@
     <ClCompile Include="application\ClockworksDisease\System\Player\PlayerPushBackSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Object\BoxColliderUpdateSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\Component\Camera\FollowCameraComponent.cpp" />
-    <ClCompile Include="engine\Functions\Renderer\RenderPass\TLASBuildPass.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\RenderPass\PrePasses\TLASBuildPass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\Raytracing\RaytracingShadowPass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\Raytracing\RaytracingTestPass.cpp" />
-    <ClCompile Include="engine\Functions\Renderer\RenderPass\PrePass.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\RenderPass\PrePasses\PreRenderPass.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\RabbitdokuOdyssey3Plus.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\Scene\RabbitdokuScene.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\Component\RabbitdokuComponent.cpp" />
@@ -191,7 +191,7 @@
     <ClInclude Include="engine\Functions\ECS\System\SystemManager.h" />
     <ClInclude Include="engine\Functions\Input\Input.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderContext.h" />
-    <ClInclude Include="engine\Functions\Renderer\RenderPass\LightPass.h" />
+    <ClInclude Include="engine\Functions\Renderer\RenderPass\PrePasses\LightPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\MeshPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PrimitivePass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\RenderPass.h" />
@@ -335,10 +335,10 @@
     <ClInclude Include="application\ClockworksDisease\System\Player\PlayerPushBackSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Object\BoxColliderUpdateSystem.h" />
     <ClInclude Include="engine\Assets\RaytracingMesh.h" />
-    <ClInclude Include="engine\Functions\Renderer\RenderPass\TLASBuildPass.h" />
+    <ClInclude Include="engine\Functions\Renderer\RenderPass\PrePasses\TLASBuildPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\Raytracing\RaytracingShadowPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\Raytracing\RaytracingTestPass.h" />
-    <ClInclude Include="engine\Functions\Renderer\RenderPass\PrePass.h" />
+    <ClInclude Include="engine\Functions\Renderer\RenderPass\PrePasses\PreRenderPass.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\RabbitdokuOdyssey3Plus.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\Scene\RabbitdokuScene.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\Component\RabbitdokuComponent.h" />

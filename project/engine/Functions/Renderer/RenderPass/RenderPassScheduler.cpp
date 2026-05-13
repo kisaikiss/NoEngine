@@ -2,10 +2,10 @@
 #include "SpritePass.h"
 #include "MeshPass.h"
 #include "PrimitivePass.h"
-#include "LightPass.h"
+#include "PrePasses/LightPass.h"
 #include "ParticlePass.h"
-#include "TLASBuildPass.h"
-#include "PrePass.h"
+#include "PrePasses/TLASBuildPass.h"
+#include "PrePasses/PreRenderPass.h"
 #include "Raytracing/RaytracingShadowPass.h"
 #include "Raytracing/RaytracingTestPass.h"
 
@@ -14,7 +14,7 @@ namespace Render {
 void RenderPassScheduler::Initialize() {
 	passes_.push_back(std::make_unique<TLASBuildPass>());
 	passes_.push_back(std::make_unique<LightPass>());
-	passes_.push_back(std::make_unique<PrePass>());
+	passes_.push_back(std::make_unique<PreRenderPass>());
 	passes_.push_back(std::make_unique<RaytracingShadowPass>());
 	passes_.push_back(std::make_unique<MeshPass>());
 	passes_.push_back(std::make_unique<PrimitivePass>());
