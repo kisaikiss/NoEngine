@@ -9,7 +9,7 @@ public:
 	Texture(D3D12_CPU_DESCRIPTOR_HANDLE Handle) : cpuDescriptorHandle_(Handle) {}
 
 	void Create2D(size_t RowPitchBytes, size_t Width, size_t Height, DXGI_FORMAT Format, const void* InitData);
-	// void CreateCube(size_t RowPitchBytes, size_t Width, size_t Height, DXGI_FORMAT Format, const void* InitialData);
+	void CreateCube(size_t RowPitchBytes, size_t Width, size_t Height, DXGI_FORMAT Format, const void* InitialData);
 
 	virtual void Destroy() override {
 		GpuResource::Destroy();

@@ -7,7 +7,7 @@
 #include "PrePasses/TLASBuildPass.h"
 #include "PrePasses/PreRenderPass.h"
 #include "Raytracing/RaytracingShadowPass.h"
-#include "Raytracing/RaytracingTestPass.h"
+#include "SkyBoxPass.h"
 
 namespace NoEngine {
 namespace Render {
@@ -20,6 +20,7 @@ void RenderPassScheduler::Initialize() {
 	passes_.push_back(std::make_unique<PrimitivePass>());
 	passes_.push_back(std::make_unique<ParticlePass>());
 	passes_.push_back(std::make_unique<SpritePass>());
+	passes_.push_back(std::make_unique<SkyBoxPass>());
 }
 
 void RenderPassScheduler::Render(GraphicsContext& gfx, ECS::Registry& registry) {

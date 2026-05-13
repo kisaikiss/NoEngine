@@ -1,0 +1,27 @@
+
+struct VertexShaderOutput
+{
+    float4 position : SV_Position;
+    float3 texcoord : TEXCOORD0;
+};
+
+struct PixelShaderOutput
+{
+    float4 color : SV_TARGET0;
+};
+
+TextureCube<float4> gTexture : register(t0);
+SamplerState gSampler : register(s0);
+struct Material
+{
+    float4 color;
+};
+ConstantBuffer<Material> gMaterial : register(b2);
+
+PixelShaderOutput main(VertexShaderOutput input)
+{
+    PixelShaderOutput output;
+    float4 textureColor = gTexture.Sample(gSampler, input.texcoord);
+    output.color = textureColor * gMaterial.color;
+    return output;
+}

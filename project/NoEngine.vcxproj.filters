@@ -23,6 +23,8 @@
     <FxCompile Include="resources\engine\Shaders\Raytracing\RayTracingShadowLib.hlsl" />
     <FxCompile Include="resources\engine\Shaders\Raytracing\RaytracingTestLib.hlsl" />
     <FxCompile Include="resources\engine\Shaders\PreRender.PS.hlsl" />
+    <FxCompile Include="resources\engine\Shaders\SkyBox.VS.hlsl" />
+    <FxCompile Include="resources\engine\Shaders\SkyBox.PS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="engine\Assets\Audio\Audio.cpp" />
@@ -164,6 +166,7 @@
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\FollowCamera2DSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\DebugCamera2DSystem.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\Camera2DChangeSystem.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\RenderPass\SkyBoxPass.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -354,6 +357,7 @@
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\FollowCamera2DSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\DebugCamera2DSystem.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\Camera2DChangeSystem.h" />
+    <ClInclude Include="engine\Functions\Renderer\RenderPass\SkyBoxPass.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />
