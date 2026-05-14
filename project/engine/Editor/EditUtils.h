@@ -15,6 +15,12 @@ struct EditTag {
 /// <returns>マウスポインタのワールド座標</returns>
 Math::Vector2 Get2DSceneMousePosition(ECS::Registry& registry);
 bool IsMouseOverSceneWindow();
+
+/// <summary>
+/// 2Dグリッドを描画する。
+/// </summary>
+/// <param name="gridSize">グリッドの幅と高さを表す2次元ベクトル。</param>
+void DrawGrid2D(Math::Vector2 gridSize);
 }
 
 void DrawComponentUI(ECS::Registry& registry, ECS::Entity e);

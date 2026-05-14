@@ -2,6 +2,7 @@
 #include "engine/Editor/ComponentRegistry.h"
 #include "engine/Functions/ECS/Component/Transform2DComponent.h"
 #include "engine/Runtime/GraphicsCore.h"
+#include "engine/Functions/Renderer/Primitive.h"
 
 #ifdef USE_IMGUI
 #include "externals/imgui/imgui.h"
@@ -35,6 +36,15 @@ bool Editor::IsMouseOverSceneWindow() {
 #else
 	return false;
 #endif // USE_IMGUI
+
+}
+
+void Editor::DrawGrid2D(Math::Vector2 gridSize) {
+	static const float kGridNum = 1000;
+	for (uint32_t i = 0; i < kGridNum; i++) {
+		DebugPrimitive::DrawLine2D(Math::Vector2(gridSize.x * i - gridSize.x * kGridNum / 2.f, -gridSize.x * kGridNum), Math::Vector2(gridSize.x * i - gridSize.x * kGridNum / 2.f, gridSize.x * kGridNum), Math::Color::WHITE);
+		DebugPrimitive::DrawLine2D(Math::Vector2(-gridSize.x * kGridNum, gridSize.y * i - gridSize.y * kGridNum / 2.f), Math::Vector2(gridSize.x * kGridNum, gridSize.y * i - gridSize.y * kGridNum / 2.f), Math::Color::WHITE);
+	}
 
 }
 

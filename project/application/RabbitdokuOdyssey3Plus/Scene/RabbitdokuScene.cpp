@@ -227,5 +227,5 @@ void RabbitdokuScene::InitRoom(No::Registry& registry) {
 }
 
 void RabbitdokuScene::NotSystemUpdate() {
-
+	No::DrawGrid2D(No::Vector2(64.f, 64.f));
 }
