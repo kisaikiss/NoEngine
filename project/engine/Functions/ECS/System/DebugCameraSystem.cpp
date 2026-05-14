@@ -115,7 +115,7 @@ void DebugCameraSystem::Update(Registry& registry, float deltaTime) {
 		transform->rotation.LookRotation(forward.Normalize(), Math::Vector3::UP);
 
 		if (debugCamera->drawCenter) {
-			Primitive::DrawSphere(debugCamera->center, 0.3f, Math::Color::WHITE);
+			DebugPrimitive::DrawSphere(debugCamera->center, 0.3f, Math::Color::WHITE);
 		}
 
 	}

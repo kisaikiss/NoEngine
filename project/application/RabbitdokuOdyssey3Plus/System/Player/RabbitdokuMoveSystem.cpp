@@ -4,7 +4,6 @@
 void RabbitdokuMoveSystem::Update(No::Registry& registry, float deltaTime) {
 	auto view = registry.View<Rabbitdoku>();
 	static_cast<void>(deltaTime);
-	if (deltaTime > 0.1f) return;
 	for (auto e : view) {
 		auto* velocity = registry.GetComponent<No::Velocity2DComponent>(e);
 		auto* sprite = registry.GetComponent<No::SpriteComponent>(e);

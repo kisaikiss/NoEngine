@@ -34,6 +34,7 @@ struct Camera2DComponent {
     float zFar = 100.f;
 
     Math::Matrix4x4 projection;
+    Math::Matrix4x4 viewProjection;
 };
 
 /// <summary>

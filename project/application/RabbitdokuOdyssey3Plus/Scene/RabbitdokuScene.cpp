@@ -6,6 +6,7 @@
 #include "../System/Player/RabbitdokuPushBackSystem.h"
 #include "../System/FollowCamera2DSystem.h"
 #include "../System/Camera2DChangeSystem.h"
+#include "../System/Editor/RabbitdokuStageEditSystem.h"
 
 #include "../Component/RabbitdokuComponent.h"
 #include "../Component/FollowCamera2DComponent.h"
@@ -24,6 +25,7 @@ void RabbitdokuScene::Setup() {
 
 void RabbitdokuScene::AddSystems() {
 	AddSystem(std::make_unique<No::EditSystem>());
+	AddSystem(std::make_unique<RabbitdokuStageEditSystem>());
 	AddSystem(std::make_unique<No::DebugCamera2DSystem>());
 	AddSystem(std::make_unique<Camera2DChangeSystem>());
 
@@ -225,5 +227,5 @@ void RabbitdokuScene::InitRoom(No::Registry& registry) {
 }
 
 void RabbitdokuScene::NotSystemUpdate() {
-	No::Get2DSceneMousePosition(*GetRegistry());
+
 }

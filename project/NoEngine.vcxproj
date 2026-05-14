@@ -205,6 +205,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\RabbitdokuOdyssey3Plus.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\Scene\RabbitdokuScene.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\Camera2DChangeSystem.cpp" />
+    <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\Editor\RabbitdokuStageEditSystem.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\FollowCamera2DSystem.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\RabbitdokuCollisionEventSystem.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\Player\RabbitdokuMoveSystem.cpp" />
@@ -385,6 +386,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\RabbitdokuOdyssey3Plus.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\Scene\RabbitdokuScene.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\Camera2DChangeSystem.h" />
+    <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\Editor\RabbitdokuStageEditSystem.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\FollowCamera2DSystem.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\RabbitdokuCollisionEventSystem.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\Player\RabbitdokuMoveSystem.h" />

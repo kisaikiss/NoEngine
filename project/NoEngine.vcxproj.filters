@@ -167,6 +167,7 @@
     <ClCompile Include="engine\Functions\ECS\System\DebugCamera2DSystem.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\Camera2DChangeSystem.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\SkyBoxPass.cpp" />
+    <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\Editor\RabbitdokuStageEditSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -358,6 +359,7 @@
     <ClInclude Include="engine\Functions\ECS\System\DebugCamera2DSystem.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\Camera2DChangeSystem.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\SkyBoxPass.h" />
+    <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\Editor\RabbitdokuStageEditSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

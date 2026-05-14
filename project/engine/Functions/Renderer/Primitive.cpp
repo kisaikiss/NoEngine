@@ -6,36 +6,38 @@
 
 using namespace NoEngine;
 using namespace NoEngine::Math;
-namespace
-{
-	struct PrimitiveVertex
-	{
-		Vector3 pos;
-		Color color;
-	};
+namespace {
+struct PrimitiveVertex {
+	Vector3 pos;
+	Color color;
+};
 
-	RootSignature sRootSig;
-	GraphicsPSO* pPSO = nullptr;
+RootSignature sRootSig;
+GraphicsPSO* pPSO = nullptr;
 
-	std::vector<PrimitiveVertex> sVertices;
+std::vector<PrimitiveVertex> sVertices;
+std::vector<PrimitiveVertex> sVertices2D;
 }
 
-void Primitive::Initialize()
-{
+void DebugPrimitive::Initialize() {
 	pPSO = &Render::GetPSO(Render::GetPSOID(L"Renderer : Primitive PSO"));
 }
 
-void Primitive::Shutdown()
-{
+void DebugPrimitive::Shutdown() {
 	sVertices.clear();
+	sVertices2D.clear();
 }
-void Primitive::DrawLine(const Vector3& a, const Vector3& b, const Color& color)
-{
+
+void DebugPrimitive::DrawLine(const Vector3& a, const Vector3& b, const Color& color) {
 	AddLineInternal(a, b, color);
 }
-void Primitive::DrawCube(const Vector3& center, const Vector3& size,
-	const Color& color)
-{
+
+void DebugPrimitive::DrawLine2D(const Math::Vector2& a, const Math::Vector2& b, const Math::Color& color) {
+	Add2DLineInternal(a, b, color);
+}
+
+void DebugPrimitive::DrawCube(const Vector3& center, const Vector3& size,
+	const Color& color) {
 	Vector3 h = size * 0.5f;
 
 	Vector3 p[8] =
@@ -57,20 +59,17 @@ void Primitive::DrawCube(const Vector3& center, const Vector3& size,
 		AddLineInternal(p[e[0]], p[e[1]], color);
 }
 
-void Primitive::DrawSphere(const Vector3& center, float radius, const Color& color, uint32_t slices, uint32_t stacks)
-{
+void DebugPrimitive::DrawSphere(const Vector3& center, float radius, const Color& color, uint32_t slices, uint32_t stacks) {
 	if (slices < 3) slices = 3;
 	if (stacks < 2) stacks = 2;
 
 	const float dPhi = PI / stacks;
 	const float dTheta = PI * 2.0f / slices;
 
-	for (uint32_t stack = 1; stack < stacks; stack++)
-	{
+	for (uint32_t stack = 1; stack < stacks; stack++) {
 		float phi = stack * dPhi;
 
-		for (uint32_t slice = 0; slice < slices; slice++)
-		{
+		for (uint32_t slice = 0; slice < slices; slice++) {
 			float theta0 = dTheta * slice;
 			float theta1 = dTheta * (slice + 1);
 
@@ -90,12 +89,10 @@ void Primitive::DrawSphere(const Vector3& center, float radius, const Color& col
 		}
 	}
 
-	for (uint32_t slice = 0; slice < slices; slice++)
-	{
+	for (uint32_t slice = 0; slice < slices; slice++) {
 		float theta = dTheta * slice;
 
-		for (uint32_t stack = 0; stack < stacks; stack++)
-		{
+		for (uint32_t stack = 0; stack < stacks; stack++) {
 			float phi0 = dPhi * stack;
 			float phi1 = dPhi * (stack + 1);
 
@@ -116,19 +113,17 @@ void Primitive::DrawSphere(const Vector3& center, float radius, const Color& col
 	}
 }
 
-void Primitive::DrawTriangle(
+void DebugPrimitive::DrawTriangle(
 	const Vector3& a,
 	const Vector3& b,
 	const Vector3& c,
-	const Color& color)
-{
+	const Color& color) {
 	AddLineInternal(a, b, color);
 	AddLineInternal(b, c, color);
 	AddLineInternal(c, a, color);
 }
 
-void Primitive::Render(GraphicsContext& ctx, const Matrix4x4& ViewProj)
-{
+void DebugPrimitive::Render(GraphicsContext& ctx, const Matrix4x4& ViewProj) {
 	if (sVertices.empty() || !pPSO) return;
 
 	ctx.SetRootSignature(Render::GetRootSignature(Render::GetRootSignatureID(L"Renderer : Primitive PSO")));
@@ -144,8 +139,28 @@ void Primitive::Render(GraphicsContext& ctx, const Matrix4x4& ViewProj)
 	sVertices.clear();
 }
 
-void Primitive::AddLineInternal(const Vector3& a, const Vector3& b, const Color& color)
-{
+void DebugPrimitive::Render2D(GraphicsContext& ctx, const Math::Matrix4x4& ViewProj) {
+	if (sVertices2D.empty() || !pPSO) return;
+
+	ctx.SetRootSignature(Render::GetRootSignature(Render::GetRootSignatureID(L"Renderer : Primitive PSO")));
+	ctx.SetPipelineState(*pPSO);
+	ctx.SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINELIST);
+
+	ctx.SetDynamicVB(0, sVertices2D.size(), sizeof(PrimitiveVertex), sVertices2D.data());
+
+	ctx.SetDynamicConstantBufferView(0, sizeof(ViewProj), &ViewProj);
+
+	ctx.DrawInstanced((uint32_t)sVertices2D.size(), 1, 0, 0);
+
+	sVertices2D.clear();
+}
+
+void DebugPrimitive::AddLineInternal(const Vector3& a, const Vector3& b, const Color& color) {
 	sVertices.push_back({ a, color });
 	sVertices.push_back({ b, color });
+}
+
+void DebugPrimitive::Add2DLineInternal(const Math::Vector2& a, const Math::Vector2& b, const Math::Color& color) {
+	sVertices2D.push_back({ Math::Vector3(a.x,a.y,0.f),color });
+	sVertices2D.push_back({ Math::Vector3(b.x,b.y,0.f),color });
 }

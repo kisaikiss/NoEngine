@@ -47,6 +47,7 @@ float sWindowWidth;
 float sWindowHeight;
 // windowMousePosition
 Math::Vector2 sGameWindowMousePosition{};
+bool sIsMouseOverWindow = false;
 
 std::unique_ptr<DepthBuffer> sDepthBuffer;									   // 深度バッファ
 ColorBuffer sShadowMaskBuffer;
@@ -142,6 +143,9 @@ Math::Vector2 GraphicsCore::GetWindowSize() {
 #ifdef USE_IMGUI
 Math::Vector2 GraphicsCore::GetSceneWindowMousePosition() {
 	return sGameWindowMousePosition;
+}
+bool GraphicsCore::IsMouseOverSceneWindow() {
+	return sIsMouseOverWindow;
 }
 #endif // USE_IMGUI
 
@@ -249,6 +253,7 @@ void GraphicsCore::EndFrame(GraphicsContext& context) {
 	);
 
 	// シーン上のマウスのスクリーン座標を取得
+	sIsMouseOverWindow = false;
 	if (ImGui::IsItemHovered()) {
 		ImVec2 imgPos = ImGui::GetItemRectMin();
 		ImVec2 imgSize = ImGui::GetItemRectSize();
@@ -263,7 +268,7 @@ void GraphicsCore::EndFrame(GraphicsContext& context) {
 			// ウィンドウ内のスクリーン座標に変換
 			sGameWindowMousePosition.x = uv.x * sWindowWidth;
 			sGameWindowMousePosition.y = uv.y * sWindowHeight;
-
+			sIsMouseOverWindow = true;
 		}
 	}
 

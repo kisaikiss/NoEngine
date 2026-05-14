@@ -29,6 +29,15 @@ Math::Vector2 Editor::Get2DSceneMousePosition(ECS::Registry& registry) {
 	return result;
 }
 
+bool Editor::IsMouseOverSceneWindow() {
+#ifdef USE_IMGUI
+	return GraphicsCore::IsMouseOverSceneWindow();
+#else
+	return false;
+#endif // USE_IMGUI
+
+}
+
 using namespace ECS;
 void DrawComponentUI(Registry& registry, Entity e) {
 #ifdef USE_IMGUI

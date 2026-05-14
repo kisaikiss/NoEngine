@@ -14,6 +14,7 @@ struct EditTag {
 /// <param name="registry">ECSレジストリ</param>
 /// <returns>マウスポインタのワールド座標</returns>
 Math::Vector2 Get2DSceneMousePosition(ECS::Registry& registry);
+bool IsMouseOverSceneWindow();
 }
 
 void DrawComponentUI(ECS::Registry& registry, ECS::Entity e);

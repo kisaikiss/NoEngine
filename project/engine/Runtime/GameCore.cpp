@@ -63,7 +63,8 @@ int RunApplication(std::unique_ptr<IGameApp> game) {
 		imguiManager.BeginFrame();
 #endif // USE_IMGUI
 
-		const float deltaTime = CalculateDeltaTime();
+		float deltaTime = CalculateDeltaTime();
+		if (deltaTime > 0.1f) deltaTime = 0.1f;
 		game->Update(ctx, deltaTime);
 
 		renderPassScheduler->SetRenderContext(renderContext);

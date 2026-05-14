@@ -4,7 +4,7 @@
 
 namespace NoEngine {
 
-class Primitive {
+class DebugPrimitive {
 public:
 	static void Initialize();
 	static void Shutdown();
@@ -15,8 +15,15 @@ public:
 	/// <param name="a">ポイントA</param>
 	/// <param name="b">ポイントB</param>
 	/// <param name="color">色</param>
-	/// <param name="viewProj">カメラ行列</param>
 	static void DrawLine(const Math::Vector3& a, const Math::Vector3& b, const Math::Color& color);
+
+	/// <summary>
+	/// 2Dライン描画
+	/// </summary>
+	/// <param name="a">ポイントA</param>
+	/// <param name="b">ポイントB</param>
+	/// <param name="color">色</param>
+	static void DrawLine2D(const Math::Vector2& a, const Math::Vector2& b, const Math::Color& color);
 
 	/// <summary>
 	/// ボックス描画
@@ -53,8 +60,10 @@ public:
 	/// 描画
 	/// </summary>
 	static void Render(GraphicsContext& ctx, const Math::Matrix4x4& ViewProj);
+	static void Render2D(GraphicsContext& ctx, const Math::Matrix4x4& ViewProj);
 
 private:
 	static void AddLineInternal(const Math::Vector3& a, const Math::Vector3& b, const Math::Color& color);
+	static void Add2DLineInternal(const Math::Vector2& a, const Math::Vector2& b, const Math::Color& color);
 };
 }

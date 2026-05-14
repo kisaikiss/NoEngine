@@ -90,7 +90,7 @@ void AnimationSystem::SkeletonDraw(Component::AnimatorComponent* animeComp) {
 			Vector3 start = parentJoint.skeletonSpaceMatrix.GetTranslate();
 			Vector3 end = joint.skeletonSpaceMatrix.GetTranslate();
 
-			Primitive::DrawLine(start, end, Color::WHITE);
+			DebugPrimitive::DrawLine(start, end, Color::WHITE);
 		}
 	}
 }

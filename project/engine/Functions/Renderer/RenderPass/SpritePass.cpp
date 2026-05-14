@@ -60,6 +60,7 @@ void SpritePass::CameraUpdate(ECS::Registry& registry) {
 
 		camera->projection = MathCalculations::MakeOrthographicMatrix(0.f, 0.f, camera->width, camera->height, camera->zNear, camera->zFar);
 		sCameraMatrix = view * camera->projection;
+		camera->viewProjection = sCameraMatrix;
 	}
 }
 
