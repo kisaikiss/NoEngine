@@ -46,6 +46,7 @@ void RabbitdokuScene::AddSystems() {
 	AddSystem(std::make_unique<RabbitdokuPushBackSystem>());
 	
 	AddSystem(std::make_unique<No::SpriteAnimationSystem>());
+	AddSystem(std::make_unique<No::Camera2DSystem>());
 }
 
 void RabbitdokuScene::InitPlayer(No::Registry& registry) {

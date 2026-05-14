@@ -39,28 +39,7 @@ void SpritePass::CameraUpdate(ECS::Registry& registry) {
 	auto cameraView = registry.View<ActiveCamera2DTag>();
 	for (auto entity : cameraView) {
 		auto* camera = registry.GetComponent<Camera2DComponent>(entity);
-		auto* transform = registry.GetComponent<Transform2DComponent>(entity);
-	
-		// 画面中央
-		Math::Vector2 screenCenter = { camera->width / 2.f, camera->height / 2.f };
-		// ビュー行列を作成
-		Transform2DComponent t = *transform;
-		t.translate -= screenCenter;
-		Matrix4x4 view = t.MakeAffineMatrix4x4();
-		view.Inverse();
-
-		// 画面中央を基準とするための補正
-		Matrix4x4 centerToOrigin;
-		centerToOrigin.MakeTranslate(Vector3(-screenCenter.x, -screenCenter.y, 0.f));
-		Matrix4x4 originToCenter;
-		originToCenter.MakeTranslate(Vector3(screenCenter.x, screenCenter.y, 0.f));
-
-		// ビュー行列の計算
-		view = centerToOrigin * view * originToCenter;
-
-		camera->projection = MathCalculations::MakeOrthographicMatrix(0.f, 0.f, camera->width, camera->height, camera->zNear, camera->zFar);
-		sCameraMatrix = view * camera->projection;
-		camera->viewProjection = sCameraMatrix;
+		sCameraMatrix = camera->viewProjection;
 	}
 }
 

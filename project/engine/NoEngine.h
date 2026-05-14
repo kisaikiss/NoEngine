@@ -19,6 +19,7 @@
 #include "Functions/ECS/System/SpriteAnimationSystem.h"
 #include "Functions/ECS/System/EditSystem.h"
 #include "Functions/ECS/System/Camera/CameraSystem.h"
+#include "Functions/ECS/System/Camera/Camera2DSystem.h"
 #include "Functions/ECS/System/Camera/DebugCameraSystem.h"
 #include "Functions/ECS/System/Camera/DebugCamera2DSystem.h"
 #include "Functions/ECS/System/MovementSystem.h"
