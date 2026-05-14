@@ -216,7 +216,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="engine\Functions\ECS\Component\CameraComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\MaterialComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\VelocityComponent.cpp" />
-    <ClCompile Include="engine\Functions\ECS\System\CameraSystem.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\Camera\CameraSystem.cpp" />
     <ClCompile Include="engine\Assets\Audio\Audio.cpp" />
     <ClCompile Include="engine\Editor\DataDriven\SceneSerializer.cpp" />
     <ClCompile Include="engine\Editor\EditUtils.cpp" />
@@ -225,8 +225,8 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="engine\Functions\ECS\Component\Transform2DComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\TransformComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Collision\CollisionResolutionSystem.cpp" />
-    <ClCompile Include="engine\Functions\ECS\System\DebugCamera2DSystem.cpp" />
-    <ClCompile Include="engine\Functions\ECS\System\DebugCameraSystem.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\Camera\DebugCamera2DSystem.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\Camera\DebugCameraSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\EditSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\GroundResetSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Movement2DSystem.cpp" />
@@ -400,7 +400,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="engine\Functions\ECS\Component\PauseComponent.h" />
     <ClInclude Include="engine\Functions\ECS\Component\VelocityComponent.h" />
     <ClInclude Include="engine\Functions\ECS\Event\CollisionEvents.h" />
-    <ClInclude Include="engine\Functions\ECS\System\CameraSystem.h" />
+    <ClInclude Include="engine\Functions\ECS\System\Camera\CameraSystem.h" />
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
     <ClInclude Include="engine\Editor\ComponentRegistry.h" />
     <ClInclude Include="engine\Editor\DataDriven\SceneSerializer.h" />
@@ -413,8 +413,8 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="engine\Functions\ECS\EventBus.h" />
     <ClInclude Include="engine\Functions\ECS\Event\SceneChangeEvent.h" />
     <ClInclude Include="engine\Functions\ECS\System\Collision\CollisionResolutionSystem.h" />
-    <ClInclude Include="engine\Functions\ECS\System\DebugCamera2DSystem.h" />
-    <ClInclude Include="engine\Functions\ECS\System\DebugCameraSystem.h" />
+    <ClInclude Include="engine\Functions\ECS\System\Camera\DebugCamera2DSystem.h" />
+    <ClInclude Include="engine\Functions\ECS\System\Camera\DebugCameraSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\EditSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\GroundResetSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\Movement2DSystem.h" />

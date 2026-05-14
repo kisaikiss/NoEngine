@@ -1,5 +1,5 @@
-#include "ISystem.h"
-#include "../Component/TransformComponent.h"
+#include "../ISystem.h"
+#include "../../Component/TransformComponent.h"
 
 
 namespace NoEngine {

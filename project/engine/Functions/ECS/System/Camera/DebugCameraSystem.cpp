@@ -1,5 +1,5 @@
 #include "DebugCameraSystem.h"
-#include "../Component/CameraComponent.h"
+#include "../../Component/CameraComponent.h"
 
 #include "engine/Functions/Input/Input.h"
 #include "engine/Functions/Renderer/Primitive.h"

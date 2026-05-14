@@ -1,6 +1,6 @@
 #include "CameraSystem.h"
-#include "../Component/CameraComponent.h"
-#include "../Component/TransformComponent.h"
+#include "../../Component/CameraComponent.h"
+#include "../../Component/TransformComponent.h"
 
 namespace NoEngine{
 namespace ECS {

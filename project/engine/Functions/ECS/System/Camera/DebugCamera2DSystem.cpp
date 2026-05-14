@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "DebugCamera2DSystem.h"
-#include "../Component/CameraComponent.h"
-#include "../Component/Transform2DComponent.h"
+#include "../../Component/CameraComponent.h"
+#include "../../Component/Transform2DComponent.h"
 #include "engine/Functions/Input/Input.h"
 
 namespace NoEngine {
