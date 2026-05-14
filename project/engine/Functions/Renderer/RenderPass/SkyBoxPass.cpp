@@ -27,6 +27,7 @@ void SkyBoxPass::Execute(GraphicsContext& gfx, ECS::Registry& registry) {
 	for (auto entity : cameraView) {
 		camera_ = registry.GetComponent<CameraComponent>(entity);
 	}
+	if (camera_ == nullptr) return;
 
 	auto& rootIndex = RootSignatureBuilder::GetRootIndexMap("SkyBox PSO");
 	gfx.SetPipelineState(pso_);
