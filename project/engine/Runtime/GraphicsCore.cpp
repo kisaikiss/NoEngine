@@ -45,6 +45,8 @@ UINT sBackBufferIndex;
 // WindowSize
 float sWindowWidth;
 float sWindowHeight;
+// windowMousePosition
+Math::Vector2 sGameWindowMousePosition{};
 
 std::unique_ptr<DepthBuffer> sDepthBuffer;									   // 深度バッファ
 ColorBuffer sShadowMaskBuffer;
@@ -133,6 +135,16 @@ void GraphicsCore::Shutdown(void) {
 	sGraphicsDevice.reset();
 	sGraphicsInfrastructures.reset();
 }
+
+Math::Vector2 GraphicsCore::GetWindowSize() {
+	return Math::Vector2(sWindowWidth, sWindowHeight);
+}
+#ifdef USE_IMGUI
+Math::Vector2 GraphicsCore::GetSceneWindowMousePosition() {
+	return sGameWindowMousePosition;
+}
+#endif // USE_IMGUI
+
 
 void GraphicsCore::EnableDebugLayer() {
 #ifdef _DEBUG
@@ -235,6 +247,26 @@ void GraphicsCore::EndFrame(GraphicsContext& context) {
 		sPostEffectTexture,
 		ImVec2(sWindowWidth * 2 / 3, sWindowHeight * 2 / 3) // 表示サイズ
 	);
+
+	// シーン上のマウスのスクリーン座標を取得
+	if (ImGui::IsItemHovered()) {
+		ImVec2 imgPos = ImGui::GetItemRectMin();
+		ImVec2 imgSize = ImGui::GetItemRectSize();
+		ImVec2 mouse = ImGui::GetMousePos();
+
+		ImVec2 local(mouse.x - imgPos.x, mouse.y - imgPos.y);
+
+		if (0 <= local.x && local.x < imgSize.x &&
+			0 <= local.y && local.y < imgSize.y) {
+			ImVec2 uv(local.x / imgSize.x, local.y / imgSize.y);
+
+			// ウィンドウ内のスクリーン座標に変換
+			sGameWindowMousePosition.x = uv.x * sWindowWidth;
+			sGameWindowMousePosition.y = uv.y * sWindowHeight;
+
+		}
+	}
+
 	ImGui::End();
 	ImGui::Render();
 	context.SetDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, Render::gTextureHeap.GetHeapPointer());

@@ -12,5 +12,7 @@ private:
 
     void InitBlock(No::Registry& registry);
     void InitRoom(No::Registry& registry);
+
+    void NotSystemUpdate() override;
 };
 

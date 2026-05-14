@@ -1,11 +1,34 @@
 #include "EditUtils.h"
 #include "engine/Editor/ComponentRegistry.h"
+#include "engine/Functions/ECS/Component/Transform2DComponent.h"
+#include "engine/Runtime/GraphicsCore.h"
 
 #ifdef USE_IMGUI
 #include "externals/imgui/imgui.h"
 #endif // USE_IMGUI
 
 namespace NoEngine {
+
+
+Math::Vector2 Editor::Get2DSceneMousePosition(ECS::Registry& registry) {
+	Math::Vector2 result{};
+#ifdef USE_IMGUI
+	result = GraphicsCore::GetSceneWindowMousePosition();
+	result -= GraphicsCore::GetWindowSize() / 2.f;
+	auto cameraView = registry.View<Component::ActiveCamera2DTag>();
+	for (auto e : cameraView) {
+		auto* transform = registry.GetComponent<Component::Transform2DComponent>(e);
+		
+		result = Math::Vector2(result.x * transform->scale.x, result.y * transform->scale.y);
+		result += transform->translate;
+	}
+#else
+	static_cast<void>(registry);
+#endif // USE_IMGUI
+	
+	return result;
+}
+
 using namespace ECS;
 void DrawComponentUI(Registry& registry, Entity e) {
 #ifdef USE_IMGUI
@@ -88,3 +111,4 @@ void DrawFieldUI(const FieldInfo& field, void* ptr) {
 
 }
 }
+

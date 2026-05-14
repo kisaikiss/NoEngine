@@ -223,3 +223,7 @@ void RabbitdokuScene::InitRoom(No::Registry& registry) {
 	}
 
 }
+
+void RabbitdokuScene::NotSystemUpdate() {
+	No::Get2DSceneMousePosition(*GetRegistry());
+}

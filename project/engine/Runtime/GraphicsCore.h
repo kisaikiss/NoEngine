@@ -5,6 +5,7 @@
 #include "Command/CommandListManager.h"
 #include "../Window/WindowManager.h"
 #include "ContextManager.h"
+#include "engine/Math/Types/Vector2.h"
 
 namespace NoEngine {
 /// <summary>
@@ -28,6 +29,10 @@ public:
 	static ColorBuffer sNormalGBuffer;
 	static ColorBuffer sWorldPositionGBuffer;
 
+	static Math::Vector2 GetWindowSize();
+#ifdef USE_IMGUI
+	static Math::Vector2 GetSceneWindowMousePosition();
+#endif
 
 	// ディスクリプタアロケータ(ディスクリプタのメモリ管理)配列。数はD3D12_DESCRIPTOR_HEAP_TYPE
 	static DescriptorAllocator sDescriptorAllocator[];
