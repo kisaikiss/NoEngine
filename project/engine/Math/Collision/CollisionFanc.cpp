@@ -175,5 +175,16 @@ Collision2D TestAABB2DVertical(const Transform2D* transformA, const Math::AABBCo
 	return result;
 }
 
+bool IsCollision(const Vector2& positon, const AABBCollider2D* aabb, const Transform2D* transform) {
+	AABBWorld2D box = GetWorldAABB2D(transform, aabb);
+
+	if (box.min.x < positon.x && positon.x < box.max.x) {
+		if (box.min.y < positon.y && positon.y < box.max.y) {
+			return true;
+		}
+	}
+	return false;
+}
+
 }
 }

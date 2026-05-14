@@ -384,6 +384,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\Component\RabbitdokuComponent.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\Component\RoomComponent.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\Game\RabbitdokuCollisionLayer.h" />
+    <ClInclude Include="application\RabbitdokuOdyssey3Plus\Game\RabbitdokuTag.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\RabbitdokuOdyssey3Plus.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\Scene\RabbitdokuScene.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\Camera2DChangeSystem.h" />

@@ -26,6 +26,7 @@ CapsuleAABBCollision TestCapsuleAABB(const Transform* capsuleTransform, const Ma
 Collision2D TestAABB2D(const Transform2D* transformA, const Math::AABBCollider2D* aabbA, const Transform2D* transformB, const Math::AABBCollider2D* aabbB);
 Collision2D TestAABB2DHorizontal(const Transform2D* transformA, const Math::AABBCollider2D* aabbA, const Transform2D* transformB, const Math::AABBCollider2D* aabbB);
 Collision2D TestAABB2DVertical(const Transform2D* transformA, const Math::AABBCollider2D* aabbA, const Transform2D* transformB, const Math::AABBCollider2D* aabbB);
+bool IsCollision(const Vector2& positon, const AABBCollider2D* box, const Transform2D* transformA);
 }
 
 }

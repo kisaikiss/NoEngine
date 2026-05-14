@@ -362,6 +362,7 @@
     <ClInclude Include="engine\Functions\Renderer\RenderPass\SkyBoxPass.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\Editor\RabbitdokuStageEditSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\Camera\Camera2DSystem.h" />
+    <ClInclude Include="application\RabbitdokuOdyssey3Plus\Game\RabbitdokuTag.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />
