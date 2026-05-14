@@ -15,6 +15,8 @@ MeshPass::MeshPass() {
 	outlinePSOID_ = GetPSOID(ConvertString(outlinePSOName_));
 	outlineSkinnedPSOName_ = "Renderer : skinnedOutline PSO";
 	outlineSkinnedPSOID_ = GetPSOID(ConvertString(outlineSkinnedPSOName_));
+
+	skyBoxTexture_ = TextureManager::LoadTextureFile("resources/engine/Texture/rostock_laage_airport_4k.dds");
 }
 
 void MeshPass::Execute(GraphicsContext& gfx, ECS::Registry& registry) {
@@ -94,7 +96,7 @@ void MeshPass::Render(GraphicsContext& context) {
 				uint32_t directionalLightNum = 0;
 				uint32_t pointLightNum = 0;
 				uint32_t spotLightNum = 0;
-				uint32_t pad;
+				uint32_t pad = 0;
 			}constants;
 			constants.directionalLightNum = GetRenderContext()->GetLightNums()->directionalLightNum;
 			constants.pointLightNum = GetRenderContext()->GetLightNums()->pointLightNum;
@@ -123,14 +125,16 @@ void MeshPass::Render(GraphicsContext& context) {
 			_declspec(align(16)) struct {
 				Math::Color color;
 				float shininess;
-				float padding[3];
+				float enviromentCoefficient;
+				float padding[2];
 			}constants;
 			constants.color = item.material->color;
 			constants.shininess = item.material->shininess;
+			constants.enviromentCoefficient = item.material->enviromentCoefficient;
 			context.SetDynamicConstantBufferView(rootIndex["gMaterial"], sizeof(constants), &constants);
 			context.SetDynamicDescriptor(rootIndex["gTexture"], 0, item.material->materials[subMesh.materialIndex].textureHandle.GetSRV());
 			context.SetDynamicDescriptor(rootIndex["gShadowMask"], 0, GraphicsCore::GetShadowMask().GetSRV());
-
+			context.SetDynamicDescriptor(rootIndex["gEnvironmentTexture"], 0, skyBoxTexture_.GetSRV());
 			context.DrawIndexedInstanced(subMesh.indexCount, 1, subMesh.indexStart, subMesh.vertexStart, 0);
 		}
 	}

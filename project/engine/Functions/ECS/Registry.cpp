@@ -37,6 +37,7 @@ void Registry::FlushDestroy() {
 }
 
 void* Registry::GetComponent(const size_t& typeId, const Entity& entity) {
+	if (!componentPools_[typeId] || !componentPools_[typeId]->Has(entity)) return nullptr;
 	return componentPools_[typeId]->GetVoidPointerComponent(entity);
 }
 

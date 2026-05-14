@@ -4,5 +4,6 @@
 REFLECT_STRUCT_BEGIN(NoEngine::Component::MaterialComponent)
 REFLECT_FIELD(color),
 REFLECT_FIELD(drawOutline),
-REFLECT_FIELD(shininess)
+REFLECT_FIELD(shininess),
+REFLECT_FIELD(enviromentCoefficient)
 REFLECT_STRUCT_END(NoEngine::Component::MaterialComponent)

@@ -18,7 +18,7 @@ SkyBoxPass::SkyBoxPass() {
 	Transform transform;
 	transform.scale = 1000.f;
 	sWorldMatrix.MakeAffine(transform.scale, transform.rotation, transform.translate);
-	texture_ = TextureManager::LoadTextureFile("resources/engine/Texture/rostock_laage_airport_4k.dds", Graphics::kMagenta2D, true);
+	texture_ = TextureManager::LoadTextureFile("resources/engine/Texture/rostock_laage_airport_4k.dds");
 }
 
 void SkyBoxPass::Execute(GraphicsContext& gfx, ECS::Registry& registry) {

@@ -45,6 +45,7 @@ private:
     std::string outlineSkinnedPSOName_;
     uint32_t outlinePSOID_;
     uint32_t outlineSkinnedPSOID_;
+    TextureRef skyBoxTexture_;
 
     /// <summary>
     /// DrawItemを収集します

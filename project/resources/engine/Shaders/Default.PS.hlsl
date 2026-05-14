@@ -4,6 +4,7 @@ struct Material
 {
     float4 color;
     float shininess;
+    float environmentCoefficient;
 };
 ConstantBuffer<Material> gMaterial : register(b0);
 
@@ -54,6 +55,7 @@ struct SpotLight
 StructuredBuffer<SpotLight> gSpotLights : register(t4);
 
 Texture2D<float> gShadowMask : register(t5);
+TextureCube<float4> gEnvironmentTexture : register(t6);
 
 PixelShaderOutput main(VertexShaderOutput input)
 {
@@ -142,8 +144,13 @@ PixelShaderOutput main(VertexShaderOutput input)
         color.rgb = (diffuse.rgb + specular) * falloffFactor * attenuationFactor;
         lightColor += color;
     }
+    float3 cameraToPosition = normalize(input.worldPosition - gCameraMatrix.worldPosition);
+    float3 reflectedVector = reflect(cameraToPosition, normalize(input.normal));
+    float4 environmentColor = gEnvironmentTexture.Sample(gSampler, reflectedVector);
+    
     
     output.color += gMaterial.color * textureColor * lightColor;
+    output.color.rgb += environmentColor.rbg * gMaterial.environmentCoefficient;
     output.color.a = gMaterial.color.a * textureColor.a;
     return output;
 }

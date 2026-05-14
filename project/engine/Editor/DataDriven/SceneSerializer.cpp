@@ -103,7 +103,7 @@ void LoadEntityFromJson(ECS::Registry& registry, ECS::Entity entity, const json&
 		if (!typeInfo) continue;
 
 		void* compPtr = registry.GetComponent(typeInfo->typeId, entity);
-
+		if (!compPtr) continue;
 		for (auto& field : typeInfo->fields) {
 			uint8_t* base = (uint8_t*)compPtr + field.offset;
 			ReadFieldFromJson(compJson, field, base);

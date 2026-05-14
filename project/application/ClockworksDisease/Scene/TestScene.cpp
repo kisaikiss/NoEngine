@@ -30,7 +30,9 @@ void TestScene::Setup() {
 		No::ModelLoader::LoadModel("magiclash", "resources/engine/Model/monkey.obj");
 		No::ModelLoader::GetModel("magiclash", model/*, a*/);
 		m->materials = No::ModelLoader::GetMaterial("magiclash");
+		m->materials[0].textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/engine/white1x1.png");
 		m->drawOutline = false;
+		m->enviromentCoefficient = 1.f;
 		//m->enableSkinning = true;
 		m->psoName = L"Renderer : Default PSO";
 		m->psoId = NoEngine::Render::GetPSOID(m->psoName);
@@ -75,8 +77,8 @@ void TestScene::Setup() {
 	auto camera = registry.GenerateEntity();
 	registry.AddComponent<No::ActiveCameraTag>(camera);
 	registry.AddComponent<No::CameraComponent>(camera);
-	registry.AddComponent<No::DebugCameraComponent>(camera);
-	//registry.AddComponent<FollowCameraComponent>(camera);
+	//registry.AddComponent<No::DebugCameraComponent>(camera);
+	registry.AddComponent<FollowCameraComponent>(camera);
 	auto* cameraEditTag = registry.AddComponent<No::EditTag>(camera);
 	cameraEditTag->name = "camera";
 	registry.AddComponent<No::TransformComponent>(camera);

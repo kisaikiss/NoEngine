@@ -4,6 +4,7 @@ struct Material
 {
     float4 color;
     float shininess;
+    float environmentCoefficient;
 };
 ConstantBuffer<Material> gMaterial : register(b0);
 
@@ -31,6 +32,7 @@ struct DirectionalLight
 StructuredBuffer<DirectionalLight> gDirectionalLights : register(t2);
 
 Texture2D<float> gShadowMask : register(t5);
+TextureCube<float4> gEnvironmentTexture : register(t6);
 
 PixelShaderOutput main(VertexShaderOutput input)
 {
@@ -49,7 +51,10 @@ PixelShaderOutput main(VertexShaderOutput input)
         float totalIntensity = toonIntensity * gDirectionalLights[i].intensity;
         output.color += gMaterial.color * textureColor * gDirectionalLights[i].color * totalIntensity * shadowFactor;
     }
-        
+    float3 cameraToPosition = normalize(input.worldPosition - gCameraMatrix.worldPosition);
+    float3 reflectedVector = reflect(cameraToPosition, normalize(input.normal));
+    float4 environmentColor = gEnvironmentTexture.Sample(gSampler, reflectedVector);
+    output.color.rgb += environmentColor.rgb * gMaterial.environmentCoefficient;
     output.color.a = gMaterial.color.a;
     return output;
 }

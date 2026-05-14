@@ -16,6 +16,7 @@ struct MaterialComponent {
 	bool drawOutline = false;
 	bool enableSkinning = false;
 	float shininess = 60.f;
+	float enviromentCoefficient = 0.f;
 };
 }
 }
