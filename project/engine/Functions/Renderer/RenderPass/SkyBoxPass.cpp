@@ -35,7 +35,11 @@ void SkyBoxPass::Execute(GraphicsContext& gfx, ECS::Registry& registry) {
 
 	gfx.SetDynamicConstantBufferView(rootIndex["gWorldMatrix"], sizeof(Math::Matrix4x4), &sWorldMatrix);
 	gfx.SetDynamicConstantBufferView(rootIndex["gCameraMatrix"], sizeof(Component::CameraForGPU), &camera_->forGPU);
-	gfx.SetDynamicConstantBufferView(rootIndex["gMaterial"], sizeof(Math::Color), &Math::Color::WHITE);
+	_declspec(align(16)) struct {
+		Math::Color color;
+	}constants;
+	constants.color = Math::Color::WHITE;
+	gfx.SetDynamicConstantBufferView(rootIndex["gMaterial"], sizeof(constants), &constants);
 	gfx.SetVertexBuffer(0, vertex_.VertexBufferView());
 	gfx.SetIndexBuffer(index_.IndexBufferView());
 	gfx.SetDynamicDescriptor(rootIndex["gTexture"], 0, texture_.GetSRV());

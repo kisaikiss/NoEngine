@@ -37,20 +37,6 @@
                 "CameraComponent": {
                     "fov": 0.44999998807907104
                 },
-                "DebugCameraComponent": {
-                    "center": [
-                        0.0,
-                        0.0,
-                        0.0
-                    ],
-                    "distance": 48.92954635620117,
-                    "drawCenter": false,
-                    "mousePositionX": 674,
-                    "mousePositionY": 440,
-                    "mouseWheelY": -2520.0,
-                    "phi": 1.3186002969741821,
-                    "theta": 0.008673983626067638
-                },
                 "TransformComponent": {
                     "rotation": [
                         0.08854212611913681,

@@ -3,4 +3,4 @@
 #include "application/ClockworksDisease/ClockworksDisease.h"
 
 
-int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) { return NoEngine::GameCore::RunApplication(std::make_unique<RabbitdokuOdyssey3Plus>()); }
+int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) { return NoEngine::GameCore::RunApplication(std::make_unique<ClockworksDisease>()); }
