@@ -61,7 +61,7 @@ void RabbitdokuStageEditSystem::AddBlock(No::Registry& registry) {
 }
 
 void RabbitdokuStageEditSystem::DeleteBlock(No::Registry& registry) {
-	No::Vector2 position = GetGridPosition(No::Get2DSceneMousePosition(registry));
+	No::Vector2 position = No::Get2DSceneMousePosition(registry);
 	auto blockView = registry.View<BlockTag, No::AABBCollider2D, No::Transform2DComponent>();
 	for (auto e : blockView) {
 		auto* aabb = registry.GetComponent<No::AABBCollider2D>(e);
