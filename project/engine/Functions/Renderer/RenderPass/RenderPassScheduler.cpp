@@ -8,6 +8,7 @@
 #include "PrePasses/PreRenderPass.h"
 #include "Raytracing/RaytracingShadowPass.h"
 #include "SkyBoxPass.h"
+#include "DebugRenderPass.h"
 
 namespace NoEngine {
 namespace Render {
@@ -21,6 +22,8 @@ void RenderPassScheduler::Initialize() {
 	passes_.push_back(std::make_unique<ParticlePass>());
 	passes_.push_back(std::make_unique<SpritePass>());
 	passes_.push_back(std::make_unique<SkyBoxPass>());
+
+	passes_.push_back(std::make_unique<DebugRenderPass>());
 }
 
 void RenderPassScheduler::Render(GraphicsContext& gfx, ECS::Registry& registry) {

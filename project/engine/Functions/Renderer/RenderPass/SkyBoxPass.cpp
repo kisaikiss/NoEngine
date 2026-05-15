@@ -32,7 +32,7 @@ void SkyBoxPass::Execute(GraphicsContext& gfx, ECS::Registry& registry) {
 	auto& rootIndex = RootSignatureBuilder::GetRootIndexMap("SkyBox PSO");
 	gfx.SetPipelineState(pso_);
 	gfx.SetRootSignature(rootSig_);
-
+	gfx.SetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	gfx.SetDynamicConstantBufferView(rootIndex["gWorldMatrix"], sizeof(Math::Matrix4x4), &sWorldMatrix);
 	gfx.SetDynamicConstantBufferView(rootIndex["gCameraMatrix"], sizeof(Component::CameraForGPU), &camera_->forGPU);
 	_declspec(align(16)) struct {

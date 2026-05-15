@@ -2,6 +2,18 @@
     "entities": {
         "box": {
             "components": {
+                "AABBCollider": {
+                    "max": [
+                        0.5,
+                        0.5,
+                        0.5
+                    ],
+                    "min": [
+                        -0.5,
+                        -0.5,
+                        -0.5
+                    ]
+                },
                 "MaterialComponent": {
                     "color": [
                         1.0,
@@ -10,7 +22,11 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "enviromentCoefficient": 0.0,
                     "shininess": 60.0
+                },
+                "MeshComponent": {
+                    "isVisible": true
                 },
                 "TransformComponent": {
                     "rotation": [
@@ -37,6 +53,11 @@
                 "CameraComponent": {
                     "fov": 0.44999998807907104
                 },
+                "FollowCameraComponent": {
+                    "distance": 15.0,
+                    "phi": 1.0,
+                    "theta": 0.0
+                },
                 "TransformComponent": {
                     "rotation": [
                         0.08854212611913681,
@@ -53,6 +74,45 @@
                         47.379966735839844,
                         12.209444046020508,
                         0.4109833538532257
+                    ]
+                }
+            }
+        },
+        "debugCamera": {
+            "components": {
+                "CameraComponent": {
+                    "fov": 0.44999998807907104
+                },
+                "DebugCameraComponent": {
+                    "center": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "distance": 40.63812255859375,
+                    "drawCenter": false,
+                    "mousePositionX": 334,
+                    "mousePositionY": 321,
+                    "mouseWheelY": -6360.0,
+                    "phi": 1.2827239036560059,
+                    "theta": -0.5406283736228943
+                },
+                "TransformComponent": {
+                    "rotation": [
+                        0.12491475045681,
+                        -0.48750683665275574,
+                        0.07070830464363098,
+                        0.8612396717071533
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        33.40678787231445,
+                        11.545477867126465,
+                        -20.053564071655273
                     ]
                 }
             }
@@ -77,6 +137,26 @@
         },
         "player": {
             "components": {
+                "CapsuleCollider": {
+                    "localP0": [
+                        0.0,
+                        0.25,
+                        0.0
+                    ],
+                    "localP1": [
+                        0.0,
+                        1.25,
+                        0.0
+                    ],
+                    "radius": 0.25
+                },
+                "CollisionBody": {
+                    "type": 0
+                },
+                "GroundStateComponent": {
+                    "groundHeight": 0.0,
+                    "isGrounded": false
+                },
                 "MaterialComponent": {
                     "color": [
                         1.0,
@@ -85,7 +165,11 @@
                         1.0
                     ],
                     "drawOutline": true,
+                    "enviromentCoefficient": 1.0,
                     "shininess": 60.0
+                },
+                "MeshComponent": {
+                    "isVisible": true
                 },
                 "TransformComponent": {
                     "rotation": [

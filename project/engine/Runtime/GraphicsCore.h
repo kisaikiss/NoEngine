@@ -74,6 +74,8 @@ public:
 	static ColorBuffer& GetPostEffectBuffer();
 	static ColorBuffer& GetRaytracingBuffer();
 	static DepthBuffer& GetDepth();
+	static ColorBuffer& GetDebugRenderBuffer();
+
 
 	/// <summary>
 	/// レイトレーシングが有効かどうかを判定する静的関数です。

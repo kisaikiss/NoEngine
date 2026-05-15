@@ -74,14 +74,23 @@ void TestScene::Setup() {
 
 
 	// カメラ
-	auto camera = registry.GenerateEntity();
-	registry.AddComponent<No::ActiveCameraTag>(camera);
-	registry.AddComponent<No::CameraComponent>(camera);
-	//registry.AddComponent<No::DebugCameraComponent>(camera);
-	registry.AddComponent<FollowCameraComponent>(camera);
-	auto* cameraEditTag = registry.AddComponent<No::EditTag>(camera);
-	cameraEditTag->name = "camera";
-	registry.AddComponent<No::TransformComponent>(camera);
+	{
+		auto camera = registry.GenerateEntity();
+		registry.AddComponent<No::ActiveCameraTag>(camera);
+		registry.AddComponent<No::CameraComponent>(camera);
+		registry.AddComponent<FollowCameraComponent>(camera);
+		auto* cameraEditTag = registry.AddComponent<No::EditTag>(camera);
+		cameraEditTag->name = "camera";
+		registry.AddComponent<No::TransformComponent>(camera);
+	}
+	{
+		auto camera = registry.GenerateEntity();
+		registry.AddComponent<No::CameraComponent>(camera);
+		registry.AddComponent<No::DebugCameraComponent>(camera);
+		registry.AddComponent<No::TransformComponent>(camera);
+		auto* cameraEditTag = registry.AddComponent<No::EditTag>(camera);
+		cameraEditTag->name = "debugCamera";
+	}
 
 	// 方向ライト
 	auto directionalLight = registry.GenerateEntity();

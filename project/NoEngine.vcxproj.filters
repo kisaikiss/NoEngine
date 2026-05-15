@@ -175,6 +175,7 @@
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\Game\RabbitdokuTag.cpp" />
     <ClCompile Include="engine\Math\Collision\ColliderComponent.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\Game\RabbitdokuCollisionLayer.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\RenderPass\DebugRenderPass.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -369,6 +370,7 @@
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\Editor\RabbitdokuStageEditSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\Camera\Camera2DSystem.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\Game\RabbitdokuTag.h" />
+    <ClInclude Include="engine\Functions\Renderer\RenderPass\DebugRenderPass.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

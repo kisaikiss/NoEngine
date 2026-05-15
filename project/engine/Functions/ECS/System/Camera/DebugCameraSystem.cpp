@@ -11,7 +11,7 @@ namespace ECS {
 void DebugCameraSystem::Update(Registry& registry, float deltaTime) {
 	using namespace Component;
 
-	auto view = registry.View<ActiveCameraTag, DebugCameraComponent>();
+	auto view = registry.View<DebugCameraComponent>();
 
 	for (auto entity : view) {
 		auto* debugCamera = registry.GetComponent<DebugCameraComponent>(entity);

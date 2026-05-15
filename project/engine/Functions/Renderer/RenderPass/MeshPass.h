@@ -23,11 +23,11 @@ public:
     /// </summary>
 	/// <param name="gfx">描画用コマンドリストのラッパークラスの参照</param>
 	/// <param name="registry">ECSレジストリ</param>
-    void Execute(GraphicsContext& gfx, ECS::Registry& registry) override;
-private:
+    virtual void Execute(GraphicsContext& gfx, ECS::Registry& registry) override;
+protected:
     /// <summary>
-    /// 描画に必要な変数
-    /// </summary>
+   /// 描画に必要な変数
+   /// </summary>
     struct DrawItem {
         Component::MeshComponent* mesh;
         Component::MaterialComponent* material;
@@ -51,7 +51,8 @@ private:
     /// DrawItemを収集します
     /// </summary>
     /// <param name="registry">ECSレジストリ</param>
-    void Collect(ECS::Registry& registry);
+    virtual void Collect(ECS::Registry& registry);
+   
     /// <summary>
     /// DrawItemの中身をソートします。
     /// </summary>
