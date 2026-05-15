@@ -48,10 +48,12 @@ void EditSystem::Update(Registry& registry, float deltaTime) {
 	ImGui::Begin("Inspector");
 	if (sEditorState.selectedEntity != INVALID_ENTITY) {
 		auto* tag = registry.GetComponent<Editor::EditTag>(sEditorState.selectedEntity);
-		ImGui::BeginChild(tag->name.c_str());
-		ImGui::Text(tag->name.c_str());
-		DrawComponentUI(registry, sEditorState.selectedEntity);
-		ImGui::EndChild();
+		if (tag) {
+			ImGui::BeginChild(tag->name.c_str());
+			ImGui::Text(tag->name.c_str());
+			DrawComponentUI(registry, sEditorState.selectedEntity);
+			ImGui::EndChild();
+		}
 	}
 	ImGui::End();
 

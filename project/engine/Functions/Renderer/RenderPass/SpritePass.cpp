@@ -53,7 +53,7 @@ void SpritePass::Collect(ECS::Registry& registry) {
 
 	for (auto entity : view) {
 		auto* sprite = registry.GetComponent<SpriteComponent>(entity);
-		if (!sprite->isVisible) continue;
+		if (!sprite->isVisible || !sprite->textureHandle.IsValid()) continue;
 		auto* transform = registry.GetComponent<Transform2DComponent>(entity);
 
 		items_.push_back({ transform, sprite });

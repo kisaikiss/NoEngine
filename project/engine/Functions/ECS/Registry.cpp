@@ -1,4 +1,5 @@
 #include "Registry.h"
+#include "engine/Editor/ComponentRegistry.h"
 
 namespace NoEngine {
 namespace ECS {
@@ -34,6 +35,15 @@ void Registry::FlushDestroy() {
 		}
 	}
 	pendingDestroy_.clear();
+}
+
+void* Registry::AddComponent(const size_t& typeId, const Entity& entity) {
+	// ComponentRegistry から TypeInfo を取得
+	TypeInfo* info = ComponentRegistry::FindByTypeID(typeId);
+	if (!info) return nullptr;
+
+	// テンプレート AddComponent を呼ぶ
+	return info->adder(*this, entity);
 }
 
 void* Registry::GetComponent(const size_t& typeId, const Entity& entity) {

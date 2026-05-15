@@ -15,8 +15,43 @@
                 }
             }
         },
+        "DebugCamera": {
+            "components": {
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
         "Rabbitdoku": {
             "components": {
+                "AABBCollider2D": {
+                    "max": [
+                        24.0,
+                        32.0
+                    ],
+                    "min": [
+                        -24.0,
+                        -24.0
+                    ]
+                },
+                "Animator2DComponent": {
+                    "currentAnimation": "Unsupported"
+                },
+                "CollisionBody": {
+                    "type": 0
+                },
+                "GroundStateComponent": {
+                    "groundHeight": 0.0,
+                    "isGrounded": false
+                },
                 "Rabbitdoku": {
                     "doubleJumpSpeed": 350.0,
                     "jumpSpeed": 450.0,
@@ -26,6 +61,9 @@
                         0.0
                     ],
                     "yVelocity": 0.0
+                },
+                "RabbitdokuCollisionLayerComponent": {
+                    "layer": 1
                 },
                 "SpriteComponent": {
                     "color": [

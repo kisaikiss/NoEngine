@@ -24,6 +24,9 @@ NoEngine::TypeInfo* GetTypeInfo();
             }, \
             [](NoEngine::ECS::Registry& registry, NoEngine::ECS::Entity e) -> void* { \
                 return registry.GetComponent<ThisType>(e); \
+            }, \
+            [](NoEngine::ECS::Registry& registry, NoEngine::ECS::Entity e) -> void* { \
+                return registry.AddComponent<ThisType>(e); \
             } \
         }; \
         static bool s_registered = [](){ \

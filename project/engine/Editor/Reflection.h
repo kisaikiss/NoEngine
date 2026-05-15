@@ -50,6 +50,8 @@ struct TypeInfo {
 
     // RegistryからComponentを取得する関数
     std::function<void* (ECS::Registry&, ECS::Entity)> getter;
+    // RegistryからComponentを追加する関数 
+    std::function<void* (ECS::Registry&, ECS::Entity)> adder;
 };
 
 

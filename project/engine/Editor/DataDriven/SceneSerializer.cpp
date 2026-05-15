@@ -76,7 +76,8 @@ void LoadScene(ECS::Registry& registry, const json& scene) {
 		ECS::Entity e = FindEntityByName(registry, name);
 
 		if (e == ECS::INVALID_ENTITY) {
-			continue;
+			e = registry.GenerateEntity();
+			registry.AddComponent<EditTag>(e)->name = name;
 		}
 
 		// Componentを復元
@@ -103,7 +104,9 @@ void LoadEntityFromJson(ECS::Registry& registry, ECS::Entity entity, const json&
 		if (!typeInfo) continue;
 
 		void* compPtr = registry.GetComponent(typeInfo->typeId, entity);
-		if (!compPtr) continue;
+		if (!compPtr) {
+			compPtr = registry.AddComponent(typeInfo->typeId, entity);
+		}
 		for (auto& field : typeInfo->fields) {
 			uint8_t* base = (uint8_t*)compPtr + field.offset;
 			ReadFieldFromJson(compJson, field, base);

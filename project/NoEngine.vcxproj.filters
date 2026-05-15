@@ -169,6 +169,12 @@
     <ClCompile Include="engine\Functions\Renderer\RenderPass\SkyBoxPass.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\Editor\RabbitdokuStageEditSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Camera\Camera2DSystem.cpp" />
+    <ClCompile Include="engine\Functions\ECS\Component\MeshComponent.cpp" />
+    <ClCompile Include="engine\Functions\ECS\Component\AnimatorComponent.cpp" />
+    <ClCompile Include="engine\Functions\ECS\Component\Animator2DComponent.cpp" />
+    <ClCompile Include="application\RabbitdokuOdyssey3Plus\Game\RabbitdokuTag.cpp" />
+    <ClCompile Include="engine\Math\Collision\ColliderComponent.cpp" />
+    <ClCompile Include="application\RabbitdokuOdyssey3Plus\Game\RabbitdokuCollisionLayer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />

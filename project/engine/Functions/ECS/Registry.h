@@ -37,6 +37,14 @@ public:
 	CompType* AddComponent(const Entity entity);
 
 	/// <summary>
+	/// 指定したエンティティに、与えられた型IDのコンポーネントを追加する。
+	/// </summary>
+	/// <param name="typeId">追加するコンポーネントの型を識別するID（const size_t&）。</param>
+	/// <param name="entity">コンポーネントを追加する対象のエンティティ（const Entity&）。</param>
+	/// <returns>追加されたコンポーネントへのポインタ。追加に失敗した場合は nullptr を返す可能性がある。</returns>
+	void* AddComponent(const size_t& typeId, const Entity& entity);
+
+	/// <summary>
 	///  エンティティのコンポーネントを取り外します。
 	/// </summary>
 	/// <typeparam name="CompType">取り外したいコンポーネント</typeparam>

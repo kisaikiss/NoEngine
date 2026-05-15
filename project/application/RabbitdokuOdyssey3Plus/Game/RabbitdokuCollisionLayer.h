@@ -15,4 +15,15 @@ struct RabbitdokuCollisionLayerComponent {
 	};
 
 	CollisionLayer layer;
+	
 };
+
+namespace NoEngine {
+
+// エディタにCollisionLayerのタイプを登録する
+template<>
+struct FieldTypeResolver<RabbitdokuCollisionLayerComponent::CollisionLayer> {
+	static constexpr FieldType value = FieldType::Int;
+};
+
+}

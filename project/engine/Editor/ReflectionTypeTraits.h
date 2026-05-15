@@ -61,5 +61,10 @@ struct FieldTypeResolver<std::string> {
     static constexpr FieldType value = FieldType::String;
 };
 
+template<>
+struct FieldTypeResolver<Component::BodyType> {
+    static constexpr FieldType value = FieldType::Int;
+};
+
 
 }

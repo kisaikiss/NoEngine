@@ -24,6 +24,15 @@ public:
 		}
 		return nullptr;
 	}
+
+	static TypeInfo* FindByTypeID(size_t typeID) {
+		for (auto& comp : Get().components_) {
+			if (comp.typeId == typeID) {
+				return &comp;
+			}
+		}
+		return nullptr;
+	}
 private:
 	std::vector<TypeInfo> components_;
 	static ComponentRegistry& Get() {
