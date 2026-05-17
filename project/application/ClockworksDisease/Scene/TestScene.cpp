@@ -35,7 +35,6 @@ void TestScene::Setup() {
 		m->enviromentCoefficient = 1.f;
 		//m->enableSkinning = true;
 		m->psoName = L"Renderer : Default PSO";
-		m->psoId = NoEngine::Render::GetPSOID(m->psoName);
 		m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
 
 		auto* collider = registry.AddComponent<No::CapsuleCollider>(player);
@@ -60,7 +59,6 @@ void TestScene::Setup() {
 		auto* bmm = registry.AddComponent<No::MaterialComponent>(box);
 		bmm->materials = No::ModelLoader::GetMaterial("box");
 		bmm->psoName = L"Renderer : Default PSO";
-		bmm->psoId = NoEngine::Render::GetPSOID(bmm->psoName);
 		bmm->rootSigId = NoEngine::Render::GetRootSignatureID(bmm->psoName);
 		auto* boxT = registry.AddComponent<No::TransformComponent>(box);
 		boxT->translate.x = 2.f;

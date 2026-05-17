@@ -1,13 +1,9 @@
 #include "SpritePass.h"
-#include "engine/Runtime/GpuResource/UploadBuffer.h"
 #include "engine/Functions/Shader/ShaderReflection.h"
-#include "engine/Math/Types/Calculations/Matrix3x3Calculations.h"
 #include "engine/Math/Types/Calculations/Matrix4x4Calculations.h"
-#include "engine/Functions/Renderer/RenderSystem.h"
 #include "engine/Functions/ECS/Component/CameraComponent.h"
 #include "engine/Runtime/GraphicsCore.h"
 
-#include "engine/Functions/Input/Input.h"
 
 namespace NoEngine {
 namespace Render {
@@ -137,10 +133,10 @@ void SpritePass::GenerateVertices() {
 
 void SpritePass::Render(GraphicsContext& gfx) {
 	if (vertices_.empty()) return;
-
+	auto* renderCtx = GetRenderContext();
 	std::unordered_map<std::string, uint32_t>& rootIndex = RootSignatureBuilder::GetRootIndexMap("Renderer : Default Sprite PSO");
-	gfx.SetPipelineState(GetPSO(Render::GetPSOID(L"Renderer : Default Sprite PSO")));
-	gfx.SetRootSignature(GetRootSignature(Render::GetRootSignatureID(L"Renderer : Default Sprite PSO")));
+	gfx.SetPipelineState(renderCtx->GetGraphicsPSO("Renderer : Default Sprite PSO"));
+	gfx.SetRootSignature(renderCtx->GetRootSignature("Renderer : Default Sprite PSO"));
 	gfx.SetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	gfx.SetDynamicConstantBufferView(rootIndex["gCameraMatrix"], sizeof(Matrix4x4), &sCameraMatrix);
 	gfx.SetDynamicVB(0, vertices_.size(), sizeof(SpriteVertex), vertices_.data());

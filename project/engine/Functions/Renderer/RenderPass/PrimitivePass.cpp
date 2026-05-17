@@ -5,21 +5,19 @@
 namespace NoEngine {
 namespace Render {
 PrimitivePass::PrimitivePass() {
-	DebugPrimitive::Initialize();
+	
 }
 
 void PrimitivePass::Execute(GraphicsContext& gfx, ECS::Registry& registry) {
-	Draw(gfx, registry);
+	DebugPrimitive::Initialize(*GetRenderContext());
+	Draw(gfx);
 	Draw2D(gfx, registry);
 }
 
-void PrimitivePass::Draw(GraphicsContext& gfx, ECS::Registry& registry) {
+void PrimitivePass::Draw(GraphicsContext& gfx) {
 	using namespace Component;
-	auto cameraView = registry.View<CameraComponent, ActiveCameraTag>();
 	CameraComponent* camera{};
-	for (auto entity : cameraView) {
-		camera = registry.GetComponent<CameraComponent>(entity);
-	}
+	camera = GetRenderContext()->GetCamera();
 	if (!camera) return;
 	DebugPrimitive::Render(gfx, camera->forGPU.viewProjection);
 }

@@ -2,7 +2,6 @@
 #include "PreRenderPass.h"
 
 #include "engine/Runtime/GraphicsCore.h"
-#include "engine/Functions/Renderer/RenderSystem.h"
 #include "engine/Functions/Shader/ShaderReflection.h"
 
 namespace NoEngine {
@@ -10,21 +9,11 @@ namespace Render {
 
 using namespace Component;
 
-namespace {
-uint32_t sPSOID;
-uint32_t sRootSignatureID;
-uint32_t sPSOSkinnedID;
-uint32_t sRootSignatureSkinnedID;
-}
-
 PreRenderPass::PreRenderPass() {
-	sPSOID = GetPSOID(L"Renderer : PreRender PSO");
-	sRootSignatureID = GetRootSignatureID(L"Renderer : PreRender PSO");
-	sPSOSkinnedID = GetPSOID(L"Renderer : PreRenderSkinned PSO");
-	sRootSignatureSkinnedID = GetRootSignatureID(L"Renderer : PreRenderSkinned PSO");
 }
 
 void PreRenderPass::Execute(GraphicsContext& gfx, ECS::Registry& registry) {
+	auto* renderCtx = GetRenderContext();
 	D3D12_CPU_DESCRIPTOR_HANDLE renderTargetViews[] = {
 		GraphicsCore::sWorldPositionGBuffer.GetRTV(),
 		GraphicsCore::sNormalGBuffer.GetRTV()
@@ -61,12 +50,12 @@ void PreRenderPass::Execute(GraphicsContext& gfx, ECS::Registry& registry) {
 	for (auto& item : items_) {
 		std::string currentPsoName;
 		if (item.material->enableSkinning) {
-			gfx.SetPipelineState(GetPSO(sPSOSkinnedID));
-			gfx.SetRootSignature(GetRootSignature(sRootSignatureSkinnedID));
+			gfx.SetPipelineState(renderCtx->GetGraphicsPSO("Renderer : PreRenderSkinned PSO"));
+			gfx.SetRootSignature(renderCtx->GetRootSignature("Renderer : PreRenderSkinned PSO"));
 			currentPsoName = "Renderer : PreRenderSkinned PSO";
 		} else {
-			gfx.SetPipelineState(GetPSO(sPSOID));
-			gfx.SetRootSignature(GetRootSignature(sRootSignatureID));
+			gfx.SetPipelineState(renderCtx->GetGraphicsPSO("Renderer : PreRender PSO"));
+			gfx.SetRootSignature(renderCtx->GetRootSignature("Renderer : PreRender PSO"));
 			currentPsoName = "Renderer : PreRender PSO";
 		}
 		auto& rootIndex = RootSignatureBuilder::GetRootIndexMap(currentPsoName);

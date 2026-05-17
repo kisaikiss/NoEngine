@@ -1,7 +1,6 @@
 #include "MeshPass.h"
 #include "engine/Math/Types/Calculations/Vector3Calculations.h"
 #include "engine/Functions/Shader/ShaderReflection.h"
-#include "engine/Functions/Renderer/RenderSystem.h"
 #include "engine/Utilities/Conversion/ConvertString.h"
 #include "engine/Runtime/GraphicsCore.h"
 
@@ -10,12 +9,8 @@ namespace Render {
 
 using namespace Component;
 
-MeshPass::MeshPass() {
-	outlinePSOName_ = "Renderer : outline PSO";
-	outlinePSOID_ = GetPSOID(ConvertString(outlinePSOName_));
-	outlineSkinnedPSOName_ = "Renderer : skinnedOutline PSO";
-	outlineSkinnedPSOID_ = GetPSOID(ConvertString(outlineSkinnedPSOName_));
-
+MeshPass::MeshPass() : camera_(nullptr) {
+	
 	skyBoxTexture_ = TextureManager::LoadTextureFile("resources/engine/Texture/rostock_laage_airport_4k.dds");
 }
 
@@ -69,12 +64,13 @@ void MeshPass::Sort() {
 void MeshPass::Render(GraphicsContext& context) {
 	// ToDo : currentPsoの値は被りえない値にすべきです。
 	uint32_t currentPSO = 110;
+	auto* renderCtx = GetRenderContext();
 	context.TransitionResource(GraphicsCore::GetShadowMask(), D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 	for (auto& item : items_) {
 		auto& rootIndex = RootSignatureBuilder::GetRootIndexMap(item.psoName);
 		if (item.psoId != currentPSO) {
-			context.SetPipelineState(GetPSO(item.psoId));
-			context.SetRootSignature(GetRootSignature(item.rootSigId));
+			context.SetPipelineState(renderCtx->GetGraphicsPSO(ConvertString(item.material->psoName)));
+			context.SetRootSignature(renderCtx->GetRootSignature(ConvertString(item.material->psoName)));
 			context.SetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 			currentPSO = item.psoId;
 		}
@@ -98,17 +94,17 @@ void MeshPass::Render(GraphicsContext& context) {
 				uint32_t spotLightNum = 0;
 				uint32_t pad = 0;
 			}constants;
-			constants.directionalLightNum = GetRenderContext()->GetLightNums()->directionalLightNum;
-			constants.pointLightNum = GetRenderContext()->GetLightNums()->pointLightNum;
-			constants.spotLightNum = GetRenderContext()->GetLightNums()->spotLightNum;
+			constants.directionalLightNum = renderCtx->GetLightNums()->directionalLightNum;
+			constants.pointLightNum = renderCtx->GetLightNums()->pointLightNum;
+			constants.spotLightNum = renderCtx->GetLightNums()->spotLightNum;
 			context.SetDynamicConstantBufferView(rootIndex["gLightNums"], sizeof(constants), &constants);
 
 			if (constants.directionalLightNum)
-				context.SetDynamicDescriptor(rootIndex["gDirectionalLights"], 0, GetRenderContext()->GetDirectionalLightSRV());
+				context.SetDynamicDescriptor(rootIndex["gDirectionalLights"], 0, renderCtx->GetDirectionalLightSRV());
 			if (constants.pointLightNum)
-				context.SetDynamicDescriptor(rootIndex["gPointLights"], 0, GetRenderContext()->GetPointLightSRV());
+				context.SetDynamicDescriptor(rootIndex["gPointLights"], 0, renderCtx->GetPointLightSRV());
 			if (constants.spotLightNum)
-				context.SetDynamicDescriptor(rootIndex["gSpotLights"], 0, GetRenderContext()->GetSpotLightSRV());
+				context.SetDynamicDescriptor(rootIndex["gSpotLights"], 0, renderCtx->GetSpotLightSRV());
 		}
 		context.SetVertexBuffer(0, item.mesh->mesh->vertexBuffer.VertexBufferView());
 		context.SetIndexBuffer(item.mesh->mesh->indexBuffer.IndexBufferView());
@@ -142,10 +138,18 @@ void MeshPass::Render(GraphicsContext& context) {
 
 void MeshPass::RenderOutline(GraphicsContext& context) {
 	if (items_.empty()) return;
+	auto* renderCtx = GetRenderContext();
+	outlinePSOName_ = "Renderer : outline PSO";
+	uint32_t a = renderCtx->GetRootSignatureID(outlinePSOName_);
+	a;
+	outlinePSOID_ = renderCtx->GetPSOID(outlinePSOName_);
+	outlineSkinnedPSOName_ = "Renderer : skinnedOutline PSO";
+	outlineSkinnedPSOID_ = renderCtx->GetPSOID(outlineSkinnedPSOName_);
+
 	bool currentPSOEnableSkinning = false;
 	std::string currentPSOName = outlinePSOName_;
-	context.SetPipelineState(GetPSO(GetPSOID(ConvertString(outlinePSOName_))));
-	context.SetRootSignature(GetRootSignature(GetPSOID(ConvertString(outlinePSOName_))));
+	context.SetPipelineState(renderCtx->GetGraphicsPSO(outlinePSOID_));
+	context.SetRootSignature(renderCtx->GetRootSignature(outlinePSOID_));
 	context.SetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	for (auto& item : items_) {
@@ -155,13 +159,13 @@ void MeshPass::RenderOutline(GraphicsContext& context) {
 			currentPSOEnableSkinning = item.material->enableSkinning;
 			if (currentPSOEnableSkinning) {
 				currentPSOName = outlineSkinnedPSOName_;
-				context.SetPipelineState(GetPSO(GetPSOID(ConvertString(currentPSOName))));
-				context.SetRootSignature(GetRootSignature(GetPSOID(ConvertString(currentPSOName))));
+				context.SetPipelineState(renderCtx->GetGraphicsPSO(outlineSkinnedPSOID_));
+				context.SetRootSignature(renderCtx->GetRootSignature(outlineSkinnedPSOID_));
 				context.SetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 			} else {
 				currentPSOName = outlinePSOName_;
-				context.SetPipelineState(GetPSO(GetPSOID(ConvertString(outlinePSOName_))));
-				context.SetRootSignature(GetRootSignature(GetPSOID(ConvertString(outlinePSOName_))));
+				context.SetPipelineState(renderCtx->GetGraphicsPSO(outlinePSOID_));
+				context.SetRootSignature(renderCtx->GetRootSignature(outlinePSOID_));
 				context.SetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 			}
 		}

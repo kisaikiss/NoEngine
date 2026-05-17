@@ -22,13 +22,10 @@ SkyBoxPass::SkyBoxPass() {
 }
 
 void SkyBoxPass::Execute(GraphicsContext& gfx, ECS::Registry& registry) {
+	static_cast<void>(registry);
 	using namespace Component;
-	auto cameraView = registry.View<CameraComponent, ActiveCameraTag>();
-	for (auto entity : cameraView) {
-		camera_ = registry.GetComponent<CameraComponent>(entity);
-	}
-	if (camera_ == nullptr) return;
-
+	camera_ = GetRenderContext()->GetCamera();
+	if (!camera_) return;
 	auto& rootIndex = RootSignatureBuilder::GetRootIndexMap("SkyBox PSO");
 	gfx.SetPipelineState(pso_);
 	gfx.SetRootSignature(rootSig_);

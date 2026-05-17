@@ -1,12 +1,13 @@
 #pragma once
 #include "engine/Runtime/Command/GraphicsContext.h"
 #include "engine/Math/MathInclude.h"
+#include "RenderContext.h"
 
 namespace NoEngine {
 
 class DebugPrimitive {
 public:
-	static void Initialize();
+	static void Initialize(RenderContext& ctx);
 	static void Shutdown();
 
 	/// <summary>

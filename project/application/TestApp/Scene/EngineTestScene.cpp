@@ -31,7 +31,6 @@ void EngineTestScene::Setup() {
 	m->drawOutline = true;
 	m->enableSkinning = true;
 	m->psoName = L"Renderer : DefaultSkinned PSO";
-	m->psoId = NoEngine::Render::GetPSOID(m->psoName);
 	m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
 
 	No::Entity background = registry.GenerateEntity();
@@ -41,7 +40,6 @@ void EngineTestScene::Setup() {
 	auto* bmm = registry.AddComponent<No::MaterialComponent>(background);
 	bmm->materials = No::ModelLoader::GetMaterial("background");
 	bmm->psoName = L"Renderer : Default PSO";
-	bmm->psoId = NoEngine::Render::GetPSOID(bmm->psoName);
 	bmm->rootSigId = NoEngine::Render::GetRootSignatureID(bmm->psoName);
 	registry.AddComponent<No::TransformComponent>(background);
 	auto* backgroundTag = registry.AddComponent<No::EditTag>(background);

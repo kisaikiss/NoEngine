@@ -2,7 +2,6 @@
 #include "ParticlePass.h"
 #include "engine/Runtime/GpuResource/UploadBuffer.h"
 #include "engine/Functions/Shader/ShaderReflection.h"
-#include "engine/Functions/Renderer/RenderSystem.h"
 #include "engine/Functions/ECS/Component/TransformComponent.h"
 
 namespace NoEngine {
@@ -32,14 +31,14 @@ ParticlePass::ParticlePass() {
 	indexUpload.Unmap();
 	index_.Create(L"particleIndex", sizeof(indices), sizeof(uint32_t), indexUpload);
 
-	psoId_ = Render::GetPSOID(L"Renderer : particle PSO");
-	rootSigId_ = Render::GetRootSignatureID(L"Renderer : particle PSO");
+	
 
 	maxParticles_ = 50000;
 	Initialize(maxParticles_);
 }
 
 void ParticlePass::Execute(GraphicsContext& gfx, ECS::Registry& registry) {
+	auto* renderCtx = GetRenderContext();
 	auto cameraView = registry.View<Component::TransformComponent, Component::CameraComponent, Component::ActiveCameraTag>();
 	Math::Vector3 cameraPos{};
 	for (auto entity : cameraView) {
@@ -60,8 +59,8 @@ void ParticlePass::Execute(GraphicsContext& gfx, ECS::Registry& registry) {
 		// GPUへ行列を転送
 		UploadMatrices(gfx, emitter->particles, baseIndex);
 
-		gfx.SetPipelineState(GetPSO(psoId_));
-		gfx.SetRootSignature(GetRootSignature(rootSigId_));
+		gfx.SetPipelineState(renderCtx->GetGraphicsPSO("Renderer : particle PSO"));
+		gfx.SetRootSignature(renderCtx->GetRootSignature("Renderer : particle PSO"));
 		gfx.SetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 		gfx.SetVertexBuffer(0, vertex_.VertexBufferView());

@@ -2,8 +2,30 @@
 #include "engine/Functions/ECS/Component/LightComponent.h"
 #include "engine/Runtime/GraphicsCore.h"
 
+#include "Initializer/RenderInitializer.h"
+
 namespace NoEngine {
 using namespace Component;
+
+RenderContext::RenderContext() {
+	if (isInitialized_) return;
+	RenderInitializer::Initialize(*this);
+	isInitialized_ = true;
+}
+
+void RenderContext::Update(ECS::Registry& registry) {
+	auto cameraView = registry.View<CameraComponent, ActiveCameraTag>();
+	for (auto e : cameraView) {
+		camera_ = registry.GetComponent<CameraComponent>(e);
+	}
+
+	auto debugCameraView = registry.View<CameraComponent, DebugCameraComponent>();
+	for (auto e : debugCameraView) {
+		debugCamera_ = registry.GetComponent<CameraComponent>(e);
+	}
+
+}
+
 void RenderContext::SetDirectionalLight(GraphicsContext& gfx, UploadBuffer& directionalLightUpload, uint32_t directionalLightNum) {
 	bool recreate = false;
 	if (lightNums_.directionalLightNum != directionalLightNum) recreate = true;

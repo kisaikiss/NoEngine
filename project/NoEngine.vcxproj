@@ -240,6 +240,14 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="engine\Functions\ECS\System\Collision\NarrowPhase2DSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\SpriteAnimationSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\SystemManager.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\Initializer\MeshInitialzer.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\Initializer\ParticleInitialzer.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\Initializer\PreRenderInitialzer.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\Initializer\PrimitiveInitializer.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\Initializer\SpriteInitializer.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\PipelineState\GraphicsPSOManager.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\PipelineState\RootSignatureManager.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\PipelineState\StateObjectManager.cpp" />
     <ClCompile Include="engine\Functions\Renderer\Primitive.cpp" />
     <ClCompile Include="application\TestApp\Scene\EngineTestScene.cpp" />
     <ClCompile Include="application\TestApp\System\TestSystem.cpp" />
@@ -249,6 +257,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="engine\Functions\ECS\System\AnimationSystem.cpp" />
     <ClCompile Include="engine\Functions\Input\Input.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderContext.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\Initializer\RenderInitializer.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\DebugRenderPass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PrePasses\LightPass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\MeshPass.cpp" />
@@ -431,7 +440,15 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="engine\Functions\ECS\System\MovementSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\Collision\NarrowPhase2DSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\SpriteAnimationSystem.h" />
+    <ClInclude Include="engine\Functions\Renderer\Initializer\MeshInitialzer.h" />
+    <ClInclude Include="engine\Functions\Renderer\Initializer\ParticleInitialzer.h" />
+    <ClInclude Include="engine\Functions\Renderer\Initializer\PreRenderInitialzer.h" />
+    <ClInclude Include="engine\Functions\Renderer\Initializer\PrimitiveInitializer.h" />
+    <ClInclude Include="engine\Functions\Renderer\Initializer\SpriteInitializer.h" />
     <ClInclude Include="engine\Functions\Renderer\LightForGPU.h" />
+    <ClInclude Include="engine\Functions\Renderer\PipelineState\GraphicsPSOManager.h" />
+    <ClInclude Include="engine\Functions\Renderer\PipelineState\RootSignatureManager.h" />
+    <ClInclude Include="engine\Functions\Renderer\PipelineState\StateObjectManager.h" />
     <ClInclude Include="engine\Functions\Renderer\Primitive.h" />
     <ClInclude Include="application\TestApp\Scene\EngineTestScene.h" />
     <ClInclude Include="application\TestApp\System\TestSystem.h" />
@@ -453,6 +470,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="engine\Functions\ECS\System\SystemManager.h" />
     <ClInclude Include="engine\Functions\Input\Input.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderContext.h" />
+    <ClInclude Include="engine\Functions\Renderer\Initializer\RenderInitializer.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\DebugRenderPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PrePasses\LightPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\MeshPass.h" />

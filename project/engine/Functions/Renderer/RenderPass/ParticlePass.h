@@ -26,9 +26,6 @@ private:
 
 	std::vector< Component::ParticleEmitterComponent*> emitters_;
 
-	uint32_t psoId_;
-	uint32_t rootSigId_;
-
 	size_t maxParticles_;
 
 	Component::CameraComponent* camera_;

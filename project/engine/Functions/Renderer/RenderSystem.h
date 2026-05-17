@@ -11,9 +11,7 @@ void Initialize();
 void Shutdown();
 extern DescriptorHeap gTextureHeap;
 
-GraphicsPSO& GetPSO(uint32_t psoId);
 RootSignature& GetRootSignature(uint32_t rootSigId);
-uint32_t GetPSOID(std::wstring psoName);
 uint32_t GetRootSignatureID(std::wstring rootSigName);
 
 Microsoft::WRL::ComPtr<ID3D12StateObject>& GetShadowRtStateObject();

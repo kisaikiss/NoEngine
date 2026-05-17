@@ -9,6 +9,12 @@ public:
 
     ~RootSignature() = default;
 
+    RootSignature(RootSignature&&) = default;
+    RootSignature& operator=(RootSignature&&) = default;
+
+    RootSignature(const RootSignature&) = delete;
+    RootSignature& operator=(const RootSignature&) = delete;
+
     static void DestroyAll(void);
 
     void Reset(UINT NumRootParams, UINT NumStaticSamplers = 0);

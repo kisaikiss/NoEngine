@@ -2,7 +2,6 @@
 #include "engine/Runtime/PipelineStateObject/GraphicsPSO.h"
 #include "engine/Runtime/PipelineStateObject/RootSignature.h"
 #include "engine/Functions/Shader/ShaderModule.h"
-#include "engine/Functions/Renderer/RenderSystem.h"
 
 using namespace NoEngine;
 using namespace NoEngine::Math;
@@ -14,13 +13,18 @@ struct PrimitiveVertex {
 
 RootSignature sRootSig;
 GraphicsPSO* pPSO = nullptr;
+RootSignature* pRootSig = nullptr;
+bool sIsInitialized = false;
 
 std::vector<PrimitiveVertex> sVertices;
 std::vector<PrimitiveVertex> sVertices2D;
 }
 
-void DebugPrimitive::Initialize() {
-	pPSO = &Render::GetPSO(Render::GetPSOID(L"Renderer : Primitive PSO"));
+void DebugPrimitive::Initialize(RenderContext& ctx) {
+	if (sIsInitialized) return;
+	pPSO = &ctx.GetGraphicsPSO("Renderer : Primitive PSO");
+	pRootSig = &ctx.GetRootSignature("Renderer : Primitive PSO");
+	sIsInitialized = true;
 }
 
 void DebugPrimitive::Shutdown() {
@@ -126,7 +130,7 @@ void DebugPrimitive::DrawTriangle(
 void DebugPrimitive::Render(GraphicsContext& ctx, const Matrix4x4& ViewProj) {
 	if (sVertices.empty() || !pPSO) return;
 
-	ctx.SetRootSignature(Render::GetRootSignature(Render::GetRootSignatureID(L"Renderer : Primitive PSO")));
+	ctx.SetRootSignature(*pRootSig);
 	ctx.SetPipelineState(*pPSO);
 	ctx.SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINELIST);
 
@@ -142,7 +146,7 @@ void DebugPrimitive::Render(GraphicsContext& ctx, const Matrix4x4& ViewProj) {
 void DebugPrimitive::Render2D(GraphicsContext& ctx, const Math::Matrix4x4& ViewProj) {
 	if (sVertices2D.empty() || !pPSO) return;
 
-	ctx.SetRootSignature(Render::GetRootSignature(Render::GetRootSignatureID(L"Renderer : Primitive PSO")));
+	ctx.SetRootSignature(*pRootSig);
 	ctx.SetPipelineState(*pPSO);
 	ctx.SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINELIST);
 

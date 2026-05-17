@@ -110,7 +110,7 @@ void ImGuiManager::BeginFrame() {
 	ImGui::SetNextWindowSize(viewport->Size);
 	ImGui::SetNextWindowViewport(viewport->ID);
 
-	ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking |
+	ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking |ImGuiWindowFlags_NoTitleBar|
 		ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize |
 		ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus |
 		ImGuiWindowFlags_NoNavFocus;

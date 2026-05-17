@@ -3,6 +3,10 @@
 #include "engine/Runtime/GpuResource/GpuBuffer.h"
 #include "engine/Runtime/GpuResource/UploadBuffer.h"
 #include "engine/Runtime/Command/GraphicsContext.h"
+#include "engine/Functions/ECS/Registry.h"
+#include "PipelineState/GraphicsPSOManager.h"
+#include "PipelineState/RootSignatureManager.h"
+#include "PipelineState/StateObjectManager.h"
 #include "LightForGPU.h"
 
 namespace NoEngine {
@@ -11,6 +15,10 @@ namespace NoEngine {
 /// </summary>
 class RenderContext : NonCopyable {
 public:
+	RenderContext();
+
+	void Update(ECS::Registry& registry);
+
 	/// <summary>
 	/// それぞれのライトの数
 	/// </summary>
@@ -19,6 +27,29 @@ public:
 		uint32_t pointLightNum = 0;
 		uint32_t spotLightNum = 0;
 	};
+
+	/// <summary>
+	/// グラフィックスのパイプラインステートオブジェクト (PSO) を登録する関数。
+	/// </summary>
+	/// <param name="name">登録する PSO の名前を表す文字列。</param>
+	/// <param name="pso">登録する GraphicsPSO オブジェクトへの参照。</param>
+	/// <returns>登録された PSO に対応する uint32_t 型の識別子を返す。</returns>
+	uint32_t RegisterGraphicsPSO(const std::string& name, const GraphicsPSO& pso) { return graphicsPSOs_.Register(name, pso); }
+
+	/// <summary>
+	/// 名前でルートシグネチャを内部に登録し、その識別子を返す。
+	/// </summary>
+	/// <param name="name">登録に使用する一意の名前。</param>
+	/// <param name="rootSignature">登録する RootSignature オブジェクトへの参照。</param>
+	/// <returns>登録されたルートシグネチャを識別する uint32_t の ID。</returns>
+	uint32_t RegisterRootSignature(const std::string& name, RootSignature rootSignature) { return rootSignatures_.Register(name, std::move(rootSignature)); }
+
+	/// <summary>
+	/// 名前をキーに StateObjectManager に状態オブジェクトを登録する。
+	/// </summary>
+	/// <param name="name">登録するオブジェクトの識別名。</param>
+	/// <param name="entry">登録する StateObjectManager::Entry の情報。</param>
+	void RegisterStateObject(const std::string& name, const StateObject& entry) { stateObjects_.Register(name, entry); }
 
 	/// <summary>
 	/// 方向ライトをセットします
@@ -63,20 +94,43 @@ public:
 	/// <returns>それぞれのライトの数</returns>
 	const LightNums* GetLightNums() { return &lightNums_; }
 
+
+	GraphicsPSO& GetGraphicsPSO(const std::string& name) { return graphicsPSOs_.Get(name); }
+	GraphicsPSO& GetGraphicsPSO(uint32_t index) { return graphicsPSOs_.Get(index); }
+	RootSignature& GetRootSignature(const std::string& name) { return rootSignatures_.Get(name); }
+	RootSignature& GetRootSignature(uint32_t index) { return rootSignatures_.Get(index); }
+	StateObject& GetStateObject(const std::string& name) { return stateObjects_.Get(name); }
+	uint32_t GetPSOID(const std::string& name) { return graphicsPSOs_.GetID(name); }
+	uint32_t GetRootSignatureID(const std::string& name) { return rootSignatures_.GetID(name); }
 	D3D12_CPU_DESCRIPTOR_HANDLE GetDirectionalLightSRV() { return directionalLightBuffer_.GetSRV(); }
 	D3D12_CPU_DESCRIPTOR_HANDLE GetPointLightSRV() { return pointLightBuffer_.GetSRV(); }
 	D3D12_CPU_DESCRIPTOR_HANDLE GetSpotLightSRV() { return spotLightBuffer_.GetSRV(); }
+	Component::CameraComponent* GetCamera() { return camera_; }
+	Component::CameraComponent* GetDebugCamera() { return debugCamera_; }
+	bool IsInitialized() { return isInitialized_; }
 
 	StructuredBuffer& GetDirectionalLightBuffer() { return directionalLightBuffer_; }
 
 	Microsoft::WRL::ComPtr<ID3D12Resource>& GetRaytraceInstanceBuffer() { return instanceBuffer_; }
 	Microsoft::WRL::ComPtr<ID3D12Resource>& GetTLAS() { return tlas_; }
 private:
+	// 初期化済みか
+	bool isInitialized_ = false;
+
 	// ライト
 	StructuredBuffer directionalLightBuffer_;
 	StructuredBuffer pointLightBuffer_;
 	StructuredBuffer spotLightBuffer_;
 	LightNums lightNums_;
+
+	// カメラ
+	Component::CameraComponent* camera_;
+	Component::CameraComponent* debugCamera_;
+
+	// 描画Pipeline
+	GraphicsPSOManager graphicsPSOs_;
+	RootSignatureManager rootSignatures_;
+	StateObjectManager stateObjects_;
 
 	// Raytracing
 	Microsoft::WRL::ComPtr<ID3D12Resource> tlas_;

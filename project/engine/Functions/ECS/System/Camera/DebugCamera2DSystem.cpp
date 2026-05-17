@@ -3,11 +3,13 @@
 #include "../../Component/CameraComponent.h"
 #include "../../Component/Transform2DComponent.h"
 #include "engine/Functions/Input/Input.h"
+#include "../../../../Editor/EditUtils.h"
 
 namespace NoEngine {
 namespace ECS {
 
 void DebugCamera2DSystem::Update(Registry& registry, float deltaTime) {
+	if (!Editor::IsMouseOverSceneWindow()) return;
 	auto view = registry.View<Component::DebugCamera2DComponent, Component::ActiveCamera2DTag, Component::Camera2DComponent, Component::Transform2DComponent>();
 	for (auto e : view) {
 		auto* transform = registry.GetComponent<Component::Transform2DComponent>(e);
