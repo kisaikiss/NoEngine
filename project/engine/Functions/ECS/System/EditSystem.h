@@ -13,7 +13,7 @@ private:
     void LoadFile(Registry& registry);
 
     void DrawHierarchyWindow(Registry& registry);
-    void RenameEditTag(Registry& registry, Entity entity, const std::string& desiredName);
+    void EnsureUniqueEditTagNames(Registry& registry);
     bool FirstLoaded_ = false;
 };
 }
