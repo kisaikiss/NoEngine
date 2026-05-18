@@ -48,11 +48,11 @@ void RabbitdokuStageEditSystem::AddBlock(No::Registry& registry) {
 	auto* sprite = registry.AddComponent<No::SpriteComponent>(e);
 	auto* collider = registry.AddComponent<No::AABBCollider2D>(e);
 	registry.AddComponent<BlockTag>(e);
-	registry.AddComponent<No::EditTag>(e)->name = "block" + std::to_string(count);
+	registry.AddComponent<No::EditTag>(e)->name = "block";
 	registry.AddComponent<No::CollisionBody>(e)->type = No::BodyType::Static;
 	registry.AddComponent<RabbitdokuCollisionLayerComponent>(e)->layer = RabbitdokuCollisionLayerComponent::Terrain;
 
-	sprite->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/RabbitdokuOdyssey3Plus/Sprite/block.png");
+	sprite->textureFilePath = "resources/game/RabbitdokuOdyssey3Plus/Sprite/block.png";
 	transform->scale.x = gridSize_.x;
 	transform->scale.y = gridSize_.y;
 	collider->max = transform->scale / 2.f;

@@ -39,6 +39,8 @@ bool Editor::IsMouseOverSceneWindow() {
 
 }
 
+
+
 void Editor::DrawGrid2D(Math::Vector2 gridSize) {
 	static const float kGridNum = 1000;
 	for (uint32_t i = 0; i < kGridNum; i++) {
@@ -46,6 +48,28 @@ void Editor::DrawGrid2D(Math::Vector2 gridSize) {
 		DebugPrimitive::DrawLine2D(Math::Vector2(-gridSize.x * kGridNum, gridSize.y * i - gridSize.y * kGridNum / 2.f), Math::Vector2(gridSize.x * kGridNum, gridSize.y * i - gridSize.y * kGridNum / 2.f), Math::Color::WHITE);
 	}
 
+}
+
+std::string MakeUniqueName(const std::unordered_set<std::string>& used, const std::string& base) {
+	if (used.find(base) == used.end()) return base;
+	// base が既に使われている場合は base_1, base_2 ... を試す
+	int i = 1;
+	while (true) {
+		std::string cand = base + "_" + std::to_string(i);
+		if (used.find(cand) == used.end()) return cand;
+		++i;
+	}
+}
+
+std::unordered_set<std::string> CollectEditTagNames(ECS::Registry& registry, ECS::Entity except) {
+	std::unordered_set<std::string> names;
+	auto view = registry.View<Editor::EditTag>();
+	for (auto e : view) {
+		if (e == except) continue;
+		const Editor::EditTag* tag = registry.GetComponent<Editor::EditTag>(e);
+		if (tag) names.insert(tag->name);
+	}
+	return names;
 }
 
 using namespace ECS;

@@ -10,7 +10,6 @@ private:
     void InitPlayer(No::Registry& registry);
     void InitCamera(No::Registry& registry);
 
-    void InitBlock(No::Registry& registry);
     void InitRoom(No::Registry& registry);
 
     void NotSystemUpdate() override;

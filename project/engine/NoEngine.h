@@ -15,6 +15,7 @@
 #include "Editor/EditUtils.h"
 #include "Editor/ReflectionMacros.h"
 
+#include "Functions/ECS/System/Loader/SpriteLoadSystem.h"
 #include "Functions/ECS/System/AnimationSystem.h"
 #include "Functions/ECS/System/SpriteAnimationSystem.h"
 #include "Functions/ECS/System/EditSystem.h"

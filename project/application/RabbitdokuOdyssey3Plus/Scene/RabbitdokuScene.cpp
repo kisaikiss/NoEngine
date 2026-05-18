@@ -19,12 +19,12 @@ void RabbitdokuScene::Setup() {
 	AddSystems();
 	InitPlayer(registry);
 	InitCamera(registry);
-	InitBlock(registry);
 	InitRoom(registry);
 }
 
 void RabbitdokuScene::AddSystems() {
 	AddSystem(std::make_unique<No::EditSystem>());
+	AddSystem(std::make_unique<No::SpriteLoadSystem>());
 	AddSystem(std::make_unique<RabbitdokuStageEditSystem>());
 	AddSystem(std::make_unique<No::DebugCamera2DSystem>());
 	AddSystem(std::make_unique<Camera2DChangeSystem>());
@@ -94,115 +94,6 @@ void RabbitdokuScene::InitCamera(No::Registry& registry) {
 	
 }
 
-void RabbitdokuScene::InitBlock(No::Registry& registry) {
-	for (uint32_t i = 0; i < 21; i++) {
-		if (i % 2 == 0) continue;
-		No::Entity e = registry.GenerateEntity();
-		auto* transform = registry.AddComponent<No::Transform2DComponent>(e);
-		transform->translate.x = float(i) * 64.f;
-		transform->translate.y = 640.f;
-		auto* sprite = registry.AddComponent<No::SpriteComponent>(e);
-		auto* collider = registry.AddComponent<No::AABBCollider2D>(e);
-		collider->max = 32.f;
-		collider->min = -32.f;
-		registry.AddComponent<No::CollisionBody>(e)->type = No::BodyType::Static;
-		registry.AddComponent<RabbitdokuCollisionLayerComponent>(e)->layer = RabbitdokuCollisionLayerComponent::Terrain;
-
-		sprite->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/RabbitdokuOdyssey3Plus/Sprite/block.png");
-		transform->scale.x = static_cast<float>(sprite->textureHandle.GetWidth());
-		transform->scale.y = static_cast<float>(sprite->textureHandle.GetHeight());
-	}
-
-	for (uint32_t i = 0; i < 41; i++) {
-
-		No::Entity e = registry.GenerateEntity();
-		auto* transform = registry.AddComponent<No::Transform2DComponent>(e);
-		transform->translate.x = float(i) * 64.f;
-		transform->translate.y = 704.f;
-		auto* sprite = registry.AddComponent<No::SpriteComponent>(e);
-		auto* collider = registry.AddComponent<No::AABBCollider2D>(e);
-		collider->max = 32.f;
-		collider->min = -32.f;
-		registry.AddComponent<No::CollisionBody>(e)->type = No::BodyType::Static;
-		registry.AddComponent<RabbitdokuCollisionLayerComponent>(e)->layer = RabbitdokuCollisionLayerComponent::Terrain;
-
-		sprite->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/RabbitdokuOdyssey3Plus/Sprite/block.png");
-		transform->scale.x = static_cast<float>(sprite->textureHandle.GetWidth());
-		transform->scale.y = static_cast<float>(sprite->textureHandle.GetHeight());
-	}
-
-	for (uint32_t i = 0; i < 20; i++) {
-
-		No::Entity e = registry.GenerateEntity();
-		auto* transform = registry.AddComponent<No::Transform2DComponent>(e);
-		transform->translate.x = float(i) * 64.f;
-		transform->translate.y = 0.f;
-		auto* sprite = registry.AddComponent<No::SpriteComponent>(e);
-		auto* collider = registry.AddComponent<No::AABBCollider2D>(e);
-		collider->max = 32.f;
-		collider->min = -32.f;
-		registry.AddComponent<No::CollisionBody>(e)->type = No::BodyType::Static;
-		registry.AddComponent<RabbitdokuCollisionLayerComponent>(e)->layer = RabbitdokuCollisionLayerComponent::Terrain;
-
-		sprite->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/RabbitdokuOdyssey3Plus/Sprite/block.png");
-		transform->scale.x = static_cast<float>(sprite->textureHandle.GetWidth());
-		transform->scale.y = static_cast<float>(sprite->textureHandle.GetHeight());
-	}
-
-	for (uint32_t i = 0; i < 11; i++) {
-
-		No::Entity e = registry.GenerateEntity();
-		auto* transform = registry.AddComponent<No::Transform2DComponent>(e);
-		transform->translate.x = 0.f;
-		transform->translate.y = float(i) * 64.f;
-		auto* sprite = registry.AddComponent<No::SpriteComponent>(e);
-		auto* collider = registry.AddComponent<No::AABBCollider2D>(e);
-		collider->max = 32.f;
-		collider->min = -32.f;
-		registry.AddComponent<No::CollisionBody>(e)->type = No::BodyType::Static;
-		registry.AddComponent<RabbitdokuCollisionLayerComponent>(e)->layer = RabbitdokuCollisionLayerComponent::Terrain;
-
-		sprite->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/RabbitdokuOdyssey3Plus/Sprite/block.png");
-		transform->scale.x = static_cast<float>(sprite->textureHandle.GetWidth());
-		transform->scale.y = static_cast<float>(sprite->textureHandle.GetHeight());
-	}
-
-	for (uint32_t i = 0; i < 11; i++) {
-		if (i % 2 == 0) continue;
-		No::Entity e = registry.GenerateEntity();
-		auto* transform = registry.AddComponent<No::Transform2DComponent>(e);
-		transform->translate.x = 64.f;
-		transform->translate.y = float(i) * 64.f;
-		auto* sprite = registry.AddComponent<No::SpriteComponent>(e);
-		auto* collider = registry.AddComponent<No::AABBCollider2D>(e);
-		collider->max = 32.f;
-		collider->min = -32.f;
-		registry.AddComponent<No::CollisionBody>(e)->type = No::BodyType::Static;
-		registry.AddComponent<RabbitdokuCollisionLayerComponent>(e)->layer = RabbitdokuCollisionLayerComponent::Terrain;
-
-		sprite->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/RabbitdokuOdyssey3Plus/Sprite/block.png");
-		transform->scale.x = static_cast<float>(sprite->textureHandle.GetWidth());
-		transform->scale.y = static_cast<float>(sprite->textureHandle.GetHeight());
-	}
-
-	for (uint32_t i = 0; i < 6; i++) {
-
-		No::Entity e = registry.GenerateEntity();
-		auto* transform = registry.AddComponent<No::Transform2DComponent>(e);
-		transform->translate.x = 1280.f;
-		transform->translate.y = float(i) * 64.f;
-		auto* sprite = registry.AddComponent<No::SpriteComponent>(e);
-		auto* collider = registry.AddComponent<No::AABBCollider2D>(e);
-		collider->max = 32.f;
-		collider->min = -32.f;
-		registry.AddComponent<No::CollisionBody>(e)->type = No::BodyType::Static;
-		registry.AddComponent<RabbitdokuCollisionLayerComponent>(e)->layer = RabbitdokuCollisionLayerComponent::Terrain;
-
-		sprite->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/RabbitdokuOdyssey3Plus/Sprite/block.png");
-		transform->scale.x = static_cast<float>(sprite->textureHandle.GetWidth());
-		transform->scale.y = static_cast<float>(sprite->textureHandle.GetHeight());
-	}
-}
 
 void RabbitdokuScene::InitRoom(No::Registry& registry) {
 	// room1

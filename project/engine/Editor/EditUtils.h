@@ -16,12 +16,29 @@ struct EditTag {
 Math::Vector2 Get2DSceneMousePosition(ECS::Registry& registry);
 bool IsMouseOverSceneWindow();
 
+
 /// <summary>
 /// 2Dグリッドを描画する。
 /// </summary>
 /// <param name="gridSize">グリッドの幅と高さを表す2次元ベクトル。</param>
 void DrawGrid2D(Math::Vector2 gridSize);
 }
+
+/// <summary>
+/// 既存の名前集合と衝突しない一意の名前を生成する。
+/// </summary>
+/// <param name="used">既に使用されている名前の集合。</param>
+/// <param name="base">基となる希望の名前。必要に応じて接尾辞（数値）を付与して一意化される。</param>
+/// <returns>used に含まれない一意の名前を返す。</returns>
+std::string MakeUniqueName(const std::unordered_set<std::string>& used, const std::string& base);
+
+/// <summary>
+/// レジストリから編集タグ名を収集する。指定したエンティティのタグは除外される。
+/// </summary>
+/// <param name="registry">検索対象の ECS レジストリへの参照。</param>
+/// <param name="except">除外するエンティティ。デフォルトは ECS::INVALID_ENTITY（除外なし）。</param>
+/// <returns>重複のない編集タグ名の集合（std::unordered_set<std::string>）。</returns>
+std::unordered_set<std::string> CollectEditTagNames(ECS::Registry& registry, ECS::Entity except = ECS::INVALID_ENTITY);
 
 void DrawComponentUI(ECS::Registry& registry, ECS::Entity e);
 void DrawFieldUI(const FieldInfo& field, void* ptr);

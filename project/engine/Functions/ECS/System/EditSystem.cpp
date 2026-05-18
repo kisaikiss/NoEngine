@@ -114,6 +114,8 @@ void EditSystem::DrawHierarchyWindow(Registry& registry) {
 
 	for (auto e : view) {
 		auto* tag = registry.GetComponent<Editor::EditTag>(e);
+
+		RenameEditTag(registry, e, tag->name);
 		if (!tag->isDrawHierarchy) continue;
 
 		bool selected = (sEditorState.selectedEntity == e);
@@ -126,6 +128,13 @@ void EditSystem::DrawHierarchyWindow(Registry& registry) {
 #else
 	static_cast<void>(registry);
 #endif // USE_IMGUI
+}
+
+void EditSystem::RenameEditTag(Registry& registry, Entity entity, const std::string& desiredName) {
+	auto used = CollectEditTagNames(registry, entity);
+	std::string unique = MakeUniqueName(used, desiredName);
+	auto* tag = registry.GetComponent<Editor::EditTag>(entity);
+	if (tag) tag->name = unique;
 }
 
 }
