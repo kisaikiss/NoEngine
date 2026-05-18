@@ -6,5 +6,6 @@ public:
     void Update(No::Registry& registry, float deltaTime) override;
 private:
     No::Entity FindRoom(No::Registry& registry, const No::Vector2& pos);
+    No::AABBCollider2D GetWorldAABB(No::AABBCollider2D* box, No::Transform2DComponent::Transform2D* transform);
 };
 

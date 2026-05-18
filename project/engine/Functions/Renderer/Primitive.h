@@ -36,6 +36,8 @@ public:
 	static void DrawCube(const Math::Vector3& center, const Math::Vector3& size,
 		const Math::Color& color);
 
+	static void DrawCube2D(const Math::Vector2& center, const Math::Vector2& max, const Math::Vector2& min, const Math::Color& color);
+
 	/// <summary>
 	/// 球の描画
 	/// </summary>

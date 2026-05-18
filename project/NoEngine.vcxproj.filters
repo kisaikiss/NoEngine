@@ -372,7 +372,6 @@
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\Game\RabbitdokuCollisionLayer.h" />
     <ClInclude Include="engine\Functions\ECS\System\Movement2DSystem.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\Component\FollowCamera2DComponent.h" />
-    <ClInclude Include="application\RabbitdokuOdyssey3Plus\Component\RoomComponent.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\FollowCamera2DSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\Camera\DebugCamera2DSystem.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\Camera2DChangeSystem.h" />

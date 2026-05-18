@@ -6,6 +6,7 @@ namespace NoEngine {
 namespace Editor {
 struct EditTag {
 	std::string name;
+	std::string path;
 	bool isDrawHierarchy = true;
 };
 /// <summary>

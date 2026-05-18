@@ -18,7 +18,7 @@ void NarrowPhase2DSystem::Update(Registry& registry, float deltaTime) {
 	Event::Contact2DEvent contactEvent;
 
 	// BroadPhaseがないためとりあえず必要なAABB vs AABBのみ衝突判定を行う
-    auto boxView = registry.View<Math::AABBCollider2D, Component::Transform2DComponent>();
+    auto boxView = registry.View<Math::AABBCollider2D, Component::Transform2DComponent, Component::CollisionBody>();
     std::vector<Entity> boxes;
     for (auto e : boxView) {
         boxes.push_back(e);

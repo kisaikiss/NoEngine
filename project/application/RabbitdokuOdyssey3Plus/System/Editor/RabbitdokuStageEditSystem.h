@@ -14,5 +14,6 @@ private:
     No::Vector2 GetGridPosition(const No::Vector2& position);
 
     void DrawEditWindow();
+    void DrawRooms(No::Registry& registry);
 };
 

@@ -63,6 +63,18 @@ void DebugPrimitive::DrawCube(const Vector3& center, const Vector3& size,
 		AddLineInternal(p[e[0]], p[e[1]], color);
 }
 
+void DebugPrimitive::DrawCube2D(const Vector2& center, const Vector2& max, const Vector2& min, const Color& color) {
+	Vector2 p[4] = {
+		{center.x + min.x, center.y + min.y}, {center.x + max.x, center.y + min.y},
+		{center.x + max.x, center.y + max.y}, {center.x + min.x, center.y + max.y},
+	};
+
+	Add2DLineInternal(p[0], p[1], color);
+	Add2DLineInternal(p[1], p[2], color);
+	Add2DLineInternal(p[2], p[3], color);
+	Add2DLineInternal(p[3], p[0], color);
+}
+
 void DebugPrimitive::DrawSphere(const Vector3& center, float radius, const Color& color, uint32_t slices, uint32_t stacks) {
 	if (slices < 3) slices = 3;
 	if (stacks < 2) stacks = 2;

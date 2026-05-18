@@ -22,8 +22,9 @@ void RabbitdokuStageEditSystem::Update(No::Registry& registry, float deltaTime) 
 
 	}
 	
-	
 	No::DrawGrid2D(gridSize_);
+
+	DrawRooms(registry);
 #else
 	static_cast<void>(registry);
 #endif // USE_IMGUI
@@ -89,5 +90,21 @@ void RabbitdokuStageEditSystem::DrawEditWindow() {
 	ImGui::End();
 #endif // USE_IMGUI
 
+
+}
+
+void RabbitdokuStageEditSystem::DrawRooms(No::Registry& registry) {
+#ifdef USE_IMGUI
+
+
+	auto view = registry.View<RoomTag, No::Transform2DComponent, No::AABBCollider2D>();
+	for (auto e : view) {
+		auto* box = registry.GetComponent<No::AABBCollider2D>(e);
+		auto* transform = registry.GetComponent<No::Transform2DComponent>(e);
+		NoEngine::DebugPrimitive::DrawCube2D(transform->translate, box->max, box->min, No::Color::RED);
+	}
+#else
+	static_cast<void>(registry);
+#endif // USE_IMGUI
 
 }

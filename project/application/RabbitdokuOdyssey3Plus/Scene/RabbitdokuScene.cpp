@@ -10,8 +10,8 @@
 
 #include "../Component/RabbitdokuComponent.h"
 #include "../Component/FollowCamera2DComponent.h"
-#include "../Component/RoomComponent.h"
 #include "../Game/RabbitdokuCollisionLayer.h"
+#include "../Game/RabbitdokuTag.h"
 
 
 void RabbitdokuScene::Setup() {
@@ -99,21 +99,23 @@ void RabbitdokuScene::InitRoom(No::Registry& registry) {
 	// room1
 	{
 		auto e = registry.GenerateEntity();
-		auto* room = registry.AddComponent<RoomComponent>(e);
-		room->bounds.top = 0.0f;
-		room->bounds.left = 0.0f;
-		room->bounds.right = 1280.f;
-		room->bounds.bottom = 720.f;
+		registry.AddComponent<RoomTag>(e);
+		registry.AddComponent<No::EditTag>(e)->name = "room";
+		auto* collider = registry.AddComponent<No::AABBCollider2D>(e);
+		collider->max = No::Vector2(640.f, 360.f);
+		collider->min = -No::Vector2(640.f, 360.f);
+		registry.AddComponent<No::Transform2DComponent>(e)->translate = No::Vector2(640.f, 360.f);
 	}
 	
 	// room2
 	{
 		auto e = registry.GenerateEntity();
-		auto* room = registry.AddComponent<RoomComponent>(e);
-		room->bounds.top = 0.0f;
-		room->bounds.left = 1280.f;
-		room->bounds.right = 3280.f;
-		room->bounds.bottom = 720.f;
+		registry.AddComponent<RoomTag>(e);
+		registry.AddComponent<No::EditTag>(e)->name = "room";
+		auto* collider = registry.AddComponent<No::AABBCollider2D>(e);
+		collider->max = No::Vector2(640.f, 360.f);
+		collider->min = -No::Vector2(640.f, 360.f);
+		registry.AddComponent<No::Transform2DComponent>(e)->translate = No::Vector2(640.f + 1280.f, 360.f);
 	}
 
 }

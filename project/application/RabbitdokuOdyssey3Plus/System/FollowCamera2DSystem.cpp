@@ -2,7 +2,7 @@
 #include "FollowCamera2DSystem.h"
 #include "../Component/FollowCamera2DComponent.h"
 #include "../Component/RabbitdokuComponent.h"
-#include "../Component/RoomComponent.h"
+#include "../Game/RabbitdokuTag.h"
 
 void FollowCamera2DSystem::Update(No::Registry& registry, float deltaTime) {
 	static_cast<void>(deltaTime);
@@ -28,29 +28,35 @@ void FollowCamera2DSystem::Update(No::Registry& registry, float deltaTime) {
 	No::Entity roomE = FindRoom(registry, playerPosition);
 
 	if (roomE == No::INVALID_ENTITY) return;
-	auto* room = registry.GetComponent<RoomComponent>(roomE);
-
-	if (followCamera->lerpPosition.x + camera->width / 2.f > room->bounds.right) {
-		followCamera->lerpPosition.x = room->bounds.right - camera->width / 2.f;
+	
+	auto room = GetWorldAABB(registry.GetComponent<No::AABBCollider2D>(roomE), registry.GetComponent<No::Transform2DComponent>(roomE));
+	if (followCamera->lerpPosition.x + camera->width / 2.f > room.max.x) {
+		followCamera->lerpPosition.x = room.max.x - camera->width / 2.f;
 	}
-	if (followCamera->lerpPosition.x - camera->width / 2.f < room->bounds.left) {
-		followCamera->lerpPosition.x = room->bounds.left + camera->width / 2.f;
+	if (followCamera->lerpPosition.x - camera->width / 2.f < room.min.x) {
+		followCamera->lerpPosition.x = room.min.x + camera->width / 2.f;
 	}
-	if (followCamera->lerpPosition.y + camera->height / 2.f > room->bounds.bottom) {
-		followCamera->lerpPosition.y = room->bounds.bottom - camera->height / 2.f;
+	if (followCamera->lerpPosition.y + camera->height / 2.f > room.max.y) {
+		followCamera->lerpPosition.y = room.max.y - camera->height / 2.f;
 	}
-	if (followCamera->lerpPosition.y - camera->height / 2.f < room->bounds.top) {
-		followCamera->lerpPosition.y = room->bounds.top + camera->height / 2.f;
+	if (followCamera->lerpPosition.y - camera->height / 2.f < room.min.y) {
+		followCamera->lerpPosition.y = room.min.y + camera->height / 2.f;
 	}
 	transform->translate = No::Lerp(transform->translate, followCamera->lerpPosition, 0.1f);
 
 }
 
 No::Entity FollowCamera2DSystem::FindRoom(No::Registry& registry, const No::Vector2& pos) {
-	auto view = registry.View<RoomComponent>();
+	auto view = registry.View<RoomTag, No::Transform2DComponent, No::AABBCollider2D>();
 	for (auto e : view) {
-		auto& room = registry.GetComponent<RoomComponent>(e)->bounds;
-		if (room.Contains(pos)) return e;
+		if (No::IsCollision(pos, registry.GetComponent<No::AABBCollider2D>(e), registry.GetComponent<No::Transform2DComponent>(e))) return e;
 	}
 	return No::INVALID_ENTITY;
+}
+
+No::AABBCollider2D FollowCamera2DSystem::GetWorldAABB(No::AABBCollider2D* box, No::Transform2DComponent::Transform2D* transform) {
+	No::AABBCollider2D result{};
+	result.max = box->max + transform->translate;
+	result.min = box->min + transform->translate;
+	return result;
 }

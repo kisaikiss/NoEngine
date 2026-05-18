@@ -3,12 +3,18 @@
 #include "engine/Functions/ECS/Component/Transform2DComponent.h"
 #include "engine/Runtime/GraphicsCore.h"
 #include "engine/Functions/Renderer/Primitive.h"
+#include "ReflectionMacros.h"
 
 #ifdef USE_IMGUI
 #include "externals/imgui/imgui.h"
 #endif // USE_IMGUI
 
 namespace NoEngine {
+
+REFLECT_STRUCT_BEGIN(NoEngine::Editor::EditTag)
+REFLECT_FIELD(name),
+REFLECT_FIELD(path)
+REFLECT_STRUCT_END(NoEngine::Editor::EditTag)
 
 
 Math::Vector2 Editor::Get2DSceneMousePosition(ECS::Registry& registry) {
