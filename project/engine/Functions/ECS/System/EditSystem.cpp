@@ -1,8 +1,10 @@
 #include "EditSystem.h"
 #include "engine/Editor/EditUtils.h"
 #include "engine/Editor/DataDriven/SceneSerializer.h"
+#include "engine/Editor/ReflectionMacros.h"
 #include "engine/Functions/Debug/Logger/Log.h"
 #include "engine/Functions/Scene/SceneNameComponent.h"
+
 #ifdef USE_IMGUI
 #include "externals/imgui/imgui.h"
 #endif // USE_IMGUI
@@ -11,6 +13,8 @@ namespace {
 const std::string skDirectoryPath = "resources/game/Scenes/";
 }
 
+REFLECT_STRUCT_BEGIN(NoEngine::FolderTag)
+REFLECT_STRUCT_END(NoEngine::FolderTag)
 namespace NoEngine {
 namespace ECS {
 
@@ -30,6 +34,7 @@ void EditSystem::Update(Registry& registry, float deltaTime) {
 		FirstLoaded_ = true;
 	}
 #ifdef USE_IMGUI
+
 	EnsureUniqueEditTagNames(registry);
 	if (ImGui::BeginMainMenuBar()) {
 		if (ImGui::BeginMenu("File")) {
@@ -112,23 +117,165 @@ void EditSystem::DrawHierarchyWindow(Registry& registry) {
 #ifdef USE_IMGUI
 	ImGui::Begin("Hierarchy");
 
+	if (ImGui::BeginPopupContextWindow()) {
+		if (ImGui::MenuItem("Create Folder (Root)")) {
+			CreateFolder(registry, "NewFolder", "");
+		}
+		ImGui::EndPopup();
+	}
+
+	FolderNode root;
+	root.name = "";
 	auto view = registry.View<Editor::EditTag>();
 
 	for (auto e : view) {
 		auto* tag = registry.GetComponent<Editor::EditTag>(e);
 		if (!tag->isDrawHierarchy) continue;
 
-		bool selected = (sEditorState.selectedEntity == e);
-		if (ImGui::Selectable(tag->name.c_str(), selected)) {
-			sEditorState.selectedEntity = e;
-		}
+		// パスが空なら名前をパスとして扱う
+		if (tag->path.empty()) tag->path = tag->name;
+
+		AddEntityToFolder(root, registry, e);
 	}
+
+	DrawFolderNode(root, registry, "");
 
 	ImGui::End();
 #else
 	static_cast<void>(registry);
+#endif
+}
+
+void EditSystem::DrawFolderNode(FolderNode& node, ECS::Registry& registry, const std::string& currentPath) {
+#ifdef USE_IMGUI
+
+	const char* label = node.name.empty() ? "Scene" : node.name.c_str();
+
+	ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow;
+	if (node.name.empty()) flags |= ImGuiTreeNodeFlags_DefaultOpen;
+
+	// フォルダ自体の Entity が選択されているか
+	if (node.folderEntity != INVALID_ENTITY && sEditorState.selectedEntity == node.folderEntity) {
+		flags |= ImGuiTreeNodeFlags_Selected;
+	}
+
+	bool open = ImGui::TreeNodeEx(label, flags);
+
+	// フォルダのクリック選択
+	if (ImGui::IsItemClicked() && node.folderEntity != INVALID_ENTITY) {
+		sEditorState.selectedEntity = node.folderEntity;
+	}
+
+	// パスの計算（親のパス + 自分の名前）
+	std::string fullPath = currentPath;
+	if (!node.name.empty()) {
+		fullPath = currentPath.empty() ? node.name : (currentPath + "/" + node.name);
+	}
+
+	// --- コンテキストメニュー ---
+	if (ImGui::BeginPopupContextItem()) {
+		if (ImGui::MenuItem("Create Folder")) {
+			CreateFolder(registry, "NewFolder", fullPath);
+		}
+		if (node.folderEntity != INVALID_ENTITY) {
+			if (ImGui::MenuItem("Delete Folder")) {
+				registry.DestroyEntity(node.folderEntity);
+				// ※ 本来は中身の path も書き換えるか、一緒に消す処理が必要
+			}
+		}
+		ImGui::EndPopup();
+	}
+
+	// --- ドロップ受け取り ---
+	if (ImGui::BeginDragDropTarget()) {
+		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ENTITY")) {
+			ECS::Entity dropped = *(ECS::Entity*)payload->Data;
+			auto* tag = registry.GetComponent<Editor::EditTag>(dropped);
+			if (tag) {
+				// 移動先: fullPath (フォルダ内) + 自分の名前
+				tag->path = fullPath.empty() ? tag->name : (fullPath + "/" + tag->name);
+			}
+		}
+		ImGui::EndDragDropTarget();
+	}
+
+	if (open) {
+		// 子フォルダ
+		for (auto& [name, child] : node.children) {
+			DrawFolderNode(child, registry, fullPath);
+		}
+		// 所属エンティティ
+		for (auto e : node.entities) {
+			DrawEntityItem(registry, e);
+		}
+		ImGui::TreePop();
+	}
+#else 
+	static_cast<void>(node);
+	static_cast<void>(registry);
+	static_cast<void>(currentPath);
+
+#endif // USE_IMGUI
+
+}
+void EditSystem::DrawEntityItem(ECS::Registry& registry, ECS::Entity e) {
+#ifdef USE_IMGUI
+
+
+	auto* tag = registry.GetComponent<Editor::EditTag>(e);
+	if (!tag || !tag->isDrawHierarchy) return;
+
+	bool selected = (sEditorState.selectedEntity == e);
+
+	// 選択可能な行
+	if (ImGui::Selectable(tag->name.c_str(), selected)) {
+		sEditorState.selectedEntity = e;
+	}
+
+	// ドラッグ開始（ENTITY ペイロード）
+	if (ImGui::BeginDragDropSource()) {
+		ImGui::SetDragDropPayload("ENTITY", &e, sizeof(ECS::Entity));
+		ImGui::Text("%s", tag->name.c_str());
+		ImGui::EndDragDropSource();
+	}
+
+	// 右クリックメニュー（個別エンティティ用）
+	if (ImGui::BeginPopupContextItem()) {
+		if (ImGui::MenuItem("Rename")) {
+			// 簡易リネーム処理（ダイアログ等に置き換えてください）
+			ImGui::OpenPopup("RenameEntityPopup");
+		}
+		if (ImGui::MenuItem("Delete")) {
+			// 削除処理（確認ダイアログを入れるのが望ましい）
+			registry.DestroyEntity(e);
+			ImGui::EndPopup();
+			return; // 既に削除したので以降の UI は無効
+		}
+		ImGui::EndPopup();
+	}
+
+	// Rename ポップアップ（簡易）
+	if (ImGui::BeginPopupModal("RenameEntityPopup", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
+		static char buf[256] = "";
+		strncpy_s(buf, tag->name.c_str(), sizeof(buf));
+		if (ImGui::InputText("Name", buf, sizeof(buf))) {}
+		if (ImGui::Button("OK")) {
+			tag->name = std::string(buf);
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("Cancel")) {
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::EndPopup();
+	}
+
+#else
+	static_cast<void>(registry);
+	static_cast<void>(e);
 #endif // USE_IMGUI
 }
+
 
 void EditSystem::DrawAddComponentMenu(Registry& registry, Entity entity) {
 #ifdef USE_IMGUI
@@ -243,5 +390,52 @@ void EditSystem::EnsureUniqueEditTagNames(Registry& registry) {
 	}
 }
 
+void EditSystem::CreateFolder(ECS::Registry& registry, const std::string& name, const std::string& parentPath) {
+	ECS::Entity folder = registry.GenerateEntity();
+
+	auto* tag = registry.AddComponent<Editor::EditTag>(folder);
+	tag->name = name;
+
+	if (parentPath.empty())
+		tag->path = name;
+	else
+		tag->path = parentPath + "/" + name;
+
+	registry.AddComponent<FolderTag>(folder);
+}
+
+void EditSystem::AddEntityToFolder(FolderNode& root, ECS::Registry& registry, Entity e) {
+	auto* tag = registry.GetComponent<Editor::EditTag>(e);
+	bool isFolder = registry.Has<FolderTag>(e);
+
+	// パスを分割（例: "Parent/Sub/MyEntity" -> ["Parent", "Sub", "MyEntity"]）
+	std::vector<std::string> segments;
+	{
+		std::stringstream ss(tag->path);
+		std::string seg;
+		while (std::getline(ss, seg, '/')) {
+			if (!seg.empty()) segments.push_back(seg);
+		}
+	}
+
+	FolderNode* current = &root;
+
+	if (isFolder) {
+		// フォルダーの場合：パスの全セグメントを辿り、最後のノードに Entity を紐付ける
+		for (const auto& name : segments) {
+			current = &current->children[name];
+			current->name = name;
+		}
+		current->folderEntity = e;
+	} else {
+		// 通常のエンティティの場合：最後のセグメントを除いた場所まで辿り、そこに push_back
+		// ※ tag->path が "Folder/EntityName" なら、segments[0] がフォルダ名
+		for (size_t i = 0; i + 1 < segments.size(); ++i) {
+			current = &current->children[segments[i]];
+			current->name = segments[i];
+		}
+		current->entities.push_back(e);
+	}
+}
 }
 }

@@ -19,7 +19,6 @@ void RabbitdokuScene::Setup() {
 	AddSystems();
 	InitPlayer(registry);
 	InitCamera(registry);
-	InitRoom(registry);
 }
 
 void RabbitdokuScene::AddSystems() {

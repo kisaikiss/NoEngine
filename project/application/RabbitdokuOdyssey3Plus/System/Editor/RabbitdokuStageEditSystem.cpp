@@ -49,7 +49,9 @@ void RabbitdokuStageEditSystem::AddBlock(No::Registry& registry) {
 	auto* sprite = registry.AddComponent<No::SpriteComponent>(e);
 	auto* collider = registry.AddComponent<No::AABBCollider2D>(e);
 	registry.AddComponent<BlockTag>(e);
-	registry.AddComponent<No::EditTag>(e)->name = "block";
+	auto* tag = registry.AddComponent<No::EditTag>(e);
+	tag->name = "block";
+	tag->path = "Block/block";
 	registry.AddComponent<No::CollisionBody>(e)->type = No::BodyType::Static;
 	registry.AddComponent<RabbitdokuCollisionLayerComponent>(e)->layer = RabbitdokuCollisionLayerComponent::Terrain;
 
