@@ -116,6 +116,23 @@ void DrawFieldUI(const FieldInfo& field, void* ptr) {
 	case FieldType::Bool:
 		ImGui::Checkbox(field.name.c_str(), reinterpret_cast<bool*>(valuePtr));
 		break;
+	case FieldType::String: {
+		// valuePtr が std::string* を指している場合
+		std::string* s = reinterpret_cast<std::string*>(valuePtr);
+
+		// 一時バッファを用意して ImGui に渡す
+		const size_t BUF_SIZE = 1024; // 必要に応じて調整
+		char buf[BUF_SIZE];
+		strncpy_s(buf, s->c_str(), BUF_SIZE);
+		buf[BUF_SIZE - 1] = '\0';
+
+		if (ImGui::InputText(field.name.c_str(), buf, BUF_SIZE)) {
+			// 変更があれば std::string に戻す
+			*s = buf;
+		}
+	}
+	
+		break;
 	default:
 		ImGui::Text(field.name.c_str());
 		ImGui::SameLine();

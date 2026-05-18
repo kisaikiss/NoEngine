@@ -62,6 +62,12 @@ void WriteFieldToJson(nlohmann::json& j, const FieldInfo& field, void* ptr) {
 	case NoEngine::FieldType::Bool:
 		j[field.name] = *(bool*)ptr;
 		break;
+	case NoEngine::FieldType::String: {
+		// std::string を指している想定
+		const std::string* s = reinterpret_cast<const std::string*>(ptr);
+		j[field.name] = *s;
+	}
+		break;
 	default:
 		j[field.name] = "Unsupported";
 		break;
@@ -127,7 +133,6 @@ void ReadFieldFromJson(const nlohmann::json& j, const FieldInfo& field, void* pt
 		v[0] = arr[0];
 		v[1] = arr[1];
 	}
-	break;
 		break;
 	case NoEngine::FieldType::Float3:
 	{
@@ -147,13 +152,19 @@ void ReadFieldFromJson(const nlohmann::json& j, const FieldInfo& field, void* pt
 		v[2] = arr[2];
 		v[3] = arr[3];
 	}
-	break;
 		break;
 	case NoEngine::FieldType::Int:
 		*(int*)ptr = j[field.name].get<int>();
 		break;
 	case NoEngine::FieldType::Bool:
 		*(bool*)ptr = j[field.name].get<bool>();
+		break;
+	case NoEngine::FieldType::String: {
+		const std::string value = j[field.name].get<std::string>();
+		// std::string に書き込む
+		std::string* s = reinterpret_cast<std::string*>(ptr);
+		*s = value;
+	}
 		break;
 	default:
 		break;
