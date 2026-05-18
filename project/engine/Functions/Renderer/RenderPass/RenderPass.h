@@ -9,10 +9,6 @@ class RenderPass {
 public:
 	virtual ~RenderPass() = default;
 	virtual void Execute(GraphicsContext& gfx, ECS::Registry& registry) = 0;
-	virtual void DebugExecute(GraphicsContext& gfx, ECS::Registry& registry) {
-		static_cast<void>(gfx);
-		static_cast<void>(registry);
-	}
 
 	void SetRenderContext(RenderContext* renderContext) { renderContext_ = renderContext; }
 protected:

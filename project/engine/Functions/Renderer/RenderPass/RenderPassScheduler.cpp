@@ -24,10 +24,13 @@ void RenderPassScheduler::Initialize() {
 	passes_.push_back(std::make_unique<SkyBoxPass>());
 
 	passes_.push_back(std::make_unique<DebugRenderPass>());
+
+	for (auto& pass : passes_) pass->SetRenderContext(&renderContext_);
 }
 
 void RenderPassScheduler::Render(GraphicsContext& gfx, ECS::Registry& registry) {
 	if (registry.Empty()) return;
+	renderContext_.Update(registry);
 	for (auto& pass : passes_) pass->Execute(gfx, registry);
 }
 

@@ -38,8 +38,6 @@ int RunApplication(std::unique_ptr<IGameApp> game) {
 
 	EngineInitialize();
 
-	RenderContext renderContext;
-
 	std::unique_ptr<Render::RenderPassScheduler> renderPassScheduler = std::make_unique<Render::RenderPassScheduler>();
 	renderPassScheduler->Initialize();
 
@@ -69,8 +67,6 @@ int RunApplication(std::unique_ptr<IGameApp> game) {
 		if (deltaTime > 0.1f) deltaTime = 0.1f;
 		game->Update(ctx, deltaTime);
 
-		renderContext.Update(game->GetRegistry());
-		renderPassScheduler->SetRenderContext(renderContext);
 		renderPassScheduler->Render(context, game->GetRegistry());
 
 		DrawPerformance(deltaTime);

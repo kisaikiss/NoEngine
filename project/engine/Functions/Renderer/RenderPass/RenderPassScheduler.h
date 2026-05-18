@@ -12,6 +12,9 @@ public:
 	void AddRenderPass(std::unique_ptr<RenderPass>&& pass);
 
 private:
+
+	RenderContext renderContext_;
+
 	std::vector<std::unique_ptr<RenderPass>> passes_;
 };
 }
