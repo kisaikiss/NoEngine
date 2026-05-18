@@ -53,6 +53,7 @@ void EditSystem::Update(Registry& registry, float deltaTime) {
 			ImGui::BeginChild(tag->name.c_str());
 			ImGui::Text(tag->name.c_str());
 			DrawComponentUI(registry, sEditorState.selectedEntity);
+			DrawAddComponentMenu(registry, sEditorState.selectedEntity);
 			ImGui::EndChild();
 		}
 	}
@@ -127,6 +128,37 @@ void EditSystem::DrawHierarchyWindow(Registry& registry) {
 #else
 	static_cast<void>(registry);
 #endif // USE_IMGUI
+}
+
+void EditSystem::DrawAddComponentMenu(Registry& registry, Entity entity) {
+#ifdef USE_IMGUI
+	if (ImGui::Button("Add Component")) {
+		ImGui::OpenPopup("AddComponentPopup");
+	}
+
+	if (ImGui::BeginPopup("AddComponentPopup")) {
+
+		for (auto& typeInfo : NoEngine::ComponentRegistry::GetAll()) {
+
+			// すでに持っている Component はスキップ
+			if (registry.Has(typeInfo.typeId, entity))
+				continue;
+
+			if (ImGui::MenuItem(typeInfo.name.c_str())) {
+				// adder を使って Component を追加
+				typeInfo.adder(registry, entity);
+			}
+		}
+
+		ImGui::EndPopup();
+	}
+
+#else
+	static_cast<void>(registry);
+	static_cast<void>(entity);
+
+#endif // USE_IMGUI
+
 }
 
 void EditSystem::EnsureUniqueEditTagNames(Registry& registry) {

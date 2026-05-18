@@ -46,7 +46,14 @@ void* Registry::AddComponent(const size_t& typeId, const Entity& entity) {
 	return info->adder(*this, entity);
 }
 
+void Registry::RemoveComponent(const size_t& typeId, const Entity& entity) {
+	if (typeId >= componentPools_.size()) return;
+	if (!componentPools_[typeId]) return;
+	componentPools_[typeId]->RemoveIfExists(entity);
+}
+
 void* Registry::GetComponent(const size_t& typeId, const Entity& entity) {
+	if (typeId >= componentPools_.size()) return nullptr;
 	if (!componentPools_[typeId] || !componentPools_[typeId]->Has(entity)) return nullptr;
 	return componentPools_[typeId]->GetVoidPointerComponent(entity);
 }

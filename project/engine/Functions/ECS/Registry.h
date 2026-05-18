@@ -53,6 +53,13 @@ public:
 	void RemoveComponent(const Entity entity);
 
 	/// <summary>
+	/// 指定したエンティティから型IDに対応するコンポーネントを削除する。
+	/// </summary>
+	/// <param name="typeId">削除対象のコンポーネントの型を識別する const size_t の参照。</param>
+	/// <param name="entity">コンポーネントを削除する対象のエンティティへの const 参照。</param>
+	void RemoveComponent(const size_t& typeId, const Entity& entity);
+
+	/// <summary>
 	/// 指定したエンティティと関連付けられたコンポーネントのポインタを取得します。
 	/// </summary>
 	/// <typeparam name="CompType">取得したい種類のコンポーネント</typeparam>

@@ -25,14 +25,14 @@ Math::Vector2 Editor::Get2DSceneMousePosition(ECS::Registry& registry) {
 	auto cameraView = registry.View<Component::ActiveCamera2DTag>();
 	for (auto e : cameraView) {
 		auto* transform = registry.GetComponent<Component::Transform2DComponent>(e);
-		
+
 		result = Math::Vector2(result.x * transform->scale.x, result.y * transform->scale.y);
 		result += transform->translate;
 	}
 #else
 	static_cast<void>(registry);
 #endif // USE_IMGUI
-	
+
 	return result;
 }
 
@@ -91,9 +91,23 @@ void DrawComponentUI(Registry& registry, Entity e) {
 			for (auto& field : compInfo.fields) {
 				DrawFieldUI(field, compPtr);
 			}
+			// 削除ボタン
+			if (ImGui::SmallButton("Remove")) {
+				ImGui::OpenPopup("ConfirmRemove");
+			}
+			if (ImGui::BeginPopupModal("ConfirmRemove")) {
+				ImGui::Text("Remove this component?");
+				if (ImGui::Button("Yes")) { 
+					registry.RemoveComponent(compInfo.typeId, e);
+				}
+				ImGui::SameLine();
+				if (ImGui::Button("No")) {
+					ImGui::CloseCurrentPopup();
+				}
+				ImGui::EndPopup();
+			}
 		}
 	}
-
 #else
 	static_cast<void>(registry);
 	static_cast<void>(e);
@@ -161,8 +175,8 @@ void DrawFieldUI(const FieldInfo& field, void* ptr) {
 			*s = buf;
 		}
 	}
-	
-		break;
+
+						  break;
 	default:
 		ImGui::Text(field.name.c_str());
 		ImGui::SameLine();

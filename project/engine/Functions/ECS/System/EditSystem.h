@@ -13,6 +13,7 @@ private:
     void LoadFile(Registry& registry);
 
     void DrawHierarchyWindow(Registry& registry);
+    void DrawAddComponentMenu(Registry& registry, Entity entity);
     void EnsureUniqueEditTagNames(Registry& registry);
     bool FirstLoaded_ = false;
 };
