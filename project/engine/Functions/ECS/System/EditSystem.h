@@ -13,7 +13,7 @@ public:
 private:
     struct FolderNode {
         std::string name;
-        ECS::Entity folderEntity = INVALID_ENTITY; // 追加：このフォルダ自体のEntity
+        ECS::Entity folderEntity = INVALID_ENTITY; // このフォルダ自体のEntity
         std::map<std::string, FolderNode> children;
         std::vector<ECS::Entity> entities; // フォルダ以外のエンティティ
     };
