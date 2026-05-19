@@ -29,7 +29,7 @@ void FollowCamera2DSystem::Update(No::Registry& registry, float deltaTime) {
 
 	if (roomE == No::INVALID_ENTITY) return;
 	
-	auto room = GetWorldAABB(registry.GetComponent<No::AABBCollider2D>(roomE), registry.GetComponent<No::Transform2DComponent>(roomE));
+	auto room = GetWorldAABB(registry.GetComponent<RoomTag>(roomE), registry.GetComponent<No::Transform2DComponent>(roomE));
 	if (followCamera->lerpPosition.x + camera->width / 2.f > room.max.x) {
 		followCamera->lerpPosition.x = room.max.x - camera->width / 2.f;
 	}
@@ -47,9 +47,9 @@ void FollowCamera2DSystem::Update(No::Registry& registry, float deltaTime) {
 }
 
 No::Entity FollowCamera2DSystem::FindRoom(No::Registry& registry, const No::Vector2& pos) {
-	auto view = registry.View<RoomTag, No::Transform2DComponent, No::AABBCollider2D>();
+	auto view = registry.View<RoomTag, No::Transform2DComponent>();
 	for (auto e : view) {
-		if (No::IsCollision(pos, registry.GetComponent<No::AABBCollider2D>(e), registry.GetComponent<No::Transform2DComponent>(e))) return e;
+		if (No::IsCollision(pos, registry.GetComponent<RoomTag>(e), registry.GetComponent<No::Transform2DComponent>(e))) return e;
 	}
 	return No::INVALID_ENTITY;
 }
