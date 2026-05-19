@@ -81,6 +81,11 @@ void RabbitdokuMoveSystem::Update(No::Registry& registry, float deltaTime) {
 			animator->framesNum = 1;
 			animator->currentAnimation = 2;
 			sprite->uv.x = 0.f;
+		case RabbitdokuState::Wall:
+			playerVariables->state = RabbitdokuState::Jump;
+			animator->framesNum = 1;
+			animator->currentAnimation = 2;
+			sprite->uv.x = 0.f;
 		default:
 			break;
 		}

@@ -5,6 +5,7 @@ enum class RabbitdokuState {
 	Wait,
 	Walk,
 	Jump,
+	Wall,
 
 	Unknown
 };
