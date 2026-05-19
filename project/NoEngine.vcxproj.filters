@@ -186,6 +186,7 @@
     <ClCompile Include="engine\Functions\Renderer\Initializer\PrimitiveInitializer.cpp" />
     <ClCompile Include="engine\Functions\Renderer\PipelineState\StateObjectManager.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Loader\SpriteLoadSystem.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\RenderResourceManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -391,6 +392,7 @@
     <ClInclude Include="engine\Functions\Renderer\PipelineState\StateObjectManager.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderGraph.h" />
     <ClInclude Include="engine\Functions\ECS\System\Loader\SpriteLoadSystem.h" />
+    <ClInclude Include="engine\Functions\Renderer\RenderResourceManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

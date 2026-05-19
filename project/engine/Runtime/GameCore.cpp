@@ -13,7 +13,7 @@
 #include "engine/Editor/ImGuiManager.h"
 #include "externals/imgui/imgui.h"
 namespace {
-NoEngine::ImGuiManager imguiManager;
+NoEngine::ImGuiManager sImGuiManager;
 }
 #endif // USE_IMGUI
 
@@ -28,6 +28,11 @@ static int sFrameIndex = 0;
 }
 
 
+void IGameApp::SetupRenderPass(RenderPassScheduler& renderPassScheduler, RenderResourceManager& renderResources) {
+	(void)renderPassScheduler;
+	(void)renderResources;
+}
+
 bool IGameApp::Exit() {
 	return Input::Keyboard::IsTrigger(VK_ESCAPE);
 }
@@ -38,14 +43,13 @@ int RunApplication(std::unique_ptr<IGameApp> game) {
 
 	EngineInitialize();
 
-	std::unique_ptr<Render::RenderPassScheduler> renderPassScheduler = std::make_unique<Render::RenderPassScheduler>();
-	renderPassScheduler->Initialize();
+	RenderPassScheduler renderPassScheduler;
+	renderPassScheduler.Initialize();
+	RenderResourceManager renderResources;
 
-	// ゲームアプリケーションにレンダーパススケジューラを設定します。
-	game->SetRenderPassScheduler(renderPassScheduler.get());
 	// ゲームアプリケーションの初期化を行います。
 	game->Startup();
-
+	game->SetupRenderPass(renderPassScheduler, renderResources);
 	
 	CalculateDeltaTime();
 	// メインループ
@@ -60,14 +64,14 @@ int RunApplication(std::unique_ptr<IGameApp> game) {
 		InputUpdate();
 
 #ifdef USE_IMGUI
-		imguiManager.BeginFrame();
+		sImGuiManager.BeginFrame();
 #endif // USE_IMGUI
 
 		float deltaTime = CalculateDeltaTime();
 		if (deltaTime > 0.1f) deltaTime = 0.1f;
 		game->Update(ctx, deltaTime);
 
-		renderPassScheduler->Render(context, game->GetRegistry());
+		renderPassScheduler.Render(context, game->GetRegistry());
 
 		DrawPerformance(deltaTime);
 
@@ -112,14 +116,14 @@ void EngineInitialize() {
 	AudioInitialize();
 
 #ifdef USE_IMGUI
-	imguiManager.Initialize();
+	sImGuiManager.Initialize();
 #endif // USE_IMGUI
 
 }
 
 void EngineFinalize() {
 #ifdef USE_IMGUI
-	imguiManager.Shutdown();
+	sImGuiManager.Shutdown();
 #endif // USE_IMGUI
 	AudioShutdown();
 	InputShutdown();

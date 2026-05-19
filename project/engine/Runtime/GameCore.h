@@ -1,6 +1,7 @@
 #pragma once
 #include "engine/Functions/Scene/SceneManager.h"
 #include "engine/Functions/Renderer/RenderPass/RenderPassScheduler.h"
+#include "engine/Functions/Renderer/RenderResourceManager.h"
 #include "engine/Functions/ECS/Event/SceneChangeEvent.h"
 
 namespace NoEngine {
@@ -36,6 +37,8 @@ public:
 		UpdateScene(ctx, deltaT);
 	};
 
+	virtual void SetupRenderPass(RenderPassScheduler& renderPassScheduler, RenderResourceManager& renderResources);
+
 	/// <summary>
 	/// ゲームを閉じるかどうか取得します。
 	/// </summary>
@@ -47,20 +50,6 @@ public:
 	/// </summary>
 	/// <returns>ECSレジストリ</returns>
 	ECS::Registry& GetRegistry() { return *sceneManager_->GetRegistry(); }
-
-	/// <summary>
-	/// カスタム RenderPass を追加します。IGameApp から呼び出してください。
-	/// </summary>
-	void AddRenderPass(std::unique_ptr<Render::RenderPass>&& pass)
-	{
-		if (renderPassScheduler_) 
-			renderPassScheduler_->AddRenderPass(std::move(pass));
-	}
-
-	/// <summary>
-	/// フレームワーク内部用: RunApplication がスケジューラを設定します。
-	/// </summary>
-	void SetRenderPassScheduler(Render::RenderPassScheduler* scheduler) { renderPassScheduler_ = scheduler; }
 
 protected:
 	/// <summary>
@@ -91,7 +80,6 @@ protected:
 
 private:
 	std::unique_ptr<Scene::SceneManager> sceneManager_;
-	Render::RenderPassScheduler* renderPassScheduler_ = nullptr;
 };
 
 /// <summary>
