@@ -27,6 +27,7 @@ WindowManager GraphicsCore::sWindowManager;
 ColorBuffer GraphicsCore::sAlbedoGBuffer;
 ColorBuffer GraphicsCore::sNormalGBuffer;
 ColorBuffer GraphicsCore::sWorldPositionGBuffer;
+ColorBuffer GraphicsCore::sFinalColorBuffer;
 
 namespace {
 const uint32_t sSwapChainBufferCount = 2;
@@ -111,6 +112,9 @@ void GraphicsCore::Initialize(float windowWidth, float windowHeight) {
 	sPostEffectBuffer.Create(L"PostEffect Buffer", static_cast<uint32_t>(windowWidth), static_cast<uint32_t>(windowHeight), 1, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
 	sPostEffectBuffer.CreateImGuiSRV();
 
+	sFinalColorBuffer.Create(L"FinalColor Buffer", static_cast<uint32_t>(windowWidth), static_cast<uint32_t>(windowHeight), 1, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
+	sFinalColorBuffer.CreateImGuiSRV();
+
 #ifdef USE_IMGUI
 	sDebugRenderBuffer = ColorBuffer();
 	sDebugRenderBuffer.Create(L"DebugRender Buffer", static_cast<uint32_t>(windowWidth), static_cast<uint32_t>(windowHeight), 1, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
@@ -131,6 +135,7 @@ void GraphicsCore::Shutdown(void) {
 	sSwapChain.reset();
 	sNormalGBuffer.Destroy();
 	sWorldPositionGBuffer.Destroy();
+	sFinalColorBuffer.Destroy();
 	sPostEffectBuffer.Destroy();
 	sWindowManager.Shutdown();
 	Render::Shutdown();
@@ -216,6 +221,7 @@ void GraphicsCore::StartFrame(GraphicsContext& context) {
 	context.TransitionResource(sWorldPositionGBuffer, D3D12_RESOURCE_STATE_RENDER_TARGET);
 	context.TransitionResource(sNormalGBuffer, D3D12_RESOURCE_STATE_RENDER_TARGET);
 	context.TransitionResource(*sDepthBuffer, D3D12_RESOURCE_STATE_DEPTH_WRITE);
+	context.TransitionResource(sFinalColorBuffer, D3D12_RESOURCE_STATE_RENDER_TARGET);
 #ifdef USE_IMGUI
 	context.TransitionResource(sDebugRenderBuffer, D3D12_RESOURCE_STATE_RENDER_TARGET);
 
@@ -228,6 +234,7 @@ void GraphicsCore::StartFrame(GraphicsContext& context) {
 	context.ClearColor(sPostEffectBuffer);
 	context.ClearColor(sWorldPositionGBuffer);
 	context.ClearColor(sNormalGBuffer);
+	context.ClearColor(sFinalColorBuffer);
 	context.ClearDepthAndStencil(*sDepthBuffer);
 	
 }
@@ -237,6 +244,7 @@ void GraphicsCore::EndFrame(GraphicsContext& context) {
 	context.TransitionResource(sDebugRenderBuffer, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 #endif // USE_IMGUI
 	context.TransitionResource(sPostEffectBuffer, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+	context.TransitionResource(sFinalColorBuffer, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 	context.TransitionResource(sNormalGBuffer, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 	context.TransitionResource(sShadowMaskBuffer, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 	context.TransitionResource(sRaytracingBuffer, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
@@ -259,7 +267,7 @@ void GraphicsCore::EndFrame(GraphicsContext& context) {
 			sGraphicsDevice->GetDevice()->CopyDescriptorsSimple(
 				1,
 				static_cast<D3D12_CPU_DESCRIPTOR_HANDLE>(slot),
-				sPostEffectBuffer.GetImGuiSRV(),
+				sFinalColorBuffer.GetImGuiSRV(),
 				D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 			sPostEffectTexture = static_cast<ImTextureID>(slot.GetGpuPtr());
 			
@@ -402,7 +410,7 @@ void GraphicsCore::FullScreenDraw(GraphicsContext& context) {
 	context.SetPipelineState(defaultPSO);
 	context.SetRootSignature(*defaultRootSignature.get());
 	context.SetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	context.SetDynamicDescriptor(rootIndex["gTexture"], 0, sPostEffectBuffer.GetSRV());
+	context.SetDynamicDescriptor(rootIndex["gTexture"], 0, sFinalColorBuffer.GetSRV());
 	context.Draw(3);
 }
 

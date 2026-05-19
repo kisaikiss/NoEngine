@@ -9,6 +9,7 @@
 #include "Raytracing/RaytracingShadowPass.h"
 #include "SkyBoxPass.h"
 #include "DebugRenderPass.h"
+#include "PostEffect/GrayscalePass.h"
 
 #include "engine/Runtime/GraphicsCore.h"
 
@@ -40,6 +41,7 @@ void RenderPassScheduler::Initialize() {
 	passes_.push_back(std::make_unique<ParticlePass>());
 	passes_.push_back(std::make_unique<SpritePass>());
 	passes_.push_back(std::make_unique<SkyBoxPass>());
+	passes_.push_back(std::make_unique<GrayscalePass>());
 
 	passes_.push_back(std::make_unique<DebugRenderPass>());
 

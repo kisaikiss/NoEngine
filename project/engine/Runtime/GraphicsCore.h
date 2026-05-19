@@ -28,6 +28,7 @@ public:
 	static ColorBuffer sAlbedoGBuffer;
 	static ColorBuffer sNormalGBuffer;
 	static ColorBuffer sWorldPositionGBuffer;
+	static ColorBuffer sFinalColorBuffer;
 
 	static Math::Vector2 GetWindowSize();
 #ifdef USE_IMGUI

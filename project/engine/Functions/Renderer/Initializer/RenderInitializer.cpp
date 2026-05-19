@@ -5,6 +5,7 @@
 #include "SpriteInitializer.h"
 #include "PreRenderInitialzer.h"
 #include "PrimitiveInitializer.h"
+#include "PostEffectInitialzer.h"
 
 namespace NoEngine {
 
@@ -15,5 +16,6 @@ void RenderInitializer::Initialize(RenderContext& renderContext) {
 	ParticleInitialzer::Initialize(renderContext);
 	PreRenderInitialzer::Initialize(renderContext);
 	PrimitiveInitializer::Initialize(renderContext);
+	PostEffectInitialzer::Initialize(renderContext);
 }
 }
