@@ -2,6 +2,7 @@
 #include "../RenderPass.h"
 
 #include "../../../../Assets/RaytracingMesh.h"
+#include "engine/Math/MathInclude.h"
 
 namespace NoEngine {
 namespace Render {

@@ -1,8 +1,10 @@
 #include "RenderContext.h"
 #include "engine/Functions/ECS/Component/LightComponent.h"
 #include "engine/Runtime/GraphicsCore.h"
+#include "engine/Editor/EditUtils.h"
 
 #include "Initializer/RenderInitializer.h"
+#include "LightForGPU.h"
 
 namespace NoEngine {
 using namespace Component;
@@ -23,6 +25,15 @@ void RenderContext::Update(ECS::Registry& registry) {
 	for (auto e : debugCameraView) {
 		debugCamera_ = registry.GetComponent<CameraComponent>(e);
 	}
+
+	auto view = registry.View<CameraComponent, Editor::EditTag>();
+	cameras_.clear();
+	for (auto e : view) {
+		auto name = registry.GetComponent<Editor::EditTag>(e)->name;
+		auto camera = registry.GetComponent<CameraComponent>(e);
+		cameras_[name] = camera;
+	}
+
 
 }
 

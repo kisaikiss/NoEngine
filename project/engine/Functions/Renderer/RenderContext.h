@@ -7,7 +7,6 @@
 #include "PipelineState/GraphicsPSOManager.h"
 #include "PipelineState/RootSignatureManager.h"
 #include "PipelineState/StateObjectManager.h"
-#include "LightForGPU.h"
 
 namespace NoEngine {
 /// <summary>
@@ -126,6 +125,7 @@ private:
 	// カメラ
 	Component::CameraComponent* camera_;
 	Component::CameraComponent* debugCamera_;
+	std::unordered_map<std::string, Component::CameraComponent*> cameras_;
 
 	// 描画Pipeline
 	GraphicsPSOManager graphicsPSOs_;
