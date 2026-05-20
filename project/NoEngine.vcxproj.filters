@@ -27,6 +27,7 @@
     <FxCompile Include="resources\engine\Shaders\SkyBox.PS.hlsl" />
     <FxCompile Include="resources\engine\Shaders\Grayscale.PS.hlsl" />
     <FxCompile Include="resources\engine\Shaders\Vignetting.PS.hlsl" />
+    <FxCompile Include="resources\engine\Shaders\BoxFilter.PS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="engine\Assets\Audio\Audio.cpp" />
@@ -193,6 +194,7 @@
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\GrayscalePass.cpp" />
     <ClCompile Include="engine\Functions\Input\InputConfig.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\VignettingPass.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\BoxFilterPass.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -403,6 +405,7 @@
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\GrayscalePass.h" />
     <ClInclude Include="engine\Functions\Input\InputConfig.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\VignettingPass.h" />
+    <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\BoxFilterPass.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

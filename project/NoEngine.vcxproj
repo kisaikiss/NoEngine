@@ -262,6 +262,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="engine\Functions\Renderer\RenderContext.cpp" />
     <ClCompile Include="engine\Functions\Renderer\Initializer\RenderInitializer.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\DebugRenderPass.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\BoxFilterPass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\GrayscalePass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\VignettingPass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PrePasses\LightPass.cpp" />
@@ -481,6 +482,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="engine\Functions\Renderer\Initializer\RenderInitializer.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderGraph.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\DebugRenderPass.h" />
+    <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\BoxFilterPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\GrayscalePass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\VignettingPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PrePasses\LightPass.h" />
@@ -641,6 +643,14 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Development|x64'">Pixel</ShaderType>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="resources\engine\Shaders\BoxFilter.PS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Development|x64'">Pixel</ShaderType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="resources\engine\Shaders\Compute\Skinning.CS.hlsl">

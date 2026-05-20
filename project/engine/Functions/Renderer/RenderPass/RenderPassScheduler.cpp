@@ -11,6 +11,7 @@
 #include "DebugRenderPass.h"
 #include "PostEffect/GrayscalePass.h"
 #include "PostEffect/VignettingPass.h"
+#include "PostEffect/BoxFilterPass.h"
 
 #include "engine/Runtime/GraphicsCore.h"
 
@@ -42,7 +43,7 @@ void RenderPassScheduler::Initialize() {
 	passes_.push_back(std::make_unique<ParticlePass>());
 	passes_.push_back(std::make_unique<SpritePass>());
 	passes_.push_back(std::make_unique<SkyBoxPass>());
-	passes_.push_back(std::make_unique<VignettingPass>());
+	passes_.push_back(std::make_unique<BoxFilterPass>());
 
 	passes_.push_back(std::make_unique<DebugRenderPass>());
 

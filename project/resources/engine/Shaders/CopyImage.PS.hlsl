@@ -1,7 +1,7 @@
 struct VSOutput
 {
     float4 pos : SV_POSITION;
-    float2 tedcoord : TEXCOORD0;
+    float2 texcoord : TEXCOORD0;
 };
 
 struct PSOutput
@@ -15,6 +15,6 @@ SamplerState gSampler : register(s0);
 PSOutput main(VSOutput input)
 {
     PSOutput o;
-    o.color = gTexture.Sample(gSampler, input.tedcoord);
+    o.color = gTexture.Sample(gSampler, input.texcoord);
 	return o;
 }

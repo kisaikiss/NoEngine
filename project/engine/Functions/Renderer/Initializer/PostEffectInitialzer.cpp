@@ -54,5 +54,27 @@ void PostEffectInitialzer::CreatePSO(RenderContext& ctx) {
 	defaultPSO.Finalize();
 
 	ctx.RegisterGraphicsPSO("Renderer : Vignetting PSO", defaultPSO);
+
+	{
+		ShaderModule boxFilterPS(ShaderStage::Pixel, L"resources/engine/Shaders/BoxFilter.PS.hlsl", L"ps_6_0");
+
+		const ShaderReflection& boxFilterPSReflection = boxFilterPS.GetReflection();
+		std::vector<ShaderReflection> boxFilterReflections;
+		boxFilterReflections.push_back(vsReflection);
+		boxFilterReflections.push_back(boxFilterPSReflection);
+
+		RootSignature boxFilterRootSignature;
+		RootSignatureBuilder::BuildFromReflection(boxFilterReflections, boxFilterRootSignature, "Renderer : BoxFilter");
+
+		defaultPSO.SetPixelShader(boxFilterPS.GetBytecode());
+		defaultPSO.SetRootSignature(boxFilterRootSignature);
+		defaultPSO.Finalize();
+
+		ctx.RegisterGraphicsPSO("Renderer : BoxFilter PSO", defaultPSO);
+		ctx.RegisterRootSignature("Renderer : BoxFilter", std::move(boxFilterRootSignature));
+	}
+
+	
+
 }
 }

@@ -1,7 +1,7 @@
 struct VSOutput
 {
     float4 pos : SV_POSITION;
-    float2 tedcoord : TEXCOORD0;
+    float2 texcoord : TEXCOORD0;
 };
 
 struct PSOutput
@@ -15,10 +15,10 @@ SamplerState gSampler : register(s0);
 PSOutput main(VSOutput input)
 {
     PSOutput o;
-    o.color = gTexture.Sample(gSampler, input.tedcoord);
+    o.color = gTexture.Sample(gSampler, input.texcoord);
     
     // 周囲を0に、中心になるほど明るくなるように計算で調整
-    float2 correct = input.tedcoord * (1.0f - input.tedcoord.yx);
+    float2 correct = input.texcoord * (1.0f - input.texcoord.yx);
     // correctだけで計算すると中心の最大値が0.0625で暗すぎるのでScaleで調整
     float vignette = correct.x * correct.y * 16.0f;
     
