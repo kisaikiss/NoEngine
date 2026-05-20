@@ -263,6 +263,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="engine\Functions\Renderer\Initializer\RenderInitializer.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\DebugRenderPass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\GrayscalePass.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\VignettingPass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PrePasses\LightPass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\MeshPass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\ParticlePass.cpp" />
@@ -481,6 +482,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="engine\Functions\Renderer\RenderGraph.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\DebugRenderPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\GrayscalePass.h" />
+    <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\VignettingPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PrePasses\LightPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\MeshPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\ParticlePass.h" />
@@ -797,6 +799,14 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="resources\engine\Shaders\Toon.PS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Development|x64'">Pixel</ShaderType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="resources\engine\Shaders\Vignetting.PS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Development|x64'">Pixel</ShaderType>

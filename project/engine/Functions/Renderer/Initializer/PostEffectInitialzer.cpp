@@ -9,17 +9,18 @@ void PostEffectInitialzer::Initialize(RenderContext& ctx) {
 }
 void PostEffectInitialzer::CreatePSO(RenderContext& ctx) {
 	ShaderModule defaultVS(ShaderStage::Vertex, L"resources/engine/Shaders/FullScreen.VS.hlsl", L"vs_6_0");
-	ShaderModule defaultPS(ShaderStage::Pixel, L"resources/engine/Shaders/Grayscale.PS.hlsl", L"ps_6_0");
+	ShaderModule grayscalePS(ShaderStage::Pixel, L"resources/engine/Shaders/Grayscale.PS.hlsl", L"ps_6_0");
 
 	const ShaderReflection& vsReflection = defaultVS.GetReflection();
-	const ShaderReflection& psReflection = defaultPS.GetReflection();
+	const ShaderReflection& psReflection = grayscalePS.GetReflection();
 	std::vector<ShaderReflection> refls;
 	refls.push_back(vsReflection);
 	refls.push_back(psReflection);
 
 	RootSignature defaultRootSignature;
 	std::string defaultPSOName = "Renderer : Grayscale PSO";
-	RootSignatureBuilder::BuildFromReflection(refls, defaultRootSignature, defaultPSOName);
+	std::string rootSigName = "Renderer : PostEffectRootSig";
+	RootSignatureBuilder::BuildFromReflection(refls, defaultRootSignature, rootSigName);
 	
 	D3D12_RASTERIZER_DESC rasterizerDesc{};
 	rasterizerDesc.CullMode = D3D12_CULL_MODE_BACK;
@@ -40,11 +41,18 @@ void PostEffectInitialzer::CreatePSO(RenderContext& ctx) {
 	DXGI_FORMAT rtvFormat[] = { DXGI_FORMAT_R8G8B8A8_UNORM_SRGB };
 	defaultPSO.SetRenderTargetFormats(1, rtvFormat, DXGI_FORMAT_UNKNOWN);
 	defaultPSO.SetVertexShader(defaultVS.GetBytecode());
-	defaultPSO.SetPixelShader(defaultPS.GetBytecode());
+	defaultPSO.SetPixelShader(grayscalePS.GetBytecode());
 	defaultPSO.SetSampleMask(D3D12_DEFAULT_SAMPLE_MASK);
 	defaultPSO.Finalize();
 
 	ctx.RegisterGraphicsPSO(defaultPSOName, defaultPSO);
-	ctx.RegisterRootSignature(defaultPSOName, std::move(defaultRootSignature));
+	ctx.RegisterRootSignature(rootSigName, std::move(defaultRootSignature));
+
+
+	ShaderModule vignettingPS(ShaderStage::Pixel, L"resources/engine/Shaders/Vignetting.PS.hlsl", L"ps_6_0");
+	defaultPSO.SetPixelShader(vignettingPS.GetBytecode());
+	defaultPSO.Finalize();
+
+	ctx.RegisterGraphicsPSO("Renderer : Vignetting PSO", defaultPSO);
 }
 }
