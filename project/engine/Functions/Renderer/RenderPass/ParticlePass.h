@@ -11,7 +11,7 @@ namespace Render {
 class ParticlePass : public RenderPass{
 public:
 	ParticlePass();
-	void Execute(GraphicsContext& gfx, ECS::Registry& registry) override;
+	void Execute(GraphicsContext& gfx, const RenderGraphRegistry& resourceRegistry, ECS::Registry& registry) override;
 private:
 	ByteAddressBuffer vertex_;
 	ByteAddressBuffer index_;

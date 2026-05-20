@@ -261,6 +261,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="engine\Functions\Input\Input.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderContext.cpp" />
     <ClCompile Include="engine\Functions\Renderer\Initializer\RenderInitializer.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\RenderGraph.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\DebugRenderPass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\BoxFilterPass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\GrayscalePass.cpp" />
@@ -275,7 +276,6 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="engine\Functions\Renderer\RenderPass\RenderPassScheduler.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PrePasses\TLASBuildPass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\SkyBoxPass.cpp" />
-    <ClCompile Include="engine\Functions\Renderer\RenderResourceManager.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderSystem.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\SpritePass.cpp" />
     <ClCompile Include="engine\Functions\Scene\IScene.cpp" />
@@ -497,7 +497,6 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="engine\Functions\Renderer\RenderPass\SkyBoxPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\SpritePass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PrePasses\TLASBuildPass.h" />
-    <ClInclude Include="engine\Functions\Renderer\RenderResourceManager.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderSystem.h" />
     <ClInclude Include="engine\Functions\Scene\IScene.h" />
     <ClInclude Include="engine\Functions\Scene\SceneManager.h" />

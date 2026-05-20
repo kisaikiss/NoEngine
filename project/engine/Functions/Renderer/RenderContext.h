@@ -104,6 +104,10 @@ public:
 	D3D12_CPU_DESCRIPTOR_HANDLE GetDirectionalLightSRV() { return directionalLightBuffer_.GetSRV(); }
 	D3D12_CPU_DESCRIPTOR_HANDLE GetPointLightSRV() { return pointLightBuffer_.GetSRV(); }
 	D3D12_CPU_DESCRIPTOR_HANDLE GetSpotLightSRV() { return spotLightBuffer_.GetSRV(); }
+	Component::CameraComponent* GetCamera(const std::string& name) {
+		if (cameras_.contains(name)) return cameras_[name];
+		return nullptr;
+	}
 	Component::CameraComponent* GetCamera() { return camera_; }
 	Component::CameraComponent* GetDebugCamera() { return debugCamera_; }
 	bool IsInitialized() { return isInitialized_; }

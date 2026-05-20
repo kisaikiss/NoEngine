@@ -14,7 +14,7 @@ class SpritePass final :
 public:
     SpritePass();
     ~SpritePass();
-    void Execute(GraphicsContext& gfx, ECS::Registry& registry) override;
+    void Execute(GraphicsContext& gfx, const RenderGraphRegistry& resourceRegistry, ECS::Registry& registry) override;
 private:
     struct DrawItem {
         Component::Transform2DComponent* transform;

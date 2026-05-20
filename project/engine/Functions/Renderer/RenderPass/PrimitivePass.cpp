@@ -8,7 +8,8 @@ PrimitivePass::PrimitivePass() {
 	
 }
 
-void PrimitivePass::Execute(GraphicsContext& gfx, ECS::Registry& registry) {
+void PrimitivePass::Execute(GraphicsContext& gfx, const  RenderGraphRegistry& resourceRegistry, ECS::Registry& registry) {
+	static_cast<void>(resourceRegistry);
 	DebugPrimitive::Initialize(*GetRenderContext());
 	Draw(gfx);
 	Draw2D(gfx, registry);

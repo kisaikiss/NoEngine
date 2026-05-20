@@ -23,7 +23,7 @@ public:
     /// </summary>
 	/// <param name="gfx">描画用コマンドリストのラッパークラスの参照</param>
 	/// <param name="registry">ECSレジストリ</param>
-    virtual void Execute(GraphicsContext& gfx, ECS::Registry& registry) override;
+    virtual void Execute(GraphicsContext& gfx, const RenderGraphRegistry& resourceRegistry, ECS::Registry& registry) override;
 protected:
     /// <summary>
    /// 描画に必要な変数

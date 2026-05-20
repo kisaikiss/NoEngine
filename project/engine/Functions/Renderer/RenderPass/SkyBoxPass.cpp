@@ -21,7 +21,8 @@ SkyBoxPass::SkyBoxPass() {
 	texture_ = TextureManager::LoadTextureFile("resources/engine/Texture/rostock_laage_airport_4k.dds");
 }
 
-void SkyBoxPass::Execute(GraphicsContext& gfx, ECS::Registry& registry) {
+void SkyBoxPass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& resourceRegistry, ECS::Registry& registry) {
+	static_cast<void>(resourceRegistry);
 	static_cast<void>(registry);
 	using namespace Component;
 	camera_ = GetRenderContext()->GetCamera();

@@ -37,7 +37,8 @@ ParticlePass::ParticlePass() {
 	Initialize(maxParticles_);
 }
 
-void ParticlePass::Execute(GraphicsContext& gfx, ECS::Registry& registry) {
+void ParticlePass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& resourceRegistry, ECS::Registry& registry) {
+	static_cast<void>(resourceRegistry);
 	auto* renderCtx = GetRenderContext();
 	auto cameraView = registry.View<Component::TransformComponent, Component::CameraComponent, Component::ActiveCameraTag>();
 	Math::Vector3 cameraPos{};

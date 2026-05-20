@@ -5,7 +5,7 @@ namespace NoEngine {
 namespace Render {
 class BoxFilterPass : public RenderPass {
 public:
-	void Execute(GraphicsContext& gfx, ECS::Registry& registry) override;
+	void Execute(GraphicsContext& gfx, const RenderGraphRegistry& resourceRegistry, ECS::Registry& registry) override;
 };
 }
 }

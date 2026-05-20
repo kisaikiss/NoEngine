@@ -28,9 +28,8 @@ static int sFrameIndex = 0;
 }
 
 
-void IGameApp::SetupRenderPass(RenderPassScheduler& renderPassScheduler, RenderResourceManager& renderResources) {
+void IGameApp::SetupRenderPass(RenderPassScheduler& renderPassScheduler) {
 	(void)renderPassScheduler;
-	(void)renderResources;
 }
 
 bool IGameApp::Exit() {
@@ -45,11 +44,10 @@ int RunApplication(std::unique_ptr<IGameApp> game) {
 
 	RenderPassScheduler renderPassScheduler;
 	renderPassScheduler.Initialize();
-	RenderResourceManager renderResources;
 
 	// ゲームアプリケーションの初期化を行います。
 	game->Startup();
-	game->SetupRenderPass(renderPassScheduler, renderResources);
+	game->SetupRenderPass(renderPassScheduler);
 	
 	CalculateDeltaTime();
 	// メインループ
@@ -71,7 +69,7 @@ int RunApplication(std::unique_ptr<IGameApp> game) {
 		if (deltaTime > 0.1f) deltaTime = 0.1f;
 		game->Update(ctx, deltaTime);
 
-		renderPassScheduler.Render(context, game->GetRegistry());
+		renderPassScheduler.RenderAll(context, game->GetRegistry());
 
 		DrawPerformance(deltaTime);
 

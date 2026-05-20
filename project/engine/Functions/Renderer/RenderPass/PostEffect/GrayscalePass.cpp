@@ -5,7 +5,8 @@
 
 namespace NoEngine {
 namespace Render {
-void GrayscalePass::Execute(GraphicsContext& gfx, ECS::Registry& registry) {
+void GrayscalePass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& resourceRegistry, ECS::Registry& registry) {
+	static_cast<void>(resourceRegistry);
 	static_cast<void>(registry);
 	gfx.SetRenderTarget(GraphicsCore::sFinalColorBuffer.GetRTV());
 	gfx.TransitionResource(GraphicsCore::GetPostEffectBuffer(), D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);

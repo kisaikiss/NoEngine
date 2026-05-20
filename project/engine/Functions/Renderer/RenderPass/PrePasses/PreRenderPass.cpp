@@ -12,7 +12,8 @@ using namespace Component;
 PreRenderPass::PreRenderPass() {
 }
 
-void PreRenderPass::Execute(GraphicsContext& gfx, ECS::Registry& registry) {
+void PreRenderPass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& resourceRegistry, ECS::Registry& registry) {
+	(void)resourceRegistry;
 	auto* renderCtx = GetRenderContext();
 	D3D12_CPU_DESCRIPTOR_HANDLE renderTargetViews[] = {
 		GraphicsCore::sWorldPositionGBuffer.GetRTV(),

@@ -16,7 +16,7 @@ public:
 	/// </summary>
 	/// <param name="gfx">描画用コマンドリストのラッパークラス</param>
 	/// <param name="registry">ECSレジストリ</param>
-	void Execute(GraphicsContext& gfx, ECS::Registry& registry) override;
+	void Execute(GraphicsContext& gfx, const RenderGraphRegistry& resourceRegistry, ECS::Registry& registry) override;
 
 private:
 	/// <summary>

@@ -7,7 +7,8 @@
 namespace NoEngine {
 namespace Render {
 
-void TLASBuildPass::Execute(GraphicsContext& gfx, ECS::Registry& registry) {
+void TLASBuildPass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& resourceRegistry, ECS::Registry& registry) {
+	static_cast<void>(resourceRegistry);
 	if (!GraphicsCore::IsEnableRaytracing()) return;
 	BuildRaytracingInstances(registry);
 	BuildTLAS(gfx);

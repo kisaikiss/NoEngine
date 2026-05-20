@@ -7,7 +7,7 @@ class RaytracingTestPass :
     Component::CameraComponent* camera_ = nullptr;
     Math::Quaternion cameraRotate_;
 public:
-    void Execute(GraphicsContext& gfx, ECS::Registry& registry) override;
+    void Execute(GraphicsContext& gfx, const RenderGraphRegistry& resourceRegistry, ECS::Registry& registry) override;
 };
 }
 }

@@ -1,7 +1,6 @@
 #pragma once
 #include "engine/Functions/Scene/SceneManager.h"
 #include "engine/Functions/Renderer/RenderPass/RenderPassScheduler.h"
-#include "engine/Functions/Renderer/RenderResourceManager.h"
 #include "engine/Functions/ECS/Event/SceneChangeEvent.h"
 
 namespace NoEngine {
@@ -37,7 +36,7 @@ public:
 		UpdateScene(ctx, deltaT);
 	};
 
-	virtual void SetupRenderPass(RenderPassScheduler& renderPassScheduler, RenderResourceManager& renderResources);
+	virtual void SetupRenderPass(RenderPassScheduler& renderPassScheduler);
 
 	/// <summary>
 	/// ゲームを閉じるかどうか取得します。

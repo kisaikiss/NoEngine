@@ -3,7 +3,6 @@
 #include "engine/Runtime/Command/GraphicsContext.h"
 #include "../RenderContext.h"
 #include "../RenderGraph.h"
-#include "../RenderResourceManager.h"
 namespace NoEngine {
 class RenderPassScheduler {
 public:
@@ -14,6 +13,7 @@ public:
 
 	void Initialize();
 	void Render(GraphicsContext& gfx, ECS::Registry& registry);
+	void RenderAll(GraphicsContext& gfx, ECS::Registry& registry);
 	void SetRenderContext(RenderContext& renderContext);
 	void AddRenderPass(std::unique_ptr<Render::RenderPass>&& pass);
 
@@ -24,7 +24,7 @@ private:
 	struct RenderPassNode {
 		std::unique_ptr<Render::RenderPass> pass;
 		std::vector<std::string> inputs;  // このパスがSRVとして読むリソース
-		std::vector<std::string> outputs; // このパスがRTVとして書くリソース
+		std::vector<RenderGraphBuilder::OutputDesc> outputs; // このパスがRTVとして書くリソース
 	};
 
 	std::vector<RenderPassNode> nodes_;
@@ -35,7 +35,8 @@ private:
 	std::vector<std::unique_ptr<Render::RenderPass>> passes_;
 };
 
-void CommonSetupRenderPass(RenderPassScheduler& renderPassScheduler, RenderResourceManager& renderResources);
+void CommonSetupRenderPass(RenderPassScheduler& renderPassScheduler);
+void CommonSetupDebugRenderPass(RenderPassScheduler& renderPassScheduler);
 
 }
 

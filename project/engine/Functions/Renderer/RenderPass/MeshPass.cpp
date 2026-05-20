@@ -14,7 +14,8 @@ MeshPass::MeshPass() : camera_(nullptr) {
 	skyBoxTexture_ = TextureManager::LoadTextureFile("resources/engine/Texture/rostock_laage_airport_4k.dds");
 }
 
-void MeshPass::Execute(GraphicsContext& gfx, ECS::Registry& registry) {
+void MeshPass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& resourceRegistry, ECS::Registry& registry) {
+	static_cast<void>(resourceRegistry);
 	gfx.SetRenderTarget(GraphicsCore::GetPostEffectBuffer().GetRTV(), GraphicsCore::GetDepth().GetDSV());
 	Collect(registry);
 	Sort();
@@ -121,12 +122,12 @@ void MeshPass::Render(GraphicsContext& context) {
 			_declspec(align(16)) struct {
 				Math::Color color;
 				float shininess;
-				float enviromentCoefficient;
+				float environmentCoefficient;
 				float padding[2];
 			}constants;
 			constants.color = item.material->color;
 			constants.shininess = item.material->shininess;
-			constants.enviromentCoefficient = item.material->enviromentCoefficient;
+			constants.environmentCoefficient = item.material->enviromentCoefficient;
 			context.SetDynamicConstantBufferView(rootIndex["gMaterial"], sizeof(constants), &constants);
 			context.SetDynamicDescriptor(rootIndex["gTexture"], 0, item.material->materials[subMesh.materialIndex].textureHandle.GetSRV());
 			context.SetDynamicDescriptor(rootIndex["gShadowMask"], 0, GraphicsCore::GetShadowMask().GetSRV());

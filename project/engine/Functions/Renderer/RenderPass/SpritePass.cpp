@@ -23,7 +23,8 @@ NoEngine::Render::SpritePass::SpritePass() {
 
 SpritePass::~SpritePass() {}
 
-void SpritePass::Execute(GraphicsContext& gfx, ECS::Registry& registry) {
+void SpritePass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& resourceRegistry, ECS::Registry& registry) {
+	(void)resourceRegistry;
 	CameraUpdate(registry);
 	Collect(registry);
 	Sort();

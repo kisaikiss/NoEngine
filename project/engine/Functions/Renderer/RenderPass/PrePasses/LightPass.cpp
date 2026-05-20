@@ -5,7 +5,8 @@ namespace NoEngine {
 namespace Render {
 using namespace Component;
 
-void LightPass::Execute(GraphicsContext& gfx, ECS::Registry& registry) {
+void LightPass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& resourceRegistry, ECS::Registry& registry) {
+	static_cast<void>(resourceRegistry);
 	Collect(registry);
 	UploadToGpu(gfx);
 }

@@ -7,7 +7,8 @@
 namespace NoEngine {
 namespace Render {
 
-void RaytracingShadowPass::Execute(GraphicsContext& gfx, ECS::Registry& registry) {
+void RaytracingShadowPass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& resourceRegistry, ECS::Registry& registry) {
+	static_cast<void>(resourceRegistry);
 	Collect(registry);
 	Dispatch(gfx);
 }

@@ -11,7 +11,7 @@ class PreRenderPass :
     public RenderPass {
 public:
     PreRenderPass();
-    void Execute(GraphicsContext& gfx, ECS::Registry& registry) override;
+    void Execute(GraphicsContext& gfx, const RenderGraphRegistry& resourceRegistry, ECS::Registry& registry) override;
 
 private:
    /// <summary>

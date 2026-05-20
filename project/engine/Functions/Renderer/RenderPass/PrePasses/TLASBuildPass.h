@@ -9,7 +9,7 @@ namespace Render {
 class TLASBuildPass :
     public RenderPass {
 public:
-    void Execute(GraphicsContext& gfx, ECS::Registry& registry) override;
+    void Execute(GraphicsContext& gfx, const RenderGraphRegistry& resourceRegistry, ECS::Registry& registry) override;
    
 private:
     struct RaytracingInstance {

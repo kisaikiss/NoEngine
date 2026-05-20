@@ -7,7 +7,8 @@
 
 namespace NoEngine {
 namespace Render {
-void RaytracingTestPass::Execute(GraphicsContext& gfx, ECS::Registry& registry) {
+void RaytracingTestPass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& resourceRegistry, ECS::Registry& registry) {
+	static_cast<void>(resourceRegistry);
 	auto view = registry.View<Component::ActiveCameraTag, Component::CameraComponent>();
 
 	for (auto entity : view) {

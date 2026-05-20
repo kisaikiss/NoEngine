@@ -5,7 +5,7 @@ namespace Render {
 class DebugRenderPass :
     public MeshPass {
 public:
-    void Execute(GraphicsContext& gfx, ECS::Registry& registry) override;
+    void Execute(GraphicsContext& gfx, const RenderGraphRegistry& resourceRegistry, ECS::Registry& registry) override;
 private:
     /// <summary>
     /// DrawItemを収集します

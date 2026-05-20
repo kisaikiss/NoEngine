@@ -9,7 +9,8 @@ namespace Render {
 
 using namespace Component;
 
-void DebugRenderPass::Execute(GraphicsContext& gfx, ECS::Registry& registry) {
+void DebugRenderPass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& resourceRegistry, ECS::Registry& registry) {
+	static_cast<void>(resourceRegistry);
 #ifdef USE_IMGUI
 	gfx.ClearDepthAndStencil(GraphicsCore::GetDepth());
 	gfx.SetRenderTarget(GraphicsCore::GetDebugRenderBuffer().GetRTV(), GraphicsCore::GetDepth().GetDSV());

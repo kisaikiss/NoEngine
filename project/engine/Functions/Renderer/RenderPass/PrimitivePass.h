@@ -8,7 +8,7 @@ class PrimitivePass :
 public:
 	PrimitivePass();
 	~PrimitivePass() = default;
-	void Execute(GraphicsContext& gfx, ECS::Registry& registry) override;
+	void Execute(GraphicsContext& gfx, const  RenderGraphRegistry& resourceRegistry, ECS::Registry& registry) override;
 private:
 	void Draw(GraphicsContext& gfx);
 	void Draw2D(GraphicsContext& gfx, ECS::Registry& registry);
