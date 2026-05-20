@@ -190,6 +190,7 @@
     <ClCompile Include="engine\Functions\Renderer\RenderResourceManager.cpp" />
     <ClCompile Include="engine\Functions\Renderer\Initializer\PostEffectInitialzer.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\GrayscalePass.cpp" />
+    <ClCompile Include="engine\Functions\Input\InputConfig.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -398,6 +399,7 @@
     <ClInclude Include="engine\Functions\Renderer\RenderResourceManager.h" />
     <ClInclude Include="engine\Functions\Renderer\Initializer\PostEffectInitialzer.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\GrayscalePass.h" />
+    <ClInclude Include="engine\Functions\Input\InputConfig.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />
