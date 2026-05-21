@@ -78,7 +78,7 @@ void TestScene::Setup() {
 		registry.AddComponent<No::CameraComponent>(camera);
 		registry.AddComponent<FollowCameraComponent>(camera);
 		auto* cameraEditTag = registry.AddComponent<No::EditTag>(camera);
-		cameraEditTag->name = "camera";
+		cameraEditTag->name = "GameCamera";
 		registry.AddComponent<No::TransformComponent>(camera);
 	}
 	{
@@ -87,7 +87,7 @@ void TestScene::Setup() {
 		registry.AddComponent<No::DebugCameraComponent>(camera);
 		registry.AddComponent<No::TransformComponent>(camera);
 		auto* cameraEditTag = registry.AddComponent<No::EditTag>(camera);
-		cameraEditTag->name = "debugCamera";
+		cameraEditTag->name = "DebugCamera";
 	}
 
 	// 方向ライト

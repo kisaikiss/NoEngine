@@ -1,6 +1,7 @@
 #pragma once
 #include "Reflection.h"
 #include "engine/Functions/ECS/Registry.h"
+#include "engine/Runtime/GpuResource/PixelBuffer/ColorBuffer.h"
 
 namespace NoEngine {
 namespace Editor {
@@ -40,6 +41,11 @@ std::string MakeUniqueName(const std::unordered_set<std::string>& used, const st
 /// <param name="except">除外するエンティティ。デフォルトは ECS::INVALID_ENTITY（除外なし）。</param>
 /// <returns>重複のない編集タグ名の集合（std::unordered_set<std::string>）。</returns>
 std::unordered_set<std::string> CollectEditTagNames(ECS::Registry& registry, ECS::Entity except = ECS::INVALID_ENTITY);
+
+void InitGameImGuiWindow(ColorBuffer& mainColor);
+void InitSceneImGuiWindow(ColorBuffer& debugColor);
+void DrawGameImGuiWindow();
+void DrawSceneImGuiWindow();
 
 void DrawComponentUI(ECS::Registry& registry, ECS::Entity e);
 void DrawFieldUI(const FieldInfo& field, void* ptr);

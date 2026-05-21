@@ -24,14 +24,8 @@ public:
 	static CommandListManager sCommandListManager;
 	static ContextManager sContextManager;
 	static WindowManager sWindowManager;
-	
-	static ColorBuffer sFinalColorBuffer;
 
 	static Math::Vector2 GetWindowSize();
-#ifdef USE_IMGUI
-	static Math::Vector2 GetSceneWindowMousePosition();
-	static bool IsMouseOverSceneWindow();
-#endif
 
 	// ディスクリプタアロケータ(ディスクリプタのメモリ管理)配列。数はD3D12_DESCRIPTOR_HEAP_TYPE
 	static DescriptorAllocator sDescriptorAllocator[];

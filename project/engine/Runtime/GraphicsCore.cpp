@@ -22,14 +22,12 @@ std::unique_ptr<Graphics::GraphicsDevice> GraphicsCore::sGraphicsDevice;
 CommandListManager GraphicsCore::sCommandListManager;
 ContextManager GraphicsCore::sContextManager;
 WindowManager GraphicsCore::sWindowManager;
-ColorBuffer GraphicsCore::sFinalColorBuffer;
 
 namespace {
 const uint32_t sSwapChainBufferCount = 2;
 
 std::unique_ptr<Graphics::GraphicsSwapChain> sSwapChain;
 std::array<std::unique_ptr<ColorBuffer>, sSwapChainBufferCount> sFrameBuffers; // 実際に描画するカラーバッファ
-ColorBuffer sPostEffectBuffer;												   // ポストエフェクト用カラーバッファ
 
 // ビューポート
 D3D12_VIEWPORT sViewport;
@@ -41,10 +39,6 @@ UINT sBackBufferIndex;
 // WindowSize
 float sWindowWidth;
 float sWindowHeight;
-// windowMousePosition
-Math::Vector2 sGameWindowMousePosition{};
-bool sIsMouseOverWindow = false;
-
 ColorBuffer sShadowMaskBuffer;
 
 GraphicsPSO defaultPSO(L"CopyImage");
@@ -98,13 +92,6 @@ void GraphicsCore::Initialize(float windowWidth, float windowHeight) {
 	sWindowWidth = windowWidth;
 	sWindowHeight = windowHeight;
 
-	sPostEffectBuffer = ColorBuffer();
-	sPostEffectBuffer.Create(L"PostEffect Buffer", static_cast<uint32_t>(windowWidth), static_cast<uint32_t>(windowHeight), 1, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
-	sPostEffectBuffer.CreateImGuiSRV();
-
-	sFinalColorBuffer.Create(L"FinalColor Buffer", static_cast<uint32_t>(windowWidth), static_cast<uint32_t>(windowHeight), 1, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
-	sFinalColorBuffer.CreateImGuiSRV();
-
 	CreatePixelBuffer();
 
 	InitPostEffect();
@@ -113,8 +100,6 @@ void GraphicsCore::Initialize(float windowWidth, float windowHeight) {
 void GraphicsCore::Shutdown(void) {
 	DestroyPixelBuffer();
 	sSwapChain.reset();
-	sFinalColorBuffer.Destroy();
-	sPostEffectBuffer.Destroy();
 	sWindowManager.Shutdown();
 	Render::Shutdown();
 	CommandContext::DestroyAllContexts();
@@ -133,14 +118,6 @@ void GraphicsCore::Shutdown(void) {
 Math::Vector2 GraphicsCore::GetWindowSize() {
 	return Math::Vector2(sWindowWidth, sWindowHeight);
 }
-#ifdef USE_IMGUI
-Math::Vector2 GraphicsCore::GetSceneWindowMousePosition() {
-	return sGameWindowMousePosition;
-}
-bool GraphicsCore::IsMouseOverSceneWindow() {
-	return sIsMouseOverWindow;
-}
-#endif // USE_IMGUI
 
 
 void GraphicsCore::EnableDebugLayer() {
@@ -195,19 +172,10 @@ void GraphicsCore::SettingDebugLayer() {
 
 void GraphicsCore::StartFrame(GraphicsContext& context) {
 	// オブジェクトの描画開始
-	context.TransitionResource(sPostEffectBuffer, D3D12_RESOURCE_STATE_RENDER_TARGET);
-	context.TransitionResource(sFinalColorBuffer, D3D12_RESOURCE_STATE_RENDER_TARGET);
-
-	
-
 	context.SetViewportAndScissor(sViewport, sScissorRect);
-	context.ClearColor(sPostEffectBuffer);
-	context.ClearColor(sFinalColorBuffer);
-	
 }
 
 void GraphicsCore::EndFrame(GraphicsContext& context, ColorBuffer& finalColor) {
-	context.TransitionResource(sFinalColorBuffer, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 	context.TransitionResource(sShadowMaskBuffer, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 	// 本描画
 	sBackBufferIndex = sSwapChain->GetSwapChain()->GetCurrentBackBufferIndex();
@@ -220,55 +188,7 @@ void GraphicsCore::EndFrame(GraphicsContext& context, ColorBuffer& finalColor) {
 	FullScreenDraw(context, finalColor);
 
 #ifdef USE_IMGUI
-	static bool isInitFrame = true;
-	if (isInitFrame) {
-		// gTextureHeap.Alloc() で空きスロットを確保。
-		{
-			NoEngine::DescriptorHandle slot = Render::gTextureHeap.Alloc();
-			sGraphicsDevice->GetDevice()->CopyDescriptorsSimple(
-				1,
-				static_cast<D3D12_CPU_DESCRIPTOR_HANDLE>(slot),
-				sFinalColorBuffer.GetImGuiSRV(),
-				D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-			sPostEffectTexture = static_cast<ImTextureID>(slot.GetGpuPtr());
-			
-		}
-		isInitFrame = false;
-	}
-	//ImGui::Begin("Scene");
-	//ImGui::Image(
-	//	sDebugTexture,
-	//	ImVec2(sWindowWidth * 2 / 3, sWindowHeight * 2 / 3) // 表示サイズ
-	//);
-	//ImGui::End();
 
-	ImGui::Begin("Game");
-	ImGui::Image(
-		sPostEffectTexture,
-		ImVec2(sWindowWidth * 2 / 3, sWindowHeight * 2 / 3) // 表示サイズ
-	);
-
-	// シーン上のマウスのスクリーン座標を取得
-	sIsMouseOverWindow = false;
-	if (ImGui::IsItemHovered()) {
-		ImVec2 imgPos = ImGui::GetItemRectMin();
-		ImVec2 imgSize = ImGui::GetItemRectSize();
-		ImVec2 mouse = ImGui::GetMousePos();
-
-		ImVec2 local(mouse.x - imgPos.x, mouse.y - imgPos.y);
-
-		if (0 <= local.x && local.x < imgSize.x &&
-			0 <= local.y && local.y < imgSize.y) {
-			ImVec2 uv(local.x / imgSize.x, local.y / imgSize.y);
-
-			// ウィンドウ内のスクリーン座標に変換
-			sGameWindowMousePosition.x = uv.x * sWindowWidth;
-			sGameWindowMousePosition.y = uv.y * sWindowHeight;
-			sIsMouseOverWindow = true;
-		}
-	}
-
-	ImGui::End();
 	ImGui::Render();
 	context.SetDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, Render::gTextureHeap.GetHeapPointer());
 	ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), context.GetCommandList());

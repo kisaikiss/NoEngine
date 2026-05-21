@@ -1,5 +1,82 @@
 {
     "entities": {
+        "DebugCamera": {
+            "components": {
+                "CameraComponent": {
+                    "fov": 0.44999998807907104
+                },
+                "DebugCameraComponent": {
+                    "center": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "distance": 40.63812255859375,
+                    "drawCenter": false,
+                    "mousePositionX": 334,
+                    "mousePositionY": 321,
+                    "mouseWheelY": 0.0,
+                    "phi": 1.2827239036560059,
+                    "theta": -0.5406283736228943
+                },
+                "EditTag": {
+                    "name": "DebugCamera",
+                    "path": "DebugCamera"
+                },
+                "TransformComponent": {
+                    "rotation": [
+                        0.12491475045681,
+                        -0.48750683665275574,
+                        0.07070830464363098,
+                        0.8612396717071533
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        33.40678787231445,
+                        11.545477867126465,
+                        -20.053564071655273
+                    ]
+                }
+            }
+        },
+        "GameCamera": {
+            "components": {
+                "CameraComponent": {
+                    "fov": 0.44999998807907104
+                },
+                "EditTag": {
+                    "name": "GameCamera",
+                    "path": "GameCamera"
+                },
+                "FollowCameraComponent": {
+                    "distance": 15.0,
+                    "phi": 1.0,
+                    "theta": 0.0
+                },
+                "TransformComponent": {
+                    "rotation": [
+                        0.08854212611913681,
+                        -0.7045282125473022,
+                        0.08931348472833633,
+                        0.6984435319900513
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        47.379966735839844,
+                        12.209444046020508,
+                        0.4109833538532257
+                    ]
+                }
+            }
+        },
         "box": {
             "components": {
                 "AABBCollider": {
@@ -13,6 +90,10 @@
                         -0.5,
                         -0.5
                     ]
+                },
+                "EditTag": {
+                    "name": "box",
+                    "path": "box"
                 },
                 "MaterialComponent": {
                     "color": [
@@ -48,75 +129,6 @@
                 }
             }
         },
-        "camera": {
-            "components": {
-                "CameraComponent": {
-                    "fov": 0.44999998807907104
-                },
-                "FollowCameraComponent": {
-                    "distance": 15.0,
-                    "phi": 1.0,
-                    "theta": 0.0
-                },
-                "TransformComponent": {
-                    "rotation": [
-                        0.08854212611913681,
-                        -0.7045282125473022,
-                        0.08931348472833633,
-                        0.6984435319900513
-                    ],
-                    "scale": [
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "translate": [
-                        47.379966735839844,
-                        12.209444046020508,
-                        0.4109833538532257
-                    ]
-                }
-            }
-        },
-        "debugCamera": {
-            "components": {
-                "CameraComponent": {
-                    "fov": 0.44999998807907104
-                },
-                "DebugCameraComponent": {
-                    "center": [
-                        0.0,
-                        0.0,
-                        0.0
-                    ],
-                    "distance": 40.63812255859375,
-                    "drawCenter": false,
-                    "mousePositionX": 334,
-                    "mousePositionY": 321,
-                    "mouseWheelY": -6360.0,
-                    "phi": 1.2827239036560059,
-                    "theta": -0.5406283736228943
-                },
-                "TransformComponent": {
-                    "rotation": [
-                        0.12491475045681,
-                        -0.48750683665275574,
-                        0.07070830464363098,
-                        0.8612396717071533
-                    ],
-                    "scale": [
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "translate": [
-                        33.40678787231445,
-                        11.545477867126465,
-                        -20.053564071655273
-                    ]
-                }
-            }
-        },
         "directionalLight": {
             "components": {
                 "DirectionalLightComponent": {
@@ -132,6 +144,10 @@
                         0.0
                     ],
                     "intensity": 1.0
+                },
+                "EditTag": {
+                    "name": "directionalLight",
+                    "path": "directionalLight"
                 }
             }
         },
@@ -152,6 +168,10 @@
                 },
                 "CollisionBody": {
                     "type": 0
+                },
+                "EditTag": {
+                    "name": "player",
+                    "path": "player"
                 },
                 "GroundStateComponent": {
                     "groundHeight": 0.0,

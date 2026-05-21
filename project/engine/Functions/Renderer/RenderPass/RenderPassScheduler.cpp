@@ -14,6 +14,7 @@
 #include "../RenderSystem.h"
 
 #include "engine/Runtime/GraphicsCore.h"
+#include "engine/Editor/EditUtils.h"
 
 #ifdef USE_IMGUI
 #include "externals/imgui/imgui.h"
@@ -26,14 +27,7 @@ using namespace Render;
 namespace {
 #ifdef USE_IMGUI
 ImTextureID sDebugTexture;
-
 #endif // USE_IMGUI
-
-
-// ビューポート
-D3D12_VIEWPORT sViewport;
-// シザー矩形
-D3D12_RECT sScissorRect;
 }
 
 void RenderPassScheduler::AddPass(std::unique_ptr<RenderPass> pass) {
@@ -113,14 +107,10 @@ void RenderPassScheduler::Render(GraphicsContext& gfx, ECS::Registry& registry) 
 	}
 
 #ifdef USE_IMGUI
-	gfx.TransitionResource(*resourceRegistry_.GetColorBufferPointer("MainColor"), D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
-	Math::Vector2 windowSize = GraphicsCore::GetWindowSize();
-	ImGui::Begin("test");
-	ImGui::Image(
-		sDebugTexture,
-		ImVec2(windowSize.x * 2 / 3, windowSize.y* 2 / 3) // 表示サイズ
-	);
-	ImGui::End();
+	gfx.TransitionResource(*resourceRegistry_.GetColorBufferPointer(screenDrawBufferName_), D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+	gfx.TransitionResource(*resourceRegistry_.GetColorBufferPointer("DebugColor"), D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+	DrawGameImGuiWindow();
+	DrawSceneImGuiWindow();
 #endif // USE_IMGUI
 
 
@@ -139,22 +129,7 @@ void RenderPassScheduler::AddRenderPass(std::unique_ptr<RenderPass>&& pass) {
 void CommonSetupRenderPass(RenderPassScheduler& renderPassScheduler) {
 	Math::Vector2 windowSize = GraphicsCore::GetWindowSize();
 	auto& resourceRegistry = renderPassScheduler.GetResourceRegistry();
-	auto* mainColor = resourceRegistry.CreateColorBuffer("MainColor", windowSize.x, windowSize.y, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
-#ifdef USE_IMGUI
-	mainColor->CreateImGuiSRV();
-	{
-		NoEngine::DescriptorHandle slot = Render::gTextureHeap.Alloc();
-		GraphicsCore::sGraphicsDevice->GetDevice()->CopyDescriptorsSimple(
-			1,
-			static_cast<D3D12_CPU_DESCRIPTOR_HANDLE>(slot),
-			mainColor->GetImGuiSRV(),
-			D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-		sDebugTexture = static_cast<ImTextureID>(slot.GetGpuPtr());
-	}
-#else
-	static_cast<void>(mainColor);
-#endif // USE_IMGUI
-
+	InitGameImGuiWindow(*resourceRegistry.CreateColorBuffer("MainColor", windowSize.x, windowSize.y, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB));
 	
 
 	resourceRegistry.CreateColorBuffer("ShadowMap", windowSize.x, windowSize.y, DXGI_FORMAT_R8_UNORM);
@@ -216,7 +191,7 @@ void CommonSetupDebugRenderPass(RenderPassScheduler& renderPassScheduler) {
 
 	Math::Vector2 windowSize = GraphicsCore::GetWindowSize();
 	auto& resourceRegistry = renderPassScheduler.GetResourceRegistry();
-	resourceRegistry.CreateColorBuffer("DebugColor", windowSize.x, windowSize.y, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
+	InitSceneImGuiWindow(*resourceRegistry.CreateColorBuffer("DebugColor", windowSize.x, windowSize.y, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB));
 
 	auto preRenderPass = std::make_unique<PreRenderPass>();
 	preRenderPass->AddOutput("WorldPosition");

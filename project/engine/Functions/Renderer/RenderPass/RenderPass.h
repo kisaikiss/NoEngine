@@ -41,7 +41,7 @@ private:
 	std::vector<std::string> inputs_;
 	std::vector<std::string> outputs_;
 	std::string depthOutput_;
-	std::string targetCameraName_;
+	std::string targetCameraName_ = "GameCamera";
 	bool autoClear_ = false;
 	bool clearDepth_ = false;
 

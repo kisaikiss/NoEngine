@@ -4,6 +4,7 @@
 #include "engine/Runtime/GraphicsCore.h"
 #include "engine/Functions/Renderer/Primitive.h"
 #include "ReflectionMacros.h"
+#include "engine/Functions/Renderer/RenderSystem.h"
 
 #ifdef USE_IMGUI
 #include "externals/imgui/imgui.h"
@@ -17,10 +18,20 @@ REFLECT_FIELD(path)
 REFLECT_STRUCT_END(NoEngine::Editor::EditTag)
 
 
+namespace {
+#ifdef USE_IMGUI
+ImTextureID sGameTexture;
+ImTextureID sSceneTexture;
+bool sIsMouseOverWindow = false;
+Math::Vector2 sGameWindowMousePosition{};
+#endif // USE_IMGUI
+}
+
+
 Math::Vector2 Editor::Get2DSceneMousePosition(ECS::Registry& registry) {
 	Math::Vector2 result{};
 #ifdef USE_IMGUI
-	result = GraphicsCore::GetSceneWindowMousePosition();
+	result = sGameWindowMousePosition;
 	result -= GraphicsCore::GetWindowSize() / 2.f;
 	auto cameraView = registry.View<Component::ActiveCamera2DTag>();
 	for (auto e : cameraView) {
@@ -38,7 +49,7 @@ Math::Vector2 Editor::Get2DSceneMousePosition(ECS::Registry& registry) {
 
 bool Editor::IsMouseOverSceneWindow() {
 #ifdef USE_IMGUI
-	return GraphicsCore::IsMouseOverSceneWindow();
+	return sIsMouseOverWindow;
 #else
 	return false;
 #endif // USE_IMGUI
@@ -76,6 +87,84 @@ std::unordered_set<std::string> CollectEditTagNames(ECS::Registry& registry, ECS
 		if (tag) names.insert(tag->name);
 	}
 	return names;
+}
+
+void InitGameImGuiWindow(ColorBuffer& mainColor) {
+#ifdef USE_IMGUI
+	mainColor.CreateImGuiSRV();
+	{
+		NoEngine::DescriptorHandle slot = Render::gTextureHeap.Alloc();
+		GraphicsCore::sGraphicsDevice->GetDevice()->CopyDescriptorsSimple(
+			1,
+			static_cast<D3D12_CPU_DESCRIPTOR_HANDLE>(slot),
+			mainColor.GetImGuiSRV(),
+			D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+		sGameTexture = static_cast<ImTextureID>(slot.GetGpuPtr());
+	}
+#else
+	static_cast<void>(mainColor);
+#endif // USE_IMGUI
+}
+
+void InitSceneImGuiWindow(ColorBuffer& debugColor) {
+#ifdef USE_IMGUI
+	debugColor.CreateImGuiSRV();
+	{
+		NoEngine::DescriptorHandle slot = Render::gTextureHeap.Alloc();
+		GraphicsCore::sGraphicsDevice->GetDevice()->CopyDescriptorsSimple(
+			1,
+			static_cast<D3D12_CPU_DESCRIPTOR_HANDLE>(slot),
+			debugColor.GetImGuiSRV(),
+			D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+		sSceneTexture = static_cast<ImTextureID>(slot.GetGpuPtr());
+	}
+#else
+	static_cast<void>(debugColor);
+#endif // USE_IMGUI
+}
+
+void DrawGameImGuiWindow() {
+#ifdef USE_IMGUI
+	Math::Vector2 windowSize = GraphicsCore::GetWindowSize();
+	ImGui::Begin("Game");
+	ImGui::Image(
+		sGameTexture,
+		ImVec2(windowSize.x * 2 / 3, windowSize.y * 2 / 3) // 表示サイズ
+	);
+
+	sIsMouseOverWindow = false;
+	if (ImGui::IsItemHovered()) {
+		ImVec2 imgPos = ImGui::GetItemRectMin();
+		ImVec2 imgSize = ImGui::GetItemRectSize();
+		ImVec2 mouse = ImGui::GetMousePos();
+
+		ImVec2 local(mouse.x - imgPos.x, mouse.y - imgPos.y);
+
+		if (0 <= local.x && local.x < imgSize.x &&
+			0 <= local.y && local.y < imgSize.y) {
+			ImVec2 uv(local.x / imgSize.x, local.y / imgSize.y);
+
+			// ウィンドウ内のスクリーン座標に変換
+			sGameWindowMousePosition.x = uv.x * windowSize.x;
+			sGameWindowMousePosition.y = uv.y * windowSize.y;
+			sIsMouseOverWindow = true;
+		}
+	}
+
+	ImGui::End();
+#endif // USE_IMGUI
+}
+
+void DrawSceneImGuiWindow() {
+#ifdef USE_IMGUI
+	Math::Vector2 windowSize = GraphicsCore::GetWindowSize();
+	ImGui::Begin("Scene");
+	ImGui::Image(
+		sSceneTexture,
+		ImVec2(windowSize.x * 2 / 3, windowSize.y * 2 / 3) // 表示サイズ
+	);
+	ImGui::End();
+#endif // USE_IMGUI
 }
 
 using namespace ECS;
