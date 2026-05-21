@@ -10,7 +10,7 @@ namespace Render {
 void RaytracingShadowPass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& resourceRegistry, ECS::Registry& registry) {
 	static_cast<void>(resourceRegistry);
 	Collect(registry);
-	Dispatch(gfx);
+	Dispatch(gfx, resourceRegistry);
 }
 
 void RaytracingShadowPass::Collect(ECS::Registry& registry) {
@@ -28,7 +28,7 @@ void RaytracingShadowPass::Collect(ECS::Registry& registry) {
 
 }
 
-void RaytracingShadowPass::Dispatch(GraphicsContext& gfx) {
+void RaytracingShadowPass::Dispatch(GraphicsContext& gfx, const RenderGraphRegistry& resourceRegistry) {
 	auto& stateObject = Render::GetShadowRtStateObject();
 	auto* renderContext = GetRenderContext();
 
@@ -40,12 +40,10 @@ void RaytracingShadowPass::Dispatch(GraphicsContext& gfx) {
 	gfx.SetComputeSRV(0, renderContext->GetTLAS()->GetGPUVirtualAddress());
 	
 	// worldPos
-	gfx.TransitionResource(GraphicsCore::sWorldPositionGBuffer, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE);
-	gfx.SetRaytracingDynamicDescriptor(1, 0, GraphicsCore::sWorldPositionGBuffer.GetSRV());
+	gfx.SetRaytracingDynamicDescriptor(1, 0, resourceRegistry.GetColorBuffer("WorldPosition").GetSRV());
 
 	// normal
-	gfx.TransitionResource(GraphicsCore::sNormalGBuffer, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE);
-	gfx.SetRaytracingDynamicDescriptor(6, 0, GraphicsCore::sNormalGBuffer.GetSRV());
+	gfx.SetRaytracingDynamicDescriptor(6, 0, resourceRegistry.GetColorBuffer("Normal").GetSRV());
 	
 	// lights
 	gfx.SetRaytracingDynamicDescriptor(2, 0, renderContext->GetDirectionalLightSRV());

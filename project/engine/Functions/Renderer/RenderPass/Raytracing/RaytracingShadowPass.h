@@ -10,7 +10,7 @@ private:
 	Math::Vector3 lightDir_;
 
 	void Collect(ECS::Registry& registry);
-	void Dispatch(GraphicsContext& gfx);
+	void Dispatch(GraphicsContext& gfx, const RenderGraphRegistry& resourceRegistry);
 };
 }
 }

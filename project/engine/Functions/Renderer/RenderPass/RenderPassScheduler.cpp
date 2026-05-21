@@ -12,11 +12,26 @@
 #include "PostEffect/GrayscalePass.h"
 #include "PostEffect/VignettingPass.h"
 #include "PostEffect/BoxFilterPass.h"
+#include "../RenderSystem.h"
 
 #include "engine/Runtime/GraphicsCore.h"
 
+#ifdef USE_IMGUI
+#include "externals/imgui/imgui.h"
+#endif // USE_IMGUI
+
+
 namespace NoEngine {
 using namespace Render;
+
+namespace {
+ImTextureID sDebugTexture;
+
+// ビューポート
+D3D12_VIEWPORT sViewport;
+// シザー矩形
+D3D12_RECT sScissorRect;
+}
 
 void RenderPassScheduler::AddPass(std::unique_ptr<RenderPass> pass) {
 	RenderPassNode node;
@@ -28,8 +43,13 @@ void RenderPassScheduler::Compile() {
 	for (auto& node : nodes_) {
 		RenderGraphBuilder builder;
 		node.pass->Setup(builder);
+		node.pass->SetRenderContext(&renderContext_);
 		node.inputs = builder.inputs_;
 		node.outputs = builder.outputs_;
+		if (builder.hasDepthOutput_) {
+			node.hasDepthOutput = true;
+			node.depthOutput = builder.depthOutput_;
+		}
 	}
 }
 
@@ -52,7 +72,7 @@ void RenderPassScheduler::Initialize() {
 
 void RenderPassScheduler::Render(GraphicsContext& gfx, ECS::Registry& registry) {
 	if (registry.Empty() || nodes_.empty()) return;
-
+	renderContext_.Update(registry);
 	for (auto& node : nodes_) {
 		// 入力リソース（SRVとして読むもの）を PIXEL_SHADER_RESOURCE ステートへ
 		for (const auto& inputName : node.inputs) {
@@ -75,9 +95,47 @@ void RenderPassScheduler::Render(GraphicsContext& gfx, ECS::Registry& registry) 
 			}
 		}
 
-		if (!renderTargetViews.empty()) gfx.SetRenderTargets(static_cast<UINT>(renderTargetViews.size()), renderTargetViews.data());
+		D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = {};
+		bool useDepth = false;
+
+		if (node.hasDepthOutput) { // このパスがDepthBufferを使う場合
+			DepthBuffer* depthBuffer = resourceRegistry_.GetDepthBufferPointer(node.depthOutput.name);
+			if (depthBuffer) {
+				// DirectX12のバリア：書き込み状態(DEPTH_WRITE)へ自動遷移
+				gfx.TransitionResource(*depthBuffer, D3D12_RESOURCE_STATE_DEPTH_WRITE);
+				dsvHandle = depthBuffer->GetDSV();
+				useDepth = true;
+
+				// 自動クリアの実行
+				if (node.depthOutput.autoClear) {
+					// MiniEngineのClearDepth関数を呼び出す
+					gfx.ClearDepthAndStencil(*depthBuffer);
+				}
+			}
+		}
+
+		if (!renderTargetViews.empty() || useDepth) {
+			if(useDepth){
+				gfx.SetRenderTargets(static_cast<UINT>(renderTargetViews.size()), renderTargetViews.data(), dsvHandle);
+			} else {
+				gfx.SetRenderTargets(static_cast<UINT>(renderTargetViews.size()), renderTargetViews.data());
+			}
+			
+		} 
 		node.pass->Execute(gfx, resourceRegistry_, registry);
 	}
+
+#ifdef USE_IMGUI
+	gfx.TransitionResource(*resourceRegistry_.GetColorBufferPointer("MainColor"), D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+	Math::Vector2 windowSize = GraphicsCore::GetWindowSize();
+	ImGui::Begin("test");
+	ImGui::Image(
+		sDebugTexture,
+		ImVec2(windowSize.x * 2 / 3, windowSize.y* 2 / 3) // 表示サイズ
+	);
+	ImGui::End();
+#endif // USE_IMGUI
+
 
 }
 
@@ -99,14 +157,30 @@ void RenderPassScheduler::AddRenderPass(std::unique_ptr<RenderPass>&& pass) {
 
 void CommonSetupRenderPass(RenderPassScheduler& renderPassScheduler) {
 	Math::Vector2 windowSize = GraphicsCore::GetWindowSize();
-	auto resourceRegistry = renderPassScheduler.GetResourceRegistry();
-	resourceRegistry.Create("MainColor", windowSize.x, windowSize.y, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
-	resourceRegistry.Create("ShadowMap", windowSize.x, windowSize.y, DXGI_FORMAT_R8_UNORM);
-	resourceRegistry.Create("WorldPosition", windowSize.x, windowSize.y, DXGI_FORMAT_R32G32B32A32_FLOAT);
-	resourceRegistry.Create("Normal", windowSize.x, windowSize.y, DXGI_FORMAT_R10G10B10A2_UNORM);
+	auto& resourceRegistry = renderPassScheduler.GetResourceRegistry();
+	auto* mainColor = resourceRegistry.CreateColorBuffer("MainColor", windowSize.x, windowSize.y, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
+#ifdef USE_IMGUI
+	mainColor->CreateImGuiSRV();
+	{
+		NoEngine::DescriptorHandle slot = Render::gTextureHeap.Alloc();
+		GraphicsCore::sGraphicsDevice->GetDevice()->CopyDescriptorsSimple(
+			1,
+			static_cast<D3D12_CPU_DESCRIPTOR_HANDLE>(slot),
+			mainColor->GetImGuiSRV(),
+			D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+		sDebugTexture = static_cast<ImTextureID>(slot.GetGpuPtr());
+	}
+#endif // USE_IMGUI
 
-	resourceRegistry.Create("PostEffect1", windowSize.x, windowSize.y, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
-	resourceRegistry.Create("PostEffect2", windowSize.x, windowSize.y, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
+	
+
+	resourceRegistry.CreateColorBuffer("ShadowMap", windowSize.x, windowSize.y, DXGI_FORMAT_R8_UNORM);
+	resourceRegistry.CreateColorBuffer("WorldPosition", windowSize.x, windowSize.y, DXGI_FORMAT_R32G32B32A32_FLOAT);
+	resourceRegistry.CreateColorBuffer("Normal", windowSize.x, windowSize.y, DXGI_FORMAT_R10G10B10A2_UNORM);
+
+	resourceRegistry.CreateColorBuffer("PostEffect1", windowSize.x, windowSize.y, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
+	resourceRegistry.CreateColorBuffer("PostEffect2", windowSize.x, windowSize.y, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
+	resourceRegistry.CreateDepthBuffer("MainDepth", windowSize.x, windowSize.y);
 
 
 	renderPassScheduler.AddPass(std::make_unique<TLASBuildPass>());
@@ -115,6 +189,8 @@ void CommonSetupRenderPass(RenderPassScheduler& renderPassScheduler) {
 	auto preRenderPass = std::make_unique<PreRenderPass>();
 	preRenderPass->AddOutput("WorldPosition");
 	preRenderPass->AddOutput("Normal");
+	preRenderPass->SetClearTarget(true);
+	preRenderPass->SetDepthOutput("MainDepth", true);
 	renderPassScheduler.AddPass(std::move(preRenderPass));
 
 	auto raytracingShadowPass = std::make_unique<RaytracingShadowPass>();
@@ -122,36 +198,46 @@ void CommonSetupRenderPass(RenderPassScheduler& renderPassScheduler) {
 	raytracingShadowPass->AddInput("Normal");
 	raytracingShadowPass->AddOutput("ShadowMap");
 	raytracingShadowPass->SetClearTarget(true);
+
 	renderPassScheduler.AddPass(std::move(raytracingShadowPass));
 
 	auto meshPass = std::make_unique<MeshPass>();
 	meshPass->AddInput("ShadowMap");
 	meshPass->AddOutput("MainColor");
+	meshPass->SetDepthOutput("MainDepth");
 	meshPass->SetClearTarget(true);
 	renderPassScheduler.AddPass(std::move(meshPass));
 
 	auto primitivePass = std::make_unique<PrimitivePass>();
 	primitivePass->AddOutput("MainColor");
+	primitivePass->SetDepthOutput("MainDepth");
 	renderPassScheduler.AddPass(std::move(primitivePass));
 
 	auto particlePass = std::make_unique<ParticlePass>();
 	particlePass->AddOutput("MainColor");
 	renderPassScheduler.AddPass(std::move(particlePass));
 
+	auto spritePass = std::make_unique<SpritePass>();
+	spritePass->AddOutput("MainColor");
+	renderPassScheduler.AddPass(std::move(spritePass));
+
 	auto skyBoxPass = std::make_unique<SkyBoxPass>();
 	skyBoxPass->AddOutput("MainColor");
+	skyBoxPass->SetDepthOutput("MainDepth");
 	renderPassScheduler.AddPass(std::move(skyBoxPass));
 
 }
 
 void CommonSetupDebugRenderPass(RenderPassScheduler& renderPassScheduler) {
 	Math::Vector2 windowSize = GraphicsCore::GetWindowSize();
-	auto resourceRegistry = renderPassScheduler.GetResourceRegistry();
-	resourceRegistry.Create("DebugColor", windowSize.x, windowSize.y, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
+	auto& resourceRegistry = renderPassScheduler.GetResourceRegistry();
+	resourceRegistry.CreateColorBuffer("DebugColor", windowSize.x, windowSize.y, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
 
 	auto preRenderPass = std::make_unique<PreRenderPass>();
 	preRenderPass->AddOutput("WorldPosition");
 	preRenderPass->AddOutput("Normal");
+	preRenderPass->SetClearTarget(true);
+	preRenderPass->SetDepthOutput("MainDepth", true);
 	renderPassScheduler.AddPass(std::move(preRenderPass));
 
 	auto raytracingShadowPass = std::make_unique<RaytracingShadowPass>();
@@ -164,12 +250,9 @@ void CommonSetupDebugRenderPass(RenderPassScheduler& renderPassScheduler) {
 	auto meshPass = std::make_unique<MeshPass>();
 	meshPass->AddInput("ShadowMap");
 	meshPass->AddOutput("DebugColor");
+	meshPass->SetDepthOutput("MainDepth");
 	meshPass->SetClearTarget(true);
 	renderPassScheduler.AddPass(std::move(meshPass));
-
-	auto primitivePass = std::make_unique<PrimitivePass>();
-	primitivePass->AddOutput("DebugColor");
-	renderPassScheduler.AddPass(std::move(primitivePass));
 
 	auto particlePass = std::make_unique<ParticlePass>();
 	particlePass->AddOutput("DebugColor");

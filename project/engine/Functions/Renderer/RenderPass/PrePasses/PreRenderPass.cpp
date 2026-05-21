@@ -15,11 +15,6 @@ PreRenderPass::PreRenderPass() {
 void PreRenderPass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& resourceRegistry, ECS::Registry& registry) {
 	(void)resourceRegistry;
 	auto* renderCtx = GetRenderContext();
-	D3D12_CPU_DESCRIPTOR_HANDLE renderTargetViews[] = {
-		GraphicsCore::sWorldPositionGBuffer.GetRTV(),
-		GraphicsCore::sNormalGBuffer.GetRTV()
-	};
-	gfx.SetRenderTargets(2, renderTargetViews, GraphicsCore::GetDepth().GetDSV());
 	items_.clear();
 
 	auto view = registry.View<

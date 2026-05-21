@@ -1,6 +1,8 @@
 #include "PrimitivePass.h"
 #include "../Primitive.h"
+#include "engine/Math/Types/Calculations/Matrix4x4Calculations.h"
 #include "engine/Functions/ECS/Component/CameraComponent.h"
+#include "engine/Runtime/GraphicsCore.h"
 
 namespace NoEngine {
 namespace Render {
@@ -26,12 +28,12 @@ void PrimitivePass::Draw(GraphicsContext& gfx) {
 void PrimitivePass::Draw2D(GraphicsContext& gfx, ECS::Registry& registry) {
 	using namespace Component;
 	auto camera2DView = registry.View<Camera2DComponent, ActiveCamera2DTag>();
-	Camera2DComponent* camera2D{};
+	auto size = GraphicsCore::sWindowManager.GetMainWindow()->GetWindowSize();
+	Math::Matrix4x4 viewProj = MathCalculations::MakeOrthographicMatrix(0.f, 0.f, static_cast<float>(size.clientWidth), static_cast<float>(size.clientHeight), 0.1f, 100.f);
 	for (auto entity : camera2DView) {
-		camera2D = registry.GetComponent<Camera2DComponent>(entity);
+		viewProj = registry.GetComponent<Camera2DComponent>(entity)->viewProjection;
 	}
-	if (!camera2D) return;
-	DebugPrimitive::Render2D(gfx, camera2D->viewProjection);
+	DebugPrimitive::Render2D(gfx, viewProj);
 }
 
 }

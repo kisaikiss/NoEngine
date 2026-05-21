@@ -19,12 +19,16 @@ public:
 		for (const auto& output : outputs_) {
 			builder.WriteRenderTarget(output, autoClear_);
 		}
+		if (!depthOutput_.empty()) {
+			builder.WriteDepthStencil(depthOutput_, clearDepth_);
+		}
 	}
 
 	virtual void Execute(GraphicsContext& gfx, const RenderGraphRegistry& resourceRegistry, ECS::Registry& registry) = 0;
 
 	void AddInput(const std::string& input) { inputs_.emplace_back(input); }
 	void AddOutput(const std::string& output) { outputs_.emplace_back(output); }
+	void SetDepthOutput(const std::string& depth, bool clearDepth = false) { depthOutput_ = depth; clearDepth_ = clearDepth; }
 	void SetClearTarget(bool autoClear) { autoClear_ = autoClear; }
 	void SetTargetCamera(const std::string& targetCamera) { targetCameraName_ = targetCamera; }
 
@@ -36,9 +40,10 @@ protected:
 private:
 	std::vector<std::string> inputs_;
 	std::vector<std::string> outputs_;
+	std::string depthOutput_;
 	std::string targetCameraName_;
 	bool autoClear_ = false;
-	bool depthClear_ = false;
+	bool clearDepth_ = false;
 
 	RenderContext* renderContext_;
 };

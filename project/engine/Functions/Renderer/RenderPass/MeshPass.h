@@ -61,7 +61,7 @@ protected:
     /// 収集したDrawItemの情報から描画します
     /// </summary>
     /// <param name="gfx">描画用コマンドリストのラッパークラスの参照</param>
-    void Render(GraphicsContext& gfx);
+    void Render(GraphicsContext& gfx, const RenderGraphRegistry& resourceRegistry);
 
     /// <summary>
     /// GraphicsContext を使用してアウトラインを描画する関数。

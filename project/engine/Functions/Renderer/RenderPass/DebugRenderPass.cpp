@@ -12,11 +12,9 @@ using namespace Component;
 void DebugRenderPass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& resourceRegistry, ECS::Registry& registry) {
 	static_cast<void>(resourceRegistry);
 #ifdef USE_IMGUI
-	gfx.ClearDepthAndStencil(GraphicsCore::GetDepth());
-	gfx.SetRenderTarget(GraphicsCore::GetDebugRenderBuffer().GetRTV(), GraphicsCore::GetDepth().GetDSV());
 	Collect(registry);
 	Sort();
-	Render(gfx);
+	Render(gfx, resourceRegistry);
 	RenderOutline(gfx);
 #else
 	static_cast<void>(gfx);

@@ -16,10 +16,9 @@ MeshPass::MeshPass() : camera_(nullptr) {
 
 void MeshPass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& resourceRegistry, ECS::Registry& registry) {
 	static_cast<void>(resourceRegistry);
-	gfx.SetRenderTarget(GraphicsCore::GetPostEffectBuffer().GetRTV(), GraphicsCore::GetDepth().GetDSV());
 	Collect(registry);
 	Sort();
-	Render(gfx);
+	Render(gfx, resourceRegistry);
 	RenderOutline(gfx);
 }
 
@@ -62,7 +61,8 @@ void MeshPass::Sort() {
 		});
 }
 
-void MeshPass::Render(GraphicsContext& context) {
+void MeshPass::Render(GraphicsContext& context, const RenderGraphRegistry& resourceRegistry) {
+	(void)resourceRegistry;
 	// ToDo : currentPsoの値は被りえない値にすべきです。
 	uint32_t currentPSO = 110;
 	auto* renderCtx = GetRenderContext();

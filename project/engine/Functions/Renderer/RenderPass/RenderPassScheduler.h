@@ -25,6 +25,8 @@ private:
 		std::unique_ptr<Render::RenderPass> pass;
 		std::vector<std::string> inputs;  // このパスがSRVとして読むリソース
 		std::vector<RenderGraphBuilder::OutputDesc> outputs; // このパスがRTVとして書くリソース
+		RenderGraphBuilder::OutputDesc depthOutput;
+		bool hasDepthOutput = false;
 	};
 
 	std::vector<RenderPassNode> nodes_;
