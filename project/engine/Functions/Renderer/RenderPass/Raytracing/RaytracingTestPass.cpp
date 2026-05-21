@@ -26,8 +26,8 @@ void RaytracingTestPass::Execute(GraphicsContext& gfx, const RenderGraphRegistry
 	gfx.SetComputeSRV(0, renderContext->GetTLAS()->GetGPUVirtualAddress());
 
 	// UAV
-	gfx.TransitionResource(GraphicsCore::GetRaytracingBuffer(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
-	gfx.SetRaytracingDynamicDescriptor(1, 0, GraphicsCore::GetRaytracingBuffer().GetUAV());
+	//gfx.TransitionResource(GraphicsCore::GetRaytracingBuffer(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+	//gfx.SetRaytracingDynamicDescriptor(1, 0, GraphicsCore::GetRaytracingBuffer().GetUAV());
 
 	// camera
 	_declspec(align(16)) struct {

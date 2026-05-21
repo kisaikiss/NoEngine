@@ -1,14 +1,13 @@
 #include "RenderPassScheduler.h"
-#include "SpritePass.h"
-#include "MeshPass.h"
-#include "PrimitivePass.h"
+#include "Rasterization/SpritePass.h"
+#include "Rasterization/MeshPass.h"
+#include "Rasterization/PrimitivePass.h"
 #include "PrePasses/LightPass.h"
-#include "ParticlePass.h"
+#include "Rasterization/ParticlePass.h"
 #include "PrePasses/TLASBuildPass.h"
 #include "PrePasses/PreRenderPass.h"
 #include "Raytracing/RaytracingShadowPass.h"
-#include "SkyBoxPass.h"
-#include "DebugRenderPass.h"
+#include "Rasterization/SkyBoxPass.h"
 #include "PostEffect/GrayscalePass.h"
 #include "PostEffect/VignettingPass.h"
 #include "PostEffect/BoxFilterPass.h"
@@ -25,7 +24,11 @@ namespace NoEngine {
 using namespace Render;
 
 namespace {
+#ifdef USE_IMGUI
 ImTextureID sDebugTexture;
+
+#endif // USE_IMGUI
+
 
 // ビューポート
 D3D12_VIEWPORT sViewport;
@@ -53,22 +56,6 @@ void RenderPassScheduler::Compile() {
 	}
 }
 
-void RenderPassScheduler::Initialize() {
-	passes_.push_back(std::make_unique<TLASBuildPass>());
-	passes_.push_back(std::make_unique<LightPass>());
-	passes_.push_back(std::make_unique<PreRenderPass>());
-	passes_.push_back(std::make_unique<RaytracingShadowPass>());
-	passes_.push_back(std::make_unique<MeshPass>());
-	passes_.push_back(std::make_unique<PrimitivePass>());
-	passes_.push_back(std::make_unique<ParticlePass>());
-	passes_.push_back(std::make_unique<SpritePass>());
-	passes_.push_back(std::make_unique<SkyBoxPass>());
-	passes_.push_back(std::make_unique<VignettingPass>());
-
-	passes_.push_back(std::make_unique<DebugRenderPass>());
-
-	for (auto& pass : passes_) pass->SetRenderContext(&renderContext_);
-}
 
 void RenderPassScheduler::Render(GraphicsContext& gfx, ECS::Registry& registry) {
 	if (registry.Empty() || nodes_.empty()) return;
@@ -139,12 +126,6 @@ void RenderPassScheduler::Render(GraphicsContext& gfx, ECS::Registry& registry) 
 
 }
 
-void RenderPassScheduler::RenderAll(GraphicsContext& gfx, ECS::Registry& registry) {
-	if (registry.Empty()) return;
-	renderContext_.Update(registry);
-	for (auto& pass : passes_) pass->Execute(gfx, resourceRegistry_, registry);
-}
-
 void RenderPassScheduler::SetRenderContext(RenderContext& renderContext) {
 	for (auto& pass : passes_) pass->SetRenderContext(&renderContext);
 }
@@ -170,6 +151,8 @@ void CommonSetupRenderPass(RenderPassScheduler& renderPassScheduler) {
 			D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 		sDebugTexture = static_cast<ImTextureID>(slot.GetGpuPtr());
 	}
+#else
+	static_cast<void>(mainColor);
 #endif // USE_IMGUI
 
 	
@@ -229,6 +212,8 @@ void CommonSetupRenderPass(RenderPassScheduler& renderPassScheduler) {
 }
 
 void CommonSetupDebugRenderPass(RenderPassScheduler& renderPassScheduler) {
+#ifdef USE_IMGUI
+
 	Math::Vector2 windowSize = GraphicsCore::GetWindowSize();
 	auto& resourceRegistry = renderPassScheduler.GetResourceRegistry();
 	resourceRegistry.CreateColorBuffer("DebugColor", windowSize.x, windowSize.y, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
@@ -260,7 +245,11 @@ void CommonSetupDebugRenderPass(RenderPassScheduler& renderPassScheduler) {
 
 	auto skyBoxPass = std::make_unique<SkyBoxPass>();
 	skyBoxPass->AddOutput("DebugColor");
+	skyBoxPass->SetDepthOutput("MainDepth");
 	renderPassScheduler.AddPass(std::move(skyBoxPass));
+#else
+	static_cast<void>(renderPassScheduler);
+#endif // USE_IMGUI
 
 }
 

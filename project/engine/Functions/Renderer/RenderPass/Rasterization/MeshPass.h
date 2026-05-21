@@ -1,5 +1,5 @@
 #pragma once
-#include "RenderPass.h"
+#include "../RenderPass.h"
 #include "engine/Functions/ECS/Component/MeshComponent.h"
 #include "engine/Functions/ECS/Component/MaterialComponent.h"
 #include "engine/Functions/ECS/Component/TransformComponent.h"

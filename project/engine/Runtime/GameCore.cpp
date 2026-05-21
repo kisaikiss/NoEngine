@@ -30,7 +30,7 @@ static int sFrameIndex = 0;
 
 void IGameApp::SetupRenderPass(RenderPassScheduler& renderPassScheduler) {
 	CommonSetupRenderPass(renderPassScheduler);
-	//CommonSetupDebugRenderPass(renderPassScheduler);
+	CommonSetupDebugRenderPass(renderPassScheduler);
 }
 
 bool IGameApp::Exit() {
@@ -75,7 +75,7 @@ int RunApplication(std::unique_ptr<IGameApp> game) {
 		DrawPerformance(deltaTime);
 
 		ctx.Finish(true);
-		GraphicsCore::EndFrame(context);
+		GraphicsCore::EndFrame(context, renderPassScheduler.GetScreenDrawBuffer());
 		if (game->Exit()) break;
 	}
 

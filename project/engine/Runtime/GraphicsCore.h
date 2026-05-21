@@ -25,9 +25,6 @@ public:
 	static ContextManager sContextManager;
 	static WindowManager sWindowManager;
 	
-	static ColorBuffer sAlbedoGBuffer;
-	static ColorBuffer sNormalGBuffer;
-	static ColorBuffer sWorldPositionGBuffer;
 	static ColorBuffer sFinalColorBuffer;
 
 	static Math::Vector2 GetWindowSize();
@@ -59,7 +56,7 @@ public:
 	/// フレーム終了
 	/// </summary>
 	/// <param name="context">グラフィックス用のコマンドリストラッパークラス</param>
-	static void EndFrame(GraphicsContext& context);
+	static void EndFrame(GraphicsContext& context, ColorBuffer& finalColor);
 
 	/// <summary>
 	/// ディスクリプタを割り当てます。
@@ -72,10 +69,6 @@ public:
 	}
 
 	static ColorBuffer& GetShadowMask();
-	static ColorBuffer& GetPostEffectBuffer();
-	static ColorBuffer& GetRaytracingBuffer();
-	static DepthBuffer& GetDepth();
-	static ColorBuffer& GetDebugRenderBuffer();
 
 
 	/// <summary>
@@ -106,7 +99,7 @@ private:
 	/// <summary>
 	/// 最終的なフルスクリーン描画
 	/// </summary>
-	static void FullScreenDraw(GraphicsContext& context);
+	static void FullScreenDraw(GraphicsContext& context, ColorBuffer& finalColor);
 
 	static void InitPostEffect();
 

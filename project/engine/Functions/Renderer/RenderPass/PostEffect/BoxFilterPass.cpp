@@ -9,7 +9,7 @@ void BoxFilterPass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& res
 	static_cast<void>(resourceRegistry);
 	static_cast<void>(registry);
 	gfx.SetRenderTarget(GraphicsCore::sFinalColorBuffer.GetRTV());
-	gfx.TransitionResource(GraphicsCore::GetPostEffectBuffer(), D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+	//gfx.TransitionResource(GraphicsCore::GetPostEffectBuffer(), D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 
 	auto& rootIndex = RootSignatureBuilder::GetRootIndexMap("Renderer : BoxFilter");
 	auto renderCtx = GetRenderContext();
@@ -34,7 +34,7 @@ void BoxFilterPass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& res
 	for (int i = count; i < KMaxKernelVec * 4; ++i) constants.kernelVec[i] = 0.0f;
 
 	gfx.SetDynamicConstantBufferView(rootIndex["KernelCB"], sizeof(constants), &constants);
-	gfx.SetDynamicDescriptor(rootIndex["gTexture"], 0, GraphicsCore::GetPostEffectBuffer().GetSRV());
+	//gfx.SetDynamicDescriptor(rootIndex["gTexture"], 0, GraphicsCore::GetPostEffectBuffer().GetSRV());
 	gfx.Draw(3);
 }
 }

@@ -22,11 +22,6 @@ std::unique_ptr<Graphics::GraphicsDevice> GraphicsCore::sGraphicsDevice;
 CommandListManager GraphicsCore::sCommandListManager;
 ContextManager GraphicsCore::sContextManager;
 WindowManager GraphicsCore::sWindowManager;
-
-
-ColorBuffer GraphicsCore::sAlbedoGBuffer;
-ColorBuffer GraphicsCore::sNormalGBuffer;
-ColorBuffer GraphicsCore::sWorldPositionGBuffer;
 ColorBuffer GraphicsCore::sFinalColorBuffer;
 
 namespace {
@@ -50,12 +45,7 @@ float sWindowHeight;
 Math::Vector2 sGameWindowMousePosition{};
 bool sIsMouseOverWindow = false;
 
-std::unique_ptr<DepthBuffer> sDepthBuffer;									   // 深度バッファ
 ColorBuffer sShadowMaskBuffer;
-ColorBuffer sRaytracingBuffer;
-
-// デバッグ描画用
-ColorBuffer sDebugRenderBuffer;
 
 GraphicsPSO defaultPSO(L"CopyImage");
 std::unique_ptr<RootSignature> defaultRootSignature;
@@ -115,15 +105,6 @@ void GraphicsCore::Initialize(float windowWidth, float windowHeight) {
 	sFinalColorBuffer.Create(L"FinalColor Buffer", static_cast<uint32_t>(windowWidth), static_cast<uint32_t>(windowHeight), 1, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
 	sFinalColorBuffer.CreateImGuiSRV();
 
-#ifdef USE_IMGUI
-	sDebugRenderBuffer = ColorBuffer();
-	sDebugRenderBuffer.Create(L"DebugRender Buffer", static_cast<uint32_t>(windowWidth), static_cast<uint32_t>(windowHeight), 1, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
-	sDebugRenderBuffer.CreateImGuiSRV();
-
-#endif // USE_IMGUI
-	sWorldPositionGBuffer.Create(L"WorldPosition Buffer", static_cast<uint32_t>(windowWidth), static_cast<uint32_t>(windowHeight), 1, DXGI_FORMAT_R32G32B32A32_FLOAT);
-	sNormalGBuffer.Create(L"Normal Buffer", static_cast<uint32_t>(windowWidth), static_cast<uint32_t>(windowHeight), 1, DXGI_FORMAT_R10G10B10A2_UNORM);
-
 	CreatePixelBuffer();
 
 	InitPostEffect();
@@ -131,10 +112,7 @@ void GraphicsCore::Initialize(float windowWidth, float windowHeight) {
 
 void GraphicsCore::Shutdown(void) {
 	DestroyPixelBuffer();
-	sDebugRenderBuffer.Destroy();
 	sSwapChain.reset();
-	sNormalGBuffer.Destroy();
-	sWorldPositionGBuffer.Destroy();
 	sFinalColorBuffer.Destroy();
 	sPostEffectBuffer.Destroy();
 	sWindowManager.Shutdown();
@@ -218,36 +196,19 @@ void GraphicsCore::SettingDebugLayer() {
 void GraphicsCore::StartFrame(GraphicsContext& context) {
 	// オブジェクトの描画開始
 	context.TransitionResource(sPostEffectBuffer, D3D12_RESOURCE_STATE_RENDER_TARGET);
-	context.TransitionResource(sWorldPositionGBuffer, D3D12_RESOURCE_STATE_RENDER_TARGET);
-	context.TransitionResource(sNormalGBuffer, D3D12_RESOURCE_STATE_RENDER_TARGET);
-	context.TransitionResource(*sDepthBuffer, D3D12_RESOURCE_STATE_DEPTH_WRITE);
 	context.TransitionResource(sFinalColorBuffer, D3D12_RESOURCE_STATE_RENDER_TARGET);
-#ifdef USE_IMGUI
-	context.TransitionResource(sDebugRenderBuffer, D3D12_RESOURCE_STATE_RENDER_TARGET);
-
-	context.ClearColor(sDebugRenderBuffer);
-#endif // USE_IMGUI
 
 	
 
 	context.SetViewportAndScissor(sViewport, sScissorRect);
 	context.ClearColor(sPostEffectBuffer);
-	context.ClearColor(sWorldPositionGBuffer);
-	context.ClearColor(sNormalGBuffer);
 	context.ClearColor(sFinalColorBuffer);
-	context.ClearDepthAndStencil(*sDepthBuffer);
 	
 }
 
-void GraphicsCore::EndFrame(GraphicsContext& context) {
-#ifdef USE_IMGUI
-	context.TransitionResource(sDebugRenderBuffer, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
-#endif // USE_IMGUI
-	context.TransitionResource(sPostEffectBuffer, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+void GraphicsCore::EndFrame(GraphicsContext& context, ColorBuffer& finalColor) {
 	context.TransitionResource(sFinalColorBuffer, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
-	context.TransitionResource(sNormalGBuffer, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 	context.TransitionResource(sShadowMaskBuffer, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
-	context.TransitionResource(sRaytracingBuffer, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 	// 本描画
 	sBackBufferIndex = sSwapChain->GetSwapChain()->GetCurrentBackBufferIndex();
 	context.TransitionResource(*sFrameBuffers[sBackBufferIndex].get(), D3D12_RESOURCE_STATE_RENDER_TARGET);
@@ -256,7 +217,7 @@ void GraphicsCore::EndFrame(GraphicsContext& context) {
 	context.SetViewportAndScissor(sViewport, sScissorRect);
 	context.ClearColor(*sFrameBuffers[sBackBufferIndex].get());
 
-	FullScreenDraw(context);
+	FullScreenDraw(context, finalColor);
 
 #ifdef USE_IMGUI
 	static bool isInitFrame = true;
@@ -272,25 +233,14 @@ void GraphicsCore::EndFrame(GraphicsContext& context) {
 			sPostEffectTexture = static_cast<ImTextureID>(slot.GetGpuPtr());
 			
 		}
-		
-		{
-			NoEngine::DescriptorHandle slot = Render::gTextureHeap.Alloc();
-			sGraphicsDevice->GetDevice()->CopyDescriptorsSimple(
-				1,
-				static_cast<D3D12_CPU_DESCRIPTOR_HANDLE>(slot),
-				sDebugRenderBuffer.GetImGuiSRV(),
-				D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-			sDebugTexture = static_cast<ImTextureID>(slot.GetGpuPtr());
-		}
-
 		isInitFrame = false;
 	}
-	ImGui::Begin("Scene");
-	ImGui::Image(
-		sDebugTexture,
-		ImVec2(sWindowWidth * 2 / 3, sWindowHeight * 2 / 3) // 表示サイズ
-	);
-	ImGui::End();
+	//ImGui::Begin("Scene");
+	//ImGui::Image(
+	//	sDebugTexture,
+	//	ImVec2(sWindowWidth * 2 / 3, sWindowHeight * 2 / 3) // 表示サイズ
+	//);
+	//ImGui::End();
 
 	ImGui::Begin("Game");
 	ImGui::Image(
@@ -340,22 +290,6 @@ ColorBuffer& GraphicsCore::GetShadowMask() {
 	return sShadowMaskBuffer;
 }
 
-ColorBuffer& GraphicsCore::GetPostEffectBuffer() {
-	return sPostEffectBuffer;
-}
-
-ColorBuffer& GraphicsCore::GetRaytracingBuffer() {
-	return sRaytracingBuffer;
-}
-
-DepthBuffer& GraphicsCore::GetDepth() {
-	return *sDepthBuffer;
-}
-
-ColorBuffer& GraphicsCore::GetDebugRenderBuffer() {
-	return sDebugRenderBuffer;
-}
-
 bool GraphicsCore::IsEnableRaytracing() {
 	return sIsEnableRaytracing;
 }
@@ -385,11 +319,7 @@ void GraphicsCore::CreatePixelBuffer() {
 		sFrameBuffers[i] = std::make_unique<ColorBuffer>();
 		sFrameBuffers[i]->CreateFromSwapChain(L"Primary SwapChain Buffer", displayPlane.Detach());
 	}
-	sDepthBuffer = std::make_unique<DepthBuffer>(1.f);
-	
-	sDepthBuffer->Create(L"GraphicsCore Depth Buffer", static_cast<uint32_t>(sWindowWidth), static_cast<uint32_t>(sWindowHeight), DXGI_FORMAT_D24_UNORM_S8_UINT);
 	sShadowMaskBuffer.Create(L"ShadowMask", static_cast<uint32_t>(sWindowWidth), static_cast<uint32_t>(sWindowHeight), 1, DXGI_FORMAT_R8_UNORM);
-	sRaytracingBuffer.Create(L"RaytracingTest", static_cast<uint32_t>(sWindowWidth), static_cast<uint32_t>(sWindowHeight), 1, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
 	Log::DebugPrint("create pixel buffers");
 }
 
@@ -398,19 +328,18 @@ void GraphicsCore::DestroyPixelBuffer() {
 	for (auto& colorBuffer : sFrameBuffers) {
 		colorBuffer.reset();
 	}
-	sDepthBuffer.reset();
 	sShadowMaskBuffer.Destroy();
-	sRaytracingBuffer.Destroy();
 	Log::DebugPrint("destroy pixel buffers");
 }
 
-void GraphicsCore::FullScreenDraw(GraphicsContext& context) {
+void GraphicsCore::FullScreenDraw(GraphicsContext& context, ColorBuffer& finalColor) {
 	auto& rootIndex = RootSignatureBuilder::GetRootIndexMap("CopyImage");
 
+	context.TransitionResource(finalColor, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 	context.SetPipelineState(defaultPSO);
 	context.SetRootSignature(*defaultRootSignature.get());
 	context.SetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	context.SetDynamicDescriptor(rootIndex["gTexture"], 0, sFinalColorBuffer.GetSRV());
+	context.SetDynamicDescriptor(rootIndex["gTexture"], 0, finalColor.GetSRV());
 	context.Draw(3);
 }
 

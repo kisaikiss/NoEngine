@@ -41,11 +41,11 @@
     <ClCompile Include="engine\Functions\Input\Input.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderContext.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PrePasses\LightPass.cpp" />
-    <ClCompile Include="engine\Functions\Renderer\RenderPass\MeshPass.cpp" />
-    <ClCompile Include="engine\Functions\Renderer\RenderPass\PrimitivePass.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\RenderPass\Rasterization\MeshPass.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\RenderPass\Rasterization\PrimitivePass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\RenderPassScheduler.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderSystem.cpp" />
-    <ClCompile Include="engine\Functions\Renderer\RenderPass\SpritePass.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\RenderPass\Rasterization\SpritePass.cpp" />
     <ClCompile Include="engine\Functions\Scene\SceneManager.cpp" />
     <ClCompile Include="engine\Math\Color\Color.cpp" />
     <ClCompile Include="engine\Math\Easing.cpp" />
@@ -130,7 +130,7 @@
     <ClCompile Include="engine\Functions\ECS\System\Camera\CameraSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Camera\DebugCameraSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\CameraComponent.cpp" />
-    <ClCompile Include="engine\Functions\Renderer\RenderPass\ParticlePass.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\RenderPass\Rasterization\ParticlePass.cpp" />
     <ClCompile Include="application\TestApp\System\ParticleTestSystem.cpp" />
     <ClCompile Include="engine\Utilities\Random.cpp" />
     <ClCompile Include="engine\Functions\Scene\IScene.cpp" />
@@ -169,7 +169,7 @@
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\FollowCamera2DSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Camera\DebugCamera2DSystem.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\Camera2DChangeSystem.cpp" />
-    <ClCompile Include="engine\Functions\Renderer\RenderPass\SkyBoxPass.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\RenderPass\Rasterization\SkyBoxPass.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\Editor\RabbitdokuStageEditSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Camera\Camera2DSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\MeshComponent.cpp" />
@@ -178,7 +178,6 @@
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\Game\RabbitdokuTag.cpp" />
     <ClCompile Include="engine\Math\Collision\ColliderComponent.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\Game\RabbitdokuCollisionLayer.cpp" />
-    <ClCompile Include="engine\Functions\Renderer\RenderPass\DebugRenderPass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\PipelineState\GraphicsPSOManager.cpp" />
     <ClCompile Include="engine\Functions\Renderer\Initializer\RenderInitializer.cpp" />
     <ClCompile Include="engine\Functions\Renderer\Initializer\MeshInitialzer.cpp" />
@@ -223,11 +222,11 @@
     <ClInclude Include="engine\Functions\Input\Input.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderContext.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PrePasses\LightPass.h" />
-    <ClInclude Include="engine\Functions\Renderer\RenderPass\MeshPass.h" />
-    <ClInclude Include="engine\Functions\Renderer\RenderPass\PrimitivePass.h" />
+    <ClInclude Include="engine\Functions\Renderer\RenderPass\Rasterization\MeshPass.h" />
+    <ClInclude Include="engine\Functions\Renderer\RenderPass\Rasterization\PrimitivePass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\RenderPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\RenderPassScheduler.h" />
-    <ClInclude Include="engine\Functions\Renderer\RenderPass\SpritePass.h" />
+    <ClInclude Include="engine\Functions\Renderer\RenderPass\Rasterization\SpritePass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderSystem.h" />
     <ClInclude Include="engine\Functions\Scene\IScene.h" />
     <ClInclude Include="engine\Functions\Scene\SceneManager.h" />
@@ -336,7 +335,7 @@
     <ClInclude Include="engine\Functions\ECS\Component\CameraComponent.h" />
     <ClInclude Include="engine\Functions\ECS\System\Camera\CameraSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\Camera\DebugCameraSystem.h" />
-    <ClInclude Include="engine\Functions\Renderer\RenderPass\ParticlePass.h" />
+    <ClInclude Include="engine\Functions\Renderer\RenderPass\Rasterization\ParticlePass.h" />
     <ClInclude Include="engine\Functions\ECS\Component\ParticleEmitterComponent.h" />
     <ClInclude Include="application\TestApp\System\ParticleTestSystem.h" />
     <ClInclude Include="engine\Utilities\Random.h" />
@@ -384,11 +383,10 @@
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\FollowCamera2DSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\Camera\DebugCamera2DSystem.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\Camera2DChangeSystem.h" />
-    <ClInclude Include="engine\Functions\Renderer\RenderPass\SkyBoxPass.h" />
+    <ClInclude Include="engine\Functions\Renderer\RenderPass\Rasterization\SkyBoxPass.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\Editor\RabbitdokuStageEditSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\Camera\Camera2DSystem.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\Game\RabbitdokuTag.h" />
-    <ClInclude Include="engine\Functions\Renderer\RenderPass\DebugRenderPass.h" />
     <ClInclude Include="engine\Functions\Renderer\PipelineState\GraphicsPSOManager.h" />
     <ClInclude Include="engine\Functions\Renderer\Initializer\RenderInitializer.h" />
     <ClInclude Include="engine\Functions\Renderer\Initializer\MeshInitialzer.h" />

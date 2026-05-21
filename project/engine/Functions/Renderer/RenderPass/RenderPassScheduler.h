@@ -11,11 +11,12 @@ public:
 	// パイプラインの構築（初期化時、または画面リサイズ・構成変更時に呼ぶ）
 	void Compile();
 
-	void Initialize();
 	void Render(GraphicsContext& gfx, ECS::Registry& registry);
-	void RenderAll(GraphicsContext& gfx, ECS::Registry& registry);
 	void SetRenderContext(RenderContext& renderContext);
 	void AddRenderPass(std::unique_ptr<Render::RenderPass>&& pass);
+	void SetScreenDrawBuffer(const std::string& name) { screenDrawBufferName_ = name; }
+
+	ColorBuffer& GetScreenDrawBuffer() { return *resourceRegistry_.GetColorBufferPointer(screenDrawBufferName_); }
 
 	// リソース登録用（外部からバックバッファなどを登録する）
 	RenderGraphRegistry& GetResourceRegistry() { return resourceRegistry_; }
@@ -33,6 +34,8 @@ private:
 	RenderGraphRegistry resourceRegistry_;
 
 	RenderContext renderContext_;
+
+	std::string screenDrawBufferName_ = "MainColor";
 
 	std::vector<std::unique_ptr<Render::RenderPass>> passes_;
 };

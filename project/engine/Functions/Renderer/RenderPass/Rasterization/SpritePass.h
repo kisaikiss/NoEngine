@@ -1,5 +1,5 @@
 #pragma once
-#include "RenderPass.h"
+#include "../RenderPass.h"
 #include "engine/Functions/ECS/Component/SpriteComponent.h"
 #include "engine/Functions/ECS/Component/Transform2DComponent.h"
 #include "engine/Runtime/GpuResource/GpuBuffer.h"

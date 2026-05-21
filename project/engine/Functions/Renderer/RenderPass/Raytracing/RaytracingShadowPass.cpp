@@ -87,7 +87,6 @@ void RaytracingShadowPass::Dispatch(GraphicsContext& gfx, const RenderGraphRegis
 
 	gfx.DispatchRays(GetShadowDispatchRaysDesc());
 
-	gfx.TransitionResource(GraphicsCore::GetDepth(), D3D12_RESOURCE_STATE_DEPTH_WRITE);
 }
 }
 }
