@@ -40,13 +40,7 @@ ParticlePass::ParticlePass() {
 void ParticlePass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& resourceRegistry, ECS::Registry& registry) {
 	static_cast<void>(resourceRegistry);
 	auto* renderCtx = GetRenderContext();
-	auto cameraView = registry.View<Component::TransformComponent, Component::CameraComponent, Component::ActiveCameraTag>();
-	Math::Vector3 cameraPos{};
-	for (auto entity : cameraView) {
-		auto* cameraTransform = registry.GetComponent<Component::TransformComponent>(entity);
-		cameraPos = cameraTransform->GetWorldPosition();
-		camera_ = registry.GetComponent<Component::CameraComponent>(entity);
-	}
+	camera_ = GetTargetCamera();
 
 	auto& rootIndex = RootSignatureBuilder::GetRootIndexMap("Renderer : particle PSO");
 	auto view = registry.View<Component::ParticleEmitterComponent>();

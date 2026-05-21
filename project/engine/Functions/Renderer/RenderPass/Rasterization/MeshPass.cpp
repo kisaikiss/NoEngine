@@ -30,14 +30,8 @@ void MeshPass::Collect(ECS::Registry& registry) {
 	>();
 	items_.clear();
 
-	auto cameraView = registry.View<TransformComponent, CameraComponent, ActiveCameraTag>();
-	Math::Vector3 cameraPos{};
-	for (auto entity : cameraView) {
-		auto* cameraTransform = registry.GetComponent<TransformComponent>(entity);
-		cameraPos = cameraTransform->GetWorldPosition();
-		camera_ = registry.GetComponent<CameraComponent>(entity);
-	}
-
+	camera_ = GetTargetCamera();
+	Math::Vector3 cameraPos = camera_->forGPU.worldPosition;
 
 	for (auto entity : view) {
 		auto* mesh = registry.GetComponent<MeshComponent>(entity);

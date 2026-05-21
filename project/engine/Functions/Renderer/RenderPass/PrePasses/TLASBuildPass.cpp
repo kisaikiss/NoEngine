@@ -56,7 +56,7 @@ void TLASBuildPass::BuildTLAS(GraphicsContext& gfx) {
 
 	renderContext->CreateRaytraceInstanceBuffer(uploadHeap, instDesc);
 
-	auto& instanceBuffer = renderContext->GetRaytraceInstanceBuffer();
+	auto& instanceBuffer = renderContext->GetRaytracingInstanceBuffer();
 
 	// マップしてコピー
 	{

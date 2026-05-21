@@ -20,7 +20,7 @@ void PrimitivePass::Execute(GraphicsContext& gfx, const  RenderGraphRegistry& re
 void PrimitivePass::Draw(GraphicsContext& gfx) {
 	using namespace Component;
 	CameraComponent* camera{};
-	camera = GetRenderContext()->GetCamera();
+	camera = GetTargetCamera();
 	if (!camera) return;
 	DebugPrimitive::Render(gfx, camera->forGPU.viewProjection);
 }

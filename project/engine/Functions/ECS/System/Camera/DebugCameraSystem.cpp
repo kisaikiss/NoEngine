@@ -3,14 +3,13 @@
 
 #include "engine/Functions/Input/Input.h"
 #include "engine/Functions/Renderer/Primitive.h"
-#include "engine/Math/Types/Calculations/Matrix4x4Calculations.h"
-#include "engine/Math/Types/Calculations/Vector3Calculations.h"
+#include "engine/Editor/EditUtils.h"
 
 namespace NoEngine {
 namespace ECS {
 void DebugCameraSystem::Update(Registry& registry, float deltaTime) {
 	using namespace Component;
-
+	if (!Editor::IsMouseOverSceneWindow()) return;
 	auto view = registry.View<DebugCameraComponent>();
 
 	for (auto entity : view) {

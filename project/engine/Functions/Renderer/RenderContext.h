@@ -114,7 +114,7 @@ public:
 
 	StructuredBuffer& GetDirectionalLightBuffer() { return directionalLightBuffer_; }
 
-	Microsoft::WRL::ComPtr<ID3D12Resource>& GetRaytraceInstanceBuffer() { return instanceBuffer_; }
+	Microsoft::WRL::ComPtr<ID3D12Resource>& GetRaytracingInstanceBuffer() { return instanceBuffer_; }
 	Microsoft::WRL::ComPtr<ID3D12Resource>& GetTLAS() { return tlas_; }
 private:
 	// 初期化済みか

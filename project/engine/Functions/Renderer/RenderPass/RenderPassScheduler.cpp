@@ -198,6 +198,7 @@ void CommonSetupDebugRenderPass(RenderPassScheduler& renderPassScheduler) {
 	preRenderPass->AddOutput("Normal");
 	preRenderPass->SetClearTarget(true);
 	preRenderPass->SetDepthOutput("MainDepth", true);
+	preRenderPass->SetTargetCameraType(RenderPass::TargetCameraType::kDebug);
 	renderPassScheduler.AddPass(std::move(preRenderPass));
 
 	auto raytracingShadowPass = std::make_unique<RaytracingShadowPass>();
@@ -205,6 +206,7 @@ void CommonSetupDebugRenderPass(RenderPassScheduler& renderPassScheduler) {
 	raytracingShadowPass->AddInput("Normal");
 	raytracingShadowPass->AddOutput("ShadowMap");
 	raytracingShadowPass->SetClearTarget(true);
+	raytracingShadowPass->SetTargetCameraType(RenderPass::TargetCameraType::kDebug);
 	renderPassScheduler.AddPass(std::move(raytracingShadowPass));
 
 	auto meshPass = std::make_unique<MeshPass>();
@@ -212,15 +214,18 @@ void CommonSetupDebugRenderPass(RenderPassScheduler& renderPassScheduler) {
 	meshPass->AddOutput("DebugColor");
 	meshPass->SetDepthOutput("MainDepth");
 	meshPass->SetClearTarget(true);
+	meshPass->SetTargetCameraType(RenderPass::TargetCameraType::kDebug);
 	renderPassScheduler.AddPass(std::move(meshPass));
 
 	auto particlePass = std::make_unique<ParticlePass>();
 	particlePass->AddOutput("DebugColor");
+	particlePass->SetTargetCameraType(RenderPass::TargetCameraType::kDebug);
 	renderPassScheduler.AddPass(std::move(particlePass));
 
 	auto skyBoxPass = std::make_unique<SkyBoxPass>();
 	skyBoxPass->AddOutput("DebugColor");
 	skyBoxPass->SetDepthOutput("MainDepth");
+	skyBoxPass->SetTargetCameraType(RenderPass::TargetCameraType::kDebug);
 	renderPassScheduler.AddPass(std::move(skyBoxPass));
 #else
 	static_cast<void>(renderPassScheduler);

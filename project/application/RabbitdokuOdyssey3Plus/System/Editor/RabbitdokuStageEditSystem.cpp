@@ -11,23 +11,23 @@ void RabbitdokuStageEditSystem::Update(No::Registry& registry, float deltaTime) 
 #ifdef USE_IMGUI
 	DrawEditWindow(registry);
 
-	mousePosition_ = No::Get2DSceneMousePosition(registry);
+	mousePosition_ = No::Get2DGameWindowMousePosition(registry);
 
 	switch (state_) {
 	case RabbitdokuStageEditSystem::EditState::kBlock:
 		if (No::Mouse::IsPress(No::MouseButton::Left)) {
-			if (No::IsMouseOverSceneWindow())
+			if (No::IsMouseOverGameWindow())
 				AddBlock(registry);
 		}
 		if (No::Mouse::IsPress(No::MouseButton::Right)) {
-			if (No::IsMouseOverSceneWindow())
+			if (No::IsMouseOverGameWindow())
 				DeleteBlock(registry);
 		}
 		break;
 	case RabbitdokuStageEditSystem::EditState::kRoom:
 		if (No::Mouse::IsTrigger(No::MouseButton::Right)) {
-			if (No::IsMouseOverSceneWindow()) {
-				addRoomPosition_ = No::Get2DSceneMousePosition(registry);
+			if (No::IsMouseOverGameWindow()) {
+				addRoomPosition_ = No::Get2DGameWindowMousePosition(registry);
 				ImGui::OpenPopup("AddRoomPopup");
 			}
 		}
@@ -40,7 +40,7 @@ void RabbitdokuStageEditSystem::Update(No::Registry& registry, float deltaTime) 
 		}
 
 		if (No::Mouse::IsPress(No::MouseButton::Left)) {
-			if (No::IsMouseOverSceneWindow()) {
+			if (No::IsMouseOverGameWindow()) {
 				No::Entity roomE = FindRoom(registry, mousePosition_);
 
 				if (roomE == No::INVALID_ENTITY) break;
@@ -75,7 +75,7 @@ void RabbitdokuStageEditSystem::Update(No::Registry& registry, float deltaTime) 
 }
 
 void RabbitdokuStageEditSystem::AddBlock(No::Registry& registry) {
-	No::Vector2 position = GetGridPosition(No::Get2DSceneMousePosition(registry));
+	No::Vector2 position = GetGridPosition(No::Get2DGameWindowMousePosition(registry));
 	auto blockView = registry.View<BlockTag, No::AABBCollider2D, No::Transform2DComponent>();
 	for (auto e : blockView) {
 		auto* aabb = registry.GetComponent<No::AABBCollider2D>(e);
@@ -87,7 +87,7 @@ void RabbitdokuStageEditSystem::AddBlock(No::Registry& registry) {
 
 	No::Entity e = registry.GenerateEntity();
 	auto* transform = registry.AddComponent<No::Transform2DComponent>(e);
-	transform->translate = GetGridPosition(No::Get2DSceneMousePosition(registry));
+	transform->translate = GetGridPosition(No::Get2DGameWindowMousePosition(registry));
 	auto* sprite = registry.AddComponent<No::SpriteComponent>(e);
 	auto* collider = registry.AddComponent<No::AABBCollider2D>(e);
 	registry.AddComponent<BlockTag>(e);
@@ -120,7 +120,7 @@ void RabbitdokuStageEditSystem::AddRoom(No::Registry& registry) {
 }
 
 void RabbitdokuStageEditSystem::DeleteBlock(No::Registry& registry) {
-	No::Vector2 position = No::Get2DSceneMousePosition(registry);
+	No::Vector2 position = No::Get2DGameWindowMousePosition(registry);
 	auto blockView = registry.View<BlockTag, No::AABBCollider2D, No::Transform2DComponent>();
 	for (auto e : blockView) {
 		auto* aabb = registry.GetComponent<No::AABBCollider2D>(e);

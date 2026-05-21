@@ -25,7 +25,7 @@ void SkyBoxPass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& resour
 	static_cast<void>(resourceRegistry);
 	static_cast<void>(registry);
 	using namespace Component;
-	camera_ = GetRenderContext()->GetCamera();
+	camera_ = GetTargetCamera();
 	if (!camera_) return;
 	auto& rootIndex = RootSignatureBuilder::GetRootIndexMap("SkyBox PSO");
 	gfx.SetPipelineState(pso_);

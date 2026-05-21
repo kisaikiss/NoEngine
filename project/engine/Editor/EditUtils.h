@@ -15,7 +15,9 @@ struct EditTag {
 /// </summary>
 /// <param name="registry">ECSレジストリ</param>
 /// <returns>マウスポインタのワールド座標</returns>
-Math::Vector2 Get2DSceneMousePosition(ECS::Registry& registry);
+Math::Vector2 Get2DGameWindowMousePosition(ECS::Registry& registry);
+bool IsMouseOverGameWindow();
+Math::Vector2 Get2DSceneWindowMousePosition(ECS::Registry& registry);
 bool IsMouseOverSceneWindow();
 
 

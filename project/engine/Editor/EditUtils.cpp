@@ -24,11 +24,13 @@ ImTextureID sGameTexture;
 ImTextureID sSceneTexture;
 bool sIsMouseOverWindow = false;
 Math::Vector2 sGameWindowMousePosition{};
+bool sIsMouseOverSceneWindow = false;
+Math::Vector2 sSceneWindowMousePosition{};
 #endif // USE_IMGUI
 }
 
 
-Math::Vector2 Editor::Get2DSceneMousePosition(ECS::Registry& registry) {
+Math::Vector2 Editor::Get2DGameWindowMousePosition(ECS::Registry& registry) {
 	Math::Vector2 result{};
 #ifdef USE_IMGUI
 	result = sGameWindowMousePosition;
@@ -47,13 +49,41 @@ Math::Vector2 Editor::Get2DSceneMousePosition(ECS::Registry& registry) {
 	return result;
 }
 
-bool Editor::IsMouseOverSceneWindow() {
+bool Editor::IsMouseOverGameWindow() {
 #ifdef USE_IMGUI
 	return sIsMouseOverWindow;
 #else
 	return false;
 #endif // USE_IMGUI
 
+}
+
+Math::Vector2 Editor::Get2DSceneWindowMousePosition(ECS::Registry& registry) {
+	Math::Vector2 result{};
+#ifdef USE_IMGUI
+	result = sSceneWindowMousePosition;
+	result -= GraphicsCore::GetWindowSize() / 2.f;
+	auto cameraView = registry.View<Component::ActiveCamera2DTag>();
+	for (auto e : cameraView) {
+		auto* transform = registry.GetComponent<Component::Transform2DComponent>(e);
+
+		result = Math::Vector2(result.x * transform->scale.x, result.y * transform->scale.y);
+		result += transform->translate;
+	}
+#else
+	static_cast<void>(registry);
+#endif // USE_IMGUI
+
+	return result;
+}
+
+bool Editor::IsMouseOverSceneWindow() {
+
+#ifdef USE_IMGUI
+	return sIsMouseOverSceneWindow;
+#else
+	return false;
+#endif // USE_IMGUI
 }
 
 
@@ -163,6 +193,26 @@ void DrawSceneImGuiWindow() {
 		sSceneTexture,
 		ImVec2(windowSize.x * 2 / 3, windowSize.y * 2 / 3) // 表示サイズ
 	);
+
+	sIsMouseOverSceneWindow = false;
+	if (ImGui::IsItemHovered()) {
+		ImVec2 imgPos = ImGui::GetItemRectMin();
+		ImVec2 imgSize = ImGui::GetItemRectSize();
+		ImVec2 mouse = ImGui::GetMousePos();
+
+		ImVec2 local(mouse.x - imgPos.x, mouse.y - imgPos.y);
+
+		if (0 <= local.x && local.x < imgSize.x &&
+			0 <= local.y && local.y < imgSize.y) {
+			ImVec2 uv(local.x / imgSize.x, local.y / imgSize.y);
+
+			// ウィンドウ内のスクリーン座標に変換
+			sSceneWindowMousePosition.x = uv.x * windowSize.x;
+			sSceneWindowMousePosition.y = uv.y * windowSize.y;
+			sIsMouseOverSceneWindow = true;
+		}
+	}
+
 	ImGui::End();
 #endif // USE_IMGUI
 }

@@ -8,6 +8,12 @@ namespace NoEngine {
 namespace Render {
 class RenderPass {
 public:
+
+	enum class TargetCameraType {
+		kMain,
+		kDebug,
+		kCustom,
+	};
 	
 	RenderPass() : renderContext_(nullptr) {}
 	virtual ~RenderPass() = default;
@@ -30,17 +36,37 @@ public:
 	void AddOutput(const std::string& output) { outputs_.emplace_back(output); }
 	void SetDepthOutput(const std::string& depth, bool clearDepth = false) { depthOutput_ = depth; clearDepth_ = clearDepth; }
 	void SetClearTarget(bool autoClear) { autoClear_ = autoClear; }
-	void SetTargetCamera(const std::string& targetCamera) { targetCameraName_ = targetCamera; }
+	void SetTargetCameraType(TargetCameraType type) { targetCameraType_ = type; }
+	void SetTargetCamera(const std::string& targetCamera) { 
+		targetCameraType_ = TargetCameraType::kCustom;
+		targetCameraName_ = targetCamera;
+	}
 
 	void SetRenderContext(RenderContext* renderContext) { renderContext_ = renderContext; }
 protected:
-	Component::CameraComponent* GetTargetCamera() { return renderContext_->GetCamera(targetCameraName_); }
+	Component::CameraComponent* GetTargetCamera() { 
+		switch (targetCameraType_) {
+		case NoEngine::Render::RenderPass::TargetCameraType::kMain:
+			return renderContext_->GetCamera();
+			break;
+		case NoEngine::Render::RenderPass::TargetCameraType::kDebug:
+			return renderContext_->GetDebugCamera();
+			break;
+		case NoEngine::Render::RenderPass::TargetCameraType::kCustom:
+			return renderContext_->GetCamera(targetCameraName_);
+			break;
+		default:
+			return renderContext_->GetCamera();
+			break;
+		}
+	}
 	RenderContext* GetRenderContext() { return renderContext_; }
 
 private:
 	std::vector<std::string> inputs_;
 	std::vector<std::string> outputs_;
 	std::string depthOutput_;
+	TargetCameraType targetCameraType_ = TargetCameraType::kMain;
 	std::string targetCameraName_ = "GameCamera";
 	bool autoClear_ = false;
 	bool clearDepth_ = false;

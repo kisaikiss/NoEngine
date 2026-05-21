@@ -14,11 +14,8 @@ void RaytracingShadowPass::Execute(GraphicsContext& gfx, const RenderGraphRegist
 }
 
 void RaytracingShadowPass::Collect(ECS::Registry& registry) {
-	auto view = registry.View<Component::ActiveCameraTag, Component::CameraComponent>();
-
-	for (auto entity : view) {
-		camera_ = registry.GetComponent<Component::CameraComponent>(entity);
-	}
+	
+	camera_ = GetTargetCamera();
 
 	auto lightView = registry.View<Component::DirectionalLightComponent>();
 	for (auto entity : lightView) {

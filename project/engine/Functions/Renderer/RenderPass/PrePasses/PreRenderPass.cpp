@@ -32,14 +32,7 @@ void PreRenderPass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& res
 		items_.push_back({ mesh,material,transform });
 	}
 
-	auto cameraView = registry.View<TransformComponent, CameraComponent, ActiveCameraTag>();
-	CameraComponent* camera = nullptr;
-	Math::Vector3 cameraPos{};
-	for (auto entity : cameraView) {
-		auto* cameraTransform = registry.GetComponent<TransformComponent>(entity);
-		cameraPos = cameraTransform->GetWorldPosition();
-		camera = registry.GetComponent<CameraComponent>(entity);
-	}
+	CameraComponent* camera = GetTargetCamera();
 
 	if (camera == nullptr) return;
 
