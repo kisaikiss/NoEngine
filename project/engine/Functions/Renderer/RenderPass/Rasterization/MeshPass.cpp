@@ -31,6 +31,7 @@ void MeshPass::Collect(ECS::Registry& registry) {
 	items_.clear();
 
 	camera_ = GetTargetCamera();
+	if (camera_ == nullptr) return;
 	Math::Vector3 cameraPos = camera_->forGPU.worldPosition;
 
 	for (auto entity : view) {
