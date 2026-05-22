@@ -171,11 +171,6 @@ void CommonSetupRenderPass(RenderPassScheduler& renderPassScheduler) {
 	primitivePass->SetDepthOutput("MainDepth");
 	renderPassScheduler.AddPass(std::move(primitivePass));
 
-	auto particlePass = std::make_unique<ParticlePass>();
-	particlePass->AddOutput("MainColor");
-	particlePass->SetDepthOutput("MainDepth");
-	renderPassScheduler.AddPass(std::move(particlePass));
-
 	auto spritePass = std::make_unique<SpritePass>();
 	spritePass->AddOutput("MainColor");
 	renderPassScheduler.AddPass(std::move(spritePass));
@@ -184,6 +179,11 @@ void CommonSetupRenderPass(RenderPassScheduler& renderPassScheduler) {
 	skyBoxPass->AddOutput("MainColor");
 	skyBoxPass->SetDepthOutput("MainDepth");
 	renderPassScheduler.AddPass(std::move(skyBoxPass));
+
+	auto particlePass = std::make_unique<ParticlePass>();
+	particlePass->AddOutput("MainColor");
+	particlePass->SetDepthOutput("MainDepth");
+	renderPassScheduler.AddPass(std::move(particlePass));
 
 	auto vignettingPass = std::make_unique<VignettingPass>();
 	vignettingPass->AddInput("InputColor", "MainColor");
@@ -223,17 +223,17 @@ void CommonSetupDebugRenderPass(RenderPassScheduler& renderPassScheduler) {
 	meshPass->SetTargetCameraType(RenderPass::TargetCameraType::kDebug);
 	renderPassScheduler.AddPass(std::move(meshPass));
 
-	auto particlePass = std::make_unique<ParticlePass>();
-	particlePass->AddOutput("DebugColor");
-	particlePass->SetDepthOutput("MainDepth");
-	particlePass->SetTargetCameraType(RenderPass::TargetCameraType::kDebug);
-	renderPassScheduler.AddPass(std::move(particlePass));
-
 	auto skyBoxPass = std::make_unique<SkyBoxPass>();
 	skyBoxPass->AddOutput("DebugColor");
 	skyBoxPass->SetDepthOutput("MainDepth");
 	skyBoxPass->SetTargetCameraType(RenderPass::TargetCameraType::kDebug);
 	renderPassScheduler.AddPass(std::move(skyBoxPass));
+
+	auto particlePass = std::make_unique<ParticlePass>();
+	particlePass->AddOutput("DebugColor");
+	particlePass->SetDepthOutput("MainDepth");
+	particlePass->SetTargetCameraType(RenderPass::TargetCameraType::kDebug);
+	renderPassScheduler.AddPass(std::move(particlePass));
 #else
 	static_cast<void>(renderPassScheduler);
 #endif // USE_IMGUI
