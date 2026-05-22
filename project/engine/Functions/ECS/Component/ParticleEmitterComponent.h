@@ -9,6 +9,7 @@ namespace Component {
 struct Particle {
 	Transform transform;
 	Math::Vector3 velocity;
+	Math::Color color = Math::Color::WHITE;
 	float lifeTime = 3.f;
 	float currentTime = 0.f;
 };

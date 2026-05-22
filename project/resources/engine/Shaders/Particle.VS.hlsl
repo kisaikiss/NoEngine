@@ -1,6 +1,7 @@
 struct WorldMatrix
 {
     float4x4 world;
+    float4 color;
 };
 StructuredBuffer<WorldMatrix> gWorldMatrices : register(t1);
 
@@ -14,6 +15,7 @@ struct VertexShaderOutput
 {
     float4 position : SV_POSITION;
     float2 texcoord : TEXCOORD0;
+    float4 color : COLOR0;
 };
 
 struct CameraMatrix
@@ -45,5 +47,6 @@ VertexShaderOutput main(VertexShaderInput input, uint instanceId : SV_InstanceID
     
     output.position = mul(position, wvp);
     output.texcoord = input.texcoord;
+    output.color = gWorldMatrices[instanceId + gBaseIndex.index].color;
     return output;
 }

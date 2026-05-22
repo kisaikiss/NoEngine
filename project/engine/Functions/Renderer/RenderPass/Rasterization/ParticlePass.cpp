@@ -69,7 +69,7 @@ void ParticlePass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& reso
 			uint32_t pad[3];
 		}indexConstant;
 		indexConstant.index = (uint32_t)baseIndex;
-		gfx.SetDynamicConstantBufferView(rootIndex["gBaseIndex"], sizeof(uint32_t), &indexConstant);
+		gfx.SetDynamicConstantBufferView(rootIndex["gBaseIndex"], sizeof(indexConstant), &indexConstant);
 
 		// ワールド行列
 		gfx.SetDynamicDescriptor(
@@ -78,18 +78,14 @@ void ParticlePass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& reso
 			worldMatrixBuffer_.GetSRV()
 		);
 
-		_declspec(align(16)) struct {
-			Math::Color color;
-		}constants;
-		constants.color = Math::Color::WHITE;
-		gfx.SetDynamicConstantBufferView(rootIndex["gMaterial"], sizeof(constants), &constants);
+		
 		gfx.SetDynamicDescriptor(rootIndex["gTexture"], 0, emitter->texture.GetSRV());
 
 		gfx.DrawIndexedInstanced(6, static_cast<UINT>(emitter->particles.size()), 0, 0, static_cast<UINT>(baseIndex));
 		baseIndex += emitter->particles.size();
 	}
 	particleCount_ = 0;
-	matrices_.clear();
+	particleForGpu_.clear();
 }
 
 void ParticlePass::UploadMatrices(GraphicsContext& gfx, std::vector<Component::Particle>& particles, ECS::Registry& registry, size_t baseIndex, bool isBillboard) {
@@ -100,7 +96,7 @@ void ParticlePass::UploadMatrices(GraphicsContext& gfx, std::vector<Component::P
 
 	if (count == 0) return;
 
-	matrices_.reserve(count);
+	particleForGpu_.reserve(count);
 
 	Math::Matrix4x4 billBoardMatrix{};
 	if (isBillboard) {
@@ -120,13 +116,13 @@ void ParticlePass::UploadMatrices(GraphicsContext& gfx, std::vector<Component::P
 			Math::Matrix4x4 translateMatrix;
 			translateMatrix.MakeTranslate(particles[i].transform.translate);
 			Math::Matrix4x4 worldMatrix = scaleMatrix * billBoardMatrix * translateMatrix;
-			matrices_.push_back(worldMatrix);
+			particleForGpu_.push_back({ worldMatrix, particles[i].color });
 		} else {
-			matrices_.push_back(particles[i].transform.MakeAffineMatrix4x4());
+			particleForGpu_.push_back({ particles[i].transform.MakeAffineMatrix4x4(), particles[i].color });
 		}
 	}
-	size_t size = count * sizeof(Math::Matrix4x4);
-	memcpy(worldMatrixUpload_.Map(), matrices_.data(), size);
+	size_t size = count * sizeof(ParticleForGPU);
+	memcpy(worldMatrixUpload_.Map(), particleForGpu_.data(), size);
 	worldMatrixUpload_.Unmap();
 	gfx.CopyBufferRegion(
 		worldMatrixBuffer_,
@@ -139,12 +135,12 @@ void ParticlePass::UploadMatrices(GraphicsContext& gfx, std::vector<Component::P
 }
 
 void ParticlePass::Initialize(size_t maxParticles) {
-	size_t bufferSize = maxParticles * sizeof(Math::Matrix4x4);
+	size_t bufferSize = maxParticles * sizeof(ParticleForGPU);
 
 	worldMatrixBuffer_.Create(
 		L"ParticleWorldMatrices",
 		static_cast<uint32_t>(maxParticles),
-		sizeof(Math::Matrix4x4)
+		sizeof(ParticleForGPU)
 	);
 
 	worldMatrixUpload_.Create(

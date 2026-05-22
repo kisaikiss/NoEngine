@@ -24,12 +24,17 @@ private:
 		Math::Vector2 texcoord;
 	};
 
+	__declspec(align(16))struct ParticleForGPU {
+		Math::Matrix4x4 worldMatrix;
+		Math::Color color;
+	};
+
 	std::vector< Component::ParticleEmitterComponent*> emitters_;
 
 	size_t maxParticles_;
 
 	Component::CameraComponent* camera_;
-	std::vector<Math::Matrix4x4> matrices_;
+	std::vector<ParticleForGPU> particleForGpu_;
 	size_t particleCount_ = 0;
 
 	void UploadMatrices(GraphicsContext& gfx, std::vector<Component::Particle>& particles, ECS::Registry& registry, size_t baseIndex, bool isBillboard = false);

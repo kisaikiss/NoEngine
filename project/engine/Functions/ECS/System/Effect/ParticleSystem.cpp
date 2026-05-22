@@ -14,6 +14,7 @@ void ParticleSystem::Update(Registry& registry, float deltaTime) {
 		for (auto& p : emitter->particles) {
 			p.transform.translate += p.velocity * deltaTime;
 			p.currentTime += deltaTime;
+			p.color.a = 1.0f - (p.currentTime / p.lifeTime);
 		}
 
 		for (uint32_t i = 0; i < emitter->particles.size(); i++) {
