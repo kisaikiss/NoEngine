@@ -20,7 +20,7 @@ public:
 
 	virtual void Setup(RenderGraphBuilder& builder) {
 		for (const auto& input : inputs_) {
-			builder.ReadTexture(input);
+			builder.ReadTexture(input.second);
 		}
 		for (const auto& output : outputs_) {
 			builder.WriteRenderTarget(output, autoClear_);
@@ -32,7 +32,7 @@ public:
 
 	virtual void Execute(GraphicsContext& gfx, const RenderGraphRegistry& resourceRegistry, ECS::Registry& registry) = 0;
 
-	void AddInput(const std::string& input) { inputs_.emplace_back(input); }
+	void AddInput(const std::string& role, const std::string& input) { inputs_[role] = input; }
 	void AddOutput(const std::string& output) { outputs_.emplace_back(output); }
 	void SetDepthOutput(const std::string& depth, bool clearDepth = false) { depthOutput_ = depth; clearDepth_ = clearDepth; }
 	void SetClearTarget(bool autoClear) { autoClear_ = autoClear; }
@@ -61,9 +61,13 @@ protected:
 		}
 	}
 	RenderContext* GetRenderContext() { return renderContext_; }
+	const std::string& GetInput(const std::string& role){
+		if (!inputs_.contains(role))assert(false);
+		return inputs_[role];
+	}
 
 private:
-	std::vector<std::string> inputs_;
+	std::unordered_map<std::string, std::string> inputs_;
 	std::vector<std::string> outputs_;
 	std::string depthOutput_;
 	TargetCameraType targetCameraType_ = TargetCameraType::kMain;

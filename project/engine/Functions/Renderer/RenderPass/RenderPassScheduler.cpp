@@ -128,15 +128,16 @@ void RenderPassScheduler::AddRenderPass(std::unique_ptr<RenderPass>&& pass) {
 void CommonSetupRenderPass(RenderPassScheduler& renderPassScheduler) {
 	Math::Vector2 windowSize = GraphicsCore::GetWindowSize();
 	auto& resourceRegistry = renderPassScheduler.GetResourceRegistry();
-	InitGameImGuiWindow(*resourceRegistry.CreateColorBuffer("MainColor", windowSize.x, windowSize.y, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB));
-	renderPassScheduler.SetScreenDrawBuffer("MainColor");
+	resourceRegistry.CreateColorBuffer("MainColor", windowSize.x, windowSize.y, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
+	
 
 	resourceRegistry.CreateColorBuffer("ShadowMap", windowSize.x, windowSize.y, DXGI_FORMAT_R8_UNORM);
 	resourceRegistry.CreateColorBuffer("WorldPosition", windowSize.x, windowSize.y, DXGI_FORMAT_R32G32B32A32_FLOAT);
 	resourceRegistry.CreateColorBuffer("Normal", windowSize.x, windowSize.y, DXGI_FORMAT_R10G10B10A2_UNORM);
 
-	resourceRegistry.CreateColorBuffer("PostEffect1", windowSize.x, windowSize.y, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
-	resourceRegistry.CreateColorBuffer("PostEffect2", windowSize.x, windowSize.y, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
+	InitGameImGuiWindow(*resourceRegistry.CreateColorBuffer("PostEffect", windowSize.x, windowSize.y, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB));
+	renderPassScheduler.SetScreenDrawBuffer("PostEffect");
+	
 	resourceRegistry.CreateDepthBuffer("MainDepth", windowSize.x, windowSize.y);
 
 
@@ -151,15 +152,15 @@ void CommonSetupRenderPass(RenderPassScheduler& renderPassScheduler) {
 	renderPassScheduler.AddPass(std::move(preRenderPass));
 
 	auto raytracingShadowPass = std::make_unique<RaytracingShadowPass>();
-	raytracingShadowPass->AddInput("WorldPosition");
-	raytracingShadowPass->AddInput("Normal");
+	raytracingShadowPass->AddInput("WorldPosition", "WorldPosition");
+	raytracingShadowPass->AddInput("Normal", "Normal");
 	raytracingShadowPass->AddOutput("ShadowMap");
 	raytracingShadowPass->SetClearTarget(true);
 
 	renderPassScheduler.AddPass(std::move(raytracingShadowPass));
 
 	auto meshPass = std::make_unique<MeshPass>();
-	meshPass->AddInput("ShadowMap");
+	meshPass->AddInput("ShadowMap", "ShadowMap");
 	meshPass->AddOutput("MainColor");
 	meshPass->SetDepthOutput("MainDepth");
 	meshPass->SetClearTarget(true);
@@ -183,6 +184,11 @@ void CommonSetupRenderPass(RenderPassScheduler& renderPassScheduler) {
 	skyBoxPass->SetDepthOutput("MainDepth");
 	renderPassScheduler.AddPass(std::move(skyBoxPass));
 
+	auto vignettingPass = std::make_unique<VignettingPass>();
+	vignettingPass->AddInput("InputColor", "MainColor");
+	vignettingPass->AddOutput("PostEffect");
+	renderPassScheduler.AddPass(std::move(vignettingPass));
+
 }
 
 void CommonSetupDebugRenderPass(RenderPassScheduler& renderPassScheduler) {
@@ -201,15 +207,15 @@ void CommonSetupDebugRenderPass(RenderPassScheduler& renderPassScheduler) {
 	renderPassScheduler.AddPass(std::move(preRenderPass));
 
 	auto raytracingShadowPass = std::make_unique<RaytracingShadowPass>();
-	raytracingShadowPass->AddInput("WorldPosition");
-	raytracingShadowPass->AddInput("Normal");
+	raytracingShadowPass->AddInput("WorldPosition", "WorldPosition");
+	raytracingShadowPass->AddInput("Normal", "Normal");
 	raytracingShadowPass->AddOutput("ShadowMap");
 	raytracingShadowPass->SetClearTarget(true);
 	raytracingShadowPass->SetTargetCameraType(RenderPass::TargetCameraType::kDebug);
 	renderPassScheduler.AddPass(std::move(raytracingShadowPass));
 
 	auto meshPass = std::make_unique<MeshPass>();
-	meshPass->AddInput("ShadowMap");
+	meshPass->AddInput("ShadowMap", "ShadowMap");
 	meshPass->AddOutput("DebugColor");
 	meshPass->SetDepthOutput("MainDepth");
 	meshPass->SetClearTarget(true);
