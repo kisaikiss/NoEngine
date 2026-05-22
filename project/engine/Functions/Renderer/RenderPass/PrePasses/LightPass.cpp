@@ -74,6 +74,12 @@ void LightPass::UploadToGpu(GraphicsContext& gfx) {
 		memcpy(directionalLightUpload_.Map(), directionalLights_.data(), sizeof(DirectionalLightComponent) * directionalLightsSize_);
 
 		renderContext->SetDirectionalLight(gfx, directionalLightUpload_, static_cast<uint32_t>(directionalLightsSize_));
+	} else {
+		if (directionalLights_.size() != directionalLightsSize_) {
+			directionalLightsSize_ = 0;
+			directionalLightUpload_.Destroy();
+			renderContext->DestroyDirectionalLight();
+		}
 	}
 	
 
@@ -86,6 +92,12 @@ void LightPass::UploadToGpu(GraphicsContext& gfx) {
 		memcpy(pointLightUpload_.Map(), pointLights_.data(), sizeof(PointLightForGPU) * pointLightsSize_);
 
 		renderContext->SetPointLight(gfx, pointLightUpload_, static_cast<uint32_t>(pointLightsSize_));
+	} else {
+		if (pointLights_.size() != pointLightsSize_) {
+			pointLightsSize_ = 0;
+			pointLightUpload_.Destroy();
+			renderContext->DestroyPointLight();
+		}
 	}
 
 	// スポットライトをGPUへ送る
@@ -97,6 +109,12 @@ void LightPass::UploadToGpu(GraphicsContext& gfx) {
 		memcpy(spotLightUpload_.Map(), spotLights_.data(), sizeof(SpotLightForGPU) * spotLightsSize_);
 
 		renderContext->SetSpotLight(gfx, spotLightUpload_, static_cast<uint32_t>(spotLightsSize_));
+	} else {
+		if (spotLights_.size() != spotLightsSize_) {
+			spotLightsSize_ = 0;
+			spotLightUpload_.Destroy();
+			renderContext->DestroySpotLight();
+		}
 	}
 	
 

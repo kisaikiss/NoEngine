@@ -41,9 +41,9 @@ private:
 	std::vector<PointLightForGPU> pointLights_;
 	std::vector<SpotLightForGPU> spotLights_;
 	// Light配列のサイズ
-	size_t directionalLightsSize_;
-	size_t pointLightsSize_;
-	size_t spotLightsSize_;
+	size_t directionalLightsSize_ = 0;
+	size_t pointLightsSize_ = 0;
+	size_t spotLightsSize_ = 0;
 };
 }
 }

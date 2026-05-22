@@ -11,7 +11,6 @@
 #include "PostEffect/GrayscalePass.h"
 #include "PostEffect/VignettingPass.h"
 #include "PostEffect/BoxFilterPass.h"
-#include "../RenderSystem.h"
 
 #include "engine/Runtime/GraphicsCore.h"
 #include "engine/Editor/EditUtils.h"
@@ -130,7 +129,7 @@ void CommonSetupRenderPass(RenderPassScheduler& renderPassScheduler) {
 	Math::Vector2 windowSize = GraphicsCore::GetWindowSize();
 	auto& resourceRegistry = renderPassScheduler.GetResourceRegistry();
 	InitGameImGuiWindow(*resourceRegistry.CreateColorBuffer("MainColor", windowSize.x, windowSize.y, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB));
-	
+	renderPassScheduler.SetScreenDrawBuffer("MainColor");
 
 	resourceRegistry.CreateColorBuffer("ShadowMap", windowSize.x, windowSize.y, DXGI_FORMAT_R8_UNORM);
 	resourceRegistry.CreateColorBuffer("WorldPosition", windowSize.x, windowSize.y, DXGI_FORMAT_R32G32B32A32_FLOAT);

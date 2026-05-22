@@ -57,6 +57,7 @@ public:
 	/// <param name="directionalLightUpload">方向ライトのUploadバッファ</param>
 	/// <param name="directionalLightNum">方向ライトの数</param>
 	void SetDirectionalLight(GraphicsContext& gfx, UploadBuffer& directionalLightUpload, uint32_t directionalLightNum);
+	void DestroyDirectionalLight() { directionalLightBuffer_.Destroy(); lightNums_.directionalLightNum = 0; }
 
 	/// <summary>
 	/// ポイントライトをセットします。
@@ -65,6 +66,7 @@ public:
 	/// <param name="pointLightUpload">ポイントライトのUploadバッファ</param>
 	/// <param name="directionalLightNum">ポイントライトの数</param>
 	void SetPointLight(GraphicsContext& gfx, UploadBuffer& pointLightUpload, uint32_t pointLightNum);
+	void DestroyPointLight() { pointLightBuffer_.Destroy(); lightNums_.pointLightNum = 0; }
 
 	/// <summary>
 	/// スポットライトをセットします。
@@ -73,6 +75,7 @@ public:
 	/// <param name="spotLightUpload">スポットライトののUploadバッファ</param>
 	/// <param name="spotLightNum">スポットライトの数</param>
 	void SetSpotLight(GraphicsContext& gfx, UploadBuffer& spotLightUpload, uint32_t spotLightNum);
+	void DestroySpotLight() { spotLightBuffer_.Destroy(); lightNums_.spotLightNum = 0; }
 
 	/// <summary>
 	/// レイトレーシング用のインスタンスバッファを作成する。
