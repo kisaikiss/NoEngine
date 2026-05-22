@@ -173,6 +173,7 @@ void CommonSetupRenderPass(RenderPassScheduler& renderPassScheduler) {
 
 	auto particlePass = std::make_unique<ParticlePass>();
 	particlePass->AddOutput("MainColor");
+	particlePass->SetDepthOutput("MainDepth");
 	renderPassScheduler.AddPass(std::move(particlePass));
 
 	auto spritePass = std::make_unique<SpritePass>();
@@ -224,6 +225,7 @@ void CommonSetupDebugRenderPass(RenderPassScheduler& renderPassScheduler) {
 
 	auto particlePass = std::make_unique<ParticlePass>();
 	particlePass->AddOutput("DebugColor");
+	particlePass->SetDepthOutput("MainDepth");
 	particlePass->SetTargetCameraType(RenderPass::TargetCameraType::kDebug);
 	renderPassScheduler.AddPass(std::move(particlePass));
 

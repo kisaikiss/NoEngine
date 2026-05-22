@@ -58,17 +58,16 @@ void MeshPass::Sort() {
 
 void MeshPass::Render(GraphicsContext& context, const RenderGraphRegistry& resourceRegistry) {
 	(void)resourceRegistry;
-	// ToDo : currentPsoの値は被りえない値にすべきです。
-	uint32_t currentPSO = 110;
+	std::string currentPSO = "";
 	auto* renderCtx = GetRenderContext();
 	context.TransitionResource(GraphicsCore::GetShadowMask(), D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 	for (auto& item : items_) {
 		auto& rootIndex = RootSignatureBuilder::GetRootIndexMap(item.psoName);
-		if (item.psoId != currentPSO) {
+		if (item.psoName != currentPSO) {
 			context.SetPipelineState(renderCtx->GetGraphicsPSO(ConvertString(item.material->psoName)));
 			context.SetRootSignature(renderCtx->GetRootSignature(ConvertString(item.material->psoName)));
 			context.SetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-			currentPSO = item.psoId;
+			currentPSO = item.psoName;
 		}
 
 		struct MeshConstants {
