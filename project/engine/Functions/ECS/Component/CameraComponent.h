@@ -1,5 +1,6 @@
 #pragma once
 #include "engine/Math/Types/Matrix4x4.h"
+#include "../Entity.h"
 namespace NoEngine {
 namespace Component {
 /// <summary>
@@ -21,6 +22,8 @@ struct CameraComponent {
     float nearClip = 0.1f;
     float farClip = 1000.0f;
     float aspect = 16.0f / 9.0f;
+    ECS::Entity entity;
+    ECS::Entity pad[3];
 
     Math::Matrix4x4 view;
     Math::Matrix4x4 projection;

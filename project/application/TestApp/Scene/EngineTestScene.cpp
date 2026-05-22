@@ -1,6 +1,5 @@
 #include "EngineTestScene.h"
 #include "application/TestApp/System/TestSystem.h"
-#include "application/TestApp/System/ParticleTestSystem.h"
 
 namespace {
 No::Entity cameraE;
@@ -10,7 +9,7 @@ void EngineTestScene::Setup() {
 	AddSystem(std::make_unique<TestSystem>());
 	AddSystem(std::make_unique<No::AnimationSystem>());
 	AddSystem(std::make_unique<No::SpriteAnimationSystem>());
-	AddSystem(std::make_unique<ParticleTestSystem>());
+	AddSystem(std::make_unique<No::ParticleSystem>());
 	AddSystem(std::make_unique<No::EditSystem>());
 	AddSystem(std::make_unique<No::DebugCameraSystem>());
 	AddSystem(std::make_unique<No::CameraSystem>());

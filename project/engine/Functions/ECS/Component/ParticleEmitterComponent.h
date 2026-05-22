@@ -15,12 +15,17 @@ struct Particle {
 
 struct ParticleEmitterComponent {
 	bool active = true;
+	bool isBillboard = true;
 
 	// パーティクルの設定
 	uint32_t maxCount = 100;	// 最大発生数
 	uint32_t count = 10;		// 発生数
 	float frequency = 0.5f;		// 発生頻度
 	float frequencyTime = 0.0f; // 頻度用時刻
+	Math::Vector3 maxSpeed = Math::Vector3::UNIT_SCALE;
+	Math::Vector3 minSpeed = -Math::Vector3::UNIT_SCALE;
+	float maxLifeTime = 6.f;
+	float minLifeTime = 2.f;
 	TextureRef texture;			// 使用するテクスチャ
 
 	// 実行時データ

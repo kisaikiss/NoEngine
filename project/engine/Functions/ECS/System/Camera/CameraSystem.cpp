@@ -13,7 +13,7 @@ void CameraSystem::Update(Registry& registry, float deltaTime) {
 		auto* transform = registry.GetComponent<Component::TransformComponent>(entity);
 
 		camera->forGPU.fov = camera->fov;
-
+		camera->entity = entity;
 		camera->view = transform->MakeAffineMatrix4x4();
 		camera->view.Inverse();
 		camera->projection.MakePerspectiveFov(camera->forGPU.fov, camera->aspect, camera->nearClip, camera->farClip);

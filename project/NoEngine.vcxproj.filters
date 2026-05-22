@@ -131,7 +131,6 @@
     <ClCompile Include="engine\Functions\ECS\System\Camera\DebugCameraSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\CameraComponent.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\Rasterization\ParticlePass.cpp" />
-    <ClCompile Include="application\TestApp\System\ParticleTestSystem.cpp" />
     <ClCompile Include="engine\Utilities\Random.cpp" />
     <ClCompile Include="engine\Functions\Scene\IScene.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\SystemManager.cpp" />
@@ -194,6 +193,8 @@
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\VignettingPass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\BoxFilterPass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderGraph.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\Effect\ParticleSystem.cpp" />
+    <ClCompile Include="engine\Functions\ECS\Component\ParticleEmitterComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -337,7 +338,6 @@
     <ClInclude Include="engine\Functions\ECS\System\Camera\DebugCameraSystem.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\Rasterization\ParticlePass.h" />
     <ClInclude Include="engine\Functions\ECS\Component\ParticleEmitterComponent.h" />
-    <ClInclude Include="application\TestApp\System\ParticleTestSystem.h" />
     <ClInclude Include="engine\Utilities\Random.h" />
     <ClInclude Include="engine\Functions\ECS\Component\PauseComponent.h" />
     <ClInclude Include="engine\Functions\ECS\Component\Animator2DComponent.h" />
@@ -403,6 +403,7 @@
     <ClInclude Include="engine\Functions\Input\InputConfig.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\VignettingPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\BoxFilterPass.h" />
+    <ClInclude Include="engine\Functions\ECS\System\Effect\ParticleSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

@@ -32,7 +32,7 @@ private:
 	std::vector<Math::Matrix4x4> matrices_;
 	size_t particleCount_ = 0;
 
-	void UploadMatrices(GraphicsContext& gfx, std::vector<Component::Particle>& particles, size_t baseIndex);
+	void UploadMatrices(GraphicsContext& gfx, std::vector<Component::Particle>& particles, ECS::Registry& registry, size_t baseIndex, bool isBillboard = false);
 	void Initialize(size_t maxParticles);
 };
 

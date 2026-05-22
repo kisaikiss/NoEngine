@@ -52,7 +52,7 @@ void ParticlePass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& reso
 		if (!emitter->active || emitter->particles.empty()) continue;
 
 		// GPUへ行列を転送
-		UploadMatrices(gfx, emitter->particles, baseIndex);
+		UploadMatrices(gfx, emitter->particles, registry, baseIndex, emitter->isBillboard);
 
 		gfx.SetPipelineState(renderCtx->GetGraphicsPSO("Renderer : particle PSO"));
 		gfx.SetRootSignature(renderCtx->GetRootSignature("Renderer : particle PSO"));
@@ -92,7 +92,7 @@ void ParticlePass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& reso
 	matrices_.clear();
 }
 
-void ParticlePass::UploadMatrices(GraphicsContext& gfx, std::vector<Component::Particle>& particles, size_t baseIndex) {
+void ParticlePass::UploadMatrices(GraphicsContext& gfx, std::vector<Component::Particle>& particles, ECS::Registry& registry, size_t baseIndex, bool isBillboard) {
 	size_t remaining = maxParticles_ - baseIndex;
 	particleCount_ += particles.size();
 	size_t count = std::min(particleCount_, remaining);
@@ -102,8 +102,28 @@ void ParticlePass::UploadMatrices(GraphicsContext& gfx, std::vector<Component::P
 
 	matrices_.reserve(count);
 
+	Math::Matrix4x4 billBoardMatrix{};
+	if (isBillboard) {
+		Math::Matrix4x4 backToFrontMatrix;
+		backToFrontMatrix.MakeRotate(Math::Vector3::UP * PI);
+		auto* transform = registry.GetComponent<Component::TransformComponent>(GetTargetCamera()->entity);
+		billBoardMatrix = backToFrontMatrix * transform->MakeAffineMatrix4x4();
+		billBoardMatrix.m[3][0] = 0.0f;
+		billBoardMatrix.m[3][1] = 0.0f;
+		billBoardMatrix.m[3][2] = 0.0f;
+	}
+
 	for (size_t i = 0; i < currentCount; ++i) {
-		matrices_.push_back(particles[i].transform.MakeAffineMatrix4x4());
+		if (isBillboard) {
+			Math::Matrix4x4 scaleMatrix;
+			scaleMatrix.MakeScale(particles[i].transform.scale);
+			Math::Matrix4x4 translateMatrix;
+			translateMatrix.MakeTranslate(particles[i].transform.translate);
+			Math::Matrix4x4 worldMatrix = scaleMatrix * billBoardMatrix * translateMatrix;
+			matrices_.push_back(worldMatrix);
+		} else {
+			matrices_.push_back(particles[i].transform.MakeAffineMatrix4x4());
+		}
 	}
 	size_t size = count * sizeof(Math::Matrix4x4);
 	memcpy(worldMatrixUpload_.Map(), matrices_.data(), size);

@@ -15,5 +15,12 @@ float GetRandomVal(float min, float max) {
 	std::uniform_real_distribution<float> distribution(min, max);
 	return distribution(randomEngine);
 }
+
+Math::Vector3 GetRandomVal(const Math::Vector3& min, const Math::Vector3& max) {
+	return Math::Vector3(GetRandomVal(min.x,max.x), GetRandomVal(min.y, max.y), GetRandomVal(min.z, max.z));
+}
+Math::Vector2 GetRandomVal(const Math::Vector2& min, const Math::Vector2& max) {
+	return Math::Vector2(GetRandomVal(min.x, max.x), GetRandomVal(min.y, max.y));
+}
 }
 }
