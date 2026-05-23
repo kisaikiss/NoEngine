@@ -236,7 +236,7 @@ void DrawComponentUI(Registry& registry, Entity e) {
 			}
 			if (ImGui::BeginPopupModal("ConfirmRemove")) {
 				ImGui::Text("Remove this component?");
-				if (ImGui::Button("Yes")) { 
+				if (ImGui::Button("Yes")) {
 					registry.RemoveComponent(compInfo.typeId, e);
 				}
 				ImGui::SameLine();
@@ -295,6 +295,9 @@ void DrawFieldUI(const FieldInfo& field, void* ptr) {
 		} else {
 			ImGui::DragInt(field.name.c_str(), reinterpret_cast<int*>(valuePtr), field.attributes.valueSpeed);
 		}
+		break;
+	case FieldType::Uint:
+		ImGui::DragInt(field.name.c_str(), reinterpret_cast<int*>(valuePtr), field.attributes.valueSpeed, 0, INT32_MAX);
 		break;
 	case FieldType::Bool:
 		ImGui::Checkbox(field.name.c_str(), reinterpret_cast<bool*>(valuePtr));

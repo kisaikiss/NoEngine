@@ -40,7 +40,7 @@ void ParticlePass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& reso
 	static_cast<void>(resourceRegistry);
 	auto* renderCtx = GetRenderContext();
 	camera_ = GetTargetCamera();
-
+	if (!camera_) return;
 	auto& rootIndex = RootSignatureBuilder::GetRootIndexMap("Renderer : particle PSO");
 
 	// GPUへ行列を転送

@@ -1,7 +1,69 @@
 {
     "entities": {
+        "CAMERA2D": {
+            "components": {
+                "EditTag": {
+                    "name": "CAMERA2D",
+                    "path": "CAMERA2D"
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "SpotLight": {
+            "components": {
+                "EditTag": {
+                    "name": "SpotLight",
+                    "path": "SpotLight"
+                },
+                "SpotLightComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "cosAngle": 0.800000011920929,
+                    "cosFalloffStart": 1.0,
+                    "decay": 1.5,
+                    "distance": 5.0,
+                    "intensity": 1.0
+                },
+                "TransformComponent": {
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
         "background": {
             "components": {
+                "EditTag": {
+                    "name": "background",
+                    "path": "background"
+                },
                 "MaterialComponent": {
                     "color": [
                         1.0,
@@ -10,7 +72,11 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "enviromentCoefficient": 0.0,
                     "shininess": 60.0
+                },
+                "MeshComponent": {
+                    "isVisible": true
                 },
                 "TransformComponent": {
                     "rotation": [
@@ -43,20 +109,24 @@
                         0.0,
                         0.0
                     ],
-                    "distance": 15.728891372680664,
+                    "distance": 37.18646240234375,
                     "drawCenter": false,
-                    "mousePositionX": 504,
-                    "mousePositionY": 296,
-                    "mouseWheelY": -960.0,
-                    "phi": 1.4116933345794678,
-                    "theta": -1.058453917503357
+                    "mousePositionX": 405,
+                    "mousePositionY": 279,
+                    "mouseWheelY": -480.0,
+                    "phi": 1.1773474216461182,
+                    "theta": -0.9642321467399597
+                },
+                "EditTag": {
+                    "name": "camera",
+                    "path": "camera"
                 },
                 "TransformComponent": {
                     "rotation": [
-                        0.07687436789274216,
-                        -0.2525772452354431,
-                        0.020135391503572464,
-                        0.9643078446388245
+                        0.18653757870197296,
+                        -0.2928936779499054,
+                        0.05837433785200119,
+                        0.9359537959098816
                     ],
                     "scale": [
                         1.0,
@@ -64,9 +134,9 @@
                         1.0
                     ],
                     "translate": [
-                        7.61323356628418,
-                        2.491968870162964,
-                        -13.536128044128418
+                        19.578371047973633,
+                        14.256399154663086,
+                        -28.218353271484375
                     ]
                 }
             }
@@ -86,11 +156,190 @@
                         0.0
                     ],
                     "intensity": 1.0
+                },
+                "EditTag": {
+                    "name": "directionalLight",
+                    "path": "directionalLight"
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureFilePath": "",
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        100.0,
+                        100.0
+                    ],
+                    "translate": [
+                        100.0,
+                        200.0
+                    ]
                 }
             }
         },
-        "player": {
+        "emitter": {
             "components": {
+                "EditTag": {
+                    "name": "emitter",
+                    "path": "emitter"
+                },
+                "ParticleEmitterComponent": {
+                    "active": true,
+                    "count": 10,
+                    "frequency": 0.10000000149011612,
+                    "maxCount": 100,
+                    "maxLifeTime": 6.0,
+                    "maxSpeed": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "minLifeTime": 2.0,
+                    "minSpeed": [
+                        -1.0,
+                        -1.0,
+                        -1.0
+                    ]
+                },
+                "TransformComponent": {
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "emitter2": {
+            "components": {
+                "EditTag": {
+                    "name": "emitter2",
+                    "path": "emitter2"
+                },
+                "ParticleEmitterComponent": {
+                    "active": true,
+                    "count": 10,
+                    "frequency": 0.10000000149011612,
+                    "maxCount": 100,
+                    "maxLifeTime": 6.0,
+                    "maxSpeed": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "minLifeTime": 2.0,
+                    "minSpeed": [
+                        -1.0,
+                        -1.0,
+                        -1.0
+                    ]
+                },
+                "TransformComponent": {
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        4.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "emitter3": {
+            "components": {
+                "EditTag": {
+                    "name": "emitter3",
+                    "path": "emitter3"
+                },
+                "ParticleEmitterComponent": {
+                    "active": true,
+                    "count": 10,
+                    "frequency": 0.10000000149011612,
+                    "maxCount": 100,
+                    "maxLifeTime": 6.0,
+                    "maxSpeed": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "minLifeTime": 2.0,
+                    "minSpeed": [
+                        -1.0,
+                        -1.0,
+                        -1.0
+                    ]
+                },
+                "TransformComponent": {
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        -4.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "girl": {
+            "components": {
+                "Animator2DComponent": {
+                    "currentAnimation": 1
+                },
+                "AnimatorComponent": {
+                    "currentAnimation": 0,
+                    "drawSkeleton": false
+                },
+                "EditTag": {
+                    "name": "girl",
+                    "path": "girl"
+                },
                 "MaterialComponent": {
                     "color": [
                         1.0,
@@ -99,6 +348,79 @@
                         1.0
                     ],
                     "drawOutline": true,
+                    "enviromentCoefficient": 0.0,
+                    "shininess": 60.0
+                },
+                "MeshComponent": {
+                    "isVisible": true
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureFilePath": "",
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        100.0,
+                        100.0
+                    ],
+                    "translate": [
+                        100.0,
+                        200.0
+                    ]
+                },
+                "TransformComponent": {
+                    "rotation": [
+                        0.0,
+                        1.0,
+                        0.0,
+                        -4.371138828673793e-08
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        0.0,
+                        -1.5,
+                        4.0
+                    ]
+                }
+            }
+        },
+        "player": {
+            "components": {
+                "EditTag": {
+                    "name": "player",
+                    "path": "player"
+                },
+                "MaterialComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": true,
+                    "enviromentCoefficient": 0.0,
                     "shininess": 60.0
                 },
                 "TransformComponent": {
@@ -107,6 +429,43 @@
                         1.0,
                         0.0,
                         -4.371138828673793e-08
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "pointLight": {
+            "components": {
+                "EditTag": {
+                    "name": "pointLight",
+                    "path": "pointLight"
+                },
+                "PointLightComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "decay": 1.5,
+                    "intensity": 1.0,
+                    "radius": 1.0
+                },
+                "TransformComponent": {
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
                     ],
                     "scale": [
                         1.0,

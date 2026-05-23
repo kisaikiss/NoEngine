@@ -59,9 +59,6 @@
                         -24.0
                     ]
                 },
-                "Animator2DComponent": {
-                    "currentAnimation": "Unsupported"
-                },
                 "CollisionBody": {
                     "type": 0
                 },

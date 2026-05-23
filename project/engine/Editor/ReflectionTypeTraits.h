@@ -47,13 +47,44 @@ struct FieldTypeResolver<Rect> {
 };
 
 template<>
-struct FieldTypeResolver<int> {
+struct FieldTypeResolver<int8_t> {
     static constexpr FieldType value = FieldType::Int;
 };
 
 template<>
-struct FieldTypeResolver<uint32_t> {
+struct FieldTypeResolver<int16_t> {
     static constexpr FieldType value = FieldType::Int;
+};
+
+template<>
+struct FieldTypeResolver<int32_t> {
+    static constexpr FieldType value = FieldType::Int;
+};
+
+
+template<>
+struct FieldTypeResolver<int64_t> {
+    static constexpr FieldType value = FieldType::Int;
+};
+
+template<>
+struct FieldTypeResolver<uint8_t> {
+    static constexpr FieldType value = FieldType::Uint;
+};
+
+template<>
+struct FieldTypeResolver<uint16_t> {
+    static constexpr FieldType value = FieldType::Uint;
+};
+
+template<>
+struct FieldTypeResolver<uint32_t> {
+    static constexpr FieldType value = FieldType::Uint;
+};
+
+template<>
+struct FieldTypeResolver<uint64_t> {
+    static constexpr FieldType value = FieldType::Uint;
 };
 
 template<>

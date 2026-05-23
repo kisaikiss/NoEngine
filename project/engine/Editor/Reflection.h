@@ -13,6 +13,7 @@ enum class FieldType {
     Float3,
     Float4,
     Int,
+    Uint,
     Bool,
     String,
     Struct,

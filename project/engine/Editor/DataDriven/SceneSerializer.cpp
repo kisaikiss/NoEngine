@@ -59,6 +59,9 @@ void WriteFieldToJson(nlohmann::json& j, const FieldInfo& field, void* ptr) {
 	case NoEngine::FieldType::Int:
 		j[field.name] = *(int*)ptr;
 		break;
+	case NoEngine::FieldType::Uint:
+		j[field.name] = *(int*)ptr;
+		break;
 	case NoEngine::FieldType::Bool:
 		j[field.name] = *(bool*)ptr;
 		break;
@@ -154,6 +157,9 @@ void ReadFieldFromJson(const nlohmann::json& j, const FieldInfo& field, void* pt
 	}
 		break;
 	case NoEngine::FieldType::Int:
+		*(int*)ptr = j[field.name].get<int>();
+		break;
+	case NoEngine::FieldType::Uint:
 		*(int*)ptr = j[field.name].get<int>();
 		break;
 	case NoEngine::FieldType::Bool:
