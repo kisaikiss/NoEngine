@@ -4,6 +4,7 @@
 #include "engine/Math/MathInclude.h"
 #include "engine/Functions/ECS/Component/ParticleEmitterComponent.h"
 #include "engine/Functions/ECS/Component/CameraComponent.h"
+#include "engine/Functions/ECS/Component/TransformComponent.h"
 
 namespace NoEngine {
 namespace Render {
@@ -24,6 +25,12 @@ private:
 		Math::Vector2 texcoord;
 	};
 
+	struct DrawItem {
+		Component::TransformComponent* transform;
+		Component::ParticleComponent* particle;
+	};
+	std::vector<DrawItem> items_;
+
 	__declspec(align(16))struct ParticleForGPU {
 		Math::Matrix4x4 worldMatrix;
 		Math::Color color;
@@ -35,9 +42,11 @@ private:
 
 	Component::CameraComponent* camera_;
 	std::vector<ParticleForGPU> particleForGpu_;
+	std::vector<size_t> baseIndices_;
+	std::vector<TextureRef> textures_;
 	size_t particleCount_ = 0;
 
-	void UploadMatrices(GraphicsContext& gfx, std::vector<Component::Particle>& particles, ECS::Registry& registry, size_t baseIndex, bool isBillboard = false);
+	void UploadMatrices(GraphicsContext& gfx, ECS::Registry& registry);
 	void Initialize(size_t maxParticles);
 };
 

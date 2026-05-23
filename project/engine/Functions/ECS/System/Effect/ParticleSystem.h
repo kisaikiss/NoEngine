@@ -10,7 +10,8 @@ public:
     ParticleSystem() { SetStopInPause(false); }
     void Update(Registry& registry, float deltaTime) override;
 private:
-    void EmitParticle(Component::TransformComponent* transform, Component::ParticleEmitterComponent* emitter);
+    void EmitParticle(Registry& registry, const Component::TransformComponent& transform, Component::ParticleEmitterComponent* emitter);
+    Math::Vector3 GetNewPosition(const Component::TransformComponent& emitterTransform);
 };
 
 }

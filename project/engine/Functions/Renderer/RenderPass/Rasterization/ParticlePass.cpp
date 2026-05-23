@@ -2,7 +2,6 @@
 #include "ParticlePass.h"
 #include "engine/Runtime/GpuResource/UploadBuffer.h"
 #include "engine/Functions/Shader/ShaderReflection.h"
-#include "engine/Functions/ECS/Component/TransformComponent.h"
 
 namespace NoEngine {
 namespace Render {
@@ -31,7 +30,7 @@ ParticlePass::ParticlePass() {
 	indexUpload.Unmap();
 	index_.Create(L"particleIndex", sizeof(indices), sizeof(uint32_t), indexUpload);
 
-	
+
 
 	maxParticles_ = 50000;
 	Initialize(maxParticles_);
@@ -43,63 +42,60 @@ void ParticlePass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& reso
 	camera_ = GetTargetCamera();
 
 	auto& rootIndex = RootSignatureBuilder::GetRootIndexMap("Renderer : particle PSO");
-	auto view = registry.View<Component::ParticleEmitterComponent>();
+
+	// GPUへ行列を転送
+	UploadMatrices(gfx, registry);
+
+	if (items_.empty()) return;
+
+	gfx.SetPipelineState(renderCtx->GetGraphicsPSO("Renderer : particle PSO"));
+	gfx.SetRootSignature(renderCtx->GetRootSignature("Renderer : particle PSO"));
+	gfx.SetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	gfx.SetVertexBuffer(0, vertex_.VertexBufferView());
+	gfx.SetIndexBuffer(index_.IndexBufferView());
+
+	// カメラ
+	gfx.SetDynamicConstantBufferView(rootIndex["gCameraMatrix"], sizeof(Component::CameraForGPU), &camera_->forGPU);
+
+	// ワールド行列
+	gfx.SetDynamicDescriptor(
+		rootIndex["gWorldMatrices"],
+		0,
+		worldMatrixBuffer_.GetSRV()
+	);
 
 
-	size_t baseIndex = 0;
-	for (auto entity : view) {
-		auto* emitter = registry.GetComponent<Component::ParticleEmitterComponent>(entity);
-		if (!emitter->active || emitter->particles.empty()) continue;
+	uint32_t count = 0;
+	for (size_t i = 0; i < baseIndices_.size() - 1; i++) {
+		size_t baseIndex = baseIndices_[i];
+		size_t nextIndex = baseIndices_[i + 1];
+		size_t instanceCount = nextIndex - baseIndex; // インスタンス数を計算
 
-		// GPUへ行列を転送
-		UploadMatrices(gfx, emitter->particles, registry, baseIndex, emitter->isBillboard);
-
-		gfx.SetPipelineState(renderCtx->GetGraphicsPSO("Renderer : particle PSO"));
-		gfx.SetRootSignature(renderCtx->GetRootSignature("Renderer : particle PSO"));
-		gfx.SetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-		gfx.SetVertexBuffer(0, vertex_.VertexBufferView());
-		gfx.SetIndexBuffer(index_.IndexBufferView());
-
-		// カメラ
-		gfx.SetDynamicConstantBufferView(rootIndex["gCameraMatrix"], sizeof(Component::CameraForGPU), &camera_->forGPU);
 		// baseIndex
 		_declspec(align(16)) struct {
 			uint32_t index;
 			uint32_t pad[3];
-		}indexConstant;
+		} indexConstant;
 		indexConstant.index = (uint32_t)baseIndex;
 		gfx.SetDynamicConstantBufferView(rootIndex["gBaseIndex"], sizeof(indexConstant), &indexConstant);
 
-		// ワールド行列
-		gfx.SetDynamicDescriptor(
-			rootIndex["gWorldMatrices"],
-			0,
-			worldMatrixBuffer_.GetSRV()
-		);
+		gfx.SetDynamicDescriptor(rootIndex["gTexture"], 0, textures_[count]->GetSRV());
 
-		
-		gfx.SetDynamicDescriptor(rootIndex["gTexture"], 0, emitter->texture.GetSRV());
+		gfx.DrawIndexedInstanced(6, static_cast<UINT>(instanceCount), 0, 0, static_cast<UINT>(baseIndex));
 
-		gfx.DrawIndexedInstanced(6, static_cast<UINT>(emitter->particles.size()), 0, 0, static_cast<UINT>(baseIndex));
-		baseIndex += emitter->particles.size();
+		count++;
 	}
+	
 	particleCount_ = 0;
 	particleForGpu_.clear();
 }
 
-void ParticlePass::UploadMatrices(GraphicsContext& gfx, std::vector<Component::Particle>& particles, ECS::Registry& registry, size_t baseIndex, bool isBillboard) {
-	size_t remaining = maxParticles_ - baseIndex;
-	particleCount_ += particles.size();
-	size_t count = std::min(particleCount_, remaining);
-	size_t currentCount = std::min(particles.size(), remaining);
-
-	if (count == 0) return;
-
-	particleForGpu_.reserve(count);
+void ParticlePass::UploadMatrices(GraphicsContext& gfx, ECS::Registry& registry) {
+	auto view = registry.View<Component::ParticleComponent, Component::TransformComponent>();
 
 	Math::Matrix4x4 billBoardMatrix{};
-	if (isBillboard) {
+	{
 		Math::Matrix4x4 backToFrontMatrix;
 		backToFrontMatrix.MakeRotate(Math::Vector3::UP * PI);
 		auto* transform = registry.GetComponent<Component::TransformComponent>(GetTargetCamera()->entity);
@@ -108,19 +104,54 @@ void ParticlePass::UploadMatrices(GraphicsContext& gfx, std::vector<Component::P
 		billBoardMatrix.m[3][1] = 0.0f;
 		billBoardMatrix.m[3][2] = 0.0f;
 	}
+	
 
-	for (size_t i = 0; i < currentCount; ++i) {
-		if (isBillboard) {
-			Math::Matrix4x4 scaleMatrix;
-			scaleMatrix.MakeScale(particles[i].transform.scale);
-			Math::Matrix4x4 translateMatrix;
-			translateMatrix.MakeTranslate(particles[i].transform.translate);
-			Math::Matrix4x4 worldMatrix = scaleMatrix * billBoardMatrix * translateMatrix;
-			particleForGpu_.push_back({ worldMatrix, particles[i].color });
-		} else {
-			particleForGpu_.push_back({ particles[i].transform.MakeAffineMatrix4x4(), particles[i].color });
-		}
+	
+	// collect
+	items_.clear();
+	for (auto entity : view) {
+		auto* particle = registry.GetComponent<Component::ParticleComponent>(entity);
+		auto* transform = registry.GetComponent<Component::TransformComponent>(entity);
+
+		items_.push_back({ transform,particle });
 	}
+
+	if (items_.empty()) return;
+
+	// sort
+	std::sort(items_.begin(), items_.end(), [](const DrawItem& a, const DrawItem& b) {
+		return a.particle->texture < b.particle->texture;
+		});
+
+	// build
+	size_t baseIndex = 0;
+	baseIndices_.clear();
+	TextureRef currentTexture;
+	textures_.clear();
+	for (auto& item : items_) {
+		if (currentTexture != item.particle->texture) {
+			currentTexture = item.particle->texture;
+			baseIndices_.push_back(baseIndex);
+			textures_.push_back(item.particle->texture);
+		}
+
+		Math::Matrix4x4 scaleMatrix;
+		scaleMatrix.MakeScale(item.transform->scale);
+		Math::Matrix4x4 translateMatrix;
+		translateMatrix.MakeTranslate(item.transform->translate);
+		Math::Matrix4x4 worldMatrix = scaleMatrix * billBoardMatrix * translateMatrix;
+		particleForGpu_.push_back({ worldMatrix, item.particle->color });
+
+		baseIndex++;
+	}
+
+	baseIndices_.push_back(baseIndex);
+
+
+
+	size_t count = std::min(maxParticles_, baseIndex);
+	if (count == 0) return;
+
 	size_t size = count * sizeof(ParticleForGPU);
 	memcpy(worldMatrixUpload_.Map(), particleForGpu_.data(), size);
 	worldMatrixUpload_.Unmap();

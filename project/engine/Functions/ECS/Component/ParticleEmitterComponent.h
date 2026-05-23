@@ -6,12 +6,11 @@
 namespace NoEngine {
 namespace Component {
 
-struct Particle {
-	Transform transform;
-	Math::Vector3 velocity;
+struct ParticleComponent {
 	Math::Color color = Math::Color::WHITE;
 	float lifeTime = 3.f;
 	float currentTime = 0.f;
+	TextureRef texture;			// 使用するテクスチャ
 };
 
 struct ParticleEmitterComponent {
@@ -28,9 +27,6 @@ struct ParticleEmitterComponent {
 	float maxLifeTime = 6.f;
 	float minLifeTime = 2.f;
 	TextureRef texture;			// 使用するテクスチャ
-
-	// 実行時データ
-	std::vector<Particle> particles;
 };
 }
 }
