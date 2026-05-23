@@ -30,6 +30,7 @@
 #include "Functions/ECS/System/Collision/CollisionResolution2DSystem.h"
 #include "Functions/ECS/System/Collision/NarrowPhase2DSystem.h"
 #include "Functions/ECS/System/Effect/ParticleSystem.h"
+#include "Functions/ECS/System/Effect/ParticleEmitterSystem.h"
 #include "Functions/ECS/System/GroundResetSystem.h"
 
 #include "Assets/ModelLoader.h"

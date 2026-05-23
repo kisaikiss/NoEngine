@@ -3,8 +3,8 @@
 
 REFLECT_STRUCT_BEGIN(NoEngine::Component::ParticleEmitterComponent)
 REFLECT_FIELD(active),
-REFLECT_FIELD(isBillboard),
 REFLECT_FIELD(maxCount),
+REFLECT_FIELD(count),
 REFLECT_FIELD(frequency),
 REFLECT_FIELD(maxSpeed),
 REFLECT_FIELD(minSpeed),

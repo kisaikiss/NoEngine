@@ -15,7 +15,6 @@ struct ParticleComponent {
 
 struct ParticleEmitterComponent {
 	bool active = true;
-	bool isBillboard = true;
 
 	// パーティクルの設定
 	uint32_t maxCount = 100;	// 最大発生数

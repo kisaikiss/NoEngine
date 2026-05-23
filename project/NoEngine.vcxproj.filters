@@ -195,6 +195,7 @@
     <ClCompile Include="engine\Functions\Renderer\RenderGraph.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Effect\ParticleSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\ParticleEmitterComponent.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\Effect\ParticleEmitterSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -404,6 +405,7 @@
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\VignettingPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\BoxFilterPass.h" />
     <ClInclude Include="engine\Functions\ECS\System\Effect\ParticleSystem.h" />
+    <ClInclude Include="engine\Functions\ECS\System\Effect\ParticleEmitterSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />
