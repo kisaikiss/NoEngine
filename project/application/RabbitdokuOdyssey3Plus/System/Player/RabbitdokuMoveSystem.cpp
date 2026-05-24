@@ -71,7 +71,7 @@ void RabbitdokuMoveSystem::Update(No::Registry& registry, float deltaTime) {
 			break;
 		case RabbitdokuState::Walk:
 			playerVariables->state = RabbitdokuState::Walk;
-			animator->framesNum = 3;
+			animator->framesNum = 6;
 			animator->currentAnimation = 1;
 			animator->frameByFrameTime = 0.1f;
 			sprite->uv.x = 0.f;
