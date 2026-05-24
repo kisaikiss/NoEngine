@@ -11,6 +11,7 @@
 #include "Functions/ECS/Component/CameraComponent.h"
 #include "Functions/ECS/Component/ParticleEmitterComponent.h"
 #include "Functions/ECS/Component/VelocityComponent.h"
+#include "Functions/ECS/Component/Effect/EffectEmitterComponent.h"
 #include "Functions/ECS/Event/SceneChangeEvent.h"
 #include "Editor/EditUtils.h"
 #include "Editor/ReflectionMacros.h"
@@ -32,6 +33,7 @@
 #include "Functions/ECS/System/Effect/ParticleSystem.h"
 #include "Functions/ECS/System/Effect/ParticleEmitterSystem.h"
 #include "Functions/ECS/System/GroundResetSystem.h"
+#include "Functions/ECS/System/Effect/EffectEmitSystem.h"
 
 #include "Assets/ModelLoader.h"
 #include "Assets/Audio/Audio.h"

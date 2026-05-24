@@ -196,6 +196,8 @@
     <ClCompile Include="engine\Functions\ECS\System\Effect\ParticleSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\ParticleEmitterComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Effect\ParticleEmitterSystem.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\Effect\EffectEmitSystem.cpp" />
+    <ClCompile Include="engine\Functions\ECS\Component\Effect\EffectEmitterComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -406,6 +408,8 @@
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\BoxFilterPass.h" />
     <ClInclude Include="engine\Functions\ECS\System\Effect\ParticleSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\Effect\ParticleEmitterSystem.h" />
+    <ClInclude Include="engine\Functions\ECS\System\Effect\EffectEmitSystem.h" />
+    <ClInclude Include="engine\Functions\ECS\Component\Effect\EffectEmitterComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

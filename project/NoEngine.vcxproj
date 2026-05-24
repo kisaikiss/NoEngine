@@ -215,6 +215,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="application\TestApp\TestApp.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Animator2DComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\AnimatorComponent.cpp" />
+    <ClCompile Include="engine\Functions\ECS\Component\Effect\EffectEmitterComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\MeshComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\ParticleEmitterComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Camera\Camera2DSystem.cpp" />
@@ -234,6 +235,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="engine\Functions\ECS\System\Camera\DebugCamera2DSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Camera\DebugCameraSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\EditSystem.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\Effect\EffectEmitSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Effect\ParticleEmitterSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Effect\ParticleSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\GroundResetSystem.cpp" />
@@ -418,6 +420,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\Player\RabbitdokuPushBackSystem.h" />
     <ClInclude Include="application\TestApp\TestApp.h" />
     <ClInclude Include="engine\Assets\RaytracingMesh.h" />
+    <ClInclude Include="engine\Functions\ECS\Component\Effect\EffectEmitterComponent.h" />
     <ClInclude Include="engine\Functions\ECS\System\Camera\Camera2DSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\Collision\CollisionResolution2DSystem.h" />
     <ClInclude Include="engine\Functions\ECS\Component\Animator2DComponent.h" />
@@ -441,6 +444,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="engine\Functions\ECS\System\Camera\DebugCamera2DSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\Camera\DebugCameraSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\EditSystem.h" />
+    <ClInclude Include="engine\Functions\ECS\System\Effect\EffectEmitSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\Effect\ParticleEmitterSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\Effect\ParticleSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\GroundResetSystem.h" />

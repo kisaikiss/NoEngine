@@ -1,0 +1,18 @@
+#include "stdafx.h"
+#include "EffectEmitterComponent.h"
+#include "engine/Editor/ReflectionMacros.h"
+
+REFLECT_STRUCT_BEGIN(NoEngine::Component::EffectEmitTag)
+REFLECT_STRUCT_END(NoEngine::Component::EffectEmitTag)
+
+REFLECT_STRUCT_BEGIN(NoEngine::Component::EffectEmitterComponent)
+REFLECT_FIELD(count),
+REFLECT_FIELD(maxSpeed),
+REFLECT_FIELD(minSpeed),
+REFLECT_FIELD(maxScale),
+REFLECT_FIELD(minScale),
+REFLECT_FIELD(maxLifeTime),
+REFLECT_FIELD(minLifeTime),
+REFLECT_FIELD(maxRotate),
+REFLECT_FIELD(minRotate)
+REFLECT_STRUCT_END(NoEngine::Component::EffectEmitterComponent)

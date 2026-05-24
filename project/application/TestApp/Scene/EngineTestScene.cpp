@@ -10,6 +10,7 @@ void EngineTestScene::Setup() {
 	AddSystem(std::make_unique<No::AnimationSystem>());
 	AddSystem(std::make_unique<No::SpriteAnimationSystem>());
 	AddSystem(std::make_unique<No::ParticleEmitterSystem>());
+	AddSystem(std::make_unique<No::EffectEmitSystem>());
 	AddSystem(std::make_unique<No::ParticleSystem>());
 	AddSystem(std::make_unique<No::EditSystem>());
 	AddSystem(std::make_unique<No::DebugCameraSystem>());
@@ -45,22 +46,6 @@ void EngineTestScene::Setup() {
 	registry.AddComponent<No::TransformComponent>(background);
 	auto* backgroundTag = registry.AddComponent<No::EditTag>(background);
 	backgroundTag->name = "background";
-
-
-	auto* t2d = registry.AddComponent<No::Transform2DComponent>(entity);
-	t2d->translate = { 100.f, 200.f };
-	auto* sprite = registry.AddComponent<No::SpriteComponent>(entity);
-	sprite->layer = 1;
-
-	t2d->scale = { 100.f, 100.f };
-	sprite->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/engine/Texture/player.png");
-
-	auto* anime2d = registry.AddComponent<No::Animator2DComponent>(entity);
-	anime2d->animeFrameHeight = 256.f;
-	anime2d->animeFrameWidth = 512.f;
-	anime2d->frameByFrameTime = 0.2f;
-	anime2d->currentAnimation = 1;
-	anime2d->framesNum = 6;
 
 	auto light = registry.GenerateEntity();
 	auto* dir = registry.AddComponent<No::DirectionalLightComponent>(light);
@@ -147,6 +132,19 @@ void EngineTestScene::Setup() {
 	emitterT2->translate.x = -4.f;
 	auto* emitterTag3 = registry.AddComponent<No::EditTag>(emitterE3);
 	emitterTag3->name = "emitter3";
+
+	{
+		auto e = registry.GenerateEntity();
+		auto* effect = registry.AddComponent<No::EffectEmitterComponent>(e);
+		effect->texture = NoEngine::TextureManager::LoadCovertTexture("resources/engine/Texture/circle.png");
+		effect->count = 3;
+		effect->maxSpeed = 0;
+		effect->minSpeed = 0;
+		effect->maxScale = 10.f;
+		effect->minScale = 1.f;
+		registry.AddComponent<No::EditTag>(e)->name = "effectEmitter";
+		registry.AddComponent<No::TransformComponent>(e);
+	}
 }
 
 void EngineTestScene::NotSystemUpdate() {

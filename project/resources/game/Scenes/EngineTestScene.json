@@ -105,17 +105,17 @@
                 },
                 "DebugCameraComponent": {
                     "center": [
-                        0.0,
-                        0.0,
-                        0.0
+                        0.11924878507852554,
+                        1.024911880493164,
+                        0.23238030076026917
                     ],
-                    "distance": 37.18646240234375,
+                    "distance": 17.080202102661133,
                     "drawCenter": false,
-                    "mousePositionX": 405,
-                    "mousePositionY": 279,
-                    "mouseWheelY": -480.0,
-                    "phi": 1.1773474216461182,
-                    "theta": -0.9642321467399597
+                    "mousePositionX": 695,
+                    "mousePositionY": 432,
+                    "mouseWheelY": -600.0,
+                    "phi": 1.2082818746566772,
+                    "theta": -1.7952038049697876
                 },
                 "EditTag": {
                     "name": "camera",
@@ -123,10 +123,10 @@
                 },
                 "TransformComponent": {
                     "rotation": [
-                        0.18653757870197296,
-                        -0.2928936779499054,
-                        0.05837433785200119,
-                        0.9359537959098816
+                        0.17913281917572021,
+                        0.11013416945934296,
+                        -0.020184148102998734,
+                        0.9774326086044312
                     ],
                     "scale": [
                         1.0,
@@ -134,9 +134,9 @@
                         1.0
                     ],
                     "translate": [
-                        19.578371047973633,
-                        14.256399154663086,
-                        -28.218353271484375
+                        -3.434563398361206,
+                        7.08200216293335,
+                        -15.337313652038574
                     ]
                 }
             }
@@ -195,6 +195,59 @@
                 }
             }
         },
+        "effectEmitter": {
+            "components": {
+                "EditTag": {
+                    "name": "effectEmitter",
+                    "path": "effectEmitter"
+                },
+                "EffectEmitterComponent": {
+                    "count": 4,
+                    "maxLifeTime": 1.0,
+                    "maxRotate": 3.1415927410125732,
+                    "maxScale": [
+                        0.4000000059604645,
+                        7.199999809265137,
+                        1.0
+                    ],
+                    "maxSpeed": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "minLifeTime": 0.8999999761581421,
+                    "minRotate": 0.0,
+                    "minScale": [
+                        0.20000000298023224,
+                        3.0,
+                        1.0
+                    ],
+                    "minSpeed": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                "TransformComponent": {
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        0.0,
+                        1.600000023841858,
+                        0.0
+                    ]
+                }
+            }
+        },
         "emitter": {
             "components": {
                 "EditTag": {
@@ -202,7 +255,7 @@
                     "path": "emitter"
                 },
                 "ParticleEmitterComponent": {
-                    "active": true,
+                    "active": false,
                     "count": 10,
                     "frequency": 0.10000000149011612,
                     "maxCount": 100,
@@ -246,7 +299,7 @@
                     "path": "emitter2"
                 },
                 "ParticleEmitterComponent": {
-                    "active": true,
+                    "active": false,
                     "count": 10,
                     "frequency": 0.10000000149011612,
                     "maxCount": 100,
@@ -290,7 +343,7 @@
                     "path": "emitter3"
                 },
                 "ParticleEmitterComponent": {
-                    "active": true,
+                    "active": false,
                     "count": 10,
                     "frequency": 0.10000000149011612,
                     "maxCount": 100,
@@ -329,9 +382,6 @@
         },
         "girl": {
             "components": {
-                "Animator2DComponent": {
-                    "currentAnimation": 1
-                },
                 "AnimatorComponent": {
                     "currentAnimation": 0,
                     "drawSkeleton": false
@@ -353,38 +403,6 @@
                 },
                 "MeshComponent": {
                     "isVisible": true
-                },
-                "SpriteComponent": {
-                    "color": [
-                        1.0,
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "flipX": false,
-                    "flipY": false,
-                    "pivot": [
-                        0.5,
-                        0.5
-                    ],
-                    "textureFilePath": "",
-                    "uv": [
-                        0.0,
-                        0.0,
-                        1.0,
-                        1.0
-                    ]
-                },
-                "Transform2DComponent": {
-                    "rotation": 0.0,
-                    "scale": [
-                        100.0,
-                        100.0
-                    ],
-                    "translate": [
-                        100.0,
-                        200.0
-                    ]
                 },
                 "TransformComponent": {
                     "rotation": [

@@ -139,7 +139,9 @@ void ParticlePass::UploadMatrices(GraphicsContext& gfx, ECS::Registry& registry)
 		scaleMatrix.MakeScale(item.transform->scale);
 		Math::Matrix4x4 translateMatrix;
 		translateMatrix.MakeTranslate(item.transform->translate);
-		Math::Matrix4x4 worldMatrix = scaleMatrix * billBoardMatrix * translateMatrix;
+		Math::Matrix4x4 rotateMatrix;
+		rotateMatrix.MakeRotate(item.transform->rotation);
+		Math::Matrix4x4 worldMatrix = scaleMatrix *rotateMatrix * billBoardMatrix * translateMatrix;
 		particleForGpu_.push_back({ worldMatrix, item.particle->color });
 
 		baseIndex++;
