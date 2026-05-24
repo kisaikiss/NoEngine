@@ -1,5 +1,49 @@
 {
     "entities": {
+        "AnimeCube": {
+            "components": {
+                "AnimatorComponent": {
+                    "currentAnimation": 0,
+                    "drawSkeleton": false
+                },
+                "EditTag": {
+                    "name": "AnimeCube",
+                    "path": "AnimeCube"
+                },
+                "MaterialComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "enviromentCoefficient": 0.0,
+                    "shininess": 60.0
+                },
+                "MeshComponent": {
+                    "isVisible": true
+                },
+                "TransformComponent": {
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        0.0,
+                        2.299999952316284,
+                        0.0
+                    ]
+                }
+            }
+        },
         "CAMERA2D": {
             "components": {
                 "EditTag": {
@@ -109,13 +153,13 @@
                         1.024911880493164,
                         0.23238030076026917
                     ],
-                    "distance": 17.080202102661133,
+                    "distance": 33.05585861206055,
                     "drawCenter": false,
-                    "mousePositionX": 695,
-                    "mousePositionY": 432,
-                    "mouseWheelY": -600.0,
-                    "phi": 1.2082818746566772,
-                    "theta": -1.7952038049697876
+                    "mousePositionX": 327,
+                    "mousePositionY": 386,
+                    "mouseWheelY": -840.0,
+                    "phi": 1.274091362953186,
+                    "theta": -0.9147881269454956
                 },
                 "EditTag": {
                     "name": "camera",
@@ -123,10 +167,10 @@
                 },
                 "TransformComponent": {
                     "rotation": [
-                        0.17913281917572021,
-                        0.11013416945934296,
-                        -0.020184148102998734,
-                        0.9774326086044312
+                        0.13992881774902344,
+                        -0.3186156451702118,
+                        0.04761726036667824,
+                        0.9362887740135193
                     ],
                     "scale": [
                         1.0,
@@ -134,9 +178,9 @@
                         1.0
                     ],
                     "translate": [
-                        -3.434563398361206,
-                        7.08200216293335,
-                        -15.337313652038574
+                        19.400941848754883,
+                        10.689477920532227,
+                        -24.817615509033203
                     ]
                 }
             }
@@ -151,9 +195,9 @@
                         1.0
                     ],
                     "direction": [
-                        0.0,
-                        -1.0,
-                        0.0
+                        0.42433932423591614,
+                        -0.6017764806747437,
+                        0.6766101121902466
                     ],
                     "intensity": 1.0
                 },

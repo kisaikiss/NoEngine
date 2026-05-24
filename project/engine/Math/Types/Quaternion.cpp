@@ -150,5 +150,10 @@ Quaternion operator*(float s, const Quaternion& q) {
 Quaternion operator-(const Quaternion& q0, const Quaternion& q1) {
 	return Quaternion(q0.x - q1.x, q0.y - q1.y, q0.z - q1.z, q0.w - q1.w);
 }
+
+bool operator==(const Quaternion& q1, const Quaternion& q2) {
+	return (q1.x == q2.x && q1.y == q2.y && q1.z == q2.z && q1.w == q2.w);
+}
+
 }
 }

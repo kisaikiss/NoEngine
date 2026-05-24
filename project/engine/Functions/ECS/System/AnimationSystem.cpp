@@ -4,6 +4,7 @@
 #include "engine/Math/Types/Calculations/QuaternionCalculations.h"
 #include "engine/Functions/Shader/ShaderModule.h"
 #include "engine/Utilities/Conversion/ConvertString.h"
+#include "../Component/TransformComponent.h" 
 
 
 namespace NoEngine {
@@ -48,14 +49,24 @@ void AnimationSystem::AnimationUpdate(Registry& registry, float deltaTime) {
 	for (auto entity : view) {
 		auto* animeComp = registry.GetComponent<Component::AnimatorComponent>(entity);
 		auto* meshComp = registry.GetComponent<Component::MeshComponent>(entity);
-		if (!animeComp->skeleton || !meshComp->mesh) continue;
+		auto* transformComp = registry.GetComponent<Component::TransformComponent>(entity);
+
+		if (!meshComp->mesh) continue;
+
 		animeComp->time += deltaTime;
 		uint32_t currentAnimation = animeComp->currentAnimation;
 		animeComp->time = std::fmod(animeComp->time, animeComp->animation[currentAnimation].duration);
+			
 		if (animeComp->skeleton) {
 			SkeletonUpdate(animeComp);
 			SkeletonDraw(animeComp);
 			SKinUpdate(animeComp, meshComp);
+		}
+
+		//animeComp->parent.translate != Math::Vector3::ZERO && animeComp->parent.rotation != Math::Quaternion::ZERO && animeComp->parent.scale != Math::Vector3::ZERO
+		if (animeComp->animation[currentAnimation].nodeAnimations.contains(meshComp->mesh->rootNode.name)) {
+			CalculateValue(animeComp->animation[currentAnimation].nodeAnimations[meshComp->mesh->rootNode.name], animeComp->parent, animeComp->time);
+			transformComp->parent = &animeComp->parent;
 		}
 	}
 }

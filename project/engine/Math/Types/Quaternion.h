@@ -63,5 +63,7 @@ Quaternion operator*(const Quaternion& q, float s);
 Quaternion operator*(float s, const Quaternion& q);
 
 Quaternion operator-(const Quaternion& q0, const Quaternion& q1);
+
+bool operator==(const Quaternion& q1, const Quaternion& q2);
 }
 }

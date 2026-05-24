@@ -30,7 +30,9 @@ float Dot(const Quaternion& q1, const Quaternion& q2) {
 
 Quaternion Normalize(const Quaternion& q) {
 	float norm = Norm(q);
-	assert(norm != 0);
+	if (norm == 0) {
+		return Quaternion::IDENTITY;
+	}
 	return Quaternion(q.x / norm, q.y / norm, q.z / norm, q.w / norm);
 }
 

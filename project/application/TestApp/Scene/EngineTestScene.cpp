@@ -33,7 +33,6 @@ void EngineTestScene::Setup() {
 	m->drawOutline = true;
 	m->enableSkinning = true;
 	m->psoName = L"Renderer : DefaultSkinned PSO";
-	m->rootSigId = NoEngine::Render::GetRootSignatureID(m->psoName);
 
 	No::Entity background = registry.GenerateEntity();
 	auto* bm = registry.AddComponent<No::MeshComponent>(background);
@@ -143,6 +142,20 @@ void EngineTestScene::Setup() {
 		effect->maxScale = 10.f;
 		effect->minScale = 1.f;
 		registry.AddComponent<No::EditTag>(e)->name = "effectEmitter";
+		registry.AddComponent<No::TransformComponent>(e);
+	}
+
+	{
+		auto e = registry.GenerateEntity();
+		auto* cubeMesh = registry.AddComponent<No::MeshComponent>(e);
+		auto* cubeM = registry.AddComponent<No::MaterialComponent>(e);
+		auto* cubeA = registry.AddComponent<No::AnimatorComponent>(e);
+		No::ModelLoader::LoadModel("animeCube", "resources/engine/Model/AnimatedCube/AnimatedCube.gltf");
+		No::ModelLoader::GetModel("animeCube", cubeMesh, cubeA);
+		cubeM->materials = No::ModelLoader::GetMaterial("animeCube");
+		cubeM->psoName = L"Renderer : Default PSO";
+
+		registry.AddComponent<No::EditTag>(e)->name = "AnimeCube";
 		registry.AddComponent<No::TransformComponent>(e);
 	}
 }
