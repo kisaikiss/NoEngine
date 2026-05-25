@@ -7,6 +7,8 @@
 #include "../System/FollowCamera2DSystem.h"
 #include "../System/Camera2DChangeSystem.h"
 #include "../System/Editor/RabbitdokuStageEditSystem.h"
+#include "../System/Game/RabbitdokuLoadSystem.h"
+#include "../System/Game/RabbitdokuSceneResetSystem.h"
 
 #include "../Component/RabbitdokuComponent.h"
 #include "../Component/FollowCamera2DComponent.h"
@@ -28,6 +30,8 @@ void RabbitdokuScene::AddSystems() {
 	AddSystem(std::make_unique<No::DebugCamera2DSystem>());
 	AddSystem(std::make_unique<Camera2DChangeSystem>());
 
+	AddSystem(std::make_unique<RabbitdokuLoadSystem>());
+
 	AddSystem(std::make_unique<RabbitdokuMoveSystem>());
 	AddSystem(std::make_unique<FollowCamera2DSystem>());
 
@@ -46,6 +50,9 @@ void RabbitdokuScene::AddSystems() {
 	
 	AddSystem(std::make_unique<No::SpriteAnimationSystem>());
 	AddSystem(std::make_unique<No::Camera2DSystem>());
+
+
+	AddSystem(std::make_unique<RabbitdokuSceneResetSystem>());
 }
 
 void RabbitdokuScene::InitPlayer(No::Registry& registry) {

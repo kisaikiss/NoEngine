@@ -43,7 +43,6 @@ public:
 	void Update(ComputeContext& ctx, float deltaTime);
 
 	ECS::Registry* GetRegistry() { return registry_.get(); }
-
 protected:
 	template<typename T>
 	T* AddSystem(std::unique_ptr<T> system) { return systemManager_->AddSystem(std::move(system)); }
@@ -63,6 +62,8 @@ private:
 	std::unique_ptr<ECS::Registry> registry_;
 	std::unique_ptr<ECS::SystemManager> systemManager_;
 };
+
+std::string GetCurrentSceneName(ECS::Registry& registry);
 }
 }
 

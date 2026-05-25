@@ -8,5 +8,16 @@ void IScene::Update(ComputeContext& ctx, float deltaTime) {
 	registry_->FlushDestroy();
 }
 
+std::string GetCurrentSceneName(ECS::Registry& registry) {
+	auto view = registry.View<SceneNameComponent>();
+	std::string currentName;
+	for (auto entity : view) {
+		auto* scene = registry.GetComponent<SceneNameComponent>(entity);
+		currentName = scene->GetName();
+	}
+
+	return currentName;
+}
+
 }
 }
