@@ -21,4 +21,6 @@ void RabbitdokuOdyssey3Plus::Startup(void) {
 
 	No::InputBindAction("Reset", No::DeviceType::Keyboard, static_cast<int>('R'));
 	No::InputBindAction("Reset", No::DeviceType::Gamepad, static_cast<int>(No::GamepadButton::Y));
+
+	No::InputBindAction("Save", No::DeviceType::Keyboard, static_cast<int>('Z'));
 }

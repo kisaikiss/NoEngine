@@ -34,5 +34,7 @@ Vector2 operator*(const Vector2& v, float s);
 Vector2 operator/(const Vector2& v, float s);
 
 Vector2 operator-(const Vector2& v);
+
+bool operator==(const Vector2& v1, const Vector2& v2);
 }
 }

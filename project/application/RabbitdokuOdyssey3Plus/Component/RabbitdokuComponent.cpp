@@ -1,6 +1,5 @@
 #include "RabbitdokuComponent.h"
 REFLECT_STRUCT_BEGIN(Rabbitdoku)
-REFLECT_FIELD(respawnPoint),
 REFLECT_FIELD(moveSpeed),
 REFLECT_FIELD(yVelocity),
 REFLECT_FIELD(jumpSpeed),

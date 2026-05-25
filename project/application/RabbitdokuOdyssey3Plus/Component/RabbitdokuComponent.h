@@ -11,7 +11,6 @@ enum class RabbitdokuState {
 };
 
 struct Rabbitdoku {
-	No::Vector2 respawnPoint = No::Vector2::ZERO;
 	float moveSpeed = 500.f;
 	float yVelocity = 0.f;
 	float jumpSpeed;

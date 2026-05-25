@@ -26,6 +26,8 @@ void CollisionResolution2DSystem::Update(Registry& registry, float deltaTime) {
         Math::Vector2 n = c.normal;
         float p = c.penetration;
 
+        if (p == 0.0f) continue;
+
         auto* bodyA = registry.GetComponent<CollisionBody>(c.a);
         if (bodyA && bodyA->type == BodyType::Dynamic) {
             pushes[c.a].push_back({ n, p });

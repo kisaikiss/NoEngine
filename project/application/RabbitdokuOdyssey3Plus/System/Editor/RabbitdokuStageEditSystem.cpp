@@ -2,9 +2,6 @@
 #include "RabbitdokuStageEditSystem.h"
 #include "application/RabbitdokuOdyssey3Plus/Game/RabbitdokuCollisionLayer.h"
 #include "application/RabbitdokuOdyssey3Plus/Game/RabbitdokuTag.h"
-namespace {
-int count = 0;
-}
 
 void RabbitdokuStageEditSystem::Update(No::Registry& registry, float deltaTime) {
 	static_cast<void>(deltaTime);
@@ -61,6 +58,17 @@ void RabbitdokuStageEditSystem::Update(No::Registry& registry, float deltaTime) 
 		}
 
 		break;
+	case RabbitdokuStageEditSystem::EditState::kGimmick:
+		if (No::Mouse::IsTrigger(No::MouseButton::Left)) {
+			if (No::IsMouseOverGameWindow())
+				AddSave(registry);
+		}
+
+		if (No::Mouse::IsTrigger(No::MouseButton::Right)) {
+			if (No::IsMouseOverGameWindow())
+				DeleteGimmick(registry);
+		}
+		break;
 	}
 
 
@@ -102,7 +110,6 @@ void RabbitdokuStageEditSystem::AddBlock(No::Registry& registry) {
 	transform->scale.y = gridSize_.y;
 	collider->max = transform->scale / 2.f;
 	collider->min = -transform->scale / 2.f;
-	count++;
 }
 
 void RabbitdokuStageEditSystem::AddRoom(No::Registry& registry) {
@@ -119,6 +126,64 @@ void RabbitdokuStageEditSystem::AddRoom(No::Registry& registry) {
 	tag->path = "Room/room";
 }
 
+void RabbitdokuStageEditSystem::AddSave(No::Registry& registry) {
+	No::Vector2 position = GetGridPosition(No::Get2DGameWindowMousePosition(registry));
+	auto blockView = registry.View<BlockTag, No::AABBCollider2D, No::Transform2DComponent>();
+	for (auto e : blockView) {
+		auto* aabb = registry.GetComponent<No::AABBCollider2D>(e);
+		auto* transform = registry.GetComponent<No::Transform2DComponent>(e);
+		if (No::IsCollision(position, aabb, transform)) return;
+	}
+
+	auto gimmickView = registry.View<GimmickTag, No::AABBCollider2D, No::Transform2DComponent>();
+	for (auto e : gimmickView) {
+		auto* aabb = registry.GetComponent<No::AABBCollider2D>(e);
+		auto* transform = registry.GetComponent<No::Transform2DComponent>(e);
+		if (No::IsCollision(position, aabb, transform)) return;
+	}
+
+
+	No::Entity e = registry.GenerateEntity();
+	auto* transform = registry.AddComponent<No::Transform2DComponent>(e);
+	transform->translate = position;
+	auto* sprite = registry.AddComponent<No::SpriteComponent>(e);
+	auto* collider = registry.AddComponent<No::AABBCollider2D>(e);
+	registry.AddComponent<SaveTag>(e);
+	registry.AddComponent<GimmickTag>(e);
+	auto* tag = registry.AddComponent<No::EditTag>(e);
+	tag->name = "save";
+	tag->path = "Gimmick/Save/save";
+	registry.AddComponent<No::CollisionBody>(e)->type = No::BodyType::Through;
+	registry.AddComponent<RabbitdokuCollisionLayerComponent>(e)->layer = RabbitdokuCollisionLayerComponent::Item;
+	sprite->textureFilePath = "resources/game/RabbitdokuOdyssey3Plus/Sprite/savePoint.png";
+	transform->scale.x = gridSize_.x;
+	transform->scale.y = gridSize_.y;
+	collider->max = transform->scale / 2.f;
+	collider->min = -transform->scale / 2.f;
+
+	auto* animator = registry.AddComponent<No::Animator2DComponent>(e);
+	animator->animeFrameHeight = 64.f;
+	animator->animeFrameWidth = 64.f;
+	animator->framesNum = 8;
+	animator->frameByFrameTime = 0.1f;
+	sprite->uv.x = 0.f;
+	sprite->uv.width = 1.f/8.f;
+	sprite->uv.height = 1.f;
+
+}
+
+void RabbitdokuStageEditSystem::DeleteGimmick(No::Registry& registry) {
+	No::Vector2 position = No::Get2DGameWindowMousePosition(registry);
+	auto gimmickView = registry.View<GimmickTag, No::AABBCollider2D, No::Transform2DComponent>();
+	for (auto e : gimmickView) {
+		auto* aabb = registry.GetComponent<No::AABBCollider2D>(e);
+		auto* transform = registry.GetComponent<No::Transform2DComponent>(e);
+		if (No::IsCollision(position, aabb, transform)) {
+			registry.DestroyEntity(e);
+		}
+	}
+}
+
 void RabbitdokuStageEditSystem::DeleteBlock(No::Registry& registry) {
 	No::Vector2 position = No::Get2DGameWindowMousePosition(registry);
 	auto blockView = registry.View<BlockTag, No::AABBCollider2D, No::Transform2DComponent>();
@@ -127,7 +192,6 @@ void RabbitdokuStageEditSystem::DeleteBlock(No::Registry& registry) {
 		auto* transform = registry.GetComponent<No::Transform2DComponent>(e);
 		if (No::IsCollision(position, aabb, transform)) {
 			registry.DestroyEntity(e);
-			count--;
 		}
 	}
 }
@@ -167,6 +231,9 @@ void RabbitdokuStageEditSystem::DrawEditWindow(No::Registry& registry) {
 	case RabbitdokuStageEditSystem::EditState::kRoom:
 		ImGui::Text("RoomMode");
 		break;
+	case RabbitdokuStageEditSystem::EditState::kGimmick:
+		ImGui::Text("GimmickMode");
+		break;
 	default:
 		ImGui::Text("UnknownMode");
 		break;
@@ -178,6 +245,9 @@ void RabbitdokuStageEditSystem::DrawEditWindow(No::Registry& registry) {
 		}
 		if (ImGui::MenuItem("RoomMode")) {
 			state_ = EditState::kRoom;
+		}
+		if (ImGui::MenuItem("GimmickMode")) {
+			state_ = EditState::kGimmick;
 		}
 
 		ImGui::EndPopup();

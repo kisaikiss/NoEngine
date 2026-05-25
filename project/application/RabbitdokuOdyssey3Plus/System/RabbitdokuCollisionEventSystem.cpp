@@ -23,6 +23,13 @@ void RabbitdokuCollisionEventSystem::Update(No::Registry& registry, float deltaT
 			registry.EmitEvent(event);
 		}
 
+		if ((layerA->layer & RabbitdokuCollisionLayerComponent::Player) != RabbitdokuCollisionLayerComponent::None &&
+			(layerB->layer & RabbitdokuCollisionLayerComponent::Item) != RabbitdokuCollisionLayerComponent::None) {
+			RabbitdokuItemGetEvent event;
+			event.player = contact.a;
+			event.item = contact.b;
+			registry.EmitEvent(event);
+		}
 
 	}
 }

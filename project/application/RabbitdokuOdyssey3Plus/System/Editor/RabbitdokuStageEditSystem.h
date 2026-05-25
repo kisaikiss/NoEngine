@@ -9,6 +9,7 @@ private:
     enum class EditState {
         kBlock,
         kRoom,
+        kGimmick,
     };
 
     No::Vector2 gridSize_ = No::Vector2(64.f,64.f);
@@ -23,6 +24,8 @@ private:
 
     void AddBlock(No::Registry& registry);
     void AddRoom(No::Registry& registry);
+    void AddSave(No::Registry& registry);
+    void DeleteGimmick(No::Registry& registry);
     void DeleteBlock(No::Registry& registry);
     No::Entity FindRoom(No::Registry& registry, const No::Vector2& pos);
     No::Vector2 GetGridPosition(const No::Vector2& position);

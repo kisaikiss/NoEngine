@@ -202,6 +202,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="application\ClockworksDisease\System\Object\BoxColliderUpdateSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Player\PlayerMoveSystem.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\Component\RabbitdokuComponent.cpp" />
+    <ClCompile Include="application\RabbitdokuOdyssey3Plus\Component\SaveDataComponent.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\Game\RabbitdokuCollisionLayer.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\Game\RabbitdokuTag.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\RabbitdokuOdyssey3Plus.cpp" />
@@ -209,8 +210,10 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\Camera2DChangeSystem.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\Editor\RabbitdokuStageEditSystem.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\FollowCamera2DSystem.cpp" />
+    <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\Game\RabbitdokuItemGetSystem.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\Game\RabbitdokuLoadSystem.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\Game\RabbitdokuSceneResetSystem.cpp" />
+    <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\Game\RabbitItemGetSystem.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\RabbitdokuCollisionEventSystem.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\Player\RabbitdokuMoveSystem.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\Player\RabbitdokuPushBackSystem.cpp" />
@@ -410,6 +413,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="application\ClockworksDisease\System\Player\PlayerMoveSystem.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\Component\FollowCamera2DComponent.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\Component\RabbitdokuComponent.h" />
+    <ClInclude Include="application\RabbitdokuOdyssey3Plus\Component\SaveDataComponent.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\Game\RabbitdokuCollisionLayer.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\Game\RabbitdokuResetEvent.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\Game\RabbitdokuTag.h" />
@@ -418,6 +422,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\Camera2DChangeSystem.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\Editor\RabbitdokuStageEditSystem.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\FollowCamera2DSystem.h" />
+    <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\Game\RabbitdokuItemGetSystem.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\Game\RabbitdokuLoadSystem.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\Game\RabbitdokuSceneResetSystem.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\RabbitdokuCollisionEventSystem.h" />

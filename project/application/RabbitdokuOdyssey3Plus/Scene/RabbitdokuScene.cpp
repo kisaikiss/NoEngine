@@ -9,9 +9,11 @@
 #include "../System/Editor/RabbitdokuStageEditSystem.h"
 #include "../System/Game/RabbitdokuLoadSystem.h"
 #include "../System/Game/RabbitdokuSceneResetSystem.h"
+#include "../System/Game/RabbitdokuItemGetSystem.h"
 
 #include "../Component/RabbitdokuComponent.h"
 #include "../Component/FollowCamera2DComponent.h"
+#include "../Component/SaveDataComponent.h"
 #include "../Game/RabbitdokuCollisionLayer.h"
 #include "../Game/RabbitdokuTag.h"
 
@@ -47,6 +49,7 @@ void RabbitdokuScene::AddSystems() {
 
 	AddSystem(std::make_unique<RabbitdokuCollisionEventSystem>());
 	AddSystem(std::make_unique<RabbitdokuPushBackSystem>());
+	AddSystem(std::make_unique<RabbitItemGetSystem>());
 	
 	AddSystem(std::make_unique<No::SpriteAnimationSystem>());
 	AddSystem(std::make_unique<No::Camera2DSystem>());
@@ -61,6 +64,7 @@ void RabbitdokuScene::InitPlayer(No::Registry& registry) {
 	registry.AddComponent<No::Velocity2DComponent>(e);
 	registry.AddComponent<Rabbitdoku>(e);
 	registry.AddComponent<No::EditTag>(e)->name = "Rabbitdoku";
+	registry.AddComponent<SaveDataComponent>(e);
 	auto* collider = registry.AddComponent<No::AABBCollider2D>(e);
 	collider->max.y = 32.f;
 	collider->min.y = -24.f;

@@ -37,14 +37,32 @@
                 "Transform2DComponent": {
                     "rotation": 0.0,
                     "scale": [
-                        2.4850661754608154,
-                        2.4850661754608154
+                        1.1816251277923584,
+                        1.1816251277923584
                     ],
                     "translate": [
-                        4997.02490234375,
-                        -606.1504516601563
+                        696.2166137695313,
+                        353.1176452636719
                     ]
                 }
+            }
+        },
+        "NewFolder": {
+            "components": {
+                "EditTag": {
+                    "name": "NewFolder",
+                    "path": "Gimmick"
+                },
+                "FolderTag": null
+            }
+        },
+        "NewFolder_2": {
+            "components": {
+                "EditTag": {
+                    "name": "NewFolder_2",
+                    "path": "Gimmick/Save"
+                },
+                "FolderTag": null
             }
         },
         "Rabbitdoku": {
@@ -60,7 +78,11 @@
                     ]
                 },
                 "Animator2DComponent": {
-                    "currentAnimation": 0
+                    "animeFrameHeight": 32.0,
+                    "animeFrameWidth": 32.0,
+                    "currentAnimation": 0,
+                    "frameByFrameTime": 0.30000001192092896,
+                    "framesNum": 2
                 },
                 "CollisionBody": {
                     "type": 0
@@ -77,14 +99,17 @@
                     "doubleJumpSpeed": 350.0,
                     "jumpSpeed": 450.0,
                     "moveSpeed": 300.0,
-                    "respawnPoint": [
-                        150.0,
-                        224.0
-                    ],
                     "yVelocity": 0.0
                 },
                 "RabbitdokuCollisionLayerComponent": {
                     "layer": 1
+                },
+                "SaveDataComponent": {
+                    "deathCount": 0,
+                    "respawnPoint": [
+                        258.5195617675781,
+                        416.0
+                    ]
                 },
                 "SpriteComponent": {
                     "color": [
@@ -93,7 +118,7 @@
                         1.0,
                         1.0
                     ],
-                    "flipX": false,
+                    "flipX": true,
                     "flipY": false,
                     "pivot": [
                         0.5,
@@ -114,7 +139,7 @@
                         64.0
                     ],
                     "translate": [
-                        360.0302734375,
+                        258.5195617675781,
                         416.0
                     ]
                 },
@@ -26980,6 +27005,71 @@
                     "translate": [
                         4676.12255859375,
                         -677.2593994140625
+                    ]
+                }
+            }
+        },
+        "save": {
+            "components": {
+                "AABBCollider2D": {
+                    "max": [
+                        32.0,
+                        32.0
+                    ],
+                    "min": [
+                        -32.0,
+                        -32.0
+                    ]
+                },
+                "Animator2DComponent": {
+                    "animeFrameHeight": 64.0,
+                    "animeFrameWidth": 64.0,
+                    "currentAnimation": 0,
+                    "frameByFrameTime": 0.10000000149011612,
+                    "framesNum": 8
+                },
+                "CollisionBody": {
+                    "type": 2
+                },
+                "EditTag": {
+                    "name": "save",
+                    "path": "Gimmick/Save/save"
+                },
+                "GimmickTag": null,
+                "RabbitdokuCollisionLayerComponent": {
+                    "layer": 8
+                },
+                "SaveTag": null,
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/savePoint.png",
+                    "uv": [
+                        0.375,
+                        0.0,
+                        0.125,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        64.0,
+                        64.0
+                    ],
+                    "translate": [
+                        288.0,
+                        416.0
                     ]
                 }
             }

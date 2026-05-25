@@ -45,7 +45,8 @@ struct GroundStateComponent {
 /// </summary>
 enum class BodyType {
 	Dynamic,   // 押し戻される
-	Static	   // 押し戻されない
+	Static,	   // 押し戻されない
+	Through,   // スルーされる(相手も押し戻されない)
 };
 
 /// <summary>
