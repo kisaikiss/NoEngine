@@ -11,12 +11,15 @@
 namespace NoEngine {
 namespace ECS {
 
-SystemManager::SystemManager() {
+namespace {
 #ifdef USE_IMGUI
-	gameStop_ = true;
+bool sGameStop = true;
+#else
+bool sGameStop = false;
 #endif // USE_IMGUI
-
 }
+
+SystemManager::SystemManager() {}
 
 void SystemManager::UpdateAll(ComputeContext& ctx, Registry& registry, float deltaTime) {
 	auto pauseView = registry.View<PauseComponent>();
@@ -28,7 +31,7 @@ void SystemManager::UpdateAll(ComputeContext& ctx, Registry& registry, float del
 
 
 	for (auto& system : systems_) {
-		if (!gameStop_ || !system->GetStopInGameStop()) {
+		if (!sGameStop || !system->GetStopInGameStop()) {
 			if (!isPause || !system->GetStopInPause()) {
 				system->Update(ctx, registry, deltaTime);
 			}
@@ -44,6 +47,7 @@ void SystemManager::UpdateAll(ComputeContext& ctx, Registry& registry, float del
 
 	ImGui::SetCursorPosX(windowWidth * 0.5f - itemWidth);
 	if (ImGui::Button("■")) {
+		sGameStop = true;
 		auto sceneView = registry.View<SceneNameComponent>();
 		for (auto e : sceneView) {
 			auto* sceneName = registry.GetComponent<SceneNameComponent>(e);
@@ -55,11 +59,11 @@ void SystemManager::UpdateAll(ComputeContext& ctx, Registry& registry, float del
 	}
 	ImGui::SameLine();
 	if (ImGui::Button(">")) {
-		gameStop_ = false;
+		sGameStop = false;
 	}
 	ImGui::SameLine();
 	if (ImGui::Button("||")) {
-		gameStop_ = true;
+		sGameStop = true;
 	}
 
 	ImGui::End();

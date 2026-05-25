@@ -19,8 +19,6 @@ public:
 
 private:
 	std::vector<std::unique_ptr<ISystem>> systems_;
-
-	bool gameStop_ = false;
 };
 }
 }
