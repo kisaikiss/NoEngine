@@ -13,6 +13,10 @@ bool InputIsTrigger(const std::string& actionName) {
 	return InputConfig::Get().IsActionTriggered(actionName);
 }
 
+bool InputIsRelease(const std::string& actionName) {
+	return InputConfig::Get().IsActionReleased(actionName);
+}
+
 bool InputIsPress(const std::string& actionName) {
 	return InputConfig::Get().IsActionPressed(actionName);
 }
@@ -31,6 +35,13 @@ bool InputConfig::IsActionTriggered(const std::string& actionName) {
 	return false;
 }
 
+bool InputConfig::IsActionReleased(const std::string& actionName) {
+	for (auto input : actionMap[actionName].inputs) {
+		if (CheckPhysicalRelease(input)) return true;
+	}
+	return false;
+}
+
 bool InputConfig::IsActionPressed(const std::string& actionName) {
 	for (auto input : actionMap[actionName].inputs) {
 		if (CheckPhysicalPress(input)) return true;
@@ -43,6 +54,15 @@ bool InputConfig::CheckPhysicalTrigger(const PhysicalInput& bind) {
 	case DeviceType::Keyboard: return Keyboard::IsTrigger(static_cast<uint8_t>(bind.code));
 	case DeviceType::Gamepad:  return Pad::IsTrigger(static_cast<GamepadButton>(bind.code));
 	case DeviceType::Mouse:    return Mouse::IsTrigger(static_cast<MouseButton>(bind.code));
+	}
+	return false;
+}
+
+bool InputConfig::CheckPhysicalRelease(const PhysicalInput& bind) {
+	switch (bind.device) {
+	case DeviceType::Keyboard: return Keyboard::IsRelease(static_cast<uint8_t>(bind.code));
+	case DeviceType::Gamepad:  return Pad::IsRelease(static_cast<GamepadButton>(bind.code));
+	case DeviceType::Mouse:    return Mouse::IsRelease(static_cast<MouseButton>(bind.code));
 	}
 	return false;
 }

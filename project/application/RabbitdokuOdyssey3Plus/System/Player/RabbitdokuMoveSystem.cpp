@@ -2,7 +2,7 @@
 #include "../../Component/RabbitdokuComponent.h"
 
 void RabbitdokuMoveSystem::Update(No::Registry& registry, float deltaTime) {
-	auto view = registry.View<Rabbitdoku>();
+	auto view = registry.View<Rabbitdoku, No::Velocity2DComponent, No::SpriteComponent, No::GroundStateComponent, No::Animator2DComponent>();
 	static_cast<void>(deltaTime);
 	for (auto e : view) {
 		auto* velocity = registry.GetComponent<No::Velocity2DComponent>(e);
@@ -13,10 +13,10 @@ void RabbitdokuMoveSystem::Update(No::Registry& registry, float deltaTime) {
 		playerVariables->nextState = RabbitdokuState::Unknown;
 
 		velocity->linear = No::Vector2::ZERO;
-		if (No::Keyboard::IsPress(VK_RIGHT)) {
+		if (No::InputIsPress("Right")) {
 			velocity->linear.x += playerVariables->moveSpeed;
 			sprite->flipX = false;
-		} else if (No::Keyboard::IsPress(VK_LEFT)) {
+		} else if (No::InputIsPress("Left")) {
 			velocity->linear.x -= playerVariables->moveSpeed;
 			sprite->flipX = true;
 		}
@@ -30,7 +30,7 @@ void RabbitdokuMoveSystem::Update(No::Registry& registry, float deltaTime) {
 		}
 
 		// 縦移動
-		if (No::Keyboard::IsTrigger(VK_LSHIFT) || No::Keyboard::IsTrigger(VK_RSHIFT)) {
+		if (No::InputIsTrigger("Jump")) {
 			if (groundState->isGrounded) {
 				playerVariables->yVelocity = -playerVariables->jumpSpeed;
 			} else {
@@ -44,7 +44,7 @@ void RabbitdokuMoveSystem::Update(No::Registry& registry, float deltaTime) {
 
 
 		// 上昇中にキーを離したら速度を半減
-		if (No::Keyboard::IsRelease(VK_LSHIFT) || No::Keyboard::IsRelease(VK_RSHIFT)) {
+		if (No::InputIsRelease("Jump")) {
 			if (playerVariables->yVelocity < 0.f) {
 				playerVariables->yVelocity *= 0.45f;
 			}

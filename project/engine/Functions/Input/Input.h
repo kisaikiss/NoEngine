@@ -56,7 +56,7 @@ public:
 	};
 
 	static bool IsTrigger(GamepadButton button);
-
+	static bool IsRelease(GamepadButton button);
 	static bool IsPress(GamepadButton button);
 
 	static const Trigger& GetTriggerButton();
@@ -79,7 +79,7 @@ class Mouse {
 	friend void NoEngine::InputUpdate();
 public:
 	static bool IsTrigger(MouseButton button);
-
+	static bool IsRelease(MouseButton button);
 	static bool IsPress(MouseButton button);
 
 	/// <summary>

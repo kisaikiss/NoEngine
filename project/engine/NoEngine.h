@@ -40,6 +40,7 @@
 #include "Functions/Renderer/RenderSystem.h"
 #include "Functions/Renderer/Primitive.h"
 #include "Functions/Input/Input.h"
+#include "Functions/Input/InputConfig.h"
 
 #include "Math/MathInclude.h"
 

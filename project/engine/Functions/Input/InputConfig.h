@@ -10,6 +10,7 @@ enum class DeviceType {
 void InputBindAction(const std::string& actionName, Input::DeviceType device, int code);
 
 bool InputIsTrigger(const std::string& actionName);
+bool InputIsRelease(const std::string& actionName);
 bool InputIsPress(const std::string& actionName);
 
 }
@@ -37,11 +38,13 @@ public:
     void BindAction(const std::string& actionName, Input::DeviceType device, int code);
 
     bool IsActionTriggered(const std::string& actionName);
+    bool IsActionReleased(const std::string& actionName);
     bool IsActionPressed(const std::string& actionName);
 private:
     std::unordered_map<std::string, ActionBinding> actionMap;
 
     bool CheckPhysicalTrigger(const PhysicalInput& bind);
+    bool CheckPhysicalRelease(const PhysicalInput& bind);
     bool CheckPhysicalPress(const PhysicalInput& bind);
 
     InputConfig() = default;
