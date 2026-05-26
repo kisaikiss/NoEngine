@@ -4,6 +4,7 @@
 #include "../../Component/SaveDataComponent.h"
 #include "../../Game/RabbitdokuCollisionLayer.h"
 #include "../../Game/RabbitdokuTag.h"
+#include "application/RabbitdokuOdyssey3Plus/Game/RabbitdokuSerializer.h"
 
 
 void RabbitItemGetSystem::Update(No::Registry& registry, float deltaTime) {
@@ -14,7 +15,7 @@ void RabbitItemGetSystem::Update(No::Registry& registry, float deltaTime) {
 		//auto* player = registry.GetComponent<Rabbitdoku>(event.player);
 		if (registry.GetComponent<SaveTag>(event.item)) {
 			if (No::InputIsTrigger("Save")) {
-				registry.GetComponent<SaveDataComponent>(event.player)->respawnPoint = registry.GetComponent<No::Transform2DComponent>(event.player)->translate;
+				RabbitdokuSerializer::GameSave(registry, registry.GetComponent<No::Transform2DComponent>(event.player)->translate);
 			}
 		}
 
