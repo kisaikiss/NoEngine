@@ -26,6 +26,7 @@ void EffectEmitSystem::EmitParticle(Registry& registry, Component::EffectEmitter
 		auto* particle = registry.AddComponent<ParticleComponent>(e);
 		particle->lifeTime = Random::GetRandomVal(effectEmitter.minLifeTime, effectEmitter.maxLifeTime);
 		particle->texture = effectEmitter.texture;
+		particle->shape = effectEmitter.shape;
 	}
 }
 }

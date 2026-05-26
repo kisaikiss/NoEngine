@@ -6,10 +6,17 @@
 namespace NoEngine {
 namespace Component {
 
+// ToDo: ParticleShapeを消し、ParticlePassをモデルパーティクルへ対応させる
+enum class ParticleShape {
+	kPlane,
+	kRing
+};
+
 struct ParticleComponent {
 	Math::Color color = Math::Color::WHITE;
 	float lifeTime = 3.f;
 	float currentTime = 0.f;
+	ParticleShape shape = ParticleShape::kPlane;
 	TextureRef texture;			// 使用するテクスチャ
 };
 
@@ -25,6 +32,7 @@ struct ParticleEmitterComponent {
 	Math::Vector3 minSpeed = -Math::Vector3::UNIT_SCALE;
 	float maxLifeTime = 6.f;
 	float minLifeTime = 2.f;
+	ParticleShape shape = ParticleShape::kPlane;
 	TextureRef texture;			// 使用するテクスチャ
 };
 }

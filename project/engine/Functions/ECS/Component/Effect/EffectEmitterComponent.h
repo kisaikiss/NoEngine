@@ -1,7 +1,7 @@
 #pragma once
 #include "engine/Math/MathInclude.h"
 #include "engine/Assets/Texture/TextureManager.h"
-
+#include "../ParticleEmitterComponent.h"
 
 namespace NoEngine {
 namespace Component {
@@ -17,6 +17,7 @@ struct EffectEmitterComponent {
     float minLifeTime = 2.f;
     float maxRotate = PI;
     float minRotate = 0.f;
+    ParticleShape shape = ParticleShape::kPlane;
     TextureRef texture;			// 使用するテクスチャ
 };
 }

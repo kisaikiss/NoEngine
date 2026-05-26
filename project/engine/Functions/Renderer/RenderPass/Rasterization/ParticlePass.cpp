@@ -7,6 +7,30 @@ namespace NoEngine {
 namespace Render {
 
 ParticlePass::ParticlePass() {
+	// --- リングメッシュ生成 ---
+	std::vector<ParticleVertex> ringVerts;
+	std::vector<uint32_t> ringIndices;
+	GenerateRingMesh(ringVerts, ringIndices);
+
+	// Upload ring vertices
+	UploadBuffer ringVertUpload;
+	size_t vertSize = ringVerts.size() * sizeof(ParticleVertex);
+	ringVertUpload.Create(L"RingVertexUpload", vertSize);
+	memcpy(ringVertUpload.Map(), ringVerts.data(), vertSize);
+	ringVertUpload.Unmap();
+	ringVertex_.Create(L"ringVertex", static_cast<uint32_t>(ringVerts.size()), sizeof(ParticleVertex), ringVertUpload);
+
+	// Upload ring indices
+	UploadBuffer ringIdxUpload;
+	size_t idxSize = ringIndices.size() * sizeof(uint32_t);
+	ringIdxUpload.Create(L"RingIndexUpload", idxSize);
+	memcpy(ringIdxUpload.Map(), ringIndices.data(), idxSize);
+	ringIdxUpload.Unmap();
+	ringIndex_.Create(L"ringIndex", static_cast<uint32_t>(ringIndices.size()), sizeof(uint32_t), ringIdxUpload);
+
+	ringIndexCount_ = static_cast<uint32_t>(ringIndices.size());
+
+	// Quad
 	vertex_ = ByteAddressBuffer();
 	ParticleVertex vertices[] = {
 		{{-0.5f,-0.5f,0.f,1.f},{0,1}},
@@ -52,9 +76,6 @@ void ParticlePass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& reso
 	gfx.SetRootSignature(renderCtx->GetRootSignature("Renderer : particle PSO"));
 	gfx.SetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	gfx.SetVertexBuffer(0, vertex_.VertexBufferView());
-	gfx.SetIndexBuffer(index_.IndexBufferView());
-
 	// カメラ
 	gfx.SetDynamicConstantBufferView(rootIndex["gCameraMatrix"], sizeof(Component::CameraForGPU), &camera_->forGPU);
 
@@ -72,6 +93,11 @@ void ParticlePass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& reso
 		size_t nextIndex = baseIndices_[i + 1];
 		size_t instanceCount = nextIndex - baseIndex; // インスタンス数を計算
 
+		if (instanceCount == 0) continue;
+
+		// ここで textures_[count] に対応する最初の item の shape を取得する
+		Component::ParticleShape shape = items_[baseIndex].particle->shape;
+
 		// baseIndex
 		_declspec(align(16)) struct {
 			uint32_t index;
@@ -81,8 +107,19 @@ void ParticlePass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& reso
 		gfx.SetDynamicConstantBufferView(rootIndex["gBaseIndex"], sizeof(indexConstant), &indexConstant);
 
 		gfx.SetDynamicDescriptor(rootIndex["gTexture"], 0, textures_[count]->GetSRV());
+		switch (shape) {
+		case NoEngine::Component::ParticleShape::kPlane:
+			gfx.SetVertexBuffer(0, vertex_.VertexBufferView());
+			gfx.SetIndexBuffer(index_.IndexBufferView());
+			gfx.DrawIndexedInstanced(6, static_cast<UINT>(instanceCount), 0, 0, static_cast<UINT>(baseIndex));
+			break;
+		case NoEngine::Component::ParticleShape::kRing:
+			gfx.SetVertexBuffer(0, ringVertex_.VertexBufferView());
+			gfx.SetIndexBuffer(ringIndex_.IndexBufferView());
+			gfx.DrawIndexedInstanced(ringIndexCount_, static_cast<UINT>(instanceCount), 0, 0, static_cast<UINT>(baseIndex));
+			break;
+		}
 
-		gfx.DrawIndexedInstanced(6, static_cast<UINT>(instanceCount), 0, 0, static_cast<UINT>(baseIndex));
 
 		count++;
 	}
@@ -105,8 +142,6 @@ void ParticlePass::UploadMatrices(GraphicsContext& gfx, ECS::Registry& registry)
 		billBoardMatrix.m[3][2] = 0.0f;
 	}
 	
-
-	
 	// collect
 	items_.clear();
 	for (auto entity : view) {
@@ -120,6 +155,7 @@ void ParticlePass::UploadMatrices(GraphicsContext& gfx, ECS::Registry& registry)
 
 	// sort
 	std::sort(items_.begin(), items_.end(), [](const DrawItem& a, const DrawItem& b) {
+		if (a.particle->shape != b.particle->shape) return a.particle->shape < b.particle->shape;
 		return a.particle->texture < b.particle->texture;
 		});
 
@@ -181,6 +217,42 @@ void ParticlePass::Initialize(size_t maxParticles) {
 		bufferSize
 	);
 
+}
+
+void ParticlePass::GenerateRingMesh(std::vector<ParticleVertex>& outVerts, std::vector<uint32_t>& outIndices, uint32_t ringDivide, float innerRadius, float outerRadius) {
+	outVerts.clear();
+	outIndices.clear();
+	outVerts.reserve(ringDivide * 4);
+	outIndices.reserve(ringDivide * 6);
+
+	const float kRadianPerDivide = 2.0f * PI / float(ringDivide);
+	for (uint32_t index = 0; index < ringDivide; ++index) {
+		const float kAngle = static_cast<float>(index) * kRadianPerDivide;
+		const float kAngleNext = static_cast<float>(index + 1) * kRadianPerDivide;
+
+		float sin = std::sinf(kAngle);
+		float cos = std::cosf(kAngle);
+		float sinNext = std::sinf(kAngleNext);
+		float cosNext = std::cosf(kAngleNext);
+		float u = static_cast<float>(index) / static_cast<float>(ringDivide);
+		float uNext = static_cast<float>(index + 1) / static_cast<float>(ringDivide);
+		outVerts.push_back({ {-sin * outerRadius, cos * outerRadius, 0.0f, 1.0f},{u,0.0f} });
+		outVerts.push_back({ {-sinNext * outerRadius, cosNext * outerRadius, 0.0f, 1.0f},{uNext,0.0f} });
+		outVerts.push_back({ {-sin * innerRadius, cos * innerRadius, 0.0f, 1.0f},{u,1.0f} });
+		outVerts.push_back({ {-sinNext * innerRadius, cosNext * innerRadius, 0.0f, 1.0f},{uNext,1.0f} });
+
+		uint32_t base = index * 4;
+		// 三角形 1
+		outIndices.push_back(base + 1);
+		outIndices.push_back(base + 2);
+		outIndices.push_back(base + 0);
+
+		// 三角形 2: inner current, inner next, outer next
+		outIndices.push_back(base + 1);
+		outIndices.push_back(base + 3);
+		outIndices.push_back(base + 2);
+
+	}
 }
 
 }

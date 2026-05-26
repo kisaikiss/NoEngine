@@ -4,7 +4,6 @@
 #include "engine/Runtime/Graphics/GraphicsCommon.h"
 
 namespace NoEngine {
-// ToDo : Texture周りはコピペが多く、理解が薄い部分が多いです。全体的に理解し、リファクタリングをすべきです。
 class ManagedTexture;
 class TextureRef;
 

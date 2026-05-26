@@ -16,6 +16,9 @@ public:
 private:
 	ByteAddressBuffer vertex_;
 	ByteAddressBuffer index_;
+	ByteAddressBuffer ringVertex_;
+	ByteAddressBuffer ringIndex_;
+	uint32_t ringIndexCount_;
 
 	StructuredBuffer worldMatrixBuffer_;
 	UploadBuffer worldMatrixUpload_;
@@ -48,6 +51,7 @@ private:
 
 	void UploadMatrices(GraphicsContext& gfx, ECS::Registry& registry);
 	void Initialize(size_t maxParticles);
+	void GenerateRingMesh(std::vector<ParticleVertex>& outVerts, std::vector<uint32_t>& outIndices, uint32_t ringDivide = 32, float innerRadius = 0.2f, float outerRadius = 1.0f);
 };
 
 }
