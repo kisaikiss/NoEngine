@@ -12,10 +12,15 @@ private:
         kGimmick,
     };
 
-    enum class GimmickSlected {
+    enum class GimmickSelected {
         kSave,
         kDeathBlock,
         kNeedle,
+    };
+
+    struct BlockTextures {
+        static inline std::string kDaionkai = "resources/game/RabbitdokuOdyssey3Plus/Sprite/block.png";
+        static inline std::string kBlue = "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png";
     };
 
     No::Vector2 gridSize_ = No::Vector2(64.f,64.f);
@@ -25,13 +30,14 @@ private:
     
     No::Vector2 mouseOffset_{};
 
-
+    std::string currentBlockTexture = BlockTextures::kBlue;
     EditState state_ = EditState::kGimmick;
-    GimmickSlected gimmick_ = GimmickSlected::kDeathBlock;
+    GimmickSelected gimmick_ = GimmickSelected::kDeathBlock;
 
     void AddBlock(No::Registry& registry);
     void AddRoom(No::Registry& registry);
     void AddSave(No::Registry& registry);
+    void AddDeathBlock(No::Registry& registry);
     void AddNeedle(No::Registry& registry);
     void DeleteGimmick(No::Registry& registry);
     void DeleteBlock(No::Registry& registry);
@@ -40,5 +46,6 @@ private:
 
     void DrawEditWindow(No::Registry& registry);
     void DrawRooms(No::Registry& registry);
+    void DrawCollider(No::Registry& registry);
 };
 

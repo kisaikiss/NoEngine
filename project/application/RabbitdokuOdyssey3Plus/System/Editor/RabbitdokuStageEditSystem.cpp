@@ -62,13 +62,14 @@ void RabbitdokuStageEditSystem::Update(No::Registry& registry, float deltaTime) 
 		if (No::Mouse::IsTrigger(No::MouseButton::Left)) {
 			if (No::IsMouseOverGameWindow()) {
 				switch (gimmick_) {
-				case RabbitdokuStageEditSystem::GimmickSlected::kSave:
+				case RabbitdokuStageEditSystem::GimmickSelected::kSave:
 					AddSave(registry);
 					break;
-				case RabbitdokuStageEditSystem::GimmickSlected::kDeathBlock:
-					AddNeedle(registry);
+				case RabbitdokuStageEditSystem::GimmickSelected::kDeathBlock:
+					AddDeathBlock(registry);
 					break;
-				case RabbitdokuStageEditSystem::GimmickSlected::kNeedle:
+				case RabbitdokuStageEditSystem::GimmickSelected::kNeedle:
+					AddNeedle(registry);
 					break;
 				default:
 					break;
@@ -87,6 +88,7 @@ void RabbitdokuStageEditSystem::Update(No::Registry& registry, float deltaTime) 
 	No::DrawGrid2D(gridSize_);
 
 	DrawRooms(registry);
+	DrawCollider(registry);
 #else
 	static_cast<void>(registry);
 #endif // USE_IMGUI
@@ -109,6 +111,7 @@ void RabbitdokuStageEditSystem::AddBlock(No::Registry& registry) {
 	auto* transform = registry.AddComponent<No::Transform2DComponent>(e);
 	transform->translate = GetGridPosition(No::Get2DGameWindowMousePosition(registry));
 	auto* sprite = registry.AddComponent<No::SpriteComponent>(e);
+	sprite->layer = 10;
 	auto* collider = registry.AddComponent<No::AABBCollider2D>(e);
 	registry.AddComponent<BlockTag>(e);
 	auto* tag = registry.AddComponent<No::EditTag>(e);
@@ -117,7 +120,7 @@ void RabbitdokuStageEditSystem::AddBlock(No::Registry& registry) {
 	registry.AddComponent<No::CollisionBody>(e)->type = No::BodyType::Static;
 	registry.AddComponent<RabbitdokuCollisionLayerComponent>(e)->layer = RabbitdokuCollisionLayerComponent::Terrain;
 
-	sprite->textureFilePath = "resources/game/RabbitdokuOdyssey3Plus/Sprite/block.png";
+	sprite->textureFilePath = currentBlockTexture;
 	transform->scale.x = gridSize_.x;
 	transform->scale.y = gridSize_.y;
 	collider->max = transform->scale / 2.f;
@@ -159,6 +162,7 @@ void RabbitdokuStageEditSystem::AddSave(No::Registry& registry) {
 	auto* transform = registry.AddComponent<No::Transform2DComponent>(e);
 	transform->translate = position;
 	auto* sprite = registry.AddComponent<No::SpriteComponent>(e);
+	sprite->layer = 10;
 	auto* collider = registry.AddComponent<No::AABBCollider2D>(e);
 	registry.AddComponent<SaveTag>(e);
 	registry.AddComponent<GimmickTag>(e);
@@ -184,6 +188,43 @@ void RabbitdokuStageEditSystem::AddSave(No::Registry& registry) {
 
 }
 
+void RabbitdokuStageEditSystem::AddDeathBlock(No::Registry& registry) {
+	No::Vector2 position = GetGridPosition(No::Get2DGameWindowMousePosition(registry));
+	auto blockView = registry.View<BlockTag, No::AABBCollider2D, No::Transform2DComponent>();
+	for (auto e : blockView) {
+		auto* aabb = registry.GetComponent<No::AABBCollider2D>(e);
+		auto* transform = registry.GetComponent<No::Transform2DComponent>(e);
+		if (No::IsCollision(position, aabb, transform)) return;
+	}
+
+	auto gimmickView = registry.View<GimmickTag, No::AABBCollider2D, No::Transform2DComponent>();
+	for (auto e : gimmickView) {
+		auto* aabb = registry.GetComponent<No::AABBCollider2D>(e);
+		auto* transform = registry.GetComponent<No::Transform2DComponent>(e);
+		if (No::IsCollision(position, aabb, transform)) return;
+	}
+
+
+	No::Entity e = registry.GenerateEntity();
+	auto* transform = registry.AddComponent<No::Transform2DComponent>(e);
+	transform->translate = position;
+	auto* sprite = registry.AddComponent<No::SpriteComponent>(e);
+	sprite->layer = 10;
+	auto* collider = registry.AddComponent<No::AABBCollider2D>(e);
+	registry.AddComponent<EnemyTag>(e);
+	registry.AddComponent<GimmickTag>(e);
+	auto* tag = registry.AddComponent<No::EditTag>(e);
+	tag->name = "deathBlock";
+	tag->path = "Gimmick/DeathObject/deathBlock";
+	registry.AddComponent<No::CollisionBody>(e)->type = No::BodyType::Through;
+	registry.AddComponent<RabbitdokuCollisionLayerComponent>(e)->layer = RabbitdokuCollisionLayerComponent::Item;
+	sprite->textureFilePath = "resources/game/RabbitdokuOdyssey3Plus/Sprite/deathBlock.png";
+	transform->scale.x = gridSize_.x;
+	transform->scale.y = gridSize_.y;
+	collider->max = transform->scale / 2.f;
+	collider->min = -transform->scale / 2.f;
+}
+
 void RabbitdokuStageEditSystem::AddNeedle(No::Registry& registry) {
 	No::Vector2 position = GetGridPosition(No::Get2DGameWindowMousePosition(registry));
 	auto blockView = registry.View<BlockTag, No::AABBCollider2D, No::Transform2DComponent>();
@@ -205,19 +246,29 @@ void RabbitdokuStageEditSystem::AddNeedle(No::Registry& registry) {
 	auto* transform = registry.AddComponent<No::Transform2DComponent>(e);
 	transform->translate = position;
 	auto* sprite = registry.AddComponent<No::SpriteComponent>(e);
+	sprite->layer = 10;
 	auto* collider = registry.AddComponent<No::AABBCollider2D>(e);
 	registry.AddComponent<EnemyTag>(e);
 	registry.AddComponent<GimmickTag>(e);
 	auto* tag = registry.AddComponent<No::EditTag>(e);
-	tag->name = "deathBlock";
-	tag->path = "Gimmick/DeathObject/deathBlock";
+	tag->name = "needle";
+	tag->path = "Gimmick/DeathObject/needle";
 	registry.AddComponent<No::CollisionBody>(e)->type = No::BodyType::Through;
 	registry.AddComponent<RabbitdokuCollisionLayerComponent>(e)->layer = RabbitdokuCollisionLayerComponent::Item;
-	sprite->textureFilePath = "resources/game/RabbitdokuOdyssey3Plus/Sprite/deathBlock.png";
+	sprite->textureFilePath = "resources/game/RabbitdokuOdyssey3Plus/Sprite/gimmicks.png";
 	transform->scale.x = gridSize_.x;
 	transform->scale.y = gridSize_.y;
 	collider->max = transform->scale / 2.f;
 	collider->min = -transform->scale / 2.f;
+	collider->min.y = collider->max.y / 2.f;
+	auto* animator = registry.AddComponent<No::Animator2DComponent>(e);
+	animator->animeFrameHeight = 64.f;
+	animator->animeFrameWidth = 64.f;
+	animator->currentAnimation = 1;
+	animator->framesNum = 1;
+
+	sprite->uv.y = 1.f / 4.f;
+	sprite->uv.height = 1.f / 4.f;
 }
 
 void RabbitdokuStageEditSystem::DeleteGimmick(No::Registry& registry) {
@@ -303,27 +354,38 @@ void RabbitdokuStageEditSystem::DrawEditWindow(No::Registry& registry) {
 
 	switch (state_) {
 	case RabbitdokuStageEditSystem::EditState::kBlock:
+		if (ImGui::Button("Blue")) {
+			currentBlockTexture = BlockTextures::kBlue;
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("ジェイムズ")) {
+			currentBlockTexture = BlockTextures::kDaionkai;
+		}
 		break;
 	case RabbitdokuStageEditSystem::EditState::kRoom:
 		break;
 	case RabbitdokuStageEditSystem::EditState::kGimmick:
 		if (ImGui::Button("Save")) {
-			gimmick_ = GimmickSlected::kSave;
+			gimmick_ = GimmickSelected::kSave;
 		}
 		ImGui::SameLine();
 		if (ImGui::Button("DeathBlock")) {
-			gimmick_ = GimmickSlected::kDeathBlock;
+			gimmick_ = GimmickSelected::kDeathBlock;
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("Needle")) {
+			gimmick_ = GimmickSelected::kNeedle;
 		}
 		ImGui::Text("Selected : ");
 		ImGui::SameLine();
 		switch (gimmick_) {
-		case RabbitdokuStageEditSystem::GimmickSlected::kSave:
+		case RabbitdokuStageEditSystem::GimmickSelected::kSave:
 			ImGui::Text("Save");
 			break;
-		case RabbitdokuStageEditSystem::GimmickSlected::kDeathBlock:
+		case RabbitdokuStageEditSystem::GimmickSelected::kDeathBlock:
 			ImGui::Text("DeathBlock");
 			break;
-		case RabbitdokuStageEditSystem::GimmickSlected::kNeedle:
+		case RabbitdokuStageEditSystem::GimmickSelected::kNeedle:
 			ImGui::Text("Needle");
 			break;
 		}
@@ -340,8 +402,6 @@ void RabbitdokuStageEditSystem::DrawEditWindow(No::Registry& registry) {
 
 void RabbitdokuStageEditSystem::DrawRooms(No::Registry& registry) {
 #ifdef USE_IMGUI
-
-
 	auto view = registry.View<RoomTag, No::Transform2DComponent>();
 	for (auto e : view) {
 		auto* box = registry.GetComponent<RoomTag>(e);
@@ -352,4 +412,12 @@ void RabbitdokuStageEditSystem::DrawRooms(No::Registry& registry) {
 	static_cast<void>(registry);
 #endif // USE_IMGUI
 
+}
+
+void RabbitdokuStageEditSystem::DrawCollider(No::Registry& registry) {
+	for (auto e : registry.View<No::Transform2DComponent, No::AABBCollider2D>()) {
+		auto* c = registry.GetComponent<No::AABBCollider2D>(e);
+		NoEngine::DebugPrimitive::DrawCube2D(registry.GetComponent<No::Transform2DComponent>(e)->translate,
+			c->min, c->max, No::Color::RED);
+	}
 }

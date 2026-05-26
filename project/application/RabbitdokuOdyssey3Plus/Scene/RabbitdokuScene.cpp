@@ -74,6 +74,7 @@ void RabbitdokuScene::InitPlayer(No::Registry& registry) {
 	registry.AddComponent<RabbitdokuCollisionLayerComponent>(e)->layer = RabbitdokuCollisionLayerComponent::Player;
 	auto* sprite = registry.AddComponent<No::SpriteComponent>(e);
 	sprite->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/RabbitdokuOdyssey3Plus/Sprite/Player.png");
+	sprite->layer = 20;
 	transform->scale.x = 64.f;
 	transform->scale.y = 64.f;
 	auto* animator = registry.AddComponent<No::Animator2DComponent>(e);
