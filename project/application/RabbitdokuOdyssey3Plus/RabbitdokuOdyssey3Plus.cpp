@@ -1,10 +1,12 @@
 #include "stdafx.h"
 #include "RabbitdokuOdyssey3Plus.h"
 #include "Scene/RabbitdokuScene.h"
+#include "Scene/ExxsearearStage.h"
 
 void RabbitdokuOdyssey3Plus::Startup(void) {
 	RegisterScene("Rabbitdoku", []() { return std::make_unique<RabbitdokuScene>();	});
-	ChangeScene("Rabbitdoku");
+	RegisterScene("ExxsearearStage", []() { return std::make_unique<ExxsearearStage>();	});
+	ChangeScene("ExxsearearStage");
 
 	auto* roomBox = NoEngine::ComponentRegistry::FindByName("RoomTag");
 	roomBox->fields[0].attributes.valueSpeed = 1.f;

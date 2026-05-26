@@ -4,6 +4,8 @@ class RabbitdokuScene :
     public No::IScene {
 public:
     void Setup() override;
+protected:
+    void InitGameScene();
 private:
     void AddSystems();
     

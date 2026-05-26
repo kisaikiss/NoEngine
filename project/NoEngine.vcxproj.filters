@@ -203,6 +203,7 @@
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\Game\RabbitItemGetSystem.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\Game\RabbitdokuItemGetSystem.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\Game\RabbitdokuSerializer.cpp" />
+    <ClCompile Include="application\RabbitdokuOdyssey3Plus\Scene\ExxsearearStage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -420,6 +421,7 @@
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\Game\RabbitdokuSceneResetSystem.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\Game\RabbitdokuItemGetSystem.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\Game\RabbitdokuSerializer.h" />
+    <ClInclude Include="application\RabbitdokuOdyssey3Plus\Scene\ExxsearearStage.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

@@ -19,6 +19,10 @@
 
 
 void RabbitdokuScene::Setup() {
+	InitGameScene();
+}
+
+void RabbitdokuScene::InitGameScene() {
 	auto& registry = *GetRegistry();
 	AddSystems();
 	InitPlayer(registry);
