@@ -12,6 +12,12 @@ private:
         kGimmick,
     };
 
+    enum class GimmickSlected {
+        kSave,
+        kDeathBlock,
+        kNeedle,
+    };
+
     No::Vector2 gridSize_ = No::Vector2(64.f,64.f);
     No::Vector2 addRoomPosition_{};
 
@@ -20,11 +26,13 @@ private:
     No::Vector2 mouseOffset_{};
 
 
-    EditState state_ = EditState::kRoom;
+    EditState state_ = EditState::kGimmick;
+    GimmickSlected gimmick_ = GimmickSlected::kDeathBlock;
 
     void AddBlock(No::Registry& registry);
     void AddRoom(No::Registry& registry);
     void AddSave(No::Registry& registry);
+    void AddNeedle(No::Registry& registry);
     void DeleteGimmick(No::Registry& registry);
     void DeleteBlock(No::Registry& registry);
     No::Entity FindRoom(No::Registry& registry, const No::Vector2& pos);

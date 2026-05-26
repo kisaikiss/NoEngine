@@ -60,8 +60,20 @@ void RabbitdokuStageEditSystem::Update(No::Registry& registry, float deltaTime) 
 		break;
 	case RabbitdokuStageEditSystem::EditState::kGimmick:
 		if (No::Mouse::IsTrigger(No::MouseButton::Left)) {
-			if (No::IsMouseOverGameWindow())
-				AddSave(registry);
+			if (No::IsMouseOverGameWindow()) {
+				switch (gimmick_) {
+				case RabbitdokuStageEditSystem::GimmickSlected::kSave:
+					AddSave(registry);
+					break;
+				case RabbitdokuStageEditSystem::GimmickSlected::kDeathBlock:
+					AddNeedle(registry);
+					break;
+				case RabbitdokuStageEditSystem::GimmickSlected::kNeedle:
+					break;
+				default:
+					break;
+				}
+			}
 		}
 
 		if (No::Mouse::IsTrigger(No::MouseButton::Right)) {
@@ -172,6 +184,42 @@ void RabbitdokuStageEditSystem::AddSave(No::Registry& registry) {
 
 }
 
+void RabbitdokuStageEditSystem::AddNeedle(No::Registry& registry) {
+	No::Vector2 position = GetGridPosition(No::Get2DGameWindowMousePosition(registry));
+	auto blockView = registry.View<BlockTag, No::AABBCollider2D, No::Transform2DComponent>();
+	for (auto e : blockView) {
+		auto* aabb = registry.GetComponent<No::AABBCollider2D>(e);
+		auto* transform = registry.GetComponent<No::Transform2DComponent>(e);
+		if (No::IsCollision(position, aabb, transform)) return;
+	}
+
+	auto gimmickView = registry.View<GimmickTag, No::AABBCollider2D, No::Transform2DComponent>();
+	for (auto e : gimmickView) {
+		auto* aabb = registry.GetComponent<No::AABBCollider2D>(e);
+		auto* transform = registry.GetComponent<No::Transform2DComponent>(e);
+		if (No::IsCollision(position, aabb, transform)) return;
+	}
+
+
+	No::Entity e = registry.GenerateEntity();
+	auto* transform = registry.AddComponent<No::Transform2DComponent>(e);
+	transform->translate = position;
+	auto* sprite = registry.AddComponent<No::SpriteComponent>(e);
+	auto* collider = registry.AddComponent<No::AABBCollider2D>(e);
+	registry.AddComponent<EnemyTag>(e);
+	registry.AddComponent<GimmickTag>(e);
+	auto* tag = registry.AddComponent<No::EditTag>(e);
+	tag->name = "deathBlock";
+	tag->path = "Gimmick/DeathObject/deathBlock";
+	registry.AddComponent<No::CollisionBody>(e)->type = No::BodyType::Through;
+	registry.AddComponent<RabbitdokuCollisionLayerComponent>(e)->layer = RabbitdokuCollisionLayerComponent::Item;
+	sprite->textureFilePath = "resources/game/RabbitdokuOdyssey3Plus/Sprite/deathBlock.png";
+	transform->scale.x = gridSize_.x;
+	transform->scale.y = gridSize_.y;
+	collider->max = transform->scale / 2.f;
+	collider->min = -transform->scale / 2.f;
+}
+
 void RabbitdokuStageEditSystem::DeleteGimmick(No::Registry& registry) {
 	No::Vector2 position = No::Get2DGameWindowMousePosition(registry);
 	auto gimmickView = registry.View<GimmickTag, No::AABBCollider2D, No::Transform2DComponent>();
@@ -252,6 +300,38 @@ void RabbitdokuStageEditSystem::DrawEditWindow(No::Registry& registry) {
 
 		ImGui::EndPopup();
 	}
+
+	switch (state_) {
+	case RabbitdokuStageEditSystem::EditState::kBlock:
+		break;
+	case RabbitdokuStageEditSystem::EditState::kRoom:
+		break;
+	case RabbitdokuStageEditSystem::EditState::kGimmick:
+		if (ImGui::Button("Save")) {
+			gimmick_ = GimmickSlected::kSave;
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("DeathBlock")) {
+			gimmick_ = GimmickSlected::kDeathBlock;
+		}
+		ImGui::Text("Selected : ");
+		ImGui::SameLine();
+		switch (gimmick_) {
+		case RabbitdokuStageEditSystem::GimmickSlected::kSave:
+			ImGui::Text("Save");
+			break;
+		case RabbitdokuStageEditSystem::GimmickSlected::kDeathBlock:
+			ImGui::Text("DeathBlock");
+			break;
+		case RabbitdokuStageEditSystem::GimmickSlected::kNeedle:
+			ImGui::Text("Needle");
+			break;
+		}
+		break;
+	default:
+		break;
+	}
+
 	ImGui::End();
 #endif // USE_IMGUI
 	static_cast<void>(registry);

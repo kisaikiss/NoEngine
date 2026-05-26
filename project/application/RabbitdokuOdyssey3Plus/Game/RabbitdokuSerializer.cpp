@@ -12,7 +12,7 @@ void RabbitdokuSerializer::SetSaveData(uint32_t saveDataNum) {
 	sCurrentSaveData = saveDataNum;
 }
 
-void RabbitdokuSerializer::GameSave(No::Registry& registry, const No::Vector2& respawnPoint) {
+void RabbitdokuSerializer::GameSave(No::Registry& registry, const No::Vector2& respawnPoint, uint32_t deathCount, uint32_t totalDeath) {
 	std::string fileName = "saveData" + std::to_string(sCurrentSaveData) + ".json";
 	std::string filePath = sDirectory + fileName;
 
@@ -43,9 +43,10 @@ void RabbitdokuSerializer::GameSave(No::Registry& registry, const No::Vector2& r
 		{"y", respawnPoint.y}
 	};
 
-	if (!saveData[sceneName].contains("deathCount")) {
-		saveData[sceneName]["deathCount"] = 0;
-	}
+	saveData[sceneName]["deathCount"] = deathCount;
+	
+	saveData[sceneName]["totalDeath"] = totalDeath;
+	
 
 	// 上書き保存
 	std::ofstream ofs(filePath);
@@ -56,7 +57,7 @@ void RabbitdokuSerializer::GameSave(No::Registry& registry, const No::Vector2& r
 	}
 }
 
-No::Vector2 RabbitdokuSerializer::GameLoad(No::Registry& registry) {
+SaveData RabbitdokuSerializer::GameLoad(No::Registry& registry) {
 	std::string fileName = "saveData" + std::to_string(sCurrentSaveData) + ".json";
 	std::string filePath = sDirectory + fileName;
 
@@ -65,7 +66,7 @@ No::Vector2 RabbitdokuSerializer::GameLoad(No::Registry& registry) {
 
 	std::ifstream ifs(filePath);
 	if (!ifs.is_open()) {
-		return No::Vector2::ZERO;
+		return SaveData();
 	}
 
 	json saveData;
@@ -74,27 +75,26 @@ No::Vector2 RabbitdokuSerializer::GameLoad(No::Registry& registry) {
 	}
 	catch (const json::parse_error&) {
 		ifs.close();
-		return No::Vector2::ZERO;
+		return SaveData();
 	}
 	ifs.close();
 
 	std::string sceneName = No::GetCurrentSceneName(registry);
 	if (!saveData.contains(sceneName)) {
 		// データが存在しない場合は0でリターン
-		return No::Vector2::ZERO;
+		return SaveData();
 	}
 
 	auto& sceneData = saveData[sceneName];
 
-	No::Vector2 respawnPoint{};
-	if (sceneData.contains("respawnPoint") && sceneData.contains("deathCount")) {
-		respawnPoint.x = sceneData["respawnPoint"]["x"].get<float>();
-		respawnPoint.y = sceneData["respawnPoint"]["y"].get<float>();
+	SaveData data;
+	if (sceneData.contains("respawnPoint") && sceneData.contains("deathCount") && sceneData.contains("totalDeath")) {
+		data.respawnPoint.x = sceneData["respawnPoint"]["x"].get<float>();
+		data.respawnPoint.y = sceneData["respawnPoint"]["y"].get<float>();
 
 		// 死亡数の読み込み
-		int count = sceneData["deathCount"].get<int>();
-		count++;
-		sceneData["deathCount"] = count;
+		data.death = sceneData["deathCount"].get<int>();
+		data.totalDeath = sceneData["totalDeath"].get<int>();
 	}
 	
 	// 死亡数を加算した状態で上書き保存
@@ -105,5 +105,5 @@ No::Vector2 RabbitdokuSerializer::GameLoad(No::Registry& registry) {
 		ofs.close();
 	}
 
-	return respawnPoint;
+	return data;
 }

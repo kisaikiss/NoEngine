@@ -202,7 +202,6 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="application\ClockworksDisease\System\Object\BoxColliderUpdateSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Player\PlayerMoveSystem.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\Component\RabbitdokuComponent.cpp" />
-    <ClCompile Include="application\RabbitdokuOdyssey3Plus\Component\SaveDataComponent.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\Game\RabbitdokuCollisionLayer.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\Game\RabbitdokuSerializer.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\Game\RabbitdokuTag.cpp" />
@@ -414,7 +413,6 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="application\ClockworksDisease\System\Player\PlayerMoveSystem.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\Component\FollowCamera2DComponent.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\Component\RabbitdokuComponent.h" />
-    <ClInclude Include="application\RabbitdokuOdyssey3Plus\Component\SaveDataComponent.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\Game\RabbitdokuCollisionLayer.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\Game\RabbitdokuResetEvent.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\Game\RabbitdokuSerializer.h" />

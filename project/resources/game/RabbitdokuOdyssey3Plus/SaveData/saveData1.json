@@ -1,9 +1,10 @@
 {
     "Rabbitdoku": {
-        "deathCount": 4,
+        "deathCount": 117,
         "respawnPoint": {
-            "x": 1375.7747802734375,
-            "y": 672.0
-        }
+            "x": 4458.359375,
+            "y": -604.2012939453125
+        },
+        "totalDeath": 117
     }
 }

@@ -13,9 +13,9 @@
 
 #include "../Component/RabbitdokuComponent.h"
 #include "../Component/FollowCamera2DComponent.h"
-#include "../Component/SaveDataComponent.h"
 #include "../Game/RabbitdokuCollisionLayer.h"
 #include "../Game/RabbitdokuTag.h"
+#include "../Game/RabbitdokuSerializer.h"
 
 
 void RabbitdokuScene::Setup() {
@@ -64,7 +64,6 @@ void RabbitdokuScene::InitPlayer(No::Registry& registry) {
 	registry.AddComponent<No::Velocity2DComponent>(e);
 	registry.AddComponent<Rabbitdoku>(e);
 	registry.AddComponent<No::EditTag>(e)->name = "Rabbitdoku";
-	registry.AddComponent<SaveDataComponent>(e);
 	auto* collider = registry.AddComponent<No::AABBCollider2D>(e);
 	collider->max.y = 32.f;
 	collider->min.y = -24.f;
@@ -82,6 +81,7 @@ void RabbitdokuScene::InitPlayer(No::Registry& registry) {
 	animator->animeFrameWidth = 32.f;
 	animator->framesNum = 2;
 	animator->frameByFrameTime = 0.3f;
+	registry.AddComponent<SaveData>(e);
 }
 
 void RabbitdokuScene::InitCamera(No::Registry& registry) {

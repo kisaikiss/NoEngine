@@ -202,7 +202,6 @@
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\Game\RabbitdokuSceneResetSystem.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\Game\RabbitItemGetSystem.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\Game\RabbitdokuItemGetSystem.cpp" />
-    <ClCompile Include="application\RabbitdokuOdyssey3Plus\Component\SaveDataComponent.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\Game\RabbitdokuSerializer.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -420,7 +419,6 @@
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\Game\RabbitdokuResetEvent.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\Game\RabbitdokuSceneResetSystem.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\Game\RabbitdokuItemGetSystem.h" />
-    <ClInclude Include="application\RabbitdokuOdyssey3Plus\Component\SaveDataComponent.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\Game\RabbitdokuSerializer.h" />
   </ItemGroup>
   <ItemGroup>
