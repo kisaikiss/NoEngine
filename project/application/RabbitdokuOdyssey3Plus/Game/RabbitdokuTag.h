@@ -19,3 +19,5 @@ struct TransitionOutTag { float t = 0.0f; };
 struct SceneTransitionOutEvent {};
 
 struct SmokeEffectTag{};
+
+struct BackgroundTag{};

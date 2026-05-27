@@ -10,6 +10,7 @@ private:
         kBlock,
         kRoom,
         kGimmick,
+        kBackground,
     };
 
     enum class GimmickSelected {
@@ -21,6 +22,10 @@ private:
     struct BlockTextures {
         static inline std::string kDaionkai = "resources/game/RabbitdokuOdyssey3Plus/Sprite/block.png";
         static inline std::string kBlue = "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png";
+    };
+
+    struct BackgroundTextures {
+        static inline std::string kFlower = "resources/game/RabbitdokuOdyssey3Plus/Sprite/flower.png";
     };
 
     No::Vector2 gridSize_ = No::Vector2(64.f,64.f);
@@ -39,9 +44,11 @@ private:
     void AddSave(No::Registry& registry);
     void AddDeathBlock(No::Registry& registry);
     void AddNeedle(No::Registry& registry);
+    void AddBackground(No::Registry& registry);
     void DeleteGimmick(No::Registry& registry);
     void DeleteBlock(No::Registry& registry);
     No::Entity FindRoom(No::Registry& registry, const No::Vector2& pos);
+    No::Entity FindBackground(No::Registry& registry, const No::Vector2& pos);
     No::Vector2 GetGridPosition(const No::Vector2& position);
 
     void DrawEditWindow(No::Registry& registry);

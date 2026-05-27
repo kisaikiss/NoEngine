@@ -45,14 +45,8 @@ void RabbitdokuStageEditSystem::Update(No::Registry& registry, float deltaTime) 
 					mouseOffset_ = registry.GetComponent<No::Transform2DComponent>(roomE)->translate;
 					mouseOffset_ = mouseOffset_ - mousePosition_;
 				}
-
 				auto* transform = registry.GetComponent<No::Transform2DComponent>(roomE);
-
-
-
-
 				transform->translate = mousePosition_ + mouseOffset_;
-
 			}
 
 		}
@@ -81,6 +75,37 @@ void RabbitdokuStageEditSystem::Update(No::Registry& registry, float deltaTime) 
 			if (No::IsMouseOverGameWindow())
 				DeleteGimmick(registry);
 		}
+		break;
+	case EditState::kBackground:
+		if (No::Mouse::IsTrigger(No::MouseButton::Right)) {
+			if (No::IsMouseOverGameWindow()) {
+				addRoomPosition_ = No::Get2DGameWindowMousePosition(registry);
+				ImGui::OpenPopup("AddBackgroundPopup");
+			}
+		}
+		if (ImGui::BeginPopupContextItem("AddBackgroundPopup")) {
+			if (ImGui::MenuItem("AddBackground")) {
+				AddBackground(registry);
+			}
+
+			ImGui::EndPopup();
+		}
+
+		if (No::Mouse::IsPress(No::MouseButton::Left)) {
+			if (No::IsMouseOverGameWindow()) {
+				No::Entity roomE = FindBackground(registry, mousePosition_);
+
+				if (roomE == No::INVALID_ENTITY) break;
+				if (No::Mouse::IsTrigger(No::MouseButton::Left)) {
+					mouseOffset_ = registry.GetComponent<No::Transform2DComponent>(roomE)->translate;
+					mouseOffset_ = mouseOffset_ - mousePosition_;
+				}
+				auto* transform = registry.GetComponent<No::Transform2DComponent>(roomE);
+				transform->translate = mousePosition_ + mouseOffset_;
+			}
+
+		}
+
 		break;
 	}
 
@@ -271,6 +296,26 @@ void RabbitdokuStageEditSystem::AddNeedle(No::Registry& registry) {
 	sprite->uv.height = 1.f / 4.f;
 }
 
+void RabbitdokuStageEditSystem::AddBackground(No::Registry& registry) {
+	No::Entity e = registry.GenerateEntity();
+	auto* t = registry.AddComponent<No::Transform2DComponent>(e);
+	auto* s = registry.AddComponent<No::SpriteComponent>(e);
+	s->textureHandle = NoEngine::TextureManager::LoadCovertTexture(BackgroundTextures::kFlower);
+	s->textureFilePath = BackgroundTextures::kFlower;
+	s->layer = 0;
+	t->translate = addRoomPosition_;
+	t->scale.x = static_cast<float>(s->textureHandle.GetWidth());
+	t->scale.y = static_cast<float>(s->textureHandle.GetHeight());
+	auto* tag = registry.AddComponent<No::EditTag>(e);
+	tag->name = "background";
+	tag->path = "Background/background";
+	auto* box = registry.AddComponent<No::AABBCollider2D>(e);
+	box->max = t->scale / 2.f;
+	box->min = -t->scale / 2.f;
+	registry.AddComponent<No::CollisionBody>(e)->type = No::BodyType::Through;
+	registry.AddComponent<BackgroundTag>(e);
+}
+
 void RabbitdokuStageEditSystem::DeleteGimmick(No::Registry& registry) {
 	No::Vector2 position = No::Get2DGameWindowMousePosition(registry);
 	auto gimmickView = registry.View<GimmickTag, No::AABBCollider2D, No::Transform2DComponent>();
@@ -299,6 +344,14 @@ No::Entity RabbitdokuStageEditSystem::FindRoom(No::Registry& registry, const No:
 	auto view = registry.View<RoomTag, No::Transform2DComponent>();
 	for (auto e : view) {
 		if (No::IsCollision(pos, registry.GetComponent<RoomTag>(e), registry.GetComponent<No::Transform2DComponent>(e))) return e;
+	}
+	return No::INVALID_ENTITY;
+}
+
+No::Entity RabbitdokuStageEditSystem::FindBackground(No::Registry& registry, const No::Vector2& pos) {
+	auto view = registry.View<BackgroundTag,No::AABBCollider2D, No::Transform2DComponent>();
+	for (auto e : view) {
+		if (No::IsCollision(pos, registry.GetComponent<No::AABBCollider2D>(e), registry.GetComponent<No::Transform2DComponent>(e))) return e;
 	}
 	return No::INVALID_ENTITY;
 }
@@ -333,6 +386,9 @@ void RabbitdokuStageEditSystem::DrawEditWindow(No::Registry& registry) {
 	case RabbitdokuStageEditSystem::EditState::kGimmick:
 		ImGui::Text("GimmickMode");
 		break;
+	case RabbitdokuStageEditSystem::EditState::kBackground:
+		ImGui::Text("BackgroundMode");
+		break;
 	default:
 		ImGui::Text("UnknownMode");
 		break;
@@ -348,7 +404,9 @@ void RabbitdokuStageEditSystem::DrawEditWindow(No::Registry& registry) {
 		if (ImGui::MenuItem("GimmickMode")) {
 			state_ = EditState::kGimmick;
 		}
-
+		if (ImGui::MenuItem("BackgroundMode")) {
+			state_ = EditState::kBackground;
+		}
 		ImGui::EndPopup();
 	}
 
