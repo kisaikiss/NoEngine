@@ -11,6 +11,7 @@
 #include "../System/Game/RabbitdokuSceneResetSystem.h"
 #include "../System/Game/RabbitdokuItemGetSystem.h"
 #include "../System/Effect/ScreenTransitionEffectSystem.h"
+#include "../System/Effect/SmokeEffectSystem.h"
 
 #include "../Component/RabbitdokuComponent.h"
 #include "../Component/FollowCamera2DComponent.h"
@@ -63,6 +64,7 @@ void RabbitdokuScene::AddSystems() {
 	AddSystem(std::make_unique<RabbitItemGetSystem>());
 	
 	AddSystem(std::make_unique<No::SpriteAnimationSystem>());
+	AddSystem(std::make_unique<SmokeEffectSystem>());
 	AddSystem(std::make_unique<No::Camera2DSystem>());
 
 

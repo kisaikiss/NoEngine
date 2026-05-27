@@ -174,5 +174,29 @@ void RabbitdokuMoveSystem::DeadMove(No::Registry& registry, No::Entity e, float 
 		SceneTransitionInEvent dead;
 		registry.EmitEvent(dead);
 		registry.DestroyEntity(e);
+		const uint32_t kSmokeNum = static_cast<uint32_t>(No::GetRandomVal(10.f, 20.f));
+		for (uint32_t i = 0; i < kSmokeNum; i++) {
+			GenerateDeadSmoke(registry, e);
+		}
 	}
+}
+
+void RabbitdokuMoveSystem::GenerateDeadSmoke(No::Registry& registry, No::Entity playerEntity) {
+	auto* playerTransform = registry.GetComponent<No::Transform2DComponent>(playerEntity);
+	auto e = registry.GenerateEntity();
+	auto* t = registry.AddComponent<No::Transform2DComponent>(e);
+	t->translate = playerTransform->translate;
+	t->scale = 64.f;
+	t->rotation = 0.0f;
+	auto* s = registry.AddComponent<No::SpriteComponent>(e);
+	s->textureFilePath = No::GetRandomValNormalized() > 0.0f ? "resources/game/RabbitdokuOdyssey3Plus/Sprite/smokeParticle1.png" : "resources/game/RabbitdokuOdyssey3Plus/Sprite/smokeParticle2.png";
+	s->color = No::Color::RED;
+	s->layer = 20;
+	auto* a = registry.AddComponent<No::Animator2DComponent>(e);
+	a->animeFrameHeight = 64.f;
+	a->animeFrameWidth = 64.f;
+	a->framesNum = 3;
+	a->frameByFrameTime = No::GetRandomVal(0.1f, 0.4f);
+	registry.AddComponent<SmokeEffectTag>(e);
+	registry.AddComponent<No::Velocity2DComponent>(e)->linear = No::GetRandomVal(No::Vector2(-200.f, -200.f), No::Vector2(200.f, 200.f));
 }
