@@ -47,6 +47,9 @@ void RabbitdokuScene::AddSystems() {
 	AddSystem(std::make_unique<No::NarrowPhase2DSystem>(No::NarrowPhase2DSystem::TestAxis::Horizontal));
 	AddSystem(std::make_unique<No::CollisionResolution2DSystem>());
 
+	AddSystem(std::make_unique<RabbitdokuCollisionEventSystem>());
+	AddSystem(std::make_unique<RabbitdokuPushBackSystem>());
+
 	AddSystem(std::make_unique<No::Movement2DSystem>(No::Movement2DSystem::MovementAxis::Vertical));
 	AddSystem(std::make_unique<No::NarrowPhase2DSystem>(No::NarrowPhase2DSystem::TestAxis::Vertical));
 	AddSystem(std::make_unique<No::CollisionResolution2DSystem>());
@@ -66,7 +69,13 @@ void RabbitdokuScene::InitPlayer(No::Registry& registry) {
 	No::Entity e = registry.GenerateEntity();
 	auto* transform =  registry.AddComponent<No::Transform2DComponent>(e);
 	registry.AddComponent<No::Velocity2DComponent>(e);
-	registry.AddComponent<Rabbitdoku>(e);
+
+	// プレイヤーのパラメータ
+	auto* player = registry.AddComponent<Rabbitdoku>(e);
+	player->doubleJumpSpeed = 350.f;
+	player->jumpSpeed = 450.f;
+	player->moveSpeed = 300.f;
+
 	registry.AddComponent<No::EditTag>(e)->name = "Rabbitdoku";
 	auto* collider = registry.AddComponent<No::AABBCollider2D>(e);
 	collider->max.y = 32.f;

@@ -22,5 +22,17 @@ void RabbitdokuPushBackSystem::Update(No::Registry& registry, float deltaTime) {
 				player->yVelocity = 0.f;
 			}
 		}
+		if (event.position == No::ContactPosition::SIDE) {
+			auto* player = registry.GetComponent<Rabbitdoku>(event.player);
+			
+			if (player->yVelocity > 0.f) {
+				player->yVelocity -= 3.0f;
+			} 
+			if (player->yVelocity != 0) {
+				player->sizeCollide = true;
+			}
+
+
+		}
 	}
 }

@@ -1,4 +1,12 @@
 {
+    "ExxsearearStage": {
+        "deathCount": 34,
+        "respawnPoint": {
+            "x": 0.0,
+            "y": 0.0
+        },
+        "totalDeath": 34
+    },
     "Rabbitdoku": {
         "deathCount": 136,
         "respawnPoint": {

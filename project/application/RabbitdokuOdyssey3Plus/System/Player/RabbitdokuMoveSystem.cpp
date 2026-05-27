@@ -14,15 +14,36 @@ void RabbitdokuMoveSystem::Update(No::Registry& registry, float deltaTime) {
 		auto* animator = registry.GetComponent<No::Animator2DComponent>(e);
 		playerVariables->nextState = RabbitdokuState::Unknown;
 
+
+		// 左右移動
 		velocity->linear = No::Vector2::ZERO;
-		if (No::InputIsPress("Right")) {
-			velocity->linear.x += playerVariables->moveSpeed;
-			sprite->flipX = false;
-		} else if (No::InputIsPress("Left")) {
-			velocity->linear.x -= playerVariables->moveSpeed;
-			sprite->flipX = true;
+
+		if (groundState->isGrounded) playerVariables->wallJumpTimer = 0.f;
+		if (playerVariables->wallJumpTimer > 0.0f) {
+			playerVariables->wallJumpTimer -= deltaTime;
+			switch (playerVariables->wallJumpDirection) {
+			case RabbitdokuDirection::kRight:
+				velocity->linear += playerVariables->moveSpeed;
+				break;
+			case RabbitdokuDirection::kLeft:
+				velocity->linear += -playerVariables->moveSpeed;
+				break;
+			}
+		} else {
+			playerVariables->wallJumpTimer = 0.0f;
+			if (No::InputIsPress("Right")) {
+				velocity->linear.x += playerVariables->moveSpeed;
+				sprite->flipX = false;
+			} else if (No::InputIsPress("Left")) {
+				velocity->linear.x -= playerVariables->moveSpeed;
+				sprite->flipX = true;
+			}
 		}
 
+
+		
+
+		// 横移動していたら次のステートを歩きにする
 		if (velocity->linear.x) {
 			if (playerVariables->state != RabbitdokuState::Walk)
 				playerVariables->nextState = RabbitdokuState::Walk;
@@ -31,10 +52,27 @@ void RabbitdokuMoveSystem::Update(No::Registry& registry, float deltaTime) {
 				playerVariables->nextState = RabbitdokuState::Wait;
 		}
 
+		// 壁に張り付いていたら次のステートを壁にする
+		if (playerVariables->sizeCollide && playerVariables->yVelocity) {
+			playerVariables->nextState = RabbitdokuState::Wall;
+			groundState->isGrounded = true;
+		}
+
 		// 縦移動
 		if (No::InputIsTrigger("Jump")) {
 			if (groundState->isGrounded) {
 				playerVariables->yVelocity = -playerVariables->jumpSpeed;
+				if (playerVariables->nextState == RabbitdokuState::Wall) {
+					const float kWallJumpTime = 0.5f;
+					playerVariables->wallJumpTimer = kWallJumpTime;
+					if (sprite->flipX) {
+						playerVariables->wallJumpDirection = RabbitdokuDirection::kRight;
+						sprite->flipX = false;
+					} else {
+						playerVariables->wallJumpDirection = RabbitdokuDirection::kLeft;
+						sprite->flipX = true;
+					}
+				}
 			} else {
 				if (playerVariables->canDoubleJump) {
 					playerVariables->yVelocity = -playerVariables->doubleJumpSpeed;
@@ -52,10 +90,12 @@ void RabbitdokuMoveSystem::Update(No::Registry& registry, float deltaTime) {
 			}
 		}
 
-		if (playerVariables->yVelocity) {
+		// 移動の速度がある、かつ壁に張り付いていなかったらジャンプ中にする
+		if (playerVariables->yVelocity && !playerVariables->sizeCollide) {
 			playerVariables->nextState = RabbitdokuState::Jump;
 		}
 
+		// 重力
 		static const float kGravity = 9.8f;
 
 
@@ -83,11 +123,13 @@ void RabbitdokuMoveSystem::Update(No::Registry& registry, float deltaTime) {
 			animator->framesNum = 1;
 			animator->currentAnimation = 2;
 			sprite->uv.x = 0.f;
+			break;
 		case RabbitdokuState::Wall:
-			playerVariables->state = RabbitdokuState::Jump;
+			playerVariables->state = RabbitdokuState::Wall;
 			animator->framesNum = 1;
-			animator->currentAnimation = 2;
+			animator->currentAnimation = 4;
 			sprite->uv.x = 0.f;
+			break;
 		default:
 			break;
 		}
@@ -98,6 +140,13 @@ void RabbitdokuMoveSystem::Update(No::Registry& registry, float deltaTime) {
 			registry.GetComponent<SaveData>(e)->totalDeath++;
 			RabbitdokuResetEvent dead;
 			registry.EmitEvent(dead);
+		}
+
+		playerVariables->sizeCollide = false;
+		if (velocity->linear.x > 800.f) {
+			velocity->linear.x = 800.f;
+		} else if (velocity->linear.x < -800.f) {
+			velocity->linear.x = -800.f;
 		}
 	}
 }

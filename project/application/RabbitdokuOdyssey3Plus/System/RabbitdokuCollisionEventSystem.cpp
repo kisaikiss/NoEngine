@@ -20,6 +20,10 @@ void RabbitdokuCollisionEventSystem::Update(No::Registry& registry, float deltaT
 			RabbitdokuPushBackEvent event;
 			event.player = contact.a;
 			event.position = contact.contactPosition;
+			if (contact.contactPosition == No::ContactPosition::SIDE|| contact.contactPosition == No::ContactPosition::DOWN) {
+				static int z = 0;
+				z++;
+			}
 			registry.EmitEvent(event);
 		}
 
