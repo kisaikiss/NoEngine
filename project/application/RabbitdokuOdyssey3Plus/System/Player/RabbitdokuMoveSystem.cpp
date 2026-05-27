@@ -95,9 +95,14 @@ void RabbitdokuMoveSystem::Update(No::Registry& registry, float deltaTime) {
 		}
 
 		// 移動の速度がある、かつ壁に張り付いていなかったらジャンプ中にする
-		if (playerVariables->yVelocity && !playerVariables->sizeCollide) {
-			playerVariables->nextState = RabbitdokuState::Jump;
+		if (!playerVariables->sizeCollide) {
+			if (playerVariables->yVelocity < 0.0f) {
+				playerVariables->nextState = RabbitdokuState::Jump;
+			} else if (playerVariables->yVelocity > 0.0f) {
+				playerVariables->nextState = RabbitdokuState::Fall;
+			}
 		}
+		
 
 		// 重力
 		static const float kGravity = 9.8f;
@@ -127,6 +132,13 @@ void RabbitdokuMoveSystem::Update(No::Registry& registry, float deltaTime) {
 			animator->framesNum = 1;
 			animator->currentAnimation = 2;
 			sprite->uv.x = 0.f;
+			break;
+		case RabbitdokuState::Fall:
+			playerVariables->state = RabbitdokuState::Fall;
+			animator->framesNum = 1;
+			animator->currentAnimation = 3;
+			sprite->uv.x = 0.f;
+			break;
 			break;
 		case RabbitdokuState::Wall:
 			playerVariables->state = RabbitdokuState::Wall;
