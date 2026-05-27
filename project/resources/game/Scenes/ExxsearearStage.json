@@ -13,8 +13,8 @@
                         1.0
                     ],
                     "translate": [
-                        195.60406494140625,
-                        -101.72726440429688
+                        0.0,
+                        0.0
                     ]
                 }
             }
@@ -28,12 +28,12 @@
                 "Transform2DComponent": {
                     "rotation": 0.0,
                     "scale": [
-                        2.3705341815948486,
-                        2.3705341815948486
+                        1.480806827545166,
+                        1.480806827545166
                     ],
                     "translate": [
-                        258.6888122558594,
-                        -344.58770751953125
+                        256.09722900390625,
+                        -1167.108154296875
                     ]
                 }
             }
@@ -5700,6 +5700,64 @@
                     "translate": [
                         224.0,
                         -96.0
+                    ]
+                }
+            }
+        },
+        "deathBlock_2": {
+            "components": {
+                "AABBCollider2D": {
+                    "max": [
+                        32.0,
+                        32.0
+                    ],
+                    "min": [
+                        -32.0,
+                        -32.0
+                    ]
+                },
+                "CollisionBody": {
+                    "type": 2
+                },
+                "EditTag": {
+                    "name": "deathBlock_2",
+                    "path": "Gimmick/DeathObject/deathBlock"
+                },
+                "EnemyTag": null,
+                "GimmickTag": null,
+                "RabbitdokuCollisionLayerComponent": {
+                    "layer": 8
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/deathBlock.png",
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        64.0,
+                        64.0
+                    ],
+                    "translate": [
+                        -96.0,
+                        -1120.0
                     ]
                 }
             }

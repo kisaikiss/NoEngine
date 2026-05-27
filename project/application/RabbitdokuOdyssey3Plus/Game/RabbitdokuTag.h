@@ -10,4 +10,10 @@ struct EnemyTag{};
 
 struct RoomTag : public No::AABBCollider2D{};
 
-struct TransitionInTag{};
+struct TransitionInTag { float t = 0.0f; };
+
+struct SceneTransitionInEvent{};
+
+struct TransitionOutTag { float t = 0.0f; };
+
+struct SceneTransitionOutEvent {};

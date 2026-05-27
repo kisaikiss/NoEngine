@@ -12,6 +12,7 @@ void FollowCamera2DSystem::Update(No::Registry& registry, float deltaTime) {
 	for (auto e : playerView) {
 		playerPosition = registry.GetComponent<No::Transform2DComponent>(e)->translate;
 	}
+	if (playerPosition == No::Vector2::ZERO) return;
 
 	No::Camera2DComponent* camera = nullptr;
 	No::Transform2DComponent* transform = nullptr;

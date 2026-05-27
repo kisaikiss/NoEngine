@@ -10,6 +10,7 @@
 #include "../System/Game/RabbitdokuLoadSystem.h"
 #include "../System/Game/RabbitdokuSceneResetSystem.h"
 #include "../System/Game/RabbitdokuItemGetSystem.h"
+#include "../System/Effect/ScreenTransitionEffectSystem.h"
 
 #include "../Component/RabbitdokuComponent.h"
 #include "../Component/FollowCamera2DComponent.h"
@@ -27,10 +28,13 @@ void RabbitdokuScene::InitGameScene() {
 	AddSystems();
 	InitPlayer(registry);
 	InitCamera(registry);
+	SceneTransitionOutEvent t;
+	registry.EmitEvent(t);
 }
 
 void RabbitdokuScene::AddSystems() {
 	AddSystem(std::make_unique<No::EditSystem>());
+	AddSystem(std::make_unique<ScreenTransitionEffectSystem>());
 	AddSystem(std::make_unique<No::SpriteLoadSystem>());
 	AddSystem(std::make_unique<RabbitdokuStageEditSystem>());
 	AddSystem(std::make_unique<No::DebugCamera2DSystem>());

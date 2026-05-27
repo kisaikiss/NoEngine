@@ -1,7 +1,7 @@
 #include "RabbitdokuMoveSystem.h"
 #include "../../Component/RabbitdokuComponent.h"
-#include "../../Game/RabbitdokuResetEvent.h"
 #include "application/RabbitdokuOdyssey3Plus/Game/RabbitdokuSerializer.h"
+#include "../../Game/RabbitdokuTag.h"
 
 void RabbitdokuMoveSystem::Update(No::Registry& registry, float deltaTime) {
 	auto view = registry.View<Rabbitdoku, No::Velocity2DComponent, No::SpriteComponent, No::GroundStateComponent, No::Animator2DComponent>();
@@ -142,7 +142,7 @@ void RabbitdokuMoveSystem::Update(No::Registry& registry, float deltaTime) {
 		if (No::InputIsTrigger("Reset")) {
 			registry.GetComponent<SaveData>(e)->death++;
 			registry.GetComponent<SaveData>(e)->totalDeath++;
-			RabbitdokuResetEvent dead;
+			SceneTransitionInEvent dead;
 			registry.EmitEvent(dead);
 		}
 
@@ -171,7 +171,7 @@ void RabbitdokuMoveSystem::DeadMove(No::Registry& registry, No::Entity e, float 
 	if (playerVariables->deadTimer > kDeadTime) {
 		registry.GetComponent<SaveData>(e)->death++;
 		registry.GetComponent<SaveData>(e)->totalDeath++;
-		RabbitdokuResetEvent dead;
+		SceneTransitionInEvent dead;
 		registry.EmitEvent(dead);
 		registry.DestroyEntity(e);
 	}
