@@ -7,9 +7,13 @@ void RabbitdokuMoveSystem::Update(No::Registry& registry, float deltaTime) {
 	auto view = registry.View<Rabbitdoku, No::Velocity2DComponent, No::SpriteComponent, No::GroundStateComponent, No::Animator2DComponent>();
 	static_cast<void>(deltaTime);
 	for (auto e : view) {
+		auto* playerVariables = registry.GetComponent<Rabbitdoku>(e);
+		if (playerVariables->state == RabbitdokuState::Dead) {
+			DeadMove(registry, e, deltaTime);
+			continue;
+		}
 		auto* velocity = registry.GetComponent<No::Velocity2DComponent>(e);
 		auto* sprite = registry.GetComponent<No::SpriteComponent>(e);
-		auto* playerVariables = registry.GetComponent<Rabbitdoku>(e);
 		auto* groundState = registry.GetComponent<No::GroundStateComponent>(e);
 		auto* animator = registry.GetComponent<No::Animator2DComponent>(e);
 		playerVariables->nextState = RabbitdokuState::Unknown;
@@ -148,5 +152,27 @@ void RabbitdokuMoveSystem::Update(No::Registry& registry, float deltaTime) {
 		} else if (velocity->linear.x < -800.f) {
 			velocity->linear.x = -800.f;
 		}
+	}
+}
+
+void RabbitdokuMoveSystem::DeadMove(No::Registry& registry, No::Entity e, float deltaTime) {
+	auto* playerVariables = registry.GetComponent<Rabbitdoku>(e);
+	auto* velocity = registry.GetComponent<No::Velocity2DComponent>(e);
+	auto* sprite = registry.GetComponent<No::SpriteComponent>(e);
+	auto* animator = registry.GetComponent<No::Animator2DComponent>(e);
+
+	velocity->linear = No::GetRandomVal(No::Vector2(-150.f, -150.f), No::Vector2(150.f, 150.f));
+	animator->framesNum = 1;
+	animator->currentAnimation = 5;
+	sprite->uv.x = 0.f;
+	playerVariables->deadTimer += deltaTime;
+
+	static const float kDeadTime = 0.75f;
+	if (playerVariables->deadTimer > kDeadTime) {
+		registry.GetComponent<SaveData>(e)->death++;
+		registry.GetComponent<SaveData>(e)->totalDeath++;
+		RabbitdokuResetEvent dead;
+		registry.EmitEvent(dead);
+		registry.DestroyEntity(e);
 	}
 }

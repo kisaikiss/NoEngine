@@ -9,3 +9,5 @@ struct SaveTag{};
 struct EnemyTag{};
 
 struct RoomTag : public No::AABBCollider2D{};
+
+struct TransitionInTag{};

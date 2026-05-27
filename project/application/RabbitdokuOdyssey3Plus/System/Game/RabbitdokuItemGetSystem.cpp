@@ -11,7 +11,7 @@ void RabbitItemGetSystem::Update(No::Registry& registry, float deltaTime) {
 	auto view = registry.PollAllEvents<RabbitdokuItemGetEvent>();
 
 	for (auto event : view) {
-		//auto* player = registry.GetComponent<Rabbitdoku>(event.player);
+		auto* player = registry.GetComponent<Rabbitdoku>(event.player);
 		if (registry.GetComponent<SaveTag>(event.item)) {
 			if (No::InputIsTrigger("Save")) {
 				auto* data = registry.GetComponent<SaveData>(event.player);
@@ -23,10 +23,7 @@ void RabbitItemGetSystem::Update(No::Registry& registry, float deltaTime) {
 		}
 
 		if (registry.GetComponent<EnemyTag>(event.item)) {
-			registry.GetComponent<SaveData>(event.player)->death++;
-			registry.GetComponent<SaveData>(event.player)->totalDeath++;
-			RabbitdokuResetEvent dead;
-			registry.EmitEvent(dead);
+			player->state = RabbitdokuState::Dead;
 		}
 
 	}

@@ -6,6 +6,7 @@ enum class RabbitdokuState {
 	Walk,
 	Jump,
 	Wall,
+	Dead,
 
 	Unknown
 };
@@ -25,6 +26,8 @@ struct Rabbitdoku {
 	float wallJumpTimer = 0.f;
 	RabbitdokuDirection wallJumpDirection = RabbitdokuDirection::kRight;
 	bool isWallJump = false;
+
+	float deadTimer = 0.0f;
 
 	bool canDoubleJump = true;
 	bool sizeCollide = false;

@@ -96,6 +96,7 @@ void RabbitdokuScene::InitPlayer(No::Registry& registry) {
 	animator->framesNum = 2;
 	animator->frameByFrameTime = 0.3f;
 	registry.AddComponent<SaveData>(e);
+
 }
 
 void RabbitdokuScene::InitCamera(No::Registry& registry) {

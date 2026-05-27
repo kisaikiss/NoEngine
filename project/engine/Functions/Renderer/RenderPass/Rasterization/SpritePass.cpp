@@ -95,10 +95,7 @@ void SpritePass::GenerateVertices() {
 
 		Vector2 local[4];
 		MakeLocalQuad(item, local);
-		Quaternion rotate;
-		rotate.FromAxisAngle(Vector3(0.f, 0.f, 1.f), t->rotation);
-		Matrix4x4 mat;
-		mat.MakeAffine({ t->scale.x,t->scale.y,0.f }, rotate, { t->translate.x,t->translate.y,0.f });
+		Matrix4x4 mat = t->MakeAffineMatrix4x4();
 
 		Vector3 world[4];
 		for (int i = 0; i < 4; i++) {
