@@ -8,5 +8,6 @@ private:
     void DeadMove(No::Registry& registry, No::Entity e, float deltaTime);
     void GenerateDeadSmoke(No::Registry& registry, No::Entity e);
     void GenerateDoubleJump(No::Registry& registry, No::Entity e);
+    void GenerateWallJump(No::Registry& registry, No::Entity e);
 };
 

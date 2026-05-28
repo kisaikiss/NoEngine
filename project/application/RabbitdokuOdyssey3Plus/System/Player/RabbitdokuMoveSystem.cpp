@@ -69,6 +69,7 @@ void RabbitdokuMoveSystem::Update(No::Registry& registry, float deltaTime) {
 				if (playerVariables->nextState == RabbitdokuState::Wall) {
 					const float kWallJumpTime = 0.5f;
 					playerVariables->wallJumpTimer = kWallJumpTime;
+					GenerateWallJump(registry, e);
 					if (sprite->flipX) {
 						playerVariables->wallJumpDirection = RabbitdokuDirection::kRight;
 						sprite->flipX = false;
@@ -76,7 +77,7 @@ void RabbitdokuMoveSystem::Update(No::Registry& registry, float deltaTime) {
 						playerVariables->wallJumpDirection = RabbitdokuDirection::kLeft;
 						sprite->flipX = true;
 					}
-				}
+				} 
 			} else {
 				if (playerVariables->canDoubleJump) {
 					playerVariables->yVelocity = -playerVariables->doubleJumpSpeed;
@@ -236,4 +237,30 @@ void RabbitdokuMoveSystem::GenerateDoubleJump(No::Registry& registry, No::Entity
 	a->frameByFrameTime = 0.07f;
 	registry.AddComponent<SmokeEffectTag>(e);
 	registry.AddComponent<No::Velocity2DComponent>(e)->linear.y = 50.f;
+}
+
+void RabbitdokuMoveSystem::GenerateWallJump(No::Registry& registry, No::Entity playerEntity) {
+	auto* playerTransform = registry.GetComponent<No::Transform2DComponent>(playerEntity);
+	auto* player = registry.GetComponent<No::SpriteComponent>(playerEntity);
+	auto e = registry.GenerateEntity();
+	auto* t = registry.AddComponent<No::Transform2DComponent>(e);
+	t->translate = playerTransform->translate;
+	t->translate.y;
+	t->scale = 64.f;
+	if (player->flipX) {
+		t->rotation = PI / 2.f;
+	} else {
+		t->rotation = -PI / 2.f;
+	}
+
+	auto* s = registry.AddComponent<No::SpriteComponent>(e);
+	s->textureFilePath = "resources/game/RabbitdokuOdyssey3Plus/Sprite/JumpWall.png";
+	s->layer = 20;
+	s->pivot.y = 0.7f;
+	auto* a = registry.AddComponent<No::Animator2DComponent>(e);
+	a->animeFrameHeight = 64.f;
+	a->animeFrameWidth = 64.f;
+	a->framesNum = 4;
+	a->frameByFrameTime = 0.07f;
+	registry.AddComponent<SmokeEffectTag>(e);
 }
