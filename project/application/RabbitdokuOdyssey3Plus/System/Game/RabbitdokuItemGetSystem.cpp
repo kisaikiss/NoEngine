@@ -26,6 +26,10 @@ void RabbitItemGetSystem::Update(No::Registry& registry, float deltaTime) {
 			player->state = RabbitdokuState::Dead;
 		}
 
+		if (registry.GetComponent<SpringComponent>(event.item)) {
+			player->yVelocity = -registry.GetComponent<SpringComponent>(event.item)->force;
+			registry.GetComponent<No::Animator2DComponent>(event.item)->framesNum = 5;
+		}
 	}
 
 }

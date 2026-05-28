@@ -14,6 +14,7 @@
 #include "../System/Effect/SmokeEffectSystem.h"
 #include "../System/Effect/BackgroundAttachSystem.h"
 #include "../System/Effect/SoftlyMoveSystem.h"
+#include "../System/Gimmick/SpringSystem.h"
 
 #include "../Component/RabbitdokuComponent.h"
 #include "../Component/FollowCamera2DComponent.h"
@@ -49,6 +50,7 @@ void RabbitdokuScene::AddSystems() {
 	AddSystem(std::make_unique<RabbitdokuMoveSystem>());
 	AddSystem(std::make_unique<FollowCamera2DSystem>());
 	AddSystem(std::make_unique<SoftlyMoveSystem>());
+	AddSystem(std::make_unique<SpringSystem>());
 
 	AddSystem(std::make_unique<No::GroundResetSystem>());
 

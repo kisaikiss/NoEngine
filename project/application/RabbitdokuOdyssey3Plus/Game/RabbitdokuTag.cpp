@@ -30,3 +30,7 @@ REFLECT_FIELD(t),
 REFLECT_FIELD(moveSpeed),
 REFLECT_FIELD(amplitude)
 REFLECT_STRUCT_END(SoftlyMoveComponent)
+
+REFLECT_STRUCT_BEGIN(SpringComponent)
+REFLECT_FIELD(force)
+REFLECT_STRUCT_END(SpringComponent)

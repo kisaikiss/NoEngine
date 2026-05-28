@@ -219,6 +219,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\Game\RabbitdokuItemGetSystem.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\Game\RabbitdokuLoadSystem.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\Game\RabbitdokuSceneResetSystem.cpp" />
+    <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\Gimmick\SpringSystem.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\RabbitdokuCollisionEventSystem.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\Player\RabbitdokuMoveSystem.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\Player\RabbitdokuPushBackSystem.cpp" />
@@ -436,6 +437,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\Game\RabbitdokuItemGetSystem.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\Game\RabbitdokuLoadSystem.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\Game\RabbitdokuSceneResetSystem.h" />
+    <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\Gimmick\SpringSystem.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\RabbitdokuCollisionEventSystem.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\Player\RabbitdokuMoveSystem.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\Player\RabbitdokuPushBackSystem.h" />

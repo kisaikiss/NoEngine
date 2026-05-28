@@ -65,6 +65,8 @@ void RabbitdokuStageEditSystem::Update(No::Registry& registry, float deltaTime) 
 				case RabbitdokuStageEditSystem::GimmickSelected::kNeedle:
 					AddNeedle(registry);
 					break;
+				case RabbitdokuStageEditSystem::GimmickSelected::kSpring:
+					AddSpring(registry);
 				default:
 					break;
 				}
@@ -302,7 +304,55 @@ void RabbitdokuStageEditSystem::AddNeedle(No::Registry& registry) {
 	animator->frameByFrameTime = 0.1f;
 
 	sprite->uv.width = 1.f / 5.f;
-	sprite->uv.height = 1.f / 3.f;
+	sprite->uv.height = 1.f / 4.f;
+}
+
+void RabbitdokuStageEditSystem::AddSpring(No::Registry& registry) {
+	No::Vector2 position = GetGridPosition(No::Get2DGameWindowMousePosition(registry));
+	auto blockView = registry.View<BlockTag, No::AABBCollider2D, No::Transform2DComponent>();
+	for (auto e : blockView) {
+		auto* aabb = registry.GetComponent<No::AABBCollider2D>(e);
+		auto* transform = registry.GetComponent<No::Transform2DComponent>(e);
+		if (No::IsCollision(position, aabb, transform)) return;
+	}
+
+	auto gimmickView = registry.View<GimmickTag, No::AABBCollider2D, No::Transform2DComponent>();
+	for (auto e : gimmickView) {
+		auto* aabb = registry.GetComponent<No::AABBCollider2D>(e);
+		auto* transform = registry.GetComponent<No::Transform2DComponent>(e);
+		if (No::IsCollision(position, aabb, transform)) return;
+	}
+
+
+	No::Entity e = registry.GenerateEntity();
+	auto* transform = registry.AddComponent<No::Transform2DComponent>(e);
+	transform->translate = position;
+	auto* sprite = registry.AddComponent<No::SpriteComponent>(e);
+	sprite->layer = 10;
+	auto* collider = registry.AddComponent<No::AABBCollider2D>(e);
+	registry.AddComponent<SpringComponent>(e);
+	registry.AddComponent<GimmickTag>(e);
+	auto* tag = registry.AddComponent<No::EditTag>(e);
+	tag->name = "spring";
+	tag->path = "Gimmick/Spring/spring";
+	registry.AddComponent<No::CollisionBody>(e)->type = No::BodyType::Through;
+	registry.AddComponent<RabbitdokuCollisionLayerComponent>(e)->layer = RabbitdokuCollisionLayerComponent::Item;
+	sprite->textureFilePath = "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png";
+	transform->scale.x = gridSize_.x;
+	transform->scale.y = gridSize_.y;
+	collider->max.x = transform->scale.x / 2.6f;
+	collider->max.y = transform->scale.y / 2.0f;
+	collider->min = -transform->scale / 2.6f;
+	collider->min.y = collider->max.y / 2.f;
+	auto* animator = registry.AddComponent<No::Animator2DComponent>(e);
+	animator->animeFrameHeight = 64.f;
+	animator->animeFrameWidth = 64.f;
+	animator->currentAnimation = 3;
+	animator->framesNum = 1;
+	animator->frameByFrameTime = 0.1f;
+
+	sprite->uv.width = 1.f / 5.f;
+	sprite->uv.height = 3.f / 4.f;
 }
 
 void RabbitdokuStageEditSystem::AddBackground(No::Registry& registry) {
@@ -446,6 +496,10 @@ void RabbitdokuStageEditSystem::DrawEditWindow(No::Registry& registry) {
 		if (ImGui::Button("Needle")) {
 			gimmick_ = GimmickSelected::kNeedle;
 		}
+		ImGui::SameLine();
+		if (ImGui::Button("Spring")) {
+			gimmick_ = GimmickSelected::kSpring;
+		}
 		ImGui::Text("Selected : ");
 		ImGui::SameLine();
 		switch (gimmick_) {
@@ -457,6 +511,9 @@ void RabbitdokuStageEditSystem::DrawEditWindow(No::Registry& registry) {
 			break;
 		case RabbitdokuStageEditSystem::GimmickSelected::kNeedle:
 			ImGui::Text("Needle");
+			break;
+		case RabbitdokuStageEditSystem::GimmickSelected::kSpring:
+			ImGui::Text("Spring");
 			break;
 		}
 		break;

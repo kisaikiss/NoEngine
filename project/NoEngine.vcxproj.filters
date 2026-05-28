@@ -208,6 +208,7 @@
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\Effect\BackgroundAttachSystem.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\Scene\RabbitdokuTitleScene.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\Effect\SoftlyMoveSystem.cpp" />
+    <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\Gimmick\SpringSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -431,6 +432,7 @@
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\Effect\BackgroundAttachSystem.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\Scene\RabbitdokuTitleScene.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\Effect\SoftlyMoveSystem.h" />
+    <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\Gimmick\SpringSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

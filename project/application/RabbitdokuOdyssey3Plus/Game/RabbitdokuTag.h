@@ -28,3 +28,7 @@ struct SoftlyMoveComponent {
 	float moveSpeed = 1.0f;
 	No::Vector2 amplitude = No::Vector2::ZERO;
 };
+
+struct SpringComponent {
+	float force = 700.f;
+};
