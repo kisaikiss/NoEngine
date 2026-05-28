@@ -128,15 +128,15 @@ void RenderPassScheduler::AddRenderPass(std::unique_ptr<RenderPass>&& pass) {
 void CommonSetupRenderPass(RenderPassScheduler& renderPassScheduler) {
 	Math::Vector2 windowSize = GraphicsCore::GetWindowSize();
 	auto& resourceRegistry = renderPassScheduler.GetResourceRegistry();
-	resourceRegistry.CreateColorBuffer("MainColor", windowSize.x, windowSize.y, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
+	InitGameImGuiWindow(*resourceRegistry.CreateColorBuffer("MainColor", windowSize.x, windowSize.y, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB));
 	
 
 	resourceRegistry.CreateColorBuffer("ShadowMap", windowSize.x, windowSize.y, DXGI_FORMAT_R8_UNORM);
 	resourceRegistry.CreateColorBuffer("WorldPosition", windowSize.x, windowSize.y, DXGI_FORMAT_R32G32B32A32_FLOAT);
 	resourceRegistry.CreateColorBuffer("Normal", windowSize.x, windowSize.y, DXGI_FORMAT_R10G10B10A2_UNORM);
 
-	InitGameImGuiWindow(*resourceRegistry.CreateColorBuffer("PostEffect", windowSize.x, windowSize.y, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB));
-	renderPassScheduler.SetScreenDrawBuffer("PostEffect");
+	resourceRegistry.CreateColorBuffer("PostEffect", windowSize.x, windowSize.y, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
+	renderPassScheduler.SetScreenDrawBuffer("MainColor");
 	
 	resourceRegistry.CreateDepthBuffer("MainDepth", windowSize.x, windowSize.y);
 
@@ -184,11 +184,6 @@ void CommonSetupRenderPass(RenderPassScheduler& renderPassScheduler) {
 	particlePass->AddOutput("MainColor");
 	particlePass->SetDepthOutput("MainDepth");
 	renderPassScheduler.AddPass(std::move(particlePass));
-
-	auto vignettingPass = std::make_unique<VignettingPass>();
-	vignettingPass->AddInput("InputColor", "MainColor");
-	vignettingPass->AddOutput("PostEffect");
-	renderPassScheduler.AddPass(std::move(vignettingPass));
 
 }
 
