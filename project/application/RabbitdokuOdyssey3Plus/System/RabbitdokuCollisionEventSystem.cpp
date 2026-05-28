@@ -32,6 +32,7 @@ void RabbitdokuCollisionEventSystem::Update(No::Registry& registry, float deltaT
 			RabbitdokuItemGetEvent event;
 			event.player = contact.a;
 			event.item = contact.b;
+			event.position = contact.contactPosition;
 			registry.EmitEvent(event);
 		}
 

@@ -9,6 +9,7 @@ struct RabbitdokuPushBackEvent {
 struct RabbitdokuItemGetEvent {
 	No::Entity player;
 	No::Entity item;
+	No::ContactPosition position;
 };
 
 struct RabbitdokuCollisionLayerComponent {

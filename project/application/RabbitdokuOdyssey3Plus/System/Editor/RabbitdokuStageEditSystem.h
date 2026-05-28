@@ -18,6 +18,7 @@ private:
         kDeathBlock,
         kNeedle,
         kSpring,
+        kCollapseBlock,
     };
 
     struct BlockTextures {
@@ -46,6 +47,7 @@ private:
     void AddDeathBlock(No::Registry& registry);
     void AddNeedle(No::Registry& registry);
     void AddSpring(No::Registry& registry);
+    void AddCollapseBlock(No::Registry& registry);
     void AddBackground(No::Registry& registry);
     void DeleteGimmick(No::Registry& registry);
     void DeleteBlock(No::Registry& registry);

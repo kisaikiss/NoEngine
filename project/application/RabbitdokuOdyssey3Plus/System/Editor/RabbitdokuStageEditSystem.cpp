@@ -67,6 +67,10 @@ void RabbitdokuStageEditSystem::Update(No::Registry& registry, float deltaTime) 
 					break;
 				case RabbitdokuStageEditSystem::GimmickSelected::kSpring:
 					AddSpring(registry);
+					break;
+				case RabbitdokuStageEditSystem::GimmickSelected::kCollapseBlock:
+					AddCollapseBlock(registry);
+					break;
 				default:
 					break;
 				}
@@ -217,7 +221,7 @@ void RabbitdokuStageEditSystem::AddSave(No::Registry& registry) {
 	animator->framesNum = 8;
 	animator->frameByFrameTime = 0.1f;
 	sprite->uv.x = 0.f;
-	sprite->uv.width = 1.f/8.f;
+	sprite->uv.width = 1.f / 8.f;
 	sprite->uv.height = 1.f;
 
 }
@@ -351,8 +355,57 @@ void RabbitdokuStageEditSystem::AddSpring(No::Registry& registry) {
 	animator->framesNum = 1;
 	animator->frameByFrameTime = 0.1f;
 
+	sprite->uv.y = 3.f / 4.f;
 	sprite->uv.width = 1.f / 5.f;
-	sprite->uv.height = 3.f / 4.f;
+	sprite->uv.height = 1.f / 4.f;
+}
+
+void RabbitdokuStageEditSystem::AddCollapseBlock(No::Registry& registry) {
+	No::Vector2 position = GetGridPosition(No::Get2DGameWindowMousePosition(registry));
+	auto blockView = registry.View<BlockTag, No::AABBCollider2D, No::Transform2DComponent>();
+	for (auto e : blockView) {
+		auto* aabb = registry.GetComponent<No::AABBCollider2D>(e);
+		auto* transform = registry.GetComponent<No::Transform2DComponent>(e);
+		if (No::IsCollision(position, aabb, transform)) return;
+	}
+
+	auto gimmickView = registry.View<GimmickTag, No::AABBCollider2D, No::Transform2DComponent>();
+	for (auto e : gimmickView) {
+		auto* aabb = registry.GetComponent<No::AABBCollider2D>(e);
+		auto* transform = registry.GetComponent<No::Transform2DComponent>(e);
+		if (No::IsCollision(position, aabb, transform)) return;
+	}
+
+	No::Entity e = registry.GenerateEntity();
+	auto* transform = registry.AddComponent<No::Transform2DComponent>(e);
+	transform->translate = GetGridPosition(No::Get2DGameWindowMousePosition(registry));
+	auto* sprite = registry.AddComponent<No::SpriteComponent>(e);
+	sprite->layer = 10;
+	auto* collider = registry.AddComponent<No::AABBCollider2D>(e);
+	registry.AddComponent<BlockTag>(e);
+	registry.AddComponent<GimmickTag>(e);
+	auto* tag = registry.AddComponent<No::EditTag>(e);
+	tag->name = "collapseBlock";
+	tag->path = "Gimmick/CollapseBlock/collapseBlock";
+	registry.AddComponent<No::CollisionBody>(e)->type = No::BodyType::Static;
+	registry.AddComponent<RabbitdokuCollisionLayerComponent>(e)->layer = RabbitdokuCollisionLayerComponent::Item;
+
+	sprite->textureFilePath = "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png";
+	transform->scale.x = gridSize_.x;
+	transform->scale.y = gridSize_.y;
+	collider->max = transform->scale / 2.f;
+	collider->min = -transform->scale / 2.f;
+	auto* a = registry.AddComponent<No::Animator2DComponent>(e);
+	a->animeFrameHeight = 64.f;
+	a->animeFrameWidth = 64.f;
+	a->currentAnimation = 1;
+	a->framesNum = 5;
+	a->frameByFrameTime = 0.1f;
+
+	sprite->uv.y = 1.f / 4.f;
+	sprite->uv.width = 1.f / 5.f;
+	sprite->uv.height = 1.f / 4.f;
+	registry.AddComponent<CollapseBlockComponent>(e);
 }
 
 void RabbitdokuStageEditSystem::AddBackground(No::Registry& registry) {
@@ -411,7 +464,7 @@ No::Entity RabbitdokuStageEditSystem::FindRoom(No::Registry& registry, const No:
 }
 
 No::Entity RabbitdokuStageEditSystem::FindBackground(No::Registry& registry, const No::Vector2& pos) {
-	auto view = registry.View<BackgroundTag,No::AABBCollider2D, No::Transform2DComponent>();
+	auto view = registry.View<BackgroundTag, No::AABBCollider2D, No::Transform2DComponent>();
 	for (auto e : view) {
 		if (No::IsCollision(pos, registry.GetComponent<No::AABBCollider2D>(e), registry.GetComponent<No::Transform2DComponent>(e))) return e;
 	}
@@ -499,6 +552,9 @@ void RabbitdokuStageEditSystem::DrawEditWindow(No::Registry& registry) {
 		ImGui::SameLine();
 		if (ImGui::Button("Spring")) {
 			gimmick_ = GimmickSelected::kSpring;
+		}ImGui::SameLine();
+		if (ImGui::Button("CollapseBlock")) {
+			gimmick_ = GimmickSelected::kCollapseBlock;
 		}
 		ImGui::Text("Selected : ");
 		ImGui::SameLine();
@@ -514,6 +570,9 @@ void RabbitdokuStageEditSystem::DrawEditWindow(No::Registry& registry) {
 			break;
 		case RabbitdokuStageEditSystem::GimmickSelected::kSpring:
 			ImGui::Text("Spring");
+			break;
+		case RabbitdokuStageEditSystem::GimmickSelected::kCollapseBlock:
+			ImGui::Text("CollapseBlock");
 			break;
 		}
 		break;

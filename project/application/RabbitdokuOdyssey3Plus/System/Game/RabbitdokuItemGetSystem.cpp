@@ -10,7 +10,7 @@ void RabbitItemGetSystem::Update(No::Registry& registry, float deltaTime) {
 	static_cast<void>(deltaTime);
 	auto view = registry.PollAllEvents<RabbitdokuItemGetEvent>();
 
-	for (auto event : view) {
+	for (const auto& event : view) {
 		auto* player = registry.GetComponent<Rabbitdoku>(event.player);
 		if (registry.GetComponent<SaveTag>(event.item)) {
 			if (No::InputIsTrigger("Save")) {
@@ -29,6 +29,14 @@ void RabbitItemGetSystem::Update(No::Registry& registry, float deltaTime) {
 		if (registry.GetComponent<SpringComponent>(event.item)) {
 			player->yVelocity = -registry.GetComponent<SpringComponent>(event.item)->force;
 			registry.GetComponent<No::Animator2DComponent>(event.item)->framesNum = 5;
+		}
+
+		if (auto* block = registry.GetComponent<CollapseBlockComponent>(event.item)) {
+			block->startCollapse = true;
+			RabbitdokuPushBackEvent e;
+			e.player = event.player;
+			e.position = event.position;
+			registry.EmitEvent(e);
 		}
 	}
 

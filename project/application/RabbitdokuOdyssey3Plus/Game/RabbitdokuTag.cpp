@@ -34,3 +34,8 @@ REFLECT_STRUCT_END(SoftlyMoveComponent)
 REFLECT_STRUCT_BEGIN(SpringComponent)
 REFLECT_FIELD(force)
 REFLECT_STRUCT_END(SpringComponent)
+
+
+REFLECT_STRUCT_BEGIN(CollapseBlockComponent)
+REFLECT_FIELD(collapseTime)
+REFLECT_STRUCT_END(CollapseBlockComponent)

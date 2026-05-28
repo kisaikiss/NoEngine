@@ -32,3 +32,9 @@ struct SoftlyMoveComponent {
 struct SpringComponent {
 	float force = 700.f;
 };
+
+struct CollapseBlockComponent {
+	bool startCollapse = false;
+	bool startBreak = false;
+	float collapseTime = 0.5f;
+};
