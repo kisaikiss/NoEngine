@@ -19,6 +19,10 @@ void RabbitItemGetSystem::Update(No::Registry& registry, float deltaTime) {
 					registry.GetComponent<No::Transform2DComponent>(event.player)->translate,
 					data->death, data->totalDeath);
 				data->respawnPoint = registry.GetComponent<No::Transform2DComponent>(event.player)->translate;
+				GenerateLight(registry, event.player);
+				for (uint32_t i = 0; i < 3; i++) {
+					GenerateStars(registry, event.player);
+				}
 			}
 		}
 
@@ -28,6 +32,7 @@ void RabbitItemGetSystem::Update(No::Registry& registry, float deltaTime) {
 
 		if (registry.GetComponent<SpringComponent>(event.item)) {
 			player->yVelocity = -registry.GetComponent<SpringComponent>(event.item)->force;
+			player->canDoubleJump = true;
 			registry.GetComponent<No::Animator2DComponent>(event.item)->framesNum = 5;
 		}
 
@@ -40,4 +45,44 @@ void RabbitItemGetSystem::Update(No::Registry& registry, float deltaTime) {
 		}
 	}
 
+}
+
+void RabbitItemGetSystem::GenerateLight(No::Registry& registry, No::Entity playerEntity) {
+	auto* playerTransform = registry.GetComponent<No::Transform2DComponent>(playerEntity);
+	auto e = registry.GenerateEntity();
+	auto* t = registry.AddComponent<No::Transform2DComponent>(e);
+	t->translate = playerTransform->translate;
+	t->translate.y -= 64.f;
+	t->scale = 64.f;
+	t->rotation = 0.0f;
+	auto* s = registry.AddComponent<No::SpriteComponent>(e);
+	s->textureFilePath = "resources/game/RabbitdokuOdyssey3Plus/Sprite/Light.png";
+	s->layer = 19;
+	auto* a = registry.AddComponent<No::Animator2DComponent>(e);
+	a->animeFrameHeight = 64.f;
+	a->animeFrameWidth = 64.f;
+	a->framesNum = 5;
+	a->frameByFrameTime = 0.1f;
+	registry.AddComponent<SmokeEffectTag>(e);
+	registry.AddComponent<No::Velocity2DComponent>(e)->linear.y = -32.f;
+}
+
+void RabbitItemGetSystem::GenerateStars(No::Registry& registry, No::Entity playerEntity) {
+	auto* playerTransform = registry.GetComponent<No::Transform2DComponent>(playerEntity);
+	auto e = registry.GenerateEntity();
+	auto* t = registry.AddComponent<No::Transform2DComponent>(e);
+	t->translate = playerTransform->translate;
+	t->translate += No::GetRandomVal(No::Vector2(-128.f, -128.f), No::Vector2(128.f, -32.f));
+	t->scale = 64.f;
+	t->rotation = 0.0f;
+	auto* s = registry.AddComponent<No::SpriteComponent>(e);
+	s->textureFilePath = "resources/game/RabbitdokuOdyssey3Plus/Sprite/Stars.png";
+	s->layer = 19;
+	auto* a = registry.AddComponent<No::Animator2DComponent>(e);
+	a->animeFrameHeight = 64.f;
+	a->animeFrameWidth = 64.f;
+	a->framesNum = 6;
+	a->frameByFrameTime = 0.1f;
+	registry.AddComponent<SmokeEffectTag>(e);
+	registry.AddComponent<No::Velocity2DComponent>(e)->linear.y = 64.f;
 }
