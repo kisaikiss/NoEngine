@@ -21,3 +21,10 @@ struct SceneTransitionOutEvent {};
 struct SmokeEffectTag{};
 
 struct BackgroundTag{};
+struct MainBackgroundTag{};
+
+struct SoftlyMoveComponent {
+	float t = 0.0f;
+	float moveSpeed = 1.0f;
+	No::Vector2 amplitude = No::Vector2::ZERO;
+};

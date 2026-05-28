@@ -205,6 +205,9 @@
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\Scene\ExxsearearStage.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\Effect\ScreenTransitionEffectSystem.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\Effect\SmokeEffectSystem.cpp" />
+    <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\Effect\BackgroundAttachSystem.cpp" />
+    <ClCompile Include="application\RabbitdokuOdyssey3Plus\Scene\RabbitdokuTitleScene.cpp" />
+    <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\Effect\SoftlyMoveSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -425,6 +428,9 @@
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\Scene\ExxsearearStage.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\Effect\ScreenTransitionEffectSystem.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\Effect\SmokeEffectSystem.h" />
+    <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\Effect\BackgroundAttachSystem.h" />
+    <ClInclude Include="application\RabbitdokuOdyssey3Plus\Scene\RabbitdokuTitleScene.h" />
+    <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\Effect\SoftlyMoveSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

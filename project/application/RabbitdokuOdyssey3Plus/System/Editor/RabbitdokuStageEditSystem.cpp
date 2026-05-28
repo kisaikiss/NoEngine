@@ -212,10 +212,10 @@ void RabbitdokuStageEditSystem::AddSave(No::Registry& registry) {
 	auto* animator = registry.AddComponent<No::Animator2DComponent>(e);
 	animator->animeFrameHeight = 64.f;
 	animator->animeFrameWidth = 64.f;
-	animator->framesNum = 4;
+	animator->framesNum = 8;
 	animator->frameByFrameTime = 0.1f;
 	sprite->uv.x = 0.f;
-	sprite->uv.width = 1.f/4.f;
+	sprite->uv.width = 1.f/8.f;
 	sprite->uv.height = 1.f;
 
 }
@@ -311,7 +311,7 @@ void RabbitdokuStageEditSystem::AddBackground(No::Registry& registry) {
 	auto* s = registry.AddComponent<No::SpriteComponent>(e);
 	s->textureHandle = NoEngine::TextureManager::LoadCovertTexture(BackgroundTextures::kFlower);
 	s->textureFilePath = BackgroundTextures::kFlower;
-	s->layer = 0;
+	s->layer = 5;
 	t->translate = addRoomPosition_;
 	t->scale.x = static_cast<float>(s->textureHandle.GetWidth());
 	t->scale.y = static_cast<float>(s->textureHandle.GetHeight());
@@ -323,6 +323,9 @@ void RabbitdokuStageEditSystem::AddBackground(No::Registry& registry) {
 	box->min = -t->scale / 2.f;
 	registry.AddComponent<No::CollisionBody>(e)->type = No::BodyType::Through;
 	registry.AddComponent<BackgroundTag>(e);
+	auto* softly = registry.AddComponent<SoftlyMoveComponent>(e);
+	softly->amplitude.y = 64.f;
+	registry.AddComponent<No::Velocity2DComponent>(e);
 }
 
 void RabbitdokuStageEditSystem::DeleteGimmick(No::Registry& registry) {

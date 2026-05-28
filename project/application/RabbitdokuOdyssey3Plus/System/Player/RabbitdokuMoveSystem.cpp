@@ -211,6 +211,7 @@ void RabbitdokuMoveSystem::GenerateDeadSmoke(No::Registry& registry, No::Entity 
 	a->animeFrameHeight = 64.f;
 	a->animeFrameWidth = 64.f;
 	a->framesNum = 4;
+	a->currentAnimation = No::GetRandomValNormalized() > 0 ? 0 : 1;
 	a->frameByFrameTime = No::GetRandomVal(0.05f, 0.2f);
 	registry.AddComponent<SmokeEffectTag>(e);
 	registry.AddComponent<No::Velocity2DComponent>(e)->linear = No::GetRandomVal(No::Vector2(-200.f, -200.f), No::Vector2(200.f, 200.f));

@@ -12,6 +12,8 @@
 #include "../System/Game/RabbitdokuItemGetSystem.h"
 #include "../System/Effect/ScreenTransitionEffectSystem.h"
 #include "../System/Effect/SmokeEffectSystem.h"
+#include "../System/Effect/BackgroundAttachSystem.h"
+#include "../System/Effect/SoftlyMoveSystem.h"
 
 #include "../Component/RabbitdokuComponent.h"
 #include "../Component/FollowCamera2DComponent.h"
@@ -29,6 +31,7 @@ void RabbitdokuScene::InitGameScene() {
 	AddSystems();
 	InitPlayer(registry);
 	InitCamera(registry);
+	InitBackground(registry);
 	SceneTransitionOutEvent t;
 	registry.EmitEvent(t);
 }
@@ -45,6 +48,7 @@ void RabbitdokuScene::AddSystems() {
 
 	AddSystem(std::make_unique<RabbitdokuMoveSystem>());
 	AddSystem(std::make_unique<FollowCamera2DSystem>());
+	AddSystem(std::make_unique<SoftlyMoveSystem>());
 
 	AddSystem(std::make_unique<No::GroundResetSystem>());
 
@@ -66,7 +70,7 @@ void RabbitdokuScene::AddSystems() {
 	AddSystem(std::make_unique<No::SpriteAnimationSystem>());
 	AddSystem(std::make_unique<SmokeEffectSystem>());
 	AddSystem(std::make_unique<No::Camera2DSystem>());
-
+	AddSystem(std::make_unique<BackgroundAttachSystem>());
 
 	AddSystem(std::make_unique<RabbitdokuSceneResetSystem>());
 }
@@ -149,6 +153,16 @@ void RabbitdokuScene::InitRoom(No::Registry& registry) {
 		registry.AddComponent<No::Transform2DComponent>(e)->translate = No::Vector2(640.f + 1280.f, 360.f);
 	}
 
+}
+
+void RabbitdokuScene::InitBackground(No::Registry& registry) {
+	auto e = registry.GenerateEntity();
+	auto* t = registry.AddComponent<No::Transform2DComponent>(e);
+	t->scale = No::Vector2(1280.f, 720.f);
+	auto* s = registry.AddComponent<No::SpriteComponent>(e);
+	s->textureFilePath = "resources/game/RabbitdokuOdyssey3Plus/Sprite/BackGround01.png";
+	s->layer = 0;
+	registry.AddComponent<MainBackgroundTag>(e);
 }
 
 void RabbitdokuScene::NotSystemUpdate() {

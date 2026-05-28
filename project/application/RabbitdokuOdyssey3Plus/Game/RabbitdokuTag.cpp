@@ -24,3 +24,9 @@ REFLECT_STRUCT_END(TransitionInTag)
 
 REFLECT_STRUCT_BEGIN(BackgroundTag)
 REFLECT_STRUCT_END(BackgroundTag)
+
+REFLECT_STRUCT_BEGIN(SoftlyMoveComponent)
+REFLECT_FIELD(t),
+REFLECT_FIELD(moveSpeed),
+REFLECT_FIELD(amplitude)
+REFLECT_STRUCT_END(SoftlyMoveComponent)

@@ -6,6 +6,7 @@ public:
     void Setup() override;
 protected:
     void InitGameScene();
+    virtual void InitBackground(No::Registry& registry);
 private:
     void AddSystems();
     

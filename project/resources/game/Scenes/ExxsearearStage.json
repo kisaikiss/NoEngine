@@ -13,7 +13,7 @@
                         1.0
                     ],
                     "translate": [
-                        333.98291015625,
+                        714.9722900390625,
                         -124.44476318359375
                     ]
                 }
@@ -28,12 +28,12 @@
                 "Transform2DComponent": {
                     "rotation": 0.0,
                     "scale": [
-                        0.6000000238418579,
-                        0.6000000238418579
+                        2.045961618423462,
+                        2.045961618423462
                     ],
                     "translate": [
-                        -139.3966827392578,
-                        48.651153564453125
+                        825.7899169921875,
+                        -207.889404296875
                     ]
                 }
             }
@@ -84,7 +84,7 @@
                         1.0,
                         1.0
                     ],
-                    "flipX": true,
+                    "flipX": false,
                     "flipY": false,
                     "layer": 20,
                     "orderInLayer": 0,
@@ -107,8 +107,8 @@
                         64.0
                     ],
                     "translate": [
-                        210.14144897460938,
-                        160.0
+                        714.9728393554688,
+                        96.0
                     ]
                 },
                 "Velocity2DComponent": {
@@ -119,7 +119,7 @@
                 }
             }
         },
-        "background": {
+        "background_2": {
             "components": {
                 "AABBCollider2D": {
                     "max": [
@@ -136,8 +136,16 @@
                     "type": 2
                 },
                 "EditTag": {
-                    "name": "background",
+                    "name": "background_2",
                     "path": "Background/background"
+                },
+                "SoftlyMoveComponent": {
+                    "amplitude": [
+                        0.0,
+                        64.0
+                    ],
+                    "moveSpeed": 1.0,
+                    "t": 5.508456707000732
                 },
                 "SpriteComponent": {
                     "color": [
@@ -148,7 +156,7 @@
                     ],
                     "flipX": false,
                     "flipY": false,
-                    "layer": 0,
+                    "layer": 5,
                     "orderInLayer": 0,
                     "pivot": [
                         0.5,
@@ -169,8 +177,14 @@
                         760.0
                     ],
                     "translate": [
-                        299.2330017089844,
-                        -135.410400390625
+                        393.1983947753906,
+                        -470.4574279785156
+                    ]
+                },
+                "Velocity2DComponent": {
+                    "linear": [
+                        0.0,
+                        -44.76941680908203
                     ]
                 }
             }
@@ -7549,7 +7563,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png",
                     "uv": [
-                        0.6000000238418579,
+                        0.0,
                         0.0,
                         0.20000000298023224,
                         0.3333333432674408
@@ -7616,7 +7630,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png",
                     "uv": [
-                        0.6000000238418579,
+                        0.0,
                         0.0,
                         0.20000000298023224,
                         0.3333333432674408
@@ -7683,7 +7697,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png",
                     "uv": [
-                        0.6000000238418579,
+                        0.0,
                         0.0,
                         0.20000000298023224,
                         0.3333333432674408
@@ -7748,7 +7762,7 @@
                     "animeFrameWidth": 64.0,
                     "currentAnimation": 0,
                     "frameByFrameTime": 0.10000000149011612,
-                    "framesNum": 4
+                    "framesNum": 8
                 },
                 "CollisionBody": {
                     "type": 2
@@ -7779,9 +7793,9 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/savePoint.png",
                     "uv": [
-                        0.25,
+                        0.875,
                         0.0,
-                        0.25,
+                        0.125,
                         1.0
                     ]
                 },
