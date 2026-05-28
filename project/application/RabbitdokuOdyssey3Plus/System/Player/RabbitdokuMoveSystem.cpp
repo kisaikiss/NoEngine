@@ -81,6 +81,7 @@ void RabbitdokuMoveSystem::Update(No::Registry& registry, float deltaTime) {
 				if (playerVariables->canDoubleJump) {
 					playerVariables->yVelocity = -playerVariables->doubleJumpSpeed;
 					playerVariables->canDoubleJump = false;
+					GenerateDoubleJump(registry, e);
 				}
 			}
 
@@ -215,4 +216,24 @@ void RabbitdokuMoveSystem::GenerateDeadSmoke(No::Registry& registry, No::Entity 
 	a->frameByFrameTime = No::GetRandomVal(0.05f, 0.2f);
 	registry.AddComponent<SmokeEffectTag>(e);
 	registry.AddComponent<No::Velocity2DComponent>(e)->linear = No::GetRandomVal(No::Vector2(-200.f, -200.f), No::Vector2(200.f, 200.f));
+}
+
+void RabbitdokuMoveSystem::GenerateDoubleJump(No::Registry& registry, No::Entity playerEntity) {
+	auto* playerTransform = registry.GetComponent<No::Transform2DComponent>(playerEntity);
+	auto e = registry.GenerateEntity();
+	auto* t = registry.AddComponent<No::Transform2DComponent>(e);
+	t->translate = playerTransform->translate;
+	t->translate.y += 24.f;
+	t->scale = 64.f;
+	t->rotation = 0.0f;
+	auto* s = registry.AddComponent<No::SpriteComponent>(e);
+	s->textureFilePath = "resources/game/RabbitdokuOdyssey3Plus/Sprite/JumpDowble.png";
+	s->layer = 20;
+	auto* a = registry.AddComponent<No::Animator2DComponent>(e);
+	a->animeFrameHeight = 64.f;
+	a->animeFrameWidth = 64.f;
+	a->framesNum = 4;
+	a->frameByFrameTime = 0.07f;
+	registry.AddComponent<SmokeEffectTag>(e);
+	registry.AddComponent<No::Velocity2DComponent>(e)->linear.y = 50.f;
 }
