@@ -28,9 +28,8 @@ void ScreenTransitionEffectSystem::TransitionIn(No::Registry& registry, float de
 		t->translate.y = -720.0f;
 		t->parent = cameraT;
 		auto* s = registry.AddComponent<No::SpriteComponent>(e);
-		s->textureFilePath = "resources/game/RabbitdokuOdyssey3Plus/Sprite/block.png";
+		s->textureFilePath = "resources/game/RabbitdokuOdyssey3Plus/Sprite/SceneChange01.png";
 		s->layer = 1000;
-		s->color = No::Color::BLACK;
 	}
 
 	if (cameraT) {
@@ -69,9 +68,8 @@ void ScreenTransitionEffectSystem::TransitionOut(No::Registry& registry, float d
 		t->scale = No::Vector2(1280.f, 720.f);
 		t->parent = cameraT;
 		auto* s = registry.AddComponent<No::SpriteComponent>(e);
-		s->textureFilePath = "resources/game/RabbitdokuOdyssey3Plus/Sprite/block.png";
+		s->textureFilePath = "resources/game/RabbitdokuOdyssey3Plus/Sprite/SceneChange01.png";
 		s->layer = 1000;
-		s->color = No::Color::BLACK;
 	}
 
 	auto view = registry.View<TransitionOutTag, No::SpriteComponent, No::Transform2DComponent>();

@@ -45,14 +45,14 @@ void RabbitdokuMoveSystem::Update(No::Registry& registry, float deltaTime) {
 		}
 
 
-		
+
 
 		// 横移動していたら次のステートを歩きにする
 		if (velocity->linear.x) {
-			if (playerVariables->state != RabbitdokuState::Walk)
+			if (playerVariables->state != RabbitdokuState::Walk && groundState->isGrounded)
 				playerVariables->nextState = RabbitdokuState::Walk;
 		} else {
-			if (playerVariables->state != RabbitdokuState::Wait)
+			if (playerVariables->state != RabbitdokuState::Wait && groundState->isGrounded)
 				playerVariables->nextState = RabbitdokuState::Wait;
 		}
 
@@ -97,12 +97,14 @@ void RabbitdokuMoveSystem::Update(No::Registry& registry, float deltaTime) {
 		// 移動の速度がある、かつ壁に張り付いていなかったらジャンプ中にする
 		if (!playerVariables->sizeCollide) {
 			if (playerVariables->yVelocity < 0.0f) {
-				playerVariables->nextState = RabbitdokuState::Jump;
+				if (playerVariables->state != RabbitdokuState::Jump)
+					playerVariables->nextState = RabbitdokuState::Jump;
 			} else if (playerVariables->yVelocity > 0.0f) {
-				playerVariables->nextState = RabbitdokuState::Fall;
+				if (playerVariables->state != RabbitdokuState::Fall)
+					playerVariables->nextState = RabbitdokuState::Fall;
 			}
 		}
-		
+
 
 		// 重力
 		static const float kGravity = 9.8f;
@@ -129,15 +131,17 @@ void RabbitdokuMoveSystem::Update(No::Registry& registry, float deltaTime) {
 			break;
 		case RabbitdokuState::Jump:
 			playerVariables->state = RabbitdokuState::Jump;
-			animator->framesNum = 1;
+			animator->framesNum = 2;
 			animator->currentAnimation = 2;
 			sprite->uv.x = 0.f;
+			animator->frameByFrameTime = 0.1f;
 			break;
 		case RabbitdokuState::Fall:
 			playerVariables->state = RabbitdokuState::Fall;
-			animator->framesNum = 1;
+			animator->framesNum = 2;
 			animator->currentAnimation = 3;
 			sprite->uv.x = 0.f;
+			animator->frameByFrameTime = 0.1f;
 			break;
 			break;
 		case RabbitdokuState::Wall:
@@ -186,7 +190,7 @@ void RabbitdokuMoveSystem::DeadMove(No::Registry& registry, No::Entity e, float 
 		SceneTransitionInEvent dead;
 		registry.EmitEvent(dead);
 		registry.DestroyEntity(e);
-		const uint32_t kSmokeNum = static_cast<uint32_t>(No::GetRandomVal(10.f, 20.f));
+		const uint32_t kSmokeNum = static_cast<uint32_t>(No::GetRandomVal(30.f, 50.f));
 		for (uint32_t i = 0; i < kSmokeNum; i++) {
 			GenerateDeadSmoke(registry, e);
 		}
@@ -201,14 +205,13 @@ void RabbitdokuMoveSystem::GenerateDeadSmoke(No::Registry& registry, No::Entity 
 	t->scale = 64.f;
 	t->rotation = 0.0f;
 	auto* s = registry.AddComponent<No::SpriteComponent>(e);
-	s->textureFilePath = No::GetRandomValNormalized() > 0.0f ? "resources/game/RabbitdokuOdyssey3Plus/Sprite/smokeParticle1.png" : "resources/game/RabbitdokuOdyssey3Plus/Sprite/smokeParticle2.png";
-	s->color = No::Color::RED;
+	s->textureFilePath = "resources/game/RabbitdokuOdyssey3Plus/Sprite/Death.png";
 	s->layer = 20;
 	auto* a = registry.AddComponent<No::Animator2DComponent>(e);
 	a->animeFrameHeight = 64.f;
 	a->animeFrameWidth = 64.f;
-	a->framesNum = 3;
-	a->frameByFrameTime = No::GetRandomVal(0.1f, 0.4f);
+	a->framesNum = 4;
+	a->frameByFrameTime = No::GetRandomVal(0.05f, 0.2f);
 	registry.AddComponent<SmokeEffectTag>(e);
 	registry.AddComponent<No::Velocity2DComponent>(e)->linear = No::GetRandomVal(No::Vector2(-200.f, -200.f), No::Vector2(200.f, 200.f));
 }

@@ -97,8 +97,8 @@ void RabbitdokuScene::InitPlayer(No::Registry& registry) {
 	transform->scale.x = 64.f;
 	transform->scale.y = 64.f;
 	auto* animator = registry.AddComponent<No::Animator2DComponent>(e);
-	animator->animeFrameHeight = 32.f;
-	animator->animeFrameWidth = 32.f;
+	animator->animeFrameHeight = 64.f;
+	animator->animeFrameWidth = 64.f;
 	animator->framesNum = 2;
 	animator->frameByFrameTime = 0.3f;
 	registry.AddComponent<SaveData>(e);

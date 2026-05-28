@@ -150,6 +150,13 @@ void RabbitdokuStageEditSystem::AddBlock(No::Registry& registry) {
 	transform->scale.y = gridSize_.y;
 	collider->max = transform->scale / 2.f;
 	collider->min = -transform->scale / 2.f;
+	if (sprite->textureFilePath == BlockTextures::kBlue) {
+		auto* a = registry.AddComponent<No::Animator2DComponent>(e);
+		a->animeFrameHeight = 64.f;
+		a->animeFrameWidth = 64.f;
+		a->framesNum = 4;
+		a->frameByFrameTime = 0.1f;
+	}
 }
 
 void RabbitdokuStageEditSystem::AddRoom(No::Registry& registry) {
@@ -205,10 +212,10 @@ void RabbitdokuStageEditSystem::AddSave(No::Registry& registry) {
 	auto* animator = registry.AddComponent<No::Animator2DComponent>(e);
 	animator->animeFrameHeight = 64.f;
 	animator->animeFrameWidth = 64.f;
-	animator->framesNum = 8;
+	animator->framesNum = 4;
 	animator->frameByFrameTime = 0.1f;
 	sprite->uv.x = 0.f;
-	sprite->uv.width = 1.f/8.f;
+	sprite->uv.width = 1.f/4.f;
 	sprite->uv.height = 1.f;
 
 }
@@ -280,20 +287,22 @@ void RabbitdokuStageEditSystem::AddNeedle(No::Registry& registry) {
 	tag->path = "Gimmick/DeathObject/needle";
 	registry.AddComponent<No::CollisionBody>(e)->type = No::BodyType::Through;
 	registry.AddComponent<RabbitdokuCollisionLayerComponent>(e)->layer = RabbitdokuCollisionLayerComponent::Item;
-	sprite->textureFilePath = "resources/game/RabbitdokuOdyssey3Plus/Sprite/gimmicks.png";
+	sprite->textureFilePath = "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png";
 	transform->scale.x = gridSize_.x;
 	transform->scale.y = gridSize_.y;
-	collider->max = transform->scale / 2.f;
-	collider->min = -transform->scale / 2.f;
+	collider->max.x = transform->scale.x / 2.6f;
+	collider->max.y = transform->scale.y / 2.0f;
+	collider->min = -transform->scale / 2.6f;
 	collider->min.y = collider->max.y / 2.f;
 	auto* animator = registry.AddComponent<No::Animator2DComponent>(e);
 	animator->animeFrameHeight = 64.f;
 	animator->animeFrameWidth = 64.f;
-	animator->currentAnimation = 1;
-	animator->framesNum = 1;
+	animator->currentAnimation = 0;
+	animator->framesNum = 5;
+	animator->frameByFrameTime = 0.1f;
 
-	sprite->uv.y = 1.f / 4.f;
-	sprite->uv.height = 1.f / 4.f;
+	sprite->uv.width = 1.f / 5.f;
+	sprite->uv.height = 1.f / 3.f;
 }
 
 void RabbitdokuStageEditSystem::AddBackground(No::Registry& registry) {
