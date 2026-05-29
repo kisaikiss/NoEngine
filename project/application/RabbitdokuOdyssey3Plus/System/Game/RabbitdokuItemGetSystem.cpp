@@ -23,16 +23,19 @@ void RabbitItemGetSystem::Update(No::Registry& registry, float deltaTime) {
 				GenerateLight(registry, event.player);
 				GenerateStars(registry, event.player);
 			}
+			continue;
 		}
 
 		if (registry.Has<EnemyTag>(event.item)) {
 			player->state = RabbitdokuState::Dead;
+			return;
 		}
 
 		if (registry.Has<SpringComponent>(event.item)) {
 			player->yVelocity = -registry.GetComponent<SpringComponent>(event.item)->force;
 			player->canDoubleJump = true;
 			registry.GetComponent<No::Animator2DComponent>(event.item)->framesNum = 5;
+			continue;
 		}
 
 		if (auto* block = registry.GetComponent<CollapseBlockComponent>(event.item)) {
@@ -41,11 +44,14 @@ void RabbitItemGetSystem::Update(No::Registry& registry, float deltaTime) {
 			e.player = event.player;
 			e.position = event.position;
 			registry.EmitEvent(e);
+			continue;
 		}
 
 		if (registry.Has<ReplenisherTag>(event.item)) {
 			player->canDoubleJump = true;
+			GenerateHealedEffect(registry, event.item);
 			registry.DestroyEntity(event.item);
+			continue;
 		}
 	}
 
@@ -109,4 +115,22 @@ void RabbitItemGetSystem::GenerateStars(No::Registry& registry, No::Entity playe
 	a->frameByFrameTime = 0.1f;
 	registry.AddComponent<SmokeEffectTag>(e);
 	registry.AddComponent<No::Velocity2DComponent>(e)->linear.y = 64.f;
+}
+
+void RabbitItemGetSystem::GenerateHealedEffect(No::Registry& registry, No::Entity item) {
+	auto* playerTransform = registry.GetComponent<No::Transform2DComponent>(item);
+	auto e = registry.GenerateEntity();
+	auto* t = registry.AddComponent<No::Transform2DComponent>(e);
+	t->translate = playerTransform->translate;
+	t->scale = 64.f;
+	t->rotation = 0.0f;
+	auto* s = registry.AddComponent<No::SpriteComponent>(e);
+	s->textureFilePath = "resources/game/RabbitdokuOdyssey3Plus/Sprite/JumpDowbleHealed.png";
+	s->layer = 19;
+	auto* a = registry.AddComponent<No::Animator2DComponent>(e);
+	a->animeFrameHeight = 64.f;
+	a->animeFrameWidth = 64.f;
+	a->framesNum = 5;
+	a->frameByFrameTime = 0.1f;
+	registry.AddComponent<SmokeEffectTag>(e);
 }

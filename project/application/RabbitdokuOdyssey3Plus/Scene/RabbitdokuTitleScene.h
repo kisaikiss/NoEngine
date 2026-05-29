@@ -1,9 +1,5 @@
 #pragma once
-#include "engine/NoEngine.h"
+#include "RabbitdokuScene.h"
 
-
-class RabbitdokuTitleScene : public No::IScene {
-public:
-	void Setup() override;
-};
+class RabbitdokuTitleScene : public RabbitdokuScene {};
 

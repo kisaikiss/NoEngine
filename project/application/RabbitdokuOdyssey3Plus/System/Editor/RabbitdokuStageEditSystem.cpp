@@ -460,8 +460,8 @@ void RabbitdokuStageEditSystem::AddBackground(No::Registry& registry) {
 	No::Entity e = registry.GenerateEntity();
 	auto* t = registry.AddComponent<No::Transform2DComponent>(e);
 	auto* s = registry.AddComponent<No::SpriteComponent>(e);
-	s->textureHandle = NoEngine::TextureManager::LoadCovertTexture(BackgroundTextures::kFlower);
-	s->textureFilePath = BackgroundTextures::kFlower;
+	s->textureHandle = NoEngine::TextureManager::LoadCovertTexture(currentBackgroundTexture_);
+	s->textureFilePath = currentBackgroundTexture_;
 	s->layer = 5;
 	t->translate = addRoomPosition_;
 	t->scale.x = static_cast<float>(s->textureHandle.GetWidth());
@@ -630,6 +630,20 @@ void RabbitdokuStageEditSystem::DrawEditWindow(No::Registry& registry) {
 		case RabbitdokuStageEditSystem::GimmickSelected::kReplenisher:
 			ImGui::Text("Replenisher");
 			break;
+		}
+		break;
+	case EditState::kBackground:
+		if (ImGui::Button("ChangeTex")) {
+			ImGui::OpenPopup("TexturePopup");
+		}
+		if (ImGui::BeginPopupContextItem("TexturePopup")) {
+			if (ImGui::MenuItem("Flower")) {
+				currentBackgroundTexture_ = BackgroundTextures::kFlower;
+			}
+			if (ImGui::MenuItem("Title")) {
+				currentBackgroundTexture_ = BackgroundTextures::kTitle;
+			}
+			ImGui::EndPopup();
 		}
 		break;
 	default:

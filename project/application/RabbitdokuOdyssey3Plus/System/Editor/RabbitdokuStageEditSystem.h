@@ -29,6 +29,7 @@ private:
 
     struct BackgroundTextures {
         static inline std::string kFlower = "resources/game/RabbitdokuOdyssey3Plus/Sprite/flower.png";
+        static inline std::string kTitle = "resources/game/RabbitdokuOdyssey3Plus/Sprite/Title/GameTitle.png";
     };
 
     No::Vector2 gridSize_ = No::Vector2(64.f,64.f);
@@ -39,7 +40,8 @@ private:
     No::Vector2 mouseOffset_{};
 
     std::string currentBlockTexture = BlockTextures::kBlue;
-    EditState state_ = EditState::kGimmick;
+    std::string currentBackgroundTexture_ = BackgroundTextures::kTitle;
+    EditState state_ = EditState::kBlock;
     GimmickSelected gimmick_ = GimmickSelected::kDeathBlock;
 
     void AddBlock(No::Registry& registry);

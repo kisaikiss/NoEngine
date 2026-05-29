@@ -166,14 +166,14 @@ void CommonSetupRenderPass(RenderPassScheduler& renderPassScheduler) {
 	meshPass->SetClearTarget(true);
 	renderPassScheduler.AddPass(std::move(meshPass));
 
+	auto spritePass = std::make_unique<SpritePass>();
+	spritePass->AddOutput("MainColor");
+	renderPassScheduler.AddPass(std::move(spritePass));
+
 	auto primitivePass = std::make_unique<PrimitivePass>();
 	primitivePass->AddOutput("MainColor");
 	primitivePass->SetDepthOutput("MainDepth");
 	renderPassScheduler.AddPass(std::move(primitivePass));
-
-	auto spritePass = std::make_unique<SpritePass>();
-	spritePass->AddOutput("MainColor");
-	renderPassScheduler.AddPass(std::move(spritePass));
 
 	auto skyBoxPass = std::make_unique<SkyBoxPass>();
 	skyBoxPass->AddOutput("MainColor");
