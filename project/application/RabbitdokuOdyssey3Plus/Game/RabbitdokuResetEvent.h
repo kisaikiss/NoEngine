@@ -1,2 +1,2 @@
 #pragma once
-struct RabbitdokuResetEvent{};
+struct RabbitdokuResetEvent { std::string nextScene; };

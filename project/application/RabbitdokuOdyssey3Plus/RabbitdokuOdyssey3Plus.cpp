@@ -28,4 +28,6 @@ void RabbitdokuOdyssey3Plus::Startup(void) {
 
 	No::InputBindAction("Save", No::DeviceType::Keyboard, static_cast<int>('Z'));
 	No::InputBindAction("Save", No::DeviceType::Gamepad, static_cast<int>(No::GamepadButton::X));
+
+	No::InputBindAction("EnterDoor", No::DeviceType::Keyboard, static_cast<int>(VK_UP));
 }

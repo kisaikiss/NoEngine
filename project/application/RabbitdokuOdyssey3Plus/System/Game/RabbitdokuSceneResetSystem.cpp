@@ -19,7 +19,7 @@ void RabbitdokuSceneResetSystem::Update(No::Registry& registry, float deltaTime)
 
 		RabbitdokuSerializer::GameSave(registry, saveData.respawnPoint, saveData.death, saveData.totalDeath);
 		No::SceneChangeEvent sceneChange;
-		sceneChange.nextScene = No::GetCurrentSceneName(registry);
+		sceneChange.nextScene = event->nextScene;
 		registry.EmitEvent(sceneChange);
 	}
 

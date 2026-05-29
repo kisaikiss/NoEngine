@@ -8,4 +8,5 @@ public:
 private:
     void TransitionIn(No::Registry& registry, float deltaTime);
     void TransitionOut(No::Registry& registry, float deltaTime);
+    std::string nextScene_;
 };

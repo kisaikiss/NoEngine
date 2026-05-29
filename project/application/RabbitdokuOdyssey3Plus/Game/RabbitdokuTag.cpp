@@ -43,3 +43,7 @@ REFLECT_STRUCT_END(CollapseBlockComponent)
 
 REFLECT_STRUCT_BEGIN(ReplenisherTag)
 REFLECT_STRUCT_END(ReplenisherTag)
+
+REFLECT_STRUCT_BEGIN(DoorComponent)
+REFLECT_FIELD(stageName)
+REFLECT_STRUCT_END(DoorComponent)

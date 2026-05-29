@@ -12,7 +12,7 @@ struct RoomTag : public No::AABBCollider2D{};
 
 struct TransitionInTag { float t = 0.0f; };
 
-struct SceneTransitionInEvent{};
+struct SceneTransitionInEvent { std::string stageName; };
 
 struct TransitionOutTag { float t = 0.0f; };
 
@@ -40,3 +40,7 @@ struct CollapseBlockComponent {
 };
 
 struct ReplenisherTag {};
+
+struct DoorComponent {
+	std::string stageName = "Title";
+};

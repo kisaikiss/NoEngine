@@ -5,9 +5,11 @@
 
 namespace {
 const float kTransitionSpeed = 1.5f;
+std::string sCurrentScene;
 }
 
 void ScreenTransitionEffectSystem::Update(No::Registry& registry, float deltaTime) {
+	sCurrentScene = No::GetCurrentSceneName(registry);
 	TransitionIn(registry, deltaTime);
 	TransitionOut(registry, deltaTime);
 }
@@ -22,6 +24,11 @@ void ScreenTransitionEffectSystem::TransitionIn(No::Registry& registry, float de
 	auto event = registry.PollEvent<SceneTransitionInEvent>();
 	if (event.has_value()) {
 		auto e = registry.GenerateEntity();
+		if (event->stageName.empty()) {
+			nextScene_ = sCurrentScene;
+		} else {
+			nextScene_ = event->stageName;
+		}
 		registry.AddComponent<TransitionInTag>(e);
 		auto* t = registry.AddComponent<No::Transform2DComponent>(e);
 		t->scale = No::Vector2(1280.f, 848.f);
@@ -46,6 +53,7 @@ void ScreenTransitionEffectSystem::TransitionIn(No::Registry& registry, float de
 				t->scale.x = 1280.f * cameraT->scale.x;
 				t->scale.y = 848.f * cameraT->scale.y;
 				RabbitdokuResetEvent dead;
+				dead.nextScene = nextScene_;
 				registry.EmitEvent(dead);
 			}
 

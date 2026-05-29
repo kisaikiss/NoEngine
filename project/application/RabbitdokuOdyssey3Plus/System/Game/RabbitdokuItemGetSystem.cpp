@@ -53,6 +53,15 @@ void RabbitItemGetSystem::Update(No::Registry& registry, float deltaTime) {
 			registry.DestroyEntity(event.item);
 			continue;
 		}
+
+		if (registry.Has<DoorComponent>(event.item)) {
+			if (No::InputIsTrigger("EnterDoor")) {
+				SceneTransitionInEvent change;
+				change.stageName = registry.GetComponent<DoorComponent>(event.item)->stageName;
+				registry.EmitEvent(change);
+				return;
+			}
+		}
 	}
 
 }

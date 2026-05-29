@@ -74,6 +74,9 @@ void RabbitdokuStageEditSystem::Update(No::Registry& registry, float deltaTime) 
 				case RabbitdokuStageEditSystem::GimmickSelected::kReplenisher:
 					AddReplenisher(registry);
 					break;
+				case RabbitdokuStageEditSystem::GimmickSelected::kDoor:
+					AddDoor(registry);
+					break;
 				default:
 					break;
 				}
@@ -456,6 +459,51 @@ void RabbitdokuStageEditSystem::AddReplenisher(No::Registry& registry) {
 	sprite->uv.width = 1.f / 5.f;
 }
 
+void RabbitdokuStageEditSystem::AddDoor(No::Registry& registry) {
+	No::Vector2 position = GetGridPosition(No::Get2DGameWindowMousePosition(registry));
+	auto blockView = registry.View<BlockTag, No::AABBCollider2D, No::Transform2DComponent>();
+	for (auto e : blockView) {
+		auto* aabb = registry.GetComponent<No::AABBCollider2D>(e);
+		auto* transform = registry.GetComponent<No::Transform2DComponent>(e);
+		if (No::IsCollision(position, aabb, transform)) return;
+	}
+
+	auto gimmickView = registry.View<GimmickTag, No::AABBCollider2D, No::Transform2DComponent>();
+	for (auto e : gimmickView) {
+		auto* aabb = registry.GetComponent<No::AABBCollider2D>(e);
+		auto* transform = registry.GetComponent<No::Transform2DComponent>(e);
+		if (No::IsCollision(position, aabb, transform)) return;
+	}
+
+
+	No::Entity e = registry.GenerateEntity();
+	auto* transform = registry.AddComponent<No::Transform2DComponent>(e);
+	transform->translate = position;
+	transform->translate.y -= gridSize_.y / 2.f;
+	auto* sprite = registry.AddComponent<No::SpriteComponent>(e);
+	sprite->layer = 10;
+	auto* collider = registry.AddComponent<No::AABBCollider2D>(e);
+	registry.AddComponent<DoorComponent>(e);
+	registry.AddComponent<GimmickTag>(e);
+	auto* tag = registry.AddComponent<No::EditTag>(e);
+	tag->name = "door";
+	tag->path = "Gimmick/Door/door";
+	registry.AddComponent<No::CollisionBody>(e)->type = No::BodyType::Through;
+	registry.AddComponent<RabbitdokuCollisionLayerComponent>(e)->layer = RabbitdokuCollisionLayerComponent::Item;
+	sprite->textureFilePath = "resources/game/RabbitdokuOdyssey3Plus/Sprite/Door.png";
+	transform->scale = 128.f;
+	collider->max = transform->scale / 2.f;
+	collider->min = -transform->scale / 2.f;
+	auto* animator = registry.AddComponent<No::Animator2DComponent>(e);
+	animator->animeFrameHeight = 128.f;
+	animator->animeFrameWidth = 128.f;
+	animator->currentAnimation = 0;
+	animator->framesNum = 8;
+	animator->frameByFrameTime = 0.1f;
+
+	sprite->uv.width = 1.f / 8.f;
+}
+
 void RabbitdokuStageEditSystem::AddBackground(No::Registry& registry) {
 	No::Entity e = registry.GenerateEntity();
 	auto* t = registry.AddComponent<No::Transform2DComponent>(e);
@@ -609,6 +657,10 @@ void RabbitdokuStageEditSystem::DrawEditWindow(No::Registry& registry) {
 		if (ImGui::Button("Replenisher")) {
 			gimmick_ = GimmickSelected::kReplenisher;
 		}
+		ImGui::SameLine();
+		if (ImGui::Button("Door")) {
+			gimmick_ = GimmickSelected::kDoor;
+		}
 		ImGui::Text("Selected : ");
 		ImGui::SameLine();
 		switch (gimmick_) {
@@ -629,7 +681,10 @@ void RabbitdokuStageEditSystem::DrawEditWindow(No::Registry& registry) {
 			break;
 		case RabbitdokuStageEditSystem::GimmickSelected::kReplenisher:
 			ImGui::Text("Replenisher");
-			break;
+			break; 
+		case RabbitdokuStageEditSystem::GimmickSelected::kDoor:
+				ImGui::Text("Door");
+				break;
 		}
 		break;
 	case EditState::kBackground:
@@ -642,6 +697,65 @@ void RabbitdokuStageEditSystem::DrawEditWindow(No::Registry& registry) {
 			}
 			if (ImGui::MenuItem("Title")) {
 				currentBackgroundTexture_ = BackgroundTextures::kTitle;
+			}
+
+			if (ImGui::MenuItem("Background01")) {
+				currentBackgroundTexture_ = BackgroundTextures::kBackground01;
+			}
+			if (ImGui::MenuItem("Background02")) {
+				currentBackgroundTexture_ = BackgroundTextures::kBackground02;
+			}
+			if (ImGui::MenuItem("Background03")) {
+				currentBackgroundTexture_ = BackgroundTextures::kBackground03;
+			}
+			if (ImGui::MenuItem("Background04")) {
+				currentBackgroundTexture_ = BackgroundTextures::kBackground04;
+			}
+			if (ImGui::MenuItem("Background05")) {
+				currentBackgroundTexture_ = BackgroundTextures::kBackground05;
+			}
+			if (ImGui::MenuItem("Background06")) {
+				currentBackgroundTexture_ = BackgroundTextures::kBackground06;
+			}
+			if (ImGui::MenuItem("Background07")) {
+				currentBackgroundTexture_ = BackgroundTextures::kBackground07;
+			}
+			if (ImGui::MenuItem("Background08")) {
+				currentBackgroundTexture_ = BackgroundTextures::kBackground08;
+			}
+			if (ImGui::MenuItem("Background09")) {
+				currentBackgroundTexture_ = BackgroundTextures::kBackground09;
+			}
+
+			if (ImGui::MenuItem("StageNumber00")) {
+				currentBackgroundTexture_ = BackgroundTextures::kStageNumber00;
+			}
+			if (ImGui::MenuItem("StageNumber01")) {
+				currentBackgroundTexture_ = BackgroundTextures::kStageNumber01;
+			}
+			if (ImGui::MenuItem("StageNumber02")) {
+				currentBackgroundTexture_ = BackgroundTextures::kStageNumber02;
+			}
+			if (ImGui::MenuItem("StageNumber03")) {
+				currentBackgroundTexture_ = BackgroundTextures::kStageNumber03;
+			}
+			if (ImGui::MenuItem("StageNumber04")) {
+				currentBackgroundTexture_ = BackgroundTextures::kStageNumber04;
+			}
+			if (ImGui::MenuItem("StageNumber05")) {
+				currentBackgroundTexture_ = BackgroundTextures::kStageNumber05;
+			}
+			if (ImGui::MenuItem("StageNumber06")) {
+				currentBackgroundTexture_ = BackgroundTextures::kStageNumber06;
+			}
+			if (ImGui::MenuItem("StageNumber07")) {
+				currentBackgroundTexture_ = BackgroundTextures::kStageNumber07;
+			}
+			if (ImGui::MenuItem("StageNumber08")) {
+				currentBackgroundTexture_ = BackgroundTextures::kStageNumber08;
+			}
+			if (ImGui::MenuItem("StageNumber09")) {
+				currentBackgroundTexture_ = BackgroundTextures::kStageNumber09;
 			}
 			ImGui::EndPopup();
 		}

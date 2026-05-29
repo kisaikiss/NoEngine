@@ -20,6 +20,7 @@ private:
         kSpring,
         kCollapseBlock,
         kReplenisher,
+        kDoor,
     };
 
     struct BlockTextures {
@@ -30,6 +31,26 @@ private:
     struct BackgroundTextures {
         static inline std::string kFlower = "resources/game/RabbitdokuOdyssey3Plus/Sprite/flower.png";
         static inline std::string kTitle = "resources/game/RabbitdokuOdyssey3Plus/Sprite/Title/GameTitle.png";
+        static inline std::string kBackground01 = "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/DirectionObject01.png";
+        static inline std::string kBackground02 = "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/DirectionObject02.png";
+        static inline std::string kBackground03 = "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/DirectionObject03.png";
+        static inline std::string kBackground04 = "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/DirectionObject04.png";
+        static inline std::string kBackground05 = "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/DirectionObject05.png";
+        static inline std::string kBackground06 = "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/DirectionObject06.png";
+        static inline std::string kBackground07 = "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/DirectionObject07.png";
+        static inline std::string kBackground08 = "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/DirectionObject08.png";
+        static inline std::string kBackground09 = "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/DirectionObject09.png";
+
+        static inline std::string kStageNumber00 = "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/StageNumber00.png";
+        static inline std::string kStageNumber01 = "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/StageNumber01.png";
+        static inline std::string kStageNumber02 = "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/StageNumber02.png";
+        static inline std::string kStageNumber03 = "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/StageNumber03.png";
+        static inline std::string kStageNumber04 = "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/StageNumber04.png";
+        static inline std::string kStageNumber05 = "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/StageNumber05.png";
+        static inline std::string kStageNumber06 = "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/StageNumber06.png";
+        static inline std::string kStageNumber07 = "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/StageNumber07.png";
+        static inline std::string kStageNumber08 = "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/StageNumber08.png";
+        static inline std::string kStageNumber09 = "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/StageNumber09.png";
     };
 
     No::Vector2 gridSize_ = No::Vector2(64.f,64.f);
@@ -52,6 +73,7 @@ private:
     void AddSpring(No::Registry& registry);
     void AddCollapseBlock(No::Registry& registry);
     void AddReplenisher(No::Registry& registry);
+    void AddDoor(No::Registry& registry);
     void AddBackground(No::Registry& registry);
     void DeleteGimmick(No::Registry& registry);
     void DeleteBlock(No::Registry& registry);
