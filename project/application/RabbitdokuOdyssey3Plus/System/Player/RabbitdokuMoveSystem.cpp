@@ -233,10 +233,9 @@ void RabbitdokuMoveSystem::GenerateDoubleJump(No::Registry& registry, No::Entity
 	auto* a = registry.AddComponent<No::Animator2DComponent>(e);
 	a->animeFrameHeight = 64.f;
 	a->animeFrameWidth = 64.f;
-	a->framesNum = 4;
+	a->framesNum = 5;
 	a->frameByFrameTime = 0.07f;
 	registry.AddComponent<SmokeEffectTag>(e);
-	registry.AddComponent<No::Velocity2DComponent>(e)->linear.y = 50.f;
 }
 
 void RabbitdokuMoveSystem::GenerateWallJump(No::Registry& registry, No::Entity playerEntity) {

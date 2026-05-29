@@ -205,7 +205,7 @@ private:
 	// 再利用待ちのエンティティ
 	std::vector<Entity> freeEntities_;
 	// 削除待ちのエンティティ
-	std::vector<Entity> pendingDestroy_;
+	std::set<Entity> pendingDestroy_;
 	// イベントの集合
 	EventBus eventBus_;
 

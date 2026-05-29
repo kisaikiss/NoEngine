@@ -39,3 +39,7 @@ REFLECT_STRUCT_END(SpringComponent)
 REFLECT_STRUCT_BEGIN(CollapseBlockComponent)
 REFLECT_FIELD(collapseTime)
 REFLECT_STRUCT_END(CollapseBlockComponent)
+
+
+REFLECT_STRUCT_BEGIN(ReplenisherTag)
+REFLECT_STRUCT_END(ReplenisherTag)

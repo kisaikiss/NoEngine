@@ -22,7 +22,7 @@ Entity Registry::GenerateEntity() {
 }
 
 void Registry::DestroyEntity(Entity entity) {
-	pendingDestroy_.push_back(entity);
+	pendingDestroy_.insert(entity);
 }
 
 void Registry::FlushDestroy() {

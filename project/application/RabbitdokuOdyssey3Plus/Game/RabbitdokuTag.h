@@ -38,3 +38,5 @@ struct CollapseBlockComponent {
 	bool startBreak = false;
 	float collapseTime = 0.5f;
 };
+
+struct ReplenisherTag {};

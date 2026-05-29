@@ -13,8 +13,8 @@
                         1.0
                     ],
                     "translate": [
-                        333.982666015625,
-                        -124.44476318359375
+                        587.7896728515625,
+                        96.00000762939453
                     ]
                 }
             }
@@ -107,8 +107,8 @@
                         64.0
                     ],
                     "translate": [
-                        39.013973236083984,
-                        160.0
+                        587.7896728515625,
+                        96.00000762939453
                     ]
                 },
                 "Velocity2DComponent": {
@@ -9840,6 +9840,207 @@
                     "translate": [
                         -96.0,
                         160.0
+                    ]
+                }
+            }
+        },
+        "replenisher": {
+            "components": {
+                "AABBCollider2D": {
+                    "max": [
+                        16.0,
+                        16.0
+                    ],
+                    "min": [
+                        -16.0,
+                        -16.0
+                    ]
+                },
+                "Animator2DComponent": {
+                    "animeFrameHeight": 64.0,
+                    "animeFrameWidth": 64.0,
+                    "currentAnimation": 0,
+                    "frameByFrameTime": 0.10000000149011612,
+                    "framesNum": 5
+                },
+                "CollisionBody": {
+                    "type": 2
+                },
+                "EditTag": {
+                    "name": "replenisher",
+                    "path": "Gimmick/Replenisher/replenisher"
+                },
+                "GimmickTag": null,
+                "RabbitdokuCollisionLayerComponent": {
+                    "layer": 8
+                },
+                "ReplenisherTag": null,
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "layer": 10,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/JumpDowbleItem.png",
+                    "uv": [
+                        0.0,
+                        0.0,
+                        0.20000000298023224,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        64.0,
+                        64.0
+                    ],
+                    "translate": [
+                        736.0,
+                        -32.0
+                    ]
+                }
+            }
+        },
+        "replenisher_2": {
+            "components": {
+                "AABBCollider2D": {
+                    "max": [
+                        16.0,
+                        16.0
+                    ],
+                    "min": [
+                        -16.0,
+                        -16.0
+                    ]
+                },
+                "Animator2DComponent": {
+                    "animeFrameHeight": 64.0,
+                    "animeFrameWidth": 64.0,
+                    "currentAnimation": 0,
+                    "frameByFrameTime": 0.10000000149011612,
+                    "framesNum": 5
+                },
+                "CollisionBody": {
+                    "type": 2
+                },
+                "EditTag": {
+                    "name": "replenisher_2",
+                    "path": "Gimmick/Replenisher/replenisher"
+                },
+                "GimmickTag": null,
+                "RabbitdokuCollisionLayerComponent": {
+                    "layer": 8
+                },
+                "ReplenisherTag": null,
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "layer": 10,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/JumpDowbleItem.png",
+                    "uv": [
+                        0.0,
+                        0.0,
+                        0.20000000298023224,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        64.0,
+                        64.0
+                    ],
+                    "translate": [
+                        864.0,
+                        -160.0
+                    ]
+                }
+            }
+        },
+        "replenisher_3": {
+            "components": {
+                "AABBCollider2D": {
+                    "max": [
+                        16.0,
+                        16.0
+                    ],
+                    "min": [
+                        -16.0,
+                        -16.0
+                    ]
+                },
+                "Animator2DComponent": {
+                    "animeFrameHeight": 64.0,
+                    "animeFrameWidth": 64.0,
+                    "currentAnimation": 0,
+                    "frameByFrameTime": 0.10000000149011612,
+                    "framesNum": 5
+                },
+                "CollisionBody": {
+                    "type": 2
+                },
+                "EditTag": {
+                    "name": "replenisher_3",
+                    "path": "Gimmick/Replenisher/replenisher"
+                },
+                "GimmickTag": null,
+                "RabbitdokuCollisionLayerComponent": {
+                    "layer": 8
+                },
+                "ReplenisherTag": null,
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "layer": 10,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/JumpDowbleItem.png",
+                    "uv": [
+                        0.0,
+                        0.0,
+                        0.20000000298023224,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        64.0,
+                        64.0
+                    ],
+                    "translate": [
+                        992.0,
+                        -224.0
                     ]
                 }
             }

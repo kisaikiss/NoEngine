@@ -19,6 +19,7 @@ private:
         kNeedle,
         kSpring,
         kCollapseBlock,
+        kReplenisher,
     };
 
     struct BlockTextures {
@@ -48,6 +49,7 @@ private:
     void AddNeedle(No::Registry& registry);
     void AddSpring(No::Registry& registry);
     void AddCollapseBlock(No::Registry& registry);
+    void AddReplenisher(No::Registry& registry);
     void AddBackground(No::Registry& registry);
     void DeleteGimmick(No::Registry& registry);
     void DeleteBlock(No::Registry& registry);

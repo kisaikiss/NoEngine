@@ -71,6 +71,9 @@ void RabbitdokuStageEditSystem::Update(No::Registry& registry, float deltaTime) 
 				case RabbitdokuStageEditSystem::GimmickSelected::kCollapseBlock:
 					AddCollapseBlock(registry);
 					break;
+				case RabbitdokuStageEditSystem::GimmickSelected::kReplenisher:
+					AddReplenisher(registry);
+					break;
 				default:
 					break;
 				}
@@ -408,6 +411,51 @@ void RabbitdokuStageEditSystem::AddCollapseBlock(No::Registry& registry) {
 	registry.AddComponent<CollapseBlockComponent>(e);
 }
 
+void RabbitdokuStageEditSystem::AddReplenisher(No::Registry& registry) {
+	No::Vector2 position = GetGridPosition(No::Get2DGameWindowMousePosition(registry));
+	auto blockView = registry.View<BlockTag, No::AABBCollider2D, No::Transform2DComponent>();
+	for (auto e : blockView) {
+		auto* aabb = registry.GetComponent<No::AABBCollider2D>(e);
+		auto* transform = registry.GetComponent<No::Transform2DComponent>(e);
+		if (No::IsCollision(position, aabb, transform)) return;
+	}
+
+	auto gimmickView = registry.View<GimmickTag, No::AABBCollider2D, No::Transform2DComponent>();
+	for (auto e : gimmickView) {
+		auto* aabb = registry.GetComponent<No::AABBCollider2D>(e);
+		auto* transform = registry.GetComponent<No::Transform2DComponent>(e);
+		if (No::IsCollision(position, aabb, transform)) return;
+	}
+
+
+	No::Entity e = registry.GenerateEntity();
+	auto* transform = registry.AddComponent<No::Transform2DComponent>(e);
+	transform->translate = position;
+	auto* sprite = registry.AddComponent<No::SpriteComponent>(e);
+	sprite->layer = 10;
+	auto* collider = registry.AddComponent<No::AABBCollider2D>(e);
+	registry.AddComponent<ReplenisherTag>(e);
+	registry.AddComponent<GimmickTag>(e);
+	auto* tag = registry.AddComponent<No::EditTag>(e);
+	tag->name = "replenisher";
+	tag->path = "Gimmick/Replenisher/replenisher";
+	registry.AddComponent<No::CollisionBody>(e)->type = No::BodyType::Through;
+	registry.AddComponent<RabbitdokuCollisionLayerComponent>(e)->layer = RabbitdokuCollisionLayerComponent::Item;
+	sprite->textureFilePath = "resources/game/RabbitdokuOdyssey3Plus/Sprite/JumpDowbleItem.png";
+	transform->scale.x = gridSize_.x;
+	transform->scale.y = gridSize_.y;
+	collider->max = transform->scale / 4.f;
+	collider->min = -transform->scale / 4.f;
+	auto* animator = registry.AddComponent<No::Animator2DComponent>(e);
+	animator->animeFrameHeight = 64.f;
+	animator->animeFrameWidth = 64.f;
+	animator->currentAnimation = 0;
+	animator->framesNum = 5;
+	animator->frameByFrameTime = 0.1f;
+
+	sprite->uv.width = 1.f / 5.f;
+}
+
 void RabbitdokuStageEditSystem::AddBackground(No::Registry& registry) {
 	No::Entity e = registry.GenerateEntity();
 	auto* t = registry.AddComponent<No::Transform2DComponent>(e);
@@ -552,9 +600,14 @@ void RabbitdokuStageEditSystem::DrawEditWindow(No::Registry& registry) {
 		ImGui::SameLine();
 		if (ImGui::Button("Spring")) {
 			gimmick_ = GimmickSelected::kSpring;
-		}ImGui::SameLine();
+		}
+		ImGui::SameLine();
 		if (ImGui::Button("CollapseBlock")) {
 			gimmick_ = GimmickSelected::kCollapseBlock;
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("Replenisher")) {
+			gimmick_ = GimmickSelected::kReplenisher;
 		}
 		ImGui::Text("Selected : ");
 		ImGui::SameLine();
@@ -573,6 +626,9 @@ void RabbitdokuStageEditSystem::DrawEditWindow(No::Registry& registry) {
 			break;
 		case RabbitdokuStageEditSystem::GimmickSelected::kCollapseBlock:
 			ImGui::Text("CollapseBlock");
+			break;
+		case RabbitdokuStageEditSystem::GimmickSelected::kReplenisher:
+			ImGui::Text("Replenisher");
 			break;
 		}
 		break;
