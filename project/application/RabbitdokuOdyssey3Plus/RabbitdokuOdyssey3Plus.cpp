@@ -16,9 +16,10 @@ void RabbitdokuOdyssey3Plus::Startup(void) {
 	RegisterScene("Rabbitdoku", []() { return std::make_unique<RabbitdokuScene>();	});
 	RegisterScene("ExxsearearStage", []() { return std::make_unique<Stage1>();	});
 	RegisterScene("Title", []() { return std::make_unique<RabbitdokuTitleScene>(); });
-	RegisterScene("Stage1", []() { return std::make_unique<Stage1>(); });
+	RegisterScene("Stage1", []() { return std::make_unique<ExxsearearStage>(); });
+	RegisterScene("Stage2", []() { return std::make_unique<ExxsearearStage>(); });
 	ChangeScene("Title");
-	//ChangeScene("Stage1");
+	//ChangeScene("Stage2");
 
 	auto* roomBox = NoEngine::ComponentRegistry::FindByName("RoomTag");
 	roomBox->fields[0].attributes.valueSpeed = 1.f;

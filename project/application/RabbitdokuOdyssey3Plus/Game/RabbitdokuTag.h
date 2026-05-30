@@ -30,7 +30,7 @@ struct SoftlyMoveComponent {
 };
 
 struct SpringComponent {
-	float force = 700.f;
+	float force = 900.f;
 };
 
 struct CollapseBlockComponent {
