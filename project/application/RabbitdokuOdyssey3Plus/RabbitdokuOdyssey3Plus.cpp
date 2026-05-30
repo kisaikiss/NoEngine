@@ -8,7 +8,9 @@ void RabbitdokuOdyssey3Plus::Startup(void) {
 	RegisterScene("Rabbitdoku", []() { return std::make_unique<RabbitdokuScene>();	});
 	RegisterScene("ExxsearearStage", []() { return std::make_unique<ExxsearearStage>();	});
 	RegisterScene("Title", []() { return std::make_unique<RabbitdokuTitleScene>(); });
+	RegisterScene("Stage1", []() { return std::make_unique<ExxsearearStage>(); });
 	ChangeScene("Title");
+	//ChangeScene("Stage1");
 
 	auto* roomBox = NoEngine::ComponentRegistry::FindByName("RoomTag");
 	roomBox->fields[0].attributes.valueSpeed = 1.f;
@@ -16,6 +18,7 @@ void RabbitdokuOdyssey3Plus::Startup(void) {
 
 	No::InputBindAction("Jump", No::DeviceType::Keyboard, static_cast<int>(VK_LSHIFT));
 	No::InputBindAction("Jump", No::DeviceType::Keyboard, static_cast<int>(VK_RSHIFT));
+	No::InputBindAction("Jump", No::DeviceType::Keyboard, static_cast<int>(VK_SPACE));
 	No::InputBindAction("Jump", No::DeviceType::Gamepad, static_cast<int>(No::GamepadButton::A));
 
 	No::InputBindAction("Right", No::DeviceType::Keyboard, static_cast<int>(VK_RIGHT));
@@ -28,8 +31,9 @@ void RabbitdokuOdyssey3Plus::Startup(void) {
 	No::InputBindAction("Reset", No::DeviceType::Keyboard, static_cast<int>('R'));
 	No::InputBindAction("Reset", No::DeviceType::Gamepad, static_cast<int>(No::GamepadButton::Y));
 
-	No::InputBindAction("Save", No::DeviceType::Keyboard, static_cast<int>('Z'));
-	No::InputBindAction("Save", No::DeviceType::Gamepad, static_cast<int>(No::GamepadButton::X));
+	No::InputBindAction("Save", No::DeviceType::Keyboard, static_cast<int>(VK_UP));
+	No::InputBindAction("EnterDoor", No::DeviceType::Keyboard, static_cast<int>('W'));
+	No::InputBindAction("Save", No::DeviceType::Gamepad, static_cast<int>(No::GamepadButton::Up));
 
 	No::InputBindAction("EnterDoor", No::DeviceType::Keyboard, static_cast<int>(VK_UP));
 	No::InputBindAction("EnterDoor", No::DeviceType::Keyboard, static_cast<int>('W'));
