@@ -222,6 +222,15 @@ void SoundCompleteStop(std::string name) {
 	assert(SUCCEEDED(hr));
 }
 
+void SoundAllCompleteStop() {
+	for (auto& data : soundData) {
+		HRESULT hr = data.second.pSourceVoice->Stop();
+		assert(SUCCEEDED(hr));
+		hr = data.second.pSourceVoice->FlushSourceBuffers();
+		assert(SUCCEEDED(hr));
+	}
+}
+
 void SetVolume(std::string name, float volume) {
 	if (soundData[name].name != name) {
 		Log::DebugPrint("This sound name is Not Found. name : " + name + "\n");

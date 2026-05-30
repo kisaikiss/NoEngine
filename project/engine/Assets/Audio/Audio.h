@@ -46,6 +46,11 @@ void SoundStop(std::string name);
 void SoundCompleteStop(std::string name);
 
 /// <summary>
+/// 全ての音声データを完全停止する(次回再生するときは最初から)
+/// </summary>
+void SoundAllCompleteStop();
+
+/// <summary>
 /// 音量のセッタ
 /// </summary>
 /// <param name="name">音声データ識別用の名前</param>
