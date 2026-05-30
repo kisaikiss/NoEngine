@@ -32,12 +32,20 @@
         "totalDeath": 0
     },
     "Stage3": {
+        "deathCount": 2,
+        "respawnPoint": {
+            "x": 0.0,
+            "y": 0.0
+        },
+        "totalDeath": 2
+    },
+    "SudokuStage": {
         "deathCount": 0,
         "respawnPoint": {
             "x": 0.0,
             "y": 0.0
         },
-        "totalDeath": 0
+        "totalDeath": 82
     },
     "Title": {
         "deathCount": 0,

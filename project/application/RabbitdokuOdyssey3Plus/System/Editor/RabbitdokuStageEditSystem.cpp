@@ -703,6 +703,10 @@ void RabbitdokuStageEditSystem::DrawEditWindow(No::Registry& registry) {
 			currentBlockTexture = BlockTextures::kBlue;
 		}
 		ImGui::SameLine();
+		if (ImGui::Button("EX")) {
+			currentBlockTexture = BlockTextures::kEx;
+		}
+		ImGui::SameLine();
 		if (ImGui::Button("ジェイムズ")) {
 			currentBlockTexture = BlockTextures::kDaionkai;
 		}

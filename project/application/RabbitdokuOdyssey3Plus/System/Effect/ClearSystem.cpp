@@ -12,6 +12,11 @@ void ClearSystem::Update(No::Registry& registry, float deltaTime) {
 		auto* a = registry.GetComponent<No::Animator2DComponent>(e);
 		auto* c = registry.GetComponent<ClearTag>(e);
 		if (c->isAnimationEnd) {
+			auto cameraView = registry.View<No::ActiveCamera2DTag, No::Transform2DComponent>();
+			No::Transform2DComponent* cameraT = nullptr;
+			for (auto ce : cameraView) {
+				cameraT = registry.GetComponent<No::Transform2DComponent>(ce);
+			}
 			auto* t = registry.GetComponent<No::Transform2DComponent>(e);
 			t->translate.x = No::EaseInOutBack(0.0f, 2000.f, c->t);
 			c->t += deltaTime * 0.2f;
@@ -20,6 +25,12 @@ void ClearSystem::Update(No::Registry& registry, float deltaTime) {
 				change.stageName = "Title";
 				change.saveData = RabbitdokuSerializer::DeleteSave(registry);
 				registry.EmitEvent(change);
+			}
+
+			if (!cameraT) {
+				t->parent = nullptr;
+			} else {
+				t->parent = cameraT;
 			}
 		}
 
@@ -45,10 +56,10 @@ void ClearSystem::GenerateEffect(No::Registry& registry) {
 	for (auto e : view) {
 		cameraT = registry.GetComponent<No::Transform2DComponent>(e);
 	}
-
+	if (!cameraT)return;
 	auto e = registry.GenerateEntity();
 	auto* t = registry.AddComponent<No::Transform2DComponent>(e);
-	t->parent = cameraT;
+	t->translate = cameraT->translate;
 	t->scale = 64.f;
 	t->rotation = 0.0f;
 	auto* s = registry.AddComponent<No::SpriteComponent>(e);

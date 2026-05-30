@@ -28,6 +28,7 @@ private:
     struct BlockTextures {
         static inline std::string kDaionkai = "resources/game/RabbitdokuOdyssey3Plus/Sprite/block.png";
         static inline std::string kBlue = "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png";
+        static inline std::string kEx = "resources/game/RabbitdokuOdyssey3Plus/Sprite/exBlock.png";
     };
 
     struct BackgroundTextures {

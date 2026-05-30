@@ -137,7 +137,7 @@ void RabbitdokuScene::InitCamera(No::Registry& registry) {
 }
 
 void RabbitdokuScene::PlayMusic() {
-	No::SoundPlay(backgroundMusicName_, 0.5f, true);
+	No::SoundPlay(backgroundMusicName_, soundVolume_, true);
 }
 
 

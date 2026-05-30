@@ -16,12 +16,17 @@ class Stage3 : public RabbitdokuScene {
 public: Stage3() : RabbitdokuScene("stage3") {}
 };
 
+class SudokuStage : public RabbitdokuScene {
+public: SudokuStage() : RabbitdokuScene("sudokuStage",0.25f) {}
+};
+
 void RabbitdokuOdyssey3Plus::Startup(void) {
 	No::SoundLoad(L"resources/game/RabbitdokuOdyssey3Plus/Sounds/BGM/Title.mp3", "title");
 	No::SoundLoad(L"resources/game/RabbitdokuOdyssey3Plus/Sounds/BGM/Stage01.mp3", "stage1");
-	No::SoundLoad(L"resources/game/RabbitdokuOdyssey3Plus/Sounds/BGM/Stage01.mp3", "stage2");
+	No::SoundLoad(L"resources/game/RabbitdokuOdyssey3Plus/Sounds/BGM/Stage02.mp3", "stage2");
 	No::SoundLoad(L"resources/game/RabbitdokuOdyssey3Plus/Sounds/BGM/Stage01.mp3", "stage3");
 	No::SoundLoad(L"resources/game/RabbitdokuOdyssey3Plus/Sounds/BGM/ExStage.mp3", "exStage");
+	No::SoundLoad(L"resources/game/RabbitdokuOdyssey3Plus/Sounds/BGM/SudokuStage.mp3", "sudokuStage");
 
 	RegisterScene("Rabbitdoku", []() { return std::make_unique<RabbitdokuScene>();	});
 	RegisterScene("ExxsearearStage", []() { return std::make_unique<ExxsearearStage>();	});
@@ -29,6 +34,7 @@ void RabbitdokuOdyssey3Plus::Startup(void) {
 	RegisterScene("Stage1", []() { return std::make_unique<Stage1>(); });
 	RegisterScene("Stage2", []() { return std::make_unique<Stage2>(); });
 	RegisterScene("Stage3", []() { return std::make_unique<Stage3>(); });
+	RegisterScene("SudokuStage", []() { return std::make_unique<SudokuStage>(); });
 	ChangeScene("Title");
 
 	auto* roomBox = NoEngine::ComponentRegistry::FindByName("RoomTag");

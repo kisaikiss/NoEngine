@@ -3,7 +3,7 @@
 class RabbitdokuScene :
     public No::IScene {
 public:
-    RabbitdokuScene(const std::string& musicName = "title") : backgroundMusicName_(musicName){}
+    RabbitdokuScene(const std::string& musicName = "title", float bgmVolume = 1.f) : backgroundMusicName_(musicName),soundVolume_(bgmVolume){}
     
     void Setup() override;
 protected:
@@ -11,6 +11,7 @@ protected:
     virtual void InitBackground(No::Registry& registry);
 private:
     std::string backgroundMusicName_;
+    float soundVolume_;
 
     void AddSystems();
     
