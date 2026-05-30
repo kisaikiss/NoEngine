@@ -44,3 +44,7 @@ struct ReplenisherTag {};
 struct DoorComponent {
 	std::string stageName = "Title";
 };
+
+struct ClearItemComponent{};
+
+struct ClearTag{};

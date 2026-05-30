@@ -68,6 +68,11 @@ void RabbitItemGetSystem::Update(No::Registry& registry, float deltaTime) {
 				return;
 			}
 		}
+
+		if (registry.Has<ClearItemComponent>(event.item)) {
+			GenerateClear(registry);
+			registry.DestroyEntity(event.item);
+		}
 	}
 
 }
@@ -153,6 +158,30 @@ void RabbitItemGetSystem::GenerateHealedEffect(No::Registry& registry, No::Entit
 	a->framesNum = 5;
 	a->frameByFrameTime = 0.1f;
 	registry.AddComponent<SmokeEffectTag>(e);
+}
+
+void RabbitItemGetSystem::GenerateClear(No::Registry& registry) {
+	auto view = registry.View<No::ActiveCamera2DTag, No::Transform2DComponent>();
+	No::Transform2DComponent* cameraT = nullptr;
+	for (auto e : view) {
+		cameraT = registry.GetComponent<No::Transform2DComponent>(e);
+	}
+
+	auto e = registry.GenerateEntity();
+	auto* t = registry.AddComponent<No::Transform2DComponent>(e);
+	
+	t->rotation = 0.0f;
+	t->parent = cameraT;
+	auto* s = registry.AddComponent<No::SpriteComponent>(e);
+	s->textureFilePath = "resources/game/RabbitdokuOdyssey3Plus/Sprite/StageClear.png";
+	s->layer = 25;
+	auto* a = registry.AddComponent<No::Animator2DComponent>(e);
+	a->animeFrameHeight = 128.f;
+	a->animeFrameWidth =768.f;
+	t->scale = { 768.f,128.f };
+	a->framesNum = 13;
+	a->frameByFrameTime = 0.1f;
+	registry.AddComponent<ClearTag>(e);
 }
 
 bool RabbitItemGetSystem::GetIsTriggerUp() {

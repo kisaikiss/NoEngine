@@ -9,6 +9,7 @@ struct Animator2DComponent {
 	uint32_t framesNum = 1;			// 現在の行のフレーム数
 	float timer = 0.f;				// 再生時間
 	bool isAnimationEnd = false;	// アニメーションが終了したか
+	bool stopAnimation = false;		// アニメーションを止めるか
 };
 }
 }

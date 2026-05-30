@@ -47,3 +47,6 @@ REFLECT_STRUCT_END(ReplenisherTag)
 REFLECT_STRUCT_BEGIN(DoorComponent)
 REFLECT_FIELD(stageName)
 REFLECT_STRUCT_END(DoorComponent)
+
+REFLECT_STRUCT_BEGIN(ClearItemComponent)
+REFLECT_STRUCT_END(ClearItemComponent)

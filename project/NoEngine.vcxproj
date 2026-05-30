@@ -212,6 +212,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\Camera2DChangeSystem.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\Editor\RabbitdokuStageEditSystem.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\Effect\BackgroundAttachSystem.cpp" />
+    <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\Effect\ClearSystem.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\Effect\ScreenTransitionEffectSystem.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\Effect\SmokeEffectSystem.cpp" />
     <ClCompile Include="application\RabbitdokuOdyssey3Plus\System\Effect\SoftlyMoveSystem.cpp" />
@@ -431,6 +432,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\Camera2DChangeSystem.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\Editor\RabbitdokuStageEditSystem.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\Effect\BackgroundAttachSystem.h" />
+    <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\Effect\ClearSystem.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\Effect\ScreenTransitionEffectSystem.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\Effect\SmokeEffectSystem.h" />
     <ClInclude Include="application\RabbitdokuOdyssey3Plus\System\Effect\SoftlyMoveSystem.h" />

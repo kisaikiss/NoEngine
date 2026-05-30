@@ -22,6 +22,7 @@ private:
         kCollapseBlock,
         kReplenisher,
         kDoor,
+        kGoal,
     };
 
     struct BlockTextures {
@@ -76,6 +77,7 @@ private:
     void AddReplenisher(No::Registry& registry);
     void AddDoor(No::Registry& registry);
     void AddBackground(No::Registry& registry);
+    void AddGoal(No::Registry& registry);
     void DeleteGimmick(No::Registry& registry);
     void DeleteBlock(No::Registry& registry);
     void WarpPlayer(No::Registry& registry);

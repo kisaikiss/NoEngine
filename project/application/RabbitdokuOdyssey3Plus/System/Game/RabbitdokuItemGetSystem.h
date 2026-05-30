@@ -9,6 +9,7 @@ private:
     void GenerateSaveEffect(No::Registry& registry, No::Entity e);
     void GenerateStars(No::Registry& registry, No::Entity e);
     void GenerateHealedEffect(No::Registry& registry, No::Entity e);
+    void GenerateClear(No::Registry& registry);
 
     bool GetIsTriggerUp();
 

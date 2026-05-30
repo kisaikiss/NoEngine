@@ -78,6 +78,9 @@ void RabbitdokuStageEditSystem::Update(No::Registry& registry, float deltaTime) 
 				case RabbitdokuStageEditSystem::GimmickSelected::kDoor:
 					AddDoor(registry);
 					break;
+				case RabbitdokuStageEditSystem::GimmickSelected::kGoal:
+					AddGoal(registry);
+					break;
 				default:
 					break;
 				}
@@ -538,6 +541,54 @@ void RabbitdokuStageEditSystem::AddBackground(No::Registry& registry) {
 	registry.AddComponent<No::Velocity2DComponent>(e);
 }
 
+void RabbitdokuStageEditSystem::AddGoal(No::Registry& registry) {
+	No::Vector2 position = GetGridPosition(No::Get2DGameWindowMousePosition(registry));
+	auto blockView = registry.View<BlockTag, No::AABBCollider2D, No::Transform2DComponent>();
+	for (auto e : blockView) {
+		auto* aabb = registry.GetComponent<No::AABBCollider2D>(e);
+		auto* transform = registry.GetComponent<No::Transform2DComponent>(e);
+		if (No::IsCollision(position, aabb, transform)) return;
+	}
+
+	auto gimmickView = registry.View<GimmickTag, No::AABBCollider2D, No::Transform2DComponent>();
+	for (auto e : gimmickView) {
+		auto* aabb = registry.GetComponent<No::AABBCollider2D>(e);
+		auto* transform = registry.GetComponent<No::Transform2DComponent>(e);
+		if (No::IsCollision(position, aabb, transform)) return;
+	}
+
+
+	No::Entity e = registry.GenerateEntity();
+	auto* transform = registry.AddComponent<No::Transform2DComponent>(e);
+	transform->translate = position;
+	auto* sprite = registry.AddComponent<No::SpriteComponent>(e);
+	sprite->layer = 10;
+	auto* collider = registry.AddComponent<No::AABBCollider2D>(e);
+	registry.AddComponent<ClearItemComponent>(e);
+	registry.AddComponent<GimmickTag>(e);
+	auto* tag = registry.AddComponent<No::EditTag>(e);
+	tag->name = "goalItem";
+	tag->path = "Gimmick/GoalItem/goalItem";
+	registry.AddComponent<No::CollisionBody>(e)->type = No::BodyType::Through;
+	registry.AddComponent<RabbitdokuCollisionLayerComponent>(e)->layer = RabbitdokuCollisionLayerComponent::Item;
+	sprite->textureFilePath = "resources/game/RabbitdokuOdyssey3Plus/Sprite/GoalObject01.png";
+	transform->scale.x = gridSize_.x;
+	transform->scale.y = gridSize_.y;
+	collider->max = transform->scale / 4.f;
+	collider->min = -transform->scale / 4.f;
+	auto* animator = registry.AddComponent<No::Animator2DComponent>(e);
+	animator->animeFrameHeight = 64.f;
+	animator->animeFrameWidth = 64.f;
+	animator->currentAnimation = 0;
+	animator->framesNum = 5;
+	animator->frameByFrameTime = 0.1f;
+
+	sprite->uv.width = 1.f / 5.f;
+	auto* softly = registry.AddComponent<SoftlyMoveComponent>(e);
+	softly->amplitude.y = 16.f;
+	registry.AddComponent<No::Velocity2DComponent>(e);
+}
+
 void RabbitdokuStageEditSystem::DeleteGimmick(No::Registry& registry) {
 	No::Vector2 position = No::Get2DGameWindowMousePosition(registry);
 	auto gimmickView = registry.View<GimmickTag, No::AABBCollider2D, No::Transform2DComponent>();
@@ -686,6 +737,10 @@ void RabbitdokuStageEditSystem::DrawEditWindow(No::Registry& registry) {
 		if (ImGui::Button("Door")) {
 			gimmick_ = GimmickSelected::kDoor;
 		}
+		ImGui::SameLine();
+		if (ImGui::Button("Goal")) {
+			gimmick_ = GimmickSelected::kGoal;
+		}
 		ImGui::Text("Selected : ");
 		ImGui::SameLine();
 		switch (gimmick_) {
@@ -709,6 +764,9 @@ void RabbitdokuStageEditSystem::DrawEditWindow(No::Registry& registry) {
 			break;
 		case RabbitdokuStageEditSystem::GimmickSelected::kDoor:
 			ImGui::Text("Door");
+			break;
+		case GimmickSelected::kGoal:
+			ImGui::Text("Goal");
 			break;
 		}
 		break;

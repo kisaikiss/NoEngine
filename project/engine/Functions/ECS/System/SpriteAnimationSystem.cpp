@@ -11,6 +11,7 @@ void SpriteAnimationSystem::Update(Registry& registry, float deltaTime) {
 		// コンポーネントの取得
 		auto* sprite = registry.GetComponent<SpriteComponent>(entity);
 		auto* animator = registry.GetComponent<Animator2DComponent>(entity);
+		if (animator->stopAnimation) continue;
 
 		animator->isAnimationEnd = false;
 
