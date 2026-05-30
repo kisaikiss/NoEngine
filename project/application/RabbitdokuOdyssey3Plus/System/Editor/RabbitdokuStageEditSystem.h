@@ -11,6 +11,7 @@ private:
         kRoom,
         kGimmick,
         kBackground,
+        kPlayer
     };
 
     enum class GimmickSelected {
@@ -77,6 +78,7 @@ private:
     void AddBackground(No::Registry& registry);
     void DeleteGimmick(No::Registry& registry);
     void DeleteBlock(No::Registry& registry);
+    void WarpPlayer(No::Registry& registry);
     No::Entity FindRoom(No::Registry& registry, const No::Vector2& pos);
     No::Entity FindBackground(No::Registry& registry, const No::Vector2& pos);
     No::Vector2 GetGridPosition(const No::Vector2& position);

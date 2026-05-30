@@ -4,6 +4,8 @@ namespace Math {
 const Color Color::WHITE(1.f, 1.f, 1.f, 1.f);
 const Color Color::BLACK(0.f, 0.f, 0.f, 1.f);
 const Color Color::RED(1.f, 0.f, 0.f, 1.f);
+const Color Color::GREEN(0.f, 1.f, 0.f, 1.f);
+const Color Color::BLUE(0.f, 0.f, 1.f, 1.f);
 
 uint32_t Color::ToRGBA8() const {
 	uint32_t R = static_cast<uint32_t>(std::clamp(r, 0.0f, 1.0f) * 255.0f + 0.5f);

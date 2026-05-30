@@ -20,6 +20,7 @@ enum class RabbitdokuDirection {
 struct Rabbitdoku {
 	float moveSpeed = 500.f;
 	float yVelocity = 0.f;
+	float gravity = 9.8f;
 
 	float jumpSpeed;
 	float doubleJumpSpeed;

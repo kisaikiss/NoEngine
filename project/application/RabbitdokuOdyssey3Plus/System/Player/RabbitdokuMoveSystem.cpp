@@ -112,7 +112,7 @@ void RabbitdokuMoveSystem::Update(No::Registry& registry, float deltaTime) {
 		static const float kGravity = 9.8f;
 
 
-		playerVariables->yVelocity += kGravity;
+		playerVariables->yVelocity += playerVariables->gravity;
 
 		velocity->linear.y = playerVariables->yVelocity;
 

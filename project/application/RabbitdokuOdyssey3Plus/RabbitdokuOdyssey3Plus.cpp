@@ -22,6 +22,8 @@ void RabbitdokuOdyssey3Plus::Startup(void) {
 	No::InputBindAction("Right", No::DeviceType::Gamepad, static_cast<int>(No::GamepadButton::Right));
 	No::InputBindAction("Left", No::DeviceType::Keyboard, static_cast<int>(VK_LEFT));
 	No::InputBindAction("Left", No::DeviceType::Gamepad, static_cast<int>(No::GamepadButton::Left));
+	No::InputBindAction("Right", No::DeviceType::Keyboard, static_cast<int>('D'));
+	No::InputBindAction("Left", No::DeviceType::Keyboard, static_cast<int>('A'));
 
 	No::InputBindAction("Reset", No::DeviceType::Keyboard, static_cast<int>('R'));
 	No::InputBindAction("Reset", No::DeviceType::Gamepad, static_cast<int>(No::GamepadButton::Y));
@@ -30,4 +32,6 @@ void RabbitdokuOdyssey3Plus::Startup(void) {
 	No::InputBindAction("Save", No::DeviceType::Gamepad, static_cast<int>(No::GamepadButton::X));
 
 	No::InputBindAction("EnterDoor", No::DeviceType::Keyboard, static_cast<int>(VK_UP));
+	No::InputBindAction("EnterDoor", No::DeviceType::Keyboard, static_cast<int>('W'));
+	No::InputBindAction("EnterDoor", No::DeviceType::Gamepad, static_cast<int>(No::GamepadButton::Up));
 }

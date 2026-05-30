@@ -51,6 +51,8 @@ public:
 	static const Color WHITE;
 	static const Color BLACK;
 	static const Color RED;
+	static const Color BLUE;
+	static const Color GREEN;
 };
 }
 }

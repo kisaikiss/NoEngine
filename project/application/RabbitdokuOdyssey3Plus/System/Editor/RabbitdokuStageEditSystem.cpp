@@ -2,6 +2,7 @@
 #include "RabbitdokuStageEditSystem.h"
 #include "application/RabbitdokuOdyssey3Plus/Game/RabbitdokuCollisionLayer.h"
 #include "application/RabbitdokuOdyssey3Plus/Game/RabbitdokuTag.h"
+#include "../../Component/RabbitdokuComponent.h"
 
 void RabbitdokuStageEditSystem::Update(No::Registry& registry, float deltaTime) {
 	static_cast<void>(deltaTime);
@@ -53,7 +54,7 @@ void RabbitdokuStageEditSystem::Update(No::Registry& registry, float deltaTime) 
 
 		break;
 	case RabbitdokuStageEditSystem::EditState::kGimmick:
-		if (No::Mouse::IsTrigger(No::MouseButton::Left)) {
+		if (No::Mouse::IsPress(No::MouseButton::Left)) {
 			if (No::IsMouseOverGameWindow()) {
 				switch (gimmick_) {
 				case RabbitdokuStageEditSystem::GimmickSelected::kSave:
@@ -83,7 +84,7 @@ void RabbitdokuStageEditSystem::Update(No::Registry& registry, float deltaTime) 
 			}
 		}
 
-		if (No::Mouse::IsTrigger(No::MouseButton::Right)) {
+		if (No::Mouse::IsPress(No::MouseButton::Right)) {
 			if (No::IsMouseOverGameWindow())
 				DeleteGimmick(registry);
 		}
@@ -118,6 +119,12 @@ void RabbitdokuStageEditSystem::Update(No::Registry& registry, float deltaTime) 
 
 		}
 
+		break;
+	case EditState::kPlayer:
+		if (No::IsMouseOverGameWindow())
+			if (No::Mouse::IsTrigger(No::MouseButton::Left)) {
+				WarpPlayer(registry);
+			}
 		break;
 	}
 
@@ -551,6 +558,14 @@ void RabbitdokuStageEditSystem::DeleteBlock(No::Registry& registry) {
 	}
 }
 
+void RabbitdokuStageEditSystem::WarpPlayer(No::Registry& registry) {
+	No::Vector2 position = No::Get2DGameWindowMousePosition(registry);
+	auto view = registry.View<Rabbitdoku, No::Transform2DComponent>();
+	for (auto e : view) {
+		registry.GetComponent<No::Transform2DComponent>(e)->translate = position;
+	}
+}
+
 No::Entity RabbitdokuStageEditSystem::FindRoom(No::Registry& registry, const No::Vector2& pos) {
 	auto view = registry.View<RoomTag, No::Transform2DComponent>();
 	for (auto e : view) {
@@ -600,6 +615,9 @@ void RabbitdokuStageEditSystem::DrawEditWindow(No::Registry& registry) {
 	case RabbitdokuStageEditSystem::EditState::kBackground:
 		ImGui::Text("BackgroundMode");
 		break;
+	case RabbitdokuStageEditSystem::EditState::kPlayer:
+		ImGui::Text("PlayerMode");
+		break;
 	default:
 		ImGui::Text("UnknownMode");
 		break;
@@ -617,6 +635,9 @@ void RabbitdokuStageEditSystem::DrawEditWindow(No::Registry& registry) {
 		}
 		if (ImGui::MenuItem("BackgroundMode")) {
 			state_ = EditState::kBackground;
+		}
+		if (ImGui::MenuItem("PlayerMode")) {
+			state_ = EditState::kPlayer;
 		}
 		ImGui::EndPopup();
 	}
@@ -681,10 +702,10 @@ void RabbitdokuStageEditSystem::DrawEditWindow(No::Registry& registry) {
 			break;
 		case RabbitdokuStageEditSystem::GimmickSelected::kReplenisher:
 			ImGui::Text("Replenisher");
-			break; 
+			break;
 		case RabbitdokuStageEditSystem::GimmickSelected::kDoor:
-				ImGui::Text("Door");
-				break;
+			ImGui::Text("Door");
+			break;
 		}
 		break;
 	case EditState::kBackground:
@@ -776,7 +797,7 @@ void RabbitdokuStageEditSystem::DrawRooms(No::Registry& registry) {
 	for (auto e : view) {
 		auto* box = registry.GetComponent<RoomTag>(e);
 		auto* transform = registry.GetComponent<No::Transform2DComponent>(e);
-		NoEngine::DebugPrimitive::DrawCube2D(transform->translate, box->max, box->min, No::Color::RED);
+		NoEngine::DebugPrimitive::DrawCube2D(transform->translate, box->max, box->min, No::Color::BLUE);
 	}
 #else
 	static_cast<void>(registry);
