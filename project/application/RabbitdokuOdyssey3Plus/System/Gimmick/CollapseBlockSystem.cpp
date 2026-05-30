@@ -15,6 +15,7 @@ void CollapseBlockSystem::Update(No::Registry& registry, float deltaTime) {
 				if (!block->startBreak) {
 					registry.GetComponent<No::SpriteComponent>(e)->uv.x = 0.f;
 					block->startBreak = true;
+					No::SoundEffectPlay("collapseBlock", 0.5f);
 				}
 				auto* body = registry.GetComponent<No::CollisionBody>(e);
 				body->type = No::BodyType::Through;

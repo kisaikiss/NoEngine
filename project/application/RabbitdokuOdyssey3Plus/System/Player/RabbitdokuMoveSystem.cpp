@@ -21,7 +21,12 @@ void RabbitdokuMoveSystem::Update(No::Registry& registry, float deltaTime) {
 
 		// 左右移動
 		velocity->linear = No::Vector2::ZERO;
+		
+		if (groundState->isGrounded && !playerVariables->preIsGrounded) {
+			No::SoundEffectPlay("landing", 0.5f);
+		}
 
+		playerVariables->preIsGrounded = groundState->isGrounded;
 		if (groundState->isGrounded) playerVariables->wallJumpTimer = 0.f;
 		if (playerVariables->wallJumpTimer > 0.0f) {
 			playerVariables->wallJumpTimer -= deltaTime;
@@ -68,6 +73,7 @@ void RabbitdokuMoveSystem::Update(No::Registry& registry, float deltaTime) {
 		// 縦移動
 		if (No::InputIsTrigger("Jump")) {
 			if (groundState->isGrounded) {
+				No::SoundEffectPlay("jump", 0.5f);
 				playerVariables->yVelocity = -playerVariables->jumpSpeed;
 				if (playerVariables->nextState == RabbitdokuState::Wall) {
 					const float kWallJumpTime = 0.5f;
@@ -83,6 +89,7 @@ void RabbitdokuMoveSystem::Update(No::Registry& registry, float deltaTime) {
 				} 
 			} else {
 				if (playerVariables->canDoubleJump) {
+					No::SoundEffectPlay("doubleJump", 0.25f);
 					playerVariables->yVelocity = -playerVariables->doubleJumpSpeed;
 					playerVariables->canDoubleJump = false;
 					GenerateDoubleJump(registry, e);
@@ -194,6 +201,8 @@ void RabbitdokuMoveSystem::DeadMove(No::Registry& registry, No::Entity e, float 
 
 	static const float kDeadTime = 0.75f;
 	if (playerVariables->deadTimer > kDeadTime) {
+
+		No::SoundEffectPlay("death", 0.5f);
 		registry.GetComponent<SaveData>(e)->death++;
 		registry.GetComponent<SaveData>(e)->totalDeath++;
 		SceneTransitionInEvent dead;

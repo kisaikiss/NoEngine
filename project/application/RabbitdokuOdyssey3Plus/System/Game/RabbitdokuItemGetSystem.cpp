@@ -18,6 +18,7 @@ void RabbitItemGetSystem::Update(No::Registry& registry, float deltaTime) {
 
 		if (registry.Has<SaveTag>(event.item)) {
 			if (No::InputIsTrigger("Save") || GetIsTriggerUp()) {
+				No::SoundEffectPlay("save", 0.5f);
 				auto* data = registry.GetComponent<SaveData>(event.player);
 				RabbitdokuSerializer::GameSave(registry,
 					registry.GetComponent<No::Transform2DComponent>(event.player)->translate,
@@ -35,6 +36,7 @@ void RabbitItemGetSystem::Update(No::Registry& registry, float deltaTime) {
 		}
 
 		if (registry.Has<SpringComponent>(event.item)) {
+			No::SoundEffectPlay("spring", 0.5f);
 			player->yVelocity = -registry.GetComponent<SpringComponent>(event.item)->force;
 			player->canDoubleJump = true;
 			registry.GetComponent<No::Animator2DComponent>(event.item)->framesNum = 5;
@@ -51,6 +53,7 @@ void RabbitItemGetSystem::Update(No::Registry& registry, float deltaTime) {
 		}
 
 		if (registry.Has<ReplenisherTag>(event.item)) {
+			No::SoundEffectPlay("replenisher", 0.5f);
 			player->canDoubleJump = true;
 			GenerateHealedEffect(registry, event.item);
 			registry.DestroyEntity(event.item);

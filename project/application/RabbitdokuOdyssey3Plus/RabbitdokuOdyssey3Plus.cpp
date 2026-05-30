@@ -38,4 +38,14 @@ void RabbitdokuOdyssey3Plus::Startup(void) {
 	No::InputBindAction("EnterDoor", No::DeviceType::Keyboard, static_cast<int>(VK_UP));
 	No::InputBindAction("EnterDoor", No::DeviceType::Keyboard, static_cast<int>('W'));
 	No::InputBindAction("EnterDoor", No::DeviceType::Gamepad, static_cast<int>(No::GamepadButton::Up));
+
+	No::SoundLoad(L"resources/game/RabbitdokuOdyssey3Plus/Sounds/SFX/Jump.mp3", "jump");
+	No::SoundLoad(L"resources/game/RabbitdokuOdyssey3Plus/Sounds/SFX/JumpDouble.mp3", "doubleJump");
+	No::SoundLoad(L"resources/game/RabbitdokuOdyssey3Plus/Sounds/SFX/Death.mp3", "death");
+	No::SoundLoad(L"resources/game/RabbitdokuOdyssey3Plus/Sounds/SFX/Save.mp3", "save");
+	No::SoundLoad(L"resources/game/RabbitdokuOdyssey3Plus/Sounds/SFX/Spring.mp3", "spring");
+	No::SoundLoad(L"resources/game/RabbitdokuOdyssey3Plus/Sounds/SFX/ItemGetJumpReload.mp3", "replenisher");
+	No::SoundLoad(L"resources/game/RabbitdokuOdyssey3Plus/Sounds/SFX/BlockBreak.mp3", "collapseBlock");
+	No::SoundLoad(L"resources/game/RabbitdokuOdyssey3Plus/Sounds/SFX/Landing.mp3", "landing");
+
 }

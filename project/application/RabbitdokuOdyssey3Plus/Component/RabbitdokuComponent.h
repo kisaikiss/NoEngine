@@ -34,6 +34,7 @@ struct Rabbitdoku {
 
 	bool canDoubleJump = true;
 	bool sizeCollide = false;
+	bool preIsGrounded = true;
 	RabbitdokuState nextState = RabbitdokuState::Unknown;
 	RabbitdokuState state = RabbitdokuState::Wait;
 };
