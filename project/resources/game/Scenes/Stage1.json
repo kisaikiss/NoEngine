@@ -28,12 +28,12 @@
                 "Transform2DComponent": {
                     "rotation": 0.0,
                     "scale": [
-                        1.5020231008529663,
-                        1.5020231008529663
+                        2.2567026615142822,
+                        2.2567026615142822
                     ],
                     "translate": [
-                        7129.56884765625,
-                        -2507.239013671875
+                        3757.767578125,
+                        -475.8871154785156
                     ]
                 }
             }
@@ -96,7 +96,7 @@
                     ],
                     "textureFilePath": "",
                     "uv": [
-                        0.0,
+                        0.1666666716337204,
                         0.0,
                         0.1666666716337204,
                         0.1666666716337204
@@ -368,7 +368,7 @@
                     "uv": [
                         0.0,
                         0.0,
-                        1.0,
+                        0.20000000298023224,
                         1.0
                     ]
                 },
@@ -434,7 +434,7 @@
                     "uv": [
                         0.0,
                         0.0,
-                        1.0,
+                        0.20000000298023224,
                         1.0
                     ]
                 },
@@ -500,7 +500,7 @@
                     "uv": [
                         0.0,
                         0.0,
-                        1.0,
+                        0.20000000298023224,
                         1.0
                     ]
                 },
@@ -566,7 +566,7 @@
                     "uv": [
                         0.0,
                         0.0,
-                        1.0,
+                        0.20000000298023224,
                         1.0
                     ]
                 },
@@ -632,7 +632,7 @@
                     "uv": [
                         0.0,
                         0.0,
-                        1.0,
+                        0.20000000298023224,
                         1.0
                     ]
                 },
@@ -698,7 +698,7 @@
                     "uv": [
                         0.0,
                         0.0,
-                        1.0,
+                        0.20000000298023224,
                         1.0
                     ]
                 },
@@ -764,7 +764,7 @@
                     "uv": [
                         0.0,
                         0.0,
-                        1.0,
+                        0.20000000298023224,
                         1.0
                     ]
                 },
@@ -50726,7 +50726,7 @@
                     "uv": [
                         0.0,
                         0.0,
-                        1.0,
+                        0.20000000298023224,
                         1.0
                     ]
                 },
@@ -64652,7 +64652,7 @@
                     "uv": [
                         0.0,
                         0.0,
-                        1.0,
+                        0.20000000298023224,
                         1.0
                     ]
                 },
@@ -65246,7 +65246,7 @@
                     "uv": [
                         0.0,
                         0.0,
-                        1.0,
+                        0.20000000298023224,
                         1.0
                     ]
                 },
@@ -66302,7 +66302,7 @@
                     "uv": [
                         0.0,
                         0.0,
-                        1.0,
+                        0.20000000298023224,
                         1.0
                     ]
                 },
@@ -66368,7 +66368,7 @@
                     "uv": [
                         0.0,
                         0.0,
-                        1.0,
+                        0.20000000298023224,
                         1.0
                     ]
                 },
@@ -66434,7 +66434,7 @@
                     "uv": [
                         0.0,
                         0.0,
-                        1.0,
+                        0.20000000298023224,
                         1.0
                     ]
                 },
@@ -66500,7 +66500,7 @@
                     "uv": [
                         0.0,
                         0.0,
-                        1.0,
+                        0.20000000298023224,
                         1.0
                     ]
                 },
@@ -70347,7 +70347,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Door.png",
                     "uv": [
-                        0.0,
+                        0.5,
                         0.0,
                         0.125,
                         1.0
@@ -70414,7 +70414,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png",
                     "uv": [
-                        0.6000000238418579,
+                        0.0,
                         0.0,
                         0.20000000298023224,
                         0.25
@@ -70494,7 +70494,7 @@
                         64.0
                     ],
                     "translate": [
-                        7712.0,
+                        8032.0,
                         -2272.0
                     ]
                 }
@@ -70548,7 +70548,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png",
                     "uv": [
-                        0.800000011920929,
+                        0.20000000298023224,
                         0.0,
                         0.20000000298023224,
                         0.25
@@ -70615,7 +70615,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png",
                     "uv": [
-                        0.800000011920929,
+                        0.0,
                         0.0,
                         0.20000000298023224,
                         0.25
@@ -70682,7 +70682,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png",
                     "uv": [
-                        0.800000011920929,
+                        0.0,
                         0.0,
                         0.20000000298023224,
                         0.25
@@ -70829,7 +70829,7 @@
                         64.0
                     ],
                     "translate": [
-                        7712.0,
+                        7968.0,
                         -2272.0
                     ]
                 }
@@ -70883,7 +70883,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png",
                     "uv": [
-                        0.4000000059604645,
+                        0.800000011920929,
                         0.0,
                         0.20000000298023224,
                         0.25
@@ -70896,7 +70896,7 @@
                         64.0
                     ],
                     "translate": [
-                        7776.0,
+                        7904.0,
                         -2464.0
                     ]
                 }
@@ -70950,7 +70950,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png",
                     "uv": [
-                        0.800000011920929,
+                        0.6000000238418579,
                         0.0,
                         0.20000000298023224,
                         0.25
@@ -70963,8 +70963,8 @@
                         64.0
                     ],
                     "translate": [
-                        7648.0,
-                        -2272.0
+                        7840.0,
+                        -2464.0
                     ]
                 }
             }
@@ -71017,7 +71017,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png",
                     "uv": [
-                        0.0,
+                        0.4000000059604645,
                         0.0,
                         0.20000000298023224,
                         0.25
@@ -71030,8 +71030,8 @@
                         64.0
                     ],
                     "translate": [
-                        7968.0,
-                        -2272.0
+                        7776.0,
+                        -2464.0
                     ]
                 }
             }
@@ -71084,7 +71084,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png",
                     "uv": [
-                        0.0,
+                        0.20000000298023224,
                         0.0,
                         0.20000000298023224,
                         0.25
@@ -71097,7 +71097,7 @@
                         64.0
                     ],
                     "translate": [
-                        7968.0,
+                        7648.0,
                         -2272.0
                     ]
                 }
@@ -71151,7 +71151,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png",
                     "uv": [
-                        0.6000000238418579,
+                        0.0,
                         0.0,
                         0.20000000298023224,
                         0.25
@@ -71231,7 +71231,7 @@
                         64.0
                     ],
                     "translate": [
-                        7968.0,
+                        7712.0,
                         -2272.0
                     ]
                 }
@@ -71285,7 +71285,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png",
                     "uv": [
-                        0.20000000298023224,
+                        0.800000011920929,
                         0.0,
                         0.20000000298023224,
                         0.25
@@ -71298,8 +71298,8 @@
                         64.0
                     ],
                     "translate": [
-                        7776.0,
-                        -2464.0
+                        6432.0,
+                        -2784.0
                     ]
                 }
             }
@@ -71352,7 +71352,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png",
                     "uv": [
-                        0.20000000298023224,
+                        0.0,
                         0.0,
                         0.20000000298023224,
                         0.25
@@ -71365,8 +71365,8 @@
                         64.0
                     ],
                     "translate": [
-                        7776.0,
-                        -2464.0
+                        6496.0,
+                        -2848.0
                     ]
                 }
             }
@@ -71419,208 +71419,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png",
                     "uv": [
-                        0.800000011920929,
-                        0.0,
                         0.20000000298023224,
-                        0.25
-                    ]
-                },
-                "Transform2DComponent": {
-                    "rotation": 0.0,
-                    "scale": [
-                        64.0,
-                        64.0
-                    ],
-                    "translate": [
-                        8032.0,
-                        -2272.0
-                    ]
-                }
-            }
-        },
-        "needle_25": {
-            "components": {
-                "AABBCollider2D": {
-                    "max": [
-                        24.615385055541992,
-                        32.0
-                    ],
-                    "min": [
-                        -24.615385055541992,
-                        16.0
-                    ]
-                },
-                "Animator2DComponent": {
-                    "animeFrameHeight": 64.0,
-                    "animeFrameWidth": 64.0,
-                    "currentAnimation": 0,
-                    "frameByFrameTime": 0.10000000149011612,
-                    "framesNum": 5
-                },
-                "CollisionBody": {
-                    "type": 2
-                },
-                "EditTag": {
-                    "name": "needle_25",
-                    "path": "Gimmick/DeathObject/needle"
-                },
-                "EnemyTag": null,
-                "GimmickTag": null,
-                "RabbitdokuCollisionLayerComponent": {
-                    "layer": 8
-                },
-                "SpriteComponent": {
-                    "color": [
-                        1.0,
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "flipX": false,
-                    "flipY": false,
-                    "layer": 10,
-                    "orderInLayer": 0,
-                    "pivot": [
-                        0.5,
-                        0.5
-                    ],
-                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png",
-                    "uv": [
-                        0.800000011920929,
-                        0.0,
-                        0.20000000298023224,
-                        0.25
-                    ]
-                },
-                "Transform2DComponent": {
-                    "rotation": 0.0,
-                    "scale": [
-                        64.0,
-                        64.0
-                    ],
-                    "translate": [
-                        6432.0,
-                        -2784.0
-                    ]
-                }
-            }
-        },
-        "needle_26": {
-            "components": {
-                "AABBCollider2D": {
-                    "max": [
-                        24.615385055541992,
-                        32.0
-                    ],
-                    "min": [
-                        -24.615385055541992,
-                        16.0
-                    ]
-                },
-                "Animator2DComponent": {
-                    "animeFrameHeight": 64.0,
-                    "animeFrameWidth": 64.0,
-                    "currentAnimation": 0,
-                    "frameByFrameTime": 0.10000000149011612,
-                    "framesNum": 5
-                },
-                "CollisionBody": {
-                    "type": 2
-                },
-                "EditTag": {
-                    "name": "needle_26",
-                    "path": "Gimmick/DeathObject/needle"
-                },
-                "EnemyTag": null,
-                "GimmickTag": null,
-                "RabbitdokuCollisionLayerComponent": {
-                    "layer": 8
-                },
-                "SpriteComponent": {
-                    "color": [
-                        1.0,
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "flipX": false,
-                    "flipY": false,
-                    "layer": 10,
-                    "orderInLayer": 0,
-                    "pivot": [
-                        0.5,
-                        0.5
-                    ],
-                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png",
-                    "uv": [
-                        0.800000011920929,
-                        0.0,
-                        0.20000000298023224,
-                        0.25
-                    ]
-                },
-                "Transform2DComponent": {
-                    "rotation": 0.0,
-                    "scale": [
-                        64.0,
-                        64.0
-                    ],
-                    "translate": [
-                        6496.0,
-                        -2848.0
-                    ]
-                }
-            }
-        },
-        "needle_27": {
-            "components": {
-                "AABBCollider2D": {
-                    "max": [
-                        24.615385055541992,
-                        32.0
-                    ],
-                    "min": [
-                        -24.615385055541992,
-                        16.0
-                    ]
-                },
-                "Animator2DComponent": {
-                    "animeFrameHeight": 64.0,
-                    "animeFrameWidth": 64.0,
-                    "currentAnimation": 0,
-                    "frameByFrameTime": 0.10000000149011612,
-                    "framesNum": 5
-                },
-                "CollisionBody": {
-                    "type": 2
-                },
-                "EditTag": {
-                    "name": "needle_27",
-                    "path": "Gimmick/DeathObject/needle"
-                },
-                "EnemyTag": null,
-                "GimmickTag": null,
-                "RabbitdokuCollisionLayerComponent": {
-                    "layer": 8
-                },
-                "SpriteComponent": {
-                    "color": [
-                        1.0,
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "flipX": false,
-                    "flipY": false,
-                    "layer": 10,
-                    "orderInLayer": 0,
-                    "pivot": [
-                        0.5,
-                        0.5
-                    ],
-                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png",
-                    "uv": [
-                        0.800000011920929,
                         0.0,
                         0.20000000298023224,
                         0.25
@@ -71635,140 +71434,6 @@
                     "translate": [
                         6560.0,
                         -2784.0
-                    ]
-                }
-            }
-        },
-        "needle_28": {
-            "components": {
-                "AABBCollider2D": {
-                    "max": [
-                        24.615385055541992,
-                        32.0
-                    ],
-                    "min": [
-                        -24.615385055541992,
-                        16.0
-                    ]
-                },
-                "Animator2DComponent": {
-                    "animeFrameHeight": 64.0,
-                    "animeFrameWidth": 64.0,
-                    "currentAnimation": 0,
-                    "frameByFrameTime": 0.10000000149011612,
-                    "framesNum": 5
-                },
-                "CollisionBody": {
-                    "type": 2
-                },
-                "EditTag": {
-                    "name": "needle_28",
-                    "path": "Gimmick/DeathObject/needle"
-                },
-                "EnemyTag": null,
-                "GimmickTag": null,
-                "RabbitdokuCollisionLayerComponent": {
-                    "layer": 8
-                },
-                "SpriteComponent": {
-                    "color": [
-                        1.0,
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "flipX": false,
-                    "flipY": false,
-                    "layer": 10,
-                    "orderInLayer": 0,
-                    "pivot": [
-                        0.5,
-                        0.5
-                    ],
-                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png",
-                    "uv": [
-                        0.20000000298023224,
-                        0.0,
-                        0.20000000298023224,
-                        0.25
-                    ]
-                },
-                "Transform2DComponent": {
-                    "rotation": 0.0,
-                    "scale": [
-                        64.0,
-                        64.0
-                    ],
-                    "translate": [
-                        6624.0,
-                        -1824.0
-                    ]
-                }
-            }
-        },
-        "needle_29": {
-            "components": {
-                "AABBCollider2D": {
-                    "max": [
-                        24.615385055541992,
-                        32.0
-                    ],
-                    "min": [
-                        -24.615385055541992,
-                        16.0
-                    ]
-                },
-                "Animator2DComponent": {
-                    "animeFrameHeight": 64.0,
-                    "animeFrameWidth": 64.0,
-                    "currentAnimation": 0,
-                    "frameByFrameTime": 0.10000000149011612,
-                    "framesNum": 5
-                },
-                "CollisionBody": {
-                    "type": 2
-                },
-                "EditTag": {
-                    "name": "needle_29",
-                    "path": "Gimmick/DeathObject/needle"
-                },
-                "EnemyTag": null,
-                "GimmickTag": null,
-                "RabbitdokuCollisionLayerComponent": {
-                    "layer": 8
-                },
-                "SpriteComponent": {
-                    "color": [
-                        1.0,
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "flipX": false,
-                    "flipY": false,
-                    "layer": 10,
-                    "orderInLayer": 0,
-                    "pivot": [
-                        0.5,
-                        0.5
-                    ],
-                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png",
-                    "uv": [
-                        0.20000000298023224,
-                        0.0,
-                        0.20000000298023224,
-                        0.25
-                    ]
-                },
-                "Transform2DComponent": {
-                    "rotation": 0.0,
-                    "scale": [
-                        64.0,
-                        64.0
-                    ],
-                    "translate": [
-                        6624.0,
-                        -1824.0
                     ]
                 }
             }
@@ -71821,73 +71486,6 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png",
                     "uv": [
-                        0.6000000238418579,
-                        0.0,
-                        0.20000000298023224,
-                        0.25
-                    ]
-                },
-                "Transform2DComponent": {
-                    "rotation": 0.0,
-                    "scale": [
-                        64.0,
-                        64.0
-                    ],
-                    "translate": [
-                        5472.0,
-                        32.0
-                    ]
-                }
-            }
-        },
-        "needle_30": {
-            "components": {
-                "AABBCollider2D": {
-                    "max": [
-                        24.615385055541992,
-                        32.0
-                    ],
-                    "min": [
-                        -24.615385055541992,
-                        16.0
-                    ]
-                },
-                "Animator2DComponent": {
-                    "animeFrameHeight": 64.0,
-                    "animeFrameWidth": 64.0,
-                    "currentAnimation": 0,
-                    "frameByFrameTime": 0.10000000149011612,
-                    "framesNum": 5
-                },
-                "CollisionBody": {
-                    "type": 2
-                },
-                "EditTag": {
-                    "name": "needle_30",
-                    "path": "Gimmick/DeathObject/needle"
-                },
-                "EnemyTag": null,
-                "GimmickTag": null,
-                "RabbitdokuCollisionLayerComponent": {
-                    "layer": 8
-                },
-                "SpriteComponent": {
-                    "color": [
-                        1.0,
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "flipX": false,
-                    "flipY": false,
-                    "layer": 10,
-                    "orderInLayer": 0,
-                    "pivot": [
-                        0.5,
-                        0.5
-                    ],
-                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png",
-                    "uv": [
                         0.20000000298023224,
                         0.0,
                         0.20000000298023224,
@@ -71901,611 +71499,8 @@
                         64.0
                     ],
                     "translate": [
-                        6624.0,
-                        -1824.0
-                    ]
-                }
-            }
-        },
-        "needle_31": {
-            "components": {
-                "AABBCollider2D": {
-                    "max": [
-                        24.615385055541992,
-                        32.0
-                    ],
-                    "min": [
-                        -24.615385055541992,
-                        16.0
-                    ]
-                },
-                "Animator2DComponent": {
-                    "animeFrameHeight": 64.0,
-                    "animeFrameWidth": 64.0,
-                    "currentAnimation": 0,
-                    "frameByFrameTime": 0.10000000149011612,
-                    "framesNum": 5
-                },
-                "CollisionBody": {
-                    "type": 2
-                },
-                "EditTag": {
-                    "name": "needle_31",
-                    "path": "Gimmick/DeathObject/needle"
-                },
-                "EnemyTag": null,
-                "GimmickTag": null,
-                "RabbitdokuCollisionLayerComponent": {
-                    "layer": 8
-                },
-                "SpriteComponent": {
-                    "color": [
-                        1.0,
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "flipX": false,
-                    "flipY": false,
-                    "layer": 10,
-                    "orderInLayer": 0,
-                    "pivot": [
-                        0.5,
-                        0.5
-                    ],
-                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png",
-                    "uv": [
-                        0.20000000298023224,
-                        0.0,
-                        0.20000000298023224,
-                        0.25
-                    ]
-                },
-                "Transform2DComponent": {
-                    "rotation": 0.0,
-                    "scale": [
-                        64.0,
-                        64.0
-                    ],
-                    "translate": [
-                        6624.0,
-                        -1824.0
-                    ]
-                }
-            }
-        },
-        "needle_32": {
-            "components": {
-                "AABBCollider2D": {
-                    "max": [
-                        24.615385055541992,
-                        32.0
-                    ],
-                    "min": [
-                        -24.615385055541992,
-                        16.0
-                    ]
-                },
-                "Animator2DComponent": {
-                    "animeFrameHeight": 64.0,
-                    "animeFrameWidth": 64.0,
-                    "currentAnimation": 0,
-                    "frameByFrameTime": 0.10000000149011612,
-                    "framesNum": 5
-                },
-                "CollisionBody": {
-                    "type": 2
-                },
-                "EditTag": {
-                    "name": "needle_32",
-                    "path": "Gimmick/DeathObject/needle"
-                },
-                "EnemyTag": null,
-                "GimmickTag": null,
-                "RabbitdokuCollisionLayerComponent": {
-                    "layer": 8
-                },
-                "SpriteComponent": {
-                    "color": [
-                        1.0,
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "flipX": false,
-                    "flipY": false,
-                    "layer": 10,
-                    "orderInLayer": 0,
-                    "pivot": [
-                        0.5,
-                        0.5
-                    ],
-                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png",
-                    "uv": [
-                        0.20000000298023224,
-                        0.0,
-                        0.20000000298023224,
-                        0.25
-                    ]
-                },
-                "Transform2DComponent": {
-                    "rotation": 0.0,
-                    "scale": [
-                        64.0,
-                        64.0
-                    ],
-                    "translate": [
-                        7776.0,
-                        -2464.0
-                    ]
-                }
-            }
-        },
-        "needle_33": {
-            "components": {
-                "AABBCollider2D": {
-                    "max": [
-                        24.615385055541992,
-                        32.0
-                    ],
-                    "min": [
-                        -24.615385055541992,
-                        16.0
-                    ]
-                },
-                "Animator2DComponent": {
-                    "animeFrameHeight": 64.0,
-                    "animeFrameWidth": 64.0,
-                    "currentAnimation": 0,
-                    "frameByFrameTime": 0.10000000149011612,
-                    "framesNum": 5
-                },
-                "CollisionBody": {
-                    "type": 2
-                },
-                "EditTag": {
-                    "name": "needle_33",
-                    "path": "Gimmick/DeathObject/needle"
-                },
-                "EnemyTag": null,
-                "GimmickTag": null,
-                "RabbitdokuCollisionLayerComponent": {
-                    "layer": 8
-                },
-                "SpriteComponent": {
-                    "color": [
-                        1.0,
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "flipX": false,
-                    "flipY": false,
-                    "layer": 10,
-                    "orderInLayer": 0,
-                    "pivot": [
-                        0.5,
-                        0.5
-                    ],
-                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png",
-                    "uv": [
-                        0.20000000298023224,
-                        0.0,
-                        0.20000000298023224,
-                        0.25
-                    ]
-                },
-                "Transform2DComponent": {
-                    "rotation": 0.0,
-                    "scale": [
-                        64.0,
-                        64.0
-                    ],
-                    "translate": [
-                        7776.0,
-                        -2464.0
-                    ]
-                }
-            }
-        },
-        "needle_34": {
-            "components": {
-                "AABBCollider2D": {
-                    "max": [
-                        24.615385055541992,
-                        32.0
-                    ],
-                    "min": [
-                        -24.615385055541992,
-                        16.0
-                    ]
-                },
-                "Animator2DComponent": {
-                    "animeFrameHeight": 64.0,
-                    "animeFrameWidth": 64.0,
-                    "currentAnimation": 0,
-                    "frameByFrameTime": 0.10000000149011612,
-                    "framesNum": 5
-                },
-                "CollisionBody": {
-                    "type": 2
-                },
-                "EditTag": {
-                    "name": "needle_34",
-                    "path": "Gimmick/DeathObject/needle"
-                },
-                "EnemyTag": null,
-                "GimmickTag": null,
-                "RabbitdokuCollisionLayerComponent": {
-                    "layer": 8
-                },
-                "SpriteComponent": {
-                    "color": [
-                        1.0,
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "flipX": false,
-                    "flipY": false,
-                    "layer": 10,
-                    "orderInLayer": 0,
-                    "pivot": [
-                        0.5,
-                        0.5
-                    ],
-                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png",
-                    "uv": [
-                        0.20000000298023224,
-                        0.0,
-                        0.20000000298023224,
-                        0.25
-                    ]
-                },
-                "Transform2DComponent": {
-                    "rotation": 0.0,
-                    "scale": [
-                        64.0,
-                        64.0
-                    ],
-                    "translate": [
-                        7776.0,
-                        -2464.0
-                    ]
-                }
-            }
-        },
-        "needle_35": {
-            "components": {
-                "AABBCollider2D": {
-                    "max": [
-                        24.615385055541992,
-                        32.0
-                    ],
-                    "min": [
-                        -24.615385055541992,
-                        16.0
-                    ]
-                },
-                "Animator2DComponent": {
-                    "animeFrameHeight": 64.0,
-                    "animeFrameWidth": 64.0,
-                    "currentAnimation": 0,
-                    "frameByFrameTime": 0.10000000149011612,
-                    "framesNum": 5
-                },
-                "CollisionBody": {
-                    "type": 2
-                },
-                "EditTag": {
-                    "name": "needle_35",
-                    "path": "Gimmick/DeathObject/needle"
-                },
-                "EnemyTag": null,
-                "GimmickTag": null,
-                "RabbitdokuCollisionLayerComponent": {
-                    "layer": 8
-                },
-                "SpriteComponent": {
-                    "color": [
-                        1.0,
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "flipX": false,
-                    "flipY": false,
-                    "layer": 10,
-                    "orderInLayer": 0,
-                    "pivot": [
-                        0.5,
-                        0.5
-                    ],
-                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png",
-                    "uv": [
-                        0.20000000298023224,
-                        0.0,
-                        0.20000000298023224,
-                        0.25
-                    ]
-                },
-                "Transform2DComponent": {
-                    "rotation": 0.0,
-                    "scale": [
-                        64.0,
-                        64.0
-                    ],
-                    "translate": [
-                        7776.0,
-                        -2464.0
-                    ]
-                }
-            }
-        },
-        "needle_36": {
-            "components": {
-                "AABBCollider2D": {
-                    "max": [
-                        24.615385055541992,
-                        32.0
-                    ],
-                    "min": [
-                        -24.615385055541992,
-                        16.0
-                    ]
-                },
-                "Animator2DComponent": {
-                    "animeFrameHeight": 64.0,
-                    "animeFrameWidth": 64.0,
-                    "currentAnimation": 0,
-                    "frameByFrameTime": 0.10000000149011612,
-                    "framesNum": 5
-                },
-                "CollisionBody": {
-                    "type": 2
-                },
-                "EditTag": {
-                    "name": "needle_36",
-                    "path": "Gimmick/DeathObject/needle"
-                },
-                "EnemyTag": null,
-                "GimmickTag": null,
-                "RabbitdokuCollisionLayerComponent": {
-                    "layer": 8
-                },
-                "SpriteComponent": {
-                    "color": [
-                        1.0,
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "flipX": false,
-                    "flipY": false,
-                    "layer": 10,
-                    "orderInLayer": 0,
-                    "pivot": [
-                        0.5,
-                        0.5
-                    ],
-                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png",
-                    "uv": [
-                        0.6000000238418579,
-                        0.0,
-                        0.20000000298023224,
-                        0.25
-                    ]
-                },
-                "Transform2DComponent": {
-                    "rotation": 0.0,
-                    "scale": [
-                        64.0,
-                        64.0
-                    ],
-                    "translate": [
-                        7840.0,
-                        -2464.0
-                    ]
-                }
-            }
-        },
-        "needle_37": {
-            "components": {
-                "AABBCollider2D": {
-                    "max": [
-                        24.615385055541992,
-                        32.0
-                    ],
-                    "min": [
-                        -24.615385055541992,
-                        16.0
-                    ]
-                },
-                "Animator2DComponent": {
-                    "animeFrameHeight": 64.0,
-                    "animeFrameWidth": 64.0,
-                    "currentAnimation": 0,
-                    "frameByFrameTime": 0.10000000149011612,
-                    "framesNum": 5
-                },
-                "CollisionBody": {
-                    "type": 2
-                },
-                "EditTag": {
-                    "name": "needle_37",
-                    "path": "Gimmick/DeathObject/needle"
-                },
-                "EnemyTag": null,
-                "GimmickTag": null,
-                "RabbitdokuCollisionLayerComponent": {
-                    "layer": 8
-                },
-                "SpriteComponent": {
-                    "color": [
-                        1.0,
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "flipX": false,
-                    "flipY": false,
-                    "layer": 10,
-                    "orderInLayer": 0,
-                    "pivot": [
-                        0.5,
-                        0.5
-                    ],
-                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png",
-                    "uv": [
-                        0.4000000059604645,
-                        0.0,
-                        0.20000000298023224,
-                        0.25
-                    ]
-                },
-                "Transform2DComponent": {
-                    "rotation": 0.0,
-                    "scale": [
-                        64.0,
-                        64.0
-                    ],
-                    "translate": [
-                        7840.0,
-                        -2464.0
-                    ]
-                }
-            }
-        },
-        "needle_38": {
-            "components": {
-                "AABBCollider2D": {
-                    "max": [
-                        24.615385055541992,
-                        32.0
-                    ],
-                    "min": [
-                        -24.615385055541992,
-                        16.0
-                    ]
-                },
-                "Animator2DComponent": {
-                    "animeFrameHeight": 64.0,
-                    "animeFrameWidth": 64.0,
-                    "currentAnimation": 0,
-                    "frameByFrameTime": 0.10000000149011612,
-                    "framesNum": 5
-                },
-                "CollisionBody": {
-                    "type": 2
-                },
-                "EditTag": {
-                    "name": "needle_38",
-                    "path": "Gimmick/DeathObject/needle"
-                },
-                "EnemyTag": null,
-                "GimmickTag": null,
-                "RabbitdokuCollisionLayerComponent": {
-                    "layer": 8
-                },
-                "SpriteComponent": {
-                    "color": [
-                        1.0,
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "flipX": false,
-                    "flipY": false,
-                    "layer": 10,
-                    "orderInLayer": 0,
-                    "pivot": [
-                        0.5,
-                        0.5
-                    ],
-                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png",
-                    "uv": [
-                        0.4000000059604645,
-                        0.0,
-                        0.20000000298023224,
-                        0.25
-                    ]
-                },
-                "Transform2DComponent": {
-                    "rotation": 0.0,
-                    "scale": [
-                        64.0,
-                        64.0
-                    ],
-                    "translate": [
-                        7840.0,
-                        -2464.0
-                    ]
-                }
-            }
-        },
-        "needle_39": {
-            "components": {
-                "AABBCollider2D": {
-                    "max": [
-                        24.615385055541992,
-                        32.0
-                    ],
-                    "min": [
-                        -24.615385055541992,
-                        16.0
-                    ]
-                },
-                "Animator2DComponent": {
-                    "animeFrameHeight": 64.0,
-                    "animeFrameWidth": 64.0,
-                    "currentAnimation": 0,
-                    "frameByFrameTime": 0.10000000149011612,
-                    "framesNum": 5
-                },
-                "CollisionBody": {
-                    "type": 2
-                },
-                "EditTag": {
-                    "name": "needle_39",
-                    "path": "Gimmick/DeathObject/needle"
-                },
-                "EnemyTag": null,
-                "GimmickTag": null,
-                "RabbitdokuCollisionLayerComponent": {
-                    "layer": 8
-                },
-                "SpriteComponent": {
-                    "color": [
-                        1.0,
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "flipX": false,
-                    "flipY": false,
-                    "layer": 10,
-                    "orderInLayer": 0,
-                    "pivot": [
-                        0.5,
-                        0.5
-                    ],
-                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png",
-                    "uv": [
-                        0.4000000059604645,
-                        0.0,
-                        0.20000000298023224,
-                        0.25
-                    ]
-                },
-                "Transform2DComponent": {
-                    "rotation": 0.0,
-                    "scale": [
-                        64.0,
-                        64.0
-                    ],
-                    "translate": [
-                        7840.0,
-                        -2464.0
+                        5408.0,
+                        224.0
                     ]
                 }
             }
@@ -72558,676 +71553,6 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png",
                     "uv": [
-                        0.6000000238418579,
-                        0.0,
-                        0.20000000298023224,
-                        0.25
-                    ]
-                },
-                "Transform2DComponent": {
-                    "rotation": 0.0,
-                    "scale": [
-                        64.0,
-                        64.0
-                    ],
-                    "translate": [
-                        5536.0,
-                        32.0
-                    ]
-                }
-            }
-        },
-        "needle_40": {
-            "components": {
-                "AABBCollider2D": {
-                    "max": [
-                        24.615385055541992,
-                        32.0
-                    ],
-                    "min": [
-                        -24.615385055541992,
-                        16.0
-                    ]
-                },
-                "Animator2DComponent": {
-                    "animeFrameHeight": 64.0,
-                    "animeFrameWidth": 64.0,
-                    "currentAnimation": 0,
-                    "frameByFrameTime": 0.10000000149011612,
-                    "framesNum": 5
-                },
-                "CollisionBody": {
-                    "type": 2
-                },
-                "EditTag": {
-                    "name": "needle_40",
-                    "path": "Gimmick/DeathObject/needle"
-                },
-                "EnemyTag": null,
-                "GimmickTag": null,
-                "RabbitdokuCollisionLayerComponent": {
-                    "layer": 8
-                },
-                "SpriteComponent": {
-                    "color": [
-                        1.0,
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "flipX": false,
-                    "flipY": false,
-                    "layer": 10,
-                    "orderInLayer": 0,
-                    "pivot": [
-                        0.5,
-                        0.5
-                    ],
-                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png",
-                    "uv": [
-                        0.4000000059604645,
-                        0.0,
-                        0.20000000298023224,
-                        0.25
-                    ]
-                },
-                "Transform2DComponent": {
-                    "rotation": 0.0,
-                    "scale": [
-                        64.0,
-                        64.0
-                    ],
-                    "translate": [
-                        7840.0,
-                        -2464.0
-                    ]
-                }
-            }
-        },
-        "needle_41": {
-            "components": {
-                "AABBCollider2D": {
-                    "max": [
-                        24.615385055541992,
-                        32.0
-                    ],
-                    "min": [
-                        -24.615385055541992,
-                        16.0
-                    ]
-                },
-                "Animator2DComponent": {
-                    "animeFrameHeight": 64.0,
-                    "animeFrameWidth": 64.0,
-                    "currentAnimation": 0,
-                    "frameByFrameTime": 0.10000000149011612,
-                    "framesNum": 5
-                },
-                "CollisionBody": {
-                    "type": 2
-                },
-                "EditTag": {
-                    "name": "needle_41",
-                    "path": "Gimmick/DeathObject/needle"
-                },
-                "EnemyTag": null,
-                "GimmickTag": null,
-                "RabbitdokuCollisionLayerComponent": {
-                    "layer": 8
-                },
-                "SpriteComponent": {
-                    "color": [
-                        1.0,
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "flipX": false,
-                    "flipY": false,
-                    "layer": 10,
-                    "orderInLayer": 0,
-                    "pivot": [
-                        0.5,
-                        0.5
-                    ],
-                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png",
-                    "uv": [
-                        0.4000000059604645,
-                        0.0,
-                        0.20000000298023224,
-                        0.25
-                    ]
-                },
-                "Transform2DComponent": {
-                    "rotation": 0.0,
-                    "scale": [
-                        64.0,
-                        64.0
-                    ],
-                    "translate": [
-                        7840.0,
-                        -2464.0
-                    ]
-                }
-            }
-        },
-        "needle_42": {
-            "components": {
-                "AABBCollider2D": {
-                    "max": [
-                        24.615385055541992,
-                        32.0
-                    ],
-                    "min": [
-                        -24.615385055541992,
-                        16.0
-                    ]
-                },
-                "Animator2DComponent": {
-                    "animeFrameHeight": 64.0,
-                    "animeFrameWidth": 64.0,
-                    "currentAnimation": 0,
-                    "frameByFrameTime": 0.10000000149011612,
-                    "framesNum": 5
-                },
-                "CollisionBody": {
-                    "type": 2
-                },
-                "EditTag": {
-                    "name": "needle_42",
-                    "path": "Gimmick/DeathObject/needle"
-                },
-                "EnemyTag": null,
-                "GimmickTag": null,
-                "RabbitdokuCollisionLayerComponent": {
-                    "layer": 8
-                },
-                "SpriteComponent": {
-                    "color": [
-                        1.0,
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "flipX": false,
-                    "flipY": false,
-                    "layer": 10,
-                    "orderInLayer": 0,
-                    "pivot": [
-                        0.5,
-                        0.5
-                    ],
-                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png",
-                    "uv": [
-                        0.4000000059604645,
-                        0.0,
-                        0.20000000298023224,
-                        0.25
-                    ]
-                },
-                "Transform2DComponent": {
-                    "rotation": 0.0,
-                    "scale": [
-                        64.0,
-                        64.0
-                    ],
-                    "translate": [
-                        7840.0,
-                        -2464.0
-                    ]
-                }
-            }
-        },
-        "needle_43": {
-            "components": {
-                "AABBCollider2D": {
-                    "max": [
-                        24.615385055541992,
-                        32.0
-                    ],
-                    "min": [
-                        -24.615385055541992,
-                        16.0
-                    ]
-                },
-                "Animator2DComponent": {
-                    "animeFrameHeight": 64.0,
-                    "animeFrameWidth": 64.0,
-                    "currentAnimation": 0,
-                    "frameByFrameTime": 0.10000000149011612,
-                    "framesNum": 5
-                },
-                "CollisionBody": {
-                    "type": 2
-                },
-                "EditTag": {
-                    "name": "needle_43",
-                    "path": "Gimmick/DeathObject/needle"
-                },
-                "EnemyTag": null,
-                "GimmickTag": null,
-                "RabbitdokuCollisionLayerComponent": {
-                    "layer": 8
-                },
-                "SpriteComponent": {
-                    "color": [
-                        1.0,
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "flipX": false,
-                    "flipY": false,
-                    "layer": 10,
-                    "orderInLayer": 0,
-                    "pivot": [
-                        0.5,
-                        0.5
-                    ],
-                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png",
-                    "uv": [
-                        0.800000011920929,
-                        0.0,
-                        0.20000000298023224,
-                        0.25
-                    ]
-                },
-                "Transform2DComponent": {
-                    "rotation": 0.0,
-                    "scale": [
-                        64.0,
-                        64.0
-                    ],
-                    "translate": [
-                        7904.0,
-                        -2464.0
-                    ]
-                }
-            }
-        },
-        "needle_44": {
-            "components": {
-                "AABBCollider2D": {
-                    "max": [
-                        24.615385055541992,
-                        32.0
-                    ],
-                    "min": [
-                        -24.615385055541992,
-                        16.0
-                    ]
-                },
-                "Animator2DComponent": {
-                    "animeFrameHeight": 64.0,
-                    "animeFrameWidth": 64.0,
-                    "currentAnimation": 0,
-                    "frameByFrameTime": 0.10000000149011612,
-                    "framesNum": 5
-                },
-                "CollisionBody": {
-                    "type": 2
-                },
-                "EditTag": {
-                    "name": "needle_44",
-                    "path": "Gimmick/DeathObject/needle"
-                },
-                "EnemyTag": null,
-                "GimmickTag": null,
-                "RabbitdokuCollisionLayerComponent": {
-                    "layer": 8
-                },
-                "SpriteComponent": {
-                    "color": [
-                        1.0,
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "flipX": false,
-                    "flipY": false,
-                    "layer": 10,
-                    "orderInLayer": 0,
-                    "pivot": [
-                        0.5,
-                        0.5
-                    ],
-                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png",
-                    "uv": [
-                        0.800000011920929,
-                        0.0,
-                        0.20000000298023224,
-                        0.25
-                    ]
-                },
-                "Transform2DComponent": {
-                    "rotation": 0.0,
-                    "scale": [
-                        64.0,
-                        64.0
-                    ],
-                    "translate": [
-                        7904.0,
-                        -2464.0
-                    ]
-                }
-            }
-        },
-        "needle_45": {
-            "components": {
-                "AABBCollider2D": {
-                    "max": [
-                        24.615385055541992,
-                        32.0
-                    ],
-                    "min": [
-                        -24.615385055541992,
-                        16.0
-                    ]
-                },
-                "Animator2DComponent": {
-                    "animeFrameHeight": 64.0,
-                    "animeFrameWidth": 64.0,
-                    "currentAnimation": 0,
-                    "frameByFrameTime": 0.10000000149011612,
-                    "framesNum": 5
-                },
-                "CollisionBody": {
-                    "type": 2
-                },
-                "EditTag": {
-                    "name": "needle_45",
-                    "path": "Gimmick/DeathObject/needle"
-                },
-                "EnemyTag": null,
-                "GimmickTag": null,
-                "RabbitdokuCollisionLayerComponent": {
-                    "layer": 8
-                },
-                "SpriteComponent": {
-                    "color": [
-                        1.0,
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "flipX": false,
-                    "flipY": false,
-                    "layer": 10,
-                    "orderInLayer": 0,
-                    "pivot": [
-                        0.5,
-                        0.5
-                    ],
-                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png",
-                    "uv": [
-                        0.6000000238418579,
-                        0.0,
-                        0.20000000298023224,
-                        0.25
-                    ]
-                },
-                "Transform2DComponent": {
-                    "rotation": 0.0,
-                    "scale": [
-                        64.0,
-                        64.0
-                    ],
-                    "translate": [
-                        7904.0,
-                        -2464.0
-                    ]
-                }
-            }
-        },
-        "needle_46": {
-            "components": {
-                "AABBCollider2D": {
-                    "max": [
-                        24.615385055541992,
-                        32.0
-                    ],
-                    "min": [
-                        -24.615385055541992,
-                        16.0
-                    ]
-                },
-                "Animator2DComponent": {
-                    "animeFrameHeight": 64.0,
-                    "animeFrameWidth": 64.0,
-                    "currentAnimation": 0,
-                    "frameByFrameTime": 0.10000000149011612,
-                    "framesNum": 5
-                },
-                "CollisionBody": {
-                    "type": 2
-                },
-                "EditTag": {
-                    "name": "needle_46",
-                    "path": "Gimmick/DeathObject/needle"
-                },
-                "EnemyTag": null,
-                "GimmickTag": null,
-                "RabbitdokuCollisionLayerComponent": {
-                    "layer": 8
-                },
-                "SpriteComponent": {
-                    "color": [
-                        1.0,
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "flipX": false,
-                    "flipY": false,
-                    "layer": 10,
-                    "orderInLayer": 0,
-                    "pivot": [
-                        0.5,
-                        0.5
-                    ],
-                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png",
-                    "uv": [
-                        0.6000000238418579,
-                        0.0,
-                        0.20000000298023224,
-                        0.25
-                    ]
-                },
-                "Transform2DComponent": {
-                    "rotation": 0.0,
-                    "scale": [
-                        64.0,
-                        64.0
-                    ],
-                    "translate": [
-                        7904.0,
-                        -2464.0
-                    ]
-                }
-            }
-        },
-        "needle_47": {
-            "components": {
-                "AABBCollider2D": {
-                    "max": [
-                        24.615385055541992,
-                        32.0
-                    ],
-                    "min": [
-                        -24.615385055541992,
-                        16.0
-                    ]
-                },
-                "Animator2DComponent": {
-                    "animeFrameHeight": 64.0,
-                    "animeFrameWidth": 64.0,
-                    "currentAnimation": 0,
-                    "frameByFrameTime": 0.10000000149011612,
-                    "framesNum": 5
-                },
-                "CollisionBody": {
-                    "type": 2
-                },
-                "EditTag": {
-                    "name": "needle_47",
-                    "path": "Gimmick/DeathObject/needle"
-                },
-                "EnemyTag": null,
-                "GimmickTag": null,
-                "RabbitdokuCollisionLayerComponent": {
-                    "layer": 8
-                },
-                "SpriteComponent": {
-                    "color": [
-                        1.0,
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "flipX": false,
-                    "flipY": false,
-                    "layer": 10,
-                    "orderInLayer": 0,
-                    "pivot": [
-                        0.5,
-                        0.5
-                    ],
-                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png",
-                    "uv": [
-                        0.6000000238418579,
-                        0.0,
-                        0.20000000298023224,
-                        0.25
-                    ]
-                },
-                "Transform2DComponent": {
-                    "rotation": 0.0,
-                    "scale": [
-                        64.0,
-                        64.0
-                    ],
-                    "translate": [
-                        7904.0,
-                        -2464.0
-                    ]
-                }
-            }
-        },
-        "needle_48": {
-            "components": {
-                "AABBCollider2D": {
-                    "max": [
-                        24.615385055541992,
-                        32.0
-                    ],
-                    "min": [
-                        -24.615385055541992,
-                        16.0
-                    ]
-                },
-                "Animator2DComponent": {
-                    "animeFrameHeight": 64.0,
-                    "animeFrameWidth": 64.0,
-                    "currentAnimation": 0,
-                    "frameByFrameTime": 0.10000000149011612,
-                    "framesNum": 5
-                },
-                "CollisionBody": {
-                    "type": 2
-                },
-                "EditTag": {
-                    "name": "needle_48",
-                    "path": "Gimmick/DeathObject/needle"
-                },
-                "EnemyTag": null,
-                "GimmickTag": null,
-                "RabbitdokuCollisionLayerComponent": {
-                    "layer": 8
-                },
-                "SpriteComponent": {
-                    "color": [
-                        1.0,
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "flipX": false,
-                    "flipY": false,
-                    "layer": 10,
-                    "orderInLayer": 0,
-                    "pivot": [
-                        0.5,
-                        0.5
-                    ],
-                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png",
-                    "uv": [
-                        0.6000000238418579,
-                        0.0,
-                        0.20000000298023224,
-                        0.25
-                    ]
-                },
-                "Transform2DComponent": {
-                    "rotation": 0.0,
-                    "scale": [
-                        64.0,
-                        64.0
-                    ],
-                    "translate": [
-                        7904.0,
-                        -2464.0
-                    ]
-                }
-            }
-        },
-        "needle_49": {
-            "components": {
-                "AABBCollider2D": {
-                    "max": [
-                        24.615385055541992,
-                        32.0
-                    ],
-                    "min": [
-                        -24.615385055541992,
-                        16.0
-                    ]
-                },
-                "Animator2DComponent": {
-                    "animeFrameHeight": 64.0,
-                    "animeFrameWidth": 64.0,
-                    "currentAnimation": 0,
-                    "frameByFrameTime": 0.10000000149011612,
-                    "framesNum": 5
-                },
-                "CollisionBody": {
-                    "type": 2
-                },
-                "EditTag": {
-                    "name": "needle_49",
-                    "path": "Gimmick/DeathObject/needle"
-                },
-                "EnemyTag": null,
-                "GimmickTag": null,
-                "RabbitdokuCollisionLayerComponent": {
-                    "layer": 8
-                },
-                "SpriteComponent": {
-                    "color": [
-                        1.0,
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "flipX": false,
-                    "flipY": false,
-                    "layer": 10,
-                    "orderInLayer": 0,
-                    "pivot": [
-                        0.5,
-                        0.5
-                    ],
-                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png",
-                    "uv": [
                         0.0,
                         0.0,
                         0.20000000298023224,
@@ -73241,8 +71566,8 @@
                         64.0
                     ],
                     "translate": [
-                        7712.0,
-                        -2272.0
+                        5472.0,
+                        32.0
                     ]
                 }
             }
@@ -73295,7 +71620,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png",
                     "uv": [
-                        0.6000000238418579,
+                        0.800000011920929,
                         0.0,
                         0.20000000298023224,
                         0.25
@@ -73308,276 +71633,8 @@
                         64.0
                     ],
                     "translate": [
-                        5600.0,
+                        5536.0,
                         32.0
-                    ]
-                }
-            }
-        },
-        "needle_50": {
-            "components": {
-                "AABBCollider2D": {
-                    "max": [
-                        24.615385055541992,
-                        32.0
-                    ],
-                    "min": [
-                        -24.615385055541992,
-                        16.0
-                    ]
-                },
-                "Animator2DComponent": {
-                    "animeFrameHeight": 64.0,
-                    "animeFrameWidth": 64.0,
-                    "currentAnimation": 0,
-                    "frameByFrameTime": 0.10000000149011612,
-                    "framesNum": 5
-                },
-                "CollisionBody": {
-                    "type": 2
-                },
-                "EditTag": {
-                    "name": "needle_50",
-                    "path": "Gimmick/DeathObject/needle"
-                },
-                "EnemyTag": null,
-                "GimmickTag": null,
-                "RabbitdokuCollisionLayerComponent": {
-                    "layer": 8
-                },
-                "SpriteComponent": {
-                    "color": [
-                        1.0,
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "flipX": false,
-                    "flipY": false,
-                    "layer": 10,
-                    "orderInLayer": 0,
-                    "pivot": [
-                        0.5,
-                        0.5
-                    ],
-                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png",
-                    "uv": [
-                        0.0,
-                        0.0,
-                        0.20000000298023224,
-                        0.25
-                    ]
-                },
-                "Transform2DComponent": {
-                    "rotation": 0.0,
-                    "scale": [
-                        64.0,
-                        64.0
-                    ],
-                    "translate": [
-                        7712.0,
-                        -2272.0
-                    ]
-                }
-            }
-        },
-        "needle_51": {
-            "components": {
-                "AABBCollider2D": {
-                    "max": [
-                        24.615385055541992,
-                        32.0
-                    ],
-                    "min": [
-                        -24.615385055541992,
-                        16.0
-                    ]
-                },
-                "Animator2DComponent": {
-                    "animeFrameHeight": 64.0,
-                    "animeFrameWidth": 64.0,
-                    "currentAnimation": 0,
-                    "frameByFrameTime": 0.10000000149011612,
-                    "framesNum": 5
-                },
-                "CollisionBody": {
-                    "type": 2
-                },
-                "EditTag": {
-                    "name": "needle_51",
-                    "path": "Gimmick/DeathObject/needle"
-                },
-                "EnemyTag": null,
-                "GimmickTag": null,
-                "RabbitdokuCollisionLayerComponent": {
-                    "layer": 8
-                },
-                "SpriteComponent": {
-                    "color": [
-                        1.0,
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "flipX": false,
-                    "flipY": false,
-                    "layer": 10,
-                    "orderInLayer": 0,
-                    "pivot": [
-                        0.5,
-                        0.5
-                    ],
-                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png",
-                    "uv": [
-                        0.0,
-                        0.0,
-                        0.20000000298023224,
-                        0.25
-                    ]
-                },
-                "Transform2DComponent": {
-                    "rotation": 0.0,
-                    "scale": [
-                        64.0,
-                        64.0
-                    ],
-                    "translate": [
-                        7712.0,
-                        -2272.0
-                    ]
-                }
-            }
-        },
-        "needle_52": {
-            "components": {
-                "AABBCollider2D": {
-                    "max": [
-                        24.615385055541992,
-                        32.0
-                    ],
-                    "min": [
-                        -24.615385055541992,
-                        16.0
-                    ]
-                },
-                "Animator2DComponent": {
-                    "animeFrameHeight": 64.0,
-                    "animeFrameWidth": 64.0,
-                    "currentAnimation": 0,
-                    "frameByFrameTime": 0.10000000149011612,
-                    "framesNum": 5
-                },
-                "CollisionBody": {
-                    "type": 2
-                },
-                "EditTag": {
-                    "name": "needle_52",
-                    "path": "Gimmick/DeathObject/needle"
-                },
-                "EnemyTag": null,
-                "GimmickTag": null,
-                "RabbitdokuCollisionLayerComponent": {
-                    "layer": 8
-                },
-                "SpriteComponent": {
-                    "color": [
-                        1.0,
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "flipX": false,
-                    "flipY": false,
-                    "layer": 10,
-                    "orderInLayer": 0,
-                    "pivot": [
-                        0.5,
-                        0.5
-                    ],
-                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png",
-                    "uv": [
-                        0.0,
-                        0.0,
-                        0.20000000298023224,
-                        0.25
-                    ]
-                },
-                "Transform2DComponent": {
-                    "rotation": 0.0,
-                    "scale": [
-                        64.0,
-                        64.0
-                    ],
-                    "translate": [
-                        7968.0,
-                        -2272.0
-                    ]
-                }
-            }
-        },
-        "needle_53": {
-            "components": {
-                "AABBCollider2D": {
-                    "max": [
-                        24.615385055541992,
-                        32.0
-                    ],
-                    "min": [
-                        -24.615385055541992,
-                        16.0
-                    ]
-                },
-                "Animator2DComponent": {
-                    "animeFrameHeight": 64.0,
-                    "animeFrameWidth": 64.0,
-                    "currentAnimation": 0,
-                    "frameByFrameTime": 0.10000000149011612,
-                    "framesNum": 5
-                },
-                "CollisionBody": {
-                    "type": 2
-                },
-                "EditTag": {
-                    "name": "needle_53",
-                    "path": "Gimmick/DeathObject/needle"
-                },
-                "EnemyTag": null,
-                "GimmickTag": null,
-                "RabbitdokuCollisionLayerComponent": {
-                    "layer": 8
-                },
-                "SpriteComponent": {
-                    "color": [
-                        1.0,
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "flipX": false,
-                    "flipY": false,
-                    "layer": 10,
-                    "orderInLayer": 0,
-                    "pivot": [
-                        0.5,
-                        0.5
-                    ],
-                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png",
-                    "uv": [
-                        0.0,
-                        0.0,
-                        0.20000000298023224,
-                        0.25
-                    ]
-                },
-                "Transform2DComponent": {
-                    "rotation": 0.0,
-                    "scale": [
-                        64.0,
-                        64.0
-                    ],
-                    "translate": [
-                        7968.0,
-                        -2272.0
                     ]
                 }
             }
@@ -73643,8 +71700,8 @@
                         64.0
                     ],
                     "translate": [
-                        5664.0,
-                        224.0
+                        5600.0,
+                        32.0
                     ]
                 }
             }
@@ -73697,7 +71754,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png",
                     "uv": [
-                        0.6000000238418579,
+                        0.4000000059604645,
                         0.0,
                         0.20000000298023224,
                         0.25
@@ -73710,8 +71767,8 @@
                         64.0
                     ],
                     "translate": [
-                        5728.0,
-                        288.0
+                        5664.0,
+                        224.0
                     ]
                 }
             }
@@ -73764,7 +71821,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png",
                     "uv": [
-                        0.20000000298023224,
+                        0.4000000059604645,
                         0.0,
                         0.20000000298023224,
                         0.25
@@ -73831,7 +71888,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png",
                     "uv": [
-                        0.6000000238418579,
+                        0.0,
                         0.0,
                         0.20000000298023224,
                         0.25
@@ -73844,8 +71901,8 @@
                         64.0
                     ],
                     "translate": [
-                        5408.0,
-                        224.0
+                        5728.0,
+                        288.0
                     ]
                 }
             }
@@ -74072,7 +72129,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/savePoint.png",
                     "uv": [
-                        0.375,
+                        0.875,
                         0.0,
                         0.125,
                         1.0
@@ -74139,7 +72196,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/savePoint.png",
                     "uv": [
-                        0.375,
+                        0.875,
                         0.0,
                         0.125,
                         1.0
@@ -74206,7 +72263,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/savePoint.png",
                     "uv": [
-                        0.375,
+                        0.875,
                         0.0,
                         0.125,
                         1.0
@@ -74273,7 +72330,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/savePoint.png",
                     "uv": [
-                        0.375,
+                        0.875,
                         0.0,
                         0.125,
                         1.0
@@ -74340,7 +72397,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/savePoint.png",
                     "uv": [
-                        0.375,
+                        0.875,
                         0.0,
                         0.125,
                         1.0
@@ -74407,7 +72464,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/savePoint.png",
                     "uv": [
-                        0.375,
+                        0.875,
                         0.0,
                         0.125,
                         1.0
