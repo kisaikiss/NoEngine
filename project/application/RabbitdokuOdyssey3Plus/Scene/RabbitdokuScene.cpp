@@ -34,6 +34,7 @@ void RabbitdokuScene::InitGameScene() {
 	InitPlayer(registry);
 	InitCamera(registry);
 	InitBackground(registry);
+	PlayMusic();
 	SceneTransitionOutEvent t;
 	registry.EmitEvent(t);
 }
@@ -131,6 +132,10 @@ void RabbitdokuScene::InitCamera(No::Registry& registry) {
 		registry.AddComponent<No::DebugCamera2DComponent>(e);
 	}
 	
+}
+
+void RabbitdokuScene::PlayMusic() {
+	No::SoundPlay(backgroundMusicName_, 0.5f, true);
 }
 
 

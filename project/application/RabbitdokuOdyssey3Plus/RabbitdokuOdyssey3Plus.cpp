@@ -4,11 +4,19 @@
 #include "Scene/RabbitdokuTitleScene.h"
 #include "Scene/ExxsearearStage.h"
 
+class Stage1 : public RabbitdokuScene {
+public: Stage1() : RabbitdokuScene("stage1") {}
+};
+
 void RabbitdokuOdyssey3Plus::Startup(void) {
+	No::SoundLoad(L"resources/game/RabbitdokuOdyssey3Plus/Sounds/BGM/Title.mp3", "title");
+	No::SoundLoad(L"resources/game/RabbitdokuOdyssey3Plus/Sounds/BGM/Stage01.mp3", "stage1");
+	No::SoundLoad(L"resources/game/RabbitdokuOdyssey3Plus/Sounds/BGM/ExStage.mp3", "exStage");
+
 	RegisterScene("Rabbitdoku", []() { return std::make_unique<RabbitdokuScene>();	});
-	RegisterScene("ExxsearearStage", []() { return std::make_unique<ExxsearearStage>();	});
+	RegisterScene("ExxsearearStage", []() { return std::make_unique<Stage1>();	});
 	RegisterScene("Title", []() { return std::make_unique<RabbitdokuTitleScene>(); });
-	RegisterScene("Stage1", []() { return std::make_unique<ExxsearearStage>(); });
+	RegisterScene("Stage1", []() { return std::make_unique<Stage1>(); });
 	ChangeScene("Title");
 	//ChangeScene("Stage1");
 
@@ -48,6 +56,6 @@ void RabbitdokuOdyssey3Plus::Startup(void) {
 	No::SoundLoad(L"resources/game/RabbitdokuOdyssey3Plus/Sounds/SFX/BlockBreak.mp3", "collapseBlock");
 	No::SoundLoad(L"resources/game/RabbitdokuOdyssey3Plus/Sounds/SFX/Landing.mp3", "landing");
 
-	No::SoundLoad(L"resources/game/RabbitdokuOdyssey3Plus/Sounds/BGM/Title.mp3", "title");
+	
 
 }

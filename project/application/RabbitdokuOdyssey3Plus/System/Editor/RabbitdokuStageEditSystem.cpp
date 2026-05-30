@@ -287,9 +287,11 @@ void RabbitdokuStageEditSystem::AddNeedle(No::Registry& registry) {
 
 	auto gimmickView = registry.View<GimmickTag, No::AABBCollider2D, No::Transform2DComponent>();
 	for (auto e : gimmickView) {
-		auto* aabb = registry.GetComponent<No::AABBCollider2D>(e);
+		No::AABBCollider2D aabb;
+		aabb.max = gridSize_ / 2.f;
+		aabb.min = -gridSize_ / 2.f;
 		auto* transform = registry.GetComponent<No::Transform2DComponent>(e);
-		if (No::IsCollision(position, aabb, transform)) return;
+		if (No::IsCollision(position, &aabb, transform)) return;
 	}
 
 
@@ -335,9 +337,11 @@ void RabbitdokuStageEditSystem::AddSpring(No::Registry& registry) {
 
 	auto gimmickView = registry.View<GimmickTag, No::AABBCollider2D, No::Transform2DComponent>();
 	for (auto e : gimmickView) {
-		auto* aabb = registry.GetComponent<No::AABBCollider2D>(e);
+		No::AABBCollider2D aabb;
+		aabb.max = gridSize_ / 2.f;
+		aabb.min = -gridSize_ / 2.f;
 		auto* transform = registry.GetComponent<No::Transform2DComponent>(e);
-		if (No::IsCollision(position, aabb, transform)) return;
+		if (No::IsCollision(position, &aabb, transform)) return;
 	}
 
 

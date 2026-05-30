@@ -54,6 +54,7 @@ void ScreenTransitionEffectSystem::TransitionIn(No::Registry& registry, float de
 				t->scale.y = 848.f * cameraT->scale.y;
 				RabbitdokuResetEvent dead;
 				dead.nextScene = nextScene_;
+				if (nextScene_ != No::GetCurrentSceneName(registry)) No::SoundAllCompleteStop();
 				registry.EmitEvent(dead);
 			}
 
