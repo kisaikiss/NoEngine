@@ -10,17 +10,20 @@ void RabbitItemGetSystem::Update(No::Registry& registry, float deltaTime) {
 	static_cast<void>(deltaTime);
 	auto view = registry.PollAllEvents<RabbitdokuItemGetEvent>();
 
+	preIsPressUp_ = isPressUp_;
+	isPressUp_ = (No::Pad::GetStick().leftStickY > 0.4f);
+
 	for (const auto& event : view) {
 		auto* player = registry.GetComponent<Rabbitdoku>(event.player);
 
 		if (registry.Has<SaveTag>(event.item)) {
-			if (No::InputIsTrigger("Save")) {
+			if (No::InputIsTrigger("Save") || GetIsTriggerUp()) {
 				auto* data = registry.GetComponent<SaveData>(event.player);
 				RabbitdokuSerializer::GameSave(registry,
 					registry.GetComponent<No::Transform2DComponent>(event.player)->translate,
 					data->death, data->totalDeath);
 				data->respawnPoint = registry.GetComponent<No::Transform2DComponent>(event.player)->translate;
-				GenerateLight(registry, event.player);
+				GenerateSaveEffect(registry, event.player);
 				GenerateStars(registry, event.player);
 			}
 			continue;
@@ -55,7 +58,7 @@ void RabbitItemGetSystem::Update(No::Registry& registry, float deltaTime) {
 		}
 
 		if (registry.Has<DoorComponent>(event.item)) {
-			if (No::InputIsTrigger("EnterDoor")) {
+			if (No::InputIsTrigger("EnterDoor") || GetIsTriggerUp()) {
 				SceneTransitionInEvent change;
 				change.stageName = registry.GetComponent<DoorComponent>(event.item)->stageName;
 				registry.EmitEvent(change);
@@ -87,6 +90,11 @@ void RabbitItemGetSystem::GenerateLight(No::Registry& registry, No::Entity playe
 		registry.AddComponent<No::Velocity2DComponent>(e)->linear.y = -32.f;
 	}
 	
+	
+}
+
+void RabbitItemGetSystem::GenerateSaveEffect(No::Registry& registry, No::Entity playerEntity) {
+	auto* playerTransform = registry.GetComponent<No::Transform2DComponent>(playerEntity);
 	{
 		auto e = registry.GenerateEntity();
 		auto* t = registry.AddComponent<No::Transform2DComponent>(e);
@@ -142,4 +150,8 @@ void RabbitItemGetSystem::GenerateHealedEffect(No::Registry& registry, No::Entit
 	a->framesNum = 5;
 	a->frameByFrameTime = 0.1f;
 	registry.AddComponent<SmokeEffectTag>(e);
+}
+
+bool RabbitItemGetSystem::GetIsTriggerUp() {
+	return isPressUp_ && !preIsPressUp_;
 }

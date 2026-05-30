@@ -6,6 +6,12 @@ public:
     void Update(No::Registry& registry, float deltaTime) override;
 private:
     void GenerateLight(No::Registry& registry, No::Entity e);
+    void GenerateSaveEffect(No::Registry& registry, No::Entity e);
     void GenerateStars(No::Registry& registry, No::Entity e);
     void GenerateHealedEffect(No::Registry& registry, No::Entity e);
+
+    bool GetIsTriggerUp();
+
+    bool preIsPressUp_ = false;
+    bool isPressUp_ = false;
 };

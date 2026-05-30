@@ -17,7 +17,7 @@ void RabbitdokuMoveSystem::Update(No::Registry& registry, float deltaTime) {
 		auto* groundState = registry.GetComponent<No::GroundStateComponent>(e);
 		auto* animator = registry.GetComponent<No::Animator2DComponent>(e);
 		playerVariables->nextState = RabbitdokuState::Unknown;
-
+		auto& stick = No::Pad::GetStick();
 
 		// 左右移動
 		velocity->linear = No::Vector2::ZERO;
@@ -34,14 +34,17 @@ void RabbitdokuMoveSystem::Update(No::Registry& registry, float deltaTime) {
 				break;
 			}
 		} else {
+			
+
 			playerVariables->wallJumpTimer = 0.0f;
-			if (No::InputIsPress("Right")) {
+			if (No::InputIsPress("Right") || stick.leftStickX > 0.4f) {
 				velocity->linear.x += playerVariables->moveSpeed;
 				sprite->flipX = false;
-			} else if (No::InputIsPress("Left")) {
+			} else if (No::InputIsPress("Left") || stick.leftStickX < -0.4f) {
 				velocity->linear.x -= playerVariables->moveSpeed;
 				sprite->flipX = true;
 			}
+
 		}
 
 
@@ -113,6 +116,10 @@ void RabbitdokuMoveSystem::Update(No::Registry& registry, float deltaTime) {
 
 
 		playerVariables->yVelocity += playerVariables->gravity;
+
+		if (playerVariables->yVelocity > playerVariables->maxFallSpeed) {
+			playerVariables->yVelocity = playerVariables->maxFallSpeed;
+		}
 
 		velocity->linear.y = playerVariables->yVelocity;
 

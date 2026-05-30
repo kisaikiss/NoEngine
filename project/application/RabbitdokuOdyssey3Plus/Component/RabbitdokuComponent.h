@@ -21,6 +21,7 @@ struct Rabbitdoku {
 	float moveSpeed = 500.f;
 	float yVelocity = 0.f;
 	float gravity = 9.8f;
+	float maxFallSpeed = 700.f;
 
 	float jumpSpeed;
 	float doubleJumpSpeed;
