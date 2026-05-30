@@ -31,6 +31,14 @@
         },
         "totalDeath": 0
     },
+    "Stage3": {
+        "deathCount": 0,
+        "respawnPoint": {
+            "x": 0.0,
+            "y": 0.0
+        },
+        "totalDeath": 0
+    },
     "Title": {
         "deathCount": 0,
         "respawnPoint": {
