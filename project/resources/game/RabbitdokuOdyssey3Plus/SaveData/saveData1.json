@@ -21,7 +21,7 @@
             "x": 0.0,
             "y": 0.0
         },
-        "totalDeath": 0
+        "totalDeath": 8
     },
     "Stage2": {
         "deathCount": 0,
@@ -45,6 +45,6 @@
             "x": 0.0,
             "y": 0.0
         },
-        "totalDeath": 0
+        "totalDeath": 1
     }
 }

@@ -1,5 +1,6 @@
 #pragma once
 #include "engine/NoEngine.h"
+#include "RabbitdokuSerializer.h"
 struct BlockTag{};
 
 struct GimmickTag{};
@@ -12,7 +13,7 @@ struct RoomTag : public No::AABBCollider2D{};
 
 struct TransitionInTag { float t = 0.0f; };
 
-struct SceneTransitionInEvent { std::string stageName; };
+struct SceneTransitionInEvent { std::string stageName; SaveData saveData; };
 
 struct TransitionOutTag { float t = 0.0f; };
 
@@ -47,4 +48,7 @@ struct DoorComponent {
 
 struct ClearItemComponent{};
 
-struct ClearTag{};
+struct ClearTag { 
+	float t = 0;
+	bool isAnimationEnd = false;
+};

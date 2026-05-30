@@ -1,5 +1,6 @@
 #pragma once
 #include "engine/NoEngine.h"
+#include "../../Game/RabbitdokuSerializer.h"
 class ScreenTransitionEffectSystem :
     public No::ISystem {
 public:
@@ -9,4 +10,5 @@ private:
     void TransitionIn(No::Registry& registry, float deltaTime);
     void TransitionOut(No::Registry& registry, float deltaTime);
     std::string nextScene_;
+    SaveData saveData_;
 };

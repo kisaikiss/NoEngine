@@ -9,15 +9,7 @@ void RabbitdokuSceneResetSystem::Update(No::Registry& registry, float deltaTime)
 
 	auto event = registry.PollEvent<RabbitdokuResetEvent>();
 	if (event.has_value()) {
-		auto view = registry.View<SaveData>();
-
-		SaveData saveData;
-
-		for (auto e : view) {
-			saveData = *registry.GetComponent<SaveData>(e);
-		}
-
-		RabbitdokuSerializer::GameSave(registry, saveData.respawnPoint, saveData.death, saveData.totalDeath);
+		RabbitdokuSerializer::GameSave(registry, event->saveData.respawnPoint, event->saveData.death, event->saveData.totalDeath);
 		No::SceneChangeEvent sceneChange;
 		sceneChange.nextScene = event->nextScene;
 		registry.EmitEvent(sceneChange);

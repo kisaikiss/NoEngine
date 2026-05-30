@@ -175,6 +175,7 @@ void RabbitdokuMoveSystem::Update(No::Registry& registry, float deltaTime) {
 			registry.GetComponent<SaveData>(e)->death++;
 			registry.GetComponent<SaveData>(e)->totalDeath++;
 			SceneTransitionInEvent dead;
+			dead.saveData = *registry.GetComponent<SaveData>(e);
 			registry.EmitEvent(dead);
 		}
 
@@ -206,6 +207,7 @@ void RabbitdokuMoveSystem::DeadMove(No::Registry& registry, No::Entity e, float 
 		registry.GetComponent<SaveData>(e)->death++;
 		registry.GetComponent<SaveData>(e)->totalDeath++;
 		SceneTransitionInEvent dead;
+		dead.saveData = *registry.GetComponent<SaveData>(e);
 		registry.EmitEvent(dead);
 		registry.DestroyEntity(e);
 		const uint32_t kSmokeNum = static_cast<uint32_t>(No::GetRandomVal(30.f, 50.f));

@@ -1,2 +1,3 @@
 #pragma once
-struct RabbitdokuResetEvent { std::string nextScene; };
+#include "../Game/RabbitdokuSerializer.h"
+struct RabbitdokuResetEvent { std::string nextScene; SaveData saveData; };

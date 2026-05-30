@@ -66,6 +66,8 @@ void RabbitdokuOdyssey3Plus::Startup(void) {
 	No::SoundLoad(L"resources/game/RabbitdokuOdyssey3Plus/Sounds/SFX/ItemGetJumpReload.mp3", "replenisher");
 	No::SoundLoad(L"resources/game/RabbitdokuOdyssey3Plus/Sounds/SFX/BlockBreak.mp3", "collapseBlock");
 	No::SoundLoad(L"resources/game/RabbitdokuOdyssey3Plus/Sounds/SFX/Landing.mp3", "landing");
+	No::SoundLoad(L"resources/game/RabbitdokuOdyssey3Plus/Sounds/SFX/ClearItemGet.mp3", "goalGet");
+	No::SoundLoad(L"resources/game/RabbitdokuOdyssey3Plus/Sounds/SFX/ClearJingle.mp3", "jingle");
 
 
 

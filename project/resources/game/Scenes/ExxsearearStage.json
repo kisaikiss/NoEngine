@@ -13,8 +13,8 @@
                         1.0
                     ],
                     "translate": [
-                        587.7896728515625,
-                        96.00000762939453
+                        587.7891845703125,
+                        -124.44476318359375
                     ]
                 }
             }
@@ -70,7 +70,9 @@
                 },
                 "Rabbitdoku": {
                     "doubleJumpSpeed": 350.0,
+                    "gravity": 9.800000190734863,
                     "jumpSpeed": 450.0,
+                    "maxFallSpeed": 700.0,
                     "moveSpeed": 300.0,
                     "yVelocity": 0.0
                 },
@@ -94,7 +96,7 @@
                     ],
                     "textureFilePath": "",
                     "uv": [
-                        0.0,
+                        0.1666666716337204,
                         0.0,
                         0.1666666716337204,
                         0.1666666716337204
@@ -108,7 +110,7 @@
                     ],
                     "translate": [
                         587.7896728515625,
-                        96.00000762939453
+                        96.0
                     ]
                 },
                 "Velocity2DComponent": {
@@ -145,7 +147,7 @@
                         64.0
                     ],
                     "moveSpeed": 1.0,
-                    "t": 2.5082554817199707
+                    "t": 3.3394129276275635
                 },
                 "SpriteComponent": {
                     "color": [
@@ -178,13 +180,13 @@
                     ],
                     "translate": [
                         393.1983947753906,
-                        -372.1186218261719
+                        -361.2338562011719
                     ]
                 },
                 "Velocity2DComponent": {
                     "linear": [
                         -0.0,
-                        37.87763214111328
+                        -12.578084945678711
                     ]
                 }
             }
@@ -236,7 +238,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.0,
+                        0.4000000059604645,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -302,7 +304,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.4000000059604645,
+                        0.0,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -368,7 +370,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.6000000238418579,
+                        0.20000000298023224,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -434,7 +436,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.6000000238418579,
+                        0.20000000298023224,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -500,7 +502,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.6000000238418579,
+                        0.20000000298023224,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -566,7 +568,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.4000000059604645,
+                        0.0,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -632,7 +634,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.20000000298023224,
+                        0.6000000238418579,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -698,7 +700,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.4000000059604645,
+                        0.0,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -764,7 +766,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.4000000059604645,
+                        0.0,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -830,7 +832,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.6000000238418579,
+                        0.20000000298023224,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -896,7 +898,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.0,
+                        0.4000000059604645,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -962,7 +964,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.0,
+                        0.4000000059604645,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -1028,7 +1030,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.4000000059604645,
+                        0.0,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -1094,7 +1096,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.0,
+                        0.4000000059604645,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -1160,7 +1162,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.6000000238418579,
+                        0.20000000298023224,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -1226,7 +1228,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.6000000238418579,
+                        0.20000000298023224,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -1292,7 +1294,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.0,
+                        0.4000000059604645,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -1358,7 +1360,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.20000000298023224,
+                        0.6000000238418579,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -1424,7 +1426,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.20000000298023224,
+                        0.6000000238418579,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -1490,7 +1492,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.0,
+                        0.4000000059604645,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -1556,7 +1558,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.20000000298023224,
+                        0.6000000238418579,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -1622,7 +1624,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.0,
+                        0.4000000059604645,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -1688,7 +1690,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.0,
+                        0.4000000059604645,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -1754,7 +1756,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.4000000059604645,
+                        0.0,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -1820,7 +1822,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.6000000238418579,
+                        0.20000000298023224,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -1886,7 +1888,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.6000000238418579,
+                        0.20000000298023224,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -1952,7 +1954,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.4000000059604645,
+                        0.0,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -2018,7 +2020,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.20000000298023224,
+                        0.6000000238418579,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -2084,7 +2086,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.0,
+                        0.4000000059604645,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -2150,7 +2152,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.0,
+                        0.4000000059604645,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -2216,7 +2218,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.20000000298023224,
+                        0.6000000238418579,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -2282,7 +2284,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.20000000298023224,
+                        0.6000000238418579,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -2348,7 +2350,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.0,
+                        0.4000000059604645,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -2414,7 +2416,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.0,
+                        0.4000000059604645,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -2480,7 +2482,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.4000000059604645,
+                        0.0,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -2546,7 +2548,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.6000000238418579,
+                        0.20000000298023224,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -2612,7 +2614,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.4000000059604645,
+                        0.0,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -2678,7 +2680,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.0,
+                        0.4000000059604645,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -2744,7 +2746,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.4000000059604645,
+                        0.0,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -2810,7 +2812,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.6000000238418579,
+                        0.20000000298023224,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -2876,7 +2878,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.4000000059604645,
+                        0.0,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -2942,7 +2944,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.20000000298023224,
+                        0.6000000238418579,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -3008,7 +3010,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.20000000298023224,
+                        0.6000000238418579,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -3074,7 +3076,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.0,
+                        0.4000000059604645,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -3140,7 +3142,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.6000000238418579,
+                        0.20000000298023224,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -3206,7 +3208,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.6000000238418579,
+                        0.20000000298023224,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -3272,7 +3274,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.0,
+                        0.4000000059604645,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -3338,7 +3340,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.0,
+                        0.4000000059604645,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -3404,7 +3406,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.0,
+                        0.4000000059604645,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -3470,7 +3472,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.0,
+                        0.4000000059604645,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -3536,7 +3538,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.0,
+                        0.4000000059604645,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -3602,7 +3604,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.6000000238418579,
+                        0.20000000298023224,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -3668,7 +3670,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.6000000238418579,
+                        0.20000000298023224,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -3734,7 +3736,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.0,
+                        0.4000000059604645,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -3800,7 +3802,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.6000000238418579,
+                        0.20000000298023224,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -3866,7 +3868,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.4000000059604645,
+                        0.0,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -3932,7 +3934,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.20000000298023224,
+                        0.6000000238418579,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -3998,7 +4000,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.20000000298023224,
+                        0.6000000238418579,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -4064,7 +4066,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.20000000298023224,
+                        0.6000000238418579,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -4130,7 +4132,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.20000000298023224,
+                        0.6000000238418579,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -4196,7 +4198,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.20000000298023224,
+                        0.6000000238418579,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -4262,7 +4264,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.20000000298023224,
+                        0.6000000238418579,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -4328,7 +4330,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.6000000238418579,
+                        0.20000000298023224,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -4394,7 +4396,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.0,
+                        0.4000000059604645,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -4460,7 +4462,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.0,
+                        0.4000000059604645,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -4526,7 +4528,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.0,
+                        0.4000000059604645,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -4592,7 +4594,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.6000000238418579,
+                        0.20000000298023224,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -4658,7 +4660,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.6000000238418579,
+                        0.20000000298023224,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -4724,7 +4726,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.0,
+                        0.4000000059604645,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -4790,7 +4792,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.0,
+                        0.4000000059604645,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -4856,7 +4858,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.6000000238418579,
+                        0.20000000298023224,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -4922,7 +4924,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.6000000238418579,
+                        0.20000000298023224,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -4988,7 +4990,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.4000000059604645,
+                        0.0,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -5054,7 +5056,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.4000000059604645,
+                        0.0,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -5120,7 +5122,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.6000000238418579,
+                        0.20000000298023224,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -5186,7 +5188,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.0,
+                        0.4000000059604645,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -5252,7 +5254,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.6000000238418579,
+                        0.20000000298023224,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -5318,7 +5320,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.20000000298023224,
+                        0.6000000238418579,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -5384,7 +5386,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.20000000298023224,
+                        0.6000000238418579,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -5450,7 +5452,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.20000000298023224,
+                        0.6000000238418579,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -5516,7 +5518,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.20000000298023224,
+                        0.6000000238418579,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -5582,7 +5584,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.0,
+                        0.4000000059604645,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -5648,7 +5650,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.0,
+                        0.4000000059604645,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -5714,7 +5716,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.20000000298023224,
+                        0.6000000238418579,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -5780,7 +5782,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.20000000298023224,
+                        0.6000000238418579,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -5846,7 +5848,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.6000000238418579,
+                        0.20000000298023224,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -5912,7 +5914,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.6000000238418579,
+                        0.20000000298023224,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -5978,7 +5980,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.4000000059604645,
+                        0.0,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -6044,7 +6046,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.20000000298023224,
+                        0.6000000238418579,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -6110,7 +6112,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.20000000298023224,
+                        0.6000000238418579,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -6176,7 +6178,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.0,
+                        0.4000000059604645,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -6242,7 +6244,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.6000000238418579,
+                        0.20000000298023224,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -6308,7 +6310,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.6000000238418579,
+                        0.20000000298023224,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -6374,7 +6376,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.6000000238418579,
+                        0.20000000298023224,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -6440,7 +6442,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.6000000238418579,
+                        0.20000000298023224,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -6506,7 +6508,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.0,
+                        0.4000000059604645,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -6572,7 +6574,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.0,
+                        0.4000000059604645,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -6638,7 +6640,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.0,
+                        0.4000000059604645,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -6704,7 +6706,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.0,
+                        0.4000000059604645,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -6770,7 +6772,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.0,
+                        0.4000000059604645,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -6836,7 +6838,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.6000000238418579,
+                        0.20000000298023224,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -6902,7 +6904,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.6000000238418579,
+                        0.20000000298023224,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -6968,7 +6970,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.6000000238418579,
+                        0.20000000298023224,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -7034,7 +7036,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.4000000059604645,
+                        0.0,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -7100,7 +7102,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.4000000059604645,
+                        0.0,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -7166,7 +7168,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.4000000059604645,
+                        0.0,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -7232,7 +7234,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.0,
+                        0.4000000059604645,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -7298,7 +7300,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.4000000059604645,
+                        0.0,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -7364,7 +7366,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.4000000059604645,
+                        0.0,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -7430,7 +7432,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.20000000298023224,
+                        0.6000000238418579,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -7496,7 +7498,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.20000000298023224,
+                        0.6000000238418579,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -7562,7 +7564,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.20000000298023224,
+                        0.6000000238418579,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -7628,7 +7630,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.6000000238418579,
+                        0.20000000298023224,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -7694,7 +7696,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.4000000059604645,
+                        0.0,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -7760,7 +7762,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.6000000238418579,
+                        0.20000000298023224,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -7826,7 +7828,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.6000000238418579,
+                        0.20000000298023224,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -7892,7 +7894,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.0,
+                        0.4000000059604645,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -7958,7 +7960,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.0,
+                        0.4000000059604645,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -8024,7 +8026,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.4000000059604645,
+                        0.0,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -8090,7 +8092,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.20000000298023224,
+                        0.6000000238418579,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -8156,7 +8158,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.0,
+                        0.4000000059604645,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -8222,7 +8224,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.4000000059604645,
+                        0.0,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -8288,7 +8290,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.20000000298023224,
+                        0.6000000238418579,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -8354,7 +8356,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.20000000298023224,
+                        0.6000000238418579,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -8420,7 +8422,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.20000000298023224,
+                        0.6000000238418579,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -8486,7 +8488,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.0,
+                        0.4000000059604645,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -8552,7 +8554,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.0,
+                        0.4000000059604645,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -8618,7 +8620,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.6000000238418579,
+                        0.20000000298023224,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -8684,7 +8686,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.4000000059604645,
+                        0.0,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -8750,7 +8752,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.0,
+                        0.4000000059604645,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -8816,7 +8818,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.6000000238418579,
+                        0.20000000298023224,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -8882,7 +8884,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.6000000238418579,
+                        0.20000000298023224,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -8948,7 +8950,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.20000000298023224,
+                        0.6000000238418579,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -9014,7 +9016,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.0,
+                        0.4000000059604645,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -9080,7 +9082,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.0,
+                        0.4000000059604645,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -9146,7 +9148,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.0,
+                        0.4000000059604645,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -9212,7 +9214,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.0,
+                        0.4000000059604645,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -9278,7 +9280,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.0,
+                        0.4000000059604645,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -9344,7 +9346,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/block02.png",
                     "uv": [
-                        0.6000000238418579,
+                        0.20000000298023224,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -9414,7 +9416,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png",
                     "uv": [
-                        0.20000000298023224,
+                        0.6000000238418579,
                         0.25,
                         0.20000000298023224,
                         0.25
@@ -9484,7 +9486,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png",
                     "uv": [
-                        0.6000000238418579,
+                        0.0,
                         0.25,
                         0.20000000298023224,
                         0.25
@@ -9554,7 +9556,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png",
                     "uv": [
-                        0.6000000238418579,
+                        0.0,
                         0.25,
                         0.20000000298023224,
                         0.25
@@ -9624,7 +9626,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png",
                     "uv": [
-                        0.20000000298023224,
+                        0.6000000238418579,
                         0.25,
                         0.20000000298023224,
                         0.25
@@ -9639,6 +9641,87 @@
                     "translate": [
                         32.0,
                         -96.0
+                    ]
+                }
+            }
+        },
+        "goalItem": {
+            "components": {
+                "AABBCollider2D": {
+                    "max": [
+                        16.0,
+                        16.0
+                    ],
+                    "min": [
+                        -16.0,
+                        -16.0
+                    ]
+                },
+                "Animator2DComponent": {
+                    "animeFrameHeight": 64.0,
+                    "animeFrameWidth": 64.0,
+                    "currentAnimation": 0,
+                    "frameByFrameTime": 0.10000000149011612,
+                    "framesNum": 5
+                },
+                "ClearItemComponent": null,
+                "CollisionBody": {
+                    "type": 2
+                },
+                "EditTag": {
+                    "name": "goalItem",
+                    "path": "Gimmick/GoalItem/goalItem"
+                },
+                "GimmickTag": null,
+                "RabbitdokuCollisionLayerComponent": {
+                    "layer": 8
+                },
+                "SoftlyMoveComponent": {
+                    "amplitude": [
+                        0.0,
+                        16.0
+                    ],
+                    "moveSpeed": 1.0,
+                    "t": 5.057559490203857
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "layer": 10,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/GoalObject01.png",
+                    "uv": [
+                        0.0,
+                        0.0,
+                        0.20000000298023224,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        64.0,
+                        64.0
+                    ],
+                    "translate": [
+                        544.0,
+                        42.45990753173828
+                    ]
+                },
+                "Velocity2DComponent": {
+                    "linear": [
+                        0.0,
+                        -15.056283950805664
                     ]
                 }
             }
@@ -9691,7 +9774,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png",
                     "uv": [
-                        0.20000000298023224,
+                        0.6000000238418579,
                         0.0,
                         0.20000000298023224,
                         0.25
@@ -9758,7 +9841,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png",
                     "uv": [
-                        0.20000000298023224,
+                        0.6000000238418579,
                         0.0,
                         0.20000000298023224,
                         0.25
@@ -9825,7 +9908,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Gimmick01.png",
                     "uv": [
-                        0.20000000298023224,
+                        0.6000000238418579,
                         0.0,
                         0.20000000298023224,
                         0.25
@@ -9892,7 +9975,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/JumpDowbleItem.png",
                     "uv": [
-                        0.0,
+                        0.4000000059604645,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -9959,7 +10042,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/JumpDowbleItem.png",
                     "uv": [
-                        0.0,
+                        0.4000000059604645,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -10026,7 +10109,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/JumpDowbleItem.png",
                     "uv": [
-                        0.0,
+                        0.4000000059604645,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -10122,7 +10205,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/savePoint.png",
                     "uv": [
-                        0.875,
+                        0.125,
                         0.0,
                         0.125,
                         1.0

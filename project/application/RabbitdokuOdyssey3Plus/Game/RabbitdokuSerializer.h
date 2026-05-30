@@ -12,5 +12,6 @@ public:
 	static void SetSaveData(uint32_t saveDataNum);
 	static void GameSave(No::Registry& registry, const No::Vector2& respawnPoint, uint32_t deathCount, uint32_t totalDeath);
 	static SaveData GameLoad(No::Registry& registry);
+	static SaveData DeleteSave(No::Registry& registry);
 };
 

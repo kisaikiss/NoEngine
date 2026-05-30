@@ -64,6 +64,7 @@ void RabbitItemGetSystem::Update(No::Registry& registry, float deltaTime) {
 			if (No::InputIsTrigger("EnterDoor") || GetIsTriggerUp()) {
 				SceneTransitionInEvent change;
 				change.stageName = registry.GetComponent<DoorComponent>(event.item)->stageName;
+				change.saveData = RabbitdokuSerializer::DeleteSave(registry);
 				registry.EmitEvent(change);
 				return;
 			}
@@ -71,7 +72,10 @@ void RabbitItemGetSystem::Update(No::Registry& registry, float deltaTime) {
 
 		if (registry.Has<ClearItemComponent>(event.item)) {
 			GenerateClear(registry);
+			No::SoundEffectPlay("goalGet", 0.5f);
+			No::SoundPlay("jingle", 0.5f, false);
 			registry.DestroyEntity(event.item);
+			return;
 		}
 	}
 
