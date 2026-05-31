@@ -572,13 +572,13 @@ void RabbitdokuStageEditSystem::AddGoal(No::Registry& registry) {
 	registry.AddComponent<No::CollisionBody>(e)->type = No::BodyType::Through;
 	registry.AddComponent<RabbitdokuCollisionLayerComponent>(e)->layer = RabbitdokuCollisionLayerComponent::Item;
 	sprite->textureFilePath = "resources/game/RabbitdokuOdyssey3Plus/Sprite/GoalObject01.png";
-	transform->scale.x = gridSize_.x;
-	transform->scale.y = gridSize_.y;
+	transform->scale.x = gridSize_.x * 2.f;
+	transform->scale.y = gridSize_.y * 2.f;
 	collider->max = transform->scale / 4.f;
 	collider->min = -transform->scale / 4.f;
 	auto* animator = registry.AddComponent<No::Animator2DComponent>(e);
-	animator->animeFrameHeight = 64.f;
-	animator->animeFrameWidth = 64.f;
+	animator->animeFrameHeight = 128.f;
+	animator->animeFrameWidth = 128.f;
 	animator->currentAnimation = 0;
 	animator->framesNum = 5;
 	animator->frameByFrameTime = 0.1f;
