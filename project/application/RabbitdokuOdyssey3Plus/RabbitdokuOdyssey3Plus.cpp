@@ -29,6 +29,7 @@ void RabbitdokuOdyssey3Plus::Startup(void) {
 	No::SoundLoad(L"resources/game/RabbitdokuOdyssey3Plus/Sounds/BGM/Stage01.mp3", "stage1");
 	No::SoundLoad(L"resources/game/RabbitdokuOdyssey3Plus/Sounds/BGM/Stage02.mp3", "stage2");
 	No::SoundLoad(L"resources/game/RabbitdokuOdyssey3Plus/Sounds/BGM/Stage01.mp3", "stage3");
+	No::SoundLoad(L"resources/game/RabbitdokuOdyssey3Plus/Sounds/BGM/Stage01.mp3", "stage4");
 	No::SoundLoad(L"resources/game/RabbitdokuOdyssey3Plus/Sounds/BGM/ExStage.mp3", "exStage");
 	No::SoundLoad(L"resources/game/RabbitdokuOdyssey3Plus/Sounds/BGM/SudokuStage.mp3", "sudokuStage");
 
