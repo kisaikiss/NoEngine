@@ -26,7 +26,7 @@ public: SudokuStage() : RabbitdokuScene("sudokuStage", 0.25f) {}
 };
 
 class JamdokuStage : public RabbitdokuScene {
-public: JamdokuStage() : RabbitdokuScene("jamdokuStage") {}
+public: JamdokuStage() : RabbitdokuScene("jamdokuStage", 0.25f) {}
 };
 
 class ExStage : public RabbitdokuScene {
