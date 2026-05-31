@@ -28,12 +28,12 @@
                 "Transform2DComponent": {
                     "rotation": 0.0,
                     "scale": [
-                        1.42256760597229,
-                        1.42256760597229
+                        1.6224963665008545,
+                        1.6224963665008545
                     ],
                     "translate": [
-                        3020.04541015625,
-                        18.240299224853516
+                        4779.193359375,
+                        -781.8944091796875
                     ]
                 }
             }
@@ -241,7 +241,7 @@
                         0.5,
                         0.5
                     ],
-                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/StageNumber00.png",
+                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/StageNumber01.png",
                     "uv": [
                         0.0,
                         0.0,
@@ -256,8 +256,8 @@
                         64.0
                     ],
                     "translate": [
-                        1505.1229248046875,
-                        98.19352722167969
+                        1503.593994140625,
+                        97.80757141113281
                     ]
                 },
                 "Velocity2DComponent": {
@@ -326,8 +326,8 @@
                         64.0
                     ],
                     "translate": [
-                        2978.621337890625,
-                        97.05400085449219
+                        2274.4833984375,
+                        100.4385986328125
                     ]
                 },
                 "Velocity2DComponent": {
@@ -381,7 +381,7 @@
                         0.5,
                         0.5
                     ],
-                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/StageNumber01.png",
+                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/StageNumber03.png",
                     "uv": [
                         0.0,
                         0.0,
@@ -396,8 +396,8 @@
                         64.0
                     ],
                     "translate": [
-                        2271.0419921875,
-                        95.3933334350586
+                        2978.44189453125,
+                        95.33116912841797
                     ]
                 },
                 "Velocity2DComponent": {
@@ -451,7 +451,7 @@
                         0.5,
                         0.5
                     ],
-                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/StageNumber03.png",
+                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/StageNumber00.png",
                     "uv": [
                         0.0,
                         0.0,
@@ -466,8 +466,8 @@
                         64.0
                     ],
                     "translate": [
-                        6047.70947265625,
-                        -1184.215087890625
+                        4384.26025390625,
+                        -161.5912628173828
                     ]
                 },
                 "Velocity2DComponent": {
@@ -536,8 +536,8 @@
                         64.0
                     ],
                     "translate": [
-                        4384.2392578125,
-                        -160.68431091308594
+                        6047.38818359375,
+                        -1183.7059326171875
                     ]
                 },
                 "Velocity2DComponent": {
@@ -56209,7 +56209,7 @@
                     "type": 2
                 },
                 "DoorComponent": {
-                    "stageName": "ExxsearearStage"
+                    "stageName": "Stage1"
                 },
                 "EditTag": {
                     "name": "door",
@@ -56278,7 +56278,7 @@
                     "type": 2
                 },
                 "DoorComponent": {
-                    "stageName": "Stage1"
+                    "stageName": "Stage2"
                 },
                 "EditTag": {
                     "name": "door_2",
@@ -56347,7 +56347,7 @@
                     "type": 2
                 },
                 "DoorComponent": {
-                    "stageName": "Stage2"
+                    "stageName": "Stage3"
                 },
                 "EditTag": {
                     "name": "door_3",
@@ -56416,7 +56416,7 @@
                     "type": 2
                 },
                 "DoorComponent": {
-                    "stageName": "Stage3"
+                    "stageName": "Stage4"
                 },
                 "EditTag": {
                     "name": "door_4",
@@ -56485,7 +56485,7 @@
                     "type": 2
                 },
                 "DoorComponent": {
-                    "stageName": "Stage4"
+                    "stageName": "SudokuStage"
                 },
                 "EditTag": {
                     "name": "door_5",
@@ -62874,6 +62874,73 @@
                     "translate": [
                         5088.0,
                         224.0
+                    ]
+                }
+            }
+        },
+        "save_2": {
+            "components": {
+                "AABBCollider2D": {
+                    "max": [
+                        32.0,
+                        32.0
+                    ],
+                    "min": [
+                        -32.0,
+                        -32.0
+                    ]
+                },
+                "Animator2DComponent": {
+                    "animeFrameHeight": 64.0,
+                    "animeFrameWidth": 64.0,
+                    "currentAnimation": 0,
+                    "frameByFrameTime": 0.10000000149011612,
+                    "framesNum": 8
+                },
+                "CollisionBody": {
+                    "type": 2
+                },
+                "EditTag": {
+                    "name": "save_2",
+                    "path": "Gimmick/Save/save"
+                },
+                "GimmickTag": null,
+                "RabbitdokuCollisionLayerComponent": {
+                    "layer": 8
+                },
+                "SaveTag": null,
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "layer": 10,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/savePoint.png",
+                    "uv": [
+                        0.0,
+                        0.0,
+                        0.125,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        64.0,
+                        64.0
+                    ],
+                    "translate": [
+                        4832.0,
+                        -1056.0
                     ]
                 }
             }
