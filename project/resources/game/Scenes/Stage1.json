@@ -28,12 +28,12 @@
                 "Transform2DComponent": {
                     "rotation": 0.0,
                     "scale": [
-                        0.9340999126434326,
-                        0.9340999126434326
+                        2.5226540565490723,
+                        2.5226540565490723
                     ],
                     "translate": [
-                        4957.70654296875,
-                        -2820.767822265625
+                        5693.42822265625,
+                        -2605.079345703125
                     ]
                 }
             }
@@ -111,6 +111,2876 @@
                     "translate": [
                         -350.0,
                         96.0
+                    ]
+                },
+                "Velocity2DComponent": {
+                    "linear": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "background": {
+            "components": {
+                "AABBCollider2D": {
+                    "max": [
+                        64.0,
+                        64.0
+                    ],
+                    "min": [
+                        -64.0,
+                        -64.0
+                    ]
+                },
+                "BackgroundTag": null,
+                "CollisionBody": {
+                    "type": 2
+                },
+                "EditTag": {
+                    "name": "background",
+                    "path": "Background/background"
+                },
+                "SoftlyMoveComponent": {
+                    "amplitude": [
+                        0.0,
+                        16.0
+                    ],
+                    "moveSpeed": 2.0,
+                    "t": 0.0
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "layer": 5,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/DirectionObject06.png",
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        128.0,
+                        128.0
+                    ],
+                    "translate": [
+                        128.74038696289063,
+                        106.09198760986328
+                    ]
+                },
+                "Velocity2DComponent": {
+                    "linear": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "background_10": {
+            "components": {
+                "AABBCollider2D": {
+                    "max": [
+                        64.0,
+                        64.0
+                    ],
+                    "min": [
+                        -64.0,
+                        -64.0
+                    ]
+                },
+                "BackgroundTag": null,
+                "CollisionBody": {
+                    "type": 2
+                },
+                "EditTag": {
+                    "name": "background_10",
+                    "path": "Background/background"
+                },
+                "SoftlyMoveComponent": {
+                    "amplitude": [
+                        0.0,
+                        24.0
+                    ],
+                    "moveSpeed": 3.0,
+                    "t": 0.6000000238418579
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "layer": 5,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/DirectionObject03.png",
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        128.0,
+                        128.0
+                    ],
+                    "translate": [
+                        5281.44775390625,
+                        -2902.964111328125
+                    ]
+                },
+                "Velocity2DComponent": {
+                    "linear": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "background_11": {
+            "components": {
+                "AABBCollider2D": {
+                    "max": [
+                        64.0,
+                        64.0
+                    ],
+                    "min": [
+                        -64.0,
+                        -64.0
+                    ]
+                },
+                "BackgroundTag": null,
+                "CollisionBody": {
+                    "type": 2
+                },
+                "EditTag": {
+                    "name": "background_11",
+                    "path": "Background/background"
+                },
+                "SoftlyMoveComponent": {
+                    "amplitude": [
+                        0.0,
+                        24.0
+                    ],
+                    "moveSpeed": 2.5,
+                    "t": 0.0
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "layer": 5,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/DirectionObject03.png",
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        128.0,
+                        128.0
+                    ],
+                    "translate": [
+                        6774.2138671875,
+                        -1950.364013671875
+                    ]
+                },
+                "Velocity2DComponent": {
+                    "linear": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "background_12": {
+            "components": {
+                "AABBCollider2D": {
+                    "max": [
+                        64.0,
+                        64.0
+                    ],
+                    "min": [
+                        -64.0,
+                        -64.0
+                    ]
+                },
+                "BackgroundTag": null,
+                "CollisionBody": {
+                    "type": 2
+                },
+                "EditTag": {
+                    "name": "background_12",
+                    "path": "Background/background"
+                },
+                "SoftlyMoveComponent": {
+                    "amplitude": [
+                        0.0,
+                        16.0
+                    ],
+                    "moveSpeed": 3.0,
+                    "t": 0.0
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "layer": 5,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/DirectionObject01.png",
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        128.0,
+                        128.0
+                    ],
+                    "translate": [
+                        3026.864013671875,
+                        -143.63967895507813
+                    ]
+                },
+                "Velocity2DComponent": {
+                    "linear": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "background_13": {
+            "components": {
+                "AABBCollider2D": {
+                    "max": [
+                        64.0,
+                        64.0
+                    ],
+                    "min": [
+                        -64.0,
+                        -64.0
+                    ]
+                },
+                "BackgroundTag": null,
+                "CollisionBody": {
+                    "type": 2
+                },
+                "EditTag": {
+                    "name": "background_13",
+                    "path": "Background/background"
+                },
+                "SoftlyMoveComponent": {
+                    "amplitude": [
+                        0.0,
+                        16.0
+                    ],
+                    "moveSpeed": 3.0,
+                    "t": 0.8999999761581421
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "layer": 5,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/DirectionObject01.png",
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        128.0,
+                        128.0
+                    ],
+                    "translate": [
+                        3193.22509765625,
+                        -198.30123901367188
+                    ]
+                },
+                "Velocity2DComponent": {
+                    "linear": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "background_14": {
+            "components": {
+                "AABBCollider2D": {
+                    "max": [
+                        64.0,
+                        64.0
+                    ],
+                    "min": [
+                        -64.0,
+                        -64.0
+                    ]
+                },
+                "BackgroundTag": null,
+                "CollisionBody": {
+                    "type": 2
+                },
+                "EditTag": {
+                    "name": "background_14",
+                    "path": "Background/background"
+                },
+                "SoftlyMoveComponent": {
+                    "amplitude": [
+                        0.0,
+                        32.0
+                    ],
+                    "moveSpeed": 3.0,
+                    "t": 0.0
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "layer": 5,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/DirectionObject01.png",
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        128.0,
+                        128.0
+                    ],
+                    "translate": [
+                        4290.29833984375,
+                        -25.362380981445313
+                    ]
+                },
+                "Velocity2DComponent": {
+                    "linear": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "background_15": {
+            "components": {
+                "AABBCollider2D": {
+                    "max": [
+                        64.0,
+                        64.0
+                    ],
+                    "min": [
+                        -64.0,
+                        -64.0
+                    ]
+                },
+                "BackgroundTag": null,
+                "CollisionBody": {
+                    "type": 2
+                },
+                "EditTag": {
+                    "name": "background_15",
+                    "path": "Background/background"
+                },
+                "SoftlyMoveComponent": {
+                    "amplitude": [
+                        0.0,
+                        16.0
+                    ],
+                    "moveSpeed": 3.0,
+                    "t": 0.5
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "layer": 5,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/DirectionObject01.png",
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        128.0,
+                        128.0
+                    ],
+                    "translate": [
+                        4611.205078125,
+                        244.83502197265625
+                    ]
+                },
+                "Velocity2DComponent": {
+                    "linear": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "background_16": {
+            "components": {
+                "AABBCollider2D": {
+                    "max": [
+                        64.0,
+                        64.0
+                    ],
+                    "min": [
+                        -64.0,
+                        -64.0
+                    ]
+                },
+                "BackgroundTag": null,
+                "CollisionBody": {
+                    "type": 2
+                },
+                "EditTag": {
+                    "name": "background_16",
+                    "path": "Background/background"
+                },
+                "SoftlyMoveComponent": {
+                    "amplitude": [
+                        0.0,
+                        24.0
+                    ],
+                    "moveSpeed": 3.0,
+                    "t": 0.800000011920929
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "layer": 5,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/DirectionObject01.png",
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        128.0,
+                        128.0
+                    ],
+                    "translate": [
+                        6659.15966796875,
+                        -736.950927734375
+                    ]
+                },
+                "Velocity2DComponent": {
+                    "linear": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "background_17": {
+            "components": {
+                "AABBCollider2D": {
+                    "max": [
+                        64.0,
+                        64.0
+                    ],
+                    "min": [
+                        -64.0,
+                        -64.0
+                    ]
+                },
+                "BackgroundTag": null,
+                "CollisionBody": {
+                    "type": 2
+                },
+                "EditTag": {
+                    "name": "background_17",
+                    "path": "Background/background"
+                },
+                "SoftlyMoveComponent": {
+                    "amplitude": [
+                        0.0,
+                        24.0
+                    ],
+                    "moveSpeed": 2.0,
+                    "t": 0.0
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "layer": 5,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/DirectionObject01.png",
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        128.0,
+                        128.0
+                    ],
+                    "translate": [
+                        6997.98583984375,
+                        -986.0028076171875
+                    ]
+                },
+                "Velocity2DComponent": {
+                    "linear": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "background_18": {
+            "components": {
+                "AABBCollider2D": {
+                    "max": [
+                        64.0,
+                        64.0
+                    ],
+                    "min": [
+                        -64.0,
+                        -64.0
+                    ]
+                },
+                "BackgroundTag": null,
+                "CollisionBody": {
+                    "type": 2
+                },
+                "EditTag": {
+                    "name": "background_18",
+                    "path": "Background/background"
+                },
+                "SoftlyMoveComponent": {
+                    "amplitude": [
+                        0.0,
+                        32.0
+                    ],
+                    "moveSpeed": 2.0,
+                    "t": 0.4000000059604645
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "layer": 5,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/DirectionObject01.png",
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        128.0,
+                        128.0
+                    ],
+                    "translate": [
+                        6216.36669921875,
+                        -1518.9783935546875
+                    ]
+                },
+                "Velocity2DComponent": {
+                    "linear": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "background_19": {
+            "components": {
+                "AABBCollider2D": {
+                    "max": [
+                        64.0,
+                        64.0
+                    ],
+                    "min": [
+                        -64.0,
+                        -64.0
+                    ]
+                },
+                "BackgroundTag": null,
+                "CollisionBody": {
+                    "type": 2
+                },
+                "EditTag": {
+                    "name": "background_19",
+                    "path": "Background/background"
+                },
+                "SoftlyMoveComponent": {
+                    "amplitude": [
+                        0.0,
+                        32.0
+                    ],
+                    "moveSpeed": 1.0,
+                    "t": 0.0
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "layer": 5,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/DirectionObject01.png",
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        128.0,
+                        128.0
+                    ],
+                    "translate": [
+                        -193.83157348632813,
+                        -234.5161895751953
+                    ]
+                },
+                "Velocity2DComponent": {
+                    "linear": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "background_2": {
+            "components": {
+                "AABBCollider2D": {
+                    "max": [
+                        64.0,
+                        64.0
+                    ],
+                    "min": [
+                        -64.0,
+                        -64.0
+                    ]
+                },
+                "BackgroundTag": null,
+                "CollisionBody": {
+                    "type": 2
+                },
+                "EditTag": {
+                    "name": "background_2",
+                    "path": "Background/background"
+                },
+                "SoftlyMoveComponent": {
+                    "amplitude": [
+                        0.0,
+                        24.0
+                    ],
+                    "moveSpeed": 3.0,
+                    "t": 0.0
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "layer": 5,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/DirectionObject03.png",
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        128.0,
+                        128.0
+                    ],
+                    "translate": [
+                        621.3688354492188,
+                        88.14720916748047
+                    ]
+                },
+                "Velocity2DComponent": {
+                    "linear": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "background_20": {
+            "components": {
+                "AABBCollider2D": {
+                    "max": [
+                        64.0,
+                        64.0
+                    ],
+                    "min": [
+                        -64.0,
+                        -64.0
+                    ]
+                },
+                "BackgroundTag": null,
+                "CollisionBody": {
+                    "type": 2
+                },
+                "EditTag": {
+                    "name": "background_20",
+                    "path": "Background/background"
+                },
+                "SoftlyMoveComponent": {
+                    "amplitude": [
+                        0.0,
+                        32.0
+                    ],
+                    "moveSpeed": 1.0,
+                    "t": 0.699999988079071
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "layer": 5,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/DirectionObject01.png",
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        128.0,
+                        128.0
+                    ],
+                    "translate": [
+                        -27.901123046875,
+                        -357.160400390625
+                    ]
+                },
+                "Velocity2DComponent": {
+                    "linear": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "background_21": {
+            "components": {
+                "AABBCollider2D": {
+                    "max": [
+                        64.0,
+                        64.0
+                    ],
+                    "min": [
+                        -64.0,
+                        -64.0
+                    ]
+                },
+                "BackgroundTag": null,
+                "CollisionBody": {
+                    "type": 2
+                },
+                "EditTag": {
+                    "name": "background_21",
+                    "path": "Background/background"
+                },
+                "SoftlyMoveComponent": {
+                    "amplitude": [
+                        0.0,
+                        64.0
+                    ],
+                    "moveSpeed": 1.0,
+                    "t": 0.4000000059604645
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "layer": 5,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/DirectionObject01.png",
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        128.0,
+                        128.0
+                    ],
+                    "translate": [
+                        1188.78857421875,
+                        -279.19451904296875
+                    ]
+                },
+                "Velocity2DComponent": {
+                    "linear": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "background_22": {
+            "components": {
+                "AABBCollider2D": {
+                    "max": [
+                        64.0,
+                        64.0
+                    ],
+                    "min": [
+                        -64.0,
+                        -64.0
+                    ]
+                },
+                "BackgroundTag": null,
+                "CollisionBody": {
+                    "type": 2
+                },
+                "EditTag": {
+                    "name": "background_22",
+                    "path": "Background/background"
+                },
+                "SoftlyMoveComponent": {
+                    "amplitude": [
+                        0.0,
+                        64.0
+                    ],
+                    "moveSpeed": 1.0,
+                    "t": 0.0
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "layer": 5,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/DirectionObject01.png",
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        128.0,
+                        128.0
+                    ],
+                    "translate": [
+                        1301.909912109375,
+                        -26.018407821655273
+                    ]
+                },
+                "Velocity2DComponent": {
+                    "linear": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "background_23": {
+            "components": {
+                "AABBCollider2D": {
+                    "max": [
+                        64.0,
+                        64.0
+                    ],
+                    "min": [
+                        -64.0,
+                        -64.0
+                    ]
+                },
+                "BackgroundTag": null,
+                "CollisionBody": {
+                    "type": 2
+                },
+                "EditTag": {
+                    "name": "background_23",
+                    "path": "Background/background"
+                },
+                "SoftlyMoveComponent": {
+                    "amplitude": [
+                        0.0,
+                        32.0
+                    ],
+                    "moveSpeed": 1.0,
+                    "t": 0.8999999761581421
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "layer": 5,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/DirectionObject01.png",
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        128.0,
+                        128.0
+                    ],
+                    "translate": [
+                        1560.64892578125,
+                        -117.84413146972656
+                    ]
+                },
+                "Velocity2DComponent": {
+                    "linear": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "background_24": {
+            "components": {
+                "AABBCollider2D": {
+                    "max": [
+                        64.0,
+                        64.0
+                    ],
+                    "min": [
+                        -64.0,
+                        -64.0
+                    ]
+                },
+                "BackgroundTag": null,
+                "CollisionBody": {
+                    "type": 2
+                },
+                "EditTag": {
+                    "name": "background_24",
+                    "path": "Background/background"
+                },
+                "SoftlyMoveComponent": {
+                    "amplitude": [
+                        0.0,
+                        64.0
+                    ],
+                    "moveSpeed": 1.0,
+                    "t": 0.30000001192092896
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "layer": 5,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/DirectionObject01.png",
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        128.0,
+                        128.0
+                    ],
+                    "translate": [
+                        2621.508056640625,
+                        113.8360366821289
+                    ]
+                },
+                "Velocity2DComponent": {
+                    "linear": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "background_25": {
+            "components": {
+                "AABBCollider2D": {
+                    "max": [
+                        64.0,
+                        64.0
+                    ],
+                    "min": [
+                        -64.0,
+                        -64.0
+                    ]
+                },
+                "BackgroundTag": null,
+                "CollisionBody": {
+                    "type": 2
+                },
+                "EditTag": {
+                    "name": "background_25",
+                    "path": "Background/background"
+                },
+                "SoftlyMoveComponent": {
+                    "amplitude": [
+                        0.0,
+                        32.0
+                    ],
+                    "moveSpeed": 1.0,
+                    "t": 0.0
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "layer": 5,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/DirectionObject01.png",
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        128.0,
+                        128.0
+                    ],
+                    "translate": [
+                        3766.874755859375,
+                        132.70413208007813
+                    ]
+                },
+                "Velocity2DComponent": {
+                    "linear": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "background_26": {
+            "components": {
+                "AABBCollider2D": {
+                    "max": [
+                        64.0,
+                        64.0
+                    ],
+                    "min": [
+                        -64.0,
+                        -64.0
+                    ]
+                },
+                "BackgroundTag": null,
+                "CollisionBody": {
+                    "type": 2
+                },
+                "EditTag": {
+                    "name": "background_26",
+                    "path": "Background/background"
+                },
+                "SoftlyMoveComponent": {
+                    "amplitude": [
+                        0.0,
+                        64.0
+                    ],
+                    "moveSpeed": 1.0,
+                    "t": 0.699999988079071
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "layer": 5,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/DirectionObject01.png",
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        128.0,
+                        128.0
+                    ],
+                    "translate": [
+                        5423.08349609375,
+                        -299.9744873046875
+                    ]
+                },
+                "Velocity2DComponent": {
+                    "linear": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "background_27": {
+            "components": {
+                "AABBCollider2D": {
+                    "max": [
+                        64.0,
+                        64.0
+                    ],
+                    "min": [
+                        -64.0,
+                        -64.0
+                    ]
+                },
+                "BackgroundTag": null,
+                "CollisionBody": {
+                    "type": 2
+                },
+                "EditTag": {
+                    "name": "background_27",
+                    "path": "Background/background"
+                },
+                "SoftlyMoveComponent": {
+                    "amplitude": [
+                        0.0,
+                        64.0
+                    ],
+                    "moveSpeed": 1.0,
+                    "t": 0.20000000298023224
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "layer": 5,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/DirectionObject01.png",
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        128.0,
+                        128.0
+                    ],
+                    "translate": [
+                        5643.939453125,
+                        -9.091217041015625
+                    ]
+                },
+                "Velocity2DComponent": {
+                    "linear": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "background_28": {
+            "components": {
+                "AABBCollider2D": {
+                    "max": [
+                        64.0,
+                        64.0
+                    ],
+                    "min": [
+                        -64.0,
+                        -64.0
+                    ]
+                },
+                "BackgroundTag": null,
+                "CollisionBody": {
+                    "type": 2
+                },
+                "EditTag": {
+                    "name": "background_28",
+                    "path": "Background/background"
+                },
+                "SoftlyMoveComponent": {
+                    "amplitude": [
+                        0.0,
+                        64.0
+                    ],
+                    "moveSpeed": 1.0,
+                    "t": 0.10000000149011612
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "layer": 5,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/DirectionObject01.png",
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        128.0,
+                        128.0
+                    ],
+                    "translate": [
+                        6739.4189453125,
+                        -220.797607421875
+                    ]
+                },
+                "Velocity2DComponent": {
+                    "linear": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "background_29": {
+            "components": {
+                "AABBCollider2D": {
+                    "max": [
+                        64.0,
+                        64.0
+                    ],
+                    "min": [
+                        -64.0,
+                        -64.0
+                    ]
+                },
+                "BackgroundTag": null,
+                "CollisionBody": {
+                    "type": 2
+                },
+                "EditTag": {
+                    "name": "background_29",
+                    "path": "Background/background"
+                },
+                "SoftlyMoveComponent": {
+                    "amplitude": [
+                        0.0,
+                        32.0
+                    ],
+                    "moveSpeed": 1.0,
+                    "t": 0.0
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "layer": 5,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/DirectionObject01.png",
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        128.0,
+                        128.0
+                    ],
+                    "translate": [
+                        6968.10791015625,
+                        -1536.2987060546875
+                    ]
+                },
+                "Velocity2DComponent": {
+                    "linear": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "background_3": {
+            "components": {
+                "AABBCollider2D": {
+                    "max": [
+                        64.0,
+                        64.0
+                    ],
+                    "min": [
+                        -64.0,
+                        -64.0
+                    ]
+                },
+                "BackgroundTag": null,
+                "CollisionBody": {
+                    "type": 2
+                },
+                "EditTag": {
+                    "name": "background_3",
+                    "path": "Background/background"
+                },
+                "SoftlyMoveComponent": {
+                    "amplitude": [
+                        0.0,
+                        24.0
+                    ],
+                    "moveSpeed": 2.0,
+                    "t": 0.0
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "layer": 5,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/DirectionObject03.png",
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        128.0,
+                        128.0
+                    ],
+                    "translate": [
+                        1982.63134765625,
+                        37.1895866394043
+                    ]
+                },
+                "Velocity2DComponent": {
+                    "linear": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "background_30": {
+            "components": {
+                "AABBCollider2D": {
+                    "max": [
+                        64.0,
+                        64.0
+                    ],
+                    "min": [
+                        -64.0,
+                        -64.0
+                    ]
+                },
+                "BackgroundTag": null,
+                "CollisionBody": {
+                    "type": 2
+                },
+                "EditTag": {
+                    "name": "background_30",
+                    "path": "Background/background"
+                },
+                "SoftlyMoveComponent": {
+                    "amplitude": [
+                        0.0,
+                        64.0
+                    ],
+                    "moveSpeed": 1.0,
+                    "t": 0.6000000238418579
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "layer": 5,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/DirectionObject01.png",
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        128.0,
+                        128.0
+                    ],
+                    "translate": [
+                        7099.04248046875,
+                        -2048.501220703125
+                    ]
+                },
+                "Velocity2DComponent": {
+                    "linear": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "background_31": {
+            "components": {
+                "AABBCollider2D": {
+                    "max": [
+                        64.0,
+                        64.0
+                    ],
+                    "min": [
+                        -64.0,
+                        -64.0
+                    ]
+                },
+                "BackgroundTag": null,
+                "CollisionBody": {
+                    "type": 2
+                },
+                "EditTag": {
+                    "name": "background_31",
+                    "path": "Background/background"
+                },
+                "SoftlyMoveComponent": {
+                    "amplitude": [
+                        0.0,
+                        64.0
+                    ],
+                    "moveSpeed": 1.0,
+                    "t": 0.0
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "layer": 5,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/DirectionObject01.png",
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        128.0,
+                        128.0
+                    ],
+                    "translate": [
+                        7908.044921875,
+                        -2063.4482421875
+                    ]
+                },
+                "Velocity2DComponent": {
+                    "linear": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "background_32": {
+            "components": {
+                "AABBCollider2D": {
+                    "max": [
+                        64.0,
+                        64.0
+                    ],
+                    "min": [
+                        -64.0,
+                        -64.0
+                    ]
+                },
+                "BackgroundTag": null,
+                "CollisionBody": {
+                    "type": 2
+                },
+                "EditTag": {
+                    "name": "background_32",
+                    "path": "Background/background"
+                },
+                "SoftlyMoveComponent": {
+                    "amplitude": [
+                        0.0,
+                        32.0
+                    ],
+                    "moveSpeed": 1.0,
+                    "t": 0.8999999761581421
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "layer": 5,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/DirectionObject01.png",
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        128.0,
+                        128.0
+                    ],
+                    "translate": [
+                        8266.26171875,
+                        -1853.3658447265625
+                    ]
+                },
+                "Velocity2DComponent": {
+                    "linear": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "background_33": {
+            "components": {
+                "AABBCollider2D": {
+                    "max": [
+                        64.0,
+                        64.0
+                    ],
+                    "min": [
+                        -64.0,
+                        -64.0
+                    ]
+                },
+                "BackgroundTag": null,
+                "CollisionBody": {
+                    "type": 2
+                },
+                "EditTag": {
+                    "name": "background_33",
+                    "path": "Background/background"
+                },
+                "SoftlyMoveComponent": {
+                    "amplitude": [
+                        0.0,
+                        32.0
+                    ],
+                    "moveSpeed": 1.0,
+                    "t": 0.6000000238418579
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "layer": 5,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/DirectionObject01.png",
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        128.0,
+                        128.0
+                    ],
+                    "translate": [
+                        8481.1240234375,
+                        -2388.74560546875
+                    ]
+                },
+                "Velocity2DComponent": {
+                    "linear": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "background_34": {
+            "components": {
+                "AABBCollider2D": {
+                    "max": [
+                        64.0,
+                        64.0
+                    ],
+                    "min": [
+                        -64.0,
+                        -64.0
+                    ]
+                },
+                "BackgroundTag": null,
+                "CollisionBody": {
+                    "type": 2
+                },
+                "EditTag": {
+                    "name": "background_34",
+                    "path": "Background/background"
+                },
+                "SoftlyMoveComponent": {
+                    "amplitude": [
+                        0.0,
+                        64.0
+                    ],
+                    "moveSpeed": 1.0,
+                    "t": 0.20000000298023224
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "layer": 5,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/DirectionObject01.png",
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        128.0,
+                        128.0
+                    ],
+                    "translate": [
+                        8324.9091796875,
+                        -2542.267333984375
+                    ]
+                },
+                "Velocity2DComponent": {
+                    "linear": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "background_35": {
+            "components": {
+                "AABBCollider2D": {
+                    "max": [
+                        64.0,
+                        64.0
+                    ],
+                    "min": [
+                        -64.0,
+                        -64.0
+                    ]
+                },
+                "BackgroundTag": null,
+                "CollisionBody": {
+                    "type": 2
+                },
+                "EditTag": {
+                    "name": "background_35",
+                    "path": "Background/background"
+                },
+                "SoftlyMoveComponent": {
+                    "amplitude": [
+                        0.0,
+                        64.0
+                    ],
+                    "moveSpeed": 1.0,
+                    "t": 0.0
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "layer": 5,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/DirectionObject01.png",
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        128.0,
+                        128.0
+                    ],
+                    "translate": [
+                        7424.0146484375,
+                        -2530.528564453125
+                    ]
+                },
+                "Velocity2DComponent": {
+                    "linear": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "background_36": {
+            "components": {
+                "AABBCollider2D": {
+                    "max": [
+                        64.0,
+                        64.0
+                    ],
+                    "min": [
+                        -64.0,
+                        -64.0
+                    ]
+                },
+                "BackgroundTag": null,
+                "CollisionBody": {
+                    "type": 2
+                },
+                "EditTag": {
+                    "name": "background_36",
+                    "path": "Background/background"
+                },
+                "SoftlyMoveComponent": {
+                    "amplitude": [
+                        0.0,
+                        64.0
+                    ],
+                    "moveSpeed": 1.0,
+                    "t": 0.699999988079071
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "layer": 5,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/DirectionObject01.png",
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        128.0,
+                        128.0
+                    ],
+                    "translate": [
+                        6763.4677734375,
+                        -2513.784423828125
+                    ]
+                },
+                "Velocity2DComponent": {
+                    "linear": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "background_37": {
+            "components": {
+                "AABBCollider2D": {
+                    "max": [
+                        64.0,
+                        64.0
+                    ],
+                    "min": [
+                        -64.0,
+                        -64.0
+                    ]
+                },
+                "BackgroundTag": null,
+                "CollisionBody": {
+                    "type": 2
+                },
+                "EditTag": {
+                    "name": "background_37",
+                    "path": "Background/background"
+                },
+                "SoftlyMoveComponent": {
+                    "amplitude": [
+                        0.0,
+                        32.0
+                    ],
+                    "moveSpeed": 1.0,
+                    "t": 0.4000000059604645
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "layer": 5,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/DirectionObject01.png",
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        128.0,
+                        128.0
+                    ],
+                    "translate": [
+                        6574.93212890625,
+                        -2395.2763671875
+                    ]
+                },
+                "Velocity2DComponent": {
+                    "linear": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "background_38": {
+            "components": {
+                "AABBCollider2D": {
+                    "max": [
+                        64.0,
+                        64.0
+                    ],
+                    "min": [
+                        -64.0,
+                        -64.0
+                    ]
+                },
+                "BackgroundTag": null,
+                "CollisionBody": {
+                    "type": 2
+                },
+                "EditTag": {
+                    "name": "background_38",
+                    "path": "Background/background"
+                },
+                "SoftlyMoveComponent": {
+                    "amplitude": [
+                        0.0,
+                        64.0
+                    ],
+                    "moveSpeed": 1.0,
+                    "t": 0.800000011920929
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "layer": 5,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/DirectionObject01.png",
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        128.0,
+                        128.0
+                    ],
+                    "translate": [
+                        6308.28955078125,
+                        -3028.216796875
+                    ]
+                },
+                "Velocity2DComponent": {
+                    "linear": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "background_39": {
+            "components": {
+                "AABBCollider2D": {
+                    "max": [
+                        64.0,
+                        64.0
+                    ],
+                    "min": [
+                        -64.0,
+                        -64.0
+                    ]
+                },
+                "BackgroundTag": null,
+                "CollisionBody": {
+                    "type": 2
+                },
+                "EditTag": {
+                    "name": "background_39",
+                    "path": "Background/background"
+                },
+                "SoftlyMoveComponent": {
+                    "amplitude": [
+                        0.0,
+                        32.0
+                    ],
+                    "moveSpeed": 1.0,
+                    "t": 0.0
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "layer": 5,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/DirectionObject01.png",
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        128.0,
+                        128.0
+                    ],
+                    "translate": [
+                        5772.54150390625,
+                        -2423.19140625
+                    ]
+                },
+                "Velocity2DComponent": {
+                    "linear": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "background_4": {
+            "components": {
+                "AABBCollider2D": {
+                    "max": [
+                        64.0,
+                        64.0
+                    ],
+                    "min": [
+                        -64.0,
+                        -64.0
+                    ]
+                },
+                "BackgroundTag": null,
+                "CollisionBody": {
+                    "type": 2
+                },
+                "EditTag": {
+                    "name": "background_4",
+                    "path": "Background/background"
+                },
+                "SoftlyMoveComponent": {
+                    "amplitude": [
+                        0.0,
+                        24.0
+                    ],
+                    "moveSpeed": 2.0,
+                    "t": 0.800000011920929
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "layer": 5,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/DirectionObject03.png",
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        128.0,
+                        128.0
+                    ],
+                    "translate": [
+                        2110.643798828125,
+                        -63.88715362548828
+                    ]
+                },
+                "Velocity2DComponent": {
+                    "linear": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "background_40": {
+            "components": {
+                "AABBCollider2D": {
+                    "max": [
+                        64.0,
+                        64.0
+                    ],
+                    "min": [
+                        -64.0,
+                        -64.0
+                    ]
+                },
+                "BackgroundTag": null,
+                "CollisionBody": {
+                    "type": 2
+                },
+                "EditTag": {
+                    "name": "background_40",
+                    "path": "Background/background"
+                },
+                "SoftlyMoveComponent": {
+                    "amplitude": [
+                        0.0,
+                        64.0
+                    ],
+                    "moveSpeed": 1.0,
+                    "t": 0.20000000298023224
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "layer": 5,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/DirectionObject01.png",
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        128.0,
+                        128.0
+                    ],
+                    "translate": [
+                        5303.896484375,
+                        -2555.166259765625
+                    ]
+                },
+                "Velocity2DComponent": {
+                    "linear": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "background_41": {
+            "components": {
+                "AABBCollider2D": {
+                    "max": [
+                        64.0,
+                        64.0
+                    ],
+                    "min": [
+                        -64.0,
+                        -64.0
+                    ]
+                },
+                "BackgroundTag": null,
+                "CollisionBody": {
+                    "type": 2
+                },
+                "EditTag": {
+                    "name": "background_41",
+                    "path": "Background/background"
+                },
+                "SoftlyMoveComponent": {
+                    "amplitude": [
+                        0.0,
+                        32.0
+                    ],
+                    "moveSpeed": 1.0,
+                    "t": 0.10000000149011612
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "layer": 5,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/DirectionObject01.png",
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        128.0,
+                        128.0
+                    ],
+                    "translate": [
+                        5013.0126953125,
+                        -3050.744873046875
+                    ]
+                },
+                "Velocity2DComponent": {
+                    "linear": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "background_5": {
+            "components": {
+                "AABBCollider2D": {
+                    "max": [
+                        64.0,
+                        64.0
+                    ],
+                    "min": [
+                        -64.0,
+                        -64.0
+                    ]
+                },
+                "BackgroundTag": null,
+                "CollisionBody": {
+                    "type": 2
+                },
+                "EditTag": {
+                    "name": "background_5",
+                    "path": "Background/background"
+                },
+                "SoftlyMoveComponent": {
+                    "amplitude": [
+                        0.0,
+                        24.0
+                    ],
+                    "moveSpeed": 2.0,
+                    "t": 0.800000011920929
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "layer": 5,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/DirectionObject03.png",
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        128.0,
+                        128.0
+                    ],
+                    "translate": [
+                        5020.92529296875,
+                        87.18183898925781
+                    ]
+                },
+                "Velocity2DComponent": {
+                    "linear": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "background_6": {
+            "components": {
+                "AABBCollider2D": {
+                    "max": [
+                        64.0,
+                        64.0
+                    ],
+                    "min": [
+                        -64.0,
+                        -64.0
+                    ]
+                },
+                "BackgroundTag": null,
+                "CollisionBody": {
+                    "type": 2
+                },
+                "EditTag": {
+                    "name": "background_6",
+                    "path": "Background/background"
+                },
+                "SoftlyMoveComponent": {
+                    "amplitude": [
+                        0.0,
+                        24.0
+                    ],
+                    "moveSpeed": 2.0,
+                    "t": 0.0
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "layer": 5,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/DirectionObject03.png",
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        128.0,
+                        128.0
+                    ],
+                    "translate": [
+                        4902.49755859375,
+                        -149.6728973388672
+                    ]
+                },
+                "Velocity2DComponent": {
+                    "linear": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "background_7": {
+            "components": {
+                "AABBCollider2D": {
+                    "max": [
+                        64.0,
+                        64.0
+                    ],
+                    "min": [
+                        -64.0,
+                        -64.0
+                    ]
+                },
+                "BackgroundTag": null,
+                "CollisionBody": {
+                    "type": 2
+                },
+                "EditTag": {
+                    "name": "background_7",
+                    "path": "Background/background"
+                },
+                "SoftlyMoveComponent": {
+                    "amplitude": [
+                        0.0,
+                        16.0
+                    ],
+                    "moveSpeed": 2.0,
+                    "t": 0.0
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "layer": 5,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/DirectionObject06.png",
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        128.0,
+                        128.0
+                    ],
+                    "translate": [
+                        6278.47119140625,
+                        -272.26300048828125
+                    ]
+                },
+                "Velocity2DComponent": {
+                    "linear": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "background_8": {
+            "components": {
+                "AABBCollider2D": {
+                    "max": [
+                        64.0,
+                        64.0
+                    ],
+                    "min": [
+                        -64.0,
+                        -64.0
+                    ]
+                },
+                "BackgroundTag": null,
+                "CollisionBody": {
+                    "type": 2
+                },
+                "EditTag": {
+                    "name": "background_8",
+                    "path": "Background/background"
+                },
+                "SoftlyMoveComponent": {
+                    "amplitude": [
+                        0.0,
+                        16.0
+                    ],
+                    "moveSpeed": 2.0,
+                    "t": 0.0
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "layer": 5,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/DirectionObject06.png",
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        128.0,
+                        128.0
+                    ],
+                    "translate": [
+                        7542.13525390625,
+                        -1946.384521484375
+                    ]
+                },
+                "Velocity2DComponent": {
+                    "linear": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "background_9": {
+            "components": {
+                "AABBCollider2D": {
+                    "max": [
+                        64.0,
+                        64.0
+                    ],
+                    "min": [
+                        -64.0,
+                        -64.0
+                    ]
+                },
+                "BackgroundTag": null,
+                "CollisionBody": {
+                    "type": 2
+                },
+                "EditTag": {
+                    "name": "background_9",
+                    "path": "Background/background"
+                },
+                "SoftlyMoveComponent": {
+                    "amplitude": [
+                        0.0,
+                        24.0
+                    ],
+                    "moveSpeed": 3.0,
+                    "t": 0.0
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "layer": 5,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Background/DirectionObject03.png",
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        128.0,
+                        128.0
+                    ],
+                    "translate": [
+                        5484.10205078125,
+                        -2842.3359375
                     ]
                 },
                 "Velocity2DComponent": {
@@ -82224,7 +85094,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/savePoint.png",
                     "uv": [
-                        0.375,
+                        0.0,
                         0.0,
                         0.125,
                         1.0
@@ -82237,7 +85107,7 @@
                         64.0
                     ],
                     "translate": [
-                        288.0,
+                        96.0,
                         224.0
                     ]
                 }
