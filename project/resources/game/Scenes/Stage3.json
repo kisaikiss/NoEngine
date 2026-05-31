@@ -28,12 +28,12 @@
                 "Transform2DComponent": {
                     "rotation": 0.0,
                     "scale": [
-                        2.7202327251434326,
-                        2.7202327251434326
+                        0.8242373466491699,
+                        0.8242373466491699
                     ],
                     "translate": [
-                        12575.0,
-                        -5731.01171875
+                        13929.94921875,
+                        -5994.1845703125
                     ]
                 }
             }
@@ -110954,17 +110954,17 @@
             "components": {
                 "AABBCollider2D": {
                     "max": [
-                        16.0,
-                        16.0
+                        32.0,
+                        32.0
                     ],
                     "min": [
-                        -16.0,
-                        -16.0
+                        -32.0,
+                        -32.0
                     ]
                 },
                 "Animator2DComponent": {
-                    "animeFrameHeight": 64.0,
-                    "animeFrameWidth": 64.0,
+                    "animeFrameHeight": 128.0,
+                    "animeFrameWidth": 128.0,
                     "currentAnimation": 0,
                     "frameByFrameTime": 0.10000000149011612,
                     "framesNum": 5
@@ -111015,8 +111015,8 @@
                 "Transform2DComponent": {
                     "rotation": 0.0,
                     "scale": [
-                        64.0,
-                        64.0
+                        128.0,
+                        128.0
                     ],
                     "translate": [
                         13856.0,

@@ -13,8 +13,8 @@
                         1.0
                     ],
                     "translate": [
-                        10844.59375,
-                        -3232.0
+                        0.0,
+                        0.0
                     ]
                 }
             }
@@ -28,12 +28,12 @@
                 "Transform2DComponent": {
                     "rotation": 0.0,
                     "scale": [
-                        1.2979741096496582,
-                        1.2979741096496582
+                        1.2723714113235474,
+                        1.2723714113235474
                     ],
                     "translate": [
-                        -346.08575439453125,
-                        -28.9018611907959
+                        11832.796875,
+                        -5366.50732421875
                     ]
                 }
             }
@@ -89098,17 +89098,17 @@
             "components": {
                 "AABBCollider2D": {
                     "max": [
-                        16.0,
-                        16.0
+                        32.0,
+                        32.0
                     ],
                     "min": [
-                        -16.0,
-                        -16.0
+                        -32.0,
+                        -32.0
                     ]
                 },
                 "Animator2DComponent": {
-                    "animeFrameHeight": 64.0,
-                    "animeFrameWidth": 64.0,
+                    "animeFrameHeight": 128.0,
+                    "animeFrameWidth": 128.0,
                     "currentAnimation": 0,
                     "frameByFrameTime": 0.10000000149011612,
                     "framesNum": 5
@@ -89131,7 +89131,7 @@
                         16.0
                     ],
                     "moveSpeed": 1.0,
-                    "t": 2.500431537628174
+                    "t": 0.0
                 },
                 "SpriteComponent": {
                     "color": [
@@ -89150,7 +89150,7 @@
                     ],
                     "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/GoalObject01.png",
                     "uv": [
-                        0.4000000059604645,
+                        0.0,
                         0.0,
                         0.20000000298023224,
                         1.0
@@ -89159,18 +89159,18 @@
                 "Transform2DComponent": {
                     "rotation": 0.0,
                     "scale": [
-                        64.0,
-                        64.0
+                        128.0,
+                        128.0
                     ],
                     "translate": [
                         11808.0,
-                        -5379.09423828125
+                        -5408.0
                     ]
                 },
                 "Velocity2DComponent": {
                     "linear": [
-                        -0.0,
-                        9.570021629333496
+                        0.0,
+                        0.0
                     ]
                 }
             }
