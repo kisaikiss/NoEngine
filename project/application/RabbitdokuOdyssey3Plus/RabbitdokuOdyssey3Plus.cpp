@@ -64,8 +64,7 @@ void RabbitdokuOdyssey3Plus::Startup(void) {
 	RegisterScene("JamdokuStage", []() { return std::make_unique<JamdokuStage>(); });
 	RegisterScene("ExStage", []() { return std::make_unique<ExStage>(); });
 
-	//ChangeScene("SudokuStage");
-	ChangeScene("JamdokuStage");
+	ChangeScene("Title");
 
 	auto* roomBox = NoEngine::ComponentRegistry::FindByName("RoomTag");
 	roomBox->fields[0].attributes.valueSpeed = 1.f;

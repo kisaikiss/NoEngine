@@ -28,12 +28,12 @@
                 "Transform2DComponent": {
                     "rotation": 0.0,
                     "scale": [
-                        2.957217216491699,
-                        2.957217216491699
+                        2.790525436401367,
+                        2.790525436401367
                     ],
                     "translate": [
-                        2206.9423828125,
-                        -972.7654418945313
+                        1578.302978515625,
+                        -831.8685913085938
                     ]
                 }
             }
@@ -107740,7 +107740,7 @@
                     "type": 2
                 },
                 "DoorComponent": {
-                    "stageName": "Title"
+                    "stageName": "JamdokuStage"
                 },
                 "EditTag": {
                     "name": "door_6",
