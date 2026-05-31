@@ -80,12 +80,12 @@ void RabbitdokuOdyssey3Plus::Startup(void) {
 	No::InputBindAction("Reset", No::DeviceType::Gamepad, static_cast<int>(No::GamepadButton::Y));
 
 	No::InputBindAction("Save", No::DeviceType::Keyboard, static_cast<int>(VK_UP));
-	No::InputBindAction("EnterDoor", No::DeviceType::Keyboard, static_cast<int>('W'));
 	No::InputBindAction("Save", No::DeviceType::Gamepad, static_cast<int>(No::GamepadButton::Up));
+	No::InputBindAction("Save", No::DeviceType::Keyboard, static_cast<int>('W'));
 
 	No::InputBindAction("EnterDoor", No::DeviceType::Keyboard, static_cast<int>(VK_UP));
-	No::InputBindAction("EnterDoor", No::DeviceType::Keyboard, static_cast<int>('W'));
 	No::InputBindAction("EnterDoor", No::DeviceType::Gamepad, static_cast<int>(No::GamepadButton::Up));
+	No::InputBindAction("EnterDoor", No::DeviceType::Keyboard, static_cast<int>('W'));
 
 	No::SoundLoad(L"resources/game/RabbitdokuOdyssey3Plus/Sounds/SFX/Jump.mp3", "jump");
 	No::SoundLoad(L"resources/game/RabbitdokuOdyssey3Plus/Sounds/SFX/JumpDouble.mp3", "doubleJump");
