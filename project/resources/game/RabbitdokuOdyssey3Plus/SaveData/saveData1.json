@@ -1,11 +1,11 @@
 {
     "ExStage": {
-        "deathCount": 5,
+        "deathCount": 0,
         "respawnPoint": {
             "x": 0.0,
             "y": 0.0
         },
-        "totalDeath": 5
+        "totalDeath": 65
     },
     "ExxsearearStage": {
         "deathCount": 0,
