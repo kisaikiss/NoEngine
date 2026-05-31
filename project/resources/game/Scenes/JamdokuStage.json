@@ -28,12 +28,12 @@
                 "Transform2DComponent": {
                     "rotation": 0.0,
                     "scale": [
-                        0.8812931776046753,
-                        0.8812931776046753
+                        1.185431718826294,
+                        1.185431718826294
                     ],
                     "translate": [
-                        1823.5225830078125,
-                        226.314453125
+                        763.4026489257813,
+                        32.80099105834961
                     ]
                 }
             }
@@ -109,7 +109,7 @@
                         64.0
                     ],
                     "translate": [
-                        486.0,
+                        409.20001220703125,
                         -160.0
                     ]
                 },
@@ -25907,6 +25907,75 @@
                     "translate": [
                         2848.0,
                         96.0
+                    ]
+                }
+            }
+        },
+        "door": {
+            "components": {
+                "AABBCollider2D": {
+                    "max": [
+                        64.0,
+                        64.0
+                    ],
+                    "min": [
+                        -64.0,
+                        -64.0
+                    ]
+                },
+                "Animator2DComponent": {
+                    "animeFrameHeight": 128.0,
+                    "animeFrameWidth": 128.0,
+                    "currentAnimation": 0,
+                    "frameByFrameTime": 0.10000000149011612,
+                    "framesNum": 8
+                },
+                "CollisionBody": {
+                    "type": 2
+                },
+                "DoorComponent": {
+                    "stageName": "Title"
+                },
+                "EditTag": {
+                    "name": "door",
+                    "path": "Gimmick/Door/door"
+                },
+                "GimmickTag": null,
+                "RabbitdokuCollisionLayerComponent": {
+                    "layer": 8
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "layer": 10,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/Door.png",
+                    "uv": [
+                        0.0,
+                        0.0,
+                        0.125,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        128.0,
+                        128.0
+                    ],
+                    "translate": [
+                        480.0,
+                        -192.0
                     ]
                 }
             }
