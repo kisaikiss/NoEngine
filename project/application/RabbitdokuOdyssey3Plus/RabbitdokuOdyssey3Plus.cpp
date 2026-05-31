@@ -44,7 +44,7 @@ void RabbitdokuOdyssey3Plus::Startup(void) {
 	No::SoundLoad(L"resources/game/RabbitdokuOdyssey3Plus/Sounds/BGM/Stage01.mp3", "stage1");
 	No::SoundLoad(L"resources/game/RabbitdokuOdyssey3Plus/Sounds/BGM/Stage02.mp3", "stage2");
 	No::SoundLoad(L"resources/game/RabbitdokuOdyssey3Plus/Sounds/BGM/Stage01.mp3", "stage3");
-	No::SoundLoad(L"resources/game/RabbitdokuOdyssey3Plus/Sounds/BGM/Stage01.mp3", "stage4");
+	No::SoundLoad(L"resources/game/RabbitdokuOdyssey3Plus/Sounds/BGM/Stage02.mp3", "stage4");
 	No::SoundLoad(L"resources/game/RabbitdokuOdyssey3Plus/Sounds/BGM/ExStage.mp3", "exStage");
 	No::SoundLoad(L"resources/game/RabbitdokuOdyssey3Plus/Sounds/BGM/SudokuStage.mp3", "sudokuStage");
 
@@ -58,7 +58,7 @@ void RabbitdokuOdyssey3Plus::Startup(void) {
 	RegisterScene("SudokuStage", []() { return std::make_unique<SudokuStage>(); });
 	RegisterScene("ExStage", []() { return std::make_unique<ExStage>(); });
 
-	ChangeScene("Stage3");
+	ChangeScene("Stage4");
 
 	auto* roomBox = NoEngine::ComponentRegistry::FindByName("RoomTag");
 	roomBox->fields[0].attributes.valueSpeed = 1.f;
