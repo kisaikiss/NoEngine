@@ -3,6 +3,7 @@
 #include "Scene/RabbitdokuScene.h"
 #include "Scene/RabbitdokuTitleScene.h"
 #include "Scene/ExxsearearStage.h"
+#include "Game/RabbitdokuTag.h"
 
 class Stage1 : public RabbitdokuScene {
 public: Stage1() : RabbitdokuScene("stage1") {}
@@ -24,6 +25,20 @@ class SudokuStage : public RabbitdokuScene {
 public: SudokuStage() : RabbitdokuScene("sudokuStage",0.25f) {}
 };
 
+class ExStage : public RabbitdokuScene {
+public: ExStage() : RabbitdokuScene("exStage", 0.25f) {}
+private: void InitBackground(No::Registry& registry) override {
+	auto e = registry.GenerateEntity();
+	auto* t = registry.AddComponent<No::Transform2DComponent>(e);
+	t->scale = No::Vector2(1280.f, 768.f);
+	auto* s = registry.AddComponent<No::SpriteComponent>(e);
+	s->textureFilePath = "resources/game/RabbitdokuOdyssey3Plus/Sprite/exBackground.png";
+	s->layer = 0;
+	registry.AddComponent<MainBackgroundTag>(e);
+	registry.AddComponent<ExBackgroundTag>(e);
+}
+};
+
 void RabbitdokuOdyssey3Plus::Startup(void) {
 	No::SoundLoad(L"resources/game/RabbitdokuOdyssey3Plus/Sounds/BGM/Title.mp3", "title");
 	No::SoundLoad(L"resources/game/RabbitdokuOdyssey3Plus/Sounds/BGM/Stage01.mp3", "stage1");
@@ -41,6 +56,7 @@ void RabbitdokuOdyssey3Plus::Startup(void) {
 	RegisterScene("Stage3", []() { return std::make_unique<Stage3>(); });
 	RegisterScene("Stage4", []() { return std::make_unique<Stage4>(); });
 	RegisterScene("SudokuStage", []() { return std::make_unique<SudokuStage>(); });
+	RegisterScene("ExStage", []() { return std::make_unique<ExStage>(); });
 
 	ChangeScene("Title");
 

@@ -1,0 +1,420 @@
+{
+    "entities": {
+        "Camera": {
+            "components": {
+                "EditTag": {
+                    "name": "Camera",
+                    "path": "Camera"
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "DebugCamera": {
+            "components": {
+                "EditTag": {
+                    "name": "DebugCamera",
+                    "path": "DebugCamera"
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        1.1804900169372559,
+                        1.1804900169372559
+                    ],
+                    "translate": [
+                        62.16182327270508,
+                        42.630104064941406
+                    ]
+                }
+            }
+        },
+        "Rabbitdoku": {
+            "components": {
+                "AABBCollider2D": {
+                    "max": [
+                        24.0,
+                        32.0
+                    ],
+                    "min": [
+                        -24.0,
+                        -24.0
+                    ]
+                },
+                "Animator2DComponent": {
+                    "animeFrameHeight": 64.0,
+                    "animeFrameWidth": 64.0,
+                    "currentAnimation": 0,
+                    "frameByFrameTime": 0.30000001192092896,
+                    "framesNum": 2
+                },
+                "CollisionBody": {
+                    "type": 0
+                },
+                "EditTag": {
+                    "name": "Rabbitdoku",
+                    "path": "Rabbitdoku"
+                },
+                "GroundStateComponent": {
+                    "groundHeight": 0.0,
+                    "isGrounded": true
+                },
+                "Rabbitdoku": {
+                    "doubleJumpSpeed": 350.0,
+                    "gravity": 9.800000190734863,
+                    "jumpSpeed": 450.0,
+                    "maxFallSpeed": 700.0,
+                    "moveSpeed": 300.0,
+                    "yVelocity": 0.0
+                },
+                "RabbitdokuCollisionLayerComponent": {
+                    "layer": 1
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "layer": 20,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureFilePath": "",
+                    "uv": [
+                        0.0,
+                        0.0,
+                        0.1666666716337204,
+                        0.1666666716337204
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        64.0,
+                        64.0
+                    ],
+                    "translate": [
+                        0.0,
+                        96.00000762939453
+                    ]
+                },
+                "Velocity2DComponent": {
+                    "linear": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "block": {
+            "components": {
+                "AABBCollider2D": {
+                    "max": [
+                        32.0,
+                        32.0
+                    ],
+                    "min": [
+                        -32.0,
+                        -32.0
+                    ]
+                },
+                "BlockTag": null,
+                "CollisionBody": {
+                    "type": 1
+                },
+                "EditTag": {
+                    "name": "block",
+                    "path": "Block/block"
+                },
+                "RabbitdokuCollisionLayerComponent": {
+                    "layer": 4
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "layer": 10,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/exBlock.png",
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        64.0,
+                        64.0
+                    ],
+                    "translate": [
+                        -96.0,
+                        160.0
+                    ]
+                }
+            }
+        },
+        "block_2": {
+            "components": {
+                "AABBCollider2D": {
+                    "max": [
+                        32.0,
+                        32.0
+                    ],
+                    "min": [
+                        -32.0,
+                        -32.0
+                    ]
+                },
+                "BlockTag": null,
+                "CollisionBody": {
+                    "type": 1
+                },
+                "EditTag": {
+                    "name": "block_2",
+                    "path": "Block/block"
+                },
+                "RabbitdokuCollisionLayerComponent": {
+                    "layer": 4
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "layer": 10,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/exBlock.png",
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        64.0,
+                        64.0
+                    ],
+                    "translate": [
+                        -32.0,
+                        160.0
+                    ]
+                }
+            }
+        },
+        "block_3": {
+            "components": {
+                "AABBCollider2D": {
+                    "max": [
+                        32.0,
+                        32.0
+                    ],
+                    "min": [
+                        -32.0,
+                        -32.0
+                    ]
+                },
+                "BlockTag": null,
+                "CollisionBody": {
+                    "type": 1
+                },
+                "EditTag": {
+                    "name": "block_3",
+                    "path": "Block/block"
+                },
+                "RabbitdokuCollisionLayerComponent": {
+                    "layer": 4
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "layer": 10,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/exBlock.png",
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        64.0,
+                        64.0
+                    ],
+                    "translate": [
+                        32.0,
+                        160.0
+                    ]
+                }
+            }
+        },
+        "block_4": {
+            "components": {
+                "AABBCollider2D": {
+                    "max": [
+                        32.0,
+                        32.0
+                    ],
+                    "min": [
+                        -32.0,
+                        -32.0
+                    ]
+                },
+                "BlockTag": null,
+                "CollisionBody": {
+                    "type": 1
+                },
+                "EditTag": {
+                    "name": "block_4",
+                    "path": "Block/block"
+                },
+                "RabbitdokuCollisionLayerComponent": {
+                    "layer": 4
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "layer": 10,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/exBlock.png",
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        64.0,
+                        64.0
+                    ],
+                    "translate": [
+                        96.0,
+                        160.0
+                    ]
+                }
+            }
+        },
+        "block_5": {
+            "components": {
+                "AABBCollider2D": {
+                    "max": [
+                        32.0,
+                        32.0
+                    ],
+                    "min": [
+                        -32.0,
+                        -32.0
+                    ]
+                },
+                "BlockTag": null,
+                "CollisionBody": {
+                    "type": 1
+                },
+                "EditTag": {
+                    "name": "block_5",
+                    "path": "Block/block"
+                },
+                "RabbitdokuCollisionLayerComponent": {
+                    "layer": 4
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "layer": 10,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureFilePath": "resources/game/RabbitdokuOdyssey3Plus/Sprite/exBlock.png",
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        64.0,
+                        64.0
+                    ],
+                    "translate": [
+                        160.0,
+                        160.0
+                    ]
+                }
+            }
+        }
+    }
+}

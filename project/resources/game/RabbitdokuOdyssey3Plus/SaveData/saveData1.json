@@ -1,4 +1,12 @@
 {
+    "ExStage": {
+        "deathCount": 5,
+        "respawnPoint": {
+            "x": 0.0,
+            "y": 0.0
+        },
+        "totalDeath": 5
+    },
     "ExxsearearStage": {
         "deathCount": 0,
         "respawnPoint": {
@@ -37,7 +45,7 @@
             "x": 0.0,
             "y": 0.0
         },
-        "totalDeath": 6
+        "totalDeath": 11
     },
     "Stage4": {
         "deathCount": 0,
@@ -45,15 +53,15 @@
             "x": 0.0,
             "y": 0.0
         },
-        "totalDeath": 4
+        "totalDeath": 17
     },
     "SudokuStage": {
-        "deathCount": 9,
+        "deathCount": 0,
         "respawnPoint": {
             "x": 0.0,
             "y": 0.0
         },
-        "totalDeath": 91
+        "totalDeath": 116
     },
     "Title": {
         "deathCount": 0,
@@ -61,6 +69,6 @@
             "x": 0.0,
             "y": 0.0
         },
-        "totalDeath": 3
+        "totalDeath": 6
     }
 }

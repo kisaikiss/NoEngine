@@ -12,11 +12,10 @@ void BackgroundAttachSystem::Update(No::Registry& registry, float deltaTime) {
 	auto view = registry.View<No::Transform2DComponent, No::SpriteComponent, MainBackgroundTag>();
 	for (auto e : view) {
 		auto* t = registry.GetComponent<No::Transform2DComponent>(e);
-		if (!cameraT) {
+		if (cameraT) {
+			t->translate = cameraT->translate;
 			t->parent = nullptr;
-		} else {
-			t->parent = cameraT;
-		}
+		} 
 	}
 
 }

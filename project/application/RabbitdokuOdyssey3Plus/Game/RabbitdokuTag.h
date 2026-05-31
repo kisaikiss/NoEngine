@@ -52,3 +52,5 @@ struct ClearTag {
 	float t = 0;
 	bool isAnimationEnd = false;
 };
+
+struct ExBackgroundTag{};

@@ -17,6 +17,7 @@
 #include "../System/Gimmick/SpringSystem.h"
 #include "../System/Gimmick/CollapseBlockSystem.h"
 #include "../System/Effect/ClearSystem.h"
+#include "../System/Effect/ExBackgroundSystem.h"
 
 #include "../Component/RabbitdokuComponent.h"
 #include "../Component/FollowCamera2DComponent.h"
@@ -77,8 +78,9 @@ void RabbitdokuScene::AddSystems() {
 	AddSystem(std::make_unique<ClearSystem>());
 	AddSystem(std::make_unique<SmokeEffectSystem>());
 	AddSystem(std::make_unique<No::Camera2DSystem>());
-	AddSystem(std::make_unique<BackgroundAttachSystem>());
+	AddSystem(std::make_unique<ExBackgroundSystem>());
 
+	AddSystem(std::make_unique<BackgroundAttachSystem>());
 	AddSystem(std::make_unique<RabbitdokuSceneResetSystem>());
 }
 

@@ -21,23 +21,31 @@ void ScreenTransitionEffectSystem::TransitionIn(No::Registry& registry, float de
 		cameraT = registry.GetComponent<No::Transform2DComponent>(e);
 	}
 
+	auto transitionInView = registry.View<TransitionInTag>();
+	uint32_t count = 0;
+	for (auto e : transitionInView) { count++; (void)e; }
+
+	
 	auto event = registry.PollEvent<SceneTransitionInEvent>();
 	if (event.has_value()) {
-		saveData_ = event->saveData;
-		auto e = registry.GenerateEntity();
-		if (event->stageName.empty()) {
-			nextScene_ = sCurrentScene;
-		} else {
-			nextScene_ = event->stageName;
+		if (count == 0) {
+			saveData_ = event->saveData;
+			auto e = registry.GenerateEntity();
+			if (event->stageName.empty()) {
+				nextScene_ = sCurrentScene;
+			} else {
+				nextScene_ = event->stageName;
+			}
+			registry.AddComponent<TransitionInTag>(e);
+			auto* t = registry.AddComponent<No::Transform2DComponent>(e);
+			t->scale = No::Vector2(1280.f, 848.f);
+			t->translate.y = -848.f;
+			t->parent = cameraT;
+			auto* s = registry.AddComponent<No::SpriteComponent>(e);
+			s->textureFilePath = "resources/game/RabbitdokuOdyssey3Plus/Sprite/SceneChange01.png";
+			s->layer = 1000;
 		}
-		registry.AddComponent<TransitionInTag>(e);
-		auto* t = registry.AddComponent<No::Transform2DComponent>(e);
-		t->scale = No::Vector2(1280.f, 848.f);
-		t->translate.y = -848.f;
-		t->parent = cameraT;
-		auto* s = registry.AddComponent<No::SpriteComponent>(e);
-		s->textureFilePath = "resources/game/RabbitdokuOdyssey3Plus/Sprite/SceneChange01.png";
-		s->layer = 1000;
+		
 	}
 
 	if (cameraT) {
@@ -89,6 +97,7 @@ void ScreenTransitionEffectSystem::TransitionOut(No::Registry& registry, float d
 		tag->t += deltaTime * kTransitionSpeed;
 		auto t = registry.GetComponent<No::Transform2DComponent>(e);
 		t->translate = No::EaseInExpo(No::Vector2::ZERO, No::Vector2(0.0f, -848.f), tag->t);
+		t->parent = cameraT;
 		if (tag->t > 1.f) {
 			registry.DestroyEntity(e);
 		}
