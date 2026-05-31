@@ -16,6 +16,10 @@ class Stage3 : public RabbitdokuScene {
 public: Stage3() : RabbitdokuScene("stage3") {}
 };
 
+class Stage4 : public RabbitdokuScene {
+public: Stage4() : RabbitdokuScene("stage4") {}
+};
+
 class SudokuStage : public RabbitdokuScene {
 public: SudokuStage() : RabbitdokuScene("sudokuStage",0.25f) {}
 };
@@ -34,7 +38,9 @@ void RabbitdokuOdyssey3Plus::Startup(void) {
 	RegisterScene("Stage1", []() { return std::make_unique<Stage1>(); });
 	RegisterScene("Stage2", []() { return std::make_unique<Stage2>(); });
 	RegisterScene("Stage3", []() { return std::make_unique<Stage3>(); });
+	RegisterScene("Stage4", []() { return std::make_unique<Stage4>(); });
 	RegisterScene("SudokuStage", []() { return std::make_unique<SudokuStage>(); });
+
 	ChangeScene("Title");
 
 	auto* roomBox = NoEngine::ComponentRegistry::FindByName("RoomTag");
