@@ -34,7 +34,8 @@ void TLASBuildPass::BuildRaytracingInstances(ECS::Registry& registry) {
 		desc.InstanceID = static_cast<UINT>(entity); 
 		desc.InstanceContributionToHitGroupIndex = 0;
 
-		FillInstanceTransform(desc, *transform);
+		auto* animator = registry.GetComponent<Component::AnimatorComponent>(entity);
+		FillInstanceTransform(desc, *transform, animator);
 		desc.AccelerationStructure = inst.rtMesh->blas->GetGPUVirtualAddress();
 
 		instances_.push_back(inst);
@@ -109,8 +110,9 @@ void TLASBuildPass::BuildTLAS(GraphicsContext& gfx) {
 	gfx.BuildRaytracingAccelerationStructure(build, tlasScratch_.Get());
 }
 
-void TLASBuildPass::FillInstanceTransform(D3D12_RAYTRACING_INSTANCE_DESC& instance, const Transform& transform) {
+void TLASBuildPass::FillInstanceTransform(D3D12_RAYTRACING_INSTANCE_DESC& instance, const Transform& transform, Component::AnimatorComponent* animator) {
 	Math::Matrix4x4 t = transform.MakeAffineMatrix4x4();
+	if (animator) t = animator->local.MakeAffineMatrix4x4() * t;
 	t.Transpose();
 
 	// Matrix4x4 を Matrix3x4へ設定するために Transpose したものをコピーする。

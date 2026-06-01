@@ -7,7 +7,7 @@ namespace NoEngine {
 namespace Component {
 struct AnimatorComponent {
 	std::span<Animation> animation;
-	Transform parent;
+	Transform local;
 	uint32_t currentAnimation = 0;
 	Skeleton* skeleton = nullptr;
 	float time = 0.f;

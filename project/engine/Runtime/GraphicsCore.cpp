@@ -70,8 +70,8 @@ void GraphicsCore::Initialize(float windowWidth, float windowHeight) {
 	SettingDebugLayer();
 	CheckRaytracingEnable();
 	Render::Initialize();
-	GraphicsCore::sWindowManager.Create(L"3105_RabbitDoku", UINT(windowWidth), UINT(windowHeight), L"resources/engine/noicon.ico");
-	GraphicsCore::sWindowManager.SetMainWindowName(L"3105_RabbitDoku");
+	GraphicsCore::sWindowManager.Create(L"NoEngine", UINT(windowWidth), UINT(windowHeight), L"resources/engine/noicon.ico");
+	GraphicsCore::sWindowManager.SetMainWindowName(L"NoEngine");
 
 	sSwapChain = make_unique<Graphics::GraphicsSwapChain>(sWindowManager.GetMainWindow()->GetWindowHandle(), windowWidth, windowHeight, sSwapChainBufferCount);
 

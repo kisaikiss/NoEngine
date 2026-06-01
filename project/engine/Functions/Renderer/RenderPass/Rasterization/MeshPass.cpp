@@ -3,6 +3,7 @@
 #include "engine/Functions/Shader/ShaderReflection.h"
 #include "engine/Utilities/Conversion/ConvertString.h"
 #include "engine/Runtime/GraphicsCore.h"
+#include "engine/Functions/ECS/Component/AnimatorComponent.h"
 
 namespace NoEngine {
 namespace Render {
@@ -42,9 +43,15 @@ void MeshPass::Collect(ECS::Registry& registry) {
 		auto pso = material->psoId;
 		auto rootSig = material->rootSigId;
 		auto name = material->psoName;
+		auto* anime = registry.GetComponent<AnimatorComponent>(entity);
+		Transform* animeLocal = nullptr;
+		if (anime) {
+			animeLocal = &anime->local;
+		}
+
 		float distance = MathCalculations::LengthSquared(transform->translate - cameraPos);
 
-		items_.push_back({ mesh,material,transform, pso, rootSig, ConvertString(name), distance });
+		items_.push_back({ mesh,material,transform, animeLocal, pso, rootSig, ConvertString(name), distance });
 	}
 }
 
@@ -75,8 +82,14 @@ void MeshPass::Render(GraphicsContext& context, const RenderGraphRegistry& resou
 			Math::Matrix4x4 worldIT;
 		};
 		MeshConstants m;
-		m.world = item.transform->MakeAffineMatrix4x4();
-		m.worldIT = m.world;
+		if (item.animationLocal) {
+			m.world = item.animationLocal->MakeAffineMatrix4x4() * item.transform->MakeAffineMatrix4x4();
+			m.worldIT = m.world;
+		} else {
+			m.world = item.transform->MakeAffineMatrix4x4();
+			m.worldIT = m.world;
+		}
+		
 		m.worldIT.Inverse();
 		m.worldIT.Transpose();
 		context.SetDynamicConstantBufferView(rootIndex["gWorldMatrix"], sizeof(MeshConstants), &m);
@@ -168,6 +181,9 @@ void MeshPass::RenderOutline(GraphicsContext& context) {
 		auto& rootIndex = RootSignatureBuilder::GetRootIndexMap(currentPSOName);
 
 		Math::Matrix4x4 worldData = item.transform->MakeAffineMatrix4x4();
+		if (item.animationLocal) {
+			worldData = item.animationLocal->MakeAffineMatrix4x4() * worldData;
+		}
 		context.SetDynamicConstantBufferView(rootIndex["gWorldMatrix"], sizeof(Math::Matrix4x4), &worldData);
 		context.SetDynamicConstantBufferView(rootIndex["gCameraMatrix"], sizeof(Component::CameraForGPU), &camera_->forGPU);
 

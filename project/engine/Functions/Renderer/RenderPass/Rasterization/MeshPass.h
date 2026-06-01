@@ -32,6 +32,7 @@ protected:
         Component::MeshComponent* mesh;
         Component::MaterialComponent* material;
         Component::TransformComponent* transform;
+        Transform* animationLocal;
         uint32_t psoId;
         uint32_t rootSigId;
         std::string psoName;

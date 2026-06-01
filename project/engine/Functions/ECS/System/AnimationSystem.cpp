@@ -49,7 +49,6 @@ void AnimationSystem::AnimationUpdate(Registry& registry, float deltaTime) {
 	for (auto entity : view) {
 		auto* animeComp = registry.GetComponent<Component::AnimatorComponent>(entity);
 		auto* meshComp = registry.GetComponent<Component::MeshComponent>(entity);
-		auto* transformComp = registry.GetComponent<Component::TransformComponent>(entity);
 
 		if (!meshComp->mesh) continue;
 
@@ -63,10 +62,9 @@ void AnimationSystem::AnimationUpdate(Registry& registry, float deltaTime) {
 			SKinUpdate(animeComp, meshComp);
 		}
 
-		//animeComp->parent.translate != Math::Vector3::ZERO && animeComp->parent.rotation != Math::Quaternion::ZERO && animeComp->parent.scale != Math::Vector3::ZERO
+
 		if (animeComp->animation[currentAnimation].nodeAnimations.contains(meshComp->mesh->rootNode.name)) {
-			CalculateValue(animeComp->animation[currentAnimation].nodeAnimations[meshComp->mesh->rootNode.name], animeComp->parent, animeComp->time);
-			transformComp->parent = &animeComp->parent;
+			CalculateValue(animeComp->animation[currentAnimation].nodeAnimations[meshComp->mesh->rootNode.name], animeComp->local, animeComp->time);
 		}
 	}
 }

@@ -21,6 +21,7 @@ private:
         Component::MeshComponent* mesh;
         Component::MaterialComponent* material;
         Component::TransformComponent* transform;
+        Transform* local;
     };
     std::vector<DrawItem> items_;
 };

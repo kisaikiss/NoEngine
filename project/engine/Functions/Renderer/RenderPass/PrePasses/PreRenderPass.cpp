@@ -3,6 +3,7 @@
 
 #include "engine/Runtime/GraphicsCore.h"
 #include "engine/Functions/Shader/ShaderReflection.h"
+#include "engine/Functions/ECS/Component/AnimatorComponent.h"
 
 namespace NoEngine {
 namespace Render {
@@ -28,8 +29,13 @@ void PreRenderPass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& res
 		if (!mesh->isVisible)continue;
 		auto* material = registry.GetComponent<MaterialComponent>(entity);
 		auto* transform = registry.GetComponent<TransformComponent>(entity);
+		auto* anime = registry.GetComponent<AnimatorComponent>(entity);
+		Transform* animeLocal = nullptr;
+		if (anime) {
+			animeLocal = &anime->local;
+		}
 
-		items_.push_back({ mesh,material,transform });
+		items_.push_back({ mesh,material,transform,animeLocal });
 	}
 
 	CameraComponent* camera = GetTargetCamera();
@@ -55,8 +61,13 @@ void PreRenderPass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& res
 			Math::Matrix4x4 worldIT;
 		};
 		MeshConstants m;
-		m.world = item.transform->MakeAffineMatrix4x4();
-		m.worldIT = m.world;
+		if (item.local) {
+			m.world = item.local->MakeAffineMatrix4x4() * item.transform->MakeAffineMatrix4x4();
+			m.worldIT = m.world;
+		} else {
+			m.world = item.transform->MakeAffineMatrix4x4();
+			m.worldIT = m.world;
+		}
 		m.worldIT.Inverse();
 		m.worldIT.Transpose();
 		gfx.SetDynamicConstantBufferView(rootIndex["gWorldMatrix"], sizeof(MeshConstants), &m);
