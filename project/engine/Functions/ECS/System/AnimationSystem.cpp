@@ -59,7 +59,7 @@ void AnimationSystem::AnimationUpdate(Registry& registry, float deltaTime) {
 		if (animeComp->skeleton) {
 			SkeletonUpdate(animeComp);
 			SkeletonDraw(animeComp);
-			SKinUpdate(animeComp, meshComp);
+			SkinUpdate(animeComp, meshComp);
 		}
 
 
@@ -104,7 +104,7 @@ void AnimationSystem::SkeletonDraw(Component::AnimatorComponent* animeComp) {
 	}
 }
 
-void AnimationSystem::SKinUpdate(Component::AnimatorComponent* animeComp, Component::MeshComponent* meshComp) {
+void AnimationSystem::SkinUpdate(Component::AnimatorComponent* animeComp, Component::MeshComponent* meshComp) {
 	for (size_t jointIndex = 0; jointIndex < animeComp->skeleton->joints.size(); jointIndex++) {
 		meshComp->mesh->mappedPalette[jointIndex].skeletonSpaceMatrix =
 			animeComp->skeleton->inverseBindPoseMatrices[jointIndex] * animeComp->skeleton->joints[jointIndex].skeletonSpaceMatrix;

@@ -18,7 +18,7 @@ private:
 	void AnimationUpdate(Registry& registry, float deltaTime);
 	void SkeletonUpdate(Component::AnimatorComponent* animeComp);
 	void SkeletonDraw(Component::AnimatorComponent* animeComp);
-	void SKinUpdate(Component::AnimatorComponent* animeComp, Component::MeshComponent* meshComp);
+	void SkinUpdate(Component::AnimatorComponent* animeComp, Component::MeshComponent* meshComp);
 
 	void CalculateValue(const NodeAnimation& keyframes, Transform& transform, float time);
 	Math::Vector3 CalculateValue(const std::vector<KeyframeVector3>& keyframes, float time);
