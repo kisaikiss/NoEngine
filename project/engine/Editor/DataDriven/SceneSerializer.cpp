@@ -160,7 +160,7 @@ void ReadFieldFromJson(const nlohmann::json& j, const FieldInfo& field, void* pt
 		*(int*)ptr = j[field.name].get<int>();
 		break;
 	case NoEngine::FieldType::Uint:
-		*(int*)ptr = j[field.name].get<int>();
+		*(uint32_t*)ptr = j[field.name].get<uint32_t>();
 		break;
 	case NoEngine::FieldType::Bool:
 		*(bool*)ptr = j[field.name].get<bool>();
