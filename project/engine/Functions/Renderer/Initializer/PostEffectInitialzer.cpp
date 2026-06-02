@@ -13,14 +13,14 @@ void PostEffectInitialzer::CreatePSO(RenderContext& ctx) {
 
 	const ShaderReflection& vsReflection = defaultVS.GetReflection();
 	const ShaderReflection& psReflection = grayscalePS.GetReflection();
-	std::vector<ShaderReflection> refls;
-	refls.push_back(vsReflection);
-	refls.push_back(psReflection);
+	std::vector<ShaderReflection> reflections;
+	reflections.push_back(vsReflection);
+	reflections.push_back(psReflection);
 
 	RootSignature defaultRootSignature;
 	std::string defaultPSOName = "Renderer : Grayscale PSO";
 	std::string rootSigName = "Renderer : PostEffectRootSig";
-	RootSignatureBuilder::BuildFromReflection(refls, defaultRootSignature, rootSigName);
+	RootSignatureBuilder::BuildFromReflection(reflections, defaultRootSignature, rootSigName);
 	
 	D3D12_RASTERIZER_DESC rasterizerDesc{};
 	rasterizerDesc.CullMode = D3D12_CULL_MODE_BACK;
@@ -54,6 +54,12 @@ void PostEffectInitialzer::CreatePSO(RenderContext& ctx) {
 	defaultPSO.Finalize();
 
 	ctx.RegisterGraphicsPSO("Renderer : Vignetting PSO", defaultPSO);
+
+	ShaderModule GaussianPS(ShaderStage::Pixel, L"resources/engine/Shaders/GaussianFilter.PS.hlsl", L"ps_6_0");
+	defaultPSO.SetPixelShader(GaussianPS.GetBytecode());
+	defaultPSO.Finalize();
+
+	ctx.RegisterGraphicsPSO("Renderer : Gaussian PSO", defaultPSO);
 
 	{
 		ShaderModule boxFilterPS(ShaderStage::Pixel, L"resources/engine/Shaders/BoxFilter.PS.hlsl", L"ps_6_0");

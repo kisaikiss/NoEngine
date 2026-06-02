@@ -10,6 +10,7 @@
 #include "Rasterization/SkyBoxPass.h"
 #include "PostEffect/GrayscalePass.h"
 #include "PostEffect/VignettingPass.h"
+#include "PostEffect/GaussianFilterPass.h"
 #include "PostEffect/BoxFilterPass.h"
 
 #include "engine/Runtime/GraphicsCore.h"
@@ -185,6 +186,15 @@ void CommonSetupRenderPass(RenderPassScheduler& renderPassScheduler) {
 	particlePass->SetDepthOutput("MainDepth");
 	renderPassScheduler.AddPass(std::move(particlePass));
 
+	auto gaussianFilter = std::make_unique<GaussianFilterPass>();
+	gaussianFilter->AddInput("InputColor", "MainColor");
+	gaussianFilter->AddOutput("PostEffect");
+	renderPassScheduler.AddPass(std::move(gaussianFilter));
+
+	auto vignetting = std::make_unique<VignettingPass>();
+	vignetting->AddInput("InputColor", "PostEffect");
+	vignetting->AddOutput("MainColor");
+	renderPassScheduler.AddPass(std::move(vignetting));
 }
 
 void CommonSetupDebugRenderPass(RenderPassScheduler& renderPassScheduler) {
