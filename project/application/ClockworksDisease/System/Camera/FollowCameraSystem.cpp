@@ -18,23 +18,13 @@ void FollowCameraSystem::Update(No::Registry& registry, float deltaTime) {
 		auto* transform = registry.GetComponent<No::TransformComponent>(e);
 		auto* followCameraVariables = registry.GetComponent<FollowCameraComponent>(e);
 
-		if (No::Keyboard::IsPress(VK_LEFT)) {
-			followCameraVariables->theta += 1.f * deltaTime;
-		}
-		if (No::Keyboard::IsPress(VK_RIGHT)) {
-			followCameraVariables->theta -= 1.f * deltaTime;
-		}
-		if (No::Keyboard::IsPress(VK_UP)) {
-			followCameraVariables->phi += 1.f * deltaTime;
-			if (followCameraVariables->phi >= PI) {
-				followCameraVariables->phi = PI - 0.001f;
-			}
-		}
-		if (No::Keyboard::IsPress(VK_DOWN)) {
-			followCameraVariables->phi -= 1.f * deltaTime;
-			if (followCameraVariables->phi <= 0.f) {
-				followCameraVariables->phi = 0.001f;
-			}
+		followCameraVariables->theta += No::GetInputAxisValue("CameraHorizontal") * deltaTime;
+		followCameraVariables->phi += No::GetInputAxisValue("CameraVertical") * deltaTime;
+
+		if (followCameraVariables->phi >= PI) {
+			followCameraVariables->phi = PI - 0.001f;
+		} else if (followCameraVariables->phi <= 0.f) {
+			followCameraVariables->phi = 0.001f;
 		}
 
 		No::Vector3 nextPosition;

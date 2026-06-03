@@ -48,7 +48,7 @@ void PlayerMoveSystem::Update(No::Registry& registry, float deltaTime) {
 		// jump(後にSystemを分ける)
 
 		static const float kGravity = -9.8f;
-		if (No::Keyboard::IsTrigger(VK_SPACE)) {
+		if (No::InputIsTrigger("Jump")) {
 			playerVariables->yVelocity = 6.f;
 		}
 

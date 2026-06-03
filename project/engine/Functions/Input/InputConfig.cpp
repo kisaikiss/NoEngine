@@ -139,12 +139,12 @@ float InputConfig::GetPhysicalAxis(const PhysicalInput& bind) {
 		GamepadAxis axisType = static_cast<GamepadAxis>(bind.code);
 		float rawValue = 0.0f;
 		switch (axisType) {
-		case NoEngine::Input::GamepadAxis::LeftStickX:		 rawValue = Pad::GetStick().leftStickX * bind.scale;			 break;
-		case NoEngine::Input::GamepadAxis::LeftStickY:		 rawValue = Pad::GetStick().leftStickY * bind.scale;			 break;
-		case NoEngine::Input::GamepadAxis::RightStickX:		 rawValue = Pad::GetStick().rightStickX * bind.scale;			 break;
-		case NoEngine::Input::GamepadAxis::RightStickY:		 rawValue = Pad::GetStick().rightStickY * bind.scale;			 break;
-		case NoEngine::Input::GamepadAxis::LeftTrigger:		 rawValue = Pad::GetTriggerButton().leftTrigger * bind.scale;	 break;
-		case NoEngine::Input::GamepadAxis::RightTrigger:	 rawValue = Pad::GetTriggerButton().rightTrigger * bind.scale;	 break;
+		case NoEngine::Input::GamepadAxis::LeftStickX:		 rawValue = Pad::GetStick().leftStickX;				 break;
+		case NoEngine::Input::GamepadAxis::LeftStickY:		 rawValue = Pad::GetStick().leftStickY;				 break;
+		case NoEngine::Input::GamepadAxis::RightStickX:		 rawValue = Pad::GetStick().rightStickX;			 break;
+		case NoEngine::Input::GamepadAxis::RightStickY:		 rawValue = Pad::GetStick().rightStickY;			 break;
+		case NoEngine::Input::GamepadAxis::LeftTrigger:		 rawValue = Pad::GetTriggerButton().leftTrigger;	 break;
+		case NoEngine::Input::GamepadAxis::RightTrigger:	 rawValue = Pad::GetTriggerButton().rightTrigger;	 break;
 		}
 		float processedValue = ApplyDeadZone(rawValue, bind.deadZone);
 		return processedValue * bind.scale;
@@ -173,12 +173,12 @@ float InputConfig::GetPrePhysicalAxis(const PhysicalInput& bind) {
 		GamepadAxis axisType = static_cast<GamepadAxis>(bind.code);
 		float rawValue = 0.0f;
 		switch (axisType) {
-		case NoEngine::Input::GamepadAxis::LeftStickX:		 rawValue = Pad::GetPreStick().leftStickX * bind.scale;			  break;
-		case NoEngine::Input::GamepadAxis::LeftStickY:		 rawValue = Pad::GetPreStick().leftStickY * bind.scale;			  break;
-		case NoEngine::Input::GamepadAxis::RightStickX:		 rawValue = Pad::GetPreStick().rightStickX * bind.scale;		  break;
-		case NoEngine::Input::GamepadAxis::RightStickY:		 rawValue = Pad::GetPreStick().rightStickY * bind.scale;		  break;
-		case NoEngine::Input::GamepadAxis::LeftTrigger:		 rawValue = Pad::GetPreTriggerButton().leftTrigger * bind.scale;  break;
-		case NoEngine::Input::GamepadAxis::RightTrigger:	 rawValue = Pad::GetPreTriggerButton().rightTrigger * bind.scale; break;
+		case NoEngine::Input::GamepadAxis::LeftStickX:		 rawValue = Pad::GetPreStick().leftStickX;			 break;
+		case NoEngine::Input::GamepadAxis::LeftStickY:		 rawValue = Pad::GetPreStick().leftStickY;			 break;
+		case NoEngine::Input::GamepadAxis::RightStickX:		 rawValue = Pad::GetPreStick().rightStickX;			 break;
+		case NoEngine::Input::GamepadAxis::RightStickY:		 rawValue = Pad::GetPreStick().rightStickY;			 break;
+		case NoEngine::Input::GamepadAxis::LeftTrigger:		 rawValue = Pad::GetPreTriggerButton().leftTrigger;  break;
+		case NoEngine::Input::GamepadAxis::RightTrigger:	 rawValue = Pad::GetPreTriggerButton().rightTrigger; break;
 		}
 		float processedValue = ApplyDeadZone(rawValue, bind.deadZone);
 		return processedValue * bind.scale;
