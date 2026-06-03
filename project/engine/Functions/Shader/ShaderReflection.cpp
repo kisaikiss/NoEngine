@@ -241,10 +241,10 @@ void RootSignatureBuilder::BuildFromReflection(
 	RootSignature& rootSig,
 	const std::string& rootSigName) {
 
-	Log::DebugPrint("=== Reflection Dump ===\n");
+	LogDebug("=== Reflection Dump ===\n");
 	for (auto& refl : reflections) {
 		for (auto& r : refl.resources_) {
-			Log::DebugPrint("stage=" + std::to_string(static_cast<int>(refl.stage_)) + 
+			LogDebug("stage=" + std::to_string(static_cast<int>(refl.stage_)) + 
 				"name="+ r.name +" type="+ std::to_string(static_cast<int>(r.type))+" bindPoint=" +
 				std::to_string(static_cast<int>(r.bindPoint)) +" space=" + std::to_string(static_cast<int>(r.space)));
 		}

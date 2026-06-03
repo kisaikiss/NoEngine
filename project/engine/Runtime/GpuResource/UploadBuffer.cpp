@@ -5,7 +5,7 @@
 
 namespace NoEngine {
 void UploadBuffer::Create(const std::wstring& name, size_t BufferSize) {
-    Log::DebugPrint("UploadBuffer Create Start", VerbosityLevel::kDebug);
+    LogDebug("UploadBuffer Create Start");
     Destroy();
 
     bufferSize_ = BufferSize;
@@ -47,7 +47,7 @@ void UploadBuffer::Create(const std::wstring& name, size_t BufferSize) {
     resource_->SetName(name.c_str());
     name_ = name;
 #endif
-    Log::DebugPrint("UploadBuffer Created", VerbosityLevel::kDebug);
+    LogDebug("UploadBuffer Created");
 }
 
 void* UploadBuffer::Map(void) {

@@ -85,7 +85,7 @@ void EditSystem::SaveFile(Registry& registry, nlohmann::json j) {
 	std::string filePath = skDirectoryPath + sceneName + ".json";
 	std::ofstream file(filePath);
 	if (!file.is_open()) {
-		Log::DebugPrint("Failed to open file for writing", VerbosityLevel::kError);
+		LogError("Failed to open file for writing");
 		return;
 	}
 
@@ -103,7 +103,7 @@ void EditSystem::LoadFile(Registry& registry) {
 
 	std::ifstream file(filePath);
 	if (!file.is_open()) {
-		Log::DebugPrint("Failed to open scene file:" + filePath, VerbosityLevel::kError);
+		LogError("Failed to open scene file:" + filePath);
 		return;
 	}
 

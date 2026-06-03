@@ -113,7 +113,7 @@ uint64_t CommandQueue::ExecuteCommandList(ID3D12CommandList* list) {
 
 	HRESULT hr = ((ID3D12GraphicsCommandList4*)list)->Close();
 	if (FAILED(hr)) {
-		Log::DebugPrint("commandList close failed", VerbosityLevel::kCritical);
+		LogCritical("commandList close failed");
 	}
 
 	commandQueue_->ExecuteCommandLists(1, &list);

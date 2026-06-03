@@ -229,7 +229,7 @@ void ModelLoader::LoadModel(const std::string& name, const std::string& filePath
 
 	// RaytracingMesh
 	if (GraphicsCore::IsEnableRaytracing()) {
-		Log::DebugPrint("RaytracingMesh create start");
+		LogDebug("RaytracingMesh create start");
 		sMeshes[name].raytracingMesh = std::make_unique<RaytracingMesh>(ProcessRaytracingMesh(sMeshes[name]));
 	}
 

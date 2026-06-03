@@ -46,7 +46,7 @@ void GraphicsPSO::SetRenderTargetFormat(DXGI_FORMAT rtvFormat, DXGI_FORMAT dsvFo
 
 void GraphicsPSO::SetRenderTargetFormats(UINT numRTVs, const DXGI_FORMAT* rtvFormats, DXGI_FORMAT dsvFormat, UINT msaaCount, UINT msaaQuality) {
 	if (numRTVs != 0 && rtvFormats == nullptr) {
-		Log::DebugPrint("Null format array conflicts with non-zero length", VerbosityLevel::kCritical);
+		LogCritical("Null format array conflicts with non-zero length");
 		assert(false);
 	}
 

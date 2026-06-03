@@ -180,7 +180,7 @@ DXGI_FORMAT PixelBuffer::GetUAVFormat(DXGI_FORMAT format) {
     case DXGI_FORMAT_R24_UNORM_X8_TYPELESS:
     case DXGI_FORMAT_X24_TYPELESS_G8_UINT:
     case DXGI_FORMAT_D16_UNORM:
-        Log::DebugPrint("Requested a UAV Format for a depth stencil Format.", VerbosityLevel::kCritical);
+        LogCritical("Requested a UAV Format for a depth stencil Format.");
         assert(false);
 #endif
     }

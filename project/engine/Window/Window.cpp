@@ -22,7 +22,7 @@ Window::~Window() {
 }
 
 void Window::Create(WNDPROC windowProc, std::wstring title, uint32_t width, uint32_t height, const std::wstring& iconPath) {
-	Log::DebugPrint("Window_WindowCreateStart title : " + ConvertString(title),VerbosityLevel::kInfo);
+	LogInfo("Window_WindowCreateStart title : " + ConvertString(title));
 	core_.title = title;
 	isDead_ = false;
 	isResize_ = false;
@@ -71,7 +71,7 @@ void Window::Create(WNDPROC windowProc, std::wstring title, uint32_t width, uint
 	if (!RegisterClassEx(&core_.wcex)) {
 		assert(false);
 	}
-	Log::DebugPrint("RegisterWindowClass title : " + ConvertString(title));
+	LogDebug("RegisterWindowClass title : " + ConvertString(title));
 
 	//クライアント領域を元に実際のサイズにwrcを変更してもらう
 	AdjustWindowRect(&size_.windowRect, WS_OVERLAPPEDWINDOW, false);
@@ -104,7 +104,7 @@ void Window::Create(WNDPROC windowProc, std::wstring title, uint32_t width, uint
 	// ウィンドウを表示します。
 	ShowWindow(core_.hwnd, SW_SHOW);
 
-	Log::DebugPrint("Window_WindowCreated title : " + ConvertString(title), VerbosityLevel::kInfo);
+	LogInfo("Window_WindowCreated title : " + ConvertString(title));
 }
 
 
@@ -127,7 +127,7 @@ bool Window::ProcessMessage() {
 }
 void Window::RegisterWindowEvent(std::unique_ptr<IWindowEvent> event) {
 	UINT msg = event->GetTargetMassage();
-	Log::DebugPrint("RegisterWindowEvent WindowTitle : " + ConvertString(core_.title) + ", message : " + to_string(msg), VerbosityLevel::kInfo);
+	LogInfo("RegisterWindowEvent WindowTitle : " + ConvertString(core_.title) + ", message : " + to_string(msg));
 	if (eventMap_.contains(msg)) {
 		eventMap_[msg].reset();
 	}
@@ -164,17 +164,17 @@ void Window::SetSizeChangeMode(SizeChangeMode sizeChangeMode) {
 
 		switch (sizeChangeMode) {
 		case SizeChangeMode::kNone:
-			Log::DebugPrint("Set SizeChangeMode : None", VerbosityLevel::kInfo);
+			LogInfo("Set SizeChangeMode : None");
 			// サイズ変更不可
 			style &= ~(WS_SIZEBOX | WS_MAXIMIZEBOX);
 			break;
 		case SizeChangeMode::kNormal:
-			Log::DebugPrint("Set SizeChangeMode : Normal", VerbosityLevel::kInfo);
+			LogInfo("Set SizeChangeMode : Normal");
 			// 自由変更
 			style |= (WS_SIZEBOX | WS_MAXIMIZEBOX);
 			break;
 		case SizeChangeMode::kFixedAspect:
-			Log::DebugPrint("Set SizeChangeMode : FixedAspect", VerbosityLevel::kInfo);
+			LogInfo("Set SizeChangeMode : FixedAspect");
 			// アスペクト比固定（サイズ変更は可能）
 			style |= (WS_SIZEBOX | WS_MAXIMIZEBOX);
 			break;
@@ -195,7 +195,7 @@ void Window::SetWindowMode(WindowMode windowMode) {
 
 	switch (windowMode) {
 	case WindowMode::kWindow:
-		Log::DebugPrint("Change WindowMode : Window", VerbosityLevel::kInfo);
+		LogInfo("Change WindowMode : Window");
 		// ウィンドウモード
 		size_ = preWindowSize_;
 		SetWindowLong(core_.hwnd, GWL_STYLE, core_.windowStyle);
@@ -211,7 +211,7 @@ void Window::SetWindowMode(WindowMode windowMode) {
 		break;
 
 	case WindowMode::kFullScreen:
-		Log::DebugPrint("Change WindowMode : FullScreen", VerbosityLevel::kInfo);
+		LogInfo("Change WindowMode : FullScreen");
 
 		preWindowSize_ = size_;
 		// フルスクリーンモード
@@ -245,7 +245,7 @@ void Window::AdjustWindowSize() {
 	if (!core_.hwnd) {
 		return;
 	}
-	Log::DebugPrint("AdjustWindowSize", VerbosityLevel::kInfo);
+	LogInfo("AdjustWindowSize");
 }
 
 void Window::ResizeSignal() {

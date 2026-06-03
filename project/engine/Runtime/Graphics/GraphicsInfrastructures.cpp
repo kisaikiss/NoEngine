@@ -7,7 +7,7 @@
 #pragma comment(lib,"dxgi.lib")
 
 NoEngine::Graphics::GraphicsInfrastructures::GraphicsInfrastructures() {
-	Log::DebugPrint("GraphicsInfrastructures create start");
+	LogDebug("GraphicsInfrastructures create start");
 	//DXGIファクトリーの生成
 	//HRESULTはWindows系のエラーコード
 	//関数が成功したかSUCCEEDEDマクロで判定できる
@@ -24,12 +24,12 @@ NoEngine::Graphics::GraphicsInfrastructures::GraphicsInfrastructures() {
 		// ソフトウェアアダプタは除外
 		if (!(adapterDesc.Flags & DXGI_ADAPTER_FLAG3_SOFTWARE)) {
 			// 利用したアダプタの情報をコンソールに出力。wstringのままだと注意
-			Log::DebugPrint(ConvertString(std::format(L"Use Adapter: {}", adapterDesc.Description)));
+			LogDebug(ConvertString(std::format(L"Use Adapter: {}", adapterDesc.Description)));
 			break;
 		}
 		dxgiAdapter_ = nullptr; // ソフトウェアアダプタの場合は見なかったことにする
 	}
 	// 適切なアダプタが見つからなかったので起動できない
 	assert(dxgiAdapter_ != nullptr);
-	Log::DebugPrint("GraphicsInfrastructures created");
+	LogDebug("GraphicsInfrastructures created");
 }

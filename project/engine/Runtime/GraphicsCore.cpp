@@ -135,7 +135,7 @@ void GraphicsCore::EnableDebugLayer() {
 void GraphicsCore::SettingDebugLayer() {
 #ifdef _DEBUG
 	if (!sGraphicsDevice) {
-		Log::DebugPrint("GraphicsDevice is nulptr!!!", VerbosityLevel::kCritical);
+		LogCritical("GraphicsDevice is nulptr!!!");
 		assert(false);
 	}
 	ID3D12InfoQueue* infoQueue = nullptr;
@@ -221,7 +221,7 @@ void GraphicsCore::CheckDeviceStatus() {
 		return; //!< 正常
 	}
 
-	Log::DebugPrint(GetHResultMessage(hr), VerbosityLevel::kCritical);
+	LogCritical(GetHResultMessage(hr));
 	assert(false);
 }
 
@@ -233,14 +233,14 @@ void GraphicsCore::CreatePixelBuffer() {
 		Microsoft::WRL::ComPtr<ID3D12Resource> displayPlane;
 		HRESULT hr = sSwapChain->Get()->GetBuffer(i, IID_PPV_ARGS(&displayPlane));
 		if (FAILED(hr)) {
-			Log::DebugPrint("swap chain GetBuffer() failed", VerbosityLevel::kCritical);
+			LogCritical("swap chain GetBuffer() failed");
 			assert(false);
 		}
 		sFrameBuffers[i] = std::make_unique<ColorBuffer>();
 		sFrameBuffers[i]->CreateFromSwapChain(L"Primary SwapChain Buffer", displayPlane.Detach());
 	}
 	sShadowMaskBuffer.Create(L"ShadowMask", static_cast<uint32_t>(sWindowWidth), static_cast<uint32_t>(sWindowHeight), 1, DXGI_FORMAT_R8_UNORM);
-	Log::DebugPrint("create pixel buffers");
+	LogDebug("create pixel buffers");
 }
 
 void GraphicsCore::DestroyPixelBuffer() {
@@ -249,7 +249,7 @@ void GraphicsCore::DestroyPixelBuffer() {
 		colorBuffer.reset();
 	}
 	sShadowMaskBuffer.Destroy();
-	Log::DebugPrint("destroy pixel buffers");
+	LogDebug("destroy pixel buffers");
 }
 
 void GraphicsCore::FullScreenDraw(GraphicsContext& context, ColorBuffer& finalColor) {

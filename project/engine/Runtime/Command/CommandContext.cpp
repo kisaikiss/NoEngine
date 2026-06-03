@@ -91,15 +91,13 @@ void CommandContext::Initialize(void) {
 
 GraphicsContext& CommandContext::GetGraphicsContext() {
 	if (type_ == D3D12_COMMAND_LIST_TYPE_COMPUTE) {
-		Log::DebugPrint("Cannot convert async compute context to graphics", VerbosityLevel::kCritical);
+		LogCritical("Cannot convert async compute context to graphics");
 		assert(false);
 	}
-	Log::DebugPrint("Converting a command context to a graphics context");
 	return reinterpret_cast<GraphicsContext&>(*this);
 }
 
 ComputeContext& CommandContext::GetComputeContext() {
-	Log::DebugPrint("Converting a command context to a compute context");
 	return reinterpret_cast<ComputeContext&>(*this);
 	
 }
@@ -184,7 +182,7 @@ void CommandContext::TransitionResource(GpuResource& resource, D3D12_RESOURCE_ST
 
 	if (oldState != newState) {
 		if (numBarriersToFlush_ >= 16) {
-			Log::DebugPrint("Exceeded arbitrary limit on buffered barriers", VerbosityLevel::kCritical);
+			LogCritical("Exceeded arbitrary limit on buffered barriers");
 			assert(false);
 		}
 
@@ -217,7 +215,7 @@ void CommandContext::TransitionResource(GpuResource& resource, D3D12_RESOURCE_ST
 }
 
 void CommandContext::InsertUAVBarrier(GpuResource& Resource, bool FlushImmediate) {
-	Log::DebugPrint("Exceeded arbitrary limit on buffered barriers", VerbosityLevel::kCritical);
+	LogCritical("Exceeded arbitrary limit on buffered barriers");
 	assert(numBarriersToFlush_ < 16);
 	D3D12_RESOURCE_BARRIER& BarrierDesc = resourceBarrierBuffer_[numBarriersToFlush_++];
 

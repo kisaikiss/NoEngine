@@ -42,7 +42,7 @@ static void SoundUnload(SoundData* soundDataPointer) {
 	soundDataPointer->pBuffer = 0;
 	soundDataPointer->mediaData.clear();
 	CoTaskMemFree(soundDataPointer->waveFormat);
-	Log::DebugPrint("sound data unloaded. name : " + soundDataPointer->name);
+	LogDebug("sound data unloaded. name : " + soundDataPointer->name);
 }
 
 void AudioInitialize() {
@@ -59,20 +59,20 @@ void AudioShutdown() {
 		SoundUnload(&sound);
 	}
 	MFShutdown();
-	Log::DebugPrint("Audio Finalized\n",VerbosityLevel::kInfo);
+	LogInfo("Audio Finalized\n");
 }
 
 namespace Asset {
 
 void SoundLoad(std::wstring filePath, std::string name) {
-	Log::DebugPrint("Sound load begin. filePath : " + ConvertString(filePath) + ", name : " + name + "\n");
+	LogDebug("Sound load begin. filePath : " + ConvertString(filePath) + ", name : " + name + "\n");
 
 	//まだ読み込んでいなければ
 	if (soundData[name].filePath != filePath) {
 		if (soundData[name].name != name) {
 			soundData[name].name = name;
 		} else {
-			Log::DebugPrint("SoundData_name : " + name + " is already taken\n");
+			LogDebug("SoundData_name : " + name + " is already taken\n");
 			assert(false);
 			return;
 		}
@@ -80,7 +80,7 @@ void SoundLoad(std::wstring filePath, std::string name) {
 		soundData[name].filePath = filePath;
 
 	} else {
-		Log::DebugPrint("filePath : " + ConvertString(filePath) + " is already loaded\n");
+		LogDebug("filePath : " + ConvertString(filePath) + " is already loaded\n");
 		return;
 	}
 	//ソースリーダの作成
@@ -138,12 +138,12 @@ void SoundLoad(std::wstring filePath, std::string name) {
 	//波形フォーマットを元にSourceVoiceの生成
 	hr = xAudio2->CreateSourceVoice(&soundData[name].pSourceVoice, soundData[name].waveFormat);
 	assert(SUCCEEDED(hr));
-	Log::DebugPrint("Sound load Succes! filePath : " + ConvertString(filePath) + ", name : " + name + "\n");
+	LogDebug("Sound load Succes! filePath : " + ConvertString(filePath) + ", name : " + name + "\n");
 }
 
 void SoundUnload(std::string name) {
 	if (soundData[name].name != name) {
-		Log::DebugPrint("This sound name is Not Found. name : " + name + "\n");
+		LogDebug("This sound name is Not Found. name : " + name + "\n");
 		return;
 	}
 	//バッファのメモリを解放
@@ -151,12 +151,12 @@ void SoundUnload(std::string name) {
 	soundData[name].pBuffer = 0;
 	soundData[name].mediaData.clear();
 	soundData[name].waveFormat = {};
-	Log::DebugPrint("sound data unloaded. name : " + name + "\n");
+	LogDebug("sound data unloaded. name : " + name + "\n");
 }
 
 void SoundPlay(std::string name, float volume, bool isLoop) {
 	if (soundData[name].name != name) {
-		Log::DebugPrint("This sound name is Not Found. name : " + name + "\n");
+		LogDebug("This sound name is Not Found. name : " + name + "\n");
 		return;
 	}
 	HRESULT result;
@@ -179,7 +179,7 @@ void SoundPlay(std::string name, float volume, bool isLoop) {
 
 void SoundEffectPlay(std::string name, float volume) {
 	if (soundData[name].name != name) {
-		Log::DebugPrint("This sound name is Not Found. name : " + name + "\n");
+		LogDebug("This sound name is Not Found. name : " + name + "\n");
 		return;
 	}
 	IXAudio2SourceVoice* pSourceVoice;
@@ -200,12 +200,12 @@ void SoundEffectPlay(std::string name, float volume) {
 
 void SoundStop(std::string name) {
 	if (soundData[name].name != name) {
-		Log::DebugPrint("This sound name is Not Found. name : " + name + "\n");
+		LogDebug("This sound name is Not Found. name : " + name + "\n");
 		return;
 	}
 	HRESULT hr = soundData[name].pSourceVoice->Stop();
 	if (FAILED(hr)) {
-		Log::DebugPrint("SoundStop Failed : " + name);
+		LogDebug("SoundStop Failed : " + name);
 		assert(false);
 	}
 	
@@ -213,7 +213,7 @@ void SoundStop(std::string name) {
 
 void SoundCompleteStop(std::string name) {
 	if (soundData[name].name != name) {
-		Log::DebugPrint("This sound name is Not Found. name : " + name + "\n");
+		LogDebug("This sound name is Not Found. name : " + name + "\n");
 		return;
 	}
 	HRESULT hr = soundData[name].pSourceVoice->Stop();
@@ -233,7 +233,7 @@ void SoundAllCompleteStop() {
 
 void SetVolume(std::string name, float volume) {
 	if (soundData[name].name != name) {
-		Log::DebugPrint("This sound name is Not Found. name : " + name + "\n");
+		LogDebug("This sound name is Not Found. name : " + name + "\n");
 		return;
 	}
 	soundData[name].pSourceVoice->SetVolume(volume);
@@ -241,7 +241,7 @@ void SetVolume(std::string name, float volume) {
 
 void SetPitch(std::string name, float pitch) {
 	if (soundData[name].name != name) {
-		Log::DebugPrint("This sound name is Not Found. name : " + name + "\n");
+		LogDebug("This sound name is Not Found. name : " + name + "\n");
 		return;
 	}
 	soundData[name].pSourceVoice->SetFrequencyRatio(pitch);

@@ -15,12 +15,12 @@ CommandListManager::~CommandListManager() {
 }
 
 void CommandListManager::Create() {
-	Log::DebugPrint("CommandListManager Create Start");
+	LogDebug("CommandListManager Create Start");
 
 	graphicsQueue_.Create();
 	computeQueue_.Create();
 	copyQueue_.Create();
-	Log::DebugPrint("CommandListManager Created!");
+	LogDebug("CommandListManager Created!");
 }
 
 void CommandListManager::Shutdown() {

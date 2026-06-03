@@ -32,7 +32,7 @@ void DescriptorHeap::Create(const std::wstring& debugHeapName, D3D12_DESCRIPTOR_
 
 DescriptorHandle DescriptorHeap::Alloc(uint32_t count) {
     if (!HasAvailableSpace(count)) {
-        Log::DebugPrint("Descriptor Heap out of space.  Increase heap size.", VerbosityLevel::kCritical);
+        LogCritical("Descriptor Heap out of space.  Increase heap size.");
         assert(false);
     }
     DescriptorHandle ret = nextFreeHandle_;

@@ -63,19 +63,19 @@ void ShaderModule::Initialize() {
 	// DXCはDirectX12とは別のものなので、別で初期化する
 	HRESULT hr = DxcCreateInstance(CLSID_DxcUtils, IID_PPV_ARGS(&sDxcUtils));
 	if (FAILED(hr)) {
-		Log::DebugPrint("DxcUtils Create failed", VerbosityLevel::kCritical);
+		LogCritical("DxcUtils Create failed");
 		assert(false);
 	}
 	hr = DxcCreateInstance(CLSID_DxcCompiler, IID_PPV_ARGS(&sDxcCompiler));
 	if (FAILED(hr)) {
-		Log::DebugPrint("DxcCompiler Create failed", VerbosityLevel::kCritical);
+		LogCritical("DxcCompiler Create failed");
 		assert(false);
 	}
 
 	//現時点ではincludeしないが、includeに対応するための設定を行っておく
 	hr = sDxcUtils->CreateDefaultIncludeHandler(&sIncludeHandler);
 	if (FAILED(hr)) {
-		Log::DebugPrint("IncludeHandler Create failed", VerbosityLevel::kCritical);
+		LogCritical("IncludeHandler Create failed");
 		assert(false);
 	}
 
@@ -230,7 +230,7 @@ bool ShaderModule::CompileShader(Microsoft::WRL::ComPtr<IDxcBlob>& outBlob) {
 #pragma region 1.hlslファイルを読む
 	// hlslファイルの内容ををDXCの機能を利用して読み、コンパイラに渡すための設定を行います。
 	// これからシェーダーをコンパイルする旨をログに出します。
-	NoEngine::Log::DebugPrint(NoEngine::ConvertString(std::format(L"Begin CompileShader, path:{}, profile:{}\n", filePath_, profile_)));
+	LogDebug(NoEngine::ConvertString(std::format(L"Begin CompileShader, path:{}, profile:{}\n", filePath_, profile_)));
 	// hlslファイルをロードしてバッファにします。
 	Microsoft::WRL::ComPtr<IDxcBlobEncoding> shaderSource = nullptr;
 	HRESULT hr = sDxcUtils->LoadFile(filePath_.c_str(), nullptr, &shaderSource);
@@ -286,7 +286,7 @@ bool ShaderModule::CompileShader(Microsoft::WRL::ComPtr<IDxcBlob>& outBlob) {
 	Microsoft::WRL::ComPtr<IDxcBlobUtf8> shaderError = nullptr;
 	shaderResult->GetOutput(DXC_OUT_ERRORS, IID_PPV_ARGS(&shaderError), nullptr);
 	if (shaderError != nullptr && shaderError->GetStringLength() != 0) {
-		NoEngine::Log::DebugPrint(shaderError->GetStringPointer());
+		LogDebug(shaderError->GetStringPointer());
 		assert(false);
 	}
 #pragma endregion
@@ -297,7 +297,7 @@ bool ShaderModule::CompileShader(Microsoft::WRL::ComPtr<IDxcBlob>& outBlob) {
 	hr = shaderResult->GetOutput(DXC_OUT_OBJECT, IID_PPV_ARGS(&outBlob), nullptr);
 	assert(SUCCEEDED(hr));
 	// 成功したログを出します。
-	NoEngine::Log::DebugPrint(NoEngine::ConvertString(std::format(L"Compile Succeeded, path:{}, profile:{}\n", filePath_, profile_)));
+	LogDebug(NoEngine::ConvertString(std::format(L"Compile Succeeded, path:{}, profile:{}\n", filePath_, profile_)));
 	// もう使わないリソースを解放します。
 	shaderSource.Reset();
 	shaderResult.Reset();

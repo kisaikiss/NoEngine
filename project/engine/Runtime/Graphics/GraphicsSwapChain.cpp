@@ -46,7 +46,7 @@ void GraphicsSwapChain::Resize() {
 		0
 	);
 	if (FAILED(hr)) {
-		Log::DebugPrint("SwapChain resize failed", VerbosityLevel::kCritical);
+		LogCritical("SwapChain resize failed");
 		assert(false);
 	}
 	isResize_ = false;
@@ -83,7 +83,7 @@ void GraphicsSwapChain::Initialize(HWND hwnd, UINT windowWidth, UINT windowHeigh
 			nullptr,
 			reinterpret_cast<IDXGISwapChain1**>(swapChain_.GetAddressOf()));
 	if (FAILED(hr)) {
-		Log::DebugPrint("SwapChain.create.failed", VerbosityLevel::kCritical);
+		LogCritical("SwapChain.create.failed");
 		assert(false);
 	}
 }

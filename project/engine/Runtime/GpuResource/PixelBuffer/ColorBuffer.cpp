@@ -53,7 +53,7 @@ void ColorBuffer::CreateImGuiSRV() {
 //}
 
 void ColorBuffer::CreateDerivedViews(ID3D12Device* Device, DXGI_FORMAT Format, uint32_t ArraySize, uint32_t NumMips) {
-    Log::DebugPrint("We don't support auto-mips on mTexture arrays", VerbosityLevel::kCritical);
+    LogCritical("We don't support auto-mips on mTexture arrays");
     assert(ArraySize == 1 || NumMips == 1);
 
     numMipMaps_ = NumMips - 1;

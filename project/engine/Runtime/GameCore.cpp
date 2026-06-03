@@ -73,6 +73,7 @@ int RunApplication(std::unique_ptr<IGameApp> game) {
 		renderPassScheduler.Render(context, game->GetRegistry());
 
 		DrawPerformance(deltaTime);
+		Log::GetInstance().DrawImGuiWindow("Console");
 
 		ctx.Finish(true);
 		GraphicsCore::EndFrame(context, renderPassScheduler.GetScreenDrawBuffer());
@@ -96,8 +97,8 @@ void EngineInitialize() {
 	}
 
 	// ログを初期化します。
-	Log::Initialize();
-	Log::SetVerbosityLevel(VerbosityLevel::kDebug);
+	Log::GetInstance().Initialize();
+	Log::GetInstance().SetVerbosityLevel(VerbosityLevel::kDebug);
 
 	// グラフィックス関連の基盤を初期化
 	GraphicsCore::Initialize();

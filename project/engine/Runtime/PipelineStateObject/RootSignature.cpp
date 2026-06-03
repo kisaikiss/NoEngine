@@ -74,7 +74,7 @@ void RootSignature::InitStaticSampler(UINT Register, const D3D12_SAMPLER_DESC& N
             NonStaticSamplerDesc.BorderColor[1] == 1.0f &&
             NonStaticSamplerDesc.BorderColor[2] == 1.0f &&
             NonStaticSamplerDesc.BorderColor[3] == 1.0f) {
-            Log::DebugPrint("Sampler border color does not match static sampler limitations",VerbosityLevel::kCritical);
+            LogCritical("Sampler border color does not match static sampler limitations");
             assert(false);
         }
 
@@ -149,7 +149,7 @@ void RootSignature::Finalize(const std::wstring& name, D3D12_ROOT_SIGNATURE_FLAG
 
         HRESULT hr = D3D12SerializeRootSignature(&RootDesc, D3D_ROOT_SIGNATURE_VERSION_1, pOutBlob.GetAddressOf(), pErrorBlob.GetAddressOf());
         if (FAILED(hr)) {
-            NoEngine::Log::DebugPrint((char*)pErrorBlob->GetBufferPointer(), VerbosityLevel::kCritical);
+            LogCritical((char*)pErrorBlob->GetBufferPointer());
             assert(false);
         }
 
@@ -241,7 +241,7 @@ void RootSignature::Dump() const {
     }
 
     dump += ("==== End RootSignature Dump ====");
-    Log::DebugPrint(dump);
+    LogDebug(dump);
 
 }
 }

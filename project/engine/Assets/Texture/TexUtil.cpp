@@ -26,7 +26,7 @@ void CompileTextureOnDemand(const std::wstring& originalFile, uint32_t flags) {
 	bool ddsFileExists = std::filesystem::exists(ddsFile);
 
 	if (!srcFileExists && !ddsFileExists) {
-		Log::DebugPrint("Texture " + WStringToString(RemoveBasePath(originalFile)) + " is missing.\n", VerbosityLevel::kInfo);
+		LogInfo("Texture " + WStringToString(RemoveBasePath(originalFile)) + " is missing.\n");
 		return;
 	}
 
@@ -40,7 +40,7 @@ void CompileTextureOnDemand(const std::wstring& originalFile, uint32_t flags) {
 		ddsLastWriteTime = std::filesystem::last_write_time(ddsFile);
 
 	if (!ddsFileExists || (srcFileExists && ddsLastWriteTime < srcLastWriteTime)) {
-		Log::DebugPrint("DDS mTexture " + WStringToString(RemoveBasePath(originalFile)) + " missing or older than source. Rebuilding.\n");
+		LogDebug("DDS mTexture " + WStringToString(RemoveBasePath(originalFile)) + " missing or older than source. Rebuilding.\n");
 		ConvertToDDS(originalFile, flags);
 	}
 }
@@ -63,7 +63,7 @@ bool ConvertToDDS(const std::wstring& filePath, uint32_t Flags) {
 	
 
 	std::string filePathStr = WStringToString(filePath);
-	Log::DebugPrint("Converting file \"" + filePathStr + "\" to DDS.\n");
+	LogDebug("Converting file \"" + filePathStr + "\" to DDS.\n");
 
 	// 拡張子をutf8（ascii）として取得する
 	std::wstring ext = ToLower(GetFileExtension(filePath));
@@ -80,7 +80,7 @@ bool ConvertToDDS(const std::wstring& filePath, uint32_t Flags) {
 		if (FAILED(hr)) {
 			std::ostringstream oss;
 			oss << "Could not load mTexture \"" << filePathStr << "\" (DDS: " << hr << ").\n";
-			Log::DebugPrint(oss.str(), VerbosityLevel::kInfo);
+			LogInfo(oss.str());
 			return false;
 		}
 	} else if (ext == L"tga") {
@@ -88,7 +88,7 @@ bool ConvertToDDS(const std::wstring& filePath, uint32_t Flags) {
 		if (FAILED(hr)) {
 			std::ostringstream oss;
 			oss << "Could not load mTexture \"" << filePathStr << "\" (TGA: " << hr << ").\n";
-			Log::DebugPrint(oss.str(), VerbosityLevel::kInfo);
+			LogInfo(oss.str());
 			return false;
 		}
 	} else if (ext == L"hdr") {
@@ -97,7 +97,7 @@ bool ConvertToDDS(const std::wstring& filePath, uint32_t Flags) {
 		if (FAILED(hr)) {
 			std::ostringstream oss;
 			oss << "Could not load mTexture \"" << filePathStr << "\" (HDR: " << hr << ").\n";
-			Log::DebugPrint(oss.str(), VerbosityLevel::kInfo);
+			LogInfo(oss.str());
 			return false;
 		}
 	} else {
@@ -107,7 +107,7 @@ bool ConvertToDDS(const std::wstring& filePath, uint32_t Flags) {
 		if (FAILED(hr)) {
 			std::ostringstream oss;
 			oss << "Could not load mTexture \"" << filePathStr << "\" (WIC: " << hr << ").\n";
-			Log::DebugPrint(oss.str(), VerbosityLevel::kInfo);
+			LogInfo(oss.str());
 			return false;
 		}
 	}
@@ -115,7 +115,7 @@ bool ConvertToDDS(const std::wstring& filePath, uint32_t Flags) {
 	if (info.width > 16384 || info.height > 16384) {
 		std::ostringstream oss;
 		oss << "Texture size (" << info.width << "," << info.height << ") too large for feature level 11.0 or later (16384) \"" << filePathStr << "\".\n";
-		Log::DebugPrint(oss.str(), VerbosityLevel::kInfo);
+		LogInfo(oss.str());
 		return false;
 	}
 
@@ -127,7 +127,7 @@ bool ConvertToDDS(const std::wstring& filePath, uint32_t Flags) {
 		if (FAILED(hr)) {
 			std::ostringstream oss;
 			oss << "Could not flip image \"" << filePathStr << "\" (" << hr << ").\n";
-			Log::DebugPrint(oss.str(), VerbosityLevel::kInfo);
+			LogInfo(oss.str());
 		} else {
 			image.swap(timage);
 		}
@@ -161,7 +161,7 @@ bool ConvertToDDS(const std::wstring& filePath, uint32_t Flags) {
 		if (FAILED(hr)) {
 			std::ostringstream oss;
 			oss << "Could not compute normal map for \"" << filePathStr << "\" (" << hr << ").\n";
-			Log::DebugPrint(oss.str(), VerbosityLevel::kInfo);
+			LogInfo(oss.str());
 		} else {
 			image.swap(timage);
 			info.format = tformat;
@@ -175,7 +175,7 @@ bool ConvertToDDS(const std::wstring& filePath, uint32_t Flags) {
 		if (FAILED(hr)) {
 			std::ostringstream oss;
 			oss << "Could not convert \"" << filePathStr << "\" (" << hr << ").\n";
-			Log::DebugPrint(oss.str(), VerbosityLevel::kInfo);
+			LogInfo(oss.str());
 		} else {
 			image.swap(timage);
 			info.format = tformat;
@@ -191,7 +191,7 @@ bool ConvertToDDS(const std::wstring& filePath, uint32_t Flags) {
 		if (FAILED(hr)) {
 			std::ostringstream oss;
 			oss << "Failing generating mipmaps for \"" << filePathStr << "\" (WIC: " << hr << ").\n";
-			Log::DebugPrint(oss.str(), VerbosityLevel::kInfo);
+			LogInfo(oss.str());
 		} else {
 			image.swap(timage);
 		}
@@ -202,7 +202,7 @@ bool ConvertToDDS(const std::wstring& filePath, uint32_t Flags) {
 		if (info.width % 4 || info.height % 4) {
 			std::ostringstream oss;
 			oss << "Texture size (" << info.width << "," << info.height << ") not a multiple of 4 \"" << filePathStr << "\", so skipping compress\n";
-			Log::DebugPrint(oss.str(), VerbosityLevel::kInfo);
+			LogInfo(oss.str());
 		} else {
 			std::unique_ptr<ScratchImage> timage(new ScratchImage);
 
@@ -210,7 +210,7 @@ bool ConvertToDDS(const std::wstring& filePath, uint32_t Flags) {
 			if (FAILED(hr)) {
 				std::ostringstream oss;
 				oss << "Failing compressing \"" << filePathStr << "\" (WIC: " << hr << ").\n";
-				Log::DebugPrint(oss.str(), VerbosityLevel::kInfo);
+				LogInfo(oss.str());
 			} else {
 				image.swap(timage);
 			}
@@ -225,7 +225,7 @@ bool ConvertToDDS(const std::wstring& filePath, uint32_t Flags) {
 	if (FAILED(hr)) {
 		std::ostringstream oss;
 		oss << "Could not write mTexture to file \"" << WStringToString(wDest) << "\" (" << hr << ").\n";
-		Log::DebugPrint(oss.str(), VerbosityLevel::kInfo);
+		LogInfo(oss.str());
 		return false;
 	}
 

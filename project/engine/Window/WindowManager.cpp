@@ -20,18 +20,18 @@ wstring sMainWindowName;
 LRESULT CALLBACK WindowProc(HWND, UINT, WPARAM, LPARAM);
 
 Window* WindowManager::Create(std::wstring title, uint32_t width, uint32_t height, const std::wstring& iconPath) {
-	Log::DebugPrint("WindowManager_WindowCreateStart title : " + ConvertString(title));
+	LogDebug("WindowManager_WindowCreateStart title : " + ConvertString(title));
 	unique_ptr<Window> window = make_unique<Window>();
 	window->Create(WindowProc, title, width, height, iconPath);
 	HWND hwnd = window->GetWindowHandle();
 	sWindowMap[hwnd] = move(window);
 	sHWNDMap[title] = hwnd;
-	Log::DebugPrint("WindowManager_WindowCreated title : " + ConvertString(title));
+	LogDebug("WindowManager_WindowCreated title : " + ConvertString(title));
 	return sWindowMap[hwnd].get();
 }
 
 void WindowManager::Shutdown() {
-	Log::DebugPrint("WindowManager Shutdown", VerbosityLevel::kInfo);
+	LogInfo("WindowManager Shutdown");
 	sWindowMap.clear();
 }
 
@@ -44,7 +44,7 @@ bool WindowManager::ProcessMessage() {
 			bool isFailure = pair.second->ProcessMessage();
 
 			if (isFailure) {
-				Log::DebugPrint("ProcessMessage is failure", VerbosityLevel::kCritical);
+				LogCritical("ProcessMessage is failure");
 				return true;
 			}
 		}
@@ -54,14 +54,14 @@ bool WindowManager::ProcessMessage() {
 		Window* window = it->second.get();
 
 		if (window->IsDead()) {
-			Log::DebugPrint("Window is dead");
+			LogDebug("Window is dead");
 			if (window->GetTitleName() == sMainWindowName) {
-				Log::DebugPrint("MainWindow is dead", VerbosityLevel::kInfo);
+				LogInfo("MainWindow is dead");
 				isDead_ = true;
 			}
 			// ToDo : sHWNDMapもsWindowMapの要素削除と同時に削除すべきです。
 			it = sWindowMap.erase(it);
-			Log::DebugPrint("Window is erase");
+			LogDebug("Window is erase");
 		} else {
 			++it;
 		}
@@ -76,7 +76,7 @@ bool WindowManager::ProcessMessage() {
 
 void WindowManager::SetMainWindowName(std::wstring title) {
 	sMainWindowName = title;
-	Log::DebugPrint("SetMainWindowName : " + ConvertString(title), VerbosityLevel::kInfo);
+	LogInfo("SetMainWindowName : " + ConvertString(title));
 }
 
 Window* WindowManager::GetWindow(const std::wstring& windowTitle) {
