@@ -58,10 +58,13 @@ public:
 	static bool IsTrigger(GamepadButton button);
 	static bool IsRelease(GamepadButton button);
 	static bool IsPress(GamepadButton button);
+	static bool PreIsPress(GamepadButton button);
 
 	static const Trigger& GetTriggerButton();
+	static const Trigger& GetPreTriggerButton();
 
 	static const Stick& GetStick();
+	static const Stick& GetPreStick();
 
 	static bool IsGamepadConnected();
 private:
@@ -81,6 +84,7 @@ public:
 	static bool IsTrigger(MouseButton button);
 	static bool IsRelease(MouseButton button);
 	static bool IsPress(MouseButton button);
+	static bool PreIsPress(MouseButton button);
 
 	/// <summary>
 	/// マウスのスクリーン上の座標を取得

@@ -24,18 +24,9 @@ void PlayerMoveSystem::Update(No::Registry& registry, float deltaTime) {
 		velocity->linear = No::Vector3::ZERO;
 
 		// キーボード入力による移動を行います
-		if (No::Keyboard::IsPress('D')) {
-			velocity->linear.x += 1;
-		}
-		if (No::Keyboard::IsPress('A')) {
-			velocity->linear.x -= 1;
-		}
-		if (No::Keyboard::IsPress('W')) {
-			velocity->linear.z += 1;
-		}
-		if (No::Keyboard::IsPress('S')) {
-			velocity->linear.z -= 1;
-		}
+		
+		velocity->linear.x = No::GetInputAxisValue("Horizontal");
+		velocity->linear.z = No::GetInputAxisValue("Forward");
 
 		// 入力がされていた場合
 		if (velocity->linear.x || velocity->linear.z) {

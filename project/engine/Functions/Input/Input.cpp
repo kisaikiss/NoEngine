@@ -16,6 +16,8 @@ GameInputGamepadState gamepadState;
 GameInputGamepadState preGamepadState;
 Input::Pad::Stick stick;
 Input::Pad::Trigger triggerButton;
+Input::Pad::Stick preStick;
+Input::Pad::Trigger preTriggerButton;
 
 GameInputMouseState mouseState;
 GameInputMouseState preMouseState;
@@ -92,8 +94,10 @@ void Pad::Update() {
 		readingPad->Release();
 		isGamepadConnected = true;
 
+		preTriggerButton = triggerButton;
 		triggerButton.leftTrigger = gamepadState.leftTrigger;
 		triggerButton.rightTrigger = gamepadState.rightTrigger;
+		preStick = stick;
 		stick.leftStickX = gamepadState.leftThumbstickX;
 		stick.leftStickY = gamepadState.leftThumbstickY;
 		stick.rightStickX = gamepadState.rightThumbstickX;
@@ -102,7 +106,9 @@ void Pad::Update() {
 	} else {
 		gamepadState = {};
 		stick = {};
+		preStick = {};
 		triggerButton = {};
+		preTriggerButton = {};
 		isGamepadConnected = false;
 	}
 
@@ -163,12 +169,38 @@ bool Pad::IsPress(GamepadButton button) {
 	return false;
 }
 
+bool Pad::PreIsPress(GamepadButton button) {
+	switch (button) {
+	case GamepadButton::Left:	return preGamepadState.buttons & GameInputGamepadDPadLeft;		break;
+	case GamepadButton::Right:	return preGamepadState.buttons & GameInputGamepadDPadRight;	break;
+	case GamepadButton::Up:		return preGamepadState.buttons & GameInputGamepadDPadUp;		break;
+	case GamepadButton::Down:	return preGamepadState.buttons & GameInputGamepadDPadDown;		break;
+	case GamepadButton::A:		return preGamepadState.buttons & GameInputGamepadA;			break;
+	case GamepadButton::B:		return preGamepadState.buttons & GameInputGamepadB;			break;
+	case GamepadButton::X:		return preGamepadState.buttons & GameInputGamepadX;			break;
+	case GamepadButton::Y:		return preGamepadState.buttons & GameInputGamepadY;			break;
+	case GamepadButton::RB:		return preGamepadState.buttons & GameInputGamepadRightShoulder; break;
+	case GamepadButton::LB:		return preGamepadState.buttons & GameInputGamepadLeftShoulder;	break;
+	case GamepadButton::Start:	return preGamepadState.buttons & GameInputGamepadMenu;			break;
+	case GamepadButton::Select:	return preGamepadState.buttons & GameInputGamepadView;			break;
+	}
+	return false;
+}
+
 const Pad::Trigger& Pad::GetTriggerButton() {
 	return triggerButton;
 }
 
+const Pad::Trigger& Pad::GetPreTriggerButton() {
+	return preTriggerButton;
+}
+
 const Pad::Stick& Pad::GetStick() {
 	return stick;
+}
+
+const Pad::Stick& Pad::GetPreStick() {
+	return preStick;
 }
 
 bool Pad::IsGamepadConnected() {
@@ -198,6 +230,15 @@ bool Mouse::IsPress(MouseButton button) {
 	case NoEngine::Input::MouseButton::Left:	return mouseState.buttons & GameInputMouseLeftButton;	break;
 	case NoEngine::Input::MouseButton::Right:	return mouseState.buttons & GameInputMouseRightButton;	break;
 	case NoEngine::Input::MouseButton::Middle:	return mouseState.buttons & GameInputMouseMiddleButton;	break;
+	}
+	return false;
+}
+
+bool Mouse::PreIsPress(MouseButton button) {
+	switch (button) {
+	case NoEngine::Input::MouseButton::Left:	return preMouseState.buttons & GameInputMouseLeftButton;	break;
+	case NoEngine::Input::MouseButton::Right:	return preMouseState.buttons & GameInputMouseRightButton;	break;
+	case NoEngine::Input::MouseButton::Middle:	return preMouseState.buttons & GameInputMouseMiddleButton;	break;
 	}
 	return false;
 }
