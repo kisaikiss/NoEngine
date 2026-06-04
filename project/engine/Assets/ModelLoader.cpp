@@ -3,7 +3,6 @@
 #include "engine/Runtime/GpuResource/UploadBuffer.h"
 #include "engine/Runtime/GraphicsCore.h"
 
-#include "engine/Functions/Debug/Logger/Log.h"
 #include "engine/Utilities/FileUtilities.h"
 
 namespace NoEngine {

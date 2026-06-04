@@ -1,7 +1,6 @@
 #include "ShaderReflection.h"
 
 #include "engine/Utilities/Conversion/ConvertString.h"
-#include "engine/Functions/Debug/Logger/Log.h"
 
 #include <d3d12shader.h>
 

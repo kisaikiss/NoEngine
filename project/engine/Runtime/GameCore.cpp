@@ -1,6 +1,5 @@
 #include "GameCore.h"
 #include "engine/Window/WindowManager.h"
-#include "engine/Functions/Debug/Logger/Log.h"
 #include "engine/Functions/Debug/CrashHandler/ExportDump.h"
 #include "engine/Functions/Debug/GraphicsResourceLeakChecker.h"
 #include "engine/Runtime/GraphicsCore.h"

@@ -5,7 +5,6 @@
 #include "engine/Functions/Renderer/RenderSystem.h"
 #include "engine/Functions/Shader/ShaderModule.h"
 
-#include "engine/Functions/Debug/Logger/Log.h"
 #include "engine/Utilities/Conversion/ConvertString.h"
 #ifdef USE_IMGUI
 #include "externals/imgui/imgui.h"

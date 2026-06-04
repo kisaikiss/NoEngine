@@ -2,7 +2,6 @@
 #include "engine/Editor/EditUtils.h"
 #include "engine/Editor/DataDriven/SceneSerializer.h"
 #include "engine/Editor/ReflectionMacros.h"
-#include "engine/Functions/Debug/Logger/Log.h"
 #include "engine/Functions/Scene/SceneNameComponent.h"
 
 #ifdef USE_IMGUI

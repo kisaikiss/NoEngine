@@ -1,6 +1,5 @@
 #include "CommandListManager.h"
 
-#include "engine/Functions/Debug/Logger/Log.h"
 #include "../GraphicsCore.h"
 
 namespace NoEngine {

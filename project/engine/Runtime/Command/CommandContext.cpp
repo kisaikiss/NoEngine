@@ -2,7 +2,6 @@
 #include "GraphicsContext.h"
 
 #include "../GraphicsCore.h"
-#include "engine/Functions/Debug/Logger/Log.h"
 #include "engine/Math/Common.h"
 
 #include "../GpuResource/UploadBuffer.h"

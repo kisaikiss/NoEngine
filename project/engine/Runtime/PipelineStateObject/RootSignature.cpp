@@ -1,6 +1,5 @@
 #include "RootSignature.h"
 
-#include "engine/Functions/Debug/Logger/Log.h"
 #include "engine/Utilities/Hash.h"
 #include "engine/Runtime/GraphicsCore.h"
 

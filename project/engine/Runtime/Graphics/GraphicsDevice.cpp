@@ -1,5 +1,4 @@
 #include "GraphicsDevice.h"
-#include "engine/Functions/Debug/Logger/Log.h"
 
 namespace NoEngine {
 namespace Graphics {

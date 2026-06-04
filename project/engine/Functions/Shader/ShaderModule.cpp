@@ -1,7 +1,6 @@
 #include "ShaderModule.h"
 #include "../../Utilities/Conversion/ConvertString.h"
 #include "../../Utilities/FileUtilities.h"
-#include "engine/Functions/Debug/Logger/Log.h"
 
 
 #pragma comment(lib, "dxcompiler.lib")

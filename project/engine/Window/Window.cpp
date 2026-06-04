@@ -1,6 +1,5 @@
 #include "Window.h"
 
-#include "engine/Functions/Debug/Logger/Log.h"
 #include "engine/Utilities/Conversion/ConvertString.h"
 
 #include "Event/Default/CloseEvent.h"

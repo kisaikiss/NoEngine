@@ -1,6 +1,5 @@
 #include "PixelBuffer.h"
 #include "engine/Runtime/GraphicsCore.h"
-#include "engine/Functions/Debug/Logger/Log.h"
 
 namespace NoEngine {
 
