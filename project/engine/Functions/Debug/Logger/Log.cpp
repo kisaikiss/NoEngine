@@ -11,8 +11,8 @@
 
 namespace NoEngine {
 Log::~Log() {
-    if (m_LogStream.is_open()) {
-        m_LogStream.close();
+    if (logStream_.is_open()) {
+        logStream_.close();
     }
 }
 
@@ -42,18 +42,18 @@ void Log::Initialize() {
     std::chrono::zoned_time localTime{ std::chrono::current_zone(), nowSeconds };
 
     std::string dateString = std::format("{:%Y%m%d_%H%M%S}", localTime);
-    m_FilePath = "logs/" + dateString + ".log";
+    filePath_ = "logs/" + dateString + ".log";
 
     // ここでストリームを開きっぱなしにする
-    m_LogStream.open(m_FilePath, std::ios::out | std::ios::app);
+    logStream_.open(filePath_, std::ios::out | std::ios::app);
 }
 
 void Log::SetVerbosityLevel(VerbosityLevel verbosityLevel) {
-    m_VerbosityLevel = verbosityLevel;
+    verbosityLevel_ = verbosityLevel;
 }
 
 void Log::Print(VerbosityLevel level, const std::string& message) {
-    if (m_VerbosityLevel < level) return; // 設定レベルより詳細なログは弾く
+    if (verbosityLevel_ < level) return; // 設定レベルより詳細なログは弾く
 
     // ログ出力時間の取得
     auto now = std::chrono::system_clock::now();
@@ -71,14 +71,14 @@ void Log::Print(VerbosityLevel level, const std::string& message) {
     std::string formattedMessage = std::format("[{}] {}{}", timeStr, prefix, message);
 
     // --- マルチスレッド保護区間 ---
-    std::lock_guard<std::mutex> lock(m_Mutex);
+    std::lock_guard<std::mutex> lock(mutex_);
 
     // 1. ファイルへの出力
-    if (m_LogStream.is_open()) {
-        m_LogStream << formattedMessage << "\n";
+    if (logStream_.is_open()) {
+        logStream_ << formattedMessage << "\n";
         // エラー以上の場合は即座にフラッシュして書き込みを保証する
         if (level <= VerbosityLevel::kError) {
-            m_LogStream.flush();
+            logStream_.flush();
         }
     }
 
@@ -86,9 +86,9 @@ void Log::Print(VerbosityLevel level, const std::string& message) {
     OutputDebugStringA((formattedMessage + "\n").c_str());
 
     // 3. ImGui用のメモリ保存
-    m_LogEntries.push_back({ level, timeStr, message });
-    if (m_LogEntries.size() > MAX_LOG_ENTRIES) {
-        m_LogEntries.pop_front(); // 上限を超えたら古いものから削除
+    logEntries.push_back({ level, timeStr, message });
+    if (logEntries.size() > kMaxLogEntries) {
+        logEntries.pop_front(); // 上限を超えたら古いものから削除
     }
 }
 
@@ -103,11 +103,11 @@ void Log::DrawImGuiWindow(const char* title, bool* p_open) {
 
     // オプション配置（クリアボタン、オートスクロール）
     if (ImGui::Button("Clear")) {
-        std::lock_guard<std::mutex> lock(m_Mutex);
-        m_LogEntries.clear();
+        std::lock_guard<std::mutex> lock(mutex_);
+        logEntries.clear();
     }
     ImGui::SameLine();
-    ImGui::Checkbox("Auto-scroll", &m_AutoScroll);
+    ImGui::Checkbox("Auto-scroll", &autoScroll_);
     ImGui::Separator();
 
     // ログ表示領域
@@ -115,8 +115,8 @@ void Log::DrawImGuiWindow(const char* title, bool* p_open) {
 
     {
         // 描画中は新しいログが追加されないようにロック
-        std::lock_guard<std::mutex> lock(m_Mutex);
-        for (const auto& entry : m_LogEntries) {
+        std::lock_guard<std::mutex> lock(mutex_);
+        for (const auto& entry : logEntries) {
             // レベルに応じてテキストの色を変える
             ImVec4 color;
             bool hasColor = true;
@@ -138,7 +138,7 @@ void Log::DrawImGuiWindow(const char* title, bool* p_open) {
     }
 
     // 一番下までスクロール
-    if (m_AutoScroll && ImGui::GetScrollY() >= ImGui::GetScrollMaxY()) {
+    if (autoScroll_ && ImGui::GetScrollY() >= ImGui::GetScrollMaxY()) {
         ImGui::SetScrollHereY(1.0f);
     }
 

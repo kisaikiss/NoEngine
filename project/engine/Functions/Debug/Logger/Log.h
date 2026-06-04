@@ -39,19 +39,19 @@ private:
     Log(const Log&) = delete;
     Log& operator=(const Log&) = delete;
 
-    VerbosityLevel m_VerbosityLevel = VerbosityLevel::kDebug;
-    std::string m_FilePath;
-    std::ofstream m_LogStream;
+    VerbosityLevel verbosityLevel_ = VerbosityLevel::kDebug;
+    std::string filePath_;
+    std::ofstream logStream_;
 
     // スレッドセーフ用のミューテックス
-    std::mutex m_Mutex;
+    std::mutex mutex_;
 
     // ImGui表示用のログ履歴（メモリ肥大化を防ぐため上限を設ける）
-    std::deque<LogEntry> m_LogEntries;
-    const size_t MAX_LOG_ENTRIES = 1000;
+    std::deque<LogEntry> logEntries;
+    const size_t kMaxLogEntries = 1000;
 
     // ImGuiの自動スクロールフラグ
-    bool m_AutoScroll = true;
+    bool autoScroll_ = true;
 };
 }
 
