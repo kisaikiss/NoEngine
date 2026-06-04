@@ -6,6 +6,7 @@
 #include "engine/Runtime/Command/GraphicsContext.h"
 #include "engine/Functions/Renderer/RenderPass/RenderPassScheduler.h"
 #include "engine/Functions/Input/input.h"
+#include "engine/Editor/EditorCommandOperator.h"
 #include "engine/Assets/Audio/Audio.h"
 
 #ifdef USE_IMGUI
@@ -68,7 +69,7 @@ int RunApplication(std::unique_ptr<IGameApp> game) {
 		float deltaTime = CalculateDeltaTime();
 		if (deltaTime > 0.1f) deltaTime = 0.1f;
 		game->Update(ctx, deltaTime);
-
+		Editor::EditorCommandOperator::Update(deltaTime);
 		renderPassScheduler.Render(context, game->GetRegistry());
 
 		DrawPerformance(deltaTime);
@@ -124,6 +125,7 @@ void EngineFinalize() {
 #ifdef USE_IMGUI
 	sImGuiManager.Shutdown();
 #endif // USE_IMGUI
+	Editor::EditorCommandOperator::Shutdown();
 	AudioShutdown();
 	InputShutdown();
 	GraphicsCore::Shutdown();

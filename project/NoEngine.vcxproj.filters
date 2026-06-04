@@ -189,6 +189,8 @@
     <ClCompile Include="engine\Functions\ECS\System\Effect\EffectEmitSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Effect\EffectEmitterComponent.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\GaussianFilterPass.cpp" />
+    <ClCompile Include="engine\Functions\Command\CommandManager.cpp" />
+    <ClCompile Include="engine\Editor\EditorCommandOperator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -390,6 +392,9 @@
     <ClInclude Include="engine\Functions\ECS\System\Effect\EffectEmitSystem.h" />
     <ClInclude Include="engine\Functions\ECS\Component\Effect\EffectEmitterComponent.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\GaussianFilterPass.h" />
+    <ClInclude Include="engine\Functions\Command\CommandManager.h" />
+    <ClInclude Include="engine\Functions\Command\EditCommand\ChangeValueCommand.h" />
+    <ClInclude Include="engine\Editor\EditorCommandOperator.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

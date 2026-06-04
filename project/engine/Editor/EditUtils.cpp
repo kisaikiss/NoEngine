@@ -5,6 +5,8 @@
 #include "engine/Functions/Renderer/Primitive.h"
 #include "ReflectionMacros.h"
 #include "engine/Functions/Renderer/RenderSystem.h"
+#include "engine/Functions/Command/EditCommand/ChangeValueCommand.h"
+#include "EditorCommandOperator.h"
 
 #ifdef USE_IMGUI
 #include "externals/imgui/imgui.h"
@@ -261,47 +263,173 @@ void DrawFieldUI(const FieldInfo& field, void* ptr) {
 	uint8_t* base = (uint8_t*)ptr;
 	void* valuePtr = base + field.offset;
 	switch (field.type) {
-	case FieldType::Float:
+	case FieldType::Float: {
+		float* fPtr = reinterpret_cast<float*>(valuePtr);
+
+		// 一時保存用の変数（同時に編集できるUIは1つなのでstaticで使い回せます）
+		static float oldFloatValue;
+
 		if (field.attributes.hasRange) {
-			ImGui::DragFloat(field.name.c_str(), reinterpret_cast<float*>(valuePtr), field.attributes.valueSpeed, field.attributes.minValue, field.attributes.maxValue);
+			ImGui::DragFloat(field.name.c_str(), fPtr, field.attributes.valueSpeed, field.attributes.minValue, field.attributes.maxValue);
 		} else {
-			ImGui::DragFloat(field.name.c_str(), reinterpret_cast<float*>(valuePtr), field.attributes.valueSpeed);
+			ImGui::DragFloat(field.name.c_str(), fPtr, field.attributes.valueSpeed);
+		}
+
+		// 編集が開始された瞬間（マウスでクリックした時など）に元の値を保存
+		if (ImGui::IsItemActivated()) {
+			oldFloatValue = *fPtr;
+		}
+
+		// 編集が確定した瞬間（マウスを離した時、Enterを押した時など）にコマンドを発行
+		if (ImGui::IsItemDeactivatedAfterEdit()) {
+			Editor::EditorCommandOperator::AddCommand(
+				std::make_unique<Command::ChangeValueCommand<float>>(fPtr, oldFloatValue, *fPtr)
+			);
 		}
 		break;
-	case FieldType::Float2:
+	}
+	case FieldType::Float2: {
+		Math::Vector2* vPtr = reinterpret_cast<Math::Vector2*>(valuePtr);
+
+		static Math::Vector2 oldVector2Value;
+
 		if (field.attributes.hasRange) {
 			ImGui::DragFloat2(field.name.c_str(), reinterpret_cast<float*>(valuePtr), field.attributes.valueSpeed, field.attributes.minValue, field.attributes.maxValue);
 		} else {
 			ImGui::DragFloat2(field.name.c_str(), reinterpret_cast<float*>(valuePtr), field.attributes.valueSpeed);
 		}
+
+
+		// 編集が開始された瞬間（マウスでクリックした時など）に元の値を保存
+		if (ImGui::IsItemActivated()) {
+			oldVector2Value = *vPtr;
+		}
+
+		// 編集が確定した瞬間（マウスを離した時、Enterを押した時など）にコマンドを発行
+		if (ImGui::IsItemDeactivatedAfterEdit()) {
+			Editor::EditorCommandOperator::AddCommand(
+				std::make_unique<Command::ChangeValueCommand<Math::Vector2>>(vPtr, oldVector2Value, *vPtr)
+			);
+		}
 		break;
-	case FieldType::Float3:
+	}
+	case FieldType::Float3: {
+		Math::Vector3* vPtr = reinterpret_cast<Math::Vector3*>(valuePtr);
+
+		static Math::Vector3 oldVectorValue;
+
 		if (field.attributes.hasRange) {
 			ImGui::DragFloat3(field.name.c_str(), reinterpret_cast<float*>(valuePtr), field.attributes.valueSpeed, field.attributes.minValue, field.attributes.maxValue);
 		} else {
 			ImGui::DragFloat3(field.name.c_str(), reinterpret_cast<float*>(valuePtr), field.attributes.valueSpeed);
 		}
+
+
+		// 編集が開始された瞬間（マウスでクリックした時など）に元の値を保存
+		if (ImGui::IsItemActivated()) {
+			oldVectorValue = *vPtr;
+		}
+
+		// 編集が確定した瞬間（マウスを離した時、Enterを押した時など）にコマンドを発行
+		if (ImGui::IsItemDeactivatedAfterEdit()) {
+			Editor::EditorCommandOperator::AddCommand(
+				std::make_unique<Command::ChangeValueCommand<Math::Vector3>>(vPtr, oldVectorValue, *vPtr)
+			);
+		}
 		break;
-	case FieldType::Float4:
+	}
+	case FieldType::Float4: {
+		Math::Vector4* vPtr = reinterpret_cast<Math::Vector4*>(valuePtr);
+
+		static Math::Vector4 oldVectorValue;
+
 		if (field.attributes.hasRange) {
 			ImGui::DragFloat4(field.name.c_str(), reinterpret_cast<float*>(valuePtr), field.attributes.valueSpeed, field.attributes.minValue, field.attributes.maxValue);
 		} else {
 			ImGui::DragFloat4(field.name.c_str(), reinterpret_cast<float*>(valuePtr), field.attributes.valueSpeed);
 		}
+
+
+		// 編集が開始された瞬間（マウスでクリックした時など）に元の値を保存
+		if (ImGui::IsItemActivated()) {
+			oldVectorValue = *vPtr;
+		}
+
+		// 編集が確定した瞬間（マウスを離した時、Enterを押した時など）にコマンドを発行
+		if (ImGui::IsItemDeactivatedAfterEdit()) {
+			Editor::EditorCommandOperator::AddCommand(
+				std::make_unique<Command::ChangeValueCommand<Math::Vector4>>(vPtr, oldVectorValue, *vPtr)
+			);
+		}
 		break;
-	case FieldType::Int:
+	}
+	case FieldType::Int: {
+		int* iPtr = reinterpret_cast<int*>(valuePtr);
+
+		// 一時保存用の変数（同時に編集できるUIは1つなのでstaticで使い回せます）
+		static int oldIntValue;
+
 		if (field.attributes.hasRange) {
 			ImGui::DragInt(field.name.c_str(), reinterpret_cast<int*>(valuePtr), field.attributes.valueSpeed, static_cast<int>(field.attributes.minValue), static_cast<int>(field.attributes.maxValue));
 		} else {
 			ImGui::DragInt(field.name.c_str(), reinterpret_cast<int*>(valuePtr), field.attributes.valueSpeed);
 		}
+
+		// 編集が開始された瞬間（マウスでクリックした時など）に元の値を保存
+		if (ImGui::IsItemActivated()) {
+			oldIntValue = *iPtr;
+		}
+
+		// 編集が確定した瞬間（マウスを離した時、Enterを押した時など）にコマンドを発行
+		if (ImGui::IsItemDeactivatedAfterEdit()) {
+			Editor::EditorCommandOperator::AddCommand(
+				std::make_unique<Command::ChangeValueCommand<int>>(iPtr, oldIntValue, *iPtr)
+			);
+		}
 		break;
-	case FieldType::Uint:
+	}
+	case FieldType::Uint: {
+		uint32_t* iPtr = reinterpret_cast<uint32_t*>(valuePtr);
+
+		// 一時保存用の変数（同時に編集できるUIは1つなのでstaticで使い回せます）
+		static uint32_t oldIntValue;
+
 		ImGui::DragInt(field.name.c_str(), reinterpret_cast<int*>(valuePtr), field.attributes.valueSpeed, 0, INT32_MAX);
+
+		// 編集が開始された瞬間（マウスでクリックした時など）に元の値を保存
+		if (ImGui::IsItemActivated()) {
+			oldIntValue = *iPtr;
+		}
+
+		// 編集が確定した瞬間（マウスを離した時、Enterを押した時など）にコマンドを発行
+		if (ImGui::IsItemDeactivatedAfterEdit()) {
+			Editor::EditorCommandOperator::AddCommand(
+				std::make_unique<Command::ChangeValueCommand<uint32_t>>(iPtr, oldIntValue, *iPtr)
+			);
+		}
 		break;
-	case FieldType::Bool:
+	}
+	case FieldType::Bool: {
+		bool *bPtr = reinterpret_cast<bool*>(valuePtr);
+
+		// 一時保存用の変数（同時に編集できるUIは1つなのでstaticで使い回せます）
+		static bool oldBoolValue;
+
 		ImGui::Checkbox(field.name.c_str(), reinterpret_cast<bool*>(valuePtr));
+
+		// 編集が開始された瞬間（マウスでクリックした時など）に元の値を保存
+		if (ImGui::IsItemActivated()) {
+			oldBoolValue = *bPtr;
+		}
+
+		// 編集が確定した瞬間（マウスを離した時、Enterを押した時など）にコマンドを発行
+		if (ImGui::IsItemDeactivatedAfterEdit()) {
+			Editor::EditorCommandOperator::AddCommand(
+				std::make_unique<Command::ChangeValueCommand<bool>>(bPtr, oldBoolValue, *bPtr)
+			);
+		}
 		break;
+	}
 	case FieldType::String: {
 		// valuePtr が std::string* を指している場合
 		std::string* s = reinterpret_cast<std::string*>(valuePtr);
