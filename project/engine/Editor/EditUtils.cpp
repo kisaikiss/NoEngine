@@ -264,7 +264,7 @@ void DrawFieldUI(const FieldInfo& field, void* ptr) {
 	void* valuePtr = base + field.offset;
 	switch (field.type) {
 	case FieldType::Float: {
-		float* fPtr = reinterpret_cast<float*>(valuePtr);
+		float* fPtr = static_cast<float*>(valuePtr);
 
 		// 一時保存用の変数（同時に編集できるUIは1つなのでstaticで使い回せます）
 		static float oldFloatValue;
@@ -289,14 +289,14 @@ void DrawFieldUI(const FieldInfo& field, void* ptr) {
 		break;
 	}
 	case FieldType::Float2: {
-		Math::Vector2* vPtr = reinterpret_cast<Math::Vector2*>(valuePtr);
+		Math::Vector2* vPtr = static_cast<Math::Vector2*>(valuePtr);
 
 		static Math::Vector2 oldVector2Value;
 
 		if (field.attributes.hasRange) {
-			ImGui::DragFloat2(field.name.c_str(), reinterpret_cast<float*>(valuePtr), field.attributes.valueSpeed, field.attributes.minValue, field.attributes.maxValue);
+			ImGui::DragFloat2(field.name.c_str(), static_cast<float*>(valuePtr), field.attributes.valueSpeed, field.attributes.minValue, field.attributes.maxValue);
 		} else {
-			ImGui::DragFloat2(field.name.c_str(), reinterpret_cast<float*>(valuePtr), field.attributes.valueSpeed);
+			ImGui::DragFloat2(field.name.c_str(), static_cast<float*>(valuePtr), field.attributes.valueSpeed);
 		}
 
 
@@ -314,14 +314,14 @@ void DrawFieldUI(const FieldInfo& field, void* ptr) {
 		break;
 	}
 	case FieldType::Float3: {
-		Math::Vector3* vPtr = reinterpret_cast<Math::Vector3*>(valuePtr);
+		Math::Vector3* vPtr = static_cast<Math::Vector3*>(valuePtr);
 
 		static Math::Vector3 oldVectorValue;
 
 		if (field.attributes.hasRange) {
-			ImGui::DragFloat3(field.name.c_str(), reinterpret_cast<float*>(valuePtr), field.attributes.valueSpeed, field.attributes.minValue, field.attributes.maxValue);
+			ImGui::DragFloat3(field.name.c_str(), static_cast<float*>(valuePtr), field.attributes.valueSpeed, field.attributes.minValue, field.attributes.maxValue);
 		} else {
-			ImGui::DragFloat3(field.name.c_str(), reinterpret_cast<float*>(valuePtr), field.attributes.valueSpeed);
+			ImGui::DragFloat3(field.name.c_str(), static_cast<float*>(valuePtr), field.attributes.valueSpeed);
 		}
 
 
@@ -339,14 +339,14 @@ void DrawFieldUI(const FieldInfo& field, void* ptr) {
 		break;
 	}
 	case FieldType::Float4: {
-		Math::Vector4* vPtr = reinterpret_cast<Math::Vector4*>(valuePtr);
+		Math::Vector4* vPtr = static_cast<Math::Vector4*>(valuePtr);
 
 		static Math::Vector4 oldVectorValue;
 
 		if (field.attributes.hasRange) {
-			ImGui::DragFloat4(field.name.c_str(), reinterpret_cast<float*>(valuePtr), field.attributes.valueSpeed, field.attributes.minValue, field.attributes.maxValue);
+			ImGui::DragFloat4(field.name.c_str(), static_cast<float*>(valuePtr), field.attributes.valueSpeed, field.attributes.minValue, field.attributes.maxValue);
 		} else {
-			ImGui::DragFloat4(field.name.c_str(), reinterpret_cast<float*>(valuePtr), field.attributes.valueSpeed);
+			ImGui::DragFloat4(field.name.c_str(), static_cast<float*>(valuePtr), field.attributes.valueSpeed);
 		}
 
 
@@ -364,15 +364,15 @@ void DrawFieldUI(const FieldInfo& field, void* ptr) {
 		break;
 	}
 	case FieldType::Int: {
-		int* iPtr = reinterpret_cast<int*>(valuePtr);
+		int* iPtr = static_cast<int*>(valuePtr);
 
 		// 一時保存用の変数（同時に編集できるUIは1つなのでstaticで使い回せます）
 		static int oldIntValue;
 
 		if (field.attributes.hasRange) {
-			ImGui::DragInt(field.name.c_str(), reinterpret_cast<int*>(valuePtr), field.attributes.valueSpeed, static_cast<int>(field.attributes.minValue), static_cast<int>(field.attributes.maxValue));
+			ImGui::DragInt(field.name.c_str(), static_cast<int*>(valuePtr), field.attributes.valueSpeed, static_cast<int>(field.attributes.minValue), static_cast<int>(field.attributes.maxValue));
 		} else {
-			ImGui::DragInt(field.name.c_str(), reinterpret_cast<int*>(valuePtr), field.attributes.valueSpeed);
+			ImGui::DragInt(field.name.c_str(), static_cast<int*>(valuePtr), field.attributes.valueSpeed);
 		}
 
 		// 編集が開始された瞬間（マウスでクリックした時など）に元の値を保存
@@ -389,12 +389,12 @@ void DrawFieldUI(const FieldInfo& field, void* ptr) {
 		break;
 	}
 	case FieldType::Uint: {
-		uint32_t* iPtr = reinterpret_cast<uint32_t*>(valuePtr);
+		uint32_t* iPtr = static_cast<uint32_t*>(valuePtr);
 
 		// 一時保存用の変数（同時に編集できるUIは1つなのでstaticで使い回せます）
 		static uint32_t oldIntValue;
 
-		ImGui::DragInt(field.name.c_str(), reinterpret_cast<int*>(valuePtr), field.attributes.valueSpeed, 0, INT32_MAX);
+		ImGui::DragInt(field.name.c_str(), static_cast<int*>(valuePtr), field.attributes.valueSpeed, 0, INT32_MAX);
 
 		// 編集が開始された瞬間（マウスでクリックした時など）に元の値を保存
 		if (ImGui::IsItemActivated()) {
@@ -410,12 +410,12 @@ void DrawFieldUI(const FieldInfo& field, void* ptr) {
 		break;
 	}
 	case FieldType::Bool: {
-		bool *bPtr = reinterpret_cast<bool*>(valuePtr);
+		bool *bPtr = static_cast<bool*>(valuePtr);
 
 		// 一時保存用の変数（同時に編集できるUIは1つなのでstaticで使い回せます）
 		static bool oldBoolValue;
 
-		ImGui::Checkbox(field.name.c_str(), reinterpret_cast<bool*>(valuePtr));
+		ImGui::Checkbox(field.name.c_str(), static_cast<bool*>(valuePtr));
 
 		// 編集が開始された瞬間（マウスでクリックした時など）に元の値を保存
 		if (ImGui::IsItemActivated()) {
@@ -431,7 +431,7 @@ void DrawFieldUI(const FieldInfo& field, void* ptr) {
 		break;
 	}
 	case FieldType::String: {
-		std::string* s = reinterpret_cast<std::string*>(valuePtr);
+		std::string* s = static_cast<std::string*>(valuePtr);
 		static std::string oldStringValue;
 
 		const size_t BUF_SIZE = 1024;
