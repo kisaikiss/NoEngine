@@ -346,6 +346,12 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="engine\Window\Event\MainEditor\MainEditorWindowCloseEvent.cpp" />
     <ClCompile Include="engine\Window\Window.cpp" />
     <ClCompile Include="engine\Window\WindowManager.cpp" />
+    <ClCompile Include="externals\imgui\ImGuizmo.cpp">
+      <TreatWarningAsError Condition="'$(Configuration)|$(Platform)'=='Development|x64'">false</TreatWarningAsError>
+      <TreatWarningAsError Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</TreatWarningAsError>
+      <TreatWarningAsError Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</TreatWarningAsError>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="externals\imgui\imgui.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">false</ExcludedFromBuild>
@@ -579,6 +585,9 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="engine\Window\WindowCore.h" />
     <ClInclude Include="engine\Window\WindowManager.h" />
     <ClInclude Include="engine\Window\WindowSize.h" />
+    <ClInclude Include="externals\imgui\ImGuizmo.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="externals\imgui\imconfig.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">false</ExcludedFromBuild>

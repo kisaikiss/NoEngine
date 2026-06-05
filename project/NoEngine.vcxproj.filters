@@ -192,6 +192,7 @@
     <ClCompile Include="engine\Functions\Command\CommandManager.cpp" />
     <ClCompile Include="engine\Editor\EditorCommandOperator.cpp" />
     <ClCompile Include="engine\Editor\EditTag.cpp" />
+    <ClCompile Include="externals\imgui\ImGuizmo.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -397,6 +398,7 @@
     <ClInclude Include="engine\Functions\Command\EditCommand\ChangeValueCommand.h" />
     <ClInclude Include="engine\Editor\EditorCommandOperator.h" />
     <ClInclude Include="engine\Editor\EditTag.h" />
+    <ClInclude Include="externals\imgui\ImGuizmo.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />
