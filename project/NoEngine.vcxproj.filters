@@ -191,6 +191,7 @@
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\GaussianFilterPass.cpp" />
     <ClCompile Include="engine\Functions\Command\CommandManager.cpp" />
     <ClCompile Include="engine\Editor\EditorCommandOperator.cpp" />
+    <ClCompile Include="engine\Editor\EditTag.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -395,6 +396,7 @@
     <ClInclude Include="engine\Functions\Command\CommandManager.h" />
     <ClInclude Include="engine\Functions\Command\EditCommand\ChangeValueCommand.h" />
     <ClInclude Include="engine\Editor\EditorCommandOperator.h" />
+    <ClInclude Include="engine\Editor\EditTag.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

@@ -51,13 +51,15 @@ void EditSystem::Update(Registry& registry, float deltaTime) {
 	DrawHierarchyWindow(registry);
 
 	ImGui::Begin("Inspector");
-	if (sEditorState.selectedEntity != INVALID_ENTITY) {
-		auto* tag = registry.GetComponent<Editor::EditTag>(sEditorState.selectedEntity);
+	auto selectedView = registry.View<Editor::EditSelectedTag, Editor::EditTag>();
+
+	for (auto e : selectedView) {
+		auto* tag = registry.GetComponent<Editor::EditTag>(e);
 		if (tag) {
 			ImGui::BeginChild(tag->name.c_str());
 			ImGui::Text(tag->name.c_str());
-			DrawComponentUI(registry, sEditorState.selectedEntity);
-			DrawAddComponentMenu(registry, sEditorState.selectedEntity);
+			DrawComponentUI(registry, e);
+			DrawAddComponentMenu(registry, e);
 			ImGui::EndChild();
 		}
 	}
@@ -129,7 +131,6 @@ void EditSystem::DrawHierarchyWindow(Registry& registry) {
 
 	for (auto e : view) {
 		auto* tag = registry.GetComponent<Editor::EditTag>(e);
-		if (!tag->isDrawHierarchy) continue;
 
 		// パスが空なら名前をパスとして扱う
 		if (tag->path.empty()) tag->path = tag->name;
@@ -163,6 +164,7 @@ void EditSystem::DrawFolderNode(FolderNode& node, ECS::Registry& registry, const
 	// フォルダのクリック選択
 	if (ImGui::IsItemClicked() && node.folderEntity != INVALID_ENTITY) {
 		sEditorState.selectedEntity = node.folderEntity;
+		registry.AddComponent<Editor::EditSelectedTag>(sEditorState.selectedEntity);
 	}
 
 	// パスの計算（親のパス + 自分の名前）
@@ -222,13 +224,12 @@ void EditSystem::DrawEntityItem(ECS::Registry& registry, ECS::Entity e) {
 
 
 	auto* tag = registry.GetComponent<Editor::EditTag>(e);
-	if (!tag || !tag->isDrawHierarchy) return;
-
 	bool selected = (sEditorState.selectedEntity == e);
 
 	// 選択可能な行
 	if (ImGui::Selectable(tag->name.c_str(), selected)) {
 		sEditorState.selectedEntity = e;
+		registry.AddComponent<Editor::EditSelectedTag>(e);
 	}
 
 	// ドラッグ開始（ENTITY ペイロード）

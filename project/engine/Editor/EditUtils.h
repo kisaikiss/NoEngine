@@ -2,14 +2,11 @@
 #include "Reflection.h"
 #include "engine/Functions/ECS/Registry.h"
 #include "engine/Runtime/GpuResource/PixelBuffer/ColorBuffer.h"
+#include "EditTag.h"
 
 namespace NoEngine {
 namespace Editor {
-struct EditTag {
-	std::string name;
-	std::string path;
-	bool isDrawHierarchy = true;
-};
+
 /// <summary>
 /// ImGuiウィンドウに2Dカメラで描画したシーンでのマウスポインタのワールド座標を取得します
 /// </summary>

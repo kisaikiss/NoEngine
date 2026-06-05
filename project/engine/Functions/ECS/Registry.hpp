@@ -1,5 +1,6 @@
 #include "engine/Utilities/TypeIndex.h"
 #include "engine/Functions/ECS/Component/CameraComponent.h"
+#include "engine/Editor/EditTag.h"
 
 namespace NoEngine{
 namespace ECS{
@@ -73,6 +74,29 @@ inline Component::ActiveCamera2DTag* Registry::AddComponent<Component::ActiveCam
 
 	// この Entity に付ける
 	return AddComponentInternal<Component::ActiveCamera2DTag>(e);
+}
+
+/// <summary>
+/// コンポーネント追加のエディット選択タグについての特殊化。選択タグはただ一つとなるように動作します。
+/// </summary>
+/// <param name="e">エンティティ</param>
+/// <returns>選択タグ</returns>
+template<>
+inline Editor::EditSelectedTag* Registry::AddComponent<Editor::EditSelectedTag>(const Entity e) {
+	// すでに付いているなら何もしない
+	if (Has<Editor::EditSelectedTag>(e))
+		return GetComponent<Editor::EditSelectedTag>(e);
+
+	// 他の Entity から EditSelectedTag を外す
+	auto view = View<Editor::EditSelectedTag>();
+	for (Entity other : view) {
+		if (other != e && Has<Editor::EditSelectedTag>(other)) {
+			RemoveComponent<Editor::EditSelectedTag>(other);
+		}
+	}
+
+	// この Entity に付ける
+	return AddComponentInternal<Editor::EditSelectedTag>(e);
 }
 
 template<typename CompType>

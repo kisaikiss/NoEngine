@@ -3,7 +3,6 @@
 #include "engine/Functions/ECS/Component/Transform2DComponent.h"
 #include "engine/Runtime/GraphicsCore.h"
 #include "engine/Functions/Renderer/Primitive.h"
-#include "ReflectionMacros.h"
 #include "engine/Functions/Renderer/RenderSystem.h"
 #include "engine/Functions/Command/EditCommand/ChangeValueCommand.h"
 #include "EditorCommandOperator.h"
@@ -14,10 +13,6 @@
 
 namespace NoEngine {
 
-REFLECT_STRUCT_BEGIN(NoEngine::Editor::EditTag)
-REFLECT_FIELD(name),
-REFLECT_FIELD(path)
-REFLECT_STRUCT_END(NoEngine::Editor::EditTag)
 
 
 namespace {
