@@ -117,7 +117,7 @@ void EditTransform(const Camera& camera, matrix_t& matrix)
 #endif
 
 struct ImGuiWindow;
-
+#include "imgui.h"
 namespace IMGUIZMO_NAMESPACE
 {
    // call inside your own window and before Manipulate() in order to draw gizmo to that window.

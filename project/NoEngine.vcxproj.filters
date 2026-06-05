@@ -122,7 +122,7 @@
     <ClCompile Include="engine\Runtime\PipelineStateObject\ComputePSO.cpp" />
     <ClCompile Include="engine\Runtime\Command\ComputeContext.cpp" />
     <ClCompile Include="engine\Editor\EditUtils.cpp" />
-    <ClCompile Include="engine\Functions\ECS\System\EditSystem.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\Editor\EditSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\TransformComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Transform2DComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\SpriteComponent.cpp" />
@@ -193,6 +193,7 @@
     <ClCompile Include="engine\Editor\EditorCommandOperator.cpp" />
     <ClCompile Include="engine\Editor\EditTag.cpp" />
     <ClCompile Include="externals\imgui\ImGuizmo.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\Editor\DrawManipulatorSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -327,7 +328,7 @@
     <ClInclude Include="engine\Editor\ReflectionTypeTraits.h" />
     <ClInclude Include="engine\Editor\ReflectionMacros.h" />
     <ClInclude Include="engine\Editor\EditUtils.h" />
-    <ClInclude Include="engine\Functions\ECS\System\EditSystem.h" />
+    <ClInclude Include="engine\Functions\ECS\System\Editor\EditSystem.h" />
     <ClInclude Include="engine\Editor\ComponentRegistry.h" />
     <ClInclude Include="engine\Editor\DataDriven\SceneSerializer.h" />
     <ClInclude Include="engine\Functions\Scene\SceneNameComponent.h" />
@@ -399,6 +400,7 @@
     <ClInclude Include="engine\Editor\EditorCommandOperator.h" />
     <ClInclude Include="engine\Editor\EditTag.h" />
     <ClInclude Include="externals\imgui\ImGuizmo.h" />
+    <ClInclude Include="engine\Functions\ECS\System\Editor\DrawManipulatorSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

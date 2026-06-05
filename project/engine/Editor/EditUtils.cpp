@@ -19,6 +19,8 @@ namespace {
 #ifdef USE_IMGUI
 ImTextureID sGameTexture;
 ImTextureID sSceneTexture;
+Math::Vector4 sSceneTexRect;
+std::function<void(const Math::Vector4& imageRect)> sGizmoCallback;
 bool sIsMouseOverWindow = false;
 Math::Vector2 sGameWindowMousePosition{};
 bool sIsMouseOverSceneWindow = false;
@@ -191,6 +193,10 @@ void DrawSceneImGuiWindow() {
 		ImVec2(windowSize.x * 2 / 3, windowSize.y * 2 / 3) // 表示サイズ
 	);
 
+	ImVec2 min = ImGui::GetItemRectMin();
+	ImVec2 max = ImGui::GetItemRectMax();
+	sSceneTexRect = Math::Vector4(min.x, min.y, max.x - min.x, max.y - min.y);
+	
 	sIsMouseOverSceneWindow = false;
 	if (ImGui::IsItemHovered()) {
 		ImVec2 imgPos = ImGui::GetItemRectMin();
@@ -210,8 +216,18 @@ void DrawSceneImGuiWindow() {
 		}
 	}
 
+	if (sGizmoCallback) sGizmoCallback(sSceneTexRect);
 	ImGui::End();
 #endif // USE_IMGUI
+}
+
+void SetGizmoCallback(std::function<void(const Math::Vector4& imageRect)> cb) {
+#ifdef USE_IMGUI
+	sGizmoCallback = cb;
+#else
+	static_cast<void>(cb);
+#endif // USE_IMGUI
+
 }
 
 using namespace ECS;

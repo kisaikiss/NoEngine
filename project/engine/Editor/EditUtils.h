@@ -45,6 +45,7 @@ void InitGameImGuiWindow(ColorBuffer& mainColor);
 void InitSceneImGuiWindow(ColorBuffer& debugColor);
 void DrawGameImGuiWindow();
 void DrawSceneImGuiWindow();
+void SetGizmoCallback(std::function<void(const Math::Vector4& imageRect)> cb);
 
 void DrawComponentUI(ECS::Registry& registry, ECS::Entity e);
 void DrawFieldUI(const FieldInfo& field, void* ptr);

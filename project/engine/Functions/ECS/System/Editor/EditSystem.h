@@ -1,5 +1,5 @@
 #pragma once
-#include "ISystem.h"
+#include "../ISystem.h"
 #include "externals/nlohmann/json.hpp"
 namespace NoEngine {
 
