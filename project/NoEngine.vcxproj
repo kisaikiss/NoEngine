@@ -281,6 +281,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="engine\Functions\Renderer\RenderPass\Rasterization\SpritePass.cpp" />
     <ClCompile Include="engine\Functions\Scene\IScene.cpp" />
     <ClCompile Include="engine\Functions\Scene\SceneManager.cpp" />
+    <ClCompile Include="engine\Math\Collision\BVH.cpp" />
     <ClCompile Include="engine\Math\Collision\ColliderComponent.cpp" />
     <ClCompile Include="engine\Math\Collision\CollisionFanc.cpp" />
     <ClCompile Include="engine\Math\Collision\CollisionHelper.cpp" />
@@ -508,6 +509,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="engine\Functions\Scene\IScene.h" />
     <ClInclude Include="engine\Functions\Scene\SceneManager.h" />
     <ClInclude Include="engine\Functions\Scene\SceneNameComponent.h" />
+    <ClInclude Include="engine\Math\Collision\BVH.h" />
     <ClInclude Include="engine\Math\Collision\ColliderComponent.h" />
     <ClInclude Include="engine\Math\Collision\CollisionFanc.h" />
     <ClInclude Include="engine\Math\Collision\CollisionHelper.h" />
