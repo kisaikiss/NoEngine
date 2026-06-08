@@ -1,5 +1,6 @@
 #pragma once
 #include "ColliderComponent.h"
+#include "MeshColliderLoader.h"
 #include "../Types/Transform.h"
 #include "../Types/Transform2D.h"
 

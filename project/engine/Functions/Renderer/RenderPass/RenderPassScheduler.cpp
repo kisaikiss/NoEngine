@@ -171,11 +171,6 @@ void CommonSetupRenderPass(RenderPassScheduler& renderPassScheduler) {
 	spritePass->AddOutput("MainColor");
 	renderPassScheduler.AddPass(std::move(spritePass));
 
-	auto primitivePass = std::make_unique<PrimitivePass>();
-	primitivePass->AddOutput("MainColor");
-	primitivePass->SetDepthOutput("MainDepth");
-	renderPassScheduler.AddPass(std::move(primitivePass));
-
 	auto skyBoxPass = std::make_unique<SkyBoxPass>();
 	skyBoxPass->AddOutput("MainColor");
 	skyBoxPass->SetDepthOutput("MainDepth");
@@ -227,6 +222,13 @@ void CommonSetupDebugRenderPass(RenderPassScheduler& renderPassScheduler) {
 	meshPass->SetClearTarget(true);
 	meshPass->SetTargetCameraType(RenderPass::TargetCameraType::kDebug);
 	renderPassScheduler.AddPass(std::move(meshPass));
+
+
+	auto primitivePass = std::make_unique<PrimitivePass>();
+	primitivePass->AddOutput("DebugColor");
+	primitivePass->SetDepthOutput("MainDepth");
+	primitivePass->SetTargetCameraType(RenderPass::TargetCameraType::kDebug);
+	renderPassScheduler.AddPass(std::move(primitivePass));
 
 	auto skyBoxPass = std::make_unique<SkyBoxPass>();
 	skyBoxPass->AddOutput("DebugColor");

@@ -90,6 +90,12 @@ void TestScene::Setup() {
 		cameraEditTag->name = "DebugCamera";
 	}
 
+	{
+		auto e = registry.GenerateEntity();
+		auto* t = registry.AddComponent<No::TerrainMesh>(e);
+		No::LoadMeshCollider("resources/game/ClockworksDisease/Model/testMap/terrain.obj", t);
+	}
+
 	// 方向ライト
 	auto directionalLight = registry.GenerateEntity();
 	auto* dir = registry.AddComponent<No::DirectionalLightComponent>(directionalLight);
@@ -101,6 +107,13 @@ void TestScene::Setup() {
 }
 
 void TestScene::NotSystemUpdate() {
+	auto registry = GetRegistry();
+	for (auto e : registry->View<No::TerrainMesh>()) {
+		auto* terrain = registry->GetComponent<No::TerrainMesh>(e);
+		for (auto t : terrain->triangles) {
+			NoEngine::DebugPrimitive::DrawTriangle(t.v[0], t.v[1], t.v[2], No::Color::WHITE);
+		}
+	}
 }
 
 void TestScene::AddSystems() {

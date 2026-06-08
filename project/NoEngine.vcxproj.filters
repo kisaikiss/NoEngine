@@ -195,6 +195,7 @@
     <ClCompile Include="externals\imgui\ImGuizmo.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Editor\DrawManipulatorSystem.cpp" />
     <ClCompile Include="engine\Math\Collision\BVH.cpp" />
+    <ClCompile Include="engine\Math\Collision\MeshColliderLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -403,6 +404,7 @@
     <ClInclude Include="externals\imgui\ImGuizmo.h" />
     <ClInclude Include="engine\Functions\ECS\System\Editor\DrawManipulatorSystem.h" />
     <ClInclude Include="engine\Math\Collision\BVH.h" />
+    <ClInclude Include="engine\Math\Collision\MeshColliderLoader.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />
