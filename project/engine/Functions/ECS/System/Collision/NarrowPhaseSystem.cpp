@@ -21,8 +21,9 @@ void NarrowPhaseSystem::Update(Registry& registry, float deltaTime) {
 	// 衝突情報
 	Event::ContactEvent contactEvent;
 
-	// BroadPhaseがないためとりあえず必要なAABB vs Capsuleのみ衝突判定を行う
+	// BroadPhaseがないためとりあえず必要なAABB vs CapsuleとTriangle vs Capsuleのみ衝突判定を行う
 	auto boxView = registry.View<Math::AABBCollider, Component::TransformComponent>();
+	auto terrainView = registry.View<Math::TerrainMesh>();
 	auto capsuleView = registry.View<Math::CapsuleCollider, Component::TransformComponent>();
 
 	for (auto capsuleE : capsuleView) {
@@ -48,6 +49,25 @@ void NarrowPhaseSystem::Update(Registry& registry, float deltaTime) {
 
 			contactEvent.contacts.push_back(contact);
 		}
+
+		for (auto terrainE : terrainView) {
+			for (auto& triangle : registry.GetComponent<Math::TerrainMesh>(terrainE)->triangles) {
+				auto collide = Math::TestCapsuleTriangle(capsuleTransform, capsuleCollider, triangle);
+
+				if (!collide.hit) continue;
+
+				// 衝突情報を格納
+				Contact contact;
+				contact.a = capsuleE;
+				contact.b = terrainE;
+				contact.normal = collide.normal;
+				contact.penetration = collide.penetration;
+				contact.contactPosition = ClassifyContact(collide.normal);
+
+				contactEvent.contacts.push_back(contact);
+			}
+		}
+
 	}
 	if (!contactEvent.contacts.empty()) {
 		// 衝突情報をイベントとして次のシステムへ送る

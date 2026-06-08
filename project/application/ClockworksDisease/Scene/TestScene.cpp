@@ -90,10 +90,20 @@ void TestScene::Setup() {
 		cameraEditTag->name = "DebugCamera";
 	}
 
+	// 地形
 	{
 		auto e = registry.GenerateEntity();
 		auto* t = registry.AddComponent<No::TerrainMesh>(e);
+		auto* bm = registry.AddComponent<No::MeshComponent>(e);
 		No::LoadMeshCollider("resources/game/ClockworksDisease/Model/testMap/terrain.obj", t);
+		registry.AddComponent<CollisionLayerComponent>(e)->layer = CollisionLayerComponent::Terrain;
+		No::ModelLoader::LoadModel("terrain", "resources/game/ClockworksDisease/Model/testMap/terrain.obj");
+		No::ModelLoader::GetModel("terrain", bm);
+		auto* bmm = registry.AddComponent<No::MaterialComponent>(e);
+		bmm->materials = No::ModelLoader::GetMaterial("terrain");
+		bmm->psoName = L"Renderer : Default PSO";
+		bmm->rootSigId = NoEngine::Render::GetRootSignatureID(bmm->psoName);
+		registry.AddComponent<No::TransformComponent>(e);
 	}
 
 	// 方向ライト

@@ -20,7 +20,7 @@ inline Math::Vector3 ToVec3(const aiVector3D& v) {
     return { v.x, v.y, v.z };
 }
 
-// aiMatrix4x4 を Math::Matrix4 に変換するか、直接 aiMatrix4x4 で変換するヘルパー
+
 inline Math::Vector3 TransformPoint(const aiMatrix4x4& m, const Math::Vector3& p) {
     float x = m.a1 * p.x + m.a2 * p.y + m.a3 * p.z + m.a4;
     float y = m.b1 * p.x + m.b2 * p.y + m.b3 * p.z + m.b4;

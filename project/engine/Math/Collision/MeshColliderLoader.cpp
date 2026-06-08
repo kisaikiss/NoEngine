@@ -29,11 +29,15 @@ void ProcessMeshTriangles(const aiMesh* mesh, const aiMatrix4x4& transform, std:
 
     for (unsigned int fi = 0; fi < mesh->mNumFaces; ++fi) {
         const aiFace& face = mesh->mFaces[fi];
-        if (face.mNumIndices != 3) continue; // triangulate フラグがあれば不要
+        if (face.mNumIndices != 3) continue;
 
         aiVector3D aiV0 = mesh->mVertices[face.mIndices[0]];
         aiVector3D aiV1 = mesh->mVertices[face.mIndices[1]];
         aiVector3D aiV2 = mesh->mVertices[face.mIndices[2]];
+
+        aiV0.x *= -1.0f;
+        aiV1.x *= -1.0f;
+        aiV2.x *= -1.0f;
 
         Math::Vector3 v0 = TransformPoint(transform, ToVec3(aiV0));
         Math::Vector3 v1 = TransformPoint(transform, ToVec3(aiV1));
