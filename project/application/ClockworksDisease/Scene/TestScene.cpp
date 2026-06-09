@@ -95,9 +95,9 @@ void TestScene::Setup() {
 		auto e = registry.GenerateEntity();
 		auto* t = registry.AddComponent<No::TerrainMesh>(e);
 		auto* bm = registry.AddComponent<No::MeshComponent>(e);
-		No::LoadMeshCollider("resources/game/ClockworksDisease/Model/testMap/terrain.obj", t);
+		No::LoadMeshCollider("resources/game/ClockworksDisease/Model/Area1/Area1.obj", t);
 		registry.AddComponent<CollisionLayerComponent>(e)->layer = CollisionLayerComponent::Terrain;
-		No::ModelLoader::LoadModel("terrain", "resources/game/ClockworksDisease/Model/testMap/terrain.obj");
+		No::ModelLoader::LoadModel("terrain", "resources/game/ClockworksDisease/Model/Area1/Area1.obj");
 		No::ModelLoader::GetModel("terrain", bm);
 		auto* bmm = registry.AddComponent<No::MaterialComponent>(e);
 		bmm->materials = No::ModelLoader::GetMaterial("terrain");

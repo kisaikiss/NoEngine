@@ -52,7 +52,7 @@ void NarrowPhaseSystem::Update(Registry& registry, float deltaTime) {
 
 		for (auto terrainE : terrainView) {
 			for (auto& triangle : registry.GetComponent<Math::TerrainMesh>(terrainE)->triangles) {
-				auto collide = Math::TestCapsuleTriangle(capsuleTransform, capsuleCollider, triangle);
+				auto collide = Math::TestCapsuleTriangle(capsuleTransform, capsuleCollider, triangle); 
 
 				if (!collide.hit) continue;
 
