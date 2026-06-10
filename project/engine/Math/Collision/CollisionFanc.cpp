@@ -111,59 +111,151 @@ CapsuleAABBCollision TestCapsuleAABB(const Transform* capsuleTransform, const Ma
 
 	return result;
 }
-
-CapsuleTriangleCollision TestCapsuleTriangle(const Transform* capsuleTransform, const Math::CapsuleCollider* capsule, Math::TriangleCollider triangle) {
+CapsuleTriangleCollision TestCapsuleTriangle(
+	const Transform* capsuleTransform,
+	const Math::CapsuleCollider* capsule,
+	Math::TriangleCollider triangle) {
 	CapsuleTriangleCollision result;
 
-	// ワールド座標でのコライダーを取得
 	CapsuleWorld cap = GetWorldCapsule(capsuleTransform, capsule);
 
-	Vector3 segDir = cap.p1 - cap.p0;
-	float segLenSq = segDir.LengthSquared();
-	float t = 0.0f;
+	Vector3 segA = cap.p0;
+	Vector3 segB = cap.p1;
+	Vector3 A = triangle.v[0];
+	Vector3 B = triangle.v[1];
+	Vector3 C = triangle.v[2];
+	float   r = capsule->radius;
 
-	if (segLenSq > 1e-8f) {
-		Vector3 temp = triangle.Centroid() - cap.p0;
-		t = temp.Dot(segDir) / segLenSq;
-		t = std::clamp(t, 0.0f, 1.0f);
+	// ----------------------------------------------------------------
+	//  Step 1. カプセル線分の各端点 → 三角形 の最近接点を調べる
+	//          （線分が面に突き刺さるケースをここで捕捉）
+	// ----------------------------------------------------------------
+	auto testPoint = [&](const Vector3& pt) -> std::pair<Vector3, float> {
+		Vector3 onTri = ClosestPointOnTriangle(pt, A, B, C);
+		float   dist = (pt - onTri).Length();
+		return { onTri, dist };
+		};
+
+	float   bestDist = 1e30f;
+	Vector3 bestOnCap = segA;
+	Vector3 bestOnTri = A;
+
+	auto tryPair = [&](const Vector3& onCap, const Vector3& onTri) {
+		float d = (onCap - onTri).Length();
+		if (d < bestDist) {
+			bestDist = d;
+			bestOnCap = onCap;
+			bestOnTri = onTri;
+		}
+		};
+
+	// 端点 p0, p1 から三角形への最近接
+	{
+		auto [onTri0, d0] = testPoint(segA);
+		tryPair(segA, onTri0);
+		auto [onTri1, d1] = testPoint(segB);
+		tryPair(segB, onTri1);
+		// 中点も追加（急斜面で線分が三角形を跨ぐケース）
+		Vector3 mid = (segA + segB) * 0.5f;
+		auto [onTriM, dM] = testPoint(mid);
+		tryPair(mid, onTriM);
 	}
 
-	Math::Vector3 closestOnCapsule = cap.p0 + segDir * t;
+	// ----------------------------------------------------------------
+	//  Step 2. カプセル線分 × 三角形の3辺 の最近接点ペアを調べる
+	//          （辺方向の接触はここで捕捉）
+	// ----------------------------------------------------------------
+	auto closestSegSeg = [&](
+		const Vector3& p0, const Vector3& p1,   // カプセル線分
+		const Vector3& q0, const Vector3& q1,   // 三角形の辺
+		Vector3& outOnCap, Vector3& outOnEdge) {
+			Vector3 d1 = p1 - p0;
+			Vector3 d2 = q1 - q0;
+			Vector3 r_ = p0 - q0;
 
-	// 三角形上の最近接点
-	Math::Vector3 closestOnTri = ClosestPointOnTriangle(
-		closestOnCapsule,
-		triangle.v[0], triangle.v[1], triangle.v[2]
-	);
+			float a = d1.Dot(d1);
+			float e = d2.Dot(d2);
+			float f = d2.Dot(r_);
 
-	// ---  距離を計算 ---
-	Math::Vector3 diff = closestOnCapsule - closestOnTri;
-	float dist = diff.Length();
+			float s, t;
 
-	// ---  衝突判定 ---
-	float r = capsule->radius;
+			if (a < 1e-8f && e < 1e-8f) {
+				// 両方縮退
+				s = t = 0.0f;
+			} else if (a < 1e-8f) {
+				// p が縮退
+				s = 0.0f;
+				t = std::clamp(f / e, 0.0f, 1.0f);
+			} else {
+				float c = d1.Dot(r_);
+				if (e < 1e-8f) {
+					// q が縮退
+					t = 0.0f;
+					s = std::clamp(-c / a, 0.0f, 1.0f);
+				} else {
+					float b_ = d1.Dot(d2);
+					float denom = a * e - b_ * b_;
 
-	if (dist > r) {
-		// 衝突していない
-		return result;
-	}
+					if (std::abs(denom) > 1e-8f) {
+						s = std::clamp((b_ * f - c * e) / denom, 0.0f, 1.0f);
+					} else {
+						s = 0.0f;
+					}
 
-	// ---  衝突している場合 ---
+					t = (b_ * s + f) / e;
+
+					if (t < 0.0f) {
+						t = 0.0f;
+						s = std::clamp(-c / a, 0.0f, 1.0f);
+					} else if (t > 1.0f) {
+						t = 1.0f;
+						s = std::clamp((b_ - c) / a, 0.0f, 1.0f);
+					}
+				}
+			}
+
+			outOnCap = p0 + d1 * s;
+			outOnEdge = q0 + d2 * t;
+		};
+
+	// 3辺それぞれと比較
+	auto tryEdge = [&](const Vector3& q0, const Vector3& q1) {
+		Vector3 onCap, onEdge;
+		closestSegSeg(segA, segB, q0, q1, onCap, onEdge);
+		tryPair(onCap, onEdge);
+		};
+
+	tryEdge(A, B);
+	tryEdge(B, C);
+	tryEdge(C, A);
+
+	// ----------------------------------------------------------------
+	//  Step 3. 衝突判定
+	// ----------------------------------------------------------------
+	if (bestDist > r) return result;   // 衝突なし
+
+	// ----------------------------------------------------------------
+	//  Step 4. 法線と貫通量
+	// ----------------------------------------------------------------
 	result.hit = true;
-	result.closestOnCapsule = closestOnCapsule;
-	result.closestOnTriangle = closestOnTri;
+	result.closestOnCapsule = bestOnCap;
+	result.closestOnTriangle = bestOnTri;
+	result.penetration = r - bestDist;
 
-	// 法線（triangle → capsule）
-	if (dist > 1e-8f) {
-		result.normal = diff / dist;
+	if (bestDist > 1e-6f) {
+		result.normal = (bestOnCap - bestOnTri) / bestDist;
 	} else {
-		// diff がゼロに近い場合は三角形法線を使う
-		result.normal = triangle.normal;
+		// 完全貫通 → 面法線で押し出す（裏面貫通対策で符号を確認）
+		Vector3 n = triangle.normal;
+		// カプセル重心が裏側にあれば反転
+		Vector3 capsuleCenter = (segA + segB) * 0.5f;
+		if ((capsuleCenter - A).Dot(n) < 0.0f) n = n * -1.0f;
+		result.normal = n;
 	}
 
-	result.penetration = r - dist;
 	return result;
 }
+
 
 Collision2D TestAABB2D(const Transform2D* transformA, const Math::AABBCollider2D* aabbA, const Transform2D* transformB, const Math::AABBCollider2D* aabbB) {
 	AABBWorld2D boxA = GetWorldAABB2D(transformA, aabbA);

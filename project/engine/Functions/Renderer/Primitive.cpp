@@ -151,8 +151,6 @@ void DebugPrimitive::Render(GraphicsContext& ctx, const Matrix4x4& ViewProj) {
 	ctx.SetDynamicConstantBufferView(0, sizeof(ViewProj), &ViewProj);
 
 	ctx.DrawInstanced((uint32_t)sVertices.size(), 1, 0, 0);
-
-	sVertices.clear();
 }
 
 void DebugPrimitive::Render2D(GraphicsContext& ctx, const Math::Matrix4x4& ViewProj) {
@@ -167,8 +165,6 @@ void DebugPrimitive::Render2D(GraphicsContext& ctx, const Math::Matrix4x4& ViewP
 	ctx.SetDynamicConstantBufferView(0, sizeof(ViewProj), &ViewProj);
 
 	ctx.DrawInstanced((uint32_t)sVertices2D.size(), 1, 0, 0);
-
-	sVertices2D.clear();
 }
 
 void DebugPrimitive::AddLineInternal(const Vector3& a, const Vector3& b, const Color& color) {

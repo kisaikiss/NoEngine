@@ -13,6 +13,8 @@
 #include "PostEffect/GaussianFilterPass.h"
 #include "PostEffect/BoxFilterPass.h"
 
+#include "../Primitive.h"
+
 #include "engine/Runtime/GraphicsCore.h"
 #include "engine/Editor/EditUtils.h"
 
@@ -106,6 +108,7 @@ void RenderPassScheduler::Render(GraphicsContext& gfx, ECS::Registry& registry) 
 		node.pass->Execute(gfx, resourceRegistry_, registry);
 	}
 
+	DebugPrimitive::Shutdown();
 #ifdef USE_IMGUI
 	gfx.TransitionResource(*resourceRegistry_.GetColorBufferPointer(screenDrawBufferName_), D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 	gfx.TransitionResource(*resourceRegistry_.GetColorBufferPointer("DebugColor"), D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
@@ -166,6 +169,11 @@ void CommonSetupRenderPass(RenderPassScheduler& renderPassScheduler) {
 	meshPass->SetDepthOutput("MainDepth");
 	meshPass->SetClearTarget(true);
 	renderPassScheduler.AddPass(std::move(meshPass));
+
+	auto primitivePass = std::make_unique<PrimitivePass>();
+	primitivePass->AddOutput("MainColor");
+	primitivePass->SetDepthOutput("MainDepth");
+	renderPassScheduler.AddPass(std::move(primitivePass));
 
 	auto spritePass = std::make_unique<SpritePass>();
 	spritePass->AddOutput("MainColor");

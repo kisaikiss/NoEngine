@@ -12,8 +12,6 @@ void CollisionResolutionSystem::Update(Registry& registry, float deltaTime) {
 	auto contactEvent = registry.PollEvent<Event::ContactEvent>();
 	if (!contactEvent.has_value()) return;
 	for (const auto& contact : contactEvent->contacts) {
-		auto* transformA = registry.GetComponent<Component::TransformComponent>(contact.a);
-		auto* transformB = registry.GetComponent<Component::TransformComponent>(contact.b);
 
 		auto* velocityA = registry.GetComponent<Component::VelocityComponent>(contact.a);
 		auto* velocityB = registry.GetComponent<Component::VelocityComponent>(contact.b);
@@ -23,14 +21,12 @@ void CollisionResolutionSystem::Update(Registry& registry, float deltaTime) {
 
 		if (bodyA) {
 			if (bodyA->type == Component::BodyType::Dynamic) {
-				transformA->translate += contact.normal * contact.penetration;
 				if (velocityA)Slide(velocityA->linear, contact.normal);
 			}
 		}
 
 		if (bodyB) {
 			if (bodyB->type == Component::BodyType::Dynamic) {
-				transformB->translate -= contact.normal * contact.penetration;
 				if (velocityB)Slide(velocityB->linear, contact.normal);
 
 			}

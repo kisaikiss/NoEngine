@@ -29,7 +29,9 @@ void NarrowPhaseSystem::Update(Registry& registry, float deltaTime) {
 	for (auto capsuleE : capsuleView) {
 		auto* capsuleTransform = registry.GetComponent<Component::TransformComponent>(capsuleE);
 		auto* capsuleCollider = registry.GetComponent<Math::CapsuleCollider>(capsuleE);
-
+		DebugPrimitive::DrawSphere(capsuleTransform->GetWorldPosition() + capsuleCollider->localP0, capsuleCollider->radius, Math::Color::WHITE);
+		DebugPrimitive::DrawSphere(capsuleTransform->GetWorldPosition() + capsuleCollider->localP1, capsuleCollider->radius, Math::Color::WHITE);
+		DebugPrimitive::DrawLine(capsuleTransform->GetWorldPosition() + capsuleCollider->localP0, capsuleTransform->GetWorldPosition() + capsuleCollider->localP1, Math::Color::WHITE);
 		for (auto boxE : boxView) {
 			auto* boxTransform = registry.GetComponent<Component::TransformComponent>(boxE);
 			auto* boxCollider = registry.GetComponent<Math::AABBCollider>(boxE);
