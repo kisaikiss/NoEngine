@@ -197,6 +197,7 @@
     <ClCompile Include="engine\Math\Collision\BVH.cpp" />
     <ClCompile Include="engine\Math\Collision\MeshColliderLoader.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Game\ColliderDrawSystem.cpp" />
+    <ClCompile Include="application\ClockworksDisease\Component\Player\PlayerComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />

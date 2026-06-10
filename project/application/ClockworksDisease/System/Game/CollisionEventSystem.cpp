@@ -20,6 +20,7 @@ void CollisionEventSystem::Update(No::Registry& registry, float deltaTime) {
 			PlayerPushBackEvent event;
 			event.player = contact.a;
 			event.position = contact.contactPosition;
+			event.normal = contact.normal;
 			registry.EmitEvent(event);
 		}
 

@@ -23,7 +23,7 @@ void PlayerMoveSystem::Update(No::Registry& registry, float deltaTime) {
 		auto* velocity = registry.GetComponent < No::VelocityComponent>(entity);
 		velocity->linear = No::Vector3::ZERO;
 
-		// キーボード入力による移動を行います
+		// 入力による移動を行います
 		
 		velocity->linear.x = No::GetInputAxisValue("Horizontal");
 		velocity->linear.z = No::GetInputAxisValue("Forward");
@@ -47,12 +47,13 @@ void PlayerMoveSystem::Update(No::Registry& registry, float deltaTime) {
 
 		// jump(後にSystemを分ける)
 
-		static const float kGravity = -9.8f;
 		if (No::InputIsTrigger("Jump")) {
-			playerVariables->yVelocity = 6.f;
+			if (registry.GetComponent<No::GroundStateComponent>(entity)->isGrounded || playerVariables->infinityJump) {
+				playerVariables->yVelocity = playerVariables->jumpSpeed;
+			}
 		}
 
-		playerVariables->yVelocity += kGravity * deltaTime;
+		playerVariables->yVelocity += playerVariables->gravity * deltaTime;
 
 		velocity->linear.y = playerVariables->yVelocity;
 

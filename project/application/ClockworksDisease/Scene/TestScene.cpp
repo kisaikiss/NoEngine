@@ -128,8 +128,10 @@ void TestScene::NotSystemUpdate() {
 }
 
 void TestScene::AddSystems() {
+
 	AddSystem(std::make_unique<BoxColliderUpdateSystem>());
 	AddSystem(std::make_unique<PlayerMoveSystem>());
+	AddSystem(std::make_unique<No::GroundResetSystem>());
 
 	AddSystem(std::make_unique<No::NarrowPhaseSystem>());
 	AddSystem(std::make_unique<No::CollisionResolutionSystem>());
