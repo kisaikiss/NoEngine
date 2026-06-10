@@ -196,6 +196,7 @@
     <ClCompile Include="engine\Functions\ECS\System\Editor\DrawManipulatorSystem.cpp" />
     <ClCompile Include="engine\Math\Collision\BVH.cpp" />
     <ClCompile Include="engine\Math\Collision\MeshColliderLoader.cpp" />
+    <ClCompile Include="application\ClockworksDisease\System\Game\ColliderDrawSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -405,6 +406,7 @@
     <ClInclude Include="engine\Functions\ECS\System\Editor\DrawManipulatorSystem.h" />
     <ClInclude Include="engine\Math\Collision\BVH.h" />
     <ClInclude Include="engine\Math\Collision\MeshColliderLoader.h" />
+    <ClInclude Include="application\ClockworksDisease\System\Game\ColliderDrawSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

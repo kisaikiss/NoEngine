@@ -9,6 +9,7 @@
 #include "../Component/Player/PlayerComponent.h"
 #include "../Component/Camera/FollowCameraComponent.h"
 #include "../System/Game/CollisionLayer.h"
+#include "../System/Game/ColliderDrawSystem.h"
 
 void TestScene::Setup() {
 	AddSystems();
@@ -129,13 +130,14 @@ void TestScene::NotSystemUpdate() {
 void TestScene::AddSystems() {
 	AddSystem(std::make_unique<BoxColliderUpdateSystem>());
 	AddSystem(std::make_unique<PlayerMoveSystem>());
-	AddSystem(std::make_unique<FollowCameraSystem>());
 
 	AddSystem(std::make_unique<No::NarrowPhaseSystem>());
 	AddSystem(std::make_unique<No::CollisionResolutionSystem>());
 	AddSystem(std::make_unique<CollisionEventSystem>());
 	AddSystem(std::make_unique<PlayerPushBackSystem>());
 	AddSystem(std::make_unique<No::MovementSystem>());
+	AddSystem(std::make_unique<ColliderDrawSystem>());
+	AddSystem(std::make_unique<FollowCameraSystem>());
 	AddSystem(std::make_unique<No::AnimationSystem>());
 	AddSystem(std::make_unique<No::SpriteAnimationSystem>());
 	AddSystem(std::make_unique<No::EditSystem>());
