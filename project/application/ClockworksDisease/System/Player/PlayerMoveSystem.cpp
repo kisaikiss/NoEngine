@@ -75,7 +75,8 @@ void PlayerMoveSystem::Update(No::Registry& registry, float deltaTime) {
 			if (lookDir.Length() > 1e-6f) {
 				No::Quaternion newRotation;
 				newRotation.LookRotation(lookDir, groundNormal);
-				transform->rotation = transform->rotation.Slerp(transform->rotation, newRotation, deltaTime * 20.f);
+				const float kSlerpScale = 20.f;
+				transform->rotation = transform->rotation.Slerp(transform->rotation, newRotation, deltaTime * kSlerpScale);
 			}
 		}
 

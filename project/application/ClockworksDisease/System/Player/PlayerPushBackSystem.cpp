@@ -34,7 +34,8 @@ void PlayerPushBackSystem::Update(No::Registry& registry, float deltaTime) {
 
 				No::Quaternion newRotation;
 				newRotation.LookRotation(projForward, event.normal);
-				transform->rotation = transform->rotation.Slerp(transform->rotation, newRotation, deltaTime * 20.f);
+				const float kSlerpScale = 20.f;
+				transform->rotation = transform->rotation.Slerp(transform->rotation, newRotation, deltaTime * kSlerpScale);
 			}
 		}
 		if (event.position == No::ContactPosition::DOWN) {
