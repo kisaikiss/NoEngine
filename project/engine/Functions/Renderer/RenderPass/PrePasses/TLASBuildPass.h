@@ -3,7 +3,7 @@
 
 #include "../../../../Assets/RaytracingMesh.h"
 #include "engine/Math/MathInclude.h"
-#include "engine/Functions/ECS/Component/AnimatorComponent.h"
+#include "engine/Functions/ECS/Component/Asset/AnimatorComponent.h"
 
 namespace NoEngine {
 namespace Render {

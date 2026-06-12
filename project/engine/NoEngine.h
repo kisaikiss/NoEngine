@@ -1,12 +1,12 @@
 #pragma once
 #include "Runtime/GameCore.h"
 
-#include "Functions/ECS/Component/MeshComponent.h"
-#include "Functions/ECS/Component/Animator2DComponent.h"
-#include "Functions/ECS/Component/SpriteComponent.h"
+#include "Functions/ECS/Component/Asset/MeshComponent.h"
+#include "Functions/ECS/Component/Asset/Animator2DComponent.h"
+#include "Functions/ECS/Component/Asset/SpriteComponent.h"
 #include "Functions/ECS/Component/TransformComponent.h"
 #include "Functions/ECS/Component/Transform2DComponent.h"
-#include "Functions/ECS/Component/MaterialComponent.h"
+#include "Functions/ECS/Component/Asset/MaterialComponent.h"
 #include "Functions/ECS/Component/LightComponent.h"
 #include "Functions/ECS/Component/CameraComponent.h"
 #include "Functions/ECS/Component/ParticleEmitterComponent.h"

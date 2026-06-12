@@ -1,6 +1,6 @@
 #include "SpriteAnimationSystem.h"
-#include "../Component/Animator2DComponent.h"
-#include "../Component/SpriteComponent.h"
+#include "../Component/Asset/Animator2DComponent.h"
+#include "../Component/Asset/SpriteComponent.h"
 
 namespace NoEngine {
 namespace ECS {

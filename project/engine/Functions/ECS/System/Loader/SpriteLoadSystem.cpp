@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "SpriteLoadSystem.h"
-#include "../../Component/SpriteComponent.h"
+#include "../../Component/Asset/SpriteComponent.h"
 #include "engine/Assets/Texture/TextureManager.h"
 
 namespace NoEngine {

@@ -1,7 +1,7 @@
 #pragma once
-#include "engine/Functions/ECS/Component/AnimatorComponent.h"
-#include "engine/Functions/ECS/Component/MeshComponent.h"
-#include "engine/Functions/ECS/Component/MaterialComponent.h"
+#include "engine/Functions/ECS/Component/Asset/AnimatorComponent.h"
+#include "engine/Functions/ECS/Component/Asset/MeshComponent.h"
+#include "engine/Functions/ECS/Component/Asset/MaterialComponent.h"
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>

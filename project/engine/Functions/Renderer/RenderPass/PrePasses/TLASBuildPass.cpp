@@ -1,6 +1,6 @@
 #include "TLASBuildPass.h"
 
-#include "engine/Functions/ECS/Component/MeshComponent.h"
+#include "engine/Functions/ECS/Component/Asset/MeshComponent.h"
 #include "engine/Functions/ECS/Component/TransformComponent.h"
 #include "engine/Runtime/GraphicsCore.h"
 

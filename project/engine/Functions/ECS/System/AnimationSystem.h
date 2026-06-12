@@ -1,7 +1,7 @@
 #pragma once
 #include "ISystem.h"
-#include "../Component/AnimatorComponent.h"
-#include "../Component/MeshComponent.h" 
+#include "../Component/Asset/AnimatorComponent.h"
+#include "../Component/Asset/MeshComponent.h" 
 #include "engine/Runtime/PipelineStateObject/RootSignature.h"
 #include "engine/Runtime/PipelineStateObject/ComputePSO.h"
 

@@ -2,7 +2,7 @@
 
 #include "engine/Runtime/GraphicsCore.h"
 #include "engine/Assets/Texture/TextureManager.h"
-#include "engine/Functions/ECS/Component/SpriteComponent.h"
+#include "engine/Functions/ECS/Component/Asset/SpriteComponent.h"
 #include "engine/Functions/ECS/Component/Transform2DComponent.h"
 #include "engine/Math/Easing.h"
 

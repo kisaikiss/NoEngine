@@ -3,7 +3,7 @@
 
 #include "engine/Runtime/GraphicsCore.h"
 #include "engine/Functions/Shader/ShaderReflection.h"
-#include "engine/Functions/ECS/Component/AnimatorComponent.h"
+#include "engine/Functions/ECS/Component/Asset/AnimatorComponent.h"
 
 namespace NoEngine {
 namespace Render {
