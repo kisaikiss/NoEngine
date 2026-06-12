@@ -5,60 +5,92 @@
 using namespace std;
 
 void PlayerMoveSystem::Update(No::Registry& registry, float deltaTime) {
-	static_cast<void>(deltaTime);
 
+	// カメラの回転を取得
 	No::Quaternion cameraRotate{};
-
 	auto cameraView = registry.View<FollowCameraComponent>();
 	for (auto entity : cameraView) {
 		cameraRotate = registry.GetComponent<No::TransformComponent>(entity)->rotation;
 	}
 
-
-
 	auto view = registry.View<PlayerComponent>();
 	for (auto entity : view) {
 		auto* transform = registry.GetComponent<No::TransformComponent>(entity);
 		auto* playerVariables = registry.GetComponent<PlayerComponent>(entity);
-		auto* velocity = registry.GetComponent < No::VelocityComponent>(entity);
+		auto* velocity = registry.GetComponent<No::VelocityComponent>(entity);
+		auto* groundState = registry.GetComponent<No::GroundStateComponent>(entity);
+
 		velocity->linear = No::Vector3::ZERO;
 
-		// 入力による移動を行います
-		
-		velocity->linear.x = No::GetInputAxisValue("Horizontal");
-		velocity->linear.z = No::GetInputAxisValue("Forward");
+		const No::Vector3& groundNormal = playerVariables->groundNormal;
+		const bool isGrounded = groundState->isGrounded;
 
-		// 入力がされていた場合
-		if (velocity->linear.x || velocity->linear.z) {
-			
-			No::Vector3 rotateVelocity = cameraRotate.RotateVector(velocity->linear);
-			velocity->linear.x = rotateVelocity.x;
-			velocity->linear.z = rotateVelocity.z;
-
-			// 移動成分を正規化
-			velocity->linear = velocity->linear.Normalize();
-
-			velocity->linear *= playerVariables->moveSpeed ;
-
-			// プレイヤーを移動方向へ向ける
-			transform->rotation.LookRotation(velocity->linear, No::Vector3::UP);
-
-		}
-
-		// jump(後にSystemを分ける)
-
+		bool justJumped = false;
 		if (No::InputIsTrigger("Jump")) {
-			if (registry.GetComponent<No::GroundStateComponent>(entity)->isGrounded || playerVariables->infinityJump) {
+			if (isGrounded || playerVariables->infinityJump) {
 				playerVariables->yVelocity = playerVariables->jumpSpeed;
+				justJumped = true;
+				// ジャンプ直後は接地フラグを即座に落とす
+				// → このフレームの velocity.y 計算を「空中ブランチ」で処理させる
+				groundState->isGrounded = false;
 			}
 		}
 
-		playerVariables->yVelocity += playerVariables->gravity * deltaTime;
+		// ------------------------------------------------------------------
+		//  水平移動入力
+		// ------------------------------------------------------------------
+		No::Vector3 inputDir = No::Vector3::ZERO;
+		inputDir.x = No::GetInputAxisValue("Horizontal");
+		inputDir.z = No::GetInputAxisValue("Forward");
 
-		velocity->linear.y = playerVariables->yVelocity;
+		// 斜面に沿った y 寄与分（斜面下り用）
+		float slopeY = 0.f;
 
-		
+		if (inputDir.x != 0.f || inputDir.z != 0.f) {
 
+			// カメラ基準の移動ベクトル（水平成分のみ）
+			No::Vector3 worldDir = cameraRotate.RotateVector(inputDir);
+			worldDir.y = 0.f;
+			if (isGrounded && !justJumped) {
+				float dn = worldDir.Dot(groundNormal);
+				worldDir = worldDir - groundNormal * dn;
+				// 投影後の y 成分を斜面寄与として取り出す
+				// （正規化 → speedをかけた後の y を使うため、ここでは比率のみ保持）
+			}
 
+			// 正規化してスピードを乗算
+			float len = worldDir.Length();
+			if (len > 1e-6f) {
+				worldDir = worldDir * (playerVariables->moveSpeed / len);
+			}
+
+			velocity->linear.x = worldDir.x;
+			velocity->linear.z = worldDir.z;
+
+			// 斜面寄与の y 成分を記録（後で velocity.y に合成）
+			slopeY = worldDir.y;
+
+			// プレイヤーを移動方向へ向ける（水平方向のみで LookRotation）
+			No::Vector3 lookDir = { worldDir.x, 0.f, worldDir.z };
+			if (lookDir.Length() > 1e-6f) {
+				No::Quaternion newRotation;
+				newRotation.LookRotation(lookDir, groundNormal);
+				transform->rotation = transform->rotation.Slerp(transform->rotation, newRotation, deltaTime * 20.f);
+			}
+		}
+
+		if (isGrounded && !justJumped) {
+			// 接地中は重力加算しない。
+
+			// 斜面 y のみ velocity に反映
+			velocity->linear.y = slopeY;
+
+		} else {
+			// 空中 or ジャンプ直後
+			playerVariables->yVelocity += playerVariables->gravity * deltaTime;
+			velocity->linear.y = playerVariables->yVelocity;
+		}
+
+		playerVariables->groundNormal = No::Vector3::ZERO;
 	}
 }

@@ -6,5 +6,6 @@ struct PlayerComponent {
 	float jumpSpeed = 16.f;
 	float gravity = -9.8f;
 	float yVelocity = 0.f;
+	No::Vector3 groundNormal = No::Vector3::UP;
 	bool infinityJump = false;
 };
