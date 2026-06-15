@@ -28,6 +28,7 @@ void EngineTestScene::Setup() {
 	auto* m = registry.AddComponent<No::MaterialComponent>(entity);
 	auto* a = registry.AddComponent<No::AnimatorComponent>(entity);
 	No::ModelLoader::LoadModel("magiclash", "resources/engine/Model/test/TD_girl/test7.gltf");
+	No::ModelLoader::Load("resources/engine/Model/test/TD_girl/test7.gltf");
 	No::ModelLoader::GetModel("magiclash", model, a);
 	m->materials = No::ModelLoader::GetMaterial("magiclash");
 	m->drawOutline = true;

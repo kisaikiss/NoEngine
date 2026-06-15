@@ -204,6 +204,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="application\ClockworksDisease\System\Object\BoxColliderUpdateSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Player\PlayerMoveSystem.cpp" />
     <ClCompile Include="application\TestApp\TestApp.cpp" />
+    <ClCompile Include="engine\Assets\Model\ModelSaver.cpp" />
     <ClCompile Include="engine\Editor\EditorCommandOperator.cpp" />
     <ClCompile Include="engine\Editor\EditTag.cpp" />
     <ClCompile Include="engine\Functions\Command\CommandManager.cpp" />
@@ -416,6 +417,9 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="application\ClockworksDisease\System\Object\BoxColliderUpdateSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Player\PlayerMoveSystem.h" />
     <ClInclude Include="application\TestApp\TestApp.h" />
+    <ClInclude Include="engine\Assets\AssetHandles.h" />
+    <ClInclude Include="engine\Assets\Model\ModelAsset.h" />
+    <ClInclude Include="engine\Assets\Model\ModelSaver.h" />
     <ClInclude Include="engine\Assets\RaytracingMesh.h" />
     <ClInclude Include="engine\Editor\EditorCommandOperator.h" />
     <ClInclude Include="engine\Editor\EditTag.h" />

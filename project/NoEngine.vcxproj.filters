@@ -198,6 +198,7 @@
     <ClCompile Include="engine\Math\Collision\MeshColliderLoader.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Game\ColliderDrawSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\Component\Player\PlayerComponent.cpp" />
+    <ClCompile Include="engine\Assets\Model\ModelSaver.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -408,6 +409,9 @@
     <ClInclude Include="engine\Math\Collision\BVH.h" />
     <ClInclude Include="engine\Math\Collision\MeshColliderLoader.h" />
     <ClInclude Include="application\ClockworksDisease\System\Game\ColliderDrawSystem.h" />
+    <ClInclude Include="engine\Assets\AssetHandles.h" />
+    <ClInclude Include="engine\Assets\Model\ModelSaver.h" />
+    <ClInclude Include="engine\Assets\Model\ModelAsset.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />
