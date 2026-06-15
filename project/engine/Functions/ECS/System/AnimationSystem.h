@@ -16,9 +16,9 @@ public:
 	void Update(Registry& registry, float deltaTime) override;
 private:
 	void AnimationUpdate(Registry& registry, float deltaTime);
-	void SkeletonUpdate(Component::AnimatorComponent* animeComp);
-	void SkeletonDraw(Component::AnimatorComponent* animeComp);
-	void SkinUpdate(Component::AnimatorComponent* animeComp, Component::MeshComponent* meshComp);
+	void SkeletonUpdate(Component::AnimatorComponent* animeComp, Skeleton* skeleton, Animation* animation);
+	void SkeletonDraw(Skeleton* skeleton);
+	void SkinUpdate(Skeleton* skeleton, Component::MeshComponent* meshComp);
 
 	void CalculateValue(const NodeAnimation& keyframes, Transform& transform, float time);
 	Math::Vector3 CalculateValue(const std::vector<KeyframeVector3>& keyframes, float time);

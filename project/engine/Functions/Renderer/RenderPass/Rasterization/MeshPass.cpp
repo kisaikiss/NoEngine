@@ -52,7 +52,7 @@ void MeshPass::Collect(ECS::Registry& registry) {
 
 		float distance = MathCalculations::LengthSquared(transform->translate - cameraPos);
 
-		items_.push_back({ mesh->handle, material,transform, animeLocal, pso, rootSig, ConvertString(name), distance });
+		items_.push_back({ mesh->handle, material->handles, material, transform, animeLocal, pso, rootSig, ConvertString(name), distance });
 	}
 }
 
@@ -139,7 +139,8 @@ void MeshPass::Render(GraphicsContext& context, const RenderGraphRegistry& resou
 			constants.shininess = item.material->shininess;
 			constants.environmentCoefficient = item.material->enviromentCoefficient;
 			context.SetDynamicConstantBufferView(rootIndex["gMaterial"], sizeof(constants), &constants);
-			context.SetDynamicDescriptor(rootIndex["gTexture"], 0, item.material->materials[subMesh.materialIndex].textureHandle.GetSRV());
+			auto* material = ModelSaver::Get().GetMaterial(item.materialHandles[subMesh.materialIndex]);
+			context.SetDynamicDescriptor(rootIndex["gTexture"], 0, material->textureHandle.GetSRV());
 			context.SetDynamicDescriptor(rootIndex["gShadowMask"], 0, GraphicsCore::GetShadowMask().GetSRV());
 			context.SetDynamicDescriptor(rootIndex["gEnvironmentTexture"], 0, skyBoxTexture_.GetSRV());
 			context.DrawIndexedInstanced(subMesh.indexCount, 1, subMesh.indexStart, subMesh.vertexStart, 0);

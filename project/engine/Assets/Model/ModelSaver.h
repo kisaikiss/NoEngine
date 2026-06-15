@@ -35,7 +35,7 @@ public:
         skeletons_[handle.id] = std::move(skeleton);
         return handle;
     }
-    const Skeleton* GetSkeleton(Asset::SkeletonHandle handle) const {
+    Skeleton* GetSkeleton(Asset::SkeletonHandle handle) {
         auto it = skeletons_.find(handle.id);
         return it != skeletons_.end() ? &it->second : nullptr;
     }
@@ -46,7 +46,7 @@ public:
         animations_[handle.id] = std::move(animation);
         return handle;
     }
-    const Animation* GetAnimation(Asset::AnimationHandle handle) const {
+    Animation* GetAnimation(Asset::AnimationHandle handle) {
         auto it = animations_.find(handle.id);
         return it != animations_.end() ? &it->second : nullptr;
     }
@@ -57,7 +57,7 @@ public:
         materials_[handle.id] = std::move(material);
         return handle;
     }
-    const Material* GetAnimation(Asset::MaterialHandle handle) const {
+    const Material* GetMaterial(Asset::MaterialHandle handle) const {
         auto it = materials_.find(handle.id);
         return it != materials_.end() ? &it->second : nullptr;
     }

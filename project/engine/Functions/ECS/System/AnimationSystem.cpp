@@ -51,36 +51,36 @@ void AnimationSystem::AnimationUpdate(Registry& registry, float deltaTime) {
 		auto* animeComp = registry.GetComponent<Component::AnimatorComponent>(entity);
 		auto* meshComp = registry.GetComponent<Component::MeshComponent>(entity);
 
-		if (!meshComp->mesh) continue;
-
 		animeComp->time += deltaTime;
 		uint32_t currentAnimation = animeComp->currentAnimation;
-		animeComp->time = std::fmod(animeComp->time, animeComp->animation[currentAnimation].duration);
+		auto& modelSaver = ModelSaver::Get();
+		auto* animation = modelSaver.GetAnimation(animeComp->animationHandles[currentAnimation]);
+		auto* skeleton = modelSaver.GetSkeleton(animeComp->skeletonHandle);
+		animeComp->time = std::fmod(animeComp->time, animation[currentAnimation].duration);
 			
-		if (animeComp->skeleton) {
-			SkeletonUpdate(animeComp);
-			SkeletonDraw(animeComp);
-			SkinUpdate(animeComp, meshComp);
+		if (skeleton) {
+			SkeletonUpdate(animeComp,skeleton,animation);
+			if(animeComp->drawSkeleton) SkeletonDraw(skeleton);
+			SkinUpdate(skeleton, meshComp);
 		}
-
-
-		if (animeComp->animation[currentAnimation].nodeAnimations.contains(meshComp->mesh->rootNode.name)) {
-			CalculateValue(animeComp->animation[currentAnimation].nodeAnimations[meshComp->mesh->rootNode.name], animeComp->local, animeComp->time);
+		auto* mesh = ModelSaver::Get().GetMesh(meshComp->handle);
+		if (!mesh) return;
+		if (animation[currentAnimation].nodeAnimations.contains(mesh->rootNode.name)) {
+			CalculateValue(animation[currentAnimation].nodeAnimations[mesh->rootNode.name], animeComp->local, animeComp->time);
 		}
 	}
 }
 
-void AnimationSystem::SkeletonUpdate(Component::AnimatorComponent* animeComp) {
-	uint32_t currentAnimation = animeComp->currentAnimation;
-	for (Joint& joint : animeComp->skeleton->joints) {
-		if (auto it = animeComp->animation[currentAnimation].nodeAnimations.find(joint.name); it != animeComp->animation[currentAnimation].nodeAnimations.end()) {
+void AnimationSystem::SkeletonUpdate(Component::AnimatorComponent* animeComp, Skeleton* skeleton, Animation* animation) {
+	for (Joint& joint : skeleton->joints) {
+		if (auto it = animation->nodeAnimations.find(joint.name); it != animation->nodeAnimations.end()) {
 			const NodeAnimation& rootNodeAnimation = (*it).second;
 			CalculateValue(rootNodeAnimation, joint.transform, animeComp->time);
 		}
 
 		joint.localMatrix = joint.transform.MakeAffineMatrix4x4();
 		if (joint.parent) {
-			joint.skeletonSpaceMatrix = joint.localMatrix * animeComp->skeleton->joints[*joint.parent].skeletonSpaceMatrix;
+			joint.skeletonSpaceMatrix = joint.localMatrix * skeleton->joints[*joint.parent].skeletonSpaceMatrix;
 		} else {
 			joint.skeletonSpaceMatrix = joint.localMatrix;
 		}
@@ -88,11 +88,9 @@ void AnimationSystem::SkeletonUpdate(Component::AnimatorComponent* animeComp) {
 	}
 }
 
-void AnimationSystem::SkeletonDraw(Component::AnimatorComponent* animeComp) {
+void AnimationSystem::SkeletonDraw(Skeleton* skeleton) {
 
-	if (!animeComp->drawSkeleton) return;
-
-	std::vector<Joint>& joints = animeComp->skeleton->joints;
+	std::vector<Joint>& joints = skeleton->joints;
 	for (Joint& joint : joints) {
 		if (joint.parent.has_value()) {
 			const Joint& parentJoint = joints[joint.parent.value()];
@@ -105,12 +103,12 @@ void AnimationSystem::SkeletonDraw(Component::AnimatorComponent* animeComp) {
 	}
 }
 
-void AnimationSystem::SkinUpdate(Component::AnimatorComponent* animeComp, Component::MeshComponent* meshComp) {
+void AnimationSystem::SkinUpdate(Skeleton* skeleton, Component::MeshComponent* meshComp) {
 	auto* mesh = ModelSaver::Get().GetMesh(meshComp->handle);
 	if (!mesh) return;
-	for (size_t jointIndex = 0; jointIndex < animeComp->skeleton->joints.size(); jointIndex++) {
+	for (size_t jointIndex = 0; jointIndex < skeleton->joints.size(); jointIndex++) {
 		mesh->mappedPalette[jointIndex].skeletonSpaceMatrix =
-			animeComp->skeleton->inverseBindPoseMatrices[jointIndex] * animeComp->skeleton->joints[jointIndex].skeletonSpaceMatrix;
+			skeleton->inverseBindPoseMatrices[jointIndex] * skeleton->joints[jointIndex].skeletonSpaceMatrix;
 		mesh->mappedPalette[jointIndex].skeletonSpaceInverseTransposeMatrix =
 			MathCalculations::Transpose(MathCalculations::Inverse(mesh->mappedPalette[jointIndex].skeletonSpaceMatrix));
 

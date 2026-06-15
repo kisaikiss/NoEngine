@@ -7,6 +7,7 @@ No::Entity cameraE;
 
 void EngineTestScene::Setup() {
 	AddSystem(std::make_unique<TestSystem>());
+	AddSystem(std::make_unique<No::ModelLoadSystem>());
 	AddSystem(std::make_unique<No::AnimationSystem>());
 	AddSystem(std::make_unique<No::SpriteAnimationSystem>());
 	AddSystem(std::make_unique<No::ParticleEmitterSystem>());
@@ -26,22 +27,16 @@ void EngineTestScene::Setup() {
 	t->rotation.FromAxisAngle(No::Vector3(0.f, 1.f, 0.f), PI);
 	t->translate = { 0.f,-1.5f,4.f };
 	auto* m = registry.AddComponent<No::MaterialComponent>(entity);
-	auto* a = registry.AddComponent<No::AnimatorComponent>(entity);
-	No::ModelLoader::LoadModel("magiclash", "resources/engine/Model/test/TD_girl/test7.gltf");
-	model->handle = No::ModelLoader::Load("resources/engine/Model/test/TD_girl/test7.gltf").mesh;
-	No::ModelLoader::GetModel("magiclash", model, a);
-	m->materials = No::ModelLoader::GetMaterial("magiclash");
+	registry.AddComponent<No::AnimatorComponent>(entity);
+	model->meshName = "resources/engine/Model/test/TD_girl/test7.gltf";
 	m->drawOutline = true;
 	m->enableSkinning = true;
 	m->psoName = L"Renderer : DefaultSkinned PSO";
 
 	No::Entity background = registry.GenerateEntity();
 	auto* bm = registry.AddComponent<No::MeshComponent>(background);
-	No::ModelLoader::LoadModel("background", "resources/engine/Model/terrain/terrain.obj");
-	bm->handle = No::ModelLoader::Load("resources/engine/Model/terrain/terrain.obj").mesh;
-	No::ModelLoader::GetModel("background", bm);
+	bm->meshName = "resources/engine/Model/terrain/terrain.obj";
 	auto* bmm = registry.AddComponent<No::MaterialComponent>(background);
-	bmm->materials = No::ModelLoader::GetMaterial("background");
 	bmm->psoName = L"Renderer : Default PSO";
 	bmm->rootSigId = NoEngine::Render::GetRootSignatureID(bmm->psoName);
 	registry.AddComponent<No::TransformComponent>(background);
@@ -152,11 +147,8 @@ void EngineTestScene::Setup() {
 		auto e = registry.GenerateEntity();
 		auto* cubeMesh = registry.AddComponent<No::MeshComponent>(e);
 		auto* cubeM = registry.AddComponent<No::MaterialComponent>(e);
-		auto* cubeA = registry.AddComponent<No::AnimatorComponent>(e);
-		No::ModelLoader::LoadModel("animeCube", "resources/engine/Model/AnimatedCube/AnimatedCube.gltf");
-		cubeMesh->handle = No::ModelLoader::Load("resources/engine/Model/AnimatedCube/AnimatedCube.gltf").mesh;
-		No::ModelLoader::GetModel("animeCube", cubeMesh, cubeA);
-		cubeM->materials = No::ModelLoader::GetMaterial("animeCube");
+		registry.AddComponent<No::AnimatorComponent>(e);
+		cubeMesh->meshName = "resources/engine/Model/AnimatedCube/AnimatedCube.gltf";
 		cubeM->psoName = L"Renderer : Default PSO";
 
 		registry.AddComponent<No::EditTag>(e)->name = "AnimeCube";

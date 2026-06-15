@@ -15,7 +15,6 @@ class ModelLoader {
 public:
 	static void LoadModel(const std::string& name, const std::string& filePath, Component::MeshComponent* model = nullptr, Component::AnimatorComponent* animator = nullptr);
 	static ModelAsset Load(const std::string& filePath);
-	static void GetModel(const std::string& name, Component::MeshComponent* model, Component::AnimatorComponent* animator = nullptr);
 	static std::span<Material> GetMaterial(const std::string& name);
 	static void DeleteAll();
 

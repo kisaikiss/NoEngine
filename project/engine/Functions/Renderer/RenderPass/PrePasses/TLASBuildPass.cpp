@@ -4,6 +4,8 @@
 #include "engine/Functions/ECS/Component/TransformComponent.h"
 #include "engine/Runtime/GraphicsCore.h"
 
+#include  "engine/Assets/Model/ModelSaver.h"
+
 namespace NoEngine {
 namespace Render {
 
@@ -22,10 +24,13 @@ void TLASBuildPass::BuildRaytracingInstances(ECS::Registry& registry) {
 	for (auto entity : view) {
 		auto* meshComp = registry.GetComponent<Component::MeshComponent>(entity);
 		auto* transform = registry.GetComponent<Component::TransformComponent>(entity);
-		if (!meshComp || !transform || !meshComp->mesh || !meshComp->mesh->raytracingMesh) continue;
+
+		auto* mesh = ModelSaver::Get().GetMesh(meshComp->handle);
+		if (!mesh) return;
+		if (!meshComp || !transform || !mesh || !mesh->raytracingMesh) continue;
 
 		RaytracingInstance inst = {};
-		inst.rtMesh = meshComp->mesh->raytracingMesh.get();
+		inst.rtMesh = mesh->raytracingMesh.get();
 
 		auto& desc = inst.desc;
 		memset(&desc, 0, sizeof(desc));

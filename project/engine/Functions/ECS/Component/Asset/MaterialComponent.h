@@ -1,5 +1,6 @@
 #pragma once
 #include "engine/Assets/Material.h"
+#include "engine/Assets/AssetHandles.h"
 
 namespace NoEngine {
 namespace Component {
@@ -8,7 +9,7 @@ namespace Component {
 /// マルチマテリアルなのでメッシュごとのマテリアルはstd::spanでこのコンポーネントに管理されている
 /// </summary>
 struct MaterialComponent {
-	std::span<Material> materials;
+	std::vector<Asset::MaterialHandle> handles;
 	Math::Color color = Math::Color::WHITE;
 	uint32_t psoId = 0;
 	uint32_t rootSigId = 0;

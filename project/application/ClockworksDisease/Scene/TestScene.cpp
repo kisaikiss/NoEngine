@@ -19,7 +19,7 @@ void TestScene::Setup() {
 	// プレイヤー
 	{
 		No::Entity player = registry.GenerateEntity();
-		auto* model = registry.AddComponent<No::MeshComponent>(player);
+		//auto* model = registry.AddComponent<No::MeshComponent>(player);
 		auto* t = registry.AddComponent<No::TransformComponent>(player);
 		auto* imguiName = registry.AddComponent<No::EditTag>(player);
 		imguiName->name = "player";
@@ -29,9 +29,9 @@ void TestScene::Setup() {
 		//auto* a = registry.AddComponent<No::AnimatorComponent>(player);
 		//No::ModelLoader::LoadModel("magiclash", "resources/game/ClockworksDisease/Model/player/magiclash2.gltf");
 		No::ModelLoader::LoadModel("magiclash", "resources/engine/Model/monkey.obj");
-		No::ModelLoader::GetModel("magiclash", model/*, a*/);
-		m->materials = No::ModelLoader::GetMaterial("magiclash");
-		m->materials[0].textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/engine/white1x1.png");
+		//No::ModelLoader::GetModel("magiclash", model/*, a*/);
+		//m->materials = No::ModelLoader::GetMaterial("magiclash");
+		//m->materials[0].textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/engine/white1x1.png");
 		m->drawOutline = false;
 		m->enviromentCoefficient = 1.f;
 		//m->enableSkinning = true;
@@ -54,11 +54,11 @@ void TestScene::Setup() {
 	// 箱
 	{
 		No::Entity box = registry.GenerateEntity();
-		auto* bm = registry.AddComponent<No::MeshComponent>(box);
+		//auto* bm = registry.AddComponent<No::MeshComponent>(box);
 		No::ModelLoader::LoadModel("box", "resources/engine/Model/block/block.obj");
-		No::ModelLoader::GetModel("box", bm);
+		//No::ModelLoader::GetModel("box", bm);
 		auto* bmm = registry.AddComponent<No::MaterialComponent>(box);
-		bmm->materials = No::ModelLoader::GetMaterial("box");
+		//bmm->materials = No::ModelLoader::GetMaterial("box");
 		bmm->psoName = L"Renderer : Default PSO";
 		bmm->rootSigId = NoEngine::Render::GetRootSignatureID(bmm->psoName);
 		auto* boxT = registry.AddComponent<No::TransformComponent>(box);
@@ -95,13 +95,13 @@ void TestScene::Setup() {
 	{
 		auto e = registry.GenerateEntity();
 		auto* t = registry.AddComponent<No::TerrainMesh>(e);
-		auto* bm = registry.AddComponent<No::MeshComponent>(e);
+		//auto* bm = registry.AddComponent<No::MeshComponent>(e);
 		No::LoadMeshCollider("resources/game/ClockworksDisease/Model/Area1/Area1.obj", t);
 		registry.AddComponent<CollisionLayerComponent>(e)->layer = CollisionLayerComponent::Terrain;
 		No::ModelLoader::LoadModel("terrain", "resources/game/ClockworksDisease/Model/Area1/Area1.obj");
-		No::ModelLoader::GetModel("terrain", bm);
+		//No::ModelLoader::GetModel("terrain", bm);
 		auto* bmm = registry.AddComponent<No::MaterialComponent>(e);
-		bmm->materials = No::ModelLoader::GetMaterial("terrain");
+		//bmm->materials = No::ModelLoader::GetMaterial("terrain");
 		bmm->psoName = L"Renderer : Default PSO";
 		bmm->rootSigId = NoEngine::Render::GetRootSignatureID(bmm->psoName);
 		registry.AddComponent<No::TransformComponent>(e);

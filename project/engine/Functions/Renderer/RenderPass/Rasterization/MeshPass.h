@@ -31,6 +31,7 @@ protected:
    /// </summary>
     struct DrawItem {
         Asset::MeshHandle meshHandle;
+        std::vector<Asset::MaterialHandle> materialHandles;
         Component::MaterialComponent* material;
         Component::TransformComponent* transform;
         Transform* animationLocal;

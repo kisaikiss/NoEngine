@@ -20,15 +20,8 @@ std::unordered_map<std::string, std::vector<Material>> sMaterials;
 }
 
 void ModelLoader::LoadModel(const std::string& name, const std::string& filePath, MeshComponent* model, AnimatorComponent* animator) {
-	if (sMeshes.contains(name)) {
-		if (model) model->mesh = &sMeshes[name];
-		if (animator) {
-			if (sAnimation.contains(name))animator->animation = sAnimation[name];
-			if (sSkeletons.contains(name))animator->skeleton = &sSkeletons[name];
-		}
-		return;
-	}
-
+	(void)model;
+	(void)animator;
 	Assimp::Importer importer;
 	const aiScene* scene = importer.ReadFile(filePath.c_str(), aiProcess_FlipWindingOrder | aiProcess_FlipUVs);
 	assert(scene->HasMeshes());
@@ -134,11 +127,6 @@ void ModelLoader::LoadModel(const std::string& name, const std::string& filePath
 		ProcessAnimation(name, scene);
 		ProcessSkeleton(name, sMeshes[name].rootNode);
 	}
-	if (animator) {
-		if (sAnimation.contains(name))animator->animation = sAnimation[name];
-		if (sSkeletons.contains(name))animator->skeleton = &sSkeletons[name];
-	}
-
 	// Vertex
 	{
 		if (sMeshes[name].skinClusterData.empty()) {
@@ -233,7 +221,7 @@ void ModelLoader::LoadModel(const std::string& name, const std::string& filePath
 		sMeshes[name].raytracingMesh = std::make_unique<RaytracingMesh>(ProcessRaytracingMesh(sMeshes[name]));
 	}
 
-	if (model) model->mesh = &sMeshes[name];
+	//if (model) model->mesh = &sMeshes[name];
 }
 
 ModelAsset Asset::ModelLoader::Load(const std::string& filePath) {
@@ -451,17 +439,6 @@ ModelAsset Asset::ModelLoader::Load(const std::string& filePath) {
 	return modelAsset;
 }
 
-void ModelLoader::GetModel(const std::string& name, MeshComponent* model, AnimatorComponent* animator) {
-	if (!model) return;
-
-	if (sMeshes.contains(name)) {
-		model->mesh = &sMeshes[name];
-		if (animator) {
-			if (sAnimation.contains(name))animator->animation = sAnimation[name];
-			if (sSkeletons.contains(name))animator->skeleton = &sSkeletons[name];
-		}
-	}
-}
 
 std::span<Material> ModelLoader::GetMaterial(const std::string& name) {
 	return sMaterials[name];

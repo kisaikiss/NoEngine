@@ -239,6 +239,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="engine\Functions\ECS\System\Effect\ParticleEmitterSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Effect\ParticleSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\GroundResetSystem.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\Loader\ModelLoadSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Loader\SpriteLoadSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Movement2DSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\MovementSystem.cpp" />
@@ -458,6 +459,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="engine\Functions\ECS\System\Effect\ParticleEmitterSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\Effect\ParticleSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\GroundResetSystem.h" />
+    <ClInclude Include="engine\Functions\ECS\System\Loader\ModelLoadSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\Loader\SpriteLoadSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\Movement2DSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\MovementSystem.h" />
