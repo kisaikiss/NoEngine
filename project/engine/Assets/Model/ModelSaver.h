@@ -24,7 +24,7 @@ public:
         meshes_[handle.id] = std::move(mesh);
         return handle;
     }
-    const Mesh* GetMesh(Asset::MeshHandle handle) const {
+    Mesh* GetMesh(Asset::MeshHandle handle) {
         auto it = meshes_.find(handle.id);
         return it != meshes_.end() ? &it->second : nullptr;
     }

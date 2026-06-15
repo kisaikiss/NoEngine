@@ -5,6 +5,7 @@
 #include "engine/Functions/Shader/ShaderModule.h"
 #include "engine/Utilities/Conversion/ConvertString.h"
 #include "../Component/TransformComponent.h" 
+#include "engine/Assets/Model/ModelSaver.h"
 
 
 namespace NoEngine {
@@ -105,13 +106,15 @@ void AnimationSystem::SkeletonDraw(Component::AnimatorComponent* animeComp) {
 }
 
 void AnimationSystem::SkinUpdate(Component::AnimatorComponent* animeComp, Component::MeshComponent* meshComp) {
+	auto* mesh = ModelSaver::Get().GetMesh(meshComp->handle);
+	if (!mesh) return;
 	for (size_t jointIndex = 0; jointIndex < animeComp->skeleton->joints.size(); jointIndex++) {
-		meshComp->mesh->mappedPalette[jointIndex].skeletonSpaceMatrix =
+		mesh->mappedPalette[jointIndex].skeletonSpaceMatrix =
 			animeComp->skeleton->inverseBindPoseMatrices[jointIndex] * animeComp->skeleton->joints[jointIndex].skeletonSpaceMatrix;
-		meshComp->mesh->mappedPalette[jointIndex].skeletonSpaceInverseTransposeMatrix =
-			MathCalculations::Transpose(MathCalculations::Inverse(meshComp->mesh->mappedPalette[jointIndex].skeletonSpaceMatrix));
+		mesh->mappedPalette[jointIndex].skeletonSpaceInverseTransposeMatrix =
+			MathCalculations::Transpose(MathCalculations::Inverse(mesh->mappedPalette[jointIndex].skeletonSpaceMatrix));
 
-		memcpy(meshComp->mesh->paletteUpload.Map(), meshComp->mesh->mappedPalette.data(), sizeof(SkeletonWell) * meshComp->mesh->mappedPalette.size());
+		memcpy(mesh->paletteUpload.Map(), mesh->mappedPalette.data(), sizeof(SkeletonWell) * mesh->mappedPalette.size());
 		
 	}
 }

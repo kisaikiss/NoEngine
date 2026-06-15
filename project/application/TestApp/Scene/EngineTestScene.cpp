@@ -28,7 +28,7 @@ void EngineTestScene::Setup() {
 	auto* m = registry.AddComponent<No::MaterialComponent>(entity);
 	auto* a = registry.AddComponent<No::AnimatorComponent>(entity);
 	No::ModelLoader::LoadModel("magiclash", "resources/engine/Model/test/TD_girl/test7.gltf");
-	No::ModelLoader::Load("resources/engine/Model/test/TD_girl/test7.gltf");
+	model->handle = No::ModelLoader::Load("resources/engine/Model/test/TD_girl/test7.gltf").mesh;
 	No::ModelLoader::GetModel("magiclash", model, a);
 	m->materials = No::ModelLoader::GetMaterial("magiclash");
 	m->drawOutline = true;
@@ -38,6 +38,7 @@ void EngineTestScene::Setup() {
 	No::Entity background = registry.GenerateEntity();
 	auto* bm = registry.AddComponent<No::MeshComponent>(background);
 	No::ModelLoader::LoadModel("background", "resources/engine/Model/terrain/terrain.obj");
+	bm->handle = No::ModelLoader::Load("resources/engine/Model/terrain/terrain.obj").mesh;
 	No::ModelLoader::GetModel("background", bm);
 	auto* bmm = registry.AddComponent<No::MaterialComponent>(background);
 	bmm->materials = No::ModelLoader::GetMaterial("background");
@@ -153,6 +154,7 @@ void EngineTestScene::Setup() {
 		auto* cubeM = registry.AddComponent<No::MaterialComponent>(e);
 		auto* cubeA = registry.AddComponent<No::AnimatorComponent>(e);
 		No::ModelLoader::LoadModel("animeCube", "resources/engine/Model/AnimatedCube/AnimatedCube.gltf");
+		cubeMesh->handle = No::ModelLoader::Load("resources/engine/Model/AnimatedCube/AnimatedCube.gltf").mesh;
 		No::ModelLoader::GetModel("animeCube", cubeMesh, cubeA);
 		cubeM->materials = No::ModelLoader::GetMaterial("animeCube");
 		cubeM->psoName = L"Renderer : Default PSO";

@@ -3,6 +3,7 @@
 #include "engine/Functions/ECS/Component/Asset/MeshComponent.h"
 #include "engine/Functions/ECS/Component/Asset/MaterialComponent.h"
 #include "engine/Functions/ECS/Component/TransformComponent.h"
+#include "engine/Assets/AssetHandles.h"
 
 namespace NoEngine {
 namespace Render {
@@ -18,7 +19,7 @@ private:
    /// 描画に必要な変数
    /// </summary>
     struct DrawItem {
-        Component::MeshComponent* mesh;
+        Asset::MeshHandle mesh;
         Component::MaterialComponent* material;
         Component::TransformComponent* transform;
         Transform* local;

@@ -4,6 +4,7 @@
 #include "engine/Functions/ECS/Component/Asset/MaterialComponent.h"
 #include "engine/Functions/ECS/Component/TransformComponent.h"
 #include "engine/Functions/ECS/Component/CameraComponent.h"
+#include "engine/Assets/AssetHandles.h"
 
 namespace NoEngine {
 namespace Render {
@@ -29,7 +30,7 @@ protected:
    /// 描画に必要な変数
    /// </summary>
     struct DrawItem {
-        Component::MeshComponent* mesh;
+        Asset::MeshHandle meshHandle;
         Component::MaterialComponent* material;
         Component::TransformComponent* transform;
         Transform* animationLocal;

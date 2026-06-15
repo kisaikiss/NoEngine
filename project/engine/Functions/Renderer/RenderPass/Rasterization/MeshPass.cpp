@@ -4,6 +4,7 @@
 #include "engine/Utilities/Conversion/ConvertString.h"
 #include "engine/Runtime/GraphicsCore.h"
 #include "engine/Functions/ECS/Component/Asset/AnimatorComponent.h"
+#include "engine/Assets/Model/ModelSaver.h"
 
 namespace NoEngine {
 namespace Render {
@@ -51,7 +52,7 @@ void MeshPass::Collect(ECS::Registry& registry) {
 
 		float distance = MathCalculations::LengthSquared(transform->translate - cameraPos);
 
-		items_.push_back({ mesh,material,transform, animeLocal, pso, rootSig, ConvertString(name), distance });
+		items_.push_back({ mesh->handle, material,transform, animeLocal, pso, rootSig, ConvertString(name), distance });
 	}
 }
 
@@ -114,17 +115,19 @@ void MeshPass::Render(GraphicsContext& context, const RenderGraphRegistry& resou
 			if (constants.spotLightNum)
 				context.SetDynamicDescriptor(rootIndex["gSpotLights"], 0, renderCtx->GetSpotLightSRV());
 		}
-		context.SetVertexBuffer(0, item.mesh->mesh->vertexBuffer.VertexBufferView());
-		context.SetIndexBuffer(item.mesh->mesh->indexBuffer.IndexBufferView());
+		auto* mesh = ModelSaver::Get().GetMesh(item.meshHandle);
+		if (!mesh) continue;
+		context.SetVertexBuffer(0, mesh->vertexBuffer.VertexBufferView());
+		context.SetIndexBuffer(mesh->indexBuffer.IndexBufferView());
 
-		if (item.mesh->mesh->numJoints && item.material->enableSkinning) {
+		if (mesh->numJoints && item.material->enableSkinning) {
 
-			context.CopyBufferRegion(item.mesh->mesh->paletteResource, 0, item.mesh->mesh->paletteUpload, 0, sizeof(SkeletonWell) * item.mesh->mesh->mappedPalette.size());
+			context.CopyBufferRegion(mesh->paletteResource, 0, mesh->paletteUpload, 0, sizeof(SkeletonWell) * mesh->mappedPalette.size());
 
-			context.SetDynamicDescriptor(rootIndex["gJoints"], 0, item.mesh->mesh->paletteResource.GetSRV());
+			context.SetDynamicDescriptor(rootIndex["gJoints"], 0, mesh->paletteResource.GetSRV());
 		}
 
-		for (const auto& subMesh : item.mesh->mesh->subMeshes) {
+		for (const auto& subMesh : mesh->subMeshes) {
 
 			_declspec(align(16)) struct {
 				Math::Color color;
@@ -187,15 +190,16 @@ void MeshPass::RenderOutline(GraphicsContext& context) {
 		context.SetDynamicConstantBufferView(rootIndex["gWorldMatrix"], sizeof(Math::Matrix4x4), &worldData);
 		context.SetDynamicConstantBufferView(rootIndex["gCameraMatrix"], sizeof(Component::CameraForGPU), &camera_->forGPU);
 
-		context.SetVertexBuffer(0, item.mesh->mesh->vertexBuffer.VertexBufferView());
-		context.SetIndexBuffer(item.mesh->mesh->indexBuffer.IndexBufferView());
+		auto* mesh = ModelSaver::Get().GetMesh(item.meshHandle);
+		if (!mesh) continue;
+		context.SetVertexBuffer(0, mesh->vertexBuffer.VertexBufferView());
+		context.SetIndexBuffer(mesh->indexBuffer.IndexBufferView());
 
-		if (item.mesh->mesh->numJoints && item.material->enableSkinning) {
-
-			context.SetDynamicDescriptor(rootIndex["gJoints"], 0, item.mesh->mesh->paletteResource.GetSRV());
+		if (mesh->numJoints && item.material->enableSkinning) {
+			context.SetDynamicDescriptor(rootIndex["gJoints"], 0, mesh->paletteResource.GetSRV());
 		}
 
-		for (const auto& subMesh : item.mesh->mesh->subMeshes) {
+		for (const auto& subMesh : mesh->subMeshes) {
 			context.DrawIndexedInstanced(subMesh.indexCount, 1, subMesh.indexStart, subMesh.vertexStart, 0);
 		}
 	}

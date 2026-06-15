@@ -4,6 +4,7 @@
 #include "engine/Runtime/GraphicsCore.h"
 #include "engine/Functions/Shader/ShaderReflection.h"
 #include "engine/Functions/ECS/Component/Asset/AnimatorComponent.h"
+#include "engine/Assets/Model/ModelSaver.h"
 
 namespace NoEngine {
 namespace Render {
@@ -35,7 +36,7 @@ void PreRenderPass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& res
 			animeLocal = &anime->local;
 		}
 
-		items_.push_back({ mesh,material,transform,animeLocal });
+		items_.push_back({ mesh->handle,material,transform,animeLocal });
 	}
 
 	CameraComponent* camera = GetTargetCamera();
@@ -72,15 +73,18 @@ void PreRenderPass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& res
 		m.worldIT.Transpose();
 		gfx.SetDynamicConstantBufferView(rootIndex["gWorldMatrix"], sizeof(MeshConstants), &m);
 		gfx.SetDynamicConstantBufferView(rootIndex["gCameraMatrix"], sizeof(Component::CameraForGPU), &camera->forGPU);
-		gfx.SetVertexBuffer(0, item.mesh->mesh->vertexBuffer.VertexBufferView());
-		gfx.SetIndexBuffer(item.mesh->mesh->indexBuffer.IndexBufferView());
-		if (item.mesh->mesh->numJoints && item.material->enableSkinning) {
 
-			gfx.CopyBufferRegion(item.mesh->mesh->paletteResource, 0, item.mesh->mesh->paletteUpload, 0, sizeof(SkeletonWell) * item.mesh->mesh->mappedPalette.size());
+		auto* mesh = ModelSaver::Get().GetMesh(item.mesh);
+		if (!mesh) continue;
+		gfx.SetVertexBuffer(0, mesh->vertexBuffer.VertexBufferView());
+		gfx.SetIndexBuffer(mesh->indexBuffer.IndexBufferView());
+		if (mesh->numJoints && item.material->enableSkinning) {
 
-			gfx.SetDynamicDescriptor(rootIndex["gJoints"], 0, item.mesh->mesh->paletteResource.GetSRV());
+			gfx.CopyBufferRegion(mesh->paletteResource, 0, mesh->paletteUpload, 0, sizeof(SkeletonWell) * mesh->mappedPalette.size());
+
+			gfx.SetDynamicDescriptor(rootIndex["gJoints"], 0, mesh->paletteResource.GetSRV());
 		}
-		for (const auto& subMesh : item.mesh->mesh->subMeshes) {
+		for (const auto& subMesh : mesh->subMeshes) {
 			gfx.DrawIndexedInstanced(subMesh.indexCount, 1, subMesh.indexStart, subMesh.vertexStart, 0);
 		}
 	}
