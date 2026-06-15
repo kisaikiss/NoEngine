@@ -4,6 +4,8 @@
 #include "../Component/Asset/MeshComponent.h" 
 #include "engine/Runtime/PipelineStateObject/RootSignature.h"
 #include "engine/Runtime/PipelineStateObject/ComputePSO.h"
+#include "engine/Assets/Model/Skeleton.h"
+#include "engine/Assets/Model/Animation.h"
 
 namespace NoEngine {
 namespace ECS {

@@ -37,7 +37,6 @@
 #include "Functions/ECS/System/GroundResetSystem.h"
 #include "Functions/ECS/System/Effect/EffectEmitSystem.h"
 
-#include "Assets/ModelLoader.h"
 #include "Assets/Audio/Audio.h"
 #include "Functions/Renderer/RenderSystem.h"
 #include "Functions/Renderer/Primitive.h"

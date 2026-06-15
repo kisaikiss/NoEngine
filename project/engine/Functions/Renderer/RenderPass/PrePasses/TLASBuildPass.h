@@ -1,7 +1,7 @@
 #pragma once
 #include "../RenderPass.h"
 
-#include "../../../../Assets/RaytracingMesh.h"
+#include "engine/Assets/Model/RaytracingMesh.h"
 #include "engine/Math/MathInclude.h"
 #include "engine/Functions/ECS/Component/Asset/AnimatorComponent.h"
 

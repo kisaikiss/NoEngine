@@ -1,5 +1,4 @@
 #pragma once
-#include "engine/Assets/Mesh.h"
 #include "engine/Assets/AssetHandles.h"
 
 namespace NoEngine {

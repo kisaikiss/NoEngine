@@ -52,7 +52,6 @@ void TestScene::Setup() {
 	{
 		No::Entity box = registry.GenerateEntity();
 		auto* bm = registry.AddComponent<No::MeshComponent>(box);
-		No::ModelLoader::LoadModel("box", "resources/engine/Model/block/block.obj");
 		bm->meshName = "resources/engine/Model/block/block.obj";
 		auto* bmm = registry.AddComponent<No::MaterialComponent>(box);
 		bmm->psoName = L"Renderer : Default PSO";

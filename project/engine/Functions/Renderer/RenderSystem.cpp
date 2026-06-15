@@ -1,5 +1,4 @@
 #include "RenderSystem.h"
-#include "engine/Assets/ModelLoader.h"
 #include "engine/Assets/Model/ModelSaver.h"
 #include "engine/Utilities/Conversion/ConvertString.h"
 #include "engine/Functions/Shader/ShaderModule.h"
@@ -341,7 +340,6 @@ void Shutdown() {
 	sRtTestStateObject.Reset();
 
 	gTextureHeap.Destroy();
-	Asset::ModelLoader::DeleteAll();
 	ModelSaver::Get().ClearAll();
 	PSO::DestroyAll();
 	RootSignature::DestroyAll();

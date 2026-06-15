@@ -4,7 +4,7 @@
 #include "engine/Functions/ECS/Component/Asset/AnimatorComponent.h"
 #include "engine/Functions/ECS/Component/Asset/MeshComponent.h"
 #include "engine/Functions/ECS/Component/Asset/MaterialComponent.h"
-#include "../ModelLoader.h"
+#include "ModelLoader.h"
 
 namespace NoEngine {
 
@@ -78,7 +78,7 @@ public:
         }
 
         // 2. キャッシュにない場合は、ModelLoaderを使って新規ロード
-        ModelAsset newAsset = Asset::ModelLoader::Load(filePath);
+        ModelAsset newAsset = ModelLoader::Load(filePath);
 
         // 3. 次回のためにキャッシュに登録
         modelCache_[filePath] = newAsset;

@@ -259,7 +259,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="engine\Functions\Renderer\Primitive.cpp" />
     <ClCompile Include="application\TestApp\Scene\EngineTestScene.cpp" />
     <ClCompile Include="application\TestApp\System\TestSystem.cpp" />
-    <ClCompile Include="engine\Assets\ModelLoader.cpp" />
+    <ClCompile Include="engine\Assets\Model\ModelLoader.cpp" />
     <ClCompile Include="engine\Assets\Texture\TexUtil.cpp" />
     <ClCompile Include="engine\Functions\ECS\Registry.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\AnimationSystem.cpp" />
@@ -421,7 +421,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="engine\Assets\AssetHandles.h" />
     <ClInclude Include="engine\Assets\Model\ModelAsset.h" />
     <ClInclude Include="engine\Assets\Model\ModelSaver.h" />
-    <ClInclude Include="engine\Assets\RaytracingMesh.h" />
+    <ClInclude Include="engine\Assets\Model\RaytracingMesh.h" />
     <ClInclude Include="engine\Editor\EditorCommandOperator.h" />
     <ClInclude Include="engine\Editor\EditTag.h" />
     <ClInclude Include="engine\Functions\Command\CommandManager.h" />
@@ -479,9 +479,9 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="engine\Functions\Renderer\Primitive.h" />
     <ClInclude Include="application\TestApp\Scene\EngineTestScene.h" />
     <ClInclude Include="application\TestApp\System\TestSystem.h" />
-    <ClInclude Include="engine\Assets\Animation.h" />
-    <ClInclude Include="engine\Assets\ModelLoader.h" />
-    <ClInclude Include="engine\Assets\Skeleton.h" />
+    <ClInclude Include="engine\Assets\Model\Animation.h" />
+    <ClInclude Include="engine\Assets\Model\ModelLoader.h" />
+    <ClInclude Include="engine\Assets\Model\Skeleton.h" />
     <ClInclude Include="engine\Functions\ECS\Component\Asset\AnimatorComponent.h" />
     <ClInclude Include="engine\Functions\ECS\Component\Asset\MaterialComponent.h" />
     <ClInclude Include="engine\Functions\ECS\Component\Asset\MeshComponent.h" />
@@ -533,7 +533,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="engine\NoEngine.h" />
     <ClInclude Include="engine\Runtime\Command\ComputeContext.h" />
     <ClInclude Include="engine\Runtime\GpuResource\PixelBuffer\DepthBuffer.h" />
-    <ClInclude Include="engine\Assets\Mesh.h" />
+    <ClInclude Include="engine\Assets\Model\Mesh.h" />
     <ClInclude Include="engine\Assets\Texture\TextureManager.h" />
     <ClInclude Include="engine\Assets\Material.h" />
     <ClInclude Include="engine\Functions\Debug\CrashHandler\ExportDump.h" />

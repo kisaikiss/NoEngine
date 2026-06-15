@@ -1,7 +1,6 @@
 #pragma once
-#include "engine/Assets/Skeleton.h"
-#include "engine/Assets/Animation.h"
 #include "engine/Assets/AssetHandles.h"
+#include "engine/Math/Types/Transform.h"
 
 namespace NoEngine {
 
