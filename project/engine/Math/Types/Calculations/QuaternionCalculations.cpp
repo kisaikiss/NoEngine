@@ -122,7 +122,7 @@ Quaternion Slerp(const Quaternion& q0, const Quaternion& q1, float t)
 	float scale0 = std::sin((1 - t) * theta) / sinTheta;
 	float scale1 = std::sin(t * theta) / sinTheta;
 
-	return Normalize(scale0 * q0 + scale1 * q1);
+	return Normalize(scale0 * q0 + scale1 * qt);
 }
 }
 }
