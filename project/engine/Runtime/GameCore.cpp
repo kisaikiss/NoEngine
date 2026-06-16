@@ -8,6 +8,7 @@
 #include "engine/Functions/Input/input.h"
 #include "engine/Editor/EditorCommandOperator.h"
 #include "engine/Assets/Audio/Audio.h"
+#include "engine/Assets/AssetManager.h"
 
 #ifdef USE_IMGUI
 #include "engine/Editor/ImGuiManager.h"
@@ -118,7 +119,8 @@ void EngineInitialize() {
 #ifdef USE_IMGUI
 	sImGuiManager.Initialize();
 #endif // USE_IMGUI
-
+	AssetManager::CreateMetaFileForAllFiles();
+	AssetManager::CreateAddressableList();
 }
 
 void EngineFinalize() {

@@ -4,7 +4,8 @@
 #include "engine/Functions/ECS/Component/Asset/MaterialComponent.h"
 #include "engine/Functions/ECS/Component/Asset/AnimatorComponent.h"
 
-#include  "engine/Assets/Model/ModelSaver.h"
+#include "engine/Assets/Model/ModelSaver.h"
+#include "engine/Assets/AssetManager.h"
 
 namespace NoEngine {
 namespace ECS {
@@ -14,7 +15,7 @@ void ModelLoadSystem::Update(Registry& registry, float deltaTime) {
 	auto view = registry.View<MeshComponent>();
 	for (auto e : view) {
 		auto* mesh = registry.GetComponent<MeshComponent>(e);
-		auto asset = ModelSaver::Get().LoadOrGetModel(mesh->meshName);
+		auto asset = ModelSaver::Get().LoadOrGetModel(AssetManager::GetFilePathFromAddressableName(mesh->meshName));
 		mesh->handle = asset.mesh;
 		if (registry.Has<MaterialComponent>(e)) {
 			auto* material = registry.GetComponent<MaterialComponent>(e);

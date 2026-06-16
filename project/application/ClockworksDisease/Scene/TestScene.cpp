@@ -28,7 +28,7 @@ void TestScene::Setup() {
 		auto* m = registry.AddComponent<No::MaterialComponent>(player);
 		//auto* a = registry.AddComponent<No::AnimatorComponent>(player);
 		//No::ModelLoader::LoadModel("magiclash", "resources/game/ClockworksDisease/Model/player/magiclash2.gltf");
-		model->meshName = "resources/engine/Model/monkey.obj";
+		model->meshName = "monkey";
 		m->drawOutline = false;
 		m->enviromentCoefficient = 1.f;
 		//m->enableSkinning = true;
@@ -111,13 +111,13 @@ void TestScene::Setup() {
 }
 
 void TestScene::NotSystemUpdate() {
-	auto registry = GetRegistry();
+	/*auto registry = GetRegistry();
 	for (auto e : registry->View<No::TerrainMesh>()) {
 		auto* terrain = registry->GetComponent<No::TerrainMesh>(e);
 		for (auto t : terrain->triangles) {
 			NoEngine::DebugPrimitive::DrawTriangle(t.v[0], t.v[1], t.v[2], No::Color::WHITE);
 		}
-	}
+	}*/
 }
 
 void TestScene::AddSystems() {
