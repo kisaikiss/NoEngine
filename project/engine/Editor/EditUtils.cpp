@@ -443,27 +443,47 @@ void DrawFieldUI(const FieldInfo& field, void* ptr) {
 	}
 	case FieldType::String: {
 		std::string* s = static_cast<std::string*>(valuePtr);
+
+		// 編集中の状態を保持するためのstatic変数
+		static char editBuf[1024] = "";
 		static std::string oldStringValue;
+		static void* activePtr = nullptr; // 現在編集中の変数のポインタ
 
-		const size_t BUF_SIZE = 1024;
-		char buf[BUF_SIZE];
-		strncpy_s(buf, s->c_str(), BUF_SIZE);
-		buf[BUF_SIZE - 1] = '\0';
+		// このフィールドが現在アクティブ（編集中）でなければ、実際の値(*s)をバッファに同期する
+		// （ポインタで判定することで、他のStringフィールド描画時に上書きされるのを防ぎます）
+		if (activePtr != s) {
+			strncpy_s(editBuf, s->c_str(), sizeof(editBuf));
+			editBuf[sizeof(editBuf) - 1] = '\0';
+		}
 
-		ImGui::InputText(field.name.c_str(), buf, BUF_SIZE);
+		// Enterを押したタイミングを検知するためのフラグ
+		ImGuiInputTextFlags flags = ImGuiInputTextFlags_EnterReturnsTrue;
 
+		// InputTextを描画（入力中は editBuf のみが書き換わり、*s は変更されません）
+		bool enterPressed = ImGui::InputText(field.name.c_str(), editBuf, sizeof(editBuf), flags);
+
+		// 編集が開始された瞬間（クリックした時など）
 		if (ImGui::IsItemActivated()) {
 			oldStringValue = *s;
+			activePtr = s; // この変数を編集中としてマーク
 		}
 
-		// 画面表示のため即時反映
-		*s = buf;
-
-		if (ImGui::IsItemDeactivatedAfterEdit()) {
-			Editor::EditorCommandOperator::AddCommand(
-				std::make_unique<Command::ChangeValueCommand<std::string>>(s, oldStringValue, *s)
-			);
+		// Enterが押された、またはフォーカスが外れて編集が完了した時
+		if (enterPressed || ImGui::IsItemDeactivatedAfterEdit()) {
+			if (*s != editBuf) {
+				// 変更があればコマンドを積んでから、実際の値に反映
+				Editor::EditorCommandOperator::AddCommand(
+					std::make_unique<Command::ChangeValueCommand<std::string>>(s, oldStringValue, editBuf)
+				);
+				*s = editBuf;
+			}
 		}
+
+		// 編集状態が解除された時（Enter確定後、フォーカス外れ、Escキーでのキャンセル等）
+		if (ImGui::IsItemDeactivated()) {
+			activePtr = nullptr; // マークを外す
+		}
+
 		break;
 	}
 	default:
