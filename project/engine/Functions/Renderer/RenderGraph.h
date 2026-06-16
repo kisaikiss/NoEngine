@@ -57,13 +57,13 @@ private:
     std::unordered_map<std::string, DepthBuffer> depthBuffers_;
 
     ColorBuffer* GetColorBufferPointer(const std::string& name) {
-        if (!colorBuffers_.contains(name))assert(false);
+        if (!colorBuffers_.contains(name)) return nullptr;
         auto it = colorBuffers_.find(name);
         return it != colorBuffers_.end() ? &it->second : nullptr;
     }
 
     DepthBuffer* GetDepthBufferPointer(const std::string& name) {
-        if (!depthBuffers_.contains(name))assert(false);
+        if (!depthBuffers_.contains(name)) return nullptr;
         auto it = depthBuffers_.find(name);
         return it != depthBuffers_.end() ? &it->second : nullptr;
     }

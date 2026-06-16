@@ -269,6 +269,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="engine\Functions\Renderer\Initializer\RenderInitializer.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderGraph.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\BoxFilterPass.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\DepthBasedOutlinePass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\GaussianFilterPass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\GrayscalePass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\VignettingPass.cpp" />
@@ -502,6 +503,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="engine\Functions\Renderer\Initializer\RenderInitializer.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderGraph.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\BoxFilterPass.h" />
+    <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\DepthBasedOutlinePass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\GaussianFilterPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\GrayscalePass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\VignettingPass.h" />
@@ -748,6 +750,14 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Development|x64'">Pixel</ShaderType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="resources\engine\Shaders\DepthBasedOutline.PS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Development|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>

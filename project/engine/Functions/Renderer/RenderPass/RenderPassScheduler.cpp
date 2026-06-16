@@ -12,6 +12,7 @@
 #include "PostEffect/VignettingPass.h"
 #include "PostEffect/GaussianFilterPass.h"
 #include "PostEffect/BoxFilterPass.h"
+#include "PostEffect/DepthBasedOutlinePass.h"
 
 #include "../Primitive.h"
 
@@ -62,6 +63,11 @@ void RenderPassScheduler::Render(GraphicsContext& gfx, ECS::Registry& registry) 
 			ColorBuffer* buffer = resourceRegistry_.GetColorBufferPointer(inputName);
 			if (buffer) {
 				gfx.TransitionResource(*buffer, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+			} else {
+				DepthBuffer* depthBuffer = resourceRegistry_.GetDepthBufferPointer(inputName);
+				if (depthBuffer) {
+					gfx.TransitionResource(*depthBuffer, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+				}
 			}
 		}
 
@@ -189,8 +195,9 @@ void CommonSetupRenderPass(RenderPassScheduler& renderPassScheduler) {
 	particlePass->SetDepthOutput("MainDepth");
 	renderPassScheduler.AddPass(std::move(particlePass));
 
-	auto gaussianFilter = std::make_unique<GaussianFilterPass>();
+	auto gaussianFilter = std::make_unique<DepthBasedOutlinePass>();
 	gaussianFilter->AddInput("InputColor", "MainColor");
+	gaussianFilter->AddInput("InputDepth", "MainDepth");
 	gaussianFilter->AddOutput("PostEffect");
 	renderPassScheduler.AddPass(std::move(gaussianFilter));
 

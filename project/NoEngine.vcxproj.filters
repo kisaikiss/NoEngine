@@ -29,6 +29,7 @@
     <FxCompile Include="resources\engine\Shaders\Vignetting.PS.hlsl" />
     <FxCompile Include="resources\engine\Shaders\BoxFilter.PS.hlsl" />
     <FxCompile Include="resources\engine\Shaders\GaussianFilter.PS.hlsl" />
+    <FxCompile Include="resources\engine\Shaders\DepthBasedOutline.PS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="engine\Assets\Audio\Audio.cpp" />
@@ -201,6 +202,7 @@
     <ClCompile Include="engine\Assets\Model\ModelSaver.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Loader\ModelLoadSystem.cpp" />
     <ClCompile Include="engine\Assets\AssetManager.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\DepthBasedOutlinePass.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -416,6 +418,7 @@
     <ClInclude Include="engine\Assets\Model\ModelAsset.h" />
     <ClInclude Include="engine\Functions\ECS\System\Loader\ModelLoadSystem.h" />
     <ClInclude Include="engine\Assets\AssetManager.h" />
+    <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\DepthBasedOutlinePass.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

@@ -80,6 +80,25 @@ void PostEffectInitialzer::CreatePSO(RenderContext& ctx) {
 		ctx.RegisterRootSignature("Renderer : BoxFilter", std::move(boxFilterRootSignature));
 	}
 
+	{
+		ShaderModule outlinePS(ShaderStage::Pixel, L"resources/engine/Shaders/DepthBasedOutline.PS.hlsl", L"ps_6_0");
+
+		const ShaderReflection& outlinePSReflection = outlinePS.GetReflection();
+		std::vector<ShaderReflection> outlineReflections;
+		outlineReflections.push_back(vsReflection);
+		outlineReflections.push_back(outlinePSReflection);
+
+		RootSignature outlineRootSignature;
+		RootSignatureBuilder::BuildFromReflection(outlineReflections, outlineRootSignature, "Renderer : Outline");
+
+		defaultPSO.SetPixelShader(outlinePS.GetBytecode());
+		defaultPSO.SetRootSignature(outlineRootSignature);
+		defaultPSO.Finalize();
+
+		ctx.RegisterGraphicsPSO("Renderer : Outline PSO", defaultPSO);
+		ctx.RegisterRootSignature("Renderer : Outline", std::move(outlineRootSignature));
+	}
+
 	
 
 }
