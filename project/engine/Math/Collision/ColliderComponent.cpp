@@ -18,6 +18,12 @@ REFLECT_FIELD(radius)
 REFLECT_STRUCT_END(NoEngine::Math::CapsuleCollider)
 
 
+REFLECT_STRUCT_BEGIN(NoEngine::Math::SphereCollider)
+REFLECT_FIELD(localCenter),
+REFLECT_FIELD(radius)
+REFLECT_STRUCT_END(NoEngine::Math::SphereCollider)
+
+
 REFLECT_STRUCT_BEGIN(NoEngine::Component::GroundStateComponent)
 REFLECT_FIELD(isGrounded),
 REFLECT_FIELD(groundHeight)

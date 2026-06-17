@@ -66,6 +66,17 @@ struct CapsuleCollider {
 	float radius;
 };
 
+/// <summary>
+/// 球形状のコライダーを表す構造体。
+/// </summary>
+struct SphereCollider {
+	Math::Vector3 localCenter;	// ローカル空間での中心点
+	float radius = 0.5f;		// 球の半径
+};
+
+/// <summary>
+/// 三角形状のコライダーを表す構造体
+/// </summary>
 struct TriangleCollider {
 	std::array<Math::Vector3, 3> v;   // 頂点
 	Math::Vector3 normal;			  // 面法線（正規化済み）

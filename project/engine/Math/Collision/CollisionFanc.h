@@ -15,6 +15,14 @@ struct CapsuleAABBCollision {
 	float penetration = 0.0f;
 };
 
+struct CapsuleSphereCollision {
+	bool hit = false;
+	Vector3 closestOnCapsule;
+	Vector3 closestOnSphere;
+	Vector3 normal;	// sphere -> capsule
+	float penetration = 0.0f;
+};
+
 struct CapsuleTriangleCollision {
 	bool hit = false;
 	Vector3 closestOnCapsule;
@@ -30,9 +38,12 @@ struct Collision2D {
 	Vector2 normal;	// B -> A
 	float penetration = 0.0f;
 };
+
 Math::Vector3 ClosestPointOnTriangle(const Math::Vector3& p, const Math::Vector3& a, const Math::Vector3& b, const Math::Vector3& c);
 CapsuleAABBCollision TestCapsuleAABB(const Transform* capsuleTransform, const Math::CapsuleCollider* capsule, const Transform* aabbTransform, const Math::AABBCollider* aabb);
 CapsuleTriangleCollision TestCapsuleTriangle(const Transform* capsuleTransform, const Math::CapsuleCollider* capsule, Math::TriangleCollider triangle);
+CapsuleSphereCollision TestCapsuleSphere(const Transform* capsuleTransform, const Math::CapsuleCollider* capsule, const Transform* sphereTransform, const Math::SphereCollider* sphere);
+
 Collision2D TestAABB2D(const Transform2D* transformA, const Math::AABBCollider2D* aabbA, const Transform2D* transformB, const Math::AABBCollider2D* aabbB);
 Collision2D TestAABB2DHorizontal(const Transform2D* transformA, const Math::AABBCollider2D* aabbA, const Transform2D* transformB, const Math::AABBCollider2D* aabbB);
 Collision2D TestAABB2DVertical(const Transform2D* transformA, const Math::AABBCollider2D* aabbA, const Transform2D* transformB, const Math::AABBCollider2D* aabbB);

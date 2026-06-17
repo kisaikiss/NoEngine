@@ -21,6 +21,11 @@ struct CapsuleWorld {
 	float radius;
 };
 
+struct SphereWorld {
+	Math::Vector3 center;
+	float radius;
+};
+
 /// <summary>
 /// AABBコライダーをワールド座標へ直す
 /// </summary>
@@ -44,4 +49,12 @@ AABBWorld2D GetWorldAABB2D(const Transform2D* transform, const Math::AABBCollide
 /// <param name="capsule">カプセルコライダー</param>
 /// <returns>ワールド座標でのカプセルコライダー</returns>
 CapsuleWorld GetWorldCapsule(const Transform* transform, const Math::CapsuleCollider* capsule);
+
+/// <summary>
+/// スフィアコライダーをワールド座標へ直す
+/// </summary>
+/// <param name="transform">トランスフォーム</param>
+/// <param name="sphere">球コライダー</param>
+/// <returns>ワールド座標での球コライダー</returns>
+SphereWorld GetWorldSphere(const Transform* transform, const Math::SphereCollider* sphere);
 }

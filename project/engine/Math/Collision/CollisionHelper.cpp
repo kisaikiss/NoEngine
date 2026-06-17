@@ -29,4 +29,12 @@ CapsuleWorld GetWorldCapsule(const Transform* transform, const Math::CapsuleColl
 
     return result;
 }
+
+SphereWorld GetWorldSphere(const Transform* transform, const Math::SphereCollider* sphere) {
+    SphereWorld result;
+    Math::Vector3 worldPos = transform->GetWorldPosition();
+    result.center = worldPos;
+    result.radius = sphere->radius;
+    return result;
+}
 }

@@ -256,6 +256,40 @@ CapsuleTriangleCollision TestCapsuleTriangle(
 	return result;
 }
 
+CapsuleSphereCollision TestCapsuleSphere(const Transform* capsuleTransform, const Math::CapsuleCollider* capsule,
+	const Transform* sphereTransform, const Math::SphereCollider* sphere) {
+	CapsuleSphereCollision result{};
+	CapsuleWorld cap = GetWorldCapsule(capsuleTransform, capsule);
+	SphereWorld sph = GetWorldSphere(sphereTransform, sphere);
+
+
+	Vector3 v = cap.p1 - cap.p0;    // 線分の方向ベクトル
+	Vector3 w = sph.center - cap.p0;     // 点からp0への方向ベクトル
+
+	// 線分の長さの2乗
+	float l = v.LengthSquared();
+
+	// 投影比率 t を内積から計算
+	float t = w.Dot(v) / l;
+
+	// 線分の範囲内にクランプ
+	t = std::clamp(t, 0.0f, 1.0f);
+
+	//  線分上の最近接点を求める
+	Vector3 nearPoint = cap.p0 + v * t;
+
+	// 距離を算出
+	float length = (sph.center - nearPoint).LengthSquared();
+
+	// 半径の合計以下かどうかを返す
+	result.hit = length <= (cap.radius + sph.radius) * (cap.radius + sph.radius);
+	if (!result.hit) return result;
+
+	// ToDo: 押し戻し用の貫通量や法線の計算を入れる
+	
+
+	return result;
+}
 
 Collision2D TestAABB2D(const Transform2D* transformA, const Math::AABBCollider2D* aabbA, const Transform2D* transformB, const Math::AABBCollider2D* aabbB) {
 	AABBWorld2D boxA = GetWorldAABB2D(transformA, aabbA);

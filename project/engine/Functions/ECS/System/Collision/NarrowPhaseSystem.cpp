@@ -21,8 +21,9 @@ void NarrowPhaseSystem::Update(Registry& registry, float deltaTime) {
 	// 衝突情報
 	Event::ContactEvent contactEvent;
 
-	// BroadPhaseがないためとりあえず必要なAABB vs CapsuleとTriangle vs Capsuleのみ衝突判定を行う
+	// ToDo : カプセルVsその他になっているので、その他Vsその他も衝突判定するようにする
 	auto boxView = registry.View<Math::AABBCollider, Component::TransformComponent>();
+	auto sphereView = registry.View<Math::SphereCollider, Component::TransformComponent>();
 	auto terrainView = registry.View<Math::TerrainMesh>();
 	auto capsuleView = registry.View<Math::CapsuleCollider, Component::TransformComponent>();
 
@@ -42,6 +43,26 @@ void NarrowPhaseSystem::Update(Registry& registry, float deltaTime) {
 			Contact contact;
 			contact.a = capsuleE;
 			contact.b = boxE;
+			contact.normal = collide.normal;
+			contact.penetration = collide.penetration;
+			contact.contactPosition = ClassifyContact(collide.normal);
+
+			contactEvent.contacts.push_back(contact);
+		}
+
+		for (auto sphereE : sphereView) {
+			auto* sphereTransform = registry.GetComponent<Component::TransformComponent>(sphereE);
+			auto* sphereCollider = registry.GetComponent<Math::SphereCollider>(sphereE);
+
+			// 衝突判定を行う
+			auto collide = Math::TestCapsuleSphere(capsuleTransform, capsuleCollider, sphereTransform, sphereCollider);
+
+			if (!collide.hit) continue;
+
+			// 衝突情報を格納
+			Contact contact;
+			contact.a = capsuleE;
+			contact.b = sphereE;
 			contact.normal = collide.normal;
 			contact.penetration = collide.penetration;
 			contact.contactPosition = ClassifyContact(collide.normal);
