@@ -65,6 +65,7 @@ int RunApplication(std::unique_ptr<IGameApp> game) {
 
 #ifdef USE_IMGUI
 		sImGuiManager.BeginFrame();
+		AssetManager::DrawImGui();
 #endif // USE_IMGUI
 
 		float deltaTime = CalculateDeltaTime();
@@ -116,11 +117,12 @@ void EngineInitialize() {
 	InputInitialize();
 	AudioInitialize();
 
-#ifdef USE_IMGUI
-	sImGuiManager.Initialize();
-#endif // USE_IMGUI
 	AssetManager::CreateMetaFileForAllFiles();
 	AssetManager::CreateAddressableList();
+#ifdef USE_IMGUI
+	sImGuiManager.Initialize();
+	AssetManager::CreateEditorDataList();
+#endif // USE_IMGUI
 }
 
 void EngineFinalize() {

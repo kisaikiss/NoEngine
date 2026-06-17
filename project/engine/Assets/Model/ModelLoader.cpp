@@ -15,6 +15,7 @@ ModelAsset ModelLoader::Load(const std::string& filePath) {
 	ModelAsset modelAsset;
 	Assimp::Importer importer;
 	const aiScene* scene = importer.ReadFile(filePath.c_str(), aiProcess_FlipWindingOrder | aiProcess_FlipUVs);
+	if (scene == nullptr) return modelAsset;
 	assert(scene->HasMeshes());
 	std::string directoryPath = Utilities::GetBasePath(filePath);
 

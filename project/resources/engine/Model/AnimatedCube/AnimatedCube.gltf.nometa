@@ -1,1 +1,4 @@
-{"AddressableName":"resources/engine/Model/AnimatedCube/AnimatedCube.gltf","SourceFile":"AnimatedCube.gltf"}
+{
+    "AddressableName": "AnimeCube",
+    "SourceFile": "AnimatedCube.gltf"
+}

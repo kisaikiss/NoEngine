@@ -1,5 +1,9 @@
 #include "stdafx.h"
 #include "AssetManager.h"
+#ifdef USE_IMGUI
+#include "externals/Imgui/imgui.h"
+#endif // USE_IMGUI
+
 
 namespace NoEngine {
 namespace {
@@ -15,6 +19,8 @@ struct MetaData {
 
 // AddressableNameとメタ情報のリスト
 std::unordered_map<std::string, MetaData> sAddressable;
+
+std::vector<AssetManager::EditorAssetData> sEditorAssets;
 }
 
 void AssetManager::CreateMetaFileForAllFiles() {
@@ -57,6 +63,7 @@ void AssetManager::DeleteAllMetaFiles() {
 }
 
 void AssetManager::CreateAddressableList() {
+	sAddressable.clear();
 	for (const std::filesystem::directory_entry& entry : std::filesystem::recursive_directory_iterator(sAssetFilePass)) {
 		// メタファイルかどうか
 		if (entry.is_regular_file() && entry.path().extension().string() == sMetaFileExtensionName) {
@@ -92,9 +99,80 @@ void AssetManager::CreateAddressableList() {
 	}
 }
 
+void AssetManager::CreateEditorDataList() {
+	sEditorAssets.clear();
+
+	// メタファイルをクロールしてエディタ用リストを構築
+	for (const std::filesystem::directory_entry& entry : std::filesystem::recursive_directory_iterator(sAssetFilePass)) {
+		if (entry.is_regular_file() && entry.path().extension().string() == sMetaFileExtensionName) {
+			std::ifstream meta(entry.path().string());
+			nlohmann::json j;
+			meta >> j;
+
+			EditorAssetData data;
+			data.metaFilePath = entry.path().string();
+			data.sourceFile = j.value("SourceFile", "Unknown");
+			data.currentAddressableName = j.value("AddressableName", "Unknown");
+
+			// ImGui用のchar配列にコピー
+			strcpy_s(data.nameInputBuffer, data.currentAddressableName.c_str());
+
+			data.isModified = false;
+			sEditorAssets.push_back(data);
+		}
+	}
+}
+
+void AssetManager::DrawImGui() {
+#ifdef USE_IMGUI
+	ImGui::Begin("Asset Manager");
+
+	if (ImGui::Button("Refresh Meta Files")) {
+		CreateMetaFileForAllFiles(); // 新規ファイルがあればメタを作る
+		CreateEditorDataList();            // エディタ情報を再読み込み
+	}
+
+	ImGui::Separator();
+
+	// 各アセットの編集UIを描画
+	for (auto& asset : sEditorAssets) {
+		// 同じ名前のUI要素が被らないようにIDをPush
+		ImGui::PushID(asset.metaFilePath.c_str());
+
+		// 元ファイル名の表示 (Read Only)
+		ImGui::Text("File: %s", asset.sourceFile.c_str());
+
+		// AddressableNameの編集
+		ImGui::SetNextItemWidth(250.0f);
+		if (ImGui::InputText("Addressable", asset.nameInputBuffer, sizeof(asset.nameInputBuffer))) {
+			// 文字列が変更されたかチェック
+			asset.isModified = (asset.currentAddressableName != asset.nameInputBuffer);
+		}
+
+		// 変更がある場合のみ Save ボタンを表示
+		if (asset.isModified) {
+			ImGui::SameLine();
+			// ボタンの色を目立つように変更（オプション）
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.7f, 0.2f, 1.0f));
+			if (ImGui::Button("Save")) {
+				SaveMetaFile(asset);
+			}
+			ImGui::PopStyleColor();
+		}
+
+		ImGui::PopID();
+		ImGui::Separator();
+	}
+
+	ImGui::End();
+#endif // USE_IMGUI
+
+}
+
 std::string AssetManager::GetFilePathFromAddressableName(const std::string& addressableName) {
 	if (sAddressable.find(addressableName) == sAddressable.end()) {
-		assert(0 && "指定されたAddressableNameが見つかりません！");
+		LogWarning("指定されたAddressableNameが見つかりません！");
+		return "";
 	}
 
 	return sAddressable[addressableName].filePath;
@@ -126,5 +204,32 @@ std::string AssetManager::AddressableName(const std::filesystem::path& srcFile) 
 	// Addressableが指定されていない場合、ファイルパスをそのまま
 	return srcFile.relative_path().generic_string();
 
+}
+
+void AssetManager::SaveMetaFile(AssetManager::EditorAssetData& data) {
+	// 既存のJSONを読み込み
+	std::ifstream ifs(data.metaFilePath);
+	nlohmann::json j;
+	if (ifs.is_open()) {
+		ifs >> j;
+		ifs.close();
+	}
+
+	// 値を上書き
+	std::string newName = data.nameInputBuffer;
+	j["AddressableName"] = newName;
+
+	// ファイルに書き戻す (インデント付きで見やすく)
+	std::ofstream ofs(data.metaFilePath);
+	ofs << j.dump(4);
+	ofs.close();
+
+	// 状態の更新
+	data.currentAddressableName = newName;
+	data.isModified = false;
+	LogInfo("Update Meta File : " + data.metaFilePath + " -> " + newName);
+
+	// ★ 変更を即座にゲームエンジン側に反映するため、リストを再構築
+	CreateAddressableList();
 }
 }
