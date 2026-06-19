@@ -253,6 +253,8 @@ void DrawSceneImGuiWindow(ECS::Registry& registry) {
 
 	if (sGizmoCallback) sGizmoCallback(sSceneTexRect);
 	ImGui::End();
+#else
+	static_cast<void>(registry);
 #endif // USE_IMGUI
 }
 
