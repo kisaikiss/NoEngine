@@ -1,11 +1,13 @@
 #include "EditUtils.h"
 #include "engine/Editor/ComponentRegistry.h"
 #include "engine/Functions/ECS/Component/Transform2DComponent.h"
+#include "engine/Functions/ECS/Component/TransformComponent.h"
 #include "engine/Runtime/GraphicsCore.h"
 #include "engine/Functions/Renderer/Primitive.h"
 #include "engine/Functions/Renderer/RenderSystem.h"
 #include "engine/Functions/Command/EditCommand/ChangeValueCommand.h"
 #include "engine/Utilities/Conversion/ConvertString.h"
+#include "DataDriven/PrefabSerializer.h"
 #include "EditorCommandOperator.h"
 
 #ifdef USE_IMGUI
@@ -185,7 +187,7 @@ void DrawGameImGuiWindow() {
 #endif // USE_IMGUI
 }
 
-void DrawSceneImGuiWindow() {
+void DrawSceneImGuiWindow(ECS::Registry& registry) {
 #ifdef USE_IMGUI
 	Math::Vector2 windowSize = GraphicsCore::GetWindowSize();
 	ImGui::Begin("Scene");
@@ -215,6 +217,38 @@ void DrawSceneImGuiWindow() {
 			sSceneWindowMousePosition.y = uv.y * windowSize.y;
 			sIsMouseOverSceneWindow = true;
 		}
+	}
+
+	if (ImGui::BeginDragDropTarget()) {
+		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("PREFAB_PATH")) {
+			const char* path = (const char*)payload->Data;
+			// インスタンス化
+			auto e = Editor::InstantiatePreset(registry, std::string(path));
+			registry.AddComponent<Editor::EditSelectedTag>(e);
+
+			// Transform があるなら
+			if (auto* t = registry.GetComponent<Component::TransformComponent>(e)) {
+				// ToDo: ドロップ位置からレイを飛ばし、衝突判定を取った場所に配置する
+
+				// カメラの向いている方向から50m離れた場所に配置
+				auto cameraView = registry.View<Component::CameraComponent, Component::DebugCameraComponent>();
+				Component::CameraComponent* camera = nullptr;
+				Component::TransformComponent* transform = nullptr;
+				for (auto entity : cameraView) {
+					camera = registry.GetComponent<Component::CameraComponent>(entity);
+					transform = registry.GetComponent<Component::TransformComponent>(entity);
+				}
+				if (camera && transform) {
+					Math::Vector3 worldPos = camera->forGPU.worldPosition;
+					const float kOffset = 50.f;
+					worldPos += transform->rotation.zAxis() * kOffset;
+					t->translate = worldPos;
+				}
+
+			}
+
+		}
+		ImGui::EndDragDropTarget();
 	}
 
 	if (sGizmoCallback) sGizmoCallback(sSceneTexRect);

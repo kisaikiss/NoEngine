@@ -7,17 +7,17 @@
                 },
                 "DebugCameraComponent": {
                     "center": [
-                        93.15483093261719,
-                        -2.195340156555176,
-                        32.79953384399414
+                        -15.000351905822754,
+                        -23.23291778564453,
+                        49.1172981262207
                     ],
-                    "distance": 66.36432647705078,
+                    "distance": 139.34518432617188,
                     "drawCenter": false,
-                    "mousePositionX": 495,
-                    "mousePositionY": 424,
-                    "mouseWheelY": -960.0,
-                    "phi": 1.2453800439834595,
-                    "theta": -1.257158875465393
+                    "mousePositionX": 648,
+                    "mousePositionY": 392,
+                    "mouseWheelY": -480.0,
+                    "phi": 1.2058684825897217,
+                    "theta": -1.7940868139266968
                 },
                 "EditTag": {
                     "name": "DebugCamera",
@@ -25,10 +25,10 @@
                 },
                 "TransformComponent": {
                     "rotation": [
-                        0.1600033938884735,
-                        -0.15411405265331268,
-                        0.02529926225543022,
-                        0.974683403968811
+                        0.18032343685626984,
+                        0.10956395417451859,
+                        -0.02021632343530655,
+                        0.9772771000862122
                     ],
                     "scale": [
                         1.0,
@@ -36,9 +36,9 @@
                         1.0
                     ],
                     "translate": [
-                        112.55503845214844,
-                        19.021549224853516,
-                        -27.014339447021484
+                        -43.82497787475586,
+                        26.49685287475586,
+                        -77.82035827636719
                     ]
                 }
             }
@@ -91,6 +91,9 @@
                         -25.0
                     ]
                 },
+                "CollisionLayerComponent": {
+                    "layer": 4
+                },
                 "EditTag": {
                     "name": "box",
                     "path": "box"
@@ -104,10 +107,35 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.0,
+                    "psoName": [
+                        82,
+                        101,
+                        110,
+                        100,
+                        101,
+                        114,
+                        101,
+                        114,
+                        32,
+                        58,
+                        32,
+                        68,
+                        101,
+                        102,
+                        97,
+                        117,
+                        108,
+                        116,
+                        32,
+                        80,
+                        83,
+                        79
+                    ],
                     "shininess": 60.0
                 },
                 "MeshComponent": {
-                    "isVisible": true
+                    "isVisible": true,
+                    "meshName": "resources/engine/Model/block/block.obj"
                 },
                 "TransformComponent": {
                     "rotation": [
@@ -169,6 +197,9 @@
                 "CollisionBody": {
                     "type": 0
                 },
+                "CollisionLayerComponent": {
+                    "layer": 1
+                },
                 "EditTag": {
                     "name": "player",
                     "path": "player"
@@ -186,10 +217,35 @@
                     ],
                     "drawOutline": true,
                     "enviromentCoefficient": 1.0,
+                    "psoName": [
+                        82,
+                        101,
+                        110,
+                        100,
+                        101,
+                        114,
+                        101,
+                        114,
+                        32,
+                        58,
+                        32,
+                        68,
+                        101,
+                        102,
+                        97,
+                        117,
+                        108,
+                        116,
+                        32,
+                        80,
+                        83,
+                        79
+                    ],
                     "shininess": 60.0
                 },
                 "MeshComponent": {
-                    "isVisible": true
+                    "isVisible": true,
+                    "meshName": "monkey"
                 },
                 "PlayerComponent": {
                     "gravity": -15.0,

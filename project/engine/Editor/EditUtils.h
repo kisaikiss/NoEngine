@@ -44,7 +44,7 @@ std::unordered_set<std::string> CollectEditTagNames(ECS::Registry& registry, ECS
 void InitGameImGuiWindow(ColorBuffer& mainColor);
 void InitSceneImGuiWindow(ColorBuffer& debugColor);
 void DrawGameImGuiWindow();
-void DrawSceneImGuiWindow();
+void DrawSceneImGuiWindow(ECS::Registry& registry);
 void SetGizmoCallback(std::function<void(const Math::Vector4& imageRect)> cb);
 
 void DrawComponentUI(ECS::Registry& registry, ECS::Entity e);

@@ -22,5 +22,16 @@ void SavePreset(ECS::Registry& registry, ECS::Entity e);
 /// <param name="presetName">プリセット名</param>
 /// <returns>インスタンス化したプリセットのECSエンティティ</returns>
 ECS::Entity InstantiatePreset(ECS::Registry& registry, const std::string& presetPath);
+
+/// <summary>
+/// ディレクトリからすべてのPrefabを読み込みます。
+/// </summary>
+void LoadPrefabsFromDirectory();
+
+/// <summary>
+/// ImGuiでPrefabWindowを描画します。Releaseビルドでは何もしません
+/// </summary>
+/// <param name="registry">ECSレジストリ</param>
+void DrawPrefabWindow(ECS::Registry& registry);
 }
 }

@@ -1,0 +1,80 @@
+{
+    "components": {
+        "AABBCollider": {
+            "max": [
+                25.0,
+                0.5,
+                25.0
+            ],
+            "min": [
+                -25.0,
+                -0.5,
+                -25.0
+            ]
+        },
+        "CollisionLayerComponent": {
+            "layer": 4
+        },
+        "EditTag": {
+            "name": "box",
+            "path": "box"
+        },
+        "MaterialComponent": {
+            "color": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+            ],
+            "drawOutline": false,
+            "enviromentCoefficient": 0.0,
+            "psoName": [
+                82,
+                101,
+                110,
+                100,
+                101,
+                114,
+                101,
+                114,
+                32,
+                58,
+                32,
+                68,
+                101,
+                102,
+                97,
+                117,
+                108,
+                116,
+                32,
+                80,
+                83,
+                79
+            ],
+            "shininess": 60.0
+        },
+        "MeshComponent": {
+            "isVisible": true,
+            "meshName": "resources/engine/Model/block/block.obj"
+        },
+        "TransformComponent": {
+            "rotation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "scale": [
+                50.0,
+                1.0,
+                50.0
+            ],
+            "translate": [
+                2.0,
+                -38.47467803955078,
+                0.0
+            ]
+        }
+    }
+}

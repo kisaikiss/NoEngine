@@ -1,6 +1,7 @@
 #include "EditSystem.h"
 #include "engine/Editor/EditUtils.h"
 #include "engine/Editor/DataDriven/SceneSerializer.h"
+#include "engine/Editor/DataDriven/PrefabSerializer.h"
 #include "engine/Editor/ReflectionMacros.h"
 #include "engine/Functions/Scene/SceneNameComponent.h"
 
@@ -59,6 +60,9 @@ void EditSystem::Update(Registry& registry, float deltaTime) {
 			ImGui::BeginChild(tag->name.c_str());
 			ImGui::Text(tag->name.c_str());
 			DrawComponentUI(registry, e);
+			if (ImGui::Button("SavePreset")) {
+				Editor::SavePreset(registry, e);
+			}
 			DrawAddComponentMenu(registry, e);
 			ImGui::EndChild();
 		}

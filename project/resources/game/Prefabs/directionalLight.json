@@ -1,0 +1,22 @@
+{
+    "components": {
+        "DirectionalLightComponent": {
+            "color": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+            ],
+            "direction": [
+                -0.28992825746536255,
+                -0.6041658520698547,
+                -0.7422434687614441
+            ],
+            "intensity": 1.0
+        },
+        "EditTag": {
+            "name": "directionalLight",
+            "path": "directionalLight"
+        }
+    }
+}

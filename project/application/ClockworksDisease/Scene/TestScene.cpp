@@ -118,24 +118,6 @@ void TestScene::NotSystemUpdate() {
 			NoEngine::DebugPrimitive::DrawTriangle(t.v[0], t.v[1], t.v[2], No::Color::WHITE);
 		}
 	}*/
-
-#ifdef USE_IMGUI
-	ImGui::Begin("PrefabTest");
-	auto& registry = *GetRegistry();
-	if (ImGui::Button("Save")) {
-		auto view = registry.View<PlayerComponent>();
-		for (auto e : view) {
-			No::SavePreset(registry, e);
-		}
-	}
-	ImGui::SameLine();
-	if (ImGui::Button("Add")) {
-		No::InstantiatePreset(registry, "resources/game/Prefabs/player.json");
-	}
-	ImGui::End();
-#endif // USE_IMGUI
-
-
 }
 
 void TestScene::AddSystems() {
