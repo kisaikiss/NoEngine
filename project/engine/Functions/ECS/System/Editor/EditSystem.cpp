@@ -126,6 +126,12 @@ void EditSystem::DrawHierarchyWindow(Registry& registry) {
 		if (ImGui::MenuItem("Create Folder (Root)")) {
 			CreateFolder(registry, "NewFolder", "");
 		}
+		if (ImGui::MenuItem("Generate newEntity")) {
+			Entity e = registry.GenerateEntity();
+			auto* tag = registry.AddComponent<Editor::EditTag>(e);
+			tag->name = "newEntity";
+			registry.AddComponent<Editor::EditSelectedTag>(e);
+		}
 		ImGui::EndPopup();
 	}
 
@@ -181,6 +187,13 @@ void EditSystem::DrawFolderNode(FolderNode& node, ECS::Registry& registry, const
 	if (ImGui::BeginPopupContextItem()) {
 		if (ImGui::MenuItem("Create Folder")) {
 			CreateFolder(registry, "NewFolder", fullPath);
+		}
+		if (ImGui::MenuItem("Generate newEntity")) {
+			Entity e = registry.GenerateEntity();
+			auto* tag = registry.AddComponent<Editor::EditTag>(e);
+			tag->name = "newEntity";
+			tag->path = fullPath + "/" + tag->name;
+			registry.AddComponent<Editor::EditSelectedTag>(e);
 		}
 		if (node.folderEntity != INVALID_ENTITY) {
 			if (ImGui::MenuItem("Delete Folder")) {
