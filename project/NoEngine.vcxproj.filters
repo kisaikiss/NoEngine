@@ -203,6 +203,7 @@
     <ClCompile Include="engine\Functions\ECS\System\Loader\ModelLoadSystem.cpp" />
     <ClCompile Include="engine\Assets\AssetManager.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\DepthBasedOutlinePass.cpp" />
+    <ClCompile Include="application\ClockworksDisease\System\Game\CollisionLayer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />

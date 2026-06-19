@@ -22,7 +22,15 @@ void CollisionEventSystem::Update(No::Registry& registry, float deltaTime) {
 			event.position = contact.contactPosition;
 			event.normal = contact.normal;
 			registry.EmitEvent(event);
+		} else if ((layerA->layer & CollisionLayerComponent::Player) != CollisionLayerComponent::None &&
+			(layerB->layer & CollisionLayerComponent::Item) != CollisionLayerComponent::None) {
+			ItemGetEvent event;
+			event.player = contact.a;
+			event.item = contact.b;
+			registry.EmitEvent(event);
 		}
+
+
 
 
 	}

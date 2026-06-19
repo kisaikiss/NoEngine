@@ -6,3 +6,9 @@ struct PlayerPushBackEvent {
 	No::ContactPosition position;
 	No::Vector3 normal;
 };
+
+
+struct ItemGetEvent {
+	No::Entity player;
+	No::Entity item;
+};

@@ -13,4 +13,10 @@ void ColliderDrawSystem::Update(No::Registry& registry, float deltaTime) {
 
 	}
 
+	for (auto sphereE : registry.View<No::TransformComponent, No::SphereCollider>()) {
+		auto* sphereTransform = registry.GetComponent<No::TransformComponent>(sphereE);
+		auto* sphereCollider = registry.GetComponent<No::SphereCollider>(sphereE);
+		NoEngine::DebugPrimitive::DrawSphere(sphereTransform->GetWorldPosition() + sphereCollider->localCenter, sphereCollider->radius, No::Color::WHITE);
+	}
+
 }
