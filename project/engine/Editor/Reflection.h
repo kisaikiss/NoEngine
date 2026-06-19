@@ -16,6 +16,7 @@ enum class FieldType {
     Uint,
     Bool,
     String,
+    WString,
     Struct,
 };
 

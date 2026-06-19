@@ -204,6 +204,7 @@
     <ClCompile Include="engine\Assets\AssetManager.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\DepthBasedOutlinePass.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Game\CollisionLayer.cpp" />
+    <ClCompile Include="engine\Editor\DataDriven\PrefabSerializer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -420,6 +421,7 @@
     <ClInclude Include="engine\Functions\ECS\System\Loader\ModelLoadSystem.h" />
     <ClInclude Include="engine\Assets\AssetManager.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\DepthBasedOutlinePass.h" />
+    <ClInclude Include="engine\Editor\DataDriven\PrefabSerializer.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

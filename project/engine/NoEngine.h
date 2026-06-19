@@ -15,6 +15,7 @@
 #include "Functions/ECS/Event/SceneChangeEvent.h"
 #include "Editor/EditUtils.h"
 #include "Editor/ReflectionMacros.h"
+#include "Editor/DataDriven/PrefabSerializer.h"
 
 #include "Functions/ECS/System/Loader/SpriteLoadSystem.h"
 #include "Functions/ECS/System/Loader/ModelLoadSystem.h"

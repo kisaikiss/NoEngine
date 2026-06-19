@@ -71,6 +71,12 @@ void WriteFieldToJson(nlohmann::json& j, const FieldInfo& field, void* ptr) {
 		j[field.name] = *s;
 	}
 		break;
+	case NoEngine::FieldType::WString: {
+		// std::wstring を指している想定
+		const std::wstring* s = reinterpret_cast<const std::wstring*>(ptr);
+		j[field.name] = *s;
+	}
+		break;
 	default:
 		j[field.name] = "Unsupported";
 		break;
@@ -172,6 +178,12 @@ void ReadFieldFromJson(const nlohmann::json& j, const FieldInfo& field, void* pt
 		*s = value;
 	}
 		break;
+	case NoEngine::FieldType::WString: {
+		const std::wstring value = j[field.name].get<std::wstring>();
+		// std::string に書き込む
+		std::wstring* s = reinterpret_cast<std::wstring*>(ptr);
+		*s = value;
+	}
 	default:
 		break;
 	}

@@ -5,6 +5,7 @@
 #include "engine/Functions/Renderer/Primitive.h"
 #include "engine/Functions/Renderer/RenderSystem.h"
 #include "engine/Functions/Command/EditCommand/ChangeValueCommand.h"
+#include "engine/Utilities/Conversion/ConvertString.h"
 #include "EditorCommandOperator.h"
 
 #ifdef USE_IMGUI
@@ -476,6 +477,51 @@ void DrawFieldUI(const FieldInfo& field, void* ptr) {
 					std::make_unique<Command::ChangeValueCommand<std::string>>(s, oldStringValue, editBuf)
 				);
 				*s = editBuf;
+			}
+		}
+
+		// 編集状態が解除された時（Enter確定後、フォーカス外れ、Escキーでのキャンセル等）
+		if (ImGui::IsItemDeactivated()) {
+			activePtr = nullptr; // マークを外す
+		}
+
+		break;
+	}
+	case FieldType::WString: {
+		std::wstring* s = static_cast<std::wstring*>(valuePtr);
+
+		// 編集中の状態を保持するためのstatic変数
+		static char editBuf[1024] = "";
+		static std::wstring oldStringValue;
+		static void* activePtr = nullptr; // 現在編集中の変数のポインタ
+
+		// このフィールドが現在アクティブ（編集中）でなければ、実際の値(*s)をバッファに同期する
+		// （ポインタで判定することで、他のStringフィールド描画時に上書きされるのを防ぎます）
+		if (activePtr != s) {
+			strncpy_s(editBuf, ConvertString(s->c_str()).c_str(), sizeof(editBuf));
+			editBuf[sizeof(editBuf) - 1] = '\0';
+		}
+
+		// Enterを押したタイミングを検知するためのフラグ
+		ImGuiInputTextFlags flags = ImGuiInputTextFlags_EnterReturnsTrue;
+
+		// InputTextを描画（入力中は editBuf のみが書き換わり、*s は変更されません）
+		bool enterPressed = ImGui::InputText(field.name.c_str(), editBuf, sizeof(editBuf), flags);
+
+		// 編集が開始された瞬間（クリックした時など）
+		if (ImGui::IsItemActivated()) {
+			oldStringValue = *s;
+			activePtr = s; // この変数を編集中としてマーク
+		}
+
+		// Enterが押された、またはフォーカスが外れて編集が完了した時
+		if (enterPressed || ImGui::IsItemDeactivatedAfterEdit()) {
+			if (ConvertString(*s) != editBuf) {
+				// 変更があればコマンドを積んでから、実際の値に反映
+				Editor::EditorCommandOperator::AddCommand(
+					std::make_unique<Command::ChangeValueCommand<std::wstring>>(s, oldStringValue, ConvertString(editBuf))
+				);
+				*s = ConvertString(editBuf);
 			}
 		}
 

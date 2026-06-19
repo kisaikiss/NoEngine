@@ -1,0 +1,101 @@
+{
+    "components": {
+        "CapsuleCollider": {
+            "localP0": [
+                0.0,
+                0.25,
+                0.0
+            ],
+            "localP1": [
+                0.0,
+                1.25,
+                0.0
+            ],
+            "radius": 0.8500000238418579
+        },
+        "CollisionBody": {
+            "type": 0
+        },
+        "CollisionLayerComponent": {
+            "layer": 1
+        },
+        "EditTag": {
+            "name": "player",
+            "path": "player"
+        },
+        "GroundStateComponent": {
+            "groundHeight": 11.59716796875,
+            "isGrounded": true
+        },
+        "MaterialComponent": {
+            "color": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+            ],
+            "drawOutline": true,
+            "enviromentCoefficient": 1.0,
+            "psoName": [
+                82,
+                101,
+                110,
+                100,
+                101,
+                114,
+                101,
+                114,
+                32,
+                58,
+                32,
+                68,
+                101,
+                102,
+                97,
+                117,
+                108,
+                116,
+                32,
+                80,
+                83,
+                79
+            ],
+            "shininess": 60.0
+        },
+        "MeshComponent": {
+            "isVisible": true,
+            "meshName": "monkey"
+        },
+        "PlayerComponent": {
+            "gravity": -15.0,
+            "infinityJump": false,
+            "jumpSpeed": 10.0,
+            "moveSpeed": 10.0
+        },
+        "TransformComponent": {
+            "rotation": [
+                -0.014161109924316406,
+                0.9997819066047668,
+                0.007228147238492966,
+                -0.013544661924242973
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "translate": [
+                -35.79834747314453,
+                11.59716796875,
+                -40.76994705200195
+            ]
+        },
+        "VelocityComponent": {
+            "linear": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        }
+    }
+}
