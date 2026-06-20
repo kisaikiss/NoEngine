@@ -10,7 +10,7 @@ public:
     void Update(Registry& registry, float deltaTime) override;
 private:
     void EmitParticle(Registry& registry, const Component::TransformComponent& transform, Component::ParticleEmitterComponent* emitter);
-    Math::Vector3 GetNewPosition(const Component::TransformComponent& emitterTransform);
+    Math::Vector3 GetNewPosition(const Component::TransformComponent& emitterTransform, Component::ParticleEmitterComponent* emitter);
 };
 
 }

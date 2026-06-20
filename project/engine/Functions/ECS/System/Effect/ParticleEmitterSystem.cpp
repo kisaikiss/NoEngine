@@ -12,6 +12,10 @@ void ParticleEmitterSystem::Update(Registry& registry, float deltaTime) {
 	auto view = registry.View<ParticleEmitterComponent, TransformComponent>();
 	for (auto entity : view) {
 		auto* emitter = registry.GetComponent<ParticleEmitterComponent>(entity);
+		if (!emitter->active) {
+			continue;
+		}
+
 		auto* transform = registry.GetComponent<TransformComponent>(entity);
 		TransformComponent t = *transform;
 		emitter->frequencyTime += deltaTime;
@@ -20,10 +24,8 @@ void ParticleEmitterSystem::Update(Registry& registry, float deltaTime) {
 		}
 
 		if (emitter->frequency <= emitter->frequencyTime) {
-			if (emitter->active) {
 				EmitParticle(registry, t, emitter);
 				emitter->frequencyTime -= emitter->frequency;
-			}
 		}
 	}
 }
@@ -37,18 +39,18 @@ void ParticleEmitterSystem::EmitParticle(Registry& registry, const Component::Tr
 		particle->shape = emitter->shape;
 		registry.AddComponent<VelocityComponent>(e)->linear = Random::GetRandomVal(emitter->minSpeed, emitter->maxSpeed);
 		auto* transform = registry.AddComponent<TransformComponent>(e);
-		transform->translate = GetNewPosition(emitterTransform);
+		transform->translate = GetNewPosition(emitterTransform, emitter);
 		transform->rotation = Math::Quaternion::IDENTITY;
 		transform->scale = Math::Vector3::UNIT_SCALE;
 	}
 }
 
-Math::Vector3 ParticleEmitterSystem::GetNewPosition(const Component::TransformComponent& emitterTransform) {
+Math::Vector3 ParticleEmitterSystem::GetNewPosition(const Component::TransformComponent& emitterTransform, Component::ParticleEmitterComponent* emitter) {
 	Math::Vector3 min, max;
-	max = emitterTransform.translate + emitterTransform.scale;
-	min = emitterTransform.translate - emitterTransform.scale;
+	max = emitterTransform.translate + (emitter->emitRange / 2.f);
+	min = emitterTransform.translate - (emitter->emitRange / 2.f);
 	Math::Vector3 result;
-	result = Random::GetRandomVal(min, max);
+	result = Random::GetRandomVal(min, max) + emitter->localPosition;
 	return result;
 }
 

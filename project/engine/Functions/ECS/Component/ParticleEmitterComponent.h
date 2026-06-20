@@ -30,6 +30,8 @@ struct ParticleEmitterComponent {
 	float frequencyTime = 0.0f; // 頻度用時刻
 	Math::Vector3 maxSpeed = Math::Vector3::UNIT_SCALE;
 	Math::Vector3 minSpeed = -Math::Vector3::UNIT_SCALE;
+	Math::Vector3 emitRange = Math::Vector3::UNIT_SCALE;
+	Math::Vector3 localPosition = Math::Vector3::ZERO;
 	float maxLifeTime = 6.f;
 	float minLifeTime = 2.f;
 	ParticleShape shape = ParticleShape::kPlane;

@@ -19,6 +19,7 @@ void PlayerMoveSystem::Update(No::Registry& registry, float deltaTime) {
 		auto* playerVariables = registry.GetComponent<PlayerComponent>(entity);
 		auto* velocity = registry.GetComponent<No::VelocityComponent>(entity);
 		auto* groundState = registry.GetComponent<No::GroundStateComponent>(entity);
+		auto* particleEmitter = registry.GetComponent<No::ParticleEmitterComponent>(entity);
 
 		velocity->linear = No::Vector3::ZERO;
 
@@ -47,7 +48,7 @@ void PlayerMoveSystem::Update(No::Registry& registry, float deltaTime) {
 		float slopeY = 0.f;
 
 		if (inputDir.x != 0.f || inputDir.z != 0.f) {
-
+			particleEmitter->active = true;
 			// カメラ基準の移動ベクトル（水平成分のみ）
 			No::Vector3 worldDir = cameraRotate.RotateVector(inputDir);
 			worldDir.y = 0.f;
@@ -78,6 +79,8 @@ void PlayerMoveSystem::Update(No::Registry& registry, float deltaTime) {
 				const float kSlerpScale = 20.f;
 				transform->rotation = transform->rotation.Slerp(transform->rotation, newRotation, deltaTime * kSlerpScale);
 			}
+		} else {
+			particleEmitter->active = false;
 		}
 
 		if (isGrounded && !justJumped) {
@@ -90,6 +93,7 @@ void PlayerMoveSystem::Update(No::Registry& registry, float deltaTime) {
 			// 空中 or ジャンプ直後
 			playerVariables->yVelocity += playerVariables->gravity * deltaTime;
 			velocity->linear.y = playerVariables->yVelocity;
+			particleEmitter->active = false;
 		}
 
 		playerVariables->groundNormal = No::Vector3::ZERO;

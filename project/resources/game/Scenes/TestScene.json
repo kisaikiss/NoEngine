@@ -438,15 +438,15 @@
                 },
                 "FollowCameraComponent": {
                     "distance": 38.400001525878906,
-                    "phi": 1.419060230255127,
+                    "phi": 1.3597571849822998,
                     "theta": -18.82242202758789
                 },
                 "TransformComponent": {
                     "rotation": [
-                        0.05286327376961708,
-                        -0.7145735621452332,
-                        0.054317526519298553,
-                        0.6954421401023865
+                        0.07345804572105408,
+                        -0.7126485109329224,
+                        0.07547872513532639,
+                        0.6935697793960571
                     ],
                     "scale": [
                         1.0,
@@ -454,9 +454,9 @@
                         1.0
                     ],
                     "translate": [
-                        96.49637603759766,
-                        6.300176620483398,
-                        -82.70345306396484
+                        100.34346008300781,
+                        8.643267631530762,
+                        -81.6310806274414
                     ]
                 }
             }
@@ -599,8 +599,47 @@
                     "name": "player",
                     "path": "player"
                 },
+                "EffectEmitterComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "count": 30,
+                    "emitRange": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "maxLifeTime": 1.5,
+                    "maxRotate": 0.0,
+                    "maxScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "maxSpeed": [
+                        2.0,
+                        0.10000000149011612,
+                        2.0
+                    ],
+                    "minLifeTime": 0.800000011920929,
+                    "minRotate": 0.0,
+                    "minScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "minSpeed": [
+                        -2.0,
+                        0.0,
+                        -2.0
+                    ],
+                    "textureName": "smokeEffect"
+                },
                 "GroundStateComponent": {
-                    "groundHeight": 0.4958414137363434,
+                    "groundHeight": 0.5993894338607788,
                     "isGrounded": true
                 },
                 "MaterialComponent": {
@@ -642,6 +681,35 @@
                     "isVisible": true,
                     "meshName": "monkey"
                 },
+                "ParticleEmitterComponent": {
+                    "active": false,
+                    "count": 10,
+                    "emitRange": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "frequency": 0.30000001192092896,
+                    "localPosition": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "maxCount": 100,
+                    "maxLifeTime": 1.7999999523162842,
+                    "maxSpeed": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "minLifeTime": 0.8999999761581421,
+                    "minSpeed": [
+                        -1.0,
+                        -1.0,
+                        -1.0
+                    ],
+                    "textureName": "smokeEffect"
+                },
                 "PlayerComponent": {
                     "gravity": -15.0,
                     "infinityJump": false,
@@ -651,9 +719,9 @@
                 "TransformComponent": {
                     "rotation": [
                         0.0,
-                        0.7659949660301208,
+                        -0.6979162693023682,
                         0.0,
-                        -0.6428465247154236
+                        -0.716179370880127
                     ],
                     "scale": [
                         1.0,
@@ -661,9 +729,9 @@
                         1.0
                     ],
                     "translate": [
-                        58.55152893066406,
-                        0.4958414137363434,
-                        -83.73332977294922
+                        62.809261322021484,
+                        0.5993894338607788,
+                        -82.64974975585938
                     ]
                 },
                 "VelocityComponent": {
