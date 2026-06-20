@@ -1,0 +1,83 @@
+{
+    "components": {
+        "AnimatorComponent": {
+            "currentAnimation": 0,
+            "drawSkeleton": false
+        },
+        "BadgeComponent": {
+            "id": 0
+        },
+        "CollisionLayerComponent": {
+            "layer": 8
+        },
+        "EditTag": {
+            "name": "Badge",
+            "path": "newEntity"
+        },
+        "MaterialComponent": {
+            "color": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+            ],
+            "drawOutline": false,
+            "enviromentCoefficient": 0.8999999761581421,
+            "psoName": [
+                82,
+                101,
+                110,
+                100,
+                101,
+                114,
+                101,
+                114,
+                32,
+                58,
+                32,
+                68,
+                101,
+                102,
+                97,
+                117,
+                108,
+                116,
+                32,
+                80,
+                83,
+                79
+            ],
+            "shininess": 60.0
+        },
+        "MeshComponent": {
+            "isVisible": true,
+            "meshName": "badge"
+        },
+        "SphereCollider": {
+            "localCenter": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "radius": 0.699999988079071
+        },
+        "TransformComponent": {
+            "rotation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "scale": [
+                2.0,
+                2.0,
+                2.0
+            ],
+            "translate": [
+                -33.76203918457031,
+                13.526050567626953,
+                -39.741615295410156
+            ]
+        }
+    }
+}

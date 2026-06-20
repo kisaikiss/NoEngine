@@ -10,6 +10,7 @@
 #include "../Component/Camera/FollowCameraComponent.h"
 #include "../System/Game/CollisionLayer.h"
 #include "../System/Game/ColliderDrawSystem.h"
+#include "../System/Game/ItemGetSystem.h"
 
 void TestScene::Setup() {
 	AddSystems();
@@ -131,6 +132,7 @@ void TestScene::AddSystems() {
 	AddSystem(std::make_unique<No::CollisionResolutionSystem>());
 	AddSystem(std::make_unique<CollisionEventSystem>());
 	AddSystem(std::make_unique<PlayerPushBackSystem>());
+	AddSystem(std::make_unique<ItemGetSystem>());
 	AddSystem(std::make_unique<No::MovementSystem>());
 	AddSystem(std::make_unique<ColliderDrawSystem>());
 	AddSystem(std::make_unique<FollowCameraSystem>());

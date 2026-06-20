@@ -196,12 +196,14 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
   <ItemGroup>
     <ClCompile Include="application\ClockworksDisease\ClockworksDisease.cpp" />
     <ClCompile Include="application\ClockworksDisease\Component\Camera\FollowCameraComponent.cpp" />
+    <ClCompile Include="application\ClockworksDisease\Component\Item\ItemComponent.cpp" />
     <ClCompile Include="application\ClockworksDisease\Component\Player\PlayerComponent.cpp" />
     <ClCompile Include="application\ClockworksDisease\Scene\TestScene.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Camera\FollowCameraSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Game\ColliderDrawSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Game\CollisionEventSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Game\CollisionLayer.cpp" />
+    <ClCompile Include="application\ClockworksDisease\System\Game\ItemGetSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Object\BoxColliderUpdateSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Player\PlayerMoveSystem.cpp" />
     <ClCompile Include="application\TestApp\TestApp.cpp" />
@@ -412,6 +414,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
   <ItemGroup>
     <ClInclude Include="application\ClockworksDisease\ClockworksDisease.h" />
     <ClInclude Include="application\ClockworksDisease\Component\Camera\FollowCameraComponent.h" />
+    <ClInclude Include="application\ClockworksDisease\Component\Item\ItemComponent.h" />
     <ClInclude Include="application\ClockworksDisease\Component\Player\PlayerComponent.h" />
     <ClInclude Include="application\ClockworksDisease\Scene\TestScene.h" />
     <ClInclude Include="application\ClockworksDisease\System\Camera\FollowCameraSystem.h" />
@@ -419,6 +422,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="application\ClockworksDisease\System\Game\CollisionEvents.h" />
     <ClInclude Include="application\ClockworksDisease\System\Game\CollisionEventSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Game\CollisionLayer.h" />
+    <ClInclude Include="application\ClockworksDisease\System\Game\ItemGetSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Object\BoxColliderUpdateSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Player\PlayerMoveSystem.h" />
     <ClInclude Include="application\TestApp\TestApp.h" />

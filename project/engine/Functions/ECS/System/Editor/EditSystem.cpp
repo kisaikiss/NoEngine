@@ -10,7 +10,7 @@
 #endif // USE_IMGUI
 
 namespace {
-const std::string skDirectoryPath = "resources/game/Scenes/";
+const std::string sDirectoryPath = "resources/game/Scenes/";
 }
 
 REFLECT_STRUCT_BEGIN(NoEngine::FolderTag)
@@ -76,7 +76,7 @@ void EditSystem::Update(Registry& registry, float deltaTime) {
 }
 
 void EditSystem::SaveFile(Registry& registry, nlohmann::json j) {
-	std::filesystem::path dir(skDirectoryPath);
+	std::filesystem::path dir(sDirectoryPath);
 	if (!std::filesystem::exists(dir)) {
 		std::filesystem::create_directory(dir);
 	}
@@ -87,7 +87,7 @@ void EditSystem::SaveFile(Registry& registry, nlohmann::json j) {
 		auto* nameComp = registry.GetComponent<SceneNameComponent>(entity);
 		sceneName = nameComp->GetName();
 	}
-	std::string filePath = skDirectoryPath + sceneName + ".json";
+	std::string filePath = sDirectoryPath + sceneName + ".json";
 	std::ofstream file(filePath);
 	if (!file.is_open()) {
 		LogError("Failed to open file for writing");
@@ -104,7 +104,7 @@ void EditSystem::LoadFile(Registry& registry) {
 		auto* nameComp = registry.GetComponent<SceneNameComponent>(entity);
 		sceneName = nameComp->GetName();
 	}
-	std::string filePath = skDirectoryPath + sceneName + ".json";
+	std::string filePath = sDirectoryPath + sceneName + ".json";
 
 	std::ifstream file(filePath);
 	if (!file.is_open()) {

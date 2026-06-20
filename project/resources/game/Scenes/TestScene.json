@@ -1,86 +1,19 @@
 {
     "entities": {
-        "DebugCamera": {
+        "Badge": {
             "components": {
-                "CameraComponent": {
-                    "fov": 0.44999998807907104
+                "AnimatorComponent": {
+                    "currentAnimation": 0,
+                    "drawSkeleton": false
                 },
-                "DebugCameraComponent": {
-                    "center": [
-                        -69.8228759765625,
-                        -10.955259323120117,
-                        -9.905731201171875
-                    ],
-                    "distance": 101.30508422851563,
-                    "drawCenter": false,
-                    "mousePositionX": 722,
-                    "mousePositionY": 462,
-                    "mouseWheelY": -120.0,
-                    "phi": 1.148762583732605,
-                    "theta": -0.6912124752998352
+                "BadgeComponent": {
+                    "id": 0
+                },
+                "CollisionLayerComponent": {
+                    "layer": 8
                 },
                 "EditTag": {
-                    "name": "DebugCamera",
-                    "path": "DebugCamera"
-                },
-                "TransformComponent": {
-                    "rotation": [
-                        0.18952268362045288,
-                        -0.4163073003292084,
-                        0.08917541056871414,
-                        0.8847694993019104
-                    ],
-                    "scale": [
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "translate": [
-                        1.3814849853515625,
-                        30.540983200073242,
-                        -68.81855773925781
-                    ]
-                }
-            }
-        },
-        "GameCamera": {
-            "components": {
-                "CameraComponent": {
-                    "fov": 0.44999998807907104
-                },
-                "EditTag": {
-                    "name": "GameCamera",
-                    "path": "GameCamera"
-                },
-                "FollowCameraComponent": {
-                    "distance": 38.400001525878906,
-                    "phi": 1.4959702491760254,
-                    "theta": -18.366317749023438
-                },
-                "TransformComponent": {
-                    "rotation": [
-                        0.019352035596966743,
-                        -0.855160653591156,
-                        0.03200913965702057,
-                        0.5170117616653442
-                    ],
-                    "scale": [
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "translate": [
-                        -2.604771614074707,
-                        14.640796661376953,
-                        -34.824806213378906
-                    ]
-                }
-            }
-        },
-        "PrefabTest": {
-            "components": {
-                "EditTag": {
-                    "name": "PrefabTest",
+                    "name": "Badge",
                     "path": "newEntity"
                 },
                 "MaterialComponent": {
@@ -120,15 +53,15 @@
                 },
                 "MeshComponent": {
                     "isVisible": true,
-                    "meshName": "monkey"
+                    "meshName": "badge"
                 },
                 "SphereCollider": {
                     "localCenter": [
                         0.0,
-                        1.100000023841858,
+                        0.0,
                         0.0
                     ],
-                    "radius": 1.2000000476837158
+                    "radius": 0.699999988079071
                 },
                 "TransformComponent": {
                     "rotation": [
@@ -138,14 +71,257 @@
                         1.0
                     ],
                     "scale": [
+                        2.0,
+                        2.0,
+                        2.0
+                    ],
+                    "translate": [
+                        -33.76203918457031,
+                        13.526050567626953,
+                        -39.741615295410156
+                    ]
+                }
+            }
+        },
+        "Badge_2": {
+            "components": {
+                "AnimatorComponent": {
+                    "currentAnimation": 0,
+                    "drawSkeleton": false
+                },
+                "BadgeComponent": {
+                    "id": 0
+                },
+                "CollisionLayerComponent": {
+                    "layer": 8
+                },
+                "EditTag": {
+                    "name": "Badge_2",
+                    "path": "newEntity"
+                },
+                "MaterialComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "enviromentCoefficient": 0.8999999761581421,
+                    "psoName": [
+                        82,
+                        101,
+                        110,
+                        100,
+                        101,
+                        114,
+                        101,
+                        114,
+                        32,
+                        58,
+                        32,
+                        68,
+                        101,
+                        102,
+                        97,
+                        117,
+                        108,
+                        116,
+                        32,
+                        80,
+                        83,
+                        79
+                    ],
+                    "shininess": 60.0
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "badge"
+                },
+                "SphereCollider": {
+                    "localCenter": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "radius": 0.699999988079071
+                },
+                "TransformComponent": {
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        2.0,
+                        2.0,
+                        2.0
+                    ],
+                    "translate": [
+                        -38.391326904296875,
+                        12.67582893371582,
+                        -33.131473541259766
+                    ]
+                }
+            }
+        },
+        "Badge_3": {
+            "components": {
+                "AnimatorComponent": {
+                    "currentAnimation": 0,
+                    "drawSkeleton": false
+                },
+                "BadgeComponent": {
+                    "id": 0
+                },
+                "CollisionLayerComponent": {
+                    "layer": 8
+                },
+                "EditTag": {
+                    "name": "Badge_3",
+                    "path": "newEntity"
+                },
+                "MaterialComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "enviromentCoefficient": 0.8999999761581421,
+                    "psoName": [
+                        82,
+                        101,
+                        110,
+                        100,
+                        101,
+                        114,
+                        101,
+                        114,
+                        32,
+                        58,
+                        32,
+                        68,
+                        101,
+                        102,
+                        97,
+                        117,
+                        108,
+                        116,
+                        32,
+                        80,
+                        83,
+                        79
+                    ],
+                    "shininess": 60.0
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "badge"
+                },
+                "SphereCollider": {
+                    "localCenter": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "radius": 0.699999988079071
+                },
+                "TransformComponent": {
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        2.0,
+                        2.0,
+                        2.0
+                    ],
+                    "translate": [
+                        -42.943260192871094,
+                        13.051545143127441,
+                        -29.02823257446289
+                    ]
+                }
+            }
+        },
+        "DebugCamera": {
+            "components": {
+                "CameraComponent": {
+                    "fov": 0.44999998807907104
+                },
+                "DebugCameraComponent": {
+                    "center": [
+                        -69.09534454345703,
+                        -6.7068376541137695,
+                        -6.033973693847656
+                    ],
+                    "distance": 87.99635314941406,
+                    "drawCenter": false,
+                    "mousePositionX": 639,
+                    "mousePositionY": 389,
+                    "mouseWheelY": -600.0,
+                    "phi": 1.1817474365234375,
+                    "theta": -0.83179771900177
+                },
+                "EditTag": {
+                    "name": "DebugCamera",
+                    "path": "DebugCamera"
+                },
+                "TransformComponent": {
+                    "rotation": [
+                        0.18025383353233337,
+                        -0.35433724522590637,
+                        0.06981001794338226,
+                        0.9149208664894104
+                    ],
+                    "scale": [
                         1.0,
                         1.0,
                         1.0
                     ],
                     "translate": [
-                        -33.76203918457031,
-                        12.727373123168945,
-                        -39.741615295410156
+                        -14.254783630371094,
+                        26.67093276977539,
+                        -66.21533203125
+                    ]
+                }
+            }
+        },
+        "GameCamera": {
+            "components": {
+                "CameraComponent": {
+                    "fov": 0.44999998807907104
+                },
+                "EditTag": {
+                    "name": "GameCamera",
+                    "path": "GameCamera"
+                },
+                "FollowCameraComponent": {
+                    "distance": 38.400001525878906,
+                    "phi": 1.1339572668075562,
+                    "theta": -18.845006942749023
+                },
+                "TransformComponent": {
+                    "rotation": [
+                        0.15287184715270996,
+                        -0.6918752789497375,
+                        0.15356892347335815,
+                        0.6887347102165222
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        -1.11613130569458,
+                        27.895824432373047,
+                        -43.19325256347656
                     ]
                 }
             }
@@ -278,7 +454,7 @@
                     "path": "player"
                 },
                 "GroundStateComponent": {
-                    "groundHeight": 11.77015209197998,
+                    "groundHeight": 11.649656295776367,
                     "isGrounded": true
                 },
                 "MaterialComponent": {
@@ -328,10 +504,10 @@
                 },
                 "TransformComponent": {
                     "rotation": [
-                        0.0012662310618907213,
-                        -0.5353682637214661,
-                        -0.015849974006414413,
-                        -0.8444690704345703
+                        -0.004802043549716473,
+                        0.7119098901748657,
+                        0.015158546157181263,
+                        0.7020907998085022
                     ],
                     "scale": [
                         1.0,
@@ -339,9 +515,9 @@
                         1.0
                     ],
                     "translate": [
-                        -36.51263427734375,
-                        11.77015209197998,
-                        -52.61738967895508
+                        -35.90976333618164,
+                        11.649656295776367,
+                        -43.35154342651367
                     ]
                 },
                 "VelocityComponent": {
