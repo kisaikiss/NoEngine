@@ -3,7 +3,9 @@
 #include "engine/Editor/DataDriven/SceneSerializer.h"
 #include "engine/Editor/DataDriven/PrefabSerializer.h"
 #include "engine/Editor/ReflectionMacros.h"
+#include "engine/Editor/EditorCommandOperator.h"
 #include "engine/Functions/Scene/SceneNameComponent.h"
+#include "engine/Functions/Command/EditCommand/AddComponentCommand.h"
 
 #ifdef USE_IMGUI
 #include "externals/imgui/imgui.h"
@@ -311,6 +313,7 @@ void EditSystem::DrawAddComponentMenu(Registry& registry, Entity entity) {
 			if (ImGui::MenuItem(typeInfo.name.c_str())) {
 				// adder を使って Component を追加
 				typeInfo.adder(registry, entity);
+				Editor::EditorCommandOperator::AddCommand(std::make_unique<Command::AddComponentCommand>(registry, entity, typeInfo.typeId));
 			}
 		}
 
