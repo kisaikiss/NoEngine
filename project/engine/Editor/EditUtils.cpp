@@ -6,6 +6,7 @@
 #include "engine/Functions/Renderer/Primitive.h"
 #include "engine/Functions/Renderer/RenderSystem.h"
 #include "engine/Functions/Command/EditCommand/ChangeValueCommand.h"
+#include "engine/Functions/Command/EditCommand/InstantiateEntityCommand.h"
 #include "engine/Utilities/Conversion/ConvertString.h"
 #include "DataDriven/PrefabSerializer.h"
 #include "EditorCommandOperator.h"
@@ -246,7 +247,8 @@ void DrawSceneImGuiWindow(ECS::Registry& registry) {
 				}
 
 			}
-
+			// Undo 用コマンド登録
+			Editor::EditorCommandOperator::AddCommand(std::make_unique<Command::InstantiateEntityCommand>(registry, e));
 		}
 		ImGui::EndDragDropTarget();
 	}
