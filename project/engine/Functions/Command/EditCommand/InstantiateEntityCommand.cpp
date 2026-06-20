@@ -6,7 +6,7 @@
 namespace NoEngine {
 namespace Command {
 InstantiateEntityCommand::InstantiateEntityCommand(ECS::Registry& registry, ECS::Entity entity) : ICommand("InstantiateEntity"), registry_(registry), entity_(entity) {
-    // 保存用: 生成元プリセットを探すか、Entity の全コンポーネントを JSON に保存しておく
+    // Entity の全コンポーネントを JSON に保存しておく
     snapshotJson_ = Editor::SaveEntityToJson(registry_, entity_);
 }
 

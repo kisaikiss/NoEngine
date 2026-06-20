@@ -14,7 +14,7 @@
                 },
                 "EditTag": {
                     "name": "Badge",
-                    "path": "newEntity"
+                    "path": "BadgeFolder/Badge"
                 },
                 "MaterialComponent": {
                     "color": [
@@ -83,6 +83,15 @@
                 }
             }
         },
+        "BadgeFolder": {
+            "components": {
+                "EditTag": {
+                    "name": "BadgeFolder",
+                    "path": "BadgeFolder"
+                },
+                "FolderTag": null
+            }
+        },
         "Badge_2": {
             "components": {
                 "AnimatorComponent": {
@@ -97,7 +106,7 @@
                 },
                 "EditTag": {
                     "name": "Badge_2",
-                    "path": "newEntity"
+                    "path": "BadgeFolder/Badge_2"
                 },
                 "MaterialComponent": {
                     "color": [
@@ -180,7 +189,7 @@
                 },
                 "EditTag": {
                     "name": "Badge_3",
-                    "path": "newEntity"
+                    "path": "BadgeFolder/Badge_3"
                 },
                 "MaterialComponent": {
                     "color": [
@@ -263,7 +272,7 @@
                 },
                 "EditTag": {
                     "name": "Badge_4",
-                    "path": "newEntity"
+                    "path": "BadgeFolder/Badge_4"
                 },
                 "MaterialComponent": {
                     "color": [
@@ -346,7 +355,7 @@
                 },
                 "EditTag": {
                     "name": "Badge_5",
-                    "path": "newEntity"
+                    "path": "BadgeFolder/Badge_5"
                 },
                 "MaterialComponent": {
                     "color": [
@@ -429,7 +438,7 @@
                 },
                 "EditTag": {
                     "name": "Badge_6",
-                    "path": "newEntity"
+                    "path": "BadgeFolder/Badge_6"
                 },
                 "MaterialComponent": {
                     "color": [
@@ -498,6 +507,15 @@
                 }
             }
         },
+        "Camera": {
+            "components": {
+                "EditTag": {
+                    "name": "Camera",
+                    "path": "Camera"
+                },
+                "FolderTag": null
+            }
+        },
         "DebugCamera": {
             "components": {
                 "CameraComponent": {
@@ -509,24 +527,24 @@
                         -8.823609352111816,
                         -67.7232894897461
                     ],
-                    "distance": 115.00074768066406,
+                    "distance": 166.6400146484375,
                     "drawCenter": false,
                     "mousePositionX": 558,
                     "mousePositionY": 293,
-                    "mouseWheelY": -2880.0,
+                    "mouseWheelY": 0.0,
                     "phi": 1.344953179359436,
                     "theta": -0.3457182049751282
                 },
                 "EditTag": {
                     "name": "DebugCamera",
-                    "path": "DebugCamera"
+                    "path": "Camera/DebugCamera"
                 },
                 "TransformComponent": {
                     "rotation": [
-                        0.09219516813755035,
+                        0.09219517558813095,
                         -0.5712849497795105,
-                        0.06478600203990936,
-                        0.8129798769950867
+                        0.06478600949048996,
+                        0.8129799365997314
                     ],
                     "scale": [
                         1.0,
@@ -534,9 +552,9 @@
                         1.0
                     ],
                     "translate": [
-                        109.50259399414063,
-                        16.928298950195313,
-                        -105.70423889160156
+                        156.85272216796875,
+                        28.49178695678711,
+                        -122.75898742675781
                     ]
                 }
             }
@@ -548,7 +566,7 @@
                 },
                 "EditTag": {
                     "name": "GameCamera",
-                    "path": "GameCamera"
+                    "path": "Camera/GameCamera"
                 },
                 "FollowCameraComponent": {
                     "distance": 38.400001525878906,
@@ -572,6 +590,17 @@
                         6.300176620483398,
                         -82.70345306396484
                     ]
+                }
+            }
+        },
+        "GameSetting": {
+            "components": {
+                "EditTag": {
+                    "name": "GameSetting",
+                    "path": "newEntity"
+                },
+                "EditorSettingComponent": {
+                    "drawCollider": false
                 }
             }
         },

@@ -1,8 +1,17 @@
 #include "stdafx.h"
 #include "ColliderDrawSystem.h"
+#include "../../Component/Option/EditorSettingComponent.h"
 
 void ColliderDrawSystem::Update(No::Registry& registry, float deltaTime) {
 	static_cast<void>(deltaTime);
+	bool drawCollider = false;
+	for (auto setting : registry.View<EditorSettingComponent>()) {
+		drawCollider = registry.GetComponent<EditorSettingComponent>(setting)->drawCollider;
+	}
+
+	// 描画するフラグが立っていないなら早期リターン
+	if (!drawCollider) return;
+
 	for (auto capsuleE : registry.View<No::TransformComponent, No::CapsuleCollider>()) {
 
 		auto* capsuleTransform = registry.GetComponent<No::TransformComponent>(capsuleE);
