@@ -13,6 +13,9 @@ REFLECT_FIELD(maxScale),
 REFLECT_FIELD(minScale),
 REFLECT_FIELD(maxLifeTime),
 REFLECT_FIELD(minLifeTime),
+REFLECT_FIELD(color),
 REFLECT_FIELD(maxRotate),
-REFLECT_FIELD(minRotate)
+REFLECT_FIELD(minRotate),
+REFLECT_FIELD(emitRange),
+REFLECT_FIELD(textureName)
 REFLECT_STRUCT_END(NoEngine::Component::EffectEmitterComponent)

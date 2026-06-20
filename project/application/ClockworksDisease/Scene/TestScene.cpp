@@ -133,6 +133,9 @@ void TestScene::AddSystems() {
 	AddSystem(std::make_unique<CollisionEventSystem>());
 	AddSystem(std::make_unique<PlayerPushBackSystem>());
 	AddSystem(std::make_unique<ItemGetSystem>());
+	AddSystem(std::make_unique<No::EffectEmitSystem>());
+	AddSystem(std::make_unique<No::ParticleEmitterSystem>());
+	AddSystem(std::make_unique<No::ParticleSystem>());
 	AddSystem(std::make_unique<No::MovementSystem>());
 	AddSystem(std::make_unique<ColliderDrawSystem>());
 	AddSystem(std::make_unique<FollowCameraSystem>());

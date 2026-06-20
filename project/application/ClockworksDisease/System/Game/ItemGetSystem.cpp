@@ -9,6 +9,7 @@ void ItemGetSystem::Update(No::Registry& registry, float deltaTime) {
 	auto events = registry.PollAllEvents<ItemGetEvent>();
 	for (auto event : events) {
 		if (registry.Has<BadgeComponent>(event.item)) {
+			registry.AddComponent<No::EffectEmitTag>(event.item);
 			registry.DestroyEntity(event.item);
 		}
 	}
