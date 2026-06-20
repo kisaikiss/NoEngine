@@ -7,6 +7,7 @@
 #include "engine/Functions/Renderer/RenderSystem.h"
 #include "engine/Functions/Command/EditCommand/ChangeValueCommand.h"
 #include "engine/Functions/Command/EditCommand/InstantiateEntityCommand.h"
+#include "engine/Functions/Command/EditCommand/RemoveComponentCommand.h"
 #include "engine/Utilities/Conversion/ConvertString.h"
 #include "DataDriven/PrefabSerializer.h"
 #include "EditorCommandOperator.h"
@@ -289,6 +290,7 @@ void DrawComponentUI(Registry& registry, Entity e) {
 			if (ImGui::BeginPopupModal("ConfirmRemove")) {
 				ImGui::Text("Remove this component?");
 				if (ImGui::Button("Yes")) {
+					Editor::EditorCommandOperator::AddCommand(std::make_unique<Command::RemoveComponentCommand>(registry, e, compInfo.typeId));
 					registry.RemoveComponent(compInfo.typeId, e);
 				}
 				ImGui::SameLine();
