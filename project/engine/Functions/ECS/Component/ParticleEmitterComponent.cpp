@@ -9,5 +9,6 @@ REFLECT_FIELD(frequency),
 REFLECT_FIELD(maxSpeed),
 REFLECT_FIELD(minSpeed),
 REFLECT_FIELD(maxLifeTime),
-REFLECT_FIELD(minLifeTime)
+REFLECT_FIELD(minLifeTime),
+REFLECT_FIELD(textureName)
 REFLECT_STRUCT_END(NoEngine::Component::ParticleEmitterComponent)

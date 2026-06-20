@@ -33,6 +33,7 @@ struct ParticleEmitterComponent {
 	float maxLifeTime = 6.f;
 	float minLifeTime = 2.f;
 	ParticleShape shape = ParticleShape::kPlane;
+	std::string textureName = "white1x1";
 	TextureRef texture;			// 使用するテクスチャ
 };
 }

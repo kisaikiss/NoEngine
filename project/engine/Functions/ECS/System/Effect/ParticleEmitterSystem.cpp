@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "ParticleEmitterSystem.h"
 #include "engine/Utilities/Random.h"
+#include "engine/Assets/AssetManager.h"
 #include "../../Component/VelocityComponent.h"
 
 namespace NoEngine {
@@ -14,6 +15,10 @@ void ParticleEmitterSystem::Update(Registry& registry, float deltaTime) {
 		auto* transform = registry.GetComponent<TransformComponent>(entity);
 		TransformComponent t = *transform;
 		emitter->frequencyTime += deltaTime;
+		if (!emitter->texture.IsValid()) {
+			emitter->texture = TextureManager::LoadCovertTexture(AssetManager::GetFilePathFromAddressableName(emitter->textureName));
+		}
+
 		if (emitter->frequency <= emitter->frequencyTime) {
 			if (emitter->active) {
 				EmitParticle(registry, t, emitter);
