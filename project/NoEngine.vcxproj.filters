@@ -210,6 +210,7 @@
     <ClCompile Include="engine\Functions\Command\EditCommand\InstantiateEntityCommand.cpp" />
     <ClCompile Include="application\ClockworksDisease\Component\Option\EditorSettingComponent.cpp" />
     <ClCompile Include="engine\Functions\Command\EditCommand\AddComponentCommand.cpp" />
+    <ClCompile Include="engine\Functions\Command\EditCommand\DeleteEntityCommand.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -432,6 +433,7 @@
     <ClInclude Include="engine\Functions\Command\EditCommand\InstantiateEntityCommand.h" />
     <ClInclude Include="application\ClockworksDisease\Component\Option\EditorSettingComponent.h" />
     <ClInclude Include="engine\Functions\Command\EditCommand\AddComponentCommand.h" />
+    <ClInclude Include="engine\Functions\Command\EditCommand\DeleteEntityCommand.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

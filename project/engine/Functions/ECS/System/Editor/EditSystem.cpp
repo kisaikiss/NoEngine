@@ -6,6 +6,8 @@
 #include "engine/Editor/EditorCommandOperator.h"
 #include "engine/Functions/Scene/SceneNameComponent.h"
 #include "engine/Functions/Command/EditCommand/AddComponentCommand.h"
+#include "engine/Functions/Command/EditCommand/InstantiateEntityCommand.h"
+#include "engine/Functions/Command/EditCommand/DeleteEntityCommand.h"
 
 #ifdef USE_IMGUI
 #include "externals/imgui/imgui.h"
@@ -133,6 +135,7 @@ void EditSystem::DrawHierarchyWindow(Registry& registry) {
 			auto* tag = registry.AddComponent<Editor::EditTag>(e);
 			tag->name = "newEntity";
 			registry.AddComponent<Editor::EditSelectedTag>(e);
+			Editor::EditorCommandOperator::AddCommand(std::make_unique<Command::InstantiateEntityCommand>(registry, e));
 		}
 		ImGui::EndPopup();
 	}
@@ -196,9 +199,11 @@ void EditSystem::DrawFolderNode(FolderNode& node, ECS::Registry& registry, const
 			tag->name = "newEntity";
 			tag->path = fullPath + "/" + tag->name;
 			registry.AddComponent<Editor::EditSelectedTag>(e);
+			Editor::EditorCommandOperator::AddCommand(std::make_unique<Command::InstantiateEntityCommand>(registry, e));
 		}
 		if (node.folderEntity != INVALID_ENTITY) {
 			if (ImGui::MenuItem("Delete Folder")) {
+				Editor::EditorCommandOperator::AddCommand(std::make_unique<Command::DeleteEntityCommand>(registry, node.folderEntity));
 				registry.DestroyEntity(node.folderEntity);
 				// ※ 本来は中身の path も書き換えるか、一緒に消す処理が必要
 			}
@@ -265,7 +270,8 @@ void EditSystem::DrawEntityItem(ECS::Registry& registry, ECS::Entity e) {
 			ImGui::OpenPopup("RenameEntityPopup");
 		}
 		if (ImGui::MenuItem("Delete")) {
-			// 削除処理（確認ダイアログを入れるのが望ましい）
+			// 削除処理
+			Editor::EditorCommandOperator::AddCommand(std::make_unique<Command::DeleteEntityCommand>(registry, e));
 			registry.DestroyEntity(e);
 			ImGui::EndPopup();
 			return; // 既に削除したので以降の UI は無効
@@ -422,6 +428,7 @@ void EditSystem::CreateFolder(ECS::Registry& registry, const std::string& name, 
 		tag->path = parentPath + "/" + name;
 
 	registry.AddComponent<FolderTag>(folder);
+	Editor::EditorCommandOperator::AddCommand(std::make_unique<Command::InstantiateEntityCommand>(registry, folder));
 }
 
 void EditSystem::AddEntityToFolder(FolderNode& root, ECS::Registry& registry, Entity e) {
