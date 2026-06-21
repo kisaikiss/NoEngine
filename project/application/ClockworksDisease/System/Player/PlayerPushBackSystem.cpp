@@ -11,9 +11,7 @@ void PlayerPushBackSystem::Update(No::Registry& registry, float deltaTime) {
 		if (event.position == No::ContactPosition::UP) {
 			auto* transform = registry.GetComponent<No::TransformComponent>(event.player);
 			auto* ground = registry.GetComponent<No::GroundStateComponent>(event.player);
-			if (!ground->preIsGrounded) {
-				registry.AddComponent<No::EffectEmitTag>(event.player);
-			}
+			
 			ground->isGrounded = true;
 			ground->groundHeight = transform->GetWorldPosition().y;
 
@@ -22,6 +20,9 @@ void PlayerPushBackSystem::Update(No::Registry& registry, float deltaTime) {
 
 
 			if (player->yVelocity < 0.f) {
+				if (!ground->preIsGrounded && player->yVelocity < -7.5f) {
+					registry.AddComponent<No::EffectEmitTag>(event.player);
+				}
 				player->yVelocity = 0.f;
 			}
 			if (event.normal.y > player->groundNormal.y) {

@@ -11,6 +11,13 @@ void ItemGetSystem::Update(No::Registry& registry, float deltaTime) {
 		if (registry.Has<BadgeComponent>(event.item)) {
 			registry.AddComponent<No::EffectEmitTag>(event.item);
 			registry.DestroyEntity(event.item);
+			continue;
+		}
+
+		if (registry.Has<BigBadgeComponent>(event.item)) {
+			auto* badge = registry.GetComponent<BigBadgeComponent>(event.item);
+			registry.AddComponent<BigBadgeGetTag>(event.item);
+			badge->playerTransform = registry.GetComponent<No::TransformComponent>(event.player);
 		}
 	}
 }

@@ -212,6 +212,7 @@
     <ClCompile Include="engine\Functions\Command\EditCommand\AddComponentCommand.cpp" />
     <ClCompile Include="engine\Functions\Command\EditCommand\DeleteEntityCommand.cpp" />
     <ClCompile Include="engine\Functions\Command\EditCommand\RemoveComponentCommand.cpp" />
+    <ClCompile Include="application\ClockworksDisease\System\Object\BigBadgeSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -436,6 +437,7 @@
     <ClInclude Include="engine\Functions\Command\EditCommand\AddComponentCommand.h" />
     <ClInclude Include="engine\Functions\Command\EditCommand\DeleteEntityCommand.h" />
     <ClInclude Include="engine\Functions\Command\EditCommand\RemoveComponentCommand.h" />
+    <ClInclude Include="application\ClockworksDisease\System\Object\BigBadgeSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

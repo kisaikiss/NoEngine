@@ -205,6 +205,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="application\ClockworksDisease\System\Game\CollisionEventSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Game\CollisionLayer.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Game\ItemGetSystem.cpp" />
+    <ClCompile Include="application\ClockworksDisease\System\Object\BigBadgeSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Object\BoxColliderUpdateSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Player\PlayerMoveSystem.cpp" />
     <ClCompile Include="application\TestApp\TestApp.cpp" />
@@ -429,6 +430,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="application\ClockworksDisease\System\Game\CollisionEventSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Game\CollisionLayer.h" />
     <ClInclude Include="application\ClockworksDisease\System\Game\ItemGetSystem.h" />
+    <ClInclude Include="application\ClockworksDisease\System\Object\BigBadgeSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Object\BoxColliderUpdateSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Player\PlayerMoveSystem.h" />
     <ClInclude Include="application\TestApp\TestApp.h" />

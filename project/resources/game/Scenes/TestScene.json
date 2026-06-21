@@ -375,6 +375,126 @@
                 }
             }
         },
+        "BigBadge": {
+            "components": {
+                "AnimatorComponent": {
+                    "currentAnimation": 0,
+                    "drawSkeleton": false
+                },
+                "BigBadgeComponent": null,
+                "CollisionLayerComponent": {
+                    "layer": 8
+                },
+                "EditTag": {
+                    "name": "BigBadge",
+                    "path": "BadgeFolder/Badge"
+                },
+                "EffectEmitterComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        0.0,
+                        1.0
+                    ],
+                    "count": 20,
+                    "emitRange": [
+                        3.0,
+                        2.0,
+                        3.0
+                    ],
+                    "maxLifeTime": 2.0,
+                    "maxRotate": 3.1415927410125732,
+                    "maxScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "maxSpeed": [
+                        0.5,
+                        2.0,
+                        0.5
+                    ],
+                    "minLifeTime": 1.0,
+                    "minRotate": 0.0,
+                    "minScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "minSpeed": [
+                        -0.5,
+                        0.0,
+                        -0.5
+                    ],
+                    "textureName": "getEffect"
+                },
+                "MaterialComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "enviromentCoefficient": 0.8999999761581421,
+                    "psoName": [
+                        82,
+                        101,
+                        110,
+                        100,
+                        101,
+                        114,
+                        101,
+                        114,
+                        32,
+                        58,
+                        32,
+                        68,
+                        101,
+                        102,
+                        97,
+                        117,
+                        108,
+                        116,
+                        32,
+                        80,
+                        83,
+                        79
+                    ],
+                    "shininess": 60.0
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "badge"
+                },
+                "SphereCollider": {
+                    "localCenter": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "radius": 1.399999976158142
+                },
+                "TransformComponent": {
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        4.0,
+                        4.0,
+                        4.0
+                    ],
+                    "translate": [
+                        -14.245769500732422,
+                        15.934844970703125,
+                        -12.57480239868164
+                    ]
+                }
+            }
+        },
         "Camera": {
             "components": {
                 "EditTag": {
@@ -391,17 +511,17 @@
                 },
                 "DebugCameraComponent": {
                     "center": [
-                        5.878821849822998,
-                        -8.318531036376953,
-                        -76.74999237060547
+                        -11.35521411895752,
+                        16.35049057006836,
+                        -15.986000061035156
                     ],
-                    "distance": 80.55867004394531,
+                    "distance": 180.87469482421875,
                     "drawCenter": false,
-                    "mousePositionX": 486,
-                    "mousePositionY": 483,
-                    "mouseWheelY": -3000.0,
-                    "phi": 0.1140332967042923,
-                    "theta": -1.8338961601257324
+                    "mousePositionX": 610,
+                    "mousePositionY": 430,
+                    "mouseWheelY": -2040.0,
+                    "phi": 1.5940722227096558,
+                    "theta": -0.5441314578056335
                 },
                 "EditTag": {
                     "name": "DebugCamera",
@@ -409,10 +529,10 @@
                 },
                 "TransformComponent": {
                     "rotation": [
-                        0.6599112153053284,
-                        0.09788656234741211,
-                        -0.08731549978256226,
-                        0.7398049831390381
+                        -0.010137735866010189,
+                        -0.4910496175289154,
+                        -0.0057150679640471935,
+                        0.8710538744926453
                     ],
                     "scale": [
                         1.0,
@@ -420,9 +540,9 @@
                         1.0
                     ],
                     "translate": [
-                        3.4948513507843018,
-                        71.71693420410156,
-                        -85.60103607177734
+                        143.3551483154297,
+                        12.140850067138672,
+                        -109.594970703125
                     ]
                 }
             }

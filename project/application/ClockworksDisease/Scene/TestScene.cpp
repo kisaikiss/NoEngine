@@ -11,6 +11,7 @@
 #include "../System/Game/CollisionLayer.h"
 #include "../System/Game/ColliderDrawSystem.h"
 #include "../System/Game/ItemGetSystem.h"
+#include "../System/Object/BigBadgeSystem.h"
 
 void TestScene::Setup() {
 	AddSystems();
@@ -134,6 +135,7 @@ void TestScene::AddSystems() {
 	AddSystem(std::make_unique<CollisionEventSystem>());
 	AddSystem(std::make_unique<PlayerPushBackSystem>());
 	AddSystem(std::make_unique<ItemGetSystem>());
+	AddSystem(std::make_unique<BigBadgeSystem>());
 	AddSystem(std::make_unique<No::EffectEmitSystem>());
 	AddSystem(std::make_unique<No::ParticleEmitterSystem>());
 	AddSystem(std::make_unique<No::ParticleSystem>());
