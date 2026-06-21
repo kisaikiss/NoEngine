@@ -11,6 +11,7 @@ struct AnimatorComponent {
 	uint32_t currentAnimation = 0;
 	Asset::SkeletonHandle skeletonHandle;
 	float time = 0.f;
+	float animationSpeedMagnification = 1.0f;
 	bool drawSkeleton = false;
 };
 }

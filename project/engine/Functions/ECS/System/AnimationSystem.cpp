@@ -51,7 +51,7 @@ void AnimationSystem::AnimationUpdate(Registry& registry, float deltaTime) {
 		auto* animeComp = registry.GetComponent<Component::AnimatorComponent>(entity);
 		auto* meshComp = registry.GetComponent<Component::MeshComponent>(entity);
 
-		animeComp->time += deltaTime;
+		animeComp->time += deltaTime * animeComp->animationSpeedMagnification;
 		uint32_t currentAnimation = animeComp->currentAnimation;
 		auto& modelSaver = ModelSaver::Get();
 		auto* animation = modelSaver.GetAnimation(animeComp->animationHandles[currentAnimation]);

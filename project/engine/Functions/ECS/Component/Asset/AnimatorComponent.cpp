@@ -3,5 +3,6 @@
 
 REFLECT_STRUCT_BEGIN(NoEngine::Component::AnimatorComponent)
 REFLECT_FIELD(currentAnimation),
+REFLECT_FIELD(animationSpeedMagnification),
 REFLECT_FIELD(drawSkeleton)
 REFLECT_STRUCT_END(NoEngine::Component::AnimatorComponent)
