@@ -32,6 +32,7 @@ struct ParticleEmitterComponent {
 	Math::Vector3 minSpeed = -Math::Vector3::UNIT_SCALE;
 	Math::Vector3 emitRange = Math::Vector3::UNIT_SCALE;
 	Math::Vector3 localPosition = Math::Vector3::ZERO;
+	Math::Color color = Math::Color::WHITE;
 	float maxLifeTime = 6.f;
 	float minLifeTime = 2.f;
 	ParticleShape shape = ParticleShape::kPlane;

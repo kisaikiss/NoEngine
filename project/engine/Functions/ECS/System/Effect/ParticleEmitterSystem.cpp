@@ -37,6 +37,7 @@ void ParticleEmitterSystem::EmitParticle(Registry& registry, const Component::Tr
 		particle->lifeTime = Random::GetRandomVal(emitter->minLifeTime, emitter->maxLifeTime);
 		particle->texture = emitter->texture;
 		particle->shape = emitter->shape;
+		particle->color = emitter->color;
 		registry.AddComponent<VelocityComponent>(e)->linear = Random::GetRandomVal(emitter->minSpeed, emitter->maxSpeed);
 		auto* transform = registry.AddComponent<TransformComponent>(e);
 		transform->translate = GetNewPosition(emitterTransform, emitter);
