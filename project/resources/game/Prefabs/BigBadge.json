@@ -1,6 +1,7 @@
 {
     "components": {
         "AnimatorComponent": {
+            "animationSpeedMagnification": 1.0,
             "currentAnimation": 0,
             "drawSkeleton": false
         },
@@ -89,6 +90,35 @@
         "MeshComponent": {
             "isVisible": true,
             "meshName": "badge"
+        },
+        "ParticleEmitterComponent": {
+            "active": false,
+            "count": 10,
+            "emitRange": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "frequency": 0.10000000149011612,
+            "localPosition": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "maxCount": 100,
+            "maxLifeTime": 1.899999976158142,
+            "maxSpeed": [
+                1.0,
+                -1.0,
+                1.0
+            ],
+            "minLifeTime": 0.699999988079071,
+            "minSpeed": [
+                -1.0,
+                -2.0,
+                -1.0
+            ],
+            "textureName": "getEffect"
         },
         "SphereCollider": {
             "localCenter": [

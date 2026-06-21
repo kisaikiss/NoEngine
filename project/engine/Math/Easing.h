@@ -71,6 +71,16 @@ inline T EaseInOutBack(const T& a, const T& b, float t) {
 	return Lerp(a, b, time);
 }
 
+
+template<typename T>
+inline T EaseInBack(const T& a, const T& b, float t) {
+	const float c1 = 1.70158f;
+	const float c3 = c1 + 1;
+
+	float time = c3 * t * t * t - c1 * t * t;
+	return Lerp(a, b, time);
+}
+
 template<typename T>
 inline T EaseOutCubic(const T& a, const T& b, float t)
 {

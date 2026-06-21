@@ -15,9 +15,10 @@ void ItemGetSystem::Update(No::Registry& registry, float deltaTime) {
 		}
 
 		if (registry.Has<BigBadgeComponent>(event.item)) {
-			auto* badge = registry.GetComponent<BigBadgeComponent>(event.item);
 			registry.AddComponent<BigBadgeGetTag>(event.item);
-			badge->playerTransform = registry.GetComponent<No::TransformComponent>(event.player);
+			registry.GetComponent<No::AnimatorComponent>(event.item)->animationSpeedMagnification = 3.f;
+			registry.GetComponent<No::ParticleEmitterComponent>(event.item)->active = true;
+			registry.RemoveComponent<No::SphereCollider>(event.item);
 		}
 	}
 }

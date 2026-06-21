@@ -6,7 +6,11 @@ struct BadgeComponent {
 };
 
 struct BigBadgeComponent {
-	No::TransformComponent* playerTransform = nullptr;
+	float theta = 0.0f;
+	float t = 0.0f;
+	float scaleT = 0.0f;
+	float yPositionOffset = 0.0f;
+	float translateMagnification = 5.0f;
 };
 
 struct BigBadgeGetTag{};

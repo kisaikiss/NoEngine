@@ -3,6 +3,7 @@
         "Badge": {
             "components": {
                 "AnimatorComponent": {
+                    "animationSpeedMagnification": 1.0,
                     "currentAnimation": 0,
                     "drawSkeleton": false
                 },
@@ -134,6 +135,7 @@
         "Badge_2": {
             "components": {
                 "AnimatorComponent": {
+                    "animationSpeedMagnification": 1.0,
                     "currentAnimation": 0,
                     "drawSkeleton": false
                 },
@@ -256,6 +258,7 @@
         "Badge_3": {
             "components": {
                 "AnimatorComponent": {
+                    "animationSpeedMagnification": 1.0,
                     "currentAnimation": 0,
                     "drawSkeleton": false
                 },
@@ -378,6 +381,7 @@
         "BigBadge": {
             "components": {
                 "AnimatorComponent": {
+                    "animationSpeedMagnification": 1.0,
                     "currentAnimation": 0,
                     "drawSkeleton": false
                 },
@@ -467,6 +471,35 @@
                     "isVisible": true,
                     "meshName": "badge"
                 },
+                "ParticleEmitterComponent": {
+                    "active": false,
+                    "count": 10,
+                    "emitRange": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "frequency": 0.10000000149011612,
+                    "localPosition": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "maxCount": 100,
+                    "maxLifeTime": 1.899999976158142,
+                    "maxSpeed": [
+                        1.0,
+                        -1.0,
+                        1.0
+                    ],
+                    "minLifeTime": 0.699999988079071,
+                    "minSpeed": [
+                        -1.0,
+                        -2.0,
+                        -1.0
+                    ],
+                    "textureName": "getEffect"
+                },
                 "SphereCollider": {
                     "localCenter": [
                         0.0,
@@ -511,17 +544,17 @@
                 },
                 "DebugCameraComponent": {
                     "center": [
-                        -11.35521411895752,
-                        16.35049057006836,
-                        -15.986000061035156
+                        -16.1867733001709,
+                        -7.065706729888916,
+                        -87.05432891845703
                     ],
                     "distance": 180.87469482421875,
                     "drawCenter": false,
-                    "mousePositionX": 610,
-                    "mousePositionY": 430,
-                    "mouseWheelY": -2040.0,
-                    "phi": 1.5940722227096558,
-                    "theta": -0.5441314578056335
+                    "mousePositionX": 767,
+                    "mousePositionY": 304,
+                    "mouseWheelY": -480.0,
+                    "phi": 1.3360971212387085,
+                    "theta": -0.08138838410377502
                 },
                 "EditTag": {
                     "name": "DebugCamera",
@@ -529,10 +562,10 @@
                 },
                 "TransformComponent": {
                     "rotation": [
-                        -0.010137735866010189,
-                        -0.4910496175289154,
-                        -0.0057150679640471935,
-                        0.8710538744926453
+                        0.0860879197716713,
+                        -0.6730929017066956,
+                        0.0793517604470253,
+                        0.7302315831184387
                     ],
                     "scale": [
                         1.0,
@@ -540,9 +573,9 @@
                         1.0
                     ],
                     "translate": [
-                        143.3551483154297,
-                        12.140850067138672,
-                        -109.594970703125
+                        159.1468048095703,
+                        34.99678039550781,
+                        -101.35604095458984
                     ]
                 }
             }
