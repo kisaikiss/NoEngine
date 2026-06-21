@@ -23,8 +23,48 @@
             "name": "player",
             "path": "player"
         },
+        "EffectEmitModeRingTag": null,
+        "EffectEmitterComponent": {
+            "color": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+            ],
+            "count": 60,
+            "emitRange": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "maxLifeTime": 1.0,
+            "maxRotate": 0.0,
+            "maxScale": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "maxSpeed": [
+                3.0,
+                0.10000000149011612,
+                3.0
+            ],
+            "minLifeTime": 0.5,
+            "minRotate": 0.0,
+            "minScale": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "minSpeed": [
+                3.0,
+                0.0,
+                -3.0
+            ],
+            "textureName": "smokeEffect"
+        },
         "GroundStateComponent": {
-            "groundHeight": 0.5965670347213745,
+            "groundHeight": 2.4995484352111816,
             "isGrounded": true
         },
         "MaterialComponent": {
@@ -67,7 +107,7 @@
             "meshName": "monkey"
         },
         "ParticleEmitterComponent": {
-            "active": true,
+            "active": false,
             "count": 10,
             "emitRange": [
                 0.0,
@@ -103,10 +143,10 @@
         },
         "TransformComponent": {
             "rotation": [
-                1.401298464324817e-45,
-                -0.7165320515632629,
-                -1.401298464324817e-45,
-                0.6975541710853577
+                0.0,
+                -0.6489054560661316,
+                0.0,
+                0.760869026184082
             ],
             "scale": [
                 1.0,
@@ -114,9 +154,9 @@
                 1.0
             ],
             "translate": [
-                62.55921936035156,
-                0.5965670347213745,
-                -83.94473266601563
+                79.98493957519531,
+                2.4995484352111816,
+                -84.15394592285156
             ]
         },
         "VelocityComponent": {

@@ -9,6 +9,7 @@ void GroundResetSystem::Update(Registry& registry, float deltaTime) {
 	auto view = registry.View<Component::GroundStateComponent>();
 	for (auto entity : view) {
 		auto* groundState = registry.GetComponent<Component::GroundStateComponent>(entity);
+		groundState->preIsGrounded = groundState->isGrounded;
 		groundState->isGrounded = false;
 		groundState->groundHeight = 0.f;
 	}

@@ -122,6 +122,7 @@ void TestScene::NotSystemUpdate() {
 }
 
 void TestScene::AddSystems() {
+	AddSystem(std::make_unique<No::EditSystem>());
 
 	AddSystem(std::make_unique<No::ModelLoadSystem>());
 	AddSystem(std::make_unique<BoxColliderUpdateSystem>());
@@ -141,7 +142,6 @@ void TestScene::AddSystems() {
 	AddSystem(std::make_unique<FollowCameraSystem>());
 	AddSystem(std::make_unique<No::AnimationSystem>());
 	AddSystem(std::make_unique<No::SpriteAnimationSystem>());
-	AddSystem(std::make_unique<No::EditSystem>());
 	AddSystem(std::make_unique<No::DrawManipulatorSystem>());
 	AddSystem(std::make_unique<No::DebugCameraSystem>());
 	AddSystem(std::make_unique<No::CameraSystem>());

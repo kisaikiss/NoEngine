@@ -4,8 +4,21 @@
 #include "../ParticleEmitterComponent.h"
 
 namespace NoEngine {
+enum class EmitMode {
+    Box,
+    Circle,   // 円形（平面 XZ）
+    Ring,     // ドーナツ（平面 XZ）
+    Cone      // 円錐（3D）
+};
 namespace Component {
+
 struct EffectEmitTag{};
+
+struct EffectEmitModeCircleTag{
+    bool useXYPlane;
+};
+
+struct EffectEmitModeRingTag{};
 
 struct EffectEmitterComponent {
     uint32_t count = 10;		// 発生数
@@ -15,6 +28,7 @@ struct EffectEmitterComponent {
     Math::Vector3 minScale = Math::Vector3::ZERO;
     Math::Vector3 emitRange = Math::Vector3::ZERO;
     Math::Color color = Math::Color::WHITE;
+    EmitMode emitMode = EmitMode::Box;
     float maxLifeTime = 6.f;
     float minLifeTime = 2.f;
     float maxRotate = PI;

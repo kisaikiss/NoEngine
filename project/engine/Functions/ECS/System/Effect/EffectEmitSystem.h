@@ -11,7 +11,7 @@ public:
     EffectEmitSystem() { SetStopInGameStop(false); SetStopInPause(false); }
     void Update(Registry& registry, float deltaTime) override;
 private:
-    void EmitParticle(Registry& registry, Component::EffectEmitterComponent& effectEmitter, Component::TransformComponent& emitterTransform);
+    void EmitParticle(Registry& registry, Component::EffectEmitterComponent& effectEmitter, Component::TransformComponent& emitterTransform, Entity entity);
     Math::Vector3 GetNewPosition(Component::EffectEmitterComponent& effectEmitter, Component::TransformComponent& emitterTransform);
 };
 

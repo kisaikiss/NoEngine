@@ -98,6 +98,7 @@ namespace Component {
 /// </summary>
 struct GroundStateComponent {
 	bool isGrounded = false;
+	bool preIsGrounded = false;
 	float groundHeight = 0.f;	// 接地している場合の地面の高さ
 };
 
