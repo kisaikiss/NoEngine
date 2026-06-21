@@ -13,6 +13,7 @@
             "name": "BigBadge",
             "path": "BadgeFolder/Badge"
         },
+        "EffectEmitModeSphereTag": null,
         "EffectEmitterComponent": {
             "color": [
                 1.0,
@@ -20,11 +21,11 @@
                 0.0,
                 1.0
             ],
-            "count": 20,
+            "count": 200,
             "emitRange": [
-                3.0,
-                2.0,
-                3.0
+                0.0,
+                0.0,
+                0.0
             ],
             "maxLifeTime": 2.0,
             "maxRotate": 3.1415927410125732,
@@ -34,7 +35,7 @@
                 1.0
             ],
             "maxSpeed": [
-                0.5,
+                4.0,
                 2.0,
                 0.5
             ],
@@ -46,11 +47,11 @@
                 1.0
             ],
             "minSpeed": [
-                -0.5,
+                4.0,
                 0.0,
                 -0.5
             ],
-            "textureName": "getEffect"
+            "textureName": "getBigItem"
         },
         "MaterialComponent": {
             "color": [

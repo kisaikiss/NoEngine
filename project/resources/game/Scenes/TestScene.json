@@ -378,19 +378,21 @@
                 }
             }
         },
-        "BigBadge": {
+        "Badge_4": {
             "components": {
                 "AnimatorComponent": {
                     "animationSpeedMagnification": 1.0,
                     "currentAnimation": 0,
                     "drawSkeleton": false
                 },
-                "BigBadgeComponent": null,
+                "BadgeComponent": {
+                    "id": 0
+                },
                 "CollisionLayerComponent": {
                     "layer": 8
                 },
                 "EditTag": {
-                    "name": "BigBadge",
+                    "name": "Badge_4",
                     "path": "BadgeFolder/Badge"
                 },
                 "EffectEmitterComponent": {
@@ -431,6 +433,620 @@
                         -0.5
                     ],
                     "textureName": "getEffect"
+                },
+                "MaterialComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "enviromentCoefficient": 0.8999999761581421,
+                    "psoName": [
+                        82,
+                        101,
+                        110,
+                        100,
+                        101,
+                        114,
+                        101,
+                        114,
+                        32,
+                        58,
+                        32,
+                        68,
+                        101,
+                        102,
+                        97,
+                        117,
+                        108,
+                        116,
+                        32,
+                        80,
+                        83,
+                        79
+                    ],
+                    "shininess": 60.0
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "badge"
+                },
+                "SphereCollider": {
+                    "localCenter": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "radius": 0.699999988079071
+                },
+                "TransformComponent": {
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        2.0,
+                        2.0,
+                        2.0
+                    ],
+                    "translate": [
+                        -16.497026443481445,
+                        12.598630905151367,
+                        -80.49588012695313
+                    ]
+                }
+            }
+        },
+        "Badge_5": {
+            "components": {
+                "AnimatorComponent": {
+                    "animationSpeedMagnification": 1.0,
+                    "currentAnimation": 0,
+                    "drawSkeleton": false
+                },
+                "BadgeComponent": {
+                    "id": 0
+                },
+                "CollisionLayerComponent": {
+                    "layer": 8
+                },
+                "EditTag": {
+                    "name": "Badge_5",
+                    "path": "BadgeFolder/Badge"
+                },
+                "EffectEmitterComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        0.0,
+                        1.0
+                    ],
+                    "count": 20,
+                    "emitRange": [
+                        3.0,
+                        2.0,
+                        3.0
+                    ],
+                    "maxLifeTime": 2.0,
+                    "maxRotate": 3.1415927410125732,
+                    "maxScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "maxSpeed": [
+                        0.5,
+                        2.0,
+                        0.5
+                    ],
+                    "minLifeTime": 1.0,
+                    "minRotate": 0.0,
+                    "minScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "minSpeed": [
+                        -0.5,
+                        0.0,
+                        -0.5
+                    ],
+                    "textureName": "getEffect"
+                },
+                "MaterialComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "enviromentCoefficient": 0.8999999761581421,
+                    "psoName": [
+                        82,
+                        101,
+                        110,
+                        100,
+                        101,
+                        114,
+                        101,
+                        114,
+                        32,
+                        58,
+                        32,
+                        68,
+                        101,
+                        102,
+                        97,
+                        117,
+                        108,
+                        116,
+                        32,
+                        80,
+                        83,
+                        79
+                    ],
+                    "shininess": 60.0
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "badge"
+                },
+                "SphereCollider": {
+                    "localCenter": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "radius": 0.699999988079071
+                },
+                "TransformComponent": {
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        2.0,
+                        2.0,
+                        2.0
+                    ],
+                    "translate": [
+                        -22.20252227783203,
+                        12.699372291564941,
+                        -77.68636322021484
+                    ]
+                }
+            }
+        },
+        "Badge_6": {
+            "components": {
+                "AnimatorComponent": {
+                    "animationSpeedMagnification": 1.0,
+                    "currentAnimation": 0,
+                    "drawSkeleton": false
+                },
+                "BadgeComponent": {
+                    "id": 0
+                },
+                "CollisionLayerComponent": {
+                    "layer": 8
+                },
+                "EditTag": {
+                    "name": "Badge_6",
+                    "path": "BadgeFolder/Badge"
+                },
+                "EffectEmitterComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        0.0,
+                        1.0
+                    ],
+                    "count": 20,
+                    "emitRange": [
+                        3.0,
+                        2.0,
+                        3.0
+                    ],
+                    "maxLifeTime": 2.0,
+                    "maxRotate": 3.1415927410125732,
+                    "maxScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "maxSpeed": [
+                        0.5,
+                        2.0,
+                        0.5
+                    ],
+                    "minLifeTime": 1.0,
+                    "minRotate": 0.0,
+                    "minScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "minSpeed": [
+                        -0.5,
+                        0.0,
+                        -0.5
+                    ],
+                    "textureName": "getEffect"
+                },
+                "MaterialComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "enviromentCoefficient": 0.8999999761581421,
+                    "psoName": [
+                        82,
+                        101,
+                        110,
+                        100,
+                        101,
+                        114,
+                        101,
+                        114,
+                        32,
+                        58,
+                        32,
+                        68,
+                        101,
+                        102,
+                        97,
+                        117,
+                        108,
+                        116,
+                        32,
+                        80,
+                        83,
+                        79
+                    ],
+                    "shininess": 60.0
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "badge"
+                },
+                "SphereCollider": {
+                    "localCenter": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "radius": 0.699999988079071
+                },
+                "TransformComponent": {
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        2.0,
+                        2.0,
+                        2.0
+                    ],
+                    "translate": [
+                        -28.168502807617188,
+                        12.603550910949707,
+                        -73.55472564697266
+                    ]
+                }
+            }
+        },
+        "Badge_7": {
+            "components": {
+                "AnimatorComponent": {
+                    "animationSpeedMagnification": 1.0,
+                    "currentAnimation": 0,
+                    "drawSkeleton": false
+                },
+                "BadgeComponent": {
+                    "id": 0
+                },
+                "CollisionLayerComponent": {
+                    "layer": 8
+                },
+                "EditTag": {
+                    "name": "Badge_7",
+                    "path": "BadgeFolder/Badge"
+                },
+                "EffectEmitterComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        0.0,
+                        1.0
+                    ],
+                    "count": 20,
+                    "emitRange": [
+                        3.0,
+                        2.0,
+                        3.0
+                    ],
+                    "maxLifeTime": 2.0,
+                    "maxRotate": 3.1415927410125732,
+                    "maxScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "maxSpeed": [
+                        0.5,
+                        2.0,
+                        0.5
+                    ],
+                    "minLifeTime": 1.0,
+                    "minRotate": 0.0,
+                    "minScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "minSpeed": [
+                        -0.5,
+                        0.0,
+                        -0.5
+                    ],
+                    "textureName": "getEffect"
+                },
+                "MaterialComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "enviromentCoefficient": 0.8999999761581421,
+                    "psoName": [
+                        82,
+                        101,
+                        110,
+                        100,
+                        101,
+                        114,
+                        101,
+                        114,
+                        32,
+                        58,
+                        32,
+                        68,
+                        101,
+                        102,
+                        97,
+                        117,
+                        108,
+                        116,
+                        32,
+                        80,
+                        83,
+                        79
+                    ],
+                    "shininess": 60.0
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "badge"
+                },
+                "SphereCollider": {
+                    "localCenter": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "radius": 0.699999988079071
+                },
+                "TransformComponent": {
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        2.0,
+                        2.0,
+                        2.0
+                    ],
+                    "translate": [
+                        -23.766094207763672,
+                        12.853515625,
+                        -56.718990325927734
+                    ]
+                }
+            }
+        },
+        "Badge_8": {
+            "components": {
+                "AnimatorComponent": {
+                    "animationSpeedMagnification": 1.0,
+                    "currentAnimation": 0,
+                    "drawSkeleton": false
+                },
+                "BadgeComponent": {
+                    "id": 0
+                },
+                "CollisionLayerComponent": {
+                    "layer": 8
+                },
+                "EditTag": {
+                    "name": "Badge_8",
+                    "path": "BadgeFolder/Badge"
+                },
+                "EffectEmitterComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        0.0,
+                        1.0
+                    ],
+                    "count": 20,
+                    "emitRange": [
+                        3.0,
+                        2.0,
+                        3.0
+                    ],
+                    "maxLifeTime": 2.0,
+                    "maxRotate": 3.1415927410125732,
+                    "maxScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "maxSpeed": [
+                        0.5,
+                        2.0,
+                        0.5
+                    ],
+                    "minLifeTime": 1.0,
+                    "minRotate": 0.0,
+                    "minScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "minSpeed": [
+                        -0.5,
+                        0.0,
+                        -0.5
+                    ],
+                    "textureName": "getEffect"
+                },
+                "MaterialComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "enviromentCoefficient": 0.8999999761581421,
+                    "psoName": [
+                        82,
+                        101,
+                        110,
+                        100,
+                        101,
+                        114,
+                        101,
+                        114,
+                        32,
+                        58,
+                        32,
+                        68,
+                        101,
+                        102,
+                        97,
+                        117,
+                        108,
+                        116,
+                        32,
+                        80,
+                        83,
+                        79
+                    ],
+                    "shininess": 60.0
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "badge"
+                },
+                "SphereCollider": {
+                    "localCenter": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "radius": 0.699999988079071
+                },
+                "TransformComponent": {
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        2.0,
+                        2.0,
+                        2.0
+                    ],
+                    "translate": [
+                        -12.879044532775879,
+                        12.935626029968262,
+                        -47.458717346191406
+                    ]
+                }
+            }
+        },
+        "BigBadge": {
+            "components": {
+                "AnimatorComponent": {
+                    "animationSpeedMagnification": 1.0,
+                    "currentAnimation": 0,
+                    "drawSkeleton": false
+                },
+                "BigBadgeComponent": null,
+                "CollisionLayerComponent": {
+                    "layer": 8
+                },
+                "EditTag": {
+                    "name": "BigBadge",
+                    "path": "BadgeFolder/Badge"
+                },
+                "EffectEmitModeSphereTag": null,
+                "EffectEmitterComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        0.0,
+                        1.0
+                    ],
+                    "count": 200,
+                    "emitRange": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "maxLifeTime": 2.0,
+                    "maxRotate": 3.1415927410125732,
+                    "maxScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "maxSpeed": [
+                        4.0,
+                        2.0,
+                        0.5
+                    ],
+                    "minLifeTime": 1.0,
+                    "minRotate": 0.0,
+                    "minScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "minSpeed": [
+                        4.0,
+                        0.0,
+                        -0.5
+                    ],
+                    "textureName": "getBigItem"
                 },
                 "MaterialComponent": {
                     "color": [
@@ -527,9 +1143,9 @@
                         4.0
                     ],
                     "translate": [
-                        -14.245769500732422,
+                        -15.502083778381348,
                         15.934844970703125,
-                        -12.57480239868164
+                        -14.418807983398438
                     ]
                 }
             }
@@ -550,17 +1166,17 @@
                 },
                 "DebugCameraComponent": {
                     "center": [
-                        -16.1867733001709,
-                        -7.065706729888916,
-                        -87.05432891845703
+                        -17.017866134643555,
+                        9.712976455688477,
+                        -56.85109329223633
                     ],
-                    "distance": 180.87469482421875,
+                    "distance": 169.22564697265625,
                     "drawCenter": false,
-                    "mousePositionX": 767,
-                    "mousePositionY": 304,
-                    "mouseWheelY": -480.0,
-                    "phi": 1.3360971212387085,
-                    "theta": -0.08138838410377502
+                    "mousePositionX": 343,
+                    "mousePositionY": 174,
+                    "mouseWheelY": -2040.0,
+                    "phi": 1.5155924558639526,
+                    "theta": -0.053646448999643326
                 },
                 "EditTag": {
                     "name": "DebugCamera",
@@ -568,10 +1184,10 @@
                 },
                 "TransformComponent": {
                     "rotation": [
-                        0.0860879197716713,
-                        -0.6730929017066956,
-                        0.0793517604470253,
-                        0.7302315831184387
+                        0.020031414926052094,
+                        -0.6876257658004761,
+                        0.018984626978635788,
+                        0.7255405783653259
                     ],
                     "scale": [
                         1.0,
@@ -579,9 +1195,9 @@
                         1.0
                     ],
                     "translate": [
-                        159.1468048095703,
-                        34.99678039550781,
-                        -101.35604095458984
+                        151.70689392089844,
+                        19.05014419555664,
+                        -65.91127014160156
                     ]
                 }
             }

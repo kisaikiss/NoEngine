@@ -190,16 +190,17 @@ void CommonSetupRenderPass(RenderPassScheduler& renderPassScheduler) {
 	skyBoxPass->SetDepthOutput("MainDepth");
 	renderPassScheduler.AddPass(std::move(skyBoxPass));
 
+
+	auto depthBasedOutlinePass = std::make_unique<DepthBasedOutlinePass>();
+	depthBasedOutlinePass->AddInput("InputColor", "MainColor");
+	depthBasedOutlinePass->AddInput("InputDepth", "MainDepth");
+	depthBasedOutlinePass->AddOutput("PostEffect");
+	renderPassScheduler.AddPass(std::move(depthBasedOutlinePass));
+
 	auto particlePass = std::make_unique<ParticlePass>();
-	particlePass->AddOutput("MainColor");
+	particlePass->AddOutput("PostEffect");
 	particlePass->SetDepthOutput("MainDepth");
 	renderPassScheduler.AddPass(std::move(particlePass));
-
-	auto gaussianFilter = std::make_unique<DepthBasedOutlinePass>();
-	gaussianFilter->AddInput("InputColor", "MainColor");
-	gaussianFilter->AddInput("InputDepth", "MainDepth");
-	gaussianFilter->AddOutput("PostEffect");
-	renderPassScheduler.AddPass(std::move(gaussianFilter));
 
 	auto vignetting = std::make_unique<VignettingPass>();
 	vignetting->AddInput("InputColor", "PostEffect");

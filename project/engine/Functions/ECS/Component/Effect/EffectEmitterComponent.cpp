@@ -12,6 +12,9 @@ REFLECT_STRUCT_END(NoEngine::Component::EffectEmitModeCircleTag)
 REFLECT_STRUCT_BEGIN(NoEngine::Component::EffectEmitModeRingTag)
 REFLECT_STRUCT_END(NoEngine::Component::EffectEmitModeRingTag)
 
+REFLECT_STRUCT_BEGIN(NoEngine::Component::EffectEmitModeSphereTag)
+REFLECT_STRUCT_END(NoEngine::Component::EffectEmitModeSphereTag)
+
 REFLECT_STRUCT_BEGIN(NoEngine::Component::EffectEmitterComponent)
 REFLECT_FIELD(count),
 REFLECT_FIELD(maxSpeed),

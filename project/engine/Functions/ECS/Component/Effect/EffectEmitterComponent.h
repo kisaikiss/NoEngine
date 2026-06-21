@@ -20,6 +20,8 @@ struct EffectEmitModeCircleTag{
 
 struct EffectEmitModeRingTag{};
 
+struct EffectEmitModeSphereTag{};
+
 struct EffectEmitterComponent {
     uint32_t count = 10;		// 発生数
     Math::Vector3 maxSpeed = Math::Vector3::UNIT_SCALE;

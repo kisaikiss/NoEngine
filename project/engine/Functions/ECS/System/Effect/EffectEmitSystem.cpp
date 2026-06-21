@@ -61,6 +61,28 @@ void EffectEmitSystem::EmitParticle(Registry& registry, Component::EffectEmitter
 
 			registry.AddComponent<VelocityComponent>(e)->linear =
 				Math::Vector3(dirWorld.x * speed, dirWorld.y * speed, dirWorld.z * speed);
+		} else if (registry.Has<EffectEmitModeSphereTag>(entity)) {
+			// cosθ を [-1, 1] で一様サンプリング → 球面上の偏りをなくす
+			float cosTheta = Random::GetRandomVal(-1.0f, 1.0f);
+			float sinTheta = std::sqrt(1.0f - cosTheta * cosTheta);
+			float phi = Random::GetRandomVal(0.0f, 2.0f * PI);
+
+			// ローカル空間の単位方向ベクトル
+			Math::Vector3 dirLocal(
+				sinTheta * std::cos(phi),
+				cosTheta,
+				sinTheta * std::sin(phi)
+			);
+
+			// エミッタの回転をワールド空間に反映
+			Math::Vector3 dirWorld = emitterTransform.rotation.RotateVector(dirLocal);
+			dirWorld = dirWorld.Normalize();
+
+			// minSpeed〜maxSpeed でスカラー速度をサンプリング
+			float speed = Random::GetRandomVal(effectEmitter.minSpeed.x, effectEmitter.maxSpeed.x);
+
+			registry.AddComponent<VelocityComponent>(e)->linear =
+				Math::Vector3(dirWorld.x * speed, dirWorld.y * speed, dirWorld.z * speed);
 		} else {
 			registry.AddComponent<VelocityComponent>(e)->linear = Random::GetRandomVal(effectEmitter.minSpeed, effectEmitter.maxSpeed);
 		}
