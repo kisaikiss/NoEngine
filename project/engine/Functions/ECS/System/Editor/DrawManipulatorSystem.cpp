@@ -25,46 +25,6 @@ void DrawManipulatorSystem::Update(Registry& registry, float deltaTime) {
 	SetGizmoCallback([this, &registry](const Math::Vector4& rect) {
 		ImGuizmo::SetDrawlist();
 
-		ImVec2 imgMin = ImGui::GetItemRectMin();
-		ImVec2 imgMax = ImGui::GetItemRectMax();
-		float imgX = imgMin.x;
-		float imgY = imgMin.y;
-		float imgW = imgMax.x - imgMin.x;
-
-		// ツールバーのサイズとマージン
-		const ImVec2 toolbarSize = ImVec2(160, 28);
-		const float margin = 8.0f;
-
-		// 右上に配置する例
-		ImVec2 toolbarPos = ImVec2(imgX + imgW - toolbarSize.x - margin, imgY + margin);
-
-		// 保存しておく（SetCursorScreenPos はウィンドウ内の次のウィジェット位置を移動する）
-		ImGui::SetCursorScreenPos(toolbarPos);
-
-		// 見た目調整
-		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 4.0f);
-		ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(40, 40, 40, 200));
-		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, IM_COL32(60, 60, 60, 220));
-		ImGui::PushStyleColor(ImGuiCol_ButtonActive, IM_COL32(80, 80, 80, 240));
-
-		// 横並びでボタンを置く
-		static ImGuizmo::OPERATION currentOp = ImGuizmo::TRANSLATE;
-		if (ImGui::Button("Translate", ImVec2(50, 24))) {
-			// Manipulate 中なら確定して Undo コマンドを作る処理をここで呼ぶ
-			currentOp = ImGuizmo::TRANSLATE;
-		}
-		ImGui::SameLine();
-		if (ImGui::Button("Rotate", ImVec2(50, 24))) {
-			currentOp = ImGuizmo::ROTATE;
-		}
-		ImGui::SameLine();
-		if (ImGui::Button("Scale", ImVec2(50, 24))) {
-			currentOp = ImGuizmo::SCALE;
-		}
-
-		ImGui::PopStyleColor(3);
-		ImGui::PopStyleVar();
-
 		auto cameraView = registry.View<DebugCameraComponent, CameraComponent>();
 		Math::Matrix4x4 viewMatrix;
 		Math::Matrix4x4 projection;
@@ -76,6 +36,34 @@ void DrawManipulatorSystem::Update(Registry& registry, float deltaTime) {
 		isActivePreFrame_ = isActive_;
 		auto view = registry.View<TransformComponent, EditTag, EditSelectedTag>();
 		for (auto e : view) {
+			ImVec2 imgMin = ImGui::GetItemRectMin();
+			float imgX = imgMin.x;
+			float imgY = imgMin.y;
+
+			constexpr float margin = 8.0f;
+			constexpr float buttonSizeY = 28.f;
+
+			// 左上に配置する
+			ImVec2 toolbarPos = ImVec2(imgX + margin, imgY + margin);
+
+			// SetCursorScreenPos はウィンドウ内の次のウィジェット位置を移動する
+			ImGui::SetCursorScreenPos(toolbarPos);
+			// 横並びでボタンを置く
+			static ImGuizmo::OPERATION currentOp = ImGuizmo::TRANSLATE;
+			if (ImGui::Button("T")) {
+				currentOp = ImGuizmo::TRANSLATE;
+			}
+			toolbarPos.y += buttonSizeY;
+			ImGui::SetCursorScreenPos(toolbarPos);
+			if (ImGui::Button("R")) {
+				currentOp = ImGuizmo::ROTATE;
+			}
+			toolbarPos.y += buttonSizeY;
+			ImGui::SetCursorScreenPos(toolbarPos);
+			if (ImGui::Button("S")) {
+				currentOp = ImGuizmo::SCALE;
+			}
+
 			auto* t = registry.GetComponent<TransformComponent>(e);
 			Math::Matrix4x4 m = t->MakeAffineMatrix4x4();
 			ImGuizmo::SetRect(rect.x, rect.y, rect.z, rect.w);
