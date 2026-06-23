@@ -13,6 +13,7 @@
 #include "PostEffect/GaussianFilterPass.h"
 #include "PostEffect/BoxFilterPass.h"
 #include "PostEffect/DepthBasedOutlinePass.h"
+#include "PostEffect/RadialBlurPass.h"
 
 #include "../Primitive.h"
 
@@ -202,7 +203,7 @@ void CommonSetupRenderPass(RenderPassScheduler& renderPassScheduler) {
 	particlePass->SetDepthOutput("MainDepth");
 	renderPassScheduler.AddPass(std::move(particlePass));
 
-	auto vignetting = std::make_unique<VignettingPass>();
+	auto vignetting = std::make_unique<RadialBlurPass>();
 	vignetting->AddInput("InputColor", "PostEffect");
 	vignetting->AddOutput("MainColor");
 	renderPassScheduler.AddPass(std::move(vignetting));

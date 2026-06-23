@@ -30,6 +30,7 @@
     <FxCompile Include="resources\engine\Shaders\BoxFilter.PS.hlsl" />
     <FxCompile Include="resources\engine\Shaders\GaussianFilter.PS.hlsl" />
     <FxCompile Include="resources\engine\Shaders\DepthBasedOutline.PS.hlsl" />
+    <FxCompile Include="resources\engine\Shaders\RadialBlur.PS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="engine\Assets\Audio\Audio.cpp" />
@@ -213,6 +214,7 @@
     <ClCompile Include="engine\Functions\Command\EditCommand\DeleteEntityCommand.cpp" />
     <ClCompile Include="engine\Functions\Command\EditCommand\RemoveComponentCommand.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Object\BigBadgeSystem.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\RadialBlurPass.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -438,6 +440,7 @@
     <ClInclude Include="engine\Functions\Command\EditCommand\DeleteEntityCommand.h" />
     <ClInclude Include="engine\Functions\Command\EditCommand\RemoveComponentCommand.h" />
     <ClInclude Include="application\ClockworksDisease\System\Object\BigBadgeSystem.h" />
+    <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\RadialBlurPass.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

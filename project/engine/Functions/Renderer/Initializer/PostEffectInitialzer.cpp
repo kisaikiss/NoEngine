@@ -61,6 +61,11 @@ void PostEffectInitialzer::CreatePSO(RenderContext& ctx) {
 
 	ctx.RegisterGraphicsPSO("Renderer : Gaussian PSO", defaultPSO);
 
+	ShaderModule radialPS(ShaderStage::Pixel, L"resources/engine/Shaders/RadialBlur.PS.hlsl", L"ps_6_0");
+	defaultPSO.SetPixelShader(radialPS.GetBytecode());
+	defaultPSO.Finalize();
+
+	ctx.RegisterGraphicsPSO("Renderer : RadialBlur PSO", defaultPSO);
 	{
 		ShaderModule boxFilterPS(ShaderStage::Pixel, L"resources/engine/Shaders/BoxFilter.PS.hlsl", L"ps_6_0");
 
