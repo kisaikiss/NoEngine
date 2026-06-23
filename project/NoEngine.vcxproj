@@ -221,6 +221,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="engine\Functions\Command\EditCommand\RemoveComponentCommand.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Asset\Animator2DComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Asset\AnimatorComponent.cpp" />
+    <ClCompile Include="engine\Functions\ECS\Component\Asset\DissolveComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Effect\EffectEmitterComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Asset\MeshComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\ParticleEmitterComponent.cpp" />
@@ -280,6 +281,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="engine\Functions\Renderer\RenderGraph.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\BoxFilterPass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\DepthBasedOutlinePass.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\DissolvePass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\GaussianFilterPass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\GrayscalePass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\RadialBlurPass.cpp" />
@@ -449,6 +451,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="engine\Functions\Command\EditCommand\DeleteEntityCommand.h" />
     <ClInclude Include="engine\Functions\Command\EditCommand\InstantiateEntityCommand.h" />
     <ClInclude Include="engine\Functions\Command\EditCommand\RemoveComponentCommand.h" />
+    <ClInclude Include="engine\Functions\ECS\Component\Asset\DissolveComponent.h" />
     <ClInclude Include="engine\Functions\ECS\Component\Effect\EffectEmitterComponent.h" />
     <ClInclude Include="engine\Functions\ECS\System\Camera\Camera2DSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\Collision\CollisionResolution2DSystem.h" />
@@ -524,6 +527,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="engine\Functions\Renderer\RenderGraph.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\BoxFilterPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\DepthBasedOutlinePass.h" />
+    <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\DissolvePass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\GaussianFilterPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\GrayscalePass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\RadialBlurPass.h" />
@@ -750,6 +754,14 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="resources\engine\Shaders\Dissolve.PS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Development|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="resources\engine\Shaders\FullScreen.VS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>

@@ -1247,6 +1247,18 @@
                 }
             }
         },
+        "PostEffect": {
+            "components": {
+                "DissolveComponent": {
+                    "maskTextureName": "noise0",
+                    "threshold": 0.0
+                },
+                "EditTag": {
+                    "name": "PostEffect",
+                    "path": "PostEffect"
+                }
+            }
+        },
         "box": {
             "components": {
                 "AABBCollider": {

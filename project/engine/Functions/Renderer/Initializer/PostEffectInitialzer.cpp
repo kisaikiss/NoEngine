@@ -13,14 +13,14 @@ void PostEffectInitialzer::CreatePSO(RenderContext& ctx) {
 
 	const ShaderReflection& vsReflection = defaultVS.GetReflection();
 	const ShaderReflection& psReflection = grayscalePS.GetReflection();
-	std::vector<ShaderReflection> reflections;
-	reflections.push_back(vsReflection);
-	reflections.push_back(psReflection);
+	std::vector<ShaderReflection> defaultReflections;
+	defaultReflections.push_back(vsReflection);
+	defaultReflections.push_back(psReflection);
 
 	RootSignature defaultRootSignature;
 	std::string defaultPSOName = "Renderer : Grayscale PSO";
 	std::string rootSigName = "Renderer : PostEffectRootSig";
-	RootSignatureBuilder::BuildFromReflection(reflections, defaultRootSignature, rootSigName);
+	RootSignatureBuilder::BuildFromReflection(defaultReflections, defaultRootSignature, rootSigName);
 	
 	D3D12_RASTERIZER_DESC rasterizerDesc{};
 	rasterizerDesc.CullMode = D3D12_CULL_MODE_BACK;
@@ -104,7 +104,24 @@ void PostEffectInitialzer::CreatePSO(RenderContext& ctx) {
 		ctx.RegisterRootSignature("Renderer : Outline", std::move(outlineRootSignature));
 	}
 
-	
+	{
+		ShaderModule pixelShader(ShaderStage::Pixel, L"resources/engine/Shaders/Dissolve.PS.hlsl", L"ps_6_0");
+
+		const ShaderReflection& pixelShaderReflection = pixelShader.GetReflection();
+		std::vector<ShaderReflection> reflections;
+		reflections.push_back(vsReflection);
+		reflections.push_back(pixelShaderReflection);
+
+		RootSignature rootSignature;
+		RootSignatureBuilder::BuildFromReflection(reflections, rootSignature, "Renderer : Dissolve");
+
+		defaultPSO.SetPixelShader(pixelShader.GetBytecode());
+		defaultPSO.SetRootSignature(rootSignature);
+		defaultPSO.Finalize();
+
+		ctx.RegisterGraphicsPSO("Renderer : Dissolve PSO", defaultPSO);
+		ctx.RegisterRootSignature("Renderer : Dissolve", std::move(rootSignature));
+	}
 
 }
 }
