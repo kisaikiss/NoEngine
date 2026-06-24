@@ -154,6 +154,7 @@ ECS::Entity PickObject(ECS::Registry& registry, ColorBuffer& idColorBuffer, Read
 			return ECS::INVALID_ENTITY;
 		}
 
+		LogDebug("Object click select ID : " + std::to_string(pickedID));
 		return static_cast<ECS::Entity>(pickedID);
 	}
 #else

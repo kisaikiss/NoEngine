@@ -18,6 +18,13 @@ private:
         std::vector<ECS::Entity> entities; // フォルダ以外のエンティティ
     };
 
+
+    struct EditorState {
+        Entity selectedEntity = INVALID_ENTITY;
+    };
+
+    EditorState editorState_;
+
     void SaveFile(Registry& registry, nlohmann::json j);
     void LoadFile(Registry& registry);
 

@@ -22,15 +22,6 @@ REFLECT_STRUCT_END(NoEngine::FolderTag)
 namespace NoEngine {
 namespace ECS {
 
-namespace {
-struct EditorState {
-	Entity selectedEntity = INVALID_ENTITY;
-};
-
-static EditorState sEditorState;
-
-}
-
 void EditSystem::Update(Registry& registry, float deltaTime) {
 	static_cast<void>(deltaTime);
 	if (!FirstLoaded_) {
@@ -74,6 +65,10 @@ void EditSystem::Update(Registry& registry, float deltaTime) {
 	ImGui::End();
 
 
+	// 選択しているEntityを取得
+	for (auto e : registry.View<Editor::EditSelectedTag>()) {
+		editorState_.selectedEntity = e;
+	}
 #else
 	static_cast<void>(registry);
 #endif // USE_IMGUI
@@ -170,7 +165,7 @@ void EditSystem::DrawFolderNode(FolderNode& node, ECS::Registry& registry, const
 	if (node.name.empty()) flags |= ImGuiTreeNodeFlags_DefaultOpen;
 
 	// フォルダ自体の Entity が選択されているか
-	if (node.folderEntity != INVALID_ENTITY && sEditorState.selectedEntity == node.folderEntity) {
+	if (node.folderEntity != INVALID_ENTITY && editorState_.selectedEntity == node.folderEntity) {
 		flags |= ImGuiTreeNodeFlags_Selected;
 	}
 
@@ -178,8 +173,7 @@ void EditSystem::DrawFolderNode(FolderNode& node, ECS::Registry& registry, const
 
 	// フォルダのクリック選択
 	if (ImGui::IsItemClicked() && node.folderEntity != INVALID_ENTITY) {
-		sEditorState.selectedEntity = node.folderEntity;
-		registry.AddComponent<Editor::EditSelectedTag>(sEditorState.selectedEntity);
+		registry.AddComponent<Editor::EditSelectedTag>(editorState_.selectedEntity);
 	}
 
 	// パスの計算（親のパス + 自分の名前）
@@ -248,11 +242,10 @@ void EditSystem::DrawEntityItem(ECS::Registry& registry, ECS::Entity e) {
 
 
 	auto* tag = registry.GetComponent<Editor::EditTag>(e);
-	bool selected = (sEditorState.selectedEntity == e);
+	bool selected = (editorState_.selectedEntity == e);
 
 	// 選択可能な行
 	if (ImGui::Selectable(tag->name.c_str(), selected)) {
-		sEditorState.selectedEntity = e;
 		registry.AddComponent<Editor::EditSelectedTag>(e);
 	}
 
