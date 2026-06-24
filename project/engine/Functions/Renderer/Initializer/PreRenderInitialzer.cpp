@@ -46,9 +46,9 @@ void PreRenderInitialzer::CreatePSO(RenderContext& ctx) {
 		defaultPSO.SetDepthStencilState(depthStencilDesc);
 		defaultPSO.SetInputLayout(inputLayout);
 		defaultPSO.SetPrimitiveTopologyType(D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
-		DXGI_FORMAT preRenderRTVFormat[] = { DXGI_FORMAT_R32G32B32A32_FLOAT, DXGI_FORMAT_R10G10B10A2_UNORM, };
+		DXGI_FORMAT preRenderRTVFormat[] = { DXGI_FORMAT_R32G32B32A32_FLOAT, DXGI_FORMAT_R10G10B10A2_UNORM,DXGI_FORMAT_R8G8B8A8_UNORM };
 
-		defaultPSO.SetRenderTargetFormats(2, preRenderRTVFormat, DXGI_FORMAT_D24_UNORM_S8_UINT);
+		defaultPSO.SetRenderTargetFormats(3, preRenderRTVFormat, DXGI_FORMAT_D24_UNORM_S8_UINT);
 		defaultPSO.SetVertexShader(defaultVS.GetBytecode());
 		defaultPSO.SetPixelShader(pixelShader.GetBytecode());
 		defaultPSO.SetSampleMask(D3D12_DEFAULT_SAMPLE_MASK);
@@ -85,9 +85,9 @@ void PreRenderInitialzer::CreatePSO(RenderContext& ctx) {
 		defaultSkinnedPSO.SetDepthStencilState(depthStencilDesc);
 		defaultSkinnedPSO.SetInputLayout(skinnedInputLayout);
 		defaultSkinnedPSO.SetPrimitiveTopologyType(D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
-		DXGI_FORMAT preRenderRTVFormat[] = { DXGI_FORMAT_R32G32B32A32_FLOAT, DXGI_FORMAT_R10G10B10A2_UNORM, };
+		DXGI_FORMAT preRenderRTVFormat[] = { DXGI_FORMAT_R32G32B32A32_FLOAT, DXGI_FORMAT_R10G10B10A2_UNORM,DXGI_FORMAT_R8G8B8A8_UNORM };
 
-		defaultSkinnedPSO.SetRenderTargetFormats(2, preRenderRTVFormat, DXGI_FORMAT_D24_UNORM_S8_UINT);
+		defaultSkinnedPSO.SetRenderTargetFormats(3, preRenderRTVFormat, DXGI_FORMAT_D24_UNORM_S8_UINT);
 		defaultSkinnedPSO.SetVertexShader(defaultSkinnedVS.GetBytecode());
 		defaultSkinnedPSO.SetPixelShader(pixelShader.GetBytecode());
 		defaultSkinnedPSO.SetSampleMask(D3D12_DEFAULT_SAMPLE_MASK);

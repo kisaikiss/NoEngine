@@ -146,6 +146,7 @@ void CommonSetupRenderPass(RenderPassScheduler& renderPassScheduler) {
 	resourceRegistry.CreateColorBuffer("ShadowMap", windowSize.x, windowSize.y, DXGI_FORMAT_R8_UNORM);
 	resourceRegistry.CreateColorBuffer("WorldPosition", windowSize.x, windowSize.y, DXGI_FORMAT_R32G32B32A32_FLOAT);
 	resourceRegistry.CreateColorBuffer("Normal", windowSize.x, windowSize.y, DXGI_FORMAT_R10G10B10A2_UNORM);
+	resourceRegistry.CreateColorBuffer("ObjectID", windowSize.x, windowSize.y, DXGI_FORMAT_R8G8B8A8_UNORM);
 
 	resourceRegistry.CreateColorBuffer("PostEffect", windowSize.x, windowSize.y, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
 	renderPassScheduler.SetScreenDrawBuffer("MainColor");
@@ -159,6 +160,7 @@ void CommonSetupRenderPass(RenderPassScheduler& renderPassScheduler) {
 	auto preRenderPass = std::make_unique<PreRenderPass>();
 	preRenderPass->AddOutput("WorldPosition");
 	preRenderPass->AddOutput("Normal");
+	preRenderPass->AddOutput("ObjectID");
 	preRenderPass->SetClearTarget(true);
 	preRenderPass->SetDepthOutput("MainDepth", true);
 	renderPassScheduler.AddPass(std::move(preRenderPass));
@@ -204,7 +206,7 @@ void CommonSetupRenderPass(RenderPassScheduler& renderPassScheduler) {
 	particlePass->SetDepthOutput("MainDepth");
 	renderPassScheduler.AddPass(std::move(particlePass));
 
-	auto vignetting = std::make_unique<DissolvePass>();
+	auto vignetting = std::make_unique<VignettingPass>();
 	vignetting->AddInput("InputColor", "PostEffect");
 	vignetting->AddOutput("MainColor");
 	renderPassScheduler.AddPass(std::move(vignetting));
@@ -220,6 +222,7 @@ void CommonSetupDebugRenderPass(RenderPassScheduler& renderPassScheduler) {
 	auto preRenderPass = std::make_unique<PreRenderPass>();
 	preRenderPass->AddOutput("WorldPosition");
 	preRenderPass->AddOutput("Normal");
+	preRenderPass->AddOutput("ObjectID");
 	preRenderPass->SetClearTarget(true);
 	preRenderPass->SetDepthOutput("MainDepth", true);
 	preRenderPass->SetTargetCameraType(RenderPass::TargetCameraType::kDebug);

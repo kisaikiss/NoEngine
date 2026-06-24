@@ -23,6 +23,7 @@ private:
         Component::MaterialComponent* material;
         Component::TransformComponent* transform;
         Transform* local;
+        uint32_t id;
     };
     std::vector<DrawItem> items_;
 };

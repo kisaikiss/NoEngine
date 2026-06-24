@@ -36,7 +36,7 @@ void PreRenderPass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& res
 			animeLocal = &anime->local;
 		}
 
-		items_.push_back({ mesh->handle,material,transform,animeLocal });
+		items_.push_back({ mesh->handle,material,transform,animeLocal, static_cast<uint32_t>(entity)});
 	}
 
 	CameraComponent* camera = GetTargetCamera();
@@ -73,6 +73,16 @@ void PreRenderPass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& res
 		m.worldIT.Transpose();
 		gfx.SetDynamicConstantBufferView(rootIndex["gWorldMatrix"], sizeof(MeshConstants), &m);
 		gfx.SetDynamicConstantBufferView(rootIndex["gCameraMatrix"], sizeof(Component::CameraForGPU), &camera->forGPU);
+		__declspec(align(16))struct {
+			float id[4];
+		}constants;
+		Math::Color color = Math::Color(item.id);
+		constants.id[0] = color.r;
+		constants.id[1] = color.g;
+		constants.id[2] = color.b;
+		constants.id[3] = color.a;
+
+		gfx.SetDynamicConstantBufferView(rootIndex["gObjectID"], sizeof(constants), &constants);
 
 		auto* mesh = ModelSaver::Get().GetMesh(item.mesh);
 		if (!mesh) continue;
