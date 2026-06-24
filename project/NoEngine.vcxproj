@@ -341,6 +341,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="engine\Runtime\GpuResource\LinearAllocator\LinearAllocatorPageManager.cpp" />
     <ClCompile Include="engine\Runtime\GpuResource\PixelBuffer\ColorBuffer.cpp" />
     <ClCompile Include="engine\Runtime\GpuResource\PixelBuffer\PixelBuffer.cpp" />
+    <ClCompile Include="engine\Runtime\GpuResource\ReadbackBuffer.cpp" />
     <ClCompile Include="engine\Runtime\GpuResource\UploadBuffer.cpp" />
     <ClCompile Include="engine\Runtime\Graphics\GraphicsCommon.cpp" />
     <ClCompile Include="engine\Runtime\Graphics\GraphicsDevice.cpp" />
@@ -595,6 +596,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="engine\Runtime\GpuResource\LinearAllocator\LinearAllocatorType.h" />
     <ClInclude Include="engine\Runtime\GpuResource\PixelBuffer\ColorBuffer.h" />
     <ClInclude Include="engine\Runtime\GpuResource\PixelBuffer\PixelBuffer.h" />
+    <ClInclude Include="engine\Runtime\GpuResource\ReadbackBuffer.h" />
     <ClInclude Include="engine\Runtime\GpuResource\UploadBuffer.h" />
     <ClInclude Include="engine\Runtime\Graphics\GraphicsCommon.h" />
     <ClInclude Include="engine\Runtime\Graphics\GraphicsDevice.h" />

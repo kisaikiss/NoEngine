@@ -218,6 +218,7 @@
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\RadialBlurPass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\DissolvePass.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Asset\DissolveComponent.cpp" />
+    <ClCompile Include="engine\Runtime\GpuResource\ReadbackBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -446,6 +447,7 @@
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\RadialBlurPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\DissolvePass.h" />
     <ClInclude Include="engine\Functions\ECS\Component\Asset\DissolveComponent.h" />
+    <ClInclude Include="engine\Runtime\GpuResource\ReadbackBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />
