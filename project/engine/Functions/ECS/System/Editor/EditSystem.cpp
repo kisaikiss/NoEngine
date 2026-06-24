@@ -77,9 +77,40 @@ void EditSystem::Update(Registry& registry, float deltaTime) {
 		if (editorState_.selectedEntity != ECS::INVALID_ENTITY) {
 			Editor::EditorCommandOperator::AddCommand(std::make_unique<Command::DeleteEntityCommand>(registry, editorState_.selectedEntity));
 			registry.DestroyEntity(editorState_.selectedEntity);
+			LogInfo("DestroyEntity name : " + registry.GetComponent<Editor::EditTag>(editorState_.selectedEntity)->name);
 			editorState_.selectedEntity = ECS::INVALID_ENTITY;
 		}
 	}
+
+	// コピーやペーストを毎フレーム呼ばないためのインターバル計算
+	if (timeInterval_ > 0.0f) {
+		timeInterval_ -= deltaTime;
+	}
+
+	// コピー
+	if (Input::Keyboard::IsPress(VK_LCONTROL) && Input::Keyboard::IsPress('C')) {
+		if (editorState_.selectedEntity != ECS::INVALID_ENTITY) {
+			if (timeInterval_ <= 0.0f) {
+				copyObject_ = Editor::SaveEntityToJson(registry, editorState_.selectedEntity);
+				LogInfo("CopyObject name : " + registry.GetComponent<Editor::EditTag>(editorState_.selectedEntity)->name);
+				static constexpr float kIntervalTime = 0.3f;
+				timeInterval_ = kIntervalTime;
+			}
+		}
+	}
+
+	// ペースト
+	if (Input::Keyboard::IsPress(VK_LCONTROL) && Input::Keyboard::IsPress('V')) {
+		if (timeInterval_ <= 0.0f) {
+			auto pasteEntity = registry.GenerateEntity();
+			Editor::LoadEntityFromJson(registry, pasteEntity, copyObject_);
+			LogInfo("PasteObject originalName : " + registry.GetComponent<Editor::EditTag>(editorState_.selectedEntity)->name);
+			registry.AddComponent<Editor::EditSelectedTag>(pasteEntity);
+			static constexpr float kIntervalTime = 1.f;
+			timeInterval_ = kIntervalTime;
+		}
+	}
+
 #else
 	static_cast<void>(registry);
 #endif // USE_IMGUI

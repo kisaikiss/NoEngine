@@ -24,6 +24,10 @@ private:
     };
 
     EditorState editorState_;
+    // ctrl + cでコピーしたオブジェクトを一時保存する変数
+    nlohmann::json copyObject_;
+    // コピーやペーストを毎フレーム呼ばないためのインターバル計算用変数
+    float timeInterval_ = 0.0f;
 
     void SaveFile(Registry& registry, nlohmann::json j);
     void LoadFile(Registry& registry);
