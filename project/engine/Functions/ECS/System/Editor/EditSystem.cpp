@@ -9,6 +9,7 @@
 #include "engine/Functions/Command/EditCommand/InstantiateEntityCommand.h"
 #include "engine/Functions/Command/EditCommand/DeleteEntityCommand.h"
 
+#include "engine/Functions/Input/input.h"
 #ifdef USE_IMGUI
 #include "externals/imgui/imgui.h"
 #endif // USE_IMGUI
@@ -66,8 +67,18 @@ void EditSystem::Update(Registry& registry, float deltaTime) {
 
 
 	// 選択しているEntityを取得
-	for (auto e : registry.View<Editor::EditSelectedTag>()) {
+	for (auto e : registry.View<Editor::EditTag, Editor::EditSelectedTag>()) {
 		editorState_.selectedEntity = e;
+	}
+
+	// 選択しているEntityに対して何らかの操作をInputによって行う //
+	// 削除
+	if (Input::Keyboard::IsTrigger(VK_DELETE)) {
+		if (editorState_.selectedEntity != ECS::INVALID_ENTITY) {
+			Editor::EditorCommandOperator::AddCommand(std::make_unique<Command::DeleteEntityCommand>(registry, editorState_.selectedEntity));
+			registry.DestroyEntity(editorState_.selectedEntity);
+			editorState_.selectedEntity = ECS::INVALID_ENTITY;
+		}
 	}
 #else
 	static_cast<void>(registry);
