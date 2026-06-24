@@ -14,6 +14,7 @@ class Texture;
 class GraphicsContext;
 class ComputeContext;
 class UploadBuffer;
+class ReadbackBuffer;
 
 /// <summary>
 /// 描画・計算・リソース操作を抽象化するクラス
@@ -50,7 +51,8 @@ public:
 
 	void CopyBuffer(GpuResource& Dest, GpuResource& Src);
 	void CopyBufferRegion(GpuResource& Dest, size_t DestOffset, GpuResource& Src, size_t SrcOffset, size_t NumBytes);
-	
+	void CopyTextureRegion(GpuResource& Dest, UINT x, UINT y, UINT z, GpuResource& Source, RECT& rect);
+	void CopyPixelToBuffer(ReadbackBuffer& dest, GpuResource& source, UINT x, UINT y);
 
 	DynAlloc ReserveUploadMemory(size_t SizeInBytes) {
 	    return cpuLinearAllocator_.Allocate(SizeInBytes);

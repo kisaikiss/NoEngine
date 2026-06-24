@@ -12,6 +12,7 @@ using namespace Component;
 RenderContext::RenderContext() {
 	if (isInitialized_) return;
 	RenderInitializer::Initialize(*this);
+
 	isInitialized_ = true;
 }
 

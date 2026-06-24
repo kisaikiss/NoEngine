@@ -3,6 +3,7 @@
 #include "engine/Functions/ECS/Component/Transform2DComponent.h"
 #include "engine/Functions/ECS/Component/TransformComponent.h"
 #include "engine/Runtime/GraphicsCore.h"
+#include "engine/Runtime/Command/CommandContext.h"
 #include "engine/Functions/Renderer/Primitive.h"
 #include "engine/Functions/Renderer/RenderSystem.h"
 #include "engine/Functions/Command/EditCommand/ChangeValueCommand.h"
@@ -11,7 +12,7 @@
 #include "engine/Utilities/Conversion/ConvertString.h"
 #include "DataDriven/PrefabSerializer.h"
 #include "EditorCommandOperator.h"
-
+#include "engine/Functions/Input/input.h"
 #ifdef USE_IMGUI
 #include "externals/imgui/imgui.h"
 #endif // USE_IMGUI
@@ -121,6 +122,48 @@ std::unordered_set<std::string> CollectEditTagNames(ECS::Registry& registry, ECS
 		if (tag) names.insert(tag->name);
 	}
 	return names;
+}
+
+ECS::Entity PickObject(ECS::Registry& registry, ColorBuffer& idColorBuffer, ReadbackBuffer& readBackBuffer) {
+#ifdef USE_IMGUI
+
+	if (Input::Mouse::IsTrigger(Input::MouseButton::Left)) {
+		if (!Editor::IsMouseOverSceneWindow()) {
+			return ECS::INVALID_ENTITY;
+		}
+		(void)registry;
+		CommandContext& ctx = CommandContext::Begin(L"PickObject Context");
+
+		ctx.CopyPixelToBuffer(readBackBuffer, idColorBuffer, static_cast<UINT>(sSceneWindowMousePosition.x), static_cast<UINT>(sSceneWindowMousePosition.y));
+		ctx.Finish(true);
+
+		const uint8_t* pixelData = reinterpret_cast<const uint8_t*>(readBackBuffer.Map());
+
+		// DXGI_FORMAT_R8G8B8A8_UNORM はメモリ上では R, G, B, A の順で1バイトずつ格納されます
+		uint8_t r = pixelData[0];
+		uint8_t g = pixelData[1];
+		uint8_t b = pixelData[2];
+		uint8_t a = pixelData[3];
+
+		readBackBuffer.Unmap();
+
+		// RGB値からオブジェクトIDを復元する
+		uint32_t pickedID = (r << 24) | (g << 16) | (b << 8) | a;
+		constexpr uint32_t kNoObjectNumber = 1724754687;
+		if (pickedID == kNoObjectNumber) {
+			return ECS::INVALID_ENTITY;
+		}
+
+		return static_cast<ECS::Entity>(pickedID);
+	}
+#else
+	static_cast<void>(registry);
+	static_cast<void>(idColorBuffer);
+	static_cast<void>(readBackBuffer);
+
+#endif // USE_IMGUI
+
+	return ECS::INVALID_ENTITY;
 }
 
 void InitGameImGuiWindow(ColorBuffer& mainColor) {

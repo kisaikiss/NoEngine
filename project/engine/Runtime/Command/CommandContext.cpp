@@ -5,6 +5,7 @@
 #include "engine/Math/Common.h"
 
 #include "../GpuResource/UploadBuffer.h"
+#include "../GpuResource/ReadbackBuffer.h"
 
 namespace NoEngine {
 CommandContext::CommandContext(D3D12_COMMAND_LIST_TYPE type) :
@@ -110,9 +111,58 @@ void CommandContext::CopyBuffer(GpuResource& Dest, GpuResource& Src) {
 
 void CommandContext::CopyBufferRegion(GpuResource& Dest, size_t DestOffset, GpuResource& Src, size_t SrcOffset, size_t NumBytes) {
 	TransitionResource(Dest, D3D12_RESOURCE_STATE_COPY_DEST);
-	//TransitionResource(Src, D3D12_RESOURCE_STATE_COPY_SOURCE);
 	FlushResourceBarriers();
 	commandList_->CopyBufferRegion(Dest.GetResource(), DestOffset, Src.GetResource(), SrcOffset, NumBytes);
+}
+
+void CommandContext::CopyTextureRegion(GpuResource& dest, UINT x, UINT y, UINT z, GpuResource& source, RECT& rect) {
+	TransitionResource(dest, D3D12_RESOURCE_STATE_COPY_DEST);
+	TransitionResource(source, D3D12_RESOURCE_STATE_COPY_SOURCE);
+	FlushResourceBarriers();
+
+	D3D12_TEXTURE_COPY_LOCATION destLoc = CD3DX12_TEXTURE_COPY_LOCATION(dest.GetResource(), 0);
+	D3D12_TEXTURE_COPY_LOCATION srcLoc = CD3DX12_TEXTURE_COPY_LOCATION(source.GetResource(), 0);
+
+	D3D12_BOX box = {};
+	box.back = 1;
+	box.left = rect.left;
+	box.right = rect.right;
+	box.top = rect.top;
+	box.bottom = rect.bottom;
+
+	commandList_->CopyTextureRegion(&destLoc, x, y, z, &srcLoc, &box);
+}
+
+void CommandContext::CopyPixelToBuffer(ReadbackBuffer& dest, GpuResource& source, UINT x, UINT y) {
+	
+
+	// コピー元：2Dテクスチャ（IDを描画したColorBuffer）
+	D3D12_TEXTURE_COPY_LOCATION srcLoc = {};
+	srcLoc.pResource = source.GetResource();
+	srcLoc.Type = D3D12_TEXTURE_COPY_TYPE_SUBRESOURCE_INDEX;
+	srcLoc.SubresourceIndex = 0;
+
+	// コピー先：1Dバッファ（ReadbackBuffer）
+	D3D12_TEXTURE_COPY_LOCATION destLoc = {};
+	destLoc.pResource = dest.GetResource();
+	destLoc.Type = D3D12_TEXTURE_COPY_TYPE_PLACED_FOOTPRINT;
+	destLoc.PlacedFootprint.Offset = 0;
+	destLoc.PlacedFootprint.Footprint.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	destLoc.PlacedFootprint.Footprint.Width = 1;
+	destLoc.PlacedFootprint.Footprint.Height = 1;
+	destLoc.PlacedFootprint.Footprint.Depth = 1;
+	destLoc.PlacedFootprint.Footprint.RowPitch = D3D12_TEXTURE_DATA_PITCH_ALIGNMENT; // 256バイトアライメント必須
+
+	// 読み取る1ピクセル分のボックスを指定
+	D3D12_BOX box = {};
+	box.left = x;
+	box.right = x + 1;
+	box.top = y;
+	box.bottom = y + 1;
+	box.front = 0;
+	box.back = 1;
+
+	commandList_->CopyTextureRegion(&destLoc, 0, 0, 0, &srcLoc, &box);
 }
 
 void CommandContext::InitializeTexture(GpuResource& dest, UINT numSubresources, D3D12_SUBRESOURCE_DATA subData[]) {

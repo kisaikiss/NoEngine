@@ -37,6 +37,9 @@ private:
 
 	std::string screenDrawBufferName_ = "MainColor";
 
+	// クリックした場所のObjectIDテクスチャの色
+	ReadbackBuffer idReadbackBuffer_;
+
 	std::vector<std::unique_ptr<Render::RenderPass>> passes_;
 };
 

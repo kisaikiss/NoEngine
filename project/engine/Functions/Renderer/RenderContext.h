@@ -2,6 +2,7 @@
 #include "engine/Utilities/NonCopyable.h"
 #include "engine/Runtime/GpuResource/GpuBuffer.h"
 #include "engine/Runtime/GpuResource/UploadBuffer.h"
+#include "engine/Runtime/GpuResource/ReadbackBuffer.h"
 #include "engine/Runtime/Command/GraphicsContext.h"
 #include "engine/Functions/ECS/Registry.h"
 #include "PipelineState/GraphicsPSOManager.h"

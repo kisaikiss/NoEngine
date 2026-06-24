@@ -53,6 +53,10 @@ void RenderPassScheduler::Compile() {
 			node.depthOutput = builder.depthOutput_;
 		}
 	}
+
+#ifdef USE_IMGUI
+	idReadbackBuffer_.Create(L"ID_Readback_Buffer", 1, D3D12_TEXTURE_DATA_PITCH_ALIGNMENT);
+#endif // USE_IMGUI
 }
 
 
@@ -122,8 +126,15 @@ void RenderPassScheduler::Render(GraphicsContext& gfx, ECS::Registry& registry) 
 	gfx.TransitionResource(*resourceRegistry_.GetColorBufferPointer("DebugColor"), D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 	DrawGameImGuiWindow();
 	DrawSceneImGuiWindow(registry);
-#endif // USE_IMGUI
+	gfx.TransitionResource(*resourceRegistry_.GetColorBufferPointer("ObjectID"), D3D12_RESOURCE_STATE_COPY_SOURCE);
+	gfx.TransitionResource(idReadbackBuffer_, D3D12_RESOURCE_STATE_COPY_DEST);
+	gfx.FlushResourceBarriers();
+	auto e = PickObject(registry, *resourceRegistry_.GetColorBufferPointer("ObjectID"), idReadbackBuffer_);
+	if (e != ECS::INVALID_ENTITY) {
+		registry.AddComponent<Editor::EditSelectedTag>(e);
+	}
 
+#endif // USE_IMGUI
 
 }
 
