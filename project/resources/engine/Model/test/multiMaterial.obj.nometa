@@ -1,1 +1,4 @@
-{"AddressableName":"resources/engine/Model/test/multiMaterial.obj","SourceFile":"multiMaterial.obj"}
+{
+    "AddressableName": "multiMaterial",
+    "SourceFile": "multiMaterial.obj"
+}
