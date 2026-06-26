@@ -25,6 +25,10 @@ public:
 		for (const auto& output : outputs_) {
 			builder.WriteRenderTarget(output, autoClear_);
 		}
+		for (const auto& uavOutput : uavOutputs_) {
+			builder.WriteUnorderedAccessTarget(uavOutput);
+		}
+
 		if (!depthOutput_.empty()) {
 			builder.WriteDepthStencil(depthOutput_, clearDepth_);
 		}
@@ -34,6 +38,7 @@ public:
 
 	void AddInput(const std::string& role, const std::string& input) { inputs_[role] = input; }
 	void AddOutput(const std::string& output) { outputs_.emplace_back(output); }
+	void AddUAVOutput(const std::string& output) { uavOutputs_.emplace_back(output); }
 	void SetDepthOutput(const std::string& depth, bool clearDepth = false) { depthOutput_ = depth; clearDepth_ = clearDepth; }
 	void SetClearTarget(bool autoClear) { autoClear_ = autoClear; }
 	void SetTargetCameraType(TargetCameraType type) { targetCameraType_ = type; }
@@ -69,6 +74,7 @@ protected:
 private:
 	std::unordered_map<std::string, std::string> inputs_;
 	std::vector<std::string> outputs_;
+	std::vector<std::string> uavOutputs_;
 	std::string depthOutput_;
 	TargetCameraType targetCameraType_ = TargetCameraType::kMain;
 	std::string targetCameraName_ = "GameCamera";

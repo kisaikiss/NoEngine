@@ -38,7 +38,6 @@ UINT sBackBufferIndex;
 // WindowSize
 float sWindowWidth;
 float sWindowHeight;
-ColorBuffer sShadowMaskBuffer;
 
 GraphicsPSO defaultPSO(L"CopyImage");
 std::unique_ptr<RootSignature> defaultRootSignature;
@@ -175,7 +174,6 @@ void GraphicsCore::StartFrame(GraphicsContext& context) {
 }
 
 void GraphicsCore::EndFrame(GraphicsContext& context, ColorBuffer& finalColor) {
-	context.TransitionResource(sShadowMaskBuffer, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 	// 本描画
 	sBackBufferIndex = sSwapChain->GetSwapChain()->GetCurrentBackBufferIndex();
 	context.TransitionResource(*sFrameBuffers[sBackBufferIndex].get(), D3D12_RESOURCE_STATE_RENDER_TARGET);
@@ -203,10 +201,6 @@ void GraphicsCore::EndFrame(GraphicsContext& context, ColorBuffer& finalColor) {
 	}
 #endif
 	sSwapChain->Get()->Present(1, 0);
-}
-
-ColorBuffer& GraphicsCore::GetShadowMask() {
-	return sShadowMaskBuffer;
 }
 
 bool GraphicsCore::IsEnableRaytracing() {
@@ -238,7 +232,6 @@ void GraphicsCore::CreatePixelBuffer() {
 		sFrameBuffers[i] = std::make_unique<ColorBuffer>();
 		sFrameBuffers[i]->CreateFromSwapChain(L"Primary SwapChain Buffer", displayPlane.Detach());
 	}
-	sShadowMaskBuffer.Create(L"ShadowMask", static_cast<uint32_t>(sWindowWidth), static_cast<uint32_t>(sWindowHeight), 1, DXGI_FORMAT_R8_UNORM);
 	LogDebug("create pixel buffers");
 }
 
@@ -247,7 +240,6 @@ void GraphicsCore::DestroyPixelBuffer() {
 	for (auto& colorBuffer : sFrameBuffers) {
 		colorBuffer.reset();
 	}
-	sShadowMaskBuffer.Destroy();
 	LogDebug("destroy pixel buffers");
 }
 

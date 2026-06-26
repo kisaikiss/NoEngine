@@ -16,6 +16,10 @@ public:
         outputs_.push_back({ name, autoClear });
     }
 
+    void WriteUnorderedAccessTarget(const std::string& name) {
+        uavOutputs_.push_back({ name });
+    }
+
     void WriteDepthStencil(const std::string& name, bool autoClear = false) {
         depthOutput_ = { name, autoClear };
         hasDepthOutput_ = true;
@@ -29,6 +33,7 @@ private:
    
     std::vector<std::string> inputs_;
     std::vector<OutputDesc> outputs_;
+    std::vector<std::string> uavOutputs_;
     OutputDesc depthOutput_;
     bool hasDepthOutput_ = false;
     friend class RenderPassScheduler; // スケジューラがこの情報を回収する

@@ -49,6 +49,7 @@ void RenderPassScheduler::Compile() {
 		node.pass->SetRenderContext(&renderContext_);
 		node.inputs = builder.inputs_;
 		node.outputs = builder.outputs_;
+		node.uavOutputs = builder.uavOutputs_;
 		if (builder.hasDepthOutput_) {
 			node.hasDepthOutput = true;
 			node.depthOutput = builder.depthOutput_;
@@ -88,6 +89,13 @@ void RenderPassScheduler::Render(GraphicsContext& gfx, ECS::Registry& registry) 
 				if (output.autoClear) {
 					gfx.ClearColor(*buffer);
 				}
+			}
+		}
+
+		for (const auto& output : node.uavOutputs) {
+			ColorBuffer* buffer = resourceRegistry_.GetColorBufferPointer(output);
+			if (buffer) {
+				gfx.TransitionResource(*buffer, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 			}
 		}
 
@@ -159,7 +167,7 @@ void CommonSetupRenderPass(RenderPassScheduler& renderPassScheduler) {
 	InitGameImGuiWindow(*resourceRegistry.CreateColorBuffer("MainColor", windowSize.x, windowSize.y, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB));
 	
 
-	resourceRegistry.CreateColorBuffer("ShadowMap", windowSize.x, windowSize.y, DXGI_FORMAT_R8_UNORM);
+	resourceRegistry.CreateColorBuffer("ShadowMask", windowSize.x, windowSize.y, DXGI_FORMAT_R8_UNORM);
 	resourceRegistry.CreateColorBuffer("WorldPosition", windowSize.x, windowSize.y, DXGI_FORMAT_R32G32B32A32_FLOAT);
 	resourceRegistry.CreateColorBuffer("Normal", windowSize.x, windowSize.y, DXGI_FORMAT_R10G10B10A2_UNORM);
 	resourceRegistry.CreateColorBuffer("ObjectID", windowSize.x, windowSize.y, DXGI_FORMAT_R8G8B8A8_UNORM);
@@ -184,13 +192,13 @@ void CommonSetupRenderPass(RenderPassScheduler& renderPassScheduler) {
 	auto raytracingShadowPass = std::make_unique<RaytracingShadowPass>();
 	raytracingShadowPass->AddInput("WorldPosition", "WorldPosition");
 	raytracingShadowPass->AddInput("Normal", "Normal");
-	raytracingShadowPass->AddOutput("ShadowMap");
+	raytracingShadowPass->AddUAVOutput("ShadowMask");
 	raytracingShadowPass->SetClearTarget(true);
 
 	renderPassScheduler.AddPass(std::move(raytracingShadowPass));
 
 	auto meshPass = std::make_unique<MeshPass>();
-	meshPass->AddInput("ShadowMap", "ShadowMap");
+	meshPass->AddInput("ShadowMask", "ShadowMask");
 	meshPass->AddOutput("MainColor");
 	meshPass->SetDepthOutput("MainDepth");
 	meshPass->SetClearTarget(true);
@@ -247,13 +255,13 @@ void CommonSetupDebugRenderPass(RenderPassScheduler& renderPassScheduler) {
 	auto raytracingShadowPass = std::make_unique<RaytracingShadowPass>();
 	raytracingShadowPass->AddInput("WorldPosition", "WorldPosition");
 	raytracingShadowPass->AddInput("Normal", "Normal");
-	raytracingShadowPass->AddOutput("ShadowMap");
+	raytracingShadowPass->AddUAVOutput("ShadowMask");
 	raytracingShadowPass->SetClearTarget(true);
 	raytracingShadowPass->SetTargetCameraType(RenderPass::TargetCameraType::kDebug);
 	renderPassScheduler.AddPass(std::move(raytracingShadowPass));
 
 	auto meshPass = std::make_unique<MeshPass>();
-	meshPass->AddInput("ShadowMap", "ShadowMap");
+	meshPass->AddInput("ShadowMask", "ShadowMask");
 	meshPass->AddOutput("DebugColor");
 	meshPass->SetDepthOutput("MainDepth");
 	meshPass->SetClearTarget(true);

@@ -68,7 +68,6 @@ void MeshPass::Render(GraphicsContext& context, const RenderGraphRegistry& resou
 	(void)resourceRegistry;
 	std::string currentPSO = "";
 	auto* renderCtx = GetRenderContext();
-	context.TransitionResource(GraphicsCore::GetShadowMask(), D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 	for (auto& item : items_) {
 		auto& rootIndex = RootSignatureBuilder::GetRootIndexMap(item.psoName);
 		if (item.psoName != currentPSO) {
@@ -141,7 +140,7 @@ void MeshPass::Render(GraphicsContext& context, const RenderGraphRegistry& resou
 			context.SetDynamicConstantBufferView(rootIndex["gMaterial"], sizeof(constants), &constants);
 			auto* material = ModelSaver::Get().GetMaterial(item.materialHandles[subMesh.materialIndex]);
 			context.SetDynamicDescriptor(rootIndex["gTexture"], 0, material->textureHandle.GetSRV());
-			context.SetDynamicDescriptor(rootIndex["gShadowMask"], 0, GraphicsCore::GetShadowMask().GetSRV());
+			context.SetDynamicDescriptor(rootIndex["gShadowMask"], 0, resourceRegistry.GetColorBuffer("ShadowMask").GetSRV());
 			context.SetDynamicDescriptor(rootIndex["gEnvironmentTexture"], 0, skyBoxTexture_.GetSRV());
 			context.DrawIndexedInstanced(subMesh.indexCount, 1, subMesh.indexStart, subMesh.vertexStart, 0);
 		}

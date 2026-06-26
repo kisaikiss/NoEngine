@@ -46,8 +46,7 @@ void RaytracingShadowPass::Dispatch(GraphicsContext& gfx, const RenderGraphRegis
 	gfx.SetRaytracingDynamicDescriptor(2, 0, renderContext->GetDirectionalLightSRV());
 
 	// shadow Mask UAV
-	gfx.TransitionResource(GraphicsCore::GetShadowMask(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
-	gfx.SetRaytracingDynamicDescriptor(3, 0, GraphicsCore::GetShadowMask().GetUAV());
+	gfx.SetRaytracingDynamicDescriptor(3, 0, resourceRegistry.GetColorBuffer("ShadowMask").GetUAV());
 
 	// camera
 	struct CameraCB {

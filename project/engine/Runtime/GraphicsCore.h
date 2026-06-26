@@ -62,8 +62,6 @@ public:
 		return sDescriptorAllocator[Type].Allocate(Count);
 	}
 
-	static ColorBuffer& GetShadowMask();
-
 
 	/// <summary>
 	/// レイトレーシングが有効かどうかを判定する静的関数です。
