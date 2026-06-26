@@ -6,6 +6,8 @@ No::Entity cameraE;
 }
 
 void EngineTestScene::Setup() {
+	AddSystem(std::make_unique<No::EditSystem>());
+	AddSystem(std::make_unique<No::DrawManipulatorSystem>());
 	AddSystem(std::make_unique<TestSystem>());
 	AddSystem(std::make_unique<No::ModelLoadSystem>());
 	AddSystem(std::make_unique<No::AnimationSystem>());
@@ -13,7 +15,6 @@ void EngineTestScene::Setup() {
 	AddSystem(std::make_unique<No::ParticleEmitterSystem>());
 	AddSystem(std::make_unique<No::EffectEmitSystem>());
 	AddSystem(std::make_unique<No::ParticleSystem>());
-	AddSystem(std::make_unique<No::EditSystem>());
 	AddSystem(std::make_unique<No::DebugCameraSystem>());
 	AddSystem(std::make_unique<No::CameraSystem>());
 	AddSystem(std::make_unique<No::MovementSystem>());

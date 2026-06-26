@@ -3,6 +3,7 @@
         "AnimeCube": {
             "components": {
                 "AnimatorComponent": {
+                    "animationSpeedMagnification": 1.0,
                     "currentAnimation": 0,
                     "drawSkeleton": false
                 },
@@ -19,10 +20,35 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.0,
+                    "psoName": [
+                        82,
+                        101,
+                        110,
+                        100,
+                        101,
+                        114,
+                        101,
+                        114,
+                        32,
+                        58,
+                        32,
+                        68,
+                        101,
+                        102,
+                        97,
+                        117,
+                        108,
+                        116,
+                        32,
+                        80,
+                        83,
+                        79
+                    ],
                     "shininess": 60.0
                 },
                 "MeshComponent": {
-                    "isVisible": true
+                    "isVisible": true,
+                    "meshName": "AnimeCube"
                 },
                 "TransformComponent": {
                     "rotation": [
@@ -117,10 +143,35 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.0,
+                    "psoName": [
+                        82,
+                        101,
+                        110,
+                        100,
+                        101,
+                        114,
+                        101,
+                        114,
+                        32,
+                        58,
+                        32,
+                        68,
+                        101,
+                        102,
+                        97,
+                        117,
+                        108,
+                        116,
+                        32,
+                        80,
+                        83,
+                        79
+                    ],
                     "shininess": 60.0
                 },
                 "MeshComponent": {
-                    "isVisible": true
+                    "isVisible": true,
+                    "meshName": "resources/engine/Model/terrain/terrain.obj"
                 },
                 "TransformComponent": {
                     "rotation": [
@@ -157,7 +208,7 @@
                     "drawCenter": false,
                     "mousePositionX": 523,
                     "mousePositionY": 236,
-                    "mouseWheelY": -720.0,
+                    "mouseWheelY": -480.0,
                     "phi": 0.8928719758987427,
                     "theta": -0.08437954634428024
                 },
@@ -248,7 +299,18 @@
                     "path": "effectEmitter"
                 },
                 "EffectEmitterComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "count": 4,
+                    "emitRange": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
                     "maxLifeTime": 1.0,
                     "maxRotate": 3.1415927410125732,
                     "maxScale": [
@@ -272,7 +334,8 @@
                         0.0,
                         0.0,
                         0.0
-                    ]
+                    ],
+                    "textureName": "white1x1"
                 },
                 "TransformComponent": {
                     "rotation": [
@@ -302,8 +365,24 @@
                 },
                 "ParticleEmitterComponent": {
                     "active": false,
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "count": 10,
+                    "emitRange": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "frequency": 0.10000000149011612,
+                    "localPosition": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
                     "maxCount": 100,
                     "maxLifeTime": 6.0,
                     "maxSpeed": [
@@ -316,7 +395,8 @@
                         -1.0,
                         -1.0,
                         -1.0
-                    ]
+                    ],
+                    "textureName": "white1x1"
                 },
                 "TransformComponent": {
                     "rotation": [
@@ -346,8 +426,24 @@
                 },
                 "ParticleEmitterComponent": {
                     "active": false,
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "count": 10,
+                    "emitRange": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "frequency": 0.10000000149011612,
+                    "localPosition": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
                     "maxCount": 100,
                     "maxLifeTime": 6.0,
                     "maxSpeed": [
@@ -360,7 +456,8 @@
                         -1.0,
                         -1.0,
                         -1.0
-                    ]
+                    ],
+                    "textureName": "white1x1"
                 },
                 "TransformComponent": {
                     "rotation": [
@@ -390,8 +487,24 @@
                 },
                 "ParticleEmitterComponent": {
                     "active": false,
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "count": 10,
+                    "emitRange": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "frequency": 0.10000000149011612,
+                    "localPosition": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
                     "maxCount": 100,
                     "maxLifeTime": 6.0,
                     "maxSpeed": [
@@ -404,7 +517,8 @@
                         -1.0,
                         -1.0,
                         -1.0
-                    ]
+                    ],
+                    "textureName": "white1x1"
                 },
                 "TransformComponent": {
                     "rotation": [
@@ -429,6 +543,7 @@
         "girl": {
             "components": {
                 "AnimatorComponent": {
+                    "animationSpeedMagnification": 1.0,
                     "currentAnimation": 0,
                     "drawSkeleton": false
                 },
@@ -445,10 +560,42 @@
                     ],
                     "drawOutline": true,
                     "enviromentCoefficient": 0.0,
+                    "psoName": [
+                        82,
+                        101,
+                        110,
+                        100,
+                        101,
+                        114,
+                        101,
+                        114,
+                        32,
+                        58,
+                        32,
+                        68,
+                        101,
+                        102,
+                        97,
+                        117,
+                        108,
+                        116,
+                        83,
+                        107,
+                        105,
+                        110,
+                        110,
+                        101,
+                        100,
+                        32,
+                        80,
+                        83,
+                        79
+                    ],
                     "shininess": 60.0
                 },
                 "MeshComponent": {
-                    "isVisible": true
+                    "isVisible": true,
+                    "meshName": "resources/engine/Model/test/TD_girl/test7.gltf"
                 },
                 "TransformComponent": {
                     "rotation": [
@@ -485,6 +632,7 @@
                     ],
                     "drawOutline": true,
                     "enviromentCoefficient": 0.0,
+                    "psoName": [],
                     "shininess": 60.0
                 },
                 "TransformComponent": {

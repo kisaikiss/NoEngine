@@ -90,7 +90,7 @@ void EditSystem::Update(Registry& registry, float deltaTime) {
 	// コピー
 	if (Input::Keyboard::IsPress(VK_LCONTROL) && Input::Keyboard::IsPress('C')) {
 		if (editorState_.selectedEntity != ECS::INVALID_ENTITY) {
-			if (timeInterval_ <= 0.0f) {
+			if (!ImGui::IsAnyItemActive() && timeInterval_ <= 0.0f) {
 				copyObject_ = Editor::SaveEntityToJson(registry, editorState_.selectedEntity);
 				LogInfo("CopyObject name : " + registry.GetComponent<Editor::EditTag>(editorState_.selectedEntity)->name);
 				static constexpr float kIntervalTime = 0.3f;
@@ -102,7 +102,7 @@ void EditSystem::Update(Registry& registry, float deltaTime) {
 	// ペースト
 	if (Input::Keyboard::IsPress(VK_LCONTROL) && Input::Keyboard::IsPress('V')) {
 		if (timeInterval_ <= 0.0f) {
-			if (!ImGui::IsItemActivated() && !copyObject_.empty()) {
+			if (!ImGui::IsAnyItemActive() && !copyObject_.empty()) {
 				auto pasteEntity = registry.GenerateEntity();
 				Editor::LoadEntityFromJson(registry, pasteEntity, copyObject_);
 				LogInfo("PasteObject originalName : " + registry.GetComponent<Editor::EditTag>(editorState_.selectedEntity)->name);
