@@ -102,12 +102,14 @@ void EditSystem::Update(Registry& registry, float deltaTime) {
 	// ペースト
 	if (Input::Keyboard::IsPress(VK_LCONTROL) && Input::Keyboard::IsPress('V')) {
 		if (timeInterval_ <= 0.0f) {
-			auto pasteEntity = registry.GenerateEntity();
-			Editor::LoadEntityFromJson(registry, pasteEntity, copyObject_);
-			LogInfo("PasteObject originalName : " + registry.GetComponent<Editor::EditTag>(editorState_.selectedEntity)->name);
-			registry.AddComponent<Editor::EditSelectedTag>(pasteEntity);
-			static constexpr float kIntervalTime = 1.f;
-			timeInterval_ = kIntervalTime;
+			if (!ImGui::IsItemActivated() && !copyObject_.empty()) {
+				auto pasteEntity = registry.GenerateEntity();
+				Editor::LoadEntityFromJson(registry, pasteEntity, copyObject_);
+				LogInfo("PasteObject originalName : " + registry.GetComponent<Editor::EditTag>(editorState_.selectedEntity)->name);
+				registry.AddComponent<Editor::EditSelectedTag>(pasteEntity);
+				static constexpr float kIntervalTime = 1.f;
+				timeInterval_ = kIntervalTime;
+			}
 		}
 	}
 

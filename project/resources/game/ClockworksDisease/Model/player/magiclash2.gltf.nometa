@@ -1,1 +1,4 @@
-{"AddressableName":"resources/game/ClockworksDisease/Model/player/magiclash2.gltf","SourceFile":"magiclash2.gltf"}
+{
+    "AddressableName": "magiclash2",
+    "SourceFile": "magiclash2.gltf"
+}
