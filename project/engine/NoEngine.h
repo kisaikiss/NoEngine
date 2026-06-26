@@ -19,8 +19,8 @@
 
 #include "Functions/ECS/System/Loader/SpriteLoadSystem.h"
 #include "Functions/ECS/System/Loader/ModelLoadSystem.h"
-#include "Functions/ECS/System/AnimationSystem.h"
-#include "Functions/ECS/System/SpriteAnimationSystem.h"
+#include "Functions/ECS/System/Animation/AnimationSystem.h"
+#include "Functions/ECS/System/Animation/SpriteAnimationSystem.h"
 #include "Functions/ECS/System/Editor/EditSystem.h"
 #include "Functions/ECS/System/Editor/DrawManipulatorSystem.h"
 #include "Functions/ECS/System/Camera/CameraSystem.h"

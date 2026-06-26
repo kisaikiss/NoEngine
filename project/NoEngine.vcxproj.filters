@@ -41,7 +41,7 @@
     <ClCompile Include="engine\Assets\Model\ModelLoader.cpp" />
     <ClCompile Include="engine\Assets\Texture\TexUtil.cpp" />
     <ClCompile Include="engine\Functions\ECS\Registry.cpp" />
-    <ClCompile Include="engine\Functions\ECS\System\AnimationSystem.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\Animation\AnimationSystem.cpp" />
     <ClCompile Include="engine\Functions\Input\Input.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderContext.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PrePasses\LightPass.cpp" />
@@ -138,7 +138,7 @@
     <ClCompile Include="engine\Utilities\Random.cpp" />
     <ClCompile Include="engine\Functions\Scene\IScene.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\SystemManager.cpp" />
-    <ClCompile Include="engine\Functions\ECS\System\SpriteAnimationSystem.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\Animation\SpriteAnimationSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Asset\MaterialComponent.cpp" />
     <ClCompile Include="application\ClockworksDisease\ClockworksDisease.cpp" />
     <ClCompile Include="application\ClockworksDisease\Scene\TestScene.cpp" />
@@ -241,7 +241,7 @@
     <ClInclude Include="engine\Functions\ECS\ComponentPool.h" />
     <ClInclude Include="engine\Functions\ECS\Entity.h" />
     <ClInclude Include="engine\Functions\ECS\Registry.h" />
-    <ClInclude Include="engine\Functions\ECS\System\AnimationSystem.h" />
+    <ClInclude Include="engine\Functions\ECS\System\Animation\AnimationSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\ISystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\SystemManager.h" />
     <ClInclude Include="engine\Functions\Input\Input.h" />
@@ -365,7 +365,7 @@
     <ClInclude Include="engine\Utilities\Random.h" />
     <ClInclude Include="engine\Functions\ECS\Component\PauseComponent.h" />
     <ClInclude Include="engine\Functions\ECS\Component\Asset\Animator2DComponent.h" />
-    <ClInclude Include="engine\Functions\ECS\System\SpriteAnimationSystem.h" />
+    <ClInclude Include="engine\Functions\ECS\System\Animation\SpriteAnimationSystem.h" />
     <ClInclude Include="engine\Functions\Renderer\LightForGPU.h" />
     <ClInclude Include="application\ClockworksDisease\ClockworksDisease.h" />
     <ClInclude Include="application\ClockworksDisease\Scene\TestScene.h" />
