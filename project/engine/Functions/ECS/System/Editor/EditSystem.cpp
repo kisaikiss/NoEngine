@@ -217,6 +217,7 @@ void EditSystem::DrawFolderNode(FolderNode& node, ECS::Registry& registry, const
 
 	// フォルダのクリック選択
 	if (ImGui::IsItemClicked() && node.folderEntity != INVALID_ENTITY) {
+		editorState_.selectedEntity = node.folderEntity;
 		registry.AddComponent<Editor::EditSelectedTag>(editorState_.selectedEntity);
 	}
 

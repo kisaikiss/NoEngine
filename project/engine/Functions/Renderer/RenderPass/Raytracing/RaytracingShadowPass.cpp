@@ -29,7 +29,7 @@ void RaytracingShadowPass::Dispatch(GraphicsContext& gfx, const RenderGraphRegis
 	auto& stateObject = Render::GetShadowRtStateObject();
 	auto* renderContext = GetRenderContext();
 
-	if (!renderContext->GetTLAS().Get()) return;
+	if (!renderContext->GetTLAS().Get() || !camera_) return;
 
 	gfx.SetRaytracingRootSignature(Render::GetRootSignature(Render::GetRootSignatureID(L"RT Global RootSignature")));
 	

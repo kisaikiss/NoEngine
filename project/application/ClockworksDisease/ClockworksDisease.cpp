@@ -1,8 +1,9 @@
 #include "ClockworksDisease.h"
 #include "Scene/TestScene.h"
+#include "Scene/GameScene.h"
 
 void ClockworksDisease::Startup(void) {
-	RegisterScene("TestScene", []() { return std::make_unique<TestScene>();	});
+	RegisterScene("TestScene", []() { return std::make_unique<GameScene>();	});
 	ChangeScene("TestScene");
 
 	No::InputBindAxis("Horizontal", No::DeviceType::GamepadAxis, static_cast<int>(No::GamepadAxis::LeftStickX), 1.0f, 0.2f);
