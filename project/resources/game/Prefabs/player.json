@@ -3,15 +3,15 @@
         "CapsuleCollider": {
             "localP0": [
                 0.0,
-                0.8500000238418579,
+                0.3499999940395355,
                 0.0
             ],
             "localP1": [
                 0.0,
-                2.549999952316284,
+                1.350000023841858,
                 0.0
             ],
-            "radius": 0.8500000238418579
+            "radius": 0.3499999940395355
         },
         "CollisionBody": {
             "type": 0
@@ -64,7 +64,7 @@
             "textureName": "smokeEffect"
         },
         "GroundStateComponent": {
-            "groundHeight": 2.4995484352111816,
+            "groundHeight": -0.02888958901166916,
             "isGrounded": true
         },
         "MaterialComponent": {
@@ -142,27 +142,27 @@
             "textureName": "smokeEffect"
         },
         "PlayerComponent": {
-            "gravity": -15.0,
+            "gravity": -7.0,
             "infinityJump": false,
-            "jumpSpeed": 10.0,
-            "moveSpeed": 10.0
+            "jumpSpeed": 7.0,
+            "moveSpeed": 5.0
         },
         "TransformComponent": {
             "rotation": [
-                1.401298464324817e-45,
-                -0.6489054560661316,
-                -1.401298464324817e-45,
-                0.760869026184082
+                -1.2558002993046102e-07,
+                0.7364040017127991,
+                1.366916109191152e-07,
+                -0.6765420436859131
             ],
             "scale": [
-                2.0,
-                2.0,
-                2.0
+                1.0,
+                1.0,
+                1.0
             ],
             "translate": [
-                79.98493957519531,
-                2.4995484352111816,
-                -84.15394592285156
+                -10.115778923034668,
+                -0.02888958901166916,
+                1.4430140256881714
             ]
         },
         "VelocityComponent": {

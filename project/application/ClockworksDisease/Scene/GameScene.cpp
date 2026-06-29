@@ -24,9 +24,9 @@ void GameScene::Setup() {
 		auto e = registry.GenerateEntity();
 		auto* t = registry.AddComponent<No::TerrainMesh>(e);
 		auto* bm = registry.AddComponent<No::MeshComponent>(e);
-		No::LoadMeshCollider("resources/game/ClockworksDisease/Model/Area1/Area1.obj", t);
+		No::LoadMeshCollider("resources/game/ClockworksDisease/Model/StageMap/testStage.obj", t);
 		registry.AddComponent<CollisionLayerComponent>(e)->layer = CollisionLayerComponent::Terrain;
-		bm->meshName = "resources/game/ClockworksDisease/Model/Area1/Area1.obj";
+		bm->meshName = "resources/game/ClockworksDisease/Model/StageMap/testStage.obj";
 		auto* bmm = registry.AddComponent<No::MaterialComponent>(e);
 		bmm->psoName = L"Renderer : Default PSO";
 		bmm->rootSigId = NoEngine::Render::GetRootSignatureID(bmm->psoName);

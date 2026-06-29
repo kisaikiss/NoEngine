@@ -1,6 +1,7 @@
 {
     "components": {
         "AnimatorComponent": {
+            "animationSpeedMagnification": 1.0,
             "currentAnimation": 0,
             "drawSkeleton": false
         },
@@ -108,14 +109,14 @@
                 1.0
             ],
             "scale": [
-                2.0,
-                2.0,
-                2.0
+                1.0,
+                1.0,
+                1.0
             ],
             "translate": [
-                11.002925872802734,
-                5.821599960327148,
-                -83.5922622680664
+                10.149311065673828,
+                3.36716365814209,
+                -0.4090346693992615
             ]
         }
     }

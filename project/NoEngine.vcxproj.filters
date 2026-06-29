@@ -141,7 +141,6 @@
     <ClCompile Include="engine\Functions\ECS\System\Animation\SpriteAnimationSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Asset\MaterialComponent.cpp" />
     <ClCompile Include="application\ClockworksDisease\ClockworksDisease.cpp" />
-    <ClCompile Include="application\ClockworksDisease\Scene\TestScene.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Player\PlayerMoveSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Camera\FollowCameraSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\VelocityComponent.cpp" />
@@ -369,7 +368,6 @@
     <ClInclude Include="engine\Functions\ECS\System\Animation\SpriteAnimationSystem.h" />
     <ClInclude Include="engine\Functions\Renderer\LightForGPU.h" />
     <ClInclude Include="application\ClockworksDisease\ClockworksDisease.h" />
-    <ClInclude Include="application\ClockworksDisease\Scene\TestScene.h" />
     <ClInclude Include="application\ClockworksDisease\Component\Player\PlayerComponent.h" />
     <ClInclude Include="application\ClockworksDisease\System\Player\PlayerMoveSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Camera\FollowCameraSystem.h" />

@@ -26,14 +26,14 @@ void BigBadgeSystem::Update(No::Registry& registry, float deltaTime) {
 			registry.GetComponent<No::AnimatorComponent>(e)->animationSpeedMagnification = 50.f;
 			const float kScaleThetaDeltaTimeMagnification = 2.f;
 			badge->scaleT += deltaTime * kScaleThetaDeltaTimeMagnification;
-			transform->scale = No::EaseInBack(No::Vector3(4.f, 4.f, 4.f), No::Vector3::ZERO, badge->scaleT);
+			transform->scale = No::EaseInBack(No::Vector3(2.f, 2.f, 2.f), No::Vector3::ZERO, badge->scaleT);
 			if (badge->scaleT > 1.f) {
 				registry.AddComponent<No::EffectEmitTag>(e);
 				registry.DestroyEntity(e);
 			}
 		}
 
-		const float kFinalPositionOffset = 5.5f;
+		const float kFinalPositionOffset = 3.0f;
 		const float kPositionOffset = 1.f;
 		badge->yPositionOffset = No::EaseInExpo(0.f, kFinalPositionOffset, badge->t);
 

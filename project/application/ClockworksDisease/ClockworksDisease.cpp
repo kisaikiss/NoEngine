@@ -1,5 +1,4 @@
 #include "ClockworksDisease.h"
-#include "Scene/TestScene.h"
 #include "Scene/GameScene.h"
 
 void ClockworksDisease::Startup(void) {
