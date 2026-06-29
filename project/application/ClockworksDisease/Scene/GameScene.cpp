@@ -18,26 +18,6 @@ void GameScene::Setup() {
 	AddSystems();
 	auto& registry = *GetRegistry();
 
-	// カメラ
-	{
-		auto camera = registry.GenerateEntity();
-		registry.AddComponent<No::ActiveCameraTag>(camera);
-		registry.AddComponent<No::CameraComponent>(camera);
-		registry.AddComponent<FollowCameraComponent>(camera);
-		auto* cameraEditTag = registry.AddComponent<No::EditTag>(camera);
-		cameraEditTag->name = "GameCamera";
-		registry.AddComponent<No::TransformComponent>(camera);
-	}
-	{
-		auto camera = registry.GenerateEntity();
-		registry.AddComponent<No::CameraComponent>(camera);
-		registry.AddComponent<No::DebugCameraComponent>(camera);
-		registry.AddComponent<No::TransformComponent>(camera);
-		auto* cameraEditTag = registry.AddComponent<No::EditTag>(camera);
-		cameraEditTag->name = "DebugCamera";
-	}
-
-
 	// 地形
 	// ToDo: コンストラクタかエディタ上で指定できるようにする
 	{

@@ -1174,7 +1174,7 @@
                     "drawCenter": false,
                     "mousePositionX": 615,
                     "mousePositionY": 348,
-                    "mouseWheelY": -10320.0,
+                    "mouseWheelY": 0.0,
                     "phi": 1.4858609437942505,
                     "theta": -0.20588918030261993
                 },
@@ -1204,6 +1204,7 @@
         },
         "GameCamera": {
             "components": {
+                "ActiveCameraTag": null,
                 "CameraComponent": {
                     "fov": 0.44999998807907104
                 },

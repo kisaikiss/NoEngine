@@ -1,6 +1,8 @@
 #include "CameraComponent.h"
 #include "engine/Editor/ReflectionMacros.h"
 
+REFLECT_STRUCT_BEGIN(NoEngine::Component::ActiveCameraTag)
+REFLECT_STRUCT_END(NoEngine::Component::ActiveCameraTag)
 
 REFLECT_STRUCT_BEGIN(NoEngine::Component::DebugCameraComponent)
 REFLECT_FIELD(center),
