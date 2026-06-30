@@ -285,6 +285,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\GaussianFilterPass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\GrayscalePass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\RadialBlurPass.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\RandomNoisePass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\VignettingPass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PrePasses\LightPass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\Rasterization\MeshPass.cpp" />
@@ -532,6 +533,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\GaussianFilterPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\GrayscalePass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\RadialBlurPass.h" />
+    <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\RandomNoisePass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\VignettingPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PrePasses\LightPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\Rasterization\MeshPass.h" />
@@ -861,6 +863,14 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
+    <FxCompile Include="resources\engine\Shaders\RandomNoise.PS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Development|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
     <FxCompile Include="resources\engine\Shaders\Raytracing\RayTracingShadowLib.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
@@ -947,6 +957,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
       <FileType>Document</FileType>
     </ClInclude>
     <None Include="resources\engine\Shaders\Default.hlsli" />
+    <None Include="resources\engine\Shaders\Random.hlsli" />
     <None Include="resources\game\Shaders\ShaderMathUtil.hlsli" />
     <None Include="resources\game\td_2304\Json\tdSpriteConfig.json" />
   </ItemGroup>

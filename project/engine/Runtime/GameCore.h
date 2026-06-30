@@ -109,5 +109,7 @@ float CalculateDeltaTime();
 /// </summary>
 /// <param name="deltaTime">前フレームからの経過時間</param>
 void DrawPerformance(float deltaTime);
+
+float GetElapsedTime();
 };
 }

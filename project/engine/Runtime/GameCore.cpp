@@ -25,6 +25,7 @@ namespace GameCore {
 namespace {
 std::chrono::steady_clock::time_point sLastTickTime{ std::chrono::steady_clock::now() };
 
+static float sElapsedTime = 0.f;
 static float sFrameTimes[120] = {};
 static int sFrameIndex = 0;
 }
@@ -71,7 +72,7 @@ int RunApplication(std::unique_ptr<IGameApp> game) {
 #endif // USE_IMGUI
 
 		float deltaTime = CalculateDeltaTime();
-		if (deltaTime > 0.1f) deltaTime = 0.1f;
+		sElapsedTime += deltaTime;
 		game->Update(ctx, deltaTime);
 		Editor::EditorCommandOperator::Update(deltaTime);
 		renderPassScheduler.Render(context, game->GetRegistry());
@@ -176,6 +177,10 @@ void DrawPerformance(float deltaTime) {
 	static_cast<void>(deltaTime);
 #endif // USE_IMGUI
 
+}
+
+float GetElapsedTime() {
+	return sElapsedTime;
 }
 
 }

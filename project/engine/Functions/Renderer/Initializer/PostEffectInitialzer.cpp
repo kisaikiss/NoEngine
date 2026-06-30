@@ -64,8 +64,10 @@ void PostEffectInitialzer::CreatePSO(RenderContext& ctx) {
 	ShaderModule radialPS(ShaderStage::Pixel, L"resources/engine/Shaders/RadialBlur.PS.hlsl", L"ps_6_0");
 	defaultPSO.SetPixelShader(radialPS.GetBytecode());
 	defaultPSO.Finalize();
-
 	ctx.RegisterGraphicsPSO("Renderer : RadialBlur PSO", defaultPSO);
+
+	
+
 	{
 		ShaderModule boxFilterPS(ShaderStage::Pixel, L"resources/engine/Shaders/BoxFilter.PS.hlsl", L"ps_6_0");
 
@@ -123,5 +125,21 @@ void PostEffectInitialzer::CreatePSO(RenderContext& ctx) {
 		ctx.RegisterRootSignature("Renderer : Dissolve", std::move(rootSignature));
 	}
 
+	{
+		ShaderModule pixelShader(ShaderStage::Pixel, L"resources/engine/Shaders/RandomNoise.PS.hlsl", L"ps_6_0");
+		const ShaderReflection& pixelShaderReflection = pixelShader.GetReflection();
+		std::vector<ShaderReflection> reflections;
+		reflections.push_back(vsReflection);
+		reflections.push_back(pixelShaderReflection);
+
+		RootSignature rootSignature;
+		RootSignatureBuilder::BuildFromReflection(reflections, rootSignature, "Renderer : RandomNoise");
+
+		defaultPSO.SetPixelShader(pixelShader.GetBytecode());
+		defaultPSO.SetRootSignature(rootSignature);
+		defaultPSO.Finalize();
+		ctx.RegisterGraphicsPSO("Renderer : RandomNoise PSO", defaultPSO);
+		ctx.RegisterRootSignature("Renderer : RandomNoise", std::move(rootSignature));
+	}
 }
 }
