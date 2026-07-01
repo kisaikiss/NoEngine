@@ -264,8 +264,11 @@ void CommandContext::TransitionResource(GpuResource& resource, D3D12_RESOURCE_ST
 }
 
 void CommandContext::InsertUAVBarrier(GpuResource& Resource, bool FlushImmediate) {
-	LogCritical("Exceeded arbitrary limit on buffered barriers");
-	assert(numBarriersToFlush_ < 16);
+
+	if (numBarriersToFlush_ >= 16) {
+		LogCritical("Exceeded arbitrary limit on buffered barriers");
+		assert(false);
+	}
 	D3D12_RESOURCE_BARRIER& BarrierDesc = resourceBarrierBuffer_[numBarriersToFlush_++];
 
 	BarrierDesc.Type = D3D12_RESOURCE_BARRIER_TYPE_UAV;
