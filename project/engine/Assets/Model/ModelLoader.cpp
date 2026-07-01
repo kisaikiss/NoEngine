@@ -353,7 +353,7 @@ RaytracingMesh ModelLoader::ProcessRaytracingMesh(const Mesh& mesh) {
 
 	// BLAS inputs
 	rtMesh.inputs.Type = D3D12_RAYTRACING_ACCELERATION_STRUCTURE_TYPE_BOTTOM_LEVEL;
-	rtMesh.inputs.Flags = D3D12_RAYTRACING_ACCELERATION_STRUCTURE_BUILD_FLAG_PREFER_FAST_TRACE;
+	rtMesh.inputs.Flags = D3D12_RAYTRACING_ACCELERATION_STRUCTURE_BUILD_FLAG_ALLOW_UPDATE;
 	rtMesh.inputs.NumDescs = (UINT)rtMesh.geometries.size();
 	rtMesh.inputs.DescsLayout = D3D12_ELEMENTS_LAYOUT_ARRAY;
 	rtMesh.inputs.pGeometryDescs = &rtMesh.geometries[0].geometryDesc;
@@ -370,6 +370,10 @@ RaytracingMesh ModelLoader::ProcessRaytracingMesh(const Mesh& mesh) {
 		D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
 
 	auto scratchDesc = CD3DX12_RESOURCE_DESC::Buffer(prebuildInfo.ScratchDataSizeInBytes,
+		D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
+
+	auto updateScratchDesc = CD3DX12_RESOURCE_DESC::Buffer(
+		prebuildInfo.UpdateScratchDataSizeInBytes,
 		D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
 
 	D3D12_HEAP_PROPERTIES defaultHeapProps{};
@@ -395,6 +399,15 @@ RaytracingMesh ModelLoader::ProcessRaytracingMesh(const Mesh& mesh) {
 		D3D12_RESOURCE_STATE_COMMON,
 		nullptr,
 		IID_PPV_ARGS(&rtMesh.scratch)
+	);
+
+	GraphicsCore::sGraphicsDevice->GetDevice()->CreateCommittedResource(
+		&defaultHeapProps,
+		D3D12_HEAP_FLAG_NONE,
+		&updateScratchDesc,
+		D3D12_RESOURCE_STATE_COMMON,
+		nullptr,
+		IID_PPV_ARGS(&rtMesh.updateScratch)
 	);
 
 	// BLASのビルドコマンド発行

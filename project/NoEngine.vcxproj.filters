@@ -221,6 +221,7 @@
     <ClCompile Include="engine\Runtime\GpuResource\ReadbackBuffer.cpp" />
     <ClCompile Include="application\ClockworksDisease\Scene\GameScene.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\RandomNoisePass.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\RenderPass\PrePasses\BLASUpdatePass.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -451,6 +452,7 @@
     <ClInclude Include="engine\Runtime\GpuResource\ReadbackBuffer.h" />
     <ClInclude Include="application\ClockworksDisease\Scene\GameScene.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\RandomNoisePass.h" />
+    <ClInclude Include="engine\Functions\Renderer\RenderPass\PrePasses\BLASUpdatePass.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

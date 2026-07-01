@@ -5,6 +5,7 @@
 #include "PrePasses/LightPass.h"
 #include "Rasterization/ParticlePass.h"
 #include "PrePasses/TLASBuildPass.h"
+#include "PrePasses/BLASUpdatePass.h"
 #include "PrePasses/PreRenderPass.h"
 #include "Raytracing/RaytracingShadowPass.h"
 #include "Rasterization/SkyBoxPass.h"
@@ -178,7 +179,7 @@ void CommonSetupRenderPass(RenderPassScheduler& renderPassScheduler) {
 	
 	resourceRegistry.CreateDepthBuffer("MainDepth", windowSize.x, windowSize.y);
 
-
+	renderPassScheduler.AddPass(std::make_unique<BLASUpdatePass>());
 	renderPassScheduler.AddPass(std::make_unique<TLASBuildPass>());
 	renderPassScheduler.AddPass(std::make_unique<LightPass>());
 
