@@ -48,7 +48,8 @@ struct Mesh {
 	std::unordered_map<std::string, JointWeightData> skinClusterData;
 	std::vector<Vertex> vertices;
 	std::vector<uint32_t> indices;
-	ByteAddressBuffer vertexBuffer;
+	StructuredBuffer baseVertexBuffer;
+	StructuredBuffer useVertexBuffer;
 	ByteAddressBuffer indexBuffer;
 	Node rootNode;
 	std::vector<SubMesh> subMeshes; // モデルに複数のメッシュが含まれている場合のaiMeshごとの範囲
@@ -56,7 +57,6 @@ struct Mesh {
 
 	std::unique_ptr<RaytracingMesh> raytracingMesh; // レイトレーシング有効時のみ生成
 
-	// ToDo : スキニングの情報はメッシュが持つものではないので、別の構造体へ移動します。
 	std::vector<SkeletonWell> mappedPalette;
 	UploadBuffer paletteUpload;
 	StructuredBuffer paletteResource;

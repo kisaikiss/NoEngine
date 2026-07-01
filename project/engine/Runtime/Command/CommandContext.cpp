@@ -204,7 +204,7 @@ void CommandContext::InitializeBuffer(GpuBuffer& dest, const UploadBuffer& src, 
 	// データを中間アップロードヒープにコピーし、アップロードヒープからデフォルトテクスチャへのコピーをスケジュールします。
 	InitContext.TransitionResource(dest, D3D12_RESOURCE_STATE_COPY_DEST, true);
 	InitContext.commandList_->CopyBufferRegion(dest.GetResource(), destOffset, (ID3D12Resource*)src.GetResource(), srcOffset, numBytes);
-	InitContext.TransitionResource(dest, D3D12_RESOURCE_STATE_GENERIC_READ, true);
+	InitContext.TransitionResource(dest, D3D12_RESOURCE_STATE_COMMON, true);
 
 	// コマンドリストを実行し、アップロードバッファを解放できるように完了するまで待ちます。
 	InitContext.Finish(true);

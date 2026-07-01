@@ -12,7 +12,7 @@ namespace Render {
 using namespace Component;
 
 MeshPass::MeshPass() : camera_(nullptr) {
-	
+
 	skyBoxTexture_ = TextureManager::LoadTextureFile("resources/engine/Texture/rostock_laage_airport_4k.dds");
 }
 
@@ -89,7 +89,7 @@ void MeshPass::Render(GraphicsContext& context, const RenderGraphRegistry& resou
 			m.world = item.transform->MakeAffineMatrix4x4();
 			m.worldIT = m.world;
 		}
-		
+
 		m.worldIT.Inverse();
 		m.worldIT.Transpose();
 		context.SetDynamicConstantBufferView(rootIndex["gWorldMatrix"], sizeof(MeshConstants), &m);
@@ -116,15 +116,8 @@ void MeshPass::Render(GraphicsContext& context, const RenderGraphRegistry& resou
 		}
 		auto* mesh = ModelSaver::Get().GetMesh(item.meshHandle);
 		if (!mesh) continue;
-		context.SetVertexBuffer(0, mesh->vertexBuffer.VertexBufferView());
+		context.SetVertexBuffer(0, mesh->useVertexBuffer.VertexBufferView());
 		context.SetIndexBuffer(mesh->indexBuffer.IndexBufferView());
-
-		if (mesh->numJoints && item.material->enableSkinning) {
-
-			context.CopyBufferRegion(mesh->paletteResource, 0, mesh->paletteUpload, 0, sizeof(SkeletonWell) * mesh->mappedPalette.size());
-
-			context.SetDynamicDescriptor(rootIndex["gJoints"], 0, mesh->paletteResource.GetSRV());
-		}
 
 		for (const auto& subMesh : mesh->subMeshes) {
 
@@ -154,11 +147,7 @@ void MeshPass::RenderOutline(GraphicsContext& context) {
 	uint32_t a = renderCtx->GetRootSignatureID(outlinePSOName_);
 	a;
 	outlinePSOID_ = renderCtx->GetPSOID(outlinePSOName_);
-	outlineSkinnedPSOName_ = "Renderer : skinnedOutline PSO";
-	outlineSkinnedPSOID_ = renderCtx->GetPSOID(outlineSkinnedPSOName_);
 
-	bool currentPSOEnableSkinning = false;
-	std::string currentPSOName = outlinePSOName_;
 	context.SetPipelineState(renderCtx->GetGraphicsPSO(outlinePSOID_));
 	context.SetRootSignature(renderCtx->GetRootSignature(outlinePSOID_));
 	context.SetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -166,22 +155,7 @@ void MeshPass::RenderOutline(GraphicsContext& context) {
 	for (auto& item : items_) {
 		if (!item.material->drawOutline) continue;
 
-		if (currentPSOEnableSkinning != item.material->enableSkinning) {
-			currentPSOEnableSkinning = item.material->enableSkinning;
-			if (currentPSOEnableSkinning) {
-				currentPSOName = outlineSkinnedPSOName_;
-				context.SetPipelineState(renderCtx->GetGraphicsPSO(outlineSkinnedPSOID_));
-				context.SetRootSignature(renderCtx->GetRootSignature(outlineSkinnedPSOID_));
-				context.SetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-			} else {
-				currentPSOName = outlinePSOName_;
-				context.SetPipelineState(renderCtx->GetGraphicsPSO(outlinePSOID_));
-				context.SetRootSignature(renderCtx->GetRootSignature(outlinePSOID_));
-				context.SetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-			}
-		}
-
-		auto& rootIndex = RootSignatureBuilder::GetRootIndexMap(currentPSOName);
+		auto& rootIndex = RootSignatureBuilder::GetRootIndexMap(outlinePSOName_);
 
 		Math::Matrix4x4 worldData = item.transform->MakeAffineMatrix4x4();
 		if (item.animationLocal) {
@@ -192,12 +166,8 @@ void MeshPass::RenderOutline(GraphicsContext& context) {
 
 		auto* mesh = ModelSaver::Get().GetMesh(item.meshHandle);
 		if (!mesh) continue;
-		context.SetVertexBuffer(0, mesh->vertexBuffer.VertexBufferView());
+		context.SetVertexBuffer(0, mesh->useVertexBuffer.VertexBufferView());
 		context.SetIndexBuffer(mesh->indexBuffer.IndexBufferView());
-
-		if (mesh->numJoints && item.material->enableSkinning) {
-			context.SetDynamicDescriptor(rootIndex["gJoints"], 0, mesh->paletteResource.GetSRV());
-		}
 
 		for (const auto& subMesh : mesh->subMeshes) {
 			context.DrawIndexedInstanced(subMesh.indexCount, 1, subMesh.indexStart, subMesh.vertexStart, 0);

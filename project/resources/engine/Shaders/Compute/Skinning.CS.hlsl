@@ -7,20 +7,21 @@ StructuredBuffer<Joint> gJoints : register(t0);
 
 struct Vertex
 {
-    float4 position;
-    float4 texcoord;
+    float3 position;
+    float2 texcoord;
     float3 normal;
-};
-StructuredBuffer<Vertex> gInputVertices : register(t1);
-
-struct VertexInfluence
-{
     float4 jointWeights;
     uint4 jointIndices;
 };
-StructuredBuffer<VertexInfluence> gInfluences : register(t2);
+StructuredBuffer<Vertex> gInputVertices : register(t1);
 
-RWStructuredBuffer<Vertex> gOutputVertices : register(u0);
+struct OutVertex
+{
+    float3 position;
+    float2 texcoord;
+    float3 normal;
+};
+RWStructuredBuffer<OutVertex> gOutputVertices : register(u0);
 
 struct SkinningInformation
 {
@@ -36,24 +37,22 @@ void main( uint3 DTid : SV_DispatchThreadID )
     if (vertexIndex < gSkinningInformation.numVertices)
     {
         Vertex input = gInputVertices[vertexIndex];
-        VertexInfluence influence = gInfluences[vertexIndex];
-        
-        Vertex skinned;
+        OutVertex skinned;
         skinned.texcoord = input.texcoord;
         
-        float4 weights = influence.jointWeights / dot(influence.jointWeights, 1.0f);
-        float4 position = input.position;
-        float4 skinnedPos = mul(position, gJoints[influence.jointIndices.x].PosMatrix) * weights.x;
-        skinnedPos += mul(position, gJoints[influence.jointIndices.y].PosMatrix) * weights.y;
-        skinnedPos += mul(position, gJoints[influence.jointIndices.z].PosMatrix) * weights.z;
-        skinnedPos += mul(position, gJoints[influence.jointIndices.w].PosMatrix) * weights.w;
-        skinned.position = skinnedPos;
+        float4 weights = input.jointWeights / dot(input.jointWeights, 1.0f);
+        float4 position = float4(input.position, 1.0f);
+        float4 skinnedPos = mul(position, gJoints[input.jointIndices.x].PosMatrix) * weights.x;
+        skinnedPos += mul(position, gJoints[input.jointIndices.y].PosMatrix) * weights.y;
+        skinnedPos += mul(position, gJoints[input.jointIndices.z].PosMatrix) * weights.z;
+        skinnedPos += mul(position, gJoints[input.jointIndices.w].PosMatrix) * weights.w;
+        skinned.position = float3(skinnedPos.x / skinnedPos.w, skinnedPos.y / skinnedPos.w, skinnedPos.z / skinnedPos.w);
         
         float3 normal = input.normal;
-        float3 skinnedNor = mul(normal, (float3x3) gJoints[influence.jointIndices.x].NrmMatrix) * weights.x;
-        skinnedNor += mul(normal, (float3x3) gJoints[influence.jointIndices.y].NrmMatrix) * weights.y;
-        skinnedNor += mul(normal, (float3x3) gJoints[influence.jointIndices.z].NrmMatrix) * weights.z;
-        skinnedNor += mul(normal, (float3x3) gJoints[influence.jointIndices.w].NrmMatrix) * weights.w;
+        float3 skinnedNor = mul(normal, (float3x3) gJoints[input.jointIndices.x].NrmMatrix) * weights.x;
+        skinnedNor += mul(normal, (float3x3) gJoints[input.jointIndices.y].NrmMatrix) * weights.y;
+        skinnedNor += mul(normal, (float3x3) gJoints[input.jointIndices.z].NrmMatrix) * weights.z;
+        skinnedNor += mul(normal, (float3x3) gJoints[input.jointIndices.w].NrmMatrix) * weights.w;
         skinned.normal = skinnedNor;
         
         gOutputVertices[vertexIndex] = skinned;

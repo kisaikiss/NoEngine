@@ -36,8 +36,41 @@ AnimationSystem::AnimationSystem() {
 }
 
 void AnimationSystem::Update(ComputeContext& ctx, Registry& registry, float deltaTime) {
-	(void)ctx;
 	Update(registry, deltaTime);
+	for (auto e : registry.View<Component::AnimatorComponent, Component::MeshComponent, Component::MaterialComponent>()) {
+		auto* meshComp = registry.GetComponent<Component::MeshComponent>(e);
+		auto* materialComp = registry.GetComponent<Component::MaterialComponent>(e);
+
+		auto& modelSaver = ModelSaver::Get();
+		auto* mesh = modelSaver.GetMesh(meshComp->handle);
+		if (materialComp->enableSkinning && mesh->numJoints) {
+			auto& rootIndex = RootSignatureBuilder::GetRootIndexMap(ConvertString(sPsoName));
+			ctx.SetPipelineState(pso_);
+			ctx.SetRootSignature(rootSignature_);
+			// ジョイント
+			ctx.CopyBufferRegion(mesh->paletteResource, 0, mesh->paletteUpload, 0, sizeof(SkeletonWell) * mesh->mappedPalette.size());
+			ctx.TransitionResource(mesh->paletteResource, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, true);
+			ctx.SetDynamicDescriptor(rootIndex["gJoints"], 0, mesh->paletteResource.GetSRV());
+			// 入力頂点 + インフルエンス
+			ctx.TransitionResource(mesh->baseVertexBuffer, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE);
+			ctx.SetDynamicDescriptor(rootIndex["gInputVertices"], 0, mesh->baseVertexBuffer.GetSRV());
+			// 頂点数
+			_declspec(align(16))struct {
+				uint32_t numVertices;
+				uint32_t pad[3];
+			}constants;
+			constants.numVertices = static_cast<uint32_t>(mesh->vertices.size());
+			ctx.SetDynamicConstantBufferView(rootIndex["gSkinningInformation"], 0, &constants);
+			// 出力頂点
+			ctx.TransitionResource(mesh->useVertexBuffer, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+			ctx.SetDynamicDescriptor(rootIndex["gOutputVertices"], 0, mesh->useVertexBuffer.GetUAV());
+
+			// 実行
+			ctx.Dispatch1D((mesh->vertices.size() + 1023) / 1024, 1);
+
+		}
+	}
+
 }
 
 void AnimationSystem::Update(Registry& registry, float deltaTime) {

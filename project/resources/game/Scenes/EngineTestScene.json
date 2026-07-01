@@ -195,6 +195,7 @@
         },
         "camera": {
             "components": {
+                "ActiveCameraTag": null,
                 "CameraComponent": {
                     "fov": 0.44999998807907104
                 },
@@ -208,7 +209,7 @@
                     "drawCenter": false,
                     "mousePositionX": 523,
                     "mousePositionY": 236,
-                    "mouseWheelY": -480.0,
+                    "mouseWheelY": 0.0,
                     "phi": 0.8928719758987427,
                     "theta": -0.08437954634428024
                 },
@@ -255,29 +256,6 @@
                 "EditTag": {
                     "name": "directionalLight",
                     "path": "directionalLight"
-                },
-                "SpriteComponent": {
-                    "color": [
-                        1.0,
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "flipX": false,
-                    "flipY": false,
-                    "layer": 1,
-                    "orderInLayer": 0,
-                    "pivot": [
-                        0.5,
-                        0.5
-                    ],
-                    "textureFilePath": "",
-                    "uv": [
-                        0.0,
-                        0.0,
-                        1.0,
-                        1.0
-                    ]
                 },
                 "Transform2DComponent": {
                     "rotation": 0.0,
@@ -579,13 +557,6 @@
                         117,
                         108,
                         116,
-                        83,
-                        107,
-                        105,
-                        110,
-                        110,
-                        101,
-                        100,
                         32,
                         80,
                         83,

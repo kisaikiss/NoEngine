@@ -231,10 +231,10 @@ void CommonSetupRenderPass(RenderPassScheduler& renderPassScheduler) {
 	particlePass->SetDepthOutput("MainDepth");
 	renderPassScheduler.AddPass(std::move(particlePass));
 
-	auto randomNoise = std::make_unique<RandomNoisePass>();
-	randomNoise->AddInput("InputColor", "PostEffect");
-	randomNoise->AddOutput("MainColor");
-	renderPassScheduler.AddPass(std::move(randomNoise));
+	auto vignetting = std::make_unique<VignettingPass>();
+	vignetting->AddInput("InputColor", "PostEffect");
+	vignetting->AddOutput("MainColor");
+	renderPassScheduler.AddPass(std::move(vignetting));
 }
 
 void CommonSetupDebugRenderPass(RenderPassScheduler& renderPassScheduler) {

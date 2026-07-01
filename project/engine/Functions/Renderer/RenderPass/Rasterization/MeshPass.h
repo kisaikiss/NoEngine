@@ -45,9 +45,7 @@ protected:
     Component::CameraComponent* camera_;
 
     std::string outlinePSOName_;
-    std::string outlineSkinnedPSOName_;
     uint32_t outlinePSOID_;
-    uint32_t outlineSkinnedPSOID_;
     TextureRef skyBoxTexture_;
 
     /// <summary>

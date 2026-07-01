@@ -133,7 +133,7 @@ ModelAsset ModelLoader::Load(const std::string& filePath) {
 			memcpy(vertexUpload.Map(), newMesh.vertices.data(), vertexBufferSize);
 			vertexUpload.Unmap();
 
-			newMesh.vertexBuffer.Create(
+			newMesh.useVertexBuffer.Create(
 				L"Model vertex",
 				static_cast<uint32_t>(newMesh.vertices.size()),
 				sizeof(Vertex),
@@ -184,11 +184,25 @@ ModelAsset ModelLoader::Load(const std::string& filePath) {
 
 			vertexUpload.Unmap();
 
-			newMesh.vertexBuffer.Create(
+			newMesh.baseVertexBuffer.Create(
 				L"Skin model vertex",
 				static_cast<uint32_t>(newMesh.vertices.size()),
 				static_cast<uint32_t>(vertexSize + skinSize),
 				vertexUpload
+			);
+
+
+			size_t vertexBufferSize = newMesh.vertices.size() * sizeof(Vertex);
+			UploadBuffer useVertexUpload;
+			useVertexUpload.Create(L"VertexUpload", vertexBufferSize);
+			memcpy(useVertexUpload.Map(), newMesh.vertices.data(), vertexBufferSize);
+			useVertexUpload.Unmap();
+
+			newMesh.useVertexBuffer.Create(
+				L"Skinned model vertex",
+				static_cast<uint32_t>(newMesh.vertices.size()),
+				static_cast<uint32_t>(vertexSize),
+				useVertexUpload
 			);
 		}
 
@@ -427,7 +441,7 @@ RaytracingGeometry ModelLoader::MakeGeometryDesc(const Mesh& mesh, const SubMesh
 
 	// Vertex
 	geom.Triangles.VertexBuffer.StartAddress =
-		mesh.vertexBuffer.GetGpuVirtualAddress() +
+		mesh.useVertexBuffer.GetGpuVirtualAddress() +
 		sizeof(Vertex) * sm.vertexStart;
 
 	geom.Triangles.VertexBuffer.StrideInBytes = sizeof(Vertex);

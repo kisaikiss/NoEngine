@@ -11,8 +11,7 @@ namespace Render {
 
 using namespace Component;
 
-PreRenderPass::PreRenderPass() {
-}
+PreRenderPass::PreRenderPass() {}
 
 void PreRenderPass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& resourceRegistry, ECS::Registry& registry) {
 	(void)resourceRegistry;
@@ -36,26 +35,19 @@ void PreRenderPass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& res
 			animeLocal = &anime->local;
 		}
 
-		items_.push_back({ mesh->handle,material,transform,animeLocal, static_cast<uint32_t>(entity)});
+		items_.push_back({ mesh->handle,material,transform,animeLocal, static_cast<uint32_t>(entity) });
 	}
 
 	CameraComponent* camera = GetTargetCamera();
 
 	if (camera == nullptr) return;
 
+	gfx.SetPipelineState(renderCtx->GetGraphicsPSO("Renderer : PreRender PSO"));
+	gfx.SetRootSignature(renderCtx->GetRootSignature("Renderer : PreRender PSO"));
+	auto& rootIndex = RootSignatureBuilder::GetRootIndexMap("Renderer : PreRender PSO");
+	gfx.SetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	for (auto& item : items_) {
-		std::string currentPsoName;
-		if (item.material->enableSkinning) {
-			gfx.SetPipelineState(renderCtx->GetGraphicsPSO("Renderer : PreRenderSkinned PSO"));
-			gfx.SetRootSignature(renderCtx->GetRootSignature("Renderer : PreRenderSkinned PSO"));
-			currentPsoName = "Renderer : PreRenderSkinned PSO";
-		} else {
-			gfx.SetPipelineState(renderCtx->GetGraphicsPSO("Renderer : PreRender PSO"));
-			gfx.SetRootSignature(renderCtx->GetRootSignature("Renderer : PreRender PSO"));
-			currentPsoName = "Renderer : PreRender PSO";
-		}
-		auto& rootIndex = RootSignatureBuilder::GetRootIndexMap(currentPsoName);
-		gfx.SetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
 
 		struct MeshConstants {
 			Math::Matrix4x4 world;
@@ -86,14 +78,8 @@ void PreRenderPass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& res
 
 		auto* mesh = ModelSaver::Get().GetMesh(item.mesh);
 		if (!mesh) continue;
-		gfx.SetVertexBuffer(0, mesh->vertexBuffer.VertexBufferView());
+		gfx.SetVertexBuffer(0, mesh->useVertexBuffer.VertexBufferView());
 		gfx.SetIndexBuffer(mesh->indexBuffer.IndexBufferView());
-		if (mesh->numJoints && item.material->enableSkinning) {
-
-			gfx.CopyBufferRegion(mesh->paletteResource, 0, mesh->paletteUpload, 0, sizeof(SkeletonWell) * mesh->mappedPalette.size());
-
-			gfx.SetDynamicDescriptor(rootIndex["gJoints"], 0, mesh->paletteResource.GetSRV());
-		}
 		for (const auto& subMesh : mesh->subMeshes) {
 			gfx.DrawIndexedInstanced(subMesh.indexCount, 1, subMesh.indexStart, subMesh.vertexStart, 0);
 		}
