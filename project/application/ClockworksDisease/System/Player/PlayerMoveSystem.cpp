@@ -61,6 +61,12 @@ void PlayerMoveSystem::Update(No::Registry& registry, float deltaTime) {
 			}
 		}
 
+		if (No::InputIsRelease("Jump")) {
+			if (playerVariables->yVelocity > 0.f) {
+				playerVariables->yVelocity *= 0.5f;
+			}
+		}
+
 		// ------------------------------------------------------------------
 		//  水平移動入力
 		// ------------------------------------------------------------------
