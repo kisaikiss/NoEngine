@@ -199,6 +199,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="application\ClockworksDisease\Component\Item\ItemComponent.cpp" />
     <ClCompile Include="application\ClockworksDisease\Component\Option\EditorSettingComponent.cpp" />
     <ClCompile Include="application\ClockworksDisease\Component\Player\PlayerComponent.cpp" />
+    <ClCompile Include="application\ClockworksDisease\Component\Player\PlayerMoveTags.cpp" />
     <ClCompile Include="application\ClockworksDisease\Scene\GameScene.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Camera\FollowCameraSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Game\ColliderDrawSystem.cpp" />
@@ -429,6 +430,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="application\ClockworksDisease\Component\Item\ItemComponent.h" />
     <ClInclude Include="application\ClockworksDisease\Component\Option\EditorSettingComponent.h" />
     <ClInclude Include="application\ClockworksDisease\Component\Player\PlayerComponent.h" />
+    <ClInclude Include="application\ClockworksDisease\Component\Player\PlayerMoveTags.h" />
     <ClInclude Include="application\ClockworksDisease\Scene\GameScene.h" />
     <ClInclude Include="application\ClockworksDisease\System\Camera\FollowCameraSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Game\ColliderDrawSystem.h" />

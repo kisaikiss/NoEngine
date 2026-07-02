@@ -1,5 +1,6 @@
 #include "PlayerMoveSystem.h"
 #include "application/ClockworksDisease/Component/Player/PlayerComponent.h"
+#include "application/ClockworksDisease/Component/Player/PlayerMoveTags.h"
 #include "application/ClockworksDisease/Component/Camera/FollowCameraComponent.h"
 
 using namespace std;
@@ -26,6 +27,19 @@ void PlayerMoveSystem::Update(No::Registry& registry, float deltaTime) {
 		const No::Vector3& groundNormal = playerVariables->groundNormal;
 		const bool isGrounded = groundState->isGrounded;
 
+		// スタミナ回復
+		float& stamina = playerVariables->stamina;
+		float& maxStamina = playerVariables->maxStamina;
+		if (stamina < maxStamina) {
+			if (isGrounded) {
+				stamina += deltaTime;
+			}
+		}
+		if (stamina > maxStamina) {
+			stamina = maxStamina;
+		}
+		float& moveSpeed = playerVariables->moveSpeed;
+
 		bool justJumped = false;
 		if (No::InputIsTrigger("Jump")) {
 			if (isGrounded || playerVariables->infinityJump) {
@@ -34,6 +48,16 @@ void PlayerMoveSystem::Update(No::Registry& registry, float deltaTime) {
 				// ジャンプ直後は接地フラグを即座に落とす
 				// → このフレームの velocity.y 計算を「空中ブランチ」で処理させる
 				groundState->isGrounded = false;
+			} else {
+				if (registry.Has<MultiJumpTag>(entity)) {
+					if (stamina > 1.0f) {
+						playerVariables->yVelocity = playerVariables->doubleJumpSpeed;
+						justJumped = true;
+						groundState->isGrounded = false;
+						constexpr float kMultiJumpCost = 1.0f;
+						stamina -= kMultiJumpCost;
+					}
+				}
 			}
 		}
 
@@ -62,7 +86,7 @@ void PlayerMoveSystem::Update(No::Registry& registry, float deltaTime) {
 			// 正規化してスピードを乗算
 			float len = worldDir.Length();
 			if (len > 1e-6f) {
-				worldDir = worldDir * (playerVariables->moveSpeed / len);
+				worldDir = worldDir * (moveSpeed / len);
 			}
 
 			velocity->linear.x = worldDir.x;

@@ -64,7 +64,7 @@
             "textureName": "smokeEffect"
         },
         "GroundStateComponent": {
-            "groundHeight": -0.02888958901166916,
+            "groundHeight": -0.00031470737303607166,
             "isGrounded": true
         },
         "MaterialComponent": {
@@ -142,17 +142,21 @@
             "textureName": "smokeEffect"
         },
         "PlayerComponent": {
+            "doubleJumpSpeed": 4.0,
             "gravity": -7.0,
             "infinityJump": false,
             "jumpSpeed": 7.0,
-            "moveSpeed": 5.0
+            "maxStamina": 0.0,
+            "moveSpeed": 5.0,
+            "power": 0,
+            "stamina": 0.0
         },
         "TransformComponent": {
             "rotation": [
-                -1.2558002993046102e-07,
-                0.7364040017127991,
-                1.366916109191152e-07,
-                -0.6765420436859131
+                -4.699924431861291e-07,
+                -0.6893315315246582,
+                -4.939338396070525e-07,
+                0.7244460582733154
             ],
             "scale": [
                 1.0,
@@ -160,9 +164,9 @@
                 1.0
             ],
             "translate": [
-                -10.115778923034668,
-                -0.02888958901166916,
-                1.4430140256881714
+                -6.768913269042969,
+                -0.00031470737303607166,
+                -2.1763718128204346
             ]
         },
         "VelocityComponent": {

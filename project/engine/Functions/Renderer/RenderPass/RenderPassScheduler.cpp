@@ -232,10 +232,10 @@ void CommonSetupRenderPass(RenderPassScheduler& renderPassScheduler) {
 	particlePass->SetDepthOutput("MainDepth");
 	renderPassScheduler.AddPass(std::move(particlePass));
 
-	auto radialBlurPass = std::make_unique<RadialBlurPass>();
-	radialBlurPass->AddInput("InputColor", "PostEffect");
-	radialBlurPass->AddOutput("MainColor");
-	renderPassScheduler.AddPass(std::move(radialBlurPass));
+	auto vignetting = std::make_unique<VignettingPass>();
+	vignetting->AddInput("InputColor", "PostEffect");
+	vignetting->AddOutput("MainColor");
+	renderPassScheduler.AddPass(std::move(vignetting));
 }
 
 void CommonSetupDebugRenderPass(RenderPassScheduler& renderPassScheduler) {

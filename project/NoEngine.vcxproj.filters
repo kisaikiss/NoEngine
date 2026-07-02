@@ -222,6 +222,7 @@
     <ClCompile Include="application\ClockworksDisease\Scene\GameScene.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\RandomNoisePass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PrePasses\BLASUpdatePass.cpp" />
+    <ClCompile Include="application\ClockworksDisease\Component\Player\PlayerMoveTags.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -453,6 +454,7 @@
     <ClInclude Include="application\ClockworksDisease\Scene\GameScene.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\RandomNoisePass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PrePasses\BLASUpdatePass.h" />
+    <ClInclude Include="application\ClockworksDisease\Component\Player\PlayerMoveTags.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />
