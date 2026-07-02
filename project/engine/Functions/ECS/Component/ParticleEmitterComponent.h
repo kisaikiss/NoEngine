@@ -9,7 +9,8 @@ namespace Component {
 // ToDo: ParticleShapeを消し、ParticlePassをモデルパーティクルへ対応させる
 enum class ParticleShape {
 	kPlane,
-	kRing
+	kRing,
+	kCylinder
 };
 
 struct ParticleComponent {

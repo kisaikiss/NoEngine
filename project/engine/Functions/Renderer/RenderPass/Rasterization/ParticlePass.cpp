@@ -7,6 +7,32 @@ namespace NoEngine {
 namespace Render {
 
 ParticlePass::ParticlePass() {
+	{
+
+		// --- シリンダーメッシュ生成 ---
+		std::vector<ParticleVertex> cylinderVerts;
+		std::vector<uint32_t> cylinderIndices;
+		GenerateCylinderMesh(cylinderVerts, cylinderIndices);
+
+		// Upload cylinder vertices
+		UploadBuffer cylinderVertUpload;
+		size_t vertSize = cylinderVerts.size() * sizeof(ParticleVertex);
+		cylinderVertUpload.Create(L"CylinderVertexUpload", vertSize);
+		memcpy(cylinderVertUpload.Map(), cylinderVerts.data(), vertSize);
+		cylinderVertUpload.Unmap();
+		cylinderVertex_.Create(L"CylinderVertex", static_cast<uint32_t>(cylinderVerts.size()), sizeof(ParticleVertex), cylinderVertUpload);
+
+		// Upload cylinder indices
+		UploadBuffer cylinderIdxUpload;
+		size_t idxSize = cylinderIndices.size() * sizeof(uint32_t);
+		cylinderIdxUpload.Create(L"CylinderIndexUpload", idxSize);
+		memcpy(cylinderIdxUpload.Map(), cylinderIndices.data(), idxSize);
+		cylinderIdxUpload.Unmap();
+		cylinderIndex_.Create(L"CylinderIndex", static_cast<uint32_t>(cylinderIndices.size()), sizeof(uint32_t), cylinderIdxUpload);
+
+		cylinderIndexCount_ = static_cast<uint32_t>(cylinderIndices.size());
+	}
+
 	// --- リングメッシュ生成 ---
 	std::vector<ParticleVertex> ringVerts;
 	std::vector<uint32_t> ringIndices;
@@ -29,6 +55,8 @@ ParticlePass::ParticlePass() {
 	ringIndex_.Create(L"ringIndex", static_cast<uint32_t>(ringIndices.size()), sizeof(uint32_t), ringIdxUpload);
 
 	ringIndexCount_ = static_cast<uint32_t>(ringIndices.size());
+
+	
 
 	// Quad
 	vertex_ = ByteAddressBuffer();
@@ -118,12 +146,17 @@ void ParticlePass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& reso
 			gfx.SetIndexBuffer(ringIndex_.IndexBufferView());
 			gfx.DrawIndexedInstanced(ringIndexCount_, static_cast<UINT>(instanceCount), 0, 0, static_cast<UINT>(baseIndex));
 			break;
+		case NoEngine::Component::ParticleShape::kCylinder:
+			gfx.SetVertexBuffer(0, cylinderVertex_.VertexBufferView());
+			gfx.SetIndexBuffer(cylinderIndex_.IndexBufferView());
+			gfx.DrawIndexedInstanced(cylinderIndexCount_, static_cast<UINT>(instanceCount), 0, 0, static_cast<UINT>(baseIndex));
+			break;
 		}
 
 
 		count++;
 	}
-	
+
 	particleCount_ = 0;
 	particleForGpu_.clear();
 }
@@ -141,7 +174,7 @@ void ParticlePass::UploadMatrices(GraphicsContext& gfx, ECS::Registry& registry)
 		billBoardMatrix.m[3][1] = 0.0f;
 		billBoardMatrix.m[3][2] = 0.0f;
 	}
-	
+
 	// collect
 	items_.clear();
 	for (auto entity : view) {
@@ -177,7 +210,7 @@ void ParticlePass::UploadMatrices(GraphicsContext& gfx, ECS::Registry& registry)
 		translateMatrix.MakeTranslate(item.transform->translate);
 		Math::Matrix4x4 rotateMatrix;
 		rotateMatrix.MakeRotate(item.transform->rotation);
-		Math::Matrix4x4 worldMatrix = scaleMatrix *rotateMatrix * billBoardMatrix * translateMatrix;
+		Math::Matrix4x4 worldMatrix = scaleMatrix * rotateMatrix * billBoardMatrix * translateMatrix;
 		particleForGpu_.push_back({ worldMatrix, item.particle->color });
 
 		baseIndex++;
@@ -240,6 +273,37 @@ void ParticlePass::GenerateRingMesh(std::vector<ParticleVertex>& outVerts, std::
 		outVerts.push_back({ {-sinNext * outerRadius, cosNext * outerRadius, 0.0f, 1.0f},{uNext,0.0f} });
 		outVerts.push_back({ {-sin * innerRadius, cos * innerRadius, 0.0f, 1.0f},{u,1.0f} });
 		outVerts.push_back({ {-sinNext * innerRadius, cosNext * innerRadius, 0.0f, 1.0f},{uNext,1.0f} });
+
+		uint32_t base = index * 4;
+		// 三角形 1
+		outIndices.push_back(base + 1);
+		outIndices.push_back(base + 2);
+		outIndices.push_back(base + 0);
+
+		// 三角形 2: inner current, inner next, outer next
+		outIndices.push_back(base + 1);
+		outIndices.push_back(base + 3);
+		outIndices.push_back(base + 2);
+
+	}
+}
+
+void ParticlePass::GenerateCylinderMesh(std::vector<ParticleVertex>& outVerts, std::vector<uint32_t>& outIndices,
+	uint32_t cylinderDivide, float topRadius, float bottomRadius, float height) {
+
+	const float radianParDivide = 2.0f * PI / static_cast<float>(cylinderDivide);
+
+	for (uint32_t index = 0; index < cylinderDivide; ++index) {
+		float sin = std::sinf(static_cast<float>(index) * radianParDivide);
+		float cos = std::cosf(static_cast<float>(index) * radianParDivide);
+		float sinNext = std::sinf(static_cast<float>(index + 1) * radianParDivide);
+		float cosNext = std::cosf(static_cast<float>(index + 1) * radianParDivide);
+		float u = static_cast<float>(index) / static_cast<float>(cylinderDivide);
+		float uNext = static_cast<float>(index + 1) / static_cast<float>(cylinderDivide);
+		outVerts.push_back({ {-sin * topRadius, height, cos * topRadius, 1.0f}, {u,0.0f} });
+		outVerts.push_back({ {-sinNext * topRadius,height ,cosNext * topRadius, 1.0f},{uNext,0.0f} });
+		outVerts.push_back({ {-sin * bottomRadius,0.0f, cos * bottomRadius, 1.0f},{u,1.0f} });
+		outVerts.push_back({ {-sinNext * bottomRadius,  0.0f, cosNext * bottomRadius,1.0f},{uNext,1.0f} });
 
 		uint32_t base = index * 4;
 		// 三角形 1
