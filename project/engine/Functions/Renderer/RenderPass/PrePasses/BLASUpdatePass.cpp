@@ -17,7 +17,7 @@ void BLASUpdatePass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& re
 		auto* meshComp = registry.GetComponent<MeshComponent>(e);
 		auto& modelSaver = ModelSaver::Get();
 		auto* mesh = modelSaver.GetMesh(meshComp->handle);
-		if (mesh->numJoints == 0) {
+		if (mesh == nullptr || mesh->numJoints == 0) {
 			continue;
 		}
 		auto& rtMesh = mesh->raytracingMesh;

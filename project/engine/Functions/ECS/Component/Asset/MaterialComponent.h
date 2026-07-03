@@ -15,7 +15,6 @@ struct MaterialComponent {
 	uint32_t rootSigId = 0;
 	std::wstring psoName;
 	bool drawOutline = false;
-	bool enableSkinning = false;
 	float shininess = 60.f;
 	float enviromentCoefficient = 0.f;
 };

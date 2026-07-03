@@ -39,6 +39,7 @@ void GameScene::AddSystems() {
 	AddSystem(std::make_unique<No::EditSystem>());
 
 	AddSystem(std::make_unique<No::ModelLoadSystem>());
+	AddSystem(std::make_unique<No::AnimationSystem>());
 	AddSystem(std::make_unique<BoxColliderUpdateSystem>());
 	AddSystem(std::make_unique<PlayerMoveSystem>());
 	AddSystem(std::make_unique<No::GroundResetSystem>());
@@ -55,7 +56,6 @@ void GameScene::AddSystems() {
 	AddSystem(std::make_unique<No::MovementSystem>());
 	AddSystem(std::make_unique<ColliderDrawSystem>());
 	AddSystem(std::make_unique<FollowCameraSystem>());
-	AddSystem(std::make_unique<No::AnimationSystem>());
 	AddSystem(std::make_unique<No::SpriteAnimationSystem>());
 	AddSystem(std::make_unique<No::DrawManipulatorSystem>());
 	AddSystem(std::make_unique<No::DebugCameraSystem>());

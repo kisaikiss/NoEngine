@@ -13,6 +13,7 @@ struct AnimatorComponent {
 	float time = 0.f;
 	float animationSpeedMagnification = 1.0f;
 	bool drawSkeleton = false;
+	bool enableSkinning = false;
 };
 }
 }

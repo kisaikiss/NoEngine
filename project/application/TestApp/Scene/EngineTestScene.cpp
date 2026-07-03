@@ -28,10 +28,9 @@ void EngineTestScene::Setup() {
 	t->rotation.FromAxisAngle(No::Vector3(0.f, 1.f, 0.f), PI);
 	t->translate = { 0.f,-1.5f,4.f };
 	auto* m = registry.AddComponent<No::MaterialComponent>(entity);
-	registry.AddComponent<No::AnimatorComponent>(entity);
+	registry.AddComponent<No::AnimatorComponent>(entity)->enableSkinning = true;
 	model->meshName = "resources/engine/Model/test/TD_girl/test7.gltf";
 	m->drawOutline = true;
-	m->enableSkinning = true;
 	m->psoName = L"Renderer : DefaultSkinned PSO";
 
 	No::Entity background = registry.GenerateEntity();

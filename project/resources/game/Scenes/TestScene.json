@@ -5,7 +5,8 @@
                 "AnimatorComponent": {
                     "animationSpeedMagnification": 1.0,
                     "currentAnimation": 0,
-                    "drawSkeleton": false
+                    "drawSkeleton": false,
+                    "enableSkinning": false
                 },
                 "BadgeComponent": {
                     "id": 0
@@ -137,7 +138,8 @@
                 "AnimatorComponent": {
                     "animationSpeedMagnification": 1.0,
                     "currentAnimation": 0,
-                    "drawSkeleton": false
+                    "drawSkeleton": false,
+                    "enableSkinning": false
                 },
                 "BadgeComponent": {
                     "id": 0
@@ -260,7 +262,8 @@
                 "AnimatorComponent": {
                     "animationSpeedMagnification": 1.0,
                     "currentAnimation": 0,
-                    "drawSkeleton": false
+                    "drawSkeleton": false,
+                    "enableSkinning": false
                 },
                 "BadgeComponent": {
                     "id": 0
@@ -383,7 +386,8 @@
                 "AnimatorComponent": {
                     "animationSpeedMagnification": 1.0,
                     "currentAnimation": 0,
-                    "drawSkeleton": false
+                    "drawSkeleton": false,
+                    "enableSkinning": false
                 },
                 "BadgeComponent": {
                     "id": 0
@@ -506,7 +510,8 @@
                 "AnimatorComponent": {
                     "animationSpeedMagnification": 1.0,
                     "currentAnimation": 0,
-                    "drawSkeleton": false
+                    "drawSkeleton": false,
+                    "enableSkinning": false
                 },
                 "BadgeComponent": {
                     "id": 0
@@ -629,7 +634,8 @@
                 "AnimatorComponent": {
                     "animationSpeedMagnification": 1.0,
                     "currentAnimation": 0,
-                    "drawSkeleton": false
+                    "drawSkeleton": false,
+                    "enableSkinning": false
                 },
                 "BadgeComponent": {
                     "id": 0
@@ -752,7 +758,8 @@
                 "AnimatorComponent": {
                     "animationSpeedMagnification": 1.0,
                     "currentAnimation": 0,
-                    "drawSkeleton": false
+                    "drawSkeleton": false,
+                    "enableSkinning": false
                 },
                 "BadgeComponent": {
                     "id": 0
@@ -875,7 +882,8 @@
                 "AnimatorComponent": {
                     "animationSpeedMagnification": 1.0,
                     "currentAnimation": 0,
-                    "drawSkeleton": false
+                    "drawSkeleton": false,
+                    "enableSkinning": false
                 },
                 "BadgeComponent": {
                     "id": 0
@@ -998,7 +1006,8 @@
                 "AnimatorComponent": {
                     "animationSpeedMagnification": 1.0,
                     "currentAnimation": 0,
-                    "drawSkeleton": false
+                    "drawSkeleton": false,
+                    "enableSkinning": false
                 },
                 "BadgeComponent": {
                     "id": 0
@@ -1121,7 +1130,8 @@
                 "AnimatorComponent": {
                     "animationSpeedMagnification": 1.0,
                     "currentAnimation": 0,
-                    "drawSkeleton": false
+                    "drawSkeleton": false,
+                    "enableSkinning": false
                 },
                 "BadgeComponent": {
                     "id": 0
@@ -1244,7 +1254,8 @@
                 "AnimatorComponent": {
                     "animationSpeedMagnification": 1.0,
                     "currentAnimation": 0,
-                    "drawSkeleton": false
+                    "drawSkeleton": false,
+                    "enableSkinning": false
                 },
                 "BadgeComponent": {
                     "id": 0
@@ -1367,7 +1378,8 @@
                 "AnimatorComponent": {
                     "animationSpeedMagnification": 1.0,
                     "currentAnimation": 0,
-                    "drawSkeleton": false
+                    "drawSkeleton": false,
+                    "enableSkinning": false
                 },
                 "BadgeComponent": {
                     "id": 0
@@ -1490,7 +1502,8 @@
                 "AnimatorComponent": {
                     "animationSpeedMagnification": 1.0,
                     "currentAnimation": 0,
-                    "drawSkeleton": false
+                    "drawSkeleton": false,
+                    "enableSkinning": false
                 },
                 "BadgeComponent": {
                     "id": 0
@@ -1613,7 +1626,8 @@
                 "AnimatorComponent": {
                     "animationSpeedMagnification": 1.0,
                     "currentAnimation": 0,
-                    "drawSkeleton": false
+                    "drawSkeleton": false,
+                    "enableSkinning": false
                 },
                 "BadgeComponent": {
                     "id": 0
@@ -1736,7 +1750,8 @@
                 "AnimatorComponent": {
                     "animationSpeedMagnification": 1.0,
                     "currentAnimation": 0,
-                    "drawSkeleton": false
+                    "drawSkeleton": false,
+                    "enableSkinning": false
                 },
                 "BadgeComponent": {
                     "id": 0
@@ -1859,7 +1874,8 @@
                 "AnimatorComponent": {
                     "animationSpeedMagnification": 1.0,
                     "currentAnimation": 0,
-                    "drawSkeleton": false
+                    "drawSkeleton": false,
+                    "enableSkinning": false
                 },
                 "BadgeComponent": {
                     "id": 0
@@ -1982,7 +1998,8 @@
                 "AnimatorComponent": {
                     "animationSpeedMagnification": 1.0,
                     "currentAnimation": 0,
-                    "drawSkeleton": false
+                    "drawSkeleton": false,
+                    "enableSkinning": false
                 },
                 "BadgeComponent": {
                     "id": 0
@@ -2105,7 +2122,8 @@
                 "AnimatorComponent": {
                     "animationSpeedMagnification": 1.0,
                     "currentAnimation": 0,
-                    "drawSkeleton": false
+                    "drawSkeleton": false,
+                    "enableSkinning": false
                 },
                 "BadgeComponent": {
                     "id": 0
@@ -2228,7 +2246,8 @@
                 "AnimatorComponent": {
                     "animationSpeedMagnification": 1.0,
                     "currentAnimation": 0,
-                    "drawSkeleton": false
+                    "drawSkeleton": false,
+                    "enableSkinning": false
                 },
                 "BadgeComponent": {
                     "id": 0
@@ -2351,7 +2370,8 @@
                 "AnimatorComponent": {
                     "animationSpeedMagnification": 1.0,
                     "currentAnimation": 0,
-                    "drawSkeleton": false
+                    "drawSkeleton": false,
+                    "enableSkinning": false
                 },
                 "BadgeComponent": {
                     "id": 0
@@ -2474,7 +2494,8 @@
                 "AnimatorComponent": {
                     "animationSpeedMagnification": 1.0,
                     "currentAnimation": 0,
-                    "drawSkeleton": false
+                    "drawSkeleton": false,
+                    "enableSkinning": false
                 },
                 "BadgeComponent": {
                     "id": 0
@@ -2597,7 +2618,8 @@
                 "AnimatorComponent": {
                     "animationSpeedMagnification": 1.0,
                     "currentAnimation": 0,
-                    "drawSkeleton": false
+                    "drawSkeleton": false,
+                    "enableSkinning": false
                 },
                 "BadgeComponent": {
                     "id": 0
@@ -2720,7 +2742,8 @@
                 "AnimatorComponent": {
                     "animationSpeedMagnification": 1.0,
                     "currentAnimation": 0,
-                    "drawSkeleton": false
+                    "drawSkeleton": false,
+                    "enableSkinning": false
                 },
                 "BadgeComponent": {
                     "id": 0
@@ -2843,7 +2866,8 @@
                 "AnimatorComponent": {
                     "animationSpeedMagnification": 1.0,
                     "currentAnimation": 0,
-                    "drawSkeleton": false
+                    "drawSkeleton": false,
+                    "enableSkinning": false
                 },
                 "BadgeComponent": {
                     "id": 0
@@ -2966,7 +2990,8 @@
                 "AnimatorComponent": {
                     "animationSpeedMagnification": 1.0,
                     "currentAnimation": 0,
-                    "drawSkeleton": false
+                    "drawSkeleton": false,
+                    "enableSkinning": false
                 },
                 "BigBadgeComponent": null,
                 "CollisionLayerComponent": {
@@ -3123,7 +3148,8 @@
                 "AnimatorComponent": {
                     "animationSpeedMagnification": 1.0,
                     "currentAnimation": 0,
-                    "drawSkeleton": false
+                    "drawSkeleton": false,
+                    "enableSkinning": false
                 },
                 "BigBadgeComponent": null,
                 "CollisionLayerComponent": {
@@ -3280,7 +3306,8 @@
                 "AnimatorComponent": {
                     "animationSpeedMagnification": 1.0,
                     "currentAnimation": 0,
-                    "drawSkeleton": false
+                    "drawSkeleton": false,
+                    "enableSkinning": false
                 },
                 "BigBadgeComponent": null,
                 "CollisionLayerComponent": {
@@ -3437,7 +3464,8 @@
                 "AnimatorComponent": {
                     "animationSpeedMagnification": 1.0,
                     "currentAnimation": 0,
-                    "drawSkeleton": false
+                    "drawSkeleton": false,
+                    "enableSkinning": false
                 },
                 "BigBadgeComponent": null,
                 "CollisionLayerComponent": {
@@ -3652,16 +3680,19 @@
                     "path": "Camera/GameCamera"
                 },
                 "FollowCameraComponent": {
+                    "autoFollowDeadzoneAngle": 0.15000000596046448,
+                    "autoFollowDelay": 1.0,
                     "distance": 17.799999237060547,
+                    "maxAutoFollowAngularSpeed": 1.5,
                     "phi": 1.3336282968521118,
-                    "theta": -22.026586532592773
+                    "theta": -21.96556854248047
                 },
                 "TransformComponent": {
                     "rotation": [
-                        0.08215975016355515,
-                        0.7144712209701538,
-                        -0.08512416481971741,
-                        0.6895900964736938
+                        0.08471835404634476,
+                        0.6931023597717285,
+                        -0.08257828652858734,
+                        0.7110645174980164
                     ],
                     "scale": [
                         1.0,
@@ -3669,9 +3700,9 @@
                         1.0
                     ],
                     "translate": [
-                        -25.90062713623047,
-                        4.167827129364014,
-                        2.00258207321167
+                        -20.51194953918457,
+                        4.181846618652344,
+                        0.07315874844789505
                     ]
                 }
             }
@@ -3791,6 +3822,12 @@
         },
         "player": {
             "components": {
+                "AnimatorComponent": {
+                    "animationSpeedMagnification": 1.0,
+                    "currentAnimation": 0,
+                    "drawSkeleton": false,
+                    "enableSkinning": true
+                },
                 "CapsuleCollider": {
                     "localP0": [
                         0.0,
@@ -3831,9 +3868,9 @@
                     "maxLifeTime": 1.0,
                     "maxRotate": 0.0,
                     "maxScale": [
-                        1.0,
-                        1.0,
-                        1.0
+                        0.5,
+                        0.5,
+                        0.5
                     ],
                     "maxSpeed": [
                         3.0,
@@ -3843,9 +3880,9 @@
                     "minLifeTime": 0.5,
                     "minRotate": 0.0,
                     "minScale": [
-                        1.0,
-                        1.0,
-                        1.0
+                        0.5,
+                        0.5,
+                        0.5
                     ],
                     "minSpeed": [
                         3.0,
@@ -3855,7 +3892,7 @@
                     "textureName": "smokeEffect"
                 },
                 "GroundStateComponent": {
-                    "groundHeight": -0.014295953325927258,
+                    "groundHeight": -0.0002764078672043979,
                     "isGrounded": true
                 },
                 "MaterialComponent": {
@@ -3895,7 +3932,7 @@
                 },
                 "MeshComponent": {
                     "isVisible": true,
-                    "meshName": "magiclash2"
+                    "meshName": "jogging"
                 },
                 "ParticleEmitterComponent": {
                     "active": false,
@@ -3933,17 +3970,21 @@
                     "textureName": "smokeEffect"
                 },
                 "PlayerComponent": {
+                    "doubleJumpSpeed": 4.0,
                     "gravity": -7.0,
                     "infinityJump": false,
                     "jumpSpeed": 7.0,
-                    "moveSpeed": 5.0
+                    "maxStamina": 0.0,
+                    "moveSpeed": 5.0,
+                    "power": 0,
+                    "stamina": 0.0
                 },
                 "TransformComponent": {
                     "rotation": [
-                        2.4638501372464816e-07,
-                        0.7201269865036011,
-                        2.5571878836672113e-07,
-                        0.6938422918319702
+                        -0.004359743557870388,
+                        -0.7276277542114258,
+                        0.004110229667276144,
+                        -0.6859460473060608
                     ],
                     "scale": [
                         1.0,
@@ -3951,9 +3992,9 @@
                         1.0
                     ],
                     "translate": [
-                        -8.609753608703613,
-                        -0.014295953325927258,
-                        1.3895715475082397
+                        -3.2158889770507813,
+                        -0.0002764078672043979,
+                        0.5157347917556763
                     ]
                 },
                 "VelocityComponent": {

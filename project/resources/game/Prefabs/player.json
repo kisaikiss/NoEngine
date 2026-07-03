@@ -1,5 +1,11 @@
 {
     "components": {
+        "AnimatorComponent": {
+            "animationSpeedMagnification": 1.0,
+            "currentAnimation": 0,
+            "drawSkeleton": false,
+            "enableSkinning": true
+        },
         "CapsuleCollider": {
             "localP0": [
                 0.0,
@@ -40,9 +46,9 @@
             "maxLifeTime": 1.0,
             "maxRotate": 0.0,
             "maxScale": [
-                1.0,
-                1.0,
-                1.0
+                0.5,
+                0.5,
+                0.5
             ],
             "maxSpeed": [
                 3.0,
@@ -52,9 +58,9 @@
             "minLifeTime": 0.5,
             "minRotate": 0.0,
             "minScale": [
-                1.0,
-                1.0,
-                1.0
+                0.5,
+                0.5,
+                0.5
             ],
             "minSpeed": [
                 3.0,
@@ -64,7 +70,7 @@
             "textureName": "smokeEffect"
         },
         "GroundStateComponent": {
-            "groundHeight": -0.00031470737303607166,
+            "groundHeight": -0.0002764078672043979,
             "isGrounded": true
         },
         "MaterialComponent": {
@@ -104,7 +110,7 @@
         },
         "MeshComponent": {
             "isVisible": true,
-            "meshName": "magiclash2"
+            "meshName": "jogging"
         },
         "ParticleEmitterComponent": {
             "active": false,
@@ -153,10 +159,10 @@
         },
         "TransformComponent": {
             "rotation": [
-                -4.699924431861291e-07,
-                -0.6893315315246582,
-                -4.939338396070525e-07,
-                0.7244460582733154
+                -0.004359743557870388,
+                -0.7276277542114258,
+                0.004110229667276144,
+                -0.6859460473060608
             ],
             "scale": [
                 1.0,
@@ -164,9 +170,9 @@
                 1.0
             ],
             "translate": [
-                -6.768913269042969,
-                -0.00031470737303607166,
-                -2.1763718128204346
+                -3.2158889770507813,
+                -0.0002764078672043979,
+                0.5157347917556763
             ]
         },
         "VelocityComponent": {

@@ -37,13 +37,13 @@ AnimationSystem::AnimationSystem() {
 
 void AnimationSystem::Update(ComputeContext& ctx, Registry& registry, float deltaTime) {
 	Update(registry, deltaTime);
-	for (auto e : registry.View<Component::AnimatorComponent, Component::MeshComponent, Component::MaterialComponent>()) {
+	for (auto e : registry.View<Component::AnimatorComponent, Component::MeshComponent>()) {
 		auto* meshComp = registry.GetComponent<Component::MeshComponent>(e);
-		auto* materialComp = registry.GetComponent<Component::MaterialComponent>(e);
+		auto* animeComp = registry.GetComponent<Component::AnimatorComponent>(e);
 
 		auto& modelSaver = ModelSaver::Get();
 		auto* mesh = modelSaver.GetMesh(meshComp->handle);
-		if (materialComp->enableSkinning && mesh->numJoints) {
+		if (animeComp->enableSkinning && mesh->numJoints) {
 			auto& rootIndex = RootSignatureBuilder::GetRootIndexMap(ConvertString(sPsoName));
 			ctx.SetPipelineState(pso_);
 			ctx.SetRootSignature(rootSignature_);
