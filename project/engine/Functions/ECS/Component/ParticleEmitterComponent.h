@@ -31,6 +31,8 @@ struct ParticleEmitterComponent {
 	float frequencyTime = 0.0f; // 頻度用時刻
 	Math::Vector3 maxSpeed = Math::Vector3::UNIT_SCALE;
 	Math::Vector3 minSpeed = -Math::Vector3::UNIT_SCALE;
+	Math::Vector3 maxScale = Math::Vector3::UNIT_SCALE;
+	Math::Vector3 minScale = Math::Vector3::ZERO;
 	Math::Vector3 emitRange = Math::Vector3::UNIT_SCALE;
 	Math::Vector3 localPosition = Math::Vector3::ZERO;
 	Math::Color color = Math::Color::WHITE;

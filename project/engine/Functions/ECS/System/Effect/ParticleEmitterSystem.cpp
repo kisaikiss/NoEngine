@@ -41,8 +41,8 @@ void ParticleEmitterSystem::EmitParticle(Registry& registry, const Component::Tr
 		registry.AddComponent<VelocityComponent>(e)->linear = Random::GetRandomVal(emitter->minSpeed, emitter->maxSpeed);
 		auto* transform = registry.AddComponent<TransformComponent>(e);
 		transform->translate = GetNewPosition(emitterTransform, emitter);
-		transform->rotation = Math::Quaternion::IDENTITY;
-		transform->scale = Math::Vector3::UNIT_SCALE;
+		transform->rotation = Math::Quaternion::IDENTITY; 
+		transform->scale = Random::GetRandomVal(emitter->minScale, emitter->maxScale);
 	}
 }
 
