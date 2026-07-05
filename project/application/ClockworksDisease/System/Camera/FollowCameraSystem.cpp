@@ -30,6 +30,8 @@ void FollowCameraSystem::Update(No::Registry& registry, float deltaTime) {
 		float hInput = No::GetInputAxisValue("CameraHorizontal");
 		float vInput = No::GetInputAxisValue("CameraVertical");
 
+		float pInput = No::GetInputAxisValue("Horizontal") + No::GetInputAxisValue("Forward");
+
 		followCameraVariables->theta += hInput * deltaTime;
 		followCameraVariables->phi += vInput * deltaTime;
 
@@ -37,8 +39,11 @@ void FollowCameraSystem::Update(No::Registry& registry, float deltaTime) {
 			// カメラ操作中はタイマーリセット
 			followCameraVariables->idleTimer = 0.0f;
 		} else {
-			// カメラ操作がされていないときはタイマーを進める
-			followCameraVariables->idleTimer += deltaTime;
+			if (pInput) {
+				// カメラ操作がされておらず、プレイヤー操作があるときはタイマーを進める
+				followCameraVariables->idleTimer += deltaTime;
+
+			}
 		}
 
 		// 移動制限

@@ -3723,7 +3723,7 @@
                     "autoFollowDeadzoneAngle": 0.15000000596046448,
                     "autoFollowDelay": 1.0,
                     "distance": 17.799999237060547,
-                    "maxAutoFollowAngularSpeed": 1.5,
+                    "maxAutoFollowAngularSpeed": 0.6000000238418579,
                     "phi": 1.3336282968521118,
                     "theta": -21.96556854248047
                 },
