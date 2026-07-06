@@ -57,4 +57,12 @@ CapsuleWorld GetWorldCapsule(const Transform* transform, const Math::CapsuleColl
 /// <param name="sphere">球コライダー</param>
 /// <returns>ワールド座標での球コライダー</returns>
 SphereWorld GetWorldSphere(const Transform* transform, const Math::SphereCollider* sphere);
+
+/// <summary>
+/// カプセルコライダーをワールド座標上のAABBへ変換する
+/// </summary>
+/// <param name="transform">トランスフォーム</param>
+/// <param name="capsule">カプセルコライダー</param>
+/// <returns>ワールド座標上のAABB</returns>
+Math::AABBCollider ComputeCapsuleWorldBounds(const Transform* transform, const Math::CapsuleCollider* capsule);
 }

@@ -9,8 +9,8 @@ namespace Math {
 /// 軸に平行な境界ボックス (AABB) を表すコライダ構造体。
 /// </summary>
 struct AABBCollider {
-	Math::Vector3 min;
-	Math::Vector3 max;
+	Vector3 min{ FLT_MAX,  FLT_MAX,  FLT_MAX };
+	Vector3 max{ -FLT_MAX, -FLT_MAX, -FLT_MAX };
 
 	void Expand(const Math::Vector3& p) {
 		min.x = std::min(min.x, p.x);

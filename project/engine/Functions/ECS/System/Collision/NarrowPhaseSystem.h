@@ -10,6 +10,8 @@ public:
 
 private:
 	Math::ContactPosition ClassifyContact(const Math::Vector3& normal);
+
+    std::vector<int> candidateIndices_;
 };
 
 }

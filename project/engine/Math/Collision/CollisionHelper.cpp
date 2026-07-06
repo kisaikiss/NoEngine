@@ -37,4 +37,16 @@ SphereWorld GetWorldSphere(const Transform* transform, const Math::SphereCollide
     result.radius = sphere->radius;
     return result;
 }
+
+Math::AABBCollider ComputeCapsuleWorldBounds(const Transform* transform, const Math::CapsuleCollider* capsule) {
+    // カプセルのローカル始点・終点をワールド変換
+    CapsuleWorld world = GetWorldCapsule(transform, capsule);
+
+    Math::AABBCollider box;
+    box.Expand(world.p0);
+    box.Expand(world.p1);
+    box.min -= Math::Vector3(capsule->radius, capsule->radius, capsule->radius);
+    box.max += Math::Vector3(capsule->radius, capsule->radius, capsule->radius);
+    return box;
+}
 }

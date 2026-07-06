@@ -20,6 +20,7 @@ void LoadMeshCollider(const std::string& filePath, TerrainMesh* outTerrain) {
 	std::string directoryPath = Utilities::GetBasePath(filePath);
 
     BuildTerrainMeshFromAssimpScene(scene, outTerrain->triangles);
+    outTerrain->bvhRoot = BuildBVH(outTerrain->triangles);
 }
 }
 

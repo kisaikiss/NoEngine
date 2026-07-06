@@ -10,6 +10,7 @@ namespace NoEngine {
 namespace Math {
 struct TerrainMesh {
 	std::vector<TriangleCollider> triangles;
+    std::shared_ptr<BVHNode> bvhRoot;
 };
 
 void LoadMeshCollider(const std::string& filePath, TerrainMesh* outTerrain);

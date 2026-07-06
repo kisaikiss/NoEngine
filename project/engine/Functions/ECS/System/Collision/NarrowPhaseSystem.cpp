@@ -5,6 +5,7 @@
 
 #include "engine/Functions/Renderer/Primitive.h"
 #include "engine/Math/MathInclude.h"
+#include "engine/Math/Collision/CollisionHelper.h"
 
 namespace NoEngine {
 namespace ECS {
@@ -70,13 +71,22 @@ void NarrowPhaseSystem::Update(Registry& registry, float deltaTime) {
 			contactEvent.contacts.push_back(contact);
 		}
 
+		// カプセルのワールドAABBを一度だけ計算
+		Math::AABBCollider capsuleBounds = ComputeCapsuleWorldBounds(capsuleTransform, capsuleCollider);
+
 		for (auto terrainE : terrainView) {
-			for (auto& triangle : registry.GetComponent<Math::TerrainMesh>(terrainE)->triangles) {
-				auto collide = Math::TestCapsuleTriangle(capsuleTransform, capsuleCollider, triangle); 
+			auto* terrain = registry.GetComponent<Math::TerrainMesh>(terrainE);
+
+			candidateIndices_.clear();
+			Math::QueryBVH(terrain->bvhRoot.get(), capsuleBounds, terrain->triangles, candidateIndices_);
+
+
+			for (int idx : candidateIndices_) {
+				const auto& triangle = terrain->triangles[idx];
+				auto collide = Math::TestCapsuleTriangle(capsuleTransform, capsuleCollider, triangle);
 
 				if (!collide.hit) continue;
 
-				// 衝突情報を格納
 				Contact contact;
 				contact.a = capsuleE;
 				contact.b = terrainE;
@@ -87,7 +97,6 @@ void NarrowPhaseSystem::Update(Registry& registry, float deltaTime) {
 				contactEvent.contacts.push_back(contact);
 			}
 		}
-
 	}
 	if (!contactEvent.contacts.empty()) {
 		// 衝突情報をイベントとして次のシステムへ送る
