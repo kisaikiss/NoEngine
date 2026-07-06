@@ -74,13 +74,15 @@ int RunApplication(std::unique_ptr<IGameApp> game) {
 		float deltaTime = CalculateDeltaTime();
 		sElapsedTime += deltaTime;
 		game->Update(ctx, deltaTime);
+		
+		ctx.Finish(true);
+
 		Editor::EditorCommandOperator::Update(deltaTime);
 		renderPassScheduler.Render(context, game->GetRegistry());
 
 		DrawPerformance(deltaTime);
 		Log::GetInstance().DrawImGuiWindow("Console");
 
-		ctx.Finish(true);
 		GraphicsCore::EndFrame(context, renderPassScheduler.GetScreenDrawBuffer());
 		if (game->Exit()) break;
 	}
