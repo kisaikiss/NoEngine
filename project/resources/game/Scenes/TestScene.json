@@ -3729,10 +3729,10 @@
                 },
                 "TransformComponent": {
                     "rotation": [
-                        0.08471835404634476,
-                        0.6931023597717285,
-                        -0.08257828652858734,
-                        0.7110645174980164
+                        0.084718257188797,
+                        0.6931033134460449,
+                        -0.0825783982872963,
+                        0.7110636234283447
                     ],
                     "scale": [
                         1.0,
@@ -3742,7 +3742,7 @@
                     "translate": [
                         -20.51194953918457,
                         4.181846618652344,
-                        0.07315874844789505
+                        0.07320232689380646
                     ]
                 }
             }
@@ -3820,7 +3820,7 @@
                     "fill": 0.0,
                     "flipX": false,
                     "flipY": false,
-                    "layer": 0,
+                    "layer": 2,
                     "maskTextureName": "levelGaugeMask",
                     "orderInLayer": 0,
                     "pivot": [
@@ -3845,6 +3845,52 @@
                     "translate": [
                         252.0,
                         65.4000015258789
+                    ]
+                }
+            }
+        },
+        "LevelNumber": {
+            "components": {
+                "EditTag": {
+                    "name": "LevelNumber",
+                    "path": "UI/newEntity"
+                },
+                "LevelNumberTag": null,
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "fill": 0.0,
+                    "flipX": false,
+                    "flipY": false,
+                    "layer": 3,
+                    "maskTextureName": "",
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureName": "levelNumbers",
+                    "useMask": false,
+                    "uv": [
+                        0.10000000149011612,
+                        0.0,
+                        0.10000000149011612,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        64.0,
+                        64.0
+                    ],
+                    "translate": [
+                        223.60000610351563,
+                        47.599998474121094
                     ]
                 }
             }
@@ -4135,10 +4181,10 @@
                 },
                 "TransformComponent": {
                     "rotation": [
-                        -0.004359743557870388,
-                        -0.7276277542114258,
-                        0.004110229667276144,
-                        -0.6859460473060608
+                        -0.005212884396314621,
+                        -0.7277566194534302,
+                        0.0049125803634524345,
+                        -0.6857980489730835
                     ],
                     "scale": [
                         1.0,

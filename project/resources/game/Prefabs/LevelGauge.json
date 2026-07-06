@@ -15,7 +15,7 @@
             "fill": 0.0,
             "flipX": false,
             "flipY": false,
-            "layer": 0,
+            "layer": 2,
             "maskTextureName": "levelGaugeMask",
             "orderInLayer": 0,
             "pivot": [

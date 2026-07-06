@@ -1,9 +1,10 @@
 {
     "components": {
         "EditTag": {
-            "name": "Level",
+            "name": "LevelNumber",
             "path": "UI/newEntity"
         },
+        "LevelNumberTag": null,
         "SpriteComponent": {
             "color": [
                 1.0,
@@ -14,31 +15,31 @@
             "fill": 0.0,
             "flipX": false,
             "flipY": false,
-            "layer": 0,
+            "layer": 3,
             "maskTextureName": "",
             "orderInLayer": 0,
             "pivot": [
                 0.5,
                 0.5
             ],
-            "textureName": "level",
+            "textureName": "levelNumbers",
             "useMask": false,
             "uv": [
+                0.10000000149011612,
                 0.0,
-                0.0,
-                1.0,
+                0.10000000149011612,
                 1.0
             ]
         },
         "Transform2DComponent": {
             "rotation": 0.0,
             "scale": [
-                451.0,
-                83.0
+                64.0,
+                64.0
             ],
             "translate": [
-                252.0,
-                65.4000015258789
+                223.60000610351563,
+                47.599998474121094
             ]
         }
     }
