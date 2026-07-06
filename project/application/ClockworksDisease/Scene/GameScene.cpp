@@ -40,6 +40,7 @@ void GameScene::AddSystems() {
 	AddSystem(std::make_unique<No::EditSystem>());
 
 	AddSystem(std::make_unique<No::ModelLoadSystem>());
+	AddSystem(std::make_unique<No::SpriteLoadSystem>());
 	AddSystem(std::make_unique<No::AnimationSystem>());
 	AddSystem(std::make_unique<BoxColliderUpdateSystem>());
 	AddSystem(std::make_unique<PlayerMoveSystem>());

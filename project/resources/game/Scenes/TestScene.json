@@ -3758,6 +3758,57 @@
                 }
             }
         },
+        "LevelGauge": {
+            "components": {
+                "EditTag": {
+                    "name": "LevelGauge",
+                    "path": "UI/newEntity"
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "flipX": false,
+                    "flipY": false,
+                    "layer": 0,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureName": "level",
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        451.0,
+                        83.0
+                    ],
+                    "translate": [
+                        252.0,
+                        65.4000015258789
+                    ]
+                }
+            }
+        },
+        "UI": {
+            "components": {
+                "EditTag": {
+                    "name": "UI",
+                    "path": "UI"
+                },
+                "FolderTag": null
+            }
+        },
         "box": {
             "components": {
                 "AABBCollider": {
@@ -3937,7 +3988,8 @@
                 },
                 "LevelComponent": {
                     "nextLevelUp": 30,
-                    "nowLevel": 1
+                    "nowLevel": 1,
+                    "power": 0
                 },
                 "MaterialComponent": {
                     "color": [

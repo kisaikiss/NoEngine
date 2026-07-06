@@ -9,5 +9,5 @@ REFLECT_FIELD(layer),
 REFLECT_FIELD(orderInLayer),
 REFLECT_FIELD(color),
 REFLECT_FIELD(uv),
-REFLECT_FIELD(textureFilePath)
+REFLECT_FIELD(textureName)
 REFLECT_STRUCT_END(NoEngine::Component::SpriteComponent)

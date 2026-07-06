@@ -12,7 +12,7 @@ struct SpriteComponent {
 	uint32_t layer = 0;
 	uint32_t orderInLayer = 0;
 	TextureRef textureHandle;
-	std::string textureFilePath;
+	std::string textureName;
 	Math::Color color = { Math::Color::WHITE};
 	std::string name;
 	bool isVisible = true;
