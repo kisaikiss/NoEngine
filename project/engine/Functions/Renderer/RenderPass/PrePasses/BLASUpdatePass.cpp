@@ -14,6 +14,11 @@ using namespace Component;
 void BLASUpdatePass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& resourceRegistry, ECS::Registry& registry) {
 	if (!GraphicsCore::IsEnableRaytracing()) return;
 	for (auto e : registry.View<MeshComponent, AnimatorComponent>()) {
+		auto* animeComp = registry.GetComponent<AnimatorComponent>(e);
+		if (!animeComp->enableSkinning) {
+			continue;
+		}
+
 		auto* meshComp = registry.GetComponent<MeshComponent>(e);
 		auto& modelSaver = ModelSaver::Get();
 		auto* mesh = modelSaver.GetMesh(meshComp->handle);
