@@ -3809,6 +3809,7 @@
                     "name": "LevelGauge",
                     "path": "UI/newEntity"
                 },
+                "LevelGaugeTag": null,
                 "SpriteComponent": {
                     "color": [
                         1.0,
@@ -3827,7 +3828,7 @@
                         0.5
                     ],
                     "textureName": "levelGauge",
-                    "useMask": false,
+                    "useMask": true,
                     "uv": [
                         0.0,
                         0.0,

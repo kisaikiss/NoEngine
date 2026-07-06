@@ -14,6 +14,7 @@
 #include "../System/Game/ColliderDrawSystem.h"
 #include "../System/Game/ItemGetSystem.h"
 #include "../System/Object/BigBadgeSystem.h"
+#include "../System/UI/LevelUISystem.h"
 
 void GameScene::Setup() {
 	AddSystems();
@@ -53,6 +54,7 @@ void GameScene::AddSystems() {
 	AddSystem(std::make_unique<ItemGetSystem>());
 	AddSystem(std::make_unique<BigBadgeSystem>());
 	AddSystem(std::make_unique<PlayerLevelUpSystem>());
+	AddSystem(std::make_unique<LevelUISystem>());
 	AddSystem(std::make_unique<No::EffectEmitSystem>());
 	AddSystem(std::make_unique<No::ParticleEmitterSystem>());
 	AddSystem(std::make_unique<No::ParticleSystem>());

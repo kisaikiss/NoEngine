@@ -9,7 +9,8 @@ void PlayerLevelUpSystem::Update(No::Registry& registry, float deltaTime) {
 		auto* levelComponent = registry.GetComponent<LevelComponent>(e);
 		if (levelComponent->power >= levelComponent->nextLevelUp) {
 			levelComponent->nowLevel++;
-			constexpr uint32_t kAmountOfPowerNeededForTheNextLevelUp = 30;
+			constexpr uint32_t kAmountOfPowerNeededForTheNextLevelUp = 10;
+			levelComponent->power -= levelComponent->nextLevelUp;
 			levelComponent->nextLevelUp += kAmountOfPowerNeededForTheNextLevelUp;
 			EnhancementsUponLevelingUp(registry, e, levelComponent->nowLevel);
 		}
