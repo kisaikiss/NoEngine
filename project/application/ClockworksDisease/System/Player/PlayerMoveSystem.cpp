@@ -50,7 +50,7 @@ void PlayerMoveSystem::Update(No::Registry& registry, float deltaTime) {
 				groundState->isGrounded = false;
 			} else {
 				if (registry.Has<MultiJumpTag>(entity)) {
-					if (stamina > 1.0f) {
+					if (stamina >= 1.0f) {
 						playerVariables->yVelocity = playerVariables->doubleJumpSpeed;
 						justJumped = true;
 						groundState->isGrounded = false;

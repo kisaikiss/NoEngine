@@ -3681,7 +3681,7 @@
                     "drawCenter": false,
                     "mousePositionX": 720,
                     "mousePositionY": 521,
-                    "mouseWheelY": -720.0,
+                    "mouseWheelY": 0.0,
                     "phi": 1.2824972867965698,
                     "theta": -15.519105911254883
                 },
@@ -3935,6 +3935,10 @@
                     "groundHeight": -0.0002764078672043979,
                     "isGrounded": true
                 },
+                "LevelComponent": {
+                    "nextLevelUp": 30,
+                    "nowLevel": 1
+                },
                 "MaterialComponent": {
                     "color": [
                         1.0,
@@ -4026,7 +4030,6 @@
                     "jumpSpeed": 7.0,
                     "maxStamina": 0.0,
                     "moveSpeed": 5.0,
-                    "power": 0,
                     "stamina": 0.0
                 },
                 "TransformComponent": {

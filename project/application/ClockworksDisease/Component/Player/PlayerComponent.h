@@ -11,5 +11,10 @@ struct PlayerComponent {
 	float maxStamina = 0.0f;
  	No::Vector3 groundNormal = No::Vector3::UP;
 	bool infinityJump = false;
+};
+
+struct LevelComponent {
 	uint32_t power = 0;
+	uint32_t nowLevel = 1;
+	uint32_t nextLevelUp = 30;
 };

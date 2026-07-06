@@ -5,6 +5,7 @@
 #include "../System/Camera/FollowCameraSystem.h"
 #include "../System/Game/CollisionEventSystem.h"
 #include "../System/Player/PlayerPushBackSystem.h"
+#include "../System/Player/PlayerLevelUpSystem.h"
 #include "../System/Object/BoxColliderUpdateSystem.h"
 
 #include "../Component/Player/PlayerComponent.h"
@@ -50,6 +51,7 @@ void GameScene::AddSystems() {
 	AddSystem(std::make_unique<PlayerPushBackSystem>());
 	AddSystem(std::make_unique<ItemGetSystem>());
 	AddSystem(std::make_unique<BigBadgeSystem>());
+	AddSystem(std::make_unique<PlayerLevelUpSystem>());
 	AddSystem(std::make_unique<No::EffectEmitSystem>());
 	AddSystem(std::make_unique<No::ParticleEmitterSystem>());
 	AddSystem(std::make_unique<No::ParticleSystem>());
