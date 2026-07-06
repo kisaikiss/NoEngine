@@ -211,10 +211,6 @@ void CommonSetupRenderPass(RenderPassScheduler& renderPassScheduler) {
 	primitivePass->SetDepthOutput("MainDepth");
 	renderPassScheduler.AddPass(std::move(primitivePass));
 
-	auto spritePass = std::make_unique<SpritePass>();
-	spritePass->AddOutput("MainColor");
-	renderPassScheduler.AddPass(std::move(spritePass));
-
 	auto skyBoxPass = std::make_unique<SkyBoxPass>();
 	skyBoxPass->AddOutput("MainColor");
 	skyBoxPass->SetDepthOutput("MainDepth");
@@ -236,6 +232,10 @@ void CommonSetupRenderPass(RenderPassScheduler& renderPassScheduler) {
 	vignetting->AddInput("InputColor", "PostEffect");
 	vignetting->AddOutput("MainColor");
 	renderPassScheduler.AddPass(std::move(vignetting));
+
+	auto spritePass = std::make_unique<SpritePass>();
+	spritePass->AddOutput("MainColor");
+	renderPassScheduler.AddPass(std::move(spritePass));
 }
 
 void CommonSetupDebugRenderPass(RenderPassScheduler& renderPassScheduler) {

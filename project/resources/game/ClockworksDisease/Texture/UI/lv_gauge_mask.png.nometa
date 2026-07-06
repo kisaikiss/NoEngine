@@ -1,1 +1,4 @@
-{"AddressableName":"resources/game/ClockworksDisease/Texture/UI/lv_gauge_mask.png","SourceFile":"lv_gauge_mask.png"}
+{
+    "AddressableName": "levelGaugeMask",
+    "SourceFile": "lv_gauge_mask.png"
+}

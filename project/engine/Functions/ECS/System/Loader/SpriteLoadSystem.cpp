@@ -11,8 +11,8 @@ void SpriteLoadSystem::Update(Registry& registry, float deltaTime) {
 	auto view = registry.View<Component::SpriteComponent>();
 	for (auto e : view) {
 		auto* sprite = registry.GetComponent<Component::SpriteComponent>(e);
+		// 通常テクスチャ
 		if (!sprite->textureHandle.IsValid()) {
-			// すでに同じテクスチャが読み込まれているなら再読み込みされないようにLoadConvertTexture()は作成されている。
 			auto texture = TextureManager::LoadCovertTexture(AssetManager::GetFilePathFromAddressableName(sprite->textureName));
 
 			// 正常に読み込まれたなら
@@ -22,7 +22,16 @@ void SpriteLoadSystem::Update(Registry& registry, float deltaTime) {
 			}
 		}
 		
+		// マスク用テクスチャ	
+		if (!sprite->maskTextureHandle.IsValid() && sprite->useMask) {
+			auto texture = TextureManager::LoadCovertTexture(AssetManager::GetFilePathFromAddressableName(sprite->maskTextureName));
 
+			// 正常に読み込まれたなら
+			if (texture.IsValid()) {
+				// 実際のスプライトへ代入する
+				sprite->maskTextureHandle = texture;
+			}
+		}
 	}
 
 }

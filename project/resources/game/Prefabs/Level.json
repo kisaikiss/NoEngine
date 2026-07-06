@@ -1,7 +1,7 @@
 {
     "components": {
         "EditTag": {
-            "name": "LevelGauge",
+            "name": "Level",
             "path": "UI/newEntity"
         },
         "SpriteComponent": {
@@ -11,17 +11,16 @@
                 1.0,
                 1.0
             ],
-            "fill": 0.0,
             "flipX": false,
             "flipY": false,
             "layer": 0,
-            "maskTextureName": "levelGaugeMask",
+            "maskTextureName": "",
             "orderInLayer": 0,
             "pivot": [
                 0.5,
                 0.5
             ],
-            "textureName": "levelGauge",
+            "textureName": "level",
             "useMask": false,
             "uv": [
                 0.0,
