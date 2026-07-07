@@ -1,4 +1,5 @@
 #include "MathUtility.h"
+#include "engine/Runtime/GraphicsCore.h"
 
 namespace NoEngine {
 namespace Math {
@@ -22,6 +23,17 @@ Vector2 Clamp(const Vector2& v, const Vector2& min, const Vector2& max) {
 		std::clamp(v.x,min.x,max.x),
 		std::clamp(v.y,min.y,max.y)
 	};
+}
+
+Vector2 WorldToScreen(const Vector3& p, const Matrix4x4& view, const Matrix4x4& projection) {
+	Vector3 ndc = (view * projection).Transform(p);
+
+	Vector2 screenSize = GraphicsCore::GetWindowSize();
+
+	float screenX = (ndc.x + 1.0f) * 0.5f * screenSize.x;
+	float screenY = (1.0f - ndc.y) * 0.5f * screenSize.y;
+
+	return Vector2(screenX, screenY);
 }
 }
 }

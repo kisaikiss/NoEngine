@@ -8140,8 +8140,8 @@
                 "Transform2DComponent": {
                     "rotation": 0.0,
                     "scale": [
-                        128.0,
-                        128.0
+                        64.0,
+                        64.0
                     ],
                     "translate": [
                         130.10000610351563,

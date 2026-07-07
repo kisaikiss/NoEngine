@@ -5,21 +5,42 @@
 
 void StaminaUISystem::Update(No::Registry& registry, float deltaTime) {
 
+	// プレイヤーの情報を収集
 	float stamina = 0.0f;
 	float maxStamina = 0.0f;
-	for (auto e : registry.View<PlayerComponent>()) {
+	No::Vector3 playerPos = No::Vector3::ZERO;
+	for (auto e : registry.View<PlayerComponent, No::TransformComponent> ()) {
 		auto* player = registry.GetComponent<PlayerComponent>(e);
 		stamina = player->stamina;
 		maxStamina = player->maxStamina;
+		playerPos = registry.GetComponent<No::TransformComponent>(e)->GetWorldPosition();
 	}
-
+	// スタミナ最大値が0なら早期リターン
 	if (maxStamina == 0.0f) {
 		return;
 	}
 
-	for (auto e : registry.View<No::SpriteComponent, StaminaGaugeComponent>()) {
+	// カメラの情報を収集
+	No::Matrix4x4 view{};
+	No::Matrix4x4 projection{};
+	for (auto e : registry.View<No::CameraComponent, No::ActiveCameraTag>()) {
+		auto* camera = registry.GetComponent<No::CameraComponent>(e);
+		view = camera->view;
+		projection = camera->projection;
+	}
+
+
+	// スタミナゲージの位置と減り具合を決める
+	for (auto e : registry.View<No::SpriteComponent, No::Transform2DComponent, StaminaGaugeComponent>()) {
 		auto* sprite = registry.GetComponent<No::SpriteComponent>(e);
 		auto* staminaGauge = registry.GetComponent<StaminaGaugeComponent>(e);
+
+		// プレイヤーの位置にスタミナゲージを表示する
+		auto* transform = registry.GetComponent<No::Transform2DComponent>(e);
+		transform->translate = No::WorldToScreen(playerPos, view, projection);
+		constexpr No::Vector2 uiPositionOffset = { -100.f,100.f };
+		transform->translate += uiPositionOffset;
+
 
 		// 前フレームと同じスタミナかつスタミナが最大値ならタイマーを進める
 		if (staminaGauge->preStamina == stamina && stamina == maxStamina) {
@@ -42,7 +63,7 @@ void StaminaUISystem::Update(No::Registry& registry, float deltaTime) {
 		constexpr float kGaugeMin = 2 * PI;
 		// スタミナの数値から描画しない範囲を決める
 		sprite->nonRenderAngle = kGaugeMin - (stamina * kGaugeMin / maxStamina);
-
+		
 		// 次のフレームのためにこのフレームのスタミナを入れておく
 		staminaGauge->preStamina = stamina;
 	}
