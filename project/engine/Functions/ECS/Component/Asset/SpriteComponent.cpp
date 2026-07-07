@@ -10,6 +10,7 @@ REFLECT_FIELD(orderInLayer),
 REFLECT_FIELD(color),
 REFLECT_FIELD(uv),
 REFLECT_FIELD(textureName),
+REFLECT_FIELD(nonRenderAngle),
 REFLECT_FIELD(useMask),
 REFLECT_FIELD(fill),
 REFLECT_FIELD(maskTextureName)

@@ -16,6 +16,7 @@ struct SpriteComponent {
 	Math::Color color = { Math::Color::WHITE};
 	std::string name;
 	bool isVisible = true;
+	float nonRenderAngle = 0.0f;	// 描画しない角度（円形ゲージなどに使う）
 	float fill = 0.0f;				// 0..1 （UV.x に対する切り詰め量）
 	bool useMask = false;				// マスクを使用するかどうか（UI 用）
 	std::string maskTextureName;

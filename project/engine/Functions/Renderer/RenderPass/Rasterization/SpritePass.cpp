@@ -148,11 +148,12 @@ void SpritePass::Render(GraphicsContext& gfx) {
 		{
 			float fill;
 			int useMask;
-			float pad[2];
+			float angle;
+			float pad;
 		} MaskConstants;
 		MaskConstants.fill = items_[start].sprite->fill;
 		MaskConstants.useMask = (items_[start].sprite->useMask != 0 && items_[start].sprite->maskTextureHandle.IsValid()) ? 1 : 0;
-
+		MaskConstants.angle = items_[start].sprite->nonRenderAngle;
 		gfx.SetDynamicConstantBufferView(rootIndex["gMaskParams"], sizeof(MaskConstants), &MaskConstants);
 		
 		_declspec(align(16)) struct
