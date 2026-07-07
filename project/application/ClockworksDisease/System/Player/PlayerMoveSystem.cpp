@@ -71,7 +71,7 @@ void PlayerMoveSystem::Update(No::Registry& registry, float deltaTime) {
 		//  水平移動入力
 		// ------------------------------------------------------------------
 		No::Vector3 inputDir = No::Vector3::ZERO;
-		inputDir.x = No::GetInputAxisValue("Horizontal");
+		inputDir.x = No::GetInputAxisValue("Lateral");
 		inputDir.z = No::GetInputAxisValue("Forward");
 
 		// 斜面に沿った y 寄与分（斜面下り用）

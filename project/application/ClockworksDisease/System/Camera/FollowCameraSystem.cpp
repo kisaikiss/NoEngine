@@ -30,7 +30,7 @@ void FollowCameraSystem::Update(No::Registry& registry, float deltaTime) {
 		float hInput = No::GetInputAxisValue("CameraHorizontal");
 		float vInput = No::GetInputAxisValue("CameraVertical");
 
-		float pInput = No::GetInputAxisValue("Horizontal") + No::GetInputAxisValue("Forward");
+		float pInput = No::GetInputAxisValue("Lateral") + No::GetInputAxisValue("Forward");
 
 		followCameraVariables->theta += hInput * deltaTime;
 		followCameraVariables->phi += vInput * deltaTime;
