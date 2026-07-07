@@ -3,9 +3,12 @@
 #include "../../Component/Player/PlayerComponent.h"
 #include "../../Component/Player/PlayerMoveTags.h"
 
+REFLECT_STRUCT_BEGIN(LevelUpEffectTag)
+REFLECT_STRUCT_END(LevelUpEffectTag)
+
 void PlayerLevelUpSystem::Update(No::Registry& registry, float deltaTime) {
 	static_cast<void>(deltaTime);
-	for (auto e : registry.View<PlayerComponent, LevelComponent>()) {
+	for (auto e : registry.View<No::TransformComponent, PlayerComponent, LevelComponent>()) {
 		auto* levelComponent = registry.GetComponent<LevelComponent>(e);
 		if (levelComponent->power >= levelComponent->nextLevelUp) {
 			levelComponent->nowLevel++;
@@ -13,6 +16,12 @@ void PlayerLevelUpSystem::Update(No::Registry& registry, float deltaTime) {
 			levelComponent->power -= levelComponent->nextLevelUp;
 			levelComponent->nextLevelUp += kAmountOfPowerNeededForTheNextLevelUp;
 			EnhancementsUponLevelingUp(registry, e, levelComponent->nowLevel);
+
+			// レベルアップ時のエフェクト
+			for (auto effectEntity : registry.View<No::TransformComponent, No::EffectEmitterComponent, LevelUpEffectTag>()) {
+				registry.GetComponent<No::TransformComponent>(effectEntity)->translate = registry.GetComponent<No::TransformComponent>(e)->GetWorldPosition();
+				registry.AddComponent<No::EffectEmitTag>(effectEntity);
+			}
 		}
 	}
 }
