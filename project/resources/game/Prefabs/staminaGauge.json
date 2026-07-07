@@ -1,0 +1,47 @@
+{
+    "components": {
+        "EditTag": {
+            "name": "staminaGauge",
+            "path": "UI/staminaGauge"
+        },
+        "SpriteComponent": {
+            "color": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+            ],
+            "fill": 0.0,
+            "flipX": false,
+            "flipY": false,
+            "layer": 0,
+            "maskTextureName": "",
+            "nonRenderAngle": 0.0,
+            "orderInLayer": 0,
+            "pivot": [
+                0.5,
+                0.5
+            ],
+            "textureName": "staminaGauge",
+            "useMask": false,
+            "uv": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+            ]
+        },
+        "StaminaGaugeComponent": null,
+        "Transform2DComponent": {
+            "rotation": 0.0,
+            "scale": [
+                128.0,
+                128.0
+            ],
+            "translate": [
+                130.10000610351563,
+                592.7000122070313
+            ]
+        }
+    }
+}

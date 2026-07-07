@@ -225,6 +225,8 @@
     <ClCompile Include="application\ClockworksDisease\Component\Player\PlayerMoveTags.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Player\PlayerLevelUpSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\UI\LevelUISystem.cpp" />
+    <ClCompile Include="application\ClockworksDisease\Component\UI\UserInterfaceComponent.cpp" />
+    <ClCompile Include="application\ClockworksDisease\System\UI\StaminaUISystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -459,6 +461,8 @@
     <ClInclude Include="application\ClockworksDisease\Component\Player\PlayerMoveTags.h" />
     <ClInclude Include="application\ClockworksDisease\System\Player\PlayerLevelUpSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\UI\LevelUISystem.h" />
+    <ClInclude Include="application\ClockworksDisease\Component\UI\UserInterfaceComponent.h" />
+    <ClInclude Include="application\ClockworksDisease\System\UI\StaminaUISystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

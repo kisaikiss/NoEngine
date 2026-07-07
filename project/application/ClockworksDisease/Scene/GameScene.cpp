@@ -15,6 +15,7 @@
 #include "../System/Game/ItemGetSystem.h"
 #include "../System/Object/BigBadgeSystem.h"
 #include "../System/UI/LevelUISystem.h"
+#include "../System/UI/StaminaUISystem.h"
 
 void GameScene::Setup() {
 	AddSystems();
@@ -45,6 +46,7 @@ void GameScene::AddSystems() {
 	AddSystem(std::make_unique<No::AnimationSystem>());
 	AddSystem(std::make_unique<BoxColliderUpdateSystem>());
 	AddSystem(std::make_unique<PlayerMoveSystem>());
+	AddSystem(std::make_unique<StaminaUISystem>());
 	AddSystem(std::make_unique<No::GroundResetSystem>());
 
 	AddSystem(std::make_unique<No::NarrowPhaseSystem>());
