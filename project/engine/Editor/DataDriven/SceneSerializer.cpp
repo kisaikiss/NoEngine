@@ -77,6 +77,9 @@ void WriteFieldToJson(nlohmann::json& j, const FieldInfo& field, void* ptr) {
 		j[field.name] = *s;
 	}
 		break;
+	case NoEngine::FieldType::Enum:
+		j[field.name] = field.enumToString(ptr);
+		break;
 	default:
 		j[field.name] = "Unsupported";
 		break;
@@ -176,13 +179,19 @@ void ReadFieldFromJson(const nlohmann::json& j, const FieldInfo& field, void* pt
 		// std::string に書き込む
 		std::string* s = reinterpret_cast<std::string*>(ptr);
 		*s = value;
-	}
 		break;
+	}
 	case NoEngine::FieldType::WString: {
 		const std::wstring value = j[field.name].get<std::wstring>();
 		// std::string に書き込む
 		std::wstring* s = reinterpret_cast<std::wstring*>(ptr);
 		*s = value;
+		break;
+	}
+	case NoEngine::FieldType::Enum: {
+		const std::string value = j[field.name].get<std::string>();
+		field.enumFromString(ptr, value);
+		break;
 	}
 	default:
 		break;
