@@ -10,6 +10,7 @@
 #include <wrl.h>
 
 #include <externals/DirectXTex/d3dx12.h>
+#include <externals/magic_enum/magic_enum.hpp>
 
 #include <memory>
 #include <vector>

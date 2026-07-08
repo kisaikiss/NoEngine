@@ -694,6 +694,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     </ClInclude>
     <ClInclude Include="engine\Functions\ECS\System\Collision\NarrowPhaseSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Player\PlayerPushBackSystem.h" />
+    <ClInclude Include="externals\magic_enum\magic_enum.hpp" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="engine\Assets\Texture\Texture.h" />
