@@ -74,7 +74,7 @@ void EditSystem::Update(Registry& registry, float deltaTime) {
 	// 選択しているEntityに対して何らかの操作をInputによって行う //
 	// 削除
 	if (Input::Keyboard::IsTrigger(VK_DELETE)) {
-		if (editorState_.selectedEntity != ECS::INVALID_ENTITY) {
+		if (!ImGui::IsAnyItemActive() && editorState_.selectedEntity != ECS::INVALID_ENTITY) {
 			Editor::EditorCommandOperator::AddCommand(std::make_unique<Command::DeleteEntityCommand>(registry, editorState_.selectedEntity));
 			registry.DestroyEntity(editorState_.selectedEntity);
 			LogInfo("DestroyEntity name : " + registry.GetComponent<Editor::EditTag>(editorState_.selectedEntity)->name);
