@@ -7,6 +7,7 @@
 #include "engine/Functions/Renderer/Primitive.h"
 #include "engine/Functions/Renderer/RenderSystem.h"
 #include "engine/Functions/Command/EditCommand/ChangeValueCommand.h"
+#include "engine/Functions/Command/EditCommand/FunctionCommand.h"
 #include "engine/Functions/Command/EditCommand/InstantiateEntityCommand.h"
 #include "engine/Functions/Command/EditCommand/RemoveComponentCommand.h"
 #include "engine/Utilities/Conversion/ConvertString.h"
@@ -622,16 +623,22 @@ void DrawFieldUI(const FieldInfo& field, void* ptr) {
 		labels.reserve(names.size());
 		for (auto& n : names) labels.push_back(n.c_str());
 
-		int currentIndex = field.enumGetIndex(valuePtr);
-		static int oldEnumIndex = 0;
+		int oldIndex = field.enumGetIndex(valuePtr); // 変更前のインデックス
+		int currentIndex = oldIndex;
 
 		bool changed = ImGui::Combo(field.name.c_str(), &currentIndex, labels.data(), static_cast<int>(labels.size()));
 
-		if (ImGui::IsItemActivated()) {
-			oldEnumIndex = field.enumGetIndex(valuePtr);
-		}
+		if (changed && currentIndex != oldIndex) {
+			auto setIndex = field.enumSetIndex;
 
-		if (changed) {
+			Editor::EditorCommandOperator::AddCommand(
+				std::make_unique<Command::FunctionCommand>(
+					[valuePtr, setIndex, currentIndex] { setIndex(valuePtr, currentIndex); },
+					[valuePtr, setIndex, oldIndex] { setIndex(valuePtr, oldIndex); },
+					field.name + " (Enum change)"
+				)
+			);
+
 			field.enumSetIndex(valuePtr, currentIndex);
 		}
 		break;

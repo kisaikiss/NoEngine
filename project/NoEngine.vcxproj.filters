@@ -464,6 +464,7 @@
     <ClInclude Include="application\ClockworksDisease\Component\UI\UserInterfaceComponent.h" />
     <ClInclude Include="application\ClockworksDisease\System\UI\StaminaUISystem.h" />
     <ClInclude Include="externals\magic_enum\magic_enum.hpp" />
+    <ClInclude Include="engine\Functions\Command\EditCommand\FunctionCommand.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />
