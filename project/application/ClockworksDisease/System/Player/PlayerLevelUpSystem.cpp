@@ -38,5 +38,15 @@ void PlayerLevelUpSystem::EnhancementsUponLevelingUp(No::Registry& registry, No:
 		if (!registry.Has<MultiJumpTag>(e)) {
 			registry.AddComponent<MultiJumpTag>(e);
 		}
+		return;
+	}
+
+	// level3
+	if (level == 3) {
+		// ハイジャンプを追加
+		if (!registry.Has<HighJumpTag>(e)) {
+			registry.AddComponent<HighJumpTag>(e);
+		}
+		return;
 	}
 }

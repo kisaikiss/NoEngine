@@ -16,6 +16,9 @@ void ClockworksDisease::Startup(void) {
 	No::InputBindAction("Jump", No::DeviceType::Keyboard, static_cast<int>(VK_SPACE));
 	No::InputBindAction("Jump", No::DeviceType::GamepadButton, static_cast<int>(No::GamepadButton::A));
 
+	No::InputBindAction("HighJump", No::DeviceType::Keyboard, static_cast<int>('E'));
+	No::InputBindAction("HighJump", No::DeviceType::GamepadButton, static_cast<int>(No::GamepadButton::B));
+
 	No::InputBindAxis("CameraHorizontal", No::DeviceType::GamepadAxis, static_cast<int>(No::GamepadAxis::RightStickX), -1.0f, 0.2f);
 	No::InputBindAxis("CameraHorizontal", No::DeviceType::Keyboard, static_cast<int>(VK_RIGHT), -1.0f);
 	No::InputBindAxis("CameraHorizontal", No::DeviceType::Keyboard, static_cast<int>(VK_LEFT), 1.0f);

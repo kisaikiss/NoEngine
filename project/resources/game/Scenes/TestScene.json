@@ -8142,8 +8142,9 @@
                 "PlayerComponent": {
                     "doubleJumpSpeed": 4.0,
                     "gravity": -7.0,
+                    "highJumpSpeed": 7.0,
                     "infinityJump": false,
-                    "jumpSpeed": 7.0,
+                    "jumpSpeed": 5.5,
                     "maxStamina": 0.0,
                     "moveSpeed": 5.0,
                     "stamina": 0.0

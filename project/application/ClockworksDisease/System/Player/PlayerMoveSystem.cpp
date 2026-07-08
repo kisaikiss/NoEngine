@@ -24,6 +24,8 @@ void PlayerMoveSystem::Update(No::Registry& registry, float deltaTime) {
 
 		velocity->linear = No::Vector3::ZERO;
 
+		auto& state = playerVariables->state;
+
 		const No::Vector3& groundNormal = playerVariables->groundNormal;
 		const bool isGrounded = groundState->isGrounded;
 
@@ -41,6 +43,7 @@ void PlayerMoveSystem::Update(No::Registry& registry, float deltaTime) {
 		float& moveSpeed = playerVariables->moveSpeed;
 
 		bool justJumped = false;
+
 		if (No::InputIsTrigger("Jump")) {
 			if (isGrounded || playerVariables->infinityJump) {
 				playerVariables->yVelocity = playerVariables->jumpSpeed;
@@ -61,10 +64,36 @@ void PlayerMoveSystem::Update(No::Registry& registry, float deltaTime) {
 			}
 		}
 
-		if (No::InputIsRelease("Jump")) {
+		bool hasHighJumpTag = registry.Has<HighJumpTag>(entity);
+
+		if (No::InputIsPress("HighJump")) {
+			if (hasHighJumpTag && state == PlayerState::kHighJump && !isGrounded) {
+				if (stamina > 10.0f * deltaTime) {
+					playerVariables->yVelocity = playerVariables->highJumpSpeed;
+					stamina -= 10.0f * deltaTime;
+				}
+			}
+		} else {
+			state = PlayerState::kWait;
+		}
+
+		if (No::InputIsTrigger("HighJump")) {
+			if (hasHighJumpTag) {
+				if (isGrounded || playerVariables->infinityJump) {
+					playerVariables->yVelocity = playerVariables->highJumpSpeed;
+					justJumped = true;
+					groundState->isGrounded = false;
+					state = PlayerState::kHighJump;
+				}
+			}
+		}
+
+
+		if (No::InputIsRelease("Jump") || No::InputIsRelease("HighJump")) {
 			if (playerVariables->yVelocity > 0.f) {
 				playerVariables->yVelocity *= 0.5f;
 			}
+			state = PlayerState::kFall;
 		}
 
 		// ------------------------------------------------------------------
