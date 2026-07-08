@@ -616,6 +616,26 @@ void DrawFieldUI(const FieldInfo& field, void* ptr) {
 
 		break;
 	}
+	case FieldType::Enum: {
+		std::vector<std::string> names = field.enumNames();
+		std::vector<const char*> labels;
+		labels.reserve(names.size());
+		for (auto& n : names) labels.push_back(n.c_str());
+
+		int currentIndex = field.enumGetIndex(valuePtr);
+		static int oldEnumIndex = 0;
+
+		bool changed = ImGui::Combo(field.name.c_str(), &currentIndex, labels.data(), static_cast<int>(labels.size()));
+
+		if (ImGui::IsItemActivated()) {
+			oldEnumIndex = field.enumGetIndex(valuePtr);
+		}
+
+		if (changed) {
+			field.enumSetIndex(valuePtr, currentIndex);
+		}
+		break;
+	}
 	default:
 		ImGui::Text(field.name.c_str());
 		ImGui::SameLine();

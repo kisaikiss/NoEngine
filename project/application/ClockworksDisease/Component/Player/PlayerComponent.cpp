@@ -9,7 +9,8 @@ REFLECT_FIELD(doubleJumpSpeed),
 REFLECT_FIELD(gravity),
 REFLECT_FIELD(stamina),
 REFLECT_FIELD(maxStamina),
-REFLECT_FIELD(infinityJump)
+REFLECT_FIELD(infinityJump),
+REFLECT_ENUM_FIELD(state)
 REFLECT_STRUCT_END(PlayerComponent)
 
 REFLECT_STRUCT_BEGIN(LevelComponent)

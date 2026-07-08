@@ -18,6 +18,7 @@ enum class FieldType {
     String,
     WString,
     Struct,
+    Enum,
 };
 
 /// <summary>
@@ -42,6 +43,13 @@ struct FieldInfo {
     size_t          size;
     FieldType       type;       // 型の種類
     FieldAttributes attributes; // 属性
+
+    // FieldType::Enum のときのみ有効
+    std::function<std::vector<std::string>()>       enumNames;
+    std::function<int(const void*)>                  enumGetIndex;
+    std::function<void(void*, int)>                   enumSetIndex;
+    std::function<std::string(const void*)>           enumToString;
+    std::function<void(void*, const std::string&)>    enumFromString;
 };
 
 struct TypeInfo {

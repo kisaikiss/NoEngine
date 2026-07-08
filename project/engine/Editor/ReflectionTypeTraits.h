@@ -1,13 +1,21 @@
 #pragma once
 #include "Reflection.h"
 #include "engine/Math/MathInclude.h"
+#include <type_traits>
 
 // 型推論用ヘルパー
 namespace NoEngine {
 
-template<typename T>
+// 第2テンプレート引数を追加してSFINAEを効かせる
+template<typename T, typename Enable = void>
 struct FieldTypeResolver {
     static constexpr FieldType value = FieldType::Unknown;
+};
+
+// enum型を自動的にFieldType::Enumとして検出
+template<typename T>
+struct FieldTypeResolver<T, std::enable_if_t<std::is_enum_v<T>>> {
+    static constexpr FieldType value = FieldType::Enum;
 };
 
 template<>

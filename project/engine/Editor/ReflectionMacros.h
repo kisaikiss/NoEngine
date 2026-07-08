@@ -47,3 +47,39 @@ NoEngine::TypeInfo* GetTypeInfo();
         NoEngine::FieldTypeResolver<decltype(((ThisType*)0)->field_name)>::value, \
         NoEngine::FieldAttributes{} \
     }
+
+// enumフィールド用（type判定 + magic_enum連携関数を両方セットする）
+#define REFLECT_ENUM_FIELD(field_name) \
+    [] { \
+        using EnumT = decltype(((ThisType*)0)->field_name); \
+        static_assert(std::is_enum_v<EnumT>, #field_name " is not an enum type"); \
+        NoEngine::FieldInfo info{}; \
+        info.name       = #field_name; \
+        info.offset     = offsetof(ThisType, field_name); \
+        info.size       = sizeof(((ThisType*)0)->field_name); \
+        info.type       = NoEngine::FieldType::Enum; \
+        info.attributes = NoEngine::FieldAttributes{}; \
+        info.enumNames = [] { \
+            std::vector<std::string> names; \
+            for (auto n : magic_enum::enum_names<EnumT>()) names.emplace_back(n); \
+            return names; \
+        }; \
+        info.enumGetIndex = [](const void* ptr) -> int { \
+            EnumT v = *reinterpret_cast<const EnumT*>(ptr); \
+            auto idx = magic_enum::enum_index(v); \
+            return idx ? static_cast<int>(*idx) : 0; \
+        }; \
+        info.enumSetIndex = [](void* ptr, int index) { \
+            auto values = magic_enum::enum_values<EnumT>(); \
+            if (index >= 0 && index < static_cast<int>(values.size())) \
+                *reinterpret_cast<EnumT*>(ptr) = values[index]; \
+        }; \
+        info.enumToString = [](const void* ptr) -> std::string { \
+            return std::string(magic_enum::enum_name(*reinterpret_cast<const EnumT*>(ptr))); \
+        }; \
+        info.enumFromString = [](void* ptr, const std::string& s) { \
+            if (auto v = magic_enum::enum_cast<EnumT>(s)) \
+                *reinterpret_cast<EnumT*>(ptr) = *v; \
+        }; \
+        return info; \
+    }()
