@@ -5,13 +5,10 @@ REFLECT_STRUCT_BEGIN(NoEngine::Component::ActiveCameraTag)
 REFLECT_STRUCT_END(NoEngine::Component::ActiveCameraTag)
 
 REFLECT_STRUCT_BEGIN(NoEngine::Component::DebugCameraComponent)
-REFLECT_FIELD(center),
-REFLECT_FIELD(mousePositionX),
-REFLECT_FIELD(mousePositionY),
-REFLECT_FIELD(mouseWheelY),
+REFLECT_ENUM_FIELD(moveType),
+REFLECT_FIELD(unityMoveSpeed),
+REFLECT_FIELD(unitySensitivity),
 REFLECT_FIELD(distance),
-REFLECT_FIELD(theta),
-REFLECT_FIELD(phi),
 REFLECT_FIELD(drawCenter)
 REFLECT_STRUCT_END(NoEngine::Component::DebugCameraComponent)
 
