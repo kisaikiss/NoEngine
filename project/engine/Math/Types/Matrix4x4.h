@@ -9,6 +9,7 @@ __declspec(align(16))struct Matrix4x4 {
 
 	Matrix4x4() { operator=(IDENTITY); }
 	Matrix4x4(const Matrix4x4& matrix4x4);
+	Matrix4x4(const Matrix3x3& matrix3x3);
 	Matrix4x4(const Vector3& x, const Vector3& y, const Vector3& z, const Vector3& w);
 	Matrix4x4(float m00, float m01, float m02, float m03,
 		float m10, float m11, float m12, float m13,

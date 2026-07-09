@@ -17,6 +17,9 @@ struct MaterialComponent {
 	bool drawOutline = false;
 	float shininess = 60.f;
 	float enviromentCoefficient = 0.f;
+	Math::Vector2 uvPosition = Math::Vector2::ZERO;
+	float uvRotate = 0.0f;
+	Math::Vector2 uvScale = Math::Vector2::UNIT_SCALE;
 };
 }
 }

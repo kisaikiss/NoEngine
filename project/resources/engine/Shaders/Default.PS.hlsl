@@ -5,6 +5,8 @@ struct Material
     float4 color;
     float shininess;
     float environmentCoefficient;
+    float2 padding;
+    float4x4 uvTransform;
 };
 ConstantBuffer<Material> gMaterial : register(b0);
 
@@ -62,7 +64,11 @@ PixelShaderOutput main(VertexShaderOutput input)
     PixelShaderOutput output;
     output.color = 0;
 
-    float4 textureColor = gTexture.Sample(gSampler, input.texcoord);
+    // UV座標をfloat4(u, v, 0, 1)に拡張して行列と掛け合わせる
+    float4 transformedUV = mul(float4(input.texcoord, 0.0f, 1.0f), gMaterial.uvTransform);
+    
+    // 変換されたUV座標（xy）を使ってサンプリング
+    float4 textureColor = gTexture.Sample(gSampler, transformedUV.xy);
     
     float3 toEye = normalize(gCameraMatrix.worldPosition - input.worldPosition);
     

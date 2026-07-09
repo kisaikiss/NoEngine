@@ -126,10 +126,20 @@ void MeshPass::Render(GraphicsContext& context, const RenderGraphRegistry& resou
 				float shininess;
 				float environmentCoefficient;
 				float padding[2];
+				Math::Matrix4x4 uvTransform;
 			}constants;
 			constants.color = item.material->color;
 			constants.shininess = item.material->shininess;
 			constants.environmentCoefficient = item.material->enviromentCoefficient;
+
+			// uvTransform
+			Math::Quaternion uvRotate;
+			uvRotate.FromAxisAngle(Math::Vector3::FORWARD, item.material->uvRotate);
+			constants.uvTransform.MakeAffine(
+				Math::Vector3(item.material->uvScale.x, item.material->uvScale.y, 1.0f),
+				uvRotate,
+				Math::Vector3(item.material->uvPosition.x, item.material->uvPosition.y, 0.0f)
+			);
 			context.SetDynamicConstantBufferView(rootIndex["gMaterial"], sizeof(constants), &constants);
 			auto* material = ModelSaver::Get().GetMaterial(item.materialHandles[subMesh.materialIndex]);
 			context.SetDynamicDescriptor(rootIndex["gTexture"], 0, material->textureHandle.GetSRV());
