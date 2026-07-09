@@ -31,14 +31,11 @@ void EngineTestScene::Setup() {
 	registry.AddComponent<No::AnimatorComponent>(entity)->enableSkinning = true;
 	model->meshName = "resources/engine/Model/test/TD_girl/test7.gltf";
 	m->drawOutline = true;
-	m->psoName = L"Renderer : DefaultSkinned PSO";
 
 	No::Entity background = registry.GenerateEntity();
 	auto* bm = registry.AddComponent<No::MeshComponent>(background);
 	bm->meshName = "resources/engine/Model/terrain/terrain.obj";
-	auto* bmm = registry.AddComponent<No::MaterialComponent>(background);
-	bmm->psoName = L"Renderer : Default PSO";
-	bmm->rootSigId = NoEngine::Render::GetRootSignatureID(bmm->psoName);
+	registry.AddComponent<No::MaterialComponent>(background);
 	registry.AddComponent<No::TransformComponent>(background);
 	auto* backgroundTag = registry.AddComponent<No::EditTag>(background);
 	backgroundTag->name = "background";
@@ -146,10 +143,9 @@ void EngineTestScene::Setup() {
 	{
 		auto e = registry.GenerateEntity();
 		auto* cubeMesh = registry.AddComponent<No::MeshComponent>(e);
-		auto* cubeM = registry.AddComponent<No::MaterialComponent>(e);
+		registry.AddComponent<No::MaterialComponent>(e);
 		registry.AddComponent<No::AnimatorComponent>(e);
 		cubeMesh->meshName = "resources/engine/Model/AnimatedCube/AnimatedCube.gltf";
-		cubeM->psoName = L"Renderer : Default PSO";
 
 		registry.AddComponent<No::EditTag>(e)->name = "AnimeCube";
 		registry.AddComponent<No::TransformComponent>(e);

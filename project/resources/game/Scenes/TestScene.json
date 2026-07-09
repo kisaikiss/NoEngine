@@ -58,6 +58,7 @@
                     "textureName": "getEffect"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -66,31 +67,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -191,6 +178,7 @@
                     "textureName": "getEffect"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -199,31 +187,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -315,6 +289,7 @@
                     "textureName": "getEffect"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -323,31 +298,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -439,6 +400,7 @@
                     "textureName": "getEffect"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -447,31 +409,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -563,6 +511,7 @@
                     "textureName": "getEffect"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -571,31 +520,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -687,6 +622,7 @@
                     "textureName": "getEffect"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -695,31 +631,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -811,6 +733,7 @@
                     "textureName": "getEffect"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -819,31 +742,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -935,6 +844,7 @@
                     "textureName": "getEffect"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -943,31 +853,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -1059,6 +955,7 @@
                     "textureName": "getEffect"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -1067,31 +964,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -1183,6 +1066,7 @@
                     "textureName": "getEffect"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -1191,31 +1075,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -1307,6 +1177,7 @@
                     "textureName": "getEffect"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -1315,31 +1186,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -1431,6 +1288,7 @@
                     "textureName": "getEffect"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -1439,31 +1297,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -1555,6 +1399,7 @@
                     "textureName": "getEffect"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -1563,31 +1408,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -1679,6 +1510,7 @@
                     "textureName": "getEffect"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -1687,31 +1519,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -1803,6 +1621,7 @@
                     "textureName": "getEffect"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -1811,31 +1630,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -1927,6 +1732,7 @@
                     "textureName": "getEffect"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -1935,31 +1741,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -2051,6 +1843,7 @@
                     "textureName": "getEffect"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -2059,31 +1852,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -2175,6 +1954,7 @@
                     "textureName": "getEffect"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -2183,31 +1963,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -2299,6 +2065,7 @@
                     "textureName": "getEffect"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -2307,31 +2074,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -2423,6 +2176,7 @@
                     "textureName": "getEffect"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -2431,31 +2185,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -2547,6 +2287,7 @@
                     "textureName": "getEffect"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -2555,31 +2296,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -2671,6 +2398,7 @@
                     "textureName": "getEffect"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -2679,31 +2407,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -2795,6 +2509,7 @@
                     "textureName": "getEffect"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -2803,31 +2518,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -2919,6 +2620,7 @@
                     "textureName": "getEffect"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -2927,31 +2629,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -3043,6 +2731,7 @@
                     "textureName": "getEffect"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -3051,31 +2740,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -3167,6 +2842,7 @@
                     "textureName": "getEffect"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -3175,31 +2851,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -3291,6 +2953,7 @@
                     "textureName": "getEffect"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -3299,31 +2962,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -3415,6 +3064,7 @@
                     "textureName": "getEffect"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -3423,31 +3073,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -3539,6 +3175,7 @@
                     "textureName": "getEffect"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -3547,31 +3184,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -3663,6 +3286,7 @@
                     "textureName": "getEffect"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -3671,31 +3295,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -3787,6 +3397,7 @@
                     "textureName": "getEffect"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -3795,31 +3406,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -3911,6 +3508,7 @@
                     "textureName": "getEffect"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -3919,31 +3517,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -4035,6 +3619,7 @@
                     "textureName": "getEffect"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -4043,31 +3628,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -4159,6 +3730,7 @@
                     "textureName": "getEffect"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -4167,31 +3739,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -4283,6 +3841,7 @@
                     "textureName": "getEffect"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -4291,31 +3850,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -4407,6 +3952,7 @@
                     "textureName": "getEffect"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -4415,31 +3961,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -4531,6 +4063,7 @@
                     "textureName": "getEffect"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -4539,31 +4072,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -4655,6 +4174,7 @@
                     "textureName": "getEffect"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -4663,31 +4183,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -4779,6 +4285,7 @@
                     "textureName": "getEffect"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -4787,31 +4294,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -4903,6 +4396,7 @@
                     "textureName": "getEffect"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -4911,31 +4405,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -5027,6 +4507,7 @@
                     "textureName": "getEffect"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -5035,31 +4516,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -5151,6 +4618,7 @@
                     "textureName": "getEffect"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -5159,31 +4627,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -5275,6 +4729,7 @@
                     "textureName": "getEffect"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -5283,31 +4738,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -5399,6 +4840,7 @@
                     "textureName": "getEffect"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -5407,31 +4849,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -5523,6 +4951,7 @@
                     "textureName": "getEffect"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -5531,31 +4960,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -5647,6 +5062,7 @@
                     "textureName": "getEffect"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -5655,31 +5071,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -5771,6 +5173,7 @@
                     "textureName": "getEffect"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -5779,31 +5182,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -5895,6 +5284,7 @@
                     "textureName": "getEffect"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -5903,31 +5293,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -6019,6 +5395,7 @@
                     "textureName": "getEffect"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -6027,31 +5404,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -6143,6 +5506,7 @@
                     "textureName": "getEffect"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -6151,31 +5515,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -6267,6 +5617,7 @@
                     "textureName": "getEffect"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -6275,31 +5626,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -6391,6 +5728,7 @@
                     "textureName": "getEffect"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -6399,31 +5737,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -6515,6 +5839,7 @@
                     "textureName": "getEffect"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -6523,31 +5848,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -6639,6 +5950,7 @@
                     "textureName": "getEffect"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -6647,31 +5959,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -6762,6 +6060,7 @@
                     "textureName": "getBigItem"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -6770,31 +6069,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -6930,6 +6215,7 @@
                     "textureName": "getBigItem"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -6938,31 +6224,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -7098,6 +6370,7 @@
                     "textureName": "getBigItem"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -7106,31 +6379,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -7266,6 +6525,7 @@
                     "textureName": "getBigItem"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -7274,31 +6534,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -7434,6 +6680,7 @@
                     "textureName": "getBigItem"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -7442,31 +6689,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -7565,13 +6798,13 @@
                         1.57573401927948,
                         2.849214792251587
                     ],
-                    "distance": 13.075267791748047,
+                    "distance": 8.825407028198242,
                     "drawCenter": false,
-                    "mousePositionX": 509,
-                    "mousePositionY": 500,
+                    "mousePositionX": 642,
+                    "mousePositionY": 333,
                     "mouseWheelY": -840.0,
-                    "phi": 1.33607816696167,
-                    "theta": -16.880308151245117
+                    "phi": 1.2222938537597656,
+                    "theta": -16.083219528198242
                 },
                 "EditTag": {
                     "name": "DebugCamera",
@@ -7579,10 +6812,10 @@
                 },
                 "TransformComponent": {
                     "rotation": [
-                        0.02317330613732338,
-                        0.9734774827957153,
-                        -0.11477385461330414,
-                        0.19654907286167145
+                        0.0975731834769249,
+                        0.8140753507614136,
+                        -0.14330701529979706,
+                        0.5542778968811035
                     ],
                     "scale": [
                         1.0,
@@ -7590,9 +6823,9 @@
                         1.0
                     ],
                     "translate": [
-                        -9.191978454589844,
-                        4.616634368896484,
-                        14.569765090942383
+                        -11.975648880004883,
+                        4.5895280838012695,
+                        5.889374732971191
                     ]
                 }
             }
@@ -7895,6 +7128,7 @@
                     "path": "box"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -7903,31 +7137,17 @@
                     ],
                     "drawOutline": false,
                     "enviromentCoefficient": 0.0,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kDefault",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -8056,6 +7276,7 @@
                     "power": 0
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -8064,28 +7285,17 @@
                     ],
                     "drawOutline": true,
                     "enviromentCoefficient": 0.0,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        84,
-                        111,
-                        111,
-                        110,
-                        32,
-                        80,
-                        83,
-                        79
+                    "renderMode": "kToon",
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
                     ],
-                    "shininess": 60.0
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,

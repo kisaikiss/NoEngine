@@ -11,6 +11,10 @@ namespace Render {
 
 using namespace Component;
 
+static bool IsTransparent(MaterialComponent* m) {
+	return m->blendMode != BlendMode::kNormal || m->color.a < 1.0f;
+}
+
 MeshPass::MeshPass() : camera_(nullptr) {
 
 	skyBoxTexture_ = TextureManager::LoadTextureFile("resources/engine/Texture/rostock_laage_airport_4k.dds");
@@ -18,9 +22,29 @@ MeshPass::MeshPass() : camera_(nullptr) {
 
 void MeshPass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& resourceRegistry, ECS::Registry& registry) {
 	static_cast<void>(resourceRegistry);
+
+	if (psoIDs_.empty()) {
+		auto& context = *GetRenderContext();
+		psoIDs_[RenderMode::kDefault][BlendMode::kNormal] = context.GetPSOID("Renderer : Default PSO");
+		psoIDs_[RenderMode::kDefault][BlendMode::kAdd] = context.GetPSOID("Renderer : Default Add PSO");
+		psoIDs_[RenderMode::kDefault][BlendMode::kSubtract] = context.GetPSOID("Renderer : Default Sub PSO");
+		psoIDs_[RenderMode::kDefault][BlendMode::kMultiply] = context.GetPSOID("Renderer : Default Mul PSO");
+		psoIDs_[RenderMode::kDefault][BlendMode::kScreen] = context.GetPSOID("Renderer : Default Screen PSO");
+
+		psoIDs_[RenderMode::kToon][BlendMode::kNormal] = context.GetPSOID("Renderer : Toon PSO");
+		psoIDs_[RenderMode::kToon][BlendMode::kAdd] = context.GetPSOID("Renderer : Toon Add PSO");
+		psoIDs_[RenderMode::kToon][BlendMode::kSubtract] = context.GetPSOID("Renderer : Toon Sub PSO");
+		psoIDs_[RenderMode::kToon][BlendMode::kMultiply] = context.GetPSOID("Renderer : Toon Mul PSO");
+		psoIDs_[RenderMode::kToon][BlendMode::kScreen] = context.GetPSOID("Renderer : Toon Screen PSO");
+
+		rootSigIDs_[RenderMode::kDefault] = context.GetRootSignatureID("Renderer : Default PSO");
+		rootSigIDs_[RenderMode::kToon] = context.GetRootSignatureID("Renderer : Toon PSO");
+	}
+
 	Collect(registry);
 	Sort();
-	Render(gfx, resourceRegistry);
+	RenderItems(gfx, resourceRegistry, opaqueItems_);      // 不透明を先に
+	RenderItems(gfx, resourceRegistry, transparentItems_); // 半透明を後に
 	RenderOutline(gfx);
 }
 
@@ -30,7 +54,8 @@ void MeshPass::Collect(ECS::Registry& registry) {
 		MeshComponent,
 		MaterialComponent
 	>();
-	items_.clear();
+	opaqueItems_.clear();
+	transparentItems_.clear();
 
 	camera_ = GetTargetCamera();
 	if (camera_ == nullptr) return;
@@ -38,12 +63,9 @@ void MeshPass::Collect(ECS::Registry& registry) {
 
 	for (auto entity : view) {
 		auto* mesh = registry.GetComponent<MeshComponent>(entity);
-		if (!mesh->isVisible)continue;
+		if (!mesh->isVisible) continue;
 		auto* material = registry.GetComponent<MaterialComponent>(entity);
 		auto* transform = registry.GetComponent<TransformComponent>(entity);
-		auto pso = material->psoId;
-		auto rootSig = material->rootSigId;
-		auto name = material->psoName;
 		auto* anime = registry.GetComponent<AnimatorComponent>(entity);
 		Transform* animeLocal = nullptr;
 		if (anime) {
@@ -52,29 +74,50 @@ void MeshPass::Collect(ECS::Registry& registry) {
 
 		float distance = MathCalculations::LengthSquared(transform->translate - cameraPos);
 
-		items_.push_back({ mesh->handle, material->handles, material, transform, animeLocal, pso, rootSig, ConvertString(name), distance });
+		DrawItem item{ mesh->handle, material->handles, material, transform, animeLocal, distance };
+
+		if (IsTransparent(material)) {
+			transparentItems_.push_back(std::move(item));
+		} else {
+			opaqueItems_.push_back(std::move(item));
+		}
 	}
 }
 
 void MeshPass::Sort() {
-	std::sort(items_.begin(), items_.end(),
+	// 不透明: Early-Z効率を上げるため前→奥。PSO単位でまとめてステート変更コストを削減してもよい
+	std::sort(opaqueItems_.begin(), opaqueItems_.end(),
 		[](const DrawItem& a, const DrawItem& b) {
-			if (a.psoId != b.psoId) return a.psoId < b.psoId;
 			return a.distanceToCamera < b.distanceToCamera;
+		});
+
+	// 半透明: PSOを無視して奥→前(距離降順)で厳密にソートし、正しい合成順を保証する
+	std::sort(transparentItems_.begin(), transparentItems_.end(),
+		[](const DrawItem& a, const DrawItem& b) {
+			return a.distanceToCamera > b.distanceToCamera;
 		});
 }
 
-void MeshPass::Render(GraphicsContext& context, const RenderGraphRegistry& resourceRegistry) {
+void MeshPass::RenderItems(GraphicsContext& context, const RenderGraphRegistry& resourceRegistry, const std::vector<DrawItem>& items) {
 	(void)resourceRegistry;
-	std::string currentPSO = "";
+	uint32_t currentPSO = 0xFFFFFFFF;
 	auto* renderCtx = GetRenderContext();
-	for (auto& item : items_) {
-		auto& rootIndex = RootSignatureBuilder::GetRootIndexMap(item.psoName);
-		if (item.psoName != currentPSO) {
-			context.SetPipelineState(renderCtx->GetGraphicsPSO(ConvertString(item.material->psoName)));
-			context.SetRootSignature(renderCtx->GetRootSignature(ConvertString(item.material->psoName)));
+	for (auto& item : items) {
+		std::string basePsoName = "Renderer : Default PSO";
+		if (item.material->renderMode == RenderMode::kToon) {
+			basePsoName = "Renderer : Toon PSO";
+		}
+		auto& rootIndex = RootSignatureBuilder::GetRootIndexMap(basePsoName);
+
+		// psoIDs_から対象のPSO IDとRootSignature IDを取得する
+		uint32_t targetPSO = psoIDs_[item.material->renderMode][item.material->blendMode];
+		uint32_t targetRootSig = rootSigIDs_[item.material->renderMode];
+
+		if (targetPSO != currentPSO) {
+			context.SetPipelineState(renderCtx->GetGraphicsPSO(targetPSO));
+			context.SetRootSignature(renderCtx->GetRootSignature(targetRootSig));
 			context.SetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-			currentPSO = item.psoName;
+			currentPSO = targetPSO;
 		}
 
 		struct MeshConstants {
@@ -151,18 +194,19 @@ void MeshPass::Render(GraphicsContext& context, const RenderGraphRegistry& resou
 }
 
 void MeshPass::RenderOutline(GraphicsContext& context) {
-	if (items_.empty()) return;
+	if (opaqueItems_.empty()) return;
 	auto* renderCtx = GetRenderContext();
 	outlinePSOName_ = "Renderer : outline PSO";
 	uint32_t a = renderCtx->GetRootSignatureID(outlinePSOName_);
 	a;
 	outlinePSOID_ = renderCtx->GetPSOID(outlinePSOName_);
+	uint32_t outlineRootSigID = renderCtx->GetRootSignatureID(outlinePSOName_);
 
 	context.SetPipelineState(renderCtx->GetGraphicsPSO(outlinePSOID_));
-	context.SetRootSignature(renderCtx->GetRootSignature(outlinePSOID_));
+	context.SetRootSignature(renderCtx->GetRootSignature(outlineRootSigID));
 	context.SetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	for (auto& item : items_) {
+	for (auto& item : opaqueItems_) {
 		if (!item.material->drawOutline) continue;
 
 		auto& rootIndex = RootSignatureBuilder::GetRootIndexMap(outlinePSOName_);

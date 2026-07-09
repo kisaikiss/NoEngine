@@ -31,6 +31,30 @@ struct DirectionalLight
 };
 StructuredBuffer<DirectionalLight> gDirectionalLights : register(t2);
 
+struct PointLight
+{
+    float4 color;
+    float3 position;
+    float intensity;
+    float radius;
+    float decay;
+};
+StructuredBuffer<PointLight> gPointLights : register(t3);
+
+struct SpotLight
+{
+    float4 color;
+    float3 position;
+    float intensity;
+    float3 direction;
+    float distance;
+    float decay;
+    float cosAngle;
+    float cosFalloffStart;
+};
+StructuredBuffer<SpotLight> gSpotLights : register(t4);
+
+
 Texture2D<float> gShadowMask : register(t5);
 TextureCube<float4> gEnvironmentTexture : register(t6);
 

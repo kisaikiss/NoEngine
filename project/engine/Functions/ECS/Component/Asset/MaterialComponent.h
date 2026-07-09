@@ -3,6 +3,25 @@
 #include "engine/Assets/AssetHandles.h"
 
 namespace NoEngine {
+enum class BlendMode {
+
+	kNormal,
+
+	kAdd,
+
+	kSubtract,
+
+	kMultiply,
+
+	kScreen,
+
+};
+
+enum class RenderMode {
+	kDefault,
+	kToon,
+};
+
 namespace Component {
 /// <summary>
 /// マテリアルを表すコンポーネント。
@@ -13,7 +32,8 @@ struct MaterialComponent {
 	Math::Color color = Math::Color::WHITE;
 	uint32_t psoId = 0;
 	uint32_t rootSigId = 0;
-	std::wstring psoName;
+	BlendMode blendMode = BlendMode::kNormal;
+	RenderMode renderMode = RenderMode::kDefault;
 	bool drawOutline = false;
 	float shininess = 60.f;
 	float enviromentCoefficient = 0.f;

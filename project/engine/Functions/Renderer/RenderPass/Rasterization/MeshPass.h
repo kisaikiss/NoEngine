@@ -35,18 +35,21 @@ protected:
         Component::MaterialComponent* material;
         Component::TransformComponent* transform;
         Transform* animationLocal;
-        uint32_t psoId;
-        uint32_t rootSigId;
-        std::string psoName;
         float distanceToCamera;
     };
 
     std::vector<DrawItem> items_;
+    std::vector<DrawItem> opaqueItems_;
+    std::vector<DrawItem> transparentItems_;
     Component::CameraComponent* camera_;
 
     std::string outlinePSOName_;
     uint32_t outlinePSOID_;
     TextureRef skyBoxTexture_;
+
+    // PSOのBlendModeのマップ
+    std::unordered_map<RenderMode,std::unordered_map<BlendMode, uint32_t>> psoIDs_; 
+    std::unordered_map<RenderMode, uint32_t> rootSigIDs_;
 
     /// <summary>
     /// DrawItemを収集します
@@ -58,11 +61,14 @@ protected:
     /// DrawItemの中身をソートします。
     /// </summary>
     void Sort();
+   
     /// <summary>
-    /// 収集したDrawItemの情報から描画します
-    /// </summary>
-    /// <param name="gfx">描画用コマンドリストのラッパークラスの参照</param>
-    void Render(GraphicsContext& gfx, const RenderGraphRegistry& resourceRegistry);
+   /// 収集したDrawItemの情報から描画します
+   /// </summary>
+   /// <param name="context">描画用コマンドリストのラッパークラスの参照</param>
+    /// <param name="resourceRegistry"></param>
+    /// <param name="items"></param>
+    void RenderItems(GraphicsContext& context, const RenderGraphRegistry& resourceRegistry, const std::vector<DrawItem>& items);
 
     /// <summary>
     /// GraphicsContext を使用してアウトラインを描画する関数。
