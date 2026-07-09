@@ -110,10 +110,4 @@ struct FieldTypeResolver<std::wstring> {
     static constexpr FieldType value = FieldType::WString;
 };
 
-template<>
-struct FieldTypeResolver<Component::BodyType> {
-    static constexpr FieldType value = FieldType::Int;
-};
-
-
 }

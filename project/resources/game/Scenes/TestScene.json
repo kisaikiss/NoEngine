@@ -12,7 +12,7 @@
                     "id": 0
                 },
                 "CollisionLayerComponent": {
-                    "layer": 8
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "Badge",
@@ -145,7 +145,7 @@
                     "id": 0
                 },
                 "CollisionLayerComponent": {
-                    "layer": 8
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "Badge_2",
@@ -269,7 +269,7 @@
                     "id": 0
                 },
                 "CollisionLayerComponent": {
-                    "layer": 8
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "Badge_3",
@@ -393,7 +393,7 @@
                     "id": 0
                 },
                 "CollisionLayerComponent": {
-                    "layer": 8
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "Badge_3_2",
@@ -517,7 +517,7 @@
                     "id": 0
                 },
                 "CollisionLayerComponent": {
-                    "layer": 8
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "Badge_3_2_2",
@@ -641,7 +641,7 @@
                     "id": 0
                 },
                 "CollisionLayerComponent": {
-                    "layer": 8
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "Badge_3_2_3",
@@ -765,7 +765,7 @@
                     "id": 0
                 },
                 "CollisionLayerComponent": {
-                    "layer": 8
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "Badge_3_2_4",
@@ -889,7 +889,7 @@
                     "id": 0
                 },
                 "CollisionLayerComponent": {
-                    "layer": 8
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "Badge_3_2_4_2",
@@ -1013,7 +1013,7 @@
                     "id": 0
                 },
                 "CollisionLayerComponent": {
-                    "layer": 8
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "Badge_3_2_4_2_2",
@@ -1137,7 +1137,7 @@
                     "id": 0
                 },
                 "CollisionLayerComponent": {
-                    "layer": 8
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "Badge_3_2_4_2_2_2",
@@ -1261,7 +1261,7 @@
                     "id": 0
                 },
                 "CollisionLayerComponent": {
-                    "layer": 8
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "Badge_3_2_4_2_3",
@@ -1385,7 +1385,7 @@
                     "id": 0
                 },
                 "CollisionLayerComponent": {
-                    "layer": 8
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "Badge_3_2_4_3",
@@ -1509,7 +1509,7 @@
                     "id": 0
                 },
                 "CollisionLayerComponent": {
-                    "layer": 8
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "Badge_3_2_4_3_2",
@@ -1633,7 +1633,7 @@
                     "id": 0
                 },
                 "CollisionLayerComponent": {
-                    "layer": 8
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "Badge_3_2_4_4",
@@ -1757,7 +1757,7 @@
                     "id": 0
                 },
                 "CollisionLayerComponent": {
-                    "layer": 8
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "Badge_4",
@@ -1881,7 +1881,7 @@
                     "id": 0
                 },
                 "CollisionLayerComponent": {
-                    "layer": 8
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "Badge_4_2",
@@ -2005,7 +2005,7 @@
                     "id": 0
                 },
                 "CollisionLayerComponent": {
-                    "layer": 8
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "Badge_4_3",
@@ -2129,7 +2129,7 @@
                     "id": 0
                 },
                 "CollisionLayerComponent": {
-                    "layer": 8
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "Badge_4_4",
@@ -2253,7 +2253,7 @@
                     "id": 0
                 },
                 "CollisionLayerComponent": {
-                    "layer": 8
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "Badge_4_5",
@@ -2377,7 +2377,7 @@
                     "id": 0
                 },
                 "CollisionLayerComponent": {
-                    "layer": 8
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "Badge_4_6",
@@ -2501,7 +2501,7 @@
                     "id": 0
                 },
                 "CollisionLayerComponent": {
-                    "layer": 8
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "Badge_4_7",
@@ -2625,7 +2625,7 @@
                     "id": 0
                 },
                 "CollisionLayerComponent": {
-                    "layer": 8
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "Badge_4_8",
@@ -2749,7 +2749,7 @@
                     "id": 0
                 },
                 "CollisionLayerComponent": {
-                    "layer": 8
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "Badge_5",
@@ -2873,7 +2873,7 @@
                     "id": 0
                 },
                 "CollisionLayerComponent": {
-                    "layer": 8
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "Badge_6",
@@ -2997,7 +2997,7 @@
                     "id": 0
                 },
                 "CollisionLayerComponent": {
-                    "layer": 8
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "Badge_7",
@@ -3121,7 +3121,7 @@
                     "id": 0
                 },
                 "CollisionLayerComponent": {
-                    "layer": 8
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "Badge_7_2",
@@ -3245,7 +3245,7 @@
                     "id": 0
                 },
                 "CollisionLayerComponent": {
-                    "layer": 8
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "Badge_7_2_2",
@@ -3369,7 +3369,7 @@
                     "id": 0
                 },
                 "CollisionLayerComponent": {
-                    "layer": 8
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "Badge_7_2_2_2",
@@ -3493,7 +3493,7 @@
                     "id": 0
                 },
                 "CollisionLayerComponent": {
-                    "layer": 8
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "Badge_7_2_2_2_2",
@@ -3617,7 +3617,7 @@
                     "id": 0
                 },
                 "CollisionLayerComponent": {
-                    "layer": 8
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "Badge_7_2_2_2_2_2",
@@ -3741,7 +3741,7 @@
                     "id": 0
                 },
                 "CollisionLayerComponent": {
-                    "layer": 8
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "Badge_7_2_2_2_2_2_2",
@@ -3865,7 +3865,7 @@
                     "id": 0
                 },
                 "CollisionLayerComponent": {
-                    "layer": 8
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "Badge_7_2_2_2_2_2_2_2",
@@ -3989,7 +3989,7 @@
                     "id": 0
                 },
                 "CollisionLayerComponent": {
-                    "layer": 8
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "Badge_7_2_2_2_2_2_2_2_2",
@@ -4113,7 +4113,7 @@
                     "id": 0
                 },
                 "CollisionLayerComponent": {
-                    "layer": 8
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "Badge_7_2_2_2_2_2_2_2_2_2",
@@ -4237,7 +4237,7 @@
                     "id": 0
                 },
                 "CollisionLayerComponent": {
-                    "layer": 8
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "Badge_7_2_2_2_2_2_2_2_2_2_2",
@@ -4361,7 +4361,7 @@
                     "id": 0
                 },
                 "CollisionLayerComponent": {
-                    "layer": 8
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "Badge_7_2_2_2_2_2_2_2_2_2_2_2",
@@ -4485,7 +4485,7 @@
                     "id": 0
                 },
                 "CollisionLayerComponent": {
-                    "layer": 8
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "Badge_7_2_2_2_2_2_2_2_2_2_2_2_2",
@@ -4609,7 +4609,7 @@
                     "id": 0
                 },
                 "CollisionLayerComponent": {
-                    "layer": 8
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "Badge_7_2_2_2_2_2_2_2_2_2_2_2_2_2",
@@ -4733,7 +4733,7 @@
                     "id": 0
                 },
                 "CollisionLayerComponent": {
-                    "layer": 8
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "Badge_7_2_2_2_2_2_2_2_2_2_2_2_2_2_2",
@@ -4857,7 +4857,7 @@
                     "id": 0
                 },
                 "CollisionLayerComponent": {
-                    "layer": 8
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "Badge_7_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2",
@@ -4981,7 +4981,7 @@
                     "id": 0
                 },
                 "CollisionLayerComponent": {
-                    "layer": 8
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "Badge_7_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2",
@@ -5105,7 +5105,7 @@
                     "id": 0
                 },
                 "CollisionLayerComponent": {
-                    "layer": 8
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "Badge_7_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2",
@@ -5229,7 +5229,7 @@
                     "id": 0
                 },
                 "CollisionLayerComponent": {
-                    "layer": 8
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "Badge_7_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2",
@@ -5353,7 +5353,7 @@
                     "id": 0
                 },
                 "CollisionLayerComponent": {
-                    "layer": 8
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "Badge_7_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2_3",
@@ -5477,7 +5477,7 @@
                     "id": 0
                 },
                 "CollisionLayerComponent": {
-                    "layer": 8
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "Badge_7_3",
@@ -5601,7 +5601,7 @@
                     "id": 0
                 },
                 "CollisionLayerComponent": {
-                    "layer": 8
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "Badge_7_3_2",
@@ -5725,7 +5725,7 @@
                     "id": 0
                 },
                 "CollisionLayerComponent": {
-                    "layer": 8
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "Badge_7_3_2_2",
@@ -5849,7 +5849,7 @@
                     "id": 0
                 },
                 "CollisionLayerComponent": {
-                    "layer": 8
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "Badge_7_3_2_2_2",
@@ -5973,7 +5973,7 @@
                     "id": 0
                 },
                 "CollisionLayerComponent": {
-                    "layer": 8
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "Badge_7_3_2_2_2_2",
@@ -6097,7 +6097,7 @@
                     "id": 0
                 },
                 "CollisionLayerComponent": {
-                    "layer": 8
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "Badge_7_3_3",
@@ -6221,7 +6221,7 @@
                     "id": 0
                 },
                 "CollisionLayerComponent": {
-                    "layer": 8
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "Badge_7_3_3_2",
@@ -6345,7 +6345,7 @@
                     "id": 0
                 },
                 "CollisionLayerComponent": {
-                    "layer": 8
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "Badge_7_3_3_2_2",
@@ -6469,7 +6469,7 @@
                     "id": 0
                 },
                 "CollisionLayerComponent": {
-                    "layer": 8
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "Badge_7_3_3_2_2_2",
@@ -6593,7 +6593,7 @@
                     "id": 0
                 },
                 "CollisionLayerComponent": {
-                    "layer": 8
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "Badge_7_3_3_2_2_2_2",
@@ -6715,7 +6715,7 @@
                 },
                 "BigBadgeComponent": null,
                 "CollisionLayerComponent": {
-                    "layer": 8
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "BigBadge",
@@ -6883,7 +6883,7 @@
                 },
                 "BigBadgeComponent": null,
                 "CollisionLayerComponent": {
-                    "layer": 8
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "BigBadge_2",
@@ -7051,7 +7051,7 @@
                 },
                 "BigBadgeComponent": null,
                 "CollisionLayerComponent": {
-                    "layer": 8
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "BigBadge_3",
@@ -7219,7 +7219,7 @@
                 },
                 "BigBadgeComponent": null,
                 "CollisionLayerComponent": {
-                    "layer": 8
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "BigBadge_4",
@@ -7387,7 +7387,7 @@
                 },
                 "BigBadgeComponent": null,
                 "CollisionLayerComponent": {
-                    "layer": 8
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "BigBadge_5",
@@ -7672,7 +7672,7 @@
                     "flipX": false,
                     "flipY": false,
                     "isVisible": true,
-                    "layer": 0,
+                    "layer": 1,
                     "maskTextureName": "",
                     "nonRenderAngle": 0.0,
                     "orderInLayer": 0,
@@ -7720,7 +7720,7 @@
                     "flipX": false,
                     "flipY": false,
                     "isVisible": true,
-                    "layer": 2,
+                    "layer": 0,
                     "maskTextureName": "levelGaugeMask",
                     "nonRenderAngle": 0.0,
                     "orderInLayer": 0,
@@ -7888,7 +7888,7 @@
                     ]
                 },
                 "CollisionLayerComponent": {
-                    "layer": 4
+                    "layer": "Item"
                 },
                 "EditTag": {
                     "name": "box",
@@ -7997,10 +7997,10 @@
                     "radius": 0.3499999940395355
                 },
                 "CollisionBody": {
-                    "type": 0
+                    "type": "Dynamic"
                 },
                 "CollisionLayerComponent": {
-                    "layer": 1
+                    "layer": "Player"
                 },
                 "EditTag": {
                     "name": "player",
@@ -8148,7 +8148,7 @@
                     "maxStamina": 0.0,
                     "moveSpeed": 5.0,
                     "stamina": 0.0,
-                    "state": "kJump"
+                    "state": "kWait"
                 },
                 "TransformComponent": {
                     "rotation": [

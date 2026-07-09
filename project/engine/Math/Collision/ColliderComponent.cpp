@@ -31,6 +31,6 @@ REFLECT_STRUCT_END(NoEngine::Component::GroundStateComponent)
 
 
 REFLECT_STRUCT_BEGIN(NoEngine::Component::CollisionBody)
-REFLECT_FIELD(type)
+REFLECT_ENUM_FIELD(type)
 REFLECT_STRUCT_END(NoEngine::Component::CollisionBody)
 

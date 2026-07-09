@@ -20,10 +20,10 @@
             "radius": 0.3499999940395355
         },
         "CollisionBody": {
-            "type": 0
+            "type": "Dynamic"
         },
         "CollisionLayerComponent": {
-            "layer": 1
+            "layer": "Player"
         },
         "EditTag": {
             "name": "player",
@@ -75,7 +75,8 @@
         },
         "LevelComponent": {
             "nextLevelUp": 30,
-            "nowLevel": 1
+            "nowLevel": 1,
+            "power": 0
         },
         "MaterialComponent": {
             "color": [
@@ -164,18 +165,20 @@
         "PlayerComponent": {
             "doubleJumpSpeed": 4.0,
             "gravity": -7.0,
+            "highJumpSpeed": 7.0,
             "infinityJump": false,
-            "jumpSpeed": 7.0,
+            "jumpSpeed": 5.5,
             "maxStamina": 0.0,
             "moveSpeed": 5.0,
-            "stamina": 0.0
+            "stamina": 0.0,
+            "state": "kWait"
         },
         "TransformComponent": {
             "rotation": [
-                -0.004359743557870388,
-                -0.7276277542114258,
-                0.004110229667276144,
-                -0.6859460473060608
+                -0.005212884396314621,
+                -0.7277566194534302,
+                0.0049125803634524345,
+                -0.6857980489730835
             ],
             "scale": [
                 1.0,

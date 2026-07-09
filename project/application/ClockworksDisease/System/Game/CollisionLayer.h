@@ -12,11 +12,3 @@ struct CollisionLayerComponent {
 
 	CollisionLayer layer;
 };
-
-// コリジョンレイヤータイプをUint型としてエディタに登録する
-namespace NoEngine {
-template<>
-struct FieldTypeResolver<CollisionLayerComponent::CollisionLayer> {
-	static constexpr FieldType value = FieldType::Uint;
-};
-}

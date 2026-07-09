@@ -3,13 +3,14 @@
         "AnimatorComponent": {
             "animationSpeedMagnification": 1.0,
             "currentAnimation": 0,
-            "drawSkeleton": false
+            "drawSkeleton": false,
+            "enableSkinning": false
         },
         "BadgeComponent": {
             "id": 0
         },
         "CollisionLayerComponent": {
-            "layer": 8
+            "layer": "Item"
         },
         "EditTag": {
             "name": "Badge",
@@ -114,9 +115,9 @@
                 1.0
             ],
             "translate": [
-                10.149311065673828,
-                3.36716365814209,
-                -0.4090346693992615
+                4.264547348022461,
+                1.0305981636047363,
+                0.6880523562431335
             ]
         }
     }
