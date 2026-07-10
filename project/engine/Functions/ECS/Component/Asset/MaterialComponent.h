@@ -20,6 +20,7 @@ enum class BlendMode {
 enum class RenderMode {
 	kDefault,
 	kToon,
+	kEmissive,
 };
 
 namespace Component {
@@ -40,6 +41,13 @@ struct MaterialComponent {
 	Math::Vector2 uvPosition = Math::Vector2::ZERO;
 	float uvRotate = 0.0f;
 	Math::Vector2 uvScale = Math::Vector2::UNIT_SCALE;
+
+	// プラズマ用に追加
+	float emissiveIntensity = 1.0f;
+	float rimPower = 2.0f;
+	float noiseScrollSpeed = 0.3f;
+	std::string noiseTextureName = "noise0";
+	TextureRef noiseTextureHandle;// ノイズテクスチャ
 };
 }
 }

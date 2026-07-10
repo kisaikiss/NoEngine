@@ -30,7 +30,7 @@ void GameScene::Setup() {
 		No::LoadMeshCollider("resources/game/ClockworksDisease/Model/StageMap/testStage.obj", t);
 		registry.AddComponent<CollisionLayerComponent>(e)->layer = CollisionLayerComponent::Terrain;
 		bm->meshName = "resources/game/ClockworksDisease/Model/StageMap/testStage.obj";
-		registry.AddComponent<No::MaterialComponent>(e);
+		registry.AddComponent<No::MaterialComponent>(e)->color = No::Color(0.3f, 0.3f, 0.3f);
 		registry.AddComponent<No::TransformComponent>(e);
 	}
 

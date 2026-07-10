@@ -38,7 +38,6 @@ protected:
         float distanceToCamera;
     };
 
-    std::vector<DrawItem> items_;
     std::vector<DrawItem> opaqueItems_;
     std::vector<DrawItem> transparentItems_;
     Component::CameraComponent* camera_;

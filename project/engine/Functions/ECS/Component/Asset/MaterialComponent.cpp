@@ -10,5 +10,9 @@ REFLECT_FIELD(shininess),
 REFLECT_FIELD(enviromentCoefficient),
 REFLECT_FIELD(uvPosition),
 REFLECT_FIELD(uvRotate),
-REFLECT_FIELD(uvScale)
+REFLECT_FIELD(uvScale),
+REFLECT_FIELD(emissiveIntensity),
+REFLECT_FIELD(rimPower),
+REFLECT_FIELD(noiseScrollSpeed),
+REFLECT_FIELD(noiseTextureName)
 REFLECT_STRUCT_END(NoEngine::Component::MaterialComponent)

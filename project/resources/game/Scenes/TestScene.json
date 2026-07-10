@@ -58,16 +58,20 @@
                     "textureName": "getEffect"
                 },
                 "MaterialComponent": {
-                    "blendMode": "kNormal",
+                    "blendMode": "kAdd",
                     "color": [
-                        1.0,
-                        1.0,
+                        0.0,
+                        0.4000000059604645,
                         1.0,
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
-                    "renderMode": "kDefault",
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "renderMode": "kEmissive",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -186,8 +190,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kDefault",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -297,8 +305,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kDefault",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -408,8 +420,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kDefault",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -519,8 +535,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kDefault",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -630,8 +650,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kDefault",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -741,8 +765,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kDefault",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -852,8 +880,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kDefault",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -963,8 +995,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kDefault",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -1074,8 +1110,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kDefault",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -1185,8 +1225,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kDefault",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -1296,8 +1340,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kDefault",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -1407,8 +1455,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kDefault",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -1518,8 +1570,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kDefault",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -1629,8 +1685,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kDefault",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -1740,8 +1800,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kDefault",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -1851,8 +1915,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kDefault",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -1962,8 +2030,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kDefault",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -2073,8 +2145,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kDefault",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -2184,8 +2260,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kDefault",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -2295,8 +2375,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kDefault",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -2406,8 +2490,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kDefault",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -2517,8 +2605,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kDefault",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -2628,8 +2720,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kDefault",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -2739,8 +2835,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kDefault",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -2850,8 +2950,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kDefault",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -2961,8 +3065,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kDefault",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -3072,8 +3180,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kDefault",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -3183,8 +3295,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kDefault",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -3294,8 +3410,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kDefault",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -3405,8 +3525,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kDefault",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -3516,8 +3640,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kDefault",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -3627,8 +3755,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kDefault",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -3738,8 +3870,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kDefault",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -3849,8 +3985,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kDefault",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -3960,8 +4100,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kDefault",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -4071,8 +4215,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kDefault",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -4182,8 +4330,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kDefault",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -4293,8 +4445,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kDefault",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -4404,8 +4560,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kDefault",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -4515,8 +4675,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kDefault",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -4626,8 +4790,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kDefault",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -4737,8 +4905,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kDefault",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -4848,8 +5020,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kDefault",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -4959,8 +5135,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kDefault",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -5070,8 +5250,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kDefault",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -5181,8 +5365,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kDefault",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -5292,8 +5480,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kDefault",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -5403,8 +5595,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kDefault",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -5514,8 +5710,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kDefault",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -5625,8 +5825,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kDefault",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -5736,8 +5940,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kDefault",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -5847,8 +6055,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kDefault",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -5958,8 +6170,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kDefault",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -6068,8 +6284,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kDefault",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -6223,8 +6443,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kDefault",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -6378,8 +6602,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kDefault",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -6533,8 +6761,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kDefault",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -6688,8 +6920,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kDefault",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -7129,8 +7365,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kDefault",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,
@@ -7277,8 +7517,12 @@
                         1.0
                     ],
                     "drawOutline": true,
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
                     "renderMode": "kToon",
+                    "rimPower": 2.0,
                     "shininess": 60.0,
                     "uvPosition": [
                         0.0,

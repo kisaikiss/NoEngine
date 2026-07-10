@@ -34,6 +34,7 @@
     <FxCompile Include="resources\engine\Shaders\Dissolve.PS.hlsl" />
     <FxCompile Include="resources\engine\Shaders\RandomNoise.PS.hlsl" />
     <FxCompile Include="resources\engine\Shaders\ObjectID.PS.hlsl" />
+    <FxCompile Include="resources\engine\Shaders\Emissive.PS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="engine\Assets\Audio\Audio.cpp" />

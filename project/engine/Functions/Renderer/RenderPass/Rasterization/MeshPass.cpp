@@ -5,6 +5,10 @@
 #include "engine/Runtime/GraphicsCore.h"
 #include "engine/Functions/ECS/Component/Asset/AnimatorComponent.h"
 #include "engine/Assets/Model/ModelSaver.h"
+#include "engine/Assets/AssetManager.h"
+#include "engine/Assets/Texture/TextureManager.h"
+
+#include "engine/Runtime/GameCore.h"
 
 namespace NoEngine {
 namespace Render {
@@ -12,6 +16,9 @@ namespace Render {
 using namespace Component;
 
 static bool IsTransparent(MaterialComponent* m) {
+	if (m->renderMode == RenderMode::kEmissive) {
+		m->blendMode = BlendMode::kAdd;
+	}
 	return m->blendMode != BlendMode::kNormal || m->color.a < 1.0f;
 }
 
@@ -37,8 +44,11 @@ void MeshPass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& resource
 		psoIDs_[RenderMode::kToon][BlendMode::kMultiply] = context.GetPSOID("Renderer : Toon Mul PSO");
 		psoIDs_[RenderMode::kToon][BlendMode::kScreen] = context.GetPSOID("Renderer : Toon Screen PSO");
 
+		psoIDs_[RenderMode::kEmissive][BlendMode::kAdd] = context.GetPSOID("Renderer : Emissive PSO");
+
 		rootSigIDs_[RenderMode::kDefault] = context.GetRootSignatureID("Renderer : Default PSO");
 		rootSigIDs_[RenderMode::kToon] = context.GetRootSignatureID("Renderer : Toon PSO");
+		rootSigIDs_[RenderMode::kEmissive] = context.GetRootSignatureID("Renderer : Emissive PSO");
 	}
 
 	Collect(registry);
@@ -106,6 +116,8 @@ void MeshPass::RenderItems(GraphicsContext& context, const RenderGraphRegistry& 
 		std::string basePsoName = "Renderer : Default PSO";
 		if (item.material->renderMode == RenderMode::kToon) {
 			basePsoName = "Renderer : Toon PSO";
+		} else if (item.material->renderMode == RenderMode::kEmissive) {
+			basePsoName = "Renderer : Emissive PSO";
 		}
 		auto& rootIndex = RootSignatureBuilder::GetRootIndexMap(basePsoName);
 
@@ -139,23 +151,55 @@ void MeshPass::RenderItems(GraphicsContext& context, const RenderGraphRegistry& 
 		context.SetDynamicConstantBufferView(rootIndex["gCameraMatrix"], sizeof(Component::CameraForGPU), &camera_->forGPU);
 
 		{
-			_declspec(align(16)) struct {
-				uint32_t directionalLightNum = 0;
-				uint32_t pointLightNum = 0;
-				uint32_t spotLightNum = 0;
-				uint32_t pad = 0;
-			}constants;
-			constants.directionalLightNum = renderCtx->GetLightNums()->directionalLightNum;
-			constants.pointLightNum = renderCtx->GetLightNums()->pointLightNum;
-			constants.spotLightNum = renderCtx->GetLightNums()->spotLightNum;
-			context.SetDynamicConstantBufferView(rootIndex["gLightNums"], sizeof(constants), &constants);
+			if (item.material->renderMode != RenderMode::kEmissive) {
+				_declspec(align(16)) struct {
+					uint32_t directionalLightNum = 0;
+					uint32_t pointLightNum = 0;
+					uint32_t spotLightNum = 0;
+					uint32_t pad = 0;
+				}constants;
+				constants.directionalLightNum = renderCtx->GetLightNums()->directionalLightNum;
+				constants.pointLightNum = renderCtx->GetLightNums()->pointLightNum;
+				constants.spotLightNum = renderCtx->GetLightNums()->spotLightNum;
+				context.SetDynamicConstantBufferView(rootIndex["gLightNums"], sizeof(constants), &constants);
 
-			if (constants.directionalLightNum)
-				context.SetDynamicDescriptor(rootIndex["gDirectionalLights"], 0, renderCtx->GetDirectionalLightSRV());
-			if (constants.pointLightNum)
-				context.SetDynamicDescriptor(rootIndex["gPointLights"], 0, renderCtx->GetPointLightSRV());
-			if (constants.spotLightNum)
-				context.SetDynamicDescriptor(rootIndex["gSpotLights"], 0, renderCtx->GetSpotLightSRV());
+				if (constants.directionalLightNum)
+					context.SetDynamicDescriptor(rootIndex["gDirectionalLights"], 0, renderCtx->GetDirectionalLightSRV());
+				if (constants.pointLightNum)
+					context.SetDynamicDescriptor(rootIndex["gPointLights"], 0, renderCtx->GetPointLightSRV());
+				if (constants.spotLightNum)
+					context.SetDynamicDescriptor(rootIndex["gSpotLights"], 0, renderCtx->GetSpotLightSRV());
+			} else {
+				/*
+				struct EmissiveMaterial
+{
+    float4 color; // ベースカラー（発光色）
+    float intensity; // 発光強度
+    float rimPower; // フレネル(縁)の鋭さ
+    float scrollSpeed; // ノイズのスクロール速度
+    float time; // 経過時間
+};
+				*/
+				_declspec(align(16)) struct { 
+					Math::Color color = Math::Color::BLACK; 
+					float intensity = 0.0f; 
+					float rimPower = 0.0f; 
+					float scrollSpeed = 0.0f;
+					float time = 0.0f;
+				} emissiveConstants{
+					item.material->color,
+					item.material->emissiveIntensity,
+					item.material->rimPower,
+					item.material->noiseScrollSpeed,
+					GameCore::GetElapsedTime()
+				};
+				context.SetDynamicConstantBufferView(rootIndex["gEmissive"], sizeof(emissiveConstants), &emissiveConstants);
+				if (!item.material->noiseTextureHandle.IsValid()) {
+					item.material->noiseTextureHandle = TextureManager::LoadCovertTexture(AssetManager::GetFilePathFromAddressableName(item.material->noiseTextureName));
+				}
+				context.SetDynamicDescriptor(rootIndex["gNoiseTexture"], 0, item.material->noiseTextureHandle.GetSRV());
+			}
+			
 		}
 		auto* mesh = ModelSaver::Get().GetMesh(item.meshHandle);
 		if (!mesh) continue;
@@ -183,11 +227,14 @@ void MeshPass::RenderItems(GraphicsContext& context, const RenderGraphRegistry& 
 				uvRotate,
 				Math::Vector3(item.material->uvPosition.x, item.material->uvPosition.y, 0.0f)
 			);
-			context.SetDynamicConstantBufferView(rootIndex["gMaterial"], sizeof(constants), &constants);
-			auto* material = ModelSaver::Get().GetMaterial(item.materialHandles[subMesh.materialIndex]);
-			context.SetDynamicDescriptor(rootIndex["gTexture"], 0, material->textureHandle.GetSRV());
-			context.SetDynamicDescriptor(rootIndex["gShadowMask"], 0, resourceRegistry.GetColorBuffer("ShadowMask").GetSRV());
-			context.SetDynamicDescriptor(rootIndex["gEnvironmentTexture"], 0, skyBoxTexture_.GetSRV());
+			if (item.material->renderMode != RenderMode::kEmissive) {
+				context.SetDynamicConstantBufferView(rootIndex["gMaterial"], sizeof(constants), &constants);
+				auto* material = ModelSaver::Get().GetMaterial(item.materialHandles[subMesh.materialIndex]);
+				context.SetDynamicDescriptor(rootIndex["gTexture"], 0, material->textureHandle.GetSRV());
+				context.SetDynamicDescriptor(rootIndex["gShadowMask"], 0, resourceRegistry.GetColorBuffer("ShadowMask").GetSRV());
+				context.SetDynamicDescriptor(rootIndex["gEnvironmentTexture"], 0, skyBoxTexture_.GetSRV());
+			}
+			
 			context.DrawIndexedInstanced(subMesh.indexCount, 1, subMesh.indexStart, subMesh.vertexStart, 0);
 		}
 	}

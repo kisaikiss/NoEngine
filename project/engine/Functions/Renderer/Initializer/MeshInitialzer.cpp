@@ -176,6 +176,36 @@ void MeshInitialzer::CreatePSO(RenderContext& ctx) {
 		ctx.RegisterRootSignature("Renderer : Toon PSO", std::move(toonRootSignature));
 	}
 
+	// 発光オブジェクト
+	ShaderModule emissivePS(ShaderStage::Pixel, L"resources/engine/Shaders/Emissive.PS.hlsl", L"ps_6_0");
+	const ShaderReflection& emissiveReflection = emissivePS.GetReflection();
+	{
+		std::vector<ShaderReflection> refls;
+		refls.push_back(vsReflection);
+		refls.push_back(emissiveReflection);
+
+		RootSignature emissiveRootSignature;
+		std::string emissivePSOName = "Renderer : Emissive PSO";
+		RootSignatureBuilder::BuildFromReflection(refls, emissiveRootSignature, emissivePSOName);
+
+		GraphicsPSO emissivePSO(ConvertString(emissivePSOName));
+		emissivePSO.SetRootSignature(emissiveRootSignature);
+		D3D12_RASTERIZER_DESC emissiveRasterizerDesc = rasterizerDesc;
+		emissiveRasterizerDesc.CullMode = D3D12_CULL_MODE_NONE;
+		emissivePSO.SetRasterizerState(emissiveRasterizerDesc);
+		emissivePSO.SetInputLayout(inputLayout);
+		emissivePSO.SetPrimitiveTopologyType(D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
+		emissivePSO.SetBlendState(addBlendDesc);
+		emissivePSO.SetDepthStencilState(transparentDepthStencilDesc);
+		emissivePSO.SetRenderTargetFormats(1, rtvFormat, DXGI_FORMAT_D24_UNORM_S8_UINT);
+		emissivePSO.SetVertexShader(defaultVS.GetBytecode());
+		emissivePSO.SetPixelShader(emissivePS.GetBytecode());
+		emissivePSO.SetSampleMask(D3D12_DEFAULT_SAMPLE_MASK);
+		emissivePSO.Finalize();
+		ctx.RegisterGraphicsPSO(emissivePSOName, emissivePSO);
+		ctx.RegisterRootSignature(emissivePSOName, std::move(emissiveRootSignature));
+	}
+
 	// アウトライン
 	{
 		ShaderModule outlineVS(ShaderStage::Vertex, L"resources/engine/Shaders/Outline.VS.hlsl", L"vs_6_0");
