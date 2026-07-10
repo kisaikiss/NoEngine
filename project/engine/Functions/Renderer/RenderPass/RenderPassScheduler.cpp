@@ -7,6 +7,7 @@
 #include "PrePasses/TLASBuildPass.h"
 #include "PrePasses/BLASUpdatePass.h"
 #include "PrePasses/PreRenderPass.h"
+#include "PrePasses/TransparentIDPass.h"
 #include "Raytracing/RaytracingShadowPass.h"
 #include "Rasterization/SkyBoxPass.h"
 #include "PostEffect/GrayscalePass.h"
@@ -178,6 +179,7 @@ void CommonSetupRenderPass(RenderPassScheduler& renderPassScheduler) {
 	renderPassScheduler.SetScreenDrawBuffer("MainColor");
 	
 	resourceRegistry.CreateDepthBuffer("MainDepth", windowSize.x, windowSize.y);
+	resourceRegistry.CreateDepthBuffer("IDDepth", windowSize.x, windowSize.y);
 
 	renderPassScheduler.AddPass(std::make_unique<BLASUpdatePass>());
 	renderPassScheduler.AddPass(std::make_unique<TLASBuildPass>());
@@ -188,8 +190,13 @@ void CommonSetupRenderPass(RenderPassScheduler& renderPassScheduler) {
 	preRenderPass->AddOutput("Normal");
 	preRenderPass->AddOutput("ObjectID");
 	preRenderPass->SetClearTarget(true);
-	preRenderPass->SetDepthOutput("MainDepth", true);
+	preRenderPass->SetDepthOutput("IDDepth", true);
 	renderPassScheduler.AddPass(std::move(preRenderPass));
+
+	auto transparentIDPass = std::make_unique<TransparentIDPass>();
+	transparentIDPass->AddOutput("ObjectID");
+	transparentIDPass->SetDepthOutput("IDDepth");
+	renderPassScheduler.AddPass(std::move(transparentIDPass));
 
 	auto raytracingShadowPass = std::make_unique<RaytracingShadowPass>();
 	raytracingShadowPass->AddInput("WorldPosition", "WorldPosition");
@@ -202,7 +209,7 @@ void CommonSetupRenderPass(RenderPassScheduler& renderPassScheduler) {
 	auto meshPass = std::make_unique<MeshPass>();
 	meshPass->AddInput("ShadowMask", "ShadowMask");
 	meshPass->AddOutput("MainColor");
-	meshPass->SetDepthOutput("MainDepth");
+	meshPass->SetDepthOutput("MainDepth", true);
 	meshPass->SetClearTarget(true);
 	renderPassScheduler.AddPass(std::move(meshPass));
 
@@ -250,9 +257,14 @@ void CommonSetupDebugRenderPass(RenderPassScheduler& renderPassScheduler) {
 	preRenderPass->AddOutput("Normal");
 	preRenderPass->AddOutput("ObjectID");
 	preRenderPass->SetClearTarget(true);
-	preRenderPass->SetDepthOutput("MainDepth", true);
+	preRenderPass->SetDepthOutput("IDDepth", true);
 	preRenderPass->SetTargetCameraType(RenderPass::TargetCameraType::kDebug);
 	renderPassScheduler.AddPass(std::move(preRenderPass));
+
+	auto transparentIDPass = std::make_unique<TransparentIDPass>();
+	transparentIDPass->AddOutput("ObjectID");
+	transparentIDPass->SetDepthOutput("IDDepth");
+	renderPassScheduler.AddPass(std::move(transparentIDPass));
 
 	auto raytracingShadowPass = std::make_unique<RaytracingShadowPass>();
 	raytracingShadowPass->AddInput("WorldPosition", "WorldPosition");
@@ -265,7 +277,7 @@ void CommonSetupDebugRenderPass(RenderPassScheduler& renderPassScheduler) {
 	auto meshPass = std::make_unique<MeshPass>();
 	meshPass->AddInput("ShadowMask", "ShadowMask");
 	meshPass->AddOutput("DebugColor");
-	meshPass->SetDepthOutput("MainDepth");
+	meshPass->SetDepthOutput("MainDepth", true);
 	meshPass->SetClearTarget(true);
 	meshPass->SetTargetCameraType(RenderPass::TargetCameraType::kDebug);
 	renderPassScheduler.AddPass(std::move(meshPass));
