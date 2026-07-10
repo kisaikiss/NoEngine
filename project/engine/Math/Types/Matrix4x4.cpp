@@ -48,6 +48,21 @@ Matrix4x4 operator-(const Matrix4x4& matrix) {
 	return result;
 }
 
+bool operator==(const Matrix4x4& matrix1, const Matrix4x4& matrix2) {
+	for (uint32_t i = 0; i < 4; i++) {
+		for (uint32_t j = 0; j < 4; j++) {
+			if (matrix1.m[i][j] == matrix2.m[i][j]) {
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+bool operator!=(const Matrix4x4& matrix1, const Matrix4x4& matrix2) {
+	return !(matrix1 == matrix2);
+}
+
 Matrix4x4::Matrix4x4(const Matrix4x4& matrix4x4) {
 	m[0][0] = matrix4x4.m[0][0];
 	m[0][1] = matrix4x4.m[0][1];
