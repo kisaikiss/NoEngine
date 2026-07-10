@@ -75,13 +75,14 @@ void PreRenderInitialzer::CreatePSO(RenderContext& ctx) {
 		defaultPSO.SetRasterizerState(rasterizerDesc);
 		defaultPSO.SetBlendState(blendDesc);
 		D3D12_DEPTH_STENCIL_DESC idTransparentDepthDesc = depthStencilDesc;
+		idTransparentDepthDesc.DepthEnable = false;
 		idTransparentDepthDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO; // 半透明ID用: テストのみ
 		defaultPSO.SetDepthStencilState(idTransparentDepthDesc);
 		defaultPSO.SetInputLayout(inputLayout);
 		defaultPSO.SetPrimitiveTopologyType(D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
 		DXGI_FORMAT preRenderRTVFormat[] = { DXGI_FORMAT_R8G8B8A8_UNORM };
 
-		defaultPSO.SetRenderTargetFormats(1, preRenderRTVFormat, DXGI_FORMAT_D24_UNORM_S8_UINT);
+		defaultPSO.SetRenderTargetFormats(1, preRenderRTVFormat, DXGI_FORMAT_UNKNOWN);
 		defaultPSO.SetVertexShader(defaultVS.GetBytecode());
 		defaultPSO.SetPixelShader(pixelShader.GetBytecode());
 		defaultPSO.SetSampleMask(D3D12_DEFAULT_SAMPLE_MASK);
