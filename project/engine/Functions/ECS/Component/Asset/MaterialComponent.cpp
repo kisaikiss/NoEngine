@@ -14,5 +14,6 @@ REFLECT_FIELD(uvScale),
 REFLECT_FIELD(emissiveIntensity),
 REFLECT_FIELD(rimPower),
 REFLECT_FIELD(noiseScrollSpeed),
+REFLECT_FIELD(edgeColor),
 REFLECT_FIELD(noiseTextureName)
 REFLECT_STRUCT_END(NoEngine::Component::MaterialComponent)

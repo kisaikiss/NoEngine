@@ -45,7 +45,7 @@ ModelAsset ModelLoader::Load(const std::string& filePath) {
 			Vertex vertex;
 			vertex.position = { -position.x, position.y, position.z };
 			vertex.texcoord = { texcoord.x, texcoord.y };
-			vertex.normal = { normal.x, normal.y, normal.z };
+			vertex.normal = { -normal.x, normal.y, normal.z };
 			newMesh.vertices.push_back(vertex);
 		}
 

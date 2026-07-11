@@ -46,6 +46,7 @@ struct MaterialComponent {
 	float emissiveIntensity = 1.0f;
 	float rimPower = 2.0f;
 	float noiseScrollSpeed = 0.3f;
+	Math::Color edgeColor = Math::Color::WHITE;
 	std::string noiseTextureName = "noise0";
 	TextureRef noiseTextureHandle;// ノイズテクスチャ
 };

@@ -170,24 +170,17 @@ void MeshPass::RenderItems(GraphicsContext& context, const RenderGraphRegistry& 
 				if (constants.spotLightNum)
 					context.SetDynamicDescriptor(rootIndex["gSpotLights"], 0, renderCtx->GetSpotLightSRV());
 			} else {
-				/*
-				struct EmissiveMaterial
-{
-    float4 color; // ベースカラー（発光色）
-    float intensity; // 発光強度
-    float rimPower; // フレネル(縁)の鋭さ
-    float scrollSpeed; // ノイズのスクロール速度
-    float time; // 経過時間
-};
-				*/
+				
 				_declspec(align(16)) struct { 
 					Math::Color color = Math::Color::BLACK; 
+					Math::Color edgeColor = Math::Color::WHITE;
 					float intensity = 0.0f; 
 					float rimPower = 0.0f; 
 					float scrollSpeed = 0.0f;
 					float time = 0.0f;
 				} emissiveConstants{
 					item.material->color,
+					item.material->edgeColor,
 					item.material->emissiveIntensity,
 					item.material->rimPower,
 					item.material->noiseScrollSpeed,

@@ -2,7 +2,8 @@
 
 struct EmissiveMaterial
 {
-    float4 color; // ベースカラー（発光色）
+    float4 coreColor; // 中心の色（白〜シアンなど高輝度）
+    float4 edgeColor; // 縁の色（青紫、緑など）
     float intensity; // 発光強度
     float rimPower; // フレネル(縁)の鋭さ
     float scrollSpeed; // ノイズのスクロール速度
@@ -41,7 +42,8 @@ PixelShaderOutput main(VertexShaderOutput input)
     // フレネルとノイズをブレンドしてコアとエッジの両方が光るようにする
     float glow = saturate(fresnel * 0.6f + noise * 0.7f);
 
-    output.color.rgb = gEmissive.color.rgb * gEmissive.intensity * glow;
+    float3 gradientColor = lerp(gEmissive.coreColor.rgb, gEmissive.edgeColor.rgb, fresnel);
+    output.color.rgb = gradientColor * gEmissive.intensity * glow;
     output.color.a = 1.0f; // 加算合成なのでアルファは実質使わないが1.0にしておく
 
     return output;

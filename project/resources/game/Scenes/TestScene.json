@@ -2,12 +2,6 @@
     "entities": {
         "Badge": {
             "components": {
-                "AnimatorComponent": {
-                    "animationSpeedMagnification": 1.0,
-                    "currentAnimation": 0,
-                    "drawSkeleton": false,
-                    "enableSkinning": false
-                },
                 "BadgeComponent": {
                     "id": 0
                 },
@@ -20,9 +14,9 @@
                 },
                 "EffectEmitterComponent": {
                     "color": [
+                        0.4000000059604645,
+                        0.4000000059604645,
                         1.0,
-                        1.0,
-                        0.0,
                         1.0
                     ],
                     "count": 20,
@@ -60,16 +54,22 @@
                 "MaterialComponent": {
                     "blendMode": "kAdd",
                     "color": [
-                        0.0,
-                        0.4000000059604645,
-                        1.0,
+                        2.0,
+                        2.0,
+                        3.0,
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        0.0,
+                        0.10000000149011612,
+                        0.6000000238418579,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
                     "noiseScrollSpeed": 0.30000001192092896,
-                    "noiseTextureName": "noise0",
+                    "noiseTextureName": "resources/engine/Texture/noise/Noise_Gradients/T_Random_22.png",
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
@@ -85,7 +85,7 @@
                 },
                 "MeshComponent": {
                     "isVisible": true,
-                    "meshName": "badge"
+                    "meshName": "power"
                 },
                 "SphereCollider": {
                     "localCenter": [
@@ -190,6 +190,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
                     "noiseScrollSpeed": 0.30000001192092896,
@@ -305,6 +311,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
                     "noiseScrollSpeed": 0.30000001192092896,
@@ -420,6 +432,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
                     "noiseScrollSpeed": 0.30000001192092896,
@@ -535,6 +553,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
                     "noiseScrollSpeed": 0.30000001192092896,
@@ -650,6 +674,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
                     "noiseScrollSpeed": 0.30000001192092896,
@@ -765,6 +795,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
                     "noiseScrollSpeed": 0.30000001192092896,
@@ -880,6 +916,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
                     "noiseScrollSpeed": 0.30000001192092896,
@@ -995,6 +1037,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
                     "noiseScrollSpeed": 0.30000001192092896,
@@ -1110,6 +1158,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
                     "noiseScrollSpeed": 0.30000001192092896,
@@ -1225,6 +1279,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
                     "noiseScrollSpeed": 0.30000001192092896,
@@ -1340,6 +1400,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
                     "noiseScrollSpeed": 0.30000001192092896,
@@ -1455,6 +1521,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
                     "noiseScrollSpeed": 0.30000001192092896,
@@ -1570,6 +1642,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
                     "noiseScrollSpeed": 0.30000001192092896,
@@ -1685,6 +1763,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
                     "noiseScrollSpeed": 0.30000001192092896,
@@ -1800,6 +1884,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
                     "noiseScrollSpeed": 0.30000001192092896,
@@ -1915,6 +2005,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
                     "noiseScrollSpeed": 0.30000001192092896,
@@ -2030,6 +2126,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
                     "noiseScrollSpeed": 0.30000001192092896,
@@ -2145,6 +2247,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
                     "noiseScrollSpeed": 0.30000001192092896,
@@ -2260,6 +2368,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
                     "noiseScrollSpeed": 0.30000001192092896,
@@ -2375,6 +2489,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
                     "noiseScrollSpeed": 0.30000001192092896,
@@ -2490,6 +2610,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
                     "noiseScrollSpeed": 0.30000001192092896,
@@ -2605,6 +2731,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
                     "noiseScrollSpeed": 0.30000001192092896,
@@ -2720,6 +2852,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
                     "noiseScrollSpeed": 0.30000001192092896,
@@ -2835,6 +2973,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
                     "noiseScrollSpeed": 0.30000001192092896,
@@ -2950,6 +3094,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
                     "noiseScrollSpeed": 0.30000001192092896,
@@ -3065,6 +3215,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
                     "noiseScrollSpeed": 0.30000001192092896,
@@ -3180,6 +3336,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
                     "noiseScrollSpeed": 0.30000001192092896,
@@ -3295,6 +3457,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
                     "noiseScrollSpeed": 0.30000001192092896,
@@ -3410,6 +3578,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
                     "noiseScrollSpeed": 0.30000001192092896,
@@ -3525,6 +3699,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
                     "noiseScrollSpeed": 0.30000001192092896,
@@ -3640,6 +3820,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
                     "noiseScrollSpeed": 0.30000001192092896,
@@ -3755,6 +3941,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
                     "noiseScrollSpeed": 0.30000001192092896,
@@ -3870,6 +4062,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
                     "noiseScrollSpeed": 0.30000001192092896,
@@ -3985,6 +4183,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
                     "noiseScrollSpeed": 0.30000001192092896,
@@ -4100,6 +4304,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
                     "noiseScrollSpeed": 0.30000001192092896,
@@ -4215,6 +4425,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
                     "noiseScrollSpeed": 0.30000001192092896,
@@ -4330,6 +4546,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
                     "noiseScrollSpeed": 0.30000001192092896,
@@ -4445,6 +4667,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
                     "noiseScrollSpeed": 0.30000001192092896,
@@ -4560,6 +4788,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
                     "noiseScrollSpeed": 0.30000001192092896,
@@ -4675,6 +4909,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
                     "noiseScrollSpeed": 0.30000001192092896,
@@ -4790,6 +5030,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
                     "noiseScrollSpeed": 0.30000001192092896,
@@ -4905,6 +5151,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
                     "noiseScrollSpeed": 0.30000001192092896,
@@ -5020,6 +5272,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
                     "noiseScrollSpeed": 0.30000001192092896,
@@ -5135,6 +5393,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
                     "noiseScrollSpeed": 0.30000001192092896,
@@ -5250,6 +5514,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
                     "noiseScrollSpeed": 0.30000001192092896,
@@ -5365,6 +5635,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
                     "noiseScrollSpeed": 0.30000001192092896,
@@ -5480,6 +5756,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
                     "noiseScrollSpeed": 0.30000001192092896,
@@ -5595,6 +5877,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
                     "noiseScrollSpeed": 0.30000001192092896,
@@ -5710,6 +5998,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
                     "noiseScrollSpeed": 0.30000001192092896,
@@ -5825,6 +6119,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
                     "noiseScrollSpeed": 0.30000001192092896,
@@ -5940,6 +6240,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
                     "noiseScrollSpeed": 0.30000001192092896,
@@ -6055,6 +6361,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
                     "noiseScrollSpeed": 0.30000001192092896,
@@ -6170,6 +6482,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
                     "noiseScrollSpeed": 0.30000001192092896,
@@ -6284,6 +6602,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
                     "noiseScrollSpeed": 0.30000001192092896,
@@ -6443,6 +6767,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
                     "noiseScrollSpeed": 0.30000001192092896,
@@ -6602,6 +6932,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
                     "noiseScrollSpeed": 0.30000001192092896,
@@ -6761,6 +7097,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
                     "noiseScrollSpeed": 0.30000001192092896,
@@ -6920,6 +7262,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.8999999761581421,
                     "noiseScrollSpeed": 0.30000001192092896,
@@ -7041,10 +7389,10 @@
                 },
                 "TransformComponent": {
                     "rotation": [
-                        0.059634312987327576,
-                        0.9398881196975708,
-                        -0.2527020275592804,
-                        0.22180110216140747
+                        0.039261914789676666,
+                        0.8594485521316528,
+                        -0.06677677482366562,
+                        0.505319356918335
                     ],
                     "scale": [
                         1.0,
@@ -7052,9 +7400,9 @@
                         1.0
                     ],
                     "translate": [
-                        -5.178730010986328,
-                        10.613534927368164,
-                        19.77771759033203
+                        -9.233168601989746,
+                        1.9867757558822632,
+                        3.471086025238037
                     ]
                 }
             }
@@ -7365,6 +7713,12 @@
                         1.0
                     ],
                     "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.0,
                     "noiseScrollSpeed": 0.30000001192092896,
@@ -7517,6 +7871,12 @@
                         1.0
                     ],
                     "drawOutline": true,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.0,
                     "noiseScrollSpeed": 0.30000001192092896,
