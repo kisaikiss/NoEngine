@@ -5,7 +5,7 @@
         },
         "EditTag": {
             "name": "PowerItem",
-            "path": "ItemFolder/Badge"
+            "path": "Item/PowerItem"
         },
         "EffectEmitterComponent": {
             "color": [
@@ -16,9 +16,9 @@
             ],
             "count": 20,
             "emitRange": [
-                3.0,
                 2.0,
-                3.0
+                1.0,
+                2.0
             ],
             "maxLifeTime": 2.0,
             "maxRotate": 3.1415927410125732,
@@ -89,7 +89,7 @@
                 0.0,
                 0.0
             ],
-            "radius": 0.699999988079071
+            "radius": 0.30000001192092896
         },
         "TransformComponent": {
             "rotation": [
@@ -104,9 +104,9 @@
                 1.0
             ],
             "translate": [
-                4.264547348022461,
-                1.0305981636047363,
-                0.6880523562431335
+                17.07514762878418,
+                4.725268363952637,
+                0.1931905746459961
             ]
         }
     }

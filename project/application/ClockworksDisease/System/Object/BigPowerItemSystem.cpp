@@ -1,9 +1,9 @@
 #include "stdafx.h"
-#include "BigBadgeSystem.h"
+#include "BigPowerItemSystem.h"
 #include "application/ClockworksDisease/Component/Item/ItemComponent.h"
 #include "application/ClockworksDisease/Component/Player/PlayerComponent.h"
 
-void BigBadgeSystem::Update(No::Registry& registry, float deltaTime) {
+void BigPowerItemSystem::Update(No::Registry& registry, float deltaTime) {
 	for (auto e : registry.View<BigPowerItemComponent, BigPowerGetTag, No::TransformComponent>()) {
 		auto* badge = registry.GetComponent<BigPowerItemComponent>(e);
 		
@@ -14,17 +14,16 @@ void BigBadgeSystem::Update(No::Registry& registry, float deltaTime) {
 		}
 
 
-		const float kThetaDeltaTimeMagnification = 7.f;
+		constexpr float kThetaDeltaTimeMagnification = 7.f;
 		badge->theta += deltaTime * kThetaDeltaTimeMagnification;
 		if (badge->t < 1.f) {
-			const float kTDeltaTimeMagnification = 0.5f;
+			constexpr float kTDeltaTimeMagnification = 0.5f;
 			badge->t += deltaTime * kTDeltaTimeMagnification;
 
-			const float kStartTranslateMagnification = 6.f;
+			constexpr float kStartTranslateMagnification = 6.f;
 			badge->translateMagnification = std::lerp(kStartTranslateMagnification, 0.0f, badge->t);
 		} else {
-			registry.GetComponent<No::AnimatorComponent>(e)->animationSpeedMagnification = 50.f;
-			const float kScaleThetaDeltaTimeMagnification = 2.f;
+			constexpr float kScaleThetaDeltaTimeMagnification = 2.f;
 			badge->scaleT += deltaTime * kScaleThetaDeltaTimeMagnification;
 			transform->scale = No::EaseInBack(No::Vector3(2.f, 2.f, 2.f), No::Vector3::ZERO, badge->scaleT);
 			if (badge->scaleT > 1.f) {
@@ -33,8 +32,8 @@ void BigBadgeSystem::Update(No::Registry& registry, float deltaTime) {
 			}
 		}
 
-		const float kFinalPositionOffset = 3.0f;
-		const float kPositionOffset = 1.f;
+		constexpr float kFinalPositionOffset = 2.0f;
+		constexpr float kPositionOffset = 1.f;
 		badge->yPositionOffset = No::EaseInExpo(0.f, kFinalPositionOffset, badge->t);
 
 		transform->translate.x = playerWorldPos.x + std::sinf(badge->theta) * badge->translateMagnification;

@@ -1,11 +1,6 @@
 {
     "components": {
-        "AnimatorComponent": {
-            "animationSpeedMagnification": 1.0,
-            "currentAnimation": 0,
-            "drawSkeleton": false,
-            "enableSkinning": false
-        },
+        "BigPowerItemComponent": null,
         "CollisionLayerComponent": {
             "layer": "Item"
         },
@@ -17,8 +12,8 @@
         "EffectEmitterComponent": {
             "color": [
                 1.0,
-                1.0,
                 0.0,
+                1.0,
                 1.0
             ],
             "count": 200,
@@ -93,8 +88,8 @@
             "active": false,
             "color": [
                 1.0,
-                1.0,
                 0.0,
+                1.0,
                 1.0
             ],
             "count": 10,
@@ -140,7 +135,7 @@
                 0.0,
                 0.0
             ],
-            "radius": 1.399999976158142
+            "radius": 0.699999988079071
         },
         "TransformComponent": {
             "rotation": [

@@ -216,7 +216,7 @@
     <ClCompile Include="engine\Functions\Command\EditCommand\AddComponentCommand.cpp" />
     <ClCompile Include="engine\Functions\Command\EditCommand\DeleteEntityCommand.cpp" />
     <ClCompile Include="engine\Functions\Command\EditCommand\RemoveComponentCommand.cpp" />
-    <ClCompile Include="application\ClockworksDisease\System\Object\BigBadgeSystem.cpp" />
+    <ClCompile Include="application\ClockworksDisease\System\Object\BigPowerItemSystem.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\RadialBlurPass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\DissolvePass.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Asset\DissolveComponent.cpp" />
@@ -455,7 +455,7 @@
     <ClInclude Include="engine\Functions\Command\EditCommand\AddComponentCommand.h" />
     <ClInclude Include="engine\Functions\Command\EditCommand\DeleteEntityCommand.h" />
     <ClInclude Include="engine\Functions\Command\EditCommand\RemoveComponentCommand.h" />
-    <ClInclude Include="application\ClockworksDisease\System\Object\BigBadgeSystem.h" />
+    <ClInclude Include="application\ClockworksDisease\System\Object\BigPowerItemSystem.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\RadialBlurPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\DissolvePass.h" />
     <ClInclude Include="engine\Functions\ECS\Component\Asset\DissolveComponent.h" />

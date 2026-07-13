@@ -2,12 +2,7 @@
     "entities": {
         "BigPowerItem": {
             "components": {
-                "AnimatorComponent": {
-                    "animationSpeedMagnification": 1.0,
-                    "currentAnimation": 0,
-                    "drawSkeleton": false,
-                    "enableSkinning": false
-                },
+                "BigPowerItemComponent": null,
                 "CollisionLayerComponent": {
                     "layer": "Item"
                 },
@@ -19,8 +14,8 @@
                 "EffectEmitterComponent": {
                     "color": [
                         1.0,
-                        1.0,
                         0.0,
+                        1.0,
                         1.0
                     ],
                     "count": 200,
@@ -95,8 +90,8 @@
                     "active": false,
                     "color": [
                         1.0,
-                        1.0,
                         0.0,
+                        1.0,
                         1.0
                     ],
                     "count": 10,
@@ -142,7 +137,7 @@
                         0.0,
                         0.0
                     ],
-                    "radius": 1.399999976158142
+                    "radius": 0.699999988079071
                 },
                 "TransformComponent": {
                     "rotation": [
@@ -182,10 +177,10 @@
                 },
                 "TransformComponent": {
                     "rotation": [
-                        -0.005155669990926981,
-                        -0.7486773133277893,
-                        0.005822895560413599,
-                        -0.6628890037536621
+                        -0.09867647290229797,
+                        -0.7307723164558411,
+                        0.10815374553203583,
+                        -0.6667364239692688
                     ],
                     "scale": [
                         1.0,
@@ -193,9 +188,9 @@
                         1.0
                     ],
                     "translate": [
-                        -0.8506077527999878,
-                        5.916291236877441,
-                        3.735130786895752
+                        -7.459342002868652,
+                        4.644096851348877,
+                        1.690197229385376
                     ]
                 }
             }
@@ -363,6 +358,72 @@
                 }
             }
         },
+        "LevelUpEffect": {
+            "components": {
+                "EditTag": {
+                    "name": "LevelUpEffect",
+                    "path": "Effect/LevelUpEffect"
+                },
+                "EffectEmitterComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "count": 30,
+                    "emitRange": [
+                        2.0,
+                        0.0,
+                        2.0
+                    ],
+                    "maxLifeTime": 2.0,
+                    "maxRotate": 0.0,
+                    "maxScale": [
+                        0.5,
+                        3.0,
+                        0.5
+                    ],
+                    "maxSpeed": [
+                        0.0,
+                        5.400000095367432,
+                        0.0
+                    ],
+                    "minLifeTime": 1.0,
+                    "minRotate": 0.0,
+                    "minScale": [
+                        0.5,
+                        1.0,
+                        0.5
+                    ],
+                    "minSpeed": [
+                        0.0,
+                        1.899999976158142,
+                        0.0
+                    ],
+                    "textureName": "LevelUpParticle"
+                },
+                "LevelUpEffectTag": null,
+                "TransformComponent": {
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        40.19668197631836,
+                        -9.838600158691406,
+                        -2.6863276958465576
+                    ]
+                }
+            }
+        },
         "MainCamera": {
             "components": {
                 "ActiveCameraTag": null,
@@ -401,6 +462,15 @@
                 }
             }
         },
+        "NewFolder": {
+            "components": {
+                "EditTag": {
+                    "name": "NewFolder",
+                    "path": "Effect"
+                },
+                "FolderTag": null
+            }
+        },
         "PowerItem": {
             "components": {
                 "CollisionLayerComponent": {
@@ -419,9 +489,9 @@
                     ],
                     "count": 20,
                     "emitRange": [
-                        3.0,
                         2.0,
-                        3.0
+                        1.0,
+                        2.0
                     ],
                     "maxLifeTime": 2.0,
                     "maxRotate": 3.1415927410125732,
@@ -492,7 +562,7 @@
                         0.0,
                         0.0
                     ],
-                    "radius": 0.699999988079071
+                    "radius": 0.30000001192092896
                 },
                 "TransformComponent": {
                     "rotation": [
@@ -510,6 +580,119 @@
                         17.07514762878418,
                         4.725268363952637,
                         0.1931905746459961
+                    ]
+                }
+            }
+        },
+        "PowerItem_2": {
+            "components": {
+                "CollisionLayerComponent": {
+                    "layer": "Item"
+                },
+                "EditTag": {
+                    "name": "PowerItem_2",
+                    "path": "Item/PowerItem"
+                },
+                "EffectEmitterComponent": {
+                    "color": [
+                        0.4000000059604645,
+                        0.4000000059604645,
+                        1.0,
+                        1.0
+                    ],
+                    "count": 20,
+                    "emitRange": [
+                        2.0,
+                        1.0,
+                        2.0
+                    ],
+                    "maxLifeTime": 2.0,
+                    "maxRotate": 3.1415927410125732,
+                    "maxScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "maxSpeed": [
+                        0.5,
+                        2.0,
+                        0.5
+                    ],
+                    "minLifeTime": 1.0,
+                    "minRotate": 0.0,
+                    "minScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "minSpeed": [
+                        -0.5,
+                        0.0,
+                        -0.5
+                    ],
+                    "textureName": "getEffect"
+                },
+                "MaterialComponent": {
+                    "blendMode": "kAdd",
+                    "color": [
+                        2.0,
+                        2.0,
+                        3.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        0.0,
+                        0.10000000149011612,
+                        0.6000000238418579,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "resources/engine/Texture/noise/Noise_Gradients/T_Random_22.png",
+                    "renderMode": "kEmissive",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "power"
+                },
+                "PowerItemComponent": null,
+                "SphereCollider": {
+                    "localCenter": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "radius": 0.30000001192092896
+                },
+                "TransformComponent": {
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        4.0758585929870605,
+                        0.7521612644195557,
+                        0.7998101711273193
                     ]
                 }
             }
