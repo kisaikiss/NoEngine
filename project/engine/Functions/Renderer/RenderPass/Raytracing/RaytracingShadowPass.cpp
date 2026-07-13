@@ -31,6 +31,8 @@ void RaytracingShadowPass::Dispatch(GraphicsContext& gfx, const RenderGraphRegis
 
 	if (!renderContext->GetTLAS().Get() || !camera_) return;
 
+	if (renderContext->GetLightNums()->directionalLightNum == 0) return;
+
 	gfx.SetRaytracingRootSignature(Render::GetRootSignature(Render::GetRootSignatureID(L"RT Global RootSignature")));
 	
 	// tlas

@@ -13,12 +13,7 @@ namespace Scene {
 class IScene {
 	friend class SceneManager;
 public:
-	IScene() : 
-		registry_(std::make_unique<ECS::Registry>()),
-		systemManager_(std::make_unique<ECS::SystemManager>()) { 
-		registry_->AddComponent<SceneNameComponent>(registry_->GenerateEntity());
-		registry_->AddComponent<ECS::PauseComponent>(registry_->GenerateEntity());
-	}
+	IScene();
 	virtual ~IScene() = default;
 
 	/// <summary>

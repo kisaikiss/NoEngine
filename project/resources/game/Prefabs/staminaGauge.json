@@ -9,13 +9,13 @@
                 1.0,
                 1.0,
                 1.0,
-                1.0
+                0.0
             ],
             "fill": 0.0,
             "flipX": false,
             "flipY": false,
             "isVisible": true,
-            "layer": 0,
+            "layer": 5,
             "maskTextureName": "",
             "nonRenderAngle": 0.0,
             "orderInLayer": 0,
@@ -38,8 +38,8 @@
         "Transform2DComponent": {
             "rotation": 0.0,
             "scale": [
-                64.0,
-                64.0
+                110.0,
+                110.0
             ],
             "translate": [
                 130.10000610351563,

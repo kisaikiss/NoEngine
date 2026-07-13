@@ -9,7 +9,7 @@ void ItemGetSystem::Update(No::Registry& registry, float deltaTime) {
 
 	auto events = registry.PollAllEvents<ItemGetEvent>();
 	for (auto event : events) {
-		if (registry.Has<BadgeComponent>(event.item)) {
+		if (registry.Has<PowerItemComponent>(event.item)) {
 			registry.AddComponent<No::EffectEmitTag>(event.item);
 			registry.DestroyEntity(event.item);
 			constexpr uint32_t kBadgePower = 1;
@@ -17,8 +17,8 @@ void ItemGetSystem::Update(No::Registry& registry, float deltaTime) {
 			continue;
 		}
 
-		if (registry.Has<BigBadgeComponent>(event.item)) {
-			registry.AddComponent<BigBadgeGetTag>(event.item);
+		if (registry.Has<BigPowerItemComponent>(event.item)) {
+			registry.AddComponent<BigPowerGetTag>(event.item);
 			registry.GetComponent<No::AnimatorComponent>(event.item)->animationSpeedMagnification = 3.f;
 			registry.GetComponent<No::ParticleEmitterComponent>(event.item)->active = true;
 			registry.RemoveComponent<No::SphereCollider>(event.item);

@@ -15,8 +15,10 @@
             "fill": 0.0,
             "flipX": false,
             "flipY": false,
+            "isVisible": true,
             "layer": 3,
             "maskTextureName": "",
+            "nonRenderAngle": 0.0,
             "orderInLayer": 0,
             "pivot": [
                 0.5,

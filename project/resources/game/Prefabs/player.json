@@ -79,6 +79,7 @@
             "power": 0
         },
         "MaterialComponent": {
+            "blendMode": "kNormal",
             "color": [
                 1.0,
                 1.0,
@@ -86,29 +87,28 @@
                 1.0
             ],
             "drawOutline": true,
-            "enviromentCoefficient": 0.0,
-            "psoName": [
-                82,
-                101,
-                110,
-                100,
-                101,
-                114,
-                101,
-                114,
-                32,
-                58,
-                32,
-                84,
-                111,
-                111,
-                110,
-                32,
-                80,
-                83,
-                79
+            "edgeColor": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
             ],
-            "shininess": 60.0
+            "emissiveIntensity": 1.0,
+            "enviromentCoefficient": 0.0,
+            "noiseScrollSpeed": 0.30000001192092896,
+            "noiseTextureName": "noise0",
+            "renderMode": "kToon",
+            "rimPower": 2.0,
+            "shininess": 60.0,
+            "uvPosition": [
+                0.0,
+                0.0
+            ],
+            "uvRotate": 0.0,
+            "uvScale": [
+                1.0,
+                1.0
+            ]
         },
         "MeshComponent": {
             "isVisible": true,
@@ -172,10 +172,10 @@
         },
         "TransformComponent": {
             "rotation": [
-                -0.005212884396314621,
-                -0.7277566194534302,
-                0.0049125803634524345,
-                -0.6857980489730835
+                -0.0025992190930992365,
+                -0.7284965515136719,
+                0.00244440627284348,
+                -0.6850402355194092
             ],
             "scale": [
                 1.0,

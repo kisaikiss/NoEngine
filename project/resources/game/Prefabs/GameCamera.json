@@ -1,23 +1,27 @@
 {
     "components": {
+        "ActiveCameraTag": null,
         "CameraComponent": {
             "fov": 0.44999998807907104
         },
         "EditTag": {
             "name": "GameCamera",
-            "path": "GameCamera"
+            "path": "Camera/GameCamera"
         },
         "FollowCameraComponent": {
-            "distance": 38.400001525878906,
-            "phi": 1.331132411956787,
-            "theta": -14.168187141418457
+            "autoFollowDeadzoneAngle": 0.15000000596046448,
+            "autoFollowDelay": 1.0,
+            "distance": 17.799999237060547,
+            "maxAutoFollowAngularSpeed": 0.6000000238418579,
+            "phi": 1.3336282968521118,
+            "theta": -21.96556854248047
         },
         "TransformComponent": {
             "rotation": [
-                0.11953102052211761,
-                0.015398073941469193,
-                -0.0018540648743510246,
-                0.9927093386650085
+                0.084718257188797,
+                0.6931033730506897,
+                -0.08257840573787689,
+                0.7110635638237
             ],
             "scale": [
                 1.0,
@@ -25,9 +29,9 @@
                 1.0
             ],
             "translate": [
-                -36.95527648925781,
-                20.712406158447266,
-                -78.05441284179688
+                -20.51194953918457,
+                4.181846618652344,
+                0.07320421934127808
             ]
         }
     }

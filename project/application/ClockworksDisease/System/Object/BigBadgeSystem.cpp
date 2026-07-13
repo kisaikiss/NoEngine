@@ -4,8 +4,8 @@
 #include "application/ClockworksDisease/Component/Player/PlayerComponent.h"
 
 void BigBadgeSystem::Update(No::Registry& registry, float deltaTime) {
-	for (auto e : registry.View<BigBadgeComponent, BigBadgeGetTag, No::TransformComponent>()) {
-		auto* badge = registry.GetComponent<BigBadgeComponent>(e);
+	for (auto e : registry.View<BigPowerItemComponent, BigPowerGetTag, No::TransformComponent>()) {
+		auto* badge = registry.GetComponent<BigPowerItemComponent>(e);
 		
 		auto* transform = registry.GetComponent<No::TransformComponent>(e);
 		No::Vector3 playerWorldPos = No::Vector3::ZERO;

@@ -1,0 +1,11 @@
+{
+    "components": {
+        "EditTag": {
+            "name": "GameSetting",
+            "path": "newEntity"
+        },
+        "EditorSettingComponent": {
+            "drawCollider": false
+        }
+    }
+}
