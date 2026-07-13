@@ -9,7 +9,9 @@ REFLECT_ENUM_FIELD(moveType),
 REFLECT_FIELD(unityMoveSpeed),
 REFLECT_FIELD(unitySensitivity),
 REFLECT_FIELD(distance),
-REFLECT_FIELD(drawCenter)
+REFLECT_FIELD(drawCenter),
+
+REFLECT_FIELD(center)
 REFLECT_STRUCT_END(NoEngine::Component::DebugCameraComponent)
 
 REFLECT_STRUCT_BEGIN(NoEngine::Component::CameraComponent)

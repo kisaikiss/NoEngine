@@ -27,18 +27,13 @@ void DebugCameraSystem::Update(Registry& registry, float deltaTime) {
 				// 【Unity -> Blender への同期】
 				// Unityモードのカメラ位置・向きから、Blenderの注視点(center)と極座標(theta, phi)を逆算する
 
-				// 1. 現在のカメラの前方ベクトルを取得 (Z軸ベクトルを現在の回転で変換)
+				// 現在のカメラの前方ベクトルを取得 (Z軸ベクトルを現在の回転で変換)
 				Math::Vector3 forward{};
 				forward.z = 1.0f;
 				forward = transform->MakeAffineMatrix4x4().TransformNormal(forward);
 				forward = forward.Normalize();
 
-				// 2. Blenderの注視点を計算 (現在のカメラ位置から前方に distance 分進んだ位置)
-				debugCamera->center.x = transform->translate.x + forward.x * debugCamera->distance;
-				debugCamera->center.y = transform->translate.y + forward.y * debugCamera->distance;
-				debugCamera->center.z = transform->translate.z + forward.z * debugCamera->distance;
-
-				// 3. Blenderの極座標を逆算 (カメラから注視点への方向ベクトル V = -forward)
+				// Blenderの極座標を逆算 (カメラから注視点への方向ベクトル V = -forward)
 				Math::Vector3 v{};
 				v.x = -forward.x;
 				v.y = -forward.y;
@@ -85,6 +80,11 @@ void DebugCameraSystem::Update(Registry& registry, float deltaTime) {
 		case NoEngine::DebugCameraType::kUnity:
 			UnityMove(registry, entity, deltaTime);
 			break;
+		}
+
+
+		if (debugCamera->drawCenter) {
+			DebugPrimitive::DrawSphere(debugCamera->center, 0.3f, Math::Color::WHITE);
 		}
 	}
 }
@@ -190,10 +190,6 @@ void DebugCameraSystem::BlenderMove(Registry& registry, Entity entity, float del
 
 	transform->rotation.LookRotation(forward.Normalize(), Math::Vector3::UP);
 
-	if (debugCamera->drawCenter) {
-		DebugPrimitive::DrawSphere(debugCamera->center, 0.3f, Math::Color::WHITE);
-	}
-
 }
 
 void DebugCameraSystem::UnityMove(Registry& registry, Entity entity, float deltaTime) {
@@ -265,6 +261,17 @@ void DebugCameraSystem::UnityMove(Registry& registry, Entity entity, float delta
 
 		// 最終的な座標の更新
 		transform->translate += velocity * deltaTime;
+
+		// 現在のカメラの前方ベクトルを取得 (Z軸ベクトルを現在の回転で変換)
+		Math::Vector3 forward{};
+		forward.z = 1.0f;
+		forward = transform->MakeAffineMatrix4x4().TransformNormal(forward);
+		forward = forward.Normalize();
+
+		// Blenderの注視点を計算 (現在のカメラ位置から前方に distance 分進んだ位置)
+		debugCamera->center.x = transform->translate.x + forward.x * debugCamera->distance;
+		debugCamera->center.y = transform->translate.y + forward.y * debugCamera->distance;
+		debugCamera->center.z = transform->translate.z + forward.z * debugCamera->distance;
 	}
 }
 
