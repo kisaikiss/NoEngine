@@ -1,5 +1,6 @@
 #include "EngineTestScene.h"
 #include "application/TestApp/System/TestSystem.h"
+#include "engine/Assets/Font/FontManager.h"
 
 namespace {
 No::Entity cameraE;
@@ -31,6 +32,9 @@ void EngineTestScene::Setup() {
 	registry.AddComponent<No::AnimatorComponent>(entity)->enableSkinning = true;
 	model->meshName = "resources/engine/Model/test/TD_girl/test7.gltf";
 	m->drawOutline = true;
+	auto* text = registry.AddComponent<No::TextComponent>(entity);
+	text->fontHandle = NoEngine::FontManager::LoadFontFile("resources/engine/fonts/build/Isego.font");
+	
 
 	No::Entity background = registry.GenerateEntity();
 	auto* bm = registry.AddComponent<No::MeshComponent>(background);

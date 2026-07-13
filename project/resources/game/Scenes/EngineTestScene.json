@@ -5,13 +5,15 @@
                 "AnimatorComponent": {
                     "animationSpeedMagnification": 1.0,
                     "currentAnimation": 0,
-                    "drawSkeleton": false
+                    "drawSkeleton": false,
+                    "enableSkinning": false
                 },
                 "EditTag": {
                     "name": "AnimeCube",
                     "path": "AnimeCube"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -19,32 +21,28 @@
                         1.0
                     ],
                     "drawOutline": false,
-                    "enviromentCoefficient": 0.0,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
                     ],
-                    "shininess": 60.0
+                    "emissiveIntensity": 1.0,
+                    "enviromentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "renderMode": "kDefault",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -135,6 +133,7 @@
                     "path": "background"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -142,32 +141,28 @@
                         1.0
                     ],
                     "drawOutline": false,
-                    "enviromentCoefficient": 0.0,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
                     ],
-                    "shininess": 60.0
+                    "emissiveIntensity": 1.0,
+                    "enviromentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "renderMode": "kDefault",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
@@ -200,18 +195,11 @@
                     "fov": 0.44999998807907104
                 },
                 "DebugCameraComponent": {
-                    "center": [
-                        0.11924878507852554,
-                        1.024911880493164,
-                        0.23238030076026917
-                    ],
                     "distance": 37.524749755859375,
                     "drawCenter": false,
-                    "mousePositionX": 523,
-                    "mousePositionY": 236,
-                    "mouseWheelY": 0.0,
-                    "phi": 0.8928719758987427,
-                    "theta": -0.08437954634428024
+                    "moveType": "kBlender",
+                    "unityMoveSpeed": 10.0,
+                    "unitySensitivity": 0.20000000298023224
                 },
                 "EditTag": {
                     "name": "camera",
@@ -230,7 +218,7 @@
                         1.0
                     ],
                     "translate": [
-                        29.24239730834961,
+                        29.242395401000977,
                         24.559598922729492,
                         -2.2308666706085205
                     ]
@@ -256,6 +244,34 @@
                 "EditTag": {
                     "name": "directionalLight",
                     "path": "directionalLight"
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "fill": 0.0,
+                    "flipX": false,
+                    "flipY": false,
+                    "isVisible": true,
+                    "layer": 1,
+                    "maskTextureName": "",
+                    "nonRenderAngle": 0.0,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureName": "",
+                    "useMask": false,
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
                 },
                 "Transform2DComponent": {
                     "rotation": 0.0,
@@ -363,12 +379,22 @@
                     ],
                     "maxCount": 100,
                     "maxLifeTime": 6.0,
+                    "maxScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "maxSpeed": [
                         1.0,
                         1.0,
                         1.0
                     ],
                     "minLifeTime": 2.0,
+                    "minScale": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
                     "minSpeed": [
                         -1.0,
                         -1.0,
@@ -424,12 +450,22 @@
                     ],
                     "maxCount": 100,
                     "maxLifeTime": 6.0,
+                    "maxScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "maxSpeed": [
                         1.0,
                         1.0,
                         1.0
                     ],
                     "minLifeTime": 2.0,
+                    "minScale": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
                     "minSpeed": [
                         -1.0,
                         -1.0,
@@ -485,12 +521,22 @@
                     ],
                     "maxCount": 100,
                     "maxLifeTime": 6.0,
+                    "maxScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "maxSpeed": [
                         1.0,
                         1.0,
                         1.0
                     ],
                     "minLifeTime": 2.0,
+                    "minScale": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
                     "minSpeed": [
                         -1.0,
                         -1.0,
@@ -523,13 +569,15 @@
                 "AnimatorComponent": {
                     "animationSpeedMagnification": 1.0,
                     "currentAnimation": 0,
-                    "drawSkeleton": false
+                    "drawSkeleton": false,
+                    "enableSkinning": true
                 },
                 "EditTag": {
                     "name": "girl",
                     "path": "girl"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -537,36 +585,42 @@
                         1.0
                     ],
                     "drawOutline": true,
-                    "enviromentCoefficient": 0.0,
-                    "psoName": [
-                        82,
-                        101,
-                        110,
-                        100,
-                        101,
-                        114,
-                        101,
-                        114,
-                        32,
-                        58,
-                        32,
-                        68,
-                        101,
-                        102,
-                        97,
-                        117,
-                        108,
-                        116,
-                        32,
-                        80,
-                        83,
-                        79
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
                     ],
-                    "shininess": 60.0
+                    "emissiveIntensity": 1.0,
+                    "enviromentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "renderMode": "kDefault",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "MeshComponent": {
                     "isVisible": true,
                     "meshName": "resources/engine/Model/test/TD_girl/test7.gltf"
+                },
+                "TextComponent": {
+                    "hAlign": "kLeft",
+                    "isVisible": true,
+                    "layer": 0,
+                    "letterSpacing": 0.0,
+                    "orderInLayer": 0,
+                    "scale": 1.0,
+                    "text": "だだだだーんｎda",
+                    "vAlign": "kBaseline"
                 },
                 "TransformComponent": {
                     "rotation": [
@@ -595,6 +649,7 @@
                     "path": "player"
                 },
                 "MaterialComponent": {
+                    "blendMode": "kNormal",
                     "color": [
                         1.0,
                         1.0,
@@ -602,9 +657,28 @@
                         1.0
                     ],
                     "drawOutline": true,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
                     "enviromentCoefficient": 0.0,
-                    "psoName": [],
-                    "shininess": 60.0
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "renderMode": "kDefault",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "TransformComponent": {
                     "rotation": [

@@ -4,6 +4,7 @@
 #include "Functions/ECS/Component/Asset/MeshComponent.h"
 #include "Functions/ECS/Component/Asset/Animator2DComponent.h"
 #include "Functions/ECS/Component/Asset/SpriteComponent.h"
+#include "Functions/ECS/Component/Asset/TextComponent.h"
 #include "Functions/ECS/Component/TransformComponent.h"
 #include "Functions/ECS/Component/Transform2DComponent.h"
 #include "Functions/ECS/Component/Asset/MaterialComponent.h"

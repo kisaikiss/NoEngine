@@ -215,6 +215,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="application\ClockworksDisease\System\UI\StaminaUISystem.cpp" />
     <ClCompile Include="application\TestApp\TestApp.cpp" />
     <ClCompile Include="engine\Assets\AssetManager.cpp" />
+    <ClCompile Include="engine\Assets\Font\FontManager.cpp" />
     <ClCompile Include="engine\Assets\Model\ModelSaver.cpp" />
     <ClCompile Include="engine\Editor\DataDriven\PrefabSerializer.cpp" />
     <ClCompile Include="engine\Editor\EditorCommandOperator.cpp" />
@@ -227,6 +228,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="engine\Functions\ECS\Component\Asset\Animator2DComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Asset\AnimatorComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Asset\DissolveComponent.cpp" />
+    <ClCompile Include="engine\Functions\ECS\Component\Asset\TextComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Effect\EffectEmitterComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Asset\MeshComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\ParticleEmitterComponent.cpp" />
@@ -453,6 +455,8 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="application\TestApp\TestApp.h" />
     <ClInclude Include="engine\Assets\AssetHandles.h" />
     <ClInclude Include="engine\Assets\AssetManager.h" />
+    <ClInclude Include="engine\Assets\Font\Font.h" />
+    <ClInclude Include="engine\Assets\Font\FontManager.h" />
     <ClInclude Include="engine\Assets\Model\ModelAsset.h" />
     <ClInclude Include="engine\Assets\Model\ModelSaver.h" />
     <ClInclude Include="engine\Assets\Model\RaytracingMesh.h" />
@@ -467,6 +471,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="engine\Functions\Command\EditCommand\InstantiateEntityCommand.h" />
     <ClInclude Include="engine\Functions\Command\EditCommand\RemoveComponentCommand.h" />
     <ClInclude Include="engine\Functions\ECS\Component\Asset\DissolveComponent.h" />
+    <ClInclude Include="engine\Functions\ECS\Component\Asset\TextComponent.h" />
     <ClInclude Include="engine\Functions\ECS\Component\Effect\EffectEmitterComponent.h" />
     <ClInclude Include="engine\Functions\ECS\System\Camera\Camera2DSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\Collision\CollisionResolution2DSystem.h" />
