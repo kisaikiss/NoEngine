@@ -31,6 +31,8 @@ void StaminaUISystem::Update(No::Registry& registry, float deltaTime) {
 
 
 	// スタミナゲージの位置と減り具合を決める
+	No::Color staminaGaugeColor = No::Color::WHITE;
+	No::Vector2 staminaGaugePosition = No::Vector2::ZERO;
 	for (auto e : registry.View<No::SpriteComponent, No::Transform2DComponent, StaminaGaugeComponent>()) {
 		auto* sprite = registry.GetComponent<No::SpriteComponent>(e);
 		auto* staminaGauge = registry.GetComponent<StaminaGaugeComponent>(e);
@@ -66,5 +68,17 @@ void StaminaUISystem::Update(No::Registry& registry, float deltaTime) {
 		
 		// 次のフレームのためにこのフレームのスタミナを入れておく
 		staminaGauge->preStamina = stamina;
+
+		// スタミナゲージの装飾のためにスタミナゲージの情報を収集しておく
+		staminaGaugeColor = sprite->color;
+		staminaGaugePosition = transform->translate;
+
+	}
+
+
+	// スタミナゲージの周りの部分の位置と色をスタミナゲージ本体に合わせる
+	for (auto e : registry.View < No::Transform2DComponent, No::SpriteComponent, StaminaGaugeParentTag>()) {
+		registry.GetComponent<No::Transform2DComponent>(e)->translate = staminaGaugePosition;
+		registry.GetComponent<No::SpriteComponent>(e)->color = staminaGaugeColor;
 	}
 }

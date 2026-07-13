@@ -7437,9 +7437,9 @@
                 "TransformComponent": {
                     "rotation": [
                         0.084718257188797,
-                        0.6931033134460449,
-                        -0.0825783982872963,
-                        0.7110636234283447
+                        0.6931033730506897,
+                        -0.08257840573787689,
+                        0.7110635638237
                     ],
                     "scale": [
                         1.0,
@@ -7449,7 +7449,7 @@
                     "translate": [
                         -20.51194953918457,
                         4.181846618652344,
-                        0.07320232689380646
+                        0.07320421934127808
                     ]
                 }
             }
@@ -7956,10 +7956,10 @@
                 },
                 "TransformComponent": {
                     "rotation": [
-                        -0.005212884396314621,
-                        -0.7277566194534302,
-                        0.0049125803634524345,
-                        -0.6857980489730835
+                        -0.0025992190930992365,
+                        -0.7284965515136719,
+                        0.00244440627284348,
+                        -0.6850402355194092
                     ],
                     "scale": [
                         1.0,
@@ -7998,7 +7998,7 @@
                     "flipX": false,
                     "flipY": false,
                     "isVisible": true,
-                    "layer": 0,
+                    "layer": 5,
                     "maskTextureName": "",
                     "nonRenderAngle": 0.0,
                     "orderInLayer": 0,
@@ -8021,8 +8021,56 @@
                 "Transform2DComponent": {
                     "rotation": 0.0,
                     "scale": [
-                        64.0,
-                        64.0
+                        110.0,
+                        110.0
+                    ],
+                    "translate": [
+                        130.10000610351563,
+                        592.7000122070313
+                    ]
+                }
+            }
+        },
+        "staminaGaugeFrame": {
+            "components": {
+                "EditTag": {
+                    "name": "staminaGaugeFrame",
+                    "path": "UI/staminaGauge"
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        0.0
+                    ],
+                    "fill": 0.0,
+                    "flipX": false,
+                    "flipY": false,
+                    "isVisible": true,
+                    "layer": 10,
+                    "maskTextureName": "",
+                    "nonRenderAngle": 0.0,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureName": "staminaFrame",
+                    "useMask": false,
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "StaminaGaugeParentTag": null,
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        150.0,
+                        150.0
                     ],
                     "translate": [
                         130.10000610351563,

@@ -14,6 +14,7 @@
             "fill": 0.0,
             "flipX": false,
             "flipY": false,
+            "isVisible": true,
             "layer": 0,
             "maskTextureName": "",
             "nonRenderAngle": 0.0,
@@ -31,12 +32,14 @@
                 1.0
             ]
         },
-        "StaminaGaugeComponent": null,
+        "StaminaGaugeComponent": {
+            "disappearanceTime": 1.0
+        },
         "Transform2DComponent": {
             "rotation": 0.0,
             "scale": [
-                128.0,
-                128.0
+                64.0,
+                64.0
             ],
             "translate": [
                 130.10000610351563,
