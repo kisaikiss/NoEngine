@@ -70,16 +70,27 @@ void DrawManipulatorSystem::Update(Registry& registry, float deltaTime) {
 			ImGuizmo::Enable(true);
 			ImGuizmo::Manipulate(*(viewMatrix.m), *(projection.m), currentOp, ImGuizmo::WORLD, *(m.m));
 
+			// ワールド行列 → ローカル行列へ変換
+			Math::Matrix4x4 localMatrix = m;
+			if (t->parent != ECS::INVALID_ENTITY) { // 親のワールド行列を取得する何らかの手段が必要
+				if (auto* parentTransform = registry.GetComponent<TransformComponent>(t->parent)) {
+					Math::Matrix4x4 parentInverseWorld = parentTransform->MakeAffineMatrix4x4(registry);
+					parentInverseWorld.Inverse();
+					localMatrix =  m * parentInverseWorld;
+
+				}
+			}
+
 			float translate[3];
 			float rotation[3];
 			float scale[3];
-			ImGuizmo::DecomposeMatrixToComponents(*(m.m), translate, rotation, scale);
+			ImGuizmo::DecomposeMatrixToComponents(*(localMatrix.m), translate, rotation, scale);
 
 			static Math::Vector3 oldVector;
 			switch (currentOp) {
 			case ImGuizmo::TRANSLATE: {
 				if (ImGuizmo::IsUsing()) {
-					t->translate = m.GetTranslate();
+					t->translate = localMatrix.GetTranslate();
 					isActive_ = true;
 				} else {
 					isActive_ = false;
