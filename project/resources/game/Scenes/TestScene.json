@@ -954,6 +954,54 @@
                 }
             }
         },
+        "CloseHint": {
+            "components": {
+                "CloseLevelUpUITag": null,
+                "EditTag": {
+                    "name": "CloseHint",
+                    "path": "UI/staminaGauge"
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "fill": 0.0,
+                    "flipX": false,
+                    "flipY": false,
+                    "isVisible": true,
+                    "layer": 10,
+                    "maskTextureName": "",
+                    "nonRenderAngle": 0.0,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureName": "closeHint",
+                    "useMask": false,
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        237.3000030517578,
+                        64.0
+                    ],
+                    "translate": [
+                        1109.199951171875,
+                        672.5999755859375
+                    ]
+                }
+            }
+        },
         "DebugCamera": {
             "components": {
                 "CameraComponent": {
@@ -1224,6 +1272,57 @@
                 }
             }
         },
+        "LevelUpUI": {
+            "components": {
+                "EditTag": {
+                    "name": "LevelUpUI",
+                    "path": "UI/newEntity"
+                },
+                "LevelUpTextComponent": {
+                    "closeTime": 1.5,
+                    "isClose": false
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "fill": 0.0,
+                    "flipX": false,
+                    "flipY": false,
+                    "isVisible": false,
+                    "layer": 0,
+                    "maskTextureName": "",
+                    "nonRenderAngle": 0.0,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureName": "levelUpBackground",
+                    "useMask": false,
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        468.0,
+                        720.0
+                    ],
+                    "translate": [
+                        1000.0,
+                        360.0
+                    ]
+                }
+            }
+        },
         "MainCamera": {
             "components": {
                 "ActiveCameraTag": null,
@@ -1238,7 +1337,7 @@
                     "autoFollowDeadzoneAngle": 0.15000000596046448,
                     "autoFollowDelay": 1.0,
                     "distance": 15.0,
-                    "maxAutoFollowAngularSpeed": 1.5,
+                    "maxAutoFollowAngularSpeed": 0.6000000238418579,
                     "phi": 1.3188129663467407,
                     "theta": 3.1280524730682373
                 },
@@ -6476,6 +6575,54 @@
                     "path": "UI"
                 },
                 "FolderTag": null
+            }
+        },
+        "XButton": {
+            "components": {
+                "CloseLevelUpUITag": null,
+                "EditTag": {
+                    "name": "XButton",
+                    "path": "UI/staminaGauge"
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "fill": 0.0,
+                    "flipX": false,
+                    "flipY": false,
+                    "isVisible": true,
+                    "layer": 10,
+                    "maskTextureName": "",
+                    "nonRenderAngle": 0.0,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureName": "xButton",
+                    "useMask": false,
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        64.0,
+                        64.0
+                    ],
+                    "translate": [
+                        965.0999755859375,
+                        672.5999755859375
+                    ]
+                }
             }
         },
         "directionalLight": {

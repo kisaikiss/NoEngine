@@ -16,6 +16,7 @@
 #include "../System/Object/BigPowerItemSystem.h"
 #include "../System/UI/LevelUISystem.h"
 #include "../System/UI/StaminaUISystem.h"
+#include "../System/UI/LevelUpTextSystem.h"
 
 void GameScene::Setup() {
 	AddSystems();
@@ -55,6 +56,7 @@ void GameScene::AddSystems() {
 	AddSystem(std::make_unique<BigPowerItemSystem>());
 	AddSystem(std::make_unique<PlayerLevelUpSystem>());
 	AddSystem(std::make_unique<LevelUISystem>());
+	AddSystem(std::make_unique<LevelUpTextSystem>());
 	AddSystem(std::make_unique<No::EffectEmitSystem>());
 	AddSystem(std::make_unique<No::ParticleEmitterSystem>());
 	AddSystem(std::make_unique<No::ParticleSystem>());

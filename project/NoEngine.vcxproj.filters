@@ -232,6 +232,7 @@
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PrePasses\TransparentIDPass.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Asset\TextComponent.cpp" />
     <ClCompile Include="engine\Assets\Font\FontManager.cpp" />
+    <ClCompile Include="application\ClockworksDisease\System\UI\LevelUpTextSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -474,6 +475,7 @@
     <ClInclude Include="engine\Functions\ECS\Component\Asset\TextComponent.h" />
     <ClInclude Include="engine\Assets\Font\Font.h" />
     <ClInclude Include="engine\Assets\Font\FontManager.h" />
+    <ClInclude Include="application\ClockworksDisease\System\UI\LevelUpTextSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

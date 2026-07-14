@@ -2,6 +2,7 @@
 #include "PlayerLevelUpSystem.h"
 #include "../../Component/Player/PlayerComponent.h"
 #include "../../Component/Player/PlayerMoveTags.h"
+#include "../../Component/UI/UserInterfaceComponent.h"
 
 REFLECT_STRUCT_BEGIN(LevelUpEffectTag)
 REFLECT_STRUCT_END(LevelUpEffectTag)
@@ -16,6 +17,10 @@ void PlayerLevelUpSystem::Update(No::Registry& registry, float deltaTime) {
 			levelComponent->power -= levelComponent->nextLevelUp;
 			levelComponent->nextLevelUp += kAmountOfPowerNeededForTheNextLevelUp;
 			EnhancementsUponLevelingUp(registry, e, levelComponent->nowLevel);
+
+			for (auto levelUpUI : registry.View<LevelUpTextComponent>()) {
+				registry.AddComponent<LevelUpFrameTag>(levelUpUI);
+			}
 
 			// レベルアップ時のエフェクト
 			for (auto effectEntity : registry.View<No::TransformComponent, No::EffectEmitterComponent, LevelUpEffectTag>()) {
@@ -37,6 +42,12 @@ void PlayerLevelUpSystem::EnhancementsUponLevelingUp(No::Registry& registry, No:
 		// 空中ジャンプを追加
 		if (!registry.Has<MultiJumpTag>(e)) {
 			registry.AddComponent<MultiJumpTag>(e);
+			auto textEntity = registry.GenerateEntity();
+			registry.AddComponent<No::Transform2DComponent>(textEntity)->scale = No::Vector2(468.f, 720.f);
+			auto* sprite = registry.AddComponent<No::SpriteComponent>(textEntity);
+			sprite->textureName = "MultiJumpHint";
+			sprite->layer = 1;
+			registry.AddComponent<LevelUpTextParentTag>(textEntity);
 		}
 		return;
 	}

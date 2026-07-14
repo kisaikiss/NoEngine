@@ -6,4 +6,17 @@ struct StaminaGaugeComponent {
 	float disappearanceTime = 3.0f; // 非表示までの時間(秒)
 };
 
+
+struct LevelUpTextComponent {
+	float t = 0.0f;
+	bool isClose = false;
+	float closeTimer = 0.f;
+	float closeTime = 3.f;
+};
+
 struct StaminaGaugeParentTag{};
+
+// レベルアップした瞬間にUIへ付けるタグ
+struct LevelUpFrameTag{};
+
+struct LevelUpTextParentTag {};

@@ -26,4 +26,8 @@ void ClockworksDisease::Startup(void) {
 	No::InputBindAxis("CameraVertical", No::DeviceType::GamepadAxis, static_cast<int>(No::GamepadAxis::RightStickY), 1.0f, 0.2f);
 	No::InputBindAxis("CameraVertical", No::DeviceType::Keyboard, static_cast<int>(VK_UP), 1.0f);
 	No::InputBindAxis("CameraVertical", No::DeviceType::Keyboard, static_cast<int>(VK_DOWN), -1.0f);
+
+	No::InputBindAction("CloseLevelUpUI", No::DeviceType::Keyboard, static_cast<int>('X'));
+	No::InputBindAction("CloseLevelUpUI", No::DeviceType::GamepadButton, static_cast<int>(No::GamepadButton::X));
+
 }
