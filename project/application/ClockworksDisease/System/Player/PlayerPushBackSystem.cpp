@@ -13,7 +13,7 @@ void PlayerPushBackSystem::Update(No::Registry& registry, float deltaTime) {
 			auto* ground = registry.GetComponent<No::GroundStateComponent>(event.player);
 			
 			ground->isGrounded = true;
-			ground->groundHeight = transform->GetWorldPosition().y;
+			ground->groundHeight = transform->GetWorldPosition(registry).y;
 
 
 			auto* player = registry.GetComponent<PlayerComponent>(event.player);

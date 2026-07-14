@@ -53,9 +53,9 @@ void MeshPass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& resource
 
 	Collect(registry);
 	Sort();
-	RenderItems(gfx, resourceRegistry, opaqueItems_);      // 不透明を先に
-	RenderItems(gfx, resourceRegistry, transparentItems_); // 半透明を後に
-	RenderOutline(gfx);
+	RenderItems(gfx, resourceRegistry, opaqueItems_, registry);      // 不透明を先に
+	RenderItems(gfx, resourceRegistry, transparentItems_, registry); // 半透明を後に
+	RenderOutline(gfx, registry);
 }
 
 void MeshPass::Collect(ECS::Registry& registry) {
@@ -108,7 +108,7 @@ void MeshPass::Sort() {
 		});
 }
 
-void MeshPass::RenderItems(GraphicsContext& context, const RenderGraphRegistry& resourceRegistry, const std::vector<DrawItem>& items) {
+void MeshPass::RenderItems(GraphicsContext& context, const RenderGraphRegistry& resourceRegistry, const std::vector<DrawItem>& items, ECS::Registry& registry) {
 	(void)resourceRegistry;
 	uint32_t currentPSO = 0xFFFFFFFF;
 	auto* renderCtx = GetRenderContext();
@@ -138,10 +138,10 @@ void MeshPass::RenderItems(GraphicsContext& context, const RenderGraphRegistry& 
 		};
 		MeshConstants m;
 		if (item.animationLocal) {
-			m.world = item.animationLocal->MakeAffineMatrix4x4() * item.transform->MakeAffineMatrix4x4();
+			m.world = item.animationLocal->MakeAffineMatrix4x4(registry) * item.transform->MakeAffineMatrix4x4(registry);
 			m.worldIT = m.world;
 		} else {
-			m.world = item.transform->MakeAffineMatrix4x4();
+			m.world = item.transform->MakeAffineMatrix4x4(registry);
 			m.worldIT = m.world;
 		}
 
@@ -233,7 +233,7 @@ void MeshPass::RenderItems(GraphicsContext& context, const RenderGraphRegistry& 
 	}
 }
 
-void MeshPass::RenderOutline(GraphicsContext& context) {
+void MeshPass::RenderOutline(GraphicsContext& context, ECS::Registry& registry) {
 	if (opaqueItems_.empty()) return;
 	auto* renderCtx = GetRenderContext();
 	outlinePSOName_ = "Renderer : outline PSO";
@@ -251,9 +251,9 @@ void MeshPass::RenderOutline(GraphicsContext& context) {
 
 		auto& rootIndex = RootSignatureBuilder::GetRootIndexMap(outlinePSOName_);
 
-		Math::Matrix4x4 worldData = item.transform->MakeAffineMatrix4x4();
+		Math::Matrix4x4 worldData = item.transform->MakeAffineMatrix4x4(registry);
 		if (item.animationLocal) {
-			worldData = item.animationLocal->MakeAffineMatrix4x4() * worldData;
+			worldData = item.animationLocal->MakeAffineMatrix4x4(registry) * worldData;
 		}
 		context.SetDynamicConstantBufferView(rootIndex["gWorldMatrix"], sizeof(Math::Matrix4x4), &worldData);
 		context.SetDynamicConstantBufferView(rootIndex["gCameraMatrix"], sizeof(Component::CameraForGPU), &camera_->forGPU);

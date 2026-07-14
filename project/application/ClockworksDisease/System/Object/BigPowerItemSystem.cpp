@@ -10,7 +10,7 @@ void BigPowerItemSystem::Update(No::Registry& registry, float deltaTime) {
 		auto* transform = registry.GetComponent<No::TransformComponent>(e);
 		No::Vector3 playerWorldPos = No::Vector3::ZERO;
 		for (auto playerEntity : registry.View< PlayerComponent, No::TransformComponent>()) {
-			playerWorldPos = registry.GetComponent<No::TransformComponent>(playerEntity)->GetWorldPosition();
+			playerWorldPos = registry.GetComponent<No::TransformComponent>(playerEntity)->GetWorldPosition(registry);
 		}
 
 

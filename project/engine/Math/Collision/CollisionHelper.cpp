@@ -1,9 +1,9 @@
 #include "CollisionHelper.h"
 
 namespace NoEngine {
-AABBWorld GetWorldAABB(const Transform* transform, const Math::AABBCollider* aabb) {
+AABBWorld GetWorldAABB(const Transform* transform, const Math::AABBCollider* aabb, ECS::Registry& registry) {
     AABBWorld result;
-    Math::Vector3 worldPos = transform->GetWorldPosition();
+    Math::Vector3 worldPos = transform->GetWorldPosition(registry);
     result.max = worldPos + aabb->max;
     result.min = worldPos + aabb->min;
 
@@ -19,9 +19,9 @@ AABBWorld2D GetWorldAABB2D(const Transform2D* transform, const Math::AABBCollide
     return result;
 }
 
-CapsuleWorld GetWorldCapsule(const Transform* transform, const Math::CapsuleCollider* capsule) {
+CapsuleWorld GetWorldCapsule(const Transform* transform, const Math::CapsuleCollider* capsule, ECS::Registry& registry) {
     CapsuleWorld result;
-    Math::Vector3 worldPos = transform->GetWorldPosition();
+    Math::Vector3 worldPos = transform->GetWorldPosition(registry);
     result.p0 = worldPos + capsule->localP0;
     result.p1 = worldPos + capsule->localP1;
 
@@ -30,17 +30,17 @@ CapsuleWorld GetWorldCapsule(const Transform* transform, const Math::CapsuleColl
     return result;
 }
 
-SphereWorld GetWorldSphere(const Transform* transform, const Math::SphereCollider* sphere) {
+SphereWorld GetWorldSphere(const Transform* transform, const Math::SphereCollider* sphere, ECS::Registry& registry) {
     SphereWorld result;
-    Math::Vector3 worldPos = transform->GetWorldPosition();
+    Math::Vector3 worldPos = transform->GetWorldPosition(registry);
     result.center = worldPos;
     result.radius = sphere->radius;
     return result;
 }
 
-Math::AABBCollider ComputeCapsuleWorldBounds(const Transform* transform, const Math::CapsuleCollider* capsule) {
+Math::AABBCollider ComputeCapsuleWorldBounds(const Transform* transform, const Math::CapsuleCollider* capsule, ECS::Registry& registry) {
     // カプセルのローカル始点・終点をワールド変換
-    CapsuleWorld world = GetWorldCapsule(transform, capsule);
+    CapsuleWorld world = GetWorldCapsule(transform, capsule, registry);
 
     Math::AABBCollider box;
     box.Expand(world.p0);

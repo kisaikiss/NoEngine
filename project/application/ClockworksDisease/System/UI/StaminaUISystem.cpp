@@ -13,7 +13,7 @@ void StaminaUISystem::Update(No::Registry& registry, float deltaTime) {
 		auto* player = registry.GetComponent<PlayerComponent>(e);
 		stamina = player->stamina;
 		maxStamina = player->maxStamina;
-		playerPos = registry.GetComponent<No::TransformComponent>(e)->GetWorldPosition();
+		playerPos = registry.GetComponent<No::TransformComponent>(e)->GetWorldPosition(registry);
 	}
 	// スタミナ最大値が0なら早期リターン
 	if (maxStamina == 0.0f) {

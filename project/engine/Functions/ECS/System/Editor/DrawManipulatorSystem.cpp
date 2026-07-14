@@ -65,7 +65,7 @@ void DrawManipulatorSystem::Update(Registry& registry, float deltaTime) {
 			}
 
 			auto* t = registry.GetComponent<TransformComponent>(e);
-			Math::Matrix4x4 m = t->MakeAffineMatrix4x4();
+			Math::Matrix4x4 m = t->MakeAffineMatrix4x4(registry);
 			ImGuizmo::SetRect(rect.x, rect.y, rect.z, rect.w);
 			ImGuizmo::Enable(true);
 			ImGuizmo::Manipulate(*(viewMatrix.m), *(projection.m), currentOp, ImGuizmo::WORLD, *(m.m));

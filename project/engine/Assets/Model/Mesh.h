@@ -13,8 +13,8 @@ struct Vertex {
 };
 
 struct Node {
-	Transform transform;
 	Math::Matrix4x4 localMatrix;
+	Transform transform;
 	std::string name;
 	std::vector<Node> children;
 };

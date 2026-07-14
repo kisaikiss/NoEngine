@@ -8,9 +8,9 @@ struct JointVertex {
 };
 
 struct Joint {
-	Transform transform;
 	Math::Matrix4x4 localMatrix;
 	Math::Matrix4x4 skeletonSpaceMatrix;
+	Transform transform;
 	std::string name;
 	std::vector<int32_t> children;
 	int32_t index;

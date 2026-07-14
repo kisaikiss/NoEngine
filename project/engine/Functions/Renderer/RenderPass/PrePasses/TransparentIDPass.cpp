@@ -54,10 +54,10 @@ void TransparentIDPass::Execute(GraphicsContext& gfx, const RenderGraphRegistry&
 		};
 		MeshConstants m;
 		if (item.local) {
-			m.world = item.local->MakeAffineMatrix4x4() * item.transform->MakeAffineMatrix4x4();
+			m.world = item.local->MakeAffineMatrix4x4(registry) * item.transform->MakeAffineMatrix4x4(registry);
 			m.worldIT = m.world;
 		} else {
-			m.world = item.transform->MakeAffineMatrix4x4();
+			m.world = item.transform->MakeAffineMatrix4x4(registry);
 			m.worldIT = m.world;
 		}
 		m.worldIT.Inverse();

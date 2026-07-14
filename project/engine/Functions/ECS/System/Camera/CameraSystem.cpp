@@ -14,11 +14,11 @@ void CameraSystem::Update(Registry& registry, float deltaTime) {
 
 		camera->forGPU.fov = camera->fov;
 		camera->entity = entity;
-		camera->view = transform->MakeAffineMatrix4x4();
+		camera->view = transform->MakeAffineMatrix4x4(registry);
 		camera->view.Inverse();
 		camera->projection.MakePerspectiveFov(camera->forGPU.fov, camera->aspect, camera->nearClip, camera->farClip);
 		camera->forGPU.viewProjection = camera->view * camera->projection;
-		camera->forGPU.worldPosition = transform->GetWorldPosition();
+		camera->forGPU.worldPosition = transform->GetWorldPosition(registry);
 	}
 }
 }

@@ -4,6 +4,7 @@
 #include "engine/Assets/Model/RaytracingMesh.h"
 #include "engine/Math/MathInclude.h"
 #include "engine/Functions/ECS/Component/Asset/AnimatorComponent.h"
+#include "engine/Functions/ECS/Component/TransformComponent.h"
 
 namespace NoEngine {
 namespace Render {
@@ -27,7 +28,7 @@ private:
     /// </summary>
     /// <param name="instance">設定対象の D3D12_RAYTRACING_INSTANCE_DESC への参照。トランスフォーム情報が書き込まれる。</param>
     /// <param name="transform">コピー元の Transform。インスタンスの行列や位置・回転・スケール情報を提供する（const 参照）。</param>
-    void FillInstanceTransform(D3D12_RAYTRACING_INSTANCE_DESC& instance, const Transform& transform, Component::AnimatorComponent* animator);
+    void FillInstanceTransform(D3D12_RAYTRACING_INSTANCE_DESC& instance, const Component::TransformComponent* transform, Component::AnimatorComponent* animator, ECS::Registry& registry);
 };
 }
 }

@@ -1,5 +1,4 @@
 #include "CollisionFanc.h"
-#include "CollisionHelper.h"
 #include "../MathUtility.h"
 #include "../Types/Calculations/Vector3Calculations.h"
 
@@ -59,12 +58,12 @@ Math::Vector3 ClosestPointOnTriangle(const Math::Vector3& p, const Math::Vector3
 	return a + ab * v + ac * w;
 }
 CapsuleAABBCollision TestCapsuleAABB(const Transform* capsuleTransform, const Math::CapsuleCollider* capsule,
-	const Transform* aabbTransform, const Math::AABBCollider* aabb) {
+	const Transform* aabbTransform, const Math::AABBCollider* aabb, ECS::Registry& registry) {
 	CapsuleAABBCollision result;
 
 	// ワールド座標でのそれぞれのコライダーを取得
-	CapsuleWorld cap = GetWorldCapsule(capsuleTransform, capsule);
-	AABBWorld box = GetWorldAABB(aabbTransform, aabb);
+	CapsuleWorld cap = GetWorldCapsule(capsuleTransform, capsule, registry);
+	AABBWorld box = GetWorldAABB(aabbTransform, aabb, registry);
 
 	// カプセルの中心軸を表すベクトル
 	Vector3 segment = cap.p1 - cap.p0;
@@ -114,10 +113,10 @@ CapsuleAABBCollision TestCapsuleAABB(const Transform* capsuleTransform, const Ma
 CapsuleTriangleCollision TestCapsuleTriangle(
 	const Transform* capsuleTransform,
 	const Math::CapsuleCollider* capsule,
-	Math::TriangleCollider triangle) {
+	Math::TriangleCollider triangle, ECS::Registry& registry) {
 	CapsuleTriangleCollision result;
 
-	CapsuleWorld cap = GetWorldCapsule(capsuleTransform, capsule);
+	CapsuleWorld cap = GetWorldCapsule(capsuleTransform, capsule, registry);
 
 	Vector3 segA = cap.p0;
 	Vector3 segB = cap.p1;
@@ -257,10 +256,10 @@ CapsuleTriangleCollision TestCapsuleTriangle(
 }
 
 CapsuleSphereCollision TestCapsuleSphere(const Transform* capsuleTransform, const Math::CapsuleCollider* capsule,
-	const Transform* sphereTransform, const Math::SphereCollider* sphere) {
+	const Transform* sphereTransform, const Math::SphereCollider* sphere, ECS::Registry& registry) {
 	CapsuleSphereCollision result{};
-	CapsuleWorld cap = GetWorldCapsule(capsuleTransform, capsule);
-	SphereWorld sph = GetWorldSphere(sphereTransform, sphere);
+	CapsuleWorld cap = GetWorldCapsule(capsuleTransform, capsule, registry);
+	SphereWorld sph = GetWorldSphere(sphereTransform, sphere, registry);
 
 
 	Vector3 v = cap.p1 - cap.p0;    // 線分の方向ベクトル

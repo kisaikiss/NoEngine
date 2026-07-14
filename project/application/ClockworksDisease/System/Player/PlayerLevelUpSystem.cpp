@@ -24,7 +24,7 @@ void PlayerLevelUpSystem::Update(No::Registry& registry, float deltaTime) {
 
 			// レベルアップ時のエフェクト
 			for (auto effectEntity : registry.View<No::TransformComponent, No::EffectEmitterComponent, LevelUpEffectTag>()) {
-				registry.GetComponent<No::TransformComponent>(effectEntity)->translate = registry.GetComponent<No::TransformComponent>(e)->GetWorldPosition();
+				registry.GetComponent<No::TransformComponent>(effectEntity)->translate = registry.GetComponent<No::TransformComponent>(e)->GetWorldPosition(registry);
 				registry.AddComponent<No::EffectEmitTag>(effectEntity);
 			}
 		}

@@ -3,6 +3,7 @@
 #include "../Types/Transform2D.h"
 
 #include "ColliderComponent.h"
+#include "engine/Functions/ECS/Registry.h"
 
 namespace NoEngine {
 struct AABBWorld {
@@ -32,7 +33,7 @@ struct SphereWorld {
 /// <param name="transform">トランスフォーム</param>
 /// <param name="aabb">AABBコライダー</param>
 /// <returns>ワールド座標でのAABBコライダー</returns>
-AABBWorld GetWorldAABB(const Transform* transform, const Math::AABBCollider* aabb);
+AABBWorld GetWorldAABB(const Transform* transform, const Math::AABBCollider* aabb, ECS::Registry& registry);
 
 /// <summary>
 /// AABBコライダーをワールド座標へ直す
@@ -48,7 +49,7 @@ AABBWorld2D GetWorldAABB2D(const Transform2D* transform, const Math::AABBCollide
 /// <param name="transform">トランスフォーム</param>
 /// <param name="capsule">カプセルコライダー</param>
 /// <returns>ワールド座標でのカプセルコライダー</returns>
-CapsuleWorld GetWorldCapsule(const Transform* transform, const Math::CapsuleCollider* capsule);
+CapsuleWorld GetWorldCapsule(const Transform* transform, const Math::CapsuleCollider* capsule, ECS::Registry& registry);
 
 /// <summary>
 /// スフィアコライダーをワールド座標へ直す
@@ -56,7 +57,7 @@ CapsuleWorld GetWorldCapsule(const Transform* transform, const Math::CapsuleColl
 /// <param name="transform">トランスフォーム</param>
 /// <param name="sphere">球コライダー</param>
 /// <returns>ワールド座標での球コライダー</returns>
-SphereWorld GetWorldSphere(const Transform* transform, const Math::SphereCollider* sphere);
+SphereWorld GetWorldSphere(const Transform* transform, const Math::SphereCollider* sphere, ECS::Registry& registry);
 
 /// <summary>
 /// カプセルコライダーをワールド座標上のAABBへ変換する
@@ -64,5 +65,5 @@ SphereWorld GetWorldSphere(const Transform* transform, const Math::SphereCollide
 /// <param name="transform">トランスフォーム</param>
 /// <param name="capsule">カプセルコライダー</param>
 /// <returns>ワールド座標上のAABB</returns>
-Math::AABBCollider ComputeCapsuleWorldBounds(const Transform* transform, const Math::CapsuleCollider* capsule);
+Math::AABBCollider ComputeCapsuleWorldBounds(const Transform* transform, const Math::CapsuleCollider* capsule, ECS::Registry& registry);
 }

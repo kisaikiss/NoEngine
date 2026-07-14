@@ -152,7 +152,7 @@ void EngineTestScene::Setup() {
 		cubeMesh->meshName = "resources/engine/Model/AnimatedCube/AnimatedCube.gltf";
 
 		registry.AddComponent<No::EditTag>(e)->name = "AnimeCube";
-		registry.AddComponent<No::TransformComponent>(e);
+		registry.AddComponent<No::TransformComponent>(e)->parent = entity;
 	}
 }
 

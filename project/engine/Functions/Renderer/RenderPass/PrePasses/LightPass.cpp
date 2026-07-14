@@ -35,7 +35,7 @@ void LightPass::Collect(ECS::Registry& registry) {
 		pointLight.intensity = pointLightComponent->intensity;
 		pointLight.decay = pointLightComponent->decay;
 		pointLight.radius = pointLightComponent->radius;
-		pointLight.position = transformComponent->GetWorldPosition();
+		pointLight.position = transformComponent->GetWorldPosition(registry);
 		pointLights_.push_back(pointLight);
 	}
 
@@ -55,7 +55,7 @@ void LightPass::Collect(ECS::Registry& registry) {
 		spotLight.cosAngle = spotLightComponent->cosAngle;
 		spotLight.cosFalloffStart = spotLightComponent->cosFalloffStart;
 		spotLight.distance = spotLightComponent->distance;
-		spotLight.position = transformComponent->GetWorldPosition();
+		spotLight.position = transformComponent->GetWorldPosition(registry);
 		spotLight.direction = transformComponent->rotation.zAxis();
 
 		spotLights_.push_back(spotLight);

@@ -67,13 +67,13 @@ protected:
    /// <param name="context">描画用コマンドリストのラッパークラスの参照</param>
     /// <param name="resourceRegistry"></param>
     /// <param name="items"></param>
-    void RenderItems(GraphicsContext& context, const RenderGraphRegistry& resourceRegistry, const std::vector<DrawItem>& items);
+    void RenderItems(GraphicsContext& context, const RenderGraphRegistry& resourceRegistry, const std::vector<DrawItem>& items, ECS::Registry& registry);
 
     /// <summary>
     /// GraphicsContext を使用してアウトラインを描画する関数。
     /// </summary>
     /// <param name="gfx">描画操作に使用する GraphicsContext への参照。</param>
-    void RenderOutline(GraphicsContext& gfx);
+    void RenderOutline(GraphicsContext& gfx, ECS::Registry& registry);
 };
 }
 }

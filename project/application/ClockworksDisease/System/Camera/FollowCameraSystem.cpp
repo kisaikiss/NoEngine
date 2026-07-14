@@ -17,7 +17,7 @@ void FollowCameraSystem::Update(No::Registry& registry, float deltaTime) {
 	No::Vector3 playerVelocity{};
 	auto playerView = registry.View<PlayerComponent>();
 	for (auto e : playerView) {
-		playerPos = registry.GetComponent<No::TransformComponent>(e)->GetWorldPosition();
+		playerPos = registry.GetComponent<No::TransformComponent>(e)->GetWorldPosition(registry);
 		playerVelocity = registry.GetComponent<No::VelocityComponent>(e)->linear;
 	}
 
@@ -90,7 +90,7 @@ void FollowCameraSystem::Update(No::Registry& registry, float deltaTime) {
 
 		transform->translate = No::Lerp(transform->translate, nextPosition, 0.1f);
 
-		transform->rotation.LookRotation(playerPos - transform->GetWorldPosition(), No::Vector3::UP);
+		transform->rotation.LookRotation(playerPos - transform->GetWorldPosition(registry), No::Vector3::UP);
 		
 		
 	}

@@ -1,7 +1,6 @@
 #include "TLASBuildPass.h"
 
 #include "engine/Functions/ECS/Component/Asset/MeshComponent.h"
-#include "engine/Functions/ECS/Component/TransformComponent.h"
 #include "engine/Runtime/GraphicsCore.h"
 
 #include  "engine/Assets/Model/ModelSaver.h"
@@ -40,7 +39,7 @@ void TLASBuildPass::BuildRaytracingInstances(ECS::Registry& registry) {
 		desc.InstanceContributionToHitGroupIndex = 0;
 
 		auto* animator = registry.GetComponent<Component::AnimatorComponent>(entity);
-		FillInstanceTransform(desc, *transform, animator);
+		FillInstanceTransform(desc, transform, animator, registry);
 		desc.AccelerationStructure = inst.rtMesh->blas->GetGPUVirtualAddress();
 
 		instances_.push_back(inst);
@@ -115,8 +114,8 @@ void TLASBuildPass::BuildTLAS(GraphicsContext& gfx) {
 	gfx.BuildRaytracingAccelerationStructure(build, tlasScratch_.Get());
 }
 
-void TLASBuildPass::FillInstanceTransform(D3D12_RAYTRACING_INSTANCE_DESC& instance, const Transform& transform, Component::AnimatorComponent* animator) {
-	Math::Matrix4x4 t = transform.MakeAffineMatrix4x4();
+void TLASBuildPass::FillInstanceTransform(D3D12_RAYTRACING_INSTANCE_DESC& instance, const Component::TransformComponent* transform, Component::AnimatorComponent* animator, ECS::Registry& registry) {
+	Math::Matrix4x4 t = transform->MakeAffineMatrix4x4(registry);
 	if (animator) t = animator->local.MakeAffineMatrix4x4() * t;
 	t.Transpose();
 

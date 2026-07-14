@@ -36,7 +36,7 @@ void NarrowPhaseSystem::Update(Registry& registry, float deltaTime) {
 			auto* boxCollider = registry.GetComponent<Math::AABBCollider>(boxE);
 
 			// 衝突判定を行う
-			auto collide = Math::TestCapsuleAABB(capsuleTransform, capsuleCollider, boxTransform, boxCollider);
+			auto collide = Math::TestCapsuleAABB(capsuleTransform, capsuleCollider, boxTransform, boxCollider, registry);
 
 			if (!collide.hit) continue;
 
@@ -56,7 +56,7 @@ void NarrowPhaseSystem::Update(Registry& registry, float deltaTime) {
 			auto* sphereCollider = registry.GetComponent<Math::SphereCollider>(sphereE);
 
 			// 衝突判定を行う
-			auto collide = Math::TestCapsuleSphere(capsuleTransform, capsuleCollider, sphereTransform, sphereCollider);
+			auto collide = Math::TestCapsuleSphere(capsuleTransform, capsuleCollider, sphereTransform, sphereCollider, registry);
 
 			if (!collide.hit) continue;
 
@@ -72,7 +72,7 @@ void NarrowPhaseSystem::Update(Registry& registry, float deltaTime) {
 		}
 
 		// カプセルのワールドAABBを一度だけ計算
-		Math::AABBCollider capsuleBounds = ComputeCapsuleWorldBounds(capsuleTransform, capsuleCollider);
+		Math::AABBCollider capsuleBounds = ComputeCapsuleWorldBounds(capsuleTransform, capsuleCollider, registry);
 
 		for (auto terrainE : terrainView) {
 			auto* terrain = registry.GetComponent<Math::TerrainMesh>(terrainE);
@@ -83,7 +83,7 @@ void NarrowPhaseSystem::Update(Registry& registry, float deltaTime) {
 
 			for (int idx : candidateIndices_) {
 				const auto& triangle = terrain->triangles[idx];
-				auto collide = Math::TestCapsuleTriangle(capsuleTransform, capsuleCollider, triangle);
+				auto collide = Math::TestCapsuleTriangle(capsuleTransform, capsuleCollider, triangle, registry);
 
 				if (!collide.hit) continue;
 

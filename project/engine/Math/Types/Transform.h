@@ -2,6 +2,9 @@
 #include "Vector3.h"
 #include "Quaternion.h"
 #include "Matrix4x4.h"
+
+#include "engine/Functions/ECS/Registry.h"
+
 namespace NoEngine {
 struct Transform {
 public:
@@ -9,7 +12,7 @@ public:
 	Math::Quaternion rotation{ Math::Quaternion::IDENTITY };
 	Math::Vector3 translate{ Math::Vector3::ZERO };
 
-	Transform* parent = nullptr;
+	ECS::Entity parent = ECS::INVALID_ENTITY;
 
 	Transform() = default;
 
@@ -23,9 +26,9 @@ public:
 		translate = temp.GetTranslate();
 	}
 
-	Math::Matrix4x4 MakeAffineMatrix4x4() const;
-
-	Math::Vector3 GetWorldPosition() const;
+	virtual Math::Matrix4x4 MakeAffineMatrix4x4(ECS::Registry& registry) const;
+	virtual Math::Matrix4x4 MakeAffineMatrix4x4() const;
+	Math::Vector3 GetWorldPosition(ECS::Registry& registry) const;
 };
 
 

@@ -30,7 +30,7 @@ void DebugCameraSystem::Update(Registry& registry, float deltaTime) {
 				// 現在のカメラの前方ベクトルを取得 (Z軸ベクトルを現在の回転で変換)
 				Math::Vector3 forward{};
 				forward.z = 1.0f;
-				forward = transform->MakeAffineMatrix4x4().TransformNormal(forward);
+				forward = transform->MakeAffineMatrix4x4(registry).TransformNormal(forward);
 				forward = forward.Normalize();
 
 				// Blenderの極座標を逆算 (カメラから注視点への方向ベクトル V = -forward)
@@ -121,7 +121,7 @@ void DebugCameraSystem::BlenderMove(Registry& registry, Entity entity, float del
 			}
 
 			//速度ベクトルを自機の向きに合わせて回転させる
-			velocity = transform->MakeAffineMatrix4x4().TransformNormal(velocity);
+			velocity = transform->MakeAffineMatrix4x4(registry).TransformNormal(velocity);
 
 			debugCamera->center += velocity;
 		}
@@ -177,7 +177,7 @@ void DebugCameraSystem::BlenderMove(Registry& registry, Entity entity, float del
 		//距離が遠いほど早く移動できる
 		velocity.z = (debugCamera->mouseWheelY - debugCamera->preMouseWheelY) / 100.0f;
 		//速度ベクトルを自機の向きに合わせて回転させる
-		velocity = transform->MakeAffineMatrix4x4().TransformNormal(velocity);
+		velocity = transform->MakeAffineMatrix4x4(registry).TransformNormal(velocity);
 
 		debugCamera->center += velocity;
 	}
@@ -186,7 +186,7 @@ void DebugCameraSystem::BlenderMove(Registry& registry, Entity entity, float del
 	transform->translate.y = debugCamera->center.y + debugCamera->distance * std::cos(debugCamera->phi);
 	transform->translate.z = debugCamera->center.z + debugCamera->distance * std::sin(debugCamera->phi) * std::sin(debugCamera->theta);
 
-	Math::Vector3 forward = debugCamera->center - transform->GetWorldPosition();
+	Math::Vector3 forward = debugCamera->center - transform->GetWorldPosition(registry);
 
 	transform->rotation.LookRotation(forward.Normalize(), Math::Vector3::UP);
 
@@ -249,7 +249,7 @@ void DebugCameraSystem::UnityMove(Registry& registry, Entity entity, float delta
 		}
 
 		// 速度ベクトルを現在のカメラの向きに合わせて回転（ローカル座標 ➔ ワールド座標）
-		velocity = transform->MakeAffineMatrix4x4().TransformNormal(velocity);
+		velocity = transform->MakeAffineMatrix4x4(registry).TransformNormal(velocity);
 
 		// Q/E による世界座標系（垂直方向）の上下移動（UnityのSceneビューと同じ仕様）
 		if (Input::Keyboard::IsPress('E')) {
@@ -265,7 +265,7 @@ void DebugCameraSystem::UnityMove(Registry& registry, Entity entity, float delta
 		// 現在のカメラの前方ベクトルを取得 (Z軸ベクトルを現在の回転で変換)
 		Math::Vector3 forward{};
 		forward.z = 1.0f;
-		forward = transform->MakeAffineMatrix4x4().TransformNormal(forward);
+		forward = transform->MakeAffineMatrix4x4(registry).TransformNormal(forward);
 		forward = forward.Normalize();
 
 		// Blenderの注視点を計算 (現在のカメラ位置から前方に distance 分進んだ位置)
