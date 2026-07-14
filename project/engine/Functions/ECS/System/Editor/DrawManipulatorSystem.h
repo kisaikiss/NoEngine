@@ -11,6 +11,8 @@ public:
 private:
     bool isActive_ = false;
     bool isActivePreFrame_ = false;
+
+    void Manipulate3D(Registry & registry);
 };
 
 }
