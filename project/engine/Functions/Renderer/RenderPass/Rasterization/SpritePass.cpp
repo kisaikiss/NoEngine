@@ -25,19 +25,19 @@ SpritePass::~SpritePass() {}
 
 void SpritePass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& resourceRegistry, ECS::Registry& registry) {
 	(void)resourceRegistry;
-	CameraUpdate(registry);
+	CameraUpdate();
 	Collect(registry);
 	Sort();
 	GenerateVertices(registry);
 	Render(gfx);
 }
 
-void SpritePass::CameraUpdate(ECS::Registry& registry) {
-	auto cameraView = registry.View<ActiveCamera2DTag, Camera2DComponent>();
-	for (auto entity : cameraView) {
-		auto* camera = registry.GetComponent<Camera2DComponent>(entity);
+void SpritePass::CameraUpdate() {
+	auto* camera = GetTargetCamera2D();
+	if (camera) {
 		sCameraMatrix = camera->viewProjection;
 	}
+	
 }
 
 void SpritePass::Collect(ECS::Registry& registry) {

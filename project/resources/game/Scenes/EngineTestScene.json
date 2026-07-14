@@ -70,6 +70,8 @@
         },
         "CAMERA2D": {
             "components": {
+                "ActiveCamera2DTag": null,
+                "Camera2DComponent": null,
                 "EditTag": {
                     "name": "CAMERA2D",
                     "path": "CAMERA2D"
@@ -81,6 +83,97 @@
                         1.0
                     ],
                     "translate": [
+                        0.10000000149011612,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "DEBUG_CAMERA2D": {
+            "components": {
+                "Camera2DComponent": null,
+                "DebugCamera2DComponent": null,
+                "EditTag": {
+                    "name": "DEBUG_CAMERA2D",
+                    "path": "CAMERA2D"
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        -114.5999984741211,
+                        6.599999904632568
+                    ]
+                }
+            }
+        },
+        "DebugCamera": {
+            "components": {
+                "CameraComponent": {
+                    "fov": 0.44999998807907104
+                },
+                "DebugCameraComponent": {
+                    "center": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "distance": 1.5775063037872314,
+                    "drawCenter": false,
+                    "moveType": "kBlender",
+                    "unityMoveSpeed": 10.0,
+                    "unitySensitivity": 0.20000000298023224
+                },
+                "EditTag": {
+                    "name": "DebugCamera",
+                    "path": "DebugCamera"
+                },
+                "TransformComponent": {
+                    "rotation": [
+                        -0.029936719685792923,
+                        -0.03688676282763481,
+                        -0.001105517498217523,
+                        0.998870313167572
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        0.11614231020212173,
+                        -0.09447269141674042,
+                        -1.5703859329223633
+                    ]
+                }
+            }
+        },
+        "MainCamera": {
+            "components": {
+                "CameraComponent": {
+                    "fov": 0.44999998807907104
+                },
+                "EditTag": {
+                    "name": "MainCamera",
+                    "path": "MainCamera"
+                },
+                "TransformComponent": {
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        0.0,
                         0.0,
                         0.0
                     ]
@@ -195,7 +288,12 @@
                     "fov": 0.44999998807907104
                 },
                 "DebugCameraComponent": {
-                    "distance": 37.524749755859375,
+                    "center": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "distance": 29.59776496887207,
                     "drawCenter": false,
                     "moveType": "kBlender",
                     "unityMoveSpeed": 10.0,
@@ -207,10 +305,10 @@
                 },
                 "TransformComponent": {
                     "rotation": [
-                        0.24482646584510803,
-                        -0.6381523013114929,
-                        0.22499310970306396,
-                        0.6944060325622559
+                        0.21616804599761963,
+                        -0.6700519323348999,
+                        0.21389807760715485,
+                        0.677162766456604
                     ],
                     "scale": [
                         1.0,
@@ -218,9 +316,9 @@
                         1.0
                     ],
                     "translate": [
-                        29.242395401000977,
-                        24.559598922729492,
-                        -2.2308666706085205
+                        24.121957778930664,
+                        17.149169921875,
+                        -0.2546463906764984
                     ]
                 }
             }
@@ -638,6 +736,100 @@
                         0.0,
                         0.6000000238418579,
                         4.0
+                    ]
+                }
+            }
+        },
+        "noiseTex": {
+            "components": {
+                "EditTag": {
+                    "name": "noiseTex",
+                    "path": "noiseTex"
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "fill": 0.0,
+                    "flipX": false,
+                    "flipY": false,
+                    "isVisible": true,
+                    "layer": 0,
+                    "maskTextureName": "",
+                    "nonRenderAngle": 0.0,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureName": "staminaFrame",
+                    "useMask": false,
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        100.0,
+                        100.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "noiseTex1": {
+            "components": {
+                "EditTag": {
+                    "name": "noiseTex1",
+                    "path": "noiseTex1"
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "fill": 0.0,
+                    "flipX": false,
+                    "flipY": false,
+                    "isVisible": true,
+                    "layer": 0,
+                    "maskTextureName": "",
+                    "nonRenderAngle": 0.0,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureName": "staminaFrame",
+                    "useMask": false,
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "rotation": 0.0,
+                    "scale": [
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0
                     ]
                 }
             }

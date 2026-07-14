@@ -235,6 +235,7 @@ void CommonSetupRenderPass(RenderPassScheduler& renderPassScheduler) {
 
 	auto spritePass = std::make_unique<SpritePass>();
 	spritePass->AddOutput("MainColor");
+	spritePass->SetTargetCameraType(RenderPass::TargetCameraType::kMain);
 	renderPassScheduler.AddPass(std::move(spritePass));
 }
 
@@ -287,6 +288,12 @@ void CommonSetupDebugRenderPass(RenderPassScheduler& renderPassScheduler) {
 	particlePass->SetDepthOutput("MainDepth");
 	particlePass->SetTargetCameraType(RenderPass::TargetCameraType::kDebug);
 	renderPassScheduler.AddPass(std::move(particlePass));
+
+
+	auto spritePass = std::make_unique<SpritePass>();
+	spritePass->AddOutput("DebugColor");
+	spritePass->SetTargetCameraType(RenderPass::TargetCameraType::kDebug);
+	renderPassScheduler.AddPass(std::move(spritePass));
 #else
 	static_cast<void>(renderPassScheduler);
 #endif // USE_IMGUI

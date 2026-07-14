@@ -11,7 +11,7 @@ public:
 	void Execute(GraphicsContext& gfx, const  RenderGraphRegistry& resourceRegistry, ECS::Registry& registry) override;
 private:
 	void Draw(GraphicsContext& gfx);
-	void Draw2D(GraphicsContext& gfx, ECS::Registry& registry);
+	void Draw2D(GraphicsContext& gfx);
 };
 }
 }

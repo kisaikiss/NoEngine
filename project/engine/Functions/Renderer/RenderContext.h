@@ -108,12 +108,21 @@ public:
 	D3D12_CPU_DESCRIPTOR_HANDLE GetDirectionalLightSRV() { return directionalLightBuffer_.GetSRV(); }
 	D3D12_CPU_DESCRIPTOR_HANDLE GetPointLightSRV() { return pointLightBuffer_.GetSRV(); }
 	D3D12_CPU_DESCRIPTOR_HANDLE GetSpotLightSRV() { return spotLightBuffer_.GetSRV(); }
+
 	Component::CameraComponent* GetCamera(const std::string& name) {
 		if (cameras_.contains(name)) return cameras_[name];
 		return nullptr;
 	}
 	Component::CameraComponent* GetCamera() { return camera_; }
 	Component::CameraComponent* GetDebugCamera() { return debugCamera_; }
+
+	Component::Camera2DComponent* GetCamera2D(const std::string& name) {
+		if (cameras_.contains(name)) return cameras2d_[name];
+		return nullptr;
+	}
+	Component::Camera2DComponent* GetCamera2D() { return camera2d_; }
+	Component::Camera2DComponent* GetDebugCamera2D() { return debugCamera2d_; }
+
 	bool IsInitialized() { return isInitialized_; }
 
 	StructuredBuffer& GetDirectionalLightBuffer() { return directionalLightBuffer_; }
@@ -134,6 +143,11 @@ private:
 	Component::CameraComponent* camera_;
 	Component::CameraComponent* debugCamera_;
 	std::unordered_map<std::string, Component::CameraComponent*> cameras_;
+
+	// 2Dカメラ
+	Component::Camera2DComponent* camera2d_;
+	Component::Camera2DComponent* debugCamera2d_;
+	std::unordered_map<std::string, Component::Camera2DComponent*> cameras2d_;
 
 	// 描画Pipeline
 	GraphicsPSOManager graphicsPSOs_;

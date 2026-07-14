@@ -17,24 +17,47 @@ RenderContext::RenderContext() {
 }
 
 void RenderContext::Update(ECS::Registry& registry) {
-	auto cameraView = registry.View<CameraComponent, ActiveCameraTag>();
-	for (auto e : cameraView) {
-		camera_ = registry.GetComponent<CameraComponent>(e);
+	// 3Dカメラ収集
+	{
+		auto cameraView = registry.View<CameraComponent, ActiveCameraTag>();
+		for (auto e : cameraView) {
+			camera_ = registry.GetComponent<CameraComponent>(e);
+		}
+
+		auto debugCameraView = registry.View<CameraComponent, DebugCameraComponent>();
+		for (auto e : debugCameraView) {
+			debugCamera_ = registry.GetComponent<CameraComponent>(e);
+		}
+
+		auto view = registry.View<CameraComponent, Editor::EditTag>();
+		cameras_.clear();
+		for (auto e : view) {
+			auto name = registry.GetComponent<Editor::EditTag>(e)->name;
+			auto camera = registry.GetComponent<CameraComponent>(e);
+			cameras_[name] = camera;
+		}
 	}
 
-	auto debugCameraView = registry.View<CameraComponent, DebugCameraComponent>();
-	for (auto e : debugCameraView) {
-		debugCamera_ = registry.GetComponent<CameraComponent>(e);
-	}
+	// 2Dカメラ収集
+	{
+		auto cameraView = registry.View<Camera2DComponent, ActiveCamera2DTag>();
+		for (auto e : cameraView) {
+			camera2d_ = registry.GetComponent<Camera2DComponent>(e);
+		}
 
-	auto view = registry.View<CameraComponent, Editor::EditTag>();
-	cameras_.clear();
-	for (auto e : view) {
-		auto name = registry.GetComponent<Editor::EditTag>(e)->name;
-		auto camera = registry.GetComponent<CameraComponent>(e);
-		cameras_[name] = camera;
-	}
+		auto debugCameraView = registry.View<Camera2DComponent, DebugCamera2DComponent>();
+		for (auto e : debugCameraView) {
+			debugCamera2d_ = registry.GetComponent<Camera2DComponent>(e);
+		}
 
+		auto view = registry.View<Camera2DComponent, Editor::EditTag>();
+		cameras2d_.clear();
+		for (auto e : view) {
+			auto name = registry.GetComponent<Editor::EditTag>(e)->name;
+			auto camera = registry.GetComponent<Camera2DComponent>(e);
+			cameras2d_[name] = camera;
+		}
+	}
 
 }
 

@@ -9,8 +9,8 @@ namespace NoEngine {
 namespace ECS {
 
 void DebugCamera2DSystem::Update(Registry& registry, float deltaTime) {
-	if (!Editor::IsMouseOverGameWindow()) return;
-	auto view = registry.View<Component::DebugCamera2DComponent, Component::ActiveCamera2DTag, Component::Camera2DComponent, Component::Transform2DComponent>();
+	if (!Editor::IsMouseOverSceneWindow()) return;
+	auto view = registry.View<Component::DebugCamera2DComponent, Component::Camera2DComponent, Component::Transform2DComponent>();
 	for (auto e : view) {
 		auto* transform = registry.GetComponent<Component::Transform2DComponent>(e);
 		auto* debugCamera = registry.GetComponent<Component::DebugCamera2DComponent>(e);

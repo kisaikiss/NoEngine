@@ -65,6 +65,23 @@ protected:
 			break;
 		}
 	}
+
+	Component::Camera2DComponent* GetTargetCamera2D() {
+		switch (targetCameraType_) {
+		case NoEngine::Render::RenderPass::TargetCameraType::kMain:
+			return renderContext_->GetCamera2D();
+			break;
+		case NoEngine::Render::RenderPass::TargetCameraType::kDebug:
+			return renderContext_->GetDebugCamera2D();
+			break;
+		case NoEngine::Render::RenderPass::TargetCameraType::kCustom:
+			return renderContext_->GetCamera2D(targetCameraName_);
+			break;
+		default:
+			return renderContext_->GetCamera2D();
+			break;
+		}
+	}
 	RenderContext* GetRenderContext() { return renderContext_; }
 	const std::string& GetInput(const std::string& role){
 		if (!inputs_.contains(role))assert(false);

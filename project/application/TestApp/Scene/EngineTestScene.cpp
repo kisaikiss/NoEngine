@@ -18,6 +18,7 @@ void EngineTestScene::Setup() {
 	AddSystem(std::make_unique<No::EffectEmitSystem>());
 	AddSystem(std::make_unique<No::ParticleSystem>());
 	AddSystem(std::make_unique<No::DebugCameraSystem>());
+	AddSystem(std::make_unique<No::DebugCamera2DSystem>());
 	AddSystem(std::make_unique<No::CameraSystem>());
 	AddSystem(std::make_unique<No::Camera2DSystem>());
 	AddSystem(std::make_unique<No::MovementSystem>());
