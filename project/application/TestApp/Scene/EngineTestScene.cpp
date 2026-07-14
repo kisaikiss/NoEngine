@@ -11,6 +11,7 @@ void EngineTestScene::Setup() {
 	AddSystem(std::make_unique<No::DrawManipulatorSystem>());
 	AddSystem(std::make_unique<TestSystem>());
 	AddSystem(std::make_unique<No::ModelLoadSystem>());
+	AddSystem(std::make_unique<No::SpriteLoadSystem>());
 	AddSystem(std::make_unique<No::AnimationSystem>());
 	AddSystem(std::make_unique<No::SpriteAnimationSystem>());
 	AddSystem(std::make_unique<No::ParticleEmitterSystem>());
@@ -18,6 +19,7 @@ void EngineTestScene::Setup() {
 	AddSystem(std::make_unique<No::ParticleSystem>());
 	AddSystem(std::make_unique<No::DebugCameraSystem>());
 	AddSystem(std::make_unique<No::CameraSystem>());
+	AddSystem(std::make_unique<No::Camera2DSystem>());
 	AddSystem(std::make_unique<No::MovementSystem>());
 
 	No::Registry& registry = *GetRegistry();
@@ -35,6 +37,18 @@ void EngineTestScene::Setup() {
 	auto* text = registry.AddComponent<No::TextComponent>(entity);
 	text->fontHandle = NoEngine::FontManager::LoadFontFile("resources/engine/fonts/build/Isego.font");
 	
+	{
+		auto se = registry.GenerateEntity();
+		registry.AddComponent<No::EditTag>(se)->name = "noiseTex";
+		registry.AddComponent<No::Transform2DComponent>(se)->scale = No::Vector2::UNIT_SCALE * 100;
+		registry.AddComponent<No::SpriteComponent>(se)->textureName = "staminaFrame";
+
+		auto se1 = registry.GenerateEntity();
+		registry.AddComponent<No::EditTag>(se1)->name = "noiseTex1";
+		auto*  st = registry.AddComponent<No::Transform2DComponent>(se1);
+		st->parent = se;
+		registry.AddComponent<No::SpriteComponent>(se1)->textureName = "staminaFrame";
+	}
 
 	No::Entity background = registry.GenerateEntity();
 	auto* bm = registry.AddComponent<No::MeshComponent>(background);

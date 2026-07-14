@@ -33,7 +33,7 @@ private:
     void Collect(ECS::Registry& registry);
     void Sort();
     void MakeLocalQuad(const DrawItem& item , Math::Vector2 out[4]);
-    void GenerateVertices();
+    void GenerateVertices(ECS::Registry& registry);
     void Render(GraphicsContext& gfx);
 };
 

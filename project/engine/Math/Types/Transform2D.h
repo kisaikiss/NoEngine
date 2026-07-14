@@ -3,13 +3,15 @@
 #include "Matrix3x3.h"
 #include "Matrix4x4.h"
 
+#include "engine/Functions/ECS/Registry.h"
+
 namespace NoEngine {
 struct Transform2D {
 	Math::Vector2 scale{ Math::Vector2::UNIT_SCALE };
 	float rotation{};
 	Math::Vector2 translate{ Math::Vector2::ZERO };
 
-	Transform2D* parent = nullptr;
+	ECS::Entity parent = ECS::INVALID_ENTITY;
 
 	Transform2D() = default;
 
@@ -17,9 +19,9 @@ struct Transform2D {
 		: translate(position), rotation(rotation), scale(scale) {
 	}
 
-	Math::Matrix3x3 MakeAffineMatrix3x3() const;
-	Math::Matrix4x4 MakeAffineMatrix4x4() const;
+	virtual Math::Matrix3x3 MakeAffineMatrix3x3(ECS::Registry& registry) const;
+	virtual Math::Matrix4x4 MakeAffineMatrix4x4(ECS::Registry& registry) const;
 
-	Math::Vector2 GetWorldPosition() const;
+	Math::Vector2 GetWorldPosition(ECS::Registry& registry) const;
 };
 }

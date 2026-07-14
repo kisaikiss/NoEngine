@@ -4,6 +4,9 @@
 REFLECT_STRUCT_BEGIN(NoEngine::Component::ActiveCameraTag)
 REFLECT_STRUCT_END(NoEngine::Component::ActiveCameraTag)
 
+REFLECT_STRUCT_BEGIN(NoEngine::Component::ActiveCamera2DTag)
+REFLECT_STRUCT_END(NoEngine::Component::ActiveCamera2DTag)
+
 REFLECT_STRUCT_BEGIN(NoEngine::Component::DebugCameraComponent)
 REFLECT_ENUM_FIELD(moveType),
 REFLECT_FIELD(unityMoveSpeed),
@@ -14,6 +17,14 @@ REFLECT_FIELD(drawCenter),
 REFLECT_FIELD(center)
 REFLECT_STRUCT_END(NoEngine::Component::DebugCameraComponent)
 
+
+
+REFLECT_STRUCT_BEGIN(NoEngine::Component::DebugCamera2DComponent)
+REFLECT_STRUCT_END(NoEngine::Component::DebugCamera2DComponent)
+
 REFLECT_STRUCT_BEGIN(NoEngine::Component::CameraComponent)
 REFLECT_FIELD(fov)
 REFLECT_STRUCT_END(NoEngine::Component::CameraComponent)
+
+REFLECT_STRUCT_BEGIN(NoEngine::Component::Camera2DComponent)
+REFLECT_STRUCT_END(NoEngine::Component::Camera2DComponent)

@@ -21,7 +21,7 @@ void Camera2DSystem::Update(Registry& registry, float deltaTime) {
 		// ビュー行列を作成
 		Transform2DComponent t = *transform;
 		t.translate -= screenCenter;
-		Matrix4x4 view = t.MakeAffineMatrix4x4();
+		Matrix4x4 view = t.MakeAffineMatrix4x4(registry);
 		view.Inverse();
 
 		// 画面中央を基準とするための補正

@@ -28,12 +28,12 @@ void SpritePass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& resour
 	CameraUpdate(registry);
 	Collect(registry);
 	Sort();
-	GenerateVertices();
+	GenerateVertices(registry);
 	Render(gfx);
 }
 
 void SpritePass::CameraUpdate(ECS::Registry& registry) {
-	auto cameraView = registry.View<ActiveCamera2DTag>();
+	auto cameraView = registry.View<ActiveCamera2DTag, Camera2DComponent>();
 	for (auto entity : cameraView) {
 		auto* camera = registry.GetComponent<Camera2DComponent>(entity);
 		sCameraMatrix = camera->viewProjection;
@@ -86,7 +86,7 @@ void SpritePass::MakeLocalQuad(const DrawItem& item, Vector2 out[4]) {
 	out[3] = { right, bottom };
 }
 
-void SpritePass::GenerateVertices() {
+void SpritePass::GenerateVertices(ECS::Registry& registry) {
 	vertices_.clear();
 	indices_.clear();
 	uint16_t indexOffset = 0;
@@ -95,7 +95,7 @@ void SpritePass::GenerateVertices() {
 
 		Vector2 local[4];
 		MakeLocalQuad(item, local);
-		Matrix4x4 mat = t->MakeAffineMatrix4x4();
+		Matrix4x4 mat = t->MakeAffineMatrix4x4(registry);
 
 		Vector3 world[4];
 		for (int i = 0; i < 4; i++) {
