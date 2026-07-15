@@ -44,7 +44,7 @@ void ParticleInitialzer::CreatePSO(RenderContext& ctx) {
 		depthStencilParticleDesc.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
 
 		std::vector<D3D12_INPUT_ELEMENT_DESC> particleInputLayout = InputLayoutBuilder::BuildFromReflection(particleVsReflection);
-		// ShadarReflectionがInstanceIDを認識してしまうので削除する
+		// ShaderReflectionがInstanceIDを認識してしまうので削除する
 		particleInputLayout.erase(particleInputLayout.end() - 1);
 
 		GraphicsPSO particlePSO(particlePSOName);

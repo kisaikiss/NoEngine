@@ -9,9 +9,9 @@
 namespace NoEngine {
 namespace Render {
 
-class ParticlePass : public RenderPass{
+class CPUParticlePass : public RenderPass{
 public:
-	ParticlePass();
+	CPUParticlePass();
 	void Execute(GraphicsContext& gfx, const RenderGraphRegistry& resourceRegistry, ECS::Registry& registry) override;
 private:
 	ByteAddressBuffer vertex_;

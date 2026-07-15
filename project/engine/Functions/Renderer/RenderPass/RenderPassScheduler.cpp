@@ -3,7 +3,7 @@
 #include "Rasterization/MeshPass.h"
 #include "Rasterization/PrimitivePass.h"
 #include "PrePasses/LightPass.h"
-#include "Rasterization/ParticlePass.h"
+#include "Rasterization/CPUParticlePass.h"
 #include "PrePasses/TLASBuildPass.h"
 #include "PrePasses/BLASUpdatePass.h"
 #include "PrePasses/PreRenderPass.h"
@@ -223,7 +223,7 @@ void CommonSetupRenderPass(RenderPassScheduler& renderPassScheduler) {
 	depthBasedOutlinePass->AddOutput("PostEffect");
 	renderPassScheduler.AddPass(std::move(depthBasedOutlinePass));
 
-	auto particlePass = std::make_unique<ParticlePass>();
+	auto particlePass = std::make_unique<CPUParticlePass>();
 	particlePass->AddOutput("PostEffect");
 	particlePass->SetDepthOutput("MainDepth");
 	renderPassScheduler.AddPass(std::move(particlePass));
@@ -283,7 +283,7 @@ void CommonSetupDebugRenderPass(RenderPassScheduler& renderPassScheduler) {
 	primitivePass->SetTargetCameraType(RenderPass::TargetCameraType::kDebug);
 	renderPassScheduler.AddPass(std::move(primitivePass));
 
-	auto particlePass = std::make_unique<ParticlePass>();
+	auto particlePass = std::make_unique<CPUParticlePass>();
 	particlePass->AddOutput("DebugColor");
 	particlePass->SetDepthOutput("MainDepth");
 	particlePass->SetTargetCameraType(RenderPass::TargetCameraType::kDebug);

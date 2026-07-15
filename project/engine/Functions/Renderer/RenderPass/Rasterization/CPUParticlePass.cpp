@@ -1,12 +1,12 @@
 #include "stdafx.h"
-#include "ParticlePass.h"
+#include "CPUParticlePass.h"
 #include "engine/Runtime/GpuResource/UploadBuffer.h"
 #include "engine/Functions/Shader/ShaderReflection.h"
 
 namespace NoEngine {
 namespace Render {
 
-ParticlePass::ParticlePass() {
+CPUParticlePass::CPUParticlePass() {
 	{
 
 		// --- シリンダーメッシュ生成 ---
@@ -88,7 +88,7 @@ ParticlePass::ParticlePass() {
 	Initialize(maxParticles_);
 }
 
-void ParticlePass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& resourceRegistry, ECS::Registry& registry) {
+void CPUParticlePass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& resourceRegistry, ECS::Registry& registry) {
 	static_cast<void>(resourceRegistry);
 	auto* renderCtx = GetRenderContext();
 	camera_ = GetTargetCamera();
@@ -161,7 +161,7 @@ void ParticlePass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& reso
 	particleForGpu_.clear();
 }
 
-void ParticlePass::UploadMatrices(GraphicsContext& gfx, ECS::Registry& registry) {
+void CPUParticlePass::UploadMatrices(GraphicsContext& gfx, ECS::Registry& registry) {
 	auto view = registry.View<Component::ParticleComponent, Component::TransformComponent>();
 
 	Math::Matrix4x4 billBoardMatrix{};
@@ -236,7 +236,7 @@ void ParticlePass::UploadMatrices(GraphicsContext& gfx, ECS::Registry& registry)
 
 }
 
-void ParticlePass::Initialize(size_t maxParticles) {
+void CPUParticlePass::Initialize(size_t maxParticles) {
 	size_t bufferSize = maxParticles * sizeof(ParticleForGPU);
 
 	worldMatrixBuffer_.Create(
@@ -252,7 +252,7 @@ void ParticlePass::Initialize(size_t maxParticles) {
 
 }
 
-void ParticlePass::GenerateRingMesh(std::vector<ParticleVertex>& outVerts, std::vector<uint32_t>& outIndices, uint32_t ringDivide, float innerRadius, float outerRadius) {
+void CPUParticlePass::GenerateRingMesh(std::vector<ParticleVertex>& outVerts, std::vector<uint32_t>& outIndices, uint32_t ringDivide, float innerRadius, float outerRadius) {
 	outVerts.clear();
 	outIndices.clear();
 	outVerts.reserve(ringDivide * 4);
@@ -288,7 +288,7 @@ void ParticlePass::GenerateRingMesh(std::vector<ParticleVertex>& outVerts, std::
 	}
 }
 
-void ParticlePass::GenerateCylinderMesh(std::vector<ParticleVertex>& outVerts, std::vector<uint32_t>& outIndices,
+void CPUParticlePass::GenerateCylinderMesh(std::vector<ParticleVertex>& outVerts, std::vector<uint32_t>& outIndices,
 	uint32_t cylinderDivide, float topRadius, float bottomRadius, float height) {
 
 	const float radianParDivide = 2.0f * PI / static_cast<float>(cylinderDivide);

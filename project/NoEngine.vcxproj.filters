@@ -35,6 +35,7 @@
     <FxCompile Include="resources\engine\Shaders\RandomNoise.PS.hlsl" />
     <FxCompile Include="resources\engine\Shaders\ObjectID.PS.hlsl" />
     <FxCompile Include="resources\engine\Shaders\Emissive.PS.hlsl" />
+    <FxCompile Include="resources\engine\Shaders\Compute\InitializeParticle.CS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="engine\Assets\Audio\Audio.cpp" />
@@ -137,7 +138,7 @@
     <ClCompile Include="engine\Functions\ECS\System\Camera\CameraSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Camera\DebugCameraSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\CameraComponent.cpp" />
-    <ClCompile Include="engine\Functions\Renderer\RenderPass\Rasterization\ParticlePass.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\RenderPass\Rasterization\CPUParticlePass.cpp" />
     <ClCompile Include="engine\Utilities\Random.cpp" />
     <ClCompile Include="engine\Functions\Scene\IScene.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\SystemManager.cpp" />
@@ -374,7 +375,7 @@
     <ClInclude Include="engine\Functions\ECS\Component\CameraComponent.h" />
     <ClInclude Include="engine\Functions\ECS\System\Camera\CameraSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\Camera\DebugCameraSystem.h" />
-    <ClInclude Include="engine\Functions\Renderer\RenderPass\Rasterization\ParticlePass.h" />
+    <ClInclude Include="engine\Functions\Renderer\RenderPass\Rasterization\CPUParticlePass.h" />
     <ClInclude Include="engine\Functions\ECS\Component\ParticleEmitterComponent.h" />
     <ClInclude Include="engine\Utilities\Random.h" />
     <ClInclude Include="engine\Functions\ECS\Component\PauseComponent.h" />
@@ -488,5 +489,6 @@
     <None Include="resources\game\Shaders\ShaderMathUtil.hlsli" />
     <None Include="resources\game\td_2304\Json\tdSpriteConfig.json" />
     <None Include="resources\engine\Shaders\Random.hlsli" />
+    <None Include="resources\engine\Shaders\Compute\Particle.hlsli" />
   </ItemGroup>
 </Project>
