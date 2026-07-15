@@ -37,6 +37,7 @@
     <FxCompile Include="resources\engine\Shaders\Emissive.PS.hlsl" />
     <FxCompile Include="resources\engine\Shaders\Particle\InitializeParticle.CS.hlsl" />
     <FxCompile Include="resources\engine\Shaders\Particle\Particle.VS.hlsl" />
+    <FxCompile Include="resources\engine\Shaders\Particle\EmitParticle.CS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="engine\Assets\Audio\Audio.cpp" />

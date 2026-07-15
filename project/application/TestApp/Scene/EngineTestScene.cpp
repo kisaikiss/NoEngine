@@ -117,11 +117,6 @@ void EngineTestScene::Setup() {
 	}
 
 	auto emitterE = registry.GenerateEntity();
-	auto* emitter = registry.AddComponent<No::ParticleEmitterComponent>(emitterE);
-	emitter->texture = NoEngine::TextureManager::LoadCovertTexture("resources/engine/Texture/gradationLine.png");
-	emitter->count = 10;
-	emitter->frequency = 0.1f;
-	emitter->shape = No::ParticleShape::kCylinder;
 	registry.AddComponent<No::TransformComponent>(emitterE);
 	auto* emitterTag = registry.AddComponent<No::EditTag>(emitterE);
 	emitterTag->name = "emitter";

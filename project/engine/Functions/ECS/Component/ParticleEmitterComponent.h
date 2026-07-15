@@ -42,5 +42,15 @@ struct ParticleEmitterComponent {
 	std::string textureName = "white1x1";
 	TextureRef texture;			// 使用するテクスチャ
 };
+
+struct ParticleEmitterSphereComponent {
+	float radius = 1.0f;
+	uint32_t count = 10;
+	float frequency = 0.5f;
+	float frequencyTime = 0.0f;
+	uint32_t emit = 0;
+	
+};
+
 }
 }

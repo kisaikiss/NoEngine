@@ -17,3 +17,10 @@ REFLECT_FIELD(localPosition),
 REFLECT_FIELD(color),
 REFLECT_FIELD(textureName)
 REFLECT_STRUCT_END(NoEngine::Component::ParticleEmitterComponent)
+
+REFLECT_STRUCT_BEGIN(NoEngine::Component::ParticleEmitterSphereComponent)
+REFLECT_FIELD(radius),
+REFLECT_FIELD(count),
+REFLECT_FIELD(frequency),
+REFLECT_FIELD(frequencyTime)
+REFLECT_STRUCT_END(NoEngine::Component::ParticleEmitterSphereComponent)

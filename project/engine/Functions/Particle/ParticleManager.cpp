@@ -8,6 +8,7 @@
 namespace NoEngine {
 namespace {
 StructuredBuffer sParticleBuffer;
+StructuredBuffer sFreeCounterBuffer;
 ComputePSO sPSO;
 RootSignature sRootSignature;
 const std::wstring sPsoName = L"InitializeParticle";
@@ -40,8 +41,14 @@ void ParticleManager::Initialize(ComputeContext& ctx) {
 	ctx.TransitionResource(sParticleBuffer, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 	ctx.SetDynamicDescriptor(rootIndex["gParticles"], 0, sParticleBuffer.GetUAV());
 
+
+	sFreeCounterBuffer.Create(L"FreeCounterBuffer", 1, sizeof(int));
+	ctx.TransitionResource(sFreeCounterBuffer, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+	ctx.SetDynamicDescriptor(rootIndex["gFreeCounter"], 0, sFreeCounterBuffer.GetUAV());
+
 	ctx.Dispatch(1, 1, 1);
 	ctx.InsertUAVBarrier(sParticleBuffer);
+	ctx.InsertUAVBarrier(sFreeCounterBuffer);
 
 }
 
@@ -51,10 +58,15 @@ void ParticleManager::Reset() {
 
 void ParticleManager::Shutdown() {
 	sParticleBuffer.Destroy();
+	sFreeCounterBuffer.Destroy();
 }
 
 StructuredBuffer& ParticleManager::GetParticleBuffer() {
 	return sParticleBuffer;
+}
+
+StructuredBuffer& ParticleManager::GetFreeCounterBuffer() {
+	return sFreeCounterBuffer;
 }
 
 uint32_t ParticleManager::GetParticleNum() {
