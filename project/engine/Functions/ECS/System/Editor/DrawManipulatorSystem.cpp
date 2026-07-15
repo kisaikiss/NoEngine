@@ -41,6 +41,8 @@ void DrawManipulatorSystem::Update(Registry& registry, float deltaTime) {
 }
 
 void DrawManipulatorSystem::Manipulate3D(Registry& registry) {
+
+#ifdef USE_IMGUI
 	ImGuizmo::SetOrthographic(false);
 	auto cameraView = registry.View<DebugCameraComponent, CameraComponent>();
 	Math::Matrix4x4 viewMatrix;
@@ -169,9 +171,15 @@ void DrawManipulatorSystem::Manipulate3D(Registry& registry) {
 		}
 		}
 	}
+
+#else
+static_cast<void>(registry);
+#endif // USE_IMGUI
 }
 
 void DrawManipulatorSystem::Manipulate2D(Registry& registry) {
+
+#ifdef USE_IMGUI
 	ImGuizmo::SetOrthographic(true);
 	auto cameraView = registry.View<DebugCamera2DComponent, Camera2DComponent, Transform2DComponent>();
 
@@ -322,6 +330,10 @@ void DrawManipulatorSystem::Manipulate2D(Registry& registry) {
 		}
 		}
 	}
+
+#else
+static_cast<void>(registry);
+#endif // USE_IMGUI
 }
 }
 }

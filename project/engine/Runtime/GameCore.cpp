@@ -2,6 +2,7 @@
 #include "engine/Window/WindowManager.h"
 #include "engine/Functions/Debug/CrashHandler/ExportDump.h"
 #include "engine/Functions/Debug/GraphicsResourceLeakChecker.h"
+#include "engine/Functions/Particle/ParticleManager.h"
 #include "engine/Runtime/GraphicsCore.h"
 #include "engine/Runtime/Command/GraphicsContext.h"
 #include "engine/Functions/Renderer/RenderPass/RenderPassScheduler.h"
@@ -121,6 +122,11 @@ void EngineInitialize() {
 	
 	InputInitialize();
 	AudioInitialize();
+	
+	// 初期化に使うComputeContext
+	ComputeContext& ctx = ComputeContext::Begin(L"InitializeComputeContext");
+	ParticleManager::Initialize(ctx);
+	ctx.Finish();
 
 	AssetManager::CreateMetaFileForAllFiles();
 	AssetManager::CreateAddressableList();
@@ -136,6 +142,7 @@ void EngineFinalize() {
 	sImGuiManager.Shutdown();
 #endif // USE_IMGUI
 	Editor::EditorCommandOperator::Shutdown();
+	ParticleManager::Shutdown();
 	AudioShutdown();
 	InputShutdown();
 	GraphicsCore::Shutdown();

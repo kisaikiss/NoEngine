@@ -1,6 +1,7 @@
 struct Particle
 {
     float3 translate;
+    float pad;
     float3 scale;
     float lifeTime;
     float3 velocity;

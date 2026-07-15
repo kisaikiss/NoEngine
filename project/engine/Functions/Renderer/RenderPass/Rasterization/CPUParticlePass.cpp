@@ -93,15 +93,15 @@ void CPUParticlePass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& r
 	auto* renderCtx = GetRenderContext();
 	camera_ = GetTargetCamera();
 	if (!camera_) return;
-	auto& rootIndex = RootSignatureBuilder::GetRootIndexMap("Renderer : particle PSO");
+	auto& rootIndex = RootSignatureBuilder::GetRootIndexMap("Renderer : cpu particle PSO");
 
 	// GPUへ行列を転送
 	UploadMatrices(gfx, registry);
 
 	if (items_.empty()) return;
 
-	gfx.SetPipelineState(renderCtx->GetGraphicsPSO("Renderer : particle PSO"));
-	gfx.SetRootSignature(renderCtx->GetRootSignature("Renderer : particle PSO"));
+	gfx.SetPipelineState(renderCtx->GetGraphicsPSO("Renderer : cpu particle PSO"));
+	gfx.SetRootSignature(renderCtx->GetRootSignature("Renderer : cpu particle PSO"));
 	gfx.SetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	// カメラ
