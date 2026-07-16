@@ -1,0 +1,21 @@
+#include "stdafx.h"
+#include "PlayerStaminaSystem.h"
+#include "application/ClockworksDisease/Component/Player/PlayerComponent.h"
+
+void PlayerStaminaSystem::Update(No::Registry& registry, float deltaTime) {
+	auto view = registry.View<PlayerComponent, No::GroundStateComponent>();
+	for (auto entity : view) {
+		auto* playerVariables = registry.GetComponent<PlayerComponent>(entity);
+		auto* groundState = registry.GetComponent<No::GroundStateComponent>(entity);
+
+		float& stamina = playerVariables->stamina;
+		const float maxStamina = playerVariables->maxStamina;
+
+		if (groundState->isGrounded && stamina < maxStamina) {
+			stamina += deltaTime;
+		}
+		if (stamina > maxStamina) {
+			stamina = maxStamina;
+		}
+	}
+}

@@ -15,6 +15,7 @@ struct PlayerComponent {
 	float doubleJumpSpeed = 4.f;
 	float jumpSpeed = 16.f;
 	float highJumpSpeed = 17.f;
+	float airDashSpeed = 10.f;
 	float gravity = -9.8f;
 	float yVelocity = 0.f;
 	float stamina = 0.0f;
@@ -23,6 +24,16 @@ struct PlayerComponent {
 	bool infinityJump = false;
 	PlayerState state = PlayerState::kWait;
 };
+
+// PlayerJumpSystem / PlayerHorizontalMoveSystem / PlayerVerticalVelocitySystem の間で
+// フレーム内だけ受け渡す一時データ。
+// PlayerComponent（永続データ）とは意図的に分離している。
+// 値は PlayerJumpSystem の冒頭で毎フレームリセットされる。
+struct PlayerMoveTransientComponent {
+	bool justJumped = false; // このフレームでジャンプ入力を処理したか（接地/重力判定の分岐に使用）
+	float slopeY = 0.f;      // 斜面投影による水平移動のy寄与分（PlayerHorizontalMoveSystemが算出）
+};
+
 
 struct LevelComponent {
 	uint32_t power = 0;

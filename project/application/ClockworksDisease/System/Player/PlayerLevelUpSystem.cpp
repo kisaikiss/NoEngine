@@ -60,4 +60,14 @@ void PlayerLevelUpSystem::EnhancementsUponLevelingUp(No::Registry& registry, No:
 		}
 		return;
 	}
+
+
+	// level4
+	if (level == 4) {
+		// 空中ダッシュを追加
+		if (!registry.Has<AirDashTag>(e)) {
+			registry.AddComponent<AirDashTag>(e);
+		}
+		return;
+	}
 }

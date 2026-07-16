@@ -1,7 +1,11 @@
 #include "stdafx.h"
 #include "GameScene.h"
 
-#include "../System/Player/PlayerMoveSystem.h"
+#include "../System/Player/PlayerStaminaSystem.h"
+#include "../System/Player/PlayerJumpSystem.h"
+#include "../System/Player/PlayerHorizontalMoveSystem.h"
+#include "../System/Player/PlayerVerticalVelocitySystem.h"
+
 #include "../System/Camera/FollowCameraSystem.h"
 #include "../System/Game/CollisionEventSystem.h"
 #include "../System/Player/PlayerPushBackSystem.h"
@@ -44,7 +48,10 @@ void GameScene::AddSystems() {
 	AddSystem(std::make_unique<No::SpriteLoadSystem>());
 	AddSystem(std::make_unique<No::AnimationSystem>());
 	AddSystem(std::make_unique<BoxColliderUpdateSystem>());
-	AddSystem(std::make_unique<PlayerMoveSystem>());
+	AddSystem(std::make_unique<PlayerStaminaSystem>());
+	AddSystem(std::make_unique<PlayerJumpSystem>());
+	AddSystem(std::make_unique<PlayerHorizontalMoveSystem>());
+	AddSystem(std::make_unique<PlayerVerticalVelocitySystem>());
 	AddSystem(std::make_unique<StaminaUISystem>());
 	AddSystem(std::make_unique<No::GroundResetSystem>());
 

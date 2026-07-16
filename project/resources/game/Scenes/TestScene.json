@@ -6809,6 +6809,7 @@
                     "textureName": "smokeEffect"
                 },
                 "PlayerComponent": {
+                    "airDashSpeed": 10.0,
                     "doubleJumpSpeed": 4.0,
                     "gravity": -7.0,
                     "highJumpSpeed": 7.0,
@@ -6819,6 +6820,7 @@
                     "stamina": 0.0,
                     "state": "kWait"
                 },
+                "PlayerMoveTransientComponent": null,
                 "TransformComponent": {
                     "rotation": [
                         -1.196509344936203e-07,

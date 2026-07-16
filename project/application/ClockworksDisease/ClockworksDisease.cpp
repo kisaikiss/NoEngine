@@ -30,4 +30,8 @@ void ClockworksDisease::Startup(void) {
 	No::InputBindAction("CloseLevelUpUI", No::DeviceType::Keyboard, static_cast<int>('X'));
 	No::InputBindAction("CloseLevelUpUI", No::DeviceType::GamepadButton, static_cast<int>(No::GamepadButton::X));
 
+
+	No::InputBindAction("AirDash", No::DeviceType::Keyboard, static_cast<int>(VK_LSHIFT));
+	No::InputBindAction("AirDash", No::DeviceType::GamepadButton, static_cast<int>(No::GamepadButton::LB));
+
 }
