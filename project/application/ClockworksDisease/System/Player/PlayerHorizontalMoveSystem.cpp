@@ -6,11 +6,19 @@ namespace {
 
 No::Quaternion GetActiveCameraRotation(No::Registry& registry) {
 	No::Quaternion cameraRotate{};
-	auto cameraView = registry.View<No::ActiveCameraTag, No::TransformComponent, FollowCameraComponent>();
+	auto cameraView = registry.View<FollowCameraComponent>();
 	for (auto entity : cameraView) {
 		cameraRotate = registry.GetComponent<No::TransformComponent>(entity)->rotation;
 	}
 	return cameraRotate;
+}
+
+// 現在の向きの正面ベクトル（水平成分のみ）。
+// ※ No::Vector3::FORWARD がエンジンの前方軸定義と一致しているか要確認。
+No::Vector3 GetFacingDirection(const No::TransformComponent* transform) {
+	No::Vector3 forward = transform->rotation.RotateVector(No::Vector3::FORWARD);
+	forward.y = 0.f;
+	return forward;
 }
 
 void FacePlayerTowardsMoveDirection(No::TransformComponent* transform, const No::Vector3& worldDir,
@@ -28,7 +36,7 @@ void FacePlayerTowardsMoveDirection(No::TransformComponent* transform, const No:
 } // namespace
 
 void PlayerHorizontalMoveSystem::Update(No::Registry& registry, float deltaTime) {
-	No::Quaternion cameraRotate = GetActiveCameraRotation(registry);
+	const No::Quaternion cameraRotate = GetActiveCameraRotation(registry);
 
 	auto view = registry.View<PlayerComponent, No::TransformComponent, No::VelocityComponent,
 		No::GroundStateComponent, No::ParticleEmitterComponent, PlayerMoveTransientComponent>();
@@ -49,7 +57,12 @@ void PlayerHorizontalMoveSystem::Update(No::Registry& registry, float deltaTime)
 		inputDir.x = No::GetInputAxisValue("Lateral");
 		inputDir.z = No::GetInputAxisValue("Forward");
 
-		if (inputDir.x == 0.f && inputDir.z == 0.f) {
+		const bool hasInput = (inputDir.x != 0.f || inputDir.z != 0.f);
+		const bool isAirDashing = transientState->isAirDashing;
+
+		// 通常移動は無入力なら何もしない。
+		// 空中ダッシュ中は無入力でも「向いている方向」へ自動的に進む。
+		if (!hasInput && !isAirDashing) {
 			particleEmitter->active = false;
 			transientState->slopeY = 0.f;
 			continue;
@@ -61,9 +74,15 @@ void PlayerHorizontalMoveSystem::Update(No::Registry& registry, float deltaTime)
 		const bool isGrounded = groundState->isGrounded;
 		const bool justJumped = transientState->justJumped;
 
-		// カメラ基準の移動ベクトル（水平成分のみ）
-		No::Vector3 worldDir = cameraRotate.RotateVector(inputDir);
-		worldDir.y = 0.f;
+		// カメラ基準の移動ベクトル（水平成分のみ）。
+		// 入力が無い空中ダッシュ中のみ、現在の正面方向を採用する。
+		No::Vector3 worldDir;
+		if (hasInput) {
+			worldDir = cameraRotate.RotateVector(inputDir);
+			worldDir.y = 0.f;
+		} else {
+			worldDir = GetFacingDirection(transform);
+		}
 
 		if (isGrounded && !justJumped) {
 			// 斜面に沿わせるため、法線方向の成分を除去して接平面に投影
@@ -71,10 +90,11 @@ void PlayerHorizontalMoveSystem::Update(No::Registry& registry, float deltaTime)
 			worldDir = worldDir - groundNormal * dn;
 		}
 
-		// 正規化してスピードを乗算
+		// 正規化してスピードを乗算（空中ダッシュ中は専用の速度を使う）
+		const float speed = isAirDashing ? playerVariables->airDashSpeed : playerVariables->moveSpeed;
 		const float len = worldDir.Length();
 		if (len > 1e-6f) {
-			worldDir = worldDir * (playerVariables->moveSpeed / len);
+			worldDir = worldDir * (speed / len);
 		}
 
 		velocity->linear.x = worldDir.x;

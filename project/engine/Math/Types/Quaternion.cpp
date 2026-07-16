@@ -65,7 +65,7 @@ void Quaternion::FromAxisAngle(const Vector3& axis, float angle) {
 	*this = MathCalculations::MakeRotateAxisAngleQuaternion(axis, angle);
 }
 
-Vector3 Quaternion::RotateVector(const Vector3& vector) {
+Vector3 Quaternion::RotateVector(const Vector3& vector) const {
 	return MathCalculations::RotateVector(vector, *this);
 }
 

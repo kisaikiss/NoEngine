@@ -60,10 +60,23 @@ void HandleHighJump(No::Registry& registry, No::Entity entity, PlayerComponent* 
 	}
 }
 
-void HandleAirDash(No::Registry& registry, No::Entity entity) {
-	if (No::InputIsTrigger("AirDash") && registry.Has<AirDashTag>(entity)) {
-		// 空中ダッシュの処理
+// 空中で "AirDash" を押している間、スタミナを消費して空中ダッシュ状態にする。
+// 実際の移動速度は PlayerHorizontalMoveSystem、重力無視は PlayerVerticalVelocitySystem が
+// この isAirDashing フラグを見て処理する。
+void HandleAirDash(No::Registry& registry, No::Entity entity, PlayerComponent* playerVariables,
+	bool isGrounded, PlayerMoveTransientComponent* transientState, float deltaTime) {
+
+	if (isGrounded || !registry.Has<AirDashTag>(entity) || !No::InputIsPress("AirDash")) {
+		return;
 	}
+
+	constexpr float kAirDashStaminaCostRate = 5.0f; // 1秒あたりの消費量（要調整）
+	if (playerVariables->stamina <= kAirDashStaminaCostRate * deltaTime) {
+		return;
+	}
+
+	transientState->isAirDashing = true;
+	playerVariables->stamina -= kAirDashStaminaCostRate * deltaTime;
 }
 
 // ジャンプ/ハイジャンプ入力を離した瞬間の減速処理
@@ -88,13 +101,14 @@ void PlayerJumpSystem::Update(No::Registry& registry, float deltaTime) {
 		// このフレームの一時状態をリセット（このシステムが一番最初に触るため）
 		transientState->justJumped = false;
 		transientState->slopeY = 0.f;
+		transientState->isAirDashing = false;
 
 		// isGrounded は各ハンドラ内で isGrounded を書き換える前の値を使う必要があるため先に確定
 		const bool isGrounded = groundState->isGrounded;
 
 		HandleNormalJump(registry, entity, playerVariables, groundState, isGrounded, transientState);
 		HandleHighJump(registry, entity, playerVariables, groundState, isGrounded, transientState, deltaTime);
-		HandleAirDash(registry, entity);
+		HandleAirDash(registry, entity, playerVariables, isGrounded, transientState, deltaTime);
 		HandleJumpRelease(playerVariables);
 	}
 }

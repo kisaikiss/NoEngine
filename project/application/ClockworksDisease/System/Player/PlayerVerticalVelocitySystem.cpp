@@ -15,7 +15,13 @@ void PlayerVerticalVelocitySystem::Update(No::Registry& registry, float deltaTim
 		const bool isGrounded = groundState->isGrounded;
 		const bool justJumped = transientState->justJumped;
 
-		if (isGrounded && !justJumped) {
+		if (transientState->isAirDashing) {
+			// 空中ダッシュ中は重力の影響を受けない。
+			// yVelocity はあえて更新せず据え置くことで、ダッシュ終了後に
+			// 元の落下/上昇速度からスムーズに重力計算を再開できるようにする。
+			velocity->linear.y = 0.f;
+			particleEmitter->active = false;
+		} else if (isGrounded && !justJumped) {
 			// 接地中は重力加算しない。斜面yのみvelocityに反映
 			velocity->linear.y = transientState->slopeY;
 		} else {

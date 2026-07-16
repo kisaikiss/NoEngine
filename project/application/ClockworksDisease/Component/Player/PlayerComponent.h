@@ -30,8 +30,9 @@ struct PlayerComponent {
 // PlayerComponent（永続データ）とは意図的に分離している。
 // 値は PlayerJumpSystem の冒頭で毎フレームリセットされる。
 struct PlayerMoveTransientComponent {
-	bool justJumped = false; // このフレームでジャンプ入力を処理したか（接地/重力判定の分岐に使用）
-	float slopeY = 0.f;      // 斜面投影による水平移動のy寄与分（PlayerHorizontalMoveSystemが算出）
+	bool justJumped = false;   // このフレームでジャンプ入力を処理したか（接地/重力判定の分岐に使用）
+	float slopeY = 0.f;        // 斜面投影による水平移動のy寄与分（PlayerHorizontalMoveSystemが算出）
+	bool isAirDashing = false; // このフレーム、空中ダッシュ中か（移動速度/重力の分岐に使用）
 };
 
 
