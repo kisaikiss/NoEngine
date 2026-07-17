@@ -43,43 +43,44 @@ void ParticleEmitterSystem::Update(ComputeContext& ctx, Registry& registry, floa
 		if (emitter->frequency <= emitter->frequencyTime) {
 			emitter->frequencyTime -= emitter->frequency;
 			emitter->emit = 1;
+			ctx.SetPipelineState(pso_);
+			ctx.SetRootSignature(rootSignature_);
+
+			auto& rootIndex = RootSignatureBuilder::GetRootIndexMap(ConvertString(sPsoName));
+			__declspec(align(16))struct {
+				uint32_t count;
+				uint32_t emit;
+				uint32_t pad[2];
+			}emitterConstants;
+
+			emitterConstants.count = emitter->count;
+			emitterConstants.emit = emitter->emit;
+			ctx.SetDynamicConstantBufferView(rootIndex["gEmitter"], sizeof(emitterConstants), &emitterConstants);
+
+			__declspec(align(16))struct {
+				float time;
+				float deltaTime;
+				float pad[2];
+			}timeConstants;
+			timeConstants.time = GameCore::GetElapsedTime();
+			timeConstants.deltaTime = deltaTime;
+
+			ctx.SetDynamicConstantBufferView(rootIndex["gPerFrame"], sizeof(timeConstants), &timeConstants);
+
+			auto& freeCounter = ParticleManager::GetFreeCounterBuffer();
+			ctx.SetDynamicDescriptor(rootIndex["gFreeCounter"], 0, freeCounter.GetUAV());
+
+			auto& particleBuffer = ParticleManager::GetParticleBuffer();
+			ctx.TransitionResource(particleBuffer, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+			ctx.SetDynamicDescriptor(rootIndex["gParticles"], 0, particleBuffer.GetUAV());
+			ctx.Dispatch(1, 1, 1);
+			ctx.InsertUAVBarrier(particleBuffer);
+			ctx.InsertUAVBarrier(freeCounter);
 		} else {
 			emitter->emit = 0;
 		}
 
-		ctx.SetPipelineState(pso_);
-		ctx.SetRootSignature(rootSignature_);
-
-		auto& rootIndex = RootSignatureBuilder::GetRootIndexMap(ConvertString(sPsoName));
-		__declspec(align(16))struct {
-			uint32_t count;
-			uint32_t emit;
-			uint32_t pad[2];
-		}emitterConstants;
-
-		emitterConstants.count = emitter->count;
-		emitterConstants.emit = emitter->emit;
-		ctx.SetDynamicConstantBufferView(rootIndex["gEmitter"], sizeof(emitterConstants), &emitterConstants);
-
-		__declspec(align(16))struct {
-			float time;
-			float deltaTime;
-			float pad[2];
-		}timeConstants;
-		timeConstants.time = GameCore::GetElapsedTime();
-		timeConstants.deltaTime = deltaTime;
-
-		ctx.SetDynamicConstantBufferView(rootIndex["gPerFrame"], sizeof(timeConstants), &timeConstants);
-
-		auto& freeCounter = ParticleManager::GetFreeCounterBuffer();
-		ctx.SetDynamicDescriptor(rootIndex["gFreeCounter"], 0, freeCounter.GetUAV());
-
-		auto& particleBuffer = ParticleManager::GetParticleBuffer();
-		ctx.TransitionResource(particleBuffer, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
-		ctx.SetDynamicDescriptor(rootIndex["gParticles"], 0, particleBuffer.GetUAV());
-		ctx.Dispatch(1, 1, 1);
-		ctx.InsertUAVBarrier(particleBuffer);
-		ctx.InsertUAVBarrier(freeCounter);
+		
 
 
 	}
