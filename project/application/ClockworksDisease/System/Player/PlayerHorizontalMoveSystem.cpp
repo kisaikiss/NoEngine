@@ -14,7 +14,6 @@ No::Quaternion GetActiveCameraRotation(No::Registry& registry) {
 }
 
 // 現在の向きの正面ベクトル（水平成分のみ）。
-// ※ No::Vector3::FORWARD がエンジンの前方軸定義と一致しているか要確認。
 No::Vector3 GetFacingDirection(const No::TransformComponent* transform) {
 	No::Vector3 forward = transform->rotation.RotateVector(No::Vector3::FORWARD);
 	forward.y = 0.f;

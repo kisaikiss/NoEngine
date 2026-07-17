@@ -241,6 +241,7 @@
     <ClCompile Include="application\ClockworksDisease\System\Player\PlayerJumpSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Player\PlayerHorizontalMoveSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Player\PlayerVerticalVelocitySystem.cpp" />
+    <ClCompile Include="application\ClockworksDisease\System\Object\MagicScaffoldSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -489,6 +490,7 @@
     <ClInclude Include="application\ClockworksDisease\System\Player\PlayerJumpSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Player\PlayerHorizontalMoveSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Player\PlayerVerticalVelocitySystem.h" />
+    <ClInclude Include="application\ClockworksDisease\System\Object\MagicScaffoldSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

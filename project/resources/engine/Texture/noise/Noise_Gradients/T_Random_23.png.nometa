@@ -1,1 +1,4 @@
-{"AddressableName":"resources/engine/Texture/noise/Noise_Gradients/T_Random_23.png","SourceFile":"T_Random_23.png"}
+{
+    "AddressableName": "T_Random_23",
+    "SourceFile": "T_Random_23.png"
+}

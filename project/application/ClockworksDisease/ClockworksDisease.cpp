@@ -34,4 +34,6 @@ void ClockworksDisease::Startup(void) {
 	No::InputBindAction("AirDash", No::DeviceType::Keyboard, static_cast<int>(VK_LSHIFT));
 	No::InputBindAction("AirDash", No::DeviceType::GamepadButton, static_cast<int>(No::GamepadButton::LB));
 
+	No::InputBindAction("CreateScaffold", No::DeviceType::Keyboard, static_cast<int>('Q'));
+	No::InputBindAction("CreateScaffold", No::DeviceType::GamepadButton, static_cast<int>(No::GamepadButton::X));
 }

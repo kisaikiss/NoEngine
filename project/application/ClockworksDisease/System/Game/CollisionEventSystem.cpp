@@ -1,6 +1,9 @@
 #include "CollisionEventSystem.h"
 #include "CollisionLayer.h"
 #include "CollisionEvents.h"
+#include "../../Component/Player/PlayerComponent.h"
+
+struct MagicScaffoldComponent{};
 
 void CollisionEventSystem::Update(No::Registry& registry, float deltaTime) {
 	static_cast<void>(deltaTime);
@@ -21,6 +24,10 @@ void CollisionEventSystem::Update(No::Registry& registry, float deltaTime) {
 			event.player = contact.a;
 			event.position = contact.contactPosition;
 			event.normal = contact.normal;
+			// 魔法足場以外の足場にのった時は足場生成可能フラグをtrueにする
+			if (!registry.Has<MagicScaffoldComponent>(contact.b)&& contact.contactPosition == No::ContactPosition::UP) {
+				registry.GetComponent<PlayerComponent>(contact.a)->canCreateScaffold = true;
+			}
 			registry.EmitEvent(event);
 		} else if ((layerA->layer & CollisionLayerComponent::Player) != CollisionLayerComponent::None &&
 			(layerB->layer & CollisionLayerComponent::Item) != CollisionLayerComponent::None) {

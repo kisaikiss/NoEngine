@@ -28,4 +28,14 @@ void ColliderDrawSystem::Update(No::Registry& registry, float deltaTime) {
 		NoEngine::DebugPrimitive::DrawSphere(sphereTransform->GetWorldPosition(registry) + sphereCollider->localCenter, sphereCollider->radius, No::Color::WHITE);
 	}
 
+	for (auto boxE : registry.View<No::TransformComponent, No::AABBCollider>()) {
+		auto* boxTransform = registry.GetComponent<No::TransformComponent>(boxE);
+		auto* boxCollider = registry.GetComponent<No::AABBCollider>(boxE);
+		No::Vector3 size = No::Vector3(
+			(std::fabsf(boxCollider->min.x) + std::fabsf(boxCollider->max.x)),
+			(std::fabsf(boxCollider->min.y) + std::fabsf(boxCollider->max.y)),
+			(std::fabsf(boxCollider->min.z) + std::fabsf(boxCollider->max.z))
+		);
+		NoEngine::DebugPrimitive::DrawCube(boxTransform->GetWorldPosition(registry), size, No::Color::WHITE);
+	}
 }

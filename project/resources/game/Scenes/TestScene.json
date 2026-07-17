@@ -966,7 +966,7 @@
                         1.0,
                         1.0,
                         1.0,
-                        0.0
+                        -0.01630599983036518
                     ],
                     "fill": 0.0,
                     "flipX": false,
@@ -1009,9 +1009,9 @@
                 },
                 "DebugCameraComponent": {
                     "center": [
-                        9.387950897216797,
-                        -1.6136620044708252,
-                        5.959109306335449
+                        10.266519546508789,
+                        -1.4815573692321777,
+                        17.577295303344727
                     ],
                     "distance": 21.66449737548828,
                     "drawCenter": false,
@@ -1025,10 +1025,10 @@
                 },
                 "TransformComponent": {
                     "rotation": [
-                        0.0708165094256401,
-                        0.533764660358429,
-                        -0.0449209101498127,
-                        0.8414644598960876
+                        0.12241306900978088,
+                        0.715740442276001,
+                        -0.1297634243965149,
+                        0.6751978397369385
                     ],
                     "scale": [
                         1.0,
@@ -1036,9 +1036,9 @@
                         1.0
                     ],
                     "translate": [
-                        -9.935173034667969,
-                        2.0072021484375,
-                        -3.1434590816497803
+                        -9.984659194946289,
+                        6.1239800453186035,
+                        18.758848190307617
                     ]
                 }
             }
@@ -6589,7 +6589,7 @@
                         1.0,
                         1.0,
                         1.0,
-                        0.0
+                        -0.01630599983036518
                     ],
                     "fill": 0.0,
                     "flipX": false,
@@ -6644,6 +6644,90 @@
                 "EditTag": {
                     "name": "directionalLight",
                     "path": "directionalLight"
+                }
+            }
+        },
+        "magicScaffold": {
+            "components": {
+                "AABBCollider": {
+                    "max": [
+                        1.5,
+                        0.3499999940395355,
+                        1.5
+                    ],
+                    "min": [
+                        -1.5,
+                        -0.3499999940395355,
+                        -1.5
+                    ]
+                },
+                "CollisionLayerComponent": {
+                    "layer": "Terrain"
+                },
+                "EditTag": {
+                    "name": "magicScaffold",
+                    "path": "box"
+                },
+                "MagicScaffoldComponent": {
+                    "finalSize": [
+                        3.0,
+                        0.699999988079071,
+                        3.0
+                    ]
+                },
+                "MaterialComponent": {
+                    "blendMode": "kAdd",
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        1.600000023841858,
+                        0.10000000149011612,
+                        0.0,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "enviromentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "resources/engine/Texture/noise/Noise_Gradients/T_Random_45.png",
+                    "renderMode": "kEmissive",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "magicScaffold"
+                },
+                "TransformComponent": {
+                    "rotation": [
+                        0.0,
+                        1.7484555314695172e-07,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        3.0,
+                        0.699999988079071,
+                        3.0
+                    ],
+                    "translate": [
+                        3.7056965827941895,
+                        1.709768533706665,
+                        17.86457061767578
+                    ]
                 }
             }
         },
@@ -6823,10 +6907,10 @@
                 "PlayerMoveTransientComponent": null,
                 "TransformComponent": {
                     "rotation": [
-                        -1.196509344936203e-07,
-                        -0.7118778824806213,
-                        -1.2128214166295948e-07,
-                        -0.7023032903671265
+                        -1.1965092028276558e-07,
+                        -0.7118779420852661,
+                        -1.212821558738142e-07,
+                        -0.7023032307624817
                     ],
                     "scale": [
                         1.0,

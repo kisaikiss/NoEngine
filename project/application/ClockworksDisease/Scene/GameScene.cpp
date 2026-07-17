@@ -11,6 +11,7 @@
 #include "../System/Player/PlayerPushBackSystem.h"
 #include "../System/Player/PlayerLevelUpSystem.h"
 #include "../System/Object/BoxColliderUpdateSystem.h"
+#include "../System/Object/MagicScaffoldSystem.h"
 
 #include "../Component/Player/PlayerComponent.h"
 #include "../Component/Camera/FollowCameraComponent.h"
@@ -54,6 +55,7 @@ void GameScene::AddSystems() {
 	AddSystem(std::make_unique<PlayerVerticalVelocitySystem>());
 	AddSystem(std::make_unique<StaminaUISystem>());
 	AddSystem(std::make_unique<No::GroundResetSystem>());
+	AddSystem(std::make_unique<MagicScaffoldSystem>());
 
 	AddSystem(std::make_unique<No::NarrowPhaseSystem>());
 	AddSystem(std::make_unique<No::CollisionResolutionSystem>());

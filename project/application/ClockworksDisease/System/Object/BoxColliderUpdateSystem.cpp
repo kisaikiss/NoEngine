@@ -10,5 +10,22 @@ void BoxColliderUpdateSystem::Update(No::Registry& registry, float deltaTime) {
 
 		b->max = t->scale / 2.f;
 		b->min = -t->scale / 2.f;
+		if (b->max.x < b->min.x) {
+			float tmp = b->max.x;
+			b->max.x = b->min.x;
+			b->min.x = tmp;
+		}
+
+		if (b->max.y < b->min.y) {
+			float tmp = b->max.y;
+			b->max.y = b->min.y;
+			b->min.y = tmp;
+		}
+
+		if (b->max.z < b->min.z) {
+			float tmp = b->max.z;
+			b->max.z = b->min.z;
+			b->min.z = tmp;
+		}
 	}
 }

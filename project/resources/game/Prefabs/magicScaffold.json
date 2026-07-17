@@ -2,25 +2,32 @@
     "components": {
         "AABBCollider": {
             "max": [
-                25.0,
-                0.5,
-                25.0
+                1.5,
+                0.3499999940395355,
+                1.5
             ],
             "min": [
-                -25.0,
-                -0.5,
-                -25.0
+                -1.5,
+                -0.3499999940395355,
+                -1.5
             ]
         },
         "CollisionLayerComponent": {
             "layer": "Terrain"
         },
         "EditTag": {
-            "name": "box",
+            "name": "magicScaffold",
             "path": "box"
         },
+        "MagicScaffoldComponent": {
+            "finalSize": [
+                3.0,
+                0.699999988079071,
+                3.0
+            ]
+        },
         "MaterialComponent": {
-            "blendMode": "kNormal",
+            "blendMode": "kAdd",
             "color": [
                 1.0,
                 1.0,
@@ -29,16 +36,16 @@
             ],
             "drawOutline": false,
             "edgeColor": [
-                1.0,
-                1.0,
-                1.0,
+                1.600000023841858,
+                0.10000000149011612,
+                0.0,
                 1.0
             ],
             "emissiveIntensity": 1.0,
             "enviromentCoefficient": 0.0,
             "noiseScrollSpeed": 0.30000001192092896,
-            "noiseTextureName": "noise0",
-            "renderMode": "kDefault",
+            "noiseTextureName": "resources/engine/Texture/noise/Noise_Gradients/T_Random_45.png",
+            "renderMode": "kEmissive",
             "rimPower": 2.0,
             "shininess": 60.0,
             "uvPosition": [
@@ -53,23 +60,23 @@
         },
         "MeshComponent": {
             "isVisible": true,
-            "meshName": "resources/engine/Model/block/block.obj"
+            "meshName": "magicScaffold"
         },
         "TransformComponent": {
             "rotation": [
                 0.0,
-                0.0,
+                1.7484555314695172e-07,
                 0.0,
                 1.0
             ],
             "scale": [
-                50.0,
-                1.0,
-                50.0
+                3.0,
+                0.699999988079071,
+                3.0
             ],
             "translate": [
-                34.66111373901367,
-                -6.349474906921387,
+                3.7056965827941895,
+                1.709768533706665,
                 17.86457061767578
             ]
         }
