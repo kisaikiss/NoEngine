@@ -2,7 +2,9 @@
     "entities": {
         "BigPowerItem": {
             "components": {
-                "BigPowerItemComponent": null,
+                "BigPowerItemComponent": {
+                    "grantPower": 5
+                },
                 "CollisionLayerComponent": {
                     "layer": "Item"
                 },
@@ -161,7 +163,9 @@
         },
         "BigPowerItem_2": {
             "components": {
-                "BigPowerItemComponent": null,
+                "BigPowerItemComponent": {
+                    "grantPower": 5
+                },
                 "CollisionLayerComponent": {
                     "layer": "Item"
                 },
@@ -320,7 +324,9 @@
         },
         "BigPowerItem_3": {
             "components": {
-                "BigPowerItemComponent": null,
+                "BigPowerItemComponent": {
+                    "grantPower": 5
+                },
                 "CollisionLayerComponent": {
                     "layer": "Item"
                 },
@@ -479,7 +485,9 @@
         },
         "BigPowerItem_3_2": {
             "components": {
-                "BigPowerItemComponent": null,
+                "BigPowerItemComponent": {
+                    "grantPower": 5
+                },
                 "CollisionLayerComponent": {
                     "layer": "Item"
                 },
@@ -638,7 +646,9 @@
         },
         "BigPowerItem_3_2_2": {
             "components": {
-                "BigPowerItemComponent": null,
+                "BigPowerItemComponent": {
+                    "grantPower": 5
+                },
                 "CollisionLayerComponent": {
                     "layer": "Item"
                 },
@@ -797,7 +807,9 @@
         },
         "BigPowerItem_4": {
             "components": {
-                "BigPowerItemComponent": null,
+                "BigPowerItemComponent": {
+                    "grantPower": 5
+                },
                 "CollisionLayerComponent": {
                     "layer": "Item"
                 },
@@ -1009,9 +1021,9 @@
                 },
                 "DebugCameraComponent": {
                     "center": [
-                        10.266519546508789,
-                        -1.4815573692321777,
-                        17.577295303344727
+                        20.309846878051758,
+                        0.4093594551086426,
+                        5.233448028564453
                     ],
                     "distance": 21.66449737548828,
                     "drawCenter": false,
@@ -1025,10 +1037,10 @@
                 },
                 "TransformComponent": {
                     "rotation": [
-                        0.12241306900978088,
-                        0.715740442276001,
-                        -0.1297634243965149,
-                        0.6751978397369385
+                        0.05157043784856796,
+                        0.7489684224128723,
+                        -0.05870159715414047,
+                        0.657982587814331
                     ],
                     "scale": [
                         1.0,
@@ -1036,9 +1048,9 @@
                         1.0
                     ],
                     "translate": [
-                        -9.984659194946289,
-                        6.1239800453186035,
-                        18.758848190307617
+                        -0.9118647575378418,
+                        3.7846052646636963,
+                        7.989739894866943
                     ]
                 }
             }
@@ -1357,6 +1369,167 @@
                         -20.637584686279297,
                         3.739732027053833,
                         1.408873438835144
+                    ]
+                }
+            }
+        },
+        "MaxPowerItem": {
+            "components": {
+                "BigPowerItemComponent": {
+                    "grantPower": 500
+                },
+                "CollisionLayerComponent": {
+                    "layer": "Item"
+                },
+                "EditTag": {
+                    "name": "MaxPowerItem",
+                    "path": "BigPowerItem_5"
+                },
+                "EffectEmitModeSphereTag": null,
+                "EffectEmitterComponent": {
+                    "color": [
+                        1.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ],
+                    "count": 200,
+                    "emitRange": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "maxLifeTime": 2.0,
+                    "maxRotate": 3.1415927410125732,
+                    "maxScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "maxSpeed": [
+                        4.0,
+                        2.0,
+                        0.5
+                    ],
+                    "minLifeTime": 1.0,
+                    "minRotate": 0.0,
+                    "minScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "minSpeed": [
+                        4.0,
+                        0.0,
+                        -0.5
+                    ],
+                    "textureName": "getBigItem"
+                },
+                "MaterialComponent": {
+                    "blendMode": "kAdd",
+                    "color": [
+                        2.0,
+                        4.0,
+                        2.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        0.20000000298023224,
+                        0.5,
+                        0.5,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "resources/engine/Texture/noise/Noise_Gradients/T_Random_22.png",
+                    "renderMode": "kEmissive",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "power"
+                },
+                "ParticleEmitterComponent": {
+                    "active": false,
+                    "color": [
+                        1.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ],
+                    "count": 10,
+                    "emitRange": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "frequency": 0.10000000149011612,
+                    "localPosition": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "maxCount": 100,
+                    "maxLifeTime": 1.899999976158142,
+                    "maxScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "maxSpeed": [
+                        1.0,
+                        -1.0,
+                        1.0
+                    ],
+                    "minLifeTime": 0.699999988079071,
+                    "minScale": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "minSpeed": [
+                        -1.0,
+                        -2.0,
+                        -1.0
+                    ],
+                    "textureName": "getEffect"
+                },
+                "SphereCollider": {
+                    "localCenter": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "radius": 0.699999988079071
+                },
+                "TransformComponent": {
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        3.0,
+                        3.0,
+                        3.0
+                    ],
+                    "translate": [
+                        10.23979377746582,
+                        1.9113497734069824,
+                        7.446192264556885
                     ]
                 }
             }

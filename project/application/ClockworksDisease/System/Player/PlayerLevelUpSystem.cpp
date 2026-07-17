@@ -70,4 +70,13 @@ void PlayerLevelUpSystem::EnhancementsUponLevelingUp(No::Registry& registry, No:
 		}
 		return;
 	}
+
+	// level5
+	if (level == 5) {
+		// 魔法の足場生成アクションを追加
+		if (!registry.Has<CreateMagicScaffoldTag>(e)) {
+			registry.AddComponent<CreateMagicScaffoldTag>(e);
+		}
+		return;
+	}
 }

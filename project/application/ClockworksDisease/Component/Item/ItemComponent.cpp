@@ -7,4 +7,5 @@ REFLECT_STRUCT_END(PowerItemComponent)
 
 
 REFLECT_STRUCT_BEGIN(BigPowerItemComponent)
+REFLECT_FIELD(grantPower)
 REFLECT_STRUCT_END(BigPowerItemComponent)

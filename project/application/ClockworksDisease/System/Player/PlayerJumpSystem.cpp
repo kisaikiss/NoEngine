@@ -90,10 +90,11 @@ void HandleJumpRelease(PlayerComponent* playerVariables) {
 }
 
 // 足場を生成する処理
-void CreateScaffold(No::Registry& registry, PlayerComponent* playerVariables,
+void CreateScaffold(No::Registry& registry, No::Entity entity, PlayerComponent* playerVariables,
 	No::GroundStateComponent* groundState, No::TransformComponent* transform) {
 	if (No::InputIsTrigger("CreateScaffold")) {
-		if (groundState->isGrounded || playerVariables->infinityJump || !playerVariables->canCreateScaffold) {
+		const bool hasCreateMagicScaffoldTag = registry.Has<CreateMagicScaffoldTag>(entity);
+		if (groundState->isGrounded || playerVariables->infinityJump || !playerVariables->canCreateScaffold || !hasCreateMagicScaffoldTag) {
 			return;
 		}
 		// 足場をプレイヤーの下に生成する
@@ -127,6 +128,6 @@ void PlayerJumpSystem::Update(No::Registry& registry, float deltaTime) {
 		HandleHighJump(registry, entity, playerVariables, groundState, isGrounded, transientState, deltaTime);
 		HandleAirDash(registry, entity, playerVariables, isGrounded, transientState, deltaTime);
 		HandleJumpRelease(playerVariables);
-		CreateScaffold(registry, playerVariables, groundState, registry.GetComponent<No::TransformComponent>(entity));
+		CreateScaffold(registry, entity, playerVariables, groundState, registry.GetComponent<No::TransformComponent>(entity));
 	}
 }

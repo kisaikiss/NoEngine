@@ -22,8 +22,7 @@ void ItemGetSystem::Update(No::Registry& registry, float deltaTime) {
 			registry.GetComponent<No::ParticleEmitterComponent>(event.item)->active = true;
 			registry.RemoveComponent<No::SphereCollider>(event.item);
 
-			constexpr uint32_t kBigBadgePower = 5;
-			registry.GetComponent<LevelComponent>(event.player)->power += kBigBadgePower;
+			registry.GetComponent<LevelComponent>(event.player)->power += registry.GetComponent<BigPowerItemComponent>(event.item)->grantPower;
 		}
 	}
 }
