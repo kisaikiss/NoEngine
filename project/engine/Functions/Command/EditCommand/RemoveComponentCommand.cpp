@@ -13,7 +13,7 @@ registry_(registry), entity_(entity), typeID_(typeID) {
 
 	for (auto& field : typeInfo.fields) {
 		uint8_t* base = (uint8_t*)compPtr + field.offset;
-		Editor::WriteFieldToJson(snapshotJson_, field, base);
+		Editor::WriteFieldToJson(registry_, snapshotJson_, field, base);
 	}
 }
 
@@ -26,7 +26,7 @@ void RemoveComponentCommand::Undo() {
 	auto* typeInfo = ComponentRegistry::FindByTypeID(typeID_);
 	for (auto& field : typeInfo->fields) {
 		uint8_t* base = (uint8_t*)compPtr + field.offset;
-		Editor::ReadFieldFromJson(snapshotJson_, field, base);
+		Editor::ReadFieldFromJson(registry_, snapshotJson_, field, base);
 	}
 }
 }

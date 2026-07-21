@@ -31,7 +31,7 @@ json SaveEntityToJson(ECS::Registry& registry, ECS::Entity entity) {
 		json compJson;
 		for (auto& field : typeInfo.fields) {
 			uint8_t* base = (uint8_t*)compPtr + field.offset;
-			WriteFieldToJson(compJson, field, base);
+			WriteFieldToJson(registry, compJson, field, base);
 		}
 
 		result["components"][typeInfo.name] = compJson;
@@ -42,7 +42,7 @@ json SaveEntityToJson(ECS::Registry& registry, ECS::Entity entity) {
 	return result;
 }
 
-void WriteFieldToJson(nlohmann::json& j, const FieldInfo& field, void* ptr) {
+void WriteFieldToJson(ECS::Registry& registry, nlohmann::json& j, const FieldInfo& field, void* ptr) {
 	switch (field.type) {
 	case NoEngine::FieldType::Float:
 		j[field.name] = *(float*)ptr;
@@ -86,7 +86,7 @@ void WriteFieldToJson(nlohmann::json& j, const FieldInfo& field, void* ptr) {
 			json structJson;
 			for (auto& subField : nested->fields) {
 				uint8_t* subPtr = (uint8_t*)ptr + subField.offset;
-				WriteFieldToJson(structJson, subField, subPtr);
+				WriteFieldToJson(registry, structJson, subField, subPtr);
 			}
 			j[field.name] = structJson;
 		}
@@ -97,9 +97,25 @@ void WriteFieldToJson(nlohmann::json& j, const FieldInfo& field, void* ptr) {
 		size_t count = field.arrayOps->size ? field.arrayOps->size(ptr) : 0;
 		for (size_t i = 0; i < count; ++i) {
 			void* elemPtr = field.arrayOps->getElement(ptr, i);
-			arrJson.push_back(WriteArrayElementToJson(field, elemPtr));
+			arrJson.push_back(WriteArrayElementToJson(registry, field, elemPtr));
 		}
 		j[field.name] = arrJson;
+		break;
+	}
+	case NoEngine::FieldType::Entity: {
+		ECS::Entity refEntity = *(ECS::Entity*)ptr;
+		if (refEntity == ECS::INVALID_ENTITY) {
+			j[field.name] = nullptr;
+		} else {
+			// IDではなく名前で保存する（ロード時にIDが振り直されるため）
+			auto* refTag = registry.GetComponent<EditTag>(refEntity);
+			if (refTag) {
+				j[field.name] = refTag->name;
+			} else {
+				j[field.name] = nullptr;
+			}
+			
+		}
 		break;
 	}
 	default:
@@ -110,20 +126,29 @@ void WriteFieldToJson(nlohmann::json& j, const FieldInfo& field, void* ptr) {
 
 void LoadScene(ECS::Registry& registry, const json& scene) {
 	const auto& entities = scene["entities"];
+
+	// 全EntityとEditTag(名前)だけ先に用意する。
+	// Entity型フィールドが「まだ生成されていない別のEntity」を
+	// 参照している可能性があるため、コンポーネント読み込みより先に
+	// 全Entityの実体を揃えておく必要がある。
+	std::vector<std::pair<ECS::Entity, const json*>> pending;
+	pending.reserve(entities.size());
+
 	for (auto& [name, entityJson] : entities.items()) {
-
-		// 名前でEntityを探す
 		ECS::Entity e = FindEntityByName(registry, name);
-
 		if (e == ECS::INVALID_ENTITY) {
 			e = registry.GenerateEntity();
 			registry.AddComponent<EditTag>(e)->name = name;
 		}
-
-		// Componentを復元
-		LoadEntityFromJson(registry, e, entityJson);
+		pending.emplace_back(e, &entityJson);
 	}
 
+	// 全Entityが出揃った状態でComponentを復元する。
+	// ここでEntity参照フィールドをFindEntityByNameで解決しても、
+	// 参照先が必ず存在している状態になる。
+	for (auto& [e, entityJsonPtr] : pending) {
+		LoadEntityFromJson(registry, e, *entityJsonPtr);
+	}
 }
 
 ECS::Entity FindEntityByName(ECS::Registry& registry, const std::string& name) {
@@ -149,12 +174,12 @@ void LoadEntityFromJson(ECS::Registry& registry, ECS::Entity entity, const json&
 		}
 		for (auto& field : typeInfo->fields) {
 			uint8_t* base = (uint8_t*)compPtr + field.offset;
-			ReadFieldFromJson(compJson, field, base);
+			ReadFieldFromJson(registry, compJson, field, base);
 		}
 	}
 }
 
-void ReadFieldFromJson(const nlohmann::json& j, const FieldInfo& field, void* ptr) {
+void ReadFieldFromJson(ECS::Registry& registry, const nlohmann::json& j, const FieldInfo& field, void* ptr) {
 	if (!j.contains(field.name)) return;
 	switch (field.type) {
 	case NoEngine::FieldType::Float:
@@ -221,7 +246,7 @@ void ReadFieldFromJson(const nlohmann::json& j, const FieldInfo& field, void* pt
 			const json& structJson = j[field.name];
 			for (auto& subField : nested->fields) {
 				uint8_t* subPtr = (uint8_t*)ptr + subField.offset;
-				ReadFieldFromJson(structJson, subField, subPtr);
+				ReadFieldFromJson(registry, structJson, subField, subPtr);
 			}
 		}
 		break;
@@ -237,7 +262,18 @@ void ReadFieldFromJson(const nlohmann::json& j, const FieldInfo& field, void* pt
 		for (size_t i = 0; i < arrJson.size(); ++i) {
 			field.arrayOps->insertElement(ptr, i);
 			void* elemPtr = field.arrayOps->getElement(ptr, i);
-			ReadArrayElementFromJson(arrJson[i], field, elemPtr);
+			ReadArrayElementFromJson(registry, arrJson[i], field, elemPtr);
+		}
+		break;
+	}
+	case NoEngine::FieldType::Entity: {
+		ECS::Entity* ePtr = static_cast<ECS::Entity*>(ptr);
+		const json& v = j[field.name];
+		if (v.is_null()) {
+			*ePtr = ECS::INVALID_ENTITY;
+		} else {
+			const std::string refName = v.get<std::string>();
+			*ePtr = FindEntityByName(registry, refName); // 見つからなければINVALID_ENTITY
 		}
 		break;
 	}
@@ -246,14 +282,14 @@ void ReadFieldFromJson(const nlohmann::json& j, const FieldInfo& field, void* pt
 	}
 }
 
-nlohmann::json WriteArrayElementToJson(const FieldInfo& arrayField, void* elemPtr) {
+nlohmann::json WriteArrayElementToJson(ECS::Registry& registry, const FieldInfo& arrayField, void* elemPtr) {
 	if (arrayField.arrayOps->elementType == FieldType::Struct) {
 		TypeInfo* nested = arrayField.arrayOps->elementStructTypeInfo ? arrayField.arrayOps->elementStructTypeInfo() : nullptr;
 		json elemJson;
 		if (nested) {
 			for (auto& subField : nested->fields) {
 				uint8_t* subPtr = (uint8_t*)elemPtr + subField.offset;
-				WriteFieldToJson(elemJson, subField, subPtr);
+				WriteFieldToJson(registry, elemJson, subField, subPtr);
 			}
 		}
 		return elemJson;
@@ -263,17 +299,17 @@ nlohmann::json WriteArrayElementToJson(const FieldInfo& arrayField, void* elemPt
 	tmp.name = "value";
 	tmp.type = arrayField.arrayOps->elementType;
 	json wrapper;
-	WriteFieldToJson(wrapper, tmp, elemPtr);
+	WriteFieldToJson(registry, wrapper, tmp, elemPtr);
 	return wrapper["value"];
 }
 
-void ReadArrayElementFromJson(const nlohmann::json& elemJson, const FieldInfo& arrayField, void* elemPtr) {
+void ReadArrayElementFromJson(ECS::Registry& registry, const nlohmann::json& elemJson, const FieldInfo& arrayField, void* elemPtr) {
 	if (arrayField.arrayOps->elementType == FieldType::Struct) {
 		TypeInfo* nested = arrayField.arrayOps->elementStructTypeInfo ? arrayField.arrayOps->elementStructTypeInfo() : nullptr;
 		if (!nested) return;
 		for (auto& subField : nested->fields) {
 			uint8_t* subPtr = (uint8_t*)elemPtr + subField.offset;
-			ReadFieldFromJson(elemJson, subField, subPtr);
+			ReadFieldFromJson(registry, elemJson, subField, subPtr);
 		}
 		return;
 	}
@@ -282,7 +318,7 @@ void ReadArrayElementFromJson(const nlohmann::json& elemJson, const FieldInfo& a
 	tmp.type = arrayField.arrayOps->elementType;
 	json wrapper;
 	wrapper["value"] = elemJson;
-	ReadFieldFromJson(wrapper, tmp, elemPtr);
+	ReadFieldFromJson(registry, wrapper, tmp, elemPtr);
 }
 
 }

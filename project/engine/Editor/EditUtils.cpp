@@ -701,7 +701,7 @@ void DrawFieldUI(ECS::Registry& registry, const FieldInfo& field, void* ptr) {
 				void* elemPtr = field.arrayOps->getElement(valuePtr, index);
 
 				// 削除前の値をJSONスナップショットとして保存（構造体でもプリミティブでも対応）
-				nlohmann::json snapshot = Editor::WriteArrayElementToJson(field, elemPtr);
+				nlohmann::json snapshot = Editor::WriteArrayElementToJson(registry, field, elemPtr);
 
 				auto arrayRemove = field.arrayOps->removeElement;
 				auto arrayInsert = field.arrayOps->insertElement;
@@ -711,10 +711,10 @@ void DrawFieldUI(ECS::Registry& registry, const FieldInfo& field, void* ptr) {
 						[valuePtr, arrayRemove, index] {
 							arrayRemove(valuePtr, index);
 						},
-						[valuePtr, arrayInsert, index, snapshot, field] {
+						[valuePtr, arrayInsert, index, snapshot, &registry, field] {
 							arrayInsert(valuePtr, index);
 							void* restoredPtr = field.arrayOps->getElement(valuePtr, index);
-							Editor::ReadArrayElementFromJson(snapshot, field, restoredPtr);
+							Editor::ReadArrayElementFromJson(registry, snapshot, field, restoredPtr);
 						},
 						field.name + " (Array Remove)"
 					)
