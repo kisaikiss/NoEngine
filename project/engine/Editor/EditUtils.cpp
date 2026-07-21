@@ -619,18 +619,18 @@ void DrawFieldUI(const FieldInfo& field, void* ptr) {
 		break;
 	}
 	case FieldType::Enum: {
-		std::vector<std::string> names = field.enumNames();
+		std::vector<std::string> names = field.enumOps->names();
 		std::vector<const char*> labels;
 		labels.reserve(names.size());
 		for (auto& n : names) labels.push_back(n.c_str());
 
-		int oldIndex = field.enumGetIndex(valuePtr); // 変更前のインデックス
+		int oldIndex = field.enumOps->getIndex(valuePtr); // 変更前のインデックス
 		int currentIndex = oldIndex;
 
 		bool changed = ImGui::Combo(field.name.c_str(), &currentIndex, labels.data(), static_cast<int>(labels.size()));
 
 		if (changed && currentIndex != oldIndex) {
-			auto setIndex = field.enumSetIndex;
+			auto setIndex = field.enumOps->setIndex;
 
 			Editor::EditorCommandOperator::AddCommand(
 				std::make_unique<Command::FunctionCommand>(
@@ -640,7 +640,7 @@ void DrawFieldUI(const FieldInfo& field, void* ptr) {
 				)
 			);
 
-			field.enumSetIndex(valuePtr, currentIndex);
+			field.enumOps->setIndex(valuePtr, currentIndex);
 		}
 		break;
 	}
@@ -660,17 +660,17 @@ void DrawFieldUI(const FieldInfo& field, void* ptr) {
 	}
 	case FieldType::Array: {
 		if (ImGui::TreeNode(field.name.c_str())) {
-			size_t count = field.arraySize ? field.arraySize(valuePtr) : 0;
+			size_t count = field.arrayOps->size ? field.arrayOps->size(valuePtr) : 0;
 			int removeIndex = -1;
 
 			for (size_t i = 0; i < count; ++i) {
 				ImGui::PushID(static_cast<int>(i));
-				void* elemPtr = field.arrayGetElement(valuePtr, i);
+				void* elemPtr = field.arrayOps->getElement(valuePtr, i);
 
-				if (field.elementType == FieldType::Struct) {
+				if (field.arrayOps->elementType == FieldType::Struct) {
 					std::string label = "[" + std::to_string(i) + "]";
 					if (ImGui::TreeNode(label.c_str())) {
-						TypeInfo* nested = field.elementStructTypeInfo ? field.elementStructTypeInfo() : nullptr;
+						TypeInfo* nested = field.arrayOps->elementStructTypeInfo ? field.arrayOps->elementStructTypeInfo() : nullptr;
 						if (nested) {
 							for (auto& subField : nested->fields) {
 								DrawFieldUI(subField, elemPtr);
@@ -683,8 +683,8 @@ void DrawFieldUI(const FieldInfo& field, void* ptr) {
 					FieldInfo elemField{};
 					elemField.name = "[" + std::to_string(i) + "]";
 					elemField.offset = 0; // arrayGetElementが要素先頭ポインタを直接返すため0でよい
-					elemField.size = field.elementSize;
-					elemField.type = field.elementType;
+					elemField.size = field.arrayOps->elementSize;
+					elemField.type = field.arrayOps->elementType;
 					elemField.attributes = field.attributes;
 					DrawFieldUI(elemField, elemPtr);
 				}
@@ -698,13 +698,13 @@ void DrawFieldUI(const FieldInfo& field, void* ptr) {
 
 			if (removeIndex >= 0) {
 				size_t index = static_cast<size_t>(removeIndex);
-				void* elemPtr = field.arrayGetElement(valuePtr, index);
+				void* elemPtr = field.arrayOps->getElement(valuePtr, index);
 
 				// 削除前の値をJSONスナップショットとして保存（構造体でもプリミティブでも対応）
 				nlohmann::json snapshot = Editor::WriteArrayElementToJson(field, elemPtr);
 
-				auto arrayRemove = field.arrayRemoveElement;
-				auto arrayInsert = field.arrayInsertElement;
+				auto arrayRemove = field.arrayOps->removeElement;
+				auto arrayInsert = field.arrayOps->insertElement;
 
 				Editor::EditorCommandOperator::AddCommand(
 					std::make_unique<Command::FunctionCommand>(
@@ -713,7 +713,7 @@ void DrawFieldUI(const FieldInfo& field, void* ptr) {
 						},
 						[valuePtr, arrayInsert, index, snapshot, field] {
 							arrayInsert(valuePtr, index);
-							void* restoredPtr = field.arrayGetElement(valuePtr, index);
+							void* restoredPtr = field.arrayOps->getElement(valuePtr, index);
 							Editor::ReadArrayElementFromJson(snapshot, field, restoredPtr);
 						},
 						field.name + " (Array Remove)"
@@ -723,9 +723,9 @@ void DrawFieldUI(const FieldInfo& field, void* ptr) {
 			}
 
 			if (ImGui::SmallButton("+ Add")) {
-				auto arrayAdd = field.arrayAddElement;
-				auto arrayRemove = field.arrayRemoveElement;
-				size_t newIndex = field.arraySize(valuePtr);
+				auto arrayAdd = field.arrayOps->addElement;
+				auto arrayRemove = field.arrayOps->removeElement;
+				size_t newIndex = field.arrayOps->size(valuePtr);
 
 				Editor::EditorCommandOperator::AddCommand(
 					std::make_unique<Command::FunctionCommand>(

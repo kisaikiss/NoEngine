@@ -59,25 +59,26 @@ NoEngine::TypeInfo* GetTypeInfo();
         info.size       = sizeof(((ThisType*)0)->field_name); \
         info.type       = NoEngine::FieldType::Enum; \
         info.attributes = NoEngine::FieldAttributes{}; \
-        info.enumNames = [] { \
+        info.enumOps = std::make_shared<NoEngine::EnumFieldOps>(); \
+        info.enumOps->names = [] { \
             std::vector<std::string> names; \
             for (auto n : magic_enum::enum_names<EnumT>()) names.emplace_back(n); \
             return names; \
         }; \
-        info.enumGetIndex = [](const void* ptr) -> int { \
+        info.enumOps->getIndex = [](const void* ptr) -> int { \
             EnumT v = *reinterpret_cast<const EnumT*>(ptr); \
             auto idx = magic_enum::enum_index(v); \
             return idx ? static_cast<int>(*idx) : 0; \
         }; \
-        info.enumSetIndex = [](void* ptr, int index) { \
+        info.enumOps->setIndex = [](void* ptr, int index) { \
             auto values = magic_enum::enum_values<EnumT>(); \
             if (index >= 0 && index < static_cast<int>(values.size())) \
                 *reinterpret_cast<EnumT*>(ptr) = values[index]; \
         }; \
-        info.enumToString = [](const void* ptr) -> std::string { \
+        info.enumOps->toString = [](const void* ptr) -> std::string { \
             return std::string(magic_enum::enum_name(*reinterpret_cast<const EnumT*>(ptr))); \
         }; \
-        info.enumFromString = [](void* ptr, const std::string& s) { \
+        info.enumOps->fromString = [](void* ptr, const std::string& s) { \
             if (auto v = magic_enum::enum_cast<EnumT>(s)) \
                 *reinterpret_cast<EnumT*>(ptr) = *v; \
         }; \
@@ -105,27 +106,28 @@ NoEngine::TypeInfo* GetTypeInfo();
         using ArrayT   = decltype(((ThisType*)0)->field_name); \
         using ElementT = ArrayT::value_type; \
         NoEngine::FieldInfo info{}; \
-        info.name        = #field_name; \
-        info.offset      = offsetof(ThisType, field_name); \
-        info.size        = sizeof(((ThisType*)0)->field_name); \
-        info.type        = NoEngine::FieldType::Array; \
-        info.attributes  = NoEngine::FieldAttributes{}; \
-        info.elementType = NoEngine::FieldTypeResolver<ElementT>::value; \
-        info.elementSize = sizeof(ElementT); \
-        info.arraySize = [](const void* ptr) -> size_t { \
+        info.name       = #field_name; \
+        info.offset     = offsetof(ThisType, field_name); \
+        info.size       = sizeof(((ThisType*)0)->field_name); \
+        info.type       = NoEngine::FieldType::Array; \
+        info.attributes = NoEngine::FieldAttributes{}; \
+        info.arrayOps = std::make_shared<NoEngine::ArrayFieldOps>(); \
+        info.arrayOps->elementType = NoEngine::FieldTypeResolver<ElementT>::value; \
+        info.arrayOps->elementSize = sizeof(ElementT); \
+        info.arrayOps->size = [](const void* ptr) -> size_t { \
             return static_cast<const ArrayT*>(ptr)->size(); \
         }; \
-        info.arrayGetElement = [](void* ptr, size_t index) -> void* { \
+        info.arrayOps->getElement = [](void* ptr, size_t index) -> void* { \
             return &(*static_cast<ArrayT*>(ptr))[index]; \
         }; \
-        info.arrayAddElement = [](void* ptr) { \
+        info.arrayOps->addElement = [](void* ptr) { \
             static_cast<ArrayT*>(ptr)->emplace_back(); \
         }; \
-        info.arrayRemoveElement = [](void* ptr, size_t index) { \
+        info.arrayOps->removeElement = [](void* ptr, size_t index) { \
             ArrayT* arr = static_cast<ArrayT*>(ptr); \
             if (index < arr->size()) arr->erase(arr->begin() + index); \
         }; \
-        info.arrayInsertElement = [](void* ptr, size_t index) { \
+        info.arrayOps->insertElement = [](void* ptr, size_t index) { \
             ArrayT* arr = static_cast<ArrayT*>(ptr); \
             if (index > arr->size()) index = arr->size(); \
             arr->emplace(arr->begin() + index); \
@@ -139,28 +141,29 @@ NoEngine::TypeInfo* GetTypeInfo();
         using ArrayT   = decltype(((ThisType*)0)->field_name); \
         using ElementT = ArrayT::value_type; \
         NoEngine::FieldInfo info{}; \
-        info.name        = #field_name; \
-        info.offset      = offsetof(ThisType, field_name); \
-        info.size        = sizeof(((ThisType*)0)->field_name); \
-        info.type        = NoEngine::FieldType::Array; \
-        info.attributes  = NoEngine::FieldAttributes{}; \
-        info.elementType = NoEngine::FieldType::Struct; \
-        info.elementSize = sizeof(ElementT); \
-        info.elementStructTypeInfo = [] { return NoEngine::GetTypeInfo<ElementT>(); }; \
-        info.arraySize = [](const void* ptr) -> size_t { \
+        info.name       = #field_name; \
+        info.offset     = offsetof(ThisType, field_name); \
+        info.size       = sizeof(((ThisType*)0)->field_name); \
+        info.type       = NoEngine::FieldType::Array; \
+        info.attributes = NoEngine::FieldAttributes{}; \
+        info.arrayOps = std::make_shared<NoEngine::ArrayFieldOps>(); \
+        info.arrayOps->elementType = NoEngine::FieldType::Struct; \
+        info.arrayOps->elementSize = sizeof(ElementT); \
+        info.arrayOps->elementStructTypeInfo = [] { return NoEngine::GetTypeInfo<ElementT>(); }; \
+        info.arrayOps->size = [](const void* ptr) -> size_t { \
             return static_cast<const ArrayT*>(ptr)->size(); \
         }; \
-        info.arrayGetElement = [](void* ptr, size_t index) -> void* { \
+        info.arrayOps->getElement = [](void* ptr, size_t index) -> void* { \
             return &(*static_cast<ArrayT*>(ptr))[index]; \
         }; \
-        info.arrayAddElement = [](void* ptr) { \
+        info.arrayOps->addElement = [](void* ptr) { \
             static_cast<ArrayT*>(ptr)->emplace_back(); \
         }; \
-        info.arrayRemoveElement = [](void* ptr, size_t index) { \
+        info.arrayOps->removeElement = [](void* ptr, size_t index) { \
             ArrayT* arr = static_cast<ArrayT*>(ptr); \
             if (index < arr->size()) arr->erase(arr->begin() + index); \
         }; \
-        info.arrayInsertElement = [](void* ptr, size_t index) { \
+        info.arrayOps->insertElement = [](void* ptr, size_t index) { \
             ArrayT* arr = static_cast<ArrayT*>(ptr); \
             if (index > arr->size()) index = arr->size(); \
             arr->emplace(arr->begin() + index); \
