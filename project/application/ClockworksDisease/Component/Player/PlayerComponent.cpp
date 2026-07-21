@@ -17,8 +17,14 @@ REFLECT_STRUCT_END(PlayerComponent)
 REFLECT_STRUCT_BEGIN(PlayerMoveTransientComponent)
 REFLECT_STRUCT_END(PlayerMoveTransientComponent)
 
+REFLECT_STRUCT_BEGIN(LevelUpReward)
+REFLECT_FIELD(level),
+REFLECT_ENUM_FIELD(ability)
+REFLECT_STRUCT_END(LevelUpReward)
+
 REFLECT_STRUCT_BEGIN(LevelComponent)
 REFLECT_FIELD(nowLevel),
 REFLECT_FIELD(nextLevelUp),
-REFLECT_FIELD(power)
+REFLECT_FIELD(power),
+REFLECT_STRUCT_ARRAY_FIELD(rewards)
 REFLECT_STRUCT_END(LevelComponent)

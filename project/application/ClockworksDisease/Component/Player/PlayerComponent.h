@@ -37,8 +37,23 @@ struct PlayerMoveTransientComponent {
 };
 
 
+enum class PlayerAbility {
+	kNone,
+	kMultiJump,
+	kHighJump,
+	kAirDash,
+	kMagicScaffold,
+};
+
+struct LevelUpReward {
+	uint32_t level = 0;
+	PlayerAbility ability = PlayerAbility::kNone;
+};
+
 struct LevelComponent {
 	uint32_t power = 0;
 	uint32_t nowLevel = 1;
 	uint32_t nextLevelUp = 30;
+
+	std::vector<LevelUpReward> rewards;
 };

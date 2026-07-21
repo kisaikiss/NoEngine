@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "PlayerLevelUpSystem.h"
-#include "../../Component/Player/PlayerComponent.h"
 #include "../../Component/Player/PlayerMoveTags.h"
 #include "../../Component/UI/UserInterfaceComponent.h"
 
@@ -37,9 +36,17 @@ void PlayerLevelUpSystem::EnhancementsUponLevelingUp(No::Registry& registry, No:
 	constexpr float kAmountOfMaxStaminaUp = 1.0f;
 	registry.GetComponent<PlayerComponent>(e)->maxStamina += kAmountOfMaxStaminaUp;
 
-	// level2
-	if (level == 2) {
-		// 空中ジャンプを追加
+	auto* levelComponent = registry.GetComponent<LevelComponent>(e);
+	for (auto& reward : levelComponent->rewards) {
+		if (reward.level == level && reward.ability != PlayerAbility::kNone) {
+			GrantAbility(registry, e, reward.ability);
+		}
+	}
+}
+
+void PlayerLevelUpSystem::GrantAbility(No::Registry& registry, No::Entity e, PlayerAbility ability) {
+	switch (ability) {
+	case PlayerAbility::kMultiJump:
 		if (!registry.Has<MultiJumpTag>(e)) {
 			registry.AddComponent<MultiJumpTag>(e);
 			auto textEntity = registry.GenerateEntity();
@@ -49,34 +56,17 @@ void PlayerLevelUpSystem::EnhancementsUponLevelingUp(No::Registry& registry, No:
 			sprite->layer = 1;
 			registry.AddComponent<LevelUpTextParentTag>(textEntity);
 		}
-		return;
-	}
-
-	// level3
-	if (level == 3) {
-		// ハイジャンプを追加
-		if (!registry.Has<HighJumpTag>(e)) {
-			registry.AddComponent<HighJumpTag>(e);
-		}
-		return;
-	}
-
-
-	// level4
-	if (level == 4) {
-		// 空中ダッシュを追加
-		if (!registry.Has<AirDashTag>(e)) {
-			registry.AddComponent<AirDashTag>(e);
-		}
-		return;
-	}
-
-	// level5
-	if (level == 5) {
-		// 魔法の足場生成アクションを追加
-		if (!registry.Has<CreateMagicScaffoldTag>(e)) {
-			registry.AddComponent<CreateMagicScaffoldTag>(e);
-		}
-		return;
+		break;
+	case PlayerAbility::kHighJump:
+		if (!registry.Has<HighJumpTag>(e)) registry.AddComponent<HighJumpTag>(e);
+		break;
+	case PlayerAbility::kAirDash:
+		if (!registry.Has<AirDashTag>(e)) registry.AddComponent<AirDashTag>(e);
+		break;
+	case PlayerAbility::kMagicScaffold:
+		if (!registry.Has<CreateMagicScaffoldTag>(e)) registry.AddComponent<CreateMagicScaffoldTag>(e);
+		break;
+	default:
+		break;
 	}
 }

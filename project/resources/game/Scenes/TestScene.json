@@ -142,6 +142,7 @@
                     "radius": 0.699999988079071
                 },
                 "TransformComponent": {
+                    "parent": null,
                     "rotation": [
                         0.0,
                         0.0,
@@ -303,6 +304,7 @@
                     "radius": 0.699999988079071
                 },
                 "TransformComponent": {
+                    "parent": null,
                     "rotation": [
                         0.0,
                         0.0,
@@ -464,6 +466,7 @@
                     "radius": 0.699999988079071
                 },
                 "TransformComponent": {
+                    "parent": null,
                     "rotation": [
                         0.0,
                         0.0,
@@ -625,6 +628,7 @@
                     "radius": 0.699999988079071
                 },
                 "TransformComponent": {
+                    "parent": null,
                     "rotation": [
                         0.0,
                         0.0,
@@ -786,6 +790,7 @@
                     "radius": 0.699999988079071
                 },
                 "TransformComponent": {
+                    "parent": null,
                     "rotation": [
                         0.0,
                         0.0,
@@ -947,6 +952,7 @@
                     "radius": 0.699999988079071
                 },
                 "TransformComponent": {
+                    "parent": null,
                     "rotation": [
                         0.0,
                         0.0,
@@ -1002,6 +1008,7 @@
                     ]
                 },
                 "Transform2DComponent": {
+                    "parent": null,
                     "rotation": 0.0,
                     "scale": [
                         237.3000030517578,
@@ -1021,9 +1028,9 @@
                 },
                 "DebugCameraComponent": {
                     "center": [
-                        20.309846878051758,
-                        0.4093594551086426,
-                        5.233448028564453
+                        -0.8335285186767578,
+                        0.2913680076599121,
+                        -0.5388050079345703
                     ],
                     "distance": 21.66449737548828,
                     "drawCenter": false,
@@ -1036,11 +1043,12 @@
                     "path": "DebugCamera"
                 },
                 "TransformComponent": {
+                    "parent": null,
                     "rotation": [
-                        0.05157043784856796,
-                        0.7489684224128723,
-                        -0.05870159715414047,
-                        0.657982587814331
+                        0.055407579988241196,
+                        0.8872042894363403,
+                        -0.11059495061635971,
+                        0.4444854259490967
                     ],
                     "scale": [
                         1.0,
@@ -1048,9 +1056,9 @@
                         1.0
                     ],
                     "translate": [
-                        -0.9118647575378418,
-                        3.7846052646636963,
-                        7.989739894866943
+                        -17.654781341552734,
+                        5.609923839569092,
+                        12.035333633422852
                     ]
                 }
             }
@@ -1110,6 +1118,7 @@
                     ]
                 },
                 "Transform2DComponent": {
+                    "parent": null,
                     "rotation": 0.0,
                     "scale": [
                         451.0,
@@ -1158,6 +1167,7 @@
                     ]
                 },
                 "Transform2DComponent": {
+                    "parent": null,
                     "rotation": 0.0,
                     "scale": [
                         451.0,
@@ -1206,6 +1216,7 @@
                     ]
                 },
                 "Transform2DComponent": {
+                    "parent": null,
                     "rotation": 0.0,
                     "scale": [
                         64.0,
@@ -1265,6 +1276,7 @@
                 },
                 "LevelUpEffectTag": null,
                 "TransformComponent": {
+                    "parent": null,
                     "rotation": [
                         0.0,
                         0.0,
@@ -1323,6 +1335,7 @@
                     ]
                 },
                 "Transform2DComponent": {
+                    "parent": null,
                     "rotation": 0.0,
                     "scale": [
                         468.0,
@@ -1354,6 +1367,7 @@
                     "theta": 3.1280524730682373
                 },
                 "TransformComponent": {
+                    "parent": null,
                     "rotation": [
                         0.08825039118528366,
                         0.7062349915504456,
@@ -1515,6 +1529,7 @@
                     "radius": 0.699999988079071
                 },
                 "TransformComponent": {
+                    "parent": null,
                     "rotation": [
                         0.0,
                         0.0,
@@ -1637,6 +1652,7 @@
                     "radius": 0.30000001192092896
                 },
                 "TransformComponent": {
+                    "parent": null,
                     "rotation": [
                         0.0,
                         0.0,
@@ -1750,6 +1766,7 @@
                     "radius": 0.30000001192092896
                 },
                 "TransformComponent": {
+                    "parent": null,
                     "rotation": [
                         0.0,
                         0.0,
@@ -1863,6 +1880,7 @@
                     "radius": 0.30000001192092896
                 },
                 "TransformComponent": {
+                    "parent": null,
                     "rotation": [
                         0.0,
                         0.0,
@@ -1976,6 +1994,7 @@
                     "radius": 0.30000001192092896
                 },
                 "TransformComponent": {
+                    "parent": null,
                     "rotation": [
                         0.0,
                         0.0,
@@ -2089,6 +2108,7 @@
                     "radius": 0.30000001192092896
                 },
                 "TransformComponent": {
+                    "parent": null,
                     "rotation": [
                         0.0,
                         0.0,
@@ -2202,6 +2222,7 @@
                     "radius": 0.30000001192092896
                 },
                 "TransformComponent": {
+                    "parent": null,
                     "rotation": [
                         0.0,
                         0.0,
@@ -2315,6 +2336,7 @@
                     "radius": 0.30000001192092896
                 },
                 "TransformComponent": {
+                    "parent": null,
                     "rotation": [
                         0.0,
                         0.0,
@@ -2428,6 +2450,7 @@
                     "radius": 0.30000001192092896
                 },
                 "TransformComponent": {
+                    "parent": null,
                     "rotation": [
                         0.0,
                         0.0,
@@ -2541,6 +2564,7 @@
                     "radius": 0.30000001192092896
                 },
                 "TransformComponent": {
+                    "parent": null,
                     "rotation": [
                         0.0,
                         0.0,
@@ -2654,6 +2678,7 @@
                     "radius": 0.30000001192092896
                 },
                 "TransformComponent": {
+                    "parent": null,
                     "rotation": [
                         0.0,
                         0.0,
@@ -2767,6 +2792,7 @@
                     "radius": 0.30000001192092896
                 },
                 "TransformComponent": {
+                    "parent": null,
                     "rotation": [
                         0.0,
                         0.0,
@@ -2880,6 +2906,7 @@
                     "radius": 0.30000001192092896
                 },
                 "TransformComponent": {
+                    "parent": null,
                     "rotation": [
                         0.0,
                         0.0,
@@ -2993,6 +3020,7 @@
                     "radius": 0.30000001192092896
                 },
                 "TransformComponent": {
+                    "parent": null,
                     "rotation": [
                         0.0,
                         0.0,
@@ -3106,6 +3134,7 @@
                     "radius": 0.30000001192092896
                 },
                 "TransformComponent": {
+                    "parent": null,
                     "rotation": [
                         0.0,
                         0.0,
@@ -3219,6 +3248,7 @@
                     "radius": 0.30000001192092896
                 },
                 "TransformComponent": {
+                    "parent": null,
                     "rotation": [
                         0.0,
                         0.0,
@@ -3332,6 +3362,7 @@
                     "radius": 0.30000001192092896
                 },
                 "TransformComponent": {
+                    "parent": null,
                     "rotation": [
                         0.0,
                         0.0,
@@ -3445,6 +3476,7 @@
                     "radius": 0.30000001192092896
                 },
                 "TransformComponent": {
+                    "parent": null,
                     "rotation": [
                         0.0,
                         0.0,
@@ -3558,6 +3590,7 @@
                     "radius": 0.30000001192092896
                 },
                 "TransformComponent": {
+                    "parent": null,
                     "rotation": [
                         0.0,
                         0.0,
@@ -3671,6 +3704,7 @@
                     "radius": 0.30000001192092896
                 },
                 "TransformComponent": {
+                    "parent": null,
                     "rotation": [
                         0.0,
                         0.0,
@@ -3784,6 +3818,7 @@
                     "radius": 0.30000001192092896
                 },
                 "TransformComponent": {
+                    "parent": null,
                     "rotation": [
                         0.0,
                         0.0,
@@ -3897,6 +3932,7 @@
                     "radius": 0.30000001192092896
                 },
                 "TransformComponent": {
+                    "parent": null,
                     "rotation": [
                         0.0,
                         0.0,
@@ -4010,6 +4046,7 @@
                     "radius": 0.30000001192092896
                 },
                 "TransformComponent": {
+                    "parent": null,
                     "rotation": [
                         0.0,
                         0.0,
@@ -4123,6 +4160,7 @@
                     "radius": 0.30000001192092896
                 },
                 "TransformComponent": {
+                    "parent": null,
                     "rotation": [
                         0.0,
                         0.0,
@@ -4236,6 +4274,7 @@
                     "radius": 0.30000001192092896
                 },
                 "TransformComponent": {
+                    "parent": null,
                     "rotation": [
                         0.0,
                         0.0,
@@ -4349,6 +4388,7 @@
                     "radius": 0.30000001192092896
                 },
                 "TransformComponent": {
+                    "parent": null,
                     "rotation": [
                         0.0,
                         0.0,
@@ -4462,6 +4502,7 @@
                     "radius": 0.30000001192092896
                 },
                 "TransformComponent": {
+                    "parent": null,
                     "rotation": [
                         0.0,
                         0.0,
@@ -4575,6 +4616,7 @@
                     "radius": 0.30000001192092896
                 },
                 "TransformComponent": {
+                    "parent": null,
                     "rotation": [
                         0.0,
                         0.0,
@@ -4688,6 +4730,7 @@
                     "radius": 0.30000001192092896
                 },
                 "TransformComponent": {
+                    "parent": null,
                     "rotation": [
                         0.0,
                         0.0,
@@ -4801,6 +4844,7 @@
                     "radius": 0.30000001192092896
                 },
                 "TransformComponent": {
+                    "parent": null,
                     "rotation": [
                         0.0,
                         0.0,
@@ -4914,6 +4958,7 @@
                     "radius": 0.30000001192092896
                 },
                 "TransformComponent": {
+                    "parent": null,
                     "rotation": [
                         0.0,
                         0.0,
@@ -5027,6 +5072,7 @@
                     "radius": 0.30000001192092896
                 },
                 "TransformComponent": {
+                    "parent": null,
                     "rotation": [
                         0.0,
                         0.0,
@@ -5140,6 +5186,7 @@
                     "radius": 0.30000001192092896
                 },
                 "TransformComponent": {
+                    "parent": null,
                     "rotation": [
                         0.0,
                         0.0,
@@ -5253,6 +5300,7 @@
                     "radius": 0.30000001192092896
                 },
                 "TransformComponent": {
+                    "parent": null,
                     "rotation": [
                         0.0,
                         0.0,
@@ -5366,6 +5414,7 @@
                     "radius": 0.30000001192092896
                 },
                 "TransformComponent": {
+                    "parent": null,
                     "rotation": [
                         0.0,
                         0.0,
@@ -5479,6 +5528,7 @@
                     "radius": 0.30000001192092896
                 },
                 "TransformComponent": {
+                    "parent": null,
                     "rotation": [
                         0.0,
                         0.0,
@@ -5592,6 +5642,7 @@
                     "radius": 0.30000001192092896
                 },
                 "TransformComponent": {
+                    "parent": null,
                     "rotation": [
                         0.0,
                         0.0,
@@ -5705,6 +5756,7 @@
                     "radius": 0.30000001192092896
                 },
                 "TransformComponent": {
+                    "parent": null,
                     "rotation": [
                         0.0,
                         0.0,
@@ -5818,6 +5870,7 @@
                     "radius": 0.30000001192092896
                 },
                 "TransformComponent": {
+                    "parent": null,
                     "rotation": [
                         0.0,
                         0.0,
@@ -5931,6 +5984,7 @@
                     "radius": 0.30000001192092896
                 },
                 "TransformComponent": {
+                    "parent": null,
                     "rotation": [
                         0.0,
                         0.0,
@@ -6044,6 +6098,7 @@
                     "radius": 0.30000001192092896
                 },
                 "TransformComponent": {
+                    "parent": null,
                     "rotation": [
                         0.0,
                         0.0,
@@ -6157,6 +6212,7 @@
                     "radius": 0.30000001192092896
                 },
                 "TransformComponent": {
+                    "parent": null,
                     "rotation": [
                         0.0,
                         0.0,
@@ -6270,6 +6326,7 @@
                     "radius": 0.30000001192092896
                 },
                 "TransformComponent": {
+                    "parent": null,
                     "rotation": [
                         0.0,
                         0.0,
@@ -6383,6 +6440,7 @@
                     "radius": 0.30000001192092896
                 },
                 "TransformComponent": {
+                    "parent": null,
                     "rotation": [
                         0.0,
                         0.0,
@@ -6496,6 +6554,7 @@
                     "radius": 0.30000001192092896
                 },
                 "TransformComponent": {
+                    "parent": null,
                     "rotation": [
                         0.0,
                         0.0,
@@ -6609,6 +6668,7 @@
                     "radius": 0.30000001192092896
                 },
                 "TransformComponent": {
+                    "parent": null,
                     "rotation": [
                         0.0,
                         0.0,
@@ -6722,6 +6782,7 @@
                     "radius": 0.30000001192092896
                 },
                 "TransformComponent": {
+                    "parent": null,
                     "rotation": [
                         0.0,
                         0.0,
@@ -6786,6 +6847,7 @@
                     ]
                 },
                 "Transform2DComponent": {
+                    "parent": null,
                     "rotation": 0.0,
                     "scale": [
                         64.0,
@@ -6885,6 +6947,7 @@
                     "meshName": "magicScaffold"
                 },
                 "TransformComponent": {
+                    "parent": null,
                     "rotation": [
                         0.0,
                         1.7484555314695172e-07,
@@ -6982,7 +7045,13 @@
                 "LevelComponent": {
                     "nextLevelUp": 30,
                     "nowLevel": 1,
-                    "power": 0
+                    "power": 0,
+                    "rewards": [
+                        {
+                            "ability": "kHighJump",
+                            "level": 2
+                        }
+                    ]
                 },
                 "MaterialComponent": {
                     "blendMode": "kNormal",
@@ -7079,6 +7148,7 @@
                 },
                 "PlayerMoveTransientComponent": null,
                 "TransformComponent": {
+                    "parent": null,
                     "rotation": [
                         -1.1965092028276558e-07,
                         -0.7118779420852661,
@@ -7143,6 +7213,7 @@
                     "disappearanceTime": 1.0
                 },
                 "Transform2DComponent": {
+                    "parent": null,
                     "rotation": 0.0,
                     "scale": [
                         110.0,
@@ -7191,6 +7262,7 @@
                 },
                 "StaminaGaugeParentTag": null,
                 "Transform2DComponent": {
+                    "parent": null,
                     "rotation": 0.0,
                     "scale": [
                         150.0,
