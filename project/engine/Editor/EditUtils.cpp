@@ -247,7 +247,7 @@ void DrawSceneImGuiWindow(ECS::Registry& registry) {
 	ImVec2 min = ImGui::GetItemRectMin();
 	ImVec2 max = ImGui::GetItemRectMax();
 	sSceneTexRect = Math::Vector4(min.x, min.y, max.x - min.x, max.y - min.y);
-	
+
 	sIsMouseOverSceneWindow = false;
 	if (ImGui::IsItemHovered()) {
 		ImVec2 imgPos = ImGui::GetItemRectMin();
@@ -461,6 +461,27 @@ void DrawFieldUI(ECS::Registry& registry, const FieldInfo& field, void* ptr) {
 		}
 		break;
 	}
+	case FieldType::Color: {
+		Math::Vector4* vPtr = static_cast<Math::Vector4*>(valuePtr);
+
+		static Math::Vector4 oldVectorValue;
+
+		ImGui::ColorEdit4(field.name.c_str(), static_cast<float*>(valuePtr));
+
+
+		// 編集が開始された瞬間（マウスでクリックした時など）に元の値を保存
+		if (ImGui::IsItemActivated()) {
+			oldVectorValue = *vPtr;
+		}
+
+		// 編集が確定した瞬間（マウスを離した時、Enterを押した時など）にコマンドを発行
+		if (ImGui::IsItemDeactivatedAfterEdit()) {
+			Editor::EditorCommandOperator::AddCommand(
+				std::make_unique<Command::ChangeValueCommand<Math::Vector4>>(vPtr, oldVectorValue, *vPtr)
+			);
+		}
+		break;
+	}
 	case FieldType::Int: {
 		int* iPtr = static_cast<int*>(valuePtr);
 
@@ -508,7 +529,7 @@ void DrawFieldUI(ECS::Registry& registry, const FieldInfo& field, void* ptr) {
 		break;
 	}
 	case FieldType::Bool: {
-		bool *bPtr = static_cast<bool*>(valuePtr);
+		bool* bPtr = static_cast<bool*>(valuePtr);
 
 		// 一時保存用の変数（同時に編集できるUIは1つなのでstaticで使い回せます）
 		static bool oldBoolValue;

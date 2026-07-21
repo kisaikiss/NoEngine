@@ -54,6 +54,7 @@ void WriteFieldToJson(ECS::Registry& registry, nlohmann::json& j, const FieldInf
 		j[field.name] = { ((float*)ptr)[0], ((float*)ptr)[1], ((float*)ptr)[2] };
 		break;
 	case NoEngine::FieldType::Float4:
+	case NoEngine::FieldType::Color:
 		j[field.name] = { ((float*)ptr)[0], ((float*)ptr)[1], ((float*)ptr)[2], ((float*)ptr)[3] };
 		break;
 	case NoEngine::FieldType::Int:
@@ -203,6 +204,7 @@ void ReadFieldFromJson(ECS::Registry& registry, const nlohmann::json& j, const F
 	}
 	break;
 	case NoEngine::FieldType::Float4:
+	case NoEngine::FieldType::Color:
 	{
 		auto arr = j[field.name];
 		float* v = (float*)ptr;

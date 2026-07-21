@@ -41,7 +41,7 @@ struct FieldTypeResolver<Math::Vector4> {
 
 template<>
 struct FieldTypeResolver<Math::Color> {
-    static constexpr FieldType value = FieldType::Float4;
+    static constexpr FieldType value = FieldType::Color;
 };
 
 template<>
