@@ -1,6 +1,7 @@
 #pragma once
 #include "Reflection.h"
 #include "engine/Math/MathInclude.h"
+#include "engine/Functions/ECS/Entity.h"
 #include <type_traits>
 
 // 型推論用ヘルパー
@@ -48,7 +49,6 @@ struct FieldTypeResolver<Math::Quaternion> {
     static constexpr FieldType value = FieldType::Float4;
 };
 
-
 template<>
 struct FieldTypeResolver<Rect> {
     static constexpr FieldType value = FieldType::Float4;
@@ -91,11 +91,6 @@ struct FieldTypeResolver<uint32_t> {
 };
 
 template<>
-struct FieldTypeResolver<uint64_t> {
-    static constexpr FieldType value = FieldType::Uint;
-};
-
-template<>
 struct FieldTypeResolver<bool> {
     static constexpr FieldType value = FieldType::Bool;
 };
@@ -110,4 +105,8 @@ struct FieldTypeResolver<std::wstring> {
     static constexpr FieldType value = FieldType::WString;
 };
 
+template<>
+struct FieldTypeResolver<ECS::Entity> {
+    static constexpr FieldType value = FieldType::Entity;
+};
 }

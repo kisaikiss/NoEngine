@@ -51,5 +51,5 @@ void DrawSceneImGuiWindow(ECS::Registry& registry);
 void SetGizmoCallback(std::function<void(const Math::Vector4& imageRect)> cb);
 
 void DrawComponentUI(ECS::Registry& registry, ECS::Entity e);
-void DrawFieldUI(const FieldInfo& field, void* ptr);
+void DrawFieldUI(ECS::Registry& registry, const FieldInfo& field, void* ptr); 
 }

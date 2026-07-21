@@ -18,5 +18,6 @@ Math::Matrix4x4 Component::TransformComponent::MakeAffineMatrix4x4(ECS::Registry
 REFLECT_STRUCT_BEGIN(NoEngine::Component::TransformComponent)
 REFLECT_FIELD(translate),
 REFLECT_FIELD(rotation),
-REFLECT_FIELD(scale)
+REFLECT_FIELD(scale),
+REFLECT_FIELD(parent)
 REFLECT_STRUCT_END(NoEngine::Component::TransformComponent)

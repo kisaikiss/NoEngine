@@ -21,6 +21,7 @@ enum class FieldType {
     Enum,
     Struct,
     Array,
+    Entity,
 };
 
 /// <summary>

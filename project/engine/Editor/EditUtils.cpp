@@ -327,7 +327,7 @@ void DrawComponentUI(Registry& registry, Entity e) {
 			void* compPtr = compInfo.getter(registry, e);
 
 			for (auto& field : compInfo.fields) {
-				DrawFieldUI(field, compPtr);
+				DrawFieldUI(registry, field, compPtr);
 			}
 			// 削除ボタン
 			if (ImGui::SmallButton("Remove")) {
@@ -353,7 +353,7 @@ void DrawComponentUI(Registry& registry, Entity e) {
 #endif // USE_IMGUI
 }
 
-void DrawFieldUI(const FieldInfo& field, void* ptr) {
+void DrawFieldUI(ECS::Registry& registry, const FieldInfo& field, void* ptr) {
 #ifdef USE_IMGUI
 	if (!field.attributes.editable) {
 		return;
@@ -649,7 +649,7 @@ void DrawFieldUI(const FieldInfo& field, void* ptr) {
 			TypeInfo* nested = field.structTypeInfo ? field.structTypeInfo() : nullptr;
 			if (nested) {
 				for (auto& subField : nested->fields) {
-					DrawFieldUI(subField, valuePtr); // valuePtr = ネスト構造体の先頭アドレス
+					DrawFieldUI(registry, subField, valuePtr); // valuePtr = ネスト構造体の先頭アドレス
 				}
 			} else {
 				ImGui::TextDisabled("(struct type not registered)");
@@ -673,7 +673,7 @@ void DrawFieldUI(const FieldInfo& field, void* ptr) {
 						TypeInfo* nested = field.arrayOps->elementStructTypeInfo ? field.arrayOps->elementStructTypeInfo() : nullptr;
 						if (nested) {
 							for (auto& subField : nested->fields) {
-								DrawFieldUI(subField, elemPtr);
+								DrawFieldUI(registry, subField, elemPtr);
 							}
 						}
 						ImGui::TreePop();
@@ -686,7 +686,7 @@ void DrawFieldUI(const FieldInfo& field, void* ptr) {
 					elemField.size = field.arrayOps->elementSize;
 					elemField.type = field.arrayOps->elementType;
 					elemField.attributes = field.attributes;
-					DrawFieldUI(elemField, elemPtr);
+					DrawFieldUI(registry, elemField, elemPtr);
 				}
 
 				ImGui::SameLine();
@@ -738,6 +738,48 @@ void DrawFieldUI(const FieldInfo& field, void* ptr) {
 			}
 			ImGui::TreePop();
 		}
+		break;
+	}
+	case FieldType::Entity: {
+		ECS::Entity* ePtr = static_cast<ECS::Entity*>(valuePtr);
+
+		std::string label = "(None)";
+		if (*ePtr != ECS::INVALID_ENTITY) {
+			auto* refTag = registry.GetComponent<Editor::EditTag>(*ePtr);
+			label = refTag ? refTag->name : ("(Unknown Entity)");
+		}
+
+		// ドロップ先として機能するボタン
+		ImGui::Button(label.c_str(), ImVec2(160, 0));
+
+		if (ImGui::BeginDragDropTarget()) {
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ENTITY")) {
+				ECS::Entity dropped = *(ECS::Entity*)payload->Data;
+				ECS::Entity oldValue = *ePtr;
+
+				if (dropped != oldValue) {
+					*ePtr = dropped;
+					Editor::EditorCommandOperator::AddCommand(
+						std::make_unique<Command::ChangeValueCommand<ECS::Entity>>(ePtr, oldValue, dropped)
+					);
+				}
+			}
+			ImGui::EndDragDropTarget();
+		}
+
+		// 右クリックで参照解除
+		if (ImGui::BeginPopupContextItem()) {
+			if (ImGui::MenuItem("Clear")) {
+				ECS::Entity oldValue = *ePtr;
+				*ePtr = ECS::INVALID_ENTITY;
+				Editor::EditorCommandOperator::AddCommand(
+					std::make_unique<Command::ChangeValueCommand<ECS::Entity>>(ePtr, oldValue, ECS::INVALID_ENTITY)
+				);
+			}
+			ImGui::EndPopup();
+		}
+		ImGui::SameLine();
+		ImGui::Text("%s", field.name.c_str());
 		break;
 	}
 	default:
