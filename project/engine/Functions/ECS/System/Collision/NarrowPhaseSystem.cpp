@@ -1,7 +1,7 @@
 #include "NarrowPhaseSystem.h"
 #include "../../Event/CollisionEvents.h"
-#include "../../Component/TransformComponent.h"
-#include "../../Component/VelocityComponent.h"
+#include "../../Component/Common/TransformComponent.h"
+#include "../../Component/Common/VelocityComponent.h"
 
 #include "engine/Functions/Renderer/Primitive.h"
 #include "engine/Math/MathInclude.h"

@@ -1,5 +1,5 @@
 #include "engine/Utilities/TypeIndex.h"
-#include "engine/Functions/ECS/Component/CameraComponent.h"
+#include "engine/Functions/ECS/Component/Common/CameraComponent.h"
 #include "engine/Editor/EditTag.h"
 
 namespace NoEngine{

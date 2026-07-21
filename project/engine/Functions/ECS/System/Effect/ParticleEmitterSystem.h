@@ -1,7 +1,7 @@
 #pragma once
 #include "../ISystem.h"
-#include "engine/Functions/ECS/Component/ParticleEmitterComponent.h"
-#include "engine/Functions/ECS/Component/TransformComponent.h"
+#include "engine/Functions/ECS/Component/Effect/ParticleEmitterComponent.h"
+#include "engine/Functions/ECS/Component/Common/TransformComponent.h"
 
 #include "engine/Runtime/PipelineStateObject/RootSignature.h"
 #include "engine/Runtime/PipelineStateObject/ComputePSO.h"

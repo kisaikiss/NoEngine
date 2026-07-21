@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "NarrowPhase2DSystem.h"
-#include "../../Component/Transform2DComponent.h"
+#include "../../Component/Common/Transform2DComponent.h"
 #include "engine/Math/Collision/CollisionHelper.h"
 
 namespace NoEngine {

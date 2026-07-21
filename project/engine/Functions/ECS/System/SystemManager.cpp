@@ -1,5 +1,5 @@
 #include "SystemManager.h"
-#include "../Component/PauseComponent.h"
+#include "../Component/Common/PauseComponent.h"
 #include "../Event/SceneChangeEvent.h"
 #include "../../Scene/SceneNameComponent.h"
 #ifdef USE_IMGUI

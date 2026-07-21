@@ -2,7 +2,7 @@
 #include "ParticleEmitterSystem.h"
 #include "engine/Utilities/Random.h"
 #include "engine/Assets/AssetManager.h"
-#include "../../Component/VelocityComponent.h"
+#include "../../Component/Common/VelocityComponent.h"
 #include "engine/Utilities/Conversion/ConvertString.h"
 #include "engine/Functions/Particle/ParticleManager.h"
 #include "engine/Functions/Shader/ShaderModule.h"

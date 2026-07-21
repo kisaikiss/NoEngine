@@ -2,9 +2,9 @@
 #include "../RenderPass.h"
 #include "engine/Runtime/GpuResource/GpuBuffer.h"
 #include "engine/Math/MathInclude.h"
-#include "engine/Functions/ECS/Component/ParticleEmitterComponent.h"
-#include "engine/Functions/ECS/Component/CameraComponent.h"
-#include "engine/Functions/ECS/Component/TransformComponent.h"
+#include "engine/Functions/ECS/Component/Effect/ParticleEmitterComponent.h"
+#include "engine/Functions/ECS/Component/Common/CameraComponent.h"
+#include "engine/Functions/ECS/Component/Common/TransformComponent.h"
 
 namespace NoEngine {
 namespace Render {

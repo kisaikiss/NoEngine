@@ -4,7 +4,7 @@
 #include "engine/Assets/Model/RaytracingMesh.h"
 #include "engine/Math/MathInclude.h"
 #include "engine/Functions/ECS/Component/Asset/AnimatorComponent.h"
-#include "engine/Functions/ECS/Component/TransformComponent.h"
+#include "engine/Functions/ECS/Component/Common/TransformComponent.h"
 
 namespace NoEngine {
 namespace Render {

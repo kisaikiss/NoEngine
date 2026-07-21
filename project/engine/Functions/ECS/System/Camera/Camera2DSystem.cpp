@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Camera2DSystem.h"
-#include "../../Component/CameraComponent.h"
-#include "../../Component/Transform2DComponent.h"
+#include "../../Component/Common/CameraComponent.h"
+#include "../../Component/Common/Transform2DComponent.h"
 #include "engine/Math/Types/Calculations/Matrix4x4Calculations.h"
 
 namespace NoEngine {

@@ -1,6 +1,6 @@
 #include "MovementSystem.h"
-#include "../Component/TransformComponent.h"
-#include "../Component/VelocityComponent.h"
+#include "../../Component/Common/TransformComponent.h"
+#include "../../Component/Common/VelocityComponent.h"
 
 void NoEngine::ECS::MovementSystem::Update(Registry& registry, float deltaTime) {
 	auto view3d = registry.View<Component::TransformComponent, Component::VelocityComponent>();

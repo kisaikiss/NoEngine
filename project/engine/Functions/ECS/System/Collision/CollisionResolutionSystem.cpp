@@ -1,7 +1,7 @@
 #include "CollisionResolutionSystem.h"
 #include "../../Event/CollisionEvents.h"
-#include "../../Component/TransformComponent.h"
-#include "../../Component/VelocityComponent.h"
+#include "../../Component/Common/TransformComponent.h"
+#include "../../Component/Common/VelocityComponent.h"
 
 namespace NoEngine {
 namespace ECS {

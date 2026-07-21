@@ -1,5 +1,5 @@
 #pragma once
-#include "ISystem.h"
+#include "../ISystem.h"
 namespace NoEngine {
 namespace ECS {
 class Movement2DSystem : public ISystem {

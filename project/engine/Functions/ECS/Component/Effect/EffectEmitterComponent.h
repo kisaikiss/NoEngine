@@ -1,7 +1,7 @@
 #pragma once
 #include "engine/Math/MathInclude.h"
 #include "engine/Assets/Texture/TextureManager.h"
-#include "../ParticleEmitterComponent.h"
+#include "../Effect/ParticleEmitterComponent.h"
 
 namespace NoEngine {
 enum class EmitMode {

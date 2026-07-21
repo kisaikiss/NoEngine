@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Movement2DSystem.h"
-#include "../Component/Transform2DComponent.h"
-#include "../Component/VelocityComponent.h"
+#include "../../Component/Common/Transform2DComponent.h"
+#include "../../Component/Common/VelocityComponent.h"
 
 namespace NoEngine {
 namespace ECS {

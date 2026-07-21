@@ -2,8 +2,8 @@
 #include "../RenderPass.h"
 #include "engine/Functions/ECS/Component/Asset/MeshComponent.h"
 #include "engine/Functions/ECS/Component/Asset/MaterialComponent.h"
-#include "engine/Functions/ECS/Component/TransformComponent.h"
-#include "engine/Functions/ECS/Component/CameraComponent.h"
+#include "engine/Functions/ECS/Component/Common/TransformComponent.h"
+#include "engine/Functions/ECS/Component/Common/CameraComponent.h"
 #include "engine/Assets/AssetHandles.h"
 
 namespace NoEngine {

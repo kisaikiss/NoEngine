@@ -1,7 +1,7 @@
 #include "EditUtils.h"
 #include "engine/Editor/ComponentRegistry.h"
-#include "engine/Functions/ECS/Component/Transform2DComponent.h"
-#include "engine/Functions/ECS/Component/TransformComponent.h"
+#include "engine/Functions/ECS/Component/Common/Transform2DComponent.h"
+#include "engine/Functions/ECS/Component/Common/TransformComponent.h"
 #include "engine/Runtime/GraphicsCore.h"
 #include "engine/Runtime/Command/CommandContext.h"
 #include "engine/Functions/Renderer/Primitive.h"
@@ -792,6 +792,7 @@ void DrawFieldUI(ECS::Registry& registry, const FieldInfo& field, void* ptr) {
 #else
 	static_cast<void>(field);
 	static_cast<void>(ptr);
+	static_cast<void>(registry);
 #endif // USE_IMGUI
 
 }

@@ -1,7 +1,7 @@
 #pragma once
 #include "../RenderPass.h"
 #include "engine/Functions/ECS/Component/Asset/SpriteComponent.h"
-#include "engine/Functions/ECS/Component/Transform2DComponent.h"
+#include "engine/Functions/ECS/Component/Common/Transform2DComponent.h"
 #include "engine/Runtime/GpuResource/GpuBuffer.h"
 #include "engine/Math/Types/Matrix4x4.h"
 #pragma warning(push)

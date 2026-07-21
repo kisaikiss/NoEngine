@@ -1,7 +1,7 @@
 #include "SpritePass.h"
 #include "engine/Functions/Shader/ShaderReflection.h"
 #include "engine/Math/Types/Calculations/Matrix4x4Calculations.h"
-#include "engine/Functions/ECS/Component/CameraComponent.h"
+#include "engine/Functions/ECS/Component/Common/CameraComponent.h"
 #include "engine/Runtime/GraphicsCore.h"
 
 

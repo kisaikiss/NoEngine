@@ -2,7 +2,7 @@
 
 #include "../../RenderSystem.h"
 #include "engine/Runtime/GraphicsCore.h"
-#include "engine/Functions/ECS/Component/LightComponent.h"
+#include "engine/Functions/ECS/Component/Asset/LightComponent.h"
 
 namespace NoEngine {
 namespace Render {

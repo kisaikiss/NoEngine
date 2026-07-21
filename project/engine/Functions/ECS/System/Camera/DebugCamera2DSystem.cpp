@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "DebugCamera2DSystem.h"
-#include "../../Component/CameraComponent.h"
-#include "../../Component/Transform2DComponent.h"
+#include "../../Component/Common/CameraComponent.h"
+#include "../../Component/Common/Transform2DComponent.h"
 #include "engine/Functions/Input/Input.h"
 #include "../../../../Editor/EditUtils.h"
 

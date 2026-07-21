@@ -1,7 +1,7 @@
 #pragma once
 #include "engine/Functions/ECS/Registry.h"
 #include "engine/Functions/ECS/System/SystemManager.h"
-#include "engine/Functions/ECS/Component/PauseComponent.h"
+#include "engine/Functions/ECS/Component/Common/PauseComponent.h"
 #include "SceneNameComponent.h"
 
 namespace NoEngine {

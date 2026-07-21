@@ -3,7 +3,7 @@
 
 #include "../../RenderSystem.h"
 #include "engine/Runtime/GraphicsCore.h"
-#include "../../../ECS/Component/TransformComponent.h"
+#include "../../../ECS/Component/Common/TransformComponent.h"
 
 namespace NoEngine {
 namespace Render {

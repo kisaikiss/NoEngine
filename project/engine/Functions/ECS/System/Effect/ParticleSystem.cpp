@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "ParticleSystem.h"
 #include "engine/Utilities/Random.h"
-#include "../../Component/VelocityComponent.h"
+#include "../../Component/Common/VelocityComponent.h"
 
 namespace NoEngine {
 namespace ECS {

@@ -4,7 +4,7 @@
 #include "engine/Math/Types/Calculations/QuaternionCalculations.h"
 #include "engine/Functions/Shader/ShaderModule.h"
 #include "engine/Utilities/Conversion/ConvertString.h"
-#include "../../Component/TransformComponent.h" 
+#include "../../Component/Common/TransformComponent.h" 
 #include "engine/Assets/Model/ModelSaver.h"
 
 

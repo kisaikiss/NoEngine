@@ -1,6 +1,6 @@
 #pragma once
 #include "engine/Math/Types/Matrix4x4.h"
-#include "../Entity.h"
+#include "../../Entity.h"
 namespace NoEngine {
 enum class DebugCameraType {
 	kBlender,

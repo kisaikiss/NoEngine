@@ -1,11 +1,11 @@
 #pragma once
-#include "ISystem.h"
+#include "../ISystem.h"
 namespace NoEngine {
 namespace ECS {
-class MovementSystem : public ISystem {
+class GroundResetSystem :
+    public ISystem {
 public:
 	void Update(Registry& registry, float deltaTime) override;
-
 };
 }
 }
