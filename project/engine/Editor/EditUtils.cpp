@@ -14,6 +14,7 @@
 #include "DataDriven/PrefabSerializer.h"
 #include "EditorCommandOperator.h"
 #include "engine/Functions/Input/input.h"
+#include "DataDriven/SceneSerializer.h"
 #ifdef USE_IMGUI
 #include "externals/imgui/imgui.h"
 #endif // USE_IMGUI
@@ -640,6 +641,102 @@ void DrawFieldUI(const FieldInfo& field, void* ptr) {
 			);
 
 			field.enumSetIndex(valuePtr, currentIndex);
+		}
+		break;
+	}
+	case FieldType::Struct: {
+		if (ImGui::TreeNode(field.name.c_str())) {
+			TypeInfo* nested = field.structTypeInfo ? field.structTypeInfo() : nullptr;
+			if (nested) {
+				for (auto& subField : nested->fields) {
+					DrawFieldUI(subField, valuePtr); // valuePtr = ネスト構造体の先頭アドレス
+				}
+			} else {
+				ImGui::TextDisabled("(struct type not registered)");
+			}
+			ImGui::TreePop();
+		}
+		break;
+	}
+	case FieldType::Array: {
+		if (ImGui::TreeNode(field.name.c_str())) {
+			size_t count = field.arraySize ? field.arraySize(valuePtr) : 0;
+			int removeIndex = -1;
+
+			for (size_t i = 0; i < count; ++i) {
+				ImGui::PushID(static_cast<int>(i));
+				void* elemPtr = field.arrayGetElement(valuePtr, i);
+
+				if (field.elementType == FieldType::Struct) {
+					std::string label = "[" + std::to_string(i) + "]";
+					if (ImGui::TreeNode(label.c_str())) {
+						TypeInfo* nested = field.elementStructTypeInfo ? field.elementStructTypeInfo() : nullptr;
+						if (nested) {
+							for (auto& subField : nested->fields) {
+								DrawFieldUI(subField, elemPtr);
+							}
+						}
+						ImGui::TreePop();
+					}
+				} else {
+					// プリミティブ要素は仮のFieldInfoを組み立てて既存の描画分岐を再利用
+					FieldInfo elemField{};
+					elemField.name = "[" + std::to_string(i) + "]";
+					elemField.offset = 0; // arrayGetElementが要素先頭ポインタを直接返すため0でよい
+					elemField.size = field.elementSize;
+					elemField.type = field.elementType;
+					elemField.attributes = field.attributes;
+					DrawFieldUI(elemField, elemPtr);
+				}
+
+				ImGui::SameLine();
+				if (ImGui::SmallButton("x")) {
+					removeIndex = static_cast<int>(i);
+				}
+				ImGui::PopID();
+			}
+
+			if (removeIndex >= 0) {
+				size_t index = static_cast<size_t>(removeIndex);
+				void* elemPtr = field.arrayGetElement(valuePtr, index);
+
+				// 削除前の値をJSONスナップショットとして保存（構造体でもプリミティブでも対応）
+				nlohmann::json snapshot = Editor::WriteArrayElementToJson(field, elemPtr);
+
+				auto arrayRemove = field.arrayRemoveElement;
+				auto arrayInsert = field.arrayInsertElement;
+
+				Editor::EditorCommandOperator::AddCommand(
+					std::make_unique<Command::FunctionCommand>(
+						[valuePtr, arrayRemove, index] {
+							arrayRemove(valuePtr, index);
+						},
+						[valuePtr, arrayInsert, index, snapshot, field] {
+							arrayInsert(valuePtr, index);
+							void* restoredPtr = field.arrayGetElement(valuePtr, index);
+							Editor::ReadArrayElementFromJson(snapshot, field, restoredPtr);
+						},
+						field.name + " (Array Remove)"
+					)
+				);
+				arrayRemove(valuePtr, index);
+			}
+
+			if (ImGui::SmallButton("+ Add")) {
+				auto arrayAdd = field.arrayAddElement;
+				auto arrayRemove = field.arrayRemoveElement;
+				size_t newIndex = field.arraySize(valuePtr);
+
+				Editor::EditorCommandOperator::AddCommand(
+					std::make_unique<Command::FunctionCommand>(
+						[valuePtr, arrayAdd] { arrayAdd(valuePtr); },
+						[valuePtr, arrayRemove, newIndex] { arrayRemove(valuePtr, newIndex); },
+						field.name + " (Array Add)"
+					)
+				);
+				arrayAdd(valuePtr);
+			}
+			ImGui::TreePop();
 		}
 		break;
 	}

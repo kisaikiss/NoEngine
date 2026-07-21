@@ -17,8 +17,9 @@ enum class FieldType {
     Bool,
     String,
     WString,
-    Struct,
     Enum,
+    Struct,
+    Array,
 };
 
 /// <summary>
@@ -50,6 +51,19 @@ struct FieldInfo {
     std::function<void(void*, int)>                   enumSetIndex;
     std::function<std::string(const void*)>           enumToString;
     std::function<void(void*, const std::string&)>    enumFromString;
+
+    // FieldType::Struct のときのみ有効（ネストされた構造体のTypeInfoを取得）
+    std::function<TypeInfo*()> structTypeInfo;
+
+    // FieldType::Array (std::vector<T>) のときのみ有効
+    FieldType elementType = FieldType::Unknown; // 要素の型
+    size_t    elementSize = 0;                   // 要素1個分のサイズ
+    std::function<TypeInfo*()> elementStructTypeInfo; // 要素がStructのときのみ有効
+    std::function<size_t(const void*)>  arraySize;
+    std::function<void* (void*, size_t)> arrayGetElement;
+    std::function<void(void*)>           arrayAddElement;    // デフォルト構築で1個追加
+    std::function<void(void*, size_t)>   arrayRemoveElement; // index番目を削除
+    std::function<void(void*, size_t)>   arrayInsertElement;
 };
 
 struct TypeInfo {

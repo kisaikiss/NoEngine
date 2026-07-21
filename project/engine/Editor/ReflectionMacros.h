@@ -34,7 +34,7 @@ NoEngine::TypeInfo* GetTypeInfo();
             return true; \
         }(); \
     } \
-    template<> inline NoEngine::TypeInfo* NoEngine::GetTypeInfo<struct_type>() { \
+    template<> NoEngine::TypeInfo* NoEngine::GetTypeInfo<struct_type>() { \
         return &NoEngine_Reflection_##struct_type::s_typeInfo; \
     }
 
@@ -83,3 +83,94 @@ NoEngine::TypeInfo* GetTypeInfo();
         }; \
         return info; \
     }()
+
+// ネストされた構造体フィールド用マクロ
+// ※ field_name の型はあらかじめ REFLECT_STRUCT_BEGIN/END で登録済みであること
+#define REFLECT_STRUCT_FIELD(field_name) \
+    [] { \
+        using FieldT = decltype(((ThisType*)0)->field_name); \
+        NoEngine::FieldInfo info{}; \
+        info.name       = #field_name; \
+        info.offset     = offsetof(ThisType, field_name); \
+        info.size       = sizeof(((ThisType*)0)->field_name); \
+        info.type       = NoEngine::FieldType::Struct; \
+        info.attributes = NoEngine::FieldAttributes{}; \
+        info.structTypeInfo = [] { return NoEngine::GetTypeInfo<FieldT>(); }; \
+        return info; \
+    }()
+
+// std::vector<T> 配列フィールド用（T が FieldTypeResolver 対応のプリミティブ/数学型の場合）
+#define REFLECT_ARRAY_FIELD(field_name) \
+    [] { \
+        using ArrayT   = decltype(((ThisType*)0)->field_name); \
+        using ElementT = ArrayT::value_type; \
+        NoEngine::FieldInfo info{}; \
+        info.name        = #field_name; \
+        info.offset      = offsetof(ThisType, field_name); \
+        info.size        = sizeof(((ThisType*)0)->field_name); \
+        info.type        = NoEngine::FieldType::Array; \
+        info.attributes  = NoEngine::FieldAttributes{}; \
+        info.elementType = NoEngine::FieldTypeResolver<ElementT>::value; \
+        info.elementSize = sizeof(ElementT); \
+        info.arraySize = [](const void* ptr) -> size_t { \
+            return static_cast<const ArrayT*>(ptr)->size(); \
+        }; \
+        info.arrayGetElement = [](void* ptr, size_t index) -> void* { \
+            return &(*static_cast<ArrayT*>(ptr))[index]; \
+        }; \
+        info.arrayAddElement = [](void* ptr) { \
+            static_cast<ArrayT*>(ptr)->emplace_back(); \
+        }; \
+        info.arrayRemoveElement = [](void* ptr, size_t index) { \
+            ArrayT* arr = static_cast<ArrayT*>(ptr); \
+            if (index < arr->size()) arr->erase(arr->begin() + index); \
+        }; \
+        info.arrayInsertElement = [](void* ptr, size_t index) { \
+            ArrayT* arr = static_cast<ArrayT*>(ptr); \
+            if (index > arr->size()) index = arr->size(); \
+            arr->emplace(arr->begin() + index); \
+        }; \
+        return info; \
+    }()
+
+// std::vector<Struct> 配列フィールド用（要素が REFLECT_STRUCT_BEGIN/END 登録済み構造体の場合）
+#define REFLECT_STRUCT_ARRAY_FIELD(field_name) \
+    [] { \
+        using ArrayT   = decltype(((ThisType*)0)->field_name); \
+        using ElementT = ArrayT::value_type; \
+        NoEngine::FieldInfo info{}; \
+        info.name        = #field_name; \
+        info.offset      = offsetof(ThisType, field_name); \
+        info.size        = sizeof(((ThisType*)0)->field_name); \
+        info.type        = NoEngine::FieldType::Array; \
+        info.attributes  = NoEngine::FieldAttributes{}; \
+        info.elementType = NoEngine::FieldType::Struct; \
+        info.elementSize = sizeof(ElementT); \
+        info.elementStructTypeInfo = [] { return NoEngine::GetTypeInfo<ElementT>(); }; \
+        info.arraySize = [](const void* ptr) -> size_t { \
+            return static_cast<const ArrayT*>(ptr)->size(); \
+        }; \
+        info.arrayGetElement = [](void* ptr, size_t index) -> void* { \
+            return &(*static_cast<ArrayT*>(ptr))[index]; \
+        }; \
+        info.arrayAddElement = [](void* ptr) { \
+            static_cast<ArrayT*>(ptr)->emplace_back(); \
+        }; \
+        info.arrayRemoveElement = [](void* ptr, size_t index) { \
+            ArrayT* arr = static_cast<ArrayT*>(ptr); \
+            if (index < arr->size()) arr->erase(arr->begin() + index); \
+        }; \
+        info.arrayInsertElement = [](void* ptr, size_t index) { \
+            ArrayT* arr = static_cast<ArrayT*>(ptr); \
+            if (index > arr->size()) index = arr->size(); \
+            arr->emplace(arr->begin() + index); \
+        }; \
+        return info; \
+    }()
+
+// 他の構造体からネスト/配列要素として参照可能にするための前方宣言マクロ
+// 対象構造体のヘッダ (.h) に置く
+#define REFLECT_STRUCT_DECLARE(struct_type) \
+    namespace NoEngine { \
+        template<> NoEngine::TypeInfo* GetTypeInfo<struct_type>(); \
+    }

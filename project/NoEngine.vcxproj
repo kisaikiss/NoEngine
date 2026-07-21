@@ -218,6 +218,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="application\ClockworksDisease\System\UI\LevelUISystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\UI\LevelUpTextSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\UI\StaminaUISystem.cpp" />
+    <ClCompile Include="application\TestApp\Component\TestComponent.cpp" />
     <ClCompile Include="application\TestApp\TestApp.cpp" />
     <ClCompile Include="engine\Assets\AssetManager.cpp" />
     <ClCompile Include="engine\Assets\Font\FontManager.cpp" />
@@ -464,6 +465,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="application\ClockworksDisease\System\UI\LevelUISystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\UI\LevelUpTextSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\UI\StaminaUISystem.h" />
+    <ClInclude Include="application\TestApp\Component\TestComponent.h" />
     <ClInclude Include="application\TestApp\TestApp.h" />
     <ClInclude Include="engine\Assets\AssetHandles.h" />
     <ClInclude Include="engine\Assets\AssetManager.h" />

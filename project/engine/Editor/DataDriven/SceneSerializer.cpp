@@ -80,6 +80,28 @@ void WriteFieldToJson(nlohmann::json& j, const FieldInfo& field, void* ptr) {
 	case NoEngine::FieldType::Enum:
 		j[field.name] = field.enumToString(ptr);
 		break;
+	case NoEngine::FieldType::Struct: {
+		TypeInfo* nested = field.structTypeInfo ? field.structTypeInfo() : nullptr;
+		if (nested) {
+			json structJson;
+			for (auto& subField : nested->fields) {
+				uint8_t* subPtr = (uint8_t*)ptr + subField.offset;
+				WriteFieldToJson(structJson, subField, subPtr);
+			}
+			j[field.name] = structJson;
+		}
+		break;
+	}
+	case NoEngine::FieldType::Array: {
+		json arrJson = json::array();
+		size_t count = field.arraySize ? field.arraySize(ptr) : 0;
+		for (size_t i = 0; i < count; ++i) {
+			void* elemPtr = field.arrayGetElement(ptr, i);
+			arrJson.push_back(WriteArrayElementToJson(field, elemPtr));
+		}
+		j[field.name] = arrJson;
+		break;
+	}
 	default:
 		j[field.name] = "Unsupported";
 		break;
@@ -193,12 +215,75 @@ void ReadFieldFromJson(const nlohmann::json& j, const FieldInfo& field, void* pt
 		field.enumFromString(ptr, value);
 		break;
 	}
+	case NoEngine::FieldType::Struct: {
+		TypeInfo* nested = field.structTypeInfo ? field.structTypeInfo() : nullptr;
+		if (nested) {
+			const json& structJson = j[field.name];
+			for (auto& subField : nested->fields) {
+				uint8_t* subPtr = (uint8_t*)ptr + subField.offset;
+				ReadFieldFromJson(structJson, subField, subPtr);
+			}
+		}
+		break;
+	}
+	case NoEngine::FieldType::Array: {
+		if (!field.arraySize || !field.arrayInsertElement || !field.arrayRemoveElement) break;
+		const json& arrJson = j[field.name];
+
+		// 既存要素をクリアしてからJSON側の要素で作り直す
+		while (field.arraySize(ptr) > 0) {
+			field.arrayRemoveElement(ptr, field.arraySize(ptr) - 1);
+		}
+		for (size_t i = 0; i < arrJson.size(); ++i) {
+			field.arrayInsertElement(ptr, i);
+			void* elemPtr = field.arrayGetElement(ptr, i);
+			ReadArrayElementFromJson(arrJson[i], field, elemPtr);
+		}
+		break;
+	}
 	default:
 		break;
 	}
 }
 
+nlohmann::json WriteArrayElementToJson(const FieldInfo& arrayField, void* elemPtr) {
+	if (arrayField.elementType == FieldType::Struct) {
+		TypeInfo* nested = arrayField.elementStructTypeInfo ? arrayField.elementStructTypeInfo() : nullptr;
+		json elemJson;
+		if (nested) {
+			for (auto& subField : nested->fields) {
+				uint8_t* subPtr = (uint8_t*)elemPtr + subField.offset;
+				WriteFieldToJson(elemJson, subField, subPtr);
+			}
+		}
+		return elemJson;
+	}
+	// プリミティブ要素は既存のWriteFieldToJsonを"value"キーで呼び、中身だけ取り出す
+	FieldInfo tmp{};
+	tmp.name = "value";
+	tmp.type = arrayField.elementType;
+	json wrapper;
+	WriteFieldToJson(wrapper, tmp, elemPtr);
+	return wrapper["value"];
+}
 
+void ReadArrayElementFromJson(const nlohmann::json& elemJson, const FieldInfo& arrayField, void* elemPtr) {
+	if (arrayField.elementType == FieldType::Struct) {
+		TypeInfo* nested = arrayField.elementStructTypeInfo ? arrayField.elementStructTypeInfo() : nullptr;
+		if (!nested) return;
+		for (auto& subField : nested->fields) {
+			uint8_t* subPtr = (uint8_t*)elemPtr + subField.offset;
+			ReadFieldFromJson(elemJson, subField, subPtr);
+		}
+		return;
+	}
+	FieldInfo tmp{};
+	tmp.name = "value";
+	tmp.type = arrayField.elementType;
+	json wrapper;
+	wrapper["value"] = elemJson;
+	ReadFieldFromJson(wrapper, tmp, elemPtr);
+}
 
 }
 }
