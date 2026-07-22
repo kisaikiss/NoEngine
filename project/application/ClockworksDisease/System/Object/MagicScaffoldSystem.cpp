@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "MagicScaffoldSystem.h"
 
-REFLECT_STRUCT_BEGIN(MagicScaffoldComponent)
+REFLECT_STRUCT_BEGIN(MagicScaffoldComponent, "ApplicationTag")
 REFLECT_FIELD(finalSize)
 REFLECT_STRUCT_END(MagicScaffoldComponent);
 

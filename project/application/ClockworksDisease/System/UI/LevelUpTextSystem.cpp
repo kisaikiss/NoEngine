@@ -2,7 +2,7 @@
 #include "LevelUpTextSystem.h"
 #include "../../Component/UI/UserInterfaceComponent.h"
 
-REFLECT_STRUCT_BEGIN(CloseLevelUpUITag)
+REFLECT_STRUCT_BEGIN(CloseLevelUpUITag, "ApplicationTag")
 REFLECT_STRUCT_END(CloseLevelUpUITag)
 
 void LevelUpTextSystem::Update(No::Registry& registry, float deltaTime) {

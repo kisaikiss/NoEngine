@@ -1,7 +1,7 @@
 #include "TextComponent.h"
 #include "engine/Editor/ReflectionMacros.h"
 
-REFLECT_STRUCT_BEGIN(NoEngine::Component::TextComponent)
+REFLECT_STRUCT_BEGIN(NoEngine::Component::TextComponent, "Asset")
 REFLECT_FIELD(text),
 REFLECT_FIELD(scale),
 REFLECT_FIELD(letterSpacing),

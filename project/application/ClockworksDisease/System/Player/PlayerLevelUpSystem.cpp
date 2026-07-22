@@ -3,7 +3,7 @@
 #include "../../Component/Player/PlayerMoveTags.h"
 #include "../../Component/UI/UserInterfaceComponent.h"
 
-REFLECT_STRUCT_BEGIN(LevelUpEffectTag)
+REFLECT_STRUCT_BEGIN(LevelUpEffectTag, "ApplicationTag")
 REFLECT_STRUCT_END(LevelUpEffectTag)
 
 void PlayerLevelUpSystem::Update(No::Registry& registry, float deltaTime) {

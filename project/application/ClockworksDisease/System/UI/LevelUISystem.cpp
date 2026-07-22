@@ -2,10 +2,10 @@
 #include "LevelUISystem.h"
 #include "../../Component/Player/PlayerComponent.h"
 
-REFLECT_STRUCT_BEGIN(LevelGaugeTag)
+REFLECT_STRUCT_BEGIN(LevelGaugeTag, "ApplicationTag")
 REFLECT_STRUCT_END(LevelGaugeTag)
 
-REFLECT_STRUCT_BEGIN(LevelNumberTag)
+REFLECT_STRUCT_BEGIN(LevelNumberTag, "ApplicationTag")
 REFLECT_STRUCT_END(LevelNumberTag)
 
 void LevelUISystem::Update(No::Registry& registry, float deltaTime) {

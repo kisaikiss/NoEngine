@@ -1,7 +1,7 @@
 #include "MaterialComponent.h"
 #include "engine/Editor/ReflectionMacros.h"
 
-REFLECT_STRUCT_BEGIN(NoEngine::Component::MaterialComponent)
+REFLECT_STRUCT_BEGIN(NoEngine::Component::MaterialComponent, "Asset")
 REFLECT_ENUM_FIELD(blendMode),
 REFLECT_ENUM_FIELD(renderMode),
 REFLECT_FIELD(color),

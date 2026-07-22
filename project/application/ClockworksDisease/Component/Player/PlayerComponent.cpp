@@ -1,7 +1,7 @@
 #include "PlayerComponent.h"
 
 
-REFLECT_STRUCT_BEGIN(PlayerComponent)
+REFLECT_STRUCT_BEGIN(PlayerComponent, "Application")
 REFLECT_FIELD(moveSpeed),
 REFLECT_FIELD(jumpSpeed),
 REFLECT_FIELD(highJumpSpeed),
@@ -14,15 +14,15 @@ REFLECT_FIELD(infinityJump),
 REFLECT_ENUM_FIELD(state)
 REFLECT_STRUCT_END(PlayerComponent)
 
-REFLECT_STRUCT_BEGIN(PlayerMoveTransientComponent)
+REFLECT_STRUCT_BEGIN(PlayerMoveTransientComponent, "ApplicationTag")
 REFLECT_STRUCT_END(PlayerMoveTransientComponent)
 
-REFLECT_STRUCT_BEGIN(LevelUpReward)
+REFLECT_STRUCT_BEGIN(LevelUpReward, "ApplicationTag")
 REFLECT_FIELD(level),
 REFLECT_ENUM_FIELD(ability)
 REFLECT_STRUCT_END(LevelUpReward)
 
-REFLECT_STRUCT_BEGIN(LevelComponent)
+REFLECT_STRUCT_BEGIN(LevelComponent, "Application")
 REFLECT_FIELD(nowLevel),
 REFLECT_FIELD(nextLevelUp),
 REFLECT_FIELD(power),

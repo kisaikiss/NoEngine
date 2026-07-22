@@ -35,7 +35,7 @@ Math::Matrix4x4 Transform2DComponent::MakeAffineMatrix4x4(ECS::Registry& registr
 }
 }
 
-REFLECT_STRUCT_BEGIN(NoEngine::Component::Transform2DComponent)
+REFLECT_STRUCT_BEGIN(NoEngine::Component::Transform2DComponent, "Transform")
 REFLECT_FIELD(translate),
 REFLECT_FIELD(rotation),
 REFLECT_FIELD(scale),

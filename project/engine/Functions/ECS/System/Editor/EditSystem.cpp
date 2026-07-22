@@ -22,7 +22,7 @@ namespace {
 const std::string sDirectoryPath = "resources/game/Scenes/";
 }
 
-REFLECT_STRUCT_BEGIN(NoEngine::FolderTag, "Editor")
+REFLECT_STRUCT_BEGIN(NoEngine::FolderTag)
 REFLECT_STRUCT_END(NoEngine::FolderTag)
 namespace NoEngine {
 namespace ECS {

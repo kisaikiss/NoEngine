@@ -1,7 +1,7 @@
 #include "ParticleEmitterComponent.h"
 #include "engine/Editor/ReflectionMacros.h"
 
-REFLECT_STRUCT_BEGIN(NoEngine::Component::ParticleEmitterComponent)
+REFLECT_STRUCT_BEGIN(NoEngine::Component::ParticleEmitterComponent, "Effect")
 REFLECT_FIELD(active),
 REFLECT_FIELD(maxCount),
 REFLECT_FIELD(count),
@@ -18,7 +18,7 @@ REFLECT_FIELD(color),
 REFLECT_FIELD(textureName)
 REFLECT_STRUCT_END(NoEngine::Component::ParticleEmitterComponent)
 
-REFLECT_STRUCT_BEGIN(NoEngine::Component::ParticleEmitterSphereComponent)
+REFLECT_STRUCT_BEGIN(NoEngine::Component::ParticleEmitterSphereComponent, "Effect")
 REFLECT_FIELD(radius),
 REFLECT_FIELD(count),
 REFLECT_FIELD(frequency),
