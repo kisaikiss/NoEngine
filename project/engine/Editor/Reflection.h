@@ -91,6 +91,8 @@ struct TypeInfo {
     std::string name;
     size_t      size;
     size_t      typeId;
+    std::string category = "Other";
+
     std::vector<FieldInfo> fields;
 
     // RegistryからComponentを取得する関数

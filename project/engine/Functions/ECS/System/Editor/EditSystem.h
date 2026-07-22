@@ -29,6 +29,8 @@ private:
     // コピーやペーストを毎フレーム呼ばないためのインターバル計算用変数
     float timeInterval_ = 0.0f;
 
+    char addComponentFilter_[128] = {};
+
     void SaveFile(Registry& registry, nlohmann::json j);
     void LoadFile(Registry& registry);
 

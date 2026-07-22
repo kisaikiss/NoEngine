@@ -11,14 +11,30 @@ NoEngine::TypeInfo* GetTypeInfo();
 
 
 // 構造体に TypeInfo を埋め込むマクロ
-#define REFLECT_STRUCT_BEGIN(struct_type) \
+// 使い方:
+//   REFLECT_STRUCT_BEGIN(MyComponent)                 // カテゴリ省略 -> "Other" 扱い
+//   REFLECT_STRUCT_BEGIN(MyComponent, "Physics")       // カテゴリを明示指定
+#define REFLECT_STRUCT_BEGIN_IMPL(struct_type, category_str) \
     namespace NoEngine_Reflection_##struct_type { \
         using ThisType = struct_type; \
         static NoEngine::TypeInfo s_typeInfo = { \
             NoEngine::Utilities::ExtractTypeName(#struct_type), \
             sizeof(struct_type), \
             NoEngine::Utilities::TypeID<struct_type>(), \
+            category_str, \
             std::vector<NoEngine::FieldInfo>{
+
+// category を省略した場合は "Other" を補うためのオーバーロード
+#define REFLECT_STRUCT_BEGIN_1(struct_type) REFLECT_STRUCT_BEGIN_IMPL(struct_type, "Other")
+#define REFLECT_STRUCT_BEGIN_2(struct_type, category_str) REFLECT_STRUCT_BEGIN_IMPL(struct_type, category_str)
+
+// 引数の数(1個 or 2個)に応じて上の2つを振り分ける定番の可変長マクロ切り替え
+// REFLECT_EXPAND を挟むのは MSVC の伝統的プリプロセッサでも __VA_ARGS__ が
+// 正しく1個の引数列として展開されるようにするため
+#define REFLECT_EXPAND(x) x
+#define REFLECT_STRUCT_BEGIN_CHOOSER(_1, _2, NAME, ...) NAME
+#define REFLECT_STRUCT_BEGIN(...) \
+    REFLECT_EXPAND(REFLECT_STRUCT_BEGIN_CHOOSER(__VA_ARGS__, REFLECT_STRUCT_BEGIN_2, REFLECT_STRUCT_BEGIN_1)(__VA_ARGS__))
 
 #define REFLECT_STRUCT_END(struct_type) \
             }, \
