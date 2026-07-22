@@ -129,17 +129,8 @@ std::unordered_set<std::string> CollectEditTagNames(ECS::Registry& registry, ECS
 ECS::Entity PickObject(CommandContext& ctx, ColorBuffer& idColorBuffer, ReadbackBuffer& readBackBuffer) {
 #ifdef USE_IMGUI
 
-	if (Input::Mouse::IsTrigger(Input::MouseButton::Left)) {
-		if (!Editor::IsMouseOverSceneWindow()) {
-			return ECS::INVALID_ENTITY;
-		}
-
-		ctx.CopyPixelToBuffer(readBackBuffer, idColorBuffer, static_cast<UINT>(sSceneWindowMousePosition.x), static_cast<UINT>(sSceneWindowMousePosition.y));
-	}
-	if (Input::Mouse::IsRelease(Input::MouseButton::Left)) {
-		if (!Editor::IsMouseOverSceneWindow()) {
-			return ECS::INVALID_ENTITY;
-		}
+	static bool isPickObject = false;
+	if (isPickObject) {
 		const uint8_t* pixelData = reinterpret_cast<const uint8_t*>(readBackBuffer.Map());
 
 		// DXGI_FORMAT_R8G8B8A8_UNORM はメモリ上では R, G, B, A の順で1バイトずつ格納されます
@@ -158,8 +149,20 @@ ECS::Entity PickObject(CommandContext& ctx, ColorBuffer& idColorBuffer, Readback
 		}
 
 		LogDebug("Object click select ID : " + std::to_string(pickedID));
+		isPickObject = false;
 		return static_cast<ECS::Entity>(pickedID);
 	}
+
+	if (Input::Mouse::IsTrigger(Input::MouseButton::Left)) {
+		if (!Editor::IsMouseOverSceneWindow()) {
+			return ECS::INVALID_ENTITY;
+		}
+
+		ctx.CopyPixelToBuffer(readBackBuffer, idColorBuffer, static_cast<UINT>(sSceneWindowMousePosition.x), static_cast<UINT>(sSceneWindowMousePosition.y));
+		isPickObject = true;
+	}
+	
+	
 
 #else
 	static_cast<void>(ctx);
@@ -237,8 +240,13 @@ void DrawGameImGuiWindow() {
 #endif // USE_IMGUI
 }
 
-void DrawSceneImGuiWindow(ECS::Registry& registry) {
+void DrawSceneImGuiWindow(ECS::Registry& registry, CommandContext& ctx, ColorBuffer& worldPositionColorBuffer, ReadbackBuffer& readBackBuffer) {
 #ifdef USE_IMGUI
+
+	static_cast<void>(ctx);
+	static_cast<void>(worldPositionColorBuffer);
+	static_cast<void>(readBackBuffer);
+
 	Math::Vector2 windowSize = GraphicsCore::GetWindowSize();
 	ImGui::Begin("Scene");
 	ImGui::Image(
@@ -269,6 +277,26 @@ void DrawSceneImGuiWindow(ECS::Registry& registry) {
 		}
 	}
 
+	static ECS::Entity instantiateTransformObjectEntity = ECS::INVALID_ENTITY;
+	if (instantiateTransformObjectEntity != ECS::INVALID_ENTITY) {
+		registry.AddComponent<Editor::EditSelectedTag>(instantiateTransformObjectEntity);
+		const float* pixelData = reinterpret_cast<const float*>(readBackBuffer.Map());
+
+		float r = pixelData[0];
+		float g = pixelData[1];
+		float b = pixelData[2];
+
+		readBackBuffer.Unmap();
+
+		const Math::Color clearColor = worldPositionColorBuffer.GetClearColor();
+		if (r != clearColor.r || g != clearColor.g || b != clearColor.b) {
+			auto& translate = registry.GetComponent<Component::TransformComponent>(instantiateTransformObjectEntity)->translate;
+			translate = Math::Vector3(r, g, b);
+		}
+
+		instantiateTransformObjectEntity = ECS::INVALID_ENTITY;
+	}
+
 	if (ImGui::BeginDragDropTarget()) {
 		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("PREFAB_PATH")) {
 			const char* path = (const char*)payload->Data;
@@ -278,7 +306,8 @@ void DrawSceneImGuiWindow(ECS::Registry& registry) {
 
 			// Transform があるなら
 			if (auto* t = registry.GetComponent<Component::TransformComponent>(e)) {
-				// ToDo: ドロップ位置からレイを飛ばし、衝突判定を取った場所に配置する
+				ctx.CopyPixelToBuffer(readBackBuffer, worldPositionColorBuffer,
+					static_cast<UINT>(sSceneWindowMousePosition.x), static_cast<UINT>(sSceneWindowMousePosition.y), DXGI_FORMAT_R32G32B32A32_TYPELESS);
 
 				// カメラの向いている方向から50m離れた場所に配置
 				auto cameraView = registry.View<Component::CameraComponent, Component::DebugCameraComponent>();
@@ -294,7 +323,7 @@ void DrawSceneImGuiWindow(ECS::Registry& registry) {
 					worldPos += transform->rotation.zAxis() * kOffset;
 					t->translate = worldPos;
 				}
-
+				instantiateTransformObjectEntity = e;
 			}
 			// Undo 用コマンド登録
 			Editor::EditorCommandOperator::AddCommand(std::make_unique<Command::InstantiateEntityCommand>(registry, e));
@@ -306,6 +335,9 @@ void DrawSceneImGuiWindow(ECS::Registry& registry) {
 	ImGui::End();
 #else
 	static_cast<void>(registry);
+	static_cast<void>(ctx);
+	static_cast<void>(worldPositionColorBuffer);
+	static_cast<void>(readBackBuffer);
 #endif // USE_IMGUI
 }
 

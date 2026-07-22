@@ -133,7 +133,7 @@ void CommandContext::CopyTextureRegion(GpuResource& dest, UINT x, UINT y, UINT z
 	commandList_->CopyTextureRegion(&destLoc, x, y, z, &srcLoc, &box);
 }
 
-void CommandContext::CopyPixelToBuffer(ReadbackBuffer& dest, GpuResource& source, UINT x, UINT y) {
+void CommandContext::CopyPixelToBuffer(ReadbackBuffer& dest, GpuResource& source, UINT x, UINT y, DXGI_FORMAT format) {
 	
 
 	// コピー元：2Dテクスチャ（IDを描画したColorBuffer）
@@ -147,7 +147,7 @@ void CommandContext::CopyPixelToBuffer(ReadbackBuffer& dest, GpuResource& source
 	destLoc.pResource = dest.GetResource();
 	destLoc.Type = D3D12_TEXTURE_COPY_TYPE_PLACED_FOOTPRINT;
 	destLoc.PlacedFootprint.Offset = 0;
-	destLoc.PlacedFootprint.Footprint.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	destLoc.PlacedFootprint.Footprint.Format = format;
 	destLoc.PlacedFootprint.Footprint.Width = 1;
 	destLoc.PlacedFootprint.Footprint.Height = 1;
 	destLoc.PlacedFootprint.Footprint.Depth = 1;

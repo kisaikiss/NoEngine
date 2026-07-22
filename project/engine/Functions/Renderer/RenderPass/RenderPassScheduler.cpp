@@ -62,6 +62,7 @@ void RenderPassScheduler::Compile() {
 
 #ifdef USE_IMGUI
 	idReadbackBuffer_.Create(L"ID_Readback_Buffer", 1, D3D12_TEXTURE_DATA_PITCH_ALIGNMENT);
+	positionReadbackBuffer_.Create(L"WorldPosition_Readback_Buffer", 1, D3D12_TEXTURE_DATA_PITCH_ALIGNMENT);
 #endif // USE_IMGUI
 }
 
@@ -137,8 +138,10 @@ void RenderPassScheduler::Render(GraphicsContext& gfx, ECS::Registry& registry) 
 #ifdef USE_IMGUI
 	gfx.TransitionResource(*resourceRegistry_.GetColorBufferPointer(screenDrawBufferName_), D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 	gfx.TransitionResource(*resourceRegistry_.GetColorBufferPointer("DebugColor"), D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+	gfx.TransitionResource(*resourceRegistry_.GetColorBufferPointer("WorldPosition"), D3D12_RESOURCE_STATE_COPY_SOURCE);
+	gfx.FlushResourceBarriers();
 	DrawGameImGuiWindow();
-	DrawSceneImGuiWindow(registry);
+	DrawSceneImGuiWindow(registry, gfx, *resourceRegistry_.GetColorBufferPointer("WorldPosition"), positionReadbackBuffer_);
 
 	// クリックによるオブジェクトの選択
 	if (!ImGuizmo::IsUsing()) {

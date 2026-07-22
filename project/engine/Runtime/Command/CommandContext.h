@@ -52,7 +52,7 @@ public:
 	void CopyBuffer(GpuResource& Dest, GpuResource& Src);
 	void CopyBufferRegion(GpuResource& Dest, size_t DestOffset, GpuResource& Src, size_t SrcOffset, size_t NumBytes);
 	void CopyTextureRegion(GpuResource& Dest, UINT x, UINT y, UINT z, GpuResource& Source, RECT& rect);
-	void CopyPixelToBuffer(ReadbackBuffer& dest, GpuResource& source, UINT x, UINT y);
+	void CopyPixelToBuffer(ReadbackBuffer& dest, GpuResource& source, UINT x, UINT y, DXGI_FORMAT format = DXGI_FORMAT_R8G8B8A8_UNORM);
 
 	DynAlloc ReserveUploadMemory(size_t SizeInBytes) {
 	    return cpuLinearAllocator_.Allocate(SizeInBytes);

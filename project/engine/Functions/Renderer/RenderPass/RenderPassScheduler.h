@@ -41,6 +41,9 @@ private:
 	// クリックした場所のObjectIDテクスチャの色
 	ReadbackBuffer idReadbackBuffer_;
 
+	// クリックを離した場所のWorldPositionテクスチャの色
+	ReadbackBuffer positionReadbackBuffer_;
+
 	std::vector<std::unique_ptr<Render::RenderPass>> passes_;
 };
 

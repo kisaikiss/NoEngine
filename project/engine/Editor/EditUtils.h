@@ -48,7 +48,7 @@ ECS::Entity PickObject(CommandContext& ctx, ColorBuffer& idColorBuffer, Readback
 void InitGameImGuiWindow(ColorBuffer& mainColor);
 void InitSceneImGuiWindow(ColorBuffer& debugColor);
 void DrawGameImGuiWindow();
-void DrawSceneImGuiWindow(ECS::Registry& registry);
+void DrawSceneImGuiWindow(ECS::Registry& registry, CommandContext& ctx, ColorBuffer& worldPositionColorBuffer, ReadbackBuffer& readBackBuffer);
 void SetGizmoCallback(std::function<void(const Math::Vector4& imageRect)> cb);
 
 void DrawComponentUI(ECS::Registry& registry, ECS::Entity e);
