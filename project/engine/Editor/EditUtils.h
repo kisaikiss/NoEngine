@@ -3,6 +3,7 @@
 #include "engine/Functions/ECS/Registry.h"
 #include "engine/Runtime/GpuResource/PixelBuffer/ColorBuffer.h"
 #include "engine/Runtime/GpuResource/ReadbackBuffer.h"
+#include "engine/Runtime/Command/CommandContext.h"
 #include "EditTag.h"
 
 namespace NoEngine {
@@ -42,7 +43,7 @@ std::string MakeUniqueName(const std::unordered_set<std::string>& used, const st
 /// <returns>重複のない編集タグ名の集合（std::unordered_set<std::string>）。</returns>
 std::unordered_set<std::string> CollectEditTagNames(ECS::Registry& registry, ECS::Entity except = ECS::INVALID_ENTITY);
 
-ECS::Entity PickObject(ECS::Registry& registry, ColorBuffer& idColorBuffer, ReadbackBuffer& readBackBuffer);
+ECS::Entity PickObject(CommandContext& ctx, ColorBuffer& idColorBuffer, ReadbackBuffer& readBackBuffer);
 
 void InitGameImGuiWindow(ColorBuffer& mainColor);
 void InitSceneImGuiWindow(ColorBuffer& debugColor);

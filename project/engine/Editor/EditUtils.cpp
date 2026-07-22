@@ -126,19 +126,20 @@ std::unordered_set<std::string> CollectEditTagNames(ECS::Registry& registry, ECS
 	return names;
 }
 
-ECS::Entity PickObject(ECS::Registry& registry, ColorBuffer& idColorBuffer, ReadbackBuffer& readBackBuffer) {
+ECS::Entity PickObject(CommandContext& ctx, ColorBuffer& idColorBuffer, ReadbackBuffer& readBackBuffer) {
 #ifdef USE_IMGUI
 
 	if (Input::Mouse::IsTrigger(Input::MouseButton::Left)) {
 		if (!Editor::IsMouseOverSceneWindow()) {
 			return ECS::INVALID_ENTITY;
 		}
-		(void)registry;
-		CommandContext& ctx = CommandContext::Begin(L"PickObject Context");
 
 		ctx.CopyPixelToBuffer(readBackBuffer, idColorBuffer, static_cast<UINT>(sSceneWindowMousePosition.x), static_cast<UINT>(sSceneWindowMousePosition.y));
-		ctx.Finish(true);
-
+	}
+	if (Input::Mouse::IsRelease(Input::MouseButton::Left)) {
+		if (!Editor::IsMouseOverSceneWindow()) {
+			return ECS::INVALID_ENTITY;
+		}
 		const uint8_t* pixelData = reinterpret_cast<const uint8_t*>(readBackBuffer.Map());
 
 		// DXGI_FORMAT_R8G8B8A8_UNORM はメモリ上では R, G, B, A の順で1バイトずつ格納されます
@@ -159,8 +160,9 @@ ECS::Entity PickObject(ECS::Registry& registry, ColorBuffer& idColorBuffer, Read
 		LogDebug("Object click select ID : " + std::to_string(pickedID));
 		return static_cast<ECS::Entity>(pickedID);
 	}
+
 #else
-	static_cast<void>(registry);
+	static_cast<void>(ctx);
 	static_cast<void>(idColorBuffer);
 	static_cast<void>(readBackBuffer);
 

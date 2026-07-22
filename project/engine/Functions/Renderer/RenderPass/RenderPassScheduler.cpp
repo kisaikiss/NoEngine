@@ -145,7 +145,7 @@ void RenderPassScheduler::Render(GraphicsContext& gfx, ECS::Registry& registry) 
 		gfx.TransitionResource(*resourceRegistry_.GetColorBufferPointer("ObjectID"), D3D12_RESOURCE_STATE_COPY_SOURCE);
 		gfx.TransitionResource(idReadbackBuffer_, D3D12_RESOURCE_STATE_COPY_DEST);
 		gfx.FlushResourceBarriers();
-		auto e = PickObject(registry, *resourceRegistry_.GetColorBufferPointer("ObjectID"), idReadbackBuffer_);
+		auto e = PickObject(gfx, *resourceRegistry_.GetColorBufferPointer("ObjectID"), idReadbackBuffer_);
 		if (e != ECS::INVALID_ENTITY && registry.Has<Editor::EditTag>(e)) {
 			registry.AddComponent<Editor::EditSelectedTag>(e);
 		}
