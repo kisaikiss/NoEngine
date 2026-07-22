@@ -2,16 +2,21 @@
 #include "../ISystem.h"
 #include "engine/Functions/ECS/Component/Effect/ParticleEmitterComponent.h"
 #include "engine/Functions/ECS/Component/Common/TransformComponent.h"
+
+#include "engine/Runtime/PipelineStateObject/RootSignature.h"
+#include "engine/Runtime/PipelineStateObject/ComputePSO.h"
 namespace NoEngine {
 namespace ECS {
 class ParticleSystem :
     public ISystem {
 public:
-    ParticleSystem() { SetStopInPause(false); }
+    ParticleSystem();
+    void Update(ComputeContext& ctx, Registry& registry, float deltaTime) override;
     void Update(Registry& registry, float deltaTime) override;
 private:
-    void EmitParticle(Registry& registry, const Component::TransformComponent& transform, Component::ParticleEmitterComponent* emitter);
-    Math::Vector3 GetNewPosition(const Component::TransformComponent& emitterTransform);
+
+    ComputePSO pso_;
+    RootSignature rootSignature_;
 };
 
 }

@@ -60,7 +60,7 @@ void AnimationSystem::Update(ComputeContext& ctx, Registry& registry, float delt
 				uint32_t pad[3];
 			}constants;
 			constants.numVertices = static_cast<uint32_t>(mesh->vertices.size());
-			ctx.SetDynamicConstantBufferView(rootIndex["gSkinningInformation"], 0, &constants);
+			ctx.SetDynamicConstantBufferView(rootIndex["gSkinningInformation"], sizeof(constants), &constants);
 			// 出力頂点
 			ctx.TransitionResource(mesh->useVertexBuffer, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 			ctx.SetDynamicDescriptor(rootIndex["gOutputVertices"], 0, mesh->useVertexBuffer.GetUAV());

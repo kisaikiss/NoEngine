@@ -40,7 +40,7 @@ class RandomGenerator
 static const int kMaxParticles = 1024;
 
 [numthreads(1, 1, 1)]
-void main( uint3 DTid : SV_DispatchThreadID )
+void main(uint3 DTid : SV_DispatchThreadID)
 {
     if (gEmitter.emit != 0)
     {
@@ -58,7 +58,8 @@ void main( uint3 DTid : SV_DispatchThreadID )
                 gParticles[particleIndex].scale = generator.Generate3d();
                 gParticles[particleIndex].translate = generator.Generate3d();
                 gParticles[particleIndex].color = float4(generator.Generate3d(), 1.0f);
-                
+                gParticles[particleIndex].lifeTime = generator.Generate1d();
+                gParticles[particleIndex].velocity = 0.1f - generator.Generate3d() / 5.0f;
             }
 
         }
