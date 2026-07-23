@@ -43,6 +43,8 @@ private:
 class RenderGraphRegistry {
 public:
 
+    ColorBuffer* CreateColorBuffer(const std::string& name, uint32_t width, uint32_t height, uint32_t depthOrArraySize, DXGI_FORMAT format);
+    ColorBuffer* CreateColorBuffer(const std::string& name, float width, float height, uint32_t depthOrArraySize, DXGI_FORMAT format);
     ColorBuffer* CreateColorBuffer(const std::string& name, uint32_t width, uint32_t height, DXGI_FORMAT format);
     ColorBuffer* CreateColorBuffer(const std::string& name, float width, float height, DXGI_FORMAT format);
     DepthBuffer* CreateDepthBuffer(const std::string& name, uint32_t width, uint32_t height, DXGI_FORMAT format = DXGI_FORMAT_D24_UNORM_S8_UINT);

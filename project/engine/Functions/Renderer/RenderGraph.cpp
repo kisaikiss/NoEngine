@@ -3,10 +3,15 @@
 #include "engine/Utilities/Conversion/ConvertString.h"
 
 namespace NoEngine {
-
-ColorBuffer* NoEngine::RenderGraphRegistry::CreateColorBuffer(const std::string& name, uint32_t width, uint32_t height, DXGI_FORMAT format) {
-    colorBuffers_[name].Create(ConvertString(name), width, height, 1, format);
+ColorBuffer* RenderGraphRegistry::CreateColorBuffer(const std::string& name, uint32_t width, uint32_t height, uint32_t depthOrArraySize, DXGI_FORMAT format) {
+    colorBuffers_[name].Create(ConvertString(name), width, height, depthOrArraySize, 1, format);
     return &colorBuffers_[name];
+}
+ColorBuffer* RenderGraphRegistry::CreateColorBuffer(const std::string& name, float width, float height, uint32_t depthOrArraySize, DXGI_FORMAT format) {
+    return CreateColorBuffer(name, static_cast<uint32_t>(width), static_cast<uint32_t>(height), depthOrArraySize, format);
+}
+ColorBuffer* RenderGraphRegistry::CreateColorBuffer(const std::string& name, uint32_t width, uint32_t height, DXGI_FORMAT format) {
+    return CreateColorBuffer(name, width, height, 1, format);
 }
 ColorBuffer* RenderGraphRegistry::CreateColorBuffer(const std::string& name, float width, float height, DXGI_FORMAT format) {
     return CreateColorBuffer(name, static_cast<uint32_t>(width), static_cast<uint32_t>(height), format);

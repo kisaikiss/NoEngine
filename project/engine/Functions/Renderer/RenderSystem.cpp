@@ -450,29 +450,17 @@ void InitRaytracingGlobalRootSignature() {
 	std::unique_ptr<RootSignature> rtGlobalRSptr = std::make_unique<RootSignature>();
 	auto& rtGlobalRS = *rtGlobalRSptr.get();
 
-	rtGlobalRS.Reset(7, 0);
+	rtGlobalRS.Reset(9, 0); // 7 → 9
 
-	// TLAS
-	rtGlobalRS[0].InitAsBufferSRV(0);
-
-	// SRV テーブル（worldPos）
-	rtGlobalRS[1].InitAsDescriptorRange(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 1);
-
-	// Lights
-	rtGlobalRS[2].InitAsDescriptorRange(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 2, 1);
-
-	// UAV
-	rtGlobalRS[3].InitAsDescriptorRange(D3D12_DESCRIPTOR_RANGE_TYPE_UAV, 0, 1);
-
-	// CBV b0
-	rtGlobalRS[4].InitAsConstantBuffer(0);
-
-	// CBV b1
-	rtGlobalRS[5].InitAsConstantBuffer(1);
-
-	// Normal
-	rtGlobalRS[6].InitAsDescriptorRange(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 3, 1);
-
+	rtGlobalRS[0].InitAsBufferSRV(0);                                              // TLAS
+	rtGlobalRS[1].InitAsDescriptorRange(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 1);     // worldPos
+	rtGlobalRS[2].InitAsDescriptorRange(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 2, 1);     // Directional Lights
+	rtGlobalRS[3].InitAsDescriptorRange(D3D12_DESCRIPTOR_RANGE_TYPE_UAV, 0, 1);     // Shadow Mask (Array)
+	rtGlobalRS[4].InitAsConstantBuffer(0);                                         // CameraCB
+	rtGlobalRS[5].InitAsConstantBuffer(1);                                         // LightNums
+	rtGlobalRS[6].InitAsDescriptorRange(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 3, 1);     // Normal
+	rtGlobalRS[7].InitAsDescriptorRange(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 4, 1);     // Point Lights
+	rtGlobalRS[8].InitAsDescriptorRange(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 5, 1);     // Spot Lights
 
 	rtGlobalRS.Finalize(L"RT Global RootSignature");
 	sRootSignatures.push_back(std::move(rtGlobalRSptr));

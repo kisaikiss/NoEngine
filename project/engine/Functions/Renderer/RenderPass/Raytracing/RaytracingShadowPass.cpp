@@ -29,26 +29,30 @@ void RaytracingShadowPass::Dispatch(GraphicsContext& gfx, const RenderGraphRegis
 	auto& stateObject = Render::GetShadowRtStateObject();
 	auto* renderContext = GetRenderContext();
 
+	auto* lightNums = renderContext->GetLightNums();
 	if (!renderContext->GetTLAS().Get() || !camera_) return;
-
-	if (renderContext->GetLightNums()->directionalLightNum == 0) return;
+	if (lightNums->directionalLightNum == 0 &&
+		lightNums->pointLightNum == 0 &&
+		lightNums->spotLightNum == 0) return;
 
 	gfx.SetRaytracingRootSignature(Render::GetRootSignature(Render::GetRootSignatureID(L"RT Global RootSignature")));
-	
-	// tlas
+
 	gfx.SetComputeSRV(0, renderContext->GetTLAS()->GetGPUVirtualAddress());
-	
-	// worldPos
 	gfx.SetRaytracingDynamicDescriptor(1, 0, resourceRegistry.GetColorBuffer("WorldPosition").GetSRV());
-
-	// normal
 	gfx.SetRaytracingDynamicDescriptor(6, 0, resourceRegistry.GetColorBuffer("Normal").GetSRV());
-	
-	// lights
-	gfx.SetRaytracingDynamicDescriptor(2, 0, renderContext->GetDirectionalLightSRV());
 
-	// shadow Mask UAV
+	if (lightNums->directionalLightNum) {
+		gfx.SetRaytracingDynamicDescriptor(2, 0, renderContext->GetDirectionalLightSRV());
+	}
+	if (lightNums->pointLightNum) {
+		gfx.SetRaytracingDynamicDescriptor(7, 0, renderContext->GetPointLightSRV());
+	}
+	if (lightNums->spotLightNum) {
+		gfx.SetRaytracingDynamicDescriptor(8, 0, renderContext->GetSpotLightSRV());
+	}
+
 	gfx.SetRaytracingDynamicDescriptor(3, 0, resourceRegistry.GetColorBuffer("ShadowMask").GetUAV());
+
 
 	// camera
 	struct CameraCB {

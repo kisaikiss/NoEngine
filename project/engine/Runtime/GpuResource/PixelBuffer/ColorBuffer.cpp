@@ -13,9 +13,13 @@ void ColorBuffer::CreateFromSwapChain(const std::wstring& name, ID3D12Resource* 
 }
 
 void ColorBuffer::Create(const std::wstring& name, uint32_t width, uint32_t height, uint32_t numMips, DXGI_FORMAT format) {
+    Create(name, width, height, 1, numMips, format);
+}
+
+void ColorBuffer::Create(const std::wstring& name, uint32_t width, uint32_t height, uint32_t depthOrArraySize, uint32_t numMips, DXGI_FORMAT format) {
     numMips = (numMips == 0 ? ComputeNumMips(width, height) : numMips);
     D3D12_RESOURCE_FLAGS Flags = CombineResourceFlags();
-    D3D12_RESOURCE_DESC ResourceDesc = DescribeTex2D(width, height, 1, numMips, format, Flags);
+    D3D12_RESOURCE_DESC ResourceDesc = DescribeTex2D(width, height, depthOrArraySize, numMips, format, Flags);
 
     ResourceDesc.SampleDesc.Count = fragmentCount_;
     ResourceDesc.SampleDesc.Quality = 0;
@@ -28,7 +32,7 @@ void ColorBuffer::Create(const std::wstring& name, uint32_t width, uint32_t heig
     ClearValue.Color[3] = clearColor_.a;
 
     CreateTextureResource(GraphicsCore::sGraphicsDevice->GetDevice(), name, ResourceDesc, ClearValue);
-    CreateDerivedViews(GraphicsCore::sGraphicsDevice->GetDevice(), format, 1, numMips);
+    CreateDerivedViews(GraphicsCore::sGraphicsDevice->GetDevice(), format, depthOrArraySize, numMips);
 }
 
 void ColorBuffer::CreateImGuiSRV() {
@@ -46,10 +50,6 @@ void ColorBuffer::CreateImGuiSRV() {
     device->GetDevice()->CreateShaderResourceView(resource_.Get(), &srvDesc, imguiSRV_);
 #endif
 }
-//
-//D3D12_GPU_DESCRIPTOR_HANDLE ColorBuffer::GetImGuiSRV(GraphicsContext& gfx) const {
-//    return gfx.GetViewDynamicDescriptorHeap().UploadDirect(imguiSRV_);
-//}
 
 void ColorBuffer::CreateDerivedViews(ID3D12Device* Device, DXGI_FORMAT Format, uint32_t ArraySize, uint32_t NumMips) {
     LogCritical("We don't support auto-mips on mTexture arrays");

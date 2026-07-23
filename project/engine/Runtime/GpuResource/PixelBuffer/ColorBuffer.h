@@ -34,6 +34,18 @@ public:
     void Create(const std::wstring& name, uint32_t width, uint32_t height, uint32_t numMips,
         DXGI_FORMAT format);
 
+    /// <summary>
+   /// 指定した名前、サイズ、ミップ数、フォーマット、および省略可能な GPU 仮想アドレスでリソースを作成します。
+   /// </summary>
+   /// <param name="name">作成するリソースの名前（const std::wstring&）。</param>
+   /// <param name="width">リソースの幅（ピクセル単位）。</param>
+   /// <param name="height">リソースの高さ（ピクセル単位）。</param>
+   /// <param name="depthOrArraySize">Depthの奥行き</param>
+   /// <param name="numMips">生成するミップマップレベルの数。</param>
+   /// <param name="format">リソースのピクセル/データフォーマット（DXGI_FORMAT）。</param>
+    void Create(const std::wstring& name, uint32_t width, uint32_t height, uint32_t depthOrArraySize, uint32_t numMips,
+        DXGI_FORMAT format);
+
     void CreateImGuiSRV();
     const D3D12_CPU_DESCRIPTOR_HANDLE& GetImGuiSRV(void) const { return imguiSRV_; }
 
