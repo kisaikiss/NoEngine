@@ -1,12 +1,24 @@
 #include "TLASBuildPass.h"
 
 #include "engine/Functions/ECS/Component/Asset/MeshComponent.h"
+#include "engine/Functions/ECS/Component/Asset/LightComponent.h"
 #include "engine/Runtime/GraphicsCore.h"
 
 #include  "engine/Assets/Model/ModelSaver.h"
 
 namespace NoEngine {
 namespace Render {
+
+namespace {
+// bit0: 「通常のシャドウキャスターとして扱われるか」を表すビット
+constexpr UINT8 kInstanceMaskShadowCasterBit = 0x01;
+
+// 通常のメッシュ：全ビットON（シャドウレイにも他の用途にも常にヒットする）
+constexpr UINT8 kInstanceMaskDefault = 0xFF;
+
+// 発光体メッシュ（自身がPoint/SpotLightを所有）：シャドウキャスタービットだけOFF
+constexpr UINT8 kInstanceMaskLightEmitter = kInstanceMaskDefault & ~kInstanceMaskShadowCasterBit; // 0xFE
+}
 
 void TLASBuildPass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& resourceRegistry, ECS::Registry& registry) {
 	static_cast<void>(resourceRegistry);
@@ -34,8 +46,13 @@ void TLASBuildPass::BuildRaytracingInstances(ECS::Registry& registry) {
 		auto& desc = inst.desc;
 		memset(&desc, 0, sizeof(desc));
 
-		desc.InstanceMask = 0xFF;
-		desc.InstanceID = static_cast<UINT>(entity); 
+		// このエンティティが自身にPoint/SpotLightを持っているか(=発光体メッシュか)を判定
+		const bool isLightEmitter =
+			registry.Has<Component::PointLightComponent>(entity) ||
+			registry.Has<Component::SpotLightComponent>(entity);
+
+		desc.InstanceMask = isLightEmitter ? kInstanceMaskLightEmitter : kInstanceMaskDefault;
+		desc.InstanceID = static_cast<UINT>(entity);
 		desc.InstanceContributionToHitGroupIndex = 0;
 
 		auto* animator = registry.GetComponent<Component::AnimatorComponent>(entity);

@@ -62,6 +62,8 @@ StructuredBuffer<SpotLight> gSpotLights : register(t5);
 
 static const float gShadowMaxDistance = asfloat(0x7F7FFFFF);
 
+static const uint kInstanceMaskShadowCasterBit = 0x01;
+
 float TraceShadowRay(float3 origin, float3 direction, float tMax)
 {
     RayDesc rayDesc;
@@ -74,7 +76,7 @@ float TraceShadowRay(float3 origin, float3 direction, float tMax)
     payload.occluded = true;
 
     uint rayFlags = RAY_FLAG_ACCEPT_FIRST_HIT_AND_END_SEARCH | RAY_FLAG_SKIP_CLOSEST_HIT_SHADER;
-    TraceRay(gSceneTLAS, rayFlags, ~0, 0, 1, 0, rayDesc, payload);
+    TraceRay(gSceneTLAS, rayFlags, kInstanceMaskShadowCasterBit, 0, 1, 0, rayDesc, payload);
 
     return payload.occluded ? 0.3f : 1.0f;
 }
