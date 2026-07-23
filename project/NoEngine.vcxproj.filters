@@ -232,7 +232,6 @@
     <ClCompile Include="application\ClockworksDisease\System\UI\LevelUISystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\Component\UI\UserInterfaceComponent.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\UI\StaminaUISystem.cpp" />
-    <ClCompile Include="engine\Functions\Renderer\RenderPass\PrePasses\TransparentIDPass.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Asset\TextComponent.cpp" />
     <ClCompile Include="engine\Assets\Font\FontManager.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\UI\LevelUpTextSystem.cpp" />
@@ -481,7 +480,6 @@
     <ClInclude Include="application\ClockworksDisease\System\UI\StaminaUISystem.h" />
     <ClInclude Include="externals\magic_enum\magic_enum.hpp" />
     <ClInclude Include="engine\Functions\Command\EditCommand\FunctionCommand.h" />
-    <ClInclude Include="engine\Functions\Renderer\RenderPass\PrePasses\TransparentIDPass.h" />
     <ClInclude Include="engine\Functions\ECS\Component\Asset\TextComponent.h" />
     <ClInclude Include="engine\Assets\Font\Font.h" />
     <ClInclude Include="engine\Assets\Font\FontManager.h" />

@@ -8,7 +8,6 @@
 #include "PrePasses/TLASBuildPass.h"
 #include "PrePasses/BLASUpdatePass.h"
 #include "PrePasses/PreRenderPass.h"
-#include "PrePasses/TransparentIDPass.h"
 #include "Raytracing/RaytracingShadowPass.h"
 #include "Rasterization/SkyBoxPass.h"
 #include "PostEffect/GrayscalePass.h"
@@ -188,10 +187,6 @@ void CommonSetupRenderPass(RenderPassScheduler& renderPassScheduler) {
 	renderPassScheduler.AddPass(std::make_unique<TLASBuildPass>());
 	renderPassScheduler.AddPass(std::make_unique<LightPass>());
 
-	auto transparentIDPass = std::make_unique<TransparentIDPass>();
-	transparentIDPass->AddOutput("ObjectID");
-	renderPassScheduler.AddPass(std::move(transparentIDPass));
-
 	auto preRenderPass = std::make_unique<PreRenderPass>();
 	preRenderPass->AddOutput("WorldPosition");
 	preRenderPass->AddOutput("Normal");
@@ -254,10 +249,6 @@ void CommonSetupDebugRenderPass(RenderPassScheduler& renderPassScheduler) {
 	Math::Vector2 windowSize = GraphicsCore::GetWindowSize();
 	auto& resourceRegistry = renderPassScheduler.GetResourceRegistry();
 	InitSceneImGuiWindow(*resourceRegistry.CreateColorBuffer("DebugColor", windowSize.x, windowSize.y, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB));
-
-	auto transparentIDPass = std::make_unique<TransparentIDPass>();
-	transparentIDPass->AddOutput("ObjectID");
-	renderPassScheduler.AddPass(std::move(transparentIDPass));
 
 	auto preRenderPass = std::make_unique<PreRenderPass>();
 	preRenderPass->AddOutput("WorldPosition");

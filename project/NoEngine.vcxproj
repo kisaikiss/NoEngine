@@ -303,7 +303,6 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\VignettingPass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PrePasses\BLASUpdatePass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PrePasses\LightPass.cpp" />
-    <ClCompile Include="engine\Functions\Renderer\RenderPass\PrePasses\TransparentIDPass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\Rasterization\MeshPass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\Rasterization\CPUParticlePass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PrePasses\PreRenderPass.cpp" />
@@ -570,7 +569,6 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\VignettingPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PrePasses\BLASUpdatePass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PrePasses\LightPass.h" />
-    <ClInclude Include="engine\Functions\Renderer\RenderPass\PrePasses\TransparentIDPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\Rasterization\MeshPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\Rasterization\CPUParticlePass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PrePasses\PreRenderPass.h" />

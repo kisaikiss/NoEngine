@@ -29,11 +29,6 @@ void PreRenderPass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& res
 		if (!mesh->isVisible) continue;
 		auto* material = registry.GetComponent<MaterialComponent>(entity);
 
-		// 半透明オブジェクトは深度プリパスの対象から除外する。
-		// ここで深度を確定させると、背後の不透明オブジェクトが
-		// MeshPassの不透明描画時に深度テストで弾かれてしまう。
-		//if (material->blendMode != BlendMode::kNormal || material->color.a < 1.0f) continue;
-
 		auto* transform = registry.GetComponent<TransformComponent>(entity);
 		auto* anime = registry.GetComponent<AnimatorComponent>(entity);
 		Transform* animeLocal = nullptr;
