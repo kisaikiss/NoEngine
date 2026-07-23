@@ -176,13 +176,12 @@ ECS::Entity PickObject(CommandContext& ctx, ColorBuffer& idColorBuffer, Readback
 
 void InitGameImGuiWindow(ColorBuffer& mainColor) {
 #ifdef USE_IMGUI
-	mainColor.CreateImGuiSRV();
 	{
 		NoEngine::DescriptorHandle slot = Render::gTextureHeap.Alloc();
 		GraphicsCore::sGraphicsDevice->GetDevice()->CopyDescriptorsSimple(
 			1,
 			static_cast<D3D12_CPU_DESCRIPTOR_HANDLE>(slot),
-			mainColor.GetImGuiSRV(),
+			mainColor.GetSRV(),
 			D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 		sGameTexture = static_cast<ImTextureID>(slot.GetGpuPtr());
 	}
@@ -193,13 +192,12 @@ void InitGameImGuiWindow(ColorBuffer& mainColor) {
 
 void InitSceneImGuiWindow(ColorBuffer& debugColor) {
 #ifdef USE_IMGUI
-	debugColor.CreateImGuiSRV();
 	{
 		NoEngine::DescriptorHandle slot = Render::gTextureHeap.Alloc();
 		GraphicsCore::sGraphicsDevice->GetDevice()->CopyDescriptorsSimple(
 			1,
 			static_cast<D3D12_CPU_DESCRIPTOR_HANDLE>(slot),
-			debugColor.GetImGuiSRV(),
+			debugColor.GetSRV(),
 			D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 		sSceneTexture = static_cast<ImTextureID>(slot.GetGpuPtr());
 	}

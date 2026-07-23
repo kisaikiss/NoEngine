@@ -46,9 +46,6 @@ public:
     void Create(const std::wstring& name, uint32_t width, uint32_t height, uint32_t depthOrArraySize, uint32_t numMips,
         DXGI_FORMAT format);
 
-    void CreateImGuiSRV();
-    const D3D12_CPU_DESCRIPTOR_HANDLE& GetImGuiSRV(void) const { return imguiSRV_; }
-
     Math::Color& GetClearColor() { return clearColor_; }
 
     const D3D12_CPU_DESCRIPTOR_HANDLE& GetSRV(void) const { return srvHandle_; }
@@ -62,9 +59,6 @@ private:
     uint32_t numMipMaps_; // number of texture sublevels
     uint32_t fragmentCount_;
     uint32_t sampleCount_;
-
-    // ImGui用のCPU_DESCRIPTTOR_HANDLE
-    D3D12_CPU_DESCRIPTOR_HANDLE imguiSRV_;
 
     D3D12_RESOURCE_FLAGS CombineResourceFlags(void) const {
         D3D12_RESOURCE_FLAGS Flags = D3D12_RESOURCE_FLAG_NONE;
