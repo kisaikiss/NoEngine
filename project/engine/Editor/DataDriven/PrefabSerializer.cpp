@@ -12,10 +12,6 @@ using namespace ECS;
 
 namespace Editor {
 namespace {
-struct PrefabInfo {
-	std::string name;
-	std::string path;
-};
 std::vector<PrefabInfo> sPrefabs;
 
 const std::string sFilePath = "resources/game/Prefabs";
@@ -61,6 +57,10 @@ void LoadPrefabsFromDirectory() {
 		
 		sPrefabs.push_back(std::move(info));
 	}
+}
+
+const std::vector<PrefabInfo>& GetPrefabs() {
+	return sPrefabs;
 }
 
 void DrawPrefabWindow(ECS::Registry& registry) {

@@ -8,8 +8,8 @@
 #include "engine/Functions/Renderer/RenderPass/RenderPassScheduler.h"
 #include "engine/Functions/Input/input.h"
 #include "engine/Editor/EditorCommandOperator.h"
-#include "engine/Editor/DataDriven/PrefabSerializer.h"
 #include "engine/Assets/Audio/Audio.h"
+#include "engine/Assets/AssetBrowserWindow.h"
 #include "engine/Assets/AssetManager.h"
 
 #ifdef USE_IMGUI
@@ -68,8 +68,7 @@ int RunApplication(std::unique_ptr<IGameApp> game) {
 
 #ifdef USE_IMGUI
 		sImGuiManager.BeginFrame();
-		AssetManager::DrawImGui();
-		Editor::DrawPrefabWindow(game->GetRegistry());
+		Editor::DrawAssetBrowserWindow(game->GetRegistry());
 #endif // USE_IMGUI
 
 		float deltaTime = CalculateDeltaTime();
@@ -128,12 +127,11 @@ void EngineInitialize() {
 	ParticleManager::Initialize(ctx);
 	ctx.Finish();
 
-	AssetManager::CreateMetaFileForAllFiles();
 	AssetManager::CreateAddressableList();
+	
 #ifdef USE_IMGUI
+	Editor::RefreshAssetBrowser();
 	sImGuiManager.Initialize();
-	AssetManager::CreateEditorDataList();
-	Editor::LoadPrefabsFromDirectory();
 #endif // USE_IMGUI
 }
 

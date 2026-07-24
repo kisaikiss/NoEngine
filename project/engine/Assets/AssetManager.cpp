@@ -123,6 +123,10 @@ void AssetManager::CreateEditorDataList() {
 	}
 }
 
+const std::vector<AssetManager::EditorAssetData>& AssetManager::GetEditorAssets() {
+	return sEditorAssets;
+}
+
 void AssetManager::DrawImGui() {
 #ifdef USE_IMGUI
 	ImGui::Begin("Asset Manager");
@@ -190,6 +194,18 @@ nlohmann::json AssetManager::CreateMetaFileForFile(const std::filesystem::path& 
 	j["SourceFile"] = srcFile.filename().string();
 	j["AddressableName"] = AddressableName(srcFile);
 	return j;
+}
+
+Editor::EBrowserItemType AssetManager::GetAssetTypeFromExtension(const std::filesystem::path& path) {
+	static const std::unordered_map<std::string, Editor::EBrowserItemType> table = {
+		{".obj",  Editor::EBrowserItemType::Model},
+		{".gltf", Editor::EBrowserItemType::Model},
+		{".png",  Editor::EBrowserItemType::Texture},
+		{".mp3",  Editor::EBrowserItemType::Audio},
+		{".wav",  Editor::EBrowserItemType::Audio},
+	};
+	auto it = table.find(path.extension().string());
+	return it != table.end() ? it->second : Editor::EBrowserItemType::Unknown;
 }
 
 std::string AssetManager::AddressableName(const std::filesystem::path& srcFile) {

@@ -6,6 +6,10 @@
 namespace NoEngine {
 namespace Editor {
 
+struct PrefabInfo {
+	std::string name;
+	std::string path;
+};
 // Entityとコンポーネントのプリセット保存と読み込みを行う関数群
 
 /// <summary>
@@ -27,6 +31,8 @@ ECS::Entity InstantiatePreset(ECS::Registry& registry, const std::string& preset
 /// ディレクトリからすべてのPrefabを読み込みます。
 /// </summary>
 void LoadPrefabsFromDirectory();
+
+const std::vector<PrefabInfo>& GetPrefabs();
 
 /// <summary>
 /// ImGuiでPrefabWindowを描画します。Releaseビルドでは何もしません

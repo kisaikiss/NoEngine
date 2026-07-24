@@ -220,6 +220,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="application\ClockworksDisease\System\UI\StaminaUISystem.cpp" />
     <ClCompile Include="application\TestApp\Component\TestComponent.cpp" />
     <ClCompile Include="application\TestApp\TestApp.cpp" />
+    <ClCompile Include="engine\Assets\AssetBrowserWindow.cpp" />
     <ClCompile Include="engine\Assets\AssetManager.cpp" />
     <ClCompile Include="engine\Assets\Font\FontManager.cpp" />
     <ClCompile Include="engine\Assets\Model\ModelSaver.cpp" />
@@ -466,6 +467,8 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="application\ClockworksDisease\System\UI\StaminaUISystem.h" />
     <ClInclude Include="application\TestApp\Component\TestComponent.h" />
     <ClInclude Include="application\TestApp\TestApp.h" />
+    <ClInclude Include="engine\Assets\AssetBrowserTypes.h" />
+    <ClInclude Include="engine\Assets\AssetBrowserWindow.h" />
     <ClInclude Include="engine\Assets\AssetHandles.h" />
     <ClInclude Include="engine\Assets\AssetManager.h" />
     <ClInclude Include="engine\Assets\Font\Font.h" />

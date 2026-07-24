@@ -1,5 +1,6 @@
 #pragma once
 #include "externals/nlohmann/json.hpp"
+#include "AssetBrowserTypes.h"
 
 namespace NoEngine {
 class AssetManager {
@@ -30,6 +31,12 @@ public:
 	// 毎フレーム呼ぶImGui描画関数
 	static void DrawImGui();
 
+	static Editor::EBrowserItemType GetAssetTypeFromExtension(const std::filesystem::path& path);
+
+	static void SaveMetaFile(AssetManager::EditorAssetData& data);
+
+	static const std::vector<EditorAssetData>& GetEditorAssets();
+
 	// AddressableNameを指定してファイルパスの作成
 	static std::string GetFilePathFromAddressableName(const std::string& addressableName);
 private:
@@ -47,11 +54,9 @@ private:
 	/// <returns></returns>
 	static nlohmann::json CreateMetaFileForFile(const std::filesystem::path& srcFile);
 
-
 	static std::string AddressableName(const std::filesystem::path& srcFile);
 
 
-	static void SaveMetaFile(AssetManager::EditorAssetData& data);
 };
 }
 
