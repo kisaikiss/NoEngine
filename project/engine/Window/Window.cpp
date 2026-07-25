@@ -49,7 +49,6 @@ void Window::Create(WNDPROC windowProc, std::wstring title, uint32_t width, uint
 	core_.wcex.lpszMenuName = nullptr;
 	core_.wcex.lpszClassName = title.c_str();
 	core_.windowStyle = 0;
-	//core_.wcex.hIconSm = LoadIcon(nullptr, IDI_APPLICATION);
 
 	 // アイコンのカスタマイズが必要ならここで読み込む
 	if (!iconPath.empty()) {
@@ -92,6 +91,8 @@ void Window::Create(WNDPROC windowProc, std::wstring title, uint32_t width, uint
 	if (core_.hwnd == nullptr) {
 		assert(false);
 	}
+
+	core_.windowStyle = WS_OVERLAPPEDWINDOW;
 
 	RegisterWindowEvent(make_unique<CloseEvent>());
 	RegisterWindowEvent(make_unique<EnterSizeMoveEvent>());
@@ -223,12 +224,16 @@ void Window::SetWindowMode(WindowMode windowMode) {
 		ShowWindow(core_.hwnd, SW_NORMAL);
 		AdjustWindowSize();
 
-		/*SetWindowPos(core_.hwnd, HWND_TOP,
-			size_.clientRect.left,
-			size_.clientRect.top,
-			size_.clientRect.right - size_.clientRect.left,
-			size_.clientRect.bottom - size_.clientRect.top,
-			SWP_NOOWNERZORDER | SWP_FRAMECHANGED);*/
+		// クライアント領域のサイズから実際のウィンドウ外形サイズを計算し直す
+		size_.windowRect = size_.clientRect;
+		AdjustWindowRect(&size_.windowRect, core_.windowStyle, false);
+
+		SetWindowPos(core_.hwnd, HWND_TOP,
+			size_.windowRect.left,
+			size_.windowRect.top,
+			size_.windowRect.right - size_.windowRect.left,
+			size_.windowRect.bottom - size_.windowRect.top,
+			SWP_NOOWNERZORDER | SWP_FRAMECHANGED);
 		break;
 
 	case WindowMode::kFullScreen:
