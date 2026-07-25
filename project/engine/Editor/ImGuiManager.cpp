@@ -1,6 +1,6 @@
 #include "ImGuiManager.h"
 #include "engine/Runtime/GraphicsCore.h"
-#include "engine/Functions/Renderer/RenderSystem.h"
+#include "engine/Functions/Renderer/RaytracingManager.h"
 
 #include "externals/imgui/imgui.h"
 #include "externals/imgui/imgui_impl_dx12.h"

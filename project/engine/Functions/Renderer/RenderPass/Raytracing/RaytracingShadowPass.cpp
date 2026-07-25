@@ -1,6 +1,6 @@
 #include "RaytracingShadowPass.h"
 
-#include "../../RenderSystem.h"
+#include "../../RaytracingManager.h"
 #include "engine/Runtime/GraphicsCore.h"
 #include "engine/Functions/ECS/Component/Asset/LightComponent.h"
 

@@ -55,7 +55,7 @@
     <ClCompile Include="engine\Functions\Renderer\RenderPass\Rasterization\MeshPass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\Rasterization\PrimitivePass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\RenderPassScheduler.cpp" />
-    <ClCompile Include="engine\Functions\Renderer\RenderSystem.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\RaytracingManager.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\Rasterization\SpritePass.cpp" />
     <ClCompile Include="engine\Functions\Scene\SceneManager.cpp" />
     <ClCompile Include="engine\Math\Color\Color.cpp" />
@@ -278,7 +278,7 @@
     <ClInclude Include="engine\Functions\Renderer\RenderPass\RenderPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\RenderPassScheduler.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\Rasterization\SpritePass.h" />
-    <ClInclude Include="engine\Functions\Renderer\RenderSystem.h" />
+    <ClInclude Include="engine\Functions\Renderer\RaytracingManager.h" />
     <ClInclude Include="engine\Functions\Scene\IScene.h" />
     <ClInclude Include="engine\Functions\Scene\SceneManager.h" />
     <ClInclude Include="engine\Math\Easing.h" />

@@ -6,7 +6,7 @@
 #include "engine/Runtime/GraphicsCore.h"
 #include "engine/Runtime/Command/GraphicsContext.h"
 #include "engine/Functions/Renderer/RenderPass/RenderPassScheduler.h"
-#include "engine/Functions/Renderer/RenderSystem.h"
+#include "engine/Functions/Renderer/RaytracingManager.h"
 #include "engine/Functions/Input/input.h"
 #include "engine/Editor/EditorCommandOperator.h"
 #include "engine/Assets/Audio/Audio.h"

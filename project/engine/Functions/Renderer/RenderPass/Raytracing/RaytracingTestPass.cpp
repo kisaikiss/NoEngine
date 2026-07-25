@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "RaytracingTestPass.h"
 
-#include "../../RenderSystem.h"
+#include "../../RaytracingManager.h"
 #include "engine/Runtime/GraphicsCore.h"
 #include "../../../ECS/Component/Common/TransformComponent.h"
 

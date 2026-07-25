@@ -4,7 +4,7 @@
 #include "engine/Runtime/GraphicsCore.h"
 #include "engine/Runtime/Command/CommandContext.h"
 #include "engine/Functions/Renderer/Primitive.h"
-#include "engine/Functions/Renderer/RenderSystem.h"
+#include "engine/Functions/Renderer/RaytracingManager.h"
 #include "engine/Functions/Command/EditCommand/InstantiateEntityCommand.h"
 #include "DataDriven/PrefabSerializer.h"
 #include "EditorCommandOperator.h"
@@ -200,7 +200,7 @@ void RefreshGameImGuiTexture(ColorBuffer& mainColor) {
 		mainColor.GetSRV(),
 		D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
-	// アスペクト比計算にも実サイズを反映する（要 ColorBuffer に GetWidth/GetHeight）
+	// アスペクト比計算にも実サイズを反映する
 	sGameTextureSize = Math::Vector2(
 		static_cast<float>(mainColor.GetWidth()),
 		static_cast<float>(mainColor.GetHeight()));
