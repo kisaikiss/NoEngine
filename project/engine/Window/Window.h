@@ -76,6 +76,10 @@ public:
 
 	void CalculateAspectRatio();
 
+	void OnResizeSignal(UINT width, UINT height);
+	// メインループから呼ぶ用（あれば true を返してサイズを渡す）
+	bool ConsumeResizeRequest(UINT& outWidth, UINT& outHeight);
+
 	/// <summary>
 	/// 死んでるかどうか
 	/// </summary>
@@ -101,11 +105,12 @@ private:
 
 	WindowCore core_;
 	bool isDead_;
-	bool isResize_;
+
+	UINT pendingWidth_ = 0;
+	UINT pendingHeight_ = 0;
+	bool hasResizeRequest_ = false;
 	 
 	void AdjustWindowSize();
-	void ResizeSignal();
-	void Resize();
 };
 }
 

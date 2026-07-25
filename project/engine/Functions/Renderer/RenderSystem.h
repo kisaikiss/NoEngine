@@ -20,6 +20,8 @@ D3D12_DISPATCH_RAYS_DESC& GetShadowDispatchRaysDesc();
 Microsoft::WRL::ComPtr<ID3D12StateObject>& GetRtStateObject();
 D3D12_DISPATCH_RAYS_DESC& GetDispatchRaysDesc();
 
+void ResizeRaytracingDesc(UINT width, UINT height);
+
 void CreateShadowShaderTable();
 
 void InitRaytracingGlobalRootSignature();

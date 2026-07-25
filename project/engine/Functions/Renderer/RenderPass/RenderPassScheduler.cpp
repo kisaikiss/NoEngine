@@ -167,6 +167,20 @@ void RenderPassScheduler::AddRenderPass(std::unique_ptr<RenderPass>&& pass) {
 	passes_.push_back(std::make_unique<SpritePass>());
 }
 
+void RenderPassScheduler::Resize(uint32_t width, uint32_t height) {
+	if (width == 0 || height == 0) return;
+	// パスのトポロジー（何を読み書きするか）はサイズに依存しないため
+	// Compile()のやり直しは不要。バッファの中身だけ作り直す。
+	resourceRegistry_.ResizeAll(width, height);
+
+#ifdef USE_IMGUI
+	// ColorBufferの中身が新しいリソースに差し替わったので、
+	// ImGuiが参照しているディスクリプタも最新のリソースに焼き直す
+	RefreshGameImGuiTexture(*resourceRegistry_.GetColorBufferPointer("MainColor"));
+	RefreshSceneImGuiTexture(*resourceRegistry_.GetColorBufferPointer("DebugColor"));
+#endif
+}
+
 void CommonSetupRenderPass(RenderPassScheduler& renderPassScheduler) {
 	Math::Vector2 windowSize = GraphicsCore::GetWindowSize();
 	auto& resourceRegistry = renderPassScheduler.GetResourceRegistry();

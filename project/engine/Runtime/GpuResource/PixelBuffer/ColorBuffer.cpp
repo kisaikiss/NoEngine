@@ -36,8 +36,10 @@ void ColorBuffer::Create(const std::wstring& name, uint32_t width, uint32_t heig
 }
 
 void ColorBuffer::CreateDerivedViews(ID3D12Device* Device, DXGI_FORMAT Format, uint32_t ArraySize, uint32_t NumMips) {
-    LogCritical("We don't support auto-mips on mTexture arrays");
-    assert(ArraySize == 1 || NumMips == 1);
+    if (ArraySize != 1 && NumMips != 1) {
+        LogCritical("We don't support auto-mips on mTexture arrays");
+        assert(false);
+    }
 
     numMipMaps_ = NumMips - 1;
 

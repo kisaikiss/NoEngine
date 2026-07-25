@@ -26,6 +26,7 @@ public:
 	static WindowManager sWindowManager;
 
 	static Math::Vector2 GetWindowSize();
+	static void Resize(UINT width, UINT height);
 
 	// ディスクリプタアロケータ(ディスクリプタのメモリ管理)配列。数はD3D12_DESCRIPTOR_HEAP_TYPE
 	static DescriptorAllocator sDescriptorAllocator[];

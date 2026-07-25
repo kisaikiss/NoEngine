@@ -370,6 +370,11 @@ D3D12_DISPATCH_RAYS_DESC& GetDispatchRaysDesc() {
 	return sTestDispatchRaysDesc;
 }
 
+void ResizeRaytracingDesc(UINT width, UINT height) {
+	sShadowDispatchRaysDesc.Width = width;
+	sShadowDispatchRaysDesc.Height = height;
+}
+
 void CreateShadowShaderTable() {
 	using namespace Microsoft::WRL;
 	// 1. シェーダー識別子を取る

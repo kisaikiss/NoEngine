@@ -3,6 +3,7 @@
 #include "../../Component/Common/CameraComponent.h"
 #include "../../Component/Common/Transform2DComponent.h"
 #include "engine/Math/Types/Calculations/Matrix4x4Calculations.h"
+#include "engine/Runtime/GraphicsCore.h"
 
 namespace NoEngine {
 namespace ECS {
@@ -15,6 +16,10 @@ void Camera2DSystem::Update(Registry& registry, float deltaTime) {
 	for (auto entity : cameraView) {
 		auto* camera = registry.GetComponent<Camera2DComponent>(entity);
 		auto* transform = registry.GetComponent<Transform2DComponent>(entity);
+
+		Vector2 windowSize =  GraphicsCore::GetWindowSize();
+		camera->width = windowSize.x;
+		camera->height = windowSize.y;
 
 		// 画面中央
 		Math::Vector2 screenCenter = { camera->width / 2.f, camera->height / 2.f };

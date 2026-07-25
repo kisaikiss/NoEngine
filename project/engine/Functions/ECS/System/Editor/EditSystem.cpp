@@ -1,5 +1,5 @@
 #include "EditSystem.h"
-#include "engine/Editor/EditUtils.h"
+#include "engine/Editor/ComponentUI.h"
 #include "engine/Editor/DataDriven/SceneSerializer.h"
 #include "engine/Editor/DataDriven/PrefabSerializer.h"
 #include "engine/Editor/ReflectionMacros.h"

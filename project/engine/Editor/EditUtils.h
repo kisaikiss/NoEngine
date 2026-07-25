@@ -1,5 +1,4 @@
 #pragma once
-#include "Reflection.h"
 #include "engine/Functions/ECS/Registry.h"
 #include "engine/Runtime/GpuResource/PixelBuffer/ColorBuffer.h"
 #include "engine/Runtime/GpuResource/ReadbackBuffer.h"
@@ -47,10 +46,12 @@ ECS::Entity PickObject(CommandContext& ctx, ColorBuffer& idColorBuffer, Readback
 
 void InitGameImGuiWindow(ColorBuffer& mainColor);
 void InitSceneImGuiWindow(ColorBuffer& debugColor);
+
+void RefreshGameImGuiTexture(ColorBuffer& mainColor);
+void RefreshSceneImGuiTexture(ColorBuffer& debugColor);
+
 void DrawGameImGuiWindow();
 void DrawSceneImGuiWindow(ECS::Registry& registry, CommandContext& ctx, ColorBuffer& worldPositionColorBuffer, ReadbackBuffer& readBackBuffer);
 void SetGizmoCallback(std::function<void(const Math::Vector4& imageRect)> cb);
 
-void DrawComponentUI(ECS::Registry& registry, ECS::Entity e);
-void DrawFieldUI(ECS::Registry& registry, const FieldInfo& field, void* ptr); 
 }

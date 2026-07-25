@@ -117,6 +117,31 @@ Math::Vector2 GraphicsCore::GetWindowSize() {
 	return Math::Vector2(sWindowWidth, sWindowHeight);
 }
 
+void GraphicsCore::Resize(UINT width, UINT height) {
+	if (width == 0 || height == 0) return;
+	if (width == static_cast<UINT>(sWindowWidth) && height == static_cast<UINT>(sWindowHeight)) return;
+
+	sCommandListManager.IdleGPU();
+
+	// 古いバックバッファのColorBuffer(RTV)を先に破棄しないと
+	// ResizeBuffers がリソースを掴まれたままで失敗する
+	DestroyPixelBuffer();
+
+	sSwapChain->ResizeSignal(width, height);
+	sSwapChain->Resize();
+
+	// 新しいバッファからColorBufferを作り直す
+	CreatePixelBuffer();
+
+	sWindowWidth = static_cast<float>(width);
+	sWindowHeight = static_cast<float>(height);
+
+	sViewport.Width = static_cast<FLOAT>(width);
+	sViewport.Height = static_cast<FLOAT>(height);
+	sScissorRect.right = static_cast<LONG>(width);
+	sScissorRect.bottom = static_cast<LONG>(height);
+}
+
 
 void GraphicsCore::EnableDebugLayer() {
 #ifdef _DEBUG

@@ -3,6 +3,7 @@
 #include "engine/Math/Types/Calculations/Matrix4x4Calculations.h"
 #include "engine/Functions/ECS/Component/Common/CameraComponent.h"
 #include "engine/Runtime/GraphicsCore.h"
+#include "engine/Runtime/GraphicsCore.h"
 
 
 namespace NoEngine {
@@ -36,6 +37,9 @@ void SpritePass::CameraUpdate() {
 	auto* camera = GetTargetCamera2D();
 	if (camera) {
 		sCameraMatrix = camera->viewProjection;
+	} else {
+		Vector2 windowSize = GraphicsCore::GetWindowSize();
+		sCameraMatrix = MathCalculations::MakeOrthographicMatrix(0.f, 0.f, static_cast<float>(windowSize.x), static_cast<float>(windowSize.y), 0.1f, 100.f);
 	}
 	
 }

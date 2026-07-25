@@ -29,8 +29,8 @@ void DrawManipulatorSystem::Update(Registry& registry, float deltaTime) {
 		ImGuizmo::SetDrawlist();
 		ImGuizmo::SetRect(rect.x, rect.y, rect.z, rect.w);
 		ImGuizmo::Enable(true);
-		Manipulate3D(registry);
-		Manipulate2D(registry);
+		Manipulate3D(registry, rect);
+		Manipulate2D(registry, rect);
 
 		});
 
@@ -40,7 +40,7 @@ void DrawManipulatorSystem::Update(Registry& registry, float deltaTime) {
 
 }
 
-void DrawManipulatorSystem::Manipulate3D(Registry& registry) {
+void DrawManipulatorSystem::Manipulate3D(Registry& registry, const Math::Vector4& sceneRect) {
 
 #ifdef USE_IMGUI
 	ImGuizmo::SetOrthographic(false);
@@ -55,9 +55,8 @@ void DrawManipulatorSystem::Manipulate3D(Registry& registry) {
 	isActivePreFrame_ = isActive_;
 	auto view = registry.View<TransformComponent, EditTag, EditSelectedTag>();
 	for (auto e : view) {
-		ImVec2 imgMin = ImGui::GetItemRectMin();
-		float imgX = imgMin.x;
-		float imgY = imgMin.y;
+		float imgX = sceneRect.x;
+		float imgY = sceneRect.y;
 
 		constexpr float margin = 8.0f;
 		constexpr float buttonSizeY = 28.f;
@@ -174,10 +173,11 @@ void DrawManipulatorSystem::Manipulate3D(Registry& registry) {
 
 #else
 static_cast<void>(registry);
+static_cast<void>(sceneRect);
 #endif // USE_IMGUI
 }
 
-void DrawManipulatorSystem::Manipulate2D(Registry& registry) {
+void DrawManipulatorSystem::Manipulate2D(Registry& registry, const Math::Vector4& sceneRect) {
 
 #ifdef USE_IMGUI
 	ImGuizmo::SetOrthographic(true);
@@ -205,9 +205,8 @@ void DrawManipulatorSystem::Manipulate2D(Registry& registry) {
 	isActivePreFrame_ = isActive_;
 	auto view = registry.View<Transform2DComponent, EditTag, EditSelectedTag>();
 	for (auto e : view) {
-		ImVec2 imgMin = ImGui::GetItemRectMin();
-		float imgX = imgMin.x;
-		float imgY = imgMin.y;
+		float imgX = sceneRect.x;
+		float imgY = sceneRect.y;
 
 		constexpr float margin = 8.0f;
 		constexpr float buttonSizeY = 28.f;
@@ -333,6 +332,7 @@ void DrawManipulatorSystem::Manipulate2D(Registry& registry) {
 
 #else
 static_cast<void>(registry);
+static_cast<void>(sceneRect);
 #endif // USE_IMGUI
 }
 }

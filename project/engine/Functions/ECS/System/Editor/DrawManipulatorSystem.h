@@ -1,5 +1,6 @@
 #pragma once
 #include "../ISystem.h"
+#include "engine/Math/Types/Vector4.h"
 namespace NoEngine {
 namespace ECS {
 
@@ -12,8 +13,8 @@ private:
 	bool isActive_ = false;
 	bool isActivePreFrame_ = false;
 
-	void Manipulate3D(Registry& registry);
-	void Manipulate2D(Registry& registry);
+	void Manipulate3D(Registry& registry, const Math::Vector4& sceneRect);
+	void Manipulate2D(Registry& registry, const Math::Vector4& sceneRect);
 };
 
 }

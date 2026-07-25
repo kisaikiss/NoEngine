@@ -24,7 +24,6 @@ void Window::Create(WNDPROC windowProc, std::wstring title, uint32_t width, uint
 	LogInfo("Window_WindowCreateStart title : " + ConvertString(title));
 	core_.title = title;
 	isDead_ = false;
-	isResize_ = false;
 	core_.hwnd = nullptr;	//ウィンドウハンドル
 
 	size_.clientWidth = width;
@@ -154,6 +153,29 @@ void Window::CalculateAspectRatio() {
 	}
 }
 
+void Window::OnResizeSignal(UINT width, UINT height) {
+	if (width == 0 || height == 0) return; // 最小化中は無視
+	pendingWidth_ = width;
+	pendingHeight_ = height;
+	hasResizeRequest_ = true;
+}
+
+bool Window::ConsumeResizeRequest(UINT& outWidth, UINT& outHeight) {
+	if (!hasResizeRequest_) return false;
+	hasResizeRequest_ = false;
+
+	outWidth = pendingWidth_;
+	outHeight = pendingHeight_;
+
+	// Window側のサイズ情報も更新
+	size_.clientWidth = pendingWidth_;
+	size_.clientHeight = pendingHeight_;
+	size_.clientRect = { 0, 0, LONG(pendingWidth_), LONG(pendingHeight_) };
+	CalculateAspectRatio();
+
+	return true;
+}
+
 void Window::SetSizeChangeMode(SizeChangeMode sizeChangeMode) {
 	sizeChangeMode_ = sizeChangeMode;
 
@@ -246,14 +268,4 @@ void Window::AdjustWindowSize() {
 	}
 	LogInfo("AdjustWindowSize");
 }
-
-void Window::ResizeSignal() {
-	isResize_ = true;
 }
-
-void Window::Resize() {
-	if (!isResize_) return;
-	isResize_ = false;
-}
-}
-

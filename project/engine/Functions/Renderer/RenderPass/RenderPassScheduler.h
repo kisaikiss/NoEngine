@@ -16,6 +16,8 @@ public:
 	void AddRenderPass(std::unique_ptr<Render::RenderPass>&& pass);
 	void SetScreenDrawBuffer(const std::string& name) { screenDrawBufferName_ = name; }
 
+	void Resize(uint32_t width, uint32_t height);
+
 	ColorBuffer& GetScreenDrawBuffer() { return *resourceRegistry_.GetColorBufferPointer(screenDrawBufferName_); }
 
 	// リソース登録用（外部からバックバッファなどを登録する）

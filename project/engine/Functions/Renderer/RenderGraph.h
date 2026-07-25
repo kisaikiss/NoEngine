@@ -39,6 +39,17 @@ private:
     friend class RenderPassScheduler; // スケジューラがこの情報を回収する
 };
 
+// リサイズ時の再生成に使う、バッファ作成時のパラメータ
+struct ColorBufferDesc {
+    std::string name;
+    uint32_t depthOrArraySize;
+    DXGI_FORMAT format;
+};
+struct DepthBufferDesc {
+    std::string name;
+    DXGI_FORMAT format;
+};
+
 // Execute時に、実際の ColorBuffer にアクセスするためのクラス
 class RenderGraphRegistry {
 public:
@@ -49,6 +60,9 @@ public:
     ColorBuffer* CreateColorBuffer(const std::string& name, float width, float height, DXGI_FORMAT format);
     DepthBuffer* CreateDepthBuffer(const std::string& name, uint32_t width, uint32_t height, DXGI_FORMAT format = DXGI_FORMAT_D24_UNORM_S8_UINT);
     DepthBuffer* CreateDepthBuffer(const std::string& name, float width, float height, DXGI_FORMAT format = DXGI_FORMAT_D24_UNORM_S8_UINT);
+
+
+    void ResizeAll(uint32_t width, uint32_t height);
 
     const ColorBuffer& GetColorBuffer(const std::string& name) const{
         if (!colorBuffers_.contains(name))assert(false);
@@ -62,6 +76,9 @@ public:
 private:
     std::unordered_map<std::string, ColorBuffer> colorBuffers_;
     std::unordered_map<std::string, DepthBuffer> depthBuffers_;
+
+    std::vector<ColorBufferDesc> colorBufferDescs_;
+    std::vector<DepthBufferDesc> depthBufferDescs_;
 
     ColorBuffer* GetColorBufferPointer(const std::string& name) {
         if (!colorBuffers_.contains(name)) return nullptr;

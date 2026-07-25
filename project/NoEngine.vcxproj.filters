@@ -244,6 +244,7 @@
     <ClCompile Include="application\ClockworksDisease\System\Object\MagicScaffoldSystem.cpp" />
     <ClCompile Include="application\TestApp\Component\TestComponent.cpp" />
     <ClCompile Include="engine\Assets\AssetBrowserWindow.cpp" />
+    <ClCompile Include="engine\Editor\ComponentUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -495,6 +496,7 @@
     <ClInclude Include="application\TestApp\Component\TestComponent.h" />
     <ClInclude Include="engine\Assets\AssetBrowserTypes.h" />
     <ClInclude Include="engine\Assets\AssetBrowserWindow.h" />
+    <ClInclude Include="engine\Editor\ComponentUI.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

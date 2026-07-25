@@ -6,6 +6,7 @@
 #include "engine/Runtime/GraphicsCore.h"
 #include "engine/Runtime/Command/GraphicsContext.h"
 #include "engine/Functions/Renderer/RenderPass/RenderPassScheduler.h"
+#include "engine/Functions/Renderer/RenderSystem.h"
 #include "engine/Functions/Input/input.h"
 #include "engine/Editor/EditorCommandOperator.h"
 #include "engine/Assets/Audio/Audio.h"
@@ -60,6 +61,13 @@ int RunApplication(std::unique_ptr<IGameApp> game) {
 
 		GraphicsCore::CheckDeviceStatus();
 
+		UINT newWidth, newHeight;
+		if (GraphicsCore::sWindowManager.GetMainWindow()->ConsumeResizeRequest(newWidth, newHeight)) {
+			GraphicsCore::Resize(newWidth, newHeight);
+			renderPassScheduler.Resize(newWidth, newHeight);
+			Render::ResizeRaytracingDesc(newWidth, newHeight);
+		}
+
 		GraphicsContext& context = GraphicsContext::Begin();
 		GraphicsCore::StartFrame(context);
 		ComputeContext& ctx = ComputeContext::Begin(L"MainComputeContext", true);
@@ -110,14 +118,6 @@ void EngineInitialize() {
 	// グラフィックス関連の基盤を初期化
 	GraphicsCore::Initialize();
 
-	// ウィンドウの生成、初期化を行います。
-	
-#ifdef RELEASE
-	// ToDo : チーム制作用にリリースでフルスクリーンを強制しています。ウィンドウモード変更のバグは修正すべきです。
-	auto* window = GraphicsCore::sWindowManager.GetMainWindow();
-	window->SetWindowMode(Window::WindowMode::kFullScreen);
-	window->SetWindowMode(Window::WindowMode::kWindow);
-#endif // RELEASE
 	
 	InputInitialize();
 	AudioInitialize();
