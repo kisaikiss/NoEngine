@@ -76,6 +76,7 @@ int RunApplication(std::unique_ptr<IGameApp> game) {
 
 #ifdef USE_IMGUI
 		sImGuiManager.BeginFrame();
+		Editor::DrawAssetBrowserFolderWindow();
 		Editor::DrawAssetBrowserWindow(game->GetRegistry());
 #endif // USE_IMGUI
 
