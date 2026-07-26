@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "SceneSerializer.h"
 #include "engine/Functions/Scene/SceneNameComponent.h"
+#include "PrefabSerializer.h"
 #include "../EditUtils.h"
 
 namespace NoEngine {
@@ -38,6 +39,11 @@ json SaveEntityToJson(ECS::Registry& registry, ECS::Entity entity) {
 
 	}
 
+	// Prefabから配置されたEntityの場合、元になったPrefabのパスも一緒に保存しておく。
+	// ComponentRegistryを介さないEditor専用の付加情報。
+	if (auto* prefabTag = registry.GetComponent<PrefabInstanceTag>(entity)) {
+		result["prefabInstance"] = prefabTag->prefabPath;
+	}
 
 	return result;
 }
@@ -71,13 +77,13 @@ void WriteFieldToJson(ECS::Registry& registry, nlohmann::json& j, const FieldInf
 		const std::string* s = reinterpret_cast<const std::string*>(ptr);
 		j[field.name] = *s;
 	}
-		break;
+									break;
 	case NoEngine::FieldType::WString: {
 		// std::wstring を指している想定
 		const std::wstring* s = reinterpret_cast<const std::wstring*>(ptr);
 		j[field.name] = *s;
 	}
-		break;
+									 break;
 	case NoEngine::FieldType::Enum:
 		j[field.name] = field.enumOps->toString(ptr);
 		break;
@@ -115,7 +121,7 @@ void WriteFieldToJson(ECS::Registry& registry, nlohmann::json& j, const FieldInf
 			} else {
 				j[field.name] = nullptr;
 			}
-			
+
 		}
 		break;
 	}
@@ -178,6 +184,15 @@ void LoadEntityFromJson(ECS::Registry& registry, ECS::Entity entity, const json&
 			ReadFieldFromJson(registry, compJson, field, base);
 		}
 	}
+
+	// Prefab由来のEntityであれば、その紐付けも復元する
+	if (j.contains("prefabInstance")) {
+		auto* prefabTag = registry.GetComponent<PrefabInstanceTag>(entity);
+		if (!prefabTag) {
+			prefabTag = registry.AddComponent<PrefabInstanceTag>(entity);
+		}
+		prefabTag->prefabPath = j["prefabInstance"].get<std::string>();
+	}
 }
 
 void ReadFieldFromJson(ECS::Registry& registry, const nlohmann::json& j, const FieldInfo& field, void* ptr) {
@@ -193,7 +208,7 @@ void ReadFieldFromJson(ECS::Registry& registry, const nlohmann::json& j, const F
 		v[0] = arr[0];
 		v[1] = arr[1];
 	}
-		break;
+	break;
 	case NoEngine::FieldType::Float3:
 	{
 		auto arr = j[field.name];
@@ -213,7 +228,7 @@ void ReadFieldFromJson(ECS::Registry& registry, const nlohmann::json& j, const F
 		v[2] = arr[2];
 		v[3] = arr[3];
 	}
-		break;
+	break;
 	case NoEngine::FieldType::Int:
 		*(int*)ptr = j[field.name].get<int>();
 		break;

@@ -4,7 +4,7 @@
             "layer": "Item"
         },
         "EditTag": {
-            "name": "PowerItem",
+            "name": "PowerItem_Prefab",
             "path": "Item/PowerItem"
         },
         "EffectEmitterComponent": {
@@ -89,9 +89,10 @@
                 0.0,
                 0.0
             ],
-            "radius": 0.30000001192092896
+            "radius": 0.4000000059604645
         },
         "TransformComponent": {
+            "parent": null,
             "rotation": [
                 0.0,
                 0.0,

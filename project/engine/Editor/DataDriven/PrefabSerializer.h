@@ -10,6 +10,11 @@ struct PrefabInfo {
 	std::string name;
 	std::string path;
 };
+
+struct PrefabInstanceTag {
+	std::string prefabPath;
+};
+
 // Entityとコンポーネントのプリセット保存と読み込みを行う関数群
 
 /// <summary>
@@ -39,5 +44,10 @@ const std::vector<PrefabInfo>& GetPrefabs();
 /// </summary>
 /// <param name="registry">ECSレジストリ</param>
 void DrawPrefabWindow(ECS::Registry& registry);
+
+ECS::Entity LoadPrefabForEditing(ECS::Registry& registry, const std::string& prefabPath);
+void ApplyPrefabToInstances(ECS::Registry& registry, const std::string& prefabPath, const nlohmann::json& prefabJson);
+void SetEditPrefabCallback(std::function<void(ECS::Registry&, const std::string&)> cb);
+void RequestEditPrefab(ECS::Registry& registry, const std::string& prefabPath);
 }
 }

@@ -31,6 +31,11 @@ private:
 
     char addComponentFilter_[128] = {};
 
+    ECS::Entity editingPrefabEntity_ = ECS::INVALID_ENTITY;
+    std::string editingPrefabPath_;
+
+    bool FirstLoaded_ = false;
+
     void SaveFile(Registry& registry, nlohmann::json j);
     void LoadFile(Registry& registry);
 
@@ -41,7 +46,10 @@ private:
     void EnsureUniqueEditTagNames(Registry& registry);
     void CreateFolder(ECS::Registry& registry, const std::string& name, const std::string& parentPath);
     void AddEntityToFolder(FolderNode& root, ECS::Registry& registry, Entity e);
-    bool FirstLoaded_ = false;
+
+    void BeginEditPrefab(ECS::Registry& registry, const std::string& prefabPath);
+    void EndEditPrefab(ECS::Registry& registry);
+
 };
 }
 }

@@ -3,13 +3,15 @@
         "AnimatorComponent": {
             "animationSpeedMagnification": 1.0,
             "currentAnimation": 0,
-            "drawSkeleton": false
+            "drawSkeleton": false,
+            "enableSkinning": false
         },
         "EditTag": {
-            "name": "girl",
+            "name": "girl_Prefab",
             "path": "girl"
         },
         "MaterialComponent": {
+            "blendMode": "kNormal",
             "color": [
                 1.0,
                 1.0,
@@ -17,38 +19,35 @@
                 1.0
             ],
             "drawOutline": true,
-            "enviromentCoefficient": 0.0,
-            "psoName": [
-                82,
-                101,
-                110,
-                100,
-                101,
-                114,
-                101,
-                114,
-                32,
-                58,
-                32,
-                68,
-                101,
-                102,
-                97,
-                117,
-                108,
-                116,
-                32,
-                80,
-                83,
-                79
+            "edgeColor": [
+                0.1708185076713562,
+                0.0,
+                0.0,
+                1.0
             ],
-            "shininess": 60.0
+            "emissiveIntensity": 1.0,
+            "enviromentCoefficient": 0.0,
+            "noiseScrollSpeed": 0.30000001192092896,
+            "noiseTextureName": "noise0",
+            "renderMode": "kDefault",
+            "rimPower": 2.0,
+            "shininess": 60.0,
+            "uvPosition": [
+                0.0,
+                0.0
+            ],
+            "uvRotate": 0.0,
+            "uvScale": [
+                1.0,
+                1.0
+            ]
         },
         "MeshComponent": {
             "isVisible": true,
             "meshName": "resources/engine/Model/test/TD_girl/test7.gltf"
         },
         "TransformComponent": {
+            "parent": null,
             "rotation": [
                 0.0,
                 1.0,

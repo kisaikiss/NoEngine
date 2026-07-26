@@ -220,6 +220,11 @@ void DrawAssetBrowserWindow(ECS::Registry& registry) {
 
 		if (item.type == EBrowserItemType::Prefab) {
 			ImGui::TextDisabled("(Prefab)");
+			ImGui::SameLine();
+			if (ImGui::SmallButton("Edit")) {
+				// 実際の編集処理はEditSystem側に委譲する（ComponentUIの編集関数を再利用するため）
+				RequestEditPrefab(registry, item.path);
+			}
 		} else {
 			ImGui::SetNextItemWidth(250.0f);
 			if (ImGui::InputText("Addressable", item.nameInputBuffer, sizeof(item.nameInputBuffer))) {

@@ -31,6 +31,13 @@ void EditSystem::Update(Registry& registry, float deltaTime) {
 	static_cast<void>(deltaTime);
 	if (!FirstLoaded_) {
 		LoadFile(registry);
+
+		// Prefab一覧(DrawPrefabWindow / AssetBrowserWindow)からの「編集」要求を
+		// EditSystemが受け取れるようにコールバックを登録する
+		Editor::SetEditPrefabCallback([this](ECS::Registry& reg, const std::string& prefabPath) {
+			BeginEditPrefab(reg, prefabPath);
+			});
+
 		FirstLoaded_ = true;
 	}
 #ifdef USE_IMGUI
@@ -69,6 +76,37 @@ void EditSystem::Update(Registry& registry, float deltaTime) {
 	}
 	ImGui::End();
 
+	// --- Prefab編集ウィンドウ ---
+	// ComponentUI.cppのDrawComponentUIをそのまま再利用し、
+	// Prefab本体を一時Entityとしてロードして編集する。
+	if (editingPrefabEntity_ != ECS::INVALID_ENTITY) {
+		ImGui::Begin("Prefab Editor");
+		ImGui::TextDisabled("%s", editingPrefabPath_.c_str());
+		ImGui::Separator();
+
+		DrawComponentUI(registry, editingPrefabEntity_);
+
+		ImGui::Separator();
+		if (ImGui::Button("Save & Apply")) {
+			// 編集結果をPrefabファイルへ書き戻す
+			nlohmann::json prefabJson = Editor::SaveEntityToJson(registry, editingPrefabEntity_);
+
+			std::ofstream ofs(editingPrefabPath_);
+			ofs << prefabJson.dump(4);
+			ofs.close();
+
+			// 既にシーンに配置済みの、同じPrefab由来のEntityへ変更を反映する
+			Editor::ApplyPrefabToInstances(registry, editingPrefabPath_, prefabJson);
+
+			Editor::LoadPrefabsFromDirectory();
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("Close")) {
+			EndEditPrefab(registry);
+		}
+
+		ImGui::End();
+	}
 
 	// 選択しているEntityを取得
 	for (auto e : registry.View<Editor::EditTag, Editor::EditSelectedTag>()) {
@@ -93,7 +131,7 @@ void EditSystem::Update(Registry& registry, float deltaTime) {
 
 	// コピー
 	if (Input::Keyboard::IsPress(VK_LCONTROL) && Input::Keyboard::IsPress('C')) {
-		if (editorState_.selectedEntity != ECS::INVALID_ENTITY) {
+		if (editorState_.selectedEntity != ECS::INVALID_ENTITY && editorState_.selectedEntity != editingPrefabEntity_) {
 			if (!ImGui::IsAnyItemActive() && timeInterval_ <= 0.0f) {
 				copyObject_ = Editor::SaveEntityToJson(registry, editorState_.selectedEntity);
 				LogInfo("CopyObject name : " + registry.GetComponent<Editor::EditTag>(editorState_.selectedEntity)->name);
@@ -120,6 +158,25 @@ void EditSystem::Update(Registry& registry, float deltaTime) {
 #else
 	static_cast<void>(registry);
 #endif // USE_IMGUI
+}
+
+void EditSystem::BeginEditPrefab(Registry& registry, const std::string& prefabPath) {
+	// 既に別のPrefabを編集中だった場合は、その一時Entityを破棄してから切り替える
+	if (editingPrefabEntity_ != ECS::INVALID_ENTITY) {
+		registry.DestroyEntity(editingPrefabEntity_);
+		editingPrefabEntity_ = ECS::INVALID_ENTITY;
+	}
+
+	editingPrefabEntity_ = Editor::LoadPrefabForEditing(registry, prefabPath);
+	editingPrefabPath_ = prefabPath;
+}
+
+void EditSystem::EndEditPrefab(Registry& registry) {
+	if (editingPrefabEntity_ != ECS::INVALID_ENTITY) {
+		registry.DestroyEntity(editingPrefabEntity_);
+		editingPrefabEntity_ = ECS::INVALID_ENTITY;
+	}
+	editingPrefabPath_.clear();
 }
 
 void EditSystem::SaveFile(Registry& registry, nlohmann::json j) {

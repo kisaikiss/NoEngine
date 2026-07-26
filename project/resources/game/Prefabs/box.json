@@ -16,15 +16,15 @@
             "layer": "Terrain"
         },
         "EditTag": {
-            "name": "box",
+            "name": "box_Prefab",
             "path": "box"
         },
         "MaterialComponent": {
             "blendMode": "kNormal",
             "color": [
-                1.0,
-                1.0,
-                1.0,
+                0.7188612222671509,
+                0.4528058171272278,
+                0.4528058171272278,
                 1.0
             ],
             "drawOutline": false,
@@ -56,6 +56,7 @@
             "meshName": "resources/engine/Model/block/block.obj"
         },
         "TransformComponent": {
+            "parent": null,
             "rotation": [
                 0.0,
                 0.0,
@@ -63,14 +64,14 @@
                 1.0
             ],
             "scale": [
-                50.0,
+                25.018939971923828,
                 1.0,
-                50.0
+                42.88426971435547
             ],
             "translate": [
-                34.66111373901367,
-                -6.349474906921387,
-                17.86457061767578
+                9.89902400970459,
+                -22.865413665771484,
+                37.28539276123047
             ]
         }
     }
