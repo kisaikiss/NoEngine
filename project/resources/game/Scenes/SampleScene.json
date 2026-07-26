@@ -1,0 +1,173 @@
+{
+    "entities": {
+        "DebugCamera": {
+            "components": {
+                "CameraComponent": {
+                    "fov": 0.44999998807907104
+                },
+                "DebugCameraComponent": {
+                    "center": [
+                        -4.257199287414551,
+                        2.5609524250030518,
+                        -1.167163610458374
+                    ],
+                    "distance": 9.015334129333496,
+                    "drawCenter": false,
+                    "moveType": "kUnity",
+                    "unityMoveSpeed": 10.0,
+                    "unitySensitivity": 0.20000000298023224
+                },
+                "EditTag": {
+                    "name": "DebugCamera",
+                    "path": "DebugCamera"
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0683407112956047,
+                        0.5764101147651672,
+                        -0.04846165329217911,
+                        0.812854528427124
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        -12.645527839660645,
+                        4.066239833831787,
+                        -4.1076226234436035
+                    ]
+                }
+            }
+        },
+        "MainCamera": {
+            "components": {
+                "ActiveCameraTag": null,
+                "CameraComponent": {
+                    "fov": 0.44999998807907104
+                },
+                "EditTag": {
+                    "name": "MainCamera",
+                    "path": "MainCamera"
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "directionalLight": {
+            "components": {
+                "DirectionalLightComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "direction": [
+                        -1.998591142182704e-05,
+                        -1.0,
+                        -5.1165803597541526e-05
+                    ],
+                    "intensity": 1.0
+                },
+                "EditTag": {
+                    "name": "directionalLight",
+                    "path": "directionalLight"
+                },
+                "PrefabInstanceTag": {
+                    "prefabPath": "resources/game/Prefabs\\directionalLight.json"
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\directionalLight.json"
+        },
+        "stage": {
+            "components": {
+                "CollisionLayerComponent": {
+                    "layer": "Terrain"
+                },
+                "EditTag": {
+                    "name": "stage",
+                    "path": "stage"
+                },
+                "MaterialComponent": {
+                    "blendMode": "kNormal",
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "enviromentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "renderMode": "kDefault",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "resources/game/ClockworksDisease/Model/StageMap/testStage.obj"
+                },
+                "StageComponent": {
+                    "stageColliderName": "resources/game/ClockworksDisease/Model/StageMap/testStage.obj"
+                },
+                "TerrainMesh": null,
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        }
+    }
+}

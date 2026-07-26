@@ -245,6 +245,8 @@
     <ClCompile Include="application\TestApp\Component\TestComponent.cpp" />
     <ClCompile Include="engine\Assets\AssetBrowserWindow.cpp" />
     <ClCompile Include="engine\Editor\ComponentUI.cpp" />
+    <ClCompile Include="application\ClockworksDisease\Component\Stage\StageComponent.cpp" />
+    <ClCompile Include="application\ClockworksDisease\System\Game\TerrainLoadSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -497,6 +499,8 @@
     <ClInclude Include="engine\Assets\AssetBrowserTypes.h" />
     <ClInclude Include="engine\Assets\AssetBrowserWindow.h" />
     <ClInclude Include="engine\Editor\ComponentUI.h" />
+    <ClInclude Include="application\ClockworksDisease\Component\Stage\StageComponent.h" />
+    <ClInclude Include="application\ClockworksDisease\System\Game\TerrainLoadSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

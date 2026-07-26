@@ -1,1 +1,4 @@
-{"AddressableName":"resources/game/ClockworksDisease/Model/Area1/Area1.obj","SourceFile":"Area1.obj"}
+{
+    "AddressableName": "Area1",
+    "SourceFile": "Area1.obj"
+}

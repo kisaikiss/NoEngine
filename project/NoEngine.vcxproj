@@ -200,6 +200,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="application\ClockworksDisease\Component\Option\EditorSettingComponent.cpp" />
     <ClCompile Include="application\ClockworksDisease\Component\Player\PlayerComponent.cpp" />
     <ClCompile Include="application\ClockworksDisease\Component\Player\PlayerMoveTags.cpp" />
+    <ClCompile Include="application\ClockworksDisease\Component\Stage\StageComponent.cpp" />
     <ClCompile Include="application\ClockworksDisease\Component\UI\UserInterfaceComponent.cpp" />
     <ClCompile Include="application\ClockworksDisease\Scene\GameScene.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Camera\FollowCameraSystem.cpp" />
@@ -439,6 +440,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Development|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="engine\Assets\Texture\Texture.cpp" />
+    <ClCompile Include="application\ClockworksDisease\System\Game\TerrainLoadSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="application\ClockworksDisease\ClockworksDisease.h" />
@@ -447,6 +449,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="application\ClockworksDisease\Component\Option\EditorSettingComponent.h" />
     <ClInclude Include="application\ClockworksDisease\Component\Player\PlayerComponent.h" />
     <ClInclude Include="application\ClockworksDisease\Component\Player\PlayerMoveTags.h" />
+    <ClInclude Include="application\ClockworksDisease\Component\Stage\StageComponent.h" />
     <ClInclude Include="application\ClockworksDisease\Component\UI\UserInterfaceComponent.h" />
     <ClInclude Include="application\ClockworksDisease\Scene\GameScene.h" />
     <ClInclude Include="application\ClockworksDisease\System\Camera\FollowCameraSystem.h" />
@@ -725,6 +728,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="engine\Assets\Texture\Texture.h" />
+    <ClInclude Include="application\ClockworksDisease\System\Game\TerrainLoadSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="externals\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">

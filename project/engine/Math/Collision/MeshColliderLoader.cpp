@@ -1,6 +1,10 @@
 #include "stdafx.h"
 #include "MeshColliderLoader.h"
 #include "engine/Utilities/FileUtilities.h"
+#include "engine/Editor/ReflectionMacros.h"
+
+REFLECT_STRUCT_BEGIN(NoEngine::Math::TerrainMesh, "Collision")
+REFLECT_STRUCT_END(NoEngine::Math::TerrainMesh)
 
 
 namespace NoEngine {
@@ -16,7 +20,10 @@ void LoadMeshCollider(const std::string& filePath, TerrainMesh* outTerrain) {
 		aiProcess_FixInfacingNormals
 	);
 
-	assert(scene->HasMeshes());
+    if (!scene->HasMeshes()) {
+        LogWarning("LoadMeshCollider : Mesh not found. file path : " + filePath);
+        return;
+    }
 	std::string directoryPath = Utilities::GetBasePath(filePath);
 
     BuildTerrainMeshFromAssimpScene(scene, outTerrain->triangles);

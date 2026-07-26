@@ -39,6 +39,7 @@
 #include "Functions/ECS/System/Effect/EffectEmitSystem.h"
 
 #include "Assets/Audio/Audio.h"
+#include "Assets/AssetManager.h"
 #include "Functions/Renderer/RaytracingManager.h"
 #include "Functions/Renderer/Primitive.h"
 #include "Functions/Input/Input.h"
