@@ -7,9 +7,9 @@
                 },
                 "DebugCameraComponent": {
                     "center": [
-                        -4.257199287414551,
-                        2.5609524250030518,
-                        -1.167163610458374
+                        -1.6092090606689453,
+                        2.5198047161102295,
+                        -1.667201280593872
                     ],
                     "distance": 9.015334129333496,
                     "drawCenter": false,
@@ -24,10 +24,10 @@
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
-                        0.0683407112956047,
-                        0.5764101147651672,
-                        -0.04846165329217911,
-                        0.812854528427124
+                        0.05841231718659401,
+                        0.8256927132606506,
+                        -0.08701177686452866,
+                        0.5542999505996704
                     ],
                     "scale": [
                         1.0,
@@ -35,9 +35,9 @@
                         1.0
                     ],
                     "translate": [
-                        -12.645527839660645,
-                        4.066239833831787,
-                        -4.1076226234436035
+                        -9.769869804382324,
+                        4.399013996124268,
+                        1.671727180480957
                     ]
                 }
             }
@@ -52,13 +52,21 @@
                     "name": "MainCamera",
                     "path": "MainCamera"
                 },
+                "FollowCameraComponent": {
+                    "autoFollowDeadzoneAngle": 0.15000000596046448,
+                    "autoFollowDelay": 1.0,
+                    "distance": 15.0,
+                    "maxAutoFollowAngularSpeed": 1.5,
+                    "phi": 1.0,
+                    "theta": 1.422623634338379
+                },
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
-                        0.0,
-                        0.0,
-                        0.0,
-                        1.0
+                        -0.021264633163809776,
+                        0.9552168250083923,
+                        -0.28649961948394775,
+                        -0.07089830935001373
                     ],
                     "scale": [
                         1.0,
@@ -66,9 +74,9 @@
                         1.0
                     ],
                     "translate": [
-                        0.0,
-                        0.0,
-                        0.0
+                        2.9213101863861084,
+                        8.724297523498535,
+                        5.313185214996338
                     ]
                 }
             }
@@ -98,6 +106,213 @@
                 }
             },
             "prefabInstance": "resources/game/Prefabs\\directionalLight.json"
+        },
+        "player": {
+            "components": {
+                "AnimatorComponent": {
+                    "animationSpeedMagnification": 1.0,
+                    "currentAnimation": 0,
+                    "drawSkeleton": false,
+                    "enableSkinning": true
+                },
+                "CapsuleCollider": {
+                    "localP0": [
+                        0.0,
+                        0.3499999940395355,
+                        0.0
+                    ],
+                    "localP1": [
+                        0.0,
+                        1.350000023841858,
+                        0.0
+                    ],
+                    "radius": 0.3499999940395355
+                },
+                "CollisionBody": {
+                    "type": "Dynamic"
+                },
+                "CollisionLayerComponent": {
+                    "layer": "Player"
+                },
+                "EditTag": {
+                    "name": "player",
+                    "path": "player"
+                },
+                "EffectEmitModeRingTag": null,
+                "EffectEmitterComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "count": 60,
+                    "emitRange": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "maxLifeTime": 1.0,
+                    "maxRotate": 0.0,
+                    "maxScale": [
+                        0.5,
+                        0.5,
+                        0.5
+                    ],
+                    "maxSpeed": [
+                        3.0,
+                        0.10000000149011612,
+                        3.0
+                    ],
+                    "minLifeTime": 0.5,
+                    "minRotate": 0.0,
+                    "minScale": [
+                        0.5,
+                        0.5,
+                        0.5
+                    ],
+                    "minSpeed": [
+                        3.0,
+                        0.0,
+                        -3.0
+                    ],
+                    "textureName": "smokeEffect"
+                },
+                "GroundStateComponent": {
+                    "groundHeight": 0.0,
+                    "isGrounded": false
+                },
+                "LevelComponent": {
+                    "nextLevelUp": 30,
+                    "nowLevel": 1,
+                    "power": 0,
+                    "rewards": []
+                },
+                "MaterialComponent": {
+                    "blendMode": "kNormal",
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": true,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "enviromentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "renderMode": "kToon",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "jogging"
+                },
+                "ParticleEmitterComponent": {
+                    "active": false,
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "count": 10,
+                    "emitRange": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "frequency": 0.30000001192092896,
+                    "localPosition": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "maxCount": 100,
+                    "maxLifeTime": 1.7999999523162842,
+                    "maxScale": [
+                        0.5,
+                        0.5,
+                        0.5
+                    ],
+                    "maxSpeed": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "minLifeTime": 0.8999999761581421,
+                    "minScale": [
+                        0.5,
+                        0.5,
+                        0.5
+                    ],
+                    "minSpeed": [
+                        -1.0,
+                        -1.0,
+                        -1.0
+                    ],
+                    "textureName": "smokeEffect"
+                },
+                "PlayerComponent": {
+                    "airDashSpeed": 10.0,
+                    "doubleJumpSpeed": 4.0,
+                    "gravity": -7.0,
+                    "highJumpSpeed": 7.0,
+                    "infinityJump": true,
+                    "jumpSpeed": 5.5,
+                    "maxStamina": 0.0,
+                    "moveSpeed": 6.0,
+                    "stamina": 0.0,
+                    "state": "kWait"
+                },
+                "PlayerMoveTransientComponent": null,
+                "PrefabInstanceTag": {
+                    "prefabPath": "resources/game/Prefabs\\player.json"
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        -1.401298464324817e-45,
+                        0.997256875038147,
+                        -1.401298464324817e-45,
+                        -0.07401859015226364
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        1.057900071144104,
+                        0.0,
+                        -3.539100408554077
+                    ]
+                },
+                "VelocityComponent": {
+                    "linear": [
+                        0.0,
+                        -2.5044658184051514,
+                        0.0
+                    ]
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\player.json"
         },
         "stage": {
             "components": {
@@ -142,10 +357,10 @@
                 },
                 "MeshComponent": {
                     "isVisible": true,
-                    "meshName": "resources/game/ClockworksDisease/Model/StageMap/testStage.obj"
+                    "meshName": "SampleStage"
                 },
                 "StageComponent": {
-                    "stageColliderName": "resources/game/ClockworksDisease/Model/StageMap/testStage.obj"
+                    "stageColliderName": "SampleStage"
                 },
                 "TerrainMesh": null,
                 "TransformComponent": {

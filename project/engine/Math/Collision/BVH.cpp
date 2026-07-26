@@ -37,7 +37,7 @@ Math::AABBCollider ComputeBounds(const std::vector<Math::TriangleCollider>& tris
 }
 
 bool FindBestSplit(const std::vector<Math::TriangleCollider>& tris, const std::vector<int>& indices, const Math::AABBCollider& parentBounds, int& outAxis, float& outSplit) {
-    constexpr int BINS = 3;        // ビン数（多いほど精度↑・速度↓）
+    constexpr int BINS = 64;        // ビン数（多いほど精度↑・速度↓）
     constexpr int LEAF_THRESHOLD = 4; // リーフにする最小三角形数
 
     if ((int)indices.size() <= LEAF_THRESHOLD) return false;
@@ -98,7 +98,9 @@ bool FindBestSplit(const std::vector<Math::TriangleCollider>& tris, const std::v
 
     return outAxis >= 0;
 }
-std::shared_ptr<Math::BVHNode> BuildBVHDetail(const std::vector<Math::TriangleCollider>& tris, std::vector<int> indices, int depth) {
+
+std::shared_ptr<Math::BVHNode> BuildBVHDetail(const std::vector<Math::TriangleCollider>& tris,
+    std::vector<int> indices, int depth) {
     constexpr int MAX_DEPTH = 20;
     constexpr int LEAF_THRESHOLD = 4;
 
@@ -108,32 +110,42 @@ std::shared_ptr<Math::BVHNode> BuildBVHDetail(const std::vector<Math::TriangleCo
     bool makeLeaf = ((int)indices.size() <= LEAF_THRESHOLD) || (depth >= MAX_DEPTH);
 
     if (!makeLeaf) {
-        int   axis = -1;
-        float split = 0.f;
-        makeLeaf = !FindBestSplit(tris, indices, node->bounds, axis, split);
+        int axis = -1; float split = 0.f;
+        bool sahOk = FindBestSplit(tris, indices, node->bounds, axis, split);
 
-        if (!makeLeaf) {
-            std::vector<int> leftIdx, rightIdx;
+        std::vector<int> leftIdx, rightIdx;
+        if (sahOk) {
             for (int i : indices) {
                 Math::Vector3 centroid = tris[i].Centroid();
                 float c = (&centroid.x)[axis];
                 (c < split ? leftIdx : rightIdx).push_back(i);
             }
-
-            // 片方が空の場合はリーフにフォールバック
-            if (leftIdx.empty() || rightIdx.empty()) {
-                makeLeaf = true;
-            } else {
-                node->left = BuildBVHDetail(tris, std::move(leftIdx), depth + 1);
-                node->right = BuildBVHDetail(tris, std::move(rightIdx), depth + 1);
-            }
         }
+
+        // SAH分割が失敗 or 片側が空 → 最長軸のオブジェクト中央値分割に必ずフォールバック
+        if (!sahOk || leftIdx.empty() || rightIdx.empty()) {
+            Math::Vector3 extent = node->bounds.max - node->bounds.min;
+            int longestAxis = (extent.x > extent.y)
+                ? (extent.x > extent.z ? 0 : 2)
+                : (extent.y > extent.z ? 1 : 2);
+
+            std::vector<int> sorted = indices;
+            auto mid = sorted.begin() + sorted.size() / 2;
+            std::nth_element(sorted.begin(), mid, sorted.end(), [&](int a, int b) {
+                Math::Vector3 centroidA = tris[a].Centroid();
+                Math::Vector3 centroidB = tris[b].Centroid();
+                return (&centroidA.x)[longestAxis] < (&centroidB.x)[longestAxis];
+                });
+            leftIdx.assign(sorted.begin(), mid);
+            rightIdx.assign(mid, sorted.end());
+        }
+
+        node->left = BuildBVHDetail(tris, std::move(leftIdx), depth + 1);
+        node->right = BuildBVHDetail(tris, std::move(rightIdx), depth + 1);
+        return node;  // makeLeafには絶対に落ちない
     }
 
-    if (makeLeaf) {
-        node->triIndices = std::move(indices);
-    }
-
+    node->triIndices = std::move(indices);
     return node;
 }
 }

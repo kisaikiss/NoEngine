@@ -80,11 +80,9 @@ void NarrowPhaseSystem::Update(Registry& registry, float deltaTime) {
 			candidateIndices_.clear();
 			Math::QueryBVH(terrain->bvhRoot.get(), capsuleBounds, terrain->triangles, candidateIndices_);
 
-
 			for (int idx : candidateIndices_) {
 				const auto& triangle = terrain->triangles[idx];
 				auto collide = Math::TestCapsuleTriangle(capsuleTransform, capsuleCollider, triangle, registry);
-
 				if (!collide.hit) continue;
 
 				Contact contact;
