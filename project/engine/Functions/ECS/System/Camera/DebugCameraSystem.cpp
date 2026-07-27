@@ -48,7 +48,7 @@ void DebugCameraSystem::Update(Registry& registry, float deltaTime) {
 				// theta (方位角) を計算
 				debugCamera->theta = std::atan2(v.z, v.x);
 
-			} else if (debugCamera->moveType == NoEngine::DebugCameraType::kUnity) {
+			} else if (debugCamera->moveType == NoEngine::DebugCameraType::kUnreal) {
 				// 【Blender -> Unity への同期】
 				// Blenderモードのカメラ位置と注視点から、Unityの角度(Yaw, Pitch)を逆算する
 
@@ -77,7 +77,7 @@ void DebugCameraSystem::Update(Registry& registry, float deltaTime) {
 		case NoEngine::DebugCameraType::kBlender:
 			BlenderMove(registry, entity, deltaTime);
 			break;
-		case NoEngine::DebugCameraType::kUnity:
+		case NoEngine::DebugCameraType::kUnreal:
 			UnityMove(registry, entity, deltaTime);
 			break;
 		}

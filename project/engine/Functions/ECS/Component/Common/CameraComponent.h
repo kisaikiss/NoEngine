@@ -4,7 +4,7 @@
 namespace NoEngine {
 enum class DebugCameraType {
 	kBlender,
-	kUnity,
+	kUnreal,
 	kUnknown,
 };
 namespace Component {
