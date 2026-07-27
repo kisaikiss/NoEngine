@@ -187,7 +187,7 @@ void CommonSetupRenderPass(RenderPassScheduler& renderPassScheduler) {
 	InitGameImGuiWindow(*resourceRegistry.CreateColorBuffer("MainColor", windowSize.x, windowSize.y, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB));
 	
 
-	resourceRegistry.CreateColorBuffer("ShadowMask", windowSize.x, windowSize.y, 16, DXGI_FORMAT_R8_UNORM);
+	resourceRegistry.CreateColorBuffer("ShadowMask", windowSize.x, windowSize.y, 64, DXGI_FORMAT_R8_UNORM);
 	resourceRegistry.CreateColorBuffer("WorldPosition", windowSize.x, windowSize.y, DXGI_FORMAT_R32G32B32A32_FLOAT);
 	resourceRegistry.CreateColorBuffer("Normal", windowSize.x, windowSize.y, DXGI_FORMAT_R10G10B10A2_UNORM);
 	resourceRegistry.CreateColorBuffer("ObjectID", windowSize.x, windowSize.y, DXGI_FORMAT_R8G8B8A8_UNORM);

@@ -1,6 +1,8 @@
 {
     "components": {
-        "BigPowerItemComponent": null,
+        "BigPowerItemComponent": {
+            "grantPower": 5
+        },
         "CollisionLayerComponent": {
             "layer": "Item"
         },
@@ -129,6 +131,20 @@
             ],
             "textureName": "getEffect"
         },
+        "PointLightComponent": {
+            "color": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+            ],
+            "decay": 1.5,
+            "intensity": 1.0,
+            "radius": 5.199999809265137
+        },
+        "PrefabInstanceTag": {
+            "prefabPath": "resources/game/Prefabs\\BigPowerItem.json"
+        },
         "SphereCollider": {
             "localCenter": [
                 0.0,
@@ -138,6 +154,7 @@
             "radius": 0.699999988079071
         },
         "TransformComponent": {
+            "parent": null,
             "rotation": [
                 0.0,
                 0.0,
@@ -150,10 +167,11 @@
                 2.0
             ],
             "translate": [
-                20.423667907714844,
-                6.406352996826172,
-                0.8383430242538452
+                0.028732657432556152,
+                8.399985313415527,
+                0.110810786485672
             ]
         }
-    }
+    },
+    "prefabInstance": "resources/game/Prefabs\\BigPowerItem.json"
 }

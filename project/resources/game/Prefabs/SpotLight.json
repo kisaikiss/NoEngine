@@ -1,0 +1,40 @@
+{
+    "components": {
+        "EditTag": {
+            "name": "SpotLight",
+            "path": "SpotLight"
+        },
+        "SpotLightComponent": {
+            "color": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+            ],
+            "cosAngle": 0.5,
+            "cosFalloffStart": 1.100000023841858,
+            "decay": 7.099999904632568,
+            "distance": 16.5,
+            "intensity": 13.699999809265137
+        },
+        "TransformComponent": {
+            "parent": null,
+            "rotation": [
+                0.6988320350646973,
+                0.0,
+                0.0,
+                0.7152857780456543
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "translate": [
+                -0.7687864303588867,
+                3.5943145751953125,
+                -0.1338726282119751
+            ]
+        }
+    }
+}

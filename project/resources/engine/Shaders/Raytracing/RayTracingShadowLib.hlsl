@@ -1,4 +1,4 @@
-#define MAX_SHADOW_LIGHTS 16
+#define MAX_SHADOW_LIGHTS 64
 
 struct ShadowPayload
 {
