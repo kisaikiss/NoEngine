@@ -1947,6 +1947,59 @@
             },
             "prefabInstance": "resources/game/Prefabs\\BigPowerItem.json"
         },
+        "CloseHint": {
+            "components": {
+                "CloseLevelUpUITag": null,
+                "EditTag": {
+                    "name": "CloseHint",
+                    "path": "UI/staminaGauge"
+                },
+                "PrefabInstanceTag": {
+                    "prefabPath": "resources/game/Prefabs\\CloseHint.json"
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        -0.01630599983036518
+                    ],
+                    "fill": 0.0,
+                    "flipX": false,
+                    "flipY": false,
+                    "isVisible": true,
+                    "layer": 10,
+                    "maskTextureName": "",
+                    "nonRenderAngle": 0.0,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureName": "closeHint",
+                    "useMask": false,
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "parent": null,
+                    "rotation": 0.0,
+                    "scale": [
+                        237.3000030517578,
+                        64.0
+                    ],
+                    "translate": [
+                        1109.199951171875,
+                        672.5999755859375
+                    ]
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\CloseHint.json"
+        },
         "DebugCamera": {
             "components": {
                 "CameraComponent": {
@@ -1954,9 +2007,9 @@
                 },
                 "DebugCameraComponent": {
                     "center": [
-                        4.051831245422363,
-                        2.277050018310547,
-                        -5.12174129486084
+                        3.974642753601074,
+                        2.058098793029785,
+                        -4.712261199951172
                     ],
                     "distance": 9.015334129333496,
                     "drawCenter": false,
@@ -1971,10 +2024,10 @@
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
-                        0.06387080997228622,
-                        -0.8101646900177002,
-                        0.08987724781036377,
-                        0.575739324092865
+                        0.07338900119066238,
+                        -0.7952044606208801,
+                        0.09828010201454163,
+                        0.5938054919242859
                     ],
                     "scale": [
                         1.0,
@@ -2217,6 +2270,71 @@
                 }
             },
             "prefabInstance": "resources/game/Prefabs\\LevelUpEffect.json"
+        },
+        "LevelUpUI": {
+            "components": {
+                "EditTag": {
+                    "name": "LevelUpUI",
+                    "path": "UI/newEntity"
+                },
+                "LevelUpTextComponent": {
+                    "closeTime": 1.5,
+                    "isClose": false
+                },
+                "PrefabInstanceTag": {
+                    "prefabPath": "resources/game/Prefabs\\LevelUpUI.json"
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "fill": 0.0,
+                    "flipX": false,
+                    "flipY": false,
+                    "isVisible": false,
+                    "layer": 0,
+                    "maskTextureName": "",
+                    "nonRenderAngle": 0.0,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureName": "levelUpBackground",
+                    "useMask": false,
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "parent": null,
+                    "rotation": 0.0,
+                    "scale": [
+                        468.0,
+                        720.0
+                    ],
+                    "translate": [
+                        1000.0,
+                        360.0
+                    ]
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\LevelUpUI.json"
+        },
+        "LightFolder": {
+            "components": {
+                "EditTag": {
+                    "name": "LightFolder",
+                    "path": "Light"
+                },
+                "FolderTag": null
+            }
         },
         "MainCamera": {
             "components": {
@@ -23855,7 +23973,7 @@
             "components": {
                 "EditTag": {
                     "name": "SpotLight",
-                    "path": "SpotLight"
+                    "path": "Light/SpotLight"
                 },
                 "PrefabInstanceTag": {
                     "prefabPath": "resources/game/Prefabs\\SpotLight.json"
@@ -23899,7 +24017,7 @@
             "components": {
                 "EditTag": {
                     "name": "SpotLight_2",
-                    "path": "SpotLight"
+                    "path": "Light/SpotLight_2"
                 },
                 "PrefabInstanceTag": {
                     "prefabPath": "resources/game/Prefabs\\SpotLight.json"
@@ -23943,7 +24061,7 @@
             "components": {
                 "EditTag": {
                     "name": "SpotLight_2_2",
-                    "path": "SpotLight"
+                    "path": "Light/SpotLight_2_2"
                 },
                 "PrefabInstanceTag": {
                     "prefabPath": "resources/game/Prefabs\\SpotLight.json"
@@ -23987,7 +24105,7 @@
             "components": {
                 "EditTag": {
                     "name": "SpotLight_2_2_2",
-                    "path": "SpotLight"
+                    "path": "Light/SpotLight_2_2_2"
                 },
                 "PrefabInstanceTag": {
                     "prefabPath": "resources/game/Prefabs\\SpotLight.json"
@@ -24031,7 +24149,7 @@
             "components": {
                 "EditTag": {
                     "name": "SpotLight_3",
-                    "path": "SpotLight"
+                    "path": "Light/SpotLight_3"
                 },
                 "PrefabInstanceTag": {
                     "prefabPath": "resources/game/Prefabs\\SpotLight.json"
@@ -24075,7 +24193,7 @@
             "components": {
                 "EditTag": {
                     "name": "SpotLight_3_2",
-                    "path": "SpotLight"
+                    "path": "Light/SpotLight_3_2"
                 },
                 "PrefabInstanceTag": {
                     "prefabPath": "resources/game/Prefabs\\SpotLight.json"
@@ -24119,7 +24237,7 @@
             "components": {
                 "EditTag": {
                     "name": "SpotLight_3_2_2",
-                    "path": "SpotLight"
+                    "path": "Light/SpotLight_3_2_2"
                 },
                 "PrefabInstanceTag": {
                     "prefabPath": "resources/game/Prefabs\\SpotLight.json"
@@ -24163,7 +24281,7 @@
             "components": {
                 "EditTag": {
                     "name": "SpotLight_3_2_2_2",
-                    "path": "SpotLight"
+                    "path": "Light/SpotLight_3_2_2_2"
                 },
                 "PrefabInstanceTag": {
                     "prefabPath": "resources/game/Prefabs\\SpotLight.json"
@@ -24207,7 +24325,7 @@
             "components": {
                 "EditTag": {
                     "name": "SpotLight_3_2_3",
-                    "path": "SpotLight"
+                    "path": "Light/SpotLight_3_2_3"
                 },
                 "PrefabInstanceTag": {
                     "prefabPath": "resources/game/Prefabs\\SpotLight.json"
@@ -24251,7 +24369,7 @@
             "components": {
                 "EditTag": {
                     "name": "SpotLight_3_2_3_2",
-                    "path": "SpotLight"
+                    "path": "Light/SpotLight_3_2_3_2"
                 },
                 "PrefabInstanceTag": {
                     "prefabPath": "resources/game/Prefabs\\SpotLight.json"
@@ -24291,6 +24409,59 @@
             },
             "prefabInstance": "resources/game/Prefabs\\SpotLight.json"
         },
+        "XButton": {
+            "components": {
+                "CloseLevelUpUITag": null,
+                "EditTag": {
+                    "name": "XButton",
+                    "path": "UI/staminaGauge"
+                },
+                "PrefabInstanceTag": {
+                    "prefabPath": "resources/game/Prefabs\\XButton.json"
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        -0.01630599983036518
+                    ],
+                    "fill": 0.0,
+                    "flipX": false,
+                    "flipY": false,
+                    "isVisible": true,
+                    "layer": 10,
+                    "maskTextureName": "",
+                    "nonRenderAngle": 0.0,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureName": "xButton",
+                    "useMask": false,
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "parent": null,
+                    "rotation": 0.0,
+                    "scale": [
+                        64.0,
+                        64.0
+                    ],
+                    "translate": [
+                        965.0999755859375,
+                        672.5999755859375
+                    ]
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\XButton.json"
+        },
         "directionalLight": {
             "components": {
                 "DirectionalLightComponent": {
@@ -24309,7 +24480,7 @@
                 },
                 "EditTag": {
                     "name": "directionalLight",
-                    "path": "directionalLight"
+                    "path": "Light/directionalLight"
                 },
                 "PrefabInstanceTag": {
                     "prefabPath": "resources/game/Prefabs\\directionalLight.json"
@@ -24541,7 +24712,7 @@
             "components": {
                 "EditTag": {
                     "name": "pointLight",
-                    "path": "pointLight"
+                    "path": "Light/pointLight"
                 },
                 "PointLightComponent": {
                     "color": [
@@ -24583,7 +24754,7 @@
             "components": {
                 "EditTag": {
                     "name": "pointLight_10",
-                    "path": "pointLight"
+                    "path": "Light/pointLight_10"
                 },
                 "PointLightComponent": {
                     "color": [
@@ -24625,7 +24796,7 @@
             "components": {
                 "EditTag": {
                     "name": "pointLight_11",
-                    "path": "pointLight"
+                    "path": "Light/pointLight_11"
                 },
                 "PointLightComponent": {
                     "color": [
@@ -24667,7 +24838,7 @@
             "components": {
                 "EditTag": {
                     "name": "pointLight_12",
-                    "path": "pointLight"
+                    "path": "Light/pointLight_12"
                 },
                 "PointLightComponent": {
                     "color": [
@@ -24709,7 +24880,7 @@
             "components": {
                 "EditTag": {
                     "name": "pointLight_13",
-                    "path": "pointLight"
+                    "path": "Light/pointLight_13"
                 },
                 "PointLightComponent": {
                     "color": [
@@ -24751,7 +24922,7 @@
             "components": {
                 "EditTag": {
                     "name": "pointLight_14",
-                    "path": "pointLight"
+                    "path": "Light/pointLight_14"
                 },
                 "PointLightComponent": {
                     "color": [
@@ -24793,7 +24964,7 @@
             "components": {
                 "EditTag": {
                     "name": "pointLight_2",
-                    "path": "pointLight"
+                    "path": "Light/pointLight_2"
                 },
                 "PointLightComponent": {
                     "color": [
@@ -24835,7 +25006,7 @@
             "components": {
                 "EditTag": {
                     "name": "pointLight_3",
-                    "path": "pointLight"
+                    "path": "Light/pointLight_3"
                 },
                 "PointLightComponent": {
                     "color": [
@@ -24877,7 +25048,7 @@
             "components": {
                 "EditTag": {
                     "name": "pointLight_4",
-                    "path": "pointLight"
+                    "path": "Light/pointLight_4"
                 },
                 "PointLightComponent": {
                     "color": [
@@ -24919,7 +25090,7 @@
             "components": {
                 "EditTag": {
                     "name": "pointLight_5",
-                    "path": "pointLight"
+                    "path": "Light/pointLight_5"
                 },
                 "PointLightComponent": {
                     "color": [
@@ -24961,7 +25132,7 @@
             "components": {
                 "EditTag": {
                     "name": "pointLight_6",
-                    "path": "pointLight"
+                    "path": "Light/pointLight_6"
                 },
                 "PointLightComponent": {
                     "color": [
@@ -25003,7 +25174,7 @@
             "components": {
                 "EditTag": {
                     "name": "pointLight_7",
-                    "path": "pointLight"
+                    "path": "Light/pointLight_7"
                 },
                 "PointLightComponent": {
                     "color": [
@@ -25045,7 +25216,7 @@
             "components": {
                 "EditTag": {
                     "name": "pointLight_8",
-                    "path": "pointLight"
+                    "path": "Light/pointLight_8"
                 },
                 "PointLightComponent": {
                     "color": [
@@ -25087,7 +25258,7 @@
             "components": {
                 "EditTag": {
                     "name": "pointLight_9",
-                    "path": "pointLight"
+                    "path": "Light/pointLight_9"
                 },
                 "PointLightComponent": {
                     "color": [

@@ -70,7 +70,7 @@ void HandleAirDash(No::Registry& registry, No::Entity entity, PlayerComponent* p
 		return;
 	}
 
-	constexpr float kAirDashStaminaCostRate = 5.0f; // 1秒あたりの消費量（要調整）
+	constexpr float kAirDashStaminaCostRate = 2.0f; // 1秒あたりの消費量
 	if (playerVariables->stamina <= kAirDashStaminaCostRate * deltaTime) {
 		return;
 	}

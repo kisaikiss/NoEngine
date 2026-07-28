@@ -1,0 +1,49 @@
+{
+    "components": {
+        "CloseLevelUpUITag": null,
+        "EditTag": {
+            "name": "XButton",
+            "path": "UI/staminaGauge"
+        },
+        "SpriteComponent": {
+            "color": [
+                1.0,
+                1.0,
+                1.0,
+                -0.01630599983036518
+            ],
+            "fill": 0.0,
+            "flipX": false,
+            "flipY": false,
+            "isVisible": true,
+            "layer": 10,
+            "maskTextureName": "",
+            "nonRenderAngle": 0.0,
+            "orderInLayer": 0,
+            "pivot": [
+                0.5,
+                0.5
+            ],
+            "textureName": "xButton",
+            "useMask": false,
+            "uv": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+            ]
+        },
+        "Transform2DComponent": {
+            "parent": null,
+            "rotation": 0.0,
+            "scale": [
+                64.0,
+                64.0
+            ],
+            "translate": [
+                965.0999755859375,
+                672.5999755859375
+            ]
+        }
+    }
+}

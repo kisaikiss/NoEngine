@@ -17,8 +17,12 @@ void PlayerLevelUpSystem::Update(No::Registry& registry, float deltaTime) {
 			levelComponent->nextLevelUp += kAmountOfPowerNeededForTheNextLevelUp;
 			EnhancementsUponLevelingUp(registry, e, levelComponent->nowLevel);
 
-			for (auto levelUpUI : registry.View<LevelUpTextComponent>()) {
-				registry.AddComponent<LevelUpFrameTag>(levelUpUI);
+			for (auto& reward : levelComponent->rewards) {
+				if (reward.level == levelComponent->nowLevel && reward.ability != PlayerAbility::kNone) {
+					for (auto levelUpUI : registry.View<LevelUpTextComponent>()) {
+						registry.AddComponent<LevelUpFrameTag>(levelUpUI);
+					}			
+				}
 			}
 
 			// レベルアップ時のエフェクト
@@ -58,13 +62,37 @@ void PlayerLevelUpSystem::GrantAbility(No::Registry& registry, No::Entity e, Pla
 		}
 		break;
 	case PlayerAbility::kHighJump:
-		if (!registry.Has<HighJumpTag>(e)) registry.AddComponent<HighJumpTag>(e);
+		if (!registry.Has<HighJumpTag>(e)) {
+			registry.AddComponent<HighJumpTag>(e);
+			auto textEntity = registry.GenerateEntity();
+			registry.AddComponent<No::Transform2DComponent>(textEntity)->scale = No::Vector2(468.f, 720.f);
+			auto* sprite = registry.AddComponent<No::SpriteComponent>(textEntity);
+			sprite->textureName = "HighJumpHint";
+			sprite->layer = 1;
+			registry.AddComponent<LevelUpTextParentTag>(textEntity);
+		}
 		break;
 	case PlayerAbility::kAirDash:
-		if (!registry.Has<AirDashTag>(e)) registry.AddComponent<AirDashTag>(e);
+		if (!registry.Has<AirDashTag>(e)) {
+			registry.AddComponent<AirDashTag>(e);
+			auto textEntity = registry.GenerateEntity();
+			registry.AddComponent<No::Transform2DComponent>(textEntity)->scale = No::Vector2(468.f, 720.f);
+			auto* sprite = registry.AddComponent<No::SpriteComponent>(textEntity);
+			sprite->textureName = "AirDashHint";
+			sprite->layer = 1;
+			registry.AddComponent<LevelUpTextParentTag>(textEntity);
+		}
 		break;
 	case PlayerAbility::kMagicScaffold:
-		if (!registry.Has<CreateMagicScaffoldTag>(e)) registry.AddComponent<CreateMagicScaffoldTag>(e);
+		if (!registry.Has<CreateMagicScaffoldTag>(e)) {
+			registry.AddComponent<CreateMagicScaffoldTag>(e);
+			auto textEntity = registry.GenerateEntity();
+			registry.AddComponent<No::Transform2DComponent>(textEntity)->scale = No::Vector2(468.f, 720.f);
+			auto* sprite = registry.AddComponent<No::SpriteComponent>(textEntity);
+			sprite->textureName = "MagicHint";
+			sprite->layer = 1;
+			registry.AddComponent<LevelUpTextParentTag>(textEntity);
+		} 
 		break;
 	default:
 		break;
