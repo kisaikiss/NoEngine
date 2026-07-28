@@ -14,3 +14,7 @@ REFLECT_STRUCT_END(LevelUpTextComponent)
 
 REFLECT_STRUCT_BEGIN(StaminaGaugeParentTag, "ApplicationTag")
 REFLECT_STRUCT_END(StaminaGaugeParentTag)
+
+
+REFLECT_STRUCT_BEGIN(CanMagicUITag, "ApplicationTag")
+REFLECT_STRUCT_END(CanMagicUITag)

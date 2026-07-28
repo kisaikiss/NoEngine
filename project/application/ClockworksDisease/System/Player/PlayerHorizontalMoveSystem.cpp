@@ -44,7 +44,6 @@ void PlayerHorizontalMoveSystem::Update(No::Registry& registry, float deltaTime)
 		auto* transform = registry.GetComponent<No::TransformComponent>(entity);
 		auto* playerVariables = registry.GetComponent<PlayerComponent>(entity);
 		auto* velocity = registry.GetComponent<No::VelocityComponent>(entity);
-		auto* groundState = registry.GetComponent<No::GroundStateComponent>(entity);
 		auto* particleEmitter = registry.GetComponent<No::ParticleEmitterComponent>(entity);
 		auto* transientState = registry.GetComponent<PlayerMoveTransientComponent>(entity);
 
@@ -70,8 +69,6 @@ void PlayerHorizontalMoveSystem::Update(No::Registry& registry, float deltaTime)
 		particleEmitter->active = true;
 
 		const No::Vector3& groundNormal = playerVariables->groundNormal;
-		const bool isGrounded = groundState->isGrounded;
-		const bool justJumped = transientState->justJumped;
 
 		// カメラ基準の移動ベクトル（水平成分のみ）。
 		// 入力が無い空中ダッシュ中のみ、現在の正面方向を採用する。
@@ -81,12 +78,6 @@ void PlayerHorizontalMoveSystem::Update(No::Registry& registry, float deltaTime)
 			worldDir.y = 0.f;
 		} else {
 			worldDir = GetFacingDirection(transform);
-		}
-
-		if (isGrounded && !justJumped) {
-			// 斜面に沿わせるため、法線方向の成分を除去して接平面に投影
-			const float dn = worldDir.Dot(groundNormal);
-			worldDir = worldDir - groundNormal * dn;
 		}
 
 		// 正規化してスピードを乗算（空中ダッシュ中は専用の速度を使う）

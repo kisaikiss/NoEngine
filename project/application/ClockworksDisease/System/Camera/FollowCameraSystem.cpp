@@ -41,7 +41,7 @@ void FollowCameraSystem::Update(No::Registry& registry, float deltaTime) {
 		} else {
 			if (pInput) {
 				// カメラ操作がされておらず、プレイヤー操作があるときはタイマーを進める
-				followCameraVariables->idleTimer += deltaTime;
+				//followCameraVariables->idleTimer += deltaTime;
 
 			}
 		}
@@ -49,8 +49,8 @@ void FollowCameraSystem::Update(No::Registry& registry, float deltaTime) {
 		// 移動制限
 		if (followCameraVariables->phi >= PI) {
 			followCameraVariables->phi = PI - 0.001f;
-		} else if (followCameraVariables->phi <= PI /4.f) {
-			followCameraVariables->phi = PI / 4.f;
+		} else if (followCameraVariables->phi <= PI /10.f) {
+			followCameraVariables->phi = PI / 10.f;
 		}
 
 		if (followCameraVariables->hasPrevPlayerPos) {

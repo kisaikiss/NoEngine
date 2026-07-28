@@ -20,3 +20,5 @@ struct StaminaGaugeParentTag{};
 struct LevelUpFrameTag{};
 
 struct LevelUpTextParentTag {};
+
+struct CanMagicUITag {};

@@ -28,10 +28,7 @@ void PlayerPushBackSystem::Update(No::Registry& registry, float deltaTime) {
 			if (event.normal.y > player->groundNormal.y) {
 				player->groundNormal = event.normal;
 			}
-			No::Vector3 currentForward = transform->rotation.zAxis();
-			// 前方向を groundNormal 平面へ投影して再正規化（体が地面から浮かない）
-			float dot = currentForward.Dot(event.normal);
-			No::Vector3 projForward = currentForward - event.normal * dot;
+			No::Vector3 projForward = No::Vector3::ZERO;
 			float len = projForward.Length();
 			if (len > 1e-6f) {
 				projForward = projForward * (1.f / len);

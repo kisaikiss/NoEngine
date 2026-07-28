@@ -1,5 +1,6 @@
 #include "PlayerJumpSystem.h"
 #include "application/ClockworksDisease/Component/Player/PlayerComponent.h"
+#include "application/ClockworksDisease/Component/UI/UserInterfaceComponent.h"
 #include "application/ClockworksDisease/Component/Player/PlayerMoveTags.h"
 
 namespace {
@@ -92,11 +93,24 @@ void HandleJumpRelease(PlayerComponent* playerVariables) {
 // 足場を生成する処理
 void CreateScaffold(No::Registry& registry, No::Entity entity, PlayerComponent* playerVariables,
 	No::GroundStateComponent* groundState, No::TransformComponent* transform) {
+
+	const bool hasCreateMagicScaffoldTag = registry.Has<CreateMagicScaffoldTag>(entity);
+	if (hasCreateMagicScaffoldTag && playerVariables->canCreateScaffold) {
+		for (auto e : registry.View<No::SpriteComponent, CanMagicUITag>()) {
+			registry.GetComponent<No::SpriteComponent>(e)->isVisible = true;
+		}
+	} else {
+		for (auto e : registry.View<No::SpriteComponent, CanMagicUITag>()) {
+			registry.GetComponent<No::SpriteComponent>(e)->isVisible = false;
+		}
+	}
+
 	if (No::InputIsTrigger("CreateScaffold")) {
-		const bool hasCreateMagicScaffoldTag = registry.Has<CreateMagicScaffoldTag>(entity);
 		if (groundState->isGrounded || playerVariables->infinityJump || !playerVariables->canCreateScaffold || !hasCreateMagicScaffoldTag) {
 			return;
 		}
+
+
 		// 足場をプレイヤーの下に生成する
 		auto e = No::InstantiatePreset(registry, "resources/game/Prefabs/magicScaffold.json");
 		auto* scaffoldTransform = registry.GetComponent<No::TransformComponent>(e);

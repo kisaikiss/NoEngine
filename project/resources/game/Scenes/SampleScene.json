@@ -2007,9 +2007,9 @@
                 },
                 "DebugCameraComponent": {
                     "center": [
-                        3.974642753601074,
-                        2.058098793029785,
-                        -4.712261199951172
+                        5.859805107116699,
+                        8.623064994812012,
+                        2.237109661102295
                     ],
                     "distance": 9.015334129333496,
                     "drawCenter": false,
@@ -2024,10 +2024,10 @@
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
-                        0.07338900119066238,
-                        -0.7952044606208801,
-                        0.09828010201454163,
-                        0.5938054919242859
+                        -0.2215438336133957,
+                        -0.4508158564567566,
+                        -0.11656889319419861,
+                        0.8567935228347778
                     ],
                     "scale": [
                         1.0,
@@ -2340,7 +2340,7 @@
             "components": {
                 "ActiveCameraTag": null,
                 "CameraComponent": {
-                    "fov": 0.44999998807907104
+                    "fov": 0.6499999761581421
                 },
                 "EditTag": {
                     "name": "MainCamera",
@@ -24461,6 +24461,55 @@
                 }
             },
             "prefabInstance": "resources/game/Prefabs\\XButton.json"
+        },
+        "canMagicUI": {
+            "components": {
+                "CanMagicUITag": null,
+                "EditTag": {
+                    "name": "canMagicUI",
+                    "path": "UI/canMagicUI"
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "fill": 0.0,
+                    "flipX": false,
+                    "flipY": false,
+                    "isVisible": false,
+                    "layer": 0,
+                    "maskTextureName": "",
+                    "nonRenderAngle": 0.0,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureName": "canMagicUI",
+                    "useMask": false,
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "parent": null,
+                    "rotation": 0.0,
+                    "scale": [
+                        64.0,
+                        64.0
+                    ],
+                    "translate": [
+                        110.82754516601563,
+                        152.3877410888672
+                    ]
+                }
+            }
         },
         "directionalLight": {
             "components": {
