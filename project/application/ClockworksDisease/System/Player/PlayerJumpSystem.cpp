@@ -101,7 +101,9 @@ void CreateScaffold(No::Registry& registry, No::Entity entity, PlayerComponent* 
 		}
 	} else {
 		for (auto e : registry.View<No::SpriteComponent, CanMagicUITag>()) {
-			registry.GetComponent<No::SpriteComponent>(e)->isVisible = false;
+			if (!registry.GetComponent<CanMagicUITag>(e)->isBackground) {
+				registry.GetComponent<No::SpriteComponent>(e)->isVisible = false;
+			}
 		}
 	}
 
@@ -117,7 +119,6 @@ void CreateScaffold(No::Registry& registry, No::Entity entity, PlayerComponent* 
 		scaffoldTransform->translate = transform->translate;
 		playerVariables->yVelocity = playerVariables->doubleJumpSpeed;
 		playerVariables->canCreateScaffold = false;
-
 	}
 }
 

@@ -17,4 +17,5 @@ REFLECT_STRUCT_END(StaminaGaugeParentTag)
 
 
 REFLECT_STRUCT_BEGIN(CanMagicUITag, "ApplicationTag")
+REFLECT_FIELD(isBackground)
 REFLECT_STRUCT_END(CanMagicUITag)

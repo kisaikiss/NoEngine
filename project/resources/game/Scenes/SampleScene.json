@@ -2007,9 +2007,9 @@
                 },
                 "DebugCameraComponent": {
                     "center": [
-                        4.819286346435547,
-                        6.827940464019775,
-                        2.625359535217285
+                        10.328189849853516,
+                        18.435832977294922,
+                        4.899318218231201
                     ],
                     "distance": 9.015334129333496,
                     "drawCenter": false,
@@ -2024,10 +2024,10 @@
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
-                        0.04846641421318054,
-                        -0.651659369468689,
-                        0.04178788140416145,
-                        0.7558074593544006
+                        0.28734952211380005,
+                        0.30656084418296814,
+                        -0.09764211624860764,
+                        0.9021733403205872
                     ],
                     "scale": [
                         1.0,
@@ -2035,9 +2035,9 @@
                         1.0
                     ],
                     "translate": [
-                        13.663395881652832,
-                        7.979428291320801,
-                        1.3092817068099976
+                        5.847322940826416,
+                        23.649803161621094,
+                        -0.9327142834663391
                     ]
                 }
             }
@@ -24464,7 +24464,9 @@
         },
         "canMagicUI": {
             "components": {
-                "CanMagicUITag": null,
+                "CanMagicUITag": {
+                    "isBackground": false
+                },
                 "EditTag": {
                     "name": "canMagicUI",
                     "path": "UI/canMagicUI"
@@ -24474,13 +24476,13 @@
                         1.0,
                         1.0,
                         1.0,
-                        1.0
+                        0.0
                     ],
                     "fill": 0.0,
                     "flipX": false,
                     "flipY": false,
-                    "isVisible": false,
-                    "layer": 0,
+                    "isVisible": true,
+                    "layer": 1,
                     "maskTextureName": "",
                     "nonRenderAngle": 0.0,
                     "orderInLayer": 0,
@@ -24497,16 +24499,69 @@
                         1.0
                     ]
                 },
+                "StaminaGaugeParentTag": null,
                 "Transform2DComponent": {
-                    "parent": null,
+                    "parent": "staminaGauge",
                     "rotation": 0.0,
                     "scale": [
-                        64.0,
-                        64.0
+                        0.5,
+                        0.5
                     ],
                     "translate": [
-                        110.82754516601563,
-                        152.3877410888672
+                        0.7556419372558594,
+                        0.7559999823570251
+                    ]
+                }
+            }
+        },
+        "canMagicUIBack": {
+            "components": {
+                "CanMagicUITag": {
+                    "isBackground": true
+                },
+                "EditTag": {
+                    "name": "canMagicUIBack",
+                    "path": "UI/canMagicUI"
+                },
+                "SpriteComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        0.0
+                    ],
+                    "fill": 0.0,
+                    "flipX": false,
+                    "flipY": false,
+                    "isVisible": true,
+                    "layer": 0,
+                    "maskTextureName": "",
+                    "nonRenderAngle": 0.0,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "textureName": "canMagicUIBack",
+                    "useMask": false,
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "StaminaGaugeParentTag": null,
+                "Transform2DComponent": {
+                    "parent": "canMagicUI",
+                    "rotation": 0.0,
+                    "scale": [
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0
                     ]
                 }
             }
@@ -25583,15 +25638,15 @@
                 },
                 "StaminaGaugeParentTag": null,
                 "Transform2DComponent": {
-                    "parent": null,
+                    "parent": "staminaGauge",
                     "rotation": 0.0,
                     "scale": [
-                        150.0,
-                        150.0
+                        1.5,
+                        1.5
                     ],
                     "translate": [
-                        130.10000610351563,
-                        592.7000122070313
+                        0.0,
+                        0.0
                     ]
                 }
             },

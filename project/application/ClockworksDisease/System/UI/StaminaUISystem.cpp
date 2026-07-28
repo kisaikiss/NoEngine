@@ -2,17 +2,22 @@
 #include "StaminaUISystem.h"
 #include "application/ClockworksDisease/Component/UI/UserInterfaceComponent.h"
 #include "application/ClockworksDisease/Component/Player/PlayerComponent.h"
+#include "application/ClockworksDisease/Component/Player/PlayerMoveTags.h"
 
 void StaminaUISystem::Update(No::Registry& registry, float deltaTime) {
 
 	// プレイヤーの情報を収集
 	float stamina = 0.0f;
 	float maxStamina = 0.0f;
+	bool canMagic = false;
+	bool hasMagic = false;
 	No::Vector3 playerPos = No::Vector3::ZERO;
 	for (auto e : registry.View<PlayerComponent, No::TransformComponent> ()) {
 		auto* player = registry.GetComponent<PlayerComponent>(e);
 		stamina = player->stamina;
 		maxStamina = player->maxStamina;
+		canMagic = player->canCreateScaffold && registry.Has<CreateMagicScaffoldTag>(e);
+		hasMagic = registry.Has<CreateMagicScaffoldTag>(e);
 		playerPos = registry.GetComponent<No::TransformComponent>(e)->GetWorldPosition(registry);
 	}
 	// スタミナ最大値が0なら早期リターン
@@ -53,6 +58,13 @@ void StaminaUISystem::Update(No::Registry& registry, float deltaTime) {
 			staminaGauge->timer = 0.0f;
 		}
 
+		if (hasMagic && !canMagic) {
+			sprite->color.a = 1.0f;
+			staminaGauge->alphaT = 0.0f;
+			staminaGauge->timer = 0.0f;
+		}
+
+
 		// もしタイマーが一定以上なら少しずつ透明にする
 		if (staminaGauge->timer >= staminaGauge->disappearanceTime) {
 			if (staminaGauge->alphaT < 1.0f) {
@@ -76,9 +88,23 @@ void StaminaUISystem::Update(No::Registry& registry, float deltaTime) {
 	}
 
 
-	// スタミナゲージの周りの部分の位置と色をスタミナゲージ本体に合わせる
+	// スタミナゲージの周りの部分の色をスタミナゲージ本体に合わせる
 	for (auto e : registry.View < No::Transform2DComponent, No::SpriteComponent, StaminaGaugeParentTag>()) {
-		registry.GetComponent<No::Transform2DComponent>(e)->translate = staminaGaugePosition;
-		registry.GetComponent<No::SpriteComponent>(e)->color = staminaGaugeColor;
+		auto* sprite = registry.GetComponent<No::SpriteComponent>(e);
+		sprite->color = staminaGaugeColor;
+
+		// 魔法UI
+		if (registry.Has<CanMagicUITag>(e)) {
+			//プレイヤーが魔法を使えるレベルか
+			if (!hasMagic) {
+				sprite->isVisible = false;
+			} else {
+				// 魔法を使えるかつUIの背景なら常に見える
+				if (registry.GetComponent<CanMagicUITag>(e)->isBackground) {
+					sprite->isVisible = true;
+				}
+			}
+
+		} 
 	}
 }

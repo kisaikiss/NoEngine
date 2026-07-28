@@ -21,4 +21,4 @@ struct LevelUpFrameTag{};
 
 struct LevelUpTextParentTag {};
 
-struct CanMagicUITag {};
+struct CanMagicUITag { bool isBackground = false; };
