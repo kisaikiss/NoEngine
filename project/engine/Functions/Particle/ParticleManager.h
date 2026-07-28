@@ -22,7 +22,8 @@ public:
 	static void Shutdown();
 
 	static StructuredBuffer& GetParticleBuffer();
-    static StructuredBuffer& GetFreeCounterBuffer();
+    static StructuredBuffer& GetFreeListIndexBuffer();
+    static StructuredBuffer& GetFreeListBuffer();
     static uint32_t GetParticleNum();
 };
 }

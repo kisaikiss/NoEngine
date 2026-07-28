@@ -8,7 +8,8 @@
 namespace NoEngine {
 namespace {
 StructuredBuffer sParticleBuffer;
-StructuredBuffer sFreeCounterBuffer;
+StructuredBuffer sFreeListIndexBuffer;
+StructuredBuffer sFreeListBuffer;
 ComputePSO sPSO;
 RootSignature sRootSignature;
 const std::wstring sPsoName = L"InitializeParticle";
@@ -42,13 +43,17 @@ void ParticleManager::Initialize(ComputeContext& ctx) {
 	ctx.SetDynamicDescriptor(rootIndex["gParticles"], 0, sParticleBuffer.GetUAV());
 
 
-	sFreeCounterBuffer.Create(L"FreeCounterBuffer", 1, sizeof(int));
-	ctx.TransitionResource(sFreeCounterBuffer, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
-	ctx.SetDynamicDescriptor(rootIndex["gFreeCounter"], 0, sFreeCounterBuffer.GetUAV());
+	sFreeListIndexBuffer.Create(L"FreeListIndexBuffer", 1, sizeof(int));
+	ctx.TransitionResource(sFreeListIndexBuffer, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+	ctx.SetDynamicDescriptor(rootIndex["gFreeListIndex"], 0, sFreeListIndexBuffer.GetUAV());
+
+	sFreeListBuffer.Create(L"FreeListBuffer", sMaxParticle, sizeof(uint32_t));
+	ctx.TransitionResource(sFreeListBuffer, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+	ctx.SetDynamicDescriptor(rootIndex["gFreeList"], 0, sFreeListBuffer.GetUAV());
 
 	ctx.Dispatch(1, 1, 1);
 	ctx.InsertUAVBarrier(sParticleBuffer);
-	ctx.InsertUAVBarrier(sFreeCounterBuffer);
+	ctx.InsertUAVBarrier(sFreeListIndexBuffer);
 
 }
 
@@ -58,15 +63,20 @@ void ParticleManager::Reset() {
 
 void ParticleManager::Shutdown() {
 	sParticleBuffer.Destroy();
-	sFreeCounterBuffer.Destroy();
+	sFreeListIndexBuffer.Destroy();
+	sFreeListBuffer.Destroy();
 }
 
 StructuredBuffer& ParticleManager::GetParticleBuffer() {
 	return sParticleBuffer;
 }
 
-StructuredBuffer& ParticleManager::GetFreeCounterBuffer() {
-	return sFreeCounterBuffer;
+StructuredBuffer& ParticleManager::GetFreeListIndexBuffer() {
+	return sFreeListIndexBuffer;
+}
+
+StructuredBuffer& ParticleManager::GetFreeListBuffer() {
+	return sFreeListBuffer;
 }
 
 uint32_t ParticleManager::GetParticleNum() {

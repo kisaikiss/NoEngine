@@ -70,15 +70,19 @@ void ParticleEmitterSystem::Update(ComputeContext& ctx, Registry& registry, floa
 
 		ctx.SetDynamicConstantBufferView(rootIndex["gPerFrame"], sizeof(timeConstants), &timeConstants);
 
-		auto& freeCounter = ParticleManager::GetFreeCounterBuffer();
-		ctx.SetDynamicDescriptor(rootIndex["gFreeCounter"], 0, freeCounter.GetUAV());
+		auto& freeIndex = ParticleManager::GetFreeListIndexBuffer();
+		ctx.SetDynamicDescriptor(rootIndex["gFreeListIndex"], 0, freeIndex.GetUAV());
+
+		auto& freeList = ParticleManager::GetFreeListBuffer();
+		ctx.SetDynamicDescriptor(rootIndex["gFreeList"], 0, freeList.GetUAV());
 
 		auto& particleBuffer = ParticleManager::GetParticleBuffer();
 		ctx.TransitionResource(particleBuffer, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 		ctx.SetDynamicDescriptor(rootIndex["gParticles"], 0, particleBuffer.GetUAV());
 		ctx.Dispatch(1, 1, 1);
 		ctx.InsertUAVBarrier(particleBuffer);
-		ctx.InsertUAVBarrier(freeCounter);
+		ctx.InsertUAVBarrier(freeIndex);
+		ctx.InsertUAVBarrier(freeList);
 		
 
 

@@ -18,7 +18,8 @@ struct PerFrame
 };
 ConstantBuffer<PerFrame> gPerFrame : register(b1);
 
-RWStructuredBuffer<int> gFreeCounter : register(u1);
+RWStructuredBuffer<int> gFreeListIndex : register(u1);
+RWStructuredBuffer<uint> gFreeList : register(u2);
 
 class RandomGenerator
 {
@@ -49,17 +50,24 @@ void main(uint3 DTid : SV_DispatchThreadID)
         
         for (uint countIndex = 0; countIndex < gEmitter.count; ++countIndex)
         {
-            int particleIndex;
-            InterlockedAdd(gFreeCounter[0], 1, particleIndex);
-            
-            if (particleIndex < kMaxParticles)
+            int freeListIndex;
+            InterlockedAdd(gFreeListIndex[0], -1, freeListIndex);
+            if (0 <= freeListIndex && freeListIndex < kMaxParticles)
             {
+                uint particleIndex = gFreeList[freeListIndex];
                 // カウント分Particleを射出する
                 gParticles[particleIndex].scale = generator.Generate3d();
                 gParticles[particleIndex].translate = generator.Generate3d();
                 gParticles[particleIndex].color = float4(generator.Generate3d(), 1.0f);
                 gParticles[particleIndex].lifeTime = generator.Generate1d();
+                gParticles[particleIndex].currentTime = 0.0f;
                 gParticles[particleIndex].velocity = 0.1f - generator.Generate3d() / 5.0f;
+            }
+            else
+            {
+                // 発生させられなかったので減らした分を元に戻す。
+                InterlockedAdd(gFreeListIndex[0], 1);
+                break;
             }
 
         }

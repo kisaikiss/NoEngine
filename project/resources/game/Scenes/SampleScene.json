@@ -2007,9 +2007,9 @@
                 },
                 "DebugCameraComponent": {
                     "center": [
-                        5.859805107116699,
-                        8.623064994812012,
-                        2.237109661102295
+                        4.819286346435547,
+                        6.827940464019775,
+                        2.625359535217285
                     ],
                     "distance": 9.015334129333496,
                     "drawCenter": false,
@@ -2024,10 +2024,10 @@
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
-                        -0.2215438336133957,
-                        -0.4508158564567566,
-                        -0.11656889319419861,
-                        0.8567935228347778
+                        0.04846641421318054,
+                        -0.651659369468689,
+                        0.04178788140416145,
+                        0.7558074593544006
                     ],
                     "scale": [
                         1.0,
@@ -2035,9 +2035,9 @@
                         1.0
                     ],
                     "translate": [
-                        12.358616828918457,
-                        4.253000259399414,
-                        -2.228787899017334
+                        13.663395881652832,
+                        7.979428291320801,
+                        1.3092817068099976
                     ]
                 }
             }
@@ -25344,6 +25344,80 @@
                 }
             },
             "prefabInstance": "resources/game/Prefabs\\pointLight.json"
+        },
+        "skydome": {
+            "components": {
+                "EditTag": {
+                    "name": "skydome",
+                    "path": "newEntity"
+                },
+                "MaterialComponent": {
+                    "blendMode": "kNormal",
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "enviromentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "renderMode": "kDefault",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "skydome"
+                },
+                "PointLightComponent": {
+                    "color": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "decay": 1.5,
+                    "intensity": 0.0,
+                    "radius": 1.0
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
         },
         "stage": {
             "components": {
