@@ -22,43 +22,36 @@ static bool IsTransparent(MaterialComponent* m) {
 	return m->blendMode != BlendMode::kNormal || m->color.a < 1.0f;
 }
 
-MeshPass::MeshPass() : camera_(nullptr) {
+// ============================== MeshPassBase ==============================
 
+MeshPassBase::MeshPassBase() : camera_(nullptr) {
 	skyBoxTexture_ = TextureManager::LoadTextureFile("resources/engine/Texture/rostock_laage_airport_4k.dds");
 }
 
-void MeshPass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& resourceRegistry, ECS::Registry& registry) {
-	static_cast<void>(resourceRegistry);
+void MeshPassBase::EnsurePSOsInitialized() {
+	if (!psoIDs_.empty()) return;
 
-	if (psoIDs_.empty()) {
-		auto& context = *GetRenderContext();
-		psoIDs_[RenderMode::kDefault][BlendMode::kNormal] = context.GetPSOID("Renderer : Default PSO");
-		psoIDs_[RenderMode::kDefault][BlendMode::kAdd] = context.GetPSOID("Renderer : Default Add PSO");
-		psoIDs_[RenderMode::kDefault][BlendMode::kSubtract] = context.GetPSOID("Renderer : Default Sub PSO");
-		psoIDs_[RenderMode::kDefault][BlendMode::kMultiply] = context.GetPSOID("Renderer : Default Mul PSO");
-		psoIDs_[RenderMode::kDefault][BlendMode::kScreen] = context.GetPSOID("Renderer : Default Screen PSO");
+	auto& context = *GetRenderContext();
+	psoIDs_[RenderMode::kDefault][BlendMode::kNormal] = context.GetPSOID("Renderer : Default PSO");
+	psoIDs_[RenderMode::kDefault][BlendMode::kAdd] = context.GetPSOID("Renderer : Default Add PSO");
+	psoIDs_[RenderMode::kDefault][BlendMode::kSubtract] = context.GetPSOID("Renderer : Default Sub PSO");
+	psoIDs_[RenderMode::kDefault][BlendMode::kMultiply] = context.GetPSOID("Renderer : Default Mul PSO");
+	psoIDs_[RenderMode::kDefault][BlendMode::kScreen] = context.GetPSOID("Renderer : Default Screen PSO");
 
-		psoIDs_[RenderMode::kToon][BlendMode::kNormal] = context.GetPSOID("Renderer : Toon PSO");
-		psoIDs_[RenderMode::kToon][BlendMode::kAdd] = context.GetPSOID("Renderer : Toon Add PSO");
-		psoIDs_[RenderMode::kToon][BlendMode::kSubtract] = context.GetPSOID("Renderer : Toon Sub PSO");
-		psoIDs_[RenderMode::kToon][BlendMode::kMultiply] = context.GetPSOID("Renderer : Toon Mul PSO");
-		psoIDs_[RenderMode::kToon][BlendMode::kScreen] = context.GetPSOID("Renderer : Toon Screen PSO");
+	psoIDs_[RenderMode::kToon][BlendMode::kNormal] = context.GetPSOID("Renderer : Toon PSO");
+	psoIDs_[RenderMode::kToon][BlendMode::kAdd] = context.GetPSOID("Renderer : Toon Add PSO");
+	psoIDs_[RenderMode::kToon][BlendMode::kSubtract] = context.GetPSOID("Renderer : Toon Sub PSO");
+	psoIDs_[RenderMode::kToon][BlendMode::kMultiply] = context.GetPSOID("Renderer : Toon Mul PSO");
+	psoIDs_[RenderMode::kToon][BlendMode::kScreen] = context.GetPSOID("Renderer : Toon Screen PSO");
 
-		psoIDs_[RenderMode::kEmissive][BlendMode::kAdd] = context.GetPSOID("Renderer : Emissive PSO");
+	psoIDs_[RenderMode::kEmissive][BlendMode::kAdd] = context.GetPSOID("Renderer : Emissive PSO");
 
-		rootSigIDs_[RenderMode::kDefault] = context.GetRootSignatureID("Renderer : Default PSO");
-		rootSigIDs_[RenderMode::kToon] = context.GetRootSignatureID("Renderer : Toon PSO");
-		rootSigIDs_[RenderMode::kEmissive] = context.GetRootSignatureID("Renderer : Emissive PSO");
-	}
-
-	Collect(registry);
-	Sort();
-	RenderItems(gfx, resourceRegistry, opaqueItems_, registry);      // 不透明を先に
-	RenderItems(gfx, resourceRegistry, transparentItems_, registry); // 半透明を後に
-	RenderOutline(gfx, registry);
+	rootSigIDs_[RenderMode::kDefault] = context.GetRootSignatureID("Renderer : Default PSO");
+	rootSigIDs_[RenderMode::kToon] = context.GetRootSignatureID("Renderer : Toon PSO");
+	rootSigIDs_[RenderMode::kEmissive] = context.GetRootSignatureID("Renderer : Emissive PSO");
 }
 
-void MeshPass::Collect(ECS::Registry& registry) {
+void MeshPassBase::Collect(ECS::Registry& registry) {
 	auto view = registry.View<
 		TransformComponent,
 		MeshComponent,
@@ -94,7 +87,7 @@ void MeshPass::Collect(ECS::Registry& registry) {
 	}
 }
 
-void MeshPass::Sort() {
+void MeshPassBase::Sort() {
 	// 不透明: Early-Z効率を上げるため前→奥。PSO単位でまとめてステート変更コストを削減してもよい
 	std::sort(opaqueItems_.begin(), opaqueItems_.end(),
 		[](const DrawItem& a, const DrawItem& b) {
@@ -108,7 +101,7 @@ void MeshPass::Sort() {
 		});
 }
 
-void MeshPass::RenderItems(GraphicsContext& context, const RenderGraphRegistry& resourceRegistry, const std::vector<DrawItem>& items, ECS::Registry& registry) {
+void MeshPassBase::RenderItems(GraphicsContext& context, const RenderGraphRegistry& resourceRegistry, const std::vector<DrawItem>& items, ECS::Registry& registry) {
 	(void)resourceRegistry;
 	uint32_t currentPSO = 0xFFFFFFFF;
 	auto* renderCtx = GetRenderContext();
@@ -170,12 +163,12 @@ void MeshPass::RenderItems(GraphicsContext& context, const RenderGraphRegistry& 
 				if (constants.spotLightNum)
 					context.SetDynamicDescriptor(rootIndex["gSpotLights"], 0, renderCtx->GetSpotLightSRV());
 			} else {
-				
-				_declspec(align(16)) struct { 
-					Math::Color color = Math::Color::BLACK; 
+
+				_declspec(align(16)) struct {
+					Math::Color color = Math::Color::BLACK;
 					Math::Color edgeColor = Math::Color::WHITE;
-					float intensity = 0.0f; 
-					float rimPower = 0.0f; 
+					float intensity = 0.0f;
+					float rimPower = 0.0f;
 					float scrollSpeed = 0.0f;
 					float time = 0.0f;
 				} emissiveConstants{
@@ -192,7 +185,7 @@ void MeshPass::RenderItems(GraphicsContext& context, const RenderGraphRegistry& 
 				}
 				context.SetDynamicDescriptor(rootIndex["gNoiseTexture"], 0, item.material->noiseTextureHandle.GetSRV());
 			}
-			
+
 		}
 		auto* mesh = ModelSaver::Get().GetMesh(item.meshHandle);
 		if (!mesh) continue;
@@ -227,10 +220,21 @@ void MeshPass::RenderItems(GraphicsContext& context, const RenderGraphRegistry& 
 				context.SetDynamicDescriptor(rootIndex["gShadowMask"], 0, resourceRegistry.GetColorBuffer("ShadowMask").GetSRV());
 				context.SetDynamicDescriptor(rootIndex["gEnvironmentTexture"], 0, skyBoxTexture_.GetSRV());
 			}
-			
+
 			context.DrawIndexedInstanced(subMesh.indexCount, 1, subMesh.indexStart, subMesh.vertexStart, 0);
 		}
 	}
+}
+
+// =================================== MeshPass ===================================
+
+void MeshPass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& resourceRegistry, ECS::Registry& registry) {
+	EnsurePSOsInitialized();
+
+	Collect(registry);
+	Sort();
+	RenderItems(gfx, resourceRegistry, opaqueItems_, registry); // 不透明のみ。半透明はTransparentMeshPassが担当
+	RenderOutline(gfx, registry);
 }
 
 void MeshPass::RenderOutline(GraphicsContext& context, ECS::Registry& registry) {

@@ -151,6 +151,7 @@ void EditSystem::Update(Registry& registry, float deltaTime) {
 				registry.AddComponent<Editor::EditSelectedTag>(pasteEntity);
 				static constexpr float kIntervalTime = 1.f;
 				timeInterval_ = kIntervalTime;
+				Editor::EditorCommandOperator::AddCommand(std::make_unique<Command::InstantiateEntityCommand>(registry, pasteEntity));
 			}
 		}
 	}

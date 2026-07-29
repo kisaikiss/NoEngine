@@ -1,6 +1,7 @@
 #include "RenderPassScheduler.h"
 #include "Rasterization/SpritePass.h"
 #include "Rasterization/MeshPass.h"
+#include "Rasterization/TransparentMeshPass.h"
 #include "Rasterization/PrimitivePass.h"
 #include "PrePasses/LightPass.h"
 #include "Rasterization/CPUParticlePass.h"
@@ -243,18 +244,30 @@ void CommonSetupRenderPass(RenderPassScheduler& renderPassScheduler) {
 	depthBasedOutlinePass->AddOutput("PostEffect");
 	renderPassScheduler.AddPass(std::move(depthBasedOutlinePass));
 
+	auto depthOfField = std::make_unique<DepthOfFieldPass>();
+	depthOfField->AddInput("InputColor", "PostEffect");
+	depthOfField->AddInput("InputDepth", "MainDepth");
+	depthOfField->AddOutput("MainColor");
+	renderPassScheduler.AddPass(std::move(depthOfField));
+
+	auto transparentMeshPass = std::make_unique<TransparentMeshPass>();
+	transparentMeshPass->AddInput("ShadowMask", "ShadowMask");
+	transparentMeshPass->AddOutput("MainColor");
+	transparentMeshPass->SetDepthOutput("MainDepth");
+	renderPassScheduler.AddPass(std::move(transparentMeshPass));
+
 	auto cpuParticlePass = std::make_unique<CPUParticlePass>();
-	cpuParticlePass->AddOutput("PostEffect");
+	cpuParticlePass->AddOutput("MainColor");
 	cpuParticlePass->SetDepthOutput("MainDepth");
 	renderPassScheduler.AddPass(std::move(cpuParticlePass));
 
 	auto particlePass = std::make_unique<ParticlePass>();
-	particlePass->AddOutput("PostEffect");
+	particlePass->AddOutput("MainColor");
 	particlePass->SetDepthOutput("MainDepth");
 	renderPassScheduler.AddPass(std::move(particlePass));
 
 	auto bloomThreshold = std::make_unique<BloomThresholdPass>();
-	bloomThreshold->AddInput("InputColor", "PostEffect");
+	bloomThreshold->AddInput("InputColor", "MainColor");
 	bloomThreshold->AddOutput("BloomThreshold");
 	renderPassScheduler.AddPass(std::move(bloomThreshold));
 
@@ -271,19 +284,13 @@ void CommonSetupRenderPass(RenderPassScheduler& renderPassScheduler) {
 	}
 
 	auto bloomComposite = std::make_unique<BloomCompositePass>();
-	bloomComposite->AddInput("SceneColor", "PostEffect");
+	bloomComposite->AddInput("SceneColor", "MainColor");
 	bloomComposite->AddInput("BloomColor", "BloomBlurB");
 	bloomComposite->AddOutput("BloomComposite");
 	renderPassScheduler.AddPass(std::move(bloomComposite));
 
-	auto depthOfField = std::make_unique<DepthOfFieldPass>();
-	depthOfField->AddInput("InputColor", "BloomComposite");
-	depthOfField->AddInput("InputDepth", "MainDepth");
-	depthOfField->AddOutput("DepthOfField");
-	renderPassScheduler.AddPass(std::move(depthOfField));
-
 	auto vignetting = std::make_unique<VignettingPass>();
-	vignetting->AddInput("InputColor", "DepthOfField");
+	vignetting->AddInput("InputColor", "BloomComposite");
 	vignetting->AddOutput("MainColor");
 	renderPassScheduler.AddPass(std::move(vignetting));
 
@@ -327,6 +334,12 @@ void CommonSetupDebugRenderPass(RenderPassScheduler& renderPassScheduler) {
 	meshPass->SetTargetCameraType(RenderPass::TargetCameraType::kDebug);
 	renderPassScheduler.AddPass(std::move(meshPass));
 
+	auto transparentMeshPass = std::make_unique<TransparentMeshPass>();
+	transparentMeshPass->AddInput("ShadowMask", "ShadowMask");
+	transparentMeshPass->AddOutput("DebugColor");
+	transparentMeshPass->SetDepthOutput("MainDepth");
+	transparentMeshPass->SetTargetCameraType(RenderPass::TargetCameraType::kDebug);
+	renderPassScheduler.AddPass(std::move(transparentMeshPass));
 
 	auto primitivePass = std::make_unique<PrimitivePass>();
 	primitivePass->AddOutput("DebugColor");

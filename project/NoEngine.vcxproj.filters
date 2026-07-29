@@ -255,6 +255,7 @@
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\BloomBlurPass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\BloomCompositePass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\DepthOfFieldPass.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\RenderPass\Rasterization\TransparentMeshPass.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -513,6 +514,7 @@
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\BloomBlurPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\BloomCompositePass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\DepthOfFieldPass.h" />
+    <ClInclude Include="engine\Functions\Renderer\RenderPass\Rasterization\TransparentMeshPass.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />
