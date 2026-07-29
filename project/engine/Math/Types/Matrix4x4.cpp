@@ -79,7 +79,7 @@ Matrix4x4::Matrix4x4(const Matrix4x4& matrix4x4) {
 	m[3][0] = matrix4x4.m[3][0];
 	m[3][1] = matrix4x4.m[3][1];
 	m[3][2] = matrix4x4.m[3][2];
-	m[3][3] = 1.0f;
+	m[3][3] = matrix4x4.m[3][3];
 }
 
 Matrix4x4::Matrix4x4(const Matrix3x3& matrix3x3) {

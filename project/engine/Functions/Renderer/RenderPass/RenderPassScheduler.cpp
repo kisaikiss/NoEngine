@@ -13,7 +13,7 @@
 #include "PostEffect/GrayscalePass.h"
 #include "PostEffect/VignettingPass.h"
 #include "PostEffect/GaussianFilterPass.h"
-#include "PostEffect/BoxFilterPass.h"
+#include "PostEffect/DepthOfFieldPass.h"
 #include "PostEffect/DepthBasedOutlinePass.h"
 #include "PostEffect/BloomThresholdPass.h"
 #include "PostEffect/BloomBlurPass.h"
@@ -199,6 +199,7 @@ void CommonSetupRenderPass(RenderPassScheduler& renderPassScheduler) {
 	resourceRegistry.CreateColorBuffer("BloomComposite", windowSize.x, windowSize.y, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
 
 	resourceRegistry.CreateColorBuffer("PostEffect", windowSize.x, windowSize.y, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
+	resourceRegistry.CreateColorBuffer("DepthOfField", windowSize.x, windowSize.y, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
 	renderPassScheduler.SetScreenDrawBuffer("MainColor");
 	
 	resourceRegistry.CreateDepthBuffer("MainDepth", windowSize.x, windowSize.y);
@@ -277,6 +278,7 @@ void CommonSetupRenderPass(RenderPassScheduler& renderPassScheduler) {
 	vignetting->AddInput("InputColor", "BloomComposite");
 	vignetting->AddOutput("MainColor");
 	renderPassScheduler.AddPass(std::move(vignetting));
+
 
 	auto spritePass = std::make_unique<SpritePass>();
 	spritePass->AddOutput("MainColor");

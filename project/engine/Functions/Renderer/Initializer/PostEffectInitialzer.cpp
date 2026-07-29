@@ -107,6 +107,25 @@ void PostEffectInitialzer::CreatePSO(RenderContext& ctx) {
 	}
 
 	{
+		ShaderModule dofPS(ShaderStage::Pixel, L"resources/engine/Shaders/PostEffect/DepthOfField.PS.hlsl", L"ps_6_0");
+
+		const ShaderReflection& dofPSReflection = dofPS.GetReflection();
+		std::vector<ShaderReflection> dofReflections;
+		dofReflections.push_back(vsReflection);
+		dofReflections.push_back(dofPSReflection);
+
+		RootSignature dofRootSignature;
+		RootSignatureBuilder::BuildFromReflection(dofReflections, dofRootSignature, "Renderer : DepthOfField");
+
+		defaultPSO.SetPixelShader(dofPS.GetBytecode());
+		defaultPSO.SetRootSignature(dofRootSignature);
+		defaultPSO.Finalize();
+
+		ctx.RegisterGraphicsPSO("Renderer : DepthOfField PSO", defaultPSO);
+		ctx.RegisterRootSignature("Renderer : DepthOfField", std::move(dofRootSignature));
+	}
+
+	{
 		ShaderModule pixelShader(ShaderStage::Pixel, L"resources/engine/Shaders/Dissolve.PS.hlsl", L"ps_6_0");
 
 		const ShaderReflection& pixelShaderReflection = pixelShader.GetReflection();
