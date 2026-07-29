@@ -19,6 +19,7 @@ ConstantBuffer<BlurParams> gBlur : register(b0);
 Texture2D<float4> gTexture : register(t0);
 SamplerState gSampler : register(s0);
 
+// ガウス分布に基づいてあらかじめ計算した重み
 static const float kWeights[5] = { 0.2270270270f, 0.1945945946f, 0.1216216216f, 0.0540540541f, 0.0162162162f };
 
 PSOutput main(VSOutput input)
@@ -29,6 +30,7 @@ PSOutput main(VSOutput input)
     [unroll]
     for (int i = 1; i < 5; ++i)
     {
+        // ピクセルとピクセルの間をサンプリングする(そのために1.5fかける)
         float2 offset = gBlur.direction * gBlur.texelSize * float(i) * 1.5f;
         result += gTexture.Sample(gSampler, input.texcoord + offset).rgb * kWeights[i];
         result += gTexture.Sample(gSampler, input.texcoord - offset).rgb * kWeights[i];

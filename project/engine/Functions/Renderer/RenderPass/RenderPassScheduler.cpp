@@ -258,15 +258,17 @@ void CommonSetupRenderPass(RenderPassScheduler& renderPassScheduler) {
 	bloomThreshold->AddOutput("BloomThreshold");
 	renderPassScheduler.AddPass(std::move(bloomThreshold));
 
-	auto bloomBlurH = std::make_unique<BloomBlurPass>(true);
-	bloomBlurH->AddInput("InputColor", "BloomThreshold");
-	bloomBlurH->AddOutput("BloomBlurA");
-	renderPassScheduler.AddPass(std::move(bloomBlurH));
+	{
+		auto bloomBlurH = std::make_unique<BloomBlurPass>(true);
+		bloomBlurH->AddInput("InputColor", "BloomThreshold");
+		bloomBlurH->AddOutput("BloomBlurA");
+		renderPassScheduler.AddPass(std::move(bloomBlurH));
 
-	auto bloomBlurV = std::make_unique<BloomBlurPass>(false);
-	bloomBlurV->AddInput("InputColor", "BloomBlurA");
-	bloomBlurV->AddOutput("BloomBlurB");
-	renderPassScheduler.AddPass(std::move(bloomBlurV));
+		auto bloomBlurV = std::make_unique<BloomBlurPass>(false);
+		bloomBlurV->AddInput("InputColor", "BloomBlurA");
+		bloomBlurV->AddOutput("BloomBlurB");
+		renderPassScheduler.AddPass(std::move(bloomBlurV));
+	}
 
 	auto bloomComposite = std::make_unique<BloomCompositePass>();
 	bloomComposite->AddInput("SceneColor", "PostEffect");
@@ -274,8 +276,14 @@ void CommonSetupRenderPass(RenderPassScheduler& renderPassScheduler) {
 	bloomComposite->AddOutput("BloomComposite");
 	renderPassScheduler.AddPass(std::move(bloomComposite));
 
+	auto depthOfField = std::make_unique<DepthOfFieldPass>();
+	depthOfField->AddInput("InputColor", "BloomComposite");
+	depthOfField->AddInput("InputDepth", "MainDepth");
+	depthOfField->AddOutput("DepthOfField");
+	renderPassScheduler.AddPass(std::move(depthOfField));
+
 	auto vignetting = std::make_unique<VignettingPass>();
-	vignetting->AddInput("InputColor", "BloomComposite");
+	vignetting->AddInput("InputColor", "DepthOfField");
 	vignetting->AddOutput("MainColor");
 	renderPassScheduler.AddPass(std::move(vignetting));
 
