@@ -15,9 +15,9 @@
 #include "PostEffect/GaussianFilterPass.h"
 #include "PostEffect/BoxFilterPass.h"
 #include "PostEffect/DepthBasedOutlinePass.h"
-#include "PostEffect/RadialBlurPass.h"
-#include "PostEffect/DissolvePass.h"
-#include "PostEffect/RandomNoisePass.h"
+#include "PostEffect/BloomThresholdPass.h"
+#include "PostEffect/BloomBlurPass.h"
+#include "PostEffect/BloomCompositePass.h"
 
 #include "../Primitive.h"
 
@@ -192,6 +192,12 @@ void CommonSetupRenderPass(RenderPassScheduler& renderPassScheduler) {
 	resourceRegistry.CreateColorBuffer("Normal", windowSize.x, windowSize.y, DXGI_FORMAT_R10G10B10A2_UNORM);
 	resourceRegistry.CreateColorBuffer("ObjectID", windowSize.x, windowSize.y, DXGI_FORMAT_R8G8B8A8_UNORM);
 
+	// ブルーム
+	resourceRegistry.CreateColorBuffer("BloomThreshold", windowSize.x, windowSize.y, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
+	resourceRegistry.CreateColorBuffer("BloomBlurA", windowSize.x, windowSize.y, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
+	resourceRegistry.CreateColorBuffer("BloomBlurB", windowSize.x, windowSize.y, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
+	resourceRegistry.CreateColorBuffer("BloomComposite", windowSize.x, windowSize.y, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
+
 	resourceRegistry.CreateColorBuffer("PostEffect", windowSize.x, windowSize.y, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
 	renderPassScheduler.SetScreenDrawBuffer("MainColor");
 	
@@ -246,8 +252,29 @@ void CommonSetupRenderPass(RenderPassScheduler& renderPassScheduler) {
 	particlePass->SetDepthOutput("MainDepth");
 	renderPassScheduler.AddPass(std::move(particlePass));
 
+	auto bloomThreshold = std::make_unique<BloomThresholdPass>();
+	bloomThreshold->AddInput("InputColor", "PostEffect");
+	bloomThreshold->AddOutput("BloomThreshold");
+	renderPassScheduler.AddPass(std::move(bloomThreshold));
+
+	auto bloomBlurH = std::make_unique<BloomBlurPass>(true);
+	bloomBlurH->AddInput("InputColor", "BloomThreshold");
+	bloomBlurH->AddOutput("BloomBlurA");
+	renderPassScheduler.AddPass(std::move(bloomBlurH));
+
+	auto bloomBlurV = std::make_unique<BloomBlurPass>(false);
+	bloomBlurV->AddInput("InputColor", "BloomBlurA");
+	bloomBlurV->AddOutput("BloomBlurB");
+	renderPassScheduler.AddPass(std::move(bloomBlurV));
+
+	auto bloomComposite = std::make_unique<BloomCompositePass>();
+	bloomComposite->AddInput("SceneColor", "PostEffect");
+	bloomComposite->AddInput("BloomColor", "BloomBlurB");
+	bloomComposite->AddOutput("BloomComposite");
+	renderPassScheduler.AddPass(std::move(bloomComposite));
+
 	auto vignetting = std::make_unique<VignettingPass>();
-	vignetting->AddInput("InputColor", "PostEffect");
+	vignetting->AddInput("InputColor", "BloomComposite");
 	vignetting->AddOutput("MainColor");
 	renderPassScheduler.AddPass(std::move(vignetting));
 

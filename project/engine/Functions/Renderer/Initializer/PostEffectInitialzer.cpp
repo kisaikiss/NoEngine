@@ -141,5 +141,62 @@ void PostEffectInitialzer::CreatePSO(RenderContext& ctx) {
 		ctx.RegisterGraphicsPSO("Renderer : RandomNoise PSO", defaultPSO);
 		ctx.RegisterRootSignature("Renderer : RandomNoise", std::move(rootSignature));
 	}
+
+	{
+		ShaderModule thresholdPS(ShaderStage::Pixel, L"resources/engine/Shaders/PostEffect/BloomThreshold.PS.hlsl", L"ps_6_0");
+
+		const ShaderReflection& thresholdReflection = thresholdPS.GetReflection();
+		std::vector<ShaderReflection> reflections;
+		reflections.push_back(vsReflection);
+		reflections.push_back(thresholdReflection);
+
+		RootSignature rootSignature;
+		RootSignatureBuilder::BuildFromReflection(reflections, rootSignature, "Renderer : BloomThreshold");
+
+		defaultPSO.SetPixelShader(thresholdPS.GetBytecode());
+		defaultPSO.SetRootSignature(rootSignature);
+		defaultPSO.Finalize();
+
+		ctx.RegisterGraphicsPSO("Renderer : BloomThreshold PSO", defaultPSO);
+		ctx.RegisterRootSignature("Renderer : BloomThreshold", std::move(rootSignature));
+	}
+
+	{
+		ShaderModule blurPS(ShaderStage::Pixel, L"resources/engine/Shaders/PostEffect/BloomBlur.PS.hlsl", L"ps_6_0");
+
+		const ShaderReflection& blurReflection = blurPS.GetReflection();
+		std::vector<ShaderReflection> reflections;
+		reflections.push_back(vsReflection);
+		reflections.push_back(blurReflection);
+
+		RootSignature rootSignature;
+		RootSignatureBuilder::BuildFromReflection(reflections, rootSignature, "Renderer : BloomBlur");
+
+		defaultPSO.SetPixelShader(blurPS.GetBytecode());
+		defaultPSO.SetRootSignature(rootSignature);
+		defaultPSO.Finalize();
+
+		ctx.RegisterGraphicsPSO("Renderer : BloomBlur PSO", defaultPSO);
+		ctx.RegisterRootSignature("Renderer : BloomBlur", std::move(rootSignature));
+	}
+
+	{
+		ShaderModule compositePS(ShaderStage::Pixel, L"resources/engine/Shaders/PostEffect/BloomComposite.PS.hlsl", L"ps_6_0");
+
+		const ShaderReflection& compositeReflection = compositePS.GetReflection();
+		std::vector<ShaderReflection> reflections;
+		reflections.push_back(vsReflection);
+		reflections.push_back(compositeReflection);
+
+		RootSignature rootSignature;
+		RootSignatureBuilder::BuildFromReflection(reflections, rootSignature, "Renderer : BloomComposite");
+
+		defaultPSO.SetPixelShader(compositePS.GetBytecode());
+		defaultPSO.SetRootSignature(rootSignature);
+		defaultPSO.Finalize();
+
+		ctx.RegisterGraphicsPSO("Renderer : BloomComposite PSO", defaultPSO);
+		ctx.RegisterRootSignature("Renderer : BloomComposite", std::move(rootSignature));
+	}
 }
 }

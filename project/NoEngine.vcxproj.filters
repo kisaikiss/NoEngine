@@ -39,6 +39,9 @@
     <FxCompile Include="resources\engine\Shaders\Particle\Particle.VS.hlsl" />
     <FxCompile Include="resources\engine\Shaders\Particle\EmitParticle.CS.hlsl" />
     <FxCompile Include="resources\engine\Shaders\Particle\UpdateParticle.CS.hlsl" />
+    <FxCompile Include="resources\engine\Shaders\PostEffect\BloomThreshold.PS.hlsl" />
+    <FxCompile Include="resources\engine\Shaders\PostEffect\BloomBlur.PS.hlsl" />
+    <FxCompile Include="resources\engine\Shaders\PostEffect\BloomComposite.PS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="engine\Assets\Audio\Audio.cpp" />
@@ -247,6 +250,9 @@
     <ClCompile Include="engine\Editor\ComponentUI.cpp" />
     <ClCompile Include="application\ClockworksDisease\Component\Stage\StageComponent.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Game\TerrainLoadSystem.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\BloomThresholdPass.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\BloomBlurPass.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\BloomCompositePass.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -501,6 +507,9 @@
     <ClInclude Include="engine\Editor\ComponentUI.h" />
     <ClInclude Include="application\ClockworksDisease\Component\Stage\StageComponent.h" />
     <ClInclude Include="application\ClockworksDisease\System\Game\TerrainLoadSystem.h" />
+    <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\BloomThresholdPass.h" />
+    <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\BloomBlurPass.h" />
+    <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\BloomCompositePass.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />
