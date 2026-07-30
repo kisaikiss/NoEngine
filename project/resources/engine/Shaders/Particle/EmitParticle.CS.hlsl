@@ -4,6 +4,8 @@ RWStructuredBuffer<Particle> gParticles : register(u0);
 
 struct EmittterSphere
 {
+    float3 position;
+    float radius;
     uint count;
     uint emit;
     uint2 pad;
@@ -57,7 +59,9 @@ void main(uint3 DTid : SV_DispatchThreadID)
                 uint particleIndex = gFreeList[freeListIndex];
                 // カウント分Particleを射出する
                 gParticles[particleIndex].scale = generator.Generate3d();
-                gParticles[particleIndex].translate = generator.Generate3d();
+                float3 dir = normalize(generator.Generate3d() * 2.0f - 1.0f);
+                float r = pow(generator.Generate1d(), 1.0f / 3.0f) * gEmitter.radius;
+                gParticles[particleIndex].translate = gEmitter.position + dir * r;
                 gParticles[particleIndex].color = float4(generator.Generate3d(), 1.0f);
                 gParticles[particleIndex].lifeTime = generator.Generate1d();
                 gParticles[particleIndex].currentTime = 0.0f;

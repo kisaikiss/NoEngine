@@ -50,12 +50,21 @@ void ParticleEmitterSystem::Update(ComputeContext& ctx, Registry& registry, floa
 		ctx.SetRootSignature(rootSignature_);
 
 		auto& rootIndex = RootSignatureBuilder::GetRootIndexMap(ConvertString(sPsoName));
-		__declspec(align(16))struct {
+		auto* transform = registry.GetComponent<TransformComponent>(entity);
+		// 親を持つ場合はワールド座標が必要 (ParticlePassのビルボード計算と同様の手法)
+	
+		Math::Vector3 worldPos = transform->GetWorldPosition(registry);
+
+		__declspec(align(16)) struct {
+			Math::Vector3 position;
+			float radius;
 			uint32_t count;
 			uint32_t emit;
 			uint32_t pad[2];
-		}emitterConstants;
+		} emitterConstants;
 
+		emitterConstants.position = worldPos;
+		emitterConstants.radius = emitter->radius;
 		emitterConstants.count = emitter->count;
 		emitterConstants.emit = emitter->emit;
 		ctx.SetDynamicConstantBufferView(rootIndex["gEmitter"], sizeof(emitterConstants), &emitterConstants);
