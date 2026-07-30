@@ -2,6 +2,7 @@
 #include "engine/Functions/Scene/SceneManager.h"
 #include "engine/Functions/Renderer/RenderPass/RenderPassScheduler.h"
 #include "engine/Functions/ECS/Event/SceneChangeEvent.h"
+#include "engine/Functions/Particle/ParticleManager.h"
 
 namespace NoEngine {
 namespace GameCore {
@@ -30,6 +31,7 @@ public:
 	/// <param name="deltaT">経過時間</param>
 	virtual void Update(ComputeContext& ctx, float deltaT) {
 		if (auto event = GetRegistry().PollEvent<Event::SceneChangeEvent>()) {
+			ParticleManager::Reset(ctx);
 			ChangeScene(event->nextScene, true);
 		}
 

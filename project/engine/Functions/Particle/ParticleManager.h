@@ -18,7 +18,7 @@ __declspec(align(16))struct Particle {
 class ParticleManager {
 public:
 	static void Initialize(ComputeContext& ctx);
-    static void Reset();
+    static void Reset(ComputeContext& ctx);
 	static void Shutdown();
 
 	static StructuredBuffer& GetParticleBuffer();

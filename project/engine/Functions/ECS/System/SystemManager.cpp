@@ -2,6 +2,7 @@
 #include "../Component/Common/PauseComponent.h"
 #include "../Event/SceneChangeEvent.h"
 #include "../../Scene/SceneNameComponent.h"
+#include "../../Particle/ParticleManager.h"
 #ifdef USE_IMGUI
 #include "externals/imgui/imgui.h"
 #endif // USE_IMGUI

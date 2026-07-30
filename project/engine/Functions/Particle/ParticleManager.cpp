@@ -57,8 +57,24 @@ void ParticleManager::Initialize(ComputeContext& ctx) {
 
 }
 
-void ParticleManager::Reset() {
+void ParticleManager::Reset(ComputeContext& ctx) {
+	ctx.SetPipelineState(sPSO);
+	ctx.SetRootSignature(sRootSignature);
 
+	auto& rootIndex = RootSignatureBuilder::GetRootIndexMap(ConvertString(sPsoName));
+
+	ctx.TransitionResource(sParticleBuffer, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+	ctx.SetDynamicDescriptor(rootIndex["gParticles"], 0, sParticleBuffer.GetUAV());
+
+	ctx.TransitionResource(sFreeListIndexBuffer, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+	ctx.SetDynamicDescriptor(rootIndex["gFreeListIndex"], 0, sFreeListIndexBuffer.GetUAV());
+
+	ctx.TransitionResource(sFreeListBuffer, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+	ctx.SetDynamicDescriptor(rootIndex["gFreeList"], 0, sFreeListBuffer.GetUAV());
+
+	ctx.Dispatch(1, 1, 1);
+	ctx.InsertUAVBarrier(sParticleBuffer);
+	ctx.InsertUAVBarrier(sFreeListIndexBuffer);
 }
 
 void ParticleManager::Shutdown() {
