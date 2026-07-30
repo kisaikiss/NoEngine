@@ -15,7 +15,7 @@ private:
 	ByteAddressBuffer vertex_;
 	ByteAddressBuffer index_;
 	Component::CameraComponent* camera_;
-	TextureRef testTexture_;
+	TextureRef texture_;
 };
 }
 }

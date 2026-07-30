@@ -37,6 +37,8 @@ void ParticleEmitterSystem::Update(ComputeContext& ctx, Registry& registry, floa
 	auto view = registry.View<ParticleEmitterSphereComponent, TransformComponent>();
 	for (auto entity : view) {
 		auto* emitter = registry.GetComponent<ParticleEmitterSphereComponent>(entity);
+		if (!emitter->active) continue;
+
 		emitter->frequencyTime += deltaTime;
 
 		if (emitter->frequency <= emitter->frequencyTime) {

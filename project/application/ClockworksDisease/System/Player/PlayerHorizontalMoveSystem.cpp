@@ -38,13 +38,13 @@ void PlayerHorizontalMoveSystem::Update(No::Registry& registry, float deltaTime)
 	const No::Quaternion cameraRotate = GetActiveCameraRotation(registry);
 
 	auto view = registry.View<PlayerComponent, No::TransformComponent, No::VelocityComponent,
-		No::GroundStateComponent, No::ParticleEmitterComponent, PlayerMoveTransientComponent>();
+		No::GroundStateComponent, No::ParticleEmitterSphereComponent, PlayerMoveTransientComponent>();
 
 	for (auto entity : view) {
 		auto* transform = registry.GetComponent<No::TransformComponent>(entity);
 		auto* playerVariables = registry.GetComponent<PlayerComponent>(entity);
 		auto* velocity = registry.GetComponent<No::VelocityComponent>(entity);
-		auto* particleEmitter = registry.GetComponent<No::ParticleEmitterComponent>(entity);
+		auto* particleEmitter = registry.GetComponent<No::ParticleEmitterSphereComponent>(entity);
 		auto* transientState = registry.GetComponent<PlayerMoveTransientComponent>(entity);
 
 		// このフレームの水平/垂直velocityをまとめてリセット

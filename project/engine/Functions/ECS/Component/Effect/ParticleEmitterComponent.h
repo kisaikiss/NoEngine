@@ -44,6 +44,8 @@ struct ParticleEmitterComponent {
 };
 
 struct ParticleEmitterSphereComponent {
+	bool active = true;
+
 	float radius = 1.0f;
 	uint32_t count = 10;
 	float frequency = 0.5f;

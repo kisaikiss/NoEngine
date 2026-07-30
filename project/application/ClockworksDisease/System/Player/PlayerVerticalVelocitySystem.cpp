@@ -3,13 +3,13 @@
 
 void PlayerVerticalVelocitySystem::Update(No::Registry& registry, float deltaTime) {
 	auto view = registry.View<PlayerComponent, No::VelocityComponent, No::GroundStateComponent,
-		No::ParticleEmitterComponent, PlayerMoveTransientComponent>();
+		No::ParticleEmitterSphereComponent, PlayerMoveTransientComponent>();
 
 	for (auto entity : view) {
 		auto* playerVariables = registry.GetComponent<PlayerComponent>(entity);
 		auto* velocity = registry.GetComponent<No::VelocityComponent>(entity);
 		auto* groundState = registry.GetComponent<No::GroundStateComponent>(entity);
-		auto* particleEmitter = registry.GetComponent<No::ParticleEmitterComponent>(entity);
+		auto* particleEmitter = registry.GetComponent<No::ParticleEmitterSphereComponent>(entity);
 		auto* transientState = registry.GetComponent<PlayerMoveTransientComponent>(entity);
 
 		const bool isGrounded = groundState->isGrounded;

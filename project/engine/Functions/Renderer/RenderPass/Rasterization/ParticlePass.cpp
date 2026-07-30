@@ -35,7 +35,7 @@ ParticlePass::ParticlePass() {
 	indexUpload.Unmap();
 	index_.Create(L"particleIndex", sizeof(indices), sizeof(uint32_t), indexUpload);
 
-	testTexture_ = TextureManager::LoadCovertTexture("resources/engine/Texture/circle.png");
+	texture_ = TextureManager::LoadCovertTexture("resources/engine/Texture/smokeEffect.png");
 }
 
 void ParticlePass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& resourceRegistry, ECS::Registry& registry) {
@@ -64,7 +64,7 @@ void ParticlePass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& reso
 
 	gfx.SetDynamicConstantBufferView(rootIndex["gParView"], sizeof(parViewConstants), &parViewConstants);
 
-	gfx.SetDynamicDescriptor(rootIndex["gTexture"], 0, testTexture_->GetSRV());
+	gfx.SetDynamicDescriptor(rootIndex["gTexture"], 0, texture_->GetSRV());
 	gfx.SetDynamicDescriptor(rootIndex["gParticles"], 0, ParticleManager::GetParticleBuffer().GetSRV());
 	gfx.SetVertexBuffer(0, vertex_.VertexBufferView());
 	gfx.SetIndexBuffer(index_.IndexBufferView());

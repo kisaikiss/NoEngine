@@ -19,6 +19,7 @@ REFLECT_FIELD(textureName)
 REFLECT_STRUCT_END(NoEngine::Component::ParticleEmitterComponent)
 
 REFLECT_STRUCT_BEGIN(NoEngine::Component::ParticleEmitterSphereComponent, "Effect")
+REFLECT_FIELD(active),
 REFLECT_FIELD(radius),
 REFLECT_FIELD(count),
 REFLECT_FIELD(frequency),

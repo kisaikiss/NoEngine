@@ -2007,9 +2007,9 @@
                 },
                 "DebugCameraComponent": {
                     "center": [
-                        10.328189849853516,
-                        18.435832977294922,
-                        4.899318218231201
+                        1.0951166152954102,
+                        2.0592212677001953,
+                        0.9495100975036621
                     ],
                     "distance": 9.015334129333496,
                     "drawCenter": false,
@@ -2024,10 +2024,10 @@
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
-                        0.28734952211380005,
-                        0.30656084418296814,
-                        -0.09764211624860764,
-                        0.9021733403205872
+                        -0.0396413579583168,
+                        0.9582467079162598,
+                        -0.23006653785705566,
+                        -0.16510963439941406
                     ],
                     "scale": [
                         1.0,
@@ -2035,9 +2035,9 @@
                         1.0
                     ],
                     "translate": [
-                        5.847322940826416,
-                        23.649803161621094,
-                        -0.9327142834663391
+                        3.7834103107452393,
+                        6.152285099029541,
+                        8.518932342529297
                     ]
                 }
             }
@@ -24722,50 +24722,12 @@
                     "isVisible": true,
                     "meshName": "jogging"
                 },
-                "ParticleEmitterComponent": {
-                    "active": false,
-                    "color": [
-                        1.0,
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "count": 10,
-                    "emitRange": [
-                        0.0,
-                        0.0,
-                        0.0
-                    ],
-                    "frequency": 0.30000001192092896,
-                    "localPosition": [
-                        0.0,
-                        0.0,
-                        0.0
-                    ],
-                    "maxCount": 100,
-                    "maxLifeTime": 1.7999999523162842,
-                    "maxScale": [
-                        0.5,
-                        0.5,
-                        0.5
-                    ],
-                    "maxSpeed": [
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "minLifeTime": 0.8999999761581421,
-                    "minScale": [
-                        0.5,
-                        0.5,
-                        0.5
-                    ],
-                    "minSpeed": [
-                        -1.0,
-                        -1.0,
-                        -1.0
-                    ],
-                    "textureName": "smokeEffect"
+                "ParticleEmitterSphereComponent": {
+                    "active": true,
+                    "count": 20,
+                    "frequency": 0.20000000298023224,
+                    "frequencyTime": 0.0,
+                    "radius": 0.0
                 },
                 "PlayerComponent": {
                     "airDashSpeed": 10.0,
