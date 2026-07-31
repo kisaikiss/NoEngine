@@ -256,6 +256,11 @@
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\BloomCompositePass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\DepthOfFieldPass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\Rasterization\TransparentMeshPass.cpp" />
+    <ClCompile Include="engine\Editor\EntityClipboard.cpp" />
+    <ClCompile Include="engine\Editor\EntityHierarchyUtils.cpp" />
+    <ClCompile Include="engine\Editor\HierarchyPanel.cpp" />
+    <ClCompile Include="engine\Editor\InspectorPanel.cpp" />
+    <ClCompile Include="engine\Editor\PrefabEditorPanel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -515,6 +520,11 @@
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\BloomCompositePass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\DepthOfFieldPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\Rasterization\TransparentMeshPass.h" />
+    <ClInclude Include="engine\Editor\EntityClipboard.h" />
+    <ClInclude Include="engine\Editor\EntityHierarchyUtils.h" />
+    <ClInclude Include="engine\Editor\HierarchyPanel.h" />
+    <ClInclude Include="engine\Editor\InspectorPanel.h" />
+    <ClInclude Include="engine\Editor\PrefabEditorPanel.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

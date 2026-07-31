@@ -229,6 +229,11 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="engine\Editor\DataDriven\PrefabSerializer.cpp" />
     <ClCompile Include="engine\Editor\EditorCommandOperator.cpp" />
     <ClCompile Include="engine\Editor\EditTag.cpp" />
+    <ClCompile Include="engine\Editor\EntityClipboard.cpp" />
+    <ClCompile Include="engine\Editor\EntityHierarchyUtils.cpp" />
+    <ClCompile Include="engine\Editor\HierarchyPanel.cpp" />
+    <ClCompile Include="engine\Editor\InspectorPanel.cpp" />
+    <ClCompile Include="engine\Editor\PrefabEditorPanel.cpp" />
     <ClCompile Include="engine\Functions\Command\CommandManager.cpp" />
     <ClCompile Include="engine\Functions\Command\EditCommand\AddComponentCommand.cpp" />
     <ClCompile Include="engine\Functions\Command\EditCommand\DeleteEntityCommand.cpp" />
@@ -489,6 +494,11 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="engine\Editor\EditorCommandOperator.h" />
     <ClInclude Include="engine\Editor\EditTag.h" />
     <ClInclude Include="engine\Editor\ComponentUI.h" />
+    <ClInclude Include="engine\Editor\EntityClipboard.h" />
+    <ClInclude Include="engine\Editor\EntityHierarchyUtils.h" />
+    <ClInclude Include="engine\Editor\HierarchyPanel.h" />
+    <ClInclude Include="engine\Editor\InspectorPanel.h" />
+    <ClInclude Include="engine\Editor\PrefabEditorPanel.h" />
     <ClInclude Include="engine\Functions\Command\CommandManager.h" />
     <ClInclude Include="engine\Functions\Command\EditCommand\AddComponentCommand.h" />
     <ClInclude Include="engine\Functions\Command\EditCommand\ChangeValueCommand.h" />
