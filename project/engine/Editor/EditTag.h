@@ -9,5 +9,7 @@ struct EditTag {
 };
 
 struct EditSelectedTag {};
+// このタグを付けるとシーンクリックで選択できなくなる
+struct NoClickSelectTag{};
 }
 }

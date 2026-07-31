@@ -2007,9 +2007,9 @@
                 },
                 "DebugCameraComponent": {
                     "center": [
-                        20.258121490478516,
-                        1.9647397994995117,
-                        -0.6042078137397766
+                        19.96682357788086,
+                        3.3363561630249023,
+                        -0.6677486896514893
                     ],
                     "distance": 9.015334129333496,
                     "drawCenter": false,
@@ -2024,10 +2024,10 @@
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
-                        0.10417520254850388,
-                        -0.6643599271774292,
-                        0.09428006410598755,
-                        0.7340877056121826
+                        0.046613726764917374,
+                        -0.673481822013855,
+                        0.04262524098157883,
+                        0.7365001440048218
                     ],
                     "scale": [
                         1.0,
@@ -25435,6 +25435,7 @@
                     "isVisible": true,
                     "meshName": "skydome"
                 },
+                "NoClickSelectTag": null,
                 "PointLightComponent": {
                     "color": [
                         0.0,
@@ -25512,6 +25513,7 @@
                     "isVisible": true,
                     "meshName": "SampleStage"
                 },
+                "NoClickSelectTag": null,
                 "StageComponent": {
                     "stageColliderName": "SampleStage"
                 },
