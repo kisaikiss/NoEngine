@@ -8,6 +8,8 @@
 #include "engine/Functions/Command/EditCommand/AddComponentCommand.h"
 #include "engine/Functions/Command/EditCommand/InstantiateEntityCommand.h"
 #include "engine/Functions/Command/EditCommand/DeleteEntityCommand.h"
+#include "engine/Functions/ECS/Component/Common/TransformComponent.h"
+#include "engine/Functions/ECS/Component/Common/Transform2DComponent.h"
 
 #include "engine/Functions/Input/input.h"
 #ifdef USE_IMGUI
@@ -22,8 +24,6 @@ namespace {
 const std::string sDirectoryPath = "resources/game/Scenes/";
 }
 
-REFLECT_STRUCT_BEGIN(NoEngine::FolderTag)
-REFLECT_STRUCT_END(NoEngine::FolderTag)
 namespace NoEngine {
 namespace ECS {
 
@@ -129,29 +129,72 @@ void EditSystem::Update(Registry& registry, float deltaTime) {
 		timeInterval_ -= deltaTime;
 	}
 
-	// コピー
+	// コピー（選択エンティティ＋その子孫を全て再帰的にコピーする）
 	if (Input::Keyboard::IsPress(VK_LCONTROL) && Input::Keyboard::IsPress('C')) {
 		if (editorState_.selectedEntity != ECS::INVALID_ENTITY && editorState_.selectedEntity != editingPrefabEntity_) {
 			if (!ImGui::IsAnyItemActive() && timeInterval_ <= 0.0f) {
-				copyObject_ = Editor::SaveEntityToJson(registry, editorState_.selectedEntity);
-				LogInfo("CopyObject name : " + registry.GetComponent<Editor::EditTag>(editorState_.selectedEntity)->name);
+				std::vector<Entity> subtree;
+				CollectSubtreeEntities(registry, editorState_.selectedEntity, subtree);
+
+				// Entity -> subtree内でのインデックス（貼り付け時に親子関係を復元するため）
+				std::unordered_map<Entity, int> indexOf;
+				indexOf.reserve(subtree.size() * 2);
+				for (size_t i = 0; i < subtree.size(); ++i) {
+					indexOf[subtree[i]] = static_cast<int>(i);
+				}
+
+				nlohmann::json nodesJson = nlohmann::json::array();
+				for (auto e : subtree) {
+					auto* tag = registry.GetComponent<Editor::EditTag>(e);
+					nlohmann::json nodeJson;
+					nodeJson["entity"] = Editor::SaveEntityToJson(registry, e);
+					auto it = (tag && tag->parent != ECS::INVALID_ENTITY) ? indexOf.find(tag->parent) : indexOf.end();
+					nodeJson["parentIndex"] = (it != indexOf.end()) ? it->second : -1;
+					nodesJson.push_back(nodeJson);
+				}
+
+				copyObject_ = nlohmann::json{ {"nodes", nodesJson} };
+				LogInfo("CopyObject name : " + registry.GetComponent<Editor::EditTag>(editorState_.selectedEntity)->name
+					+ " (" + std::to_string(subtree.size()) + " entities)");
 				static constexpr float kIntervalTime = 0.3f;
 				timeInterval_ = kIntervalTime;
 			}
 		}
 	}
 
-	// ペースト
+	// ペースト（コピーした親子関係をそのまま新しいEntityとして復元する）
 	if (Input::Keyboard::IsPress(VK_LCONTROL) && Input::Keyboard::IsPress('V')) {
 		if (timeInterval_ <= 0.0f) {
-			if (!ImGui::IsAnyItemActive() && !copyObject_.empty()) {
-				auto pasteEntity = registry.GenerateEntity();
-				Editor::LoadEntityFromJson(registry, pasteEntity, copyObject_);
-				LogInfo("PasteObject originalName : " + registry.GetComponent<Editor::EditTag>(editorState_.selectedEntity)->name);
-				registry.AddComponent<Editor::EditSelectedTag>(pasteEntity);
+			if (!ImGui::IsAnyItemActive() && !copyObject_.empty() && copyObject_.contains("nodes")) {
+				const auto& nodes = copyObject_["nodes"];
+
+				std::vector<Entity> newEntities;
+				newEntities.reserve(nodes.size());
+
+				// 1) まず全Entityを生成してデータを流し込む
+				for (const auto& node : nodes) {
+					Entity newE = registry.GenerateEntity();
+					Editor::LoadEntityFromJson(registry, newE, node["entity"]);
+					newEntities.push_back(newE);
+				}
+
+				// 2) 新しいEntity IDで親子関係を張り直す
+				for (size_t i = 0; i < newEntities.size(); ++i) {
+					int parentIndex = nodes[i].value("parentIndex", -1);
+					Entity newParent = (parentIndex >= 0) ? newEntities[static_cast<size_t>(parentIndex)] : ECS::INVALID_ENTITY;
+					SetEntityParent(registry, newEntities[i], newParent);
+					Editor::EditorCommandOperator::AddCommand(std::make_unique<Command::InstantiateEntityCommand>(registry, newEntities[i]));
+				}
+
+				// 3) コピー元のルートに対応する新規Entityだけを選択状態にする
+				if (!newEntities.empty()) {
+					registry.AddComponent<Editor::EditSelectedTag>(newEntities.front());
+					editorState_.selectedEntity = newEntities.front();
+				}
+
+				LogInfo("PasteObject : " + std::to_string(newEntities.size()) + " entities");
 				static constexpr float kIntervalTime = 1.f;
 				timeInterval_ = kIntervalTime;
-				Editor::EditorCommandOperator::AddCommand(std::make_unique<Command::InstantiateEntityCommand>(registry, pasteEntity));
 			}
 		}
 	}
@@ -228,9 +271,6 @@ void EditSystem::DrawHierarchyWindow(Registry& registry) {
 	ImGui::Begin("Hierarchy");
 
 	if (ImGui::BeginPopupContextWindow()) {
-		if (ImGui::MenuItem("Create Folder (Root)")) {
-			CreateFolder(registry, "NewFolder", "");
-		}
 		if (ImGui::MenuItem("Generate newEntity")) {
 			Entity e = registry.GenerateEntity();
 			auto* tag = registry.AddComponent<Editor::EditTag>(e);
@@ -241,20 +281,42 @@ void EditSystem::DrawHierarchyWindow(Registry& registry) {
 		ImGui::EndPopup();
 	}
 
-	FolderNode root;
-	root.name = "";
-	auto view = registry.View<Editor::EditTag>();
+	// 親Entity -> 子Entity一覧 のマップをEditTag::parentから毎フレーム構築する
+	std::unordered_map<Entity, std::vector<Entity>> childrenMap;
+	std::vector<Entity> roots;
 
+	auto view = registry.View<Editor::EditTag>();
 	for (auto e : view) {
 		auto* tag = registry.GetComponent<Editor::EditTag>(e);
-
-		// パスが空なら名前をパスとして扱う
-		if (tag->path.empty()) tag->path = tag->name;
-
-		AddEntityToFolder(root, registry, e);
+		if (tag->parent == ECS::INVALID_ENTITY) {
+			roots.push_back(e);
+		} else {
+			childrenMap[tag->parent].push_back(e);
+		}
 	}
 
-	DrawFolderNode(root, registry, "");
+	// Shift+Click範囲選択用に、現在のツリー表示順（プリオーダー）を作っておく
+	hierarchyOrder_.clear();
+	for (auto e : roots) {
+		BuildHierarchyOrder(e, childrenMap, hierarchyOrder_);
+	}
+
+	for (auto e : roots) {
+		DrawEntityNode(registry, e, childrenMap);
+	}
+
+	// ウィンドウの何もない場所をクリックしたら選択解除する
+	if (ImGui::IsWindowHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Left) && !ImGui::IsAnyItemHovered()) {
+		editorState_.hierarchySelection.clear();
+		editorState_.lastClickedEntity = ECS::INVALID_ENTITY;
+	}
+
+	// ウィンドウ下部の余白：ここへドロップすると親を外してルートに戻せる
+	ImGui::Dummy(ImVec2(-1.0f, ImGui::GetContentRegionAvail().y > 0.0f ? ImGui::GetContentRegionAvail().y : 20.0f));
+	if (ImGui::BeginDragDropTarget()) {
+		HandleHierarchyDrop(registry, ECS::INVALID_ENTITY);
+		ImGui::EndDragDropTarget();
+	}
 
 	ImGui::End();
 #else
@@ -262,118 +324,104 @@ void EditSystem::DrawHierarchyWindow(Registry& registry) {
 #endif
 }
 
-void EditSystem::DrawFolderNode(FolderNode& node, ECS::Registry& registry, const std::string& currentPath) {
+void EditSystem::DrawEntityNode(ECS::Registry& registry, ECS::Entity e, const std::unordered_map<ECS::Entity, std::vector<ECS::Entity>>& childrenMap) {
 #ifdef USE_IMGUI
-
-	const char* label = node.name.empty() ? "Scene" : node.name.c_str();
-
-	ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow;
-	if (node.name.empty()) flags |= ImGuiTreeNodeFlags_DefaultOpen;
-
-	// フォルダ自体の Entity が選択されているか
-	if (node.folderEntity != INVALID_ENTITY && editorState_.selectedEntity == node.folderEntity) {
-		flags |= ImGuiTreeNodeFlags_Selected;
-	}
-
-	bool open = ImGui::TreeNodeEx(label, flags);
-
-	// フォルダのクリック選択
-	if (ImGui::IsItemClicked() && node.folderEntity != INVALID_ENTITY) {
-		editorState_.selectedEntity = node.folderEntity;
-		registry.AddComponent<Editor::EditSelectedTag>(editorState_.selectedEntity);
-	}
-
-	// パスの計算（親のパス + 自分の名前）
-	std::string fullPath = currentPath;
-	if (!node.name.empty()) {
-		fullPath = currentPath.empty() ? node.name : (currentPath + "/" + node.name);
-	}
-
-	// --- コンテキストメニュー ---
-	if (ImGui::BeginPopupContextItem()) {
-		if (ImGui::MenuItem("Create Folder")) {
-			CreateFolder(registry, "NewFolder", fullPath);
-		}
-		if (ImGui::MenuItem("Generate newEntity")) {
-			Entity e = registry.GenerateEntity();
-			auto* tag = registry.AddComponent<Editor::EditTag>(e);
-			tag->name = "newEntity";
-			tag->path = fullPath + "/" + tag->name;
-			registry.AddComponent<Editor::EditSelectedTag>(e);
-			Editor::EditorCommandOperator::AddCommand(std::make_unique<Command::InstantiateEntityCommand>(registry, e));
-		}
-		if (node.folderEntity != INVALID_ENTITY) {
-			if (ImGui::MenuItem("Delete Folder")) {
-				Editor::EditorCommandOperator::AddCommand(std::make_unique<Command::DeleteEntityCommand>(registry, node.folderEntity));
-				registry.DestroyEntity(node.folderEntity);
-				// ※ 本来は中身の path も書き換えるか、一緒に消す処理が必要
-			}
-		}
-		ImGui::EndPopup();
-	}
-
-	// --- ドロップ受け取り ---
-	if (ImGui::BeginDragDropTarget()) {
-		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ENTITY")) {
-			ECS::Entity dropped = *(ECS::Entity*)payload->Data;
-			auto* tag = registry.GetComponent<Editor::EditTag>(dropped);
-			if (tag) {
-				// 移動先: fullPath (フォルダ内) + 自分の名前
-				tag->path = fullPath.empty() ? tag->name : (fullPath + "/" + tag->name);
-			}
-		}
-		ImGui::EndDragDropTarget();
-	}
-
-	if (open) {
-		// 子フォルダ
-		for (auto& [name, child] : node.children) {
-			DrawFolderNode(child, registry, fullPath);
-		}
-		// 所属エンティティ
-		for (auto e : node.entities) {
-			DrawEntityItem(registry, e);
-		}
-		ImGui::TreePop();
-	}
-#else 
-	static_cast<void>(node);
-	static_cast<void>(registry);
-	static_cast<void>(currentPath);
-
-#endif // USE_IMGUI
-
-}
-void EditSystem::DrawEntityItem(ECS::Registry& registry, ECS::Entity e) {
-#ifdef USE_IMGUI
-
-
 	auto* tag = registry.GetComponent<Editor::EditTag>(e);
-	bool selected = (editorState_.selectedEntity == e);
+	if (!tag) return;
 
-	// 選択可能な行
-	if (ImGui::Selectable(tag->name.c_str(), selected)) {
-		registry.AddComponent<Editor::EditSelectedTag>(e);
+	auto childrenIt = childrenMap.find(e);
+	bool hasChildren = (childrenIt != childrenMap.end());
+	bool selected = editorState_.hierarchySelection.count(e) > 0;
+
+	// 子を持つEntityはツリーとして開閉できるようにし、持たないEntityは葉として表示する
+	// （＝親は子を入れたフォルダーのように振る舞う）
+	ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth;
+	if (!hasChildren) flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
+	if (selected) flags |= ImGuiTreeNodeFlags_Selected;
+
+	std::string label = tag->name;
+	bool open = ImGui::TreeNodeEx(reinterpret_cast<void*>(static_cast<intptr_t>(e)), flags, "%s", label.c_str());
+
+	// クリックで選択（矢印の開閉クリックとは区別する。単一/Ctrl+追加解除/Shift+範囲選択をまとめて処理する）
+	// 注意：IsItemClickedはマウス押下のタイミングで発火するため、ここで即座に単一選択へ
+	// 潰してしまうと、その直後のBeginDragDropSourceが複数選択を拾えなくなる（＝1個しかドラッグできない）。
+	// そのため「既に複数選択済みの1つを無修飾でクリックした」場合だけ選択確定を保留し、
+	// 実際にドラッグへ移行しなかった（マウスを離した）時点で単一選択に還元する。
+	bool alreadySelected = editorState_.hierarchySelection.count(e) > 0;
+	bool multiSelectActive = editorState_.hierarchySelection.size() > 1;
+	bool ctrlHeld = ImGui::GetIO().KeyCtrl;
+	bool shiftHeld = ImGui::GetIO().KeyShift;
+
+	if (ImGui::IsItemClicked(ImGuiMouseButton_Left) && !ImGui::IsItemToggledOpen()) {
+		if (alreadySelected && multiSelectActive && !ctrlHeld && !shiftHeld) {
+			pendingSingleSelectEntity_ = e;
+		} else {
+			HandleHierarchyClick(registry, e);
+			pendingSingleSelectEntity_ = ECS::INVALID_ENTITY;
+		}
 	}
 
-	// ドラッグ開始（ENTITY ペイロード）
+	// ドラッグ開始（複数選択中にその一員をドラッグした場合は選択されている全Entityを一緒に運ぶ）
 	if (ImGui::BeginDragDropSource()) {
-		ImGui::SetDragDropPayload("ENTITY", &e, sizeof(ECS::Entity));
-		ImGui::Text("%s", tag->name.c_str());
+		// ドラッグが実際に成立したので、単一選択への還元は行わない
+		pendingSingleSelectEntity_ = ECS::INVALID_ENTITY;
+
+		std::vector<Entity> dragEntities;
+		if (editorState_.hierarchySelection.count(e) && editorState_.hierarchySelection.size() > 1) {
+			dragEntities.assign(editorState_.hierarchySelection.begin(), editorState_.hierarchySelection.end());
+		} else {
+			dragEntities.push_back(e);
+		}
+
+		ImGui::SetDragDropPayload("ENTITY_MULTI", dragEntities.data(), dragEntities.size() * sizeof(Entity));
+		if (dragEntities.size() > 1) {
+			ImGui::Text("%zu entities", dragEntities.size());
+		} else {
+			ImGui::Text("%s", tag->name.c_str());
+		}
 		ImGui::EndDragDropSource();
 	}
 
-	// 右クリックメニュー（個別エンティティ用）
+	// ドラッグに発展せずマウスを離した場合は、ここで単一選択に還元する
+	if (pendingSingleSelectEntity_ == e && ImGui::IsMouseReleased(ImGuiMouseButton_Left)) {
+		HandleHierarchyClick(registry, e);
+		pendingSingleSelectEntity_ = ECS::INVALID_ENTITY;
+	}
+
+	// ドロップ受け取り（このEntityを親として付け替える。複数選択をまとめて運んできた場合も対応）
+	if (ImGui::BeginDragDropTarget()) {
+		HandleHierarchyDrop(registry, e);
+		ImGui::EndDragDropTarget();
+	}
+
+	// 右クリックメニュー
 	if (ImGui::BeginPopupContextItem()) {
+		if (ImGui::MenuItem("Generate newEntity")) {
+			Entity newE = registry.GenerateEntity();
+			auto* newTag = registry.AddComponent<Editor::EditTag>(newE);
+			newTag->name = "newEntity";
+			newTag->parent = e;
+			registry.AddComponent<Editor::EditSelectedTag>(newE);
+			Editor::EditorCommandOperator::AddCommand(std::make_unique<Command::InstantiateEntityCommand>(registry, newE));
+		}
 		if (ImGui::MenuItem("Rename")) {
-			// 簡易リネーム処理（ダイアログ等に置き換えてください）
 			ImGui::OpenPopup("RenameEntityPopup");
 		}
 		if (ImGui::MenuItem("Delete")) {
 			// 削除処理
 			Editor::EditorCommandOperator::AddCommand(std::make_unique<Command::DeleteEntityCommand>(registry, e));
+			std::vector<Entity> children;
+			CollectSubtreeEntities(registry, e, children);
+			for (auto child : children) {
+				registry.DestroyEntity(child);
+			}
 			registry.DestroyEntity(e);
+			editorState_.hierarchySelection.erase(e);
+			if (editorState_.selectedEntity == e) editorState_.selectedEntity = ECS::INVALID_ENTITY;
+			if (editorState_.lastClickedEntity == e) editorState_.lastClickedEntity = ECS::INVALID_ENTITY;
+			if (pendingSingleSelectEntity_ == e) pendingSingleSelectEntity_ = ECS::INVALID_ENTITY;
 			ImGui::EndPopup();
+			if (open && hasChildren) ImGui::TreePop();
 			return; // 既に削除したので以降の UI は無効
 		}
 		ImGui::EndPopup();
@@ -395,9 +443,121 @@ void EditSystem::DrawEntityItem(ECS::Registry& registry, ECS::Entity e) {
 		ImGui::EndPopup();
 	}
 
+	if (open && hasChildren) {
+		for (auto child : childrenIt->second) {
+			DrawEntityNode(registry, child, childrenMap);
+		}
+		ImGui::TreePop();
+	}
 #else
 	static_cast<void>(registry);
 	static_cast<void>(e);
+	static_cast<void>(childrenMap);
+#endif // USE_IMGUI
+}
+
+void EditSystem::HandleHierarchyClick(ECS::Registry& registry, ECS::Entity e) {
+#ifdef USE_IMGUI
+	const bool ctrl = ImGui::GetIO().KeyCtrl;
+	const bool shift = ImGui::GetIO().KeyShift;
+
+	auto setPrimary = [&](ECS::Entity primary) {
+		// InspectorWindow用の代表選択はEditSelectedTagと1対1（既存の排他処理に乗せる）
+		editorState_.selectedEntity = primary;
+		if (primary != ECS::INVALID_ENTITY) {
+			registry.AddComponent<Editor::EditSelectedTag>(primary);
+		}
+		};
+
+	if (shift && editorState_.lastClickedEntity != ECS::INVALID_ENTITY) {
+		// 範囲選択：直前にクリックしたEntity～今回クリックしたEntityまでを表示順で選択する
+		auto itA = std::find(hierarchyOrder_.begin(), hierarchyOrder_.end(), editorState_.lastClickedEntity);
+		auto itB = std::find(hierarchyOrder_.begin(), hierarchyOrder_.end(), e);
+		if (itA != hierarchyOrder_.end() && itB != hierarchyOrder_.end()) {
+			size_t a = static_cast<size_t>(std::distance(hierarchyOrder_.begin(), itA));
+			size_t b = static_cast<size_t>(std::distance(hierarchyOrder_.begin(), itB));
+			if (a > b) std::swap(a, b);
+
+			editorState_.hierarchySelection.clear();
+			for (size_t i = a; i <= b; ++i) {
+				editorState_.hierarchySelection.insert(hierarchyOrder_[i]);
+			}
+			setPrimary(e);
+		} else {
+			editorState_.hierarchySelection = { e };
+			setPrimary(e);
+		}
+		// lastClickedEntity_ はShiftの基準として更新しない（Unity挙動に合わせて起点を維持する）
+		return;
+	}
+
+	if (ctrl) {
+		// Ctrl+Click：選択の追加/解除トグル
+		if (editorState_.hierarchySelection.count(e)) {
+			editorState_.hierarchySelection.erase(e);
+			if (editorState_.selectedEntity == e) {
+				registry.RemoveComponent<Editor::EditSelectedTag>(e);
+				Entity newPrimary = editorState_.hierarchySelection.empty()
+					? ECS::INVALID_ENTITY
+					: *editorState_.hierarchySelection.rbegin();
+				setPrimary(newPrimary);
+			}
+		} else {
+			editorState_.hierarchySelection.insert(e);
+			setPrimary(e);
+		}
+		editorState_.lastClickedEntity = e;
+		return;
+	}
+
+	// 通常クリック：単一選択
+	editorState_.hierarchySelection = { e };
+	setPrimary(e);
+	editorState_.lastClickedEntity = e;
+#else
+	static_cast<void>(registry);
+	static_cast<void>(e);
+#endif // USE_IMGUI
+}
+
+void EditSystem::BuildHierarchyOrder(ECS::Entity e, const std::unordered_map<ECS::Entity, std::vector<ECS::Entity>>& childrenMap, std::vector<ECS::Entity>& outOrder) {
+	outOrder.push_back(e);
+	auto it = childrenMap.find(e);
+	if (it == childrenMap.end()) return;
+	for (auto child : it->second) {
+		BuildHierarchyOrder(child, childrenMap, outOrder);
+	}
+}
+
+void EditSystem::HandleHierarchyDrop(ECS::Registry& registry, ECS::Entity newParent) {
+#ifdef USE_IMGUI
+	const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ENTITY_MULTI");
+	if (!payload) return;
+
+	const Entity* dropped = reinterpret_cast<const Entity*>(payload->Data);
+	const size_t count = payload->DataSize / sizeof(Entity);
+
+	for (size_t i = 0; i < count; ++i) {
+		Entity candidate = dropped[i];
+		if (candidate == newParent) continue;
+
+		// 選択の中で「他の選択Entityの子孫」になっているものはスキップする
+		// （親側を付け替えれば子はそのまま一緒についてくるため、二重に付け替えない）
+		bool coveredByAnotherSelected = false;
+		for (size_t j = 0; j < count; ++j) {
+			if (i == j) continue;
+			if (IsDescendantOf(registry, candidate, dropped[j])) {
+				coveredByAnotherSelected = true;
+				break;
+			}
+		}
+		if (coveredByAnotherSelected) continue;
+
+		SetEntityParent(registry, candidate, newParent);
+	}
+#else
+	static_cast<void>(registry);
+	static_cast<void>(newParent);
 #endif // USE_IMGUI
 }
 
@@ -556,52 +716,56 @@ void EditSystem::EnsureUniqueEditTagNames(Registry& registry) {
 	}
 }
 
-void EditSystem::CreateFolder(ECS::Registry& registry, const std::string& name, const std::string& parentPath) {
-	ECS::Entity folder = registry.GenerateEntity();
-
-	auto* tag = registry.AddComponent<Editor::EditTag>(folder);
-	tag->name = name;
-
-	if (parentPath.empty())
-		tag->path = name;
-	else
-		tag->path = parentPath + "/" + name;
-
-	registry.AddComponent<FolderTag>(folder);
-	Editor::EditorCommandOperator::AddCommand(std::make_unique<Command::InstantiateEntityCommand>(registry, folder));
+bool EditSystem::IsDescendantOf(ECS::Registry& registry, ECS::Entity ancestorCandidate, ECS::Entity entity) {
+	// ancestorCandidate から親を辿って entity に到達できれば、
+	// entity は ancestorCandidate の祖先（＝ancestorCandidateはentityの子孫）ということになる
+	ECS::Entity current = ancestorCandidate;
+	while (current != ECS::INVALID_ENTITY) {
+		if (current == entity) return true;
+		auto* tag = registry.GetComponent<Editor::EditTag>(current);
+		current = tag ? tag->parent : ECS::INVALID_ENTITY;
+	}
+	return false;
 }
 
-void EditSystem::AddEntityToFolder(FolderNode& root, ECS::Registry& registry, Entity e) {
-	auto* tag = registry.GetComponent<Editor::EditTag>(e);
-	bool isFolder = registry.Has<FolderTag>(e);
+void EditSystem::SetEntityParent(ECS::Registry& registry, ECS::Entity child, ECS::Entity newParent) {
+	if (child == ECS::INVALID_ENTITY || child == newParent) return;
 
-	// パスを分割（例: "Parent/Sub/MyEntity" -> ["Parent", "Sub", "MyEntity"]）
-	std::vector<std::string> segments;
-	{
-		std::stringstream ss(tag->path);
-		std::string seg;
-		while (std::getline(ss, seg, '/')) {
-			if (!seg.empty()) segments.push_back(seg);
-		}
+	// 自分の子孫を自分の親にしようとした場合は循環参照になるので中止する
+	if (newParent != ECS::INVALID_ENTITY && IsDescendantOf(registry, newParent, child)) {
+		LogWarning("EditSystem: cannot parent an entity to its own descendant.");
+		return;
 	}
 
-	FolderNode* current = &root;
+	auto* tag = registry.GetComponent<Editor::EditTag>(child);
+	if (!tag) return;
+	tag->parent = newParent;
 
-	if (isFolder) {
-		// フォルダーの場合：パスの全セグメントを辿り、最後のノードに Entity を紐付ける
-		for (const auto& name : segments) {
-			current = &current->children[name];
-			current->name = name;
+	// 実際のTransform階層（ワールド座標計算に使われる parent）も、
+	// 型が一致する場合のみ同期する。フォルダ（Transformを持たないEntity）へ
+	// 入れた場合は見た目上の階層分けのみに留まり、座標計算には影響しない。
+	if (auto* childTransform = registry.GetComponent<Component::TransformComponent>(child)) {
+		Component::TransformComponent* parentTransform =
+			(newParent != ECS::INVALID_ENTITY) ? registry.GetComponent<Component::TransformComponent>(newParent) : nullptr;
+		childTransform->parent = (newParent == ECS::INVALID_ENTITY || parentTransform) ? newParent : ECS::INVALID_ENTITY;
+	} else if (auto* childTransform2D = registry.GetComponent<Component::Transform2DComponent>(child)) {
+		Component::Transform2DComponent* parentTransform2D =
+			(newParent != ECS::INVALID_ENTITY) ? registry.GetComponent<Component::Transform2DComponent>(newParent) : nullptr;
+		childTransform2D->parent = (newParent == ECS::INVALID_ENTITY || parentTransform2D) ? newParent : ECS::INVALID_ENTITY;
+	}
+}
+
+void EditSystem::CollectSubtreeEntities(ECS::Registry& registry, ECS::Entity root, std::vector<ECS::Entity>& outEntities) {
+	outEntities.push_back(root);
+
+	// EditTagを持つ全Entityをスキャンしてrootのparentになっているものを再帰的に集める
+	// （エディタでの操作前提のためO(N)スキャンで問題ない規模を想定）
+	auto view = registry.View<Editor::EditTag>();
+	for (auto e : view) {
+		auto* tag = registry.GetComponent<Editor::EditTag>(e);
+		if (tag && tag->parent == root) {
+			CollectSubtreeEntities(registry, e, outEntities);
 		}
-		current->folderEntity = e;
-	} else {
-		// 通常のエンティティの場合：最後のセグメントを除いた場所まで辿り、そこに push_back
-		// ※ tag->path が "Folder/EntityName" なら、segments[0] がフォルダ名
-		for (size_t i = 0; i + 1 < segments.size(); ++i) {
-			current = &current->children[segments[i]];
-			current->name = segments[i];
-		}
-		current->entities.push_back(e);
 	}
 }
 }

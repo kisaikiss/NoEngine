@@ -10,7 +10,7 @@
                 },
                 "EditTag": {
                     "name": "AnimeCube",
-                    "path": "AnimeCube"
+                    "parent": "girl"
                 },
                 "MaterialComponent": {
                     "blendMode": "kNormal",
@@ -62,9 +62,78 @@
                         1.0
                     ],
                     "translate": [
-                        0.10000000149011612,
-                        8.100000381469727,
+                        0.10000147670507431,
+                        7.907779216766357,
+                        5.109246253967285
+                    ]
+                }
+            }
+        },
+        "AnimeCube_2": {
+            "components": {
+                "AnimatorComponent": {
+                    "animationSpeedMagnification": 1.0,
+                    "currentAnimation": 0,
+                    "drawSkeleton": false,
+                    "enableSkinning": false
+                },
+                "EditTag": {
+                    "name": "AnimeCube_2",
+                    "parent": "girl_2"
+                },
+                "MaterialComponent": {
+                    "blendMode": "kNormal",
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "enviromentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "renderMode": "kDefault",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
                         0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "AnimeCube"
+                },
+                "TransformComponent": {
+                    "parent": "girl_2",
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        0.10000147670507431,
+                        7.907779216766357,
+                        5.109246253967285
                     ]
                 }
             }
@@ -75,7 +144,7 @@
                 "Camera2DComponent": null,
                 "EditTag": {
                     "name": "CAMERA2D",
-                    "path": "CAMERA2D"
+                    "parent": null
                 },
                 "Transform2DComponent": {
                     "parent": null,
@@ -97,18 +166,18 @@
                 "DebugCamera2DComponent": null,
                 "EditTag": {
                     "name": "DEBUG_CAMERA2D",
-                    "path": "CAMERA2D"
+                    "parent": null
                 },
                 "Transform2DComponent": {
                     "parent": null,
                     "rotation": 0.0,
                     "scale": [
-                        1.7275797128677368,
-                        1.7275797128677368
+                        3.5327653884887695,
+                        3.5327653884887695
                     ],
                     "translate": [
-                        -420.1348571777344,
-                        -75.19117736816406
+                        -600.831787109375,
+                        178.9267578125
                     ]
                 }
             }
@@ -124,7 +193,7 @@
                         0.0,
                         0.0
                     ],
-                    "distance": 2.5937178134918213,
+                    "distance": 5.17200231552124,
                     "drawCenter": false,
                     "moveType": "kBlender",
                     "unityMoveSpeed": 10.0,
@@ -132,15 +201,15 @@
                 },
                 "EditTag": {
                     "name": "DebugCamera",
-                    "path": "DebugCamera"
+                    "parent": null
                 },
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
-                        0.05066903308033943,
-                        0.17481933534145355,
-                        -0.009008781984448433,
-                        0.9832546710968018
+                        -0.07886165380477905,
+                        0.1971961110830307,
+                        0.015916377305984497,
+                        0.9770574569702148
                     ],
                     "scale": [
                         1.0,
@@ -148,10 +217,18 @@
                         1.0
                     ],
                     "translate": [
-                        -0.8893104791641235,
-                        0.266610711812973,
-                        -2.4218626022338867
+                        -1.980015516281128,
+                        -0.8294961452484131,
+                        -4.705430507659912
                     ]
+                }
+            }
+        },
+        "Lights": {
+            "components": {
+                "EditTag": {
+                    "name": "Lights",
+                    "parent": null
                 }
             }
         },
@@ -162,7 +239,7 @@
                 },
                 "EditTag": {
                     "name": "MainCamera",
-                    "path": "MainCamera"
+                    "parent": null
                 },
                 "TransformComponent": {
                     "parent": null,
@@ -189,7 +266,7 @@
             "components": {
                 "EditTag": {
                     "name": "SpotLight",
-                    "path": "SpotLight"
+                    "parent": "Lights"
                 },
                 "SpotLightComponent": {
                     "color": [
@@ -229,7 +306,7 @@
             "components": {
                 "EditTag": {
                     "name": "background",
-                    "path": "background"
+                    "parent": "AnimeCube"
                 },
                 "MaterialComponent": {
                     "blendMode": "kNormal",
@@ -268,7 +345,7 @@
                     "meshName": "resources/engine/Model/terrain/terrain.obj"
                 },
                 "TransformComponent": {
-                    "parent": null,
+                    "parent": "AnimeCube",
                     "rotation": [
                         0.0,
                         0.0,
@@ -281,9 +358,72 @@
                         1.0
                     ],
                     "translate": [
+                        2.2351741790771484e-08,
+                        -11.112686157226563,
+                        -1.565690517425537
+                    ]
+                }
+            }
+        },
+        "background_2": {
+            "components": {
+                "EditTag": {
+                    "name": "background_2",
+                    "parent": "AnimeCube_2"
+                },
+                "MaterialComponent": {
+                    "blendMode": "kNormal",
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "enviromentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "renderMode": "kDefault",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "uvPosition": [
                         0.0,
-                        -1.6374017000198364,
                         0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "resources/engine/Model/terrain/terrain.obj"
+                },
+                "TransformComponent": {
+                    "parent": "AnimeCube_2",
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        2.2351741790771484e-08,
+                        -11.112686157226563,
+                        -1.565690517425537
                     ]
                 }
             }
@@ -300,7 +440,7 @@
                         0.0,
                         0.0
                     ],
-                    "distance": 48.66429138183594,
+                    "distance": 97.03900146484375,
                     "drawCenter": false,
                     "moveType": "kBlender",
                     "unityMoveSpeed": 10.0,
@@ -308,15 +448,15 @@
                 },
                 "EditTag": {
                     "name": "camera",
-                    "path": "camera"
+                    "parent": null
                 },
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
-                        0.320994108915329,
-                        -0.49687597155570984,
-                        0.20450419187545776,
-                        0.7799070477485657
+                        0.2184307873249054,
+                        -0.5001314282417297,
+                        0.13201983273029327,
+                        0.8274825215339661
                     ],
                     "scale": [
                         1.0,
@@ -324,9 +464,9 @@
                         1.0
                     ],
                     "translate": [
-                        31.327388763427734,
-                        34.255653381347656,
-                        -14.60678482055664
+                        74.72251892089844,
+                        47.89358139038086,
+                        -39.2341423034668
                     ]
                 }
             }
@@ -349,7 +489,7 @@
                 },
                 "EditTag": {
                     "name": "directionalLight",
-                    "path": "directionalLight"
+                    "parent": null
                 },
                 "SpriteComponent": {
                     "color": [
@@ -397,7 +537,7 @@
             "components": {
                 "EditTag": {
                     "name": "effectEmitter",
-                    "path": "effectEmitter"
+                    "parent": null
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -463,9 +603,10 @@
             "components": {
                 "EditTag": {
                     "name": "emitter",
-                    "path": "emitter"
+                    "parent": null
                 },
                 "ParticleEmitterSphereComponent": {
+                    "active": true,
                     "count": 10,
                     "frequency": 0.5,
                     "frequencyTime": 0.04903136193752289,
@@ -496,7 +637,7 @@
             "components": {
                 "EditTag": {
                     "name": "emitter2",
-                    "path": "emitter2"
+                    "parent": null
                 },
                 "ParticleEmitterComponent": {
                     "active": false,
@@ -568,7 +709,7 @@
             "components": {
                 "EditTag": {
                     "name": "emitter3",
-                    "path": "emitter3"
+                    "parent": null
                 },
                 "ParticleEmitterComponent": {
                     "active": false,
@@ -646,7 +787,7 @@
                 },
                 "EditTag": {
                     "name": "girl",
-                    "path": "girl"
+                    "parent": null
                 },
                 "MaterialComponent": {
                     "blendMode": "kNormal",
@@ -714,9 +855,94 @@
                         1.0
                     ],
                     "translate": [
+                        -1.9073486328125e-06,
+                        -0.8973879814147949,
+                        1.613518476486206
+                    ]
+                }
+            }
+        },
+        "girl_2": {
+            "components": {
+                "AnimatorComponent": {
+                    "animationSpeedMagnification": 1.0,
+                    "currentAnimation": 0,
+                    "drawSkeleton": false,
+                    "enableSkinning": true
+                },
+                "EditTag": {
+                    "name": "girl_2",
+                    "parent": null
+                },
+                "MaterialComponent": {
+                    "blendMode": "kNormal",
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": true,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "enviromentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "renderMode": "kDefault",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "uvPosition": [
                         0.0,
-                        0.6000000238418579,
-                        4.0
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "resources/engine/Model/test/TD_girl/test7.gltf"
+                },
+                "TestComponent": {
+                    "a": [
+                        2,
+                        4
+                    ]
+                },
+                "TextComponent": {
+                    "hAlign": "kLeft",
+                    "isVisible": true,
+                    "layer": 0,
+                    "letterSpacing": 0.0,
+                    "orderInLayer": 0,
+                    "scale": 1.0,
+                    "text": "だだだだーんｎda",
+                    "vAlign": "kBaseline"
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        1.0,
+                        0.0,
+                        -4.371138828673793e-08
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        18.120498657226563,
+                        -0.8973879814147949,
+                        1.613518476486206
                     ]
                 }
             }
@@ -725,7 +951,7 @@
             "components": {
                 "EditTag": {
                     "name": "noiseTex",
-                    "path": "noiseTex"
+                    "parent": null
                 },
                 "SpriteComponent": {
                     "color": [
@@ -763,8 +989,8 @@
                         100.0
                     ],
                     "translate": [
-                        0.0,
-                        0.0
+                        -22.79833984375,
+                        9.499359130859375
                     ]
                 }
             }
@@ -773,7 +999,7 @@
             "components": {
                 "EditTag": {
                     "name": "noiseTex1",
-                    "path": "noiseTex1"
+                    "parent": "noiseTex"
                 },
                 "SpriteComponent": {
                     "color": [
@@ -811,67 +1037,8 @@
                         1.0
                     ],
                     "translate": [
-                        -2.01762318611145,
-                        0.6305071711540222
-                    ]
-                }
-            }
-        },
-        "player": {
-            "components": {
-                "EditTag": {
-                    "name": "player",
-                    "path": "player"
-                },
-                "MaterialComponent": {
-                    "blendMode": "kNormal",
-                    "color": [
-                        1.0,
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "drawOutline": true,
-                    "edgeColor": [
-                        1.0,
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "emissiveIntensity": 1.0,
-                    "enviromentCoefficient": 0.0,
-                    "noiseScrollSpeed": 0.30000001192092896,
-                    "noiseTextureName": "noise0",
-                    "renderMode": "kDefault",
-                    "rimPower": 2.0,
-                    "shininess": 60.0,
-                    "uvPosition": [
-                        0.0,
-                        0.0
-                    ],
-                    "uvRotate": 0.0,
-                    "uvScale": [
-                        1.0,
-                        1.0
-                    ]
-                },
-                "TransformComponent": {
-                    "parent": null,
-                    "rotation": [
-                        0.0,
-                        1.0,
-                        0.0,
-                        -4.371138828673793e-08
-                    ],
-                    "scale": [
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "translate": [
-                        0.0,
-                        0.0,
-                        0.0
+                        -2.4165966510772705,
+                        0.0035482794046401978
                     ]
                 }
             }
@@ -880,7 +1047,7 @@
             "components": {
                 "EditTag": {
                     "name": "pointLight",
-                    "path": "pointLight"
+                    "parent": "Lights"
                 },
                 "PointLightComponent": {
                     "color": [

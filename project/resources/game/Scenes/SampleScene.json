@@ -10,7 +10,7 @@
                 },
                 "EditTag": {
                     "name": "BigPowerItem",
-                    "path": "Item/BigBadge"
+                    "parent": "bigPowerItems"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -187,7 +187,7 @@
                 },
                 "EditTag": {
                     "name": "BigPowerItem_10",
-                    "path": "Item/BigBadge"
+                    "parent": "bigPowerItems"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -364,7 +364,7 @@
                 },
                 "EditTag": {
                     "name": "BigPowerItem_11",
-                    "path": "Item/BigBadge"
+                    "parent": "bigPowerItems"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -541,7 +541,7 @@
                 },
                 "EditTag": {
                     "name": "BigPowerItem_2",
-                    "path": "Item/BigBadge"
+                    "parent": "bigPowerItems"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -718,7 +718,7 @@
                 },
                 "EditTag": {
                     "name": "BigPowerItem_3",
-                    "path": "Item/BigBadge"
+                    "parent": "bigPowerItems"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -895,7 +895,7 @@
                 },
                 "EditTag": {
                     "name": "BigPowerItem_4",
-                    "path": "Item/BigBadge"
+                    "parent": "bigPowerItems"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -1072,7 +1072,7 @@
                 },
                 "EditTag": {
                     "name": "BigPowerItem_5",
-                    "path": "Item/BigBadge"
+                    "parent": "bigPowerItems"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -1249,7 +1249,7 @@
                 },
                 "EditTag": {
                     "name": "BigPowerItem_6",
-                    "path": "Item/BigBadge"
+                    "parent": "bigPowerItems"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -1426,7 +1426,7 @@
                 },
                 "EditTag": {
                     "name": "BigPowerItem_7",
-                    "path": "Item/BigBadge"
+                    "parent": "bigPowerItems"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -1603,7 +1603,7 @@
                 },
                 "EditTag": {
                     "name": "BigPowerItem_8",
-                    "path": "Item/BigBadge"
+                    "parent": "bigPowerItems"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -1780,7 +1780,7 @@
                 },
                 "EditTag": {
                     "name": "BigPowerItem_9",
-                    "path": "Item/BigBadge"
+                    "parent": "bigPowerItems"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -1952,7 +1952,7 @@
                 "CloseLevelUpUITag": null,
                 "EditTag": {
                     "name": "CloseHint",
-                    "path": "UI/staminaGauge"
+                    "parent": "UI"
                 },
                 "PrefabInstanceTag": {
                     "prefabPath": "resources/game/Prefabs\\CloseHint.json"
@@ -2007,9 +2007,9 @@
                 },
                 "DebugCameraComponent": {
                     "center": [
-                        1.0951166152954102,
-                        2.0592212677001953,
-                        0.9495100975036621
+                        -0.8039350509643555,
+                        5.110591888427734,
+                        4.620946407318115
                     ],
                     "distance": 9.015334129333496,
                     "drawCenter": false,
@@ -2019,15 +2019,15 @@
                 },
                 "EditTag": {
                     "name": "DebugCamera",
-                    "path": "DebugCamera"
+                    "parent": null
                 },
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
-                        -0.0396413579583168,
-                        0.9582467079162598,
-                        -0.23006653785705566,
-                        -0.16510963439941406
+                        0.0997428148984909,
+                        -0.898489236831665,
+                        0.2711148262023926,
+                        0.3305530846118927
                     ],
                     "scale": [
                         1.0,
@@ -2035,10 +2035,18 @@
                         1.0
                     ],
                     "translate": [
-                        3.7834103107452393,
-                        6.152285099029541,
-                        8.518932342529297
+                        4.063562870025635,
+                        10.0972261428833,
+                        10.340841293334961
                     ]
+                }
+            }
+        },
+        "Items": {
+            "components": {
+                "EditTag": {
+                    "name": "Items",
+                    "parent": null
                 }
             }
         },
@@ -2046,7 +2054,7 @@
             "components": {
                 "EditTag": {
                     "name": "Level",
-                    "path": "UI/newEntity"
+                    "parent": "UI"
                 },
                 "PrefabInstanceTag": {
                     "prefabPath": "resources/game/Prefabs\\Level.json"
@@ -2098,7 +2106,7 @@
             "components": {
                 "EditTag": {
                     "name": "LevelGauge",
-                    "path": "UI/newEntity"
+                    "parent": "UI"
                 },
                 "LevelGaugeTag": null,
                 "PrefabInstanceTag": {
@@ -2151,7 +2159,7 @@
             "components": {
                 "EditTag": {
                     "name": "LevelNumber",
-                    "path": "UI/newEntity"
+                    "parent": "UI"
                 },
                 "LevelNumberTag": null,
                 "PrefabInstanceTag": {
@@ -2204,7 +2212,7 @@
             "components": {
                 "EditTag": {
                     "name": "LevelUpEffect",
-                    "path": "Effect/LevelUpEffect"
+                    "parent": "UI"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -2275,7 +2283,7 @@
             "components": {
                 "EditTag": {
                     "name": "LevelUpUI",
-                    "path": "UI/newEntity"
+                    "parent": "UI"
                 },
                 "LevelUpTextComponent": {
                     "closeTime": 1.5,
@@ -2331,9 +2339,16 @@
             "components": {
                 "EditTag": {
                     "name": "LightFolder",
-                    "path": "Light"
-                },
-                "FolderTag": null
+                    "parent": null
+                }
+            }
+        },
+        "Lights": {
+            "components": {
+                "EditTag": {
+                    "name": "Lights",
+                    "parent": null
+                }
             }
         },
         "MainCamera": {
@@ -2344,7 +2359,7 @@
                 },
                 "EditTag": {
                     "name": "MainCamera",
-                    "path": "MainCamera"
+                    "parent": null
                 },
                 "FollowCameraComponent": {
                     "autoFollowDeadzoneAngle": 0.15000000596046448,
@@ -2382,7 +2397,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -2500,7 +2515,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_10",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -2618,7 +2633,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_10_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -2736,7 +2751,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_10_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -2854,7 +2869,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_11",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -2972,7 +2987,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_11_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -3090,7 +3105,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_11_3",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -3208,7 +3223,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_12",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -3326,7 +3341,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_12_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -3444,7 +3459,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_12_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -3562,7 +3577,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_12_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -3680,7 +3695,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_12_2_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -3798,7 +3813,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_12_2_2_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -3916,7 +3931,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_13",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -4034,7 +4049,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_13_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -4152,7 +4167,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_13_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -4270,7 +4285,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_14",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -4388,7 +4403,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_14_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -4506,7 +4521,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_14_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -4624,7 +4639,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_14_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -4742,7 +4757,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_14_2_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -4860,7 +4875,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_15",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -4978,7 +4993,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_15_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -5096,7 +5111,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_15_3",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -5214,7 +5229,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_15_3_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -5332,7 +5347,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_16",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -5450,7 +5465,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_16_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -5568,7 +5583,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_16_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -5686,7 +5701,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_16_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -5804,7 +5819,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_16_2_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -5922,7 +5937,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_17",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -6040,7 +6055,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_17_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -6158,7 +6173,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_17_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -6276,7 +6291,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_17_2_3",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -6394,7 +6409,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_17_3",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -6512,7 +6527,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_17_3_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -6630,7 +6645,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_17_4",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -6748,7 +6763,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_17_4_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -6866,7 +6881,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_18",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -6984,7 +6999,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_18_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -7102,7 +7117,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_19",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -7220,7 +7235,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_19_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -7338,7 +7353,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -7456,7 +7471,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_20",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -7574,7 +7589,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_20_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -7692,7 +7707,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_20_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -7810,7 +7825,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_20_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -7928,7 +7943,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_20_2_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -8046,7 +8061,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_20_2_2_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -8164,7 +8179,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_20_2_2_2_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -8282,7 +8297,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_20_2_2_2_2_3",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -8400,7 +8415,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_20_2_2_2_3",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -8518,7 +8533,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_20_2_2_3",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -8636,7 +8651,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_20_2_3",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -8754,7 +8769,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_20_3",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -8872,7 +8887,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_21",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -8990,7 +9005,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_21_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -9108,7 +9123,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_21_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -9226,7 +9241,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_21_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -9344,7 +9359,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_22",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -9462,7 +9477,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_22_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -9580,7 +9595,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_22_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -9698,7 +9713,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_22_2_3",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -9816,7 +9831,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_22_2_3_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -9934,7 +9949,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_22_3",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -10052,7 +10067,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_22_3_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -10170,7 +10185,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_23",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -10288,7 +10303,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_24",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -10406,7 +10421,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_24_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -10524,7 +10539,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_25",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -10642,7 +10657,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_25_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -10760,7 +10775,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_25_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -10878,7 +10893,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_25_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -10996,7 +11011,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_25_2_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -11114,7 +11129,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_26",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -11232,7 +11247,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_26_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -11350,7 +11365,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_26_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -11468,7 +11483,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_26_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -11586,7 +11601,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_27",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -11704,7 +11719,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_28",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -11822,7 +11837,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_28_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -11940,7 +11955,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_28_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -12058,7 +12073,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_28_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -12176,7 +12191,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_29",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -12294,7 +12309,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_29_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -12412,7 +12427,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_29_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -12530,7 +12545,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_29_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -12648,7 +12663,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_29_2_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -12766,7 +12781,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_29_2_2_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -12884,7 +12899,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_29_2_2_2_3",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -13002,7 +13017,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_29_2_2_2_3_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -13120,7 +13135,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -13238,7 +13253,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -13356,7 +13371,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_2_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -13474,7 +13489,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_2_2_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -13592,7 +13607,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_2_2_2_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -13710,7 +13725,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_2_2_2_2_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -13828,7 +13843,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_2_2_2_2_2_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -13946,7 +13961,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_2_2_2_2_2_2_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -14064,7 +14079,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_2_2_2_2_2_2_2_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -14182,7 +14197,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_2_2_3",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -14300,7 +14315,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_2_2_3_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -14418,7 +14433,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_2_2_3_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -14536,7 +14551,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_2_3",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -14654,7 +14669,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_2_3_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -14772,7 +14787,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_2_3_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -14890,7 +14905,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_2_3_3",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -15008,7 +15023,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_2_4",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -15126,7 +15141,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_2_4_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -15244,7 +15259,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_2_4_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -15362,7 +15377,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_2_4_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -15480,7 +15495,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_2_4_2_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -15598,7 +15613,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_2_4_2_2_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -15716,7 +15731,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_2_4_2_2_2_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -15834,7 +15849,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_2_4_2_2_2_2_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -15952,7 +15967,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_2_4_2_2_2_2_2_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -16070,7 +16085,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_3",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -16188,7 +16203,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_30",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -16306,7 +16321,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_31",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -16424,7 +16439,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_32",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -16542,7 +16557,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_33",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -16660,7 +16675,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_34",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -16778,7 +16793,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_35",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -16896,7 +16911,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_36",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -17014,7 +17029,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_36_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -17132,7 +17147,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_37",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -17250,7 +17265,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_38",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -17368,7 +17383,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_39",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -17486,7 +17501,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_39_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -17604,7 +17619,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_39_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -17722,7 +17737,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_39_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -17840,7 +17855,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_4",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -17958,7 +17973,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_40",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -18076,7 +18091,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_40_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -18194,7 +18209,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_40_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -18312,7 +18327,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_40_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -18430,7 +18445,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_41",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -18548,7 +18563,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_42",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -18666,7 +18681,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_42_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -18784,7 +18799,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_43",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -18902,7 +18917,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_43_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -19020,7 +19035,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_43_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -19138,7 +19153,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_43_3",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -19256,7 +19271,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_44",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -19374,7 +19389,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_44_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -19492,7 +19507,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_44_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -19610,7 +19625,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_44_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -19728,7 +19743,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_44_2_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -19846,7 +19861,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_44_2_2_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -19964,7 +19979,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_44_3",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -20082,7 +20097,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_44_3_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -20200,7 +20215,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_44_3_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -20318,7 +20333,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_44_3_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -20436,7 +20451,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_45",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -20554,7 +20569,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_45_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -20672,7 +20687,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_45_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -20790,7 +20805,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_45_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -20908,7 +20923,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_45_2_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -21026,7 +21041,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_46",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -21144,7 +21159,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_46_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -21262,7 +21277,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_47",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -21380,7 +21395,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_47_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -21498,7 +21513,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_48",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -21616,7 +21631,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_48_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -21734,7 +21749,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_48_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -21852,7 +21867,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_48_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -21970,7 +21985,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_48_2_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -22088,7 +22103,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_48_2_2_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -22206,7 +22221,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_48_2_2_2_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -22324,7 +22339,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_48_2_2_3",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -22442,7 +22457,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_48_2_2_3_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -22560,7 +22575,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_48_2_2_3_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -22678,7 +22693,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_5",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -22796,7 +22811,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_6",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -22914,7 +22929,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_7",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -23032,7 +23047,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_7_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -23150,7 +23165,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_7_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -23268,7 +23283,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_8",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -23386,7 +23401,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_8_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -23504,7 +23519,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_8_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -23622,7 +23637,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_8_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -23740,7 +23755,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_8_2_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -23858,7 +23873,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_9",
-                    "path": "Item/PowerItem"
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -23973,7 +23988,7 @@
             "components": {
                 "EditTag": {
                     "name": "SpotLight",
-                    "path": "Light/SpotLight"
+                    "parent": "Lights"
                 },
                 "PrefabInstanceTag": {
                     "prefabPath": "resources/game/Prefabs\\SpotLight.json"
@@ -24017,7 +24032,7 @@
             "components": {
                 "EditTag": {
                     "name": "SpotLight_2",
-                    "path": "Light/SpotLight_2"
+                    "parent": "Lights"
                 },
                 "PrefabInstanceTag": {
                     "prefabPath": "resources/game/Prefabs\\SpotLight.json"
@@ -24061,7 +24076,7 @@
             "components": {
                 "EditTag": {
                     "name": "SpotLight_2_2",
-                    "path": "Light/SpotLight_2_2"
+                    "parent": "Lights"
                 },
                 "PrefabInstanceTag": {
                     "prefabPath": "resources/game/Prefabs\\SpotLight.json"
@@ -24105,7 +24120,7 @@
             "components": {
                 "EditTag": {
                     "name": "SpotLight_2_2_2",
-                    "path": "Light/SpotLight_2_2_2"
+                    "parent": "Lights"
                 },
                 "PrefabInstanceTag": {
                     "prefabPath": "resources/game/Prefabs\\SpotLight.json"
@@ -24149,7 +24164,7 @@
             "components": {
                 "EditTag": {
                     "name": "SpotLight_3",
-                    "path": "Light/SpotLight_3"
+                    "parent": "Lights"
                 },
                 "PrefabInstanceTag": {
                     "prefabPath": "resources/game/Prefabs\\SpotLight.json"
@@ -24193,7 +24208,7 @@
             "components": {
                 "EditTag": {
                     "name": "SpotLight_3_2",
-                    "path": "Light/SpotLight_3_2"
+                    "parent": "Lights"
                 },
                 "PrefabInstanceTag": {
                     "prefabPath": "resources/game/Prefabs\\SpotLight.json"
@@ -24237,7 +24252,7 @@
             "components": {
                 "EditTag": {
                     "name": "SpotLight_3_2_2",
-                    "path": "Light/SpotLight_3_2_2"
+                    "parent": "Lights"
                 },
                 "PrefabInstanceTag": {
                     "prefabPath": "resources/game/Prefabs\\SpotLight.json"
@@ -24281,7 +24296,7 @@
             "components": {
                 "EditTag": {
                     "name": "SpotLight_3_2_2_2",
-                    "path": "Light/SpotLight_3_2_2_2"
+                    "parent": "Lights"
                 },
                 "PrefabInstanceTag": {
                     "prefabPath": "resources/game/Prefabs\\SpotLight.json"
@@ -24325,7 +24340,7 @@
             "components": {
                 "EditTag": {
                     "name": "SpotLight_3_2_3",
-                    "path": "Light/SpotLight_3_2_3"
+                    "parent": "Lights"
                 },
                 "PrefabInstanceTag": {
                     "prefabPath": "resources/game/Prefabs\\SpotLight.json"
@@ -24369,7 +24384,7 @@
             "components": {
                 "EditTag": {
                     "name": "SpotLight_3_2_3_2",
-                    "path": "Light/SpotLight_3_2_3_2"
+                    "parent": "Lights"
                 },
                 "PrefabInstanceTag": {
                     "prefabPath": "resources/game/Prefabs\\SpotLight.json"
@@ -24409,12 +24424,20 @@
             },
             "prefabInstance": "resources/game/Prefabs\\SpotLight.json"
         },
+        "UI": {
+            "components": {
+                "EditTag": {
+                    "name": "UI",
+                    "parent": null
+                }
+            }
+        },
         "XButton": {
             "components": {
                 "CloseLevelUpUITag": null,
                 "EditTag": {
                     "name": "XButton",
-                    "path": "UI/staminaGauge"
+                    "parent": "UI"
                 },
                 "PrefabInstanceTag": {
                     "prefabPath": "resources/game/Prefabs\\XButton.json"
@@ -24462,6 +24485,14 @@
             },
             "prefabInstance": "resources/game/Prefabs\\XButton.json"
         },
+        "bigPowerItems": {
+            "components": {
+                "EditTag": {
+                    "name": "bigPowerItems",
+                    "parent": "Items"
+                }
+            }
+        },
         "canMagicUI": {
             "components": {
                 "CanMagicUITag": {
@@ -24469,7 +24500,7 @@
                 },
                 "EditTag": {
                     "name": "canMagicUI",
-                    "path": "UI/canMagicUI"
+                    "parent": "UI"
                 },
                 "SpriteComponent": {
                     "color": [
@@ -24501,7 +24532,7 @@
                 },
                 "StaminaGaugeParentTag": null,
                 "Transform2DComponent": {
-                    "parent": "staminaGauge",
+                    "parent": null,
                     "rotation": 0.0,
                     "scale": [
                         0.5,
@@ -24521,7 +24552,7 @@
                 },
                 "EditTag": {
                     "name": "canMagicUIBack",
-                    "path": "UI/canMagicUI"
+                    "parent": "UI"
                 },
                 "SpriteComponent": {
                     "color": [
@@ -24553,7 +24584,7 @@
                 },
                 "StaminaGaugeParentTag": null,
                 "Transform2DComponent": {
-                    "parent": "canMagicUI",
+                    "parent": null,
                     "rotation": 0.0,
                     "scale": [
                         1.0,
@@ -24584,7 +24615,7 @@
                 },
                 "EditTag": {
                     "name": "directionalLight",
-                    "path": "Light/directionalLight"
+                    "parent": "Lights"
                 },
                 "PrefabInstanceTag": {
                     "prefabPath": "resources/game/Prefabs\\directionalLight.json"
@@ -24621,7 +24652,7 @@
                 },
                 "EditTag": {
                     "name": "player",
-                    "path": "player"
+                    "parent": null
                 },
                 "EffectEmitModeRingTag": null,
                 "EffectEmitterComponent": {
@@ -24778,7 +24809,7 @@
             "components": {
                 "EditTag": {
                     "name": "pointLight",
-                    "path": "Light/pointLight"
+                    "parent": "Lights"
                 },
                 "PointLightComponent": {
                     "color": [
@@ -24820,7 +24851,7 @@
             "components": {
                 "EditTag": {
                     "name": "pointLight_10",
-                    "path": "Light/pointLight_10"
+                    "parent": "Lights"
                 },
                 "PointLightComponent": {
                     "color": [
@@ -24862,7 +24893,7 @@
             "components": {
                 "EditTag": {
                     "name": "pointLight_11",
-                    "path": "Light/pointLight_11"
+                    "parent": "Lights"
                 },
                 "PointLightComponent": {
                     "color": [
@@ -24904,7 +24935,7 @@
             "components": {
                 "EditTag": {
                     "name": "pointLight_12",
-                    "path": "Light/pointLight_12"
+                    "parent": "Lights"
                 },
                 "PointLightComponent": {
                     "color": [
@@ -24946,7 +24977,7 @@
             "components": {
                 "EditTag": {
                     "name": "pointLight_13",
-                    "path": "Light/pointLight_13"
+                    "parent": "Lights"
                 },
                 "PointLightComponent": {
                     "color": [
@@ -24988,7 +25019,7 @@
             "components": {
                 "EditTag": {
                     "name": "pointLight_14",
-                    "path": "Light/pointLight_14"
+                    "parent": "Lights"
                 },
                 "PointLightComponent": {
                     "color": [
@@ -25030,7 +25061,7 @@
             "components": {
                 "EditTag": {
                     "name": "pointLight_2",
-                    "path": "Light/pointLight_2"
+                    "parent": "Lights"
                 },
                 "PointLightComponent": {
                     "color": [
@@ -25072,7 +25103,7 @@
             "components": {
                 "EditTag": {
                     "name": "pointLight_3",
-                    "path": "Light/pointLight_3"
+                    "parent": "Lights"
                 },
                 "PointLightComponent": {
                     "color": [
@@ -25114,7 +25145,7 @@
             "components": {
                 "EditTag": {
                     "name": "pointLight_4",
-                    "path": "Light/pointLight_4"
+                    "parent": "Lights"
                 },
                 "PointLightComponent": {
                     "color": [
@@ -25156,7 +25187,7 @@
             "components": {
                 "EditTag": {
                     "name": "pointLight_5",
-                    "path": "Light/pointLight_5"
+                    "parent": "Lights"
                 },
                 "PointLightComponent": {
                     "color": [
@@ -25198,7 +25229,7 @@
             "components": {
                 "EditTag": {
                     "name": "pointLight_6",
-                    "path": "Light/pointLight_6"
+                    "parent": "Lights"
                 },
                 "PointLightComponent": {
                     "color": [
@@ -25240,7 +25271,7 @@
             "components": {
                 "EditTag": {
                     "name": "pointLight_7",
-                    "path": "Light/pointLight_7"
+                    "parent": "Lights"
                 },
                 "PointLightComponent": {
                     "color": [
@@ -25282,7 +25313,7 @@
             "components": {
                 "EditTag": {
                     "name": "pointLight_8",
-                    "path": "Light/pointLight_8"
+                    "parent": "Lights"
                 },
                 "PointLightComponent": {
                     "color": [
@@ -25324,7 +25355,7 @@
             "components": {
                 "EditTag": {
                     "name": "pointLight_9",
-                    "path": "Light/pointLight_9"
+                    "parent": "Lights"
                 },
                 "PointLightComponent": {
                     "color": [
@@ -25362,11 +25393,19 @@
             },
             "prefabInstance": "resources/game/Prefabs\\pointLight.json"
         },
+        "powerItems": {
+            "components": {
+                "EditTag": {
+                    "name": "powerItems",
+                    "parent": "Items"
+                }
+            }
+        },
         "skydome": {
             "components": {
                 "EditTag": {
                     "name": "skydome",
-                    "path": "newEntity"
+                    "parent": null
                 },
                 "MaterialComponent": {
                     "blendMode": "kNormal",
@@ -25443,7 +25482,7 @@
                 },
                 "EditTag": {
                     "name": "stage",
-                    "path": "stage"
+                    "parent": null
                 },
                 "MaterialComponent": {
                     "blendMode": "kNormal",
@@ -25510,7 +25549,7 @@
             "components": {
                 "EditTag": {
                     "name": "staminaGauge",
-                    "path": "UI/staminaGauge"
+                    "parent": "UI"
                 },
                 "PrefabInstanceTag": {
                     "prefabPath": "resources/game/Prefabs\\staminaGauge.json"
@@ -25565,7 +25604,7 @@
             "components": {
                 "EditTag": {
                     "name": "staminaGaugeFrame",
-                    "path": "UI/staminaGauge"
+                    "parent": "UI"
                 },
                 "PrefabInstanceTag": {
                     "prefabPath": "resources/game/Prefabs\\staminaGaugeFrame.json"
@@ -25600,7 +25639,7 @@
                 },
                 "StaminaGaugeParentTag": null,
                 "Transform2DComponent": {
-                    "parent": "staminaGauge",
+                    "parent": null,
                     "rotation": 0.0,
                     "scale": [
                         1.5,
