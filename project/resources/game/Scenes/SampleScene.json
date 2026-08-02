@@ -2007,9 +2007,9 @@
                 },
                 "DebugCameraComponent": {
                     "center": [
-                        19.96682357788086,
-                        3.3363561630249023,
-                        -0.6677486896514893
+                        20.07588005065918,
+                        2.7189877033233643,
+                        -0.580719530582428
                     ],
                     "distance": 9.015334129333496,
                     "drawCenter": false,
@@ -2024,10 +2024,10 @@
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
-                        0.046613726764917374,
-                        -0.673481822013855,
-                        0.04262524098157883,
-                        0.7365001440048218
+                        0.07249274104833603,
+                        -0.667584240436554,
+                        0.06556788831949234,
+                        0.7380901575088501
                     ],
                     "scale": [
                         1.0,
@@ -24492,7 +24492,7 @@
                 },
                 "EditTag": {
                     "name": "canMagicUI",
-                    "parent": "UI"
+                    "parent": "staminaGauge"
                 },
                 "SpriteComponent": {
                     "color": [
@@ -24524,7 +24524,7 @@
                 },
                 "StaminaGaugeParentTag": null,
                 "Transform2DComponent": {
-                    "parent": null,
+                    "parent": "staminaGauge",
                     "rotation": 0.0,
                     "scale": [
                         0.5,
@@ -24544,7 +24544,7 @@
                 },
                 "EditTag": {
                     "name": "canMagicUIBack",
-                    "parent": "UI"
+                    "parent": "canMagicUI"
                 },
                 "SpriteComponent": {
                     "color": [
@@ -24576,7 +24576,7 @@
                 },
                 "StaminaGaugeParentTag": null,
                 "Transform2DComponent": {
-                    "parent": null,
+                    "parent": "canMagicUI",
                     "rotation": 0.0,
                     "scale": [
                         1.0,
@@ -25598,7 +25598,7 @@
             "components": {
                 "EditTag": {
                     "name": "staminaGaugeFrame",
-                    "parent": "UI"
+                    "parent": "staminaGauge"
                 },
                 "PrefabInstanceTag": {
                     "prefabPath": "resources/game/Prefabs\\staminaGaugeFrame.json"
@@ -25633,7 +25633,7 @@
                 },
                 "StaminaGaugeParentTag": null,
                 "Transform2DComponent": {
-                    "parent": null,
+                    "parent": "staminaGauge",
                     "rotation": 0.0,
                     "scale": [
                         1.5,
