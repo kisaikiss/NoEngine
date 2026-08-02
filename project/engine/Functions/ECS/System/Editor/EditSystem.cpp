@@ -5,7 +5,7 @@
 #include "engine/Editor/ReflectionMacros.h"
 #include "engine/Editor/EditorCommandOperator.h"
 #include "engine/Functions/Scene/SceneNameComponent.h"
-#include "engine/Functions/Command/EditCommand/InstantiateEntityCommand.h"
+#include "engine/Functions/Command/EditCommand/InstantiateEntitiesCommand.h"
 
 #include "engine/Functions/Input/input.h"
 #ifdef USE_IMGUI
@@ -114,8 +114,11 @@ void EditSystem::HandleGlobalShortcuts(Registry& registry, float deltaTime) {
 		if (timeInterval_ <= 0.0f) {
 			if (!ImGui::IsAnyItemActive() && clipboard_.HasContent()) {
 				std::vector<Entity> pasted = clipboard_.Paste(registry);
-				for (auto e : pasted) {
-					Editor::EditorCommandOperator::AddCommand(std::make_unique<Command::InstantiateEntityCommand>(registry, e));
+
+				// 1回のコマンドにまとめて記録することで、1回のUndoで貼り付けた全Entity
+				// （子孫含む）をまとめて取り消せるようにする。
+				if (!pasted.empty()) {
+					Editor::EditorCommandOperator::AddCommand(std::make_unique<Command::InstantiateEntitiesCommand>(registry, pasted));
 				}
 
 				// コピー元のルートに対応する新規Entityだけを選択状態にする

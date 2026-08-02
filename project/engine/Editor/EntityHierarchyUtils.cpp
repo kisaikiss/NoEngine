@@ -1,7 +1,7 @@
 #include "EntityHierarchyUtils.h"
 #include "engine/Editor/ReflectionMacros.h"
 #include "engine/Editor/EditorCommandOperator.h"
-#include "engine/Functions/Command/EditCommand/DeleteEntityCommand.h"
+#include "engine/Functions/Command/EditCommand/DeleteEntitiesCommand.h"
 #include "engine/Functions/ECS/Component/Common/TransformComponent.h"
 #include "engine/Functions/ECS/Component/Common/Transform2DComponent.h"
 
@@ -92,12 +92,11 @@ void BuildPreOrder(
 }
 
 void DeleteEntitiesWithUndo(ECS::Registry& registry, const std::vector<ECS::Entity>& entities) {
-	// 先に全Entity分のコマンドを記録してから破棄する。
-	// 1つのコマンドだけを記録して残りを直接DestroyEntityすると、
-	// そのEntityの分の復元情報がコマンド履歴に残らず、Undoで復元できなくなる。
-	for (auto e : entities) {
-		Editor::EditorCommandOperator::AddCommand(std::make_unique<Command::DeleteEntityCommand>(registry, e));
-	}
+	if (entities.empty()) return;
+
+	// 1回のコマンドにまとめて記録することで、1回のUndoで全Entity（子孫含む）を復元できるようにする。
+	// Entity毎に別々のコマンドを積むと、元に戻すのに同じ回数だけUndoを押す必要があって不便なため。
+	Editor::EditorCommandOperator::AddCommand(std::make_unique<Command::DeleteEntitiesCommand>(registry, entities));
 	for (auto e : entities) {
 		registry.DestroyEntity(e);
 	}

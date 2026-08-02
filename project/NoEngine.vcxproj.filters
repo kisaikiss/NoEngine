@@ -261,6 +261,8 @@
     <ClCompile Include="engine\Editor\HierarchyPanel.cpp" />
     <ClCompile Include="engine\Editor\InspectorPanel.cpp" />
     <ClCompile Include="engine\Editor\PrefabEditorPanel.cpp" />
+    <ClCompile Include="engine\Functions\Command\EditCommand\DeleteEntitiesCommand.cpp" />
+    <ClCompile Include="engine\Functions\Command\EditCommand\InstantiateEntitiesCommand.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -525,6 +527,8 @@
     <ClInclude Include="engine\Editor\HierarchyPanel.h" />
     <ClInclude Include="engine\Editor\InspectorPanel.h" />
     <ClInclude Include="engine\Editor\PrefabEditorPanel.h" />
+    <ClInclude Include="engine\Functions\Command\EditCommand\DeleteEntitiesCommand.h" />
+    <ClInclude Include="engine\Functions\Command\EditCommand\InstantiateEntitiesCommand.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />
