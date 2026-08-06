@@ -1958,11 +1958,15 @@
                     "prefabPath": "resources/game/Prefabs\\CloseHint.json"
                 },
                 "SpriteComponent": {
+                    "anchor": [
+                        1.0,
+                        1.0
+                    ],
                     "color": [
                         1.0,
                         1.0,
                         1.0,
-                        -0.01630599983036518
+                        0.0
                     ],
                     "fill": 0.0,
                     "flipX": false,
@@ -1976,6 +1980,7 @@
                         0.5,
                         0.5
                     ],
+                    "space": "Screen",
                     "textureName": "closeHint",
                     "useMask": false,
                     "uv": [
@@ -1993,8 +1998,8 @@
                         64.0
                     ],
                     "translate": [
-                        1109.199951171875,
-                        672.5999755859375
+                        -131.1999969482422,
+                        -50.5
                     ]
                 }
             },
@@ -2060,6 +2065,10 @@
                     "prefabPath": "resources/game/Prefabs\\Level.json"
                 },
                 "SpriteComponent": {
+                    "anchor": [
+                        0.0,
+                        0.0
+                    ],
                     "color": [
                         1.0,
                         1.0,
@@ -2078,6 +2087,7 @@
                         0.5,
                         0.5
                     ],
+                    "space": "World",
                     "textureName": "level",
                     "useMask": false,
                     "uv": [
@@ -2113,6 +2123,10 @@
                     "prefabPath": "resources/game/Prefabs\\LevelGauge.json"
                 },
                 "SpriteComponent": {
+                    "anchor": [
+                        0.0,
+                        0.0
+                    ],
                     "color": [
                         1.0,
                         1.0,
@@ -2131,6 +2145,7 @@
                         0.5,
                         0.5
                     ],
+                    "space": "World",
                     "textureName": "levelGauge",
                     "useMask": true,
                     "uv": [
@@ -2166,6 +2181,10 @@
                     "prefabPath": "resources/game/Prefabs\\LevelNumber.json"
                 },
                 "SpriteComponent": {
+                    "anchor": [
+                        0.0,
+                        0.0
+                    ],
                     "color": [
                         1.0,
                         1.0,
@@ -2184,6 +2203,7 @@
                         0.5,
                         0.5
                     ],
+                    "space": "World",
                     "textureName": "levelNumbers",
                     "useMask": false,
                     "uv": [
@@ -2293,6 +2313,10 @@
                     "prefabPath": "resources/game/Prefabs\\LevelUpUI.json"
                 },
                 "SpriteComponent": {
+                    "anchor": [
+                        0.0,
+                        0.0
+                    ],
                     "color": [
                         1.0,
                         1.0,
@@ -2311,6 +2335,7 @@
                         0.5,
                         0.5
                     ],
+                    "space": "World",
                     "textureName": "levelUpBackground",
                     "useMask": false,
                     "uv": [
@@ -24435,11 +24460,15 @@
                     "prefabPath": "resources/game/Prefabs\\XButton.json"
                 },
                 "SpriteComponent": {
+                    "anchor": [
+                        1.0,
+                        1.0
+                    ],
                     "color": [
                         1.0,
                         1.0,
                         1.0,
-                        -0.01630599983036518
+                        0.0
                     ],
                     "fill": 0.0,
                     "flipX": false,
@@ -24453,6 +24482,7 @@
                         0.5,
                         0.5
                     ],
+                    "space": "Screen",
                     "textureName": "xButton",
                     "useMask": false,
                     "uv": [
@@ -24470,8 +24500,8 @@
                         64.0
                     ],
                     "translate": [
-                        965.0999755859375,
-                        672.5999755859375
+                        -277.6000061035156,
+                        -53.5
                     ]
                 }
             },
@@ -24495,6 +24525,10 @@
                     "parent": "staminaGauge"
                 },
                 "SpriteComponent": {
+                    "anchor": [
+                        0.0,
+                        0.0
+                    ],
                     "color": [
                         1.0,
                         1.0,
@@ -24513,6 +24547,7 @@
                         0.5,
                         0.5
                     ],
+                    "space": "World",
                     "textureName": "canMagicUI",
                     "useMask": false,
                     "uv": [
@@ -24547,6 +24582,10 @@
                     "parent": "canMagicUI"
                 },
                 "SpriteComponent": {
+                    "anchor": [
+                        0.0,
+                        0.0
+                    ],
                     "color": [
                         1.0,
                         1.0,
@@ -24565,6 +24604,7 @@
                         0.5,
                         0.5
                     ],
+                    "space": "World",
                     "textureName": "canMagicUIBack",
                     "useMask": false,
                     "uv": [
@@ -25549,6 +25589,10 @@
                     "prefabPath": "resources/game/Prefabs\\staminaGauge.json"
                 },
                 "SpriteComponent": {
+                    "anchor": [
+                        0.0,
+                        0.0
+                    ],
                     "color": [
                         1.0,
                         1.0,
@@ -25567,6 +25611,7 @@
                         0.5,
                         0.5
                     ],
+                    "space": "World",
                     "textureName": "staminaGauge",
                     "useMask": false,
                     "uv": [
@@ -25604,6 +25649,10 @@
                     "prefabPath": "resources/game/Prefabs\\staminaGaugeFrame.json"
                 },
                 "SpriteComponent": {
+                    "anchor": [
+                        0.0,
+                        0.0
+                    ],
                     "color": [
                         1.0,
                         1.0,
@@ -25622,6 +25671,7 @@
                         0.5,
                         0.5
                     ],
+                    "space": "World",
                     "textureName": "staminaFrame",
                     "useMask": false,
                     "uv": [

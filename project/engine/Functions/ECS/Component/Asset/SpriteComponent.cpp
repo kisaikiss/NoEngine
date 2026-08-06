@@ -2,6 +2,8 @@
 #include "engine/Editor/ReflectionMacros.h"
 
 REFLECT_STRUCT_BEGIN(NoEngine::Component::SpriteComponent, "Asset")
+REFLECT_ENUM_FIELD(space),
+REFLECT_FIELD(anchor),
 REFLECT_FIELD(isVisible),
 REFLECT_FIELD(pivot),
 REFLECT_FIELD(flipX),

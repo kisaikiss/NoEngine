@@ -20,21 +20,25 @@ private:
         Component::Transform2DComponent* transform;
         Component::SpriteComponent* sprite;
     };
-    std::vector<DrawItem> items_;
+    std::vector<DrawItem> worldItems_;
+    std::vector<DrawItem> screenItems_;
 
     struct SpriteVertex {
-        Math::Vector4 position; // ワールド座標系
+        Math::Vector4 position;
         Math::Vector2 texcoord;
     };
     std::vector<SpriteVertex> vertices_;
     std::vector<uint16_t> indices_;
+    size_t screenIndexOffset_ = 0; // indices_内でScreen分が始まる位置
 
     void CameraUpdate();
     void Collect(ECS::Registry& registry);
     void Sort();
-    void MakeLocalQuad(const DrawItem& item , Math::Vector2 out[4]);
+    void MakeLocalQuad(const DrawItem& item, Math::Vector2 out[4]);
     void GenerateVertices(ECS::Registry& registry);
     void Render(GraphicsContext& gfx);
+    void DrawBatchRange(GraphicsContext& gfx, const std::vector<DrawItem>& items,
+        std::unordered_map<std::string, uint32_t>& rootIndex, uint32_t itemBaseIndex);
 };
 
 }
