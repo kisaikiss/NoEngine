@@ -1,0 +1,1027 @@
+{
+    "entities": {
+        "CloseHint": {
+            "components": {
+                "CloseLevelUpUITag": null,
+                "EditTag": {
+                    "name": "CloseHint",
+                    "parent": "UI"
+                },
+                "PrefabInstanceTag": {
+                    "prefabPath": "resources/game/Prefabs\\CloseHint.json"
+                },
+                "SpriteComponent": {
+                    "anchor": [
+                        1.0,
+                        1.0
+                    ],
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        -0.01674260012805462
+                    ],
+                    "fill": 0.0,
+                    "flipX": false,
+                    "flipY": false,
+                    "isVisible": true,
+                    "layer": 10,
+                    "maskTextureName": "",
+                    "nonRenderAngle": 0.0,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "space": "Screen",
+                    "textureName": "closeHint",
+                    "useMask": false,
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "parent": null,
+                    "rotation": 0.0,
+                    "scale": [
+                        237.3000030517578,
+                        64.0
+                    ],
+                    "translate": [
+                        -127.60888671875,
+                        -51.04376220703125
+                    ]
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\CloseHint.json"
+        },
+        "DebugCamera": {
+            "components": {
+                "CameraComponent": {
+                    "fov": 0.44999998807907104
+                },
+                "DebugCameraComponent": {
+                    "center": [
+                        1.5339813232421875,
+                        0.7203779220581055,
+                        -1.0258121490478516
+                    ],
+                    "distance": 23.472579956054688,
+                    "drawCenter": false,
+                    "moveType": "kUnreal",
+                    "unityMoveSpeed": 10.0,
+                    "unitySensitivity": 0.20000000298023224
+                },
+                "EditTag": {
+                    "name": "DebugCamera",
+                    "parent": null
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.06455239653587341,
+                        0.7237186431884766,
+                        -0.06833452731370926,
+                        0.6836628317832947
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        -21.48643684387207,
+                        5.113836288452148,
+                        0.2856292724609375
+                    ]
+                }
+            }
+        },
+        "Effect": {
+            "components": {
+                "EditTag": {
+                    "name": "Effect",
+                    "parent": null
+                }
+            }
+        },
+        "Level": {
+            "components": {
+                "EditTag": {
+                    "name": "Level",
+                    "parent": "UI"
+                },
+                "PrefabInstanceTag": {
+                    "prefabPath": "resources/game/Prefabs\\Level.json"
+                },
+                "SpriteComponent": {
+                    "anchor": [
+                        0.0,
+                        0.0
+                    ],
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "fill": 0.0,
+                    "flipX": false,
+                    "flipY": false,
+                    "isVisible": true,
+                    "layer": 1,
+                    "maskTextureName": "",
+                    "nonRenderAngle": 0.0,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "space": "World",
+                    "textureName": "level",
+                    "useMask": false,
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "parent": null,
+                    "rotation": 0.0,
+                    "scale": [
+                        451.0,
+                        83.0
+                    ],
+                    "translate": [
+                        252.0,
+                        65.4000015258789
+                    ]
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\Level.json"
+        },
+        "LevelGauge": {
+            "components": {
+                "EditTag": {
+                    "name": "LevelGauge",
+                    "parent": "UI"
+                },
+                "LevelGaugeTag": null,
+                "PrefabInstanceTag": {
+                    "prefabPath": "resources/game/Prefabs\\LevelGauge.json"
+                },
+                "SpriteComponent": {
+                    "anchor": [
+                        0.0,
+                        0.0
+                    ],
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "fill": 0.0,
+                    "flipX": false,
+                    "flipY": false,
+                    "isVisible": true,
+                    "layer": 0,
+                    "maskTextureName": "levelGaugeMask",
+                    "nonRenderAngle": 0.0,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "space": "World",
+                    "textureName": "levelGauge",
+                    "useMask": true,
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "parent": null,
+                    "rotation": 0.0,
+                    "scale": [
+                        451.0,
+                        83.0
+                    ],
+                    "translate": [
+                        252.0,
+                        65.4000015258789
+                    ]
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\LevelGauge.json"
+        },
+        "LevelNumber": {
+            "components": {
+                "EditTag": {
+                    "name": "LevelNumber",
+                    "parent": "UI"
+                },
+                "LevelNumberTag": null,
+                "PrefabInstanceTag": {
+                    "prefabPath": "resources/game/Prefabs\\LevelNumber.json"
+                },
+                "SpriteComponent": {
+                    "anchor": [
+                        0.0,
+                        0.0
+                    ],
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "fill": 0.0,
+                    "flipX": false,
+                    "flipY": false,
+                    "isVisible": true,
+                    "layer": 3,
+                    "maskTextureName": "",
+                    "nonRenderAngle": 0.0,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "space": "World",
+                    "textureName": "levelNumbers",
+                    "useMask": false,
+                    "uv": [
+                        0.10000000149011612,
+                        0.0,
+                        0.10000000149011612,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "parent": null,
+                    "rotation": 0.0,
+                    "scale": [
+                        64.0,
+                        64.0
+                    ],
+                    "translate": [
+                        223.60000610351563,
+                        47.599998474121094
+                    ]
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\LevelNumber.json"
+        },
+        "LevelUpEffect": {
+            "components": {
+                "EditTag": {
+                    "name": "LevelUpEffect",
+                    "parent": "Effect"
+                },
+                "EffectEmitterComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "count": 30,
+                    "emitRange": [
+                        2.0,
+                        0.0,
+                        2.0
+                    ],
+                    "maxLifeTime": 2.0,
+                    "maxRotate": 0.0,
+                    "maxScale": [
+                        0.5,
+                        3.0,
+                        0.5
+                    ],
+                    "maxSpeed": [
+                        0.0,
+                        5.400000095367432,
+                        0.0
+                    ],
+                    "minLifeTime": 1.0,
+                    "minRotate": 0.0,
+                    "minScale": [
+                        0.5,
+                        1.0,
+                        0.5
+                    ],
+                    "minSpeed": [
+                        0.0,
+                        1.899999976158142,
+                        0.0
+                    ],
+                    "textureName": "LevelUpParticle"
+                },
+                "LevelUpEffectTag": null,
+                "PrefabInstanceTag": {
+                    "prefabPath": "resources/game/Prefabs\\LevelUpEffect.json"
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        -3.497300624847412,
+                        0.0,
+                        4.0090227127075195
+                    ]
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\LevelUpEffect.json"
+        },
+        "LevelUpUI": {
+            "components": {
+                "EditTag": {
+                    "name": "LevelUpUI",
+                    "parent": "UI"
+                },
+                "LevelUpTextComponent": {
+                    "closeTime": 1.5,
+                    "isClose": false
+                },
+                "PrefabInstanceTag": {
+                    "prefabPath": "resources/game/Prefabs\\LevelUpUI.json"
+                },
+                "SpriteComponent": {
+                    "anchor": [
+                        0.0,
+                        0.0
+                    ],
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "fill": 0.0,
+                    "flipX": false,
+                    "flipY": false,
+                    "isVisible": false,
+                    "layer": 0,
+                    "maskTextureName": "",
+                    "nonRenderAngle": 0.0,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "space": "World",
+                    "textureName": "levelUpBackground",
+                    "useMask": false,
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "parent": null,
+                    "rotation": 0.0,
+                    "scale": [
+                        468.0,
+                        720.0
+                    ],
+                    "translate": [
+                        1000.0,
+                        360.0
+                    ]
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\LevelUpUI.json"
+        },
+        "MainCamera": {
+            "components": {
+                "ActiveCameraTag": null,
+                "CameraComponent": {
+                    "fov": 0.6499999761581421
+                },
+                "EditTag": {
+                    "name": "MainCamera",
+                    "parent": null
+                },
+                "FollowCameraComponent": {
+                    "autoFollowDeadzoneAngle": 0.15000000596046448,
+                    "autoFollowDelay": 1.0,
+                    "distance": 15.0,
+                    "maxAutoFollowAngularSpeed": 1.5,
+                    "phi": 1.118882417678833,
+                    "theta": -3.0989441871643066
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.1617613434791565,
+                        0.6742814779281616,
+                        -0.1550055295228958,
+                        0.7036697268486023
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        -20.783382415771484,
+                        6.550320148468018,
+                        0.45913392305374146
+                    ]
+                }
+            }
+        },
+        "UI": {
+            "components": {
+                "EditTag": {
+                    "name": "UI",
+                    "parent": null
+                }
+            }
+        },
+        "XButton": {
+            "components": {
+                "CloseLevelUpUITag": null,
+                "EditTag": {
+                    "name": "XButton",
+                    "parent": "UI"
+                },
+                "PrefabInstanceTag": {
+                    "prefabPath": "resources/game/Prefabs\\XButton.json"
+                },
+                "SpriteComponent": {
+                    "anchor": [
+                        1.0,
+                        1.0
+                    ],
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        -0.01674260012805462
+                    ],
+                    "fill": 0.0,
+                    "flipX": false,
+                    "flipY": false,
+                    "isVisible": true,
+                    "layer": 10,
+                    "maskTextureName": "",
+                    "nonRenderAngle": 0.0,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "space": "Screen",
+                    "textureName": "xButton",
+                    "useMask": false,
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "parent": null,
+                    "rotation": 0.0,
+                    "scale": [
+                        64.0,
+                        64.0
+                    ],
+                    "translate": [
+                        -280.7406005859375,
+                        -52.8663330078125
+                    ]
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\XButton.json"
+        },
+        "canMagicUI": {
+            "components": {
+                "CanMagicUITag": {
+                    "isBackground": false
+                },
+                "EditTag": {
+                    "name": "canMagicUI",
+                    "parent": "staminaGauge"
+                },
+                "PrefabInstanceTag": {
+                    "prefabPath": "resources/game/Prefabs\\canMagicUI.json"
+                },
+                "SpriteComponent": {
+                    "anchor": [
+                        0.0,
+                        0.0
+                    ],
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        0.0
+                    ],
+                    "fill": 0.0,
+                    "flipX": false,
+                    "flipY": false,
+                    "isVisible": true,
+                    "layer": 1,
+                    "maskTextureName": "",
+                    "nonRenderAngle": 0.0,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "space": "World",
+                    "textureName": "canMagicUI",
+                    "useMask": false,
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "StaminaGaugeParentTag": null,
+                "Transform2DComponent": {
+                    "parent": "staminaGauge",
+                    "rotation": 0.0,
+                    "scale": [
+                        0.5,
+                        0.5
+                    ],
+                    "translate": [
+                        0.7556419372558594,
+                        0.7559999823570251
+                    ]
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\canMagicUI.json"
+        },
+        "canMagicUIBack": {
+            "components": {
+                "CanMagicUITag": {
+                    "isBackground": true
+                },
+                "EditTag": {
+                    "name": "canMagicUIBack",
+                    "parent": "canMagicUI"
+                },
+                "PrefabInstanceTag": {
+                    "prefabPath": "resources/game/Prefabs\\canMagicUIBack.json"
+                },
+                "SpriteComponent": {
+                    "anchor": [
+                        0.0,
+                        0.0
+                    ],
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        0.0
+                    ],
+                    "fill": 0.0,
+                    "flipX": false,
+                    "flipY": false,
+                    "isVisible": true,
+                    "layer": 0,
+                    "maskTextureName": "",
+                    "nonRenderAngle": 0.0,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "space": "World",
+                    "textureName": "canMagicUIBack",
+                    "useMask": false,
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "StaminaGaugeParentTag": null,
+                "Transform2DComponent": {
+                    "parent": "canMagicUI",
+                    "rotation": 0.0,
+                    "scale": [
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\canMagicUIBack.json"
+        },
+        "directionalLight": {
+            "components": {
+                "DirectionalLightComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "direction": [
+                        0.11633047461509705,
+                        -0.9899267554283142,
+                        -0.08069895952939987
+                    ],
+                    "intensity": 1.0
+                },
+                "EditTag": {
+                    "name": "directionalLight",
+                    "parent": null
+                },
+                "PrefabInstanceTag": {
+                    "prefabPath": "resources/game/Prefabs\\directionalLight.json"
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\directionalLight.json"
+        },
+        "player": {
+            "components": {
+                "AnimatorComponent": {
+                    "animationSpeedMagnification": 1.0,
+                    "currentAnimation": 0,
+                    "drawSkeleton": false,
+                    "enableSkinning": true
+                },
+                "CapsuleCollider": {
+                    "localP0": [
+                        0.0,
+                        0.3499999940395355,
+                        0.0
+                    ],
+                    "localP1": [
+                        0.0,
+                        1.350000023841858,
+                        0.0
+                    ],
+                    "radius": 0.3499999940395355
+                },
+                "CollisionBody": {
+                    "type": "Dynamic"
+                },
+                "CollisionLayerComponent": {
+                    "layer": "Player"
+                },
+                "EditTag": {
+                    "name": "player",
+                    "parent": null
+                },
+                "EffectEmitModeRingTag": null,
+                "EffectEmitterComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "count": 60,
+                    "emitRange": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "maxLifeTime": 1.0,
+                    "maxRotate": 0.0,
+                    "maxScale": [
+                        0.5,
+                        0.5,
+                        0.5
+                    ],
+                    "maxSpeed": [
+                        3.0,
+                        0.10000000149011612,
+                        3.0
+                    ],
+                    "minLifeTime": 0.5,
+                    "minRotate": 0.0,
+                    "minScale": [
+                        0.5,
+                        0.5,
+                        0.5
+                    ],
+                    "minSpeed": [
+                        3.0,
+                        0.0,
+                        -3.0
+                    ],
+                    "textureName": "smokeEffect"
+                },
+                "GroundStateComponent": {
+                    "groundHeight": 0.0,
+                    "isGrounded": true
+                },
+                "LevelComponent": {
+                    "nextLevelUp": 30,
+                    "nowLevel": 1,
+                    "power": 0,
+                    "rewards": []
+                },
+                "MaterialComponent": {
+                    "blendMode": "kNormal",
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": true,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "enviromentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "renderMode": "kToon",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "jogging"
+                },
+                "ParticleEmitterSphereComponent": {
+                    "active": true,
+                    "count": 30,
+                    "frequency": 0.20000000298023224,
+                    "frequencyTime": 0.0,
+                    "radius": 0.0
+                },
+                "PlayerComponent": {
+                    "airDashSpeed": 10.0,
+                    "doubleJumpSpeed": 4.0,
+                    "gravity": -7.0,
+                    "highJumpSpeed": 7.0,
+                    "infinityJump": false,
+                    "jumpSpeed": 5.5,
+                    "maxStamina": 0.0,
+                    "moveSpeed": 6.0,
+                    "stamina": 0.0,
+                    "state": "kWait"
+                },
+                "PlayerMoveTransientComponent": null,
+                "PrefabInstanceTag": {
+                    "prefabPath": "resources/game/Prefabs\\player.json"
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        -1.196509344936203e-07,
+                        -0.7118778824806213,
+                        -1.2128214166295948e-07,
+                        -0.7023032903671265
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        -7.301450729370117,
+                        0.0,
+                        1.03446626663208
+                    ]
+                },
+                "VelocityComponent": {
+                    "linear": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\player.json"
+        },
+        "stage": {
+            "components": {
+                "CollisionLayerComponent": {
+                    "layer": "Terrain"
+                },
+                "EditTag": {
+                    "name": "stage",
+                    "parent": null
+                },
+                "MaterialComponent": {
+                    "blendMode": "kNormal",
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "enviromentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "renderMode": "kDefault",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "resources/game/ClockworksDisease/Model/StageMap/testStage.obj"
+                },
+                "StageComponent": {
+                    "stageColliderName": "resources/game/ClockworksDisease/Model/StageMap/testStage.obj"
+                },
+                "TerrainMesh": null,
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "staminaGauge": {
+            "components": {
+                "EditTag": {
+                    "name": "staminaGauge",
+                    "parent": "UI"
+                },
+                "PrefabInstanceTag": {
+                    "prefabPath": "resources/game/Prefabs\\staminaGauge.json"
+                },
+                "SpriteComponent": {
+                    "anchor": [
+                        0.0,
+                        0.0
+                    ],
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        0.0
+                    ],
+                    "fill": 0.0,
+                    "flipX": false,
+                    "flipY": false,
+                    "isVisible": true,
+                    "layer": 5,
+                    "maskTextureName": "",
+                    "nonRenderAngle": 0.0,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "space": "World",
+                    "textureName": "staminaGauge",
+                    "useMask": false,
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "StaminaGaugeComponent": {
+                    "disappearanceTime": 1.0
+                },
+                "Transform2DComponent": {
+                    "parent": null,
+                    "rotation": 0.0,
+                    "scale": [
+                        110.0,
+                        110.0
+                    ],
+                    "translate": [
+                        130.10000610351563,
+                        592.7000122070313
+                    ]
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\staminaGauge.json"
+        },
+        "staminaGaugeFrame": {
+            "components": {
+                "EditTag": {
+                    "name": "staminaGaugeFrame",
+                    "parent": "staminaGauge"
+                },
+                "PrefabInstanceTag": {
+                    "prefabPath": "resources/game/Prefabs\\staminaGaugeFrame.json"
+                },
+                "SpriteComponent": {
+                    "anchor": [
+                        0.0,
+                        0.0
+                    ],
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        0.0
+                    ],
+                    "fill": 0.0,
+                    "flipX": false,
+                    "flipY": false,
+                    "isVisible": true,
+                    "layer": 10,
+                    "maskTextureName": "",
+                    "nonRenderAngle": 0.0,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "space": "World",
+                    "textureName": "staminaFrame",
+                    "useMask": false,
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "StaminaGaugeParentTag": null,
+                "Transform2DComponent": {
+                    "parent": "staminaGauge",
+                    "rotation": 0.0,
+                    "scale": [
+                        1.5,
+                        1.5
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\staminaGaugeFrame.json"
+        }
+    }
+}

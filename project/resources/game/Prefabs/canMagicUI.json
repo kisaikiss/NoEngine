@@ -1,0 +1,57 @@
+{
+    "components": {
+        "CanMagicUITag": {
+            "isBackground": false
+        },
+        "EditTag": {
+            "name": "canMagicUI",
+            "parent": "staminaGauge"
+        },
+        "SpriteComponent": {
+            "anchor": [
+                0.0,
+                0.0
+            ],
+            "color": [
+                1.0,
+                1.0,
+                1.0,
+                0.0
+            ],
+            "fill": 0.0,
+            "flipX": false,
+            "flipY": false,
+            "isVisible": true,
+            "layer": 1,
+            "maskTextureName": "",
+            "nonRenderAngle": 0.0,
+            "orderInLayer": 0,
+            "pivot": [
+                0.5,
+                0.5
+            ],
+            "space": "World",
+            "textureName": "canMagicUI",
+            "useMask": false,
+            "uv": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+            ]
+        },
+        "StaminaGaugeParentTag": null,
+        "Transform2DComponent": {
+            "parent": "staminaGauge",
+            "rotation": 0.0,
+            "scale": [
+                0.5,
+                0.5
+            ],
+            "translate": [
+                0.7556419372558594,
+                0.7559999823570251
+            ]
+        }
+    }
+}

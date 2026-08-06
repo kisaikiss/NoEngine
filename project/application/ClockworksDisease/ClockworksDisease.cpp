@@ -4,7 +4,8 @@
 void ClockworksDisease::Startup(void) {
 	RegisterScene("TestScene", []() { return std::make_unique<GameScene>();	});
 	RegisterScene("SampleScene", []() { return std::make_unique<GameScene>();	});
-	ChangeScene("SampleScene");
+	RegisterScene("GameScene", []() { return std::make_unique<GameScene>();	});
+	ChangeScene("GameScene");
 
 	No::InputBindAxis("Lateral", No::DeviceType::GamepadAxis, static_cast<int>(No::GamepadAxis::LeftStickX), 1.0f, 0.2f);
 	No::InputBindAxis("Lateral", No::DeviceType::Keyboard, static_cast<int>('D'), 1.0f);
