@@ -529,6 +529,7 @@
     <ClInclude Include="engine\Editor\PrefabEditorPanel.h" />
     <ClInclude Include="engine\Functions\Command\EditCommand\DeleteEntitiesCommand.h" />
     <ClInclude Include="engine\Functions\Command\EditCommand\InstantiateEntitiesCommand.h" />
+    <ClInclude Include="engine\Math\EasingType.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

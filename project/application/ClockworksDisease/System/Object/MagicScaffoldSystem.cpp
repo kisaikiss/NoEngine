@@ -35,8 +35,8 @@ void MagicScaffoldSystem::Update(No::Registry& registry, float deltaTime) {
 
 			infos.push_back({ e,scaffold->generation });
 		}
-		transform->scale = No::EaseInOutBack(No::Vector3::ZERO, scaffold->finalSize, scaffold->time);
-		float angle = No::EaseInOutBack(0.0f, PI * 4.f, scaffold->time);
+		transform->scale = No::Lerp(No::Vector3::ZERO, scaffold->finalSize, No::ApplyEasing(No::EasingType::EaseInOutBack, scaffold->time));
+		float angle = No::Lerp(0.0f, PI * 4.f, No::ApplyEasing(No::EasingType::EaseInOutBack, scaffold->time));
 		transform->rotation.FromAxisAngle(No::Vector3::UP, angle);
 	}
 	

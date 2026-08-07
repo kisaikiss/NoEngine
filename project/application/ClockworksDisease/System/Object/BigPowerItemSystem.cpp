@@ -25,7 +25,7 @@ void BigPowerItemSystem::Update(No::Registry& registry, float deltaTime) {
 		} else {
 			constexpr float kScaleThetaDeltaTimeMagnification = 2.f;
 			badge->scaleT += deltaTime * kScaleThetaDeltaTimeMagnification;
-			transform->scale = No::EaseInBack(No::Vector3(2.f, 2.f, 2.f), No::Vector3::ZERO, badge->scaleT);
+			transform->scale = No::Lerp(No::Vector3(2.f, 2.f, 2.f), No::Vector3::ZERO, No::ApplyEasing(No::EasingType::EaseInBack, badge->scaleT));
 			if (badge->scaleT > 1.f) {
 				registry.AddComponent<No::EffectEmitTag>(e);
 				registry.DestroyEntity(e);
@@ -34,7 +34,7 @@ void BigPowerItemSystem::Update(No::Registry& registry, float deltaTime) {
 
 		constexpr float kFinalPositionOffset = 2.0f;
 		constexpr float kPositionOffset = 1.f;
-		badge->yPositionOffset = No::EaseInExpo(0.f, kFinalPositionOffset, badge->t);
+		badge->yPositionOffset = No::Lerp(0.f, kFinalPositionOffset,No::ApplyEasing(No::EasingType::EaseInExpo, badge->t));
 
 		transform->translate.x = playerWorldPos.x + std::sinf(badge->theta) * badge->translateMagnification;
 		transform->translate.y = playerWorldPos.y + badge->yPositionOffset + kPositionOffset;

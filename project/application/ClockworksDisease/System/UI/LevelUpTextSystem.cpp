@@ -38,7 +38,7 @@ void LevelUpTextSystem::Update(No::Registry& registry, float deltaTime) {
 
 		}
 		
-		transform->translate = No::EaseInOutSine(No::Vector2(1500.f, 360.f), No::Vector2(1040.f, 360.f), levelUI->t);
+		transform->translate = No::Lerp(No::Vector2(1500.f, 360.f), No::Vector2(1040.f, 360.f), No::ApplyEasing(No::EasingType::EaseInOutSine, levelUI->t));
 		uiPos = transform->translate;
 		isClose = levelUI->isClose;
 	}

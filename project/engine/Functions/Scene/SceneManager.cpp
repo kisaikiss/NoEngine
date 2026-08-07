@@ -129,7 +129,7 @@ void SceneManager::Update(ComputeContext& ctx, float deltaTime) {
 
 		if (transitionPhase_ == TransitionPhase::FadingOut) {
 			float t = std::clamp(transitionTimer_ / half, 0.0f, 1.0f);
-			float eased = NoEngine::Easing::EaseInOutSine(0.0f, 1.0f, t);
+			float eased = NoEngine::Easing::Lerp(0.0f, 1.0f, NoEngine::Easing::ApplyEasing(Easing::EasingType::EaseInOutSine, t));
 
 			// scale 0 -> 1
 			// alpha 0 -> 1
@@ -157,7 +157,7 @@ void SceneManager::Update(ComputeContext& ctx, float deltaTime) {
 			}
 		} else if (transitionPhase_ == TransitionPhase::FadingIn) {
 			float t = std::clamp(transitionTimer_ / half, 0.0f, 1.0f);
-			float eased = NoEngine::Easing::EaseInOutSine(0.0f, 1.0f, t);
+			float eased = NoEngine::Easing::Lerp(0.0f, 1.0f, NoEngine::Easing::ApplyEasing(Easing::EasingType::EaseInOutSine, t));
 
 			float s = 1.0f - eased;
 			UpdateOverlay(s, s);

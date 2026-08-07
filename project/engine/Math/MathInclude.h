@@ -7,3 +7,7 @@
 #include "Easing.h"
 #include "MathUtility.h"
 #include "Collision/CollisionFanc.h"
+
+namespace {
+constexpr float PI = std::numbers::pi_v<float>;
+}
