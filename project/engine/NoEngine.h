@@ -21,6 +21,7 @@
 #include "Functions/ECS/System/Loader/ModelLoadSystem.h"
 #include "Functions/ECS/System/Animation/AnimationSystem.h"
 #include "Functions/ECS/System/Animation/SpriteAnimationSystem.h"
+#include "Functions/ECS/System/Animation/TransformRoutineSystem.h"
 #include "Functions/ECS/System/Editor/EditSystem.h"
 #include "Functions/ECS/System/Editor/DrawManipulatorSystem.h"
 #include "Functions/ECS/System/Camera/CameraSystem.h"
