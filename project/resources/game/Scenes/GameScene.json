@@ -880,6 +880,7 @@
                     "isVisible": true,
                     "meshName": "resources/game/ClockworksDisease/Model/StageMap/testStage.obj"
                 },
+                "NoClickSelectTag": null,
                 "StageComponent": {
                     "stageColliderName": "resources/game/ClockworksDisease/Model/StageMap/testStage.obj"
                 },

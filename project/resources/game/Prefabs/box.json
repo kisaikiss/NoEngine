@@ -16,8 +16,8 @@
             "layer": "Terrain"
         },
         "EditTag": {
-            "name": "box_Prefab",
-            "path": "box"
+            "name": "box",
+            "parent": null
         },
         "MaterialComponent": {
             "blendMode": "kNormal",
@@ -55,6 +55,9 @@
             "isVisible": true,
             "meshName": "resources/engine/Model/block/block.obj"
         },
+        "PrefabInstanceTag": {
+            "prefabPath": "resources/game/Prefabs\\box.json"
+        },
         "TransformComponent": {
             "parent": null,
             "rotation": [
@@ -64,15 +67,16 @@
                 1.0
             ],
             "scale": [
-                25.018939971923828,
                 1.0,
-                42.88426971435547
+                1.0,
+                1.0
             ],
             "translate": [
-                9.89902400970459,
-                -22.865413665771484,
-                37.28539276123047
+                6.023510456085205,
+                2.510899543762207,
+                7.339221000671387
             ]
         }
-    }
+    },
+    "prefabInstance": "resources/game/Prefabs\\box.json"
 }

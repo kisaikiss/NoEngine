@@ -24,6 +24,7 @@
 
 #include "engine/Runtime/GraphicsCore.h"
 #include "engine/Editor/EditUtils.h"
+#include "engine/Functions/ECS/System/Editor/DrawManipulatorSystem.h"
 
 #ifdef USE_IMGUI
 #include "externals/imgui/imgui.h"
@@ -144,7 +145,17 @@ void RenderPassScheduler::Render(GraphicsContext& gfx, ECS::Registry& registry) 
 	DrawSceneImGuiWindow(registry, gfx, *resourceRegistry_.GetColorBufferPointer("WorldPosition"), positionReadbackBuffer_);
 
 	// クリックによるオブジェクトの選択
-	if (!ImGuizmo::IsUsing()) {
+	auto a = ECS::DrawManipulatorSystem::TriggerManipulateButton();
+
+	if (a) {
+		static int z = 0;
+		z++;
+	} else {
+		static int z = 0;
+		z++;
+	}
+
+	if (!ImGuizmo::IsUsing() && !a) {
 		gfx.TransitionResource(*resourceRegistry_.GetColorBufferPointer("ObjectID"), D3D12_RESOURCE_STATE_COPY_SOURCE);
 		gfx.TransitionResource(idReadbackBuffer_, D3D12_RESOURCE_STATE_COPY_DEST);
 		gfx.FlushResourceBarriers();

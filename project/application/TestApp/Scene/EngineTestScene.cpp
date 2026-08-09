@@ -22,6 +22,7 @@ void EngineTestScene::Setup() {
 	AddSystem(std::make_unique<No::CameraSystem>());
 	AddSystem(std::make_unique<No::Camera2DSystem>());
 	AddSystem(std::make_unique<No::MovementSystem>());
+	AddSystem(std::make_unique<No::TransformRoutineSystem>());
 
 	No::Registry& registry = *GetRegistry();
 	No::Entity entity = registry.GenerateEntity();
@@ -92,20 +93,6 @@ void EngineTestScene::Setup() {
 
 	t2d2->scale = { 100.f, 100.f };
 	sprite2->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/engine/uvChecker.png");
-
-	auto camera = registry.GenerateEntity();
-	registry.AddComponent<No::ActiveCameraTag>(camera);
-	registry.AddComponent<No::CameraComponent>(camera);
-	registry.AddComponent<No::DebugCameraComponent>(camera);
-	auto* cameraEditTag = registry.AddComponent<No::EditTag>(camera);
-	cameraEditTag->name = "camera";
-	auto* cameraTransform = registry.AddComponent<No::TransformComponent>(camera);
-	cameraTransform->translate.z = -5.f;
-
-	cameraE = registry.GenerateEntity();
-	registry.AddComponent<No::CameraComponent>(cameraE);
-	auto* cameraTransform2 = registry.AddComponent<No::TransformComponent>(cameraE);
-	cameraTransform2->translate.z = -5.f;
 
 	{
 		auto camera2d = registry.GenerateEntity();

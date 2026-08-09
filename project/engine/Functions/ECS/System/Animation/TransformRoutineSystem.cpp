@@ -36,7 +36,7 @@ void TransformRoutineSystem::Update(Registry& registry, float deltaTime) {
             break;
         }
 
-        transform->rotation.Slerp(from.rotation, to.rotation, time);
+        transform->rotation = Math::Quaternion::Slerp(from.rotation, to.rotation, time);
         transform->scale = Easing::Lerp(from.scale, to.scale, time);
 
         if (rawT >= 1.0f) {

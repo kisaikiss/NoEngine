@@ -143,6 +143,7 @@ ECS::Entity PickObject(CommandContext& ctx, ColorBuffer& idColorBuffer, Readback
 		uint32_t pickedID = (r << 24) | (g << 16) | (b << 8) | a;
 		constexpr uint32_t kNoObjectNumber = 1724754687;
 		if (pickedID == kNoObjectNumber) {
+			isPickObject = false;
 			return ECS::INVALID_ENTITY;
 		}
 
@@ -151,7 +152,7 @@ ECS::Entity PickObject(CommandContext& ctx, ColorBuffer& idColorBuffer, Readback
 		return static_cast<ECS::Entity>(pickedID);
 	}
 
-	if (Input::Mouse::IsTrigger(Input::MouseButton::Left)) {
+	if (Input::Mouse::IsRelease(Input::MouseButton::Left)) {
 		if (!Editor::IsMouseOverSceneWindow()) {
 			return ECS::INVALID_ENTITY;
 		}
