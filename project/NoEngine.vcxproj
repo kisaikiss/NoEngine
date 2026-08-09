@@ -631,6 +631,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="engine\Math\Easing.h" />
     <ClInclude Include="engine\Math\EasingType.h" />
     <ClInclude Include="engine\Math\MathUtility.h" />
+    <ClInclude Include="engine\Math\TransformRoutineCurves.h" />
     <ClInclude Include="engine\Math\Types\Calculations\Matrix3x3Calculations.h" />
     <ClInclude Include="engine\Math\Types\Calculations\Vector2Calculations.h" />
     <ClInclude Include="engine\Math\Types\Rect.h" />

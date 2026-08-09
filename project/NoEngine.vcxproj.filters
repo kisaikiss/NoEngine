@@ -536,6 +536,7 @@
     <ClInclude Include="engine\Functions\ECS\Component\Common\TransformRoutineComponent.h" />
     <ClInclude Include="engine\Functions\ECS\System\Animation\TransformRoutineSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\Editor\DrawWaypointRouteSystem.h" />
+    <ClInclude Include="engine\Math\TransformRoutineCurves.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />
