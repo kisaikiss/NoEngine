@@ -271,6 +271,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="engine\Functions\ECS\System\Editor\DrawWaypointRouteSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Editor\EditSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Effect\EffectEmitSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Effect\ParticleEmitterSystem.cpp" />
@@ -544,6 +545,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="engine\Functions\ECS\System\Editor\DrawWaypointRouteSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\Editor\EditSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\Effect\EffectEmitSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\Effect\ParticleEmitterSystem.h" />

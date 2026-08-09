@@ -265,6 +265,7 @@
     <ClCompile Include="engine\Functions\Command\EditCommand\InstantiateEntitiesCommand.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Common\TransformRoutineComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Animation\TransformRoutineSystem.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\Editor\DrawWaypointRouteSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -534,6 +535,7 @@
     <ClInclude Include="engine\Math\EasingType.h" />
     <ClInclude Include="engine\Functions\ECS\Component\Common\TransformRoutineComponent.h" />
     <ClInclude Include="engine\Functions\ECS\System\Animation\TransformRoutineSystem.h" />
+    <ClInclude Include="engine\Functions\ECS\System\Editor\DrawWaypointRouteSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

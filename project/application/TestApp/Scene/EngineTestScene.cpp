@@ -23,6 +23,7 @@ void EngineTestScene::Setup() {
 	AddSystem(std::make_unique<No::Camera2DSystem>());
 	AddSystem(std::make_unique<No::MovementSystem>());
 	AddSystem(std::make_unique<No::TransformRoutineSystem>());
+	AddSystem(std::make_unique<No::DrawWaypointRouteSystem>());
 
 	No::Registry& registry = *GetRegistry();
 	No::Entity entity = registry.GenerateEntity();

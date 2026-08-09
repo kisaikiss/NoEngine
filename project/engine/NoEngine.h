@@ -24,6 +24,7 @@
 #include "Functions/ECS/System/Animation/TransformRoutineSystem.h"
 #include "Functions/ECS/System/Editor/EditSystem.h"
 #include "Functions/ECS/System/Editor/DrawManipulatorSystem.h"
+#include "Functions/ECS/System/Editor/DrawWaypointRouteSystem.h"
 #include "Functions/ECS/System/Camera/CameraSystem.h"
 #include "Functions/ECS/System/Camera/Camera2DSystem.h"
 #include "Functions/ECS/System/Camera/DebugCameraSystem.h"
