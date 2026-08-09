@@ -145,17 +145,13 @@ void RenderPassScheduler::Render(GraphicsContext& gfx, ECS::Registry& registry) 
 	DrawSceneImGuiWindow(registry, gfx, *resourceRegistry_.GetColorBufferPointer("WorldPosition"), positionReadbackBuffer_);
 
 	// クリックによるオブジェクトの選択
-	auto a = ECS::DrawManipulatorSystem::TriggerManipulateButton();
-
-	if (a) {
-		static int z = 0;
-		z++;
-	} else {
-		static int z = 0;
-		z++;
-	}
-
-	if (!ImGuizmo::IsUsing() && !a) {
+	static bool isUsing = false;
+	static bool preIsUsing = false;
+	
+	// 左クリックのReleaseをオブジェクト選択に使用するため、前フレームの使用状況を参照
+	preIsUsing = isUsing;
+	isUsing = ImGuizmo::IsUsingAny();
+	if (!preIsUsing && !ECS::DrawManipulatorSystem::TriggerManipulateButton()) {
 		gfx.TransitionResource(*resourceRegistry_.GetColorBufferPointer("ObjectID"), D3D12_RESOURCE_STATE_COPY_SOURCE);
 		gfx.TransitionResource(idReadbackBuffer_, D3D12_RESOURCE_STATE_COPY_DEST);
 		gfx.FlushResourceBarriers();
