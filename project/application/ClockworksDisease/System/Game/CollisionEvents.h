@@ -5,6 +5,7 @@ struct PlayerPushBackEvent {
 	No::Entity player;
 	No::ContactPosition position;
 	No::Vector3 normal;
+	float penetration = 0.0f;
 };
 
 

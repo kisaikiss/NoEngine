@@ -24,6 +24,7 @@ void CollisionEventSystem::Update(No::Registry& registry, float deltaTime) {
 			event.player = contact.a;
 			event.position = contact.contactPosition;
 			event.normal = contact.normal;
+			event.penetration = contact.penetration;
 			// 魔法足場以外の足場にのった時は足場生成可能フラグをtrueにする
 			if (!registry.Has<MagicScaffoldComponent>(contact.b)&& contact.contactPosition == No::ContactPosition::UP) {
 				registry.GetComponent<PlayerComponent>(contact.a)->canCreateScaffold = true;

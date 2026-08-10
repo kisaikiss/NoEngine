@@ -10,7 +10,7 @@
                 },
                 "EditTag": {
                     "name": "BigPowerItem",
-                    "path": "Item/BigBadge"
+                    "parent": null
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -183,7 +183,7 @@
                 },
                 "EditTag": {
                     "name": "BigPowerItem_2",
-                    "path": "Item/BigBadge"
+                    "parent": null
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -345,7 +345,7 @@
                 },
                 "EditTag": {
                     "name": "BigPowerItem_3",
-                    "path": "Item/BigBadge"
+                    "parent": null
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -507,7 +507,7 @@
                 },
                 "EditTag": {
                     "name": "BigPowerItem_3_2",
-                    "path": "Item/BigBadge"
+                    "parent": null
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -669,7 +669,7 @@
                 },
                 "EditTag": {
                     "name": "BigPowerItem_3_2_2",
-                    "path": "Item/BigBadge"
+                    "parent": null
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -831,7 +831,7 @@
                 },
                 "EditTag": {
                     "name": "BigPowerItem_4",
-                    "path": "Item/BigBadge"
+                    "parent": null
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -988,9 +988,13 @@
                 "CloseLevelUpUITag": null,
                 "EditTag": {
                     "name": "CloseHint",
-                    "path": "UI/staminaGauge"
+                    "parent": null
                 },
                 "SpriteComponent": {
+                    "anchor": [
+                        0.0,
+                        0.0
+                    ],
                     "color": [
                         1.0,
                         1.0,
@@ -1009,6 +1013,7 @@
                         0.5,
                         0.5
                     ],
+                    "space": "World",
                     "textureName": "closeHint",
                     "useMask": false,
                     "uv": [
@@ -1045,13 +1050,13 @@
                     ],
                     "distance": 21.66449737548828,
                     "drawCenter": false,
-                    "moveType": "kUnity",
+                    "moveType": "kBlender",
                     "unityMoveSpeed": 10.0,
                     "unitySensitivity": 0.20000000298023224
                 },
                 "EditTag": {
                     "name": "DebugCamera",
-                    "path": "DebugCamera"
+                    "parent": null
                 },
                 "TransformComponent": {
                     "parent": null,
@@ -1078,7 +1083,7 @@
             "components": {
                 "EditTag": {
                     "name": "GameSetting",
-                    "path": "newEntity"
+                    "parent": null
                 },
                 "EditorSettingComponent": {
                     "drawCollider": false
@@ -1089,18 +1094,21 @@
             "components": {
                 "EditTag": {
                     "name": "Item",
-                    "path": "Item"
-                },
-                "FolderTag": null
+                    "parent": null
+                }
             }
         },
         "Level": {
             "components": {
                 "EditTag": {
                     "name": "Level",
-                    "path": "UI/newEntity"
+                    "parent": null
                 },
                 "SpriteComponent": {
+                    "anchor": [
+                        0.0,
+                        0.0
+                    ],
                     "color": [
                         1.0,
                         1.0,
@@ -1119,6 +1127,7 @@
                         0.5,
                         0.5
                     ],
+                    "space": "World",
                     "textureName": "level",
                     "useMask": false,
                     "uv": [
@@ -1146,10 +1155,14 @@
             "components": {
                 "EditTag": {
                     "name": "LevelGauge",
-                    "path": "UI/newEntity"
+                    "parent": null
                 },
                 "LevelGaugeTag": null,
                 "SpriteComponent": {
+                    "anchor": [
+                        0.0,
+                        0.0
+                    ],
                     "color": [
                         1.0,
                         1.0,
@@ -1168,6 +1181,7 @@
                         0.5,
                         0.5
                     ],
+                    "space": "World",
                     "textureName": "levelGauge",
                     "useMask": true,
                     "uv": [
@@ -1195,10 +1209,14 @@
             "components": {
                 "EditTag": {
                     "name": "LevelNumber",
-                    "path": "UI/newEntity"
+                    "parent": null
                 },
                 "LevelNumberTag": null,
                 "SpriteComponent": {
+                    "anchor": [
+                        0.0,
+                        0.0
+                    ],
                     "color": [
                         1.0,
                         1.0,
@@ -1217,6 +1235,7 @@
                         0.5,
                         0.5
                     ],
+                    "space": "World",
                     "textureName": "levelNumbers",
                     "useMask": false,
                     "uv": [
@@ -1244,7 +1263,7 @@
             "components": {
                 "EditTag": {
                     "name": "LevelUpEffect",
-                    "path": "Effect/LevelUpEffect"
+                    "parent": null
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -1311,13 +1330,17 @@
             "components": {
                 "EditTag": {
                     "name": "LevelUpUI",
-                    "path": "UI/newEntity"
+                    "parent": null
                 },
                 "LevelUpTextComponent": {
                     "closeTime": 1.5,
                     "isClose": false
                 },
                 "SpriteComponent": {
+                    "anchor": [
+                        0.0,
+                        0.0
+                    ],
                     "color": [
                         1.0,
                         1.0,
@@ -1336,6 +1359,7 @@
                         0.5,
                         0.5
                     ],
+                    "space": "World",
                     "textureName": "levelUpBackground",
                     "useMask": false,
                     "uv": [
@@ -1367,7 +1391,7 @@
                 },
                 "EditTag": {
                     "name": "MainCamera",
-                    "path": "MainCamera"
+                    "parent": null
                 },
                 "FollowCameraComponent": {
                     "autoFollowDeadzoneAngle": 0.15000000596046448,
@@ -1408,7 +1432,7 @@
                 },
                 "EditTag": {
                     "name": "MaxPowerItem",
-                    "path": "BigPowerItem_5"
+                    "parent": null
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -1564,9 +1588,8 @@
             "components": {
                 "EditTag": {
                     "name": "NewFolder",
-                    "path": "Effect"
-                },
-                "FolderTag": null
+                    "parent": null
+                }
             }
         },
         "PowerItem": {
@@ -1576,7 +1599,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem",
-                    "path": "Item/PowerItem"
+                    "parent": null
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -1690,7 +1713,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_2",
-                    "path": "Item/PowerItem"
+                    "parent": null
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -1804,7 +1827,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": null
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -1918,7 +1941,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": null
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -2032,7 +2055,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_2_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": null
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -2146,7 +2169,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_2_2_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": null
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -2260,7 +2283,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_2_2_2_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": null
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -2374,7 +2397,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_2_2_2_2_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": null
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -2488,7 +2511,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_2_2_2_2_2_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": null
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -2602,7 +2625,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_2_2_2_2_2_2_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": null
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -2716,7 +2739,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_2_2_2_2_2_2_2_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": null
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -2830,7 +2853,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_2_2_2_2_2_2_2_2_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": null
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -2944,7 +2967,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_2_2_2_2_2_2_2_2_2_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": null
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -3058,7 +3081,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_2_2_2_2_2_2_2_2_2_2_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": null
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -3172,7 +3195,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_2_2_2_2_2_2_2_2_2_2_2_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": null
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -3286,7 +3309,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": null
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -3400,7 +3423,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": null
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -3514,7 +3537,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": null
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -3628,7 +3651,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": null
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -3742,7 +3765,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": null
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -3856,7 +3879,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": null
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -3970,7 +3993,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": null
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -4084,7 +4107,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": null
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -4198,7 +4221,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": null
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -4312,7 +4335,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": null
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -4426,7 +4449,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_3",
-                    "path": "Item/PowerItem"
+                    "parent": null
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -4540,7 +4563,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_3_2",
-                    "path": "Item/PowerItem"
+                    "parent": null
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -4654,7 +4677,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_3_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": null
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -4768,7 +4791,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_3_2_3",
-                    "path": "Item/PowerItem"
+                    "parent": null
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -4882,7 +4905,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_3_2_3_2",
-                    "path": "Item/PowerItem"
+                    "parent": null
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -4996,7 +5019,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_3_2_3_3",
-                    "path": "Item/PowerItem"
+                    "parent": null
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -5110,7 +5133,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_3_2_3_3_2",
-                    "path": "Item/PowerItem"
+                    "parent": null
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -5224,7 +5247,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_3_2_3_3_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": null
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -5338,7 +5361,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_3_2_3_3_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": null
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -5452,7 +5475,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_3_2_3_3_2_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": null
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -5566,7 +5589,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_3_2_3_3_2_2_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": null
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -5680,7 +5703,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_4",
-                    "path": "Item/PowerItem"
+                    "parent": null
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -5794,7 +5817,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_4_2",
-                    "path": "Item/PowerItem"
+                    "parent": null
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -5908,7 +5931,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_4_3",
-                    "path": "Item/PowerItem"
+                    "parent": null
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -6022,7 +6045,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_4_3_2",
-                    "path": "Item/PowerItem"
+                    "parent": null
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -6136,7 +6159,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_4_3_3",
-                    "path": "Item/PowerItem"
+                    "parent": null
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -6250,7 +6273,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_4_3_3_2",
-                    "path": "Item/PowerItem"
+                    "parent": null
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -6364,7 +6387,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_4_3_3_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": null
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -6478,7 +6501,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_4_3_3_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": null
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -6592,7 +6615,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_4_3_3_2_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": null
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -6706,7 +6729,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_4_3_3_2_2_2_2_2",
-                    "path": "Item/PowerItem"
+                    "parent": null
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -6820,7 +6843,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_5",
-                    "path": "Item/PowerItem"
+                    "parent": null
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -6938,7 +6961,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_5_2",
-                    "path": "Item/PowerItem"
+                    "parent": null
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -7056,7 +7079,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_5_3",
-                    "path": "Item/PowerItem"
+                    "parent": null
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -7174,7 +7197,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_5_4",
-                    "path": "Item/PowerItem"
+                    "parent": null
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -7289,9 +7312,8 @@
             "components": {
                 "EditTag": {
                     "name": "UI",
-                    "path": "UI"
-                },
-                "FolderTag": null
+                    "parent": null
+                }
             }
         },
         "XButton": {
@@ -7299,9 +7321,13 @@
                 "CloseLevelUpUITag": null,
                 "EditTag": {
                     "name": "XButton",
-                    "path": "UI/staminaGauge"
+                    "parent": null
                 },
                 "SpriteComponent": {
+                    "anchor": [
+                        0.0,
+                        0.0
+                    ],
                     "color": [
                         1.0,
                         1.0,
@@ -7320,6 +7346,7 @@
                         0.5,
                         0.5
                     ],
+                    "space": "World",
                     "textureName": "xButton",
                     "useMask": false,
                     "uv": [
@@ -7361,7 +7388,7 @@
                 },
                 "EditTag": {
                     "name": "directionalLight",
-                    "path": "directionalLight"
+                    "parent": null
                 }
             }
         },
@@ -7384,7 +7411,7 @@
                 },
                 "EditTag": {
                     "name": "magicScaffold",
-                    "path": "box"
+                    "parent": null
                 },
                 "MagicScaffoldComponent": {
                     "finalSize": [
@@ -7479,7 +7506,7 @@
                 },
                 "EditTag": {
                     "name": "player",
-                    "path": "player"
+                    "parent": null
                 },
                 "EffectEmitModeRingTag": null,
                 "EffectEmitterComponent": {
@@ -7572,50 +7599,12 @@
                     "isVisible": true,
                     "meshName": "jogging"
                 },
-                "ParticleEmitterComponent": {
-                    "active": false,
-                    "color": [
-                        1.0,
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
+                "ParticleEmitterSphereComponent": {
+                    "active": true,
                     "count": 10,
-                    "emitRange": [
-                        0.0,
-                        0.0,
-                        0.0
-                    ],
-                    "frequency": 0.30000001192092896,
-                    "localPosition": [
-                        0.0,
-                        0.0,
-                        0.0
-                    ],
-                    "maxCount": 100,
-                    "maxLifeTime": 1.7999999523162842,
-                    "maxScale": [
-                        0.5,
-                        0.5,
-                        0.5
-                    ],
-                    "maxSpeed": [
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "minLifeTime": 0.8999999761581421,
-                    "minScale": [
-                        0.5,
-                        0.5,
-                        0.5
-                    ],
-                    "minSpeed": [
-                        -1.0,
-                        -1.0,
-                        -1.0
-                    ],
-                    "textureName": "smokeEffect"
+                    "frequency": 0.5,
+                    "frequencyTime": 0.0,
+                    "radius": 1.0
                 },
                 "PlayerComponent": {
                     "airDashSpeed": 10.0,
@@ -7658,13 +7647,87 @@
                 }
             }
         },
+        "stage": {
+            "components": {
+                "CollisionLayerComponent": {
+                    "layer": "Terrain"
+                },
+                "EditTag": {
+                    "name": "stage",
+                    "parent": null
+                },
+                "MaterialComponent": {
+                    "blendMode": "kNormal",
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "enviromentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "renderMode": "kDefault",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "resources/game/ClockworksDisease/Model/StageMap/testStage.obj"
+                },
+                "StageComponent": {
+                    "stageColliderName": "resources/game/ClockworksDisease/Model/StageMap/testStage.obj"
+                },
+                "TerrainMesh": null,
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
         "staminaGauge": {
             "components": {
                 "EditTag": {
                     "name": "staminaGauge",
-                    "path": "UI/staminaGauge"
+                    "parent": null
                 },
                 "SpriteComponent": {
+                    "anchor": [
+                        0.0,
+                        0.0
+                    ],
                     "color": [
                         1.0,
                         1.0,
@@ -7683,6 +7746,7 @@
                         0.5,
                         0.5
                     ],
+                    "space": "World",
                     "textureName": "staminaGauge",
                     "useMask": false,
                     "uv": [
@@ -7713,9 +7777,13 @@
             "components": {
                 "EditTag": {
                     "name": "staminaGaugeFrame",
-                    "path": "UI/staminaGauge"
+                    "parent": null
                 },
                 "SpriteComponent": {
+                    "anchor": [
+                        0.0,
+                        0.0
+                    ],
                     "color": [
                         1.0,
                         1.0,
@@ -7734,6 +7802,7 @@
                         0.5,
                         0.5
                     ],
+                    "space": "World",
                     "textureName": "staminaFrame",
                     "useMask": false,
                     "uv": [
