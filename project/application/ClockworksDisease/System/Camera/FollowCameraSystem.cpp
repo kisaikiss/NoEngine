@@ -36,7 +36,7 @@ void FollowCameraSystem::Update(No::Registry& registry, float deltaTime) {
 
 		// Phi(縦方向の移動)によって「プレイヤーとカメラの距離」と「視野角」を調整する
 		float normalizedPhi = (followCameraVariables->phi - minPhi) / (maxPhi - minPhi);
-		followCameraVariables->distance = No::Lerp(followCameraVariables->maxDistance, 2.0f, normalizedPhi);
+		followCameraVariables->distance = No::Lerp(followCameraVariables->maxDistance, followCameraVariables->minDistance, normalizedPhi);
 
 		cameraComponent->fov = No::Lerp(followCameraVariables->minFov, followCameraVariables->maxFov, normalizedPhi);
 

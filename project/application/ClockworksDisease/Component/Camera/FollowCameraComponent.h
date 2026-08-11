@@ -3,6 +3,7 @@
 
 struct FollowCameraComponent {
 	float maxDistance = 15.0f;
+	float minDistance = 2.0f;
 	float distance = 15.0f;
 	float theta = 0.f;
 	float phi = 1.f;

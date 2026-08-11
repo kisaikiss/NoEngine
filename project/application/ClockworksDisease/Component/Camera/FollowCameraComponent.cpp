@@ -3,6 +3,7 @@
 
 REFLECT_STRUCT_BEGIN(FollowCameraComponent, "Application")
 REFLECT_FIELD(maxDistance),
+REFLECT_FIELD(minDistance),
 REFLECT_FIELD(distance),
 REFLECT_FIELD(theta),
 REFLECT_FIELD(phi),
