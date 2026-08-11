@@ -32,6 +32,12 @@ struct CapsuleTriangleCollision {
 	float penetration = 0.0f;
 };
 
+struct SpherePushResult {
+	bool hit = false;
+	Vector3 normal;      // triangle -> sphere
+	float penetration = 0.0f;
+};
+
 struct Collision2D {
 	bool hit = false;
 	Vector2 closestOnA;
@@ -39,6 +45,9 @@ struct Collision2D {
 	Vector2 normal;	// B -> A
 	float penetration = 0.0f;
 };
+
+
+SpherePushResult TestSphereTriangle(const Vector3& center, float radius, const TriangleCollider& triangle);
 
 Math::Vector3 ClosestPointOnTriangle(const Math::Vector3& p, const Math::Vector3& a, const Math::Vector3& b, const Math::Vector3& c);
 CapsuleAABBCollision TestCapsuleAABB(const Transform* capsuleTransform, const Math::CapsuleCollider* capsule, const Transform* aabbTransform, const Math::AABBCollider* aabb, ECS::Registry& registry);

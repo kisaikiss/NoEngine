@@ -12,6 +12,9 @@ REFLECT_FIELD(minPhi),
 REFLECT_FIELD(maxPhi),
 REFLECT_FIELD(minFov),
 REFLECT_FIELD(maxFov),
-REFLECT_FIELD(playerPosOffset)
+REFLECT_FIELD(playerPosOffset),
+REFLECT_FIELD(currentDistance),
+REFLECT_FIELD(collisionRadius),
+REFLECT_FIELD(collisionMargin),
+REFLECT_FIELD(collisionStartOffset)
 REFLECT_STRUCT_END(FollowCameraComponent)
-

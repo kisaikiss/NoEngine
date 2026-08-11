@@ -5,6 +5,20 @@
 namespace NoEngine {
 namespace Math {
 using namespace MathCalculations;
+
+SpherePushResult TestSphereTriangle(const Vector3& center, float radius, const TriangleCollider& triangle) {
+	SpherePushResult result;
+	Vector3 closest = ClosestPointOnTriangle(center, triangle.v[0], triangle.v[1], triangle.v[2]);
+	Vector3 diff = center - closest;
+	float dist = diff.Length();
+	if (dist < radius) {
+		result.hit = true;
+		result.penetration = radius - dist;
+		result.normal = (dist > 1e-6f) ? diff / dist : triangle.normal;
+	}
+	return result;
+}
+
 Math::Vector3 ClosestPointOnTriangle(const Math::Vector3& p, const Math::Vector3& a, const Math::Vector3& b, const Math::Vector3& c) {
 	// 辺 AB
 	Math::Vector3 ab = b - a;
