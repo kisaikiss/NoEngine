@@ -42,7 +42,15 @@ struct Collision2D {
 
 Math::Vector3 ClosestPointOnTriangle(const Math::Vector3& p, const Math::Vector3& a, const Math::Vector3& b, const Math::Vector3& c);
 CapsuleAABBCollision TestCapsuleAABB(const Transform* capsuleTransform, const Math::CapsuleCollider* capsule, const Transform* aabbTransform, const Math::AABBCollider* aabb, ECS::Registry& registry);
-CapsuleTriangleCollision TestCapsuleTriangle(const Transform* capsuleTransform, const Math::CapsuleCollider* capsule, Math::TriangleCollider triangle, ECS::Registry& registry);
+
+// カメラのレイキャストや弾丸判定など、CapsuleColliderコンポーネントを持たない用途向け。
+CapsuleTriangleCollision TestSegmentTriangle(
+	const Vector3& segA, const Vector3& segB, float radius,const TriangleCollider& triangle);
+
+// CapsuleColliderコンポーネントを持つ用途向け
+CapsuleTriangleCollision TestCapsuleTriangle(
+	const Transform* capsuleTransform, const Math::CapsuleCollider* capsule, const Math::TriangleCollider& triangle, ECS::Registry& registry);
+
 CapsuleSphereCollision TestCapsuleSphere(const Transform* capsuleTransform, const Math::CapsuleCollider* capsule, const Transform* sphereTransform, const Math::SphereCollider* sphere, ECS::Registry& registry);
 
 Collision2D TestAABB2D(const Transform2D* transformA, const Math::AABBCollider2D* aabbA, const Transform2D* transformB, const Math::AABBCollider2D* aabbB);

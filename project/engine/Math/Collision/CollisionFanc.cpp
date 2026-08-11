@@ -110,25 +110,18 @@ CapsuleAABBCollision TestCapsuleAABB(const Transform* capsuleTransform, const Ma
 
 	return result;
 }
-CapsuleTriangleCollision TestCapsuleTriangle(
-	const Transform* capsuleTransform,
-	const Math::CapsuleCollider* capsule,
-	Math::TriangleCollider triangle, ECS::Registry& registry) {
+
+CapsuleTriangleCollision TestSegmentTriangle(const Vector3& segA, const Vector3& segB, float radius, const TriangleCollider& triangle) {
 	CapsuleTriangleCollision result;
 
-	CapsuleWorld cap = GetWorldCapsule(capsuleTransform, capsule, registry);
-
-	Vector3 segA = cap.p0;
-	Vector3 segB = cap.p1;
 	Vector3 A = triangle.v[0];
 	Vector3 B = triangle.v[1];
 	Vector3 C = triangle.v[2];
-	float   r = capsule->radius;
-
+	float   r = radius;
 	// ----------------------------------------------------------------
-	//  Step 1. カプセル線分の各端点 → 三角形 の最近接点を調べる
-	//          （線分が面に突き刺さるケースをここで捕捉）
-	// ----------------------------------------------------------------
+//  Step 1. カプセル線分の各端点 → 三角形 の最近接点を調べる
+//          （線分が面に突き刺さるケースをここで捕捉）
+// ----------------------------------------------------------------
 	auto testPoint = [&](const Vector3& pt) -> std::pair<Vector3, float> {
 		Vector3 onTri = ClosestPointOnTriangle(pt, A, B, C);
 		float   dist = (pt - onTri).Length();
@@ -253,6 +246,14 @@ CapsuleTriangleCollision TestCapsuleTriangle(
 	}
 
 	return result;
+}
+
+CapsuleTriangleCollision TestCapsuleTriangle(
+	const Transform* capsuleTransform,
+	const Math::CapsuleCollider* capsule,
+	const Math::TriangleCollider& triangle, ECS::Registry& registry) {
+	CapsuleWorld cap = GetWorldCapsule(capsuleTransform, capsule, registry);
+	return TestSegmentTriangle(cap.p0, cap.p1, capsule->radius, triangle);
 }
 
 CapsuleSphereCollision TestCapsuleSphere(const Transform* capsuleTransform, const Math::CapsuleCollider* capsule,
