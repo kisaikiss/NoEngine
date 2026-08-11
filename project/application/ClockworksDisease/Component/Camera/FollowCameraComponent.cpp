@@ -4,9 +4,6 @@
 REFLECT_STRUCT_BEGIN(FollowCameraComponent, "Application")
 REFLECT_FIELD(distance),
 REFLECT_FIELD(theta),
-REFLECT_FIELD(phi),
-REFLECT_FIELD(autoFollowDelay),
-REFLECT_FIELD(maxAutoFollowAngularSpeed),
-REFLECT_FIELD(autoFollowDeadzoneAngle)
+REFLECT_FIELD(phi)
 REFLECT_STRUCT_END(FollowCameraComponent)
 
