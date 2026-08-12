@@ -38,4 +38,10 @@ void ColliderDrawSystem::Update(No::Registry& registry, float deltaTime) {
 		);
 		NoEngine::DebugPrimitive::DrawCube(boxTransform->GetWorldPosition(registry), size, No::Color::WHITE);
 	}
+
+	for (auto boxE : registry.View<No::TransformComponent, No::OBBCollider>()) {
+		auto* boxTransform = registry.GetComponent<No::TransformComponent>(boxE);
+		auto* boxCollider = registry.GetComponent<No::OBBCollider>(boxE);
+		NoEngine::DebugPrimitive::DrawCube(boxTransform->GetWorldPosition(registry), boxCollider->extents, boxTransform->rotation, No::Color::WHITE);
+	}
 }

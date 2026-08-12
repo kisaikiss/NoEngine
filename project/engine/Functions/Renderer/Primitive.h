@@ -37,6 +37,16 @@ public:
 		const Math::Color& color);
 
 	/// <summary>
+	/// ボックス描画（回転あり）
+	/// </summary>
+	/// <param name="center">中心座標</param>
+	/// <param name="size">サイズ</param>
+	/// <param name="rotation">回転（クォータニオン）</param>
+	/// <param name="color">色</param>
+	static void DrawCube(const Math::Vector3& center, const Math::Vector3& size,
+		const Math::Quaternion& rotation, const Math::Color& color);
+
+	/// <summary>
 	/// 2D空間にキューブ（四角形）を描画する関数。
 	/// </summary>
 	/// <param name="center">図形の中心位置。</param>

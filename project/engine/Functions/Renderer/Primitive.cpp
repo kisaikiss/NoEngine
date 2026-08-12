@@ -63,6 +63,35 @@ void DebugPrimitive::DrawCube(const Vector3& center, const Vector3& size,
 		AddLineInternal(p[e[0]], p[e[1]], color);
 }
 
+void DebugPrimitive::DrawCube(const Vector3& center, const Vector3& size,
+	const Quaternion& rotation, const Color& color) {
+	Vector3 h = size * 0.5f;
+
+	// ローカル空間でのオフセット（回転前）
+	Vector3 localOffsets[8] =
+	{
+		{ -h.x, -h.y, -h.z }, { h.x, -h.y, -h.z },
+		{  h.x,  h.y, -h.z }, { -h.x,  h.y, -h.z },
+		{ -h.x, -h.y,  h.z }, { h.x, -h.y,  h.z },
+		{  h.x,  h.y,  h.z }, { -h.x,  h.y,  h.z },
+	};
+
+	Vector3 p[8];
+	for (int i = 0; i < 8; i++) {
+		p[i] = center + (rotation.RotateVector(localOffsets[i]));
+	}
+
+	constexpr uint16_t edges[][2] =
+	{
+		{0,1},{1,2},{2,3},{3,0},
+		{4,5},{5,6},{6,7},{7,4},
+		{0,4},{1,5},{2,6},{3,7},
+	};
+
+	for (auto& e : edges)
+		AddLineInternal(p[e[0]], p[e[1]], color);
+}
+
 void DebugPrimitive::DrawCube2D(const Vector2& center, const Vector2& max, const Vector2& min, const Color& color) {
 	Vector2 p[4] = {
 		{center.x + min.x, center.y + min.y}, {center.x + max.x, center.y + min.y},
