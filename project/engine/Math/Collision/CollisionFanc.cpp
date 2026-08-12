@@ -125,6 +125,67 @@ CapsuleAABBCollision TestCapsuleAABB(const Transform* capsuleTransform, const Ma
 	return result;
 }
 
+CapsuleOBBCollision TestCapsuleOBB(const Transform* capsuleTransform, const Math::CapsuleCollider* capsule, const Transform* obbTransform, const Math::OBBCollider* obb, ECS::Registry& registry) {
+	CapsuleOBBCollision result;
+
+	// ワールド座標でのカプセルとOBBを取得
+	// ※ OBBWorld は center / rotation(Quaternion) / halfExtents を持つ想定
+	CapsuleWorld cap = GetWorldCapsule(capsuleTransform, capsule, registry);
+	OBBWorld box = GetWorldOBB(obbTransform, obb, registry);
+
+	// OBBのローカル空間へ変換すれば、AABB版と同じアルゴリズムがそのまま使える
+	Quaternion invRot = box.rotation;
+	invRot.Inverse();
+	Vector3 localP0 = invRot.RotateVector(cap.p0 - box.center);
+	Vector3 localP1 = invRot.RotateVector(cap.p1 - box.center);
+	
+	// カプセルの中心軸を表すベクトル（ローカル空間）
+	Vector3 segment = localP1 - localP0;
+	// ローカル空間ではOBBの中心は原点
+	Vector3 boxCenter = Vector3::ZERO;
+
+	// 原点からカプセル下端へのベクトル
+	Vector3 p0ToCenter = boxCenter - localP0;
+
+	float segmentLengthSquared = segment.LengthSquared();
+
+	// 線分への射影でtを求める
+	float t = 0.0f;
+	if (segmentLengthSquared > 0.0f) {
+		t = p0ToCenter.Dot(segment) / segmentLengthSquared;
+	}
+	// 線分範囲へclamp
+	t = std::clamp(t, 0.0f, 1.0f);
+
+	// 線分上の最近接点（ローカル空間）
+	Vector3 pointOnSegmentLocal = localP0 + segment * t;
+	// ローカル空間のハーフエクステントにclampして最近接点を求める
+	Vector3 closestOnBoxLocal = Clamp(pointOnSegmentLocal, -box.halfExtents, box.halfExtents);
+
+	// 差分ベクトル（ローカル空間）
+	Vector3 diffLocal = pointOnSegmentLocal - closestOnBoxLocal;
+
+	// 0除算を避けるために1e-8fでclamp
+	float dist = std::max(diffLocal.Length(), 1e-8f);
+	float r = cap.radius;
+
+	// 衝突判定(最近接点間の距離が半径より小さいか)
+	if (dist <= r) {
+		// 衝突している
+		result.hit = true;
+		// 貫通量
+		result.penetration = r - dist;
+
+		// 法線・最近接点をワールド空間へ戻す
+		Vector3 normalLocal = diffLocal / dist;
+		result.normal = box.rotation.RotateVector(normalLocal);
+		result.closestOnBox = box.center + box.rotation.RotateVector(closestOnBoxLocal);
+		result.closestOnCapsule = box.center + box.rotation.RotateVector(pointOnSegmentLocal);
+	}
+
+	return result;
+}
+
 CapsuleTriangleCollision TestSegmentTriangle(const Vector3& segA, const Vector3& segB, float radius, const TriangleCollider& triangle) {
 	CapsuleTriangleCollision result;
 

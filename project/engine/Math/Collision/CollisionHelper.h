@@ -11,6 +11,12 @@ struct AABBWorld {
 	Math::Vector3 max;
 };
 
+struct OBBWorld {
+	Math::Vector3 center;
+	Math::Quaternion rotation;
+	Math::Vector3 halfExtents;
+};
+
 struct AABBWorld2D {
 	Math::Vector2 min;
 	Math::Vector2 max;
@@ -34,6 +40,14 @@ struct SphereWorld {
 /// <param name="aabb">AABBコライダー</param>
 /// <returns>ワールド座標でのAABBコライダー</returns>
 AABBWorld GetWorldAABB(const Transform* transform, const Math::AABBCollider* aabb, ECS::Registry& registry);
+
+/// <summary>
+/// OBBコライダーをワールド座標へ直す
+/// </summary>
+/// <param name="transform">トランスフォーム</param>
+/// <param name="obb">OBBコライダー</param>
+/// <returns>ワールド座標でのOBBコライダー</returns>
+OBBWorld GetWorldOBB(const Transform* transform, const Math::OBBCollider* obb, ECS::Registry& registry);
 
 /// <summary>
 /// AABBコライダーをワールド座標へ直す

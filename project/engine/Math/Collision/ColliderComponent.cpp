@@ -6,6 +6,11 @@ REFLECT_FIELD(min),
 REFLECT_FIELD(max)
 REFLECT_STRUCT_END(NoEngine::Math::AABBCollider)
 
+
+REFLECT_STRUCT_BEGIN(NoEngine::Math::OBBCollider, "Collision")
+REFLECT_FIELD(extents)
+REFLECT_STRUCT_END(NoEngine::Math::OBBCollider)
+
 REFLECT_STRUCT_BEGIN(NoEngine::Math::AABBCollider2D, "Collision")
 REFLECT_FIELD(min),
 REFLECT_FIELD(max)

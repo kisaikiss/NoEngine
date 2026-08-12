@@ -49,6 +49,11 @@ struct AABBCollider {
 	}
 };
 
+struct OBBCollider {
+	Vector3 extents;
+};
+
+
 /// <summary>
 /// 2D の軸整列境界ボックス (AABB) を表すコライダー構造体。衝突判定や領域表現に使用される。
 /// </summary>

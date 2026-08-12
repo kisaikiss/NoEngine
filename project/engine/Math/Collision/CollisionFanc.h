@@ -16,6 +16,14 @@ struct CapsuleAABBCollision {
 	float penetration = 0.0f;
 };
 
+struct CapsuleOBBCollision {
+	bool hit = false;
+	Vector3 closestOnCapsule;
+	Vector3 closestOnBox;
+	Vector3 normal;	// box -> capsule
+	float penetration = 0.0f;
+};
+
 struct CapsuleSphereCollision {
 	bool hit = false;
 	Vector3 closestOnCapsule;
@@ -51,6 +59,7 @@ SpherePushResult TestSphereTriangle(const Vector3& center, float radius, const T
 
 Math::Vector3 ClosestPointOnTriangle(const Math::Vector3& p, const Math::Vector3& a, const Math::Vector3& b, const Math::Vector3& c);
 CapsuleAABBCollision TestCapsuleAABB(const Transform* capsuleTransform, const Math::CapsuleCollider* capsule, const Transform* aabbTransform, const Math::AABBCollider* aabb, ECS::Registry& registry);
+CapsuleOBBCollision TestCapsuleOBB(const Transform* capsuleTransform, const Math::CapsuleCollider* capsule, const Transform* obbTransform, const Math::OBBCollider* obb, ECS::Registry& registry);
 
 // カメラのレイキャストや弾丸判定など、CapsuleColliderコンポーネントを持たない用途向け。
 CapsuleTriangleCollision TestSegmentTriangle(

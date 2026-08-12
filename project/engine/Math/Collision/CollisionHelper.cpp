@@ -10,6 +10,15 @@ AABBWorld GetWorldAABB(const Transform* transform, const Math::AABBCollider* aab
     return result;
 }
 
+OBBWorld GetWorldOBB(const Transform* transform, const Math::OBBCollider* obb, ECS::Registry& registry) {
+    OBBWorld result;
+    result.center = transform->GetWorldPosition(registry);
+    result.halfExtents = obb->extents / 2.0f;
+    result.rotation = transform->rotation;
+
+    return result;
+}
+
 AABBWorld2D GetWorldAABB2D(const Transform2D* transform, const Math::AABBCollider2D* aabb) {
     AABBWorld2D result;
     Math::Vector2 worldPos = transform->translate;

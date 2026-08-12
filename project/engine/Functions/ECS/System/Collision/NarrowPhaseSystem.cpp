@@ -23,7 +23,8 @@ void NarrowPhaseSystem::Update(Registry& registry, float deltaTime) {
 	Event::ContactEvent contactEvent;
 
 	// ToDo : カプセルVsその他になっているので、その他Vsその他も衝突判定するようにする
-	auto boxView = registry.View<Math::AABBCollider, Component::TransformComponent>();
+	auto aabbView = registry.View<Math::AABBCollider, Component::TransformComponent>();
+	auto obbView = registry.View<Math::OBBCollider, Component::TransformComponent>();
 	auto sphereView = registry.View<Math::SphereCollider, Component::TransformComponent>();
 	auto terrainView = registry.View<Math::TerrainMesh>();
 	auto capsuleView = registry.View<Math::CapsuleCollider, Component::TransformComponent>();
@@ -31,12 +32,32 @@ void NarrowPhaseSystem::Update(Registry& registry, float deltaTime) {
 	for (auto capsuleE : capsuleView) {
 		auto* capsuleTransform = registry.GetComponent<Component::TransformComponent>(capsuleE);
 		auto* capsuleCollider = registry.GetComponent<Math::CapsuleCollider>(capsuleE);
-		for (auto boxE : boxView) {
+		for (auto boxE : aabbView) {
 			auto* boxTransform = registry.GetComponent<Component::TransformComponent>(boxE);
 			auto* boxCollider = registry.GetComponent<Math::AABBCollider>(boxE);
 
 			// 衝突判定を行う
 			auto collide = Math::TestCapsuleAABB(capsuleTransform, capsuleCollider, boxTransform, boxCollider, registry);
+
+			if (!collide.hit) continue;
+
+			// 衝突情報を格納
+			Contact contact;
+			contact.a = capsuleE;
+			contact.b = boxE;
+			contact.normal = collide.normal;
+			contact.penetration = collide.penetration;
+			contact.contactPosition = ClassifyContact(collide.normal);
+
+			contactEvent.contacts.push_back(contact);
+		}
+
+		for (auto boxE : obbView) {
+			auto* boxTransform = registry.GetComponent<Component::TransformComponent>(boxE);
+			auto* boxCollider = registry.GetComponent<Math::OBBCollider>(boxE);
+
+			// 衝突判定を行う
+			auto collide = Math::TestCapsuleOBB(capsuleTransform, capsuleCollider, boxTransform, boxCollider, registry);
 
 			if (!collide.hit) continue;
 
