@@ -10,6 +10,8 @@ REFLECT_FIELD(airDashSpeed),
 REFLECT_FIELD(gravity),
 REFLECT_FIELD(stamina),
 REFLECT_FIELD(maxStamina),
+REFLECT_FIELD(coyoteTime),
+REFLECT_FIELD(coyoteTimer),
 REFLECT_FIELD(infinityJump),
 REFLECT_ENUM_FIELD(state)
 REFLECT_STRUCT_END(PlayerComponent)

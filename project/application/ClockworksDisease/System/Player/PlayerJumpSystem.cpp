@@ -37,18 +37,15 @@ void HandleHighJump(No::Registry& registry, No::Entity entity, PlayerComponent* 
 	float deltaTime) {
 
 	const bool hasHighJumpTag = registry.Has<HighJumpTag>(entity);
-	auto& state = playerVariables->state;
 
 	if (No::InputIsPress("HighJump")) {
-		if (hasHighJumpTag && state == PlayerState::kHighJump && !isGrounded) {
+		if (hasHighJumpTag && playerVariables->state == PlayerState::kHighJump && !isGrounded) {
 			constexpr float kHighJumpDrainRate = 10.0f;
 			if (playerVariables->stamina > kHighJumpDrainRate * deltaTime) {
 				playerVariables->yVelocity = playerVariables->highJumpSpeed;
 				playerVariables->stamina -= kHighJumpDrainRate * deltaTime;
 			}
 		}
-	} else {
-		state = PlayerState::kWait;
 	}
 
 	if (No::InputIsTrigger("HighJump") && hasHighJumpTag) {
@@ -56,7 +53,6 @@ void HandleHighJump(No::Registry& registry, No::Entity entity, PlayerComponent* 
 			playerVariables->yVelocity = playerVariables->highJumpSpeed;
 			transientState->justJumped = true;
 			groundState->isGrounded = false;
-			state = PlayerState::kHighJump;
 		}
 	}
 }
@@ -137,7 +133,21 @@ void PlayerJumpSystem::Update(No::Registry& registry, float deltaTime) {
 		transientState->isAirDashing = false;
 
 		// isGrounded は各ハンドラ内で isGrounded を書き換える前の値を使う必要があるため先に確定
-		const bool isGrounded = groundState->isGrounded;
+		bool isGrounded = groundState->isGrounded;
+
+		// コヨーテタイム内ならisGroundedをtrueにする
+		if (!isGrounded && playerVariables->state != PlayerState::kJump) {
+			if (playerVariables->coyoteTime > playerVariables->coyoteTimer) {
+				playerVariables->coyoteTimer += deltaTime;
+				isGrounded = true;
+			}
+		} else {
+			if (playerVariables->state == PlayerState::kJump) {
+				playerVariables->coyoteTimer = playerVariables->coyoteTime;
+			} else {
+				playerVariables->coyoteTimer = 0.0f;
+			}
+		}
 
 		HandleNormalJump(registry, entity, playerVariables, groundState, isGrounded, transientState);
 		HandleHighJump(registry, entity, playerVariables, groundState, isGrounded, transientState, deltaTime);

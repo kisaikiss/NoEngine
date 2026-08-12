@@ -2,12 +2,12 @@
 #include "engine/NoEngine.h"
 
 enum class PlayerState {
-	kWait,
-	kWalk,
-	kJump,
-	kMultiJump,
-	kHighJump,
-	kFall
+	kWait,					// 何もしていないとき
+	kWalk,					// 歩いている時
+	kJump,					// ジャンプ上昇中
+	kAirDash,				// 空中ダッシュ中
+	kHighJump,				// ハイジャンプ上昇中
+	kFall					// 下降中
 };
 
 struct PlayerComponent {
@@ -24,6 +24,10 @@ struct PlayerComponent {
 	bool infinityJump = false;
 	bool canCreateScaffold = true;
 	PlayerState state = PlayerState::kWait;
+
+	// コヨーテタイム
+	float coyoteTime = 0.3f;
+	float coyoteTimer = 0.0f;
 };
 
 // PlayerJumpSystem / PlayerHorizontalMoveSystem / PlayerVerticalVelocitySystem の間で

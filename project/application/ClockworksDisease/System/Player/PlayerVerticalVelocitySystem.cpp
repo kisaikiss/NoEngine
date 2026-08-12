@@ -16,19 +16,28 @@ void PlayerVerticalVelocitySystem::Update(No::Registry& registry, float deltaTim
 		const bool justJumped = transientState->justJumped;
 
 		if (transientState->isAirDashing) {
-			// 空中ダッシュ中は重力の影響を受けない。
-			// yVelocity はあえて更新せず据え置くことで、ダッシュ終了後に
-			// 元の落下/上昇速度からスムーズに重力計算を再開できるようにする。
 			velocity->linear.y = 0.f;
 			particleEmitter->active = false;
 		} else if (isGrounded && !justJumped) {
-			// 接地中は重力加算しない。斜面yのみvelocityに反映
 			velocity->linear.y = transientState->slopeY;
 		} else {
-			// 空中 or ジャンプ直後
 			playerVariables->yVelocity += playerVariables->gravity * deltaTime;
 			velocity->linear.y = playerVariables->yVelocity;
 			particleEmitter->active = false;
+		}
+
+		// ここでこのフレームの最終的なPlayerStateを決定する
+		if (transientState->isAirDashing) {
+			playerVariables->state = PlayerState::kAirDash;
+		} else if (!isGrounded) {
+			if (playerVariables->yVelocity > 0.f) {
+				playerVariables->state =  PlayerState::kJump;
+			} else {
+				playerVariables->state = PlayerState::kFall;
+			}
+		} else {
+			const bool isMoving = (velocity->linear.x != 0.f || velocity->linear.z != 0.f);
+			playerVariables->state = isMoving ? PlayerState::kWalk : PlayerState::kWait;
 		}
 
 		playerVariables->groundNormal = No::Vector3::ZERO;
