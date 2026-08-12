@@ -108,6 +108,21 @@
                 }
             }
         },
+        "GameSetting": {
+            "components": {
+                "EditTag": {
+                    "name": "GameSetting",
+                    "parent": null
+                },
+                "EditorSettingComponent": {
+                    "drawCollider": false
+                },
+                "PrefabInstanceTag": {
+                    "prefabPath": "resources/game/Prefabs\\GameSetting.json"
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\GameSetting.json"
+        },
         "Level": {
             "components": {
                 "EditTag": {
@@ -424,11 +439,20 @@
                     "parent": null
                 },
                 "FollowCameraComponent": {
-                    "autoFollowDeadzoneAngle": 0.15000000596046448,
-                    "autoFollowDelay": 1.0,
+                    "collisionMargin": 0.30000001192092896,
+                    "collisionRadius": 0.949999988079071,
+                    "collisionStartOffset": 5.0,
+                    "currentDistance": 15.0,
                     "distance": 15.0,
-                    "maxAutoFollowAngularSpeed": 1.5,
+                    "maxDistance": 15.0,
+                    "maxFov": 0.8500000238418579,
+                    "maxPhi": 1.5707963705062866,
+                    "minDistance": 2.0,
+                    "minFov": 0.6499999761581421,
+                    "minPhi": 0.6283185482025146,
+                    "moveSpeed": 2.0,
                     "phi": 1.118882417678833,
+                    "playerPosOffset": 2.0,
                     "theta": -3.0989441871643066
                 },
                 "TransformComponent": {
@@ -792,6 +816,8 @@
                 },
                 "PlayerComponent": {
                     "airDashSpeed": 10.0,
+                    "coyoteTime": 0.30000001192092896,
+                    "coyoteTimer": 0.0,
                     "doubleJumpSpeed": 4.0,
                     "gravity": -7.0,
                     "highJumpSpeed": 7.0,

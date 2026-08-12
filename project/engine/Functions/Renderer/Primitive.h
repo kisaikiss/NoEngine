@@ -8,7 +8,7 @@ namespace NoEngine {
 class DebugPrimitive {
 public:
 	static void Initialize(RenderContext& ctx);
-	static void Shutdown();
+	static void FrameEnd();
 
 	/// <summary>
 	/// ライン描画

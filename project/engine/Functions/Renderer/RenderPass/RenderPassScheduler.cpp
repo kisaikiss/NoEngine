@@ -135,7 +135,7 @@ void RenderPassScheduler::Render(GraphicsContext& gfx, ECS::Registry& registry) 
 		node.pass->Execute(gfx, resourceRegistry_, registry);
 	}
 
-	DebugPrimitive::Shutdown();
+	DebugPrimitive::FrameEnd();
 #ifdef USE_IMGUI
 	gfx.TransitionResource(*resourceRegistry_.GetColorBufferPointer(screenDrawBufferName_), D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 	gfx.TransitionResource(*resourceRegistry_.GetColorBufferPointer("DebugColor"), D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);

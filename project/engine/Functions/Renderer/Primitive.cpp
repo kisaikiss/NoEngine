@@ -27,7 +27,7 @@ void DebugPrimitive::Initialize(RenderContext& ctx) {
 	sIsInitialized = true;
 }
 
-void DebugPrimitive::Shutdown() {
+void DebugPrimitive::FrameEnd() {
 	sVertices.clear();
 	sVertices2D.clear();
 }
