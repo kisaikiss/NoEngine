@@ -1,10 +1,11 @@
 #include "stdafx.h"
 #include "BoxColliderUpdateSystem.h"
 
+#include "../../Component/Stage/StageComponent.h"
+
 void BoxColliderUpdateSystem::Update(No::Registry& registry, float deltaTime) {
 	static_cast<void>(deltaTime);
-	auto view = registry.View<No::TransformComponent, No::AABBCollider>();
-	for (auto e : view) {
+	for (auto e : registry.View<No::TransformComponent, No::AABBCollider, ColliderUpdateTag>()) {
 		auto* t = registry.GetComponent<No::TransformComponent>(e);
 		auto* b = registry.GetComponent<No::AABBCollider>(e);
 
@@ -27,5 +28,12 @@ void BoxColliderUpdateSystem::Update(No::Registry& registry, float deltaTime) {
 			b->max.z = b->min.z;
 			b->min.z = tmp;
 		}
+	}
+
+	for (auto e : registry.View<No::TransformComponent, No::OBBCollider, ColliderUpdateTag>()) {
+		auto* t = registry.GetComponent<No::TransformComponent>(e);
+		auto* b = registry.GetComponent<No::OBBCollider>(e);
+
+		b->extents = t->scale;
 	}
 }
