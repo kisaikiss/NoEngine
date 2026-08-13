@@ -266,6 +266,7 @@
     <ClCompile Include="engine\Functions\ECS\Component\Common\TransformRoutineComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Animation\TransformRoutineSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Editor\DrawWaypointRouteSystem.cpp" />
+    <ClCompile Include="application\ClockworksDisease\Scene\TitleScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -537,6 +538,7 @@
     <ClInclude Include="engine\Functions\ECS\System\Animation\TransformRoutineSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\Editor\DrawWaypointRouteSystem.h" />
     <ClInclude Include="engine\Math\TransformRoutineCurves.h" />
+    <ClInclude Include="application\ClockworksDisease\Scene\TitleScene.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />
