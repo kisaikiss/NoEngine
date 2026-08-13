@@ -266,7 +266,12 @@ void DrawFieldUI(ECS::Registry& registry, const FieldInfo& field, void* ptr) {
 
 		// InputTextを描画（入力中は editBuf のみが書き換わり、*s は変更されません）
 		bool enterPressed = ImGui::InputText(field.name.c_str(), editBuf, sizeof(editBuf), flags);
-
+		if (ImGui::BeginDragDropTarget()) {
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ASSET_PATH")) {
+				const char* path = (const char*)payload->Data;
+				*s = path;
+			}
+		}
 		// 編集が開始された瞬間（クリックした時など）
 		if (ImGui::IsItemActivated()) {
 			oldStringValue = *s;

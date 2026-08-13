@@ -37,7 +37,7 @@ void RebuildItemList() {
 	for (auto& asset : AssetManager::GetEditorAssets()) {
 		BrowserItem item;
 		item.displayName = asset.currentAddressableName;
-		item.path = asset.sourceFile;
+		item.path = asset.currentAddressableName.c_str();
 		item.metaFilePath = asset.metaFilePath;
 		item.dragPayloadType = "ASSET_PATH";
 		item.type = AssetManager::GetAssetTypeFromExtension(asset.sourceFile);
