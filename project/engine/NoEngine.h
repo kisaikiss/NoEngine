@@ -31,6 +31,8 @@
 #include "Functions/ECS/System/Camera/DebugCamera2DSystem.h"
 #include "Functions/ECS/System/Movement/MovementSystem.h"
 #include "Functions/ECS/System/Movement/Movement2DSystem.h"
+#include "Functions/ECS/System/Movement/CapturePlatformPrevTransformSystem.h"
+#include "Functions/ECS/System/Movement/ComputePlatformDeltaSystem.h"
 #include "Functions/ECS/System/Collision/CollisionResolutionSystem.h"
 #include "Functions/ECS/System/Collision/NarrowPhaseSystem.h"
 #include "Functions/ECS/System/Collision/CollisionResolution2DSystem.h"

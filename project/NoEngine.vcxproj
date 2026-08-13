@@ -209,6 +209,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="application\ClockworksDisease\System\Game\CollisionEventSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Game\CollisionLayer.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Game\ItemGetSystem.cpp" />
+    <ClCompile Include="application\ClockworksDisease\System\Game\PlatformRideSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Object\BigPowerItemSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Object\BoxColliderUpdateSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Object\MagicScaffoldSystem.cpp" />
@@ -277,6 +278,8 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="engine\Functions\ECS\System\Effect\EffectEmitSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Effect\ParticleEmitterSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Effect\ParticleSystem.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\Movement\CapturePlatformPrevTransformSystem.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\Movement\ComputePlatformDeltaSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Movement\GroundResetSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Loader\ModelLoadSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Loader\SpriteLoadSystem.cpp" />
@@ -475,6 +478,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="application\ClockworksDisease\System\Game\CollisionEventSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Game\CollisionLayer.h" />
     <ClInclude Include="application\ClockworksDisease\System\Game\ItemGetSystem.h" />
+    <ClInclude Include="application\ClockworksDisease\System\Game\PlatformRideSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Object\BigPowerItemSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Object\BoxColliderUpdateSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Object\MagicScaffoldSystem.h" />
@@ -552,6 +556,8 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="engine\Functions\ECS\System\Effect\EffectEmitSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\Effect\ParticleEmitterSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\Effect\ParticleSystem.h" />
+    <ClInclude Include="engine\Functions\ECS\System\Movement\CapturePlatformPrevTransformSystem.h" />
+    <ClInclude Include="engine\Functions\ECS\System\Movement\ComputePlatformDeltaSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\Movement\GroundResetSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\Loader\ModelLoadSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\Loader\SpriteLoadSystem.h" />

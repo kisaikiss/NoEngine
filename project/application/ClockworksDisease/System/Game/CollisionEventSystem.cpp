@@ -22,6 +22,7 @@ void CollisionEventSystem::Update(No::Registry& registry, float deltaTime) {
 			(layerB->layer & CollisionLayerComponent::Terrain) != CollisionLayerComponent::None) {
 			PlayerPushBackEvent event;
 			event.player = contact.a;
+			event.platform = contact.b;
 			event.position = contact.contactPosition;
 			event.normal = contact.normal;
 			event.penetration = contact.penetration;

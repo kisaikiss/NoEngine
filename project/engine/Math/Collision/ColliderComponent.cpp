@@ -34,6 +34,10 @@ REFLECT_FIELD(isGrounded),
 REFLECT_FIELD(groundHeight)
 REFLECT_STRUCT_END(NoEngine::Component::GroundStateComponent)
 
+REFLECT_STRUCT_BEGIN(NoEngine::Component::PlatformDeltaComponent, "Collision")
+REFLECT_FIELD(previousTranslate),
+REFLECT_FIELD(frameDelta)
+REFLECT_STRUCT_END(NoEngine::Component::PlatformDeltaComponent)
 
 REFLECT_STRUCT_BEGIN(NoEngine::Component::CollisionBody, "Collision")
 REFLECT_ENUM_FIELD(type)

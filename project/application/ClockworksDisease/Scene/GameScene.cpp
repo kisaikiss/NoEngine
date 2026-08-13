@@ -9,6 +9,7 @@
 #include "../System/Camera/FollowCameraSystem.h"
 #include "../System/Game/CollisionEventSystem.h"
 #include "../System/Game/TerrainLoadSystem.h"
+#include "../System/Game/PlatformRideSystem.h"
 #include "../System/Player/PlayerPushBackSystem.h"
 #include "../System/Player/PlayerLevelUpSystem.h"
 #include "../System/Object/BoxColliderUpdateSystem.h"
@@ -76,8 +77,11 @@ void GameScene::AddSystems() {
 	AddSystem(std::make_unique<No::ParticleEmitterSystem>());
 	AddSystem(std::make_unique<No::ParticleSystem>());
 
-	AddSystem(std::make_unique<No::MovementSystem>());
+	AddSystem(std::make_unique<No::CapturePlatformPrevTransformSystem>());
 	AddSystem(std::make_unique<No::TransformRoutineSystem>());
+	AddSystem(std::make_unique<No::MovementSystem>());
+	AddSystem(std::make_unique<No::ComputePlatformDeltaSystem>());
+	AddSystem(std::make_unique<PlatformRideSystem>());
 
 	AddSystem(std::make_unique<ColliderDrawSystem>());
 

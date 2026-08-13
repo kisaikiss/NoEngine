@@ -1,6 +1,7 @@
 #pragma once
 #include "../Types/Vector3.h"
 #include "../Types/Vector2.h"
+#include "engine/Functions/ECS/Entity.h"
 
 namespace NoEngine {
 namespace Math {
@@ -105,6 +106,15 @@ struct GroundStateComponent {
 	bool isGrounded = false;
 	bool preIsGrounded = false;
 	float groundHeight = 0.f;	// 接地している場合の地面の高さ
+	ECS::Entity groundEntity = ECS::INVALID_ENTITY;
+};
+
+/// <summary>
+/// 足場の移動量を保持する構造体
+/// </summary>
+struct PlatformDeltaComponent {
+	Math::Vector3 previousTranslate = Math::Vector3::ZERO;
+	Math::Vector3 frameDelta = Math::Vector3::ZERO;
 };
 
 /// <summary>
