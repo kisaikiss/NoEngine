@@ -90,6 +90,7 @@ void GameScene::AddSystems() {
 	AddSystem(std::make_unique<No::SpriteAnimationSystem>());
 
 	AddSystem(std::make_unique<No::DrawManipulatorSystem>());
+	AddSystem(std::make_unique<No::DrawWaypointRouteSystem>());
 	AddSystem(std::make_unique<No::DebugCameraSystem>());
 	AddSystem(std::make_unique<No::CameraSystem>());
 }

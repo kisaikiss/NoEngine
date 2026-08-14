@@ -105,6 +105,9 @@ void DrawWaypointRouteSystem::Update(Registry& registry, float deltaTime) {
 			DrawCurveSegment(from.translate, to.translate, prev.translate, next2.translate,
 				routine->interpolation, parentWorld, kLineColor);
 		}
+		for (auto& transform : routine->keyframes) {
+			DebugPrimitive::DrawCube(transform.GetWorldPosition(registry), transform.scale, transform.rotation, Math::Color::RED);
+		}
 	}
 }
 
