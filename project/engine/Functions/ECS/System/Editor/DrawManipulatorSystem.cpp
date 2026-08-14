@@ -23,6 +23,7 @@ namespace ECS {
 
 namespace {
 bool sTriggerButton = false;
+int  sSelectedWaypointIndex = 0;    // 現在ギズモで掴んでいるwaypointの添字
 }
 
 using namespace Editor;
@@ -51,6 +52,10 @@ void DrawManipulatorSystem::Update(Registry& registry, float deltaTime) {
 
 bool DrawManipulatorSystem::TriggerManipulateButton() {
 	return sTriggerButton;
+}
+
+void DrawManipulatorSystem::SetSelectWaypointIndex(int index) {
+	sSelectedWaypointIndex = index;
 }
 
 void DrawManipulatorSystem::Manipulate3D(Registry& registry, const Math::Vector4& sceneRect) {
@@ -472,8 +477,8 @@ void DrawManipulatorSystem::ManipulateRoutineWaypoints(Registry& registry, const
 		}
 
 		// waypointが削除された場合等に選択indexが範囲外にならないようにする
-		selectedWaypointIndex_ = std::clamp(
-			selectedWaypointIndex_, 0, static_cast<int>(routine->keyframes.size()) - 1);
+		sSelectedWaypointIndex = std::clamp(
+			sSelectedWaypointIndex, 0, static_cast<int>(routine->keyframes.size()) - 1);
 
 		Math::Matrix4x4 parentWorld = GetParentWorld3D(registry, baseT);
 
@@ -491,12 +496,12 @@ void DrawManipulatorSystem::ManipulateRoutineWaypoints(Registry& registry, const
 				ImGui::SameLine();
 			}
 			ImGui::PushID(static_cast<int>(i));
-			bool isSelected = (static_cast<int>(i) == selectedWaypointIndex_);
+			bool isSelected = (static_cast<int>(i) == sSelectedWaypointIndex);
 			if (isSelected) {
 				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.3f, 0.6f, 1.0f, 1.0f));
 			}
 			if (ImGui::Button(std::to_string(i).c_str(), ImVec2(buttonSizeX, buttonSizeY))) {
-				selectedWaypointIndex_ = static_cast<int>(i);
+				sSelectedWaypointIndex = static_cast<int>(i);
 			}
 			if (isSelected) {
 				ImGui::PopStyleColor();
@@ -525,7 +530,7 @@ void DrawManipulatorSystem::ManipulateRoutineWaypoints(Registry& registry, const
 
 		// 非選択waypointはマーカーとして描画し、クリックで選択を切り替える
 		for (size_t i = 0; i < routine->keyframes.size(); ++i) {
-			if (static_cast<int>(i) == selectedWaypointIndex_) {
+			if (static_cast<int>(i) == sSelectedWaypointIndex) {
 				continue;
 			}
 			const auto& kf = routine->keyframes[i];
@@ -551,14 +556,14 @@ void DrawManipulatorSystem::ManipulateRoutineWaypoints(Registry& registry, const
 			ImGui::SetCursorScreenPos(ImVec2(center.x - 8.0f, center.y - 8.0f));
 			ImGui::PushID(10000 + static_cast<int>(i));
 			if (ImGui::InvisibleButton("waypointMarker", ImVec2(16.0f, 16.0f))) {
-				selectedWaypointIndex_ = static_cast<int>(i);
+				sSelectedWaypointIndex = static_cast<int>(i);
 				sTriggerButton = true;
 			}
 			ImGui::PopID();
 		}
 
 		// 選択中waypointだけギズモで編集する
-		auto& kf = routine->keyframes[selectedWaypointIndex_];
+		auto& kf = routine->keyframes[sSelectedWaypointIndex];
 		Math::Matrix4x4 world = kf.MakeAffineMatrix4x4() * parentWorld;
 
 		ImGuizmo::Manipulate(*(viewMatrix.m), *(projection.m), currentWaypointOp, ImGuizmo::WORLD, *(world.m));

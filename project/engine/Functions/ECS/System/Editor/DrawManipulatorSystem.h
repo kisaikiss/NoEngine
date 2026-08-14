@@ -12,6 +12,7 @@ public:
 	void Update(Registry& registry, float deltaTime) override;
 
 	static bool TriggerManipulateButton();
+	static void SetSelectWaypointIndex(int index);
 
 private:
 	bool isActive_ = false;
@@ -19,7 +20,6 @@ private:
 
 	// --- TransformRoutineComponent の waypoint 編集用 ---
 	bool routineEditMode_ = false;      // trueの間は選択エンティティ自体ではなくwaypointを編集する
-	int  selectedWaypointIndex_ = 0;    // 現在ギズモで掴んでいるwaypointの添字
 	bool waypointIsActive_ = false;
 	bool waypointIsActivePreFrame_ = false;
 

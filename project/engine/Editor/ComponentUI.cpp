@@ -3,10 +3,13 @@
 #include "engine/Functions/Command/EditCommand/ChangeValueCommand.h"
 #include "engine/Functions/Command/EditCommand/FunctionCommand.h"
 #include "engine/Functions/Command/EditCommand/RemoveComponentCommand.h"
+#include "engine/Functions/ECS/Component/Common/TransformComponent.h"
+#include "engine/Functions/ECS/System/Editor/DrawManipulatorSystem.h"
 #include "engine/Utilities/Conversion/ConvertString.h"
 #include "DataDriven/SceneSerializer.h"
 #include "EditorCommandOperator.h"
 #include "engine/Math/MathInclude.h"
+
 
 #ifdef USE_IMGUI
 #include "externals/imgui/imgui.h"
@@ -24,7 +27,7 @@ void DrawComponentUI(Registry& registry, Entity e) {
 			void* compPtr = compInfo.getter(registry, e);
 
 			for (auto& field : compInfo.fields) {
-				DrawFieldUI(registry, field, compPtr);
+				DrawFieldUI(registry, e, field, compPtr);
 			}
 			// 削除ボタン
 			if (ImGui::SmallButton("Remove")) {
@@ -50,7 +53,7 @@ void DrawComponentUI(Registry& registry, Entity e) {
 #endif // USE_IMGUI
 }
 
-void DrawFieldUI(ECS::Registry& registry, const FieldInfo& field, void* ptr) {
+void DrawFieldUI(ECS::Registry& registry, ECS::Entity e, const FieldInfo& field, void* ptr) {
 #ifdef USE_IMGUI
 	if (!field.attributes.editable) {
 		return;
@@ -372,7 +375,7 @@ void DrawFieldUI(ECS::Registry& registry, const FieldInfo& field, void* ptr) {
 			TypeInfo* nested = field.structTypeInfo ? field.structTypeInfo() : nullptr;
 			if (nested) {
 				for (auto& subField : nested->fields) {
-					DrawFieldUI(registry, subField, valuePtr); // valuePtr = ネスト構造体の先頭アドレス
+					DrawFieldUI(registry, e, subField, valuePtr); // valuePtr = ネスト構造体の先頭アドレス
 				}
 			} else {
 				ImGui::TextDisabled("(struct type not registered)");
@@ -396,7 +399,7 @@ void DrawFieldUI(ECS::Registry& registry, const FieldInfo& field, void* ptr) {
 						TypeInfo* nested = field.arrayOps->elementStructTypeInfo ? field.arrayOps->elementStructTypeInfo() : nullptr;
 						if (nested) {
 							for (auto& subField : nested->fields) {
-								DrawFieldUI(registry, subField, elemPtr);
+								DrawFieldUI(registry, e, subField, elemPtr);
 							}
 						}
 						ImGui::TreePop();
@@ -409,7 +412,7 @@ void DrawFieldUI(ECS::Registry& registry, const FieldInfo& field, void* ptr) {
 					elemField.size = field.arrayOps->elementSize;
 					elemField.type = field.arrayOps->elementType;
 					elemField.attributes = field.attributes;
-					DrawFieldUI(registry, elemField, elemPtr);
+					DrawFieldUI(registry, e, elemField, elemPtr);
 				}
 
 				ImGui::SameLine();
@@ -458,6 +461,37 @@ void DrawFieldUI(ECS::Registry& registry, const FieldInfo& field, void* ptr) {
 					)
 				);
 				arrayAdd(valuePtr);
+
+				// TransformRoutineComponent::keyframes 専用: 追加したwaypointを原点ではなく
+				// 「最初の1個ならエンティティ自身の座標」「2個目以降なら直前のkeyframeの座標」に置く。
+				if (field.name == "keyframes" &&
+					field.arrayOps->elementType == FieldType::Struct &&
+					field.arrayOps->elementStructTypeInfo) {
+
+					void* newElemPtr = field.arrayOps->getElement(valuePtr, newIndex);
+					TypeInfo* nested = field.arrayOps->elementStructTypeInfo();
+					if (nested) {
+						for (auto& subField : nested->fields) {
+							if (subField.name != "translate") continue;
+
+							auto* newTranslate = reinterpret_cast<Math::Vector3*>(
+								static_cast<uint8_t*>(newElemPtr) + subField.offset);
+
+							if (newIndex > 0) {
+								// 直前のkeyframeの座標を引き継ぐ
+								void* prevElemPtr = field.arrayOps->getElement(valuePtr, newIndex - 1);
+								auto* prevTranslate = reinterpret_cast<Math::Vector3*>(
+									static_cast<uint8_t*>(prevElemPtr) + subField.offset);
+								*newTranslate = *prevTranslate;
+							} else if (auto* transform = registry.GetComponent<Component::TransformComponent>(e)) {
+								// 最初のkeyframeはエンティティ自身の現在位置を使う
+								*newTranslate = transform->translate;
+							}
+							ECS::DrawManipulatorSystem::SetSelectWaypointIndex(static_cast<int>(newIndex));
+							break;
+						}
+					}
+				}
 			}
 			ImGui::TreePop();
 		}
@@ -516,6 +550,7 @@ void DrawFieldUI(ECS::Registry& registry, const FieldInfo& field, void* ptr) {
 	static_cast<void>(field);
 	static_cast<void>(ptr);
 	static_cast<void>(registry);
+	static_cast<void>(e);
 #endif // USE_IMGUI
 
 }

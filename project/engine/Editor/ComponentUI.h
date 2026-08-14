@@ -4,5 +4,5 @@
 namespace NoEngine {
 
 void DrawComponentUI(ECS::Registry& registry, ECS::Entity e);
-void DrawFieldUI(ECS::Registry& registry, const FieldInfo& field, void* ptr);
+void DrawFieldUI(ECS::Registry& registry, ECS::Entity e, const FieldInfo& field, void* ptr);
 }
