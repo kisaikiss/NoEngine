@@ -2697,9 +2697,10 @@
                     "fov": 0.6499999761581421
                 },
                 "CameraIntroComponent": {
-                    "fadeInDuration": 0.5,
-                    "fadeOutDuration": 0.5,
-                    "phase": "kPlayingRoutine"
+                    "fadeInDuration": 1.0,
+                    "fadeOutDuration": 1.0,
+                    "phase": "kPlayingRoutine",
+                    "playInEditor": false
                 },
                 "CameraIntroLockTag": null,
                 "EditTag": {

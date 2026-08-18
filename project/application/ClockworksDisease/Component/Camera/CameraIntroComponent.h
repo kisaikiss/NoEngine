@@ -17,6 +17,11 @@ struct CameraIntroComponent {
 	float fadeOutDuration = 0.5f; // 暗転にかかる時間(秒)
 	float fadeInDuration = 0.5f;  // 復帰にかかる時間(秒)
 
+	// エディタでPlayして確認するたびに演出を見るのが煩わしい場合はfalseにする。
+	// falseの場合、エディタビルド実行時のみ演出全体を即座にスキップする
+	// (製品ビルドでは常にtrue相当の動作＝必ず演出を再生する)
+	bool playInEditor = true;
+
 	// 以下はランタイム用（エディタでは基本触らない想定）
 	float fadeTimer = 0.0f;
 	No::Entity overlayEntity = No::INVALID_ENTITY;
