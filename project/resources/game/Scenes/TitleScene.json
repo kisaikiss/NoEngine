@@ -73,6 +73,221 @@
                 }
             }
         },
+        "Select": {
+            "components": {
+                "EditTag": {
+                    "name": "Select",
+                    "parent": "selector"
+                },
+                "SpriteComponent": {
+                    "anchor": [
+                        0.0,
+                        1.0
+                    ],
+                    "color": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "fill": 0.0,
+                    "flipX": false,
+                    "flipY": false,
+                    "isVisible": true,
+                    "layer": 5,
+                    "maskTextureName": "",
+                    "nonRenderAngle": 0.0,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "space": "Screen",
+                    "textureName": "titleSelect",
+                    "useMask": false,
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "parent": "selector",
+                    "rotation": 0.0,
+                    "scale": [
+                        288.75,
+                        182.0
+                    ],
+                    "translate": [
+                        168.9600372314453,
+                        -107.52008056640625
+                    ]
+                }
+            }
+        },
+        "SelectBack": {
+            "components": {
+                "EditTag": {
+                    "name": "SelectBack",
+                    "parent": "selector"
+                },
+                "SpriteComponent": {
+                    "anchor": [
+                        0.0,
+                        1.0
+                    ],
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        0.21960784494876862
+                    ],
+                    "fill": 0.0,
+                    "flipX": false,
+                    "flipY": false,
+                    "isVisible": true,
+                    "layer": 1,
+                    "maskTextureName": "",
+                    "nonRenderAngle": 0.0,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "space": "Screen",
+                    "textureName": "white1x1",
+                    "useMask": false,
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "parent": "selector",
+                    "rotation": 0.0,
+                    "scale": [
+                        341.95001220703125,
+                        182.0
+                    ],
+                    "translate": [
+                        184.32009887695313,
+                        -110.93341064453125
+                    ]
+                }
+            }
+        },
+        "cursor": {
+            "components": {
+                "EditTag": {
+                    "name": "cursor",
+                    "parent": "cursorParent"
+                },
+                "SpriteComponent": {
+                    "anchor": [
+                        0.0,
+                        1.0
+                    ],
+                    "color": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "fill": 0.0,
+                    "flipX": false,
+                    "flipY": false,
+                    "isVisible": true,
+                    "layer": 3,
+                    "maskTextureName": "",
+                    "nonRenderAngle": 0.0,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "space": "Screen",
+                    "textureName": "staminaGauge",
+                    "useMask": false,
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "TitleCursorComponent": {
+                    "positionDuration": 100.0
+                },
+                "Transform2DComponent": {
+                    "parent": "cursorParent",
+                    "rotation": 0.0,
+                    "scale": [
+                        24.429967880249023,
+                        24.429967880249023
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "cursorParent": {
+            "components": {
+                "EditTag": {
+                    "name": "cursorParent",
+                    "parent": "selector"
+                },
+                "SpriteComponent": {
+                    "anchor": [
+                        0.0,
+                        1.0
+                    ],
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        0.0
+                    ],
+                    "fill": 0.0,
+                    "flipX": false,
+                    "flipY": false,
+                    "isVisible": true,
+                    "layer": 0,
+                    "maskTextureName": "",
+                    "nonRenderAngle": 0.0,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "space": "Screen",
+                    "textureName": "white1x1",
+                    "useMask": false,
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "parent": "selector",
+                    "rotation": 0.0,
+                    "scale": [
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        320.85333251953125,
+                        -155.3067626953125
+                    ]
+                }
+            }
+        },
         "directionalLight": {
             "components": {
                 "DirectionalLightComponent": {
@@ -158,6 +373,26 @@
                         0.0,
                         0.0,
                         0.0
+                    ]
+                }
+            }
+        },
+        "selector": {
+            "components": {
+                "EditTag": {
+                    "name": "selector",
+                    "parent": null
+                },
+                "Transform2DComponent": {
+                    "parent": null,
+                    "rotation": 0.0,
+                    "scale": [
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        39.253360748291016,
+                        -22.186708450317383
                     ]
                 }
             }

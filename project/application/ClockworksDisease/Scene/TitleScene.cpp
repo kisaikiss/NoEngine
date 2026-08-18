@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "TitleScene.h"
+#include "../System/UI/TitleCursorSystem.h"
 
 void TitleScene::Setup() { AddSystems(); }
 
@@ -13,6 +14,8 @@ void TitleScene::AddSystems() {
 	AddSystem(std::make_unique<No::EffectEmitSystem>());
 	AddSystem(std::make_unique<No::ParticleEmitterSystem>());
 	AddSystem(std::make_unique<No::ParticleSystem>());
+
+	AddSystem(std::make_unique<TitleCursorSystem>());
 
 	AddSystem(std::make_unique<No::MovementSystem>());
 	AddSystem(std::make_unique<No::TransformRoutineSystem>());

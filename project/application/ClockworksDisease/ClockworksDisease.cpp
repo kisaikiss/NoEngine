@@ -3,6 +3,8 @@
 #include "Scene/TitleScene.h"
 #include "Scene/GameClearScene.h"
 
+#include "Component/Game/GameQuitEvent.h"
+
 void ClockworksDisease::Startup(void) {
 	RegisterScene("TestScene", []() { return std::make_unique<GameScene>();	});
 	RegisterScene("SampleScene", []() { return std::make_unique<GameScene>();	});
@@ -10,7 +12,20 @@ void ClockworksDisease::Startup(void) {
 	RegisterScene("GameScene", []() { return std::make_unique<GameScene>();	});
 	RegisterScene("TitleScene", []() { return std::make_unique<TitleScene>();	});
 	RegisterScene("GameClearScene", []() {return std::make_unique<GameClearScene>(); });
-	ChangeScene("SampleScene");
+	ChangeScene("TitleScene");
+
+	No::InputBindAction("Up", No::DeviceType::Keyboard, static_cast<int>('W'));
+	No::InputBindAction("Up", No::DeviceType::Keyboard, static_cast<int>(VK_UP));
+	No::InputBindAction("Up", No::DeviceType::GamepadButton, static_cast<int>(No::GamepadButton::Up));
+
+	No::InputBindAction("Down", No::DeviceType::Keyboard, static_cast<int>('S'));
+	No::InputBindAction("Down", No::DeviceType::Keyboard, static_cast<int>(VK_DOWN));
+	No::InputBindAction("Down", No::DeviceType::GamepadButton, static_cast<int>(No::GamepadButton::Down));
+
+	No::InputBindAction("Choise", No::DeviceType::Keyboard, static_cast<int>(VK_SPACE));
+	No::InputBindAction("Choise", No::DeviceType::GamepadButton, static_cast<int>(No::GamepadButton::A));
+
+	No::InputBindAxis("Vertical", No::DeviceType::GamepadAxis, static_cast<int>(No::GamepadAxis::LeftStickY), 1.0f, 0.2f);
 
 	No::InputBindAxis("Lateral", No::DeviceType::GamepadAxis, static_cast<int>(No::GamepadAxis::LeftStickX), 1.0f, 0.2f);
 	No::InputBindAxis("Lateral", No::DeviceType::Keyboard, static_cast<int>('D'), 1.0f);
@@ -43,4 +58,13 @@ void ClockworksDisease::Startup(void) {
 
 	No::InputBindAction("CreateScaffold", No::DeviceType::Keyboard, static_cast<int>('Q'));
 	No::InputBindAction("CreateScaffold", No::DeviceType::GamepadButton, static_cast<int>(No::GamepadButton::X));
+}
+
+bool ClockworksDisease::Exit() {
+	if (GetRegistry().PollEvent<GameQuitEvent>()) {
+		return true;
+	}
+
+
+	return No::Keyboard::IsTrigger(VK_ESCAPE);
 }

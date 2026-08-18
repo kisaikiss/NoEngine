@@ -203,6 +203,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="application\ClockworksDisease\Component\Player\PlayerComponent.cpp" />
     <ClCompile Include="application\ClockworksDisease\Component\Player\PlayerMoveTags.cpp" />
     <ClCompile Include="application\ClockworksDisease\Component\Stage\StageComponent.cpp" />
+    <ClCompile Include="application\ClockworksDisease\Component\UI\TitleUIComponent.cpp" />
     <ClCompile Include="application\ClockworksDisease\Component\UI\UserInterfaceComponent.cpp" />
     <ClCompile Include="application\ClockworksDisease\Scene\GameClearScene.cpp" />
     <ClCompile Include="application\ClockworksDisease\Scene\GameScene.cpp" />
@@ -229,6 +230,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="application\ClockworksDisease\System\UI\LevelUpTextSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\UI\NumberDisplaySystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\UI\StaminaUISystem.cpp" />
+    <ClCompile Include="application\ClockworksDisease\System\UI\TitleCursorSystem.cpp" />
     <ClCompile Include="application\TestApp\Component\TestComponent.cpp" />
     <ClCompile Include="application\TestApp\TestApp.cpp" />
     <ClCompile Include="engine\Assets\AssetBrowserWindow.cpp" />
@@ -475,12 +477,14 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="application\ClockworksDisease\Component\Camera\CameraIntroComponent.h" />
     <ClInclude Include="application\ClockworksDisease\Component\Camera\FollowCameraComponent.h" />
     <ClInclude Include="application\ClockworksDisease\Component\Game\GameProgressComponent.h" />
+    <ClInclude Include="application\ClockworksDisease\Component\Game\GameQuitEvent.h" />
     <ClInclude Include="application\ClockworksDisease\Component\Item\ItemComponent.h" />
     <ClInclude Include="application\ClockworksDisease\Component\Option\EditorSettingComponent.h" />
     <ClInclude Include="application\ClockworksDisease\Component\Player\PlayerComponent.h" />
     <ClInclude Include="application\ClockworksDisease\Component\Player\PlayerMoveTags.h" />
     <ClInclude Include="application\ClockworksDisease\Component\Stage\StageComponent.h" />
     <ClInclude Include="application\ClockworksDisease\Component\UI\NumberDisplayComponent.h" />
+    <ClInclude Include="application\ClockworksDisease\Component\UI\TitleUIComponent.h" />
     <ClInclude Include="application\ClockworksDisease\Component\UI\UserInterfaceComponent.h" />
     <ClInclude Include="application\ClockworksDisease\Scene\GameClearScene.h" />
     <ClInclude Include="application\ClockworksDisease\Scene\GameScene.h" />
@@ -508,6 +512,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="application\ClockworksDisease\System\UI\LevelUpTextSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\UI\NumberDisplaySystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\UI\StaminaUISystem.h" />
+    <ClInclude Include="application\ClockworksDisease\System\UI\TitleCursorSystem.h" />
     <ClInclude Include="application\TestApp\Component\TestComponent.h" />
     <ClInclude Include="application\TestApp\TestApp.h" />
     <ClInclude Include="engine\Assets\AssetBrowserTypes.h" />

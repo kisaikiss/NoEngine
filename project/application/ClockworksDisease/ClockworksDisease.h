@@ -7,5 +7,7 @@ public:
 	/// ゲームアプリケーションの初期化を行います。
 	/// </summary>
 	void Startup(void) override;
+
+	bool Exit() override;
 };
 
