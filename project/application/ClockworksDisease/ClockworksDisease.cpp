@@ -1,6 +1,7 @@
 #include "ClockworksDisease.h"
 #include "Scene/GameScene.h"
 #include "Scene/TitleScene.h"
+#include "Scene/GameClearScene.h"
 
 void ClockworksDisease::Startup(void) {
 	RegisterScene("TestScene", []() { return std::make_unique<GameScene>();	});
@@ -8,7 +9,8 @@ void ClockworksDisease::Startup(void) {
 
 	RegisterScene("GameScene", []() { return std::make_unique<GameScene>();	});
 	RegisterScene("TitleScene", []() { return std::make_unique<TitleScene>();	});
-	ChangeScene("GameScene");
+	RegisterScene("GameClearScene", []() {return std::make_unique<GameClearScene>(); });
+	ChangeScene("SampleScene");
 
 	No::InputBindAxis("Lateral", No::DeviceType::GamepadAxis, static_cast<int>(No::GamepadAxis::LeftStickX), 1.0f, 0.2f);
 	No::InputBindAxis("Lateral", No::DeviceType::Keyboard, static_cast<int>('D'), 1.0f);

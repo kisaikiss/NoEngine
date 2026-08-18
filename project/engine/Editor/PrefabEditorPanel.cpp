@@ -2,6 +2,7 @@
 #include "engine/Editor/ComponentUI.h"
 #include "engine/Editor/DataDriven/PrefabSerializer.h"
 #include "engine/Editor/DataDriven/SceneSerializer.h"
+#include "engine/Editor/InspectorPanel.h"
 
 #ifdef USE_IMGUI
 #include "externals/imgui/imgui.h"
@@ -38,6 +39,7 @@ void PrefabEditorPanel::Draw(ECS::Registry& registry) {
 
 	DrawComponentUI(registry, prefabEntity_);
 
+	InspectorPanel::DrawAddComponentMenu(registry, prefabEntity_);
 	ImGui::Separator();
 	if (ImGui::Button("Save & Apply")) {
 		// 編集結果をPrefabファイルへ書き戻す

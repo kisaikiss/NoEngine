@@ -1,11 +1,12 @@
 {
     "components": {
+        "CollectibleItemTag": null,
         "CollisionLayerComponent": {
             "layer": "Item"
         },
         "EditTag": {
             "name": "PowerItem_Prefab",
-            "path": "Item/PowerItem"
+            "parent": null
         },
         "EffectEmitterComponent": {
             "color": [

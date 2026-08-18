@@ -27,7 +27,7 @@
         },
         "EditTag": {
             "name": "player",
-            "path": "player"
+            "parent": null
         },
         "EffectEmitModeRingTag": null,
         "EffectEmitterComponent": {
@@ -70,13 +70,27 @@
             "textureName": "smokeEffect"
         },
         "GroundStateComponent": {
-            "groundHeight": -0.000144485107739456,
-            "isGrounded": true
+            "groundHeight": 0.0,
+            "isGrounded": false
         },
         "LevelComponent": {
             "nextLevelUp": 30,
             "nowLevel": 1,
-            "power": 0
+            "power": 0,
+            "rewards": [
+                {
+                    "ability": "kHighJump",
+                    "level": 2
+                },
+                {
+                    "ability": "kAirDash",
+                    "level": 3
+                },
+                {
+                    "ability": "kMagicScaffold",
+                    "level": 4
+                }
+            ]
         },
         "MaterialComponent": {
             "blendMode": "kNormal",
@@ -114,56 +128,20 @@
             "isVisible": true,
             "meshName": "jogging"
         },
-        "ParticleEmitterComponent": {
-            "active": false,
-            "color": [
-                1.0,
-                1.0,
-                1.0,
-                1.0
-            ],
-            "count": 10,
-            "emitRange": [
-                0.0,
-                0.0,
-                0.0
-            ],
-            "frequency": 0.30000001192092896,
-            "localPosition": [
-                0.0,
-                0.0,
-                0.0
-            ],
-            "maxCount": 100,
-            "maxLifeTime": 1.7999999523162842,
-            "maxScale": [
-                0.5,
-                0.5,
-                0.5
-            ],
-            "maxSpeed": [
-                1.0,
-                1.0,
-                1.0
-            ],
-            "minLifeTime": 0.8999999761581421,
-            "minScale": [
-                0.5,
-                0.5,
-                0.5
-            ],
-            "minSpeed": [
-                -1.0,
-                -1.0,
-                -1.0
-            ],
-            "textureName": "smokeEffect"
+        "ParticleEmitterSphereComponent": {
+            "active": true,
+            "count": 20,
+            "frequency": 0.20000000298023224,
+            "frequencyTime": 0.0,
+            "radius": 0.0
         },
         "PlayerComponent": {
             "airDashSpeed": 10.0,
+            "coyoteTime": 0.30000001192092896,
+            "coyoteTimer": 0.0,
             "doubleJumpSpeed": 4.0,
             "gravity": -7.0,
-            "highJumpSpeed": 7.0,
+            "highJumpSpeed": 10.0,
             "infinityJump": false,
             "jumpSpeed": 5.5,
             "maxStamina": 0.0,
@@ -172,12 +150,16 @@
             "state": "kWait"
         },
         "PlayerMoveTransientComponent": null,
+        "PrefabInstanceTag": {
+            "prefabPath": "resources/game/Prefabs\\player.json"
+        },
         "TransformComponent": {
+            "parent": null,
             "rotation": [
-                -1.196509344936203e-07,
-                -0.7118778824806213,
-                -1.2128214166295948e-07,
-                -0.7023032903671265
+                -1.401298464324817e-45,
+                0.997256875038147,
+                -1.401298464324817e-45,
+                -0.07401859015226364
             ],
             "scale": [
                 1.0,
@@ -185,17 +167,18 @@
                 1.0
             ],
             "translate": [
-                -6.112610340118408,
-                -0.000144485107739456,
-                1.2121902704238892
+                1.057900071144104,
+                0.0,
+                -3.539100408554077
             ]
         },
         "VelocityComponent": {
             "linear": [
                 0.0,
-                0.0,
+                -2.5044658184051514,
                 0.0
             ]
         }
-    }
+    },
+    "prefabInstance": "resources/game/Prefabs\\player.json"
 }

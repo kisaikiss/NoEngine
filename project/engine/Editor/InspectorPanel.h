@@ -9,11 +9,8 @@ namespace Editor {
 class InspectorPanel {
 public:
 	void Draw(ECS::Registry& registry);
+	static void DrawAddComponentMenu(ECS::Registry& registry, ECS::Entity entity);
 
-private:
-	void DrawAddComponentMenu(ECS::Registry& registry, ECS::Entity entity);
-
-	char addComponentFilter_[128] = {};
 };
 
 }

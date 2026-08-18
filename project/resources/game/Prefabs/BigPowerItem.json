@@ -3,12 +3,13 @@
         "BigPowerItemComponent": {
             "grantPower": 5
         },
+        "CollectibleItemTag": null,
         "CollisionLayerComponent": {
             "layer": "Item"
         },
         "EditTag": {
-            "name": "BigPowerItem",
-            "path": "Item/BigBadge"
+            "name": "BigPowerItem_Prefab",
+            "parent": null
         },
         "EffectEmitModeSphereTag": null,
         "EffectEmitterComponent": {

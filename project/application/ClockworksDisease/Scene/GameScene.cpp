@@ -25,10 +25,20 @@
 #include "../System/UI/LevelUISystem.h"
 #include "../System/UI/StaminaUISystem.h"
 #include "../System/UI/LevelUpTextSystem.h"
+#include "../System/Game/GameProgressInitSystem.h"
+#include "../System/Game/GameTimerSystem.h"
+#include "../Component/Game/GameProgressComponent.h"
 
 void GameScene::Setup() {
 	AddSystems();
 	auto& registry = *GetRegistry();
+
+	// 進行状況管理用Entity（総数/取得数/経過時間）
+	{
+		auto e = registry.GenerateEntity();
+		registry.AddComponent<GameProgressComponent>(e);
+		registry.AddComponent<No::EditTag>(e)->name = "GameProgress";
+	}
 
 	// 地形
 	{
@@ -53,6 +63,8 @@ void GameScene::AddSystems() {
 	AddSystem(std::make_unique<No::SpriteLoadSystem>());
 	AddSystem(std::make_unique<No::AnimationSystem>());
 	AddSystem(std::make_unique<BoxColliderUpdateSystem>());
+	AddSystem(std::make_unique<GameProgressInitSystem>());
+	AddSystem(std::make_unique<GameTimerSystem>()); 
 	AddSystem(std::make_unique<PlayerStaminaSystem>());
 	AddSystem(std::make_unique<PlayerJumpSystem>());
 	AddSystem(std::make_unique<PlayerHorizontalMoveSystem>());

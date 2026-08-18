@@ -270,6 +270,12 @@
     <ClCompile Include="engine\Functions\ECS\System\Movement\CapturePlatformPrevTransformSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Movement\ComputePlatformDeltaSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Game\PlatformRideSystem.cpp" />
+    <ClCompile Include="application\ClockworksDisease\Component\Game\GameProgressComponent.cpp" />
+    <ClCompile Include="application\ClockworksDisease\System\Game\GameResult.cpp" />
+    <ClCompile Include="application\ClockworksDisease\System\Game\GameProgressInitSystem.cpp" />
+    <ClCompile Include="application\ClockworksDisease\System\Game\GameTimerSystem.cpp" />
+    <ClCompile Include="application\ClockworksDisease\System\UI\NumberDisplaySystem.cpp" />
+    <ClCompile Include="application\ClockworksDisease\Scene\GameClearScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -545,6 +551,13 @@
     <ClInclude Include="engine\Functions\ECS\System\Movement\CapturePlatformPrevTransformSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\Movement\ComputePlatformDeltaSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Game\PlatformRideSystem.h" />
+    <ClInclude Include="application\ClockworksDisease\Component\Game\GameProgressComponent.h" />
+    <ClInclude Include="application\ClockworksDisease\System\Game\GameResult.h" />
+    <ClInclude Include="application\ClockworksDisease\System\Game\GameProgressInitSystem.h" />
+    <ClInclude Include="application\ClockworksDisease\System\Game\GameTimerSystem.h" />
+    <ClInclude Include="application\ClockworksDisease\Component\UI\NumberDisplayComponent.h" />
+    <ClInclude Include="application\ClockworksDisease\System\UI\NumberDisplaySystem.h" />
+    <ClInclude Include="application\ClockworksDisease\Scene\GameClearScene.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

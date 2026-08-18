@@ -8,10 +8,13 @@
 #ifdef USE_IMGUI
 #include "externals/imgui/imgui.h"
 #endif // USE_IMGUI
-
-#include <map>
-#include <algorithm>
+ 
 #include <cctype>
+
+namespace {
+
+char sAddComponentFilter[128] = {};
+}
 
 namespace NoEngine {
 namespace Editor {
@@ -45,16 +48,16 @@ void InspectorPanel::DrawAddComponentMenu(ECS::Registry& registry, ECS::Entity e
 #ifdef USE_IMGUI
 	if (ImGui::Button("Add Component")) {
 		ImGui::OpenPopup("AddComponentPopup");
-		addComponentFilter_[0] = '\0';
+		sAddComponentFilter[0] = '\0';
 	}
 
 	if (ImGui::BeginPopup("AddComponentPopup")) {
 
 		ImGui::SetNextItemWidth(200.0f);
-		ImGui::InputTextWithHint("##AddComponentFilter", "Search...", addComponentFilter_, sizeof(addComponentFilter_));
+		ImGui::InputTextWithHint("##AddComponentFilter", "Search...", sAddComponentFilter, sizeof(sAddComponentFilter));
 		ImGui::Separator();
 
-		std::string filter = addComponentFilter_;
+		std::string filter = sAddComponentFilter;
 		std::transform(filter.begin(), filter.end(), filter.begin(),
 			[](unsigned char c) { return static_cast<char>(std::tolower(c)); });
 		const bool isFiltering = !filter.empty();

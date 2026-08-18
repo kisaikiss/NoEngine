@@ -1,0 +1,157 @@
+{
+    "entities": {
+        "ClearMinutes": {
+            "components": {
+                "EditTag": {
+                    "name": "ClearMinutes",
+                    "parent": null
+                },
+                "Transform2DComponent": {
+                    "parent": null,
+                    "rotation": 0.0,
+                    "scale": [
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        243.8095703125,
+                        246.857177734375
+                    ]
+                }
+            }
+        },
+        "ClearSeconds": {
+            "components": {
+                "EditTag": {
+                    "name": "ClearSeconds",
+                    "parent": null
+                },
+                "Transform2DComponent": {
+                    "parent": null,
+                    "rotation": 0.0,
+                    "scale": [
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        332.1905212402344,
+                        243.80950927734375
+                    ]
+                }
+            }
+        },
+        "DebugCamera": {
+            "components": {
+                "CameraComponent": {
+                    "fov": 0.44999998807907104
+                },
+                "DebugCameraComponent": {
+                    "center": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "distance": 2.0,
+                    "drawCenter": false,
+                    "moveType": "kBlender",
+                    "unityMoveSpeed": 10.0,
+                    "unitySensitivity": 0.20000000298023224
+                },
+                "EditTag": {
+                    "name": "DebugCamera",
+                    "parent": null
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        -2.1855694143368964e-08,
+                        2.1855694143368964e-08,
+                        4.776713662911763e-16,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        -8.742277657347586e-08,
+                        -8.742277657347586e-08,
+                        -2.0
+                    ]
+                }
+            }
+        },
+        "MainCamera": {
+            "components": {
+                "ActiveCameraTag": null,
+                "CameraComponent": {
+                    "fov": 0.44999998807907104
+                },
+                "EditTag": {
+                    "name": "MainCamera",
+                    "parent": null
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "collected": {
+            "components": {
+                "EditTag": {
+                    "name": "collected",
+                    "parent": null
+                },
+                "Transform2DComponent": {
+                    "parent": null,
+                    "rotation": 0.0,
+                    "scale": [
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        209.99526977539063,
+                        176.76190185546875
+                    ]
+                }
+            }
+        },
+        "total": {
+            "components": {
+                "EditTag": {
+                    "name": "total",
+                    "parent": null
+                },
+                "Transform2DComponent": {
+                    "parent": null,
+                    "rotation": 0.0,
+                    "scale": [
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        330.6667175292969,
+                        179.80953979492188
+                    ]
+                }
+            }
+        }
+    }
+}
