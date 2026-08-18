@@ -712,6 +712,184 @@
             },
             "prefabInstance": "resources/game/Prefabs\\BigPowerItem.json"
         },
+        "BigPowerItem_13": {
+            "components": {
+                "BigPowerItemComponent": {
+                    "grantPower": 5
+                },
+                "CollectibleItemTag": null,
+                "CollisionLayerComponent": {
+                    "layer": "Item"
+                },
+                "EditTag": {
+                    "name": "BigPowerItem_13",
+                    "parent": null
+                },
+                "EffectEmitModeSphereTag": null,
+                "EffectEmitterComponent": {
+                    "color": [
+                        1.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ],
+                    "count": 200,
+                    "emitRange": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "maxLifeTime": 2.0,
+                    "maxRotate": 3.1415927410125732,
+                    "maxScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "maxSpeed": [
+                        4.0,
+                        2.0,
+                        0.5
+                    ],
+                    "minLifeTime": 1.0,
+                    "minRotate": 0.0,
+                    "minScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "minSpeed": [
+                        4.0,
+                        0.0,
+                        -0.5
+                    ],
+                    "textureName": "getBigItem"
+                },
+                "MaterialComponent": {
+                    "blendMode": "kAdd",
+                    "color": [
+                        2.0999999046325684,
+                        2.0,
+                        2.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        0.5,
+                        0.0,
+                        1.0,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "resources/engine/Texture/noise/Noise_Gradients/T_Random_22.png",
+                    "renderMode": "kEmissive",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "power"
+                },
+                "ParticleEmitterComponent": {
+                    "active": false,
+                    "color": [
+                        1.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ],
+                    "count": 10,
+                    "emitRange": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "frequency": 0.10000000149011612,
+                    "localPosition": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "maxCount": 100,
+                    "maxLifeTime": 1.899999976158142,
+                    "maxScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "maxSpeed": [
+                        1.0,
+                        -1.0,
+                        1.0
+                    ],
+                    "minLifeTime": 0.699999988079071,
+                    "minScale": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "minSpeed": [
+                        -1.0,
+                        -2.0,
+                        -1.0
+                    ],
+                    "textureName": "getEffect"
+                },
+                "PointLightComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "decay": 1.5,
+                    "intensity": 1.0,
+                    "radius": 5.199999809265137
+                },
+                "PrefabInstanceTag": {
+                    "prefabPath": "resources/game/Prefabs\\BigPowerItem.json"
+                },
+                "SphereCollider": {
+                    "localCenter": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "radius": 0.699999988079071
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        2.0,
+                        2.0,
+                        2.0
+                    ],
+                    "translate": [
+                        8.937601089477539,
+                        1.3048408031463623,
+                        -6.238738059997559
+                    ]
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\BigPowerItem.json"
+        },
         "BigPowerItem_2": {
             "components": {
                 "BigPowerItemComponent": {
@@ -2201,9 +2379,9 @@
                 },
                 "DebugCameraComponent": {
                     "center": [
-                        -3.791764736175537,
-                        21.070350646972656,
-                        5.694478511810303
+                        4.843104839324951,
+                        7.074129581451416,
+                        3.8885726928710938
                     ],
                     "distance": 9.015334129333496,
                     "drawCenter": false,
@@ -2218,10 +2396,10 @@
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
-                        0.046948112547397614,
-                        -0.9331637024879456,
-                        0.33085960149765015,
-                        0.13241347670555115
+                        0.039527904242277145,
+                        -0.9462452530860901,
+                        0.2949099838733673,
+                        0.1268288493156433
                     ],
                     "scale": [
                         1.0,
@@ -2229,9 +2407,9 @@
                         1.0
                     ],
                     "translate": [
-                        -1.8439074754714966,
-                        26.749338150024414,
-                        12.419892311096191
+                        6.796800136566162,
+                        12.196109771728516,
+                        11.0457124710083
                     ]
                 }
             }

@@ -6,6 +6,7 @@
 #include "engine/Editor/EditorCommandOperator.h"
 #include "engine/Functions/Scene/SceneNameComponent.h"
 #include "engine/Functions/Command/EditCommand/InstantiateEntitiesCommand.h"
+#include "engine/Functions/ECS/System/SystemManager.h"
 
 #include "engine/Functions/Input/input.h"
 #ifdef USE_IMGUI
@@ -53,7 +54,12 @@ void EditSystem::DrawMenuBar(Registry& registry) {
 	if (ImGui::BeginMainMenuBar()) {
 		if (ImGui::BeginMenu("File")) {
 			if (ImGui::MenuItem("Save")) {
-				SaveFile(registry, Editor::SaveScene(registry));
+				if (SystemManager::IsInPlayMode()) {
+					// 再生中 / 再生からの一時停止中は、">"を押す直前の状態を保存する
+					SaveFile(registry, SystemManager::GetPlaySnapshot());
+				} else {
+					SaveFile(registry, Editor::SaveScene(registry));
+				}
 			}
 			if (ImGui::MenuItem("Load")) {
 				LoadFile(registry);
