@@ -7,6 +7,7 @@
 #include "Functions/ECS/Component/Asset/TextComponent.h"
 #include "Functions/ECS/Component/Common/TransformComponent.h"
 #include "Functions/ECS/Component/Common/Transform2DComponent.h"
+#include "Functions/ECS/Component/Common/TransformRoutineComponent.h"
 #include "Functions/ECS/Component/Asset/MaterialComponent.h"
 #include "Functions/ECS/Component/Asset/LightComponent.h"
 #include "Functions/ECS/Component/Common/CameraComponent.h"

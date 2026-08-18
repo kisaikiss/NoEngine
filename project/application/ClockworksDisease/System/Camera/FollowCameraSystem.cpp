@@ -1,6 +1,7 @@
 #include "FollowCameraSystem.h"
 #include "../../Component/Player/PlayerComponent.h"
 #include "../../Component/Camera/FollowCameraComponent.h"
+#include "../../Component/Camera/CameraIntroComponent.h"
 
 void FollowCameraSystem::Update(No::Registry& registry, float deltaTime) {
 	No::Vector3 playerPos{};
@@ -12,6 +13,8 @@ void FollowCameraSystem::Update(No::Registry& registry, float deltaTime) {
 	auto view = registry.View<No::TransformComponent, No::CameraComponent, FollowCameraComponent>();
 
 	for (auto e : view) {
+		if (registry.Has<CameraIntroLockTag>(e)) continue; // 演出中は追従しない
+		
 		auto* transform = registry.GetComponent<No::TransformComponent>(e);
 		auto* followCameraVariables = registry.GetComponent<FollowCameraComponent>(e);
 		auto* cameraComponent = registry.GetComponent<No::CameraComponent>(e);

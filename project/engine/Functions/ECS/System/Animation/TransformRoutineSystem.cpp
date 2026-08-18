@@ -59,7 +59,7 @@ void TransformRoutineSystem::Update(Registry& registry, float deltaTime) {
 		if (rawT >= 1.0f) {
 			routine->elapsed = 0.0f;
 			routine->currentIndex = nextIndex;
-			if (!routine->loop && routine->currentIndex == 0) {
+			if (!routine->loop && routine->currentIndex == routine->keyframes.size() - 1) {
 				routine->playing = false;
 			}
 		}

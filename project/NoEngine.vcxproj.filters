@@ -277,6 +277,8 @@
     <ClCompile Include="application\ClockworksDisease\System\UI\NumberDisplaySystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\Scene\GameClearScene.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Editor\DrawCameraFrustumSystem.cpp" />
+    <ClCompile Include="application\ClockworksDisease\Component\Camera\CameraIntroComponent.cpp" />
+    <ClCompile Include="application\ClockworksDisease\System\Camera\CameraIntroSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -560,6 +562,8 @@
     <ClInclude Include="application\ClockworksDisease\System\UI\NumberDisplaySystem.h" />
     <ClInclude Include="application\ClockworksDisease\Scene\GameClearScene.h" />
     <ClInclude Include="engine\Functions\ECS\System\Editor\DrawCameraFrustumSystem.h" />
+    <ClInclude Include="application\ClockworksDisease\Component\Camera\CameraIntroComponent.h" />
+    <ClInclude Include="application\ClockworksDisease\System\Camera\CameraIntroSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

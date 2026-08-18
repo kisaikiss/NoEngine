@@ -14,6 +14,7 @@
 #include "../System/Player/PlayerLevelUpSystem.h"
 #include "../System/Object/BoxColliderUpdateSystem.h"
 #include "../System/Object/MagicScaffoldSystem.h"
+#include "../System/Camera/CameraIntroSystem.h"
 
 #include "../Component/Player/PlayerComponent.h"
 #include "../Component/Camera/FollowCameraComponent.h"
@@ -94,6 +95,8 @@ void GameScene::AddSystems() {
 	AddSystem(std::make_unique<No::MovementSystem>());
 	AddSystem(std::make_unique<No::ComputePlatformDeltaSystem>());
 	AddSystem(std::make_unique<PlatformRideSystem>());
+
+	AddSystem(std::make_unique<CameraIntroSystem>());
 
 	AddSystem(std::make_unique<ColliderDrawSystem>());
 	AddSystem(std::make_unique<No::DrawCameraFrustumSystem>());
