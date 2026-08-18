@@ -1,0 +1,42 @@
+{
+    "components": {
+        "CameraComponent": {
+            "fov": 0.44999998807907104
+        },
+        "DebugCameraComponent": {
+            "center": [
+                1.3696765899658203,
+                0.20022821426391602,
+                -1.8159451484680176
+            ],
+            "distance": 23.472579956054688,
+            "drawCenter": false,
+            "moveType": "kBlender",
+            "unityMoveSpeed": 10.0,
+            "unitySensitivity": 0.20000000298023224
+        },
+        "EditTag": {
+            "name": "DebugCamera",
+            "parent": null
+        },
+        "TransformComponent": {
+            "parent": null,
+            "rotation": [
+                0.0849214494228363,
+                0.6775081753730774,
+                -0.07921776175498962,
+                0.726288914680481
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "translate": [
+                -21.41465950012207,
+                5.615267276763916,
+                -3.40132999420166
+            ]
+        }
+    }
+}

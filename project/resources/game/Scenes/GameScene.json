@@ -19,7 +19,7 @@
                         1.0,
                         1.0,
                         1.0,
-                        -0.01674260012805462
+                        -0.006225199904292822
                     ],
                     "fill": 0.0,
                     "flipX": false,
@@ -65,13 +65,13 @@
                 },
                 "DebugCameraComponent": {
                     "center": [
-                        1.5339813232421875,
-                        0.7203779220581055,
-                        -1.0258121490478516
+                        -72.55152893066406,
+                        1.6022602319717407,
+                        2.5700795650482178
                     ],
-                    "distance": 23.472579956054688,
+                    "distance": 47.87739562988281,
                     "drawCenter": false,
-                    "moveType": "kUnreal",
+                    "moveType": "kBlender",
                     "unityMoveSpeed": 10.0,
                     "unitySensitivity": 0.20000000298023224
                 },
@@ -82,10 +82,10 @@
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
-                        0.06455239653587341,
-                        0.7237186431884766,
-                        -0.06833452731370926,
-                        0.6836628317832947
+                        0.05252791941165924,
+                        0.694406270980835,
+                        -0.050954245030879974,
+                        0.7158522605895996
                     ],
                     "scale": [
                         1.0,
@@ -93,9 +93,9 @@
                         1.0
                     ],
                     "translate": [
-                        -21.48643684387207,
-                        5.113836288452148,
-                        0.2856292724609375
+                        -119.89421081542969,
+                        8.590940475463867,
+                        1.1298447847366333
                     ]
                 }
             }
@@ -432,7 +432,7 @@
             "components": {
                 "ActiveCameraTag": null,
                 "CameraComponent": {
-                    "fov": 0.6499999761581421
+                    "fov": 0.7751311659812927
                 },
                 "EditTag": {
                     "name": "MainCamera",
@@ -442,26 +442,26 @@
                     "collisionMargin": 0.30000001192092896,
                     "collisionRadius": 0.949999988079071,
                     "collisionStartOffset": 5.0,
-                    "currentDistance": 15.0,
-                    "distance": 15.0,
-                    "maxDistance": 15.0,
+                    "currentDistance": 7.615163326263428,
+                    "distance": 7.615164756774902,
+                    "maxDistance": 17.0,
                     "maxFov": 0.8500000238418579,
                     "maxPhi": 1.5707963705062866,
                     "minDistance": 2.0,
                     "minFov": 0.6499999761581421,
                     "minPhi": 0.6283185482025146,
                     "moveSpeed": 2.0,
-                    "phi": 1.118882417678833,
+                    "phi": 1.2179851531982422,
                     "playerPosOffset": 2.0,
-                    "theta": -3.0989441871643066
+                    "theta": -8.572347640991211
                 },
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
-                        0.1617613434791565,
-                        0.6742814779281616,
-                        -0.1550055295228958,
-                        0.7036697268486023
+                        0.04123349115252495,
+                        0.3511677086353302,
+                        -0.015481922775506973,
+                        0.9352760910987854
                     ],
                     "scale": [
                         1.0,
@@ -469,9 +469,9 @@
                         1.0
                     ],
                     "translate": [
-                        -20.783382415771484,
-                        6.550320148468018,
-                        0.45913392305374146
+                        2.869344711303711,
+                        22.626327514648438,
+                        -50.417816162109375
                     ]
                 }
             }
@@ -503,7 +503,7 @@
                         1.0,
                         1.0,
                         1.0,
-                        -0.01674260012805462
+                        -0.006225199904292822
                     ],
                     "fill": 0.0,
                     "flipX": false,
@@ -568,7 +568,7 @@
                     "fill": 0.0,
                     "flipX": false,
                     "flipY": false,
-                    "isVisible": true,
+                    "isVisible": false,
                     "layer": 1,
                     "maskTextureName": "",
                     "nonRenderAngle": 0.0,
@@ -693,7 +693,7 @@
         "player": {
             "components": {
                 "AnimatorComponent": {
-                    "animationSpeedMagnification": 1.0,
+                    "animationSpeedMagnification": 1.75,
                     "currentAnimation": 0,
                     "drawSkeleton": false,
                     "enableSkinning": true
@@ -729,40 +729,40 @@
                         1.0,
                         1.0
                     ],
-                    "count": 60,
+                    "count": 25,
                     "emitRange": [
                         0.0,
                         0.0,
                         0.0
                     ],
-                    "maxLifeTime": 1.0,
+                    "maxLifeTime": 0.30000001192092896,
                     "maxRotate": 0.0,
                     "maxScale": [
-                        0.5,
-                        0.5,
-                        0.5
+                        0.30000001192092896,
+                        0.30000001192092896,
+                        0.30000001192092896
                     ],
                     "maxSpeed": [
-                        3.0,
+                        5.0,
                         0.10000000149011612,
                         3.0
                     ],
-                    "minLifeTime": 0.5,
+                    "minLifeTime": 0.10000000149011612,
                     "minRotate": 0.0,
                     "minScale": [
-                        0.5,
-                        0.5,
-                        0.5
+                        0.15000000596046448,
+                        0.15000000596046448,
+                        0.15000000596046448
                     ],
                     "minSpeed": [
-                        3.0,
+                        2.5,
                         0.0,
                         -3.0
                     ],
                     "textureName": "smokeEffect"
                 },
                 "GroundStateComponent": {
-                    "groundHeight": 0.0,
+                    "groundHeight": 19.994998931884766,
                     "isGrounded": true
                 },
                 "LevelComponent": {
@@ -774,16 +774,16 @@
                 "MaterialComponent": {
                     "blendMode": "kNormal",
                     "color": [
+                        0.8896797895431519,
                         1.0,
-                        1.0,
-                        1.0,
+                        0.0,
                         1.0
                     ],
                     "drawOutline": true,
                     "edgeColor": [
-                        1.0,
-                        1.0,
-                        1.0,
+                        0.49110323190689087,
+                        0.26914554834365845,
+                        0.26914554834365845,
                         1.0
                     ],
                     "emissiveIntensity": 1.0,
@@ -808,10 +808,10 @@
                     "meshName": "jogging"
                 },
                 "ParticleEmitterSphereComponent": {
-                    "active": true,
-                    "count": 30,
-                    "frequency": 0.20000000298023224,
-                    "frequencyTime": 0.0,
+                    "active": false,
+                    "count": 50,
+                    "frequency": 0.15000000596046448,
+                    "frequencyTime": 0.0758536159992218,
                     "radius": 0.0
                 },
                 "PlayerComponent": {
@@ -819,12 +819,12 @@
                     "coyoteTime": 0.30000001192092896,
                     "coyoteTimer": 0.0,
                     "doubleJumpSpeed": 4.0,
-                    "gravity": -7.0,
+                    "gravity": -15.0,
                     "highJumpSpeed": 7.0,
                     "infinityJump": false,
-                    "jumpSpeed": 5.5,
+                    "jumpSpeed": 7.0,
                     "maxStamina": 0.0,
-                    "moveSpeed": 6.0,
+                    "moveSpeed": 7.0,
                     "stamina": 0.0,
                     "state": "kWait"
                 },
@@ -835,10 +835,10 @@
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
-                        -1.196509344936203e-07,
-                        -0.7118778824806213,
-                        -1.2128214166295948e-07,
-                        -0.7023032903671265
+                        0.0,
+                        0.41224315762519836,
+                        0.0,
+                        0.9110738635063171
                     ],
                     "scale": [
                         1.0,
@@ -846,9 +846,9 @@
                         1.0
                     ],
                     "translate": [
-                        -7.301450729370117,
-                        0.0,
-                        1.03446626663208
+                        7.5725932121276855,
+                        19.994998931884766,
+                        -45.03762435913086
                     ]
                 },
                 "VelocityComponent": {
@@ -904,11 +904,11 @@
                 },
                 "MeshComponent": {
                     "isVisible": true,
-                    "meshName": "resources/game/ClockworksDisease/Model/StageMap/testStage.obj"
+                    "meshName": "resources/game/ClockworksDisease/Model/nagasawaGround/nagasawaGround.obj"
                 },
                 "NoClickSelectTag": null,
                 "StageComponent": {
-                    "stageColliderName": "resources/game/ClockworksDisease/Model/StageMap/testStage.obj"
+                    "stageColliderName": "resources/game/ClockworksDisease/Model/nagasawaGround/nagasawaGround.obj"
                 },
                 "TerrainMesh": null,
                 "TransformComponent": {
