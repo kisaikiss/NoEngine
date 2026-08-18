@@ -60,7 +60,18 @@ void CameraIntroSystem::Update(No::Registry& registry, float deltaTime) {
 			SetOverlayAlpha(registry, intro->overlayEntity, t);
 
 			if (t >= 1.0f) {
-				// 画面が完全に暗転したタイミングでプレイヤー追従へ切り替える
+				intro->fadeTimer = 0.0f;
+				intro->phase = CameraIntroComponent::Phase::kBlackOut;
+			}
+			break;
+		}
+		case CameraIntroComponent::Phase::kBlackOut: {
+			intro->fadeTimer += deltaTime;
+			float t = intro->blackOutDuration > 0.0f
+				? std::clamp(intro->fadeTimer / intro->blackOutDuration, 0.0f, 1.0f)
+				: 1.0f;
+			if (t >= 1.0f) {
+				// 暗転から復帰するタイミングでプレイヤー追従へ切り替える
 				registry.RemoveComponent<CameraIntroLockTag>(e);
 				intro->fadeTimer = 0.0f;
 				intro->phase = CameraIntroComponent::Phase::kFadeIn;
