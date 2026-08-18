@@ -96,6 +96,7 @@ void GameScene::AddSystems() {
 	AddSystem(std::make_unique<PlatformRideSystem>());
 
 	AddSystem(std::make_unique<ColliderDrawSystem>());
+	AddSystem(std::make_unique<No::DrawCameraFrustumSystem>());
 
 	AddSystem(std::make_unique<FollowCameraSystem>());
 

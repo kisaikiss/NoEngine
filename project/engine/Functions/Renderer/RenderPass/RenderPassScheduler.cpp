@@ -239,11 +239,6 @@ void CommonSetupRenderPass(RenderPassScheduler& renderPassScheduler) {
 	meshPass->SetClearTarget(true);
 	renderPassScheduler.AddPass(std::move(meshPass));
 
-	auto primitivePass = std::make_unique<PrimitivePass>();
-	primitivePass->AddOutput("MainColor");
-	primitivePass->SetDepthOutput("MainDepth");
-	renderPassScheduler.AddPass(std::move(primitivePass));
-
 
 	auto depthBasedOutlinePass = std::make_unique<DepthBasedOutlinePass>();
 	depthBasedOutlinePass->AddInput("InputColor", "MainColor");

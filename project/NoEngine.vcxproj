@@ -274,6 +274,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="engine\Functions\ECS\System\Collision\CollisionResolutionSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Camera\DebugCamera2DSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Camera\DebugCameraSystem.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\Editor\DrawCameraFrustumSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Editor\DrawManipulatorSystem.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
@@ -559,6 +560,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="engine\Functions\ECS\System\Collision\CollisionResolutionSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\Camera\DebugCamera2DSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\Camera\DebugCameraSystem.h" />
+    <ClInclude Include="engine\Functions\ECS\System\Editor\DrawCameraFrustumSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\Editor\DrawManipulatorSystem.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>

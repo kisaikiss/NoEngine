@@ -22,4 +22,5 @@ void TitleScene::AddSystems() {
 	AddSystem(std::make_unique<No::DrawManipulatorSystem>());
 	AddSystem(std::make_unique<No::DebugCameraSystem>());
 	AddSystem(std::make_unique<No::CameraSystem>());
+	AddSystem(std::make_unique<No::DrawCameraFrustumSystem>());
 }
