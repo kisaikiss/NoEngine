@@ -33,76 +33,83 @@ void FacePlayerTowardsMoveDirection(No::TransformComponent* transform, const No:
 
 // 水平方向の単位ベクトルを、地面の法線が作る平面上に投影する
 No::Vector3 ProjectOnGroundPlane(const No::Vector3& horizontalDir, const No::Vector3& groundNormal) {
-    No::Vector3 projected = horizontalDir - groundNormal * horizontalDir.Dot(groundNormal);
-    const float len = projected.Length();
-    if (len > 1e-6f) {
-        return projected * (1.f / len);
-    }
-    return horizontalDir;
+	No::Vector3 projected = horizontalDir - groundNormal * horizontalDir.Dot(groundNormal);
+	const float len = projected.Length();
+	if (len > 1e-6f) {
+		return projected * (1.f / len);
+	}
+	return horizontalDir;
 }
 
 } // namespace
 
 void PlayerHorizontalMoveSystem::Update(No::Registry& registry, float deltaTime) {
-    const No::Quaternion cameraRotate = GetActiveCameraRotation(registry);
+	const No::Quaternion cameraRotate = GetActiveCameraRotation(registry);
 
-    auto view = registry.View<PlayerComponent, No::TransformComponent, No::VelocityComponent,
-        No::GroundStateComponent, No::ParticleEmitterSphereComponent, PlayerMoveTransientComponent>();
+	auto view = registry.View<PlayerComponent, No::TransformComponent, No::VelocityComponent,
+		No::GroundStateComponent, PlayerMoveTransientComponent>();
 
-    for (auto entity : view) {
-        auto* transform = registry.GetComponent<No::TransformComponent>(entity);
-        auto* playerVariables = registry.GetComponent<PlayerComponent>(entity);
-        auto* velocity = registry.GetComponent<No::VelocityComponent>(entity);
-        auto* groundState = registry.GetComponent<No::GroundStateComponent>(entity);  
-        auto* particleEmitter = registry.GetComponent<No::ParticleEmitterSphereComponent>(entity);
-        auto* transientState = registry.GetComponent<PlayerMoveTransientComponent>(entity);
+	for (auto entity : view) {
+		auto* transform = registry.GetComponent<No::TransformComponent>(entity);
+		auto* playerVariables = registry.GetComponent<PlayerComponent>(entity);
+		auto* velocity = registry.GetComponent<No::VelocityComponent>(entity);
+		auto* groundState = registry.GetComponent<No::GroundStateComponent>(entity);
+		auto* particleEmitterSphere = registry.GetComponent<No::ParticleEmitterSphereComponent>(entity);
+		auto* particleEmitter = registry.GetComponent<No::ParticleEmitterComponent>(entity);
+		auto* transientState = registry.GetComponent<PlayerMoveTransientComponent>(entity);
 
-        velocity->linear = No::Vector3::ZERO;
+		velocity->linear = No::Vector3::ZERO;
 
-        No::Vector3 inputDir = No::Vector3::ZERO;
-        inputDir.x = No::GetInputAxisValue("Lateral");
-        inputDir.z = No::GetInputAxisValue("Forward");
+		No::Vector3 inputDir = No::Vector3::ZERO;
+		inputDir.x = No::GetInputAxisValue("Lateral");
+		inputDir.z = No::GetInputAxisValue("Forward");
 
-        const bool hasInput = (inputDir.x != 0.f || inputDir.z != 0.f);
-        const bool isAirDashing = transientState->isAirDashing;
+		const bool hasInput = (inputDir.x != 0.f || inputDir.z != 0.f);
+		const bool isAirDashing = transientState->isAirDashing;
 
-        if (!hasInput && !isAirDashing) {
-            particleEmitter->active = false;
-            transientState->slopeY = 0.f;
-            continue;
-        }
+		if (!hasInput && !isAirDashing) {
+			if (particleEmitterSphere)
+				particleEmitterSphere->active = false;
+			if (particleEmitter)
+				particleEmitter->active = false;
+			transientState->slopeY = 0.f;
+			continue;
+		}
 
-        particleEmitter->active = true;
+		if (particleEmitterSphere)
+			particleEmitterSphere->active = true;
+		if (particleEmitter)
+			particleEmitter->active = true;
 
-        const No::Vector3& groundNormal = playerVariables->groundNormal;
+		const No::Vector3& groundNormal = playerVariables->groundNormal;
 
-        No::Vector3 worldDir;
-        if (hasInput) {
-            worldDir = cameraRotate.RotateVector(inputDir);
-            worldDir.y = 0.f;
-        } else {
-            worldDir = GetFacingDirection(transform);
-        }
+		No::Vector3 worldDir;
+		if (hasInput) {
+			worldDir = cameraRotate.RotateVector(inputDir);
+			worldDir.y = 0.f;
+		} else {
+			worldDir = GetFacingDirection(transform);
+		}
 
-        const float len = worldDir.Length();
-        No::Vector3 horizontalDir = (len > 1e-6f) ? worldDir * (1.f / len) : No::Vector3::ZERO;
+		const float len = worldDir.Length();
+		No::Vector3 horizontalDir = (len > 1e-6f) ? worldDir * (1.f / len) : No::Vector3::ZERO;
 
-        // 接地中（かつ空中ダッシュ中でない）なら、水平方向を地面平面へ投影して
-        // 実際の斜面に沿った方向ベクトルにする
-        No::Vector3 finalDir = horizontalDir;
-        if (groundState->isGrounded && !isAirDashing && horizontalDir.Length() > 1e-6f) {
-            finalDir = ProjectOnGroundPlane(horizontalDir, groundNormal);
-        }
+		// 接地中（かつ空中ダッシュ中でない）なら、水平方向を地面平面へ投影して
+		// 実際の斜面に沿った方向ベクトルにする
+		No::Vector3 finalDir = horizontalDir;
+		if (groundState->isGrounded && !isAirDashing && horizontalDir.Length() > 1e-6f) {
+			finalDir = ProjectOnGroundPlane(horizontalDir, groundNormal);
+		}
 
-        const float speed = isAirDashing ? playerVariables->airDashSpeed : playerVariables->moveSpeed;
-        No::Vector3 finalVelocity = finalDir * speed;
+		const float speed = isAirDashing ? playerVariables->airDashSpeed : playerVariables->moveSpeed;
+		No::Vector3 finalVelocity = finalDir * speed;
 
-        velocity->linear.x = finalVelocity.x;
-        velocity->linear.z = finalVelocity.z;
+		velocity->linear.x = finalVelocity.x;
+		velocity->linear.z = finalVelocity.z;
 
-        // 斜面追従によるy成分を記録し、PlayerVerticalVelocitySystemへ渡す
-        transientState->slopeY = finalVelocity.y;
+		// 斜面追従によるy成分を記録し、PlayerVerticalVelocitySystemへ渡す
+		transientState->slopeY = finalVelocity.y;
 
-        FacePlayerTowardsMoveDirection(transform, finalVelocity, deltaTime);
-    }
+		FacePlayerTowardsMoveDirection(transform, finalVelocity, deltaTime);
+	}
 }
