@@ -33,6 +33,8 @@ EditorPlayState sPlayState = EditorPlayState::kEditing;
 // "■"を押したときにこの状態へ復元する。
 nlohmann::json sPlaySnapshot;
 bool sHasPlaySnapshot = false;
+std::string startSceneName = "";
+bool changedSceneInPlaying = false;
 }
 
 SystemManager::SystemManager() {}
@@ -43,6 +45,29 @@ bool SystemManager::IsInPlayMode() {
 
 const nlohmann::json& SystemManager::GetPlaySnapshot() {
 	return sPlaySnapshot;
+}
+
+void SystemManager::LoadPlaySnapShot(Registry& registry) {
+	std::unordered_set<std::string> snapshotNames;
+	if (sPlaySnapshot.contains("entities")) {
+		for (auto& [name, j] : sPlaySnapshot["entities"].items()) {
+			snapshotNames.insert(name);
+		}
+	}
+
+	std::vector<Entity> toDestroy;
+	for (auto e : registry.View<Editor::EditTag>()) {
+		auto* tag = registry.GetComponent<Editor::EditTag>(e);
+		if (tag && !snapshotNames.contains(tag->name)) {
+			toDestroy.push_back(e);
+		}
+	}
+	for (auto e : toDestroy) {
+		registry.DestroyEntity(e);
+	}
+	registry.FlushDestroy();
+
+	Editor::LoadScene(registry, sPlaySnapshot);
 }
 
 void SystemManager::UpdateAll(ComputeContext& ctx, Registry& registry, float deltaTime) {
@@ -62,6 +87,12 @@ void SystemManager::UpdateAll(ComputeContext& ctx, Registry& registry, float del
 	}
 #ifdef USE_IMGUI
 
+	// プレイ中にシーンが切り替わった場合のスナップショット読み込み
+	if (changedSceneInPlaying) {
+		LoadPlaySnapShot(registry);
+		changedSceneInPlaying = false;
+	}
+
 	ImGui::Begin("GameController", nullptr, ImGuiWindowFlags_NoTitleBar);
 	float windowWidth = ImGui::GetWindowSize().x;
 	float itemWidth = ImGui::CalcTextSize("Button").x + ImGui::GetStyle().FramePadding.x * 2;
@@ -74,35 +105,20 @@ void SystemManager::UpdateAll(ComputeContext& ctx, Registry& registry, float del
 			// ">"を押す直前の状態へ復元する。
 			// スナップショットに存在しない(再生中に生成された)Entityは先に削除してから、
 			// スナップショットの内容を既存Entityへ書き戻す。
-			std::unordered_set<std::string> snapshotNames;
-			if (sPlaySnapshot.contains("entities")) {
-				for (auto& [name, j] : sPlaySnapshot["entities"].items()) {
-					snapshotNames.insert(name);
-				}
-			}
-
-			std::vector<Entity> toDestroy;
-			for (auto e : registry.View<Editor::EditTag>()) {
-				auto* tag = registry.GetComponent<Editor::EditTag>(e);
-				if (tag && !snapshotNames.contains(tag->name)) {
-					toDestroy.push_back(e);
-				}
-			}
-			for (auto e : toDestroy) {
-				registry.DestroyEntity(e);
-			}
-			registry.FlushDestroy();
-
-			Editor::LoadScene(registry, sPlaySnapshot);
-		} else {
-			// スナップショットが無い場合は従来通りシーンをリロードする(フォールバック)
-			auto sceneView = registry.View<SceneNameComponent>();
-			for (auto e : sceneView) {
+			// 再生中にシーンが切り替わったら元のシーンに戻す
+			for (auto e : registry.View<SceneNameComponent>()) {
 				auto* sceneName = registry.GetComponent<SceneNameComponent>(e);
-				Event::SceneChangeEvent event;
-				event.nextScene = sceneName->GetName();
-				event.transitionType = Event::SceneTransitionType::kImmediate;
-				registry.EmitEvent(event);
+				if (startSceneName != sceneName->GetName()) {
+					Event::SceneChangeEvent event;
+					event.nextScene = startSceneName;
+					event.transitionType = Event::SceneTransitionType::kImmediate;
+					registry.EmitEvent(event);
+					changedSceneInPlaying = true;
+				}
+			}
+
+			if (!changedSceneInPlaying) {
+				LoadPlaySnapShot(registry);
 			}
 		}
 
@@ -114,7 +130,8 @@ void SystemManager::UpdateAll(ComputeContext& ctx, Registry& registry, float del
 			// 停止状態から再生する瞬間だけスナップショットを取得する
 			// (一時停止からの再開では撮り直さない)
 			sPlaySnapshot = Editor::SaveScene(registry);
-			sHasPlaySnapshot = true;
+			sHasPlaySnapshot = true; 
+			for (auto e : registry.View<SceneNameComponent>()) startSceneName = registry.GetComponent<SceneNameComponent>(e)->GetName();
 		}
 		sPlayState = EditorPlayState::kPlaying;
 		sGameStop = false;
