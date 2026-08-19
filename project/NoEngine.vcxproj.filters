@@ -281,6 +281,8 @@
     <ClCompile Include="application\ClockworksDisease\System\Camera\CameraIntroSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\UI\TitleCursorSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\Component\UI\TitleUIComponent.cpp" />
+    <ClCompile Include="engine\Functions\Scene\CircleScaleTransitionEffect.cpp" />
+    <ClCompile Include="engine\Functions\Scene\FadeTransitionEffect.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -569,6 +571,9 @@
     <ClInclude Include="application\ClockworksDisease\Component\UI\TitleUIComponent.h" />
     <ClInclude Include="application\ClockworksDisease\System\UI\TitleCursorSystem.h" />
     <ClInclude Include="application\ClockworksDisease\Component\Game\GameQuitEvent.h" />
+    <ClInclude Include="engine\Functions\Scene\ITransitionEffect.h" />
+    <ClInclude Include="engine\Functions\Scene\CircleScaleTransitionEffect.h" />
+    <ClInclude Include="engine\Functions\Scene\FadeTransitionEffect.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

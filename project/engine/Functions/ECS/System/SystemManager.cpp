@@ -101,6 +101,7 @@ void SystemManager::UpdateAll(ComputeContext& ctx, Registry& registry, float del
 				auto* sceneName = registry.GetComponent<SceneNameComponent>(e);
 				Event::SceneChangeEvent event;
 				event.nextScene = sceneName->GetName();
+				event.transitionType = Event::SceneTransitionType::kImmediate;
 				registry.EmitEvent(event);
 			}
 		}

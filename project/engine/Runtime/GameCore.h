@@ -32,9 +32,9 @@ public:
 	virtual void Update(ComputeContext& ctx, float deltaT) {
 		if (auto event = GetRegistry().PollEvent<Event::SceneChangeEvent>()) {
 			ParticleManager::Reset(ctx);
-			ChangeScene(event->nextScene, true);
+			bool immediate = (event->transitionType == Event::SceneTransitionType::kImmediate);
+			ChangeScene(event->nextScene, immediate, event->transitionType, event->customTransitionName);
 		}
-
 		UpdateScene(ctx, deltaT);
 	};
 
@@ -61,11 +61,20 @@ protected:
 	void RegisterScene(const std::string& name, Scene::SceneManager::SceneFactory factory) { sceneManager_->RegisterScene(name, factory); }
 
 	/// <summary>
+	/// シーン遷移演出を登録します。
+	/// </summary>
+	/// <param name="name">シーン変更時などに使用する名前を設定します。</param>
+	/// <param name="factory">シーン遷移演出を生成する関数を登録します。(std::make_unique<>())</param>
+	void RegisterTransitionEffect(const std::string& name, Scene::SceneManager::TransitionFactory factory) { sceneManager_->RegisterTransitionEffect(name, std::move(factory)); }
+
+	/// <summary>
 	/// シーンを変更します。
 	/// </summary>
 	/// <param name="name">変更先のシーン名</param>
-	/// <param name="immediate">遷移演出(ture : 演出なし、false : 演出あり)</param>
-	void ChangeScene(const std::string& name, bool immediate = true) { sceneManager_->ChangeScene(name,immediate); }
+	/// <param name="immediate">遷移演出(true : 演出なし、false : 演出あり)</param>
+	void ChangeScene(const std::string& name, bool immediate = true, Event::SceneTransitionType type = Event::SceneTransitionType::kCircleScale, std::string customTransitionName = "") { 
+		sceneManager_->ChangeScene(name, immediate, type, customTransitionName);
+	}
 
 	/// <summary>
 	/// シーンの更新を行います
