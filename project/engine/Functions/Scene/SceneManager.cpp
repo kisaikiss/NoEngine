@@ -3,6 +3,10 @@
 #include "CircleScaleTransitionEffect.h"
 #include "FadeTransitionEffect.h"
 
+#ifdef USE_IMGUI
+#include "externals/imgui/imgui.h"
+#endif // USE_IMGUI
+
 namespace NoEngine {
 namespace Scene {
 SceneManager::SceneManager() {
@@ -61,6 +65,7 @@ void SceneManager::ChangeScene(const std::string& name, bool immediate,
 }
 
 void SceneManager::Update(ComputeContext& ctx, float deltaTime) {
+
 	if (isTransitioning_) {
 		float half = transitionDuration_ * 0.5f;
 		if (deltaTime > 0.0f && deltaTime < 0.1f) transitionTimer_ += deltaTime;
@@ -102,10 +107,28 @@ void SceneManager::Update(ComputeContext& ctx, float deltaTime) {
 			}
 		}
 
-		if (currentScene_) currentScene_->Update(ctx, deltaTime);
-		return;
 	}
+
 	if (currentScene_) currentScene_->Update(ctx, deltaTime);
+
+#ifdef USE_IMGUI
+	if (ImGui::BeginMainMenuBar()) {
+		if (ImGui::BeginMenu("Scene")) {
+			for (auto& factory : factories_) {
+				if (ImGui::MenuItem(factory.first.c_str())) {
+					Event::SceneChangeEvent event;
+					event.nextScene = factory.first;
+					event.transitionType = Event::SceneTransitionType::kImmediate;
+					GetRegistry()->EmitEvent(event);
+				}
+			}
+
+			ImGui::EndMenu();
+		}
+		ImGui::EndMainMenuBar();
+	}
+#endif // USE_IMGUI
+
 }
 }
 }
