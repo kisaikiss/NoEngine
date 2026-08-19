@@ -359,7 +359,8 @@ void DrawSceneImGuiWindow(ECS::Registry& registry, CommandContext& ctx, ColorBuf
 			auto& translate = registry.GetComponent<Component::TransformComponent>(instantiateTransformObjectEntity)->translate;
 			translate = Math::Vector3(r, g, b);
 		}
-
+		// Undo 用コマンド登録
+		Editor::EditorCommandOperator::AddCommand(std::make_unique<Command::InstantiateEntityCommand>(registry, instantiateTransformObjectEntity));
 		instantiateTransformObjectEntity = ECS::INVALID_ENTITY;
 	}
 
@@ -390,9 +391,10 @@ void DrawSceneImGuiWindow(ECS::Registry& registry, CommandContext& ctx, ColorBuf
 					t->translate = worldPos;
 				}
 				instantiateTransformObjectEntity = e;
+			} else {
+				// Undo 用コマンド登録
+				Editor::EditorCommandOperator::AddCommand(std::make_unique<Command::InstantiateEntityCommand>(registry, e));
 			}
-			// Undo 用コマンド登録
-			Editor::EditorCommandOperator::AddCommand(std::make_unique<Command::InstantiateEntityCommand>(registry, e));
 		}
 		ImGui::EndDragDropTarget();
 	}

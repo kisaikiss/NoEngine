@@ -26,6 +26,8 @@ public:
 	/// </summary>
 	static void Redo();
 
+	static void Reset();
+
 	static void Shutdown();
 private:
 };
