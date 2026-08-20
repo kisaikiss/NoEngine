@@ -74,7 +74,7 @@ void DrawCameraFrustumSystem::Update(Registry& registry, float deltaTime) {
 	const Math::Color kFrustumColor{ 1.0f, 1.0f, 0.0f, 1.0f };       // 現在のカメラ位置
 	const Math::Color kKeyframeFrustumColor{ 1.0f, 0.5f, 0.0f, 0.6f }; // keyframe位置(区別のため半透明のオレンジ)
 
-	auto view = registry.View<CameraComponent, TransformComponent, ActiveCameraTag>();
+	auto view = registry.View<CameraComponent, TransformComponent, Editor::EditSelectedTag>();
 	for (auto e : view) {
 		auto* camera = registry.GetComponent<CameraComponent>(e);
 		auto* transform = registry.GetComponent<TransformComponent>(e);

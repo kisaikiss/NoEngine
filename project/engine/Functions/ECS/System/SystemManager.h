@@ -1,5 +1,6 @@
 #pragma once
 #include "ISystem.h"
+#include "externals/nlohmann/json.hpp"
 
 namespace NoEngine {
 namespace ECS {
@@ -17,8 +18,15 @@ public:
 	void UpdateAll(ComputeContext& ctx, Registry& registry, float deltaTime);
 
 
+	// Editing以外(Playing/Paused)ならtrue。">"を押してから"■"を押すまでの間ずっとtrue。
+	static bool IsInPlayMode();
+	// ">"を押した瞬間(Editing→Playing)に取得したシーンのスナップショット
+	static const nlohmann::json& GetPlaySnapshot();
+
 private:
 	std::vector<std::unique_ptr<ISystem>> systems_;
+
+	void LoadPlaySnapShot(Registry& registry);
 };
 }
 }

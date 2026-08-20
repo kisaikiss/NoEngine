@@ -50,6 +50,7 @@
 #include "Functions/Renderer/Primitive.h"
 #include "Functions/Input/Input.h"
 #include "Functions/Input/InputConfig.h"
+#include "Functions/Scene/ITransitionEffect.h"
 
 #include "Math/MathInclude.h"
 

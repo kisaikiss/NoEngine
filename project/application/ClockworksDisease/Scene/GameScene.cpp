@@ -5,6 +5,7 @@
 #include "../System/Player/PlayerJumpSystem.h"
 #include "../System/Player/PlayerHorizontalMoveSystem.h"
 #include "../System/Player/PlayerVerticalVelocitySystem.h"
+#include "../System/Player/PlayerAbilityDebugSystem.h"
 
 #include "../System/Camera/FollowCameraSystem.h"
 #include "../System/Game/CollisionEventSystem.h"
@@ -16,8 +17,6 @@
 #include "../System/Object/MagicScaffoldSystem.h"
 #include "../System/Camera/CameraIntroSystem.h"
 
-#include "../Component/Player/PlayerComponent.h"
-#include "../Component/Camera/FollowCameraComponent.h"
 #include "../Component/Stage/StageComponent.h"
 #include "../System/Game/CollisionLayer.h"
 #include "../System/Game/ColliderDrawSystem.h"
@@ -28,6 +27,7 @@
 #include "../System/UI/LevelUpTextSystem.h"
 #include "../System/Game/GameProgressInitSystem.h"
 #include "../System/Game/GameTimerSystem.h"
+#include "../System/Game/GoalDirectionSystem.h"
 #include "../Component/Game/GameProgressComponent.h"
 
 void GameScene::Setup() {
@@ -84,6 +84,7 @@ void GameScene::AddSystems() {
 	AddSystem(std::make_unique<BigPowerItemSystem>());
 	AddSystem(std::make_unique<PlayerLevelUpSystem>());
 	AddSystem(std::make_unique<LevelUISystem>());
+	AddSystem(std::make_unique<PlayerAbilityDebugSystem>());
 	AddSystem(std::make_unique<LevelUpTextSystem>());
 
 	AddSystem(std::make_unique<No::EffectEmitSystem>());
@@ -97,6 +98,7 @@ void GameScene::AddSystems() {
 	AddSystem(std::make_unique<PlatformRideSystem>());
 
 	AddSystem(std::make_unique<CameraIntroSystem>());
+	AddSystem(std::make_unique<GoalDirectionSystem>());
 
 	AddSystem(std::make_unique<ColliderDrawSystem>());
 	AddSystem(std::make_unique<No::DrawCameraFrustumSystem>());

@@ -2,6 +2,7 @@
 #include "application/ClockworksDisease/Component/Player/PlayerComponent.h"
 #include "application/ClockworksDisease/Component/UI/UserInterfaceComponent.h"
 #include "application/ClockworksDisease/Component/Player/PlayerMoveTags.h"
+#include "application/ClockworksDisease/Component/Game/GoalDirectionComponent.h"
 
 namespace {
 
@@ -39,20 +40,21 @@ void HandleHighJump(No::Registry& registry, No::Entity entity, PlayerComponent* 
 	const bool hasHighJumpTag = registry.Has<HighJumpTag>(entity);
 
 	if (No::InputIsPress("HighJump")) {
-		if (hasHighJumpTag && playerVariables->state == PlayerState::kHighJump && !isGrounded) {
-			constexpr float kHighJumpDrainRate = 10.0f;
-			if (playerVariables->stamina > kHighJumpDrainRate * deltaTime) {
+		if (hasHighJumpTag && playerVariables->state == PlayerState::kJump && !isGrounded) {
+			if (playerVariables->stamina > playerVariables->highJumpCostRate * deltaTime) {
 				playerVariables->yVelocity = playerVariables->highJumpSpeed;
-				playerVariables->stamina -= kHighJumpDrainRate * deltaTime;
+				playerVariables->stamina -= playerVariables->highJumpCostRate * deltaTime;
 			}
 		}
 	}
 
 	if (No::InputIsTrigger("HighJump") && hasHighJumpTag) {
 		if (isGrounded || playerVariables->infinityJump) {
-			playerVariables->yVelocity = playerVariables->highJumpSpeed;
-			transientState->justJumped = true;
-			groundState->isGrounded = false;
+			if (playerVariables->stamina > playerVariables->highJumpCostRate * deltaTime) {
+				playerVariables->yVelocity = playerVariables->highJumpSpeed;
+				transientState->justJumped = true;
+				groundState->isGrounded = false;
+			}
 		}
 	}
 }
@@ -67,13 +69,13 @@ void HandleAirDash(No::Registry& registry, No::Entity entity, PlayerComponent* p
 		return;
 	}
 
-	constexpr float kAirDashStaminaCostRate = 2.0f; // 1秒あたりの消費量
-	if (playerVariables->stamina <= kAirDashStaminaCostRate * deltaTime) {
+	if (playerVariables->stamina <= playerVariables->airDashStaminaCostRate * deltaTime) {
+		playerVariables->yVelocity = 0.0f;
 		return;
 	}
 
 	transientState->isAirDashing = true;
-	playerVariables->stamina -= kAirDashStaminaCostRate * deltaTime;
+	playerVariables->stamina -= playerVariables->airDashStaminaCostRate * deltaTime;
 }
 
 // ジャンプ/ハイジャンプ入力を離した瞬間の減速処理
@@ -123,9 +125,15 @@ void CreateScaffold(No::Registry& registry, No::Entity entity, PlayerComponent* 
 void PlayerJumpSystem::Update(No::Registry& registry, float deltaTime) {
 	auto view = registry.View<PlayerComponent, No::TransformComponent, No::GroundStateComponent, PlayerMoveTransientComponent>();
 	for (auto entity : view) {
+		if (registry.Has<GoalDirectionLockTag>(entity)) continue; // ゴール演出中は操作を受け付けない
+
 		auto* playerVariables = registry.GetComponent<PlayerComponent>(entity);
 		auto* groundState = registry.GetComponent<No::GroundStateComponent>(entity);
 		auto* transientState = registry.GetComponent<PlayerMoveTransientComponent>(entity);
+
+		if (No::InputIsRelease("AirDash") && transientState->isAirDashing) {
+			playerVariables->yVelocity = 0.0f;
+		}
 
 		// このフレームの一時状態をリセット（このシステムが一番最初に触るため）
 		transientState->justJumped = false;

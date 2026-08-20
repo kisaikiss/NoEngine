@@ -1,10 +1,36 @@
 #include "stdafx.h"
 #include "PlayerLevelUpSystem.h"
+#include "../../Component/Player/PlayerComponent.h"
 #include "../../Component/Player/PlayerMoveTags.h"
 #include "../../Component/UI/UserInterfaceComponent.h"
 
 REFLECT_STRUCT_BEGIN(LevelUpEffectTag, "ApplicationTag")
 REFLECT_STRUCT_END(LevelUpEffectTag)
+
+namespace {
+// レベルアップヒントの表示要求。
+// 既に別のヒントを表示中(クローズアニメーション中も含む)ならキューに積むだけにし、
+// LevelUpTextSystem側でヒントが完全に右へはけたタイミングで次のヒントを取り出して表示する。
+// アイドル状態(何も表示していない)ならすぐに表示を開始する。
+void EnqueueOrShowLevelUpHint(No::Registry& registry, const std::string& textureName) {
+	for (auto e : registry.View<LevelUpTextComponent>()) {
+		auto* queue = registry.GetComponent<LevelUpHintQueueComponent>(e);
+		if (!queue) {
+			queue = registry.AddComponent<LevelUpHintQueueComponent>(e);
+		}
+
+		if (registry.Has<LevelUpFrameTag>(e)) {
+			// 表示中(またはクローズアニメーション中)なのでキューに積むだけ
+			queue->pendingTextureNames.push_back(textureName);
+			continue;
+		}
+
+		// アイドル状態なのですぐに表示を開始する
+		CreateLevelUpHintEntity(registry, textureName);
+		registry.AddComponent<LevelUpFrameTag>(e);
+	}
+}
+}
 
 void PlayerLevelUpSystem::Update(No::Registry& registry, float deltaTime) {
 	static_cast<void>(deltaTime);
@@ -16,14 +42,6 @@ void PlayerLevelUpSystem::Update(No::Registry& registry, float deltaTime) {
 			levelComponent->power -= levelComponent->nextLevelUp;
 			levelComponent->nextLevelUp += kAmountOfPowerNeededForTheNextLevelUp;
 			EnhancementsUponLevelingUp(registry, e, levelComponent->nowLevel);
-
-			for (auto& reward : levelComponent->rewards) {
-				if (reward.level == levelComponent->nowLevel && reward.ability != PlayerAbility::kNone) {
-					for (auto levelUpUI : registry.View<LevelUpTextComponent>()) {
-						registry.AddComponent<LevelUpFrameTag>(levelUpUI);
-					}			
-				}
-			}
 
 			// レベルアップ時のエフェクト
 			for (auto effectEntity : registry.View<No::TransformComponent, No::EffectEmitterComponent, LevelUpEffectTag>()) {
@@ -53,46 +71,35 @@ void PlayerLevelUpSystem::GrantAbility(No::Registry& registry, No::Entity e, Pla
 	case PlayerAbility::kMultiJump:
 		if (!registry.Has<MultiJumpTag>(e)) {
 			registry.AddComponent<MultiJumpTag>(e);
-			auto textEntity = registry.GenerateEntity();
-			registry.AddComponent<No::Transform2DComponent>(textEntity)->scale = No::Vector2(468.f, 720.f);
-			auto* sprite = registry.AddComponent<No::SpriteComponent>(textEntity);
-			sprite->textureName = "MultiJumpHint";
-			sprite->layer = 1;
-			registry.AddComponent<LevelUpTextParentTag>(textEntity);
+			EnqueueOrShowLevelUpHint(registry, "MultiJumpHint");
 		}
 		break;
 	case PlayerAbility::kHighJump:
 		if (!registry.Has<HighJumpTag>(e)) {
 			registry.AddComponent<HighJumpTag>(e);
-			auto textEntity = registry.GenerateEntity();
-			registry.AddComponent<No::Transform2DComponent>(textEntity)->scale = No::Vector2(468.f, 720.f);
-			auto* sprite = registry.AddComponent<No::SpriteComponent>(textEntity);
-			sprite->textureName = "HighJumpHint";
-			sprite->layer = 1;
-			registry.AddComponent<LevelUpTextParentTag>(textEntity);
+			if (auto* debug = registry.GetComponent<PlayerAbilityDebugComponent>(e)) {
+				debug->highJump = true;
+			}
+			EnqueueOrShowLevelUpHint(registry, "HighJumpHint");
 		}
 		break;
 	case PlayerAbility::kAirDash:
 		if (!registry.Has<AirDashTag>(e)) {
 			registry.AddComponent<AirDashTag>(e);
-			auto textEntity = registry.GenerateEntity();
-			registry.AddComponent<No::Transform2DComponent>(textEntity)->scale = No::Vector2(468.f, 720.f);
-			auto* sprite = registry.AddComponent<No::SpriteComponent>(textEntity);
-			sprite->textureName = "AirDashHint";
-			sprite->layer = 1;
-			registry.AddComponent<LevelUpTextParentTag>(textEntity);
+			if (auto* debug = registry.GetComponent<PlayerAbilityDebugComponent>(e)) {
+				debug->airDash = true;
+			}
+			EnqueueOrShowLevelUpHint(registry, "AirDashHint");
 		}
 		break;
 	case PlayerAbility::kMagicScaffold:
 		if (!registry.Has<CreateMagicScaffoldTag>(e)) {
 			registry.AddComponent<CreateMagicScaffoldTag>(e);
-			auto textEntity = registry.GenerateEntity();
-			registry.AddComponent<No::Transform2DComponent>(textEntity)->scale = No::Vector2(468.f, 720.f);
-			auto* sprite = registry.AddComponent<No::SpriteComponent>(textEntity);
-			sprite->textureName = "MagicHint";
-			sprite->layer = 1;
-			registry.AddComponent<LevelUpTextParentTag>(textEntity);
-		} 
+			if (auto* debug = registry.GetComponent<PlayerAbilityDebugComponent>(e)) {
+				debug->magicScaffold = true;
+			}
+			EnqueueOrShowLevelUpHint(registry, "MagicHint");
+		}
 		break;
 	default:
 		break;

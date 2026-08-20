@@ -1,6 +1,7 @@
 #include "IScene.h"
 #include "engine/Functions/ECS/Component/Common/TransformComponent.h"
 
+#include "engine/Editor/EditorCommandOperator.h"
 namespace NoEngine {
 namespace Scene {
 IScene::IScene() :
@@ -27,6 +28,10 @@ IScene::IScene() :
 		registry_->AddComponent<Component::TransformComponent>(debugCamera);
 		registry_->AddComponent<Editor::EditTag>(debugCamera)->name = "DebugCamera";
 	}
+}
+
+IScene::~IScene() {
+	Editor::EditorCommandOperator::Reset();
 }
 
 void IScene::Update(ComputeContext& ctx, float deltaTime) {

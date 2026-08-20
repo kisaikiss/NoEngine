@@ -25,7 +25,7 @@ No::Entity CreateNumberDisplay(No::Registry& registry, const No::Vector2& positi
 		t2d->translate = { position.x + digitWidth * static_cast<float>(i), position.y };
 		t2d->parent = owner;
 		auto* sprite = registry.AddComponent<No::SpriteComponent>(digitEntity);
-		sprite->textureName = "levelNumbers"; // LevelNumberTagと同じアドレッサブル名を想定
+		sprite->textureName = "numbers";
 		sprite->layer = layer;
 		sprite->uv.width = 1.0f / 10.0f;
 

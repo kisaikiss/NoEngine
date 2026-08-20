@@ -13,5 +13,6 @@ REFLECT_STRUCT_BEGIN(NoEngine::Component::TransformRoutineComponent, "Transform"
 REFLECT_STRUCT_ARRAY_FIELD(keyframes),
 REFLECT_ENUM_FIELD(interpolation),
 REFLECT_FIELD(loop),
+REFLECT_FIELD(playing),
 REFLECT_FIELD(playbackSpeed)
 REFLECT_STRUCT_END(NoEngine::Component::TransformRoutineComponent)

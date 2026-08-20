@@ -11,6 +11,36 @@ void CameraIntroSystem::Update(No::Registry& registry, float deltaTime) {
 	for (auto e : registry.View<CameraIntroComponent>()) {
 		auto* intro = registry.GetComponent<CameraIntroComponent>(e);
 
+#ifdef USE_IMGUI
+		// エディタでPlayして確認するたびに毎回演出を見るのを避けるためのショートカット。
+		// 演出全体をスキップし、カメラを演出終了時の状態(最後のキーフレーム)へ
+		// 直接スナップさせてからFollowCameraSystemへ制御を渡す。
+		if (!intro->playInEditor && intro->phase != CameraIntroComponent::Phase::kDone) {
+			if (auto* routine = registry.GetComponent<No::TransformRoutineComponent>(e)) {
+				// playingをfalseにしておかないと、TransformRoutineSystemが
+				// 以降もカメラのtranslateを上書きし続けFollowCameraSystemと競合する
+				routine->playing = false;
+				if (!routine->keyframes.empty()) {
+					if (auto* transform = registry.GetComponent<No::TransformComponent>(e)) {
+						const auto& last = routine->keyframes.back();
+						transform->translate = last.translate;
+						transform->rotation = last.rotation;
+						transform->scale = last.scale;
+					}
+				}
+			}
+
+			if (intro->overlayEntity != No::INVALID_ENTITY) {
+				registry.DestroyEntity(intro->overlayEntity);
+				intro->overlayEntity = No::INVALID_ENTITY;
+			}
+
+			registry.RemoveComponent<CameraIntroLockTag>(e);
+			intro->phase = CameraIntroComponent::Phase::kDone;
+			continue;
+		}
+#endif // USE_IMGUI
+
 		switch (intro->phase) {
 		case CameraIntroComponent::Phase::kPlayingRoutine: {
 			auto* routine = registry.GetComponent<No::TransformRoutineComponent>(e);
@@ -30,7 +60,18 @@ void CameraIntroSystem::Update(No::Registry& registry, float deltaTime) {
 			SetOverlayAlpha(registry, intro->overlayEntity, t);
 
 			if (t >= 1.0f) {
-				// 画面が完全に暗転したタイミングでプレイヤー追従へ切り替える
+				intro->fadeTimer = 0.0f;
+				intro->phase = CameraIntroComponent::Phase::kBlackOut;
+			}
+			break;
+		}
+		case CameraIntroComponent::Phase::kBlackOut: {
+			intro->fadeTimer += deltaTime;
+			float t = intro->blackOutDuration > 0.0f
+				? std::clamp(intro->fadeTimer / intro->blackOutDuration, 0.0f, 1.0f)
+				: 1.0f;
+			if (t >= 1.0f) {
+				// 暗転から復帰するタイミングでプレイヤー追従へ切り替える
 				registry.RemoveComponent<CameraIntroLockTag>(e);
 				intro->fadeTimer = 0.0f;
 				intro->phase = CameraIntroComponent::Phase::kFadeIn;

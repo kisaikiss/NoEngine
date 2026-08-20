@@ -14,7 +14,7 @@ class IScene {
 	friend class SceneManager;
 public:
 	IScene();
-	virtual ~IScene() = default;
+	virtual ~IScene();
 
 	/// <summary>
 	/// エントリ時に呼び出される仮想メソッド。派生クラスでオーバーライドして状態遷移時の処理（BGM再生など）を行えます。
