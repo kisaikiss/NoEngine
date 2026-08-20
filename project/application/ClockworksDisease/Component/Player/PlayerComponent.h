@@ -25,6 +25,9 @@ struct PlayerComponent {
 	bool canCreateScaffold = true;
 	PlayerState state = PlayerState::kWait;
 
+	float highJumpCostRate = 10.0f;
+	float airDashStaminaCostRate = 2.0f;
+
 	// コヨーテタイム
 	float coyoteTime = 0.3f;
 	float coyoteTimer = 0.0f;

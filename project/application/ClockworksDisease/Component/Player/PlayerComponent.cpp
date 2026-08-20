@@ -13,7 +13,9 @@ REFLECT_FIELD(maxStamina),
 REFLECT_FIELD(coyoteTime),
 REFLECT_FIELD(coyoteTimer),
 REFLECT_FIELD(infinityJump),
-REFLECT_ENUM_FIELD(state)
+REFLECT_ENUM_FIELD(state),
+REFLECT_FIELD(highJumpCostRate),
+REFLECT_FIELD(airDashStaminaCostRate)
 REFLECT_STRUCT_END(PlayerComponent)
 
 REFLECT_STRUCT_BEGIN(PlayerAbilityDebugComponent, "Application")
