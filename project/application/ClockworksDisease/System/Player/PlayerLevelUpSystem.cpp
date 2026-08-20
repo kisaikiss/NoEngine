@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "PlayerLevelUpSystem.h"
+#include "../../Component/Player/PlayerComponent.h"
 #include "../../Component/Player/PlayerMoveTags.h"
 #include "../../Component/UI/UserInterfaceComponent.h"
 
@@ -76,18 +77,27 @@ void PlayerLevelUpSystem::GrantAbility(No::Registry& registry, No::Entity e, Pla
 	case PlayerAbility::kHighJump:
 		if (!registry.Has<HighJumpTag>(e)) {
 			registry.AddComponent<HighJumpTag>(e);
+			if (auto* debug = registry.GetComponent<PlayerAbilityDebugComponent>(e)) {
+				debug->highJump = true;
+			}
 			EnqueueOrShowLevelUpHint(registry, "HighJumpHint");
 		}
 		break;
 	case PlayerAbility::kAirDash:
 		if (!registry.Has<AirDashTag>(e)) {
 			registry.AddComponent<AirDashTag>(e);
+			if (auto* debug = registry.GetComponent<PlayerAbilityDebugComponent>(e)) {
+				debug->airDash = true;
+			}
 			EnqueueOrShowLevelUpHint(registry, "AirDashHint");
 		}
 		break;
 	case PlayerAbility::kMagicScaffold:
 		if (!registry.Has<CreateMagicScaffoldTag>(e)) {
 			registry.AddComponent<CreateMagicScaffoldTag>(e);
+			if (auto* debug = registry.GetComponent<PlayerAbilityDebugComponent>(e)) {
+				debug->magicScaffold = true;
+			}
 			EnqueueOrShowLevelUpHint(registry, "MagicHint");
 		}
 		break;

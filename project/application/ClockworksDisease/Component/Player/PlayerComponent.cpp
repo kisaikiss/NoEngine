@@ -16,6 +16,12 @@ REFLECT_FIELD(infinityJump),
 REFLECT_ENUM_FIELD(state)
 REFLECT_STRUCT_END(PlayerComponent)
 
+REFLECT_STRUCT_BEGIN(PlayerAbilityDebugComponent, "Application")
+REFLECT_FIELD(highJump),
+REFLECT_FIELD(airDash),
+REFLECT_FIELD(magicScaffold)
+REFLECT_STRUCT_END(PlayerAbilityDebugComponent)
+
 REFLECT_STRUCT_BEGIN(PlayerMoveTransientComponent, "ApplicationTag")
 REFLECT_STRUCT_END(PlayerMoveTransientComponent)
 

@@ -30,6 +30,12 @@ struct PlayerComponent {
 	float coyoteTimer = 0.0f;
 };
 
+struct PlayerAbilityDebugComponent {
+	bool highJump = false;
+	bool airDash = false;
+	bool magicScaffold = false;
+};
+
 // PlayerJumpSystem / PlayerHorizontalMoveSystem / PlayerVerticalVelocitySystem の間で
 // フレーム内だけ受け渡す一時データ。
 // PlayerComponent（永続データ）とは意図的に分離している。

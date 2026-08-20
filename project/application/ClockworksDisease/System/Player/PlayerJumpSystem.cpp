@@ -39,9 +39,9 @@ void HandleHighJump(No::Registry& registry, No::Entity entity, PlayerComponent* 
 
 	const bool hasHighJumpTag = registry.Has<HighJumpTag>(entity);
 
+	constexpr float kHighJumpDrainRate = 10.0f;
 	if (No::InputIsPress("HighJump")) {
-		if (hasHighJumpTag && playerVariables->state == PlayerState::kHighJump && !isGrounded) {
-			constexpr float kHighJumpDrainRate = 10.0f;
+		if (hasHighJumpTag && playerVariables->state == PlayerState::kJump && !isGrounded) {
 			if (playerVariables->stamina > kHighJumpDrainRate * deltaTime) {
 				playerVariables->yVelocity = playerVariables->highJumpSpeed;
 				playerVariables->stamina -= kHighJumpDrainRate * deltaTime;
@@ -51,9 +51,11 @@ void HandleHighJump(No::Registry& registry, No::Entity entity, PlayerComponent* 
 
 	if (No::InputIsTrigger("HighJump") && hasHighJumpTag) {
 		if (isGrounded || playerVariables->infinityJump) {
-			playerVariables->yVelocity = playerVariables->highJumpSpeed;
-			transientState->justJumped = true;
-			groundState->isGrounded = false;
+			if (playerVariables->stamina > kHighJumpDrainRate * deltaTime) {
+				playerVariables->yVelocity = playerVariables->highJumpSpeed;
+				transientState->justJumped = true;
+				groundState->isGrounded = false;
+			}
 		}
 	}
 }

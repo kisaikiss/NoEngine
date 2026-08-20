@@ -25866,6 +25866,12 @@
                     "frequencyTime": 0.0,
                     "radius": 0.0
                 },
+                "PlayerAbilityDebugComponent": {
+                    "airDash": false,
+                    "all": false,
+                    "highJump": false,
+                    "magicScaffold": false
+                },
                 "PlayerComponent": {
                     "airDashSpeed": 10.0,
                     "coyoteTime": 0.30000001192092896,

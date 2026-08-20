@@ -5,6 +5,7 @@
 #include "../System/Player/PlayerJumpSystem.h"
 #include "../System/Player/PlayerHorizontalMoveSystem.h"
 #include "../System/Player/PlayerVerticalVelocitySystem.h"
+#include "../System/Player/PlayerAbilityDebugSystem.h"
 
 #include "../System/Camera/FollowCameraSystem.h"
 #include "../System/Game/CollisionEventSystem.h"
@@ -83,6 +84,7 @@ void GameScene::AddSystems() {
 	AddSystem(std::make_unique<BigPowerItemSystem>());
 	AddSystem(std::make_unique<PlayerLevelUpSystem>());
 	AddSystem(std::make_unique<LevelUISystem>());
+	AddSystem(std::make_unique<PlayerAbilityDebugSystem>());
 	AddSystem(std::make_unique<LevelUpTextSystem>());
 
 	AddSystem(std::make_unique<No::EffectEmitSystem>());

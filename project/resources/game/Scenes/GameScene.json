@@ -108,6 +108,20 @@
                 }
             }
         },
+        "GameProgress": {
+            "components": {
+                "EditTag": {
+                    "name": "GameProgress",
+                    "parent": null
+                },
+                "GameProgressComponent": {
+                    "collectedItemCount": 0,
+                    "elapsedTime": 0.0,
+                    "totalCounted": false,
+                    "totalItemCount": 0
+                }
+            }
+        },
         "GameSetting": {
             "components": {
                 "EditTag": {
@@ -813,6 +827,11 @@
                     "frequency": 0.15000000596046448,
                     "frequencyTime": 0.0758536159992218,
                     "radius": 0.0
+                },
+                "PlayerAbilityDebugComponent": {
+                    "airDash": true,
+                    "highJump": true,
+                    "magicScaffold": true
                 },
                 "PlayerComponent": {
                     "airDashSpeed": 10.0,
