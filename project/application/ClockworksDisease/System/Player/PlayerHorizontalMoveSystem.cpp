@@ -2,6 +2,7 @@
 #include "application/ClockworksDisease/Component/Player/PlayerComponent.h"
 #include "application/ClockworksDisease/Component/Camera/FollowCameraComponent.h"
 #include "application/ClockworksDisease/Component/Game/GoalDirectionComponent.h"
+#include "../../Component/Camera/CameraIntroComponent.h"
 
 namespace {
 
@@ -49,8 +50,15 @@ void PlayerHorizontalMoveSystem::Update(No::Registry& registry, float deltaTime)
 
 	auto view = registry.View<PlayerComponent, No::TransformComponent, No::VelocityComponent,
 		No::GroundStateComponent, PlayerMoveTransientComponent>();
+	
+	bool isSkip = false;
+	for (auto e : registry.View<No::TransformComponent, No::CameraComponent, FollowCameraComponent>()) {
+		if (registry.Has<CameraIntroLockTag>(e)) isSkip = true; // 演出中は操作できない
+	}
 
 	for (auto entity : view) {
+		if (isSkip) continue;
+
 		auto* transform = registry.GetComponent<No::TransformComponent>(entity);
 		auto* playerVariables = registry.GetComponent<PlayerComponent>(entity);
 		auto* velocity = registry.GetComponent<No::VelocityComponent>(entity);

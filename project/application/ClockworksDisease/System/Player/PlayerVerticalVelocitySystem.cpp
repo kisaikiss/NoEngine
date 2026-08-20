@@ -14,9 +14,7 @@ void PlayerVerticalVelocitySystem::Update(No::Registry& registry, float deltaTim
 		auto* transientState = registry.GetComponent<PlayerMoveTransientComponent>(entity);
 
 		if (registry.Has<GoalDirectionLockTag>(entity)) {
-			velocity->linear.y = 0.f;
 			particleEmitter->active = false;
-			continue; // ゴール演出中は重力も止める
 		}
 
 		const bool isGrounded = groundState->isGrounded;
