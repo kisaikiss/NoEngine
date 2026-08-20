@@ -923,11 +923,11 @@
                 },
                 "MeshComponent": {
                     "isVisible": true,
-                    "meshName": "resources/game/ClockworksDisease/Model/nagasawaGround/nagasawaGround.obj"
+                    "meshName": "resources/game/ClockworksDisease/Model/nagasawaGround02/nagasawaGround02.obj"
                 },
                 "NoClickSelectTag": null,
                 "StageComponent": {
-                    "stageColliderName": "resources/game/ClockworksDisease/Model/nagasawaGround/nagasawaGround.obj"
+                    "stageColliderName": "resources/game/ClockworksDisease/Model/nagasawaGround02/nagasawaGround02.obj"
                 },
                 "TerrainMesh": null,
                 "TransformComponent": {
