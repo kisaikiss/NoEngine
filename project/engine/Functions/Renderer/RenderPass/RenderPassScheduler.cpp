@@ -250,6 +250,7 @@ void CommonSetupRenderPass(RenderPassScheduler& renderPassScheduler) {
 	depthOfField->AddInput("InputColor", "PostEffect");
 	depthOfField->AddInput("InputDepth", "MainDepth");
 	depthOfField->AddOutput("MainColor");
+	depthOfField->SetFocusRange(60.0f);
 	renderPassScheduler.AddPass(std::move(depthOfField));
 
 	auto transparentMeshPass = std::make_unique<TransparentMeshPass>();

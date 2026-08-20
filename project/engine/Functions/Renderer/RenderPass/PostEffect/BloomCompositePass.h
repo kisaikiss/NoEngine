@@ -7,7 +7,7 @@ class BloomCompositePass : public RenderPass {
 public:
     void Execute(GraphicsContext& gfx, const RenderGraphRegistry& resourceRegistry, ECS::Registry& registry) override;
 private:
-    float intensity_ = 1.f;
+    float intensity_ = 3.f;
 };
 }
 }
