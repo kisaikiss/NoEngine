@@ -4,7 +4,8 @@
 #include "../../Component/Item/ItemComponent.h"
 #include "../../Component/Player/PlayerComponent.h"
 #include "../../Component/Game/GameProgressComponent.h"
-#include "GameResult.h"
+#include "../../Component/Game/GoalDirectionComponent.h"
+#include "engine/Editor/DataDriven/SceneSerializer.h"
 
 namespace {
 
@@ -15,19 +16,52 @@ void IncrementCollectedCount(No::Registry& registry, No::Entity item) {
 	}
 }
 
-void TriggerGameClear(No::Registry& registry) {
-	GameResult::Data result;
-	for (auto e : registry.View<GameProgressComponent>()) {
-		auto* progress = registry.GetComponent<GameProgressComponent>(e);
-		result.totalItemCount = progress->totalItemCount;
-		result.collectedItemCount = progress->collectedItemCount;
-		result.clearTime = progress->elapsedTime;
-	}
-	GameResult::Set(result);
+bool GoalDirectionInProgress(No::Registry& registry) {
+	auto view = registry.View<GoalDirectionComponent>();
+	return view.begin() != view.end();
+}
 
-	No::SceneChangeEvent sceneChangeEvent;
-	sceneChangeEvent.nextScene = "GameClearScene";
-	registry.EmitEvent(sceneChangeEvent);
+// ゴール接触時、即座にシーン遷移せず演出用のGoalDirectionComponentを生成して開始する。
+// 演出用カメラはシーンにあらかじめ配置しておき、GoalDirectorCameraTagで検索する。
+void StartGoalDirection(No::Registry& registry, No::Entity player, No::Entity goalItem) {
+
+	No::Entity directorCamera = No::INVALID_ENTITY;
+	for (auto e : registry.View<GoalDirectorCameraTag>()) {
+		directorCamera = e;
+	}
+
+	if (directorCamera == No::INVALID_ENTITY) return;
+
+	auto director = registry.GenerateEntity();
+	auto* dir = registry.AddComponent<GoalDirectionComponent>(director);
+	dir->directorCamera = directorCamera;
+	dir->goalEntity = goalItem;
+	dir->player = player;
+
+	// 演出用カメラへ主導権を渡す
+	if (directorCamera != No::INVALID_ENTITY) {
+		registry.AddComponent<No::ActiveCameraTag>(directorCamera);
+
+		// 再利用に備え、演出パスを最初から再生する
+		if (auto* camRoutine = registry.GetComponent<No::TransformRoutineComponent>(directorCamera)) {
+			camRoutine->currentIndex = 0;
+			camRoutine->elapsed = 0.0f;
+			camRoutine->playing = true;
+		}
+	}
+
+	// ゴールオブジェクト側の演出パスも同様に再生開始する(持っていなければ何もしない)
+	if (auto* goalRoutine = registry.GetComponent<No::TransformRoutineComponent>(goalItem)) {
+		goalRoutine->currentIndex = 0;
+		goalRoutine->elapsed = 0.0f;
+		goalRoutine->playing = true;
+	}
+
+	// プレイヤーの移動/ジャンプ/重力系Systemを止める
+	registry.AddComponent<GoalDirectionLockTag>(player);
+	if (auto* velocity = registry.GetComponent<No::VelocityComponent>(player)) {
+		velocity->linear = No::Vector3::ZERO;
+	}
 }
 
 } // namespace
@@ -37,10 +71,11 @@ void ItemGetSystem::Update(No::Registry& registry, float deltaTime) {
 
 	auto events = registry.PollAllEvents<ItemGetEvent>();
 	for (auto event : events) {
-		// ゴールアイテムなら他の処理より先にクリア判定する
+		// ゴールアイテムなら他の処理より先に演出を開始する(即座には遷移しない)
 		if (registry.Has<GoalItemTag>(event.item)) {
-			TriggerGameClear(registry);
-			registry.DestroyEntity(event.item);
+			if (!GoalDirectionInProgress(registry)) {
+				StartGoalDirection(registry, event.player, event.item);
+			}
 			continue;
 		}
 

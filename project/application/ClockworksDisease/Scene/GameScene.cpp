@@ -16,8 +16,6 @@
 #include "../System/Object/MagicScaffoldSystem.h"
 #include "../System/Camera/CameraIntroSystem.h"
 
-#include "../Component/Player/PlayerComponent.h"
-#include "../Component/Camera/FollowCameraComponent.h"
 #include "../Component/Stage/StageComponent.h"
 #include "../System/Game/CollisionLayer.h"
 #include "../System/Game/ColliderDrawSystem.h"
@@ -28,6 +26,7 @@
 #include "../System/UI/LevelUpTextSystem.h"
 #include "../System/Game/GameProgressInitSystem.h"
 #include "../System/Game/GameTimerSystem.h"
+#include "../System/Game/GoalDirectionSystem.h"
 #include "../Component/Game/GameProgressComponent.h"
 
 void GameScene::Setup() {
@@ -97,6 +96,7 @@ void GameScene::AddSystems() {
 	AddSystem(std::make_unique<PlatformRideSystem>());
 
 	AddSystem(std::make_unique<CameraIntroSystem>());
+	AddSystem(std::make_unique<GoalDirectionSystem>());
 
 	AddSystem(std::make_unique<ColliderDrawSystem>());
 	AddSystem(std::make_unique<No::DrawCameraFrustumSystem>());

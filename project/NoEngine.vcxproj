@@ -198,6 +198,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="application\ClockworksDisease\Component\Camera\CameraIntroComponent.cpp" />
     <ClCompile Include="application\ClockworksDisease\Component\Camera\FollowCameraComponent.cpp" />
     <ClCompile Include="application\ClockworksDisease\Component\Game\GameProgressComponent.cpp" />
+    <ClCompile Include="application\ClockworksDisease\Component\Game\GoalDirectionComponent.cpp" />
     <ClCompile Include="application\ClockworksDisease\Component\Item\ItemComponent.cpp" />
     <ClCompile Include="application\ClockworksDisease\Component\Option\EditorSettingComponent.cpp" />
     <ClCompile Include="application\ClockworksDisease\Component\Player\PlayerComponent.cpp" />
@@ -216,6 +217,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="application\ClockworksDisease\System\Game\GameProgressInitSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Game\GameResult.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Game\GameTimerSystem.cpp" />
+    <ClCompile Include="application\ClockworksDisease\System\Game\GoalDirectionSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Game\ItemGetSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Game\PlatformRideSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Object\BigPowerItemSystem.cpp" />
@@ -480,6 +482,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="application\ClockworksDisease\Component\Camera\FollowCameraComponent.h" />
     <ClInclude Include="application\ClockworksDisease\Component\Game\GameProgressComponent.h" />
     <ClInclude Include="application\ClockworksDisease\Component\Game\GameQuitEvent.h" />
+    <ClInclude Include="application\ClockworksDisease\Component\Game\GoalDirectionComponent.h" />
     <ClInclude Include="application\ClockworksDisease\Component\Item\ItemComponent.h" />
     <ClInclude Include="application\ClockworksDisease\Component\Option\EditorSettingComponent.h" />
     <ClInclude Include="application\ClockworksDisease\Component\Player\PlayerComponent.h" />
@@ -500,6 +503,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="application\ClockworksDisease\System\Game\GameProgressInitSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Game\GameResult.h" />
     <ClInclude Include="application\ClockworksDisease\System\Game\GameTimerSystem.h" />
+    <ClInclude Include="application\ClockworksDisease\System\Game\GoalDirectionSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Game\ItemGetSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Game\PlatformRideSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Object\BigPowerItemSystem.h" />

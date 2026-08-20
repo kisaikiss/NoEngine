@@ -283,6 +283,8 @@
     <ClCompile Include="application\ClockworksDisease\Component\UI\TitleUIComponent.cpp" />
     <ClCompile Include="engine\Functions\Scene\CircleScaleTransitionEffect.cpp" />
     <ClCompile Include="engine\Functions\Scene\FadeTransitionEffect.cpp" />
+    <ClCompile Include="application\ClockworksDisease\Component\Game\GoalDirectionComponent.cpp" />
+    <ClCompile Include="application\ClockworksDisease\System\Game\GoalDirectionSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -574,6 +576,8 @@
     <ClInclude Include="engine\Functions\Scene\ITransitionEffect.h" />
     <ClInclude Include="engine\Functions\Scene\CircleScaleTransitionEffect.h" />
     <ClInclude Include="engine\Functions\Scene\FadeTransitionEffect.h" />
+    <ClInclude Include="application\ClockworksDisease\Component\Game\GoalDirectionComponent.h" />
+    <ClInclude Include="application\ClockworksDisease\System\Game\GoalDirectionSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

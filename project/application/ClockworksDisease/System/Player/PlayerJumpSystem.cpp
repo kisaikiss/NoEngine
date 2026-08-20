@@ -2,6 +2,7 @@
 #include "application/ClockworksDisease/Component/Player/PlayerComponent.h"
 #include "application/ClockworksDisease/Component/UI/UserInterfaceComponent.h"
 #include "application/ClockworksDisease/Component/Player/PlayerMoveTags.h"
+#include "application/ClockworksDisease/Component/Game/GoalDirectionComponent.h"
 
 namespace {
 
@@ -123,6 +124,8 @@ void CreateScaffold(No::Registry& registry, No::Entity entity, PlayerComponent* 
 void PlayerJumpSystem::Update(No::Registry& registry, float deltaTime) {
 	auto view = registry.View<PlayerComponent, No::TransformComponent, No::GroundStateComponent, PlayerMoveTransientComponent>();
 	for (auto entity : view) {
+		if (registry.Has<GoalDirectionLockTag>(entity)) continue; // ゴール演出中は操作を受け付けない
+
 		auto* playerVariables = registry.GetComponent<PlayerComponent>(entity);
 		auto* groundState = registry.GetComponent<No::GroundStateComponent>(entity);
 		auto* transientState = registry.GetComponent<PlayerMoveTransientComponent>(entity);

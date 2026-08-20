@@ -2379,9 +2379,9 @@
                 },
                 "DebugCameraComponent": {
                     "center": [
-                        4.843104839324951,
-                        7.074129581451416,
-                        3.8885726928710938
+                        17.001476287841797,
+                        25.85938262939453,
+                        -8.002063751220703
                     ],
                     "distance": 9.015334129333496,
                     "drawCenter": false,
@@ -2396,10 +2396,10 @@
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
-                        0.039527904242277145,
-                        -0.9462452530860901,
-                        0.2949099838733673,
-                        0.1268288493156433
+                        0.3153475522994995,
+                        -0.5734648108482361,
+                        0.25392112135887146,
+                        0.7121924757957458
                     ],
                     "scale": [
                         1.0,
@@ -2407,9 +2407,9 @@
                         1.0
                     ],
                     "translate": [
-                        6.796800136566162,
-                        12.196109771728516,
-                        11.0457124710083
+                        22.921737670898438,
+                        32.53438949584961,
+                        -9.294754981994629
                     ]
                 }
             }
@@ -2543,6 +2543,94 @@
                         1.8793336153030396,
                         -8.720473289489746
                     ]
+                },
+                "TransformRoutineComponent": {
+                    "interpolation": "CatmullRom",
+                    "keyframes": [
+                        {
+                            "duration": 1.0,
+                            "easing": "Linear",
+                            "rotation": [
+                                0.0,
+                                0.0,
+                                0.0,
+                                1.0
+                            ],
+                            "scale": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ],
+                            "translate": [
+                                5.078206539154053,
+                                1.8793336153030396,
+                                -8.720473289489746
+                            ]
+                        },
+                        {
+                            "duration": 1.0,
+                            "easing": "Linear",
+                            "rotation": [
+                                0.0,
+                                0.0,
+                                0.0,
+                                1.0
+                            ],
+                            "scale": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ],
+                            "translate": [
+                                5.078206539154053,
+                                3.8872060775756836,
+                                -5.855531215667725
+                            ]
+                        },
+                        {
+                            "duration": 1.0,
+                            "easing": "Linear",
+                            "rotation": [
+                                0.0,
+                                0.0,
+                                0.0,
+                                1.0
+                            ],
+                            "scale": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ],
+                            "translate": [
+                                5.078206539154053,
+                                5.328679084777832,
+                                -8.532646179199219
+                            ]
+                        },
+                        {
+                            "duration": 1.0,
+                            "easing": "Linear",
+                            "rotation": [
+                                0.0,
+                                0.0,
+                                0.0,
+                                1.0
+                            ],
+                            "scale": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ],
+                            "translate": [
+                                5.078205585479736,
+                                3.9007182121276855,
+                                -11.170578956604004
+                            ]
+                        }
+                    ],
+                    "loop": false,
+                    "playbackSpeed": 1.0,
+                    "playing": false
                 }
             },
             "prefabInstance": "resources/game/Prefabs\\PowerItem.json"
@@ -2875,6 +2963,7 @@
                     "fov": 0.6499999761581421
                 },
                 "CameraIntroComponent": {
+                    "blackOutDuration": 0.5,
                     "fadeInDuration": 1.0,
                     "fadeOutDuration": 1.0,
                     "phase": "kPlayingRoutine",
@@ -2986,7 +3075,8 @@
                         }
                     ],
                     "loop": false,
-                    "playbackSpeed": 1.0
+                    "playbackSpeed": 1.0,
+                    "playing": true
                 }
             }
         },
@@ -25539,6 +25629,105 @@
                 }
             },
             "prefabInstance": "resources/game/Prefabs\\directionalLight.json"
+        },
+        "goalCamera": {
+            "components": {
+                "CameraComponent": {
+                    "fov": 0.6499999761581421
+                },
+                "EditTag": {
+                    "name": "goalCamera",
+                    "parent": null
+                },
+                "GoalDirectorCameraTag": null,
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        -0.021264633163809776,
+                        0.9552168250083923,
+                        -0.28649961948394775,
+                        -0.07089830935001373
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        2.9213101863861084,
+                        8.724297523498535,
+                        5.313185214996338
+                    ]
+                },
+                "TransformRoutineComponent": {
+                    "interpolation": "CatmullRom",
+                    "keyframes": [
+                        {
+                            "duration": 1.0,
+                            "easing": "EaseInExpo",
+                            "rotation": [
+                                0.04345410317182541,
+                                0.9223889112472534,
+                                -0.3680356740951538,
+                                0.10890436917543411
+                            ],
+                            "scale": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ],
+                            "translate": [
+                                2.9213101863861084,
+                                8.724297523498535,
+                                -0.9972100257873535
+                            ]
+                        },
+                        {
+                            "duration": 1.0,
+                            "easing": "Linear",
+                            "rotation": [
+                                0.29878106713294983,
+                                0.7881103754043579,
+                                -0.19076935946941376,
+                                0.503208577632904
+                            ],
+                            "scale": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ],
+                            "translate": [
+                                -1.2944698333740234,
+                                8.724297523498535,
+                                -5.006221294403076
+                            ]
+                        },
+                        {
+                            "duration": 4.0,
+                            "easing": "EaseOutSine",
+                            "rotation": [
+                                0.18688176572322845,
+                                0.19894398748874664,
+                                0.10442224889993668,
+                                0.9563432931900024
+                            ],
+                            "scale": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ],
+                            "translate": [
+                                1.313779354095459,
+                                16.560850143432617,
+                                -25.187353134155273
+                            ]
+                        }
+                    ],
+                    "loop": false,
+                    "playbackSpeed": 1.0,
+                    "playing": true
+                }
+            }
         },
         "player": {
             "components": {

@@ -1,6 +1,7 @@
 #include "PlayerHorizontalMoveSystem.h"
 #include "application/ClockworksDisease/Component/Player/PlayerComponent.h"
 #include "application/ClockworksDisease/Component/Camera/FollowCameraComponent.h"
+#include "application/ClockworksDisease/Component/Game/GoalDirectionComponent.h"
 
 namespace {
 
@@ -57,6 +58,14 @@ void PlayerHorizontalMoveSystem::Update(No::Registry& registry, float deltaTime)
 		auto* particleEmitterSphere = registry.GetComponent<No::ParticleEmitterSphereComponent>(entity);
 		auto* particleEmitter = registry.GetComponent<No::ParticleEmitterComponent>(entity);
 		auto* transientState = registry.GetComponent<PlayerMoveTransientComponent>(entity);
+
+		if (registry.Has<GoalDirectionLockTag>(entity)) {
+			velocity->linear = No::Vector3::ZERO;
+			transientState->slopeY = 0.f;
+			if (particleEmitterSphere) particleEmitterSphere->active = false;
+			if (particleEmitter) particleEmitter->active = false;
+			continue;
+		}
 
 		velocity->linear = No::Vector3::ZERO;
 

@@ -1,5 +1,6 @@
 #include "PlayerVerticalVelocitySystem.h"
 #include "application/ClockworksDisease/Component/Player/PlayerComponent.h"
+#include "application/ClockworksDisease/Component/Game/GoalDirectionComponent.h"
 
 void PlayerVerticalVelocitySystem::Update(No::Registry& registry, float deltaTime) {
 	auto view = registry.View<PlayerComponent, No::VelocityComponent, No::GroundStateComponent,
@@ -11,6 +12,12 @@ void PlayerVerticalVelocitySystem::Update(No::Registry& registry, float deltaTim
 		auto* groundState = registry.GetComponent<No::GroundStateComponent>(entity);
 		auto* particleEmitter = registry.GetComponent<No::ParticleEmitterSphereComponent>(entity);
 		auto* transientState = registry.GetComponent<PlayerMoveTransientComponent>(entity);
+
+		if (registry.Has<GoalDirectionLockTag>(entity)) {
+			velocity->linear.y = 0.f;
+			particleEmitter->active = false;
+			continue; // ゴール演出中は重力も止める
+		}
 
 		const bool isGrounded = groundState->isGrounded;
 		const bool justJumped = transientState->justJumped;

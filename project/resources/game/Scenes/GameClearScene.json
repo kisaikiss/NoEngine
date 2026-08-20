@@ -4,18 +4,18 @@
             "components": {
                 "EditTag": {
                     "name": "ClearMinutes",
-                    "parent": null
+                    "parent": "clearTime"
                 },
                 "Transform2DComponent": {
-                    "parent": null,
+                    "parent": "clearTime",
                     "rotation": 0.0,
                     "scale": [
                         1.0,
                         1.0
                     ],
                     "translate": [
-                        243.8095703125,
-                        246.857177734375
+                        0.0,
+                        0.0
                     ]
                 }
             }
@@ -24,18 +24,18 @@
             "components": {
                 "EditTag": {
                     "name": "ClearSeconds",
-                    "parent": null
+                    "parent": "clearTime"
                 },
                 "Transform2DComponent": {
-                    "parent": null,
+                    "parent": "clearTime",
                     "rotation": 0.0,
                     "scale": [
                         1.0,
                         1.0
                     ],
                     "translate": [
-                        332.1905212402344,
-                        243.80950927734375
+                        103.49711608886719,
+                        0.0
                     ]
                 }
             }
@@ -82,6 +82,26 @@
                 }
             }
         },
+        "Items": {
+            "components": {
+                "EditTag": {
+                    "name": "Items",
+                    "parent": null
+                },
+                "Transform2DComponent": {
+                    "parent": null,
+                    "rotation": 0.0,
+                    "scale": [
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        315.00738525390625,
+                        99.32502746582031
+                    ]
+                }
+            }
+        },
         "MainCamera": {
             "components": {
                 "ActiveCameraTag": null,
@@ -113,10 +133,10 @@
                 }
             }
         },
-        "collected": {
+        "clearTime": {
             "components": {
                 "EditTag": {
-                    "name": "collected",
+                    "name": "clearTime",
                     "parent": null
                 },
                 "Transform2DComponent": {
@@ -127,8 +147,240 @@
                         1.0
                     ],
                     "translate": [
-                        209.99526977539063,
-                        176.76190185546875
+                        351.9374084472656,
+                        176.50570678710938
+                    ]
+                }
+            }
+        },
+        "collected": {
+            "components": {
+                "EditTag": {
+                    "name": "collected",
+                    "parent": "Items"
+                },
+                "Transform2DComponent": {
+                    "parent": "Items",
+                    "rotation": 0.0,
+                    "scale": [
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "colon": {
+            "components": {
+                "EditTag": {
+                    "name": "colon",
+                    "parent": "clearTime"
+                },
+                "SpriteComponent": {
+                    "anchor": [
+                        0.0,
+                        0.0
+                    ],
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "fill": 0.0,
+                    "flipX": false,
+                    "flipY": false,
+                    "isVisible": true,
+                    "layer": 0,
+                    "maskTextureName": "",
+                    "nonRenderAngle": 0.0,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "space": "World",
+                    "textureName": "colon",
+                    "useMask": false,
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "parent": "clearTime",
+                    "rotation": 0.0,
+                    "scale": [
+                        50.0,
+                        50.0
+                    ],
+                    "translate": [
+                        68.3828125,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "powerText": {
+            "components": {
+                "EditTag": {
+                    "name": "powerText",
+                    "parent": "Items"
+                },
+                "SpriteComponent": {
+                    "anchor": [
+                        0.0,
+                        0.0
+                    ],
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "fill": 0.0,
+                    "flipX": false,
+                    "flipY": false,
+                    "isVisible": true,
+                    "layer": 0,
+                    "maskTextureName": "",
+                    "nonRenderAngle": 0.0,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "space": "World",
+                    "textureName": "powerText",
+                    "useMask": false,
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "parent": "Items",
+                    "rotation": 0.0,
+                    "scale": [
+                        179.20001220703125,
+                        44.80000305175781
+                    ],
+                    "translate": [
+                        -124.3922119140625,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "slash": {
+            "components": {
+                "EditTag": {
+                    "name": "slash",
+                    "parent": "Items"
+                },
+                "SpriteComponent": {
+                    "anchor": [
+                        0.0,
+                        0.0
+                    ],
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "fill": 0.0,
+                    "flipX": false,
+                    "flipY": false,
+                    "isVisible": true,
+                    "layer": 0,
+                    "maskTextureName": "",
+                    "nonRenderAngle": 0.0,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "space": "World",
+                    "textureName": "slash",
+                    "useMask": false,
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "parent": "Items",
+                    "rotation": 0.28420236706733704,
+                    "scale": [
+                        50.0,
+                        53.76000213623047
+                    ],
+                    "translate": [
+                        92.47988891601563,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "timeText": {
+            "components": {
+                "EditTag": {
+                    "name": "timeText",
+                    "parent": "clearTime"
+                },
+                "SpriteComponent": {
+                    "anchor": [
+                        0.0,
+                        0.0
+                    ],
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "fill": 0.0,
+                    "flipX": false,
+                    "flipY": false,
+                    "isVisible": true,
+                    "layer": 0,
+                    "maskTextureName": "",
+                    "nonRenderAngle": 0.0,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "space": "World",
+                    "textureName": "timeText",
+                    "useMask": false,
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "parent": "clearTime",
+                    "rotation": 0.0,
+                    "scale": [
+                        179.20001220703125,
+                        44.80000305175781
+                    ],
+                    "translate": [
+                        -124.3922119140625,
+                        0.0
                     ]
                 }
             }
@@ -137,18 +389,18 @@
             "components": {
                 "EditTag": {
                     "name": "total",
-                    "parent": null
+                    "parent": "Items"
                 },
                 "Transform2DComponent": {
-                    "parent": null,
+                    "parent": "Items",
                     "rotation": 0.0,
                     "scale": [
                         1.0,
                         1.0
                     ],
                     "translate": [
-                        330.6667175292969,
-                        179.80953979492188
+                        120.7474365234375,
+                        0.0
                     ]
                 }
             }
