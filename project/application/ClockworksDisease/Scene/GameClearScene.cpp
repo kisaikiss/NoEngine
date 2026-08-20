@@ -75,6 +75,14 @@ void GameClearScene::Setup() {
 	}
 }
 
+void GameClearScene::NotSystemUpdate() {
+	if (No::InputIsTrigger("Choise")) {
+		No::SceneChangeEvent sceneChangeEvent;
+		sceneChangeEvent.nextScene = "TitleScene";
+		GetRegistry()->EmitEvent(sceneChangeEvent);
+	}
+}
+
 void GameClearScene::AddSystems() {
 	AddSystem(std::make_unique<No::EditSystem>());
 

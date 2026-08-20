@@ -12,7 +12,7 @@ void ClockworksDisease::Startup(void) {
 	RegisterScene("GameScene", []() { return std::make_unique<GameScene>();	});
 	RegisterScene("TitleScene", []() { return std::make_unique<TitleScene>();	});
 	RegisterScene("GameClearScene", []() {return std::make_unique<GameClearScene>(); });
-	ChangeScene("GameScene");
+	ChangeScene("TitleScene");
 
 	No::InputBindAction("Up", No::DeviceType::Keyboard, static_cast<int>('W'));
 	No::InputBindAction("Up", No::DeviceType::Keyboard, static_cast<int>(VK_UP));

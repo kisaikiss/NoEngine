@@ -22,6 +22,7 @@ struct PlayerComponent {
 	float maxStamina = 0.0f;
  	No::Vector3 groundNormal = No::Vector3::UP;
 	bool infinityJump = false;
+	bool infinityStamina = false;
 	bool canCreateScaffold = true;
 	PlayerState state = PlayerState::kWait;
 

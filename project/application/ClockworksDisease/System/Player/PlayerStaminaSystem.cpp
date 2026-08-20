@@ -17,5 +17,13 @@ void PlayerStaminaSystem::Update(No::Registry& registry, float deltaTime) {
 		if (stamina > maxStamina) {
 			stamina = maxStamina;
 		}
+
+#ifdef USE_IMGUI
+		if (playerVariables->infinityStamina) {
+			stamina = FLT_MAX;
+		}
+#endif // USE_IMGUI
+
+	
 	}
 }

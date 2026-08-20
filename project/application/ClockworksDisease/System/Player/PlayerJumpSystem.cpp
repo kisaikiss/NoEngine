@@ -70,7 +70,6 @@ void HandleAirDash(No::Registry& registry, No::Entity entity, PlayerComponent* p
 	}
 
 	if (playerVariables->stamina <= playerVariables->airDashStaminaCostRate * deltaTime) {
-		playerVariables->yVelocity = 0.0f;
 		return;
 	}
 

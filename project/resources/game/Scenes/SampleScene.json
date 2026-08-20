@@ -712,184 +712,6 @@
             },
             "prefabInstance": "resources/game/Prefabs\\BigPowerItem.json"
         },
-        "BigPowerItem_13": {
-            "components": {
-                "BigPowerItemComponent": {
-                    "grantPower": 5
-                },
-                "CollectibleItemTag": null,
-                "CollisionLayerComponent": {
-                    "layer": "Item"
-                },
-                "EditTag": {
-                    "name": "BigPowerItem_13",
-                    "parent": null
-                },
-                "EffectEmitModeSphereTag": null,
-                "EffectEmitterComponent": {
-                    "color": [
-                        1.0,
-                        0.0,
-                        1.0,
-                        1.0
-                    ],
-                    "count": 200,
-                    "emitRange": [
-                        0.0,
-                        0.0,
-                        0.0
-                    ],
-                    "maxLifeTime": 2.0,
-                    "maxRotate": 3.1415927410125732,
-                    "maxScale": [
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "maxSpeed": [
-                        4.0,
-                        2.0,
-                        0.5
-                    ],
-                    "minLifeTime": 1.0,
-                    "minRotate": 0.0,
-                    "minScale": [
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "minSpeed": [
-                        4.0,
-                        0.0,
-                        -0.5
-                    ],
-                    "textureName": "getBigItem"
-                },
-                "MaterialComponent": {
-                    "blendMode": "kAdd",
-                    "color": [
-                        2.0999999046325684,
-                        2.0,
-                        2.0,
-                        1.0
-                    ],
-                    "drawOutline": false,
-                    "edgeColor": [
-                        0.5,
-                        0.0,
-                        1.0,
-                        1.0
-                    ],
-                    "emissiveIntensity": 1.0,
-                    "enviromentCoefficient": 0.8999999761581421,
-                    "noiseScrollSpeed": 0.30000001192092896,
-                    "noiseTextureName": "resources/engine/Texture/noise/Noise_Gradients/T_Random_22.png",
-                    "renderMode": "kEmissive",
-                    "rimPower": 2.0,
-                    "shininess": 60.0,
-                    "uvPosition": [
-                        0.0,
-                        0.0
-                    ],
-                    "uvRotate": 0.0,
-                    "uvScale": [
-                        1.0,
-                        1.0
-                    ]
-                },
-                "MeshComponent": {
-                    "isVisible": true,
-                    "meshName": "power"
-                },
-                "ParticleEmitterComponent": {
-                    "active": false,
-                    "color": [
-                        1.0,
-                        0.0,
-                        1.0,
-                        1.0
-                    ],
-                    "count": 10,
-                    "emitRange": [
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "frequency": 0.10000000149011612,
-                    "localPosition": [
-                        0.0,
-                        0.0,
-                        0.0
-                    ],
-                    "maxCount": 100,
-                    "maxLifeTime": 1.899999976158142,
-                    "maxScale": [
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "maxSpeed": [
-                        1.0,
-                        -1.0,
-                        1.0
-                    ],
-                    "minLifeTime": 0.699999988079071,
-                    "minScale": [
-                        0.0,
-                        0.0,
-                        0.0
-                    ],
-                    "minSpeed": [
-                        -1.0,
-                        -2.0,
-                        -1.0
-                    ],
-                    "textureName": "getEffect"
-                },
-                "PointLightComponent": {
-                    "color": [
-                        1.0,
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "decay": 1.5,
-                    "intensity": 1.0,
-                    "radius": 5.199999809265137
-                },
-                "PrefabInstanceTag": {
-                    "prefabPath": "resources/game/Prefabs\\BigPowerItem.json"
-                },
-                "SphereCollider": {
-                    "localCenter": [
-                        0.0,
-                        0.0,
-                        0.0
-                    ],
-                    "radius": 0.699999988079071
-                },
-                "TransformComponent": {
-                    "parent": null,
-                    "rotation": [
-                        0.0,
-                        0.0,
-                        0.0,
-                        1.0
-                    ],
-                    "scale": [
-                        2.0,
-                        2.0,
-                        2.0
-                    ],
-                    "translate": [
-                        8.937601089477539,
-                        1.3048408031463623,
-                        -6.238738059997559
-                    ]
-                }
-            },
-            "prefabInstance": "resources/game/Prefabs\\BigPowerItem.json"
-        },
         "BigPowerItem_2": {
             "components": {
                 "BigPowerItemComponent": {
@@ -2379,9 +2201,9 @@
                 },
                 "DebugCameraComponent": {
                     "center": [
-                        17.001476287841797,
-                        25.85938262939453,
-                        -8.002063751220703
+                        24.620853424072266,
+                        39.87028503417969,
+                        -8.07309341430664
                     ],
                     "distance": 9.015334129333496,
                     "drawCenter": false,
@@ -2396,10 +2218,10 @@
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
-                        0.3153475522994995,
-                        -0.5734648108482361,
-                        0.25392112135887146,
-                        0.7121924757957458
+                        0.1335596889257431,
+                        0.8220911026000977,
+                        -0.2153521329164505,
+                        0.5098544359207153
                     ],
                     "scale": [
                         1.0,
@@ -2407,9 +2229,9 @@
                         1.0
                     ],
                     "translate": [
-                        22.921737670898438,
-                        32.53438949584961,
-                        -9.294754981994629
+                        17.581960678100586,
+                        44.29023361206055,
+                        -4.581058502197266
                     ]
                 }
             }
@@ -2427,6 +2249,21 @@
                     "totalItemCount": 0
                 }
             }
+        },
+        "GameSetting": {
+            "components": {
+                "EditTag": {
+                    "name": "GameSetting",
+                    "parent": null
+                },
+                "EditorSettingComponent": {
+                    "drawCollider": false
+                },
+                "PrefabInstanceTag": {
+                    "prefabPath": "resources/game/Prefabs\\GameSetting.json"
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\GameSetting.json"
         },
         "GoalItem": {
             "components": {
@@ -2523,7 +2360,7 @@
                         0.0,
                         0.0
                     ],
-                    "radius": 0.800000011920929
+                    "radius": 1.0
                 },
                 "TransformComponent": {
                     "parent": null,
@@ -2534,14 +2371,14 @@
                         1.0
                     ],
                     "scale": [
-                        1.779999852180481,
-                        1.779999852180481,
-                        1.779999852180481
+                        3.4353997707366943,
+                        3.4353997707366943,
+                        3.4353997707366943
                     ],
                     "translate": [
-                        5.078206539154053,
-                        1.8793336153030396,
-                        -8.720473289489746
+                        52.6883544921875,
+                        32.39221954345703,
+                        -22.512144088745117
                     ]
                 },
                 "TransformRoutineComponent": {
@@ -2967,7 +2804,7 @@
                     "fadeInDuration": 1.0,
                     "fadeOutDuration": 1.0,
                     "phase": "kPlayingRoutine",
-                    "playInEditor": false
+                    "playInEditor": true
                 },
                 "CameraIntroLockTag": null,
                 "EditTag": {
@@ -3055,7 +2892,7 @@
                         },
                         {
                             "duration": 4.0,
-                            "easing": "EaseOutSine",
+                            "easing": "Linear",
                             "rotation": [
                                 0.19475926458835602,
                                 0.8886783719062805,
@@ -3071,6 +2908,66 @@
                                 -14.141661643981934,
                                 17.567790985107422,
                                 -0.9972100257873535
+                            ]
+                        },
+                        {
+                            "duration": 5.5,
+                            "easing": "Linear",
+                            "rotation": [
+                                -1.2508095892371784e-07,
+                                0.736232578754425,
+                                -1.2508095892371784e-07,
+                                0.6767285466194153
+                            ],
+                            "scale": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ],
+                            "translate": [
+                                -22.945716857910156,
+                                30.253156661987305,
+                                5.5638041496276855
+                            ]
+                        },
+                        {
+                            "duration": 5.900000095367432,
+                            "easing": "Linear",
+                            "rotation": [
+                                2.7561250703911355e-07,
+                                0.842140793800354,
+                                2.7561250703911355e-07,
+                                0.5392576456069946
+                            ],
+                            "scale": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ],
+                            "translate": [
+                                1.6731464862823486,
+                                37.85794448852539,
+                                3.7106773853302
+                            ]
+                        },
+                        {
+                            "duration": 3.799999952316284,
+                            "easing": "EaseOutSine",
+                            "rotation": [
+                                0.04206587374210358,
+                                0.8581923246383667,
+                                -0.06708835810422897,
+                                0.5071837902069092
+                            ],
+                            "scale": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ],
+                            "translate": [
+                                27.162565231323242,
+                                37.85794448852539,
+                                -9.315659523010254
                             ]
                         }
                     ],
@@ -9752,7 +9649,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_14_2",
-                    "parent": null
+                    "parent": "powerItems"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -25643,10 +25540,10 @@
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
-                        -0.021264633163809776,
-                        0.9552168250083923,
-                        -0.28649961948394775,
-                        -0.07089830935001373
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
                     ],
                     "scale": [
                         1.0,
@@ -25654,42 +25551,22 @@
                         1.0
                     ],
                     "translate": [
-                        2.9213101863861084,
-                        8.724297523498535,
-                        5.313185214996338
+                        43.21251678466797,
+                        39.031246185302734,
+                        -14.545406341552734
                     ]
                 },
                 "TransformRoutineComponent": {
                     "interpolation": "CatmullRom",
                     "keyframes": [
                         {
-                            "duration": 1.0,
-                            "easing": "EaseInExpo",
-                            "rotation": [
-                                0.04345410317182541,
-                                0.9223889112472534,
-                                -0.3680356740951538,
-                                0.10890436917543411
-                            ],
-                            "scale": [
-                                1.0,
-                                1.0,
-                                1.0
-                            ],
-                            "translate": [
-                                2.9213101863861084,
-                                8.724297523498535,
-                                -0.9972100257873535
-                            ]
-                        },
-                        {
-                            "duration": 1.0,
+                            "duration": 2.9000000953674316,
                             "easing": "Linear",
                             "rotation": [
-                                0.29878106713294983,
-                                0.7881103754043579,
-                                -0.19076935946941376,
-                                0.503208577632904
+                                -2.390406734775752e-07,
+                                0.7248988151550293,
+                                -2.390406734775752e-07,
+                                0.6888553500175476
                             ],
                             "scale": [
                                 1.0,
@@ -25697,19 +25574,19 @@
                                 1.0
                             ],
                             "translate": [
-                                -1.2944698333740234,
-                                8.724297523498535,
-                                -5.006221294403076
+                                38.36106872558594,
+                                34.017940521240234,
+                                -22.902660369873047
                             ]
                         },
                         {
-                            "duration": 4.0,
-                            "easing": "EaseOutSine",
+                            "duration": 6.0,
+                            "easing": "Linear",
                             "rotation": [
-                                0.18688176572322845,
-                                0.19894398748874664,
-                                0.10442224889993668,
-                                0.9563432931900024
+                                -0.13882650434970856,
+                                0.6951744556427002,
+                                0.13812300562858582,
+                                0.691651463508606
                             ],
                             "scale": [
                                 1.0,
@@ -25717,9 +25594,29 @@
                                 1.0
                             ],
                             "translate": [
-                                1.313779354095459,
-                                16.560850143432617,
-                                -25.187353134155273
+                                32.01899337768555,
+                                23.153358459472656,
+                                -22.902660369873047
+                            ]
+                        },
+                        {
+                            "duration": 5.699999809265137,
+                            "easing": "Linear",
+                            "rotation": [
+                                -0.25345128774642944,
+                                0.68621426820755,
+                                0.23622801899909973,
+                                0.6395847201347351
+                            ],
+                            "scale": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ],
+                            "translate": [
+                                13.875181198120117,
+                                5.878347873687744,
+                                -22.902660369873047
                             ]
                         }
                     ],
@@ -25868,16 +25765,17 @@
                 },
                 "PlayerAbilityDebugComponent": {
                     "airDash": false,
-                    "all": false,
                     "highJump": false,
                     "magicScaffold": false
                 },
                 "PlayerComponent": {
                     "airDashSpeed": 10.0,
+                    "airDashStaminaCostRate": 2.0,
                     "coyoteTime": 0.30000001192092896,
                     "coyoteTimer": 0.0,
                     "doubleJumpSpeed": 4.0,
                     "gravity": -7.0,
+                    "highJumpCostRate": 10.0,
                     "highJumpSpeed": 10.0,
                     "infinityJump": false,
                     "jumpSpeed": 5.5,

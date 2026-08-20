@@ -47,11 +47,11 @@
                 },
                 "DebugCameraComponent": {
                     "center": [
-                        0.0,
-                        0.0,
-                        0.0
+                        13.689900398254395,
+                        -29.33198356628418,
+                        35.0646858215332
                     ],
-                    "distance": 2.0,
+                    "distance": 279.6287841796875,
                     "drawCenter": false,
                     "moveType": "kBlender",
                     "unityMoveSpeed": 10.0,
@@ -64,10 +64,10 @@
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
-                        -2.1855694143368964e-08,
-                        2.1855694143368964e-08,
-                        4.776713662911763e-16,
-                        1.0
+                        0.3353213965892792,
+                        0.5340462327003479,
+                        -0.24294467270374298,
+                        0.7371106147766113
                     ],
                     "scale": [
                         1.0,
@@ -75,9 +75,9 @@
                         1.0
                     ],
                     "translate": [
-                        -8.742277657347586e-08,
-                        -8.742277657347586e-08,
-                        -2.0
+                        -160.90283203125,
+                        181.45925903320313,
+                        -22.17770004272461
                     ]
                 }
             }
@@ -115,10 +115,10 @@
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
-                        0.0,
-                        0.0,
-                        0.0,
-                        1.0
+                        0.20920293033123016,
+                        0.8083311915397644,
+                        -0.1378801167011261,
+                        0.5327513217926025
                     ],
                     "scale": [
                         1.0,
@@ -126,9 +126,9 @@
                         1.0
                     ],
                     "translate": [
-                        0.0,
-                        0.0,
-                        0.0
+                        -41.50959777832031,
+                        33.72611618041992,
+                        16.98214340209961
                     ]
                 }
             }
@@ -225,6 +225,99 @@
                     ]
                 }
             }
+        },
+        "directionalLight": {
+            "components": {
+                "DirectionalLightComponent": {
+                    "color": [
+                        0.9608541131019592,
+                        0.9412624835968018,
+                        0.803561270236969,
+                        1.0
+                    ],
+                    "direction": [
+                        -0.22053782641887665,
+                        -0.7953571081161499,
+                        -0.5645974278450012
+                    ],
+                    "intensity": 1.0
+                },
+                "EditTag": {
+                    "name": "directionalLight",
+                    "parent": null
+                },
+                "PrefabInstanceTag": {
+                    "prefabPath": "resources/game/Prefabs\\directionalLight.json"
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\directionalLight.json"
+        },
+        "ground": {
+            "components": {
+                "EditTag": {
+                    "name": "ground",
+                    "parent": null
+                },
+                "MaterialComponent": {
+                    "blendMode": "kNormal",
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": true,
+                    "edgeColor": [
+                        0.1708185076713562,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "enviromentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "renderMode": "kDefault",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "SampleStage"
+                },
+                "PrefabInstanceTag": {
+                    "prefabPath": "resources/game/Prefabs\\girl.json"
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        1.0,
+                        0.0,
+                        -4.371138828673793e-08
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        2.0981467514502583e-06,
+                        2.0981467514502583e-06,
+                        0.0
+                    ]
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\girl.json"
         },
         "powerText": {
             "components": {
