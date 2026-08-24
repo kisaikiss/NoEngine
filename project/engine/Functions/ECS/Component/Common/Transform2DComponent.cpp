@@ -31,6 +31,17 @@ Math::Matrix4x4 Transform2DComponent::MakeAffineMatrix4x4(ECS::Registry& registr
     return result;
 }
 
+Math::Vector2 Transform2DComponent::GetWorldScale(ECS::Registry& registry) const {
+    Math::Vector2 result = scale;
+    if (parent != ECS::INVALID_ENTITY) {
+        if (auto* parentTransform = registry.GetComponent<Component::Transform2DComponent>(parent)) {
+            Math::Vector2 parentScale = parentTransform->GetWorldScale(registry);
+            return Math::Vector2(result.x * parentScale.x, result.y * parentScale.y);
+        }
+    }
+    return result;
+}
+
 
 }
 }

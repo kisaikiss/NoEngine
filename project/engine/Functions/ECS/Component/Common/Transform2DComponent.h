@@ -9,6 +9,7 @@ struct Transform2DComponent : public Transform2D {
 
 	Math::Matrix3x3 MakeAffineMatrix3x3(ECS::Registry& registry) const override;
 	Math::Matrix4x4 MakeAffineMatrix4x4(ECS::Registry& registry) const override;
+	Math::Vector2 GetWorldScale(ECS::Registry& registry) const;
 };
 }
 }

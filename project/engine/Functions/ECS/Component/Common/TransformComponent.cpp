@@ -13,6 +13,17 @@ Math::Matrix4x4 Component::TransformComponent::MakeAffineMatrix4x4(ECS::Registry
 
     return result;
 }
+
+Math::Vector3 Component::TransformComponent::GetWorldScale(ECS::Registry& registry) const {
+    Math::Vector3 result = scale;
+    if (parent != ECS::INVALID_ENTITY) {
+        if (auto* parentTransform = registry.GetComponent<Component::TransformComponent>(parent)) {
+            Math::Vector3 parentScale = parentTransform->GetWorldScale(registry);
+            return Math::Vector3(result.x * parentScale.x, result.y * parentScale.y, result.z * parentScale.z);
+        }
+    }
+    return result;
+}
 }
 
 REFLECT_STRUCT_BEGIN(NoEngine::Component::TransformComponent, "Transform")

@@ -94,9 +94,12 @@ void DrawWaypointRouteSystem2D::Update(Registry& registry, float deltaTime) {
 				routine->interpolation, parentWorld, kLineColor);
 		}
 		for (auto& kf : routine->keyframes) {
-			//Math::Vector2 worldPos = (kf.MakeAffineMatrix3x3(registry) * parentWorld).GetTranslate();
-			Math::Vector2 half = kf.scale * 0.5f;
-			DebugPrimitive::DrawCube2D(kf.MakeAffineMatrix3x3(registry).GetTranslate(), half, -half, Math::Color::RED);
+			// Transformの正しい世界座標系での値を取得するためにこの瞬間だけキーフレームに親を設定する
+			kf.parent = t->parent;
+			Math::Vector2 worldPos = kf.GetWorldPosition(registry);
+			Math::Vector2 half = kf.GetWorldScale(registry) * 0.5f;
+			kf.parent = INVALID_ENTITY;
+			DebugPrimitive::DrawCube2D(worldPos, half, -half, Math::Color::RED);
 		}
 	}
 }
