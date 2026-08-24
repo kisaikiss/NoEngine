@@ -14,10 +14,6 @@ using namespace Component;
 
 namespace {
 
-// DrawManipulatorSystem::GetParentWorld3Dと同じロジック。
-// TransformRoutineSystemはkeyframeの値をt->translate等へそのまま書き込むため、
-// keyframeはエンティティ自身の現在のワールド行列ではなく、t->translateと同じ空間＝
-// 親のワールド行列（親がなければ単位行列）を基準にした値として扱う必要がある。
 Math::Matrix4x4 GetParentWorld3D(Registry& registry, TransformComponent* t) {
 	if (t->parent != ECS::INVALID_ENTITY) {
 		if (auto* parentTransform = registry.GetComponent<TransformComponent>(t->parent)) {
@@ -28,7 +24,6 @@ Math::Matrix4x4 GetParentWorld3D(Registry& registry, TransformComponent* t) {
 }
 
 // ローカル(親基準)の点をparentWorldでワールド空間の点へ変換する。
-// 行ベクトル・行優先(row-major)前提。DrawManipulatorSystem::WorldToScreenと同じ規約。
 // 点の位置だけが欲しいので、並進成分を求める計算のみ行っている
 // (kf.MakeAffineMatrix4x4() * parentWorld からGetTranslate()するのと同じ結果になる)。
 Math::Vector3 TransformPointByParent(const Math::Vector3& localPoint, const Math::Matrix4x4& parentWorld) {
@@ -106,7 +101,7 @@ void DrawWaypointRouteSystem::Update(Registry& registry, float deltaTime) {
 				routine->interpolation, parentWorld, kLineColor);
 		}
 		for (auto& transform : routine->keyframes) {
-			DebugPrimitive::DrawCube(transform.GetWorldPosition(registry), transform.scale, transform.rotation, Math::Color::RED);
+			DebugPrimitive::DrawCube(TransformPointByParent(transform.translate, parentWorld), transform.scale, transform.rotation, Math::Color::RED);
 		}
 	}
 }

@@ -1,15 +1,16 @@
 #pragma once
 #include "engine/Math/MathInclude.h"
-#include "TransformComponent.h"
+#include "Transform2DComponent.h"
+
 namespace NoEngine {
-struct TransformKeyframe : public Component::TransformComponent {
+struct TransformKeyframe2D : public Component::Transform2DComponent {
     float      duration = 1.0f;           // このwaypointに到達するまでの秒数
     Easing::EasingType easing = Easing::EasingType::Linear; // 直前waypoint→このwaypointの速度カーブ
 };
 
 namespace Component {
-struct TransformRoutineComponent {
-    std::vector<TransformKeyframe> keyframes;
+struct TransformRoutineComponent2D {
+    std::vector<TransformKeyframe2D> keyframes;
     InterpolationType interpolation = InterpolationType::Linear;
     bool loop = true;
     bool playing = true;
@@ -20,5 +21,4 @@ struct TransformRoutineComponent {
     float elapsed = 0.0f;
 };
 }
-
 }

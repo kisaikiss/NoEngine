@@ -93,6 +93,7 @@ void GameScene::AddSystems() {
 
 	AddSystem(std::make_unique<No::CapturePlatformPrevTransformSystem>());
 	AddSystem(std::make_unique<No::TransformRoutineSystem>());
+	AddSystem(std::make_unique<No::TransformRoutineSystem2D>());
 	AddSystem(std::make_unique<No::MovementSystem>());
 	AddSystem(std::make_unique<No::ComputePlatformDeltaSystem>());
 	AddSystem(std::make_unique<PlatformRideSystem>());
@@ -109,6 +110,7 @@ void GameScene::AddSystems() {
 
 	AddSystem(std::make_unique<No::DrawManipulatorSystem>());
 	AddSystem(std::make_unique<No::DrawWaypointRouteSystem>());
+	AddSystem(std::make_unique<No::DrawWaypointRouteSystem2D>());
 	AddSystem(std::make_unique<No::DebugCameraSystem>());
 	AddSystem(std::make_unique<No::CameraSystem>());
 }

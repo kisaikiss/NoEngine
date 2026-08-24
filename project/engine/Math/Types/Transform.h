@@ -28,7 +28,7 @@ public:
 
 	virtual Math::Matrix4x4 MakeAffineMatrix4x4(ECS::Registry& registry) const;
 	virtual Math::Matrix4x4 MakeAffineMatrix4x4() const;
-	Math::Vector3 GetWorldPosition(ECS::Registry& registry) const;
+	virtual Math::Vector3 GetWorldPosition(ECS::Registry& registry) const;
 };
 
 

@@ -90,8 +90,7 @@ void DrawCameraFrustumSystem::Update(Registry& registry, float deltaTime) {
 			Math::Matrix4x4 parentWorld = GetParentWorld3D(registry, transform);
 
 			for (const auto& kf : routine->keyframes) {
-				// TransformKeyframeはTransformを継承しているのでMakeAffineMatrix4x4()がそのまま使える
-				Math::Matrix4x4 kfWorld = kf.MakeAffineMatrix4x4() * parentWorld;
+				Math::Matrix4x4 kfWorld = kf.MakeAffineMatrix4x4(registry) * parentWorld;
 				DrawFrustumLines(kfWorld, camera->nearClip, camera->farClip, camera->fov, camera->aspect, kKeyframeFrustumColor);
 			}
 		}

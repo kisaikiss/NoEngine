@@ -286,6 +286,9 @@
     <ClCompile Include="application\ClockworksDisease\Component\Game\GoalDirectionComponent.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Game\GoalDirectionSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Player\PlayerAbilityDebugSystem.cpp" />
+    <ClCompile Include="engine\Functions\ECS\Component\Common\TransformRoutineComponent2D.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\Animation\TransformRoutineSystem2D.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\Editor\DrawWaypointRouteSystem2D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -580,6 +583,10 @@
     <ClInclude Include="application\ClockworksDisease\Component\Game\GoalDirectionComponent.h" />
     <ClInclude Include="application\ClockworksDisease\System\Game\GoalDirectionSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Player\PlayerAbilityDebugSystem.h" />
+    <ClInclude Include="engine\Functions\ECS\Component\Common\TransformRoutineComponent2D.h" />
+    <ClInclude Include="engine\Math\TransformRoutineCurves2D.h" />
+    <ClInclude Include="engine\Functions\ECS\System\Animation\TransformRoutineSystem2D.h" />
+    <ClInclude Include="engine\Functions\ECS\System\Editor\DrawWaypointRouteSystem2D.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

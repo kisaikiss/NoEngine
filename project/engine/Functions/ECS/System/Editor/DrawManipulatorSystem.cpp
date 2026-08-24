@@ -534,7 +534,7 @@ void DrawManipulatorSystem::ManipulateRoutineWaypoints(Registry& registry, const
 				continue;
 			}
 			const auto& kf = routine->keyframes[i];
-			Math::Matrix4x4 kfWorld = kf.MakeAffineMatrix4x4() * parentWorld;
+			Math::Matrix4x4 kfWorld = kf.MakeAffineMatrix4x4(registry) * parentWorld;
 			Math::Vector3 worldPos = kfWorld.GetTranslate();
 
 			Math::Vector2 screenPos;
@@ -564,7 +564,7 @@ void DrawManipulatorSystem::ManipulateRoutineWaypoints(Registry& registry, const
 
 		// 選択中waypointだけギズモで編集する
 		auto& kf = routine->keyframes[sSelectedWaypointIndex];
-		Math::Matrix4x4 world = kf.MakeAffineMatrix4x4() * parentWorld;
+		Math::Matrix4x4 world = kf.MakeAffineMatrix4x4(registry) * parentWorld;
 
 		ImGuizmo::Manipulate(*(viewMatrix.m), *(projection.m), currentWaypointOp, ImGuizmo::WORLD, *(world.m));
 

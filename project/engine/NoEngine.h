@@ -8,6 +8,7 @@
 #include "Functions/ECS/Component/Common/TransformComponent.h"
 #include "Functions/ECS/Component/Common/Transform2DComponent.h"
 #include "Functions/ECS/Component/Common/TransformRoutineComponent.h"
+#include "Functions/ECS/Component/Common/TransformRoutineComponent2D.h"
 #include "Functions/ECS/Component/Asset/MaterialComponent.h"
 #include "Functions/ECS/Component/Asset/LightComponent.h"
 #include "Functions/ECS/Component/Common/CameraComponent.h"
@@ -43,6 +44,8 @@
 #include "Functions/ECS/System/Effect/ParticleEmitterSystem.h"
 #include "Functions/ECS/System/Movement/GroundResetSystem.h"
 #include "Functions/ECS/System/Effect/EffectEmitSystem.h"
+#include "Functions/ECS/System/Animation/TransformRoutineSystem2D.h"
+#include "Functions/ECS/System/Editor/DrawWaypointRouteSystem2D.h"
 
 #include "Assets/Audio/Audio.h"
 #include "Assets/AssetManager.h"
