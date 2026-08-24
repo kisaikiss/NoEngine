@@ -38,11 +38,11 @@ Matrix3x3 Inverse(Matrix3x3 const& matrix) {
 Matrix3x3 Multiply(Matrix3x3 const& matrix1, Matrix3x3 const& matrix2) {
 	Matrix3x3 result{};
 
-	for (int i = 0; i < 3; i++) {
-		for (int j = 0; j < 3; j++) {
-			for (int k = 0; k < 3; k++) {
-				result.m[i][j] += matrix1.m[i][k] * matrix2.m[k][j];
-			}
+	for (size_t row = 0; row < 3; row++) {
+		for (size_t col = 0; col < 3; col++) {
+			result.m[row][col] = matrix1.m[row][0] * matrix2.m[0][col] +
+				matrix1.m[row][1] * matrix2.m[1][col] +
+				matrix1.m[row][2] * matrix2.m[2][col];
 		}
 	}
 
