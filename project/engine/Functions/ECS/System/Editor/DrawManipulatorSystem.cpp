@@ -3,9 +3,9 @@
 #include "engine/Editor/EditTag.h"
 #include "engine/Editor/EditUtils.h"
 #include "engine/Editor/EditorCommandOperator.h"
-#include "engine/Functions/ECS/Component/Common/Transform2DComponent.h"
 #include "engine/Functions/ECS/Component/Asset/SpriteComponent.h"
 #include "engine/Functions/ECS/Component/Common/TransformRoutineComponent.h"
+#include "engine/Functions/ECS/Component/Common/TransformRoutineComponent2D.h"
 #include "engine/Functions/Command/EditCommand/ChangeValueCommand.h"
 #include "engine/Math/Types/Calculations/Matrix4x4Calculations.h"
 #include "engine/Runtime/GraphicsCore.h"
@@ -24,6 +24,7 @@ namespace ECS {
 namespace {
 bool sTriggerButton = false;
 int  sSelectedWaypointIndex = 0;    // 現在ギズモで掴んでいるwaypointの添字
+int  sSelectedWaypointIndex2D = 0; 
 }
 
 using namespace Editor;
@@ -41,7 +42,7 @@ void DrawManipulatorSystem::Update(Registry& registry, float deltaTime) {
 		Manipulate3D(registry, rect);
 		Manipulate2D(registry, rect);
 		ManipulateRoutineWaypoints(registry, rect);
-
+		ManipulateRoutineWaypoints2D(registry, rect);
 		});
 
 #else
@@ -56,6 +57,10 @@ bool DrawManipulatorSystem::TriggerManipulateButton() {
 
 void DrawManipulatorSystem::SetSelectWaypointIndex(int index) {
 	sSelectedWaypointIndex = index;
+}
+
+void DrawManipulatorSystem::SetSelectWaypointIndex2D(int index) {
+	sSelectedWaypointIndex2D = index;
 }
 
 void DrawManipulatorSystem::Manipulate3D(Registry& registry, const Math::Vector4& sceneRect) {
@@ -276,6 +281,26 @@ void DrawManipulatorSystem::Manipulate2D(Registry& registry, const Math::Vector4
 			sTriggerButton = true;
 		}
 
+		// TransformRoutineComponent2Dを持つエンティティは、自身のTransform編集と
+		// waypoint編集(ManipulateRoutineWaypoints2D)を切り替えられるようにする
+		bool hasRoutine2D = registry.Has<TransformRoutineComponent2D>(e);
+		if (hasRoutine2D) {
+			toolbarPos.y += buttonSizeY;
+			ImGui::SetCursorScreenPos(toolbarPos);
+			bool wasRouteEditMode2D = routineEditMode2D_;
+			if (wasRouteEditMode2D) ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.3f, 0.6f, 1.0f, 1.0f));
+			if (ImGui::Button("Route")) {
+				routineEditMode2D_ = !routineEditMode2D_;
+				sTriggerButton = true;
+			}
+			if (wasRouteEditMode2D) ImGui::PopStyleColor();
+		}
+
+		// waypoint編集モード中は、このエンティティ自体のTransformは動かさない
+		if (hasRoutine2D && routineEditMode2D_) {
+			continue;
+		}
+
 		auto* t = registry.GetComponent<Transform2DComponent>(e);
 		Math::Matrix4x4 m = t->MakeAffineMatrix4x4(registry);
 
@@ -420,6 +445,15 @@ bool DrawManipulatorSystem::GetActiveCamera3D(Registry& registry, Math::Matrix4x
 Math::Matrix4x4 DrawManipulatorSystem::GetParentWorld3D(Registry& registry, Component::TransformComponent* t) {
 	if (t->parent != ECS::INVALID_ENTITY) {
 		if (auto* parentTransform = registry.GetComponent<TransformComponent>(t->parent)) {
+			return parentTransform->MakeAffineMatrix4x4(registry);
+		}
+	}
+	return Math::Matrix4x4::IDENTITY;
+}
+
+Math::Matrix4x4 DrawManipulatorSystem::GetParentWorld2D(Registry& registry, Component::Transform2DComponent* t) {
+	if (t->parent != ECS::INVALID_ENTITY) {
+		if (auto* parentTransform = registry.GetComponent<Transform2DComponent>(t->parent)) {
 			return parentTransform->MakeAffineMatrix4x4(registry);
 		}
 	}
@@ -639,6 +673,230 @@ void DrawManipulatorSystem::ManipulateRoutineWaypoints(Registry& registry, const
 			if (!waypointIsActive_ && waypointIsActivePreFrame_) {
 				EditorCommandOperator::AddCommand(
 					std::make_unique<Command::ChangeValueCommand<Math::Vector3>>(&kf.scale, oldScale, kf.scale)
+				);
+			}
+			break;
+		}
+		}
+	}
+
+#else
+	static_cast<void>(registry);
+	static_cast<void>(sceneRect);
+#endif // USE_IMGUI
+}
+
+void DrawManipulatorSystem::ManipulateRoutineWaypoints2D(Registry& registry, const Math::Vector4& sceneRect) {
+#ifdef USE_IMGUI
+	if (!routineEditMode2D_) {
+		return;
+	}
+
+	ImGuizmo::SetOrthographic(true);
+
+	// --- Manipulate2Dと同じカメラ/空間セットアップ ---
+	auto cameraView = registry.View<DebugCamera2DComponent, Camera2DComponent, Transform2DComponent>();
+
+	Math::Matrix4x4 worldViewMatrix = Math::Matrix4x4::IDENTITY;
+	auto size = GraphicsCore::sWindowManager.GetMainWindow()->GetWindowSize();
+	Math::Matrix4x4 worldProjection = MathCalculations::MakeOrthographicMatrix(
+		0.f, 0.f, static_cast<float>(size.clientWidth), static_cast<float>(size.clientHeight), 0.1f, 100.f);
+	bool existCamera = false;
+	Math::Vector2 cameraSize = Math::Vector2::UNIT_SCALE;
+	for (auto e : cameraView) {
+		auto* camera = registry.GetComponent<Camera2DComponent>(e);
+		auto* transform = registry.GetComponent<Transform2DComponent>(e);
+		worldViewMatrix = transform->MakeAffineMatrix4x4(registry);
+		cameraSize = transform->scale;
+		size.clientHeight = static_cast<uint32_t>(camera->height);
+		size.clientWidth = static_cast<uint32_t>(camera->width);
+		worldProjection = camera->projection;
+		existCamera = true;
+	}
+	worldViewMatrix.Inverse();
+
+	auto windowSize = GraphicsCore::sWindowManager.GetMainWindow()->GetWindowSize();
+	Math::Matrix4x4 screenViewMatrix = Math::Matrix4x4::IDENTITY;
+	Math::Matrix4x4 screenProjection = MathCalculations::MakeOrthographicMatrix(
+		0.f, 0.f, static_cast<float>(windowSize.clientWidth), static_cast<float>(windowSize.clientHeight), 0.1f, 100.f);
+
+	waypointIsActivePreFrame2D_ = waypointIsActive2D_;
+
+	auto view = registry.View<TransformRoutineComponent2D, Transform2DComponent, EditTag, EditSelectedTag>();
+	for (auto e : view) {
+		auto* routine = registry.GetComponent<TransformRoutineComponent2D>(e);
+		auto* baseT = registry.GetComponent<Transform2DComponent>(e);
+		if (routine->keyframes.empty()) {
+			continue;
+		}
+
+		sSelectedWaypointIndex2D = std::clamp(
+			sSelectedWaypointIndex2D, 0, static_cast<int>(routine->keyframes.size()) - 1);
+
+		Math::Matrix4x4 parentWorld = GetParentWorld2D(registry, baseT);
+
+		// このエンティティ自身がScreen空間UIかどうかで、waypoint操作の基準空間を切り替える
+		auto* sprite = registry.GetComponent<SpriteComponent>(e);
+		bool isScreenSpace = sprite && sprite->space == SpriteSpace::Screen;
+
+		Math::Vector2 anchorOffset = { 0.f, 0.f };
+		if (isScreenSpace) {
+			anchorOffset.x = sprite->anchor.x * static_cast<float>(windowSize.clientWidth);
+			anchorOffset.y = sprite->anchor.y * static_cast<float>(windowSize.clientHeight);
+		}
+
+		const Math::Matrix4x4& viewMatrix = isScreenSpace ? screenViewMatrix : worldViewMatrix;
+		const Math::Matrix4x4& projection = isScreenSpace ? screenProjection : worldProjection;
+		Math::Matrix4x4 viewProjection = viewMatrix * projection;
+
+		float imgX = sceneRect.x;
+		float imgY = sceneRect.y;
+		constexpr float margin = 8.0f;
+		constexpr float buttonSizeY = 28.f;
+		constexpr float buttonSizeX = 28.f;
+
+		// waypoint番号ボタン列
+		ImVec2 waypointBarPos = ImVec2(imgX + margin, imgY + margin + buttonSizeY * 4 + margin);
+		ImGui::SetCursorScreenPos(waypointBarPos);
+		for (size_t i = 0; i < routine->keyframes.size(); ++i) {
+			if (i > 0) ImGui::SameLine();
+			ImGui::PushID(static_cast<int>(i));
+			bool isSelected = (static_cast<int>(i) == sSelectedWaypointIndex2D);
+			if (isSelected) ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.3f, 0.6f, 1.0f, 1.0f));
+			if (ImGui::Button(std::to_string(i).c_str(), ImVec2(buttonSizeX, buttonSizeY))) {
+				sSelectedWaypointIndex2D = static_cast<int>(i);
+			}
+			if (isSelected) ImGui::PopStyleColor();
+			ImGui::PopID();
+		}
+
+		// 選択中waypointの操作切り替え(T/R/S)
+		static ImGuizmo::OPERATION currentWaypointOp2D = ImGuizmo::TRANSLATE;
+		ImVec2 opBarPos = ImVec2(imgX + margin, imgY + margin + buttonSizeY * 4 + margin + buttonSizeY + margin);
+		ImGui::SetCursorScreenPos(opBarPos);
+		if (ImGui::Button("wT")) { currentWaypointOp2D = ImGuizmo::TRANSLATE; sTriggerButton = true; }
+		ImGui::SameLine();
+		if (ImGui::Button("wR")) { currentWaypointOp2D = ImGuizmo::ROTATE; sTriggerButton = true; }
+		ImGui::SameLine();
+		if (ImGui::Button("wS")) { currentWaypointOp2D = ImGuizmo::SCALE; sTriggerButton = true; }
+
+		// 非選択waypointはマーカーとして描画し、クリックで選択を切り替える
+		for (size_t i = 0; i < routine->keyframes.size(); ++i) {
+			if (static_cast<int>(i) == sSelectedWaypointIndex2D) continue;
+
+			const auto& kf = routine->keyframes[i];
+			Math::Matrix4x4 kfWorld = kf.MakeAffineMatrix4x4(registry) * parentWorld;
+			Math::Vector3 worldPos = kfWorld.GetTranslate();
+			if (isScreenSpace) {
+				worldPos.x += anchorOffset.x;
+				worldPos.y += anchorOffset.y;
+			} else if (existCamera) {
+				worldPos.x += static_cast<float>(size.clientWidth) / 2.f * cameraSize.x;
+				worldPos.y += static_cast<float>(size.clientHeight) / 2.f * cameraSize.y;
+			}
+
+			Math::Vector2 screenPos;
+			if (!WorldToScreen(worldPos, viewProjection, sceneRect, screenPos)) continue;
+
+			constexpr float kMarkerRadius = 6.0f;
+			bool insideSceneView =
+				screenPos.x >= sceneRect.x + kMarkerRadius && screenPos.x <= sceneRect.x + sceneRect.z - kMarkerRadius &&
+				screenPos.y >= sceneRect.y + kMarkerRadius && screenPos.y <= sceneRect.y + sceneRect.w - kMarkerRadius;
+			if (!insideSceneView) continue;
+
+			ImVec2 center(screenPos.x, screenPos.y);
+			ImGui::GetForegroundDrawList()->AddCircleFilled(center, 6.0f, IM_COL32(255, 200, 0, 255));
+
+			ImGui::SetCursorScreenPos(ImVec2(center.x - 8.0f, center.y - 8.0f));
+			ImGui::PushID(20000 + static_cast<int>(i));
+			if (ImGui::InvisibleButton("waypointMarker2D", ImVec2(16.0f, 16.0f))) {
+				sSelectedWaypointIndex2D = static_cast<int>(i);
+				sTriggerButton = true;
+			}
+			ImGui::PopID();
+		}
+
+		// 選択中waypointだけギズモで編集する
+		auto& kf = routine->keyframes[sSelectedWaypointIndex2D];
+		Math::Matrix4x4 world = kf.MakeAffineMatrix4x4(registry) * parentWorld;
+
+		if (isScreenSpace) {
+			world.m[3][0] += anchorOffset.x;
+			world.m[3][1] += anchorOffset.y;
+		} else if (existCamera) {
+			world.m[3][0] += static_cast<float>(size.clientWidth) / 2.f * cameraSize.x;
+			world.m[3][1] += static_cast<float>(size.clientHeight) / 2.f * cameraSize.y;
+		}
+
+		ImGuizmo::Manipulate(*(viewMatrix.m), *(projection.m), currentWaypointOp2D, ImGuizmo::WORLD, *(world.m));
+
+		if (isScreenSpace) {
+			world.m[3][0] -= anchorOffset.x;
+			world.m[3][1] -= anchorOffset.y;
+		} else if (existCamera) {
+			world.m[3][0] -= static_cast<float>(size.clientWidth) / 2.f * cameraSize.x;
+			world.m[3][1] -= static_cast<float>(size.clientHeight) / 2.f * cameraSize.y;
+		}
+
+		// world → 親のワールド行列基準のローカルへ変換（TransformRoutineSystem2Dが書き込む空間と揃える）
+		Math::Matrix4x4 parentInverse = parentWorld;
+		parentInverse.Inverse();
+		Math::Matrix4x4 local = world * parentInverse;
+
+		float translate[3];
+		float rotation[3];
+		float scale[3];
+		ImGuizmo::DecomposeMatrixToComponents(*(local.m), translate, rotation, scale);
+
+		static Math::Vector2 oldTranslate2D;
+		static float oldRotation2D;
+		static Math::Vector2 oldScale2D;
+
+		switch (currentWaypointOp2D) {
+		case ImGuizmo::TRANSLATE: {
+			if (ImGuizmo::IsUsing()) {
+				kf.translate.x = local.GetTranslate().x;
+				kf.translate.y = local.GetTranslate().y;
+				waypointIsActive2D_ = true;
+			} else {
+				waypointIsActive2D_ = false;
+			}
+			if (waypointIsActive2D_ && !waypointIsActivePreFrame2D_) oldTranslate2D = kf.translate;
+			if (!waypointIsActive2D_ && waypointIsActivePreFrame2D_) {
+				Editor::EditorCommandOperator::AddCommand(
+					std::make_unique<Command::ChangeValueCommand<Math::Vector2>>(&kf.translate, oldTranslate2D, kf.translate)
+				);
+			}
+			break;
+		}
+		case ImGuizmo::ROTATE: {
+			if (ImGuizmo::IsUsing()) {
+				constexpr float kDegreeToRadian = PI / 180.0f;
+				kf.rotation = rotation[2] * kDegreeToRadian; // Transform2Dの回転はZ軸まわりのfloat(ラジアン)
+				waypointIsActive2D_ = true;
+			} else {
+				waypointIsActive2D_ = false;
+			}
+			if (waypointIsActive2D_ && !waypointIsActivePreFrame2D_) oldRotation2D = kf.rotation;
+			if (!waypointIsActive2D_ && waypointIsActivePreFrame2D_) {
+				Editor::EditorCommandOperator::AddCommand(
+					std::make_unique<Command::ChangeValueCommand<float>>(&kf.rotation, oldRotation2D, kf.rotation)
+				);
+			}
+			break;
+		}
+		case ImGuizmo::SCALE: {
+			if (ImGuizmo::IsUsing()) {
+				kf.scale.x = scale[0];
+				kf.scale.y = scale[1];
+				waypointIsActive2D_ = true;
+			} else {
+				waypointIsActive2D_ = false;
+			}
+			if (waypointIsActive2D_ && !waypointIsActivePreFrame2D_) oldScale2D = kf.scale;
+			if (!waypointIsActive2D_ && waypointIsActivePreFrame2D_) {
+				Editor::EditorCommandOperator::AddCommand(
+					std::make_unique<Command::ChangeValueCommand<Math::Vector2>>(&kf.scale, oldScale2D, kf.scale)
 				);
 			}
 			break;
