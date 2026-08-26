@@ -104,6 +104,28 @@ void DebugPrimitive::DrawCube2D(const Vector2& center, const Vector2& max, const
 	Add2DLineInternal(p[3], p[0], color);
 }
 
+void DebugPrimitive::DrawCube2D(const Math::Vector2& center, const Math::Vector2& max, const Math::Vector2& min, float angle, const Math::Color& color) {
+	Vector2 localCorners[4] = {
+	{ min.x, min.y }, { max.x, min.y },
+	{ max.x, max.y }, { min.x, max.y },
+	};
+
+	float c = std::cos(angle);
+	float s = std::sin(angle);
+
+	Vector2 p[4];
+	for (int i = 0; i < 4; i++) {
+		float rx = localCorners[i].x * c - localCorners[i].y * s;
+		float ry = localCorners[i].x * s + localCorners[i].y * c;
+		p[i] = { center.x + rx, center.y + ry };
+	}
+
+	Add2DLineInternal(p[0], p[1], color);
+	Add2DLineInternal(p[1], p[2], color);
+	Add2DLineInternal(p[2], p[3], color);
+	Add2DLineInternal(p[3], p[0], color);
+}
+
 void DebugPrimitive::DrawSphere(const Vector3& center, float radius, const Color& color, uint32_t slices, uint32_t stacks) {
 	if (slices < 3) slices = 3;
 	if (stacks < 2) stacks = 2;

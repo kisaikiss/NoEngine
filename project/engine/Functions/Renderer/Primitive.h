@@ -56,6 +56,16 @@ public:
 	static void DrawCube2D(const Math::Vector2& center, const Math::Vector2& max, const Math::Vector2& min, const Math::Color& color);
 
 	/// <summary>
+	/// 2D空間にキューブ（四角形）を回転付きで描画する関数。
+	/// </summary>
+	/// <param name="center">図形の中心位置。</param>
+	/// <param name="max">図形の最大座標。</param>
+	/// <param name="min">図形の最小座標。</param>
+	/// <param name="angle">回転角度（ラジアン）。</param>
+	/// <param name="color">描画に使用する色。</param>
+	static void DrawCube2D(const Math::Vector2& center, const Math::Vector2& max, const Math::Vector2& min, float angle, const Math::Color& color);
+
+	/// <summary>
 	/// 球の描画
 	/// </summary>
 	/// <param name="center">中心座標</param>
