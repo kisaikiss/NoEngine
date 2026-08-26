@@ -42,6 +42,16 @@ Math::Vector2 Transform2DComponent::GetWorldScale(ECS::Registry& registry) const
     return result;
 }
 
+float Transform2DComponent::GetWorldRotation(ECS::Registry& registry) const {
+    float result = rotation;
+    if (parent != ECS::INVALID_ENTITY) {
+        if (auto* parentTransform = registry.GetComponent<Component::Transform2DComponent>(parent)) {
+            result += parentTransform->GetWorldRotation(registry);
+        }
+    }
+    return result;
+}
+
 
 }
 }

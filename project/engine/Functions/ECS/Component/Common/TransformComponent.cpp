@@ -24,6 +24,17 @@ Math::Vector3 Component::TransformComponent::GetWorldScale(ECS::Registry& regist
     }
     return result;
 }
+
+Math::Quaternion Component::TransformComponent::GetWorldRotation(ECS::Registry& registry) const {
+    Math::Quaternion result = rotation;
+    if (parent != ECS::INVALID_ENTITY) {
+        if (auto* parentTransform = registry.GetComponent<Component::TransformComponent>(parent)) {
+            Math::Quaternion parentRotation = parentTransform->GetWorldRotation(registry);
+            return result * parentRotation;
+        }
+    }
+    return result;
+}
 }
 
 REFLECT_STRUCT_BEGIN(NoEngine::Component::TransformComponent, "Transform")

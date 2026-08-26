@@ -116,8 +116,9 @@ void DrawWaypointRouteSystem2D::Update(Registry& registry, float deltaTime) {
 			kf.parent = t->parent;
 			Math::Vector2 worldPos = kf.GetWorldPosition(registry) + anchorOffset;
 			Math::Vector2 half = kf.GetWorldScale(registry) * 0.5f;
+			float rotate = kf.GetWorldRotation(registry);
 			kf.parent = INVALID_ENTITY;
-			DebugPrimitive::DrawCube2D(worldPos, half, -half, kf.rotation, Math::Color::RED);
+			DebugPrimitive::DrawCube2D(worldPos, half, -half, rotate, Math::Color::RED);
 		}
 	}
 }

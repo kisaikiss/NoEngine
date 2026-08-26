@@ -103,7 +103,7 @@ void DrawWaypointRouteSystem::Update(Registry& registry, float deltaTime) {
 		for (auto& transform : routine->keyframes) {
 			// Transformの正しい世界座標系での値を取得するためにこの瞬間だけキーフレームに親を設定する
 			transform.parent = t->parent;
-			DebugPrimitive::DrawCube(TransformPointByParent(transform.translate, parentWorld), transform.GetWorldScale(registry), transform.rotation, Math::Color::RED);
+			DebugPrimitive::DrawCube(TransformPointByParent(transform.translate, parentWorld), transform.GetWorldScale(registry), transform.GetWorldRotation(registry), Math::Color::RED);
 			transform.parent = INVALID_ENTITY;
 		}
 	}
