@@ -4,6 +4,7 @@
 #include "engine/Functions/Command/EditCommand/FunctionCommand.h"
 #include "engine/Functions/Command/EditCommand/RemoveComponentCommand.h"
 #include "engine/Functions/ECS/Component/Common/TransformComponent.h"
+#include "engine/Functions/ECS/Component/Common/Transform2DComponent.h"
 #include "engine/Functions/ECS/System/Editor/DrawManipulatorSystem.h"
 #include "engine/Utilities/Conversion/ConvertString.h"
 #include "DataDriven/SceneSerializer.h"
@@ -462,8 +463,11 @@ void DrawFieldUI(ECS::Registry& registry, ECS::Entity e, const FieldInfo& field,
 				);
 				arrayAdd(valuePtr);
 
-				// TransformRoutineComponent::keyframes 専用: 追加したwaypointを原点ではなく
-				// 「最初の1個ならエンティティ自身の座標」「2個目以降なら直前のkeyframeの座標」に置く。
+				// TransformRoutineComponent(3D) / TransformRoutineComponent2D 共通の keyframes 専用処理:
+				// 追加したwaypointのtranslate/rotation/scaleを原点・単位値ではなく
+				// 「最初の1個ならエンティティ自身の値」「2個目以降なら直前のkeyframeの値」に揃える。
+				// 両コンポーネントとも配列フィールド名が同じ"keyframes"のため、
+				// translateフィールドの型(Float3 or Float2)で3D/2Dどちらかを判別する。
 				if (field.name == "keyframes" &&
 					field.arrayOps->elementType == FieldType::Struct &&
 					field.arrayOps->elementStructTypeInfo) {
@@ -471,24 +475,83 @@ void DrawFieldUI(ECS::Registry& registry, ECS::Entity e, const FieldInfo& field,
 					void* newElemPtr = field.arrayOps->getElement(valuePtr, newIndex);
 					TypeInfo* nested = field.arrayOps->elementStructTypeInfo();
 					if (nested) {
+						// まずtranslateフィールドを探して3D/2Dを判定する
+						const FieldInfo* translateField = nullptr;
 						for (auto& subField : nested->fields) {
-							if (subField.name != "translate") continue;
+							if (subField.name == "translate") {
+								translateField = &subField;
+								break;
+							}
+						}
 
-							auto* newTranslate = reinterpret_cast<Math::Vector3*>(
-								static_cast<uint8_t*>(newElemPtr) + subField.offset);
+						void* prevElemPtr = (newIndex > 0) ? field.arrayOps->getElement(valuePtr, newIndex - 1) : nullptr;
 
-							if (newIndex > 0) {
-								// 直前のkeyframeの座標を引き継ぐ
-								void* prevElemPtr = field.arrayOps->getElement(valuePtr, newIndex - 1);
-								auto* prevTranslate = reinterpret_cast<Math::Vector3*>(
-									static_cast<uint8_t*>(prevElemPtr) + subField.offset);
-								*newTranslate = *prevTranslate;
-							} else if (auto* transform = registry.GetComponent<Component::TransformComponent>(e)) {
-								// 最初のkeyframeはエンティティ自身の現在位置を使う
-								*newTranslate = transform->translate;
+						if (translateField && translateField->type == FieldType::Float3) {
+							// --- 3D版: TransformRoutineComponent::keyframes ---
+							auto* transform = (prevElemPtr == nullptr)
+								? registry.GetComponent<Component::TransformComponent>(e)
+								: nullptr;
+
+							for (auto& subField : nested->fields) {
+								uint8_t* dst = static_cast<uint8_t*>(newElemPtr) + subField.offset;
+
+								if (subField.name == "translate") {
+									auto* newVal = reinterpret_cast<Math::Vector3*>(dst);
+									if (prevElemPtr) {
+										*newVal = *reinterpret_cast<Math::Vector3*>(static_cast<uint8_t*>(prevElemPtr) + subField.offset);
+									} else if (transform) {
+										*newVal = transform->translate;
+									}
+								} else if (subField.name == "rotation") {
+									auto* newVal = reinterpret_cast<Math::Quaternion*>(dst);
+									if (prevElemPtr) {
+										*newVal = *reinterpret_cast<Math::Quaternion*>(static_cast<uint8_t*>(prevElemPtr) + subField.offset);
+									} else if (transform) {
+										*newVal = transform->rotation;
+									}
+								} else if (subField.name == "scale") {
+									auto* newVal = reinterpret_cast<Math::Vector3*>(dst);
+									if (prevElemPtr) {
+										*newVal = *reinterpret_cast<Math::Vector3*>(static_cast<uint8_t*>(prevElemPtr) + subField.offset);
+									} else if (transform) {
+										*newVal = transform->scale;
+									}
+								}
 							}
 							ECS::DrawManipulatorSystem::SetSelectWaypointIndex(static_cast<int>(newIndex));
-							break;
+						} else if (translateField && translateField->type == FieldType::Float2) {
+							// --- 2D版: TransformRoutineComponent2D::keyframes ---
+							auto* transform2d = (prevElemPtr == nullptr)
+								? registry.GetComponent<Component::Transform2DComponent>(e)
+								: nullptr;
+
+							for (auto& subField : nested->fields) {
+								uint8_t* dst = static_cast<uint8_t*>(newElemPtr) + subField.offset;
+
+								if (subField.name == "translate") {
+									auto* newVal = reinterpret_cast<Math::Vector2*>(dst);
+									if (prevElemPtr) {
+										*newVal = *reinterpret_cast<Math::Vector2*>(static_cast<uint8_t*>(prevElemPtr) + subField.offset);
+									} else if (transform2d) {
+										*newVal = transform2d->translate;
+									}
+								} else if (subField.name == "rotation") {
+									auto* newVal = reinterpret_cast<float*>(dst);
+									if (prevElemPtr) {
+										*newVal = *reinterpret_cast<float*>(static_cast<uint8_t*>(prevElemPtr) + subField.offset);
+									} else if (transform2d) {
+										*newVal = transform2d->rotation;
+									}
+								} else if (subField.name == "scale") {
+									auto* newVal = reinterpret_cast<Math::Vector2*>(dst);
+									if (prevElemPtr) {
+										*newVal = *reinterpret_cast<Math::Vector2*>(static_cast<uint8_t*>(prevElemPtr) + subField.offset);
+									} else if (transform2d) {
+										*newVal = transform2d->scale;
+									}
+								}
+							}
+							ECS::DrawManipulatorSystem::SetSelectWaypointIndex2D(static_cast<int>(newIndex));
 						}
 					}
 				}
