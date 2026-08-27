@@ -9,9 +9,9 @@ class TextureRef;
 
 class TextureManager {
 public:
-	
-	static void Initialize(const std::wstring& TextureRoot);
-	static void Shutdown(void);
+
+    static void Initialize(const std::wstring& TextureRoot);
+    static void Shutdown(void);
     static void DestroyTexture(std::wstring mapKey);
     static TextureRef LoadTextureFile(const std::wstring& filePath, Graphics::eDefaultTexture fallback = Graphics::eDefaultTexture::kMagenta2D, bool sRGB = false);
     static TextureRef LoadTextureFile(const std::string& filePath, Graphics::eDefaultTexture fallback = Graphics::eDefaultTexture::kMagenta2D, bool sRGB = false);
@@ -19,8 +19,14 @@ public:
     static TextureRef LoadCovertTexture(const std::wstring& filePath, Graphics::eDefaultTexture fallback = Graphics::kMagenta2D, bool sRGB = false);
     static TextureRef LoadCovertTexture(const std::string& filePath, Graphics::eDefaultTexture fallback = Graphics::kMagenta2D, bool sRGB = false);
 
+    // 実行時に生成したCPUピクセルデータからテクスチャを作成する。
+    // フォントアトラスなど、ファイルを経由しない画像をキャッシュに載せたい場合に使う。
+    // key は sTextureCache 内で一意な識別子(通常のファイルパスと衝突しない接頭辞を付けること)。
+    static TextureRef CreateFromPixels(const std::wstring& key, uint32_t width, uint32_t height,
+        DXGI_FORMAT format, const void* pixelData, size_t rowPitchBytes);
+
 private:
-	static DirectX::ScratchImage LoadTexture(const std::string& filePath);
+    static DirectX::ScratchImage LoadTexture(const std::string& filePath);
     static ManagedTexture* FindOrLoadTexture(const std::wstring& fileName, Graphics::eDefaultTexture fallback, bool forceSRGB = false);
 };
 

@@ -38,7 +38,7 @@ void EngineTestScene::Setup() {
 	model->meshName = "resources/engine/Model/test/TD_girl/test7.gltf";
 	m->drawOutline = true;
 	auto* text = registry.AddComponent<No::TextComponent>(entity);
-	text->fontHandle = NoEngine::FontManager::LoadFontFile("resources/engine/fonts/build/Isego.font");
+	text->fontHandle = NoEngine::FontManager::LoadFontFile("resources/engine/fonts/ISE-FONT4/Isego.otf");
 	
 	{
 		auto se = registry.GenerateEntity();

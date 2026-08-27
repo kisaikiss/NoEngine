@@ -207,6 +207,32 @@ DirectX::ScratchImage TextureManager::LoadTexture(const std::string& filePath) {
 	//ミニマップ付きのデータを返す
 	return mipImages;
 }
+
+TextureRef TextureManager::CreateFromPixels(const std::wstring& key, uint32_t width, uint32_t height,
+	DXGI_FORMAT format, const void* pixelData, size_t rowPitchBytes) {
+	ManagedTexture* tex = nullptr;
+	{
+		std::lock_guard<std::mutex> Guard(sMutex);
+
+		auto iter = sTextureCache.find(key);
+		if (iter != sTextureCache.end()) {
+			tex = iter->second.get();
+			tex->WaitForLoad();
+			return tex;
+		} else {
+			tex = new ManagedTexture(key);
+			sTextureCache[key].reset(tex);
+		}
+	}
+
+	// ManagedTextureはTextureを継承しているので、Create2D()をそのまま使ってGPUへアップロードする
+	tex->Create2D(rowPitchBytes, width, height, format, pixelData);
+	tex->isValid_ = true;
+	tex->isLoading_ = false;
+
+	return tex;
+}
+
 #pragma endregion
 
 #pragma region TextureRef

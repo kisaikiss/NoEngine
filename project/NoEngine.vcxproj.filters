@@ -587,6 +587,7 @@
     <ClInclude Include="engine\Math\TransformRoutineCurves2D.h" />
     <ClInclude Include="engine\Functions\ECS\System\Animation\TransformRoutineSystem2D.h" />
     <ClInclude Include="engine\Functions\ECS\System\Editor\DrawWaypointRouteSystem2D.h" />
+    <ClInclude Include="externals\stb\stb_truetype.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />
