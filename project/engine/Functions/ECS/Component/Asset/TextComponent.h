@@ -1,5 +1,6 @@
 #pragma once
 #include "engine/Assets/Font/FontManager.h"
+#include "engine/Functions/ECS/Component/Asset/SpriteComponent.h"
 
 namespace NoEngine {
 namespace Component {
@@ -7,13 +8,13 @@ struct TextComponent {
 	enum class HAlign { kLeft, kCenter, kRight };
 	enum class VAlign { kBaseline, kTop, kMiddle };
 
-	// note: 毎フレーム書き換わるHUD文字列を想定しているためstd::stringのまま。
-	// ECSのホットパス(物理/衝突などQuery頻度が高い箇所)には使わない前提で許容している。
 	std::string text;
 	FontRef fontHandle;
 
+	// フォントのベイク基準ピクセルサイズ(FontManager::kBakePixelHeight)に対する倍率。
 	float scale = 1.f;
-	float letterSpacing = 0.f; // advanceに加算するピクセル単位の追加スペース
+	// advanceに加算する追加スペース。フォントのベイク基準ピクセル単位(scale適用前)。
+	float letterSpacing = 0.f;
 
 	int layer = 0;
 	int orderInLayer = 0;
@@ -22,6 +23,11 @@ struct TextComponent {
 	VAlign vAlign = VAlign::kBaseline;
 
 	bool isVisible = true;
+
+	SpriteSpace space = SpriteSpace::World;
+	Math::Vector2 anchor = { 0.f, 0.f }; // Screen空間のみ使用。
+
+	Math::Color color = Math::Color::WHITE;
 };
 }
 }

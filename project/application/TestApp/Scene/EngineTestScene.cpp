@@ -37,8 +37,14 @@ void EngineTestScene::Setup() {
 	registry.AddComponent<No::AnimatorComponent>(entity)->enableSkinning = true;
 	model->meshName = "resources/engine/Model/test/TD_girl/test7.gltf";
 	m->drawOutline = true;
-	auto* text = registry.AddComponent<No::TextComponent>(entity);
-	text->fontHandle = NoEngine::FontManager::LoadFontFile("resources/engine/fonts/ISE-FONT4/Isego.otf");
+
+	{
+		auto tex = registry.GenerateEntity();
+		auto* text = registry.AddComponent<No::TextComponent>(tex);
+		text->fontHandle = NoEngine::FontManager::LoadFontFile("resources/engine/fonts/UbuntuMono-R.ttf");
+		registry.AddComponent<No::Transform2DComponent>(tex);
+		registry.AddComponent<No::EditTag>(tex)->name = "text";
+	}
 	
 	{
 		auto se = registry.GenerateEntity();

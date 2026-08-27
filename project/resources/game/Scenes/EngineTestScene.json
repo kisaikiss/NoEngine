@@ -152,7 +152,8 @@
                         }
                     ],
                     "loop": true,
-                    "playbackSpeed": 1.0
+                    "playbackSpeed": 1.0,
+                    "playing": true
                 }
             }
         },
@@ -259,12 +260,12 @@
                     "parent": null,
                     "rotation": 0.0,
                     "scale": [
-                        1.7884002923965454,
-                        1.7884002923965454
+                        1.2088806629180908,
+                        1.2088806629180908
                     ],
                     "translate": [
-                        116.73077392578125,
-                        -570.2907104492188
+                        -12.206116676330566,
+                        122.4912109375
                     ]
                 }
             }
@@ -276,11 +277,11 @@
                 },
                 "DebugCameraComponent": {
                     "center": [
-                        0.061863187700510025,
-                        -0.13936740159988403,
-                        0.01681499555706978
+                        1.0737638473510742,
+                        -1.3711175918579102,
+                        -2.935393810272217
                     ],
-                    "distance": 48.31500244140625,
+                    "distance": 9.737213134765625,
                     "drawCenter": false,
                     "moveType": "kBlender",
                     "unityMoveSpeed": 10.0,
@@ -293,10 +294,10 @@
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
-                        0.4983532130718231,
-                        -0.20725712180137634,
-                        0.12404688447713852,
-                        0.8326469659805298
+                        0.1976151168346405,
+                        -0.12174782902002335,
+                        0.024742724373936653,
+                        0.972375214099884
                     ],
                     "scale": [
                         1.0,
@@ -304,9 +305,9 @@
                         1.0
                     ],
                     "translate": [
-                        10.763911247253418,
-                        42.44179153442383,
-                        -20.148759841918945
+                        3.2840142250061035,
+                        2.4296748638153076,
+                        -11.623435974121094
                     ]
                 }
             }
@@ -912,12 +913,23 @@
                     ]
                 },
                 "TextComponent": {
+                    "anchor": [
+                        0.0,
+                        0.0
+                    ],
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "hAlign": "kLeft",
                     "isVisible": true,
                     "layer": 0,
                     "letterSpacing": 0.0,
                     "orderInLayer": 0,
                     "scale": 1.0,
+                    "space": "World",
                     "text": "だだだだーんｎda",
                     "vAlign": "kBaseline"
                 },
@@ -997,12 +1009,23 @@
                     ]
                 },
                 "TextComponent": {
+                    "anchor": [
+                        0.0,
+                        0.0
+                    ],
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
                     "hAlign": "kLeft",
                     "isVisible": true,
                     "layer": 0,
                     "letterSpacing": 0.0,
                     "orderInLayer": 0,
                     "scale": 1.0,
+                    "space": "World",
                     "text": "だだだだーんｎda",
                     "vAlign": "kBaseline"
                 },
@@ -1167,6 +1190,47 @@
                         1.730125404719729e-06,
                         0.0,
                         0.0
+                    ]
+                }
+            }
+        },
+        "text": {
+            "components": {
+                "EditTag": {
+                    "name": "text",
+                    "parent": null
+                },
+                "TextComponent": {
+                    "anchor": [
+                        0.6000000238418579,
+                        0.20000000298023224
+                    ],
+                    "color": [
+                        0.9764705896377563,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "hAlign": "kCenter",
+                    "isVisible": true,
+                    "layer": 0,
+                    "letterSpacing": 2.200000047683716,
+                    "orderInLayer": 0,
+                    "scale": 1.0,
+                    "space": "World",
+                    "text": "fuck you",
+                    "vAlign": "kMiddle"
+                },
+                "Transform2DComponent": {
+                    "parent": null,
+                    "rotation": 0.0,
+                    "scale": [
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        -418.0284729003906,
+                        239.12380981445313
                     ]
                 }
             }

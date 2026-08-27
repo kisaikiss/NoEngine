@@ -43,6 +43,8 @@
     <FxCompile Include="resources\engine\Shaders\PostEffect\BloomBlur.PS.hlsl" />
     <FxCompile Include="resources\engine\Shaders\PostEffect\BloomComposite.PS.hlsl" />
     <FxCompile Include="resources\engine\Shaders\PostEffect\DepthOfField.PS.hlsl" />
+    <FxCompile Include="resources\engine\Shaders\Text.VS.hlsl" />
+    <FxCompile Include="resources\engine\Shaders\Text.PS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="engine\Assets\Audio\Audio.cpp" />
@@ -289,6 +291,8 @@
     <ClCompile Include="engine\Functions\ECS\Component\Common\TransformRoutineComponent2D.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Animation\TransformRoutineSystem2D.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Editor\DrawWaypointRouteSystem2D.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\RenderPass\Rasterization\TextPass.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\Initializer\TextInitializer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -588,6 +592,8 @@
     <ClInclude Include="engine\Functions\ECS\System\Animation\TransformRoutineSystem2D.h" />
     <ClInclude Include="engine\Functions\ECS\System\Editor\DrawWaypointRouteSystem2D.h" />
     <ClInclude Include="externals\stb\stb_truetype.h" />
+    <ClInclude Include="engine\Functions\Renderer\RenderPass\Rasterization\TextPass.h" />
+    <ClInclude Include="engine\Functions\Renderer\Initializer\TextInitializer.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

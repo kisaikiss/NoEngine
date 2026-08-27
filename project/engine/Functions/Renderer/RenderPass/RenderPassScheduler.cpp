@@ -19,6 +19,7 @@
 #include "PostEffect/BloomThresholdPass.h"
 #include "PostEffect/BloomBlurPass.h"
 #include "PostEffect/BloomCompositePass.h"
+#include "Rasterization/TextPass.h"
 
 #include "../Primitive.h"
 
@@ -302,6 +303,11 @@ void CommonSetupRenderPass(RenderPassScheduler& renderPassScheduler) {
 	spritePass->AddOutput("MainColor");
 	spritePass->SetTargetCameraType(RenderPass::TargetCameraType::kMain);
 	renderPassScheduler.AddPass(std::move(spritePass));
+
+	auto textPass = std::make_unique<TextPass>();
+	textPass->AddOutput("MainColor");
+	textPass->SetTargetCameraType(RenderPass::TargetCameraType::kMain);
+	renderPassScheduler.AddPass(std::move(textPass));
 }
 
 void CommonSetupDebugRenderPass(RenderPassScheduler& renderPassScheduler) {
@@ -366,6 +372,11 @@ void CommonSetupDebugRenderPass(RenderPassScheduler& renderPassScheduler) {
 	spritePass->AddOutput("DebugColor");
 	spritePass->SetTargetCameraType(RenderPass::TargetCameraType::kDebug);
 	renderPassScheduler.AddPass(std::move(spritePass));
+
+	auto textPass = std::make_unique<TextPass>();
+	textPass->AddOutput("DebugColor");
+	textPass->SetTargetCameraType(RenderPass::TargetCameraType::kDebug);
+	renderPassScheduler.AddPass(std::move(textPass));
 #else
 	static_cast<void>(renderPassScheduler);
 #endif // USE_IMGUI
