@@ -41,9 +41,10 @@ void EngineTestScene::Setup() {
 	{
 		auto tex = registry.GenerateEntity();
 		auto* text = registry.AddComponent<No::TextComponent>(tex);
-		text->fontHandle = NoEngine::FontManager::LoadFontFile("resources/engine/fonts/UbuntuMono-R.ttf");
+		text->fontHandle = NoEngine::FontManager::LoadFontFile("resources/engine/fonts/PixelMplus12-Regular.ttf");
+		text->text = "あaaa\nfaf\nこんちはaaa";
 		registry.AddComponent<No::Transform2DComponent>(tex);
-		registry.AddComponent<No::EditTag>(tex)->name = "text";
+		registry.AddComponent<No::EditTag>(tex)->name = "text2";
 	}
 	
 	{

@@ -2,6 +2,7 @@
 #include "engine/Functions/Shader/ShaderReflection.h"
 #include "engine/Math/Types/Calculations/Matrix4x4Calculations.h"
 #include "engine/Runtime/GraphicsCore.h"
+#include "engine/Utilities/Conversion/ConvertString.h"
 
 namespace NoEngine {
 namespace Render {
@@ -72,15 +73,22 @@ void TextPass::AppendText(const DrawItem& item, bool isScreenSpace, ECS::Registr
 	auto* t = item.transform;
 	auto* text = item.text;
 
-	const Font* font = text->fontHandle.Get();
+	Font* font = text->fontHandle.Get();
 	if (!font) return;
 
+	std::u32string codepoints = Utf8ToCodepoints(text->text);
+
+	// 初出のコードポイントをこの時点でまとめてラスタライズしアトラスへ追加する。
+	// 新規追加が発生した場合のみアトラス全体がGPUへ再アップロードされる
+	// (同じ文字列を使い回す限り、2回目以降はハッシュマップ検索のみで済む)。
+	font->EnsureGlyphsBaked(codepoints);
+
 	// '\n'で行分割する(hAlignの計算に各行の幅が必要なため)
-	std::vector<std::string> lines;
+	std::vector<std::u32string> lines;
 	{
-		std::string current;
-		for (char c : text->text) {
-			if (c == '\n') { lines.push_back(current); current.clear(); } else current.push_back(c);
+		std::u32string current;
+		for (char32_t c : codepoints) {
+			if (c == U'\n') { lines.push_back(current); current.clear(); } else current.push_back(c);
 		}
 		lines.push_back(current);
 	}
@@ -89,8 +97,8 @@ void TextPass::AppendText(const DrawItem& item, bool isScreenSpace, ECS::Registr
 	lineWidths.reserve(lines.size());
 	for (auto& line : lines) {
 		float width = 0.f;
-		for (char c : line) {
-			const GlyphInfo* g = font->GetGlyph(static_cast<char32_t>(static_cast<unsigned char>(c)));
+		for (char32_t c : line) {
+			const GlyphInfo* g = font->GetGlyph(c);
 			if (!g) continue;
 			width += g->advance + text->letterSpacing;
 		}
@@ -118,7 +126,7 @@ void TextPass::AppendText(const DrawItem& item, bool isScreenSpace, ECS::Registr
 	batch.indexStart = static_cast<uint32_t>(indices_.size());
 
 	for (size_t lineIndex = 0; lineIndex < lines.size(); ++lineIndex) {
-		const std::string& line = lines[lineIndex];
+		const std::u32string& line = lines[lineIndex];
 
 		float hOffset = 0.f;
 		switch (text->hAlign) {
@@ -131,8 +139,8 @@ void TextPass::AppendText(const DrawItem& item, bool isScreenSpace, ECS::Registr
 		float cursorX = hOffset;
 		const float cursorY = vOffset + lineHeight * static_cast<float>(lineIndex);
 
-		for (char c : line) {
-			const GlyphInfo* g = font->GetGlyph(static_cast<char32_t>(static_cast<unsigned char>(c)));
+		for (char32_t c : line) {
+			const GlyphInfo* g = font->GetGlyph(c);
 			if (!g) continue;
 
 			if (g->size.x > 0.f && g->size.y > 0.f) {

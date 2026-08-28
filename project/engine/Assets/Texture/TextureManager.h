@@ -25,6 +25,12 @@ public:
     static TextureRef CreateFromPixels(const std::wstring& key, uint32_t width, uint32_t height,
         DXGI_FORMAT format, const void* pixelData, size_t rowPitchBytes);
 
+   // CreateFromPixelsで作成済みのテクスチャの中身を差し替える。
+   // keyが未登録の場合は何もせずfalseを返す。
+   // 注意: 前フレームの描画コマンドが同じGPUリソースを参照している可能性があるため、
+   // 毎フレームの呼び出しは避け、フォントへの新規文字追加のような低頻度イベント向けに使うこと。
+    static bool UpdatePixels(const std::wstring& key, uint32_t width, uint32_t height,
+        DXGI_FORMAT format, const void* pixelData, size_t rowPitchBytes);
 private:
     static DirectX::ScratchImage LoadTexture(const std::string& filePath);
     static ManagedTexture* FindOrLoadTexture(const std::wstring& fileName, Graphics::eDefaultTexture fallback, bool forceSRGB = false);

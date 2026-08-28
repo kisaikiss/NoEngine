@@ -192,6 +192,26 @@ ManagedTexture* TextureManager::FindOrLoadTexture(const std::wstring& fileName, 
 	// これは初めての要求なので、呼び出し側がファイルを読み取る必要があることを示します。
 	return tex;
 }
+
+bool TextureManager::UpdatePixels(const std::wstring& key, uint32_t width, uint32_t height,
+	DXGI_FORMAT format, const void* pixelData, size_t rowPitchBytes) {
+	ManagedTexture* tex = nullptr;
+	{
+		std::lock_guard<std::mutex> Guard(sMutex);
+		auto iter = sTextureCache.find(key);
+		if (iter == sTextureCache.end()) {
+			return false;
+		}
+		tex = iter->second.get();
+	}
+
+	tex->WaitForLoad();
+	// ToDo: 本来はGPU側の参照完了をフェンスで待ってから差し替えるべき。
+	// 現状はフォントへの新規文字追加(低頻度)専用の簡易実装として許容している。
+	tex->Create2D(rowPitchBytes, width, height, format, pixelData);
+	return true;
+}
+
 DirectX::ScratchImage TextureManager::LoadTexture(const std::string& filePath) {
 	//テクスチャファイルを読んでプログラムを扱えるようにする
 	DirectX::ScratchImage image{};

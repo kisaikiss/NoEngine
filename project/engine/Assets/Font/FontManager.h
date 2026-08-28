@@ -35,7 +35,7 @@ public:
 	bool IsValid() const;
 
 	// フォント本体を取得します。クライアントは null ポインタを参照しない責任があります。
-	const Font* Get(void) const;
+	Font* Get(void);
 	const Font* operator->(void) const;
 
 	bool operator<(const FontRef& other) const {
