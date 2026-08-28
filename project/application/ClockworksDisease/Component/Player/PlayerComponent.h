@@ -20,6 +20,8 @@ struct PlayerComponent {
 	float yVelocity = 0.f;
 	float stamina = 0.0f;
 	float maxStamina = 0.0f;
+	float staminaRecoveryRate = 1.0f;   // 秒あたりのスタミナ回復量
+	float staminaUpPerLevel = 1.0f;     // レベルアップ時のスタミナ最大値上昇量
  	No::Vector3 groundNormal = No::Vector3::UP;
 	bool infinityJump = false;
 	bool infinityStamina = false;

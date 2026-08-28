@@ -55,8 +55,8 @@ void PlayerLevelUpSystem::Update(No::Registry& registry, float deltaTime) {
 void PlayerLevelUpSystem::EnhancementsUponLevelingUp(No::Registry& registry, No::Entity e, uint32_t level) {
 	// 全レベル共通
 	// スタミナ最大値を上昇させる
-	constexpr float kAmountOfMaxStaminaUp = 1.0f;
-	registry.GetComponent<PlayerComponent>(e)->maxStamina += kAmountOfMaxStaminaUp;
+	auto* player = registry.GetComponent<PlayerComponent>(e);
+	player->maxStamina += player->staminaUpPerLevel;
 
 	auto* levelComponent = registry.GetComponent<LevelComponent>(e);
 	for (auto& reward : levelComponent->rewards) {

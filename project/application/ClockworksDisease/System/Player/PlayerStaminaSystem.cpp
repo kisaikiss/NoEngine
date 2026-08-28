@@ -12,7 +12,7 @@ void PlayerStaminaSystem::Update(No::Registry& registry, float deltaTime) {
 		const float maxStamina = playerVariables->maxStamina;
 
 		if (groundState->isGrounded && stamina < maxStamina) {
-			stamina += deltaTime;
+			stamina += deltaTime * playerVariables->staminaRecoveryRate;
 		}
 		if (stamina > maxStamina) {
 			stamina = maxStamina;
