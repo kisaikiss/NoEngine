@@ -346,6 +346,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PrePasses\PreRenderPass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\Rasterization\ParticlePass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\Rasterization\PrimitivePass.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\RenderPass\Rasterization\SpriteIDPass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\Rasterization\TextPass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\Rasterization\TransparentMeshPass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\Raytracing\RaytracingShadowPass.cpp" />
@@ -659,6 +660,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PrePasses\PreRenderPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\Rasterization\ParticlePass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\Rasterization\PrimitivePass.h" />
+    <ClInclude Include="engine\Functions\Renderer\RenderPass\Rasterization\SpriteIDPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\Rasterization\TextPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\Rasterization\TransparentMeshPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\Raytracing\RaytracingShadowPass.h" />
@@ -1103,6 +1105,14 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Development|x64'">Vertex</ShaderType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="resources\engine\Shaders\SpriteObjectID.PS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Development|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>

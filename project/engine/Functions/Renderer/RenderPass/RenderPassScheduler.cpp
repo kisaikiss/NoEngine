@@ -20,6 +20,7 @@
 #include "PostEffect/BloomBlurPass.h"
 #include "PostEffect/BloomCompositePass.h"
 #include "Rasterization/TextPass.h"
+#include "Rasterization/SpriteIDPass.h"
 
 #include "../Primitive.h"
 
@@ -326,6 +327,10 @@ void CommonSetupDebugRenderPass(RenderPassScheduler& renderPassScheduler) {
 	preRenderPass->SetTargetCameraType(RenderPass::TargetCameraType::kDebug);
 	renderPassScheduler.AddPass(std::move(preRenderPass));
 
+	auto spriteIdPass = std::make_unique<SpriteIDPass>();
+	spriteIdPass->AddOutput("ObjectID");
+	spriteIdPass->SetTargetCameraType(RenderPass::TargetCameraType::kDebug);
+	renderPassScheduler.AddPass(std::move(spriteIdPass));
 
 	auto raytracingShadowPass = std::make_unique<RaytracingShadowPass>();
 	raytracingShadowPass->AddInput("WorldPosition", "WorldPosition");

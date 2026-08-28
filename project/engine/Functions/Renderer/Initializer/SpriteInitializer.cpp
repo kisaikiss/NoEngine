@@ -62,5 +62,51 @@ void SpriteInitializer::CreatePSO(RenderContext& ctx) {
 		ctx.RegisterGraphicsPSO(ConvertString(defaultSpritePSOName), defaultSpritePSO);
 		ctx.RegisterRootSignature(ConvertString(defaultSpritePSOName), std::move(defaultSpriteRootSignature));
 	}
+
+	{
+		ShaderModule spriteIdVS(ShaderStage::Vertex, L"resources/engine/Shaders/DefaultSprite.VS.hlsl", L"vs_6_0");
+		ShaderModule spriteIdPS(ShaderStage::Pixel, L"resources/engine/Shaders/SpriteObjectID.PS.hlsl", L"ps_6_0");
+
+		const ShaderReflection& spriteIdVsReflection = spriteIdVS.GetReflection();
+		const ShaderReflection& spriteIdPsReflection = spriteIdPS.GetReflection();
+
+		std::vector<ShaderReflection> reflectionSpriteId;
+		reflectionSpriteId.push_back(spriteIdVsReflection);
+		reflectionSpriteId.push_back(spriteIdPsReflection);
+		RootSignature spriteIdRootSignature;
+		std::wstring spriteIdPSOName = L"Renderer : Sprite ObjectID PSO";
+		RootSignatureBuilder::BuildFromReflection(reflectionSpriteId, spriteIdRootSignature, ConvertString(spriteIdPSOName));
+
+		D3D12_RASTERIZER_DESC rasterizerSpriteIdDesc{};
+		rasterizerSpriteIdDesc.CullMode = D3D12_CULL_MODE_NONE;
+		rasterizerSpriteIdDesc.FillMode = D3D12_FILL_MODE_SOLID;
+
+		D3D12_BLEND_DESC blendSpriteIdDesc{};
+		blendSpriteIdDesc.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL; // ブレンドせずIDを上書き
+
+		D3D12_DEPTH_STENCIL_DESC depthStencilSpriteIdDesc{};
+		depthStencilSpriteIdDesc.DepthEnable = false;
+		depthStencilSpriteIdDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;
+		depthStencilSpriteIdDesc.DepthFunc = D3D12_COMPARISON_FUNC_NONE;
+
+		std::vector<D3D12_INPUT_ELEMENT_DESC> spriteIdInputLayout = InputLayoutBuilder::BuildFromReflection(spriteIdVsReflection);
+
+		DXGI_FORMAT idRtvFormat[] = { DXGI_FORMAT_R8G8B8A8_UNORM };
+
+		GraphicsPSO spriteIdPSO(spriteIdPSOName);
+		spriteIdPSO.SetRootSignature(spriteIdRootSignature);
+		spriteIdPSO.SetRasterizerState(rasterizerSpriteIdDesc);
+		spriteIdPSO.SetBlendState(blendSpriteIdDesc);
+		spriteIdPSO.SetDepthStencilState(depthStencilSpriteIdDesc);
+		spriteIdPSO.SetInputLayout(spriteIdInputLayout);
+		spriteIdPSO.SetPrimitiveTopologyType(D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
+		spriteIdPSO.SetRenderTargetFormats(1, idRtvFormat, DXGI_FORMAT_UNKNOWN);
+		spriteIdPSO.SetVertexShader(spriteIdVS.GetBytecode());
+		spriteIdPSO.SetPixelShader(spriteIdPS.GetBytecode());
+		spriteIdPSO.SetSampleMask(D3D12_DEFAULT_SAMPLE_MASK);
+		spriteIdPSO.Finalize();
+		ctx.RegisterGraphicsPSO(ConvertString(spriteIdPSOName), spriteIdPSO);
+		ctx.RegisterRootSignature(ConvertString(spriteIdPSOName), std::move(spriteIdRootSignature));
+	}
 }
 }
