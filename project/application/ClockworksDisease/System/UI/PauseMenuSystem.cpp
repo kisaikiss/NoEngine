@@ -51,10 +51,20 @@ void PauseMenuSystem::Update(No::Registry& registry, float deltaTime) {
 void PauseMenuSystem::CreateMenuEntities(No::Registry& registry) {
 	No::Vector2 windowSize = NoEngine::GraphicsCore::GetWindowSize();
 
+	No::Entity menuEntity = No::INVALID_ENTITY;
+	for (auto e : registry.View<PauseMenuComponent>()) {
+		menuEntity = e;
+	}
+
 	// 管理用Entity
-	menuEntity_ = registry.GenerateEntity();
-	registry.AddComponent<PauseMenuComponent>(menuEntity_);
-	registry.AddComponent<No::EditTag>(menuEntity_)->name = "PauseMenu";
+	// 既にEditSystemなどで存在する場合は作成しない
+	if (menuEntity == No::INVALID_ENTITY) {
+		menuEntity_ = registry.GenerateEntity();
+		registry.AddComponent<PauseMenuComponent>(menuEntity_);
+		registry.AddComponent<No::EditTag>(menuEntity_)->name = "PauseMenu";
+	} else {
+		menuEntity_ = menuEntity;
+	}
 
 	auto font = NoEngine::FontManager::LoadFontFile("resources/engine/fonts/UbuntuMono-R.ttf");
 
