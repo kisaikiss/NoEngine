@@ -29,6 +29,7 @@
 #include "../System/Game/GameTimerSystem.h"
 #include "../System/Game/GoalDirectionSystem.h"
 #include "../Component/Game/GameProgressComponent.h"
+#include "../System/UI/PauseMenuSystem.h"
 
 void GameScene::Setup() {
 	AddSystems();
@@ -58,6 +59,7 @@ void GameScene::Setup() {
 
 void GameScene::AddSystems() {
 	AddSystem(std::make_unique<No::EditSystem>());
+	AddSystem(std::make_unique<PauseMenuSystem>());
 
 	AddSystem(std::make_unique<No::ModelLoadSystem>());
 	AddSystem(std::make_unique<TerrainLoadSystem>());

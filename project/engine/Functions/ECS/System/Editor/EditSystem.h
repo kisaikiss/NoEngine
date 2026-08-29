@@ -17,7 +17,7 @@ namespace ECS {
 class EditSystem :
     public ISystem {
 public:
-    EditSystem() { SetStopInGameStop(false); }
+    EditSystem() { SetStopInGameStop(false); SetStopInPause(false); }
     void Update(Registry& registry, float deltaTime) override;
 
 private:

@@ -14,6 +14,15 @@ void ClockworksDisease::Startup(void) {
 	RegisterScene("GameClearScene", []() {return std::make_unique<GameClearScene>(); });
 	ChangeScene("TitleScene");
 
+	// ポーズメニュー
+	No::InputBindAction("Pause", No::DeviceType::Keyboard, static_cast<int>('P'));
+	No::InputBindAction("Pause", No::DeviceType::GamepadButton, static_cast<int>(No::GamepadButton::Start));
+	No::InputBindAction("Left", No::DeviceType::Keyboard, static_cast<int>(VK_LEFT));
+	No::InputBindAction("Left", No::DeviceType::GamepadButton, static_cast<int>(No::GamepadButton::Left));
+	
+	No::InputBindAction("Right", No::DeviceType::Keyboard, static_cast<int>(VK_RIGHT));
+	No::InputBindAction("Right", No::DeviceType::GamepadButton, static_cast<int>(No::GamepadButton::Right));
+
 	No::InputBindAction("Up", No::DeviceType::Keyboard, static_cast<int>('W'));
 	No::InputBindAction("Up", No::DeviceType::Keyboard, static_cast<int>(VK_UP));
 	No::InputBindAction("Up", No::DeviceType::GamepadButton, static_cast<int>(No::GamepadButton::Up));
@@ -24,6 +33,9 @@ void ClockworksDisease::Startup(void) {
 
 	No::InputBindAction("Choise", No::DeviceType::Keyboard, static_cast<int>(VK_SPACE));
 	No::InputBindAction("Choise", No::DeviceType::GamepadButton, static_cast<int>(No::GamepadButton::A));
+
+	No::InputBindAction("Cancel", No::DeviceType::Keyboard, static_cast<int>(VK_BACK));
+	No::InputBindAction("Cancel", No::DeviceType::GamepadButton, static_cast<int>(No::GamepadButton::B));
 
 	No::InputBindAxis("Vertical", No::DeviceType::GamepadAxis, static_cast<int>(No::GamepadAxis::LeftStickY), 1.0f, 0.2f);
 
