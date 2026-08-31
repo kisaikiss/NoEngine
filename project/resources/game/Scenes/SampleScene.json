@@ -2201,9 +2201,9 @@
                 },
                 "DebugCameraComponent": {
                     "center": [
-                        14.914752960205078,
-                        40.44194030761719,
-                        -21.430845260620117
+                        11.972616195678711,
+                        36.475284576416016,
+                        -22.170146942138672
                     ],
                     "distance": 9.015334129333496,
                     "drawCenter": false,
@@ -2218,10 +2218,10 @@
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
-                        0.12757237255573273,
-                        0.6864729523658752,
-                        -0.12421666085720062,
-                        0.7050180435180664
+                        0.2963736951351166,
+                        0.6638409495353699,
+                        -0.32538673281669617,
+                        0.6046497225761414
                     ],
                     "scale": [
                         1.0,
@@ -2884,7 +2884,7 @@
                     "fadeInDuration": 1.0,
                     "fadeOutDuration": 1.0,
                     "phase": "kPlayingRoutine",
-                    "playInEditor": true
+                    "playInEditor": false
                 },
                 "CameraIntroLockTag": null,
                 "EditTag": {
@@ -25834,7 +25834,7 @@
                 },
                 "MeshComponent": {
                     "isVisible": true,
-                    "meshName": "jogging"
+                    "meshName": "magiclash"
                 },
                 "ParticleEmitterSphereComponent": {
                     "active": true,
@@ -25863,6 +25863,8 @@
                     "maxStamina": 0.0,
                     "moveSpeed": 6.0,
                     "stamina": 0.0,
+                    "staminaRecoveryRate": 1.0,
+                    "staminaUpPerLevel": 1.0,
                     "state": "kWait"
                 },
                 "PlayerMoveTransientComponent": null,

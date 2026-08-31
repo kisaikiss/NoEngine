@@ -126,7 +126,7 @@
         },
         "MeshComponent": {
             "isVisible": true,
-            "meshName": "jogging"
+            "meshName": "magiclash"
         },
         "ParticleEmitterSphereComponent": {
             "active": true,
@@ -135,18 +135,28 @@
             "frequencyTime": 0.0,
             "radius": 0.0
         },
+        "PlayerAbilityDebugComponent": {
+            "airDash": false,
+            "highJump": false,
+            "magicScaffold": false
+        },
         "PlayerComponent": {
             "airDashSpeed": 10.0,
+            "airDashStaminaCostRate": 2.0,
             "coyoteTime": 0.30000001192092896,
             "coyoteTimer": 0.0,
             "doubleJumpSpeed": 4.0,
             "gravity": -7.0,
+            "highJumpCostRate": 10.0,
             "highJumpSpeed": 10.0,
             "infinityJump": false,
+            "infinityStamina": false,
             "jumpSpeed": 5.5,
             "maxStamina": 0.0,
             "moveSpeed": 6.0,
             "stamina": 0.0,
+            "staminaRecoveryRate": 1.0,
+            "staminaUpPerLevel": 1.0,
             "state": "kWait"
         },
         "PlayerMoveTransientComponent": null,

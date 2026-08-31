@@ -89,7 +89,7 @@ void AnimationSystem::AnimationUpdate(Registry& registry, float deltaTime) {
 		auto& modelSaver = ModelSaver::Get();
 		auto* animation = modelSaver.GetAnimation(animeComp->animationHandles[currentAnimation]);
 		auto* skeleton = modelSaver.GetSkeleton(animeComp->skeletonHandle);
-		animeComp->time = std::fmod(animeComp->time, animation[currentAnimation].duration);
+		animeComp->time = std::fmod(animeComp->time, animation->duration);
 			
 		if (skeleton) {
 			SkeletonUpdate(animeComp,skeleton,animation);
@@ -98,8 +98,8 @@ void AnimationSystem::AnimationUpdate(Registry& registry, float deltaTime) {
 		}
 		auto* mesh = ModelSaver::Get().GetMesh(meshComp->handle);
 		if (!mesh) return;
-		if (animation[currentAnimation].nodeAnimations.contains(mesh->rootNode.name)) {
-			CalculateValue(animation[currentAnimation].nodeAnimations[mesh->rootNode.name], animeComp->local, animeComp->time);
+		if (animation->nodeAnimations.contains(mesh->rootNode.name)) {
+			CalculateValue(animation->nodeAnimations[mesh->rootNode.name], animeComp->local, animeComp->time);
 		}
 	}
 }
