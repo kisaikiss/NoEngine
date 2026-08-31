@@ -36,9 +36,10 @@ void PlayerVerticalVelocitySystem::Update(No::Registry& registry, float deltaTim
 			playerVariables->state = PlayerState::kAirDash;
 		} else if (!isGrounded) {
 			if (playerVariables->yVelocity > 0.f) {
-				playerVariables->state =  PlayerState::kJump;
+				playerVariables->state = PlayerState::kJump;
 			} else {
-				playerVariables->state = PlayerState::kFall;
+				if (playerVariables->coyoteTimer >= playerVariables->coyoteTime)
+					playerVariables->state = PlayerState::kFall;
 			}
 		} else {
 			const bool isMoving = (velocity->linear.x != 0.f || velocity->linear.z != 0.f);

@@ -297,6 +297,7 @@
     <ClCompile Include="engine\Functions\Renderer\RenderPass\Rasterization\SpriteIDPass.cpp" />
     <ClCompile Include="application\ClockworksDisease\Component\UI\PauseMenuComponent.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\UI\PauseMenuSystem.cpp" />
+    <ClCompile Include="application\ClockworksDisease\System\Player\PlayerAnimationSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -601,6 +602,7 @@
     <ClInclude Include="engine\Functions\Renderer\RenderPass\Rasterization\SpriteIDPass.h" />
     <ClInclude Include="application\ClockworksDisease\Component\UI\PauseMenuComponent.h" />
     <ClInclude Include="application\ClockworksDisease\System\UI\PauseMenuSystem.h" />
+    <ClInclude Include="application\ClockworksDisease\System\Player\PlayerAnimationSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

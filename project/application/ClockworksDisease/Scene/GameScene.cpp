@@ -13,6 +13,7 @@
 #include "../System/Game/PlatformRideSystem.h"
 #include "../System/Player/PlayerPushBackSystem.h"
 #include "../System/Player/PlayerLevelUpSystem.h"
+#include "../System/Player/PlayerAnimationSystem.h"
 #include "../System/Object/BoxColliderUpdateSystem.h"
 #include "../System/Object/MagicScaffoldSystem.h"
 #include "../System/Camera/CameraIntroSystem.h"
@@ -72,6 +73,7 @@ void GameScene::AddSystems() {
 	AddSystem(std::make_unique<PlayerJumpSystem>());
 	AddSystem(std::make_unique<PlayerHorizontalMoveSystem>());
 	AddSystem(std::make_unique<PlayerVerticalVelocitySystem>());
+	AddSystem(std::make_unique<PlayerAnimationSystem>());
 	AddSystem(std::make_unique<StaminaUISystem>());
 	AddSystem(std::make_unique<No::GroundResetSystem>());
 	AddSystem(std::make_unique<MagicScaffoldSystem>());

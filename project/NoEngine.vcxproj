@@ -224,6 +224,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="application\ClockworksDisease\System\Object\BigPowerItemSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Object\BoxColliderUpdateSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Object\MagicScaffoldSystem.cpp" />
+    <ClCompile Include="application\ClockworksDisease\System\Player\PlayerAnimationSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Player\PlayerHorizontalMoveSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Player\PlayerJumpSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Player\PlayerLevelUpSystem.cpp" />
@@ -519,6 +520,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="application\ClockworksDisease\System\Object\BigPowerItemSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Object\BoxColliderUpdateSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Object\MagicScaffoldSystem.h" />
+    <ClInclude Include="application\ClockworksDisease\System\Player\PlayerAnimationSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Player\PlayerHorizontalMoveSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Player\PlayerJumpSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Player\PlayerLevelUpSystem.h" />
