@@ -3,4 +3,4 @@
 #include "application/TestApp/TestApp.h"
 
 
-int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) { return NoEngine::GameCore::RunApplication(std::make_unique<ClockworksDisease>()); }
+int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) { return NoEngine::GameCore::RunApplication(std::make_unique<TestApp>()); }

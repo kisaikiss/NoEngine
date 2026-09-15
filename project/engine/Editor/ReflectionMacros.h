@@ -64,6 +64,19 @@ NoEngine::TypeInfo* GetTypeInfo();
         NoEngine::FieldAttributes{} \
     }
 
+// 複数行テキストとして編集するフィールド用
+#define REFLECT_MULTILINE_FIELD(field_name) \
+    [] { \
+        NoEngine::FieldInfo info{}; \
+        info.name       = #field_name; \
+        info.offset     = offsetof(ThisType, field_name); \
+        info.size       = sizeof(((ThisType*)0)->field_name); \
+        info.type       = NoEngine::FieldTypeResolver<decltype(((ThisType*)0)->field_name)>::value; \
+        info.attributes = NoEngine::FieldAttributes{}; \
+        info.attributes.multiline = true; \
+        return info; \
+    }()
+
 // enumフィールド用（type判定 + magic_enum連携関数を両方セットする）
 #define REFLECT_ENUM_FIELD(field_name) \
     [] { \

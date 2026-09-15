@@ -265,11 +265,19 @@ void DrawFieldUI(ECS::Registry& registry, ECS::Entity e, const FieldInfo& field,
 			editBuf[sizeof(editBuf) - 1] = '\0';
 		}
 
-		// Enterを押したタイミングを検知するためのフラグ
-		ImGuiInputTextFlags flags = ImGuiInputTextFlags_EnterReturnsTrue;
-
-		// InputTextを描画（入力中は editBuf のみが書き換わり、*s は変更されません）
-		bool enterPressed = ImGui::InputText(field.name.c_str(), editBuf, sizeof(editBuf), flags);
+		// 単一行はEnterで確定、複数行はEnterで改行する。
+		ImGuiInputTextFlags flags = field.attributes.multiline
+			? ImGuiInputTextFlags_None
+			: ImGuiInputTextFlags_EnterReturnsTrue;
+		bool enterPressed = field.attributes.multiline
+			? false
+			: ImGui::InputText(field.name.c_str(), editBuf, sizeof(editBuf), flags);
+		if (field.attributes.multiline) {
+			ImGui::Text(field.name.c_str());
+			ImGui::InputTextMultiline(
+				field.name.c_str(), editBuf, sizeof(editBuf),
+				ImVec2(-FLT_MIN, ImGui::GetTextLineHeight() * 6.0f), flags);
+		}
 		if (ImGui::BeginDragDropTarget()) {
 			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ASSET_PATH")) {
 				const char* path = (const char*)payload->Data;

@@ -30,6 +30,7 @@ enum class FieldType {
 /// </summary>
 struct FieldAttributes {
     bool editable = true;   // エディタで使うか
+    bool multiline = false; // 複数行のテキスト入力欄として表示するか
     bool hasRange = false;  // 幅を持つか
     float minValue = 0.0f;  // 最小値
     float maxValue = 0.0f;  // 最大値

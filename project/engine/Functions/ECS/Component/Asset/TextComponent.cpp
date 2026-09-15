@@ -2,7 +2,7 @@
 #include "engine/Editor/ReflectionMacros.h"
 
 REFLECT_STRUCT_BEGIN(NoEngine::Component::TextComponent, "Asset")
-REFLECT_FIELD(text),
+REFLECT_MULTILINE_FIELD(text),
 REFLECT_FIELD(scale),
 REFLECT_FIELD(letterSpacing),
 REFLECT_FIELD(layer),
