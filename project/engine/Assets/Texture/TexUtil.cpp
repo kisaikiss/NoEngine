@@ -6,6 +6,10 @@
 
 #define GetFlag(f) ((Flags & f) != 0)
 
+namespace {
+std::unordered_set<std::wstring> sWarnedMissingTextures;
+}
+
 namespace NoEngine {
 using namespace Utilities;
 using namespace DirectX;
@@ -26,7 +30,9 @@ void CompileTextureOnDemand(const std::wstring& originalFile, uint32_t flags) {
 	bool ddsFileExists = std::filesystem::exists(ddsFile);
 
 	if (!srcFileExists && !ddsFileExists) {
-		LogInfo("Texture " + WStringToString(RemoveBasePath(originalFile)) + " is missing.\n");
+		if (sWarnedMissingTextures.insert(originalFile).second) {
+			LogWarning("Texture " + WStringToString(RemoveBasePath(originalFile)) + " is missing.\n");
+		}
 		return;
 	}
 

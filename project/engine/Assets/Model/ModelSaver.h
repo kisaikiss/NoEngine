@@ -83,6 +83,7 @@ public:
         // 3. 次回のためにキャッシュに登録
         modelCache_[filePath] = newAsset;
 
+        LogInfo("Load Model : " + filePath);
         return newAsset;
     }
 

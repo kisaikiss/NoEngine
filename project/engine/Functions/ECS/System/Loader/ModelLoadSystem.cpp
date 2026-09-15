@@ -13,9 +13,26 @@ using namespace Component;
 void ModelLoadSystem::Update(Registry& registry, float deltaTime) {
 	static_cast<void>(deltaTime);
 	auto view = registry.View<MeshComponent>();
+	const uint64_t currentGeneration = AssetManager::GetAddressableGeneration();
+
 	for (auto e : view) {
 		auto* mesh = registry.GetComponent<MeshComponent>(e);
-		auto asset = ModelSaver::Get().LoadOrGetModel(AssetManager::GetFilePathFromAddressableName(mesh->meshName));
+		const bool tableChanged = (mesh->loadedGeneration != currentGeneration);
+		const bool nameChanged = (mesh->loadedMeshName != mesh->meshName);
+
+		if (!tableChanged && !nameChanged) {
+			continue;
+		}
+
+		mesh->loadedGeneration = currentGeneration;
+		mesh->loadedMeshName = mesh->meshName;
+
+		std::string path = AssetManager::GetFilePathFromAddressableName(mesh->meshName);
+		if (path.empty()) {
+			continue; // AddressableName解決失敗。AssetManager側で警告済み
+		}
+
+		auto asset = ModelSaver::Get().LoadOrGetModel(path);
 		mesh->handle = asset.mesh;
 		if (registry.Has<MaterialComponent>(e)) {
 			auto* material = registry.GetComponent<MaterialComponent>(e);

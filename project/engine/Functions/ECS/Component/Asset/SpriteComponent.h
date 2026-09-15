@@ -28,6 +28,9 @@ struct SpriteComponent {
 	bool useMask = false;				// マスクを使用するかどうか（UI 用）
 	std::string maskTextureName;
 	TextureRef maskTextureHandle;	// マスクテクスチャ（UI 用）
+	uint64_t loadedGeneration = 0;
+	std::string loadedTextureName;  
+	std::string loadedMaskTextureName;
 };
 }
 }

@@ -21,6 +21,9 @@ struct MetaData {
 std::unordered_map<std::string, MetaData> sAddressable;
 
 std::vector<AssetManager::EditorAssetData> sEditorAssets;
+
+uint64_t sAddressableGeneration = 0;                       
+std::unordered_set<std::string> sWarnedMissingAddressable;
 }
 
 void AssetManager::CreateMetaFileForAllFiles() {
@@ -64,6 +67,9 @@ void AssetManager::DeleteAllMetaFiles() {
 
 void AssetManager::CreateAddressableList() {
 	sAddressable.clear();
+
+	sWarnedMissingAddressable.clear(); // テーブルを作り直すので警告履歴もリセット
+	++sAddressableGeneration;
 	for (const std::filesystem::directory_entry& entry : std::filesystem::recursive_directory_iterator(sAssetFilePass)) {
 		// メタファイルかどうか
 		if (entry.is_regular_file() && entry.path().extension().string() == sMetaFileExtensionName) {
@@ -174,12 +180,19 @@ void AssetManager::DrawImGui() {
 }
 
 std::string AssetManager::GetFilePathFromAddressableName(const std::string& addressableName) {
-	if (sAddressable.find(addressableName) == sAddressable.end()) {
-		LogWarning("指定されたAddressableNameが見つかりません！");
+	auto it = sAddressable.find(addressableName);
+	if (it == sAddressable.end()) {
+		// 同じ名前の警告は初回だけ出す
+		if (sWarnedMissingAddressable.insert(addressableName).second) {
+			LogWarning("指定されたAddressableNameが見つかりません！ : " + addressableName);
+		}
 		return "";
 	}
+	return it->second.filePath;
+}
 
-	return sAddressable[addressableName].filePath;
+uint64_t AssetManager::GetAddressableGeneration() {
+	return sAddressableGeneration;
 }
 
 bool AssetManager::IsSupportedFile(const std::filesystem::path& filePath) {

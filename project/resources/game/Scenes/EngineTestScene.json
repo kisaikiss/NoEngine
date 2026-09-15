@@ -260,12 +260,12 @@
                     "parent": null,
                     "rotation": 0.0,
                     "scale": [
-                        1.2088806629180908,
-                        1.2088806629180908
+                        0.6000000238418579,
+                        0.6000000238418579
                     ],
                     "translate": [
-                        -12.206116676330566,
-                        122.4912109375
+                        13.686043739318848,
+                        24.229372024536133
                     ]
                 }
             }
@@ -281,7 +281,7 @@
                         -1.3711175918579102,
                         -2.935393810272217
                     ],
-                    "distance": 9.737213134765625,
+                    "distance": 1.0213596820831299,
                     "drawCenter": false,
                     "moveType": "kBlender",
                     "unityMoveSpeed": 10.0,
@@ -294,10 +294,10 @@
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
-                        0.1976151168346405,
-                        -0.12174782902002335,
-                        0.024742724373936653,
-                        0.972375214099884
+                        0.3512672483921051,
+                        -0.15597394108772278,
+                        0.059470370411872864,
+                        0.9212744832038879
                     ],
                     "scale": [
                         1.0,
@@ -305,9 +305,9 @@
                         1.0
                     ],
                     "translate": [
-                        3.2840142250061035,
-                        2.4296748638153076,
-                        -11.623435974121094
+                        1.3246196508407593,
+                        -0.6911180019378662,
+                        -3.6550099849700928
                     ]
                 }
             }
@@ -1080,7 +1080,7 @@
                         0.5
                     ],
                     "space": "World",
-                    "textureName": "staminaFrame",
+                    "textureName": "resources/engine/flower.png",
                     "useMask": false,
                     "uv": [
                         0.0,
@@ -1231,6 +1231,47 @@
                     "translate": [
                         -418.0284729003906,
                         239.12380981445313
+                    ]
+                }
+            }
+        },
+        "text2": {
+            "components": {
+                "EditTag": {
+                    "name": "text2",
+                    "parent": null
+                },
+                "TextComponent": {
+                    "anchor": [
+                        0.0,
+                        0.0
+                    ],
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "hAlign": "kLeft",
+                    "isVisible": true,
+                    "layer": 0,
+                    "letterSpacing": 0.0,
+                    "orderInLayer": 0,
+                    "scale": 1.0,
+                    "space": "World",
+                    "text": "あaaa\nfaf\nこんちはaaa",
+                    "vAlign": "kBaseline"
+                },
+                "Transform2DComponent": {
+                    "parent": null,
+                    "rotation": 0.0,
+                    "scale": [
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0
                     ]
                 }
             }

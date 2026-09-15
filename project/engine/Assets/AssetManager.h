@@ -37,6 +37,9 @@ public:
 
 	static const std::vector<EditorAssetData>& GetEditorAssets();
 
+	// AddressableNameテーブルが再構築されるたびに増える世代カウンタ。
+	static uint64_t GetAddressableGeneration();
+
 	// AddressableNameを指定してファイルパスの作成
 	static std::string GetFilePathFromAddressableName(const std::string& addressableName);
 private:
