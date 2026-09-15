@@ -84,32 +84,84 @@ void AnimationSystem::AnimationUpdate(Registry& registry, float deltaTime) {
 		auto* animeComp = registry.GetComponent<Component::AnimatorComponent>(entity);
 		auto* meshComp = registry.GetComponent<Component::MeshComponent>(entity);
 
+		if (animeComp->currentAnimation != animeComp->preCurrentAnimation) {
+			animeComp->previousAnimation = animeComp->preCurrentAnimation;
+			animeComp->previousAnimationTime = animeComp->time;
+			animeComp->isBlending = (animeComp->blendDuration > 0.0f);
+			animeComp->blendTimer = 0.0f;
+			animeComp->time = 0.0f;
+			animeComp->preCurrentAnimation = animeComp->currentAnimation;
+		}
+
 		animeComp->time += deltaTime * animeComp->animationSpeedMagnification;
-		uint32_t currentAnimation = animeComp->currentAnimation;
+		uint32_t currentIndex = animeComp->currentAnimation;
 		auto& modelSaver = ModelSaver::Get();
-		auto* animation = modelSaver.GetAnimation(animeComp->animationHandles[currentAnimation]);
+
+		Animation* currentAnimation = modelSaver.GetAnimation(animeComp->animationHandles[currentIndex]);
 		auto* skeleton = modelSaver.GetSkeleton(animeComp->skeletonHandle);
-		animeComp->time = std::fmod(animeComp->time, animation->duration);
-			
+		if (!currentAnimation) continue;
+
+		animeComp->time = std::fmod(animeComp->time, currentAnimation->duration);
+
+		Animation* previousAnimation = nullptr;
+		float blendT = 1.0f;
+		if (animeComp->isBlending) {
+			animeComp->blendTimer += deltaTime;
+			previousAnimation = modelSaver.GetAnimation(animeComp->animationHandles[animeComp->previousAnimation]);
+			blendT = std::clamp(animeComp->blendTimer / animeComp->blendDuration, 0.0f, 1.0f);
+			if (animeComp->blendTimer >= animeComp->blendDuration) {
+				animeComp->isBlending = false;
+			}
+		}
+
 		if (skeleton) {
-			SkeletonUpdate(animeComp,skeleton,animation);
-			if(animeComp->drawSkeleton) SkeletonDraw(skeleton);
+			SkeletonUpdate(animeComp, skeleton, currentAnimation, previousAnimation);
+			if (animeComp->drawSkeleton) SkeletonDraw(skeleton);
 			SkinUpdate(skeleton, meshComp);
 		}
 		auto* mesh = ModelSaver::Get().GetMesh(meshComp->handle);
 		if (!mesh) return;
-		if (animation->nodeAnimations.contains(mesh->rootNode.name)) {
-			CalculateValue(animation->nodeAnimations[mesh->rootNode.name], animeComp->local, animeComp->time);
+
+		if (currentAnimation->nodeAnimations.contains(mesh->rootNode.name)) {
+			Transform rootLocal = SampleNodeAnimation(currentAnimation->nodeAnimations[mesh->rootNode.name], animeComp->time);
+
+			if (previousAnimation && previousAnimation->nodeAnimations.contains(mesh->rootNode.name)) {
+				Transform prevRootLocal = SampleNodeAnimation(
+					previousAnimation->nodeAnimations[mesh->rootNode.name], animeComp->previousAnimationTime);
+				rootLocal.translate = Easing::Lerp(prevRootLocal.translate, rootLocal.translate, blendT);
+				rootLocal.rotation = Math::Quaternion::Slerp(prevRootLocal.rotation, rootLocal.rotation, blendT);
+				rootLocal.scale = Easing::Lerp(prevRootLocal.scale, rootLocal.scale, blendT);
+			}
+
+			animeComp->local = rootLocal;
 		}
 	}
 }
+void AnimationSystem::SkeletonUpdate(Component::AnimatorComponent* animeComp, Skeleton* skeleton, Animation* currentAnimation, Animation* previousAnimation) {
+	float blendT = 1.0f;
+	if (animeComp->isBlending && animeComp->blendDuration > 0.0f) {
+		blendT = std::clamp(animeComp->blendTimer / animeComp->blendDuration, 0.0f, 1.0f);
+	}
 
-void AnimationSystem::SkeletonUpdate(Component::AnimatorComponent* animeComp, Skeleton* skeleton, Animation* animation) {
 	for (Joint& joint : skeleton->joints) {
-		if (auto it = animation->nodeAnimations.find(joint.name); it != animation->nodeAnimations.end()) {
-			const NodeAnimation& rootNodeAnimation = (*it).second;
-			CalculateValue(rootNodeAnimation, joint.transform, animeComp->time);
+		// 現在のアニメーションでのローカルTransformをサンプリング(なければバインドポーズのまま)
+		Transform local = joint.transform;
+		if (auto it = currentAnimation->nodeAnimations.find(joint.name); it != currentAnimation->nodeAnimations.end()) {
+			local = SampleNodeAnimation(it->second, animeComp->time);
 		}
+
+		// ブレンド中なら、切り替え時に凍結した旧アニメーションのポーズと補間する
+		if (animeComp->isBlending && previousAnimation) {
+			Transform prevLocal = joint.transform;
+			if (auto it = previousAnimation->nodeAnimations.find(joint.name); it != previousAnimation->nodeAnimations.end()) {
+				prevLocal = SampleNodeAnimation(it->second, animeComp->previousAnimationTime);
+			}
+			local.translate = Easing::Lerp(prevLocal.translate, local.translate, blendT);
+			local.rotation = Math::Quaternion::Slerp(prevLocal.rotation, local.rotation, blendT);
+			local.scale = Easing::Lerp(prevLocal.scale, local.scale, blendT);
+		}
+
+		joint.transform = local;
 
 		joint.localMatrix = joint.transform.MakeAffineMatrix4x4();
 		if (joint.parent) {
@@ -117,7 +169,6 @@ void AnimationSystem::SkeletonUpdate(Component::AnimatorComponent* animeComp, Sk
 		} else {
 			joint.skeletonSpaceMatrix = joint.localMatrix;
 		}
-
 	}
 }
 
@@ -150,10 +201,12 @@ void AnimationSystem::SkinUpdate(Skeleton* skeleton, Component::MeshComponent* m
 	}
 }
 
-void AnimationSystem::CalculateValue(const NodeAnimation& keyframes, Transform& transform, float time) {
-	transform.translate = CalculateValue(keyframes.translate.keyframes, time);
-	transform.rotation = CalculateValue(keyframes.rotation.keyframes, time);
-	transform.scale = CalculateValue(keyframes.scale.keyframes, time);
+Transform AnimationSystem::SampleNodeAnimation(const NodeAnimation& keyframes, float time) {
+	Transform result;
+	result.translate = CalculateValue(keyframes.translate.keyframes, time);
+	result.rotation = CalculateValue(keyframes.rotation.keyframes, time);
+	result.scale = CalculateValue(keyframes.scale.keyframes, time);
+	return result;
 }
 
 Vector3 AnimationSystem::CalculateValue(const std::vector<KeyframeVector3>& keyframes, float time) {

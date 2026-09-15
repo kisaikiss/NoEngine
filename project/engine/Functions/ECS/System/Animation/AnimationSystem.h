@@ -18,11 +18,13 @@ public:
 	void Update(Registry& registry, float deltaTime) override;
 private:
 	void AnimationUpdate(Registry& registry, float deltaTime);
-	void SkeletonUpdate(Component::AnimatorComponent* animeComp, Skeleton* skeleton, Animation* animation);
+	void SkeletonUpdate(Component::AnimatorComponent* animeComp, Skeleton* skeleton, Animation* currentAnimation, Animation* previousAnimation);
 	void SkeletonDraw(Skeleton* skeleton);
 	void SkinUpdate(Skeleton* skeleton, Component::MeshComponent* meshComp);
 
-	void CalculateValue(const NodeAnimation& keyframes, Transform& transform, float time);
+	// NodeAnimationから指定時刻のローカルTransformをサンプリングする(ブレンド用に値を返す版)
+	Transform SampleNodeAnimation(const NodeAnimation& keyframes, float time);
+
 	Math::Vector3 CalculateValue(const std::vector<KeyframeVector3>& keyframes, float time);
 	Math::Quaternion CalculateValue(const std::vector<KeyframeQuaternion>& keyframes, float time);
 
