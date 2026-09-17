@@ -18,6 +18,8 @@ struct PlayerComponent {
 	float jumpSpeed = 16.f;
 	float highJumpSpeed = 17.f;
 	float airDashSpeed = 10.f;
+	// 空中で目標速度へ近づく速さ。小さいほど空中での慣性が強くなる。
+	float airAcceleration = 20.f;
 	float gravity = -9.8f;
 	float yVelocity = 0.f;
 	float stamina = 0.0f;

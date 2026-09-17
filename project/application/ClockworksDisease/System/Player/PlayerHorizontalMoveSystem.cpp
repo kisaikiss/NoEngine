@@ -15,13 +15,6 @@ No::Quaternion GetActiveCameraRotation(No::Registry& registry) {
 	return cameraRotate;
 }
 
-// 現在の向きの正面ベクトル（水平成分のみ）。
-No::Vector3 GetFacingDirection(const No::TransformComponent* transform) {
-	No::Vector3 forward = transform->rotation.RotateVector(No::Vector3::FORWARD);
-	forward.y = 0.f;
-	return forward;
-}
-
 void FacePlayerTowardsMoveDirection(No::TransformComponent* transform, const No::Vector3& worldDir, float deltaTime) {
 	const No::Vector3 lookDir = { worldDir.x, 0.f, worldDir.z };
 	if (lookDir.Length() <= 1e-6f) {
@@ -50,7 +43,7 @@ void PlayerHorizontalMoveSystem::Update(No::Registry& registry, float deltaTime)
 
 	auto view = registry.View<PlayerComponent, No::TransformComponent, No::VelocityComponent,
 		No::GroundStateComponent, PlayerMoveTransientComponent>();
-	
+
 	bool isSkip = false;
 	for (auto e : registry.View<No::TransformComponent, No::CameraComponent, FollowCameraComponent>()) {
 		if (registry.Has<CameraIntroLockTag>(e)) isSkip = true; // 演出中は操作できない
@@ -76,8 +69,10 @@ void PlayerHorizontalMoveSystem::Update(No::Registry& registry, float deltaTime)
 			continue;
 		}
 
+		// 垂直速度は PlayerVerticalVelocitySystem が管理する。空中移動の慣性を
+		// 保持するため、ここでは現在の水平速度だけを退避しておく。
+		const No::Vector3 currentHorizontalVelocity = { velocity->linear.x, 0.f, velocity->linear.z };
 		velocity->linear = No::Vector3::ZERO;
-
 		No::Vector3 inputDir = No::Vector3::ZERO;
 		inputDir.x = No::GetInputAxisValue("Lateral");
 		inputDir.z = No::GetInputAxisValue("Forward");
@@ -92,23 +87,19 @@ void PlayerHorizontalMoveSystem::Update(No::Registry& registry, float deltaTime)
 				particleEmitterSphere->active = false;
 			if (particleEmitter)
 				particleEmitter->active = false;
-			transientState->slopeY = 0.f;
-			continue;
-		}
-
-		if (particleEmitterSphere)
+		} else if (particleEmitterSphere)
 			particleEmitterSphere->active = true;
-		if (particleEmitter)
-			particleEmitter->active = true;
+		if (hasInput || isAirDashing) {
+			if (particleEmitter)
+				particleEmitter->active = true;
+		}
 
 		const No::Vector3& groundNormal = playerVariables->groundNormal;
 
-		No::Vector3 worldDir;
+		No::Vector3 worldDir = No::Vector3::ZERO;
 		if (hasInput) {
 			worldDir = cameraRotate.RotateVector(inputDir);
 			worldDir.y = 0.f;
-		} else {
-			worldDir = GetFacingDirection(transform);
 		}
 
 		const float len = worldDir.Length();
@@ -128,7 +119,19 @@ void PlayerHorizontalMoveSystem::Update(No::Registry& registry, float deltaTime)
 		}
 		const float playerMoveSpeed = inputForce > playerVariables->dashStartInput ? playerVariables->moveSpeed : playerVariables->walkSpeed;
 		const float speed = isAirDashing ? playerVariables->airDashSpeed : playerMoveSpeed;
-		No::Vector3 finalVelocity = finalDir * speed;
+		const No::Vector3 targetVelocity = finalDir * speed;
+		No::Vector3 finalVelocity = targetVelocity;
+
+		if (!groundState->isGrounded && !isAirDashing) {
+			// 空中では入力を目標速度として扱い、加速量を制限して現在の速度から
+			// 徐々に近づける。入力を離した場合も同じく徐々に減速する。
+			const No::Vector3 velocityDelta = targetVelocity - currentHorizontalVelocity;
+			const float deltaLength = velocityDelta.Length();
+			const float maxSpeedChange = playerVariables->airAcceleration * deltaTime;
+			if (deltaLength > maxSpeedChange && deltaLength > 1e-6f) {
+				finalVelocity = currentHorizontalVelocity + velocityDelta * (maxSpeedChange / deltaLength);
+			}
+		}
 
 		velocity->linear.x = finalVelocity.x;
 		velocity->linear.z = finalVelocity.z;
