@@ -2201,9 +2201,9 @@
                 },
                 "DebugCameraComponent": {
                     "center": [
-                        11.972616195678711,
-                        36.475284576416016,
-                        -22.170146942138672
+                        21.543533325195313,
+                        10.413166999816895,
+                        -0.47017383575439453
                     ],
                     "distance": 9.015334129333496,
                     "drawCenter": false,
@@ -2218,10 +2218,10 @@
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
-                        0.2963736951351166,
-                        0.6638409495353699,
-                        -0.32538673281669617,
-                        0.6046497225761414
+                        0.0016441510524600744,
+                        0.9085257053375244,
+                        0.003575193928554654,
+                        -0.41781046986579895
                     ],
                     "scale": [
                         1.0,
@@ -2229,9 +2229,9 @@
                         1.0
                     ],
                     "translate": [
-                        6.474070072174072,
-                        43.60113525390625,
-                        -21.655872344970703
+                        28.38771629333496,
+                        10.342214584350586,
+                        5.397396087646484
                     ]
                 }
             }
@@ -25595,7 +25595,7 @@
                         -1.0,
                         -5.1165803597541526e-05
                     ],
-                    "intensity": 0.05000000074505806
+                    "intensity": 0.07500000298023224
                 },
                 "EditTag": {
                     "name": "directionalLight",
@@ -25710,6 +25710,7 @@
             "components": {
                 "AnimatorComponent": {
                     "animationSpeedMagnification": 1.0,
+                    "blendDuration": 0.20000000298023224,
                     "currentAnimation": 0,
                     "drawSkeleton": false,
                     "enableSkinning": true
@@ -25781,6 +25782,7 @@
                     "groundHeight": 0.0,
                     "isGrounded": false
                 },
+                "HighJumpTag": null,
                 "LevelComponent": {
                     "nextLevelUp": 30,
                     "nowLevel": 1,
@@ -25861,6 +25863,7 @@
                     "infinityStamina": false,
                     "jumpSpeed": 5.5,
                     "maxStamina": 0.0,
+                    "minGroundNormalY": 0.949999988079071,
                     "moveSpeed": 6.0,
                     "stamina": 0.0,
                     "staminaRecoveryRate": 1.0,

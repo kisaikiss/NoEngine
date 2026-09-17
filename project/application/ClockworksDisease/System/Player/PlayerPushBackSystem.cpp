@@ -11,15 +11,19 @@ void PlayerPushBackSystem::Update(No::Registry& registry, float deltaTime) {
     std::unordered_map<No::Entity, float> bestPenetration; // player entity -> 最大penetration
 
     for (const auto& event : view) {
-        if (event.position == No::ContactPosition::UP) {
+        auto* player = registry.GetComponent<PlayerComponent>(event.player);
+
+        const bool isWalkableGround =
+            event.position == No::ContactPosition::UP &&
+            event.normal.y >= player->minGroundNormalY;
+
+        if (isWalkableGround) {
             auto* transform = registry.GetComponent<No::TransformComponent>(event.player);
             auto* ground = registry.GetComponent<No::GroundStateComponent>(event.player);
 
             ground->isGrounded = true;
             ground->groundHeight = transform->GetWorldPosition(registry).y;
             ground->groundEntity = event.platform;
-
-            auto* player = registry.GetComponent<PlayerComponent>(event.player);
 
             if (player->yVelocity < 0.f) {
                 if (!ground->preIsGrounded && player->yVelocity < -3.5f) {
@@ -36,7 +40,6 @@ void PlayerPushBackSystem::Update(No::Registry& registry, float deltaTime) {
             }
         }
         if (event.position == No::ContactPosition::DOWN) {
-            auto* player = registry.GetComponent<PlayerComponent>(event.player);
             if (player->yVelocity > 0.f) player->yVelocity = 0.f;
         }
     }

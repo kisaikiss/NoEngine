@@ -153,6 +153,7 @@
             "infinityStamina": false,
             "jumpSpeed": 5.5,
             "maxStamina": 0.0,
+            "minGroundNormalY": 0.75,
             "moveSpeed": 6.0,
             "stamina": 0.0,
             "staminaRecoveryRate": 1.0,

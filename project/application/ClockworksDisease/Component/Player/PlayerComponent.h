@@ -23,6 +23,9 @@ struct PlayerComponent {
 	float staminaRecoveryRate = 1.0f;   // 秒あたりのスタミナ回復量
 	float staminaUpPerLevel = 1.0f;     // レベルアップ時のスタミナ最大値上昇量
  	No::Vector3 groundNormal = No::Vector3::UP;
+	// この値未満の上向き法線は壁・角への接触として扱い、接地しない。
+	// 0.75 は水平面から約 41 度までを歩行可能な斜面にする。
+	float minGroundNormalY = 0.75f;
 	bool infinityJump = false;
 	bool infinityStamina = false;
 	bool canCreateScaffold = true;

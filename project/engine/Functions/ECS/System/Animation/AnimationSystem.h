@@ -7,7 +7,7 @@
 #include "engine/Assets/Model/Skeleton.h"
 #include "engine/Assets/Model/Animation.h"
 
-namespace NoEngine {
+namespace NoEngine { 
 namespace ECS {
 
 class AnimationSystem :
