@@ -12,6 +12,8 @@ enum class PlayerState {
 
 struct PlayerComponent {
 	float moveSpeed = 10.f;
+	float walkSpeed = 5.f;
+	float dashStartInput = 0.5f;
 	float doubleJumpSpeed = 4.f;
 	float jumpSpeed = 16.f;
 	float highJumpSpeed = 17.f;

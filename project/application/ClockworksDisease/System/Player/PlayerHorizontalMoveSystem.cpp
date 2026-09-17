@@ -66,6 +66,7 @@ void PlayerHorizontalMoveSystem::Update(No::Registry& registry, float deltaTime)
 		auto* particleEmitterSphere = registry.GetComponent<No::ParticleEmitterSphereComponent>(entity);
 		auto* particleEmitter = registry.GetComponent<No::ParticleEmitterComponent>(entity);
 		auto* transientState = registry.GetComponent<PlayerMoveTransientComponent>(entity);
+		auto* animator = registry.GetComponent<No::AnimatorComponent>(entity);
 
 		if (registry.Has<GoalDirectionLockTag>(entity)) {
 			velocity->linear = No::Vector3::ZERO;
@@ -80,6 +81,8 @@ void PlayerHorizontalMoveSystem::Update(No::Registry& registry, float deltaTime)
 		No::Vector3 inputDir = No::Vector3::ZERO;
 		inputDir.x = No::GetInputAxisValue("Lateral");
 		inputDir.z = No::GetInputAxisValue("Forward");
+
+		float inputForce = (std::fabsf(inputDir.x) + std::fabsf(inputDir.z)) / 2.0f;
 
 		const bool hasInput = (inputDir.x != 0.f || inputDir.z != 0.f);
 		const bool isAirDashing = transientState->isAirDashing;
@@ -118,7 +121,13 @@ void PlayerHorizontalMoveSystem::Update(No::Registry& registry, float deltaTime)
 			finalDir = ProjectOnGroundPlane(horizontalDir, groundNormal);
 		}
 
-		const float speed = isAirDashing ? playerVariables->airDashSpeed : playerVariables->moveSpeed;
+		if (playerVariables->state == PlayerState::kWalk && inputForce < playerVariables->dashStartInput) {
+			animator->animationSpeedMagnification = 0.8f;
+		} else {
+			animator->animationSpeedMagnification = 1.2f;
+		}
+		const float playerMoveSpeed = inputForce > playerVariables->dashStartInput ? playerVariables->moveSpeed : playerVariables->walkSpeed;
+		const float speed = isAirDashing ? playerVariables->airDashSpeed : playerMoveSpeed;
 		No::Vector3 finalVelocity = finalDir * speed;
 
 		velocity->linear.x = finalVelocity.x;

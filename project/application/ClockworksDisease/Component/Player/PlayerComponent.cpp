@@ -3,6 +3,8 @@
 
 REFLECT_STRUCT_BEGIN(PlayerComponent, "Application")
 REFLECT_FIELD(moveSpeed),
+REFLECT_FIELD(walkSpeed),
+REFLECT_FIELD(dashStartInput),
 REFLECT_FIELD(jumpSpeed),
 REFLECT_FIELD(highJumpSpeed),
 REFLECT_FIELD(doubleJumpSpeed),
