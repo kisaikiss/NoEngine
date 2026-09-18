@@ -22,13 +22,13 @@ struct PlayerComponent {
 	float airAcceleration = 20.f;
 	float gravity = -9.8f;
 	float yVelocity = 0.f;
+	float maxFallSpeed = -25.f;
 	float stamina = 0.0f;
 	float maxStamina = 0.0f;
 	float staminaRecoveryRate = 1.0f;   // 秒あたりのスタミナ回復量
 	float staminaUpPerLevel = 1.0f;     // レベルアップ時のスタミナ最大値上昇量
  	No::Vector3 groundNormal = No::Vector3::UP;
 	// この値未満の上向き法線は壁・角への接触として扱い、接地しない。
-	// 0.75 は水平面から約 41 度までを歩行可能な斜面にする。
 	float minGroundNormalY = 0.75f;
 	bool infinityJump = false;
 	bool infinityStamina = false;

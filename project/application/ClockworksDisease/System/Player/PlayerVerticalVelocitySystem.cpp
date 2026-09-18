@@ -27,6 +27,9 @@ void PlayerVerticalVelocitySystem::Update(No::Registry& registry, float deltaTim
 			velocity->linear.y = transientState->slopeY;
 		} else {
 			playerVariables->yVelocity += playerVariables->gravity * deltaTime;
+			if (playerVariables->yVelocity < playerVariables->maxFallSpeed) {
+				playerVariables->yVelocity = playerVariables->maxFallSpeed;
+			}
 			velocity->linear.y = playerVariables->yVelocity;
 			particleEmitter->active = false;
 		}
