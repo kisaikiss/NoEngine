@@ -19,7 +19,7 @@
                         1.0,
                         1.0,
                         1.0,
-                        -0.006225199904292822
+                        0.0
                     ],
                     "fill": 0.0,
                     "flipX": false,
@@ -51,8 +51,8 @@
                         64.0
                     ],
                     "translate": [
-                        -127.60888671875,
-                        -51.04376220703125
+                        -131.1999969482422,
+                        -50.5
                     ]
                 }
             },
@@ -65,13 +65,13 @@
                 },
                 "DebugCameraComponent": {
                     "center": [
-                        -72.55152893066406,
-                        1.6022602319717407,
-                        2.5700795650482178
+                        -58.72176742553711,
+                        21.947521209716797,
+                        -9.317413330078125
                     ],
-                    "distance": 47.87739562988281,
+                    "distance": 9.015334129333496,
                     "drawCenter": false,
-                    "moveType": "kBlender",
+                    "moveType": "kUnreal",
                     "unityMoveSpeed": 10.0,
                     "unitySensitivity": 0.20000000298023224
                 },
@@ -82,10 +82,10 @@
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
-                        0.05252791941165924,
-                        0.694406270980835,
-                        -0.050954245030879974,
-                        0.7158522605895996
+                        0.10159078985452652,
+                        -0.4056555926799774,
+                        0.04542513191699982,
+                        0.9072262644767761
                     ],
                     "scale": [
                         1.0,
@@ -93,18 +93,10 @@
                         1.0
                     ],
                     "translate": [
-                        -119.89421081542969,
-                        8.590940475463867,
-                        1.1298447847366333
+                        -52.16930389404297,
+                        23.94158363342285,
+                        -15.179596900939941
                     ]
-                }
-            }
-        },
-        "Effect": {
-            "components": {
-                "EditTag": {
-                    "name": "Effect",
-                    "parent": null
                 }
             }
         },
@@ -129,13 +121,300 @@
                     "parent": null
                 },
                 "EditorSettingComponent": {
-                    "drawCollider": false
+                    "drawCollider": true
                 },
                 "PrefabInstanceTag": {
                     "prefabPath": "resources/game/Prefabs\\GameSetting.json"
                 }
             },
             "prefabInstance": "resources/game/Prefabs\\GameSetting.json"
+        },
+        "GoalItem": {
+            "components": {
+                "CollisionLayerComponent": {
+                    "layer": "Item"
+                },
+                "EditTag": {
+                    "name": "GoalItem",
+                    "parent": null
+                },
+                "EffectEmitterComponent": {
+                    "color": [
+                        0.4000000059604645,
+                        0.4000000059604645,
+                        1.0,
+                        1.0
+                    ],
+                    "count": 20,
+                    "emitRange": [
+                        2.0,
+                        1.0,
+                        2.0
+                    ],
+                    "maxLifeTime": 2.0,
+                    "maxRotate": 3.1415927410125732,
+                    "maxScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "maxSpeed": [
+                        0.5,
+                        2.0,
+                        0.5
+                    ],
+                    "minLifeTime": 1.0,
+                    "minRotate": 0.0,
+                    "minScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "minSpeed": [
+                        -0.5,
+                        0.0,
+                        -0.5
+                    ],
+                    "textureName": "getEffect"
+                },
+                "GoalItemTag": null,
+                "MaterialComponent": {
+                    "blendMode": "kAdd",
+                    "color": [
+                        2.0,
+                        5.921568393707275,
+                        3.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        0.0,
+                        0.10000000149011612,
+                        0.6000000238418579,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "enviromentCoefficient": 0.8999999761581421,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "resources/engine/Texture/noise/Noise_Gradients/T_Random_22.png",
+                    "renderMode": "kEmissive",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "power"
+                },
+                "PowerItemComponent": null,
+                "PrefabInstanceTag": {
+                    "prefabPath": "resources/game/Prefabs\\PowerItem.json"
+                },
+                "SphereCollider": {
+                    "localCenter": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "radius": 1.0
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        3.4353997707366943,
+                        3.4353997707366943,
+                        3.4353997707366943
+                    ],
+                    "translate": [
+                        52.6883544921875,
+                        32.39221954345703,
+                        -22.512144088745117
+                    ]
+                },
+                "TransformRoutineComponent": {
+                    "interpolation": "CatmullRom",
+                    "keyframes": [
+                        {
+                            "duration": 1.0,
+                            "easing": "Linear",
+                            "rotation": [
+                                0.0,
+                                0.0,
+                                0.0,
+                                1.0
+                            ],
+                            "scale": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ],
+                            "translate": [
+                                52.6883544921875,
+                                32.39221954345703,
+                                -22.512144088745117
+                            ]
+                        },
+                        {
+                            "duration": 1.0,
+                            "easing": "Linear",
+                            "rotation": [
+                                0.0,
+                                0.0,
+                                0.0,
+                                1.0
+                            ],
+                            "scale": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ],
+                            "translate": [
+                                38.9399299621582,
+                                32.39221954345703,
+                                -15.461729049682617
+                            ]
+                        },
+                        {
+                            "duration": 1.0,
+                            "easing": "Linear",
+                            "rotation": [
+                                0.0,
+                                0.0,
+                                0.0,
+                                1.0
+                            ],
+                            "scale": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ],
+                            "translate": [
+                                39.06212615966797,
+                                30.55449104309082,
+                                -21.051145553588867
+                            ]
+                        },
+                        {
+                            "duration": 1.0,
+                            "easing": "Linear",
+                            "rotation": [
+                                0.0,
+                                0.0,
+                                0.0,
+                                1.0
+                            ],
+                            "scale": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ],
+                            "translate": [
+                                47.908973693847656,
+                                30.55449104309082,
+                                -29.56836700439453
+                            ]
+                        },
+                        {
+                            "duration": 1.0,
+                            "easing": "Linear",
+                            "rotation": [
+                                0.0,
+                                0.0,
+                                0.0,
+                                1.0
+                            ],
+                            "scale": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ],
+                            "translate": [
+                                61.40716552734375,
+                                30.55449104309082,
+                                -26.1943359375
+                            ]
+                        },
+                        {
+                            "duration": 1.0,
+                            "easing": "Linear",
+                            "rotation": [
+                                0.0,
+                                0.0,
+                                0.0,
+                                1.0
+                            ],
+                            "scale": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ],
+                            "translate": [
+                                61.40716552734375,
+                                37.57782745361328,
+                                -9.433572769165039
+                            ]
+                        },
+                        {
+                            "duration": 1.0,
+                            "easing": "Linear",
+                            "rotation": [
+                                0.0,
+                                0.0,
+                                0.0,
+                                1.0
+                            ],
+                            "scale": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ],
+                            "translate": [
+                                45.04271697998047,
+                                40.50259017944336,
+                                -16.043542861938477
+                            ]
+                        },
+                        {
+                            "duration": 1.0,
+                            "easing": "EaesOutExpo",
+                            "rotation": [
+                                0.0,
+                                0.0,
+                                0.0,
+                                1.0
+                            ],
+                            "scale": [
+                                0.0,
+                                0.0,
+                                0.0
+                            ],
+                            "translate": [
+                                45.04271697998047,
+                                46.567264556884766,
+                                -21.455299377441406
+                            ]
+                        }
+                    ],
+                    "loop": false,
+                    "playbackSpeed": 1.0,
+                    "playing": false
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\PowerItem.json"
         },
         "Level": {
             "components": {
@@ -314,7 +593,7 @@
             "components": {
                 "EditTag": {
                     "name": "LevelUpEffect",
-                    "parent": "Effect"
+                    "parent": "UI"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -373,9 +652,9 @@
                         1.0
                     ],
                     "translate": [
-                        -3.497300624847412,
-                        0.0,
-                        4.0090227127075195
+                        1.123034119606018,
+                        0.07043378055095673,
+                        -3.987689256668091
                     ]
                 }
             },
@@ -442,12 +721,28 @@
             },
             "prefabInstance": "resources/game/Prefabs\\LevelUpUI.json"
         },
+        "Lights": {
+            "components": {
+                "EditTag": {
+                    "name": "Lights",
+                    "parent": null
+                }
+            }
+        },
         "MainCamera": {
             "components": {
                 "ActiveCameraTag": null,
                 "CameraComponent": {
-                    "fov": 0.7751311659812927
+                    "fov": 0.6499999761581421
                 },
+                "CameraIntroComponent": {
+                    "blackOutDuration": 0.5,
+                    "fadeInDuration": 1.0,
+                    "fadeOutDuration": 1.0,
+                    "phase": "kPlayingRoutine",
+                    "playInEditor": false
+                },
+                "CameraIntroLockTag": null,
                 "EditTag": {
                     "name": "MainCamera",
                     "parent": null
@@ -456,26 +751,26 @@
                     "collisionMargin": 0.30000001192092896,
                     "collisionRadius": 0.949999988079071,
                     "collisionStartOffset": 5.0,
-                    "currentDistance": 7.615163326263428,
-                    "distance": 7.615164756774902,
-                    "maxDistance": 17.0,
+                    "currentDistance": 15.0,
+                    "distance": 15.0,
+                    "maxDistance": 15.0,
                     "maxFov": 0.8500000238418579,
                     "maxPhi": 1.5707963705062866,
                     "minDistance": 2.0,
                     "minFov": 0.6499999761581421,
                     "minPhi": 0.6283185482025146,
                     "moveSpeed": 2.0,
-                    "phi": 1.2179851531982422,
+                    "phi": 1.0,
                     "playerPosOffset": 2.0,
-                    "theta": -8.572347640991211
+                    "theta": 0.0
                 },
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
-                        0.04123349115252495,
-                        0.3511677086353302,
-                        -0.015481922775506973,
-                        0.9352760910987854
+                        -0.021264633163809776,
+                        0.9552168250083923,
+                        -0.28649961948394775,
+                        -0.07089830935001373
                     ],
                     "scale": [
                         1.0,
@@ -483,10 +778,138 @@
                         1.0
                     ],
                     "translate": [
-                        2.869344711303711,
-                        22.626327514648438,
-                        -50.417816162109375
+                        2.9213101863861084,
+                        8.724297523498535,
+                        5.313185214996338
                     ]
+                },
+                "TransformRoutineComponent": {
+                    "interpolation": "CatmullRom",
+                    "keyframes": [
+                        {
+                            "duration": 1.0,
+                            "easing": "EaseInExpo",
+                            "rotation": [
+                                0.0,
+                                0.0,
+                                0.0,
+                                1.0
+                            ],
+                            "scale": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ],
+                            "translate": [
+                                2.9213101863861084,
+                                8.724297523498535,
+                                -0.9972100257873535
+                            ]
+                        },
+                        {
+                            "duration": 1.0,
+                            "easing": "Linear",
+                            "rotation": [
+                                0.0,
+                                -0.46169525384902954,
+                                0.0,
+                                0.8870385885238647
+                            ],
+                            "scale": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ],
+                            "translate": [
+                                -5.250000953674316,
+                                8.724297523498535,
+                                -0.9972100257873535
+                            ]
+                        },
+                        {
+                            "duration": 3.0,
+                            "easing": "Linear",
+                            "rotation": [
+                                0.19475926458835602,
+                                0.8886783719062805,
+                                -0.088869608938694,
+                                0.40548962354660034
+                            ],
+                            "scale": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ],
+                            "translate": [
+                                -14.141661643981934,
+                                17.567790985107422,
+                                -0.9972100257873535
+                            ]
+                        },
+                        {
+                            "duration": 3.0,
+                            "easing": "Linear",
+                            "rotation": [
+                                -1.2508095892371784e-07,
+                                0.736232578754425,
+                                -1.2508095892371784e-07,
+                                0.6767285466194153
+                            ],
+                            "scale": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ],
+                            "translate": [
+                                -22.945716857910156,
+                                30.253156661987305,
+                                5.5638041496276855
+                            ]
+                        },
+                        {
+                            "duration": 4.0,
+                            "easing": "Linear",
+                            "rotation": [
+                                2.7561250703911355e-07,
+                                0.842140793800354,
+                                2.7561250703911355e-07,
+                                0.5392576456069946
+                            ],
+                            "scale": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ],
+                            "translate": [
+                                1.6731464862823486,
+                                37.85794448852539,
+                                3.7106773853302
+                            ]
+                        },
+                        {
+                            "duration": 3.0,
+                            "easing": "EaseOutSine",
+                            "rotation": [
+                                0.04206587374210358,
+                                0.8581923246383667,
+                                -0.06708835810422897,
+                                0.5071837902069092
+                            ],
+                            "scale": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ],
+                            "translate": [
+                                27.162565231323242,
+                                37.85794448852539,
+                                -9.315659523010254
+                            ]
+                        }
+                    ],
+                    "loop": false,
+                    "playbackSpeed": 1.0,
+                    "playing": true
                 }
             }
         },
@@ -517,7 +940,7 @@
                         1.0,
                         1.0,
                         1.0,
-                        -0.006225199904292822
+                        0.0
                     ],
                     "fill": 0.0,
                     "flipX": false,
@@ -549,12 +972,677 @@
                         64.0
                     ],
                     "translate": [
-                        -280.7406005859375,
-                        -52.8663330078125
+                        -277.6000061035156,
+                        -53.5
                     ]
                 }
             },
             "prefabInstance": "resources/game/Prefabs\\XButton.json"
+        },
+        "box": {
+            "components": {
+                "AABBCollider": {
+                    "max": [
+                        0.9724538922309875,
+                        0.324538916349411,
+                        1.9435561895370483
+                    ],
+                    "min": [
+                        -0.9724538922309875,
+                        -0.324538916349411,
+                        -1.9435561895370483
+                    ]
+                },
+                "ColliderUpdateTag": null,
+                "CollisionLayerComponent": {
+                    "layer": "Terrain"
+                },
+                "EditTag": {
+                    "name": "box",
+                    "parent": null
+                },
+                "MaterialComponent": {
+                    "blendMode": "kNormal",
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "enviromentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "renderMode": "kDefault",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "resources/game/ClockworksDisease/Model/gimmick/movingBlock.obj"
+                },
+                "PlatformDeltaComponent": {
+                    "frameDelta": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "previousTranslate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                "PrefabInstanceTag": {
+                    "prefabPath": "resources/game/Prefabs\\box.json"
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.944907784461975,
+                        0.649077832698822,
+                        3.8871123790740967
+                    ],
+                    "translate": [
+                        -82.14740753173828,
+                        15.939661026000977,
+                        -2.9765894412994385
+                    ]
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\box.json"
+        },
+        "box_2": {
+            "components": {
+                "AABBCollider": {
+                    "max": [
+                        1.2326711416244507,
+                        0.324538916349411,
+                        2.5309596061706543
+                    ],
+                    "min": [
+                        -1.2326711416244507,
+                        -0.324538916349411,
+                        -2.5309596061706543
+                    ]
+                },
+                "ColliderUpdateTag": null,
+                "CollisionLayerComponent": {
+                    "layer": "Terrain"
+                },
+                "EditTag": {
+                    "name": "box_2",
+                    "parent": null
+                },
+                "MaterialComponent": {
+                    "blendMode": "kNormal",
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "enviromentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "renderMode": "kDefault",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "resources/game/ClockworksDisease/Model/gimmick/movingBlock.obj"
+                },
+                "PlatformDeltaComponent": {
+                    "frameDelta": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "previousTranslate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                "PrefabInstanceTag": {
+                    "prefabPath": "resources/game/Prefabs\\box.json"
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        2.4653422832489014,
+                        0.649077832698822,
+                        5.061919212341309
+                    ],
+                    "translate": [
+                        -72.52947235107422,
+                        13.79831600189209,
+                        -0.6846590042114258
+                    ]
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\box.json"
+        },
+        "box_2_2": {
+            "components": {
+                "AABBCollider": {
+                    "max": [
+                        1.2326711416244507,
+                        0.324538916349411,
+                        2.5309596061706543
+                    ],
+                    "min": [
+                        -1.2326711416244507,
+                        -0.324538916349411,
+                        -2.5309596061706543
+                    ]
+                },
+                "ColliderUpdateTag": null,
+                "CollisionLayerComponent": {
+                    "layer": "Terrain"
+                },
+                "EditTag": {
+                    "name": "box_2_2",
+                    "parent": null
+                },
+                "MaterialComponent": {
+                    "blendMode": "kNormal",
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "enviromentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "renderMode": "kDefault",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "resources/game/ClockworksDisease/Model/gimmick/movingBlock.obj"
+                },
+                "PlatformDeltaComponent": {
+                    "frameDelta": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "previousTranslate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                "PrefabInstanceTag": {
+                    "prefabPath": "resources/game/Prefabs\\box.json"
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        2.4653422832489014,
+                        0.649077832698822,
+                        5.061919212341309
+                    ],
+                    "translate": [
+                        -70.34884643554688,
+                        12.580849647521973,
+                        -0.6846590042114258
+                    ]
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\box.json"
+        },
+        "box_3": {
+            "components": {
+                "AABBCollider": {
+                    "max": [
+                        1.8724595308303833,
+                        0.324538916349411,
+                        1.9435561895370483
+                    ],
+                    "min": [
+                        -1.8724595308303833,
+                        -0.324538916349411,
+                        -1.9435561895370483
+                    ]
+                },
+                "ColliderUpdateTag": null,
+                "CollisionLayerComponent": {
+                    "layer": "Terrain"
+                },
+                "EditTag": {
+                    "name": "box_3",
+                    "parent": null
+                },
+                "MaterialComponent": {
+                    "blendMode": "kNormal",
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "enviromentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "renderMode": "kDefault",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "resources/game/ClockworksDisease/Model/gimmick/movingBlock.obj"
+                },
+                "PlatformDeltaComponent": {
+                    "frameDelta": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "previousTranslate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                "PrefabInstanceTag": {
+                    "prefabPath": "resources/game/Prefabs\\box.json"
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        3.7449190616607666,
+                        0.649077832698822,
+                        3.8871123790740967
+                    ],
+                    "translate": [
+                        -59.638980865478516,
+                        9.473039627075195,
+                        -5.738655090332031
+                    ]
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\box.json"
+        },
+        "box_3_2": {
+            "components": {
+                "AABBCollider": {
+                    "max": [
+                        1.8724595308303833,
+                        0.324538916349411,
+                        1.9435561895370483
+                    ],
+                    "min": [
+                        -1.8724595308303833,
+                        -0.324538916349411,
+                        -1.9435561895370483
+                    ]
+                },
+                "ColliderUpdateTag": null,
+                "CollisionLayerComponent": {
+                    "layer": "Terrain"
+                },
+                "EditTag": {
+                    "name": "box_3_2",
+                    "parent": null
+                },
+                "MaterialComponent": {
+                    "blendMode": "kNormal",
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "enviromentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "renderMode": "kDefault",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "resources/game/ClockworksDisease/Model/gimmick/movingBlock.obj"
+                },
+                "PlatformDeltaComponent": {
+                    "frameDelta": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "previousTranslate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                "PrefabInstanceTag": {
+                    "prefabPath": "resources/game/Prefabs\\box.json"
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        3.7449190616607666,
+                        0.649077832698822,
+                        3.8871123790740967
+                    ],
+                    "translate": [
+                        -39.979515075683594,
+                        5.333223819732666,
+                        0.408494234085083
+                    ]
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\box.json"
+        },
+        "box_4": {
+            "components": {
+                "AABBCollider": {
+                    "max": [
+                        3.7295241355895996,
+                        0.324538916349411,
+                        1.608264684677124
+                    ],
+                    "min": [
+                        -3.7295241355895996,
+                        -0.324538916349411,
+                        -1.608264684677124
+                    ]
+                },
+                "ColliderUpdateTag": null,
+                "CollisionLayerComponent": {
+                    "layer": "Terrain"
+                },
+                "EditTag": {
+                    "name": "box_4",
+                    "parent": null
+                },
+                "MaterialComponent": {
+                    "blendMode": "kNormal",
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "enviromentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "renderMode": "kDefault",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "resources/game/ClockworksDisease/Model/gimmick/movingBlock.obj"
+                },
+                "PlatformDeltaComponent": {
+                    "frameDelta": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "previousTranslate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                "PrefabInstanceTag": {
+                    "prefabPath": "resources/game/Prefabs\\box.json"
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        7.459048271179199,
+                        0.649077832698822,
+                        3.216529369354248
+                    ],
+                    "translate": [
+                        -48.648193359375,
+                        7.507922172546387,
+                        1.2229392528533936
+                    ]
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\box.json"
+        },
+        "box_5": {
+            "components": {
+                "AABBCollider": {
+                    "max": [
+                        0.9724538922309875,
+                        0.324538916349411,
+                        1.9435561895370483
+                    ],
+                    "min": [
+                        -0.9724538922309875,
+                        -0.324538916349411,
+                        -1.9435561895370483
+                    ]
+                },
+                "ColliderUpdateTag": null,
+                "CollisionLayerComponent": {
+                    "layer": "Terrain"
+                },
+                "EditTag": {
+                    "name": "box_5",
+                    "parent": null
+                },
+                "MaterialComponent": {
+                    "blendMode": "kNormal",
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "enviromentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "renderMode": "kDefault",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "resources/game/ClockworksDisease/Model/gimmick/movingBlock.obj"
+                },
+                "PlatformDeltaComponent": {
+                    "frameDelta": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "previousTranslate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                "PrefabInstanceTag": {
+                    "prefabPath": "resources/game/Prefabs\\box.json"
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.944907784461975,
+                        0.649077832698822,
+                        3.8871123790740967
+                    ],
+                    "translate": [
+                        -82.14740753173828,
+                        17.803958892822266,
+                        0.5943219661712646
+                    ]
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\box.json"
         },
         "canMagicUI": {
             "components": {
@@ -564,9 +1652,6 @@
                 "EditTag": {
                     "name": "canMagicUI",
                     "parent": "staminaGauge"
-                },
-                "PrefabInstanceTag": {
-                    "prefabPath": "resources/game/Prefabs\\canMagicUI.json"
                 },
                 "SpriteComponent": {
                     "anchor": [
@@ -582,7 +1667,7 @@
                     "fill": 0.0,
                     "flipX": false,
                     "flipY": false,
-                    "isVisible": false,
+                    "isVisible": true,
                     "layer": 1,
                     "maskTextureName": "",
                     "nonRenderAngle": 0.0,
@@ -614,8 +1699,7 @@
                         0.7559999823570251
                     ]
                 }
-            },
-            "prefabInstance": "resources/game/Prefabs\\canMagicUI.json"
+            }
         },
         "canMagicUIBack": {
             "components": {
@@ -625,9 +1709,6 @@
                 "EditTag": {
                     "name": "canMagicUIBack",
                     "parent": "canMagicUI"
-                },
-                "PrefabInstanceTag": {
-                    "prefabPath": "resources/game/Prefabs\\canMagicUIBack.json"
                 },
                 "SpriteComponent": {
                     "anchor": [
@@ -675,8 +1756,7 @@
                         0.0
                     ]
                 }
-            },
-            "prefabInstance": "resources/game/Prefabs\\canMagicUIBack.json"
+            }
         },
         "directionalLight": {
             "components": {
@@ -688,15 +1768,15 @@
                         1.0
                     ],
                     "direction": [
-                        0.11633047461509705,
-                        -0.9899267554283142,
-                        -0.08069895952939987
+                        0.4577767252922058,
+                        -0.8890671730041504,
+                        -4.548983997665346e-05
                     ],
-                    "intensity": 1.0
+                    "intensity": 0.30000001192092896
                 },
                 "EditTag": {
                     "name": "directionalLight",
-                    "parent": null
+                    "parent": "Lights"
                 },
                 "PrefabInstanceTag": {
                     "prefabPath": "resources/game/Prefabs\\directionalLight.json"
@@ -704,10 +1784,110 @@
             },
             "prefabInstance": "resources/game/Prefabs\\directionalLight.json"
         },
+        "goalCamera": {
+            "components": {
+                "CameraComponent": {
+                    "fov": 0.6499999761581421
+                },
+                "EditTag": {
+                    "name": "goalCamera",
+                    "parent": null
+                },
+                "GoalDirectorCameraTag": null,
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        43.21251678466797,
+                        39.031246185302734,
+                        -14.545406341552734
+                    ]
+                },
+                "TransformRoutineComponent": {
+                    "interpolation": "CatmullRom",
+                    "keyframes": [
+                        {
+                            "duration": 2.0,
+                            "easing": "Linear",
+                            "rotation": [
+                                -2.390406734775752e-07,
+                                0.7248988151550293,
+                                -2.390406734775752e-07,
+                                0.6888553500175476
+                            ],
+                            "scale": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ],
+                            "translate": [
+                                38.36106872558594,
+                                34.017940521240234,
+                                -22.902660369873047
+                            ]
+                        },
+                        {
+                            "duration": 3.0,
+                            "easing": "Linear",
+                            "rotation": [
+                                -0.13882650434970856,
+                                0.6951744556427002,
+                                0.13812300562858582,
+                                0.691651463508606
+                            ],
+                            "scale": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ],
+                            "translate": [
+                                32.01899337768555,
+                                23.153358459472656,
+                                -22.902660369873047
+                            ]
+                        },
+                        {
+                            "duration": 4.0,
+                            "easing": "Linear",
+                            "rotation": [
+                                -0.25345128774642944,
+                                0.68621426820755,
+                                0.23622801899909973,
+                                0.6395847201347351
+                            ],
+                            "scale": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ],
+                            "translate": [
+                                13.875181198120117,
+                                5.878347873687744,
+                                -22.902660369873047
+                            ]
+                        }
+                    ],
+                    "loop": false,
+                    "playbackSpeed": 1.0,
+                    "playing": true
+                }
+            }
+        },
         "player": {
             "components": {
                 "AnimatorComponent": {
-                    "animationSpeedMagnification": 1.75,
+                    "animationSpeedMagnification": 1.0,
+                    "blendDuration": 0.20000000298023224,
                     "currentAnimation": 0,
                     "drawSkeleton": false,
                     "enableSkinning": true
@@ -743,61 +1923,75 @@
                         1.0,
                         1.0
                     ],
-                    "count": 25,
+                    "count": 60,
                     "emitRange": [
                         0.0,
                         0.0,
                         0.0
                     ],
-                    "maxLifeTime": 0.30000001192092896,
+                    "maxLifeTime": 1.0,
                     "maxRotate": 0.0,
                     "maxScale": [
-                        0.30000001192092896,
-                        0.30000001192092896,
-                        0.30000001192092896
+                        0.5,
+                        0.5,
+                        0.5
                     ],
                     "maxSpeed": [
-                        5.0,
+                        3.0,
                         0.10000000149011612,
                         3.0
                     ],
-                    "minLifeTime": 0.10000000149011612,
+                    "minLifeTime": 0.5,
                     "minRotate": 0.0,
                     "minScale": [
-                        0.15000000596046448,
-                        0.15000000596046448,
-                        0.15000000596046448
+                        0.5,
+                        0.5,
+                        0.5
                     ],
                     "minSpeed": [
-                        2.5,
+                        3.0,
                         0.0,
                         -3.0
                     ],
                     "textureName": "smokeEffect"
                 },
                 "GroundStateComponent": {
-                    "groundHeight": 19.994998931884766,
-                    "isGrounded": true
+                    "groundHeight": 0.0,
+                    "isGrounded": false
                 },
+                "HighJumpTag": null,
                 "LevelComponent": {
                     "nextLevelUp": 30,
                     "nowLevel": 1,
                     "power": 0,
-                    "rewards": []
+                    "rewards": [
+                        {
+                            "ability": "kAirDash",
+                            "level": 2
+                        },
+                        {
+                            "ability": "kHighJump",
+                            "level": 3
+                        },
+                        {
+                            "ability": "kMagicScaffold",
+                            "level": 4
+                        }
+                    ]
                 },
                 "MaterialComponent": {
                     "blendMode": "kNormal",
                     "color": [
-                        0.8896797895431519,
                         1.0,
-                        0.0,
+                        1.0,
+                        1.0,
                         1.0
                     ],
                     "drawOutline": true,
                     "edgeColor": [
-                        0.49110323190689087,
-                        0.26914554834365845,
-                        0.26914554834365845,
+                        1.0,
+                        1.0,
+                        1.0,
                         1.0
                     ],
                     "emissiveIntensity": 1.0,
@@ -819,33 +2013,43 @@
                 },
                 "MeshComponent": {
                     "isVisible": true,
-                    "meshName": "jogging"
+                    "meshName": "magiclash"
                 },
                 "ParticleEmitterSphereComponent": {
-                    "active": false,
-                    "count": 50,
-                    "frequency": 0.15000000596046448,
-                    "frequencyTime": 0.0758536159992218,
+                    "active": true,
+                    "count": 20,
+                    "frequency": 0.20000000298023224,
+                    "frequencyTime": 0.0,
                     "radius": 0.0
                 },
                 "PlayerAbilityDebugComponent": {
-                    "airDash": true,
-                    "highJump": true,
-                    "magicScaffold": true
+                    "airDash": false,
+                    "highJump": false,
+                    "magicScaffold": false
                 },
                 "PlayerComponent": {
+                    "airAcceleration": 20.0,
                     "airDashSpeed": 10.0,
+                    "airDashStaminaCostRate": 2.0,
                     "coyoteTime": 0.30000001192092896,
                     "coyoteTimer": 0.0,
+                    "dashStartInput": 0.20000000298023224,
                     "doubleJumpSpeed": 4.0,
-                    "gravity": -15.0,
-                    "highJumpSpeed": 7.0,
+                    "gravity": -20.0,
+                    "highJumpCostRate": 10.0,
+                    "highJumpSpeed": 15.0,
                     "infinityJump": false,
-                    "jumpSpeed": 7.0,
+                    "infinityStamina": false,
+                    "jumpSpeed": 10.0,
+                    "maxFallSpeed": -20.0,
                     "maxStamina": 0.0,
-                    "moveSpeed": 7.0,
+                    "minGroundNormalY": 0.8500000238418579,
+                    "moveSpeed": 9.0,
                     "stamina": 0.0,
-                    "state": "kWait"
+                    "staminaRecoveryRate": 1.0,
+                    "staminaUpPerLevel": 1.0,
+                    "state": "kWait",
+                    "walkSpeed": 4.0
                 },
                 "PlayerMoveTransientComponent": null,
                 "PrefabInstanceTag": {
@@ -854,10 +2058,10 @@
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
-                        0.0,
-                        0.41224315762519836,
-                        0.0,
-                        0.9110738635063171
+                        -4.337023256084649e-06,
+                        -0.7890259027481079,
+                        -2.020248075496056e-06,
+                        0.6143598556518555
                     ],
                     "scale": [
                         1.0,
@@ -865,28 +2069,25 @@
                         1.0
                     ],
                     "translate": [
-                        7.5725932121276855,
-                        19.994998931884766,
-                        -45.03762435913086
+                        6.1407599449157715,
+                        -9.5367431640625e-07,
+                        0.16148066520690918
                     ]
                 },
                 "VelocityComponent": {
                     "linear": [
                         0.0,
-                        0.0,
+                        -2.5044658184051514,
                         0.0
                     ]
                 }
             },
             "prefabInstance": "resources/game/Prefabs\\player.json"
         },
-        "stage": {
+        "skydome": {
             "components": {
-                "CollisionLayerComponent": {
-                    "layer": "Terrain"
-                },
                 "EditTag": {
-                    "name": "stage",
+                    "name": "skydome",
                     "parent": null
                 },
                 "MaterialComponent": {
@@ -923,11 +2124,89 @@
                 },
                 "MeshComponent": {
                     "isVisible": true,
-                    "meshName": "resources/game/ClockworksDisease/Model/nagasawaGround02/nagasawaGround02.obj"
+                    "meshName": "skydome"
+                },
+                "NoClickSelectTag": null,
+                "PointLightComponent": {
+                    "color": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "decay": 1.5,
+                    "intensity": 0.0,
+                    "radius": 1.0
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "stage": {
+            "components": {
+                "CollisionLayerComponent": {
+                    "layer": "Terrain"
+                },
+                "EditTag": {
+                    "name": "stage",
+                    "parent": null
+                },
+                "MaterialComponent": {
+                    "blendMode": "kNormal",
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "enviromentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "renderMode": "kToon",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "resources/game/ClockworksDisease/Model/StageMap/MainStage/mainStage.gltf"
                 },
                 "NoClickSelectTag": null,
                 "StageComponent": {
-                    "stageColliderName": "resources/game/ClockworksDisease/Model/nagasawaGround02/nagasawaGround02.obj"
+                    "stageColliderName": "resources/game/ClockworksDisease/Model/StageMap/MainStage/mainStage.gltf"
                 },
                 "TerrainMesh": null,
                 "TransformComponent": {
