@@ -86,6 +86,21 @@ void BuildFolderTreeRecursive(FolderNode& node, const std::filesystem::path& dir
 	}
 }
 
+// relativePath に一致するFolderNodeを探す
+const FolderNode* FindFolderNode(const FolderNode& node, const std::string& relativePath) {
+	if (node.relativePath == relativePath) return &node;
+	for (auto& child : node.children) {
+		if (const FolderNode* found = FindFolderNode(child, relativePath)) return found;
+	}
+	return nullptr;
+}
+
+// 一つ上の階層のrelativePathを返す（ルート直下なら ""）
+std::string GetParentFolderPath(const std::string& relativePath) {
+	if (relativePath.empty()) return relativePath;
+	return std::filesystem::path(relativePath).parent_path().generic_string();
+}
+
 void BuildFolderTree() {
 	sRootFolder = FolderNode{};
 	sRootFolder.name = "resources";
@@ -177,6 +192,35 @@ void DrawAssetBrowserWindow(ECS::Registry& registry) {
 		int columns = std::max(1, (int)(panelWidth / cellSize));
 		ImGui::Columns(columns, nullptr, false);
 
+		// --- フォルダアイテム（検索中は表示しない） ---
+		if (!isSearching) {
+			// 親フォルダへ戻る
+			if (!sSelectedFolder.empty()) {
+				ImGui::PushID("..UpFolder");
+				ImGui::Selectable("[Folder]\n..", false, 0, ImVec2(cellSize - 10, cellSize - 10));
+				if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
+					sSelectedFolder = GetParentFolderPath(sSelectedFolder);
+					sSelectedIndex = -1;
+				}
+				ImGui::PopID();
+				ImGui::NextColumn();
+			}
+
+			const FolderNode* currentFolder = FindFolderNode(sRootFolder, sSelectedFolder);
+			if (currentFolder) {
+				for (auto& child : currentFolder->children) {
+					ImGui::PushID(child.relativePath.c_str());
+					std::string label = "[Folder]\n" + child.name;
+					ImGui::Selectable(label.c_str(), false, 0, ImVec2(cellSize - 10, cellSize - 10));
+					if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
+						sSelectedFolder = child.relativePath;
+						sSelectedIndex = -1;
+					}
+					ImGui::PopID();
+					ImGui::NextColumn();
+				}
+			}
+		}
 
 		for (int i = 0; i < (int)sItems.size(); ++i) {
 			auto& item = sItems[i];
