@@ -194,26 +194,29 @@ void MeshPassBase::RenderItems(GraphicsContext& context, const RenderGraphRegist
 
 		for (const auto& subMesh : mesh->subMeshes) {
 
-			_declspec(align(16)) struct {
-				Math::Color color;
-				float shininess;
-				float environmentCoefficient;
-				float padding[2];
-				Math::Matrix4x4 uvTransform;
-			}constants;
-			constants.color = item.material->color;
-			constants.shininess = item.material->shininess;
-			constants.environmentCoefficient = item.material->enviromentCoefficient;
-
-			// uvTransform
-			Math::Quaternion uvRotate;
-			uvRotate.FromAxisAngle(Math::Vector3::FORWARD, item.material->uvRotate);
-			constants.uvTransform.MakeAffine(
-				Math::Vector3(item.material->uvScale.x, item.material->uvScale.y, 1.0f),
-				uvRotate,
-				Math::Vector3(item.material->uvPosition.x, item.material->uvPosition.y, 0.0f)
-			);
 			if (item.material->renderMode != RenderMode::kEmissive) {
+				_declspec(align(16)) struct {
+					Math::Color color;
+					float shininess;
+					float environmentCoefficient;
+					float unlit;
+					float receiveShadow;
+					Math::Matrix4x4 uvTransform;
+				}constants;
+				constants.color = item.material->color;
+				constants.shininess = item.material->shininess;
+				constants.environmentCoefficient = item.material->environmentCoefficient;
+				constants.unlit = item.material->unlit ? 1.0f : 0.0f;
+				constants.receiveShadow = item.material->receiveShadow ? 1.0f : 0.0f;
+
+				// uvTransform
+				Math::Quaternion uvRotate;
+				uvRotate.FromAxisAngle(Math::Vector3::FORWARD, item.material->uvRotate);
+				constants.uvTransform.MakeAffine(
+					Math::Vector3(item.material->uvScale.x, item.material->uvScale.y, 1.0f),
+					uvRotate,
+					Math::Vector3(item.material->uvPosition.x, item.material->uvPosition.y, 0.0f)
+				);
 				context.SetDynamicConstantBufferView(rootIndex["gMaterial"], sizeof(constants), &constants);
 				auto* material = ModelSaver::Get().GetMaterial(item.materialHandles[subMesh.materialIndex]);
 				context.SetDynamicDescriptor(rootIndex["gTexture"], 0, material->textureHandle.GetSRV());

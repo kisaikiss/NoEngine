@@ -5,7 +5,8 @@ struct Material
     float4 color;
     float shininess;
     float environmentCoefficient;
-    float2 padding;
+    float unlit;
+    float receiveShadow;
     float4x4 uvTransform;
 };
 ConstantBuffer<Material> gMaterial : register(b0);
@@ -67,18 +68,27 @@ PixelShaderOutput main(VertexShaderOutput input)
 
     float4 transformedUV = mul(float4(input.texcoord, 0.0f, 1.0f), gMaterial.uvTransform);
     float4 textureColor = gTexture.Sample(gSampler, transformedUV.xy);
+
+    // Unlit: ライティング計算を一切行わずアルベドのみ出力
+    if (gMaterial.unlit > 0.5f)
+    {
+        output.color = gMaterial.color * textureColor;
+        output.color.a = gMaterial.color.a * textureColor.a;
+        return output;
+    }
+
     float3 toEye = normalize(gCameraMatrix.worldPosition - input.worldPosition);
 
     float4 lightColor = 0;
     int2 screenPos = int2(input.position.xy);
-
-    // スライスのオフセットは RayGen_Shadow と同じ順序（Directional→Point→Spot）
     uint shadowSlice = 0;
 
     // 方向ライトの計算
     for (int i = 0; i < gLightNums.directionalLightNum; i++)
     {
-        float shadowFactor = gShadowMask.Load(int4(screenPos, shadowSlice, 0));
+        float rawShadow = gShadowMask.Load(int4(screenPos, shadowSlice, 0));
+        shadowSlice++;
+        float shadowFactor = gMaterial.receiveShadow > 0.5f ? rawShadow : 1.0f;
         shadowSlice++;
 
         float NdotL = dot(normalize(input.normal), -gDirectionalLights[i].direction);
@@ -98,7 +108,9 @@ PixelShaderOutput main(VertexShaderOutput input)
     // ポイントライトの計算
     for (int j = 0; j < gLightNums.pointLightNum; j++)
     {
-        float shadowFactor = gShadowMask.Load(int4(screenPos, shadowSlice, 0));
+        float rawShadow = gShadowMask.Load(int4(screenPos, shadowSlice, 0));
+        shadowSlice++;
+        float shadowFactor = gMaterial.receiveShadow > 0.5f ? rawShadow : 1.0f;
         shadowSlice++;
 
         float3 pointLightDirection = normalize(input.worldPosition - gPointLights[j].position);
@@ -123,7 +135,9 @@ PixelShaderOutput main(VertexShaderOutput input)
     // スポットライトの計算
     for (int k = 0; k < gLightNums.spotLightNum; k++)
     {
-        float shadowFactor = gShadowMask.Load(int4(screenPos, shadowSlice, 0));
+        float rawShadow = gShadowMask.Load(int4(screenPos, shadowSlice, 0));
+        shadowSlice++;
+        float shadowFactor = gMaterial.receiveShadow > 0.5f ? rawShadow : 1.0f;
         shadowSlice++;
 
         float3 spotLightDirectionOnSurface = normalize(input.worldPosition - gSpotLights[k].position);

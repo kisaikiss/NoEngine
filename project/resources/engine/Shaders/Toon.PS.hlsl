@@ -5,6 +5,8 @@ struct Material
     float4 color;
     float shininess;
     float environmentCoefficient;
+    float unlit;
+    float receiveShadow;
 };
 ConstantBuffer<Material> gMaterial : register(b0);
 
@@ -63,15 +65,22 @@ PixelShaderOutput main(VertexShaderOutput input)
     output.color = 0;
 
     float4 textureColor = gTexture.Sample(gSampler, input.texcoord);
-    int2 screenPos = int2(input.position.xy);
 
-    // RayGen_Shadow と同じ順序（Directional→Point→Spot）でスライスを進める
+    if (gMaterial.unlit > 0.5f)
+    {
+        output.color = gMaterial.color * textureColor;
+        output.color.a = gMaterial.color.a;
+        return output;
+    }
+
+    int2 screenPos = int2(input.position.xy);
     uint shadowSlice = 0;
 
-    // 方向ライト
     for (int i = 0; i < gLightNums.directionalLightNum; i++)
     {
-        float shadowFactor = gShadowMask.Load(int4(screenPos, shadowSlice, 0));
+        float rawShadow = gShadowMask.Load(int4(screenPos, shadowSlice, 0));
+        shadowSlice++;
+        float shadowFactor = gMaterial.receiveShadow > 0.5f ? rawShadow : 1.0f;
         shadowSlice++;
 
         float NdotL = dot(normalize(input.normal), -gDirectionalLights[i].direction);
@@ -83,7 +92,9 @@ PixelShaderOutput main(VertexShaderOutput input)
     // ポイントライト
     for (int j = 0; j < gLightNums.pointLightNum; j++)
     {
-        float shadowFactor = gShadowMask.Load(int4(screenPos, shadowSlice, 0));
+        float rawShadow = gShadowMask.Load(int4(screenPos, shadowSlice, 0));
+        shadowSlice++;
+        float shadowFactor = gMaterial.receiveShadow > 0.5f ? rawShadow : 1.0f;
         shadowSlice++;
 
         float3 pointLightDirection = normalize(input.worldPosition - gPointLights[j].position);
@@ -100,7 +111,9 @@ PixelShaderOutput main(VertexShaderOutput input)
     // スポットライト
     for (int k = 0; k < gLightNums.spotLightNum; k++)
     {
-        float shadowFactor = gShadowMask.Load(int4(screenPos, shadowSlice, 0));
+        float rawShadow = gShadowMask.Load(int4(screenPos, shadowSlice, 0));
+        shadowSlice++;
+        float shadowFactor = gMaterial.receiveShadow > 0.5f ? rawShadow : 1.0f;
         shadowSlice++;
 
         float3 spotLightDirectionOnSurface = normalize(input.worldPosition - gSpotLights[k].position);

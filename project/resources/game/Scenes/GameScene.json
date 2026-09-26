@@ -65,9 +65,9 @@
                 },
                 "DebugCameraComponent": {
                     "center": [
-                        -58.72176742553711,
-                        21.947521209716797,
-                        -9.317413330078125
+                        -16.06700897216797,
+                        26.010406494140625,
+                        -33.805633544921875
                     ],
                     "distance": 9.015334129333496,
                     "drawCenter": false,
@@ -82,10 +82,10 @@
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
-                        0.10159078985452652,
-                        -0.4056555926799774,
-                        0.04542513191699982,
-                        0.9072262644767761
+                        0.10612082481384277,
+                        0.48521122336387634,
+                        -0.05946572497487068,
+                        0.8658940196037292
                     ],
                     "scale": [
                         1.0,
@@ -93,9 +93,9 @@
                         1.0
                     ],
                     "translate": [
-                        -52.16930389404297,
-                        23.94158363342285,
-                        -15.179596900939941
+                        -23.528656005859375,
+                        28.187480926513672,
+                        -38.372955322265625
                     ]
                 }
             }
@@ -194,12 +194,14 @@
                         1.0
                     ],
                     "emissiveIntensity": 1.0,
-                    "enviromentCoefficient": 0.8999999761581421,
+                    "environmentCoefficient": 0.0,
                     "noiseScrollSpeed": 0.30000001192092896,
                     "noiseTextureName": "resources/engine/Texture/noise/Noise_Gradients/T_Random_22.png",
+                    "receiveShadow": true,
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "unlit": false,
                     "uvPosition": [
                         0.0,
                         0.0
@@ -1017,12 +1019,14 @@
                         1.0
                     ],
                     "emissiveIntensity": 1.0,
-                    "enviromentCoefficient": 0.0,
+                    "environmentCoefficient": 0.0,
                     "noiseScrollSpeed": 0.30000001192092896,
                     "noiseTextureName": "noise0",
+                    "receiveShadow": true,
                     "renderMode": "kDefault",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "unlit": false,
                     "uvPosition": [
                         0.0,
                         0.0
@@ -1112,12 +1116,14 @@
                         1.0
                     ],
                     "emissiveIntensity": 1.0,
-                    "enviromentCoefficient": 0.0,
+                    "environmentCoefficient": 0.0,
                     "noiseScrollSpeed": 0.30000001192092896,
                     "noiseTextureName": "noise0",
+                    "receiveShadow": true,
                     "renderMode": "kDefault",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "unlit": false,
                     "uvPosition": [
                         0.0,
                         0.0
@@ -1207,12 +1213,14 @@
                         1.0
                     ],
                     "emissiveIntensity": 1.0,
-                    "enviromentCoefficient": 0.0,
+                    "environmentCoefficient": 0.0,
                     "noiseScrollSpeed": 0.30000001192092896,
                     "noiseTextureName": "noise0",
+                    "receiveShadow": true,
                     "renderMode": "kDefault",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "unlit": false,
                     "uvPosition": [
                         0.0,
                         0.0
@@ -1302,12 +1310,14 @@
                         1.0
                     ],
                     "emissiveIntensity": 1.0,
-                    "enviromentCoefficient": 0.0,
+                    "environmentCoefficient": 0.0,
                     "noiseScrollSpeed": 0.30000001192092896,
                     "noiseTextureName": "noise0",
+                    "receiveShadow": true,
                     "renderMode": "kDefault",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "unlit": false,
                     "uvPosition": [
                         0.0,
                         0.0
@@ -1397,12 +1407,14 @@
                         1.0
                     ],
                     "emissiveIntensity": 1.0,
-                    "enviromentCoefficient": 0.0,
+                    "environmentCoefficient": 0.0,
                     "noiseScrollSpeed": 0.30000001192092896,
                     "noiseTextureName": "noise0",
+                    "receiveShadow": true,
                     "renderMode": "kDefault",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "unlit": false,
                     "uvPosition": [
                         0.0,
                         0.0
@@ -1492,12 +1504,14 @@
                         1.0
                     ],
                     "emissiveIntensity": 1.0,
-                    "enviromentCoefficient": 0.0,
+                    "environmentCoefficient": 0.0,
                     "noiseScrollSpeed": 0.30000001192092896,
                     "noiseTextureName": "noise0",
+                    "receiveShadow": true,
                     "renderMode": "kDefault",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "unlit": false,
                     "uvPosition": [
                         0.0,
                         0.0
@@ -1587,12 +1601,14 @@
                         1.0
                     ],
                     "emissiveIntensity": 1.0,
-                    "enviromentCoefficient": 0.0,
+                    "environmentCoefficient": 0.0,
                     "noiseScrollSpeed": 0.30000001192092896,
                     "noiseTextureName": "noise0",
+                    "receiveShadow": true,
                     "renderMode": "kDefault",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "unlit": false,
                     "uvPosition": [
                         0.0,
                         0.0
@@ -1995,12 +2011,14 @@
                         1.0
                     ],
                     "emissiveIntensity": 1.0,
-                    "enviromentCoefficient": 0.0,
+                    "environmentCoefficient": 0.0,
                     "noiseScrollSpeed": 0.30000001192092896,
                     "noiseTextureName": "noise0",
+                    "receiveShadow": true,
                     "renderMode": "kToon",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "unlit": false,
                     "uvPosition": [
                         0.0,
                         0.0
@@ -2093,9 +2111,9 @@
                 "MaterialComponent": {
                     "blendMode": "kNormal",
                     "color": [
-                        1.0,
-                        1.0,
-                        1.0,
+                        0.4092526435852051,
+                        0.4092526435852051,
+                        0.4092526435852051,
                         1.0
                     ],
                     "drawOutline": false,
@@ -2106,12 +2124,14 @@
                         1.0
                     ],
                     "emissiveIntensity": 1.0,
-                    "enviromentCoefficient": 0.0,
+                    "environmentCoefficient": 0.0,
                     "noiseScrollSpeed": 0.30000001192092896,
                     "noiseTextureName": "noise0",
+                    "receiveShadow": false,
                     "renderMode": "kDefault",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "unlit": true,
                     "uvPosition": [
                         0.0,
                         0.0
@@ -2184,12 +2204,14 @@
                         1.0
                     ],
                     "emissiveIntensity": 1.0,
-                    "enviromentCoefficient": 0.0,
+                    "environmentCoefficient": 0.0,
                     "noiseScrollSpeed": 0.30000001192092896,
                     "noiseTextureName": "noise0",
+                    "receiveShadow": true,
                     "renderMode": "kToon",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "unlit": false,
                     "uvPosition": [
                         0.0,
                         0.0

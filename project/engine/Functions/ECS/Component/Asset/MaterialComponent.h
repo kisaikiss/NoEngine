@@ -36,8 +36,10 @@ struct MaterialComponent {
 	BlendMode blendMode = BlendMode::kNormal;
 	RenderMode renderMode = RenderMode::kDefault;
 	bool drawOutline = false;
+	bool unlit = false;          // true : ライトの影響を受けない
+	bool receiveShadow = true;   // false : 他オブジェクトが落とす影の影響を受けない
 	float shininess = 60.f;
-	float enviromentCoefficient = 0.f;
+	float environmentCoefficient = 0.f;
 	Math::Vector2 uvPosition = Math::Vector2::ZERO;
 	float uvRotate = 0.0f;
 	Math::Vector2 uvScale = Math::Vector2::UNIT_SCALE;
