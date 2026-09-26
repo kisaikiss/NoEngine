@@ -6,6 +6,7 @@
 #include "../System/Player/PlayerHorizontalMoveSystem.h"
 #include "../System/Player/PlayerVerticalVelocitySystem.h"
 #include "../System/Player/PlayerAbilityDebugSystem.h"
+#include "../System/Player/PlayerDeathSystem.h"
 
 #include "../System/Camera/FollowCameraSystem.h"
 #include "../System/Game/CollisionEventSystem.h"
@@ -99,6 +100,7 @@ void GameScene::AddSystems() {
 	AddSystem(std::make_unique<No::TransformRoutineSystem>());
 	AddSystem(std::make_unique<No::TransformRoutineSystem2D>());
 	AddSystem(std::make_unique<No::MovementSystem>());
+	AddSystem(std::make_unique<PlayerDeathSystem>());
 	AddSystem(std::make_unique<No::ComputePlatformDeltaSystem>());
 	AddSystem(std::make_unique<PlatformRideSystem>());
 

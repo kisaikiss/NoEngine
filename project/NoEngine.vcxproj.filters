@@ -298,6 +298,7 @@
     <ClCompile Include="application\ClockworksDisease\Component\UI\PauseMenuComponent.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\UI\PauseMenuSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Player\PlayerAnimationSystem.cpp" />
+    <ClCompile Include="application\ClockworksDisease\System\Player\PlayerDeathSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -603,6 +604,7 @@
     <ClInclude Include="application\ClockworksDisease\Component\UI\PauseMenuComponent.h" />
     <ClInclude Include="application\ClockworksDisease\System\UI\PauseMenuSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Player\PlayerAnimationSystem.h" />
+    <ClInclude Include="application\ClockworksDisease\System\Player\PlayerDeathSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

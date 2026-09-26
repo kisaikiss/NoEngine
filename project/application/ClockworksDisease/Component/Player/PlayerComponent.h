@@ -18,6 +18,8 @@ struct PlayerComponent {
 	float jumpSpeed = 16.f;
 	float highJumpSpeed = 17.f;
 	float airDashSpeed = 10.f;
+	float deathHeight = -30.0f;
+	No::Vector3 respawnPoint = No::Vector3::ZERO;
 	// 空中で目標速度へ近づく速さ。小さいほど空中での慣性が強くなる。
 	float airAcceleration = 20.f;
 	float gravity = -9.8f;

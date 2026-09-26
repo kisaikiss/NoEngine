@@ -23,7 +23,9 @@ REFLECT_FIELD(infinityJump),
 REFLECT_FIELD(infinityStamina),
 REFLECT_ENUM_FIELD(state),
 REFLECT_FIELD(highJumpCostRate),
-REFLECT_FIELD(airDashStaminaCostRate)
+REFLECT_FIELD(airDashStaminaCostRate),
+REFLECT_FIELD(deathHeight),
+REFLECT_FIELD(respawnPoint),
 REFLECT_STRUCT_END(PlayerComponent)
 
 REFLECT_STRUCT_BEGIN(PlayerAbilityDebugComponent, "Application")
