@@ -60,11 +60,11 @@ void DebugCameraSystem::Update(Registry& registry, float deltaTime) {
 				forward = forward.Normalize();
 
 				// 2. Yaw (Y軸回転: 水平面の角度) を逆算
-				debugCamera->unityYaw = std::atan2(forward.x, forward.z);
+				debugCamera->unrealYaw = std::atan2(forward.x, forward.z);
 
 				// 3. Pitch (X軸回転: 垂直面の角度) を逆算
 				float xzLen = std::sqrt(forward.x * forward.x + forward.z * forward.z);
-				debugCamera->unityPitch = std::atan2(-forward.y, xzLen);
+				debugCamera->unrealPitch = std::atan2(-forward.y, xzLen);
 			}
 
 			// 状態を更新
@@ -213,27 +213,27 @@ void DebugCameraSystem::UnityMove(Registry& registry, Entity entity, float delta
 		float deltaY = static_cast<float>(debugCamera->mousePositionY - debugCamera->preMousePositionY);
 
 		// マウスの回転感度
-		const float sensitivity = debugCamera->unitySensitivity * deltaTime;
+		const float sensitivity = debugCamera->unrealSensitivity * deltaTime;
 
 		// 2. 回転角（ラジアン）の更新
-		debugCamera->unityYaw += deltaX * sensitivity;
-		debugCamera->unityPitch += deltaY * sensitivity;
+		debugCamera->unrealYaw += deltaX * sensitivity;
+		debugCamera->unrealPitch += deltaY * sensitivity;
 
 		// 3. 上下の回転制限（ジンバルロック・画面反転の防止）
 		// 真上・真下（約 ±90度 ≒ ±1.57rad）に近づきすぎないようにクランプ
 		constexpr float maxPitch = 1.55f;
-		if (debugCamera->unityPitch > maxPitch)  debugCamera->unityPitch = maxPitch;
-		if (debugCamera->unityPitch < -maxPitch) debugCamera->unityPitch = -maxPitch;
+		if (debugCamera->unrealPitch > maxPitch)  debugCamera->unrealPitch = maxPitch;
+		if (debugCamera->unrealPitch < -maxPitch) debugCamera->unrealPitch = -maxPitch;
 
 		// 4. クォータニオンを別々に生成して合成し、トランスフォームに適用
 		Math::Quaternion qYaw{}, qPitch{};
-		qYaw.FromAxisAngle(Math::Vector3::UP, debugCamera->unityYaw);
-		qPitch.FromAxisAngle(Math::Vector3::RIGHT, debugCamera->unityPitch);
+		qYaw.FromAxisAngle(Math::Vector3::UP, debugCamera->unrealYaw);
+		qPitch.FromAxisAngle(Math::Vector3::RIGHT, debugCamera->unrealPitch);
 		transform->rotation = qYaw * qPitch; // ヨー回転の後にピッチ回転を適用（FPSスタイル）
 
 		// 5. 移動速度の計算（WASD）
 		Math::Vector3 velocity{};
-		const float& unitySpeed = debugCamera->unityMoveSpeed;
+		const float& unitySpeed = debugCamera->unrealMoveSpeed;
 
 		if (Input::Keyboard::IsPress('W')) {
 			velocity.z += unitySpeed;

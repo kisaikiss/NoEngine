@@ -72,10 +72,10 @@ struct DebugCameraComponent {
 	// 縦回転
 	float phi = 1.5f;
 
-	float unityYaw = 0.0f;
-	float unityPitch = 0.0f;
-	float unityMoveSpeed = 10.0f;
-	float unitySensitivity = 0.2f;
+	float unrealYaw = 0.0f;
+	float unrealPitch = 0.0f;
+	float unrealMoveSpeed = 10.0f;
+	float unrealSensitivity = 0.2f;
 };
 
 struct DebugCamera2DComponent {
