@@ -24,7 +24,7 @@ void PlayerDeathSystem::Update(No::Registry& registry, float deltaTime) {
 			auto* camera = registry.GetComponent<FollowCameraComponent>(e);
 			auto* transform = registry.GetComponent<No::TransformComponent>(e);
 			camera->phi = 1.0f;
-
+			camera->currentDistance = 0.1f;
 			transform->translate.y = playerPos.y + camera->distance * std::cos(camera->phi);
 		}
 	}
