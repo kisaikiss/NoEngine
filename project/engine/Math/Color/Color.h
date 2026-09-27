@@ -53,6 +53,7 @@ public:
 	static const Color RED;
 	static const Color BLUE;
 	static const Color GREEN;
+	static const Color YELLOW;
 };
 }
 }

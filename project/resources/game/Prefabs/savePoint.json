@@ -1,0 +1,86 @@
+{
+    "components": {
+        "AnimatorComponent": {
+            "animationSpeedMagnification": 1.0,
+            "blendDuration": 0.20000000298023224,
+            "currentAnimation": 0,
+            "drawSkeleton": false,
+            "enableSkinning": false
+        },
+        "CollisionLayerComponent": {
+            "layer": "Item"
+        },
+        "EditTag": {
+            "name": "savePoint",
+            "parent": null
+        },
+        "MaterialComponent": {
+            "blendMode": "kAdd",
+            "color": [
+                2.1764705181121826,
+                2.1764705181121826,
+                2.1764705181121826,
+                1.0
+            ],
+            "drawOutline": false,
+            "edgeColor": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+            ],
+            "emissiveIntensity": 1.0,
+            "environmentCoefficient": 0.0,
+            "noiseScrollSpeed": 0.30000001192092896,
+            "noiseTextureName": "noise0",
+            "receiveShadow": true,
+            "renderMode": "kToon",
+            "rimPower": 2.0,
+            "shininess": 60.0,
+            "unlit": false,
+            "uvPosition": [
+                0.0,
+                0.0
+            ],
+            "uvRotate": 0.0,
+            "uvScale": [
+                1.0,
+                1.0
+            ]
+        },
+        "MeshComponent": {
+            "isVisible": true,
+            "meshName": "savePoint"
+        },
+        "SavePointComponent": {
+            "rotateTime": 1.0
+        },
+        "SphereCollider": {
+            "localCenter": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "radius": 0.699999988079071
+        },
+        "TransformComponent": {
+            "parent": null,
+            "rotation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "translate": [
+                -85.57157135009766,
+                21.73615264892578,
+                -1.3793916702270508
+            ]
+        }
+    }
+}

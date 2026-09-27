@@ -96,5 +96,18 @@ void ItemGetSystem::Update(No::Registry& registry, float deltaTime) {
 
 			registry.GetComponent<LevelComponent>(event.player)->power += registry.GetComponent<BigPowerItemComponent>(event.item)->grantPower;
 		}
+
+		if (registry.Has<SavePointComponent>(event.item)) {
+			auto* savePoint = registry.GetComponent<SavePointComponent>(event.item);
+			auto* player = registry.GetComponent<PlayerComponent>(event.player);
+			auto* transform = registry.GetComponent<No::TransformComponent>(event.item);
+			if (player->respawnPoint == transform->GetWorldPosition(registry)) continue;
+
+			savePoint->rotateTimer = savePoint->rotateTime;
+			registry.GetComponent<No::AnimatorComponent>(event.item)->animationSpeedMagnification = 20.0f;
+			registry.GetComponent<No::MaterialComponent>(event.item)->color = No::Color::YELLOW * savePoint->colorMagnification;
+
+			player->respawnPoint = transform->GetWorldPosition(registry);
+		}
 	}
 }

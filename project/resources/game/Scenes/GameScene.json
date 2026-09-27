@@ -245,9 +245,9 @@
                 },
                 "DebugCameraComponent": {
                     "center": [
-                        -76.21058654785156,
-                        6.526335716247559,
-                        1.6410547494888306
+                        -87.05340576171875,
+                        22.249174118041992,
+                        0.48885393142700195
                     ],
                     "distance": 9.015334129333496,
                     "drawCenter": false,
@@ -262,10 +262,10 @@
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
-                        -0.10332690179347992,
-                        -0.7189011573791504,
-                        0.10946036130189896,
-                        -0.6786185503005981
+                        0.03461964800953865,
+                        -0.9277743101119995,
+                        0.08904595673084259,
+                        0.36070385575294495
                     ],
                     "scale": [
                         1.0,
@@ -273,9 +273,9 @@
                         1.0
                     ],
                     "translate": [
-                        -84.80309295654297,
-                        9.209492683410645,
-                        2.1368136405944824
+                        -81.07499694824219,
+                        23.963926315307617,
+                        7.015299320220947
                     ]
                 }
             }
@@ -1232,7 +1232,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_10",
-                    "parent": null
+                    "parent": "Item"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -1353,7 +1353,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_10_2",
-                    "parent": null
+                    "parent": "Item"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -1474,7 +1474,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_11",
-                    "parent": null
+                    "parent": "Item"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -1595,7 +1595,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_12",
-                    "parent": null
+                    "parent": "Item"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -1716,7 +1716,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_12_2",
-                    "parent": null
+                    "parent": "Item"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -1958,7 +1958,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_3",
-                    "parent": null
+                    "parent": "Item"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -2079,7 +2079,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_3_2",
-                    "parent": null
+                    "parent": "Item"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -2200,7 +2200,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_3_3",
-                    "parent": null
+                    "parent": "Item"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -2321,7 +2321,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_3_3_2_2",
-                    "parent": null
+                    "parent": "Item"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -2442,7 +2442,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_3_3_2_2_2",
-                    "parent": null
+                    "parent": "Item"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -2563,7 +2563,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_3_3_3_2",
-                    "parent": null
+                    "parent": "Item"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -2684,7 +2684,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_3_3_3_2_2",
-                    "parent": null
+                    "parent": "Item"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -2805,7 +2805,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_3_3_3_2_2_2",
-                    "parent": null
+                    "parent": "Item"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -2926,7 +2926,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_4",
-                    "parent": null
+                    "parent": "Item"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -3047,7 +3047,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_5",
-                    "parent": null
+                    "parent": "Item"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -3168,7 +3168,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_6",
-                    "parent": null
+                    "parent": "Item"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -3289,7 +3289,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_7",
-                    "parent": null
+                    "parent": "Item"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -3410,7 +3410,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_7_2",
-                    "parent": null
+                    "parent": "Item"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -3531,7 +3531,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_7_2_2",
-                    "parent": null
+                    "parent": "Item"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -3652,7 +3652,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_7_2_2_2",
-                    "parent": null
+                    "parent": "Item"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -3773,7 +3773,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_7_2_2_2_2",
-                    "parent": null
+                    "parent": "Item"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -3894,7 +3894,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_7_2_2_2_2_2",
-                    "parent": null
+                    "parent": "Item"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -4015,7 +4015,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_7_2_2_2_2_2_2",
-                    "parent": null
+                    "parent": "Item"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -4136,7 +4136,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_7_2_2_2_2_2_2_2",
-                    "parent": null
+                    "parent": "Item"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -4257,7 +4257,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_7_2_2_2_2_2_2_2_2",
-                    "parent": null
+                    "parent": "Item"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -4378,7 +4378,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_7_2_2_2_2_2_2_2_2_2",
-                    "parent": null
+                    "parent": "Item"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -4499,7 +4499,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_8",
-                    "parent": null
+                    "parent": "Item"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -4620,7 +4620,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_9",
-                    "parent": null
+                    "parent": "Item"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -4741,7 +4741,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_9_2",
-                    "parent": null
+                    "parent": "Item"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -4862,7 +4862,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_9_2_2",
-                    "parent": null
+                    "parent": "Item"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -4983,7 +4983,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_9_2_2_2",
-                    "parent": null
+                    "parent": "Item"
                 },
                 "EffectEmitterComponent": {
                     "color": [
@@ -6103,7 +6103,7 @@
                 },
                 "EditTag": {
                     "name": "box_3_3_2",
-                    "parent": null
+                    "parent": "platform"
                 },
                 "MaterialComponent": {
                     "blendMode": "kNormal",
@@ -6830,6 +6830,92 @@
                 }
             },
             "prefabInstance": "resources/game/Prefabs\\player.json"
+        },
+        "savePoint": {
+            "components": {
+                "AnimatorComponent": {
+                    "animationSpeedMagnification": 1.0,
+                    "blendDuration": 0.20000000298023224,
+                    "currentAnimation": 0,
+                    "drawSkeleton": false,
+                    "enableSkinning": false
+                },
+                "CollisionLayerComponent": {
+                    "layer": "Item"
+                },
+                "EditTag": {
+                    "name": "savePoint",
+                    "parent": null
+                },
+                "MaterialComponent": {
+                    "blendMode": "kAdd",
+                    "color": [
+                        2.1764705181121826,
+                        2.1764705181121826,
+                        2.1764705181121826,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "environmentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "receiveShadow": true,
+                    "renderMode": "kToon",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "unlit": false,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "savePoint"
+                },
+                "SavePointComponent": {
+                    "rotateTime": 1.0
+                },
+                "SphereCollider": {
+                    "localCenter": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "radius": 0.699999988079071
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        -85.57157135009766,
+                        21.73615264892578,
+                        -1.3793916702270508
+                    ]
+                }
+            }
         },
         "skydome": {
             "components": {

@@ -13,3 +13,9 @@ struct BigPowerItemComponent {
 };
 
 struct BigPowerGetTag{};
+
+struct SavePointComponent{
+	float rotateTime = 3.0f;
+	float rotateTimer = 0.0f;
+	float colorMagnification = 5.0f;
+};
