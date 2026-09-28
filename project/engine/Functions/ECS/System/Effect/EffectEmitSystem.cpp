@@ -28,7 +28,7 @@ void EffectEmitSystem::EmitParticle(Registry& registry, Component::EffectEmitter
 	for (uint32_t i = 0; i < effectEmitter.count; i++) {
 		auto e = registry.GenerateEntity();
 		auto* transform = registry.AddComponent<TransformComponent>(e);
-		transform->translate = GetNewPosition( effectEmitter, emitterTransform);
+		transform->translate = GetNewPosition(registry, effectEmitter, emitterTransform);
 		transform->rotation.FromAxisAngle(Math::Vector3::FORWARD, Random::GetRandomVal(effectEmitter.minRotate, effectEmitter.maxRotate));
 		transform->scale = Random::GetRandomVal(effectEmitter.minScale, effectEmitter.maxScale);
 
@@ -97,9 +97,9 @@ void EffectEmitSystem::EmitParticle(Registry& registry, Component::EffectEmitter
 	}
 }
 
-Math::Vector3 EffectEmitSystem::GetNewPosition(Component::EffectEmitterComponent& effectEmitter, Component::TransformComponent& emitterTransform) {
-	Math::Vector3 max = emitterTransform.translate + (effectEmitter.emitRange / 2.0f);
-	Math::Vector3 min = emitterTransform.translate - (effectEmitter.emitRange / 2.0f);
+Math::Vector3 EffectEmitSystem::GetNewPosition(Registry& registry, Component::EffectEmitterComponent& effectEmitter, Component::TransformComponent& emitterTransform) {
+	Math::Vector3 max = emitterTransform.GetWorldPosition(registry) + (effectEmitter.emitRange / 2.0f);
+	Math::Vector3 min = emitterTransform.GetWorldPosition(registry) - (effectEmitter.emitRange / 2.0f);
 	return Random::GetRandomVal(min, max);
 }
 }
