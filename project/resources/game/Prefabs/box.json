@@ -2,14 +2,14 @@
     "components": {
         "AABBCollider": {
             "max": [
-                0.5,
-                0.5,
-                0.5
+                0.9724538922309875,
+                0.324538916349411,
+                1.9435561895370483
             ],
             "min": [
-                -0.5,
-                -0.5,
-                -0.5
+                -0.9724538922309875,
+                -0.324538916349411,
+                -1.9435561895370483
             ]
         },
         "ColliderUpdateTag": null,
@@ -18,14 +18,14 @@
         },
         "EditTag": {
             "name": "box",
-            "parent": null
+            "parent": "platform"
         },
         "MaterialComponent": {
             "blendMode": "kNormal",
             "color": [
-                0.7188612222671509,
-                0.4528058171272278,
-                0.4528058171272278,
+                1.0,
+                1.0,
+                1.0,
                 1.0
             ],
             "drawOutline": false,
@@ -36,12 +36,14 @@
                 1.0
             ],
             "emissiveIntensity": 1.0,
-            "enviromentCoefficient": 0.0,
+            "environmentCoefficient": 0.0,
             "noiseScrollSpeed": 0.30000001192092896,
             "noiseTextureName": "noise0",
+            "receiveShadow": true,
             "renderMode": "kDefault",
             "rimPower": 2.0,
             "shininess": 60.0,
+            "unlit": false,
             "uvPosition": [
                 0.0,
                 0.0
@@ -54,7 +56,19 @@
         },
         "MeshComponent": {
             "isVisible": true,
-            "meshName": "resources/engine/Model/block/block.obj"
+            "meshName": "resources/game/ClockworksDisease/Model/gimmick/movingBlock.obj"
+        },
+        "PlatformDeltaComponent": {
+            "frameDelta": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "previousTranslate": [
+                0.0,
+                0.0,
+                0.0
+            ]
         },
         "PrefabInstanceTag": {
             "prefabPath": "resources/game/Prefabs\\box.json"
@@ -68,14 +82,14 @@
                 1.0
             ],
             "scale": [
-                1.0,
-                1.0,
-                1.0
+                1.944907784461975,
+                0.649077832698822,
+                3.8871123790740967
             ],
             "translate": [
-                -4.046250820159912,
-                0.7770752310752869,
-                4.167787075042725
+                -82.14740753173828,
+                15.939661026000977,
+                -2.9765894412994385
             ]
         }
     },
