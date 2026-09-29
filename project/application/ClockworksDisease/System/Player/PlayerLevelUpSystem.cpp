@@ -8,10 +8,19 @@ REFLECT_STRUCT_BEGIN(LevelUpEffectTag, "ApplicationTag")
 REFLECT_STRUCT_END(LevelUpEffectTag)
 
 namespace {
-// レベルアップヒントの表示要求。
-// 既に別のヒントを表示中(クローズアニメーション中も含む)ならキューに積むだけにし、
-// LevelUpTextSystem側でヒントが完全に右へはけたタイミングで次のヒントを取り出して表示する。
-// アイドル状態(何も表示していない)ならすぐに表示を開始する。
+// レベルアップ後に次のレベルまでに必要な経験値をテーブルから引く。
+// テーブルが空、またはインデックスが範囲外なら最後の値、もしくはフォールバック値を使う。
+uint32_t GetRequirementForLevel(const LevelComponent* levelComponent, uint32_t level) {
+	if (levelComponent->levelUpRequirements.empty()) {
+		return levelComponent->nextLevelUp; // テーブル未設定なら現状維持
+	}
+	size_t index = (level >= 1) ? static_cast<size_t>(level - 1) : 0;
+	if (index >= levelComponent->levelUpRequirements.size()) {
+		index = levelComponent->levelUpRequirements.size() - 1;
+	}
+	return levelComponent->levelUpRequirements[index];
+}
+
 void EnqueueOrShowLevelUpHint(No::Registry& registry, const std::string& textureName) {
 	for (auto e : registry.View<LevelUpTextComponent>()) {
 		auto* queue = registry.GetComponent<LevelUpHintQueueComponent>(e);
@@ -20,12 +29,10 @@ void EnqueueOrShowLevelUpHint(No::Registry& registry, const std::string& texture
 		}
 
 		if (registry.Has<LevelUpFrameTag>(e)) {
-			// 表示中(またはクローズアニメーション中)なのでキューに積むだけ
 			queue->pendingTextureNames.push_back(textureName);
 			continue;
 		}
 
-		// アイドル状態なのですぐに表示を開始する
 		CreateLevelUpHintEntity(registry, textureName);
 		registry.AddComponent<LevelUpFrameTag>(e);
 	}
@@ -36,14 +43,19 @@ void PlayerLevelUpSystem::Update(No::Registry& registry, float deltaTime) {
 	static_cast<void>(deltaTime);
 	for (auto e : registry.View<No::TransformComponent, PlayerComponent, LevelComponent>()) {
 		auto* levelComponent = registry.GetComponent<LevelComponent>(e);
+		// レベルが1の時に次にレベルが上がるまでの経験値を設定と一致させる
+		if (levelComponent->nowLevel == 1) {
+			if (!levelComponent->levelUpRequirements.empty()) {
+				levelComponent->nextLevelUp = levelComponent->levelUpRequirements[0];
+			}
+		}
+
 		if (levelComponent->power >= levelComponent->nextLevelUp) {
 			levelComponent->nowLevel++;
-			constexpr uint32_t kAmountOfPowerNeededForTheNextLevelUp = 10;
 			levelComponent->power -= levelComponent->nextLevelUp;
-			levelComponent->nextLevelUp += kAmountOfPowerNeededForTheNextLevelUp;
+			levelComponent->nextLevelUp = GetRequirementForLevel(levelComponent, levelComponent->nowLevel);
 			EnhancementsUponLevelingUp(registry, e, levelComponent->nowLevel);
 
-			// レベルアップ時のエフェクト
 			for (auto effectEntity : registry.View<No::TransformComponent, No::EffectEmitterComponent, LevelUpEffectTag>()) {
 				registry.GetComponent<No::TransformComponent>(effectEntity)->translate = registry.GetComponent<No::TransformComponent>(e)->GetWorldPosition(registry);
 				registry.AddComponent<No::EffectEmitTag>(effectEntity);
@@ -53,8 +65,6 @@ void PlayerLevelUpSystem::Update(No::Registry& registry, float deltaTime) {
 }
 
 void PlayerLevelUpSystem::EnhancementsUponLevelingUp(No::Registry& registry, No::Entity e, uint32_t level) {
-	// 全レベル共通
-	// スタミナ最大値を上昇させる
 	auto* player = registry.GetComponent<PlayerComponent>(e);
 	player->maxStamina += player->staminaUpPerLevel;
 

@@ -79,6 +79,9 @@ struct LevelComponent {
 	uint32_t power = 0;
 	uint32_t nowLevel = 1;
 	uint32_t nextLevelUp = 30;
+	// レベルごとの必要経験値テーブル。index[0] = Lv1→2, index[1] = Lv2→3 ...
+	// テーブルの長さを超えたレベルでは最後の要素を使い続ける。
+	std::vector<uint32_t> levelUpRequirements;
 
 	std::vector<LevelUpReward> rewards;
 };

@@ -3,7 +3,7 @@
         "BigPowerItem": {
             "components": {
                 "BigPowerItemComponent": {
-                    "grantPower": 5
+                    "grantPower": 30
                 },
                 "CollectibleItemTag": null,
                 "CollisionLayerComponent": {
@@ -183,7 +183,7 @@
         "BigPowerItem_2": {
             "components": {
                 "BigPowerItemComponent": {
-                    "grantPower": 5
+                    "grantPower": 30
                 },
                 "CollectibleItemTag": null,
                 "CollisionLayerComponent": {
@@ -363,7 +363,7 @@
         "BigPowerItem_3": {
             "components": {
                 "BigPowerItemComponent": {
-                    "grantPower": 5
+                    "grantPower": 30
                 },
                 "CollectibleItemTag": null,
                 "CollisionLayerComponent": {
@@ -605,11 +605,11 @@
                 },
                 "DebugCameraComponent": {
                     "center": [
-                        -203.1554412841797,
-                        -30.918203353881836,
-                        74.69505310058594
+                        -200.578125,
+                        1.8275359869003296,
+                        56.736839294433594
                     ],
-                    "distance": 169.4544677734375,
+                    "distance": 103.20269775390625,
                     "drawCenter": false,
                     "moveType": "kBlender",
                     "unrealMoveSpeed": 10.0,
@@ -622,10 +622,10 @@
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
-                        0.34570714831352234,
-                        -0.479268342256546,
-                        0.21293604373931885,
-                        0.7781045436859131
+                        0.2594357430934906,
+                        -0.2410370260477066,
+                        0.06703922152519226,
+                        0.9327914714813232
                     ],
                     "scale": [
                         1.0,
@@ -633,9 +633,9 @@
                         1.0
                     ],
                     "translate": [
-                        -101.7175064086914,
-                        94.83389282226563,
-                        23.59151840209961
+                        -157.7603759765625,
+                        55.112815856933594,
+                        -20.58142852783203
                     ]
                 }
             }
@@ -11405,6 +11405,369 @@
             },
             "prefabInstance": "resources/game/Prefabs\\PowerItem.json"
         },
+        "PowerItem_17_2_2_2_2_2_2_3_2_2_2_2_2_2_3": {
+            "components": {
+                "CollectibleItemTag": null,
+                "CollisionLayerComponent": {
+                    "layer": "Item"
+                },
+                "EditTag": {
+                    "name": "PowerItem_17_2_2_2_2_2_2_3_2_2_2_2_2_2_3",
+                    "parent": null
+                },
+                "EffectEmitterComponent": {
+                    "color": [
+                        0.4000000059604645,
+                        0.4000000059604645,
+                        1.0,
+                        1.0
+                    ],
+                    "count": 20,
+                    "emitRange": [
+                        2.0,
+                        1.0,
+                        2.0
+                    ],
+                    "maxLifeTime": 2.0,
+                    "maxRotate": 3.1415927410125732,
+                    "maxScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "maxSpeed": [
+                        0.5,
+                        2.0,
+                        0.5
+                    ],
+                    "minLifeTime": 1.0,
+                    "minRotate": 0.0,
+                    "minScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "minSpeed": [
+                        -0.5,
+                        0.0,
+                        -0.5
+                    ],
+                    "textureName": "getEffect"
+                },
+                "MaterialComponent": {
+                    "blendMode": "kAdd",
+                    "color": [
+                        2.0,
+                        2.0,
+                        3.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        0.0,
+                        0.10000000149011612,
+                        0.6000000238418579,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "environmentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "resources/engine/Texture/noise/Noise_Gradients/T_Random_22.png",
+                    "receiveShadow": true,
+                    "renderMode": "kEmissive",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "unlit": false,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "power"
+                },
+                "PowerItemComponent": null,
+                "PrefabInstanceTag": {
+                    "prefabPath": "resources/game/Prefabs\\PowerItem.json"
+                },
+                "SphereCollider": {
+                    "localCenter": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "radius": 0.4000000059604645
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        -215.86207580566406,
+                        5.904415130615234,
+                        34.052303314208984
+                    ]
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\PowerItem.json"
+        },
+        "PowerItem_17_2_2_2_2_2_2_3_2_2_2_2_2_2_3_2": {
+            "components": {
+                "CollectibleItemTag": null,
+                "CollisionLayerComponent": {
+                    "layer": "Item"
+                },
+                "EditTag": {
+                    "name": "PowerItem_17_2_2_2_2_2_2_3_2_2_2_2_2_2_3_2",
+                    "parent": null
+                },
+                "EffectEmitterComponent": {
+                    "color": [
+                        0.4000000059604645,
+                        0.4000000059604645,
+                        1.0,
+                        1.0
+                    ],
+                    "count": 20,
+                    "emitRange": [
+                        2.0,
+                        1.0,
+                        2.0
+                    ],
+                    "maxLifeTime": 2.0,
+                    "maxRotate": 3.1415927410125732,
+                    "maxScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "maxSpeed": [
+                        0.5,
+                        2.0,
+                        0.5
+                    ],
+                    "minLifeTime": 1.0,
+                    "minRotate": 0.0,
+                    "minScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "minSpeed": [
+                        -0.5,
+                        0.0,
+                        -0.5
+                    ],
+                    "textureName": "getEffect"
+                },
+                "MaterialComponent": {
+                    "blendMode": "kAdd",
+                    "color": [
+                        2.0,
+                        2.0,
+                        3.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        0.0,
+                        0.10000000149011612,
+                        0.6000000238418579,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "environmentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "resources/engine/Texture/noise/Noise_Gradients/T_Random_22.png",
+                    "receiveShadow": true,
+                    "renderMode": "kEmissive",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "unlit": false,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "power"
+                },
+                "PowerItemComponent": null,
+                "PrefabInstanceTag": {
+                    "prefabPath": "resources/game/Prefabs\\PowerItem.json"
+                },
+                "SphereCollider": {
+                    "localCenter": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "radius": 0.4000000059604645
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        -214.35581970214844,
+                        5.904411315917969,
+                        33.00688171386719
+                    ]
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\PowerItem.json"
+        },
+        "PowerItem_17_2_2_2_2_2_2_3_2_2_2_2_2_2_3_3": {
+            "components": {
+                "CollectibleItemTag": null,
+                "CollisionLayerComponent": {
+                    "layer": "Item"
+                },
+                "EditTag": {
+                    "name": "PowerItem_17_2_2_2_2_2_2_3_2_2_2_2_2_2_3_3",
+                    "parent": null
+                },
+                "EffectEmitterComponent": {
+                    "color": [
+                        0.4000000059604645,
+                        0.4000000059604645,
+                        1.0,
+                        1.0
+                    ],
+                    "count": 20,
+                    "emitRange": [
+                        2.0,
+                        1.0,
+                        2.0
+                    ],
+                    "maxLifeTime": 2.0,
+                    "maxRotate": 3.1415927410125732,
+                    "maxScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "maxSpeed": [
+                        0.5,
+                        2.0,
+                        0.5
+                    ],
+                    "minLifeTime": 1.0,
+                    "minRotate": 0.0,
+                    "minScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "minSpeed": [
+                        -0.5,
+                        0.0,
+                        -0.5
+                    ],
+                    "textureName": "getEffect"
+                },
+                "MaterialComponent": {
+                    "blendMode": "kAdd",
+                    "color": [
+                        2.0,
+                        2.0,
+                        3.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        0.0,
+                        0.10000000149011612,
+                        0.6000000238418579,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "environmentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "resources/engine/Texture/noise/Noise_Gradients/T_Random_22.png",
+                    "receiveShadow": true,
+                    "renderMode": "kEmissive",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "unlit": false,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "power"
+                },
+                "PowerItemComponent": null,
+                "PrefabInstanceTag": {
+                    "prefabPath": "resources/game/Prefabs\\PowerItem.json"
+                },
+                "SphereCollider": {
+                    "localCenter": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "radius": 0.4000000059604645
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        -219.08876037597656,
+                        6.158571720123291,
+                        38.28471755981445
+                    ]
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\PowerItem.json"
+        },
         "PowerItem_17_2_2_3": {
             "components": {
                 "CollectibleItemTag": null,
@@ -18907,6 +19270,490 @@
             },
             "prefabInstance": "resources/game/Prefabs\\PowerItem.json"
         },
+        "PowerItem_32": {
+            "components": {
+                "CollectibleItemTag": null,
+                "CollisionLayerComponent": {
+                    "layer": "Item"
+                },
+                "EditTag": {
+                    "name": "PowerItem_32",
+                    "parent": null
+                },
+                "EffectEmitterComponent": {
+                    "color": [
+                        0.4000000059604645,
+                        0.4000000059604645,
+                        1.0,
+                        1.0
+                    ],
+                    "count": 20,
+                    "emitRange": [
+                        2.0,
+                        1.0,
+                        2.0
+                    ],
+                    "maxLifeTime": 2.0,
+                    "maxRotate": 3.1415927410125732,
+                    "maxScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "maxSpeed": [
+                        0.5,
+                        2.0,
+                        0.5
+                    ],
+                    "minLifeTime": 1.0,
+                    "minRotate": 0.0,
+                    "minScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "minSpeed": [
+                        -0.5,
+                        0.0,
+                        -0.5
+                    ],
+                    "textureName": "getEffect"
+                },
+                "MaterialComponent": {
+                    "blendMode": "kAdd",
+                    "color": [
+                        2.0,
+                        2.0,
+                        3.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        0.0,
+                        0.10000000149011612,
+                        0.6000000238418579,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "environmentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "resources/engine/Texture/noise/Noise_Gradients/T_Random_22.png",
+                    "receiveShadow": true,
+                    "renderMode": "kEmissive",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "unlit": false,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "power"
+                },
+                "PowerItemComponent": null,
+                "PrefabInstanceTag": {
+                    "prefabPath": "resources/game/Prefabs\\PowerItem.json"
+                },
+                "SphereCollider": {
+                    "localCenter": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "radius": 0.4000000059604645
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        -267.9757995605469,
+                        33.03151321411133,
+                        127.89376831054688
+                    ]
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\PowerItem.json"
+        },
+        "PowerItem_32_2": {
+            "components": {
+                "CollectibleItemTag": null,
+                "CollisionLayerComponent": {
+                    "layer": "Item"
+                },
+                "EditTag": {
+                    "name": "PowerItem_32_2",
+                    "parent": null
+                },
+                "EffectEmitterComponent": {
+                    "color": [
+                        0.4000000059604645,
+                        0.4000000059604645,
+                        1.0,
+                        1.0
+                    ],
+                    "count": 20,
+                    "emitRange": [
+                        2.0,
+                        1.0,
+                        2.0
+                    ],
+                    "maxLifeTime": 2.0,
+                    "maxRotate": 3.1415927410125732,
+                    "maxScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "maxSpeed": [
+                        0.5,
+                        2.0,
+                        0.5
+                    ],
+                    "minLifeTime": 1.0,
+                    "minRotate": 0.0,
+                    "minScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "minSpeed": [
+                        -0.5,
+                        0.0,
+                        -0.5
+                    ],
+                    "textureName": "getEffect"
+                },
+                "MaterialComponent": {
+                    "blendMode": "kAdd",
+                    "color": [
+                        2.0,
+                        2.0,
+                        3.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        0.0,
+                        0.10000000149011612,
+                        0.6000000238418579,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "environmentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "resources/engine/Texture/noise/Noise_Gradients/T_Random_22.png",
+                    "receiveShadow": true,
+                    "renderMode": "kEmissive",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "unlit": false,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "power"
+                },
+                "PowerItemComponent": null,
+                "PrefabInstanceTag": {
+                    "prefabPath": "resources/game/Prefabs\\PowerItem.json"
+                },
+                "SphereCollider": {
+                    "localCenter": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "radius": 0.4000000059604645
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        -269.2218017578125,
+                        33.15039825439453,
+                        127.90913391113281
+                    ]
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\PowerItem.json"
+        },
+        "PowerItem_32_2_2": {
+            "components": {
+                "CollectibleItemTag": null,
+                "CollisionLayerComponent": {
+                    "layer": "Item"
+                },
+                "EditTag": {
+                    "name": "PowerItem_32_2_2",
+                    "parent": null
+                },
+                "EffectEmitterComponent": {
+                    "color": [
+                        0.4000000059604645,
+                        0.4000000059604645,
+                        1.0,
+                        1.0
+                    ],
+                    "count": 20,
+                    "emitRange": [
+                        2.0,
+                        1.0,
+                        2.0
+                    ],
+                    "maxLifeTime": 2.0,
+                    "maxRotate": 3.1415927410125732,
+                    "maxScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "maxSpeed": [
+                        0.5,
+                        2.0,
+                        0.5
+                    ],
+                    "minLifeTime": 1.0,
+                    "minRotate": 0.0,
+                    "minScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "minSpeed": [
+                        -0.5,
+                        0.0,
+                        -0.5
+                    ],
+                    "textureName": "getEffect"
+                },
+                "MaterialComponent": {
+                    "blendMode": "kAdd",
+                    "color": [
+                        2.0,
+                        2.0,
+                        3.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        0.0,
+                        0.10000000149011612,
+                        0.6000000238418579,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "environmentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "resources/engine/Texture/noise/Noise_Gradients/T_Random_22.png",
+                    "receiveShadow": true,
+                    "renderMode": "kEmissive",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "unlit": false,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "power"
+                },
+                "PowerItemComponent": null,
+                "PrefabInstanceTag": {
+                    "prefabPath": "resources/game/Prefabs\\PowerItem.json"
+                },
+                "SphereCollider": {
+                    "localCenter": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "radius": 0.4000000059604645
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        -270.4020080566406,
+                        33.267940521240234,
+                        127.91412353515625
+                    ]
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\PowerItem.json"
+        },
+        "PowerItem_32_2_2_2": {
+            "components": {
+                "CollectibleItemTag": null,
+                "CollisionLayerComponent": {
+                    "layer": "Item"
+                },
+                "EditTag": {
+                    "name": "PowerItem_32_2_2_2",
+                    "parent": null
+                },
+                "EffectEmitterComponent": {
+                    "color": [
+                        0.4000000059604645,
+                        0.4000000059604645,
+                        1.0,
+                        1.0
+                    ],
+                    "count": 20,
+                    "emitRange": [
+                        2.0,
+                        1.0,
+                        2.0
+                    ],
+                    "maxLifeTime": 2.0,
+                    "maxRotate": 3.1415927410125732,
+                    "maxScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "maxSpeed": [
+                        0.5,
+                        2.0,
+                        0.5
+                    ],
+                    "minLifeTime": 1.0,
+                    "minRotate": 0.0,
+                    "minScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "minSpeed": [
+                        -0.5,
+                        0.0,
+                        -0.5
+                    ],
+                    "textureName": "getEffect"
+                },
+                "MaterialComponent": {
+                    "blendMode": "kAdd",
+                    "color": [
+                        2.0,
+                        2.0,
+                        3.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        0.0,
+                        0.10000000149011612,
+                        0.6000000238418579,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "environmentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "resources/engine/Texture/noise/Noise_Gradients/T_Random_22.png",
+                    "receiveShadow": true,
+                    "renderMode": "kEmissive",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "unlit": false,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "power"
+                },
+                "PowerItemComponent": null,
+                "PrefabInstanceTag": {
+                    "prefabPath": "resources/game/Prefabs\\PowerItem.json"
+                },
+                "SphereCollider": {
+                    "localCenter": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "radius": 0.4000000059604645
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        -271.6356506347656,
+                        33.38360595703125,
+                        127.83639526367188
+                    ]
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\PowerItem.json"
+        },
         "PowerItem_3_2": {
             "components": {
                 "CollectibleItemTag": null,
@@ -24371,6 +25218,261 @@
             },
             "prefabInstance": "resources/game/Prefabs\\box.json"
         },
+        "box_7_2": {
+            "components": {
+                "AABBCollider": {
+                    "max": [
+                        2.734292984008789,
+                        0.324538916349411,
+                        2.308603525161743
+                    ],
+                    "min": [
+                        -2.734292984008789,
+                        -0.324538916349411,
+                        -2.308603525161743
+                    ]
+                },
+                "ColliderUpdateTag": null,
+                "CollisionLayerComponent": {
+                    "layer": "Terrain"
+                },
+                "EditTag": {
+                    "name": "box_7_2",
+                    "parent": null
+                },
+                "MaterialComponent": {
+                    "blendMode": "kNormal",
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "environmentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "receiveShadow": true,
+                    "renderMode": "kDefault",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "unlit": false,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "resources/game/ClockworksDisease/Model/gimmick/movingBlock.obj"
+                },
+                "PrefabInstanceTag": {
+                    "prefabPath": "resources/game/Prefabs\\box.json"
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        5.468585968017578,
+                        0.649077832698822,
+                        4.617207050323486
+                    ],
+                    "translate": [
+                        -218.45074462890625,
+                        31.552692413330078,
+                        133.64727783203125
+                    ]
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\box.json"
+        },
+        "box_7_2_2": {
+            "components": {
+                "AABBCollider": {
+                    "max": [
+                        2.734292984008789,
+                        0.324538916349411,
+                        2.308603525161743
+                    ],
+                    "min": [
+                        -2.734292984008789,
+                        -0.324538916349411,
+                        -2.308603525161743
+                    ]
+                },
+                "ColliderUpdateTag": null,
+                "CollisionLayerComponent": {
+                    "layer": "Terrain"
+                },
+                "EditTag": {
+                    "name": "box_7_2_2",
+                    "parent": null
+                },
+                "MaterialComponent": {
+                    "blendMode": "kNormal",
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "environmentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "receiveShadow": true,
+                    "renderMode": "kDefault",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "unlit": false,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "resources/game/ClockworksDisease/Model/gimmick/movingBlock.obj"
+                },
+                "PrefabInstanceTag": {
+                    "prefabPath": "resources/game/Prefabs\\box.json"
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        5.468585968017578,
+                        0.649077832698822,
+                        4.617207050323486
+                    ],
+                    "translate": [
+                        -184.839111328125,
+                        29.571279525756836,
+                        108.0963363647461
+                    ]
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\box.json"
+        },
+        "box_7_2_2_2": {
+            "components": {
+                "AABBCollider": {
+                    "max": [
+                        2.734292984008789,
+                        0.324538916349411,
+                        2.308603525161743
+                    ],
+                    "min": [
+                        -2.734292984008789,
+                        -0.324538916349411,
+                        -2.308603525161743
+                    ]
+                },
+                "ColliderUpdateTag": null,
+                "CollisionLayerComponent": {
+                    "layer": "Terrain"
+                },
+                "EditTag": {
+                    "name": "box_7_2_2_2",
+                    "parent": null
+                },
+                "MaterialComponent": {
+                    "blendMode": "kNormal",
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "environmentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "receiveShadow": true,
+                    "renderMode": "kDefault",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "unlit": false,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "resources/game/ClockworksDisease/Model/gimmick/movingBlock.obj"
+                },
+                "PrefabInstanceTag": {
+                    "prefabPath": "resources/game/Prefabs\\box.json"
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        5.468585968017578,
+                        0.649077832698822,
+                        4.617207050323486
+                    ],
+                    "translate": [
+                        -178.30014038085938,
+                        32.3086051940918,
+                        108.0963363647461
+                    ]
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\box.json"
+        },
         "canMagicUI": {
             "components": {
                 "CanMagicUITag": {
@@ -24717,6 +25819,9 @@
                 },
                 "HighJumpTag": null,
                 "LevelComponent": {
+                    "levelUpRequirements": [
+                        60
+                    ],
                     "nextLevelUp": 30,
                     "nowLevel": 1,
                     "power": 0,
@@ -24792,7 +25897,7 @@
                     "coyoteTime": 0.30000001192092896,
                     "coyoteTimer": 0.0,
                     "dashStartInput": 0.20000000298023224,
-                    "deathHeight": -30.0,
+                    "deathHeight": -10.0,
                     "doubleJumpSpeed": 4.0,
                     "gravity": -20.0,
                     "highJumpCostRate": 10.0,
@@ -25203,6 +26308,97 @@
                         -240.15826416015625,
                         7.898789405822754,
                         46.63446807861328
+                    ]
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\savePoint.json"
+        },
+        "savePoint_5": {
+            "components": {
+                "AnimatorComponent": {
+                    "animationSpeedMagnification": 1.0,
+                    "blendDuration": 0.20000000298023224,
+                    "currentAnimation": 0,
+                    "drawSkeleton": false,
+                    "enableSkinning": false
+                },
+                "CollisionLayerComponent": {
+                    "layer": "Item"
+                },
+                "EditTag": {
+                    "name": "savePoint_5",
+                    "parent": null
+                },
+                "MaterialComponent": {
+                    "blendMode": "kAdd",
+                    "color": [
+                        2.1764705181121826,
+                        2.1764705181121826,
+                        2.1764705181121826,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "environmentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "receiveShadow": true,
+                    "renderMode": "kToon",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "unlit": false,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "savePoint"
+                },
+                "PrefabInstanceTag": {
+                    "prefabPath": "resources/game/Prefabs\\savePoint.json"
+                },
+                "SavePointComponent": {
+                    "colorMagnification": 5.0,
+                    "rotateTime": 1.0
+                },
+                "SphereCollider": {
+                    "localCenter": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "radius": 0.699999988079071
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        -284.9275817871094,
+                        33.754581451416016,
+                        136.0248565673828
                     ]
                 }
             },

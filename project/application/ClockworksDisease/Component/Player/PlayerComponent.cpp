@@ -46,5 +46,6 @@ REFLECT_STRUCT_BEGIN(LevelComponent, "Application")
 REFLECT_FIELD(nowLevel),
 REFLECT_FIELD(nextLevelUp),
 REFLECT_FIELD(power),
+REFLECT_ARRAY_FIELD(levelUpRequirements),
 REFLECT_STRUCT_ARRAY_FIELD(rewards)
 REFLECT_STRUCT_END(LevelComponent)

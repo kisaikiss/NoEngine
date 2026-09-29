@@ -1,7 +1,7 @@
 {
     "components": {
         "BigPowerItemComponent": {
-            "grantPower": 5
+            "grantPower": 30
         },
         "CollectibleItemTag": null,
         "CollisionLayerComponent": {
@@ -67,12 +67,14 @@
                 1.0
             ],
             "emissiveIntensity": 1.0,
-            "enviromentCoefficient": 0.8999999761581421,
+            "environmentCoefficient": 0.0,
             "noiseScrollSpeed": 0.30000001192092896,
             "noiseTextureName": "resources/engine/Texture/noise/Noise_Gradients/T_Random_22.png",
+            "receiveShadow": true,
             "renderMode": "kEmissive",
             "rimPower": 2.0,
             "shininess": 60.0,
+            "unlit": false,
             "uvPosition": [
                 0.0,
                 0.0
