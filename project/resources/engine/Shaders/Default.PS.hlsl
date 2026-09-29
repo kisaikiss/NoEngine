@@ -89,7 +89,6 @@ PixelShaderOutput main(VertexShaderOutput input)
         float rawShadow = gShadowMask.Load(int4(screenPos, shadowSlice, 0));
         shadowSlice++;
         float shadowFactor = gMaterial.receiveShadow > 0.5f ? rawShadow : 1.0f;
-        shadowSlice++;
 
         float NdotL = dot(normalize(input.normal), -gDirectionalLights[i].direction);
         float cos = pow(NdotL * 0.5f + 0.5f, 2.0f);
@@ -111,7 +110,6 @@ PixelShaderOutput main(VertexShaderOutput input)
         float rawShadow = gShadowMask.Load(int4(screenPos, shadowSlice, 0));
         shadowSlice++;
         float shadowFactor = gMaterial.receiveShadow > 0.5f ? rawShadow : 1.0f;
-        shadowSlice++;
 
         float3 pointLightDirection = normalize(input.worldPosition - gPointLights[j].position);
         float distance = length(gPointLights[j].position - input.worldPosition);
@@ -138,7 +136,6 @@ PixelShaderOutput main(VertexShaderOutput input)
         float rawShadow = gShadowMask.Load(int4(screenPos, shadowSlice, 0));
         shadowSlice++;
         float shadowFactor = gMaterial.receiveShadow > 0.5f ? rawShadow : 1.0f;
-        shadowSlice++;
 
         float3 spotLightDirectionOnSurface = normalize(input.worldPosition - gSpotLights[k].position);
         float cosAngle = dot(spotLightDirectionOnSurface, gSpotLights[k].direction);
