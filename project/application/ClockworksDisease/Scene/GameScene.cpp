@@ -29,6 +29,7 @@
 #include "../System/UI/StaminaUISystem.h"
 #include "../System/UI/LevelUpTextSystem.h"
 #include "../System/Game/GameProgressInitSystem.h"
+#include "../System/Game/MainStageProgress.h"
 #include "../System/Game/GameTimerSystem.h"
 #include "../System/Game/GoalDirectionSystem.h"
 #include "../Component/Game/GameProgressComponent.h"
@@ -62,6 +63,7 @@ void GameScene::Setup() {
 
 void GameScene::AddSystems() {
 	AddSystem(std::make_unique<No::EditSystem>());
+	AddSystem(std::make_unique<MainStageProgressRestoreSystem>());
 	AddSystem(std::make_unique<PauseMenuSystem>());
 
 	AddSystem(std::make_unique<No::ModelLoadSystem>());
@@ -86,6 +88,7 @@ void GameScene::AddSystems() {
 
 	AddSystem(std::make_unique<PlayerPushBackSystem>());
 	AddSystem(std::make_unique<ItemGetSystem>());
+	AddSystem(std::make_unique<MainStageProgressCaptureSystem>());
 
 	AddSystem(std::make_unique<BigPowerItemSystem>());
 	AddSystem(std::make_unique<SavePointSystem>());

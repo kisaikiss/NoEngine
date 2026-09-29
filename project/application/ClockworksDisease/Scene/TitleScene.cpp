@@ -1,8 +1,12 @@
 #include "stdafx.h"
 #include "TitleScene.h"
 #include "../System/UI/TitleCursorSystem.h"
+#include "../System/Game/MainStageProgress.h"
 
-void TitleScene::Setup() { AddSystems(); }
+void TitleScene::Setup() {
+	MainStageProgress::Reset();
+	AddSystems();
+}
 
 void TitleScene::AddSystems() {
 	AddSystem(std::make_unique<No::EditSystem>());

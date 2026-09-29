@@ -3,6 +3,7 @@
 #include "CollisionEvents.h"
 #include "../../Component/Player/PlayerComponent.h"
 #include "../../Component/Game/StageTransitionComponent.h"
+#include "MainStageProgress.h"
 
 struct MagicScaffoldComponent{};
 
@@ -33,6 +34,10 @@ void CollisionEventSystem::Update(No::Registry& registry, float deltaTime) {
 		if (playerEntity != No::INVALID_ENTITY) {
 			const auto* transition = registry.GetComponent<StageTransitionComponent>(transitionEntity);
 			if (transition && !transition->destinationScene.empty()) {
+				if (No::GetCurrentSceneName(registry) == "GameScene" &&
+					transition->destinationScene != "GameScene") {
+					MainStageProgress::QueueCapture();
+				}
 				No::SceneChangeEvent event;
 				event.nextScene = transition->destinationScene;
 				event.transitionType = No::SceneTransitionType::kCircleScale;

@@ -6,11 +6,13 @@
 #include "../../Component/Game/GameProgressComponent.h"
 #include "../../Component/Game/GoalDirectionComponent.h"
 #include "engine/Editor/DataDriven/SceneSerializer.h"
+#include "MainStageProgress.h"
 
 namespace {
 
 void IncrementCollectedCount(No::Registry& registry, No::Entity item) {
 	if (!registry.Has<CollectibleItemTag>(item)) return;
+	MainStageProgress::RecordCollectedItem(registry, item);
 	for (auto e : registry.View<GameProgressComponent>()) {
 		registry.GetComponent<GameProgressComponent>(e)->collectedItemCount++;
 	}

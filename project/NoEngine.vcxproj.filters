@@ -275,6 +275,7 @@
     <ClCompile Include="application\ClockworksDisease\System\Game\PlatformRideSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\Component\Game\GameProgressComponent.cpp" />
     <ClCompile Include="application\ClockworksDisease\Component\Game\StageTransitionComponent.cpp" />
+    <ClCompile Include="application\ClockworksDisease\System\Game\MainStageProgress.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Game\GameResult.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Game\GameProgressInitSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Game\GameTimerSystem.cpp" />
@@ -578,6 +579,7 @@
     <ClInclude Include="application\ClockworksDisease\System\Game\PlatformRideSystem.h" />
     <ClInclude Include="application\ClockworksDisease\Component\Game\GameProgressComponent.h" />
     <ClInclude Include="application\ClockworksDisease\Component\Game\StageTransitionComponent.h" />
+    <ClInclude Include="application\ClockworksDisease\System\Game\MainStageProgress.h" />
     <ClInclude Include="application\ClockworksDisease\System\Game\GameResult.h" />
     <ClInclude Include="application\ClockworksDisease\System\Game\GameProgressInitSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Game\GameTimerSystem.h" />
