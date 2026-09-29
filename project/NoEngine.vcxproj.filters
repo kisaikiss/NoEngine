@@ -274,6 +274,7 @@
     <ClCompile Include="engine\Functions\ECS\System\Movement\ComputePlatformDeltaSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Game\PlatformRideSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\Component\Game\GameProgressComponent.cpp" />
+    <ClCompile Include="application\ClockworksDisease\Component\Game\StageTransitionComponent.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Game\GameResult.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Game\GameProgressInitSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Game\GameTimerSystem.cpp" />
@@ -576,6 +577,7 @@
     <ClInclude Include="engine\Functions\ECS\System\Movement\ComputePlatformDeltaSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Game\PlatformRideSystem.h" />
     <ClInclude Include="application\ClockworksDisease\Component\Game\GameProgressComponent.h" />
+    <ClInclude Include="application\ClockworksDisease\Component\Game\StageTransitionComponent.h" />
     <ClInclude Include="application\ClockworksDisease\System\Game\GameResult.h" />
     <ClInclude Include="application\ClockworksDisease\System\Game\GameProgressInitSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Game\GameTimerSystem.h" />

@@ -2,6 +2,7 @@
 #include "CollisionLayer.h"
 #include "CollisionEvents.h"
 #include "../../Component/Player/PlayerComponent.h"
+#include "../../Component/Game/StageTransitionComponent.h"
 
 struct MagicScaffoldComponent{};
 
@@ -16,6 +17,29 @@ void CollisionEventSystem::Update(No::Registry& registry, float deltaTime) {
 		// プレイヤーと地面の接触イベントは、プレイヤーが接地しているかどうかを管理するために使用される
 		auto* layerA = registry.GetComponent<CollisionLayerComponent>(contact.a);
 		auto* layerB = registry.GetComponent<CollisionLayerComponent>(contact.b);
+
+		// 接触した遷移オブジェクトに設定されたシーンへ移動する。
+		No::Entity playerEntity = No::INVALID_ENTITY;
+		No::Entity transitionEntity = No::INVALID_ENTITY;
+		if (layerA && (layerA->layer & CollisionLayerComponent::Player) != CollisionLayerComponent::None &&
+			registry.Has<StageTransitionComponent>(contact.b)) {
+			playerEntity = contact.a;
+			transitionEntity = contact.b;
+		} else if (layerB && (layerB->layer & CollisionLayerComponent::Player) != CollisionLayerComponent::None &&
+			registry.Has<StageTransitionComponent>(contact.a)) {
+			playerEntity = contact.b;
+			transitionEntity = contact.a;
+		}
+		if (playerEntity != No::INVALID_ENTITY) {
+			const auto* transition = registry.GetComponent<StageTransitionComponent>(transitionEntity);
+			if (transition && !transition->destinationScene.empty()) {
+				No::SceneChangeEvent event;
+				event.nextScene = transition->destinationScene;
+				event.transitionType = No::SceneTransitionType::kCircleScale;
+				registry.EmitEvent(event);
+			}
+			continue;
+		}
 		if (!layerA || !layerB) continue;
 
 		if ((layerA->layer & CollisionLayerComponent::Player) != CollisionLayerComponent::None &&

@@ -198,6 +198,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="application\ClockworksDisease\Component\Camera\CameraIntroComponent.cpp" />
     <ClCompile Include="application\ClockworksDisease\Component\Camera\FollowCameraComponent.cpp" />
     <ClCompile Include="application\ClockworksDisease\Component\Game\GameProgressComponent.cpp" />
+    <ClCompile Include="application\ClockworksDisease\Component\Game\StageTransitionComponent.cpp" />
     <ClCompile Include="application\ClockworksDisease\Component\Game\GoalDirectionComponent.cpp" />
     <ClCompile Include="application\ClockworksDisease\Component\Item\ItemComponent.cpp" />
     <ClCompile Include="application\ClockworksDisease\Component\Option\EditorSettingComponent.cpp" />
@@ -493,6 +494,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="application\ClockworksDisease\Component\Camera\CameraIntroComponent.h" />
     <ClInclude Include="application\ClockworksDisease\Component\Camera\FollowCameraComponent.h" />
     <ClInclude Include="application\ClockworksDisease\Component\Game\GameProgressComponent.h" />
+    <ClInclude Include="application\ClockworksDisease\Component\Game\StageTransitionComponent.h" />
     <ClInclude Include="application\ClockworksDisease\Component\Game\GameQuitEvent.h" />
     <ClInclude Include="application\ClockworksDisease\Component\Game\GoalDirectionComponent.h" />
     <ClInclude Include="application\ClockworksDisease\Component\Item\ItemComponent.h" />

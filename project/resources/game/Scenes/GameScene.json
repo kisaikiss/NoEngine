@@ -622,9 +622,9 @@
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
-                        0.2594357430934906,
+                        0.2594358026981354,
                         -0.2410370260477066,
-                        0.06703922152519226,
+                        0.06703923642635345,
                         0.9327914714813232
                     ],
                     "scale": [
@@ -634,7 +634,7 @@
                     ],
                     "translate": [
                         -157.7603759765625,
-                        55.112815856933594,
+                        55.11282730102539,
                         -20.58142852783203
                     ]
                 }
@@ -25742,7 +25742,6 @@
         },
         "player": {
             "components": {
-                "AirDashTag": null,
                 "AnimatorComponent": {
                     "animationSpeedMagnification": 1.0,
                     "blendDuration": 0.20000000298023224,
@@ -25817,7 +25816,6 @@
                     "groundHeight": 0.0,
                     "isGrounded": false
                 },
-                "HighJumpTag": null,
                 "LevelComponent": {
                     "levelUpRequirements": [
                         60
