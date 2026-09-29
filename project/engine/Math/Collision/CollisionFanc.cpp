@@ -228,6 +228,25 @@ CapsuleTriangleCollision TestSegmentTriangle(const Vector3& segA, const Vector3&
 		tryPair(mid, onTriM);
 	}
 
+	// 線分が三角形面を横切る場合、両端点や中点の最近接点だけでは
+	// 面との交差を取りこぼすことがあるため、線分と面の交点も調べる。
+	Vector3 planeNormal = triangle.normal;
+	float planeNormalLength = planeNormal.Length();
+	if (planeNormalLength > 1e-6f) {
+		planeNormal = planeNormal / planeNormalLength;
+		float distanceA = (segA - A).Dot(planeNormal);
+		float distanceB = (segB - A).Dot(planeNormal);
+		float denominator = distanceA - distanceB;
+		if (distanceA * distanceB <= 0.0f && std::abs(denominator) > 1e-8f) {
+			float t = std::clamp(distanceA / denominator, 0.0f, 1.0f);
+			Vector3 intersection = segA + (segB - segA) * t;
+			Vector3 onTriangle = ClosestPointOnTriangle(intersection, A, B, C);
+			if ((intersection - onTriangle).LengthSquared() <= 1e-8f) {
+				tryPair(intersection, onTriangle);
+			}
+		}
+	}
+
 	// ----------------------------------------------------------------
 	//  Step 2. カプセル線分 × 三角形の3辺 の最近接点ペアを調べる
 	//          （辺方向の接触はここで捕捉）
@@ -312,12 +331,18 @@ CapsuleTriangleCollision TestSegmentTriangle(const Vector3& segA, const Vector3&
 	if (bestDist > 1e-6f) {
 		result.normal = (bestOnCap - bestOnTri) / bestDist;
 	} else {
-		// 完全貫通 → 面法線で押し出す（裏面貫通対策で符号を確認）
+		// 線分が面を横切る場合は、カプセル中心がある側へ向けて押し出す。
 		Vector3 n = triangle.normal;
-		// カプセル重心が裏側にあれば反転
-		Vector3 capsuleCenter = (segA + segB) * 0.5f;
-		if ((capsuleCenter - A).Dot(n) < 0.0f) n = n * -1.0f;
+		float normalLength = n.Length();
+		if (normalLength <= 1e-6f) return CapsuleTriangleCollision{};
+		n = n / normalLength;
+		float signedA = (segA - A).Dot(n);
+		float signedB = (segB - A).Dot(n);
+		if (signedA + signedB < 0.0f) n = n * -1.0f;
 		result.normal = n;
+		// 線分の反対側の端まで面の外に出す深さを含め、地面を通り抜けないようにする。
+		float minSignedDistance = std::min((segA - A).Dot(n), (segB - A).Dot(n));
+		result.penetration = r - minSignedDistance;
 	}
 
 	return result;
