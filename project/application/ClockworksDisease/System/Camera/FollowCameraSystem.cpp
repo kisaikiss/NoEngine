@@ -2,6 +2,7 @@
 #include "../../Component/Player/PlayerComponent.h"
 #include "../../Component/Camera/FollowCameraComponent.h"
 #include "../../Component/Camera/CameraIntroComponent.h"
+#include "../../Component/Game/GameProgressComponent.h"
 
 void FollowCameraSystem::Update(No::Registry& registry, float deltaTime) {
 	No::Vector3 playerPos{};
@@ -140,9 +141,25 @@ void FollowCameraSystem::Update(No::Registry& registry, float deltaTime) {
 			if (!anyHit) break;
 		}
 		
-		// プレイヤー + Offset座標を見る
-		playerPos.y += followCameraVariables->playerPosOffset;
-		transform->rotation.LookRotation(playerPos - transform->GetWorldPosition(registry), No::Vector3::UP);
+
+		followCameraVariables->nextRotation = transform->rotation;
+		float slerpTime = deltaTime;
+		if (No::InputIsPress("ViewGoal")) {
+			// ゴールオブジェクト座標を見る
+			for (auto goalItemE : registry.View<GoalItemTag, No::TransformComponent>()) {
+				No::Vector3 goalItemPos = registry.GetComponent<No::TransformComponent>(goalItemE)->GetWorldPosition(registry);
+				followCameraVariables->nextRotation.LookRotation(goalItemPos - transform->GetWorldPosition(registry), No::Vector3::UP);
+			}
+
+			slerpTime *= followCameraVariables->goalViewSpeed;
+		} else {
+			// プレイヤー + Offset座標を見る
+			playerPos.y += followCameraVariables->playerPosOffset;
+			followCameraVariables->nextRotation.LookRotation(playerPos - transform->GetWorldPosition(registry), No::Vector3::UP);
+			slerpTime *= followCameraVariables->playerViewSpeed;
+		}
+
+		transform->rotation = No::Quaternion::Slerp(transform->rotation, followCameraVariables->nextRotation, slerpTime);
 	
 	}
 

@@ -70,6 +70,9 @@ void ClockworksDisease::Startup(void) {
 
 	No::InputBindAction("CreateScaffold", No::DeviceType::Keyboard, static_cast<int>('Q'));
 	No::InputBindAction("CreateScaffold", No::DeviceType::GamepadButton, static_cast<int>(No::GamepadButton::X));
+
+	No::InputBindAction("ViewGoal", No::DeviceType::Keyboard, static_cast<int>('Z'));
+	No::InputBindAction("ViewGoal", No::DeviceType::GamepadButton, static_cast<int>(No::GamepadButton::RB));
 }
 
 bool ClockworksDisease::Exit() {

@@ -17,9 +17,13 @@ struct FollowCameraComponent {
 	float maxFov = 0.85f;
 	float playerPosOffset = 2.0f;
 
+	float playerViewSpeed = 1.0f;
+	float goalViewSpeed = 10.0f;
+
 	// これより下はEditorに表示しない
 	float currentDistance = maxDistance; // 実際にカメラが使う距離(地形で短縮される)
 	float collisionRadius = 0.95f;       // カメラの太さ(壁の角へのめり込み防止)
 	float collisionMargin = 0.3f;        // 壁面からの余白
 	float collisionStartOffset = 5.0f; // プレイヤーから何m分カメラ側にずらして判定を始めるか
+	No::Quaternion nextRotation = No::Quaternion::IDENTITY; // 見たい方向の回転。滑らかに角度を変えるための変数
 };

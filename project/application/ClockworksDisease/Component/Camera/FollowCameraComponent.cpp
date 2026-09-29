@@ -16,5 +16,7 @@ REFLECT_FIELD(playerPosOffset),
 REFLECT_FIELD(currentDistance),
 REFLECT_FIELD(collisionRadius),
 REFLECT_FIELD(collisionMargin),
-REFLECT_FIELD(collisionStartOffset)
+REFLECT_FIELD(collisionStartOffset),
+REFLECT_FIELD(playerViewSpeed),
+REFLECT_FIELD(goalViewSpeed),
 REFLECT_STRUCT_END(FollowCameraComponent)
