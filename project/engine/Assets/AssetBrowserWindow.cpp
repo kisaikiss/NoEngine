@@ -2,6 +2,8 @@
 #include "AssetBrowserWindow.h"
 #include "AssetManager.h"
 #include "engine/Editor/DataDriven/PrefabSerializer.h"
+#include "engine/Assets/Audio/Audio.h"
+#include "engine/Utilities/Conversion/ConvertString.h"
 
 #ifdef USE_IMGUI
 #include "externals/imgui/imgui.h"
@@ -22,6 +24,7 @@ FolderNode sRootFolder;
 std::string sSelectedFolder; // "" = ルート直下を表示
 
 char sSearchBuf[128] = {};
+
 
 // 指定パスの親ディレクトリを resources/ からの相対パスで返す
 std::string GetFolderPathOf(const std::string& fullPath) {
@@ -285,6 +288,21 @@ void DrawAssetBrowserWindow(ECS::Registry& registry) {
 					RefreshAssetBrowser();
 				}
 				ImGui::PopStyleColor();
+			}
+
+			// --- 音声の試聴 ---
+			if (item.type == EBrowserItemType::Audio) {
+				if (ImGui::Button("Play")) {
+					std::string filePath = AssetManager::GetFilePathFromAddressableName(item.path);
+					if (!filePath.empty()) {
+						Asset::SoundLoad(ConvertString(filePath), item.path);
+						Asset::SoundPlay(item.path, 1.0f, false);
+					}
+				}
+				ImGui::SameLine();
+				if (ImGui::Button("Stop")) {
+					Asset::SoundCompleteStop(item.path);
+				}
 			}
 		}
 	} else {
