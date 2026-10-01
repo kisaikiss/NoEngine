@@ -27557,6 +27557,86 @@
                 }
             },
             "prefabInstance": "resources/game/Prefabs\\staminaGaugeFrame.json"
+        },
+        "warpBlock": {
+            "components": {
+                "EditTag": {
+                    "name": "warpBlock",
+                    "parent": null
+                },
+                "MaterialComponent": {
+                    "blendMode": "kAdd",
+                    "color": [
+                        6.098039150238037,
+                        0.6901960968971252,
+                        0.0,
+                        1.0
+                    ],
+                    "drawOutline": true,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "environmentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "receiveShadow": true,
+                    "renderMode": "kToon",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "unlit": false,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "resources/game/ClockworksDisease/Model/gimmick/warpBlock.gltf"
+                },
+                "PrefabInstanceTag": {
+                    "prefabPath": "resources/game/Prefabs\\warpBlock.json"
+                },
+                "SphereCollider": {
+                    "localCenter": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "radius": 0.5
+                },
+                "StageTransitionComponent": {
+                    "destinationScene": "TestScene"
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        0.39297348260879517,
+                        1.2125797271728516,
+                        -2.872622489929199
+                    ]
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\warpBlock.json"
         }
     }
 }
