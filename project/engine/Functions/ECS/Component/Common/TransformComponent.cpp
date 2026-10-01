@@ -14,6 +14,22 @@ Math::Matrix4x4 Component::TransformComponent::MakeAffineMatrix4x4(ECS::Registry
     return result;
 }
 
+void Component::TransformComponent::SetWorldPosition(ECS::Registry& registry, const Math::Vector3& worldPosition) {
+    if (parent == ECS::INVALID_ENTITY) {
+        translate = worldPosition;
+        return;
+    }
+
+    if (auto* parentTransform = registry.GetComponent<Component::TransformComponent>(parent)) {
+        Math::Matrix4x4 inverseParentWorld = parentTransform->MakeAffineMatrix4x4(registry);
+        inverseParentWorld.Inverse();
+        translate = inverseParentWorld.Transform(worldPosition);
+        return;
+    }
+
+    translate = worldPosition;
+}
+
 Math::Vector3 Component::TransformComponent::GetWorldScale(ECS::Registry& registry) const {
     Math::Vector3 result = scale;
     if (parent != ECS::INVALID_ENTITY) {

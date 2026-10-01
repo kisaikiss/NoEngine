@@ -18,12 +18,12 @@ void SmallPowerItemSystem::Update(No::Registry& registry, float deltaTime) {
 			constexpr float playerPosOffset = 1.0f;
 			playerPos.y += playerPosOffset;
 			auto* transform = registry.GetComponent<No::TransformComponent>(e);
-			transform->translate = No::Lerp(transform->GetWorldPosition(registry) , playerPos, No::ApplyEasing(No::EasingType::Linear,item->moveTimer));
-			transform->scale = No::Lerp(transform->GetWorldScale(registry), No::Vector3::ZERO, No::ApplyEasing(No::EasingType::Linear, item->moveTimer));
+			transform->SetWorldPosition(registry, No::Lerp(transform->GetWorldPosition(registry) , playerPos, No::ApplyEasing(No::EasingType::Linear,item->moveTimer)));
+			transform->scale = No::Lerp(transform->scale, No::Vector3::ZERO, No::ApplyEasing(No::EasingType::Linear, item->moveTimer));
 
 			if (item->moveTimer > item->attractTime) {
 				// エフェクトを出す位置をプレイヤーの座標に合わせる
-				transform->translate = playerPos;
+				transform->SetWorldPosition(registry,playerPos);
 				registry.AddComponent<No::EffectEmitTag>(e);
 				registry.DestroyEntity(e);
 			}
