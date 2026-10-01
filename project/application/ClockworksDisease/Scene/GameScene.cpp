@@ -23,6 +23,7 @@
 #include "../System/Game/CollisionLayer.h"
 #include "../System/Game/ColliderDrawSystem.h"
 #include "../System/Game/ItemGetSystem.h"
+#include "../System/Object/SmallPowerItemSystem.h"
 #include "../System/Object/BigPowerItemSystem.h"
 #include "../System/Object/SavePointSystem.h"
 #include "../System/UI/LevelUISystem.h"
@@ -90,6 +91,7 @@ void GameScene::AddSystems() {
 	AddSystem(std::make_unique<ItemGetSystem>());
 	AddSystem(std::make_unique<MainStageProgressCaptureSystem>());
 
+	AddSystem(std::make_unique<SmallPowerItemSystem>());
 	AddSystem(std::make_unique<BigPowerItemSystem>());
 	AddSystem(std::make_unique<SavePointSystem>());
 	AddSystem(std::make_unique<PlayerLevelUpSystem>());

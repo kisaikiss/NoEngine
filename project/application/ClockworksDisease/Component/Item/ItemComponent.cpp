@@ -3,6 +3,9 @@
 
 
 REFLECT_STRUCT_BEGIN(PowerItemComponent, "Application")
+REFLECT_FIELD(riseTime),
+REFLECT_FIELD(attractTime),
+REFLECT_FIELD(riseSpeed)
 REFLECT_STRUCT_END(PowerItemComponent)
 
 

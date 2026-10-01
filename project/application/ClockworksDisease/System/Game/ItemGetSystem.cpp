@@ -83,10 +83,11 @@ void ItemGetSystem::Update(No::Registry& registry, float deltaTime) {
 
 		if (registry.Has<PowerItemComponent>(event.item)) {
 			IncrementCollectedCount(registry, event.item);
-			registry.AddComponent<No::EffectEmitTag>(event.item);
-			registry.DestroyEntity(event.item);
-			constexpr uint32_t kBadgePower = 1;
-			registry.GetComponent<LevelComponent>(event.player)->power += kBadgePower;
+			registry.AddComponent<PowerItemGetTag>(event.item)->playerEntity = event.player;
+			registry.AddComponent<No::VelocityComponent>(event.item)->linear.y = registry.GetComponent<PowerItemComponent>(event.item)->riseSpeed;
+			registry.RemoveComponent<No::SphereCollider>(event.item);
+			constexpr uint32_t kPower = 1;
+			registry.GetComponent<LevelComponent>(event.player)->power += kPower;
 			continue;
 		}
 
