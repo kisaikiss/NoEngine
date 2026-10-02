@@ -55,6 +55,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0999999046325684,
                         2.0,
@@ -235,6 +236,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0999999046325684,
                         2.0,
@@ -415,6 +417,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0999999046325684,
                         2.0,
@@ -1003,7 +1006,7 @@
                     "phase": "kPlayingRoutine",
                     "playInEditor": false
                 },
-                "CameraIntroLockTag": null,
+                "CameraLockTag": null,
                 "EditTag": {
                     "name": "MainCamera",
                     "parent": null
@@ -1249,6 +1252,7 @@
                 "GoalItemTag": null,
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -1543,6 +1547,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -1669,6 +1674,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -1795,6 +1801,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -1921,6 +1928,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -2047,6 +2055,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -2173,6 +2182,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -2299,6 +2309,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -2425,6 +2436,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -2551,6 +2563,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -2677,6 +2690,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -2803,6 +2817,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -2929,6 +2944,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -3055,6 +3071,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -3181,6 +3198,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -3307,6 +3325,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -3433,6 +3452,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -3559,6 +3579,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -3685,6 +3706,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -3811,6 +3833,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -3937,6 +3960,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -4063,6 +4087,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -4189,6 +4214,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -4315,6 +4341,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -4441,6 +4468,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -4567,6 +4595,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -4693,6 +4722,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -4819,6 +4849,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -4945,6 +4976,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -5071,6 +5103,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -5197,6 +5230,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -5323,6 +5357,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -5449,6 +5484,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -5575,6 +5611,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -5701,6 +5738,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -5827,6 +5865,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -5953,6 +5992,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -6079,6 +6119,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -6205,6 +6246,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -6331,6 +6373,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -6457,6 +6500,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -6583,6 +6627,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -6709,6 +6754,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -6835,6 +6881,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -6961,6 +7008,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -7087,6 +7135,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -7213,6 +7262,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -7339,6 +7389,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -7465,6 +7516,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -7591,6 +7643,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -7717,6 +7770,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -7843,6 +7897,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -7969,6 +8024,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -8095,6 +8151,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -8221,6 +8278,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -8347,6 +8405,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -8473,6 +8532,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -8599,6 +8659,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -8725,6 +8786,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -8851,6 +8913,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -8977,6 +9040,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -9103,6 +9167,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -9229,6 +9294,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -9355,6 +9421,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -9481,6 +9548,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -9607,6 +9675,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -9733,6 +9802,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -9859,6 +9929,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -9985,6 +10056,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -10111,6 +10183,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -10237,6 +10310,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -10363,6 +10437,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -10489,6 +10564,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -10615,6 +10691,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -10741,6 +10818,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -10867,6 +10945,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -10993,6 +11072,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -11119,6 +11199,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -11245,6 +11326,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -11371,6 +11453,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -11497,6 +11580,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -11623,6 +11707,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -11749,6 +11834,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -11875,6 +11961,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -12001,6 +12088,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -12127,6 +12215,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -12253,6 +12342,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -12379,6 +12469,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -12505,6 +12596,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -12631,6 +12723,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -12757,6 +12850,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -12883,6 +12977,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -13009,6 +13104,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -13135,6 +13231,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -13261,6 +13358,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -13387,6 +13485,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -13513,6 +13612,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -13639,6 +13739,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -13765,6 +13866,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -13891,6 +13993,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -14017,6 +14120,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -14143,6 +14247,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -14269,6 +14374,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -14395,6 +14501,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -14521,6 +14628,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -14647,6 +14755,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -14773,6 +14882,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -14899,6 +15009,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -15025,6 +15136,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -15151,6 +15263,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -15277,6 +15390,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -15403,6 +15517,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -15529,6 +15644,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -15655,6 +15771,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -15781,6 +15898,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -15907,6 +16025,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -16033,6 +16152,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -16159,6 +16279,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -16285,6 +16406,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -16411,6 +16533,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -16537,6 +16660,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -16663,6 +16787,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -16789,6 +16914,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -16915,6 +17041,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -17041,6 +17168,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -17167,6 +17295,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -17293,6 +17422,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -17419,6 +17549,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -17545,6 +17676,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -17671,6 +17803,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -17797,6 +17930,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -17923,6 +18057,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -18049,6 +18184,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -18175,6 +18311,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -18301,6 +18438,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -18427,6 +18565,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -18553,6 +18692,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -18679,6 +18819,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -18805,6 +18946,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -18931,6 +19073,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -19057,6 +19200,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -19183,6 +19327,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -19309,6 +19454,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -19435,6 +19581,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -19561,6 +19708,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -19687,6 +19835,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -19813,6 +19962,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -19939,6 +20089,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -20065,6 +20216,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -20191,6 +20343,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -20317,6 +20470,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -20443,6 +20597,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -20569,6 +20724,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -20695,6 +20851,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -20821,6 +20978,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -20947,6 +21105,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -21073,6 +21232,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -21199,6 +21359,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -21325,6 +21486,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -21451,6 +21613,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -21577,6 +21740,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -21703,6 +21867,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -21829,6 +21994,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -21955,6 +22121,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -22081,6 +22248,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -22207,6 +22375,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -22333,6 +22502,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -22459,6 +22629,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -22585,6 +22756,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -22711,6 +22883,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -22837,6 +23010,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -22963,6 +23137,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -23089,6 +23264,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -23215,6 +23391,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -23341,6 +23518,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -23467,6 +23645,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -23593,6 +23772,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.0,
                         2.0,
@@ -23757,6 +23937,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kNormal",
+                    "castShadow": true,
                     "color": [
                         1.0,
                         1.0,
@@ -23854,6 +24035,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kNormal",
+                    "castShadow": true,
                     "color": [
                         1.0,
                         1.0,
@@ -23951,6 +24133,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kNormal",
+                    "castShadow": true,
                     "color": [
                         1.0,
                         1.0,
@@ -24048,6 +24231,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kNormal",
+                    "castShadow": true,
                     "color": [
                         1.0,
                         1.0,
@@ -24145,6 +24329,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kNormal",
+                    "castShadow": true,
                     "color": [
                         1.0,
                         1.0,
@@ -24290,6 +24475,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kNormal",
+                    "castShadow": true,
                     "color": [
                         1.0,
                         1.0,
@@ -24387,6 +24573,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kNormal",
+                    "castShadow": true,
                     "color": [
                         1.0,
                         1.0,
@@ -24484,6 +24671,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kNormal",
+                    "castShadow": true,
                     "color": [
                         1.0,
                         1.0,
@@ -24569,6 +24757,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kNormal",
+                    "castShadow": true,
                     "color": [
                         1.0,
                         1.0,
@@ -24654,6 +24843,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kNormal",
+                    "castShadow": true,
                     "color": [
                         1.0,
                         1.0,
@@ -24739,6 +24929,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kNormal",
+                    "castShadow": true,
                     "color": [
                         1.0,
                         1.0,
@@ -24920,6 +25111,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kNormal",
+                    "castShadow": true,
                     "color": [
                         1.0,
                         1.0,
@@ -25017,6 +25209,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kNormal",
+                    "castShadow": true,
                     "color": [
                         1.0,
                         1.0,
@@ -25114,6 +25307,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kNormal",
+                    "castShadow": true,
                     "color": [
                         1.0,
                         1.0,
@@ -25211,6 +25405,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kNormal",
+                    "castShadow": true,
                     "color": [
                         1.0,
                         1.0,
@@ -25308,6 +25503,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kNormal",
+                    "castShadow": true,
                     "color": [
                         1.0,
                         1.0,
@@ -25453,6 +25649,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kNormal",
+                    "castShadow": true,
                     "color": [
                         1.0,
                         1.0,
@@ -25598,6 +25795,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kNormal",
+                    "castShadow": true,
                     "color": [
                         1.0,
                         1.0,
@@ -25743,6 +25941,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kNormal",
+                    "castShadow": true,
                     "color": [
                         1.0,
                         1.0,
@@ -25888,6 +26087,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kNormal",
+                    "castShadow": true,
                     "color": [
                         1.0,
                         1.0,
@@ -26033,6 +26233,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kNormal",
+                    "castShadow": true,
                     "color": [
                         1.0,
                         1.0,
@@ -26130,6 +26331,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kNormal",
+                    "castShadow": true,
                     "color": [
                         1.0,
                         1.0,
@@ -26215,6 +26417,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kNormal",
+                    "castShadow": true,
                     "color": [
                         1.0,
                         1.0,
@@ -26300,6 +26503,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kNormal",
+                    "castShadow": true,
                     "color": [
                         1.0,
                         1.0,
@@ -26728,6 +26932,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kNormal",
+                    "castShadow": true,
                     "color": [
                         1.0,
                         1.0,
@@ -26857,6 +27062,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.1764705181121826,
                         2.1764705181121826,
@@ -26944,6 +27150,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.1764705181121826,
                         2.1764705181121826,
@@ -27035,6 +27242,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.1764705181121826,
                         2.1764705181121826,
@@ -27126,6 +27334,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.1764705181121826,
                         2.1764705181121826,
@@ -27217,6 +27426,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         2.1764705181121826,
                         2.1764705181121826,
@@ -27298,6 +27508,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kNormal",
+                    "castShadow": true,
                     "color": [
                         0.4092526435852051,
                         0.4092526435852051,
@@ -27378,6 +27589,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kNormal",
+                    "castShadow": true,
                     "color": [
                         1.0,
                         1.0,
@@ -27569,6 +27781,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
+                    "castShadow": true,
                     "color": [
                         6.098039150238037,
                         0.6901960968971252,

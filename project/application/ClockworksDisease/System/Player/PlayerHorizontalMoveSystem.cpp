@@ -46,7 +46,7 @@ void PlayerHorizontalMoveSystem::Update(No::Registry& registry, float deltaTime)
 
 	bool isSkip = false;
 	for (auto e : registry.View<No::TransformComponent, No::CameraComponent, FollowCameraComponent>()) {
-		if (registry.Has<CameraIntroLockTag>(e)) isSkip = true; // 演出中は操作できない
+		if (registry.Has<CameraLockTag>(e)) isSkip = true; // 演出中は操作できない
 	}
 
 	for (auto entity : view) {

@@ -14,7 +14,7 @@ void FollowCameraSystem::Update(No::Registry& registry, float deltaTime) {
 	auto view = registry.View<No::TransformComponent, No::CameraComponent, FollowCameraComponent>();
 
 	for (auto e : view) {
-		if (registry.Has<CameraIntroLockTag>(e)) continue; // 演出中は追従しない
+		if (registry.Has<CameraLockTag>(e)) continue; // 演出中は追従しない
 		
 		auto* transform = registry.GetComponent<No::TransformComponent>(e);
 		auto* followCameraVariables = registry.GetComponent<FollowCameraComponent>(e);

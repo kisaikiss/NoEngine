@@ -14,6 +14,7 @@ public:
 	void Update(No::Registry& registry, float deltaTime) override;
 private:
 	bool restored_ = false;
+	bool isFirstFrame_ = true;
 };
 
 class MainStageProgressCaptureSystem : public No::ISystem {

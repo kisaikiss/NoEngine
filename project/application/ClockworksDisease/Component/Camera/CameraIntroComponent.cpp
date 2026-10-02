@@ -1,7 +1,7 @@
 #include "CameraIntroComponent.h"
 
-REFLECT_STRUCT_BEGIN(CameraIntroLockTag, "ApplicationTag")
-REFLECT_STRUCT_END(CameraIntroLockTag)
+REFLECT_STRUCT_BEGIN(CameraLockTag, "ApplicationTag")
+REFLECT_STRUCT_END(CameraLockTag)
 
 REFLECT_STRUCT_BEGIN(CameraIntroComponent, "Application")
 REFLECT_ENUM_FIELD(phase),

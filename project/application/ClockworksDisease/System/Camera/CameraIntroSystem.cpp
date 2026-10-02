@@ -35,7 +35,7 @@ void CameraIntroSystem::Update(No::Registry& registry, float deltaTime) {
 				intro->overlayEntity = No::INVALID_ENTITY;
 			}
 
-			registry.RemoveComponent<CameraIntroLockTag>(e);
+			registry.RemoveComponent<CameraLockTag>(e);
 			intro->phase = CameraIntroComponent::Phase::kDone;
 			continue;
 		}
@@ -72,7 +72,7 @@ void CameraIntroSystem::Update(No::Registry& registry, float deltaTime) {
 				: 1.0f;
 			if (t >= 1.0f) {
 				// 暗転から復帰するタイミングでプレイヤー追従へ切り替える
-				registry.RemoveComponent<CameraIntroLockTag>(e);
+				registry.RemoveComponent<CameraLockTag>(e);
 				intro->fadeTimer = 0.0f;
 				intro->phase = CameraIntroComponent::Phase::kFadeIn;
 			}

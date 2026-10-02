@@ -3,7 +3,7 @@
 
 // TransformRoutine演出中、FollowCameraSystemの追従を止めておくためのタグ。
 // 演出が終わったタイミングでCameraIntroSystemがこれを外し、以降FollowCameraSystemが追従を再開する。
-struct CameraIntroLockTag {};
+struct CameraLockTag {};
 
 struct CameraIntroComponent {
 	enum class Phase {

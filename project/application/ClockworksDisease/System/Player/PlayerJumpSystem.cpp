@@ -126,7 +126,7 @@ void CreateScaffold(No::Registry& registry, No::Entity entity, PlayerComponent* 
 void PlayerJumpSystem::Update(No::Registry& registry, float deltaTime) {
 	bool isSkip = false;
 	for (auto e : registry.View<No::TransformComponent, No::CameraComponent, FollowCameraComponent>()) {
-		if (registry.Has<CameraIntroLockTag>(e)) isSkip = true; // 演出中は操作できない
+		if (registry.Has<CameraLockTag>(e)) isSkip = true; // 演出中は操作できない
 	}
 
 	auto view = registry.View<PlayerComponent, No::TransformComponent, No::GroundStateComponent, PlayerMoveTransientComponent>();

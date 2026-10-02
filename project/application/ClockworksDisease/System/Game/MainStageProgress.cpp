@@ -4,6 +4,7 @@
 #include "engine/Editor/EditTag.h"
 #include "application/ClockworksDisease/Component/Camera/FollowCameraComponent.h"
 #include "application/ClockworksDisease/Component/Camera/CameraIntroComponent.h"
+#include "application/ClockworksDisease/Component/Player/PlayerComponent.h"
 
 #include <unordered_set>
 
@@ -48,9 +49,15 @@ bool Restore(No::Registry& registry) {
 
 	// メインカメラのロックタグを外してプレイヤーが移動できるようにしておく
 	for (auto e : registry.View<No::TransformComponent, No::CameraComponent, FollowCameraComponent>()) {
-		if (registry.Has<CameraIntroLockTag>(e)) {
-			registry.RemoveComponent<CameraIntroLockTag>(e);
+		if (registry.Has<CameraLockTag>(e)) {
+			registry.RemoveComponent<CameraLockTag>(e);
 		}
+	}
+
+	// プレイヤーを見えるようにする
+	for (auto e : registry.View<No::MeshComponent, No::MaterialComponent, PlayerComponent>()) {
+		registry.GetComponent<No::MeshComponent>(e)->isVisible = true;
+		registry.GetComponent<No::MaterialComponent>(e)->castShadow = true;
 	}
 
 	for (auto entity : collectedEntities) registry.DestroyEntity(entity);
@@ -66,6 +73,12 @@ void RecordCollectedItem(No::Registry& registry, No::Entity item) {
 
 void MainStageProgressRestoreSystem::Update(No::Registry& registry, float deltaTime) {
 	static_cast<void>(deltaTime);
+	if (isFirstFrame_) {
+		isFirstFrame_ = false;
+	} else {
+		return;
+	}
+	
 	if (restored_ || No::GetCurrentSceneName(registry) != "GameScene") return;
 	restored_ = MainStageProgress::Restore(registry);
 }

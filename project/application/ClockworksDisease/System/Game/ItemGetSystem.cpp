@@ -6,7 +6,8 @@
 #include "../../Component/Game/GameProgressComponent.h"
 #include "../../Component/Game/GoalDirectionComponent.h"
 #include "../../Component/Game/StageTransitionComponent.h"
-#include "engine/Editor/DataDriven/SceneSerializer.h"
+#include "application/ClockworksDisease/Component/Camera/FollowCameraComponent.h"
+#include "application/ClockworksDisease/Component/Camera/CameraIntroComponent.h"
 #include "MainStageProgress.h"
 
 namespace {
@@ -120,6 +121,15 @@ void ItemGetSystem::Update(No::Registry& registry, float deltaTime) {
 
 			if (!transition->destinationScene.empty()) {
 				registry.GetComponent<No::MeshComponent>(event.player)->isVisible = false;
+				registry.GetComponent<No::MaterialComponent>(event.player)->castShadow = false;
+				registry.GetComponent<No::VelocityComponent>(event.player)->linear = No::Vector3::ZERO;
+				if (registry.Has<No::ParticleEmitterSphereComponent>(event.player))
+					registry.GetComponent<No::ParticleEmitterSphereComponent>(event.player)->active = false;
+				for (auto e : registry.View<FollowCameraComponent>()) {
+					registry.AddComponent<CameraLockTag>(e);
+				}
+
+
 				transition->scalingTimer = transition->transitionTime;
 				transition->collidePosition = registry.GetComponent<No::TransformComponent>(event.item)->GetWorldPosition(registry);
 			}
