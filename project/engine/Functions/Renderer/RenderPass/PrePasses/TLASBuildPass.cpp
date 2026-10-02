@@ -16,8 +16,8 @@ constexpr UINT8 kInstanceMaskShadowCasterBit = 0x01;
 // 通常のメッシュ：全ビットON（シャドウレイにも他の用途にも常にヒットする）
 constexpr UINT8 kInstanceMaskDefault = 0xFF;
 
-// 発光体メッシュ（自身がPoint/SpotLightを所有）：シャドウキャスタービットだけOFF
-constexpr UINT8 kInstanceMaskLightEmitter = kInstanceMaskDefault & ~kInstanceMaskShadowCasterBit; // 0xFE
+// マテリアルでシャドウオフ、または発光体オブジェクトの場合：シャドウキャスタービットだけOFF
+constexpr UINT8 kInstanceMaskShadowOff = kInstanceMaskDefault & ~kInstanceMaskShadowCasterBit; // 0xFE
 }
 
 void TLASBuildPass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& resourceRegistry, ECS::Registry& registry) {
@@ -30,7 +30,7 @@ void TLASBuildPass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& res
 void TLASBuildPass::BuildRaytracingInstances(ECS::Registry& registry) {
 	instances_.clear();
 
-	auto view = registry.View<Component::MeshComponent, Component::TransformComponent>();
+	auto view = registry.View<Component::MeshComponent, Component::MaterialComponent, Component::TransformComponent>();
 
 	for (auto entity : view) {
 		auto* meshComp = registry.GetComponent<Component::MeshComponent>(entity);
@@ -47,11 +47,12 @@ void TLASBuildPass::BuildRaytracingInstances(ECS::Registry& registry) {
 		memset(&desc, 0, sizeof(desc));
 
 		// このエンティティが自身にPoint/SpotLightを持っているか(=発光体メッシュか)を判定
-		const bool isLightEmitter =
+		const bool isShadowOff =
 			registry.Has<Component::PointLightComponent>(entity) ||
-			registry.Has<Component::SpotLightComponent>(entity);
+			registry.Has<Component::SpotLightComponent>(entity) ||
+			!registry.GetComponent<Component::MaterialComponent>(entity)->castShadow;
 
-		desc.InstanceMask = isLightEmitter ? kInstanceMaskLightEmitter : kInstanceMaskDefault;
+		desc.InstanceMask = isShadowOff ? kInstanceMaskShadowOff : kInstanceMaskDefault;
 		desc.InstanceID = static_cast<UINT>(entity);
 		desc.InstanceContributionToHitGroupIndex = 0;
 

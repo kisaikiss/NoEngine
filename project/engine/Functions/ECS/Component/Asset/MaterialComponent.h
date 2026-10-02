@@ -38,6 +38,7 @@ struct MaterialComponent {
 	bool drawOutline = false;
 	bool unlit = false;          // true : ライトの影響を受けない
 	bool receiveShadow = true;   // false : 他オブジェクトが落とす影の影響を受けない
+	bool castShadow = true;
 	float shininess = 60.f;
 	float environmentCoefficient = 0.f;
 	Math::Vector2 uvPosition = Math::Vector2::ZERO;

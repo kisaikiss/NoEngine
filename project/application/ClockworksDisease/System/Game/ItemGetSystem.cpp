@@ -119,7 +119,7 @@ void ItemGetSystem::Update(No::Registry& registry, float deltaTime) {
 			registry.RemoveComponent<No::SphereCollider>(event.item);
 
 			if (!transition->destinationScene.empty()) {
-
+				registry.GetComponent<No::MeshComponent>(event.player)->isVisible = false;
 				transition->scalingTimer = transition->transitionTime;
 				transition->collidePosition = registry.GetComponent<No::TransformComponent>(event.item)->GetWorldPosition(registry);
 			}
