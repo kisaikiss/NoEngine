@@ -35,7 +35,7 @@ void CaptureIfQueued(No::Registry& registry) {
 
 bool Restore(No::Registry& registry) {
 	if (!sHasSnapshot) return false;
-	NoEngine::Editor::LoadScene(registry, sMainStageSnapshot);
+	NoEngine::Editor::LoadScene(registry, sMainStageSnapshot, true);
 
 	// 読み込み元のシーンファイルに存在する取得済みアイテムを再生成させない。
 	std::vector<No::Entity> collectedEntities;

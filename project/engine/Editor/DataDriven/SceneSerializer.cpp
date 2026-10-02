@@ -131,7 +131,7 @@ void WriteFieldToJson(ECS::Registry& registry, nlohmann::json& j, const FieldInf
 	}
 }
 
-void LoadScene(ECS::Registry& registry, const json& scene) {
+void LoadScene(ECS::Registry& registry, const json& scene, bool removeMissing) {
 	const auto& entities = scene["entities"];
 
 	// 全EntityとEditTag(名前)だけ先に用意する。
@@ -154,7 +154,7 @@ void LoadScene(ECS::Registry& registry, const json& scene) {
 	// ここでEntity参照フィールドをFindEntityByNameで解決しても、
 	// 参照先が必ず存在している状態になる。
 	for (auto& [e, entityJsonPtr] : pending) {
-		LoadEntityFromJson(registry, e, *entityJsonPtr);
+		LoadEntityFromJson(registry, e, *entityJsonPtr, removeMissing);
 	}
 }
 
@@ -170,7 +170,14 @@ ECS::Entity FindEntityByName(ECS::Registry& registry, const std::string& name) {
 
 }
 
-void LoadEntityFromJson(ECS::Registry& registry, ECS::Entity entity, const json& j) {
+void LoadEntityFromJson(ECS::Registry& registry, ECS::Entity entity, const json& j, bool removeMissing) {
+	if (removeMissing) {
+		for (auto& info : ComponentRegistry::GetAll()) {
+			if (info.typeId == Utilities::TypeID<EditTag>()) continue; // EditTagは残す
+			if (!j["components"].contains(info.name)) registry.RemoveComponent(info.typeId, entity);
+		}
+	}
+
 	for (auto& [compName, compJson] : j["components"].items()) {
 		TypeInfo* typeInfo = ComponentRegistry::FindByName(compName);
 		if (!typeInfo) continue;
