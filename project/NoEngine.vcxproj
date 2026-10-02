@@ -228,6 +228,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="application\ClockworksDisease\System\Object\MagicScaffoldSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Object\SavePointSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Object\SmallPowerItemSystem.cpp" />
+    <ClCompile Include="application\ClockworksDisease\System\Object\WarpBlockSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Player\PlayerAnimationSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Player\PlayerDeathSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Player\PlayerHorizontalMoveSystem.cpp" />
@@ -529,6 +530,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="application\ClockworksDisease\System\Object\MagicScaffoldSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Object\SavePointSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Object\SmallPowerItemSystem.h" />
+    <ClInclude Include="application\ClockworksDisease\System\Object\WarpBlockSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Player\PlayerAnimationSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Player\PlayerDeathSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Player\PlayerHorizontalMoveSystem.h" />

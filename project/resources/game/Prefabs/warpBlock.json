@@ -1,5 +1,8 @@
 {
     "components": {
+        "CollisionLayerComponent": {
+            "layer": "Item"
+        },
         "EditTag": {
             "name": "warpBlock",
             "parent": null
@@ -51,7 +54,8 @@
             "radius": 0.5
         },
         "StageTransitionComponent": {
-            "destinationScene": "GameScene"
+            "destinationScene": "GameScene",
+            "transitionTime": 0.5
         },
         "TransformComponent": {
             "parent": null,

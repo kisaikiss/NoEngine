@@ -26,6 +26,7 @@
 #include "../System/Object/SmallPowerItemSystem.h"
 #include "../System/Object/BigPowerItemSystem.h"
 #include "../System/Object/SavePointSystem.h"
+#include "../System/Object/WarpBlockSystem.h"
 #include "../System/UI/LevelUISystem.h"
 #include "../System/UI/StaminaUISystem.h"
 #include "../System/UI/LevelUpTextSystem.h"
@@ -94,6 +95,7 @@ void GameScene::AddSystems() {
 	AddSystem(std::make_unique<SmallPowerItemSystem>());
 	AddSystem(std::make_unique<BigPowerItemSystem>());
 	AddSystem(std::make_unique<SavePointSystem>());
+	AddSystem(std::make_unique<WarpBlockSystem>());
 	AddSystem(std::make_unique<PlayerLevelUpSystem>());
 	AddSystem(std::make_unique<LevelUISystem>());
 	AddSystem(std::make_unique<PlayerAbilityDebugSystem>());

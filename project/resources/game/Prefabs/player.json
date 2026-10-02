@@ -2,6 +2,7 @@
     "components": {
         "AnimatorComponent": {
             "animationSpeedMagnification": 1.0,
+            "blendDuration": 0.20000000298023224,
             "currentAnimation": 0,
             "drawSkeleton": false,
             "enableSkinning": true
@@ -74,16 +75,19 @@
             "isGrounded": false
         },
         "LevelComponent": {
+            "levelUpRequirements": [
+                60
+            ],
             "nextLevelUp": 30,
             "nowLevel": 1,
             "power": 0,
             "rewards": [
                 {
-                    "ability": "kHighJump",
+                    "ability": "kAirDash",
                     "level": 2
                 },
                 {
-                    "ability": "kAirDash",
+                    "ability": "kHighJump",
                     "level": 3
                 },
                 {
@@ -108,12 +112,14 @@
                 1.0
             ],
             "emissiveIntensity": 1.0,
-            "enviromentCoefficient": 0.0,
+            "environmentCoefficient": 0.0,
             "noiseScrollSpeed": 0.30000001192092896,
             "noiseTextureName": "noise0",
+            "receiveShadow": true,
             "renderMode": "kToon",
             "rimPower": 2.0,
             "shininess": 60.0,
+            "unlit": false,
             "uvPosition": [
                 0.0,
                 0.0
@@ -141,24 +147,34 @@
             "magicScaffold": false
         },
         "PlayerComponent": {
+            "airAcceleration": 20.0,
             "airDashSpeed": 10.0,
             "airDashStaminaCostRate": 2.0,
             "coyoteTime": 0.30000001192092896,
             "coyoteTimer": 0.0,
+            "dashStartInput": 0.20000000298023224,
+            "deathHeight": -10.0,
             "doubleJumpSpeed": 4.0,
-            "gravity": -7.0,
+            "gravity": -20.0,
             "highJumpCostRate": 10.0,
-            "highJumpSpeed": 10.0,
+            "highJumpSpeed": 15.0,
             "infinityJump": false,
             "infinityStamina": false,
-            "jumpSpeed": 5.5,
+            "jumpSpeed": 10.0,
+            "maxFallSpeed": -20.0,
             "maxStamina": 0.0,
-            "minGroundNormalY": 0.75,
-            "moveSpeed": 6.0,
+            "minGroundNormalY": 0.8500000238418579,
+            "moveSpeed": 9.0,
+            "respawnPoint": [
+                0.0,
+                0.5,
+                0.0
+            ],
             "stamina": 0.0,
             "staminaRecoveryRate": 1.0,
             "staminaUpPerLevel": 1.0,
-            "state": "kWait"
+            "state": "kWait",
+            "walkSpeed": 4.0
         },
         "PlayerMoveTransientComponent": null,
         "PrefabInstanceTag": {
@@ -167,10 +183,10 @@
         "TransformComponent": {
             "parent": null,
             "rotation": [
-                -1.401298464324817e-45,
-                0.997256875038147,
-                -1.401298464324817e-45,
-                -0.07401859015226364
+                -4.337023256084649e-06,
+                -0.7890259027481079,
+                -2.020248075496056e-06,
+                0.6143598556518555
             ],
             "scale": [
                 1.0,
@@ -178,9 +194,9 @@
                 1.0
             ],
             "translate": [
-                1.057900071144104,
-                0.0,
-                -3.539100408554077
+                6.1407599449157715,
+                0.09782293438911438,
+                0.16148066520690918
             ]
         },
         "VelocityComponent": {

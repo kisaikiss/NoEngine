@@ -1056,9 +1056,9 @@
                 },
                 "DebugCameraComponent": {
                     "center": [
-                        10.922000885009766,
-                        -2.470320701599121,
-                        0.9357948303222656
+                        -0.7074661254882813,
+                        -3.2090892791748047,
+                        -0.819645881652832
                     ],
                     "distance": 24.76100730895996,
                     "drawCenter": false,
@@ -1073,10 +1073,10 @@
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
-                        0.10817409306764603,
-                        0.7732406854629517,
-                        -0.13722050189971924,
-                        0.6095635294914246
+                        0.14189763367176056,
+                        0.8395290374755859,
+                        -0.2623094320297241,
+                        0.4541475474834442
                     ],
                     "scale": [
                         1.0,
@@ -1084,9 +1084,9 @@
                         1.0
                     ],
                     "translate": [
-                        -11.68458366394043,
-                        6.049618721008301,
-                        6.3635478019714355
+                        -17.74546241760254,
+                        10.887788772583008,
+                        10.320025444030762
                     ]
                 }
             }
@@ -1425,7 +1425,7 @@
                     "collisionStartOffset": 5.0,
                     "currentDistance": 15.0,
                     "distance": 15.0,
-                    "goalViewSpeed": 10.0,
+                    "goalViewSpeed": 1.0,
                     "maxDistance": 15.0,
                     "maxFov": 0.8500000238418579,
                     "maxPhi": 1.5707963705062866,
@@ -1435,7 +1435,7 @@
                     "moveSpeed": 2.0,
                     "phi": 1.3188129663467407,
                     "playerPosOffset": 2.0,
-                    "playerViewSpeed": 1.0,
+                    "playerViewSpeed": 10.0,
                     "theta": 3.1280524730682373
                 },
                 "TransformComponent": {
@@ -7856,18 +7856,28 @@
                     "textureName": "smokeEffect"
                 },
                 "GroundStateComponent": {
-                    "groundHeight": -0.000144485107739456,
-                    "isGrounded": true
+                    "groundHeight": 0.0,
+                    "isGrounded": false
                 },
                 "LevelComponent": {
-                    "levelUpRequirements": [],
+                    "levelUpRequirements": [
+                        60
+                    ],
                     "nextLevelUp": 30,
                     "nowLevel": 1,
                     "power": 0,
                     "rewards": [
                         {
-                            "ability": "kHighJump",
+                            "ability": "kAirDash",
                             "level": 2
+                        },
+                        {
+                            "ability": "kHighJump",
+                            "level": 3
+                        },
+                        {
+                            "ability": "kMagicScaffold",
+                            "level": 4
                         }
                     ]
                 },
@@ -7907,14 +7917,19 @@
                 },
                 "MeshComponent": {
                     "isVisible": true,
-                    "meshName": "jogging"
+                    "meshName": "magiclash"
                 },
                 "ParticleEmitterSphereComponent": {
                     "active": true,
-                    "count": 10,
-                    "frequency": 0.5,
+                    "count": 20,
+                    "frequency": 0.20000000298023224,
                     "frequencyTime": 0.0,
-                    "radius": 1.0
+                    "radius": 0.0
+                },
+                "PlayerAbilityDebugComponent": {
+                    "airDash": false,
+                    "highJump": false,
+                    "magicScaffold": false
                 },
                 "PlayerComponent": {
                     "airAcceleration": 20.0,
@@ -7922,38 +7937,41 @@
                     "airDashStaminaCostRate": 2.0,
                     "coyoteTime": 0.30000001192092896,
                     "coyoteTimer": 0.0,
-                    "dashStartInput": 0.5,
-                    "deathHeight": -30.0,
+                    "dashStartInput": 0.20000000298023224,
+                    "deathHeight": -10.0,
                     "doubleJumpSpeed": 4.0,
-                    "gravity": -7.0,
+                    "gravity": -20.0,
                     "highJumpCostRate": 10.0,
-                    "highJumpSpeed": 7.0,
+                    "highJumpSpeed": 15.0,
                     "infinityJump": false,
                     "infinityStamina": false,
-                    "jumpSpeed": 5.5,
-                    "maxFallSpeed": -25.0,
+                    "jumpSpeed": 10.0,
+                    "maxFallSpeed": -20.0,
                     "maxStamina": 0.0,
-                    "minGroundNormalY": 0.75,
-                    "moveSpeed": 6.0,
+                    "minGroundNormalY": 0.8500000238418579,
+                    "moveSpeed": 9.0,
                     "respawnPoint": [
                         0.0,
-                        0.0,
+                        0.5,
                         0.0
                     ],
                     "stamina": 0.0,
                     "staminaRecoveryRate": 1.0,
                     "staminaUpPerLevel": 1.0,
                     "state": "kWait",
-                    "walkSpeed": 5.0
+                    "walkSpeed": 4.0
                 },
                 "PlayerMoveTransientComponent": null,
+                "PrefabInstanceTag": {
+                    "prefabPath": "resources/game/Prefabs\\player.json"
+                },
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
-                        -1.1965092028276558e-07,
-                        -0.7118779420852661,
-                        -1.212821558738142e-07,
-                        -0.7023032307624817
+                        -7.666791930205363e-07,
+                        0.7216740846633911,
+                        7.155207640607841e-06,
+                        0.6922329664230347
                     ],
                     "scale": [
                         1.0,
@@ -7961,19 +7979,20 @@
                         1.0
                     ],
                     "translate": [
-                        -6.112610340118408,
-                        -0.000144485107739456,
-                        1.2121902704238892
+                        -8.151572227478027,
+                        0.0,
+                        1.0656254291534424
                     ]
                 },
                 "VelocityComponent": {
                     "linear": [
                         0.0,
-                        0.0,
+                        -2.5044658184051514,
                         0.0
                     ]
                 }
-            }
+            },
+            "prefabInstance": "resources/game/Prefabs\\player.json"
         },
         "stage": {
             "components": {
@@ -8160,6 +8179,9 @@
         },
         "warpBlock": {
             "components": {
+                "CollisionLayerComponent": {
+                    "layer": "Item"
+                },
                 "EditTag": {
                     "name": "warpBlock",
                     "parent": null
@@ -8211,7 +8233,8 @@
                     "radius": 0.5
                 },
                 "StageTransitionComponent": {
-                    "destinationScene": "GameScene"
+                    "destinationScene": "GameScene",
+                    "transitionTime": 0.5
                 },
                 "TransformComponent": {
                     "parent": null,

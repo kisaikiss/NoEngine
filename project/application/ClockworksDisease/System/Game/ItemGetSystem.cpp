@@ -5,6 +5,7 @@
 #include "../../Component/Player/PlayerComponent.h"
 #include "../../Component/Game/GameProgressComponent.h"
 #include "../../Component/Game/GoalDirectionComponent.h"
+#include "../../Component/Game/StageTransitionComponent.h"
 #include "engine/Editor/DataDriven/SceneSerializer.h"
 #include "MainStageProgress.h"
 
@@ -111,6 +112,18 @@ void ItemGetSystem::Update(No::Registry& registry, float deltaTime) {
 			registry.GetComponent<No::MaterialComponent>(event.item)->color = No::Color::YELLOW * savePoint->colorMagnification;
 
 			player->respawnPoint = transform->GetWorldPosition(registry);
+		}
+
+		if (registry.HasAll<StageTransitionComponent, No::TransformComponent, No::SphereCollider>(event.item)) {
+			auto* transition = registry.GetComponent<StageTransitionComponent>(event.item);
+			registry.RemoveComponent<No::SphereCollider>(event.item);
+
+			if (!transition->destinationScene.empty()) {
+
+				transition->scalingTimer = transition->transitionTime;
+				transition->collidePosition = registry.GetComponent<No::TransformComponent>(event.item)->GetWorldPosition(registry);
+			}
+			continue;
 		}
 	}
 }

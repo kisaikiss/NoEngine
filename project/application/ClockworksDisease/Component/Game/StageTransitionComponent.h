@@ -5,4 +5,8 @@
 // 遷移させたいオブジェクトに付け、destinationScene に登録済みシーン名を設定する。
 struct StageTransitionComponent {
 	std::string destinationScene = "GameScene";
+	float transitionTime = 1.0f;
+
+	float scalingTimer = 0.0f;
+	No::Vector3 collidePosition = No::Vector3::ZERO;
 };
