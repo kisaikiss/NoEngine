@@ -27830,7 +27830,7 @@
                     "radius": 0.5
                 },
                 "StageTransitionComponent": {
-                    "destinationScene": "TestScene",
+                    "destinationScene": "SampleScene",
                     "transitionTime": 0.5
                 },
                 "TransformComponent": {

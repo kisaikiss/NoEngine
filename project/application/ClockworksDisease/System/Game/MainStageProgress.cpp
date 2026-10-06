@@ -5,6 +5,9 @@
 #include "application/ClockworksDisease/Component/Camera/FollowCameraComponent.h"
 #include "application/ClockworksDisease/Component/Camera/CameraIntroComponent.h"
 #include "application/ClockworksDisease/Component/Player/PlayerComponent.h"
+#include "application/ClockworksDisease/Component/Player/PlayerMoveTags.h"
+#include "application/ClockworksDisease/Component/UI/UserInterfaceComponent.h"
+
 
 #include <unordered_set>
 
@@ -14,6 +17,8 @@ nlohmann::json sMainStageSnapshot;
 std::unordered_set<std::string> sCollectedItemNames;
 bool sHasSnapshot = false;
 bool sCaptureQueued = false;
+PlayerAbilityDebugComponent sPlayerAbility{};
+float sPlayerStamina = 0.0f;
 }
 
 void QueueCapture() {
@@ -30,8 +35,15 @@ void Reset() {
 void CaptureIfQueued(No::Registry& registry) {
 	if (!sCaptureQueued) return;
 	sMainStageSnapshot = NoEngine::Editor::SaveScene(registry);
+
+	// 現状のプレイヤーの状態を保持
+	for (auto e : registry.View<PlayerAbilityDebugComponent, PlayerComponent>()) {
+		sPlayerAbility = *registry.GetComponent<PlayerAbilityDebugComponent>(e);
+		sPlayerStamina = registry.GetComponent<PlayerComponent>(e)->maxStamina;
+	}
 	sHasSnapshot = true;
 	sCaptureQueued = false;
+
 }
 
 bool Restore(No::Registry& registry) {
@@ -60,6 +72,11 @@ bool Restore(No::Registry& registry) {
 		registry.GetComponent<No::MaterialComponent>(e)->castShadow = true;
 	}
 
+	// レベルアップ時のUIが表示しっぱなしのときに非表示に戻す
+	for (auto e : registry.View<No::SpriteComponent, LevelUpTextComponent>()) {
+		registry.GetComponent<No::SpriteComponent>(e)->isVisible = false;
+	}
+
 	for (auto entity : collectedEntities) registry.DestroyEntity(entity);
 	return true;
 }
@@ -79,8 +96,31 @@ void MainStageProgressRestoreSystem::Update(No::Registry& registry, float deltaT
 		return;
 	}
 	
-	if (restored_ || No::GetCurrentSceneName(registry) != "GameScene") return;
-	restored_ = MainStageProgress::Restore(registry);
+	if (restored_) return;
+
+	if (No::GetCurrentSceneName(registry) == "GameScene") {
+		restored_ = MainStageProgress::Restore(registry);
+	} else {
+		// メインステージでのプレイヤーのアビリティを入れる
+		for (auto e : registry.View<PlayerComponent, PlayerAbilityDebugComponent>()) {
+			auto* playerAbility = registry.GetComponent<PlayerAbilityDebugComponent>(e);
+			playerAbility->airDash = MainStageProgress::sPlayerAbility.airDash;
+			playerAbility->highJump = MainStageProgress::sPlayerAbility.highJump;
+			playerAbility->magicScaffold = MainStageProgress::sPlayerAbility.magicScaffold;
+			if (playerAbility->airDash && !registry.Has<AirDashTag>(e)) {
+				registry.AddComponent<AirDashTag>(e);
+			}
+
+			if (playerAbility->highJump && !registry.Has<HighJumpTag>(e)) {
+				registry.AddComponent<HighJumpTag>(e);
+			}
+
+			if (playerAbility->magicScaffold && !registry.Has<CreateMagicScaffoldTag>(e)) {
+				registry.AddComponent<CreateMagicScaffoldTag>(e);
+			}
+			registry.GetComponent<PlayerComponent>(e)->maxStamina = MainStageProgress::sPlayerStamina;
+		}
+	}
 }
 
 void MainStageProgressCaptureSystem::Update(No::Registry& registry, float deltaTime) {
