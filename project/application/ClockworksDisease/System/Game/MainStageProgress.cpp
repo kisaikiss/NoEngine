@@ -6,6 +6,7 @@
 #include "application/ClockworksDisease/Component/Camera/CameraIntroComponent.h"
 #include "application/ClockworksDisease/Component/Player/PlayerComponent.h"
 #include "application/ClockworksDisease/Component/Player/PlayerMoveTags.h"
+#include "application/ClockworksDisease/Component/Game/StageTransitionComponent.h"
 #include "application/ClockworksDisease/Component/UI/UserInterfaceComponent.h"
 
 
@@ -66,15 +67,27 @@ bool Restore(No::Registry& registry) {
 		}
 	}
 
-	// プレイヤーを見えるようにする
-	for (auto e : registry.View<No::MeshComponent, No::MaterialComponent, PlayerComponent>()) {
-		registry.GetComponent<No::MeshComponent>(e)->isVisible = true;
-		registry.GetComponent<No::MaterialComponent>(e)->castShadow = true;
-	}
 
 	// レベルアップ時のUIが表示しっぱなしのときに非表示に戻す
 	for (auto e : registry.View<No::SpriteComponent, LevelUpTextComponent>()) {
 		registry.GetComponent<No::SpriteComponent>(e)->isVisible = false;
+	}
+
+	// ワープブロックを復活させる
+	No::Vector3 playerNewPosition = No::Vector3::ZERO;
+	for (auto e : registry.View<StageTransitionComponent, No::TransformComponent>()) {
+		registry.GetComponent<No::TransformComponent>(e)->scale = No::Vector3::UNIT_SCALE;
+		playerNewPosition = registry.GetComponent<StageTransitionComponent>(e)->returnPosition;
+		if (!registry.Has<No::SphereCollider>(e)) {
+			registry.AddComponent<No::SphereCollider>(e);
+		}
+	}
+
+	// プレイヤーを見えるようにし、ワープブロックが指定した位置へ移動
+	for (auto e : registry.View<No::MeshComponent, No::MaterialComponent, PlayerComponent>()) {
+		registry.GetComponent<No::MeshComponent>(e)->isVisible = true;
+		registry.GetComponent<No::MaterialComponent>(e)->castShadow = true;
+		registry.GetComponent<No::TransformComponent>(e)->SetWorldPosition(registry, playerNewPosition);
 	}
 
 	for (auto entity : collectedEntities) registry.DestroyEntity(entity);

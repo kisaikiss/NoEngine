@@ -6,6 +6,7 @@
 struct StageTransitionComponent {
 	std::string destinationScene = "GameScene";
 	float transitionTime = 1.0f;
+	No::Vector3 returnPosition = No::Vector3::ZERO;
 
 	float scalingTimer = 0.0f;
 	No::Vector3 collidePosition = No::Vector3::ZERO;
