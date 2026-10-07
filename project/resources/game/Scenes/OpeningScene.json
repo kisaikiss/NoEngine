@@ -1,0 +1,369 @@
+{
+    "entities": {
+        "DebugCamera": {
+            "components": {
+                "CameraComponent": {
+                    "fov": 0.44999998807907104
+                },
+                "DebugCameraComponent": {
+                    "center": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "distance": 2.0,
+                    "drawCenter": false,
+                    "moveType": "kBlender",
+                    "unrealMoveSpeed": 10.0,
+                    "unrealSensitivity": 0.20000000298023224
+                },
+                "EditTag": {
+                    "name": "DebugCamera",
+                    "parent": null
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        -2.1855694143368964e-08,
+                        2.1855694143368964e-08,
+                        4.776713662911763e-16,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        -8.742277657347586e-08,
+                        -8.742277657347586e-08,
+                        -2.0
+                    ]
+                }
+            }
+        },
+        "MainCamera": {
+            "components": {
+                "ActiveCameraTag": null,
+                "CameraComponent": {
+                    "fov": 0.44999998807907104
+                },
+                "EditTag": {
+                    "name": "MainCamera",
+                    "parent": null
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "changeTime": {
+            "components": {
+                "EditTag": {
+                    "name": "changeTime",
+                    "parent": null
+                },
+                "SceneChangeTimerComponent": {
+                    "sceneChangeTime": 10.0
+                }
+            }
+        },
+        "intro1": {
+            "components": {
+                "EditTag": {
+                    "name": "intro1",
+                    "parent": null
+                },
+                "OpeningPanelComponent": {
+                    "appearanceTimer": 0.0,
+                    "timeUntilAppearance": 0.30000001192092896
+                },
+                "SpriteComponent": {
+                    "anchor": [
+                        0.5,
+                        0.5
+                    ],
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "fill": 0.0,
+                    "flipX": false,
+                    "flipY": false,
+                    "isVisible": true,
+                    "layer": 10,
+                    "maskTextureName": "",
+                    "nonRenderAngle": 0.0,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "space": "Screen",
+                    "textureName": "resources/game/ClockworksDisease/Texture/Opening/intro1.png",
+                    "useMask": false,
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "parent": null,
+                    "rotation": 0.0,
+                    "scale": [
+                        363.0,
+                        335.0
+                    ],
+                    "translate": [
+                        -457.3739929199219,
+                        -191.0469970703125
+                    ]
+                }
+            }
+        },
+        "intro2": {
+            "components": {
+                "EditTag": {
+                    "name": "intro2",
+                    "parent": null
+                },
+                "OpeningPanelComponent": {
+                    "appearanceTimer": 0.0,
+                    "timeUntilAppearance": 2.5
+                },
+                "SpriteComponent": {
+                    "anchor": [
+                        0.5,
+                        0.5
+                    ],
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "fill": 0.0,
+                    "flipX": false,
+                    "flipY": false,
+                    "isVisible": true,
+                    "layer": 10,
+                    "maskTextureName": "",
+                    "nonRenderAngle": 0.0,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "space": "Screen",
+                    "textureName": "resources/game/ClockworksDisease/Texture/Opening/intro2.png",
+                    "useMask": false,
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "parent": null,
+                    "rotation": 0.0,
+                    "scale": [
+                        374.0,
+                        320.0
+                    ],
+                    "translate": [
+                        -102.8550033569336,
+                        -198.63299560546875
+                    ]
+                }
+            }
+        },
+        "intro3": {
+            "components": {
+                "EditTag": {
+                    "name": "intro3",
+                    "parent": null
+                },
+                "OpeningPanelComponent": {
+                    "appearanceTimer": 0.0,
+                    "timeUntilAppearance": 4.0
+                },
+                "SpriteComponent": {
+                    "anchor": [
+                        0.5,
+                        0.5
+                    ],
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "fill": 0.0,
+                    "flipX": false,
+                    "flipY": false,
+                    "isVisible": true,
+                    "layer": 10,
+                    "maskTextureName": "",
+                    "nonRenderAngle": 0.0,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "space": "Screen",
+                    "textureName": "resources/game/ClockworksDisease/Texture/Opening/intro3.png",
+                    "useMask": false,
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "parent": null,
+                    "rotation": 0.0,
+                    "scale": [
+                        581.0,
+                        312.0
+                    ],
+                    "translate": [
+                        348.0469970703125,
+                        -203.44400024414063
+                    ]
+                }
+            }
+        },
+        "intro4": {
+            "components": {
+                "EditTag": {
+                    "name": "intro4",
+                    "parent": null
+                },
+                "OpeningPanelComponent": {
+                    "appearanceTimer": 0.0,
+                    "timeUntilAppearance": 6.0
+                },
+                "SpriteComponent": {
+                    "anchor": [
+                        0.5,
+                        0.5
+                    ],
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "fill": 0.0,
+                    "flipX": false,
+                    "flipY": false,
+                    "isVisible": true,
+                    "layer": 10,
+                    "maskTextureName": "",
+                    "nonRenderAngle": 0.0,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "space": "Screen",
+                    "textureName": "resources/game/ClockworksDisease/Texture/Opening/intro4.png",
+                    "useMask": false,
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "parent": null,
+                    "rotation": 0.0,
+                    "scale": [
+                        1280.0,
+                        414.0
+                    ],
+                    "translate": [
+                        -0.675000011920929,
+                        151.93699645996094
+                    ]
+                }
+            }
+        },
+        "white1x1": {
+            "components": {
+                "EditTag": {
+                    "name": "white1x1",
+                    "parent": null
+                },
+                "SpriteComponent": {
+                    "anchor": [
+                        0.0,
+                        0.0
+                    ],
+                    "color": [
+                        1.0,
+                        0.5978647470474243,
+                        0.0,
+                        1.0
+                    ],
+                    "fill": 0.0,
+                    "flipX": false,
+                    "flipY": false,
+                    "isVisible": true,
+                    "layer": 0,
+                    "maskTextureName": "",
+                    "nonRenderAngle": 0.0,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "space": "Screen",
+                    "textureName": "white1x1",
+                    "useMask": false,
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "parent": null,
+                    "rotation": 0.0,
+                    "scale": [
+                        10000.0,
+                        10000.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        }
+    }
+}

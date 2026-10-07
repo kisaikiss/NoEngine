@@ -304,6 +304,10 @@
     <ClCompile Include="application\ClockworksDisease\System\Object\SavePointSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Object\SmallPowerItemSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Object\WarpBlockSystem.cpp" />
+    <ClCompile Include="application\ClockworksDisease\Scene\OpeningScene.cpp" />
+    <ClCompile Include="application\ClockworksDisease\Component\Opening\OpeningPanelComponent.cpp" />
+    <ClCompile Include="application\ClockworksDisease\System\Opening\OpeningPanelSystem.cpp" />
+    <ClCompile Include="application\ClockworksDisease\System\Opening\SceneChangeTimerSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -615,6 +619,10 @@
     <ClInclude Include="application\ClockworksDisease\System\Object\SavePointSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Object\SmallPowerItemSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Object\WarpBlockSystem.h" />
+    <ClInclude Include="application\ClockworksDisease\Scene\OpeningScene.h" />
+    <ClInclude Include="application\ClockworksDisease\Component\Opening\OpeningPanelComponent.h" />
+    <ClInclude Include="application\ClockworksDisease\System\Opening\OpeningPanelSystem.h" />
+    <ClInclude Include="application\ClockworksDisease\System\Opening\SceneChangeTimerSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />
