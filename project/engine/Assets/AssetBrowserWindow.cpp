@@ -42,8 +42,9 @@ void RebuildItemList() {
 		item.displayName = asset.currentAddressableName;
 		item.path = asset.currentAddressableName.c_str();
 		item.metaFilePath = asset.metaFilePath;
-		item.dragPayloadType = "ASSET_PATH";
 		item.type = AssetManager::GetAssetTypeFromExtension(asset.sourceFile);
+		item.dragPayloadType = item.type == EBrowserItemType::Model ? "ASSET_MODEL_NAME"
+			: item.type == EBrowserItemType::Texture ? "ASSET_TEXTURE_NAME" : "ASSET_PATH";
 		item.currentAddressableName = asset.currentAddressableName;
 		item.folderPath = GetFolderPathOf(asset.metaFilePath);
 		strcpy_s(item.nameInputBuffer, asset.currentAddressableName.c_str());

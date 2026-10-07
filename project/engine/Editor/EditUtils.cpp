@@ -1,6 +1,9 @@
 #include "EditUtils.h"
 #include "engine/Functions/ECS/Component/Common/Transform2DComponent.h"
 #include "engine/Functions/ECS/Component/Common/TransformComponent.h"
+#include "engine/Functions/ECS/Component/Asset/SpriteComponent.h"
+#include "engine/Functions/ECS/Component/Asset/MeshComponent.h"
+#include "engine/Functions/ECS/Component/Asset/MaterialComponent.h"
 #include "engine/Runtime/GraphicsCore.h"
 #include "engine/Runtime/Command/CommandContext.h"
 #include "engine/Functions/Renderer/Primitive.h"
@@ -67,9 +70,9 @@ Math::Vector2 Editor::Get2DSceneWindowMousePosition(ECS::Registry& registry) {
 	Math::Vector2 result{};
 #ifdef USE_IMGUI
 	result = sSceneWindowMousePosition;
-	result -= GraphicsCore::GetWindowSize() / 2.f;
 	auto cameraView = registry.View<Component::ActiveCamera2DTag>();
 	for (auto e : cameraView) {
+		result -= GraphicsCore::GetWindowSize() / 2.f;
 		auto* transform = registry.GetComponent<Component::Transform2DComponent>(e);
 
 		result = Math::Vector2(result.x * transform->scale.x, result.y * transform->scale.y);
@@ -346,18 +349,23 @@ void DrawSceneImGuiWindow(ECS::Registry& registry, CommandContext& ctx, ColorBuf
 	static ECS::Entity instantiateTransformObjectEntity = ECS::INVALID_ENTITY;
 	if (instantiateTransformObjectEntity != ECS::INVALID_ENTITY) {
 		registry.AddComponent<Editor::EditSelectedTag>(instantiateTransformObjectEntity);
-		const float* pixelData = reinterpret_cast<const float*>(readBackBuffer.Map());
+		if (registry.Has<Component::TransformComponent>(instantiateTransformObjectEntity)) {
+			const float* pixelData = reinterpret_cast<const float*>(readBackBuffer.Map());
 
-		float r = pixelData[0];
-		float g = pixelData[1];
-		float b = pixelData[2];
+			float r = pixelData[0];
+			float g = pixelData[1];
+			float b = pixelData[2];
 
-		readBackBuffer.Unmap();
+			readBackBuffer.Unmap();
 
-		const Math::Color clearColor = worldPositionColorBuffer.GetClearColor();
-		if (r != clearColor.r || g != clearColor.g || b != clearColor.b) {
-			auto& translate = registry.GetComponent<Component::TransformComponent>(instantiateTransformObjectEntity)->translate;
-			translate = Math::Vector3(r, g, b);
+			const Math::Color clearColor = worldPositionColorBuffer.GetClearColor();
+			if (r != clearColor.r || g != clearColor.g || b != clearColor.b) {
+				auto& translate = registry.GetComponent<Component::TransformComponent>(instantiateTransformObjectEntity)->translate;
+				translate = Math::Vector3(r, g, b);
+			}
+		} else if (registry.Has<Component::Transform2DComponent>(instantiateTransformObjectEntity)) {
+			auto& translate = registry.GetComponent<Component::Transform2DComponent>(instantiateTransformObjectEntity)->translate;
+			translate = Editor::Get2DSceneWindowMousePosition(registry);
 		}
 		// Undo 用コマンド登録
 		Editor::EditorCommandOperator::AddCommand(std::make_unique<Command::InstantiateEntityCommand>(registry, instantiateTransformObjectEntity));
@@ -396,6 +404,29 @@ void DrawSceneImGuiWindow(ECS::Registry& registry, CommandContext& ctx, ColorBuf
 				Editor::EditorCommandOperator::AddCommand(std::make_unique<Command::InstantiateEntityCommand>(registry, e));
 			}
 		}
+		auto createAssetEntity = [&](const char* payloadType, bool isModel) {
+			const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(payloadType);
+			if (!payload) return;
+
+			const std::string assetName(static_cast<const char*>(payload->Data));
+			const ECS::Entity entity = registry.GenerateEntity();
+			registry.AddComponent<Editor::EditTag>(entity)->name = assetName;
+			if (isModel) {
+				registry.AddComponent<Component::MeshComponent>(entity)->meshName = assetName;
+				registry.AddComponent<Component::MaterialComponent>(entity);
+				registry.AddComponent<Component::TransformComponent>(entity);
+				ctx.CopyPixelToBuffer(readBackBuffer, worldPositionColorBuffer,
+					static_cast<UINT>(sSceneWindowMousePosition.x), static_cast<UINT>(sSceneWindowMousePosition.y), DXGI_FORMAT_R32G32B32A32_TYPELESS);
+			} else {
+				auto* sprite = registry.AddComponent<Component::SpriteComponent>(entity);
+				registry.AddComponent<Component::Transform2DComponent>(entity);
+				sprite->textureName = assetName;
+			}
+
+			instantiateTransformObjectEntity = entity;
+		};
+		createAssetEntity("ASSET_MODEL_NAME", true);
+		createAssetEntity("ASSET_TEXTURE_NAME", false);
 		ImGui::EndDragDropTarget();
 	}
 
