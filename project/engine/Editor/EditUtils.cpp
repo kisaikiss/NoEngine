@@ -421,6 +421,7 @@ void DrawSceneImGuiWindow(ECS::Registry& registry, CommandContext& ctx, ColorBuf
 				auto* sprite = registry.AddComponent<Component::SpriteComponent>(entity);
 				registry.AddComponent<Component::Transform2DComponent>(entity);
 				sprite->textureName = assetName;
+				sprite->matchScaleToTexture = true;
 			}
 
 			instantiateTransformObjectEntity = entity;

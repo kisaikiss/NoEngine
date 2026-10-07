@@ -31,6 +31,8 @@ struct SpriteComponent {
 	uint64_t loadedGeneration = 0;
 	std::string loadedTextureName;  
 	std::string loadedMaskTextureName;
+
+	bool matchScaleToTexture = false;
 };
 }
 }
