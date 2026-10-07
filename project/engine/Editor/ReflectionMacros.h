@@ -64,6 +64,21 @@ NoEngine::TypeInfo* GetTypeInfo();
         NoEngine::FieldAttributes{} \
     }
 
+// Vector3フィールドをシーン上のImGuizmoで編集できるようにする
+#define REFLECT_GIZMO_FIELD(field_name) \
+    [] { \
+        NoEngine::FieldInfo info{}; \
+        info.name = #field_name; \
+        info.offset = offsetof(ThisType, field_name); \
+        info.size = sizeof(((ThisType*)0)->field_name); \
+        info.type = NoEngine::FieldTypeResolver<decltype(((ThisType*)0)->field_name)>::value; \
+        static_assert(std::is_same_v<std::remove_cv_t<decltype(((ThisType*)0)->field_name)>, NoEngine::Math::Vector3>, \
+            #field_name " must be a Vector3 to use REFLECT_GIZMO_FIELD"); \
+        info.attributes = NoEngine::FieldAttributes{}; \
+        info.attributes.gizmoEditable = true; \
+        return info; \
+    }()
+
 // 複数行テキストとして編集するフィールド用
 #define REFLECT_MULTILINE_FIELD(field_name) \
     [] { \

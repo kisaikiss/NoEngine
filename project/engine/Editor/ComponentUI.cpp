@@ -135,6 +135,15 @@ void DrawFieldUI(ECS::Registry& registry, ECS::Entity e, const FieldInfo& field,
 				std::make_unique<Command::ChangeValueCommand<Math::Vector3>>(vPtr, oldVectorValue, *vPtr)
 			);
 		}
+
+		if (field.attributes.gizmoEditable) {
+			ImGui::SameLine();
+			const bool isGizmoTarget = ECS::DrawManipulatorSystem::IsVector3GizmoTarget(e, vPtr);
+			if (ImGui::SmallButton(isGizmoTarget ? "G*" : "G")) {
+				ECS::DrawManipulatorSystem::ToggleVector3Gizmo(e, vPtr);
+			}
+			if (ImGui::IsItemHovered()) ImGui::SetTooltip("シーン上でギズモ編集");
+		}
 		break;
 	}
 	case FieldType::Float4: {

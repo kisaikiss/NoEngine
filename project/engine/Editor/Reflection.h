@@ -35,6 +35,7 @@ struct FieldAttributes {
     float minValue = 0.0f;  // 最小値
     float maxValue = 0.0f;  // 最大値
     float valueSpeed = 0.1f; // エディタで動かすときの速度;
+    bool gizmoEditable = false; // Vector3をシーン上のギズモで編集するか
 };
 
 struct TypeInfo; // 前方宣言

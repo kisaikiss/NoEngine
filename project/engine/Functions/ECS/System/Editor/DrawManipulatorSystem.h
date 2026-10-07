@@ -15,6 +15,8 @@ public:
 	static bool TriggerManipulateButton();
 	static void SetSelectWaypointIndex(int index);
 	static void SetSelectWaypointIndex2D(int index);
+	static void ToggleVector3Gizmo(ECS::Entity entity, Math::Vector3* value);
+	static bool IsVector3GizmoTarget(ECS::Entity entity, const Math::Vector3* value);
 
 private:
 	bool isActive_ = false;

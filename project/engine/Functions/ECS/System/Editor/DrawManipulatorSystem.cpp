@@ -25,6 +25,8 @@ namespace {
 bool sTriggerButton = false;
 int  sSelectedWaypointIndex = 0;    // 現在ギズモで掴んでいるwaypointの添字
 int  sSelectedWaypointIndex2D = 0; 
+Entity sVector3GizmoEntity = INVALID_ENTITY;
+Math::Vector3* sVector3GizmoValue = nullptr;
 }
 
 using namespace Editor;
@@ -61,6 +63,20 @@ void DrawManipulatorSystem::SetSelectWaypointIndex(int index) {
 
 void DrawManipulatorSystem::SetSelectWaypointIndex2D(int index) {
 	sSelectedWaypointIndex2D = index;
+}
+
+void DrawManipulatorSystem::ToggleVector3Gizmo(Entity entity, Math::Vector3* value) {
+	if (sVector3GizmoEntity == entity && sVector3GizmoValue == value) {
+		sVector3GizmoEntity = INVALID_ENTITY;
+		sVector3GizmoValue = nullptr;
+		return;
+	}
+	sVector3GizmoEntity = entity;
+	sVector3GizmoValue = value;
+}
+
+bool DrawManipulatorSystem::IsVector3GizmoTarget(Entity entity, const Math::Vector3* value) {
+	return sVector3GizmoEntity == entity && sVector3GizmoValue == value;
 }
 
 void DrawManipulatorSystem::Manipulate3D(Registry& registry, const Math::Vector4& sceneRect) {
@@ -130,7 +146,32 @@ void DrawManipulatorSystem::Manipulate3D(Registry& registry, const Math::Vector4
 		auto* t = registry.GetComponent<TransformComponent>(e);
 		Math::Matrix4x4 m = t->MakeAffineMatrix4x4(registry);
 
-		ImGuizmo::Manipulate(*(viewMatrix.m), *(projection.m), currentOp, ImGuizmo::WORLD, *(m.m));
+		// Inspectorで選んだVector3だけをギズモで操作する。未選択時は通常のTransformギズモを使う。
+		if (sVector3GizmoEntity == e && sVector3GizmoValue) {
+			static Math::Vector3 oldGizmoValue;
+			static bool vectorGizmoWasUsing = false;
+			Math::Matrix4x4 fieldMatrix;
+			fieldMatrix.MakeTranslate(*sVector3GizmoValue);
+			ImGuizmo::Manipulate(*(viewMatrix.m), *(projection.m), ImGuizmo::TRANSLATE,
+				ImGuizmo::WORLD, *(fieldMatrix.m));
+			const bool isUsingVectorGizmo = ImGuizmo::IsUsing();
+			if (isUsingVectorGizmo) {
+				if (!vectorGizmoWasUsing) oldGizmoValue = *sVector3GizmoValue;
+				*sVector3GizmoValue = fieldMatrix.GetTranslate();
+			}
+			if (!isUsingVectorGizmo && vectorGizmoWasUsing) {
+				EditorCommandOperator::AddCommand(
+					std::make_unique<Command::ChangeValueCommand<Math::Vector3>>(
+						sVector3GizmoValue, oldGizmoValue, *sVector3GizmoValue));
+				sVector3GizmoEntity = INVALID_ENTITY;
+				sVector3GizmoValue = nullptr;
+			}
+			vectorGizmoWasUsing = isUsingVectorGizmo;
+			isActive_ = false;
+			continue;
+		}
+
+        ImGuizmo::Manipulate(*(viewMatrix.m), *(projection.m), currentOp, ImGuizmo::WORLD, *(m.m));
 
 		// ワールド行列 → ローカル行列へ変換
 		Math::Matrix4x4 localMatrix = m;
