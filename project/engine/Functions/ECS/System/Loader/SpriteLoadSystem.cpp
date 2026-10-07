@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "SpriteLoadSystem.h"
 #include "../../Component/Asset/SpriteComponent.h"
+#include "../../Component/Common/Transform2DComponent.h"
 #include "engine/Assets/Texture/TextureManager.h"
 #include "engine/Assets/AssetManager.h"
 
@@ -24,6 +25,14 @@ void SpriteLoadSystem::Update(Registry& registry, float deltaTime) {
 				auto texture = TextureManager::LoadCovertTexture(path);
 				if (texture.IsValid()) {
 					sprite->textureHandle = texture;
+					if (registry.Has<Component::Transform2DComponent>(e)) {
+						auto* transform = registry.GetComponent<Component::Transform2DComponent>(e);
+						if (transform->scale == Math::Vector2::UNIT_SCALE) {
+							transform->scale =
+								Math::Vector2(static_cast<float>(sprite->textureHandle.GetWidth()),
+									static_cast<float>(sprite->textureHandle.GetHeight()));
+						}
+					}
 				}
 			}
 		}
