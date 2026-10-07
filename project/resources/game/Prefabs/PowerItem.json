@@ -50,6 +50,7 @@
         },
         "MaterialComponent": {
             "blendMode": "kAdd",
+            "castShadow": true,
             "color": [
                 2.0,
                 2.0,

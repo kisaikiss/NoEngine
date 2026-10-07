@@ -93,6 +93,15 @@ void ApplyPrefabToInstances(ECS::Registry& registry, const std::string& prefabPa
 		auto* tag = registry.GetComponent<PrefabInstanceTag>(e);
 		if (!tag || tag->prefabPath != prefabPath) continue;
 
+		// Prefab JSON describes the component defaults, but EditTag::parent belongs
+		// to this particular scene instance. Keep its current hierarchy placement.
+		ECS::Entity savedEditParent = ECS::INVALID_ENTITY;
+		std::string savedName;
+		if (auto* editTag = registry.GetComponent<EditTag>(e)) {
+			savedEditParent = editTag->parent;
+			savedName = editTag->name;
+		}
+
 		Component::TransformComponent savedTransform{};
 		bool hasTransform = false;
 		if (auto* t = registry.GetComponent<Component::TransformComponent>(e)) {
@@ -106,6 +115,13 @@ void ApplyPrefabToInstances(ECS::Registry& registry, const std::string& prefabPa
 			if (auto* t = registry.GetComponent<Component::TransformComponent>(e)) {
 				*t = savedTransform;
 			}
+		}
+		if (auto* editTag = registry.GetComponent<EditTag>(e)) {
+			editTag->parent = hasTransform && savedTransform.parent != ECS::INVALID_ENTITY
+				? savedTransform.parent
+				: savedEditParent;
+			// Preserve the instance name while applying the prefab's other fields.
+			if (!savedName.empty()) editTag->name = savedName;
 		}
 
 		// "Prefab"を外す

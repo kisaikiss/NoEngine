@@ -3,6 +3,7 @@
 #include "engine/Functions/Scene/SceneNameComponent.h"
 #include "PrefabSerializer.h"
 #include "../EditUtils.h"
+#include "engine/Functions/ECS/Component/Common/TransformComponent.h"
 
 namespace NoEngine {
 namespace Editor {
@@ -189,6 +190,15 @@ void LoadEntityFromJson(ECS::Registry& registry, ECS::Entity entity, const json&
 		for (auto& field : typeInfo->fields) {
 			uint8_t* base = (uint8_t*)compPtr + field.offset;
 			ReadFieldFromJson(registry, compJson, field, base);
+		}
+	}
+
+	// Transform階層が設定されているEntityは、エディタ上の階層も同じ親に揃える。
+	if (auto* transform = registry.GetComponent<Component::TransformComponent>(entity)) {
+		if (transform->parent != ECS::INVALID_ENTITY) {
+			if (auto* editTag = registry.GetComponent<EditTag>(entity)) {
+				editTag->parent = transform->parent;
+			}
 		}
 	}
 
