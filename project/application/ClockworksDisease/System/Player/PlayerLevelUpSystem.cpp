@@ -3,6 +3,8 @@
 #include "../../Component/Player/PlayerComponent.h"
 #include "../../Component/Player/PlayerMoveTags.h"
 #include "../../Component/UI/UserInterfaceComponent.h"
+#include "application/ClockworksDisease/Component/Camera/FollowCameraComponent.h"
+#include "../../Component/Camera/CameraIntroComponent.h"
 
 REFLECT_STRUCT_BEGIN(LevelUpEffectTag, "ApplicationTag")
 REFLECT_STRUCT_END(LevelUpEffectTag)
@@ -37,10 +39,23 @@ void EnqueueOrShowLevelUpHint(No::Registry& registry, const std::string& texture
 		registry.AddComponent<LevelUpFrameTag>(e);
 	}
 }
+
+bool sFirstFrame = true;
+
 }
 
 void PlayerLevelUpSystem::Update(No::Registry& registry, float deltaTime) {
 	static_cast<void>(deltaTime);
+
+	bool isSkip = false;
+	for (auto e : registry.View<No::TransformComponent, No::CameraComponent, FollowCameraComponent>()) {
+		if (registry.Has<CameraLockTag>(e)) isSkip = true; 
+	}
+	if (sFirstFrame && !isSkip) {
+		EnqueueOrShowLevelUpHint(registry, "tutorialText");
+		sFirstFrame = false;
+	}
+
 	for (auto e : registry.View<No::TransformComponent, PlayerComponent, LevelComponent>()) {
 		auto* levelComponent = registry.GetComponent<LevelComponent>(e);
 		// レベルが1の時に次にレベルが上がるまでの経験値を設定と一致させる

@@ -2,6 +2,7 @@
 #include "IScene.h"
 #include "ITransitionEffect.h"
 #include "../ECS/Event/SceneChangeEvent.h"
+#include <unordered_set>
 
 namespace NoEngine {
 namespace Scene {
@@ -12,7 +13,11 @@ public:
 
 	SceneManager(); // 組み込み演出("CircleScale","Fade")を登録する
 
-	void RegisterScene(const std::string& name, SceneFactory factory) { factories_[name] = factory; }
+	void RegisterScene(const std::string& name, SceneFactory factory) {
+		if (removedScenes_.count(name)) return;
+		factories_[name] = std::move(factory);
+		editorScenes_.erase(name);
+	}
 
 	void RegisterTransitionEffect(const std::string& name, TransitionFactory factory) {	transitionFactories_[name] = std::move(factory); }
 
@@ -27,6 +32,8 @@ private:
 	std::unique_ptr<ITransitionEffect> CreateTransitionEffect(Event::SceneTransitionType type, const std::string& customName);
 
 	std::unordered_map<std::string, SceneFactory> factories_;
+	std::unordered_set<std::string> editorScenes_;
+	std::unordered_set<std::string> removedScenes_;
 	std::unordered_map<std::string, TransitionFactory> transitionFactories_;
 	std::unique_ptr<IScene> currentScene_;
 

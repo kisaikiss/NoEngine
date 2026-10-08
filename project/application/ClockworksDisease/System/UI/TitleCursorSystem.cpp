@@ -22,7 +22,7 @@ void TitleCursorSystem::Update(No::Registry& registry, float deltaTime) {
 			}
 			if (No::InputIsTrigger("Choise")) {
 				No::SceneChangeEvent sceneChangeEvent;
-				sceneChangeEvent.nextScene = "OpeningScene";
+				sceneChangeEvent.nextScene = "GameScene";
 				registry.EmitEvent(sceneChangeEvent);
 				cursor->selected = true;
 			}
