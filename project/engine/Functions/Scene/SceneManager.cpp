@@ -3,6 +3,7 @@
 #include "CircleScaleTransitionEffect.h"
 #include "FadeTransitionEffect.h"
 #include "engine/Functions/ECS/System/Editor/EditSystem.h"
+#include "engine/Functions/ECS/System/Editor/DrawManipulatorSystem.h"
 #include "engine/Editor/DataDriven/SceneSerializer.h"
 #include <fstream>
 #include <filesystem>
@@ -19,7 +20,11 @@ const char* kSceneListPath = "resources/game/application.json";
 
 class EditorScene final : public IScene {
 public:
-	void Setup() override { AddSystem(std::make_unique<ECS::EditSystem>()); }
+	void Setup() override { 
+		AddSystem(std::make_unique<ECS::EditSystem>());
+		AddSystem(std::make_unique<ECS::DrawManipulatorSystem>());
+	
+	}
 };
 
 bool IsValidSceneName(const std::string& name) {

@@ -169,6 +169,7 @@ void CPUParticlePass::UploadMatrices(GraphicsContext& gfx, ECS::Registry& regist
 		Math::Matrix4x4 backToFrontMatrix;
 		backToFrontMatrix.MakeRotate(Math::Vector3::UP * PI);
 		auto* transform = registry.GetComponent<Component::TransformComponent>(GetTargetCamera()->entity);
+		if (!transform) return;
 		billBoardMatrix = backToFrontMatrix * transform->MakeAffineMatrix4x4(registry);
 		billBoardMatrix.m[3][0] = 0.0f;
 		billBoardMatrix.m[3][1] = 0.0f;
