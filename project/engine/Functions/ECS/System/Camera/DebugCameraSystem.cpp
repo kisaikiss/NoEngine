@@ -277,3 +277,5 @@ void DebugCameraSystem::UnityMove(Registry& registry, Entity entity, float delta
 
 }
 }
+#include "../SystemManager.h"
+REGISTER_SYSTEM(NoEngine::ECS::DebugCameraSystem, "DebugCameraSystem", "Camera")

@@ -79,3 +79,5 @@ void ParticleSystem::Update(Registry& registry, float deltaTime) {
 }
 }
 }
+#include "../SystemManager.h"
+REGISTER_SYSTEM(NoEngine::ECS::ParticleSystem, "ParticleSystem", "Effects")

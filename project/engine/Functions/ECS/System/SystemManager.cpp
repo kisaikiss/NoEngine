@@ -2,6 +2,7 @@
 #include "../Component/Common/PauseComponent.h"
 #include "../Event/SceneChangeEvent.h"
 #include "../../Scene/SceneNameComponent.h"
+#include "../../Scene/IScene.h"
 #include "../../Particle/ParticleManager.h"
 #include "engine/Editor/DataDriven/SceneSerializer.h"
 #include "engine/Editor/EditTag.h"
@@ -10,11 +11,24 @@
 #endif // USE_IMGUI
 
 #include <unordered_set>
+#include <algorithm>
+#include <fstream>
+#include <map>
 
 namespace NoEngine {
 namespace ECS {
 
 namespace {
+struct SystemCatalog {
+	std::unordered_map<std::string, SystemManager::SystemRegistration> factories;
+	std::unordered_map<std::type_index, std::string> types;
+};
+
+SystemCatalog& GetSystemCatalog() {
+	static SystemCatalog catalog;
+	return catalog;
+}
+
 #ifdef USE_IMGUI
 bool sGameStop = true;
 #else
@@ -37,7 +51,81 @@ std::string startSceneName = "";
 bool changedSceneInPlaying = false;
 }
 
-SystemManager::SystemManager() {}
+bool SystemManager::RegisterSystemType(const std::string& name, const std::string& category,
+	std::type_index type, SystemFactory factory) {
+	auto& catalog = GetSystemCatalog();
+	catalog.factories[name] = SystemRegistration{ category, std::move(factory) };
+	catalog.types[type] = name;
+	return true;
+}
+
+SystemManager::SystemManager() {
+	auto& catalog = GetSystemCatalog();
+	systemFactories_ = catalog.factories;
+	systemTypes_ = catalog.types;
+}
+
+bool SystemManager::AddSystemByName(const std::string& name) {
+	auto factory = systemFactories_.find(name);
+	if (factory == systemFactories_.end()) return false;
+	systems_.push_back(factory->second.factory());
+	systemNames_.push_back(name);
+	return true;
+}
+
+void SystemManager::RemoveSystem(size_t index) {
+	if (index >= systems_.size()) return;
+	systems_.erase(systems_.begin() + index);
+	systemNames_.erase(systemNames_.begin() + index);
+}
+
+void SystemManager::MoveSystem(size_t from, size_t to) {
+	if (from >= systems_.size() || to >= systems_.size() || from == to) return;
+	auto system = std::move(systems_[from]);
+	auto name = std::move(systemNames_[from]);
+	systems_.erase(systems_.begin() + from);
+	systemNames_.erase(systemNames_.begin() + from);
+	systems_.insert(systems_.begin() + to, std::move(system));
+	systemNames_.insert(systemNames_.begin() + to, std::move(name));
+}
+
+void SystemManager::LoadSystemConfiguration(Registry& registry) {
+	std::string sceneName = Scene::GetCurrentSceneName(registry);
+	if (sceneName.empty() || sceneName == configuredSceneName_) return;
+	configuredSceneName_ = sceneName;
+	std::ifstream file("resources/game/Scenes/" + sceneName + ".json");
+	if (!file) return;
+	try {
+		nlohmann::json data; file >> data;
+		if (!data.contains("systems") || !data["systems"].is_array()) return;
+		std::vector<std::unique_ptr<ISystem>> configured;
+		std::vector<std::string> names;
+		for (const auto& value : data["systems"]) {
+			if (!value.is_string()) return;
+			const auto name = value.get<std::string>();
+			auto factory = systemFactories_.find(name);
+			if (factory == systemFactories_.end()) return;
+			names.push_back(name);
+			configured.push_back(factory->second.factory());
+		}
+		systems_ = std::move(configured);
+		systemNames_ = std::move(names);
+	} catch (const std::exception&) {
+		LogWarning("Failed to load scene system configuration: " + sceneName);
+	}
+}
+
+void SystemManager::SaveSystemConfiguration(Registry& registry) {
+	const auto sceneName = Scene::GetCurrentSceneName(registry);
+	if (sceneName.empty() || sceneName.find_first_of("/\\:") != std::string::npos) return;
+	const std::string path = "resources/game/Scenes/" + sceneName + ".json";
+	std::ifstream in(path);
+	nlohmann::json data = nlohmann::json::object();
+	if (in) { try { in >> data; } catch (const std::exception&) { return; } }
+	data["systems"] = systemNames_;
+	std::ofstream out(path);
+	if (out) out << data.dump(4);
+}
 
 bool SystemManager::IsInPlayMode() {
 	return sPlayState != EditorPlayState::kEditing;
@@ -71,6 +159,7 @@ void SystemManager::LoadPlaySnapShot(Registry& registry) {
 }
 
 void SystemManager::UpdateAll(ComputeContext& ctx, Registry& registry, float deltaTime) {
+	LoadSystemConfiguration(registry);
 	auto pauseView = registry.View<PauseComponent>();
 	bool isPause = false;
 	for (auto entity : pauseView) {
@@ -144,6 +233,39 @@ void SystemManager::UpdateAll(ComputeContext& ctx, Registry& registry, float del
 		}
 	}
 
+	ImGui::End();
+
+	ImGui::Begin("Systems");
+	if (ImGui::BeginCombo("Add system", "Select system...")) {
+		std::map<std::string, std::vector<std::string>> categories;
+		for (const auto& [name, registration] : systemFactories_) categories[registration.category].push_back(name);
+		for (auto& [category, names] : categories) {
+			std::sort(names.begin(), names.end());
+			ImGui::TextDisabled("%s", category.c_str());
+			for (const auto& name : names) {
+				bool alreadyAdded = std::find(systemNames_.begin(), systemNames_.end(), name) != systemNames_.end();
+				ImGui::Indent();
+				if (ImGui::Selectable(name.c_str(), false, alreadyAdded ? ImGuiSelectableFlags_Disabled : ImGuiSelectableFlags_None) && !alreadyAdded) {
+					if (AddSystemByName(name)) SaveSystemConfiguration(registry);
+				}
+				ImGui::Unindent();
+			}
+		}
+		ImGui::EndCombo();
+	}
+	for (size_t i = 0; i < systemNames_.size(); ++i) {
+		ImGui::PushID(static_cast<int>(i));
+		ImGui::Text("%zu. %s", i + 1, systemNames_[i].c_str());
+		ImGui::SameLine();
+		if (i > 0 && ImGui::SmallButton("Up")) { MoveSystem(i, i - 1); SaveSystemConfiguration(registry); ImGui::PopID(); break; }
+		if (i + 1 < systemNames_.size()) {
+			ImGui::SameLine();
+			if (ImGui::SmallButton("Down")) { MoveSystem(i, i + 1); SaveSystemConfiguration(registry); ImGui::PopID(); break; }
+		}
+		ImGui::SameLine();
+		if (ImGui::SmallButton("Remove")) { RemoveSystem(i); SaveSystemConfiguration(registry); ImGui::PopID(); break; }
+		ImGui::PopID();
+	}
 	ImGui::End();
 #endif // USE_IMGUI
 

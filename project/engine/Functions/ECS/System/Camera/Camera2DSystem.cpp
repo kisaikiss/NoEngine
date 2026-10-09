@@ -44,3 +44,5 @@ void Camera2DSystem::Update(Registry& registry, float deltaTime) {
 }
 }
 }
+#include "../SystemManager.h"
+REGISTER_SYSTEM(NoEngine::ECS::Camera2DSystem, "Camera2DSystem", "Camera")

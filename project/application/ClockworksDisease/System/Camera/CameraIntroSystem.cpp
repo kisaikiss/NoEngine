@@ -123,3 +123,5 @@ void CameraIntroSystem::SetOverlayAlpha(No::Registry& registry, No::Entity overl
 		sprite->color.a = std::clamp(alpha, 0.0f, 1.0f);
 	}
 }
+#include "engine/Functions/ECS/System/SystemManager.h"
+REGISTER_SYSTEM(::CameraIntroSystem, "CameraIntroSystem", "Camera")

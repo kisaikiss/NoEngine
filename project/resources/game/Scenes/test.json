@@ -1,0 +1,238 @@
+{
+    "entities": {
+        "DebugCamera": {
+            "components": {
+                "CameraComponent": {
+                    "fov": 0.44999998807907104
+                },
+                "DebugCameraComponent": {
+                    "center": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "distance": 18.514070510864258,
+                    "drawCenter": false,
+                    "moveType": "kBlender",
+                    "unrealMoveSpeed": 10.0,
+                    "unrealSensitivity": 0.20000000298023224
+                },
+                "EditTag": {
+                    "name": "DebugCamera",
+                    "parent": null
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        -0.06760724633932114,
+                        0.8754177093505859,
+                        -0.12836015224456787,
+                        -0.46108219027519226
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        14.624688148498535,
+                        5.315065383911133,
+                        10.031919479370117
+                    ]
+                }
+            }
+        },
+        "MainCamera": {
+            "components": {
+                "ActiveCameraTag": null,
+                "CameraComponent": {
+                    "fov": 0.44999998807907104
+                },
+                "EditTag": {
+                    "name": "MainCamera",
+                    "parent": null
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        0.0,
+                        1.2323678731918335,
+                        -7.897466659545898
+                    ]
+                }
+            }
+        },
+        "directionalLight": {
+            "components": {
+                "DirectionalLightComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "direction": [
+                        -0.9368273615837097,
+                        -0.22081679105758667,
+                        -0.27128297090530396
+                    ],
+                    "intensity": 1.0
+                },
+                "EditTag": {
+                    "name": "directionalLight",
+                    "parent": null
+                },
+                "PrefabInstanceTag": {
+                    "prefabPath": "resources/game/Prefabs\\directionalLight.json"
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\directionalLight.json"
+        },
+        "monkey": {
+            "components": {
+                "EditTag": {
+                    "name": "monkey",
+                    "parent": null
+                },
+                "MaterialComponent": {
+                    "blendMode": "kNormal",
+                    "castShadow": true,
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "environmentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "receiveShadow": true,
+                    "renderMode": "kDefault",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "unlit": false,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "monkey"
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "resources/game/ClockworksDisease/Texture/Opening/intro2.png": {
+            "components": {
+                "EditTag": {
+                    "name": "resources/game/ClockworksDisease/Texture/Opening/intro2.png",
+                    "parent": null
+                },
+                "SpriteComponent": {
+                    "anchor": [
+                        0.0,
+                        0.0
+                    ],
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "fill": 0.0,
+                    "flipX": false,
+                    "flipY": false,
+                    "isVisible": true,
+                    "layer": 0,
+                    "maskTextureName": "",
+                    "nonRenderAngle": 0.0,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "space": "World",
+                    "textureName": "resources/game/ClockworksDisease/Texture/Opening/intro2.png",
+                    "useMask": false,
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "parent": null,
+                    "rotation": 0.0,
+                    "scale": [
+                        374.0,
+                        320.0
+                    ],
+                    "translate": [
+                        251.39114379882813,
+                        190.31097412109375
+                    ]
+                },
+                "Velocity2DComponent": {
+                    "linear": [
+                        1.0,
+                        1.0
+                    ]
+                }
+            }
+        }
+    },
+    "systems": [
+        "EditSystem",
+        "DrawManipulatorSystem",
+        "ModelLoadSystem",
+        "SpriteLoadSystem",
+        "CameraSystem",
+        "DebugCameraSystem",
+        "MovementSystem",
+        "Movement2DSystem"
+    ]
+}

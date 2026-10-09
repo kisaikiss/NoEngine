@@ -47,3 +47,5 @@ void ModelLoadSystem::Update(Registry& registry, float deltaTime) {
 }
 }
 }
+#include "../SystemManager.h"
+REGISTER_SYSTEM(NoEngine::ECS::ModelLoadSystem, "ModelLoadSystem", "Loading")

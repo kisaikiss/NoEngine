@@ -253,3 +253,5 @@ Quaternion AnimationSystem::CalculateValue(const std::vector<KeyframeQuaternion>
 
 }
 }
+#include "../SystemManager.h"
+REGISTER_SYSTEM(NoEngine::ECS::AnimationSystem, "AnimationSystem", "Animation")

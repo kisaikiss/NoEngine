@@ -104,3 +104,5 @@ Math::Vector3 EffectEmitSystem::GetNewPosition(Registry& registry, Component::Ef
 }
 }
 }
+#include "../SystemManager.h"
+REGISTER_SYSTEM(NoEngine::ECS::EffectEmitSystem, "EffectEmitSystem", "Effects")

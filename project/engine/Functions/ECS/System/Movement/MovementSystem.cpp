@@ -11,3 +11,6 @@ void NoEngine::ECS::MovementSystem::Update(Registry& registry, float deltaTime) 
 	}
 
 }
+
+#include "../SystemManager.h"
+REGISTER_SYSTEM(NoEngine::ECS::MovementSystem, "MovementSystem", "Movement")

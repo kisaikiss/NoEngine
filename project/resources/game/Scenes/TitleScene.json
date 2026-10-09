@@ -397,5 +397,22 @@
                 }
             }
         }
-    }
+    },
+    "systems": [
+        "EditSystem",
+        "ModelLoadSystem",
+        "SpriteLoadSystem",
+        "AnimationSystem",
+        "EffectEmitSystem",
+        "ParticleEmitterSystem",
+        "ParticleSystem",
+        "class TitleCursorSystem",
+        "MovementSystem",
+        "TransformRoutineSystem",
+        "SpriteAnimationSystem",
+        "DrawManipulatorSystem",
+        "DebugCameraSystem",
+        "CameraSystem",
+        "class NoEngine::ECS::DrawCameraFrustumSystem"
+    ]
 }

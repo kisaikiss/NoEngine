@@ -90,3 +90,5 @@ void LevelUpTextSystem::Update(No::Registry& registry, float deltaTime) {
 		registry.GetComponent<No::Transform2DComponent>(e)->translate = uiPos;
 	}
 }
+#include "engine/Functions/ECS/System/SystemManager.h"
+REGISTER_SYSTEM(::LevelUpTextSystem, "LevelUpTextSystem", "UI")

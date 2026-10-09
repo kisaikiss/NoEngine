@@ -44,3 +44,5 @@ void SpriteAnimationSystem::Update(Registry& registry, float deltaTime) {
 }
 }
 }
+#include "../SystemManager.h"
+REGISTER_SYSTEM(NoEngine::ECS::SpriteAnimationSystem, "SpriteAnimationSystem", "Animation")

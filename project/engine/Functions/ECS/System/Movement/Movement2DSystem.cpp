@@ -26,3 +26,5 @@ void Movement2DSystem::Update(Registry& registry, float deltaTime) {
 }
 }
 }
+#include "../SystemManager.h"
+REGISTER_SYSTEM(NoEngine::ECS::Movement2DSystem, "Movement2DSystem", "Movement")

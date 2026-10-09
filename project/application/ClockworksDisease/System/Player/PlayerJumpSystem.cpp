@@ -171,3 +171,6 @@ void PlayerJumpSystem::Update(No::Registry& registry, float deltaTime) {
 		CreateScaffold(registry, entity, playerVariables, groundState, registry.GetComponent<No::TransformComponent>(entity));
 	}
 }
+
+#include "engine/Functions/ECS/System/SystemManager.h"
+REGISTER_SYSTEM(::PlayerJumpSystem, "PlayerJumpSystem", "Gameplay")

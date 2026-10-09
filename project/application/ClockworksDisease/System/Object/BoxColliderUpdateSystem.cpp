@@ -37,3 +37,6 @@ void BoxColliderUpdateSystem::Update(No::Registry& registry, float deltaTime) {
 		b->extents = t->scale;
 	}
 }
+
+#include "engine/Functions/ECS/System/SystemManager.h"
+REGISTER_SYSTEM(::BoxColliderUpdateSystem, "BoxColliderUpdateSystem", "Gameplay")

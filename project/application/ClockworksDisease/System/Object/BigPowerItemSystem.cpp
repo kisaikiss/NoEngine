@@ -41,3 +41,6 @@ void BigPowerItemSystem::Update(No::Registry& registry, float deltaTime) {
 		transform->translate.z = playerWorldPos.z + std::cosf(badge->theta) * badge->translateMagnification;
 	}
 }
+
+#include "engine/Functions/ECS/System/SystemManager.h"
+REGISTER_SYSTEM(::BigPowerItemSystem, "BigPowerItemSystem", "Gameplay")

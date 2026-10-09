@@ -4,3 +4,6 @@ void TestSystem::Update(No::Registry& registry, float deltaTime) {
 	static_cast<void>(registry);
 	static_cast<void>(deltaTime);
 }
+
+#include "engine/Functions/ECS/System/SystemManager.h"
+REGISTER_SYSTEM(::TestSystem, "TestSystem", "Gameplay")

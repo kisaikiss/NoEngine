@@ -45,3 +45,6 @@ void ColliderDrawSystem::Update(No::Registry& registry, float deltaTime) {
 		NoEngine::DebugPrimitive::DrawCube(boxTransform->GetWorldPosition(registry), boxCollider->extents, boxTransform->rotation, No::Color::WHITE);
 	}
 }
+
+#include "engine/Functions/ECS/System/SystemManager.h"
+REGISTER_SYSTEM(::ColliderDrawSystem, "ColliderDrawSystem", "Gameplay")

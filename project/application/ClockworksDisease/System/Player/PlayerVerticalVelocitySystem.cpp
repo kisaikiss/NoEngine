@@ -52,3 +52,5 @@ void PlayerVerticalVelocitySystem::Update(No::Registry& registry, float deltaTim
 		playerVariables->groundNormal = No::Vector3::ZERO;
 	}
 }
+#include "engine/Functions/ECS/System/SystemManager.h"
+REGISTER_SYSTEM(::PlayerVerticalVelocitySystem, "PlayerVerticalVelocitySystem", "Gameplay")

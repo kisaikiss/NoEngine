@@ -45,3 +45,5 @@ void GoalDirectionSystem::Update(No::Registry& registry, float deltaTime) {
 		registry.DestroyEntity(e);
 	}
 }
+#include "engine/Functions/ECS/System/SystemManager.h"
+REGISTER_SYSTEM(::GoalDirectionSystem, "GoalDirectionSystem", "Gameplay")

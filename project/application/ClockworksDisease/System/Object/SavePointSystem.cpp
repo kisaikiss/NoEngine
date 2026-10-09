@@ -29,3 +29,6 @@ void SavePointSystem::Update(No::Registry& registry, float deltaTime) {
 
 	}
 }
+
+#include "engine/Functions/ECS/System/SystemManager.h"
+REGISTER_SYSTEM(::SavePointSystem, "SavePointSystem", "Gameplay")

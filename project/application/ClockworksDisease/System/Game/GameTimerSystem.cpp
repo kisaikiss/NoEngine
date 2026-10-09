@@ -7,3 +7,5 @@ void GameTimerSystem::Update(No::Registry& registry, float deltaTime) {
 		registry.GetComponent<GameProgressComponent>(e)->elapsedTime += deltaTime;
 	}
 }
+#include "engine/Functions/ECS/System/SystemManager.h"
+REGISTER_SYSTEM(::GameTimerSystem, "GameTimerSystem", "Gameplay")

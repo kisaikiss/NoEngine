@@ -23,3 +23,5 @@ void GameProgressInitSystem::Update(No::Registry& registry, float deltaTime) {
 		progress->totalCounted = true;
 	}
 }
+#include "engine/Functions/ECS/System/SystemManager.h"
+REGISTER_SYSTEM(::GameProgressInitSystem, "GameProgressInitSystem", "Gameplay")

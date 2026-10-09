@@ -247,3 +247,5 @@ void PauseMenuSystem::SetPause(No::Registry& registry, bool isPause) {
 		registry.GetComponent<No::PauseComponent>(e)->isPause = isPause;
 	}
 }
+#include "engine/Functions/ECS/System/SystemManager.h"
+REGISTER_SYSTEM(::PauseMenuSystem, "PauseMenuSystem", "UI")

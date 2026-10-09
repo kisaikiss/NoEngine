@@ -168,6 +168,17 @@ void EditSystem::SaveFile(Registry& registry, nlohmann::json j) {
 		sceneName = nameComp->GetName();
 	}
 	std::string filePath = sDirectoryPath + sceneName + ".json";
+	// SceneSerializer only writes entities. Preserve editor-managed system order when
+	// the user saves the scene from the File menu.
+	if (std::filesystem::exists(filePath)) {
+		std::ifstream existing(filePath);
+		if (existing.is_open()) {
+			try {
+				nlohmann::json previous; existing >> previous;
+				if (previous.contains("systems")) j["systems"] = previous["systems"];
+			} catch (const std::exception&) {}
+		}
+	}
 	std::ofstream file(filePath);
 	if (!file.is_open()) {
 		LogError("Failed to open file for writing");
@@ -272,3 +283,6 @@ void EditSystem::EnsureUniqueEditTagNames(Registry& registry) {
 
 }
 }
+
+#include "../SystemManager.h"
+REGISTER_SYSTEM(NoEngine::ECS::EditSystem, "EditSystem", "Editor")

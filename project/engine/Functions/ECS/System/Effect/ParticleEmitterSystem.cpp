@@ -151,3 +151,5 @@ Math::Vector3 ParticleEmitterSystem::GetNewPosition(const Component::TransformCo
 
 }
 }
+#include "../SystemManager.h"
+REGISTER_SYSTEM(NoEngine::ECS::ParticleEmitterSystem, "ParticleEmitterSystem", "Effects")

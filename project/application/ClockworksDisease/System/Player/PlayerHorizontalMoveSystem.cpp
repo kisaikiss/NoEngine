@@ -142,3 +142,6 @@ void PlayerHorizontalMoveSystem::Update(No::Registry& registry, float deltaTime)
 		FacePlayerTowardsMoveDirection(transform, finalVelocity, deltaTime);
 	}
 }
+
+#include "engine/Functions/ECS/System/SystemManager.h"
+REGISTER_SYSTEM(::PlayerHorizontalMoveSystem, "PlayerHorizontalMoveSystem", "Gameplay")

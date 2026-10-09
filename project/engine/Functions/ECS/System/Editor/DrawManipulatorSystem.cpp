@@ -953,3 +953,6 @@ void DrawManipulatorSystem::ManipulateRoutineWaypoints2D(Registry& registry, con
 
 }
 }
+
+#include "../SystemManager.h"
+REGISTER_SYSTEM(NoEngine::ECS::DrawManipulatorSystem, "DrawManipulatorSystem", "Editor")

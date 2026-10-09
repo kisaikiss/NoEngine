@@ -62,3 +62,6 @@ void DebugCamera2DSystem::Update(Registry& registry, float deltaTime) {
 
 }
 }
+
+#include "../SystemManager.h"
+REGISTER_SYSTEM(NoEngine::ECS::DebugCamera2DSystem, "DebugCamera2DSystem", "Camera")

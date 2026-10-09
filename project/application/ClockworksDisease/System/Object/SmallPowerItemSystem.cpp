@@ -39,3 +39,6 @@ void SmallPowerItemSystem::Update(No::Registry& registry, float deltaTime) {
 	}
 
 }
+
+#include "engine/Functions/ECS/System/SystemManager.h"
+REGISTER_SYSTEM(::SmallPowerItemSystem, "SmallPowerItemSystem", "Gameplay")
