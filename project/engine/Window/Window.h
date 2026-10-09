@@ -89,7 +89,7 @@ public:
 	std::wstring GetTitleName() const { return core_.title; }
 	float GetAspectRatio() const noexcept { return size_.aspectRatio; }
 	SizeChangeMode GetSizeChangeMode() const noexcept { return sizeChangeMode_; }
-	WindowSize& GetWindowSize()noexcept { return size_; }
+	const WindowSize& GetWindowSize()noexcept { return size_; }
 	WindowMode GetWindowMode() const noexcept { return windowMode_; }
 	void SetSizeChangeMode(SizeChangeMode sizeChangeMode);
 	void SetWindowMode(WindowMode windowMode);
