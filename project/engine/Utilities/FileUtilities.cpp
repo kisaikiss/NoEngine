@@ -5,7 +5,10 @@
 
 namespace NoEngine {
 namespace Utilities {
-ByteArray NullFile = make_shared<vector<uint8_t> >(vector<uint8_t>());
+namespace {
+const ByteArray sNullFile = make_shared<vector<uint8_t> >(vector<uint8_t>());
+
+}
 
 std::wstring LoadFileAsString(const std::wstring& path) {
 	// ファイルを開きます。（バイナリモード + 位置移動可能）
@@ -29,11 +32,11 @@ std::wstring LoadFileAsString(const std::wstring& path) {
 
 ByteArray ReadFileHelper(const std::wstring& fileName) {
 	if (!std::filesystem::exists(fileName))
-		return NullFile;
+		return sNullFile;
 
 	std::ifstream file(fileName, std::ios::in | std::ios::binary);
 	if (!file)
-		return NullFile;
+		return sNullFile;
 
 	auto fileSize = std::filesystem::file_size(fileName);
 
