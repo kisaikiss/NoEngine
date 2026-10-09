@@ -255,15 +255,40 @@ void SystemManager::UpdateAll(ComputeContext& ctx, Registry& registry, float del
 	}
 	for (size_t i = 0; i < systemNames_.size(); ++i) {
 		ImGui::PushID(static_cast<int>(i));
+		bool reordered = false;
 		ImGui::Text("%zu. %s", i + 1, systemNames_[i].c_str());
-		ImGui::SameLine();
-		if (i > 0 && ImGui::SmallButton("Up")) { MoveSystem(i, i - 1); SaveSystemConfiguration(registry); ImGui::PopID(); break; }
-		if (i + 1 < systemNames_.size()) {
-			ImGui::SameLine();
-			if (ImGui::SmallButton("Down")) { MoveSystem(i, i + 1); SaveSystemConfiguration(registry); ImGui::PopID(); break; }
+		if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID)) {
+			ImGui::SetDragDropPayload("SYSTEM_INDEX", &i, sizeof(i));
+			ImGui::Text("Move %s", systemNames_[i].c_str());
+			ImGui::EndDragDropSource();
 		}
-		ImGui::SameLine();
-		if (ImGui::SmallButton("Remove")) { RemoveSystem(i); SaveSystemConfiguration(registry); ImGui::PopID(); break; }
+		if (ImGui::BeginDragDropTarget()) {
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("SYSTEM_INDEX")) {
+				const size_t from = *static_cast<const size_t*>(payload->Data);
+				if (payload->IsDelivery() && from < systemNames_.size() && from != i) {
+					const float midpoint = (ImGui::GetItemRectMin().y + ImGui::GetItemRectMax().y) * 0.5f;
+					const bool dropAfter = ImGui::GetMousePos().y >= midpoint;
+					size_t to = i;
+					if (dropAfter && from > i) ++to;
+					else if (!dropAfter && from < i) --to;
+					MoveSystem(from, to);
+					SaveSystemConfiguration(registry);
+					reordered = true;
+				}
+			}
+			ImGui::EndDragDropTarget();
+		}
+		if (reordered) { ImGui::PopID(); break; }
+		if (ImGui::BeginPopupContextItem("SystemContext")) {
+			if (ImGui::MenuItem("Remove")) {
+				RemoveSystem(i);
+				SaveSystemConfiguration(registry);
+				ImGui::EndPopup();
+				ImGui::PopID();
+				break;
+			}
+			ImGui::EndPopup();
+		}
 		ImGui::PopID();
 	}
 	ImGui::End();

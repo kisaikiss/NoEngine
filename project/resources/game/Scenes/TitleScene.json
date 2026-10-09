@@ -404,15 +404,15 @@
         "SpriteLoadSystem",
         "AnimationSystem",
         "EffectEmitSystem",
-        "ParticleEmitterSystem",
         "ParticleSystem",
-        "class TitleCursorSystem",
+        "ParticleEmitterSystem",
+        "TitleCursorSystem",
         "MovementSystem",
         "TransformRoutineSystem",
         "SpriteAnimationSystem",
         "DrawManipulatorSystem",
         "DebugCameraSystem",
         "CameraSystem",
-        "class NoEngine::ECS::DrawCameraFrustumSystem"
+        "DrawCameraFrustumSystem"
     ]
 }
