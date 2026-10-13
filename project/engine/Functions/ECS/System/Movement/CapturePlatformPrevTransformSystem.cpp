@@ -16,3 +16,6 @@ void CapturePlatformPrevTransformSystem::Update(Registry& registry, float deltaT
 }
 }
 }
+
+#include "../SystemManager.h"
+REGISTER_SYSTEM(NoEngine::ECS::CapturePlatformPrevTransformSystem, "CapturePlatformPrevTransformSystem", "Movement")

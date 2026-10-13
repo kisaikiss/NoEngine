@@ -131,3 +131,6 @@ ContactPosition NarrowPhaseSystem::ClassifyContact(const Math::Vector3& normal) 
 }
 }
 }
+
+#include "../SystemManager.h"
+REGISTER_SYSTEM(NoEngine::ECS::NarrowPhaseSystem, "NarrowPhaseSystem", "Collision")

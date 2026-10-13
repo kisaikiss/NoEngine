@@ -16,3 +16,6 @@ void ComputePlatformDeltaSystem::Update(Registry& registry, float deltaTime) {
 }
 }
 }
+
+#include "../SystemManager.h"
+REGISTER_SYSTEM(NoEngine::ECS::ComputePlatformDeltaSystem, "ComputePlatformDeltaSystem", "Movement")

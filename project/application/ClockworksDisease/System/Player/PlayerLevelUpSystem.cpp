@@ -130,5 +130,5 @@ void PlayerLevelUpSystem::GrantAbility(No::Registry& registry, No::Entity e, Pla
 		break;
 	}
 }
-#include "engine/Functions/ECS/System/SystemManager.h"
+
 REGISTER_SYSTEM(::PlayerLevelUpSystem, "PlayerLevelUpSystem", "Gameplay")

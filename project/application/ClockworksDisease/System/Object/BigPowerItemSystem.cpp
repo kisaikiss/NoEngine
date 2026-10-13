@@ -42,5 +42,4 @@ void BigPowerItemSystem::Update(No::Registry& registry, float deltaTime) {
 	}
 }
 
-#include "engine/Functions/ECS/System/SystemManager.h"
 REGISTER_SYSTEM(::BigPowerItemSystem, "BigPowerItemSystem", "Gameplay")

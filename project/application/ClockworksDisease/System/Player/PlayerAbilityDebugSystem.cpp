@@ -44,5 +44,4 @@ void PlayerAbilityDebugSystem::Update(No::Registry& registry, float deltaTime) {
 	static_cast<void>(deltaTime);
 }
 
-#include "engine/Functions/ECS/System/SystemManager.h"
 REGISTER_SYSTEM(::PlayerAbilityDebugSystem, "PlayerAbilityDebugSystem", "Gameplay")

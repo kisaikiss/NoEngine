@@ -36,5 +36,4 @@ void WarpBlockSystem::Update(No::Registry& registry, float deltaTime) {
 	}
 }
 
-#include "engine/Functions/ECS/System/SystemManager.h"
 REGISTER_SYSTEM(::WarpBlockSystem, "WarpBlockSystem", "Gameplay")

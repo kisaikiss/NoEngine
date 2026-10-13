@@ -127,3 +127,6 @@ std::vector<NarrowPhase2DSystem::BroadPhasePair> NarrowPhase2DSystem::BroadPhase
 
 }
 }
+
+#include "../SystemManager.h"
+REGISTER_SYSTEM(NoEngine::ECS::NarrowPhase2DSystem, "NarrowPhase2DSystem", "Collision")

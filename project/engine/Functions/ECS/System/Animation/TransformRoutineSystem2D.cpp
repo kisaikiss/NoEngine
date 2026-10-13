@@ -68,3 +68,6 @@ void TransformRoutineSystem2D::Update(Registry& registry, float deltaTime) {
 }
 }
 }
+
+#include "../SystemManager.h"
+REGISTER_SYSTEM(NoEngine::ECS::TransformRoutineSystem2D, "TransformRoutineSystem2D", "Animation")

@@ -142,6 +142,5 @@ void MainStageProgressCaptureSystem::Update(No::Registry& registry, float deltaT
 	}
 }
 
-#include "engine/Functions/ECS/System/SystemManager.h"
 REGISTER_SYSTEM(::MainStageProgressRestoreSystem, "MainStageProgressRestoreSystem", "Gameplay")
 REGISTER_SYSTEM(::MainStageProgressCaptureSystem, "MainStageProgressCaptureSystem", "Gameplay")

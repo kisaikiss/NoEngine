@@ -80,3 +80,6 @@ void CollisionResolution2DSystem::Slide(Math::Vector2& velocity, const Math::Vec
 
 }
 }
+
+#include "../SystemManager.h"
+REGISTER_SYSTEM(NoEngine::ECS::CollisionResolution2DSystem, "CollisionResolution2DSystem", "Collision")

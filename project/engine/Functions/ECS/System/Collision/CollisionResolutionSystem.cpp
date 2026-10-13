@@ -86,3 +86,7 @@ void CollisionResolutionSystem::Slide(Math::Vector3& velocity, const Math::Vecto
 }
 }
 }
+
+
+#include "../SystemManager.h"
+REGISTER_SYSTEM(NoEngine::ECS::CollisionResolutionSystem, "CollisionResolutionSystem", "Collision")

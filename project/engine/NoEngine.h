@@ -47,6 +47,8 @@
 #include "Functions/ECS/System/Animation/TransformRoutineSystem2D.h"
 #include "Functions/ECS/System/Editor/DrawWaypointRouteSystem2D.h"
 
+#include "Functions/ECS/System/SystemManager.h"
+
 #include "Assets/Audio/Audio.h"
 #include "Assets/AssetManager.h"
 #include "Functions/Renderer/RaytracingManager.h"
