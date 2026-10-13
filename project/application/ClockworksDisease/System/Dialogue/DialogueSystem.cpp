@@ -2,11 +2,30 @@
 #include "DialogueSystem.h"
 #include "../../Component/Dialogue/DialogueComponent.h"
 #include "../../Component/Player/PlayerComponent.h"
-#include "engine/Assets/Font/FontManager.h"
 #include "engine/Runtime/GraphicsCore.h"
 
+#include "engine/Utilities/Conversion/ConvertString.h"
+
+namespace {
+// UTF-8文字列の先頭 codepointCount 文字ぶんのバイト長を返す
+size_t Utf8ByteLengthOfFirst(const std::string& utf8, size_t codepointCount) {
+	size_t bytes = 0;
+	size_t count = 0;
+	while (bytes < utf8.size() && count < codepointCount) {
+		const unsigned char c = static_cast<unsigned char>(utf8[bytes]);
+		size_t len = 1;
+		if ((c & 0x80) == 0x00) len = 1;
+		else if ((c & 0xE0) == 0xC0) len = 2;
+		else if ((c & 0xF0) == 0xE0) len = 3;
+		else if ((c & 0xF8) == 0xF0) len = 4;
+		bytes += len;
+		++count;
+	}
+	return std::min(bytes, utf8.size());
+}
+}
+
 void DialogueSystem::Update(No::Registry& registry, float deltaTime) {
-	static_cast<void>(deltaTime);
 	if (!initialized_) {
 		CreateTextBox(registry);
 		initialized_ = true;
@@ -18,19 +37,56 @@ void DialogueSystem::Update(No::Registry& registry, float deltaTime) {
 	registry.GetComponent<No::Transform2DComponent>(boxEntity_)->scale = { boxWidth_, 180.f };
 	registry.GetComponent<No::Transform2DComponent>(textEntity_)->translate = { -boxWidth_ * 0.5f + 40.f, -140.f };
 
-	// 会話中でも開始イベントは必ず取り出して捨てる(溜め込まないため)
 	auto startEvents = registry.PollAllEvents<DialogueStartEvent>();
 
 	if (!active_) {
 		for (auto& ev : startEvents) {
 			if (Begin(registry, ev.speaker)) break;
 		}
-		return; // 開始したフレームは進行入力を見ない(開始に使ったボタンで即進むのを防ぐ)
+		return; // 開始したフレームは入力を見ない
 	}
 
-	if (No::InputIsTrigger("Talk")) {
-		Advance(registry);
+	// 文字送り
+	if (!IsLineFullyShown()) {
+		charTimer_ += deltaTime;
+		bool changed = false;
+		while (charTimer_ >= secondsPerChar_ && !IsLineFullyShown()) {
+			charTimer_ -= secondsPerChar_;
+			++charCount_;
+			changed = true;
+		}
+		if (changed) UpdateShownText(registry);
 	}
+
+	// ボタン入力
+	if (No::InputIsTrigger("Talk")) {
+		if (!IsLineFullyShown()) {
+			// 途中なら全文を即表示する
+			charCount_ = totalChars_;
+			UpdateShownText(registry);
+		} else {
+			Advance(registry);
+		}
+	}
+}
+
+void DialogueSystem::ShowLine(No::Registry& registry) {
+	auto* dialogue = registry.GetComponent<DialogueComponent>(speaker_);
+	totalChars_ = NoEngine::Utf8ToCodepoints(dialogue->lines[lineIndex_]).size();
+	charCount_ = 0;
+	charTimer_ = 0.0f;
+
+	registry.GetComponent<No::TextComponent>(textEntity_)->isVisible = true;
+	registry.GetComponent<No::SpriteComponent>(boxEntity_)->isVisible = true;
+	UpdateShownText(registry); // 空文字から始める
+}
+
+void DialogueSystem::UpdateShownText(No::Registry& registry) {
+	auto* dialogue = registry.GetComponent<DialogueComponent>(speaker_);
+	if (!dialogue) return;
+	const std::string& full = dialogue->lines[lineIndex_];
+	registry.GetComponent<No::TextComponent>(textEntity_)->text =
+		full.substr(0, Utf8ByteLengthOfFirst(full, charCount_));
 }
 
 bool DialogueSystem::Begin(No::Registry& registry, No::Entity speaker) {
@@ -57,13 +113,6 @@ void DialogueSystem::Advance(No::Registry& registry) {
 		return;
 	}
 	ShowLine(registry);
-}
-
-void DialogueSystem::ShowLine(No::Registry& registry) {
-	auto* dialogue = registry.GetComponent<DialogueComponent>(speaker_);
-	registry.GetComponent<No::TextComponent>(textEntity_)->text = dialogue->lines[lineIndex_];
-	registry.GetComponent<No::TextComponent>(textEntity_)->isVisible = true;
-	registry.GetComponent<No::SpriteComponent>(boxEntity_)->isVisible = true;
 }
 
 void DialogueSystem::End(No::Registry& registry) {
