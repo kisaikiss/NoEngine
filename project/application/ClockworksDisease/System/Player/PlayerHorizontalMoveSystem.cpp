@@ -3,6 +3,7 @@
 #include "application/ClockworksDisease/Component/Camera/FollowCameraComponent.h"
 #include "application/ClockworksDisease/Component/Game/GoalDirectionComponent.h"
 #include "../../Component/Camera/CameraIntroComponent.h"
+#include "../../Component/Dialogue/DialogueComponent.h"
 
 namespace {
 
@@ -61,7 +62,7 @@ void PlayerHorizontalMoveSystem::Update(No::Registry& registry, float deltaTime)
 		auto* transientState = registry.GetComponent<PlayerMoveTransientComponent>(entity);
 		auto* animator = registry.GetComponent<No::AnimatorComponent>(entity);
 
-		if (registry.Has<GoalDirectionLockTag>(entity)) {
+		if (registry.Has<GoalDirectionLockTag>(entity) || registry.Has<DialogueLockTag>(entity)) {
 			velocity->linear = No::Vector3::ZERO;
 			transientState->slopeY = 0.f;
 			if (particleEmitterSphere) particleEmitterSphere->active = false;
