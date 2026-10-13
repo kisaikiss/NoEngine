@@ -1,69 +1,58 @@
 #pragma once
 #include "ISystem.h"
-#include "externals/nlohmann/json.hpp"
+#include "SystemCatalog.h"
+#include "engine/Editor/SystemListPanel.h"
+#include "engine/Editor/GameControllerPanel.h"
+
 #include <typeindex>
-#include <unordered_map>
-#include <vector>
-#include <functional>
 
 namespace NoEngine {
 namespace ECS {
+
+/// <summary>
+/// シーンが持つ実行対象システムのリストを保持し、UpdateAllで順に更新する。
+/// カタログ・JSON永続化・再生状態・UI はそれぞれ SystemCatalog / SystemSceneConfig /
+/// PlayModeController / 各Panel が担当する。
+/// </summary>
 class SystemManager {
 public:
-	SystemManager();
-	using SystemFactory = std::function<std::unique_ptr<ISystem>()>;
-	struct SystemRegistration {
-		std::string category;
-		SystemFactory factory;
-	};
-	static bool RegisterSystemType(const std::string& name, const std::string& category,
-		std::type_index type, SystemFactory factory);
+	SystemManager() = default;
 
 	template<typename T>
 	T* AddSystem(std::unique_ptr<T> system) {
 		T* ptr = system.get();
-		auto type = systemTypes_.find(std::type_index(typeid(T)));
-		systemNames_.push_back(type == systemTypes_.end() ? std::string(typeid(T).name()) : type->second);
-		systems_.push_back(std::move(system));
+		std::string name = SystemCatalog::Get().NameOf(std::type_index(typeid(T)));
+		// 未登録型はtypeid名で保持する。この名前はLoad時に未登録扱いとなるため、
+		// 保存したJSONが読み込まれないことがある(REGISTER_SYSTEMの追加を推奨)。
+		if (name.empty()) name = typeid(T).name();
+		entries_.push_back({ std::move(name), std::move(system) });
 		return ptr;
 	}
 
-	template<typename T>
-	static bool RegisterSystemType(const std::string& name, const std::string& category) {
-		return RegisterSystemType(name, category, std::type_index(typeid(T)), [] { return std::make_unique<T>(); });
-	}
 	bool AddSystemByName(const std::string& name);
 	void RemoveSystem(size_t index);
 	void MoveSystem(size_t from, size_t to);
-	const std::vector<std::string>& GetSystemNames() const { return systemNames_; }
+
+	bool HasSystem(const std::string& name) const;
+	std::vector<std::string> GetSystemNames() const;
 
 	void UpdateAll(ComputeContext& ctx, Registry& registry, float deltaTime);
 
-
-	// Editing以外(Playing/Paused)ならtrue。">"を押してから"■"を押すまでの間ずっとtrue。
-	static bool IsInPlayMode();
-	// ">"を押した瞬間(Editing→Playing)に取得したシーンのスナップショット
-	static const nlohmann::json& GetPlaySnapshot();
+	/// <summary>現在のシーン名に対応するJSONの"systems"を適用する(シーンごとに1回だけ)</summary>
+	void LoadConfiguration(Registry& registry);
+	void SaveConfiguration(Registry& registry);
 
 private:
-	std::vector<std::unique_ptr<ISystem>> systems_;
-	std::vector<std::string> systemNames_;
-	std::unordered_map<std::string, SystemRegistration> systemFactories_;
-	std::unordered_map<std::type_index, std::string> systemTypes_;
+	struct Entry {
+		std::string name;
+		std::unique_ptr<ISystem> system;
+	};
+	std::vector<Entry> entries_;
 	std::string configuredSceneName_;
 
-	void LoadPlaySnapShot(Registry& registry);
-	void LoadSystemConfiguration(Registry& registry);
-	void SaveSystemConfiguration(Registry& registry);
+	Editor::GameControllerPanel gameControllerPanel_;
+	Editor::SystemListPanel systemListPanel_;
 };
-}
-}
 
-// Register a default-constructible ISystem in the editor's categorized system list.
-#define NOENGINE_REGISTER_SYSTEM_IMPL(Type, Name, Category, Line) \
-	namespace { const bool noEngineSystemRegistered##Line = \
-		::NoEngine::ECS::SystemManager::RegisterSystemType<Type>(Name, Category); }
-#define NOENGINE_REGISTER_SYSTEM_EXPAND(Type, Name, Category, Line) \
-	NOENGINE_REGISTER_SYSTEM_IMPL(Type, Name, Category, Line)
-#define REGISTER_SYSTEM(Type, Name, Category) \
-	NOENGINE_REGISTER_SYSTEM_EXPAND(Type, Name, Category, __LINE__)
+}
+}

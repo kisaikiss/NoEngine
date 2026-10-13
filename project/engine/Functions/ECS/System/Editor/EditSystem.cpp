@@ -2,11 +2,11 @@
 #include "engine/Editor/EntityHierarchyUtils.h"
 #include "engine/Editor/DataDriven/SceneSerializer.h"
 #include "engine/Editor/DataDriven/PrefabSerializer.h"
-#include "engine/Editor/ReflectionMacros.h"
 #include "engine/Editor/EditorCommandOperator.h"
 #include "engine/Functions/Scene/SceneNameComponent.h"
 #include "engine/Functions/Command/EditCommand/InstantiateEntitiesCommand.h"
-#include "engine/Functions/ECS/System/SystemManager.h"
+#include "engine/Functions/ECS/System/PlayModeController.h"
+#include "engine/Functions/ECS/System/SystemSceneConfig.h"
 
 #include "engine/Functions/Input/input.h"
 #ifdef USE_IMGUI
@@ -54,9 +54,9 @@ void EditSystem::DrawMenuBar(Registry& registry) {
 	if (ImGui::BeginMainMenuBar()) {
 		if (ImGui::BeginMenu("File")) {
 			if (ImGui::MenuItem("Save")) {
-				if (SystemManager::IsInPlayMode()) {
+				if (PlayModeController::IsInPlayMode()) {
 					// 再生中 / 再生からの一時停止中は、">"を押す直前の状態を保存する
-					SaveFile(registry, SystemManager::GetPlaySnapshot());
+					SaveFile(registry, PlayModeController::GetSnapshot());
 				} else {
 					SaveFile(registry, Editor::SaveScene(registry));
 				}
@@ -167,9 +167,12 @@ void EditSystem::SaveFile(Registry& registry, nlohmann::json j) {
 		auto* nameComp = registry.GetComponent<SceneNameComponent>(entity);
 		sceneName = nameComp->GetName();
 	}
-	std::string filePath = sDirectoryPath + sceneName + ".json";
-	// SceneSerializer only writes entities. Preserve editor-managed system order when
-	// the user saves the scene from the File menu.
+	
+	std::string filePath = SystemSceneConfig::GetScenePath(sceneName);
+
+	// SceneSerializerはエンティティのみを書き出します。
+	// ユーザーが「ファイル」メニューからシーンを保存する際は、
+	// エディターが管理するシステム順序を維持してください。
 	if (std::filesystem::exists(filePath)) {
 		std::ifstream existing(filePath);
 		if (existing.is_open()) {
