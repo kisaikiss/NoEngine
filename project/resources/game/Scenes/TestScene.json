@@ -1062,9 +1062,9 @@
                 },
                 "DebugCameraComponent": {
                     "center": [
-                        -0.7074661254882813,
-                        -3.2090892791748047,
-                        -0.819645881652832
+                        3.2668590545654297,
+                        -0.6247892379760742,
+                        4.070994853973389
                     ],
                     "distance": 24.76100730895996,
                     "drawCenter": false,
@@ -1079,10 +1079,10 @@
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
-                        0.14189763367176056,
-                        0.8395290374755859,
-                        -0.2623094320297241,
-                        0.4541475474834442
+                        0.1431576907634735,
+                        0.7782626748085022,
+                        -0.19192929565906525,
+                        0.5804965496063232
                     ],
                     "scale": [
                         1.0,
@@ -7663,6 +7663,14 @@
                 "CollisionLayerComponent": {
                     "layer": "Terrain"
                 },
+                "DialogueComponent": {
+                    "interactDistance": 5.199999809265137,
+                    "interactable": true,
+                    "lines": [
+                        "おいおい",
+                        "何スカ？"
+                    ]
+                },
                 "EditTag": {
                     "name": "box",
                     "parent": null
@@ -8237,48 +8245,6 @@
                 }
             }
         },
-        "textLoadTest": {
-            "components": {
-                "EditTag": {
-                    "name": "textLoadTest",
-                    "parent": null
-                },
-                "TextComponent": {
-                    "anchor": [
-                        0.0,
-                        0.0
-                    ],
-                    "color": [
-                        1.0,
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "fontName": "resources/engine/fonts/PixelMplus12-Bold.ttf",
-                    "hAlign": "kLeft",
-                    "isVisible": true,
-                    "layer": 0,
-                    "letterSpacing": 0.0,
-                    "orderInLayer": 0,
-                    "scale": 1.0,
-                    "space": "World",
-                    "text": "おい\nこんちは",
-                    "vAlign": "kBaseline"
-                },
-                "Transform2DComponent": {
-                    "parent": null,
-                    "rotation": 0.0,
-                    "scale": [
-                        1.0,
-                        1.0
-                    ],
-                    "translate": [
-                        436.3179626464844,
-                        323.5845947265625
-                    ]
-                }
-            }
-        },
         "warpBlock": {
             "components": {
                 "CollisionLayerComponent": {
@@ -8371,7 +8337,6 @@
         "MainStageProgressRestoreSystem",
         "PauseMenuSystem",
         "ModelLoadSystem",
-        "FontLoadSystem",
         "SpriteLoadSystem",
         "TerrainLoadSystem",
         "AnimationSystem",
@@ -8398,6 +8363,7 @@
         "WarpBlockSystem",
         "PlayerLevelUpSystem",
         "LevelUISystem",
+        "DialogueInteractSystem",
         "PlayerAbilityDebugSystem",
         "LevelUpTextSystem",
         "EffectEmitSystem",

@@ -313,6 +313,9 @@
     <ClCompile Include="engine\Editor\Panels\SystemListPanel.cpp" />
     <ClCompile Include="application\ClockworksDisease\Scene\GameClearScene.cpp" />
     <ClCompile Include="application\ClockworksDisease\Scene\GameScene.cpp" />
+    <ClCompile Include="application\ClockworksDisease\Component\Dialogue\DialogueComponent.cpp" />
+    <ClCompile Include="application\ClockworksDisease\System\Dialogue\DialogueInteractSystem.cpp" />
+    <ClCompile Include="application\ClockworksDisease\System\Dialogue\DialogueSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -633,6 +636,9 @@
     <ClInclude Include="application\ClockworksDisease\Scene\GameClearScene.h" />
     <ClInclude Include="application\ClockworksDisease\Scene\GameScene.h" />
     <ClInclude Include="engine\Functions\ECS\System\Loader\FontLoadSystem.h" />
+    <ClInclude Include="application\ClockworksDisease\Component\Dialogue\DialogueComponent.h" />
+    <ClInclude Include="application\ClockworksDisease\System\Dialogue\DialogueInteractSystem.h" />
+    <ClInclude Include="application\ClockworksDisease\System\Dialogue\DialogueSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />
