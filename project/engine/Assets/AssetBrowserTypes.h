@@ -7,6 +7,7 @@ enum class EBrowserItemType {
 	Model,
 	Texture,
 	Audio,
+	Font,
 	Prefab,
 	Unknown
 };

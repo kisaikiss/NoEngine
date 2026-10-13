@@ -12,6 +12,7 @@ void EngineTestScene::Setup() {
 	AddSystem(std::make_unique<TestSystem>());
 	AddSystem(std::make_unique<No::ModelLoadSystem>());
 	AddSystem(std::make_unique<No::SpriteLoadSystem>());
+	AddSystem(std::make_unique<No::FontLoadSystem>());
 	AddSystem(std::make_unique<No::AnimationSystem>());
 	AddSystem(std::make_unique<No::SpriteAnimationSystem>());
 	AddSystem(std::make_unique<No::ParticleEmitterSystem>());
@@ -41,7 +42,7 @@ void EngineTestScene::Setup() {
 	{
 		auto tex = registry.GenerateEntity();
 		auto* text = registry.AddComponent<No::TextComponent>(tex);
-		text->fontHandle = NoEngine::FontManager::LoadFontFile("resources/engine/fonts/PixelMplus12-Regular.ttf");
+		text->fontName = "resources/engine/fonts/PixelMplus12-Regular.ttf";
 		text->text = "あaaa\nfaf\nこんちはaaa";
 		registry.AddComponent<No::Transform2DComponent>(tex);
 		registry.AddComponent<No::EditTag>(tex)->name = "text2";

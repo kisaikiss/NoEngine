@@ -9,7 +9,11 @@ struct TextComponent {
 	enum class VAlign { kBaseline, kTop, kMiddle };
 
 	std::string text;
+	// Asset Browserで選択するフォントのAddressableName。
+	std::string fontName;
 	FontRef fontHandle;
+	uint64_t loadedFontGeneration = 0;
+	std::string loadedFontName;
 
 	// フォントのベイク基準ピクセルサイズ(FontManager::kBakePixelHeight)に対する倍率。
 	float scale = 1.f;

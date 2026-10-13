@@ -3,6 +3,7 @@
 
 REFLECT_STRUCT_BEGIN(NoEngine::Component::TextComponent, "Asset")
 REFLECT_MULTILINE_FIELD(text),
+REFLECT_FIELD(fontName),
 REFLECT_FIELD(scale),
 REFLECT_FIELD(letterSpacing),
 REFLECT_FIELD(layer),

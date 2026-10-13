@@ -33,6 +33,8 @@ void AssetManager::CreateMetaFileForAllFiles() {
 	sSupportedExtensions.push_back(".png");
 	sSupportedExtensions.push_back(".mp3");
 	sSupportedExtensions.push_back(".wav");
+	sSupportedExtensions.push_back(".ttf");
+	sSupportedExtensions.push_back(".otf");
 
 	// 指定されたアセットフォルダ以下をクロール
 	for (const std::filesystem::directory_entry& entry : std::filesystem::recursive_directory_iterator(sAssetFilePass)) {
@@ -216,6 +218,8 @@ Editor::EBrowserItemType AssetManager::GetAssetTypeFromExtension(const std::file
 		{".png",  Editor::EBrowserItemType::Texture},
 		{".mp3",  Editor::EBrowserItemType::Audio},
 		{".wav",  Editor::EBrowserItemType::Audio},
+		{".ttf",  Editor::EBrowserItemType::Font},
+		{".otf",  Editor::EBrowserItemType::Font},
 	};
 	auto it = table.find(path.extension().string());
 	return it != table.end() ? it->second : Editor::EBrowserItemType::Unknown;

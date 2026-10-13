@@ -20,6 +20,7 @@
 #include "Editor/DataDriven/PrefabSerializer.h"
 
 #include "Functions/ECS/System/Loader/SpriteLoadSystem.h"
+#include "Functions/ECS/System/Loader/FontLoadSystem.h"
 #include "Functions/ECS/System/Loader/ModelLoadSystem.h"
 #include "Functions/ECS/System/Animation/AnimationSystem.h"
 #include "Functions/ECS/System/Animation/SpriteAnimationSystem.h"

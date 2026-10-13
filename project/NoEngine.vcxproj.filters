@@ -192,6 +192,7 @@
     <ClCompile Include="engine\Functions\Renderer\Initializer\PrimitiveInitializer.cpp" />
     <ClCompile Include="engine\Functions\Renderer\PipelineState\StateObjectManager.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Loader\SpriteLoadSystem.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\Loader\FontLoadSystem.cpp" />
     <ClCompile Include="engine\Functions\Renderer\Initializer\PostEffectInitialzer.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\GrayscalePass.cpp" />
     <ClCompile Include="engine\Functions\Input\InputConfig.cpp" />
@@ -631,6 +632,7 @@
     <ClInclude Include="engine\Editor\Panels\SystemListPanel.h" />
     <ClInclude Include="application\ClockworksDisease\Scene\GameClearScene.h" />
     <ClInclude Include="application\ClockworksDisease\Scene\GameScene.h" />
+    <ClInclude Include="engine\Functions\ECS\System\Loader\FontLoadSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

@@ -68,6 +68,7 @@ const char* GetIconLabel(EBrowserItemType type) {
 	case EBrowserItemType::Model:   return "[Model]";
 	case EBrowserItemType::Texture: return "[Tex]";
 	case EBrowserItemType::Audio:   return "[Audio]";
+	case EBrowserItemType::Font:    return "[Font]";
 	case EBrowserItemType::Prefab:  return "[Prefab]";
 	default:                        return "[?]";
 	}

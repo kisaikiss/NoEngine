@@ -13,6 +13,7 @@ void TitleScene::AddSystems() {
 
 	AddSystem(std::make_unique<No::ModelLoadSystem>());
 	AddSystem(std::make_unique<No::SpriteLoadSystem>());
+	AddSystem(std::make_unique<No::FontLoadSystem>());
 	AddSystem(std::make_unique<No::AnimationSystem>());
 
 	AddSystem(std::make_unique<No::EffectEmitSystem>());
