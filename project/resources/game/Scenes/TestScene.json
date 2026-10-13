@@ -7664,6 +7664,7 @@
                     "layer": "Terrain"
                 },
                 "DialogueComponent": {
+                    "fontName": "resources/engine/fonts/PixelMplus12-Bold.ttf",
                     "interactDistance": 5.199999809265137,
                     "interactable": true,
                     "lines": [

@@ -2,6 +2,7 @@
 
 REFLECT_STRUCT_BEGIN(DialogueComponent, "Application")
 REFLECT_ARRAY_FIELD(lines),
+REFLECT_FIELD(fontName),
 REFLECT_FIELD(interactDistance),
 REFLECT_FIELD(interactable)
 REFLECT_STRUCT_END(DialogueComponent)

@@ -4,6 +4,7 @@
 // 話しかけられる側(NPCや看板)に付ける
 struct DialogueComponent {
 	std::vector<std::string> lines;   // 表示する文字列。改行したい箇所は \n を入れる
+	std::string fontName;
 	float interactDistance = 3.0f;    // 話しかけられる距離
 	bool interactable = true;         // ボタンで話しかけられるか(自動発火専用ならfalse)
 };

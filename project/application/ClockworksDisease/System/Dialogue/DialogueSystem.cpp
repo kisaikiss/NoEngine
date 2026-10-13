@@ -39,6 +39,8 @@ bool DialogueSystem::Begin(No::Registry& registry, No::Entity speaker) {
 
 	active_ = true;
 	speaker_ = speaker;
+	auto* text = registry.GetComponent<No::TextComponent>(textEntity_);
+	text->fontName = dialogue->fontName;
 	lineIndex_ = 0;
 	for (auto player : registry.View<PlayerComponent>()) {
 		if (!registry.Has<DialogueLockTag>(player)) registry.AddComponent<DialogueLockTag>(player);
