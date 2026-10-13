@@ -365,5 +365,23 @@
                 }
             }
         }
-    }
+    },
+    "systems": [
+        "EditSystem",
+        "ModelLoadSystem",
+        "SpriteLoadSystem",
+        "AnimationSystem",
+        "EffectEmitSystem",
+        "ParticleEmitterSystem",
+        "ParticleSystem",
+        "OpeningPanelSystem",
+        "SceneChangeTimerSystem",
+        "MovementSystem",
+        "TransformRoutineSystem",
+        "SpriteAnimationSystem",
+        "DrawManipulatorSystem",
+        "DebugCameraSystem",
+        "CameraSystem",
+        "DrawCameraFrustumSystem"
+    ]
 }

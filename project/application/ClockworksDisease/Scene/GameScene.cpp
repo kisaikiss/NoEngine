@@ -1,44 +1,12 @@
 #include "stdafx.h"
 #include "GameScene.h"
 
-#include "../System/Player/PlayerStaminaSystem.h"
-#include "../System/Player/PlayerJumpSystem.h"
-#include "../System/Player/PlayerHorizontalMoveSystem.h"
-#include "../System/Player/PlayerVerticalVelocitySystem.h"
-#include "../System/Player/PlayerAbilityDebugSystem.h"
-#include "../System/Player/PlayerDeathSystem.h"
-
-#include "../System/Camera/FollowCameraSystem.h"
-#include "../System/Game/CollisionEventSystem.h"
-#include "../System/Game/TerrainLoadSystem.h"
-#include "../System/Game/PlatformRideSystem.h"
-#include "../System/Player/PlayerPushBackSystem.h"
-#include "../System/Player/PlayerLevelUpSystem.h"
-#include "../System/Player/PlayerAnimationSystem.h"
-#include "../System/Object/BoxColliderUpdateSystem.h"
-#include "../System/Object/MagicScaffoldSystem.h"
-#include "../System/Camera/CameraIntroSystem.h"
 
 #include "../Component/Stage/StageComponent.h"
-#include "../System/Game/CollisionLayer.h"
-#include "../System/Game/ColliderDrawSystem.h"
-#include "../System/Game/ItemGetSystem.h"
-#include "../System/Object/SmallPowerItemSystem.h"
-#include "../System/Object/BigPowerItemSystem.h"
-#include "../System/Object/SavePointSystem.h"
-#include "../System/Object/WarpBlockSystem.h"
-#include "../System/UI/LevelUISystem.h"
-#include "../System/UI/StaminaUISystem.h"
-#include "../System/UI/LevelUpTextSystem.h"
-#include "../System/Game/GameProgressInitSystem.h"
-#include "../System/Game/MainStageProgress.h"
-#include "../System/Game/GameTimerSystem.h"
-#include "../System/Game/GoalDirectionSystem.h"
 #include "../Component/Game/GameProgressComponent.h"
-#include "../System/UI/PauseMenuSystem.h"
+#include "../System/Game/CollisionLayer.h"
 
 void GameScene::Setup() {
-	AddSystems();
 	auto& registry = *GetRegistry();
 
 	// 進行状況管理用Entity（総数/取得数/経過時間）
@@ -61,71 +29,4 @@ void GameScene::Setup() {
 		registry.AddComponent<No::EditTag>(e)->name = "stage";
 	}
 
-}
-
-void GameScene::AddSystems() {
-	AddSystem(std::make_unique<No::EditSystem>());
-	AddSystem(std::make_unique<MainStageProgressRestoreSystem>());
-	AddSystem(std::make_unique<PauseMenuSystem>());
-
-	AddSystem(std::make_unique<No::ModelLoadSystem>());
-	AddSystem(std::make_unique<TerrainLoadSystem>());
-	AddSystem(std::make_unique<No::SpriteLoadSystem>());
-	AddSystem(std::make_unique<No::AnimationSystem>());
-	AddSystem(std::make_unique<BoxColliderUpdateSystem>());
-	AddSystem(std::make_unique<GameProgressInitSystem>());
-	AddSystem(std::make_unique<GameTimerSystem>()); 
-	AddSystem(std::make_unique<PlayerStaminaSystem>());
-	AddSystem(std::make_unique<PlayerJumpSystem>());
-	AddSystem(std::make_unique<PlayerHorizontalMoveSystem>());
-	AddSystem(std::make_unique<PlayerVerticalVelocitySystem>());
-	AddSystem(std::make_unique<PlayerAnimationSystem>());
-	AddSystem(std::make_unique<StaminaUISystem>());
-	AddSystem(std::make_unique<No::GroundResetSystem>());
-	AddSystem(std::make_unique<MagicScaffoldSystem>());
-
-	AddSystem(std::make_unique<No::NarrowPhaseSystem>());
-	AddSystem(std::make_unique<No::CollisionResolutionSystem>());
-	AddSystem(std::make_unique<CollisionEventSystem>());
-
-	AddSystem(std::make_unique<PlayerPushBackSystem>());
-	AddSystem(std::make_unique<ItemGetSystem>());
-	AddSystem(std::make_unique<MainStageProgressCaptureSystem>());
-
-	AddSystem(std::make_unique<SmallPowerItemSystem>());
-	AddSystem(std::make_unique<BigPowerItemSystem>());
-	AddSystem(std::make_unique<SavePointSystem>());
-	AddSystem(std::make_unique<WarpBlockSystem>());
-	AddSystem(std::make_unique<PlayerLevelUpSystem>());
-	AddSystem(std::make_unique<LevelUISystem>());
-	AddSystem(std::make_unique<PlayerAbilityDebugSystem>());
-	AddSystem(std::make_unique<LevelUpTextSystem>());
-
-	AddSystem(std::make_unique<No::EffectEmitSystem>());
-	AddSystem(std::make_unique<No::ParticleEmitterSystem>());
-	AddSystem(std::make_unique<No::ParticleSystem>());
-
-	AddSystem(std::make_unique<No::CapturePlatformPrevTransformSystem>());
-	AddSystem(std::make_unique<No::TransformRoutineSystem>());
-	AddSystem(std::make_unique<No::TransformRoutineSystem2D>());
-	AddSystem(std::make_unique<No::MovementSystem>());
-	AddSystem(std::make_unique<PlayerDeathSystem>());
-	AddSystem(std::make_unique<No::ComputePlatformDeltaSystem>());
-	AddSystem(std::make_unique<PlatformRideSystem>());
-
-	AddSystem(std::make_unique<CameraIntroSystem>());
-	AddSystem(std::make_unique<GoalDirectionSystem>());
-
-	AddSystem(std::make_unique<ColliderDrawSystem>());
-	AddSystem(std::make_unique<No::DrawCameraFrustumSystem>());
-
-	AddSystem(std::make_unique<FollowCameraSystem>());
-
-	AddSystem(std::make_unique<No::SpriteAnimationSystem>());
-
-	AddSystem(std::make_unique<No::DrawManipulatorSystem>());
-	AddSystem(std::make_unique<No::DrawWaypointRouteSystem>());
-	AddSystem(std::make_unique<No::DrawWaypointRouteSystem2D>());
-	AddSystem(std::make_unique<No::DebugCameraSystem>());
-	AddSystem(std::make_unique<No::CameraSystem>());
 }

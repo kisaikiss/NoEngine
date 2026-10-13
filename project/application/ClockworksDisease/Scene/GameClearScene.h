@@ -6,5 +6,4 @@ public:
 	void Setup() override;
 private:
 	void NotSystemUpdate() override;
-	void AddSystems();
 };

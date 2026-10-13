@@ -5,6 +5,5 @@ class GameScene : public No::IScene {
 public:
 	void Setup() override;
 private:
-	void AddSystems();
 
 };

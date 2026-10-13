@@ -39,7 +39,6 @@ No::Entity CreateNumberDisplay(No::Registry& registry, const No::Vector2& positi
 } // namespace
 
 void GameClearScene::Setup() {
-	AddSystems();
 
 	auto& registry = *GetRegistry();
 	const auto& result = GameResult::Get();
@@ -81,27 +80,4 @@ void GameClearScene::NotSystemUpdate() {
 		sceneChangeEvent.nextScene = "TitleScene";
 		GetRegistry()->EmitEvent(sceneChangeEvent);
 	}
-}
-
-void GameClearScene::AddSystems() {
-	AddSystem(std::make_unique<No::EditSystem>());
-
-	AddSystem(std::make_unique<No::ModelLoadSystem>());
-	AddSystem(std::make_unique<No::SpriteLoadSystem>());
-	AddSystem(std::make_unique<No::AnimationSystem>());
-
-	AddSystem(std::make_unique<No::EffectEmitSystem>());
-	AddSystem(std::make_unique<No::ParticleEmitterSystem>());
-	AddSystem(std::make_unique<No::ParticleSystem>());
-
-	AddSystem(std::make_unique<No::MovementSystem>());
-	AddSystem(std::make_unique<No::TransformRoutineSystem>());
-
-	AddSystem(std::make_unique<No::SpriteAnimationSystem>());
-
-	AddSystem(std::make_unique<No::DrawManipulatorSystem>());
-	AddSystem(std::make_unique<No::DebugCameraSystem>());
-	AddSystem(std::make_unique<No::CameraSystem>());
-	AddSystem(std::make_unique<No::DrawCameraFrustumSystem>());
-	AddSystem(std::make_unique<NumberDisplaySystem>());
 }

@@ -1,8 +1,9 @@
 {
-    "removedScenes": [
-        "TestScene"
-    ],
     "scenes": [
-        "test"
+        "GameScene",
+        "SampleScene",
+        "TestScene",
+        "OpeningScene",
+        "GameClearScene"
     ]
 }

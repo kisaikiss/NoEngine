@@ -231,7 +231,6 @@
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\DissolvePass.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Asset\DissolveComponent.cpp" />
     <ClCompile Include="engine\Runtime\GpuResource\ReadbackBuffer.cpp" />
-    <ClCompile Include="application\ClockworksDisease\Scene\GameScene.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\RandomNoisePass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PrePasses\BLASUpdatePass.cpp" />
     <ClCompile Include="application\ClockworksDisease\Component\Player\PlayerMoveTags.cpp" />
@@ -280,7 +279,6 @@
     <ClCompile Include="application\ClockworksDisease\System\Game\GameProgressInitSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Game\GameTimerSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\UI\NumberDisplaySystem.cpp" />
-    <ClCompile Include="application\ClockworksDisease\Scene\GameClearScene.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Editor\DrawCameraFrustumSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\Component\Camera\CameraIntroComponent.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Camera\CameraIntroSystem.cpp" />
@@ -304,7 +302,6 @@
     <ClCompile Include="application\ClockworksDisease\System\Object\SavePointSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Object\SmallPowerItemSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Object\WarpBlockSystem.cpp" />
-    <ClCompile Include="application\ClockworksDisease\Scene\OpeningScene.cpp" />
     <ClCompile Include="application\ClockworksDisease\Component\Opening\OpeningPanelComponent.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Opening\OpeningPanelSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Opening\SceneChangeTimerSystem.cpp" />
@@ -313,6 +310,8 @@
     <ClCompile Include="engine\Functions\ECS\System\PlayModeController.cpp" />
     <ClCompile Include="engine\Editor\Panels\GameControllerPanel.cpp" />
     <ClCompile Include="engine\Editor\Panels\SystemListPanel.cpp" />
+    <ClCompile Include="application\ClockworksDisease\Scene\GameClearScene.cpp" />
+    <ClCompile Include="application\ClockworksDisease\Scene\GameScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -540,7 +539,6 @@
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\DissolvePass.h" />
     <ClInclude Include="engine\Functions\ECS\Component\Asset\DissolveComponent.h" />
     <ClInclude Include="engine\Runtime\GpuResource\ReadbackBuffer.h" />
-    <ClInclude Include="application\ClockworksDisease\Scene\GameScene.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\RandomNoisePass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PrePasses\BLASUpdatePass.h" />
     <ClInclude Include="application\ClockworksDisease\Component\Player\PlayerMoveTags.h" />
@@ -596,7 +594,6 @@
     <ClInclude Include="application\ClockworksDisease\System\Game\GameTimerSystem.h" />
     <ClInclude Include="application\ClockworksDisease\Component\UI\NumberDisplayComponent.h" />
     <ClInclude Include="application\ClockworksDisease\System\UI\NumberDisplaySystem.h" />
-    <ClInclude Include="application\ClockworksDisease\Scene\GameClearScene.h" />
     <ClInclude Include="engine\Functions\ECS\System\Editor\DrawCameraFrustumSystem.h" />
     <ClInclude Include="application\ClockworksDisease\Component\Camera\CameraIntroComponent.h" />
     <ClInclude Include="application\ClockworksDisease\System\Camera\CameraIntroSystem.h" />
@@ -624,7 +621,6 @@
     <ClInclude Include="application\ClockworksDisease\System\Object\SavePointSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Object\SmallPowerItemSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Object\WarpBlockSystem.h" />
-    <ClInclude Include="application\ClockworksDisease\Scene\OpeningScene.h" />
     <ClInclude Include="application\ClockworksDisease\Component\Opening\OpeningPanelComponent.h" />
     <ClInclude Include="application\ClockworksDisease\System\Opening\OpeningPanelSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Opening\SceneChangeTimerSystem.h" />
@@ -633,6 +629,8 @@
     <ClInclude Include="engine\Functions\ECS\System\PlayModeController.h" />
     <ClInclude Include="engine\Editor\Panels\GameControllerPanel.h" />
     <ClInclude Include="engine\Editor\Panels\SystemListPanel.h" />
+    <ClInclude Include="application\ClockworksDisease\Scene\GameClearScene.h" />
+    <ClInclude Include="application\ClockworksDisease\Scene\GameScene.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

@@ -1,7 +1,6 @@
 #include "ClockworksDisease.h"
 #include "Scene/GameScene.h"
 #include "Scene/TitleScene.h"
-#include "Scene/OpeningScene.h"
 #include "Scene/GameClearScene.h"
 
 #include "Component/Game/GameQuitEvent.h"
@@ -10,9 +9,7 @@ void ClockworksDisease::Startup(void) {
 	RegisterScene("TestScene", []() { return std::make_unique<GameScene>();	});
 	RegisterScene("SampleScene", []() { return std::make_unique<GameScene>();	});
 
-	RegisterScene("GameScene", []() { return std::make_unique<GameScene>();	});
 	RegisterScene("TitleScene", []() { return std::make_unique<TitleScene>();	});
-	RegisterScene("OpeningScene", []() { return std::make_unique<OpeningScene>();	});
 	RegisterScene("GameClearScene", []() {return std::make_unique<GameClearScene>(); });
 	ChangeScene("TitleScene");
 

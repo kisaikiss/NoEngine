@@ -608,11 +608,11 @@
                 },
                 "DebugCameraComponent": {
                     "center": [
-                        -42.81270980834961,
-                        -38.369781494140625,
-                        16.02076530456543
+                        -34.4621467590332,
+                        6.027373313903809,
+                        2.3916873931884766
                     ],
-                    "distance": 101.71788787841797,
+                    "distance": 6.640796661376953,
                     "drawCenter": false,
                     "moveType": "kBlender",
                     "unrealMoveSpeed": 10.0,
@@ -625,10 +625,10 @@
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
-                        0.29032111167907715,
-                        -0.5689970254898071,
-                        0.22447186708450317,
-                        0.7359133958816528
+                        0.05832333117723465,
+                        0.6863158345222473,
+                        -0.0553760826587677,
+                        0.7228432893753052
                     ],
                     "scale": [
                         1.0,
@@ -636,9 +636,9 @@
                         1.0
                     ],
                     "translate": [
-                        29.11477279663086,
-                        31.078102111816406,
-                        -2.686399459838867
+                        -41.00823211669922,
+                        7.092080116271973,
+                        2.052091121673584
                     ]
                 }
             }
@@ -27866,8 +27866,8 @@
         "MainStageProgressRestoreSystem",
         "PauseMenuSystem",
         "ModelLoadSystem",
-        "SpriteLoadSystem",
         "TerrainLoadSystem",
+        "SpriteLoadSystem",
         "AnimationSystem",
         "BoxColliderUpdateSystem",
         "GameProgressInitSystem",
@@ -27880,8 +27880,8 @@
         "StaminaUISystem",
         "GroundResetSystem",
         "MagicScaffoldSystem",
-        "class NoEngine::ECS::NarrowPhaseSystem",
-        "class NoEngine::ECS::CollisionResolutionSystem",
+        "NarrowPhaseSystem",
+        "CollisionResolutionSystem",
         "CollisionEventSystem",
         "PlayerPushBackSystem",
         "ItemGetSystem",
@@ -27897,12 +27897,12 @@
         "EffectEmitSystem",
         "ParticleEmitterSystem",
         "ParticleSystem",
-        "class NoEngine::ECS::CapturePlatformPrevTransformSystem",
+        "CapturePlatformPrevTransformSystem",
         "TransformRoutineSystem",
-        "class NoEngine::ECS::TransformRoutineSystem2D",
+        "TransformRoutineSystem2D",
         "MovementSystem",
         "PlayerDeathSystem",
-        "class NoEngine::ECS::ComputePlatformDeltaSystem",
+        "ComputePlatformDeltaSystem",
         "PlatformRideSystem",
         "CameraIntroSystem",
         "GoalDirectionSystem",
@@ -27911,8 +27911,8 @@
         "FollowCameraSystem",
         "SpriteAnimationSystem",
         "DrawManipulatorSystem",
-        "class NoEngine::ECS::DrawWaypointRouteSystem",
-        "class NoEngine::ECS::DrawWaypointRouteSystem2D",
+        "DrawWaypointRouteSystem",
+        "DrawWaypointRouteSystem2D",
         "DebugCameraSystem",
         "CameraSystem"
     ]
