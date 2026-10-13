@@ -1,5 +1,5 @@
 #include "Registry.h"
-#include "engine/Editor/ComponentRegistry.h"
+#include "engine/Editor/Reflection/ComponentRegistry.h"
 
 namespace NoEngine {
 namespace ECS {

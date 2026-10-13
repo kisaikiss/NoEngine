@@ -1,8 +1,7 @@
 #include "InspectorPanel.h"
 #include "engine/Editor/DataDriven/PrefabSerializer.h"
-#include "engine/Editor/ComponentUI.h"
-#include "engine/Editor/ReflectionMacros.h"
-#include "engine/Editor/EditorCommandOperator.h"
+#include "engine/Editor/Components/ComponentUI.h"
+#include "engine/Editor/Commands/EditorCommandOperator.h"
 #include "engine/Functions/Command/EditCommand/AddComponentCommand.h"
 
 #ifdef USE_IMGUI

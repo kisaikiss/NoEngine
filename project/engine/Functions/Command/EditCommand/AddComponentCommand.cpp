@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "AddComponentCommand.h"
-#include "engine/Editor/ComponentRegistry.h"
+#include "engine/Editor/Reflection/ComponentRegistry.h"
 
 namespace NoEngine {
 namespace Command {

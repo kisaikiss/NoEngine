@@ -2,7 +2,7 @@
 #include "SceneSerializer.h"
 #include "engine/Functions/Scene/SceneNameComponent.h"
 #include "PrefabSerializer.h"
-#include "../EditUtils.h"
+#include "../Utilities/EditUtils.h"
 #include "engine/Functions/ECS/Component/Common/TransformComponent.h"
 
 namespace NoEngine {

@@ -1,5 +1,5 @@
 #include "ParticleEmitterComponent.h"
-#include "engine/Editor/ReflectionMacros.h"
+#include "engine/Editor/Reflection/ReflectionMacros.h"
 
 REFLECT_STRUCT_BEGIN(NoEngine::Component::ParticleEmitterComponent, "Effect")
 REFLECT_FIELD(active),

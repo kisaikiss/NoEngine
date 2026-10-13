@@ -1,6 +1,6 @@
 #include "engine/Utilities/TypeIndex.h"
 #include "engine/Functions/ECS/Component/Common/CameraComponent.h"
-#include "engine/Editor/EditTag.h"
+#include "engine/Editor/Commands/EditTag.h"
 
 namespace NoEngine{
 namespace ECS{

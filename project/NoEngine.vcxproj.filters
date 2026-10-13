@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <FxCompile Include="resources\engine\Shaders\Black.PS.hlsl" />
@@ -131,14 +131,14 @@
     <ClCompile Include="externals\imgui\imgui_impl_win32.cpp" />
     <ClCompile Include="externals\imgui\imgui_tables.cpp" />
     <ClCompile Include="externals\imgui\imgui_widgets.cpp" />
-    <ClCompile Include="engine\Editor\ImGuiManager.cpp" />
+    <ClCompile Include="engine\Editor\Panels\ImGuiManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="engine\Assets\Texture\Texture.cpp" />
     <ClCompile Include="application\TestApp\TestApp.cpp" />
     <ClCompile Include="engine\Runtime\PipelineStateObject\ComputePSO.cpp" />
     <ClCompile Include="engine\Runtime\Command\ComputeContext.cpp" />
-    <ClCompile Include="engine\Editor\EditUtils.cpp" />
+    <ClCompile Include="engine\Editor\Utilities\EditUtils.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Editor\EditSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Common\TransformComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Common\Transform2DComponent.cpp" />
@@ -205,8 +205,8 @@
     <ClCompile Include="engine\Functions\ECS\Component\Effect\EffectEmitterComponent.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\GaussianFilterPass.cpp" />
     <ClCompile Include="engine\Functions\Command\CommandManager.cpp" />
-    <ClCompile Include="engine\Editor\EditorCommandOperator.cpp" />
-    <ClCompile Include="engine\Editor\EditTag.cpp" />
+    <ClCompile Include="engine\Editor\Commands\EditorCommandOperator.cpp" />
+    <ClCompile Include="engine\Editor\Commands\EditTag.cpp" />
     <ClCompile Include="externals\imgui\ImGuizmo.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Editor\DrawManipulatorSystem.cpp" />
     <ClCompile Include="engine\Math\Collision\BVH.cpp" />
@@ -251,7 +251,7 @@
     <ClCompile Include="application\ClockworksDisease\System\Object\MagicScaffoldSystem.cpp" />
     <ClCompile Include="application\TestApp\Component\TestComponent.cpp" />
     <ClCompile Include="engine\Assets\AssetBrowserWindow.cpp" />
-    <ClCompile Include="engine\Editor\ComponentUI.cpp" />
+    <ClCompile Include="engine\Editor\Components\ComponentUI.cpp" />
     <ClCompile Include="application\ClockworksDisease\Component\Stage\StageComponent.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Game\TerrainLoadSystem.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\BloomThresholdPass.cpp" />
@@ -259,11 +259,11 @@
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\BloomCompositePass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\DepthOfFieldPass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\Rasterization\TransparentMeshPass.cpp" />
-    <ClCompile Include="engine\Editor\EntityClipboard.cpp" />
-    <ClCompile Include="engine\Editor\EntityHierarchyUtils.cpp" />
-    <ClCompile Include="engine\Editor\HierarchyPanel.cpp" />
-    <ClCompile Include="engine\Editor\InspectorPanel.cpp" />
-    <ClCompile Include="engine\Editor\PrefabEditorPanel.cpp" />
+    <ClCompile Include="engine\Editor\Utilities\EntityClipboard.cpp" />
+    <ClCompile Include="engine\Editor\Utilities\EntityHierarchyUtils.cpp" />
+    <ClCompile Include="engine\Editor\Panels\HierarchyPanel.cpp" />
+    <ClCompile Include="engine\Editor\Panels\InspectorPanel.cpp" />
+    <ClCompile Include="engine\Editor\Panels\PrefabEditorPanel.cpp" />
     <ClCompile Include="engine\Functions\Command\EditCommand\DeleteEntitiesCommand.cpp" />
     <ClCompile Include="engine\Functions\Command\EditCommand\InstantiateEntitiesCommand.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Common\TransformRoutineComponent.cpp" />
@@ -311,8 +311,8 @@
     <ClCompile Include="engine\Functions\ECS\System\SystemCatalog.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\SystemSceneConfig.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\PlayModeController.cpp" />
-    <ClCompile Include="engine\Editor\GameControllerPanel.cpp" />
-    <ClCompile Include="engine\Editor\SystemListPanel.cpp" />
+    <ClCompile Include="engine\Editor\Panels\GameControllerPanel.cpp" />
+    <ClCompile Include="engine\Editor\Panels\SystemListPanel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -433,7 +433,7 @@
     <ClInclude Include="externals\imgui\imstb_rectpack.h" />
     <ClInclude Include="externals\imgui\imstb_textedit.h" />
     <ClInclude Include="externals\imgui\imstb_truetype.h" />
-    <ClInclude Include="engine\Editor\ImGuiManager.h" />
+    <ClInclude Include="engine\Editor\Panels\ImGuiManager.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="engine\Assets\Texture\Texture.h" />
@@ -443,12 +443,12 @@
     <ClInclude Include="application\TestApp\TestApp.h" />
     <ClInclude Include="engine\Runtime\PipelineStateObject\ComputePSO.h" />
     <ClInclude Include="engine\Runtime\Command\ComputeContext.h" />
-    <ClInclude Include="engine\Editor\Reflection.h" />
-    <ClInclude Include="engine\Editor\ReflectionTypeTraits.h" />
-    <ClInclude Include="engine\Editor\ReflectionMacros.h" />
-    <ClInclude Include="engine\Editor\EditUtils.h" />
+    <ClInclude Include="engine\Editor\Reflection\Reflection.h" />
+    <ClInclude Include="engine\Editor\Reflection\ReflectionTypeTraits.h" />
+    <ClInclude Include="engine\Editor\Reflection\ReflectionMacros.h" />
+    <ClInclude Include="engine\Editor\Utilities\EditUtils.h" />
     <ClInclude Include="engine\Functions\ECS\System\Editor\EditSystem.h" />
-    <ClInclude Include="engine\Editor\ComponentRegistry.h" />
+    <ClInclude Include="engine\Editor\Reflection\ComponentRegistry.h" />
     <ClInclude Include="engine\Editor\DataDriven\SceneSerializer.h" />
     <ClInclude Include="engine\Functions\Scene\SceneNameComponent.h" />
     <ClInclude Include="engine\Functions\ECS\Component\Common\CameraComponent.h" />
@@ -514,8 +514,8 @@
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\GaussianFilterPass.h" />
     <ClInclude Include="engine\Functions\Command\CommandManager.h" />
     <ClInclude Include="engine\Functions\Command\EditCommand\ChangeValueCommand.h" />
-    <ClInclude Include="engine\Editor\EditorCommandOperator.h" />
-    <ClInclude Include="engine\Editor\EditTag.h" />
+    <ClInclude Include="engine\Editor\Commands\EditorCommandOperator.h" />
+    <ClInclude Include="engine\Editor\Commands\EditTag.h" />
     <ClInclude Include="externals\imgui\ImGuizmo.h" />
     <ClInclude Include="engine\Functions\ECS\System\Editor\DrawManipulatorSystem.h" />
     <ClInclude Include="engine\Math\Collision\BVH.h" />
@@ -564,7 +564,7 @@
     <ClInclude Include="application\TestApp\Component\TestComponent.h" />
     <ClInclude Include="engine\Assets\AssetBrowserTypes.h" />
     <ClInclude Include="engine\Assets\AssetBrowserWindow.h" />
-    <ClInclude Include="engine\Editor\ComponentUI.h" />
+    <ClInclude Include="engine\Editor\Components\ComponentUI.h" />
     <ClInclude Include="application\ClockworksDisease\Component\Stage\StageComponent.h" />
     <ClInclude Include="application\ClockworksDisease\System\Game\TerrainLoadSystem.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\BloomThresholdPass.h" />
@@ -572,11 +572,11 @@
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\BloomCompositePass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\DepthOfFieldPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\Rasterization\TransparentMeshPass.h" />
-    <ClInclude Include="engine\Editor\EntityClipboard.h" />
-    <ClInclude Include="engine\Editor\EntityHierarchyUtils.h" />
-    <ClInclude Include="engine\Editor\HierarchyPanel.h" />
-    <ClInclude Include="engine\Editor\InspectorPanel.h" />
-    <ClInclude Include="engine\Editor\PrefabEditorPanel.h" />
+    <ClInclude Include="engine\Editor\Utilities\EntityClipboard.h" />
+    <ClInclude Include="engine\Editor\Utilities\EntityHierarchyUtils.h" />
+    <ClInclude Include="engine\Editor\Panels\HierarchyPanel.h" />
+    <ClInclude Include="engine\Editor\Panels\InspectorPanel.h" />
+    <ClInclude Include="engine\Editor\Panels\PrefabEditorPanel.h" />
     <ClInclude Include="engine\Functions\Command\EditCommand\DeleteEntitiesCommand.h" />
     <ClInclude Include="engine\Functions\Command\EditCommand\InstantiateEntitiesCommand.h" />
     <ClInclude Include="engine\Math\EasingType.h" />
@@ -631,8 +631,8 @@
     <ClInclude Include="engine\Functions\ECS\System\SystemCatalog.h" />
     <ClInclude Include="engine\Functions\ECS\System\SystemSceneConfig.h" />
     <ClInclude Include="engine\Functions\ECS\System\PlayModeController.h" />
-    <ClInclude Include="engine\Editor\GameControllerPanel.h" />
-    <ClInclude Include="engine\Editor\SystemListPanel.h" />
+    <ClInclude Include="engine\Editor\Panels\GameControllerPanel.h" />
+    <ClInclude Include="engine\Editor\Panels\SystemListPanel.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

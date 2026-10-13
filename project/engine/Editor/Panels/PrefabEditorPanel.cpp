@@ -1,8 +1,8 @@
 #include "PrefabEditorPanel.h"
-#include "engine/Editor/ComponentUI.h"
+#include "engine/Editor/Components/ComponentUI.h"
 #include "engine/Editor/DataDriven/PrefabSerializer.h"
 #include "engine/Editor/DataDriven/SceneSerializer.h"
-#include "engine/Editor/InspectorPanel.h"
+#include "engine/Editor/Panels/InspectorPanel.h"
 
 #ifdef USE_IMGUI
 #include "externals/imgui/imgui.h"

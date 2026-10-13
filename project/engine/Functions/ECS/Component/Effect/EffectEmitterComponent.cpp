@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "EffectEmitterComponent.h"
-#include "engine/Editor/ReflectionMacros.h"
+#include "engine/Editor/Reflection/ReflectionMacros.h"
 
 REFLECT_STRUCT_BEGIN(NoEngine::Component::EffectEmitTag, "Effect")
 REFLECT_STRUCT_END(NoEngine::Component::EffectEmitTag)

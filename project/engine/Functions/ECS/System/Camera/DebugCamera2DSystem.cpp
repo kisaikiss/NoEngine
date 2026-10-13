@@ -3,7 +3,7 @@
 #include "../../Component/Common/CameraComponent.h"
 #include "../../Component/Common/Transform2DComponent.h"
 #include "engine/Functions/Input/Input.h"
-#include "../../../../Editor/EditUtils.h"
+#include "../../../../Editor/Utilities/EditUtils.h"
 
 namespace NoEngine {
 namespace ECS {

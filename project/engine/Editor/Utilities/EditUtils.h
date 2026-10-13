@@ -3,7 +3,7 @@
 #include "engine/Runtime/GpuResource/PixelBuffer/ColorBuffer.h"
 #include "engine/Runtime/GpuResource/ReadbackBuffer.h"
 #include "engine/Runtime/Command/CommandContext.h"
-#include "EditTag.h"
+#include "../Commands/EditTag.h"
 
 namespace NoEngine {
 namespace Editor {

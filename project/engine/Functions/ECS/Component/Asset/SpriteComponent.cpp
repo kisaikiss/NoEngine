@@ -1,5 +1,5 @@
 #include "SpriteComponent.h"
-#include "engine/Editor/ReflectionMacros.h"
+#include "engine/Editor/Reflection/ReflectionMacros.h"
 
 REFLECT_STRUCT_BEGIN(NoEngine::Component::SpriteComponent, "Asset")
 REFLECT_ENUM_FIELD(space),

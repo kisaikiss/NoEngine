@@ -1,7 +1,7 @@
 #include "IScene.h"
 #include "engine/Functions/ECS/Component/Common/TransformComponent.h"
 
-#include "engine/Editor/EditorCommandOperator.h"
+#include "engine/Editor/Commands/EditorCommandOperator.h"
 namespace NoEngine {
 namespace Scene {
 IScene::IScene() :

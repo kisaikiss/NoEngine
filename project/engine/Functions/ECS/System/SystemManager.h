@@ -1,8 +1,8 @@
 #pragma once
 #include "ISystem.h"
 #include "SystemCatalog.h"
-#include "engine/Editor/SystemListPanel.h"
-#include "engine/Editor/GameControllerPanel.h"
+#include "engine/Editor/Panels/SystemListPanel.h"
+#include "engine/Editor/Panels/GameControllerPanel.h"
 
 #include <typeindex>
 

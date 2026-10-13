@@ -2,7 +2,7 @@
 #include "InstantiateEntitiesCommand.h"
 
 #include "engine/Editor/DataDriven/SceneSerializer.h"
-#include "engine/Editor/ReflectionMacros.h"
+#include "engine/Editor/Reflection/ReflectionMacros.h"
 
 #include <unordered_map>
 

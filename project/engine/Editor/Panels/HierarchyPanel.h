@@ -1,8 +1,5 @@
 #pragma once
 #include "engine/Functions/ECS/Registry.h"
-#include <unordered_map>
-#include <vector>
-#include <set>
 
 namespace NoEngine {
 namespace Editor {

@@ -1,6 +1,6 @@
 #include "EntityClipboard.h"
 #include "EntityHierarchyUtils.h"
-#include "engine/Editor/ReflectionMacros.h"
+#include "engine/Editor/Reflection/ReflectionMacros.h"
 #include "engine/Editor/DataDriven/SceneSerializer.h"
 
 namespace NoEngine {

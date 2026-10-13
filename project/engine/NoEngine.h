@@ -16,7 +16,7 @@
 #include "Functions/ECS/Component/Common/VelocityComponent.h"
 #include "Functions/ECS/Component/Effect/EffectEmitterComponent.h"
 #include "Functions/ECS/Event/SceneChangeEvent.h"
-#include "Editor/EditUtils.h"
+#include "Editor/Utilities/EditUtils.h"
 #include "Editor/DataDriven/PrefabSerializer.h"
 
 #include "Functions/ECS/System/Loader/SpriteLoadSystem.h"
@@ -58,7 +58,7 @@
 #include "Math/MathInclude.h"
 
 #include "Utilities/Random.h"
-#include "Editor/ReflectionMacros.h"
+#include "Editor/Reflection/ReflectionMacros.h"
 
 #ifdef USE_IMGUI
 #include <externals/imgui/imgui.h>

@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "DrawWaypointRouteSystem.h"
-#include "engine/Editor/EditTag.h"
+#include "engine/Editor/Commands/EditTag.h"
 #include "engine/Functions/ECS/Component/Common/TransformComponent.h"
 #include "engine/Functions/ECS/Component/Common/TransformRoutineComponent.h"
 #include "engine/Math/MathInclude.h"

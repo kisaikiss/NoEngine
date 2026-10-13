@@ -1,7 +1,7 @@
 #pragma once
 #include "externals/nlohmann/json.hpp"
 #include "engine/Functions/ECS/Registry.h"
-#include "../ComponentRegistry.h"
+#include "../Reflection/ComponentRegistry.h"
 
 namespace NoEngine {
 namespace Editor {

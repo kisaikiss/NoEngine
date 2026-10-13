@@ -2,7 +2,7 @@
 #include "RemoveComponentCommand.h"
 
 #include "engine/Editor/DataDriven/SceneSerializer.h"
-#include "engine/Editor/ComponentRegistry.h"
+#include "engine/Editor/Reflection/ComponentRegistry.h"
 
 namespace NoEngine {
 namespace Command {

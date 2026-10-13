@@ -1,7 +1,6 @@
 #pragma once
 #include "engine/Functions/ECS/Registry.h"
 #include "externals/nlohmann/json.hpp"
-#include <vector>
 
 namespace NoEngine {
 namespace Editor {

@@ -3,7 +3,7 @@
 
 #include "engine/Functions/Input/Input.h"
 #include "engine/Functions/Renderer/Primitive.h"
-#include "engine/Editor/EditUtils.h"
+#include "engine/Editor/Utilities/EditUtils.h"
 
 namespace NoEngine {
 namespace ECS {

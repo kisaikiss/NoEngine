@@ -4,7 +4,7 @@
 #include "../Event/SceneChangeEvent.h"
 #include "../../Scene/SceneNameComponent.h"
 #include "engine/Editor/DataDriven/SceneSerializer.h"
-#include "engine/Editor/EditTag.h"
+#include "engine/Editor/Commands/EditTag.h"
 
 namespace NoEngine {
 namespace ECS {

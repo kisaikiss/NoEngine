@@ -1,10 +1,8 @@
 #include "HierarchyPanel.h"
-#include "EntityHierarchyUtils.h"
-#include "engine/Editor/ReflectionMacros.h"
-#include "engine/Editor/EditorCommandOperator.h"
+#include "../Utilities/EntityHierarchyUtils.h"
+#include "engine/Editor/Commands/EditorCommandOperator.h"
 #include "engine/Functions/Command/EditCommand/InstantiateEntityCommand.h"
 
-#include <algorithm>
 
 #ifdef USE_IMGUI
 #include "externals/imgui/imgui.h"

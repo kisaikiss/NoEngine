@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "MeshColliderLoader.h"
 #include "engine/Utilities/FileUtilities.h"
-#include "engine/Editor/ReflectionMacros.h"
+#include "engine/Editor/Reflection/ReflectionMacros.h"
 
 REFLECT_STRUCT_BEGIN(NoEngine::Math::TerrainMesh, "Collision")
 REFLECT_STRUCT_END(NoEngine::Math::TerrainMesh)

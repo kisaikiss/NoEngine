@@ -1,6 +1,6 @@
 #include "EntityHierarchyUtils.h"
-#include "engine/Editor/ReflectionMacros.h"
-#include "engine/Editor/EditorCommandOperator.h"
+#include "engine/Editor/Reflection/ReflectionMacros.h"
+#include "engine/Editor/Commands/EditorCommandOperator.h"
 #include "engine/Functions/Command/EditCommand/DeleteEntitiesCommand.h"
 #include "engine/Functions/ECS/Component/Common/TransformComponent.h"
 #include "engine/Functions/ECS/Component/Common/Transform2DComponent.h"

@@ -9,8 +9,8 @@
 #include "engine/Functions/Renderer/Primitive.h"
 #include "engine/Functions/Renderer/RaytracingManager.h"
 #include "engine/Functions/Command/EditCommand/InstantiateEntityCommand.h"
-#include "DataDriven/PrefabSerializer.h"
-#include "EditorCommandOperator.h"
+#include "../DataDriven/PrefabSerializer.h"
+#include "../Commands/EditorCommandOperator.h"
 #include "engine/Functions/Input/input.h"
 #ifdef USE_IMGUI
 #include "externals/imgui/imgui.h"

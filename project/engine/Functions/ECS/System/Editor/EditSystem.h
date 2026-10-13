@@ -1,9 +1,9 @@
 #pragma once
 #include "../ISystem.h"
-#include "engine/Editor/HierarchyPanel.h"
-#include "engine/Editor/InspectorPanel.h"
-#include "engine/Editor/PrefabEditorPanel.h"
-#include "engine/Editor/EntityClipboard.h"
+#include "engine/Editor/Panels/HierarchyPanel.h"
+#include "engine/Editor/Panels/InspectorPanel.h"
+#include "engine/Editor/Panels/PrefabEditorPanel.h"
+#include "engine/Editor/Utilities/EntityClipboard.h"
 #include "externals/nlohmann/json.hpp"
 
 namespace NoEngine {

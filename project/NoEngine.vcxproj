@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|x64">
@@ -252,18 +252,18 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="engine\Assets\AssetManager.cpp" />
     <ClCompile Include="engine\Assets\Font\FontManager.cpp" />
     <ClCompile Include="engine\Assets\Model\ModelSaver.cpp" />
-    <ClCompile Include="engine\Editor\ComponentUI.cpp" />
-    <ClCompile Include="engine\Editor\GameControllerPanel.cpp" />
-    <ClCompile Include="engine\Editor\SystemListPanel.cpp" />
+    <ClCompile Include="engine\Editor\Components\ComponentUI.cpp" />
+    <ClCompile Include="engine\Editor\Panels\GameControllerPanel.cpp" />
+    <ClCompile Include="engine\Editor\Panels\SystemListPanel.cpp" />
     <ClCompile Include="engine\Functions\Command\EditCommand\DeleteEntitiesCommand.cpp" />
     <ClCompile Include="engine\Editor\DataDriven\PrefabSerializer.cpp" />
-    <ClCompile Include="engine\Editor\EditorCommandOperator.cpp" />
-    <ClCompile Include="engine\Editor\EditTag.cpp" />
-    <ClCompile Include="engine\Editor\EntityClipboard.cpp" />
-    <ClCompile Include="engine\Editor\EntityHierarchyUtils.cpp" />
-    <ClCompile Include="engine\Editor\HierarchyPanel.cpp" />
-    <ClCompile Include="engine\Editor\InspectorPanel.cpp" />
-    <ClCompile Include="engine\Editor\PrefabEditorPanel.cpp" />
+    <ClCompile Include="engine\Editor\Commands\EditorCommandOperator.cpp" />
+    <ClCompile Include="engine\Editor\Commands\EditTag.cpp" />
+    <ClCompile Include="engine\Editor\Utilities\EntityClipboard.cpp" />
+    <ClCompile Include="engine\Editor\Utilities\EntityHierarchyUtils.cpp" />
+    <ClCompile Include="engine\Editor\Panels\HierarchyPanel.cpp" />
+    <ClCompile Include="engine\Editor\Panels\InspectorPanel.cpp" />
+    <ClCompile Include="engine\Editor\Panels\PrefabEditorPanel.cpp" />
     <ClCompile Include="engine\Functions\Command\CommandManager.cpp" />
     <ClCompile Include="engine\Functions\Command\EditCommand\AddComponentCommand.cpp" />
     <ClCompile Include="engine\Functions\Command\EditCommand\DeleteEntityCommand.cpp" />
@@ -289,7 +289,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="engine\Functions\ECS\System\Camera\CameraSystem.cpp" />
     <ClCompile Include="engine\Assets\Audio\Audio.cpp" />
     <ClCompile Include="engine\Editor\DataDriven\SceneSerializer.cpp" />
-    <ClCompile Include="engine\Editor\EditUtils.cpp" />
+    <ClCompile Include="engine\Editor\Utilities\EditUtils.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Asset\LightComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Asset\SpriteComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Common\Transform2DComponent.cpp" />
@@ -485,7 +485,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">false</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="engine\Editor\ImGuiManager.cpp">
+    <ClCompile Include="engine\Editor\Panels\ImGuiManager.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">false</ExcludedFromBuild>
     </ClCompile>
@@ -568,18 +568,18 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="engine\Assets\Model\ModelAsset.h" />
     <ClInclude Include="engine\Assets\Model\ModelSaver.h" />
     <ClInclude Include="engine\Assets\Model\RaytracingMesh.h" />
-    <ClInclude Include="engine\Editor\GameControllerPanel.h" />
-    <ClInclude Include="engine\Editor\SystemListPanel.h" />
+    <ClInclude Include="engine\Editor\Panels\GameControllerPanel.h" />
+    <ClInclude Include="engine\Editor\Panels\SystemListPanel.h" />
     <ClInclude Include="engine\Functions\Command\EditCommand\DeleteEntitiesCommand.h" />
     <ClInclude Include="engine\Editor\DataDriven\PrefabSerializer.h" />
-    <ClInclude Include="engine\Editor\EditorCommandOperator.h" />
-    <ClInclude Include="engine\Editor\EditTag.h" />
-    <ClInclude Include="engine\Editor\ComponentUI.h" />
-    <ClInclude Include="engine\Editor\EntityClipboard.h" />
-    <ClInclude Include="engine\Editor\EntityHierarchyUtils.h" />
-    <ClInclude Include="engine\Editor\HierarchyPanel.h" />
-    <ClInclude Include="engine\Editor\InspectorPanel.h" />
-    <ClInclude Include="engine\Editor\PrefabEditorPanel.h" />
+    <ClInclude Include="engine\Editor\Commands\EditorCommandOperator.h" />
+    <ClInclude Include="engine\Editor\Commands\EditTag.h" />
+    <ClInclude Include="engine\Editor\Components\ComponentUI.h" />
+    <ClInclude Include="engine\Editor\Utilities\EntityClipboard.h" />
+    <ClInclude Include="engine\Editor\Utilities\EntityHierarchyUtils.h" />
+    <ClInclude Include="engine\Editor\Panels\HierarchyPanel.h" />
+    <ClInclude Include="engine\Editor\Panels\InspectorPanel.h" />
+    <ClInclude Include="engine\Editor\Panels\PrefabEditorPanel.h" />
     <ClInclude Include="engine\Functions\Command\CommandManager.h" />
     <ClInclude Include="engine\Functions\Command\EditCommand\AddComponentCommand.h" />
     <ClInclude Include="engine\Functions\Command\EditCommand\ChangeValueCommand.h" />
@@ -604,12 +604,12 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="engine\Functions\ECS\Event\CollisionEvents.h" />
     <ClInclude Include="engine\Functions\ECS\System\Camera\CameraSystem.h" />
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
-    <ClInclude Include="engine\Editor\ComponentRegistry.h" />
+    <ClInclude Include="engine\Editor\Reflection\ComponentRegistry.h" />
     <ClInclude Include="engine\Editor\DataDriven\SceneSerializer.h" />
-    <ClInclude Include="engine\Editor\EditUtils.h" />
-    <ClInclude Include="engine\Editor\Reflection.h" />
-    <ClInclude Include="engine\Editor\ReflectionMacros.h" />
-    <ClInclude Include="engine\Editor\ReflectionTypeTraits.h" />
+    <ClInclude Include="engine\Editor\Utilities\EditUtils.h" />
+    <ClInclude Include="engine\Editor\Reflection\Reflection.h" />
+    <ClInclude Include="engine\Editor\Reflection\ReflectionMacros.h" />
+    <ClInclude Include="engine\Editor\Reflection\ReflectionTypeTraits.h" />
     <ClInclude Include="engine\Functions\ECS\Component\Common\CameraComponent.h" />
     <ClInclude Include="engine\Functions\ECS\Component\Asset\LightComponent.h" />
     <ClInclude Include="engine\Functions\ECS\EventBus.h" />
@@ -841,7 +841,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">false</ExcludedFromBuild>
     </ClInclude>
-    <ClInclude Include="engine\Editor\ImGuiManager.h">
+    <ClInclude Include="engine\Editor\Panels\ImGuiManager.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">false</ExcludedFromBuild>
     </ClInclude>

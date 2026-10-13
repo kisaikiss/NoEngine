@@ -8,13 +8,13 @@
 #include "engine/Functions/Renderer/RenderPass/RenderPassScheduler.h"
 #include "engine/Functions/Renderer/RaytracingManager.h"
 #include "engine/Functions/Input/input.h"
-#include "engine/Editor/EditorCommandOperator.h"
+#include "engine/Editor/Commands/EditorCommandOperator.h"
 #include "engine/Assets/Audio/Audio.h"
 #include "engine/Assets/AssetBrowserWindow.h"
 #include "engine/Assets/AssetManager.h"
 
 #ifdef USE_IMGUI
-#include "engine/Editor/ImGuiManager.h"
+#include "engine/Editor/Panels/ImGuiManager.h"
 #include "externals/imgui/imgui.h"
 namespace {
 NoEngine::ImGuiManager sImGuiManager;

@@ -1,7 +1,6 @@
 #include "MainStageProgress.h"
 
 #include "engine/Editor/DataDriven/SceneSerializer.h"
-#include "engine/Editor/EditTag.h"
 #include "application/ClockworksDisease/Component/Camera/FollowCameraComponent.h"
 #include "application/ClockworksDisease/Component/Camera/CameraIntroComponent.h"
 #include "application/ClockworksDisease/Component/Player/PlayerComponent.h"

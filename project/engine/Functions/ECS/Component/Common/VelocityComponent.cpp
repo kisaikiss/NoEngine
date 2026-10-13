@@ -1,5 +1,5 @@
 #include "VelocityComponent.h"
-#include "engine/Editor/ReflectionMacros.h"
+#include "engine/Editor/Reflection/ReflectionMacros.h"
 
 REFLECT_STRUCT_BEGIN(NoEngine::Component::VelocityComponent, "Transform")
 REFLECT_FIELD(linear)

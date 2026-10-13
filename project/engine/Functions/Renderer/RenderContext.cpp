@@ -1,7 +1,7 @@
 #include "RenderContext.h"
 #include "engine/Functions/ECS/Component/Asset/LightComponent.h"
 #include "engine/Runtime/GraphicsCore.h"
-#include "engine/Editor/EditUtils.h"
+#include "engine/Editor/Utilities/EditUtils.h"
 
 #include "Initializer/RenderInitializer.h"
 #include "LightForGPU.h"

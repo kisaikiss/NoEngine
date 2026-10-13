@@ -1,5 +1,5 @@
 #include "ComponentUI.h"
-#include "engine/Editor/ComponentRegistry.h"
+#include "engine/Editor/Reflection/ComponentRegistry.h"
 #include "engine/Functions/Command/EditCommand/ChangeValueCommand.h"
 #include "engine/Functions/Command/EditCommand/FunctionCommand.h"
 #include "engine/Functions/Command/EditCommand/RemoveComponentCommand.h"
@@ -7,8 +7,8 @@
 #include "engine/Functions/ECS/Component/Common/Transform2DComponent.h"
 #include "engine/Functions/ECS/System/Editor/DrawManipulatorSystem.h"
 #include "engine/Utilities/Conversion/ConvertString.h"
-#include "DataDriven/SceneSerializer.h"
-#include "EditorCommandOperator.h"
+#include "../DataDriven/SceneSerializer.h"
+#include "../Commands/EditorCommandOperator.h"
 #include "engine/Math/MathInclude.h"
 
 

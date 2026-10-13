@@ -1,6 +1,5 @@
 #pragma once
 #include "engine/Functions/ECS/Registry.h"
-#include <string>
 
 namespace NoEngine {
 namespace Editor {

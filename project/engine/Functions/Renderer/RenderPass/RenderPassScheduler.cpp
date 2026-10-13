@@ -25,7 +25,7 @@
 #include "../Primitive.h"
 
 #include "engine/Runtime/GraphicsCore.h"
-#include "engine/Editor/EditUtils.h"
+#include "engine/Editor/Utilities/EditUtils.h"
 #include "engine/Functions/ECS/System/Editor/DrawManipulatorSystem.h"
 
 #ifdef USE_IMGUI
