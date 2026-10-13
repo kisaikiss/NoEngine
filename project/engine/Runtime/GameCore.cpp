@@ -12,6 +12,7 @@
 #include "engine/Assets/Audio/Audio.h"
 #include "engine/Assets/AssetBrowserWindow.h"
 #include "engine/Assets/AssetManager.h"
+#include "engine/Assets/Font/FontManager.h"
 
 #ifdef USE_IMGUI
 #include "engine/Editor/Panels/ImGuiManager.h"
@@ -144,6 +145,7 @@ void EngineFinalize() {
 	ParticleManager::Shutdown();
 	AudioShutdown();
 	InputShutdown();
+	FontManager::Shutdown();
 	GraphicsCore::Shutdown();
 	CoUninitialize();
 }

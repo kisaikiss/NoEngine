@@ -402,6 +402,7 @@
         "EditSystem",
         "ModelLoadSystem",
         "SpriteLoadSystem",
+        "FontLoadSystem",
         "AnimationSystem",
         "EffectEmitSystem",
         "ParticleSystem",

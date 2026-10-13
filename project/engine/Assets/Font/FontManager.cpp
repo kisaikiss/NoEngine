@@ -191,6 +191,7 @@ void FontManager::Initialize(const std::wstring& FontRoot) {
 	sRootPath = FontRoot;
 }
 void FontManager::Shutdown() {
+	std::lock_guard<std::mutex> Guard(sMutex);
 	sFontCache.clear();
 }
 void FontManager::DestroyFont(std::wstring mapKey) {
@@ -248,20 +249,18 @@ FontRef::~FontRef() {
 		ref_->Unload();
 }
 void FontRef::operator= (std::nullptr_t) {
-	if (ref_ != nullptr)
-		--ref_->referenceCount_;
-
-	ref_ = nullptr;
+	if (ref_ != nullptr) {
+		ManagedFont* old = ref_;
+		ref_ = nullptr;
+		if (--old->referenceCount_ == 0)
+			old->Unload();
+	}
 }
+
 void FontRef::operator= (FontRef& rhs) {
-	if (ref_ != nullptr)
-		--ref_->referenceCount_;
-
-	ref_ = rhs.ref_;
-
-	if (ref_ != nullptr)
-		++ref_->referenceCount_;
+	*this = static_cast<const FontRef&>(rhs);
 }
+
 FontRef& FontRef::operator=(const FontRef& rhs) {
 	if (this == &rhs)
 		return *this;
