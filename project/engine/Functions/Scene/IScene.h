@@ -38,6 +38,7 @@ public:
 	void Update(ComputeContext& ctx, float deltaTime);
 
 	ECS::Registry* GetRegistry() { return registry_.get(); }
+	const std::vector<std::string> GetSystemNames() const { return systemManager_->GetSystemNames(); }
 protected:
 	template<typename T>
 	T* AddSystem(std::unique_ptr<T> system) { return systemManager_->AddSystem(std::move(system)); }

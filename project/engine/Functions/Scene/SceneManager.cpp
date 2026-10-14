@@ -200,6 +200,7 @@ void SceneManager::Update(ComputeContext& ctx, float deltaTime) {
 		ImGui::InputText("Name", copyName, sizeof(copyName));
 		if (ImGui::Button("Copy") && IsValidSceneName(copyName) && factories_.find(copyName) == factories_.end() && !std::filesystem::exists(std::string(kSceneDirectory) + copyName + ".json") && currentScene_) {
 			auto data = Editor::SaveScene(*currentScene_->GetRegistry());
+			data["systems"] = currentScene_->GetSystemNames();
 			std::ofstream out(std::string(kSceneDirectory) + copyName + ".json"); out << data.dump(4);
 			if (out) { removedScenes_.erase(copyName); RegisterScene(copyName, [] { return std::make_unique<EditorScene>(); }); editorScenes_.insert(copyName); ChangeScene(copyName); }
 			ImGui::CloseCurrentPopup();
