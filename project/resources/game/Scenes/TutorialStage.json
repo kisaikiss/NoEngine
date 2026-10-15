@@ -61,9 +61,9 @@
                 },
                 "DebugCameraComponent": {
                     "center": [
-                        3.056941509246826,
-                        -1.062586784362793,
-                        14.925347328186035
+                        10.890290260314941,
+                        -2.697617530822754,
+                        -5.360787391662598
                     ],
                     "distance": 24.76100730895996,
                     "drawCenter": false,
@@ -78,10 +78,10 @@
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
-                        0.20626340806484222,
-                        -0.002458298346027732,
-                        0.0005182017921470106,
-                        0.9784932732582092
+                        0.0940915122628212,
+                        0.7974956035614014,
+                        -0.12897047400474548,
+                        0.5818197131156921
                     ],
                     "scale": [
                         1.0,
@@ -89,9 +89,75 @@
                         1.0
                     ],
                     "translate": [
-                        3.1707699298858643,
-                        8.932373046875,
-                        -7.728466987609863
+                        -11.486907005310059,
+                        5.106937408447266,
+                        1.8125981092453003
+                    ]
+                }
+            }
+        },
+        "Down": {
+            "components": {
+                "EditTag": {
+                    "name": "Down",
+                    "parent": "Leimar"
+                },
+                "MaterialComponent": {
+                    "blendMode": "kNormal",
+                    "castShadow": true,
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "environmentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "receiveShadow": true,
+                    "renderMode": "kDefault",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "unlit": false,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "resources/game/ClockworksDisease/Model/npc/LeimarDown.gltf"
+                },
+                "TransformComponent": {
+                    "parent": "Leimar",
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0,
+                        0.0
                     ]
                 }
             }
@@ -126,6 +192,66 @@
                 "EditTag": {
                     "name": "Item",
                     "parent": null
+                }
+            }
+        },
+        "Leimar": {
+            "components": {
+                "DialogueAutoTriggerComponent": {
+                    "once": true,
+                    "radius": 5.0
+                },
+                "DialogueComponent": {
+                    "fontName": "resources/engine/fonts/ISE-FONT4/Isego.otf",
+                    "interactDistance": 0.0,
+                    "interactable": true,
+                    "lines": [
+                        "おーい！まさか死んでないよな？",
+                        "呼吸はしてるな。油断しすぎだぞ",
+                        "Aでジャンプしてみろ。"
+                    ]
+                },
+                "EditTag": {
+                    "name": "Leimar",
+                    "parent": null
+                },
+                "FloatingComponent": {
+                    "amplitude": [
+                        0.30000001192092896,
+                        0.20000000298023224,
+                        0.6000000238418579
+                    ],
+                    "velocity": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "RotationalVelocityComponent": {
+                    "linear": [
+                        0.0,
+                        2.0,
+                        0.0
+                    ]
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        -2.420149087905884,
+                        2.2430579662323,
+                        -0.7344805002212524
+                    ]
                 }
             }
         },
@@ -464,11 +590,85 @@
                 }
             }
         },
+        "Platform": {
+            "components": {
+                "EditTag": {
+                    "name": "Platform",
+                    "parent": null
+                }
+            }
+        },
         "UI": {
             "components": {
                 "EditTag": {
                     "name": "UI",
                     "parent": null
+                }
+            }
+        },
+        "Up": {
+            "components": {
+                "EditTag": {
+                    "name": "Up",
+                    "parent": "Leimar"
+                },
+                "MaterialComponent": {
+                    "blendMode": "kNormal",
+                    "castShadow": true,
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "environmentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "receiveShadow": true,
+                    "renderMode": "kDefault",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "unlit": false,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "resources/game/ClockworksDisease/Model/npc/LeimarUp.gltf"
+                },
+                "TransformComponent": {
+                    "parent": "Leimar",
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
                 }
             }
         },
@@ -526,101 +726,6 @@
                 }
             }
         },
-        "box": {
-            "components": {
-                "AABBCollider": {
-                    "max": [
-                        0.5,
-                        0.5,
-                        0.5
-                    ],
-                    "min": [
-                        -0.5,
-                        -0.5,
-                        -0.5
-                    ]
-                },
-                "ColliderUpdateTag": null,
-                "CollisionLayerComponent": {
-                    "layer": "Terrain"
-                },
-                "DialogueComponent": {
-                    "fontName": "resources/engine/fonts/PixelMplus12-Bold.ttf",
-                    "interactDistance": 5.199999809265137,
-                    "interactable": true,
-                    "lines": [
-                        "おいおい",
-                        "何スカ？"
-                    ]
-                },
-                "EditTag": {
-                    "name": "box",
-                    "parent": null
-                },
-                "MaterialComponent": {
-                    "blendMode": "kNormal",
-                    "castShadow": true,
-                    "color": [
-                        0.7188612222671509,
-                        0.4528058171272278,
-                        0.4528058171272278,
-                        1.0
-                    ],
-                    "drawOutline": false,
-                    "edgeColor": [
-                        1.0,
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "emissiveIntensity": 1.0,
-                    "environmentCoefficient": 0.0,
-                    "noiseScrollSpeed": 0.30000001192092896,
-                    "noiseTextureName": "noise0",
-                    "receiveShadow": true,
-                    "renderMode": "kDefault",
-                    "rimPower": 2.0,
-                    "shininess": 60.0,
-                    "unlit": false,
-                    "uvPosition": [
-                        0.0,
-                        0.0
-                    ],
-                    "uvRotate": 0.0,
-                    "uvScale": [
-                        1.0,
-                        1.0
-                    ]
-                },
-                "MeshComponent": {
-                    "isVisible": true,
-                    "meshName": "resources/engine/Model/block/block.obj"
-                },
-                "PrefabInstanceTag": {
-                    "prefabPath": "resources/game/Prefabs\\box.json"
-                },
-                "TransformComponent": {
-                    "parent": null,
-                    "rotation": [
-                        0.0,
-                        0.0,
-                        0.0,
-                        1.0
-                    ],
-                    "scale": [
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "translate": [
-                        2.4840087890625,
-                        1.635406732559204,
-                        6.69582462310791
-                    ]
-                }
-            },
-            "prefabInstance": "resources/game/Prefabs\\box.json"
-        },
         "box_2": {
             "components": {
                 "AABBCollider": {
@@ -641,7 +746,7 @@
                 },
                 "EditTag": {
                     "name": "box_2",
-                    "parent": null
+                    "parent": "Platform"
                 },
                 "MaterialComponent": {
                     "blendMode": "kNormal",
@@ -727,7 +832,7 @@
                 },
                 "EditTag": {
                     "name": "box_2_2",
-                    "parent": null
+                    "parent": "Platform"
                 },
                 "MaterialComponent": {
                     "blendMode": "kNormal",
@@ -813,7 +918,7 @@
                 },
                 "EditTag": {
                     "name": "box_2_2_2",
-                    "parent": null
+                    "parent": "Platform"
                 },
                 "MaterialComponent": {
                     "blendMode": "kNormal",
@@ -899,7 +1004,7 @@
                 },
                 "EditTag": {
                     "name": "box_2_2_2_2",
-                    "parent": null
+                    "parent": "Platform"
                 },
                 "MaterialComponent": {
                     "blendMode": "kNormal",
@@ -985,7 +1090,7 @@
                 },
                 "EditTag": {
                     "name": "box_3",
-                    "parent": null
+                    "parent": "Platform"
                 },
                 "MaterialComponent": {
                     "blendMode": "kNormal",
@@ -1071,7 +1176,7 @@
                 },
                 "EditTag": {
                     "name": "box_3_2",
-                    "parent": null
+                    "parent": "Platform"
                 },
                 "MaterialComponent": {
                     "blendMode": "kNormal",
@@ -1157,7 +1262,7 @@
                 },
                 "EditTag": {
                     "name": "box_3_2_2",
-                    "parent": null
+                    "parent": "Platform"
                 },
                 "MaterialComponent": {
                     "blendMode": "kNormal",
@@ -1244,95 +1349,6 @@
                     "parent": null
                 }
             }
-        },
-        "girl": {
-            "components": {
-                "AnimatorComponent": {
-                    "animationSpeedMagnification": 1.0,
-                    "blendDuration": 0.20000000298023224,
-                    "currentAnimation": 0,
-                    "drawSkeleton": false,
-                    "enableSkinning": false
-                },
-                "DialogueAutoTriggerComponent": {
-                    "once": true,
-                    "radius": 8.199999809265137
-                },
-                "DialogueComponent": {
-                    "fontName": "resources/engine/fonts/ISE-FONT4/Isego.otf",
-                    "interactDistance": 0.0,
-                    "interactable": true,
-                    "lines": [
-                        "テスト"
-                    ]
-                },
-                "EditTag": {
-                    "name": "girl",
-                    "parent": null
-                },
-                "MaterialComponent": {
-                    "blendMode": "kNormal",
-                    "castShadow": true,
-                    "color": [
-                        1.0,
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "drawOutline": true,
-                    "edgeColor": [
-                        0.1708185076713562,
-                        0.0,
-                        0.0,
-                        1.0
-                    ],
-                    "emissiveIntensity": 1.0,
-                    "environmentCoefficient": 0.0,
-                    "noiseScrollSpeed": 0.30000001192092896,
-                    "noiseTextureName": "noise0",
-                    "receiveShadow": true,
-                    "renderMode": "kDefault",
-                    "rimPower": 2.0,
-                    "shininess": 60.0,
-                    "unlit": false,
-                    "uvPosition": [
-                        0.0,
-                        0.0
-                    ],
-                    "uvRotate": 0.0,
-                    "uvScale": [
-                        1.0,
-                        1.0
-                    ]
-                },
-                "MeshComponent": {
-                    "isVisible": true,
-                    "meshName": "resources/engine/Model/test/TD_girl/test7.gltf"
-                },
-                "PrefabInstanceTag": {
-                    "prefabPath": "resources/game/Prefabs\\girl.json"
-                },
-                "TransformComponent": {
-                    "parent": null,
-                    "rotation": [
-                        0.0,
-                        1.0,
-                        0.0,
-                        -4.371138828673793e-08
-                    ],
-                    "scale": [
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "translate": [
-                        4.579353332519531,
-                        0.0,
-                        13.588993072509766
-                    ]
-                }
-            },
-            "prefabInstance": "resources/game/Prefabs\\girl.json"
         },
         "player": {
             "components": {
@@ -1861,6 +1877,7 @@
         "TransformRoutineSystem",
         "TransformRoutineSystem2D",
         "MovementSystem",
+        "FloatingSystem",
         "RotationalSystem",
         "PlayerDeathSystem",
         "ComputePlatformDeltaSystem",

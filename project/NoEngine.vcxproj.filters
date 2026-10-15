@@ -320,6 +320,9 @@
     <ClCompile Include="engine\Functions\ECS\Component\Common\RotationalVelocityComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Movement\RotationalSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Movement\Rotational2DSystem.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\Movement\FloatingSystem.cpp" />
+    <ClCompile Include="engine\Functions\ECS\Component\Common\FloatingComponent.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\Movement\Floating2DSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -647,6 +650,9 @@
     <ClInclude Include="engine\Functions\ECS\Component\Common\RotationalVelocityComponent.h" />
     <ClInclude Include="engine\Functions\ECS\System\Movement\RotationalSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\Movement\Rotational2DSystem.h" />
+    <ClInclude Include="engine\Functions\ECS\Component\Common\FloatingComponent.h" />
+    <ClInclude Include="engine\Functions\ECS\System\Movement\FloatingSystem.h" />
+    <ClInclude Include="engine\Functions\ECS\System\Movement\Floating2DSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />

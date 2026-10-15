@@ -277,6 +277,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="engine\Functions\ECS\Component\Asset\AnimatorComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Asset\DissolveComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Asset\TextComponent.cpp" />
+    <ClCompile Include="engine\Functions\ECS\Component\Common\FloatingComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Common\RotationalVelocityComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Common\TransformRoutineComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Common\TransformRoutineComponent2D.cpp" />
@@ -315,6 +316,8 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="engine\Functions\ECS\System\Effect\ParticleSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Movement\CapturePlatformPrevTransformSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Movement\ComputePlatformDeltaSystem.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\Movement\Floating2DSystem.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\Movement\FloatingSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Movement\GroundResetSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Loader\ModelLoadSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Loader\SpriteLoadSystem.cpp" />
@@ -600,6 +603,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="engine\Functions\Command\EditCommand\RemoveComponentCommand.h" />
     <ClInclude Include="engine\Functions\ECS\Component\Asset\DissolveComponent.h" />
     <ClInclude Include="engine\Functions\ECS\Component\Asset\TextComponent.h" />
+    <ClInclude Include="engine\Functions\ECS\Component\Common\FloatingComponent.h" />
     <ClInclude Include="engine\Functions\ECS\Component\Common\RotationalVelocityComponent.h" />
     <ClInclude Include="engine\Functions\ECS\Component\Common\TransformRoutineComponent.h" />
     <ClInclude Include="engine\Functions\ECS\Component\Common\TransformRoutineComponent2D.h" />
@@ -643,6 +647,8 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="engine\Functions\ECS\System\Loader\FontLoadSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\Movement\CapturePlatformPrevTransformSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\Movement\ComputePlatformDeltaSystem.h" />
+    <ClInclude Include="engine\Functions\ECS\System\Movement\Floating2DSystem.h" />
+    <ClInclude Include="engine\Functions\ECS\System\Movement\FloatingSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\Movement\GroundResetSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\Loader\ModelLoadSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\Loader\SpriteLoadSystem.h" />
