@@ -316,6 +316,7 @@
     <ClCompile Include="application\ClockworksDisease\Component\Dialogue\DialogueComponent.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Dialogue\DialogueInteractSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Dialogue\DialogueSystem.cpp" />
+    <ClCompile Include="application\ClockworksDisease\System\Dialogue\DialogueAutoTriggerSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -639,6 +640,7 @@
     <ClInclude Include="application\ClockworksDisease\Component\Dialogue\DialogueComponent.h" />
     <ClInclude Include="application\ClockworksDisease\System\Dialogue\DialogueInteractSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Dialogue\DialogueSystem.h" />
+    <ClInclude Include="application\ClockworksDisease\System\Dialogue\DialogueAutoTriggerSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />
