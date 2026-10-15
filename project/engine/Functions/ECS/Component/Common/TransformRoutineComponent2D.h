@@ -11,6 +11,10 @@ struct TransformKeyframe2D : public Component::Transform2DComponent {
 namespace Component {
 struct TransformRoutineComponent2D {
     std::vector<TransformKeyframe2D> keyframes;
+    // trueなら全区間に共通設定を使い、falseなら各waypointのduration/easingを使う
+    bool useGlobalTiming = false;
+    float globalDuration = 1.0f;
+    Easing::EasingType globalEasing = Easing::EasingType::Linear;
     InterpolationType interpolation = InterpolationType::Linear;
     bool loop = true;
     bool playing = true;

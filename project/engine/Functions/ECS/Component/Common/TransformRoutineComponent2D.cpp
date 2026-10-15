@@ -11,6 +11,9 @@ REFLECT_STRUCT_END(NoEngine::TransformKeyframe2D)
 
 REFLECT_STRUCT_BEGIN(NoEngine::Component::TransformRoutineComponent2D, "Transform")
 REFLECT_STRUCT_ARRAY_FIELD(keyframes),
+REFLECT_FIELD(useGlobalTiming),
+REFLECT_FIELD(globalDuration),
+REFLECT_ENUM_FIELD(globalEasing),
 REFLECT_ENUM_FIELD(interpolation),
 REFLECT_FIELD(loop),
 REFLECT_FIELD(playing),

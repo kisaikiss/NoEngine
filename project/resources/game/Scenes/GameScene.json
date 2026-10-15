@@ -1004,7 +1004,7 @@
                     "fadeInDuration": 1.0,
                     "fadeOutDuration": 1.0,
                     "phase": "kPlayingRoutine",
-                    "playInEditor": false
+                    "playInEditor": true
                 },
                 "CameraLockTag": null,
                 "EditTag": {
@@ -1050,6 +1050,8 @@
                     ]
                 },
                 "TransformRoutineComponent": {
+                    "globalDuration": 15.0,
+                    "globalEasing": "EaseOutQuad",
                     "interpolation": "CatmullRom",
                     "keyframes": [
                         {
@@ -1195,7 +1197,8 @@
                     ],
                     "loop": false,
                     "playbackSpeed": 1.0,
-                    "playing": true
+                    "playing": true,
+                    "useGlobalTiming": true
                 }
             }
         },
@@ -1325,6 +1328,8 @@
                     ]
                 },
                 "TransformRoutineComponent": {
+                    "globalDuration": 1.0,
+                    "globalEasing": "Linear",
                     "interpolation": "CatmullRom",
                     "keyframes": [
                         {
@@ -1490,7 +1495,8 @@
                     ],
                     "loop": false,
                     "playbackSpeed": 1.0,
-                    "playing": false
+                    "playing": false,
+                    "useGlobalTiming": false
                 }
             },
             "prefabInstance": "resources/game/Prefabs\\PowerItem.json"
@@ -24401,6 +24407,8 @@
                     ]
                 },
                 "TransformRoutineComponent": {
+                    "globalDuration": 1.0,
+                    "globalEasing": "Linear",
                     "interpolation": "Linear",
                     "keyframes": [
                         {
@@ -24446,7 +24454,8 @@
                     ],
                     "loop": true,
                     "playbackSpeed": 1.0,
-                    "playing": true
+                    "playing": true,
+                    "useGlobalTiming": false
                 }
             },
             "prefabInstance": "resources/game/Prefabs\\box.json"
@@ -24998,6 +25007,8 @@
                     ]
                 },
                 "TransformRoutineComponent": {
+                    "globalDuration": 1.0,
+                    "globalEasing": "Linear",
                     "interpolation": "CatmullRom",
                     "keyframes": [
                         {
@@ -25083,7 +25094,8 @@
                     ],
                     "loop": true,
                     "playbackSpeed": 1.0,
-                    "playing": true
+                    "playing": true,
+                    "useGlobalTiming": false
                 }
             }
         },
@@ -25575,6 +25587,8 @@
                     ]
                 },
                 "TransformRoutineComponent": {
+                    "globalDuration": 1.0,
+                    "globalEasing": "Linear",
                     "interpolation": "Linear",
                     "keyframes": [
                         {
@@ -25620,7 +25634,8 @@
                     ],
                     "loop": true,
                     "playbackSpeed": 1.0,
-                    "playing": true
+                    "playing": true,
+                    "useGlobalTiming": false
                 }
             },
             "prefabInstance": "resources/game/Prefabs\\box.json"
@@ -25721,6 +25736,8 @@
                     ]
                 },
                 "TransformRoutineComponent": {
+                    "globalDuration": 1.0,
+                    "globalEasing": "Linear",
                     "interpolation": "Linear",
                     "keyframes": [
                         {
@@ -25766,7 +25783,8 @@
                     ],
                     "loop": true,
                     "playbackSpeed": 1.0,
-                    "playing": true
+                    "playing": true,
+                    "useGlobalTiming": false
                 }
             },
             "prefabInstance": "resources/game/Prefabs\\box.json"
@@ -25867,6 +25885,8 @@
                     ]
                 },
                 "TransformRoutineComponent": {
+                    "globalDuration": 1.0,
+                    "globalEasing": "Linear",
                     "interpolation": "Linear",
                     "keyframes": [
                         {
@@ -25912,7 +25932,8 @@
                     ],
                     "loop": true,
                     "playbackSpeed": 1.0,
-                    "playing": true
+                    "playing": true,
+                    "useGlobalTiming": false
                 }
             },
             "prefabInstance": "resources/game/Prefabs\\box.json"
@@ -26013,6 +26034,8 @@
                     ]
                 },
                 "TransformRoutineComponent": {
+                    "globalDuration": 1.0,
+                    "globalEasing": "Linear",
                     "interpolation": "Linear",
                     "keyframes": [
                         {
@@ -26058,7 +26081,8 @@
                     ],
                     "loop": true,
                     "playbackSpeed": 1.0,
-                    "playing": true
+                    "playing": true,
+                    "useGlobalTiming": false
                 }
             },
             "prefabInstance": "resources/game/Prefabs\\box.json"
@@ -26159,6 +26183,8 @@
                     ]
                 },
                 "TransformRoutineComponent": {
+                    "globalDuration": 1.0,
+                    "globalEasing": "Linear",
                     "interpolation": "Linear",
                     "keyframes": [
                         {
@@ -26204,7 +26230,8 @@
                     ],
                     "loop": true,
                     "playbackSpeed": 1.0,
-                    "playing": true
+                    "playing": true,
+                    "useGlobalTiming": false
                 }
             },
             "prefabInstance": "resources/game/Prefabs\\box.json"
@@ -26735,6 +26762,8 @@
                     ]
                 },
                 "TransformRoutineComponent": {
+                    "globalDuration": 1.0,
+                    "globalEasing": "Linear",
                     "interpolation": "CatmullRom",
                     "keyframes": [
                         {
@@ -26820,7 +26849,8 @@
                     ],
                     "loop": false,
                     "playbackSpeed": 1.0,
-                    "playing": true
+                    "playing": true,
+                    "useGlobalTiming": false
                 }
             }
         },

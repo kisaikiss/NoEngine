@@ -10,6 +10,10 @@ struct TransformKeyframe : public Component::TransformComponent {
 namespace Component {
 struct TransformRoutineComponent {
     std::vector<TransformKeyframe> keyframes;
+    // trueなら全区間に共通設定を使い、falseなら各waypointのduration/easingを使う
+    bool useGlobalTiming = false;
+    float globalDuration = 1.0f;
+    Easing::EasingType globalEasing = Easing::EasingType::Linear;
     InterpolationType interpolation = InterpolationType::Linear;
     bool loop = true;
     bool playing = true;

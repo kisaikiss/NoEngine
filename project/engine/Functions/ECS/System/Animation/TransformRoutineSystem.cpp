@@ -17,14 +17,32 @@ void TransformRoutineSystem::Update(Registry& registry, float deltaTime) {
 		if (!routine->playing || routine->keyframes.size() < 2) continue;
 
 		const int count = static_cast<int>(routine->keyframes.size());
-		const int currentIndex = routine->currentIndex;
-		const int nextIndex = (currentIndex + 1) % count;
+		int currentIndex = routine->currentIndex;
+		int nextIndex = (currentIndex + 1) % count;
+		float rawT;
+		float time;
+		bool routineComplete = false;
+
+		if (routine->useGlobalTiming) {
+			// 全体時間に一度だけeasingを適用し、その進捗をキーフレーム間に割り当てる。
+			const int segmentCount = count - 1;
+			routine->elapsed += deltaTime * routine->playbackSpeed;
+			rawT = std::clamp(routine->elapsed / std::max(routine->globalDuration, 0.0001f), 0.0f, 1.0f);
+			routineComplete = rawT >= 1.0f;
+			const float routeT = ApplyEasing(routine->globalEasing, rawT) * segmentCount;
+			currentIndex = std::min(static_cast<int>(routeT), segmentCount - 1);
+			nextIndex = currentIndex + 1;
+			time = std::clamp(routeT - currentIndex, 0.0f, 1.0f);
+			routine->currentIndex = currentIndex;
+		} else {
+			const auto& to = routine->keyframes[nextIndex];
+			routine->elapsed += deltaTime * routine->playbackSpeed;
+			rawT = std::clamp(routine->elapsed / std::max(to.duration, 0.0001f), 0.0f, 1.0f);
+			time = ApplyEasing(to.easing, rawT);
+		}
+
 		const auto& from = routine->keyframes[currentIndex];
 		const auto& to = routine->keyframes[nextIndex];
-
-		routine->elapsed += deltaTime * routine->playbackSpeed;
-		float rawT = std::clamp(routine->elapsed / to.duration, 0.0f, 1.0f);
-		float time = ApplyEasing(to.easing, rawT);
 
 		switch (routine->interpolation) {
 		case InterpolationType::Linear:
@@ -49,14 +67,18 @@ void TransformRoutineSystem::Update(Registry& registry, float deltaTime) {
 			break;
 		}
 		case InterpolationType::Step:
-			transform->translate = (rawT >= 1.0f) ? to.translate : from.translate;
+			transform->translate = (time >= 1.0f) ? to.translate : from.translate;
 			break;
 		}
 
 		transform->rotation = Math::Quaternion::Slerp(from.rotation, to.rotation, time);
 		transform->scale = Easing::Lerp(from.scale, to.scale, time);
 
-		if (rawT >= 1.0f) {
+		if (routine->useGlobalTiming && routineComplete) {
+			routine->elapsed = 0.0f;
+			routine->currentIndex = 0;
+			if (!routine->loop) routine->playing = false;
+		} else if (!routine->useGlobalTiming && rawT >= 1.0f) {
 			routine->elapsed = 0.0f;
 			routine->currentIndex = nextIndex;
 			if (!routine->loop && routine->currentIndex == routine->keyframes.size() - 1) {
