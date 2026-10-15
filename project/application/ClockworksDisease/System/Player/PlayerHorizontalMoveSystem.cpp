@@ -55,6 +55,10 @@ void PlayerHorizontalMoveSystem::Update(No::Registry& registry, float deltaTime)
 
 		auto* transform = registry.GetComponent<No::TransformComponent>(entity);
 		auto* playerVariables = registry.GetComponent<PlayerComponent>(entity);
+
+		// プレイヤーが寝てたら横移動はできない
+		if (playerVariables->state == PlayerState::kSleep) continue;
+
 		auto* velocity = registry.GetComponent<No::VelocityComponent>(entity);
 		auto* groundState = registry.GetComponent<No::GroundStateComponent>(entity);
 		auto* particleEmitterSphere = registry.GetComponent<No::ParticleEmitterSphereComponent>(entity);

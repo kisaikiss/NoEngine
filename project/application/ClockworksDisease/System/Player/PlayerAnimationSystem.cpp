@@ -12,7 +12,7 @@ void PlayerAnimationSystem::Update(No::Registry& registry, float deltaTime) {
 
 		switch (playerVariables->state) {
 			case PlayerState::kWait:
-				animator->currentAnimation = 1;
+				animator->currentAnimation = 2;
 				break;
 			case PlayerState::kFall:
 			case PlayerState::kJump:
@@ -20,7 +20,10 @@ void PlayerAnimationSystem::Update(No::Registry& registry, float deltaTime) {
 				animator->currentAnimation = 0;
 				break;
 			case PlayerState::kWalk:
-				animator->currentAnimation = 2;
+				animator->currentAnimation = 3;
+				break;
+			case PlayerState::kSleep:
+				animator->currentAnimation = 1;
 				break;
 		}
 

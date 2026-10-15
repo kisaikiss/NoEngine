@@ -7,7 +7,8 @@ enum class PlayerState {
 	kJump,					// ジャンプ上昇中
 	kAirDash,				// 空中ダッシュ中
 	kHighJump,				// ハイジャンプ上昇中
-	kFall					// 下降中
+	kFall,					// 下降中
+	kSleep,					// 寝っ転がる
 };
 
 struct PlayerComponent {

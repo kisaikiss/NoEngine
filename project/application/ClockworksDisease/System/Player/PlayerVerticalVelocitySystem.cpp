@@ -46,7 +46,14 @@ void PlayerVerticalVelocitySystem::Update(No::Registry& registry, float deltaTim
 			}
 		} else {
 			const bool isMoving = (velocity->linear.x != 0.f || velocity->linear.z != 0.f);
-			playerVariables->state = isMoving ? PlayerState::kWalk : PlayerState::kWait;
+			if (isMoving) {
+				playerVariables->state = PlayerState::kWalk;
+			} else {
+				// 寝てなかったら待機状態にする
+				if (playerVariables->state != PlayerState::kSleep)
+					playerVariables->state = PlayerState::kWait;
+			}
+
 		}
 
 		playerVariables->groundNormal = No::Vector3::ZERO;

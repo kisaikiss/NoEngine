@@ -1421,7 +1421,7 @@
                     "stamina": 0.0,
                     "staminaRecoveryRate": 1.0,
                     "staminaUpPerLevel": 1.0,
-                    "state": "kWait",
+                    "state": "kSleep",
                     "walkSpeed": 4.0
                 },
                 "PlayerMoveTransientComponent": null,

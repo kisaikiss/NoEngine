@@ -40,8 +40,6 @@ void EnqueueOrShowLevelUpHint(No::Registry& registry, const std::string& texture
 	}
 }
 
-bool sFirstFrame = true;
-
 }
 
 void PlayerLevelUpSystem::Update(No::Registry& registry, float deltaTime) {
@@ -50,10 +48,6 @@ void PlayerLevelUpSystem::Update(No::Registry& registry, float deltaTime) {
 	bool isSkip = false;
 	for (auto e : registry.View<No::TransformComponent, No::CameraComponent, FollowCameraComponent>()) {
 		if (registry.Has<CameraLockTag>(e)) isSkip = true; 
-	}
-	if (sFirstFrame && !isSkip) {
-		EnqueueOrShowLevelUpHint(registry, "tutorialText");
-		sFirstFrame = false;
 	}
 
 	for (auto e : registry.View<No::TransformComponent, PlayerComponent, LevelComponent>()) {

@@ -13,7 +13,7 @@ void SceneChangeTimerSystem::Update(No::Registry& registry, float deltaTime) {
 		// 設定した時間が過ぎたらシーンを変える
 		if (sceneChangeTimer_ >= changeTime->sceneChangeTime) {
 			No::SceneChangeEvent sceneChangeEvent;
-			sceneChangeEvent.nextScene = "GameScene";
+			sceneChangeEvent.nextScene = "TutorialStage";
 			registry.EmitEvent(sceneChangeEvent);
 
 			// タイマーコンポーネントは不要になるので外す
