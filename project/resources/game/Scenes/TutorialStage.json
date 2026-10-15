@@ -1861,6 +1861,7 @@
         "TransformRoutineSystem",
         "TransformRoutineSystem2D",
         "MovementSystem",
+        "RotationalSystem",
         "PlayerDeathSystem",
         "ComputePlatformDeltaSystem",
         "PlatformRideSystem",

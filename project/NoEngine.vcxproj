@@ -277,6 +277,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="engine\Functions\ECS\Component\Asset\AnimatorComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Asset\DissolveComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Asset\TextComponent.cpp" />
+    <ClCompile Include="engine\Functions\ECS\Component\Common\RotationalVelocityComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Common\TransformRoutineComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Common\TransformRoutineComponent2D.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Effect\EffectEmitterComponent.cpp" />
@@ -322,6 +323,8 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="engine\Functions\ECS\System\Movement\MovementSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Collision\NarrowPhase2DSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Animation\SpriteAnimationSystem.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\Movement\Rotational2DSystem.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\Movement\RotationalSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\PlayModeController.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\SystemCatalog.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\SystemManager.cpp" />
@@ -597,6 +600,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="engine\Functions\Command\EditCommand\RemoveComponentCommand.h" />
     <ClInclude Include="engine\Functions\ECS\Component\Asset\DissolveComponent.h" />
     <ClInclude Include="engine\Functions\ECS\Component\Asset\TextComponent.h" />
+    <ClInclude Include="engine\Functions\ECS\Component\Common\RotationalVelocityComponent.h" />
     <ClInclude Include="engine\Functions\ECS\Component\Common\TransformRoutineComponent.h" />
     <ClInclude Include="engine\Functions\ECS\Component\Common\TransformRoutineComponent2D.h" />
     <ClInclude Include="engine\Functions\ECS\Component\Effect\EffectEmitterComponent.h" />
@@ -646,6 +650,8 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="engine\Functions\ECS\System\Movement\MovementSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\Collision\NarrowPhase2DSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\Animation\SpriteAnimationSystem.h" />
+    <ClInclude Include="engine\Functions\ECS\System\Movement\Rotational2DSystem.h" />
+    <ClInclude Include="engine\Functions\ECS\System\Movement\RotationalSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\PlayModeController.h" />
     <ClInclude Include="engine\Functions\ECS\System\SystemCatalog.h" />
     <ClInclude Include="engine\Functions\ECS\System\SystemSceneConfig.h" />

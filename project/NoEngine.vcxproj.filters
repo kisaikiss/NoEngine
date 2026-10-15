@@ -317,6 +317,9 @@
     <ClCompile Include="application\ClockworksDisease\System\Dialogue\DialogueInteractSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Dialogue\DialogueSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Dialogue\DialogueAutoTriggerSystem.cpp" />
+    <ClCompile Include="engine\Functions\ECS\Component\Common\RotationalVelocityComponent.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\Movement\RotationalSystem.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\Movement\Rotational2DSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -641,6 +644,9 @@
     <ClInclude Include="application\ClockworksDisease\System\Dialogue\DialogueInteractSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Dialogue\DialogueSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Dialogue\DialogueAutoTriggerSystem.h" />
+    <ClInclude Include="engine\Functions\ECS\Component\Common\RotationalVelocityComponent.h" />
+    <ClInclude Include="engine\Functions\ECS\System\Movement\RotationalSystem.h" />
+    <ClInclude Include="engine\Functions\ECS\System\Movement\Rotational2DSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />
