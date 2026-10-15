@@ -8,7 +8,7 @@
 #include "externals/stb/stb_truetype.h"
 
 // ---------------------------------------------------------------------------
-// フォントはTTF/OTFファイルをそのまま読み込み、実際に描画で使われた文字だけをその場でSDFラスタライズして
+// フォントはTTF/OTFファイルをそのまま読み込み、実際に描画で使われた文字だけをその場でラスタライズして
 // アトラスへ追記していく(遅延ベイク)。ひらがな/カタカナ/漢字を含む全コードポイントを事前に総ベイクすると
 // アトラスサイズ・ロード時間の両方が非現実的になるため、この方式を採っている。
 // ---------------------------------------------------------------------------
@@ -20,10 +20,9 @@ namespace {
 // ベイク時の基準ピクセル高さ。GlyphInfo::size / bearing / lineHeight / ascent はこのスケールでの値。
 constexpr float kBakePixelHeight = 48.0f;
 
-// SDF生成パラメータ(stb_truetype準拠)。
-constexpr int kSdfPadding = 4;
-constexpr uint8_t kSdfOnEdgeValue = 128;
-constexpr float kSdfPixelDistScale = 32.0f;
+// stb_truetypeのSDF生成はCFF OTFの三次ベジェ輪郭を距離計算に含めないため、
+// 通常のラスタライザで輪郭を描き、縮小時の品質を保つため2倍解像度でベイクする。
+constexpr float kBitmapOversample = 2.0f;
 
 // アトラス内グリフ間の余白(px)。
 constexpr int kAtlasPadding = 1;
@@ -55,9 +54,8 @@ bool Font::EnsureGlyphsBaked(const std::u32string& codepoints) {
 		info.advance = static_cast<float>(advanceRaw) * bakeScale_;
 
 		int w = 0, h = 0, xoff = 0, yoff = 0;
-		uint8_t* bitmap = stbtt_GetGlyphSDF(
-			fontInfo_.get(), bakeScale_, glyphIndex,
-			kSdfPadding, kSdfOnEdgeValue, kSdfPixelDistScale,
+		uint8_t* bitmap = stbtt_GetGlyphBitmap(
+			fontInfo_.get(), bakeScale_ * kBitmapOversample, bakeScale_ * kBitmapOversample, glyphIndex,
 			&w, &h, &xoff, &yoff);
 
 		if (bitmap && w > 0 && h > 0) {
@@ -69,9 +67,9 @@ bool Font::EnsureGlyphsBaked(const std::u32string& codepoints) {
 			}
 			if (packCursorY_ + h + kAtlasPadding > kAtlasHeight) {
 				// アトラスが尽きた。これ以降の新規グリフはベイクしない。
-				stbtt_FreeSDF(bitmap, nullptr);
+				stbtt_FreeBitmap(bitmap, nullptr);
 				atlasFull_ = true;
-				LogWarning("Font: SDF atlas is full. Some glyphs will not be rendered.");
+				LogWarning("Font: glyph atlas is full. Some glyphs will not be rendered.");
 				glyphs_[c] = GlyphInfo{};
 				continue;
 			}
@@ -86,13 +84,13 @@ bool Font::EnsureGlyphsBaked(const std::u32string& codepoints) {
 			info.uv.y = static_cast<float>(packCursorY_) / static_cast<float>(kAtlasHeight);
 			info.uv.width = static_cast<float>(w) / static_cast<float>(kAtlasWidth);
 			info.uv.height = static_cast<float>(h) / static_cast<float>(kAtlasHeight);
-			info.size = { static_cast<float>(w), static_cast<float>(h) };
-			info.bearing = { static_cast<float>(xoff), static_cast<float>(yoff) };
+			info.size = { static_cast<float>(w) / kBitmapOversample, static_cast<float>(h) / kBitmapOversample };
+			info.bearing = { static_cast<float>(xoff) / kBitmapOversample, static_cast<float>(yoff) / kBitmapOversample };
 
 			packCursorX_ += w + kAtlasPadding;
 			packRowHeight_ = std::max(packRowHeight_, h);
 
-			stbtt_FreeSDF(bitmap, nullptr);
+			stbtt_FreeBitmap(bitmap, nullptr);
 			addedAny = true;
 		}
 
@@ -160,7 +158,7 @@ void ManagedFont::CreateFromMemory(ByteArray ba) {
 	stbtt_GetFontVMetrics(fontInfo_.get(), &ascentRaw, &descentRaw, &lineGapRaw);
 	ascent_ = static_cast<float>(ascentRaw) * bakeScale_;
 	lineHeight_ = static_cast<float>(ascentRaw - descentRaw + lineGapRaw) * bakeScale_;
-	distanceRange_ = 127.0f / kSdfPixelDistScale;
+	distanceRange_ = 0.f;
 
 	// グリフは事前ベイクせず、EnsureGlyphsBaked()を通じて実際に使われた文字だけを随時追加する。
 	atlasPixels_.assign(static_cast<size_t>(kAtlasWidth) * kAtlasHeight, 0);

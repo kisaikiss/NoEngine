@@ -61,9 +61,9 @@
                 },
                 "DebugCameraComponent": {
                     "center": [
-                        3.9884510040283203,
-                        -1.373910903930664,
-                        14.770853996276855
+                        3.056941509246826,
+                        -1.062586784362793,
+                        14.925347328186035
                     ],
                     "distance": 24.76100730895996,
                     "drawCenter": false,
@@ -78,10 +78,10 @@
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
-                        0.21296818554401398,
-                        0.017745450139045715,
-                        -0.003868618980050087,
-                        0.9768903255462646
+                        0.20626340806484222,
+                        -0.002458298346027732,
+                        0.0005182017921470106,
+                        0.9784932732582092
                     ],
                     "scale": [
                         1.0,
@@ -1259,7 +1259,7 @@
                     "radius": 8.199999809265137
                 },
                 "DialogueComponent": {
-                    "fontName": "resources/engine/fonts/PixelMplus12-Regular.ttf",
+                    "fontName": "resources/engine/fonts/ISE-FONT4/Isego.otf",
                     "interactDistance": 0.0,
                     "interactable": true,
                     "lines": [
