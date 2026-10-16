@@ -46,7 +46,7 @@ public:
     void Create(const std::wstring& name, uint32_t width, uint32_t height, uint32_t depthOrArraySize, uint32_t numMips,
         DXGI_FORMAT format);
 
-    Math::Color& GetClearColor() { return clearColor_; }
+    const Math::Color& GetClearColor() { return clearColor_; }
 
     const D3D12_CPU_DESCRIPTOR_HANDLE& GetSRV(void) const { return srvHandle_; }
     const D3D12_CPU_DESCRIPTOR_HANDLE& GetRTV(void) const { return rtvHandle_; }

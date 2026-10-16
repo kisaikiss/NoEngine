@@ -20,14 +20,14 @@ void ComputeContext::ClearUAV(GpuBuffer& Target) {
     commandList_->ClearUnorderedAccessViewUint(GpuVisibleHandle, Target.GetUAV(), Target.GetResource(), ClearColor, 0, nullptr);
 }
 
-void ComputeContext::ClearUAV(ColorBuffer& Target) {
+void ComputeContext::ClearUAV(ColorBuffer& target) {
     FlushResourceBarriers();
 
-    D3D12_GPU_DESCRIPTOR_HANDLE GpuVisibleHandle = dynamicViewDescriptorHeap_.UploadDirect(Target.GetUAV());
-    CD3DX12_RECT ClearRect(0, 0, (LONG)Target.GetWidth(), (LONG)Target.GetHeight());
+    D3D12_GPU_DESCRIPTOR_HANDLE GpuVisibleHandle = dynamicViewDescriptorHeap_.UploadDirect(target.GetUAV());
+    CD3DX12_RECT ClearRect(0, 0, (LONG)target.GetWidth(), (LONG)target.GetHeight());
 
-    const float* ClearColor = Target.GetClearColor().ptr();
-    commandList_->ClearUnorderedAccessViewFloat(GpuVisibleHandle, Target.GetUAV(), Target.GetResource(), ClearColor, 1, &ClearRect);
+    const float* ClearColor = target.GetClearColor().GetConstPtr();
+    commandList_->ClearUnorderedAccessViewFloat(GpuVisibleHandle, target.GetUAV(), target.GetResource(), ClearColor, 1, &ClearRect);
 }
 
 void ComputeContext::SetRootSignature(const RootSignature& RootSig) {

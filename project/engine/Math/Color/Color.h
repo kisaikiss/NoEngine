@@ -36,8 +36,9 @@ public:
 		return r + g + b < other.r + other.g + other.b; // SpritePassで色をまとめて描画するために使用します。
 	}
 
-	float* ptr(void) { return reinterpret_cast<float*>(this); }
-	float& operator[](int index) { return ptr()[index]; }
+	const float* GetConstPtr(void) const { return reinterpret_cast<const float*>(this); }
+	float* Ptr(void) { return reinterpret_cast<float*>(this); }
+	float& operator[](int index) { return Ptr()[index]; }
 	Color operator*(float s) const {
 		return Color(r * s, g * s, b * s, a * s);
 	}
