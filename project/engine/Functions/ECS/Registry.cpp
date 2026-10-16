@@ -27,6 +27,7 @@ void Registry::DestroyEntity(Entity entity) {
 
 void Registry::FlushDestroy() {
 	for (auto entity : pendingDestroy_) {
+		if (entity >= entityToActive_.size() || !entityToActive_[entity]) continue;
 		entityToActive_[entity] = false;
 		freeEntities_.emplace_back(entity);
 		for (auto& pool : componentPools_) {
@@ -59,7 +60,7 @@ void* Registry::GetComponent(const size_t& typeId, const Entity& entity) {
 }
 
 bool Registry::Has(size_t typeID, Entity e) const {
-	return componentPools_[typeID] && componentPools_[typeID]->Has(e);
+	return typeID < componentPools_.size() && componentPools_[typeID] && componentPools_[typeID]->Has(e);
 }
 
 bool Registry::Empty() {

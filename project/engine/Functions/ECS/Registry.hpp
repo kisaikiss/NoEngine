@@ -101,8 +101,10 @@ inline Editor::EditSelectedTag* Registry::AddComponent<Editor::EditSelectedTag>(
 
 template<typename CompType>
 void Registry::RemoveComponent(const Entity entity) {
+	const size_t type = Utilities::TypeID<CompType>();
+	if (type >= componentPools_.size() || !componentPools_[type]) return;
 	// 削除するコンポーネントを格納するコンテナクラスを取得
-	ComponentPool<CompType>* compPool = static_cast<ComponentPool<CompType>*>(componentPools_[Utilities::TypeID<CompType>()].get());
+	ComponentPool<CompType>* compPool = static_cast<ComponentPool<CompType>*>(componentPools_[type].get());
 	// コンポーネントをエンティティから取り外す
 	compPool->RemoveComponent(entity);
 }

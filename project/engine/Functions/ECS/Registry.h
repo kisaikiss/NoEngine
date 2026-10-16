@@ -118,42 +118,40 @@ public:
 		}
 
 		struct Iterator {
-			Registry& registry;
-			IComponentPool* base;
+			std::vector<Entity> entities;
 			size_t index;
-			bool empty;
+			bool endSentinel = false;
 
 			Entity operator*() const {
-				return base->Entities()[index];
+				return entities[index];
 			}
 
 			Iterator& operator++() {
-				if (empty) return *this;
-
-				do {
-					index++;
-				} while (index < base->Size() &&
-					!registry.HasAll<Components...>(base->Entities()[index]));
+				++index;
 				return *this;
 			}
 
 			bool operator!=(const Iterator& other) const {
-				return index != other.index || empty != other.empty;
+				if (other.endSentinel) return index < entities.size();
+				return index != other.index;
 			}
 		};
 
 		Iterator begin() {
-			if (empty_) return end();
-
-			size_t idx = 0;
-			while (idx < base_->Size() &&
-				!registry_.HasAll<Components...>(base_->Entities()[idx]))
-				idx++;
-			return { registry_, base_, idx, empty_ };
+			std::vector<Entity> entities;
+			if (!empty_) {
+				const auto candidates = base_->Entities();
+				entities.reserve(candidates.size());
+				for (Entity entity : candidates) {
+					if (registry_.HasAll<Components...>(entity))
+						entities.push_back(entity);
+				}
+			}
+			return { std::move(entities), 0, false };
 		}
 
 		Iterator end() {
-			return { registry_, base_, base_ ? base_->Size() : 0, empty_ };
+			return { {}, 0, true };
 		}
 
 	private:

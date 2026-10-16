@@ -34,6 +34,7 @@ public:
 	/// <param name="entity">コンポーネントを追加したいエンティティ</param>
 	/// <returns>追加したコンポーネントのポインタ</returns>
 	inline CompType* AddComponent(const Entity entity) {
+		if (Has(entity)) return GetComponent(entity);
 		if (entityToIndex_.size() <= entity) {
 			entityToIndex_.resize(entity + 1, -1);
 		}
@@ -49,8 +50,8 @@ public:
 	/// </summary>
 	/// <param name="entity">コンポーネントを取り外したいエンティティ</param>
 	inline void RemoveComponent(Entity entity) {
+		if (!Has(entity)) return;
 		int32_t idx = entityToIndex_[entity];
-		if (idx < 0) return;
 
 		int32_t last = static_cast<int32_t>(components_.size()) - 1;
 		Entity lastEntity = indexToEntity_[last];
@@ -93,7 +94,7 @@ public:
 	}
 
 	inline void* GetVoidPointerComponent(Entity entity) override {
-		// エンティティが有効なら
+		if (!Has(entity)) return nullptr;
 		int32_t index = entityToIndex_[entity];
 		if (index >= 0) {
 			return static_cast<void*>(&components_[index]);

@@ -134,6 +134,10 @@ void RenderPassScheduler::Render(GraphicsContext& gfx, ECS::Registry& registry) 
 			}
 			
 		} 
+		// バリアはパスの利用状態が切り替わる位置で確定する。
+		// 描画コマンドが発行されないパスが続いても、同一リソースへの
+		// 複数回の遷移を一つの ResourceBarrier 呼び出しに混在させない。
+		gfx.FlushResourceBarriers();
 		node.pass->Execute(gfx, resourceRegistry_, registry);
 	}
 
