@@ -1,0 +1,37 @@
+{
+    "components": {
+        "DialogueAutoTriggerComponent": {
+            "once": true,
+            "radius": 5.0
+        },
+        "DialogueComponent": {
+            "fontName": "resources/engine/fonts/ISE-FONT4/Isego.otf",
+            "interactDistance": 3.0,
+            "interactable": true,
+            "lines": []
+        },
+        "EditTag": {
+            "name": "eventPoint",
+            "parent": null
+        },
+        "TransformComponent": {
+            "parent": null,
+            "rotation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "translate": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        }
+    }
+}

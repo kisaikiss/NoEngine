@@ -1,5 +1,13 @@
 {
     "entities": {
+        "BigItem": {
+            "components": {
+                "EditTag": {
+                    "name": "BigItem",
+                    "parent": "Item"
+                }
+            }
+        },
         "BigPowerItem": {
             "components": {
                 "BigPowerItemComponent": {
@@ -11,7 +19,7 @@
                 },
                 "EditTag": {
                     "name": "BigPowerItem",
-                    "parent": null
+                    "parent": "BigItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -192,7 +200,7 @@
                 },
                 "EditTag": {
                     "name": "BigPowerItem_2",
-                    "parent": null
+                    "parent": "BigItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -373,7 +381,7 @@
                 },
                 "EditTag": {
                     "name": "BigPowerItem_3",
-                    "parent": null
+                    "parent": "BigItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -608,11 +616,11 @@
                 },
                 "DebugCameraComponent": {
                     "center": [
-                        -34.4621467590332,
-                        6.027373313903809,
-                        2.3916873931884766
+                        -140.107177734375,
+                        -32.55815887451172,
+                        50.09143829345703
                     ],
-                    "distance": 6.640796661376953,
+                    "distance": 269.0664978027344,
                     "drawCenter": false,
                     "moveType": "kBlender",
                     "unrealMoveSpeed": 10.0,
@@ -625,10 +633,10 @@
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
-                        0.05832333117723465,
-                        0.6863158345222473,
-                        -0.0553760826587677,
-                        0.7228432893753052
+                        0.28675615787506104,
+                        -0.5565176010131836,
+                        0.21272143721580505,
+                        0.7502057552337646
                     ],
                     "scale": [
                         1.0,
@@ -636,9 +644,75 @@
                         1.0
                     ],
                     "translate": [
-                        -41.00823211669922,
-                        7.092080116271973,
-                        2.052091121673584
+                        51.73912048339844,
+                        146.91421508789063,
+                        -8.0587158203125
+                    ]
+                }
+            }
+        },
+        "Down": {
+            "components": {
+                "EditTag": {
+                    "name": "Down",
+                    "parent": "Leimar"
+                },
+                "MaterialComponent": {
+                    "blendMode": "kNormal",
+                    "castShadow": true,
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "environmentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "receiveShadow": true,
+                    "renderMode": "kDefault",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "unlit": false,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "resources/game/ClockworksDisease/Model/npc/LeimarDown.gltf"
+                },
+                "TransformComponent": {
+                    "parent": "Leimar",
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0,
+                        0.0
                     ]
                 }
             }
@@ -678,6 +752,192 @@
                     "name": "Item",
                     "parent": null
                 }
+            }
+        },
+        "Leimar": {
+            "components": {
+                "EditTag": {
+                    "name": "Leimar",
+                    "parent": null
+                },
+                "RotationalVelocityComponent": {
+                    "linear": [
+                        0.0,
+                        1.0,
+                        0.0
+                    ]
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        -0.9107447862625122,
+                        1.882114052772522,
+                        2.7370166778564453
+                    ]
+                },
+                "TransformRoutineComponent": {
+                    "globalDuration": 10.0,
+                    "globalEasing": "EaseInOutQuad",
+                    "interpolation": "CatmullRom",
+                    "keyframes": [
+                        {
+                            "duration": 1.0,
+                            "easing": "Linear",
+                            "rotation": [
+                                0.0,
+                                0.0,
+                                0.0,
+                                1.0
+                            ],
+                            "scale": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ],
+                            "translate": [
+                                -0.9107447862625122,
+                                1.882114052772522,
+                                2.7370166778564453
+                            ]
+                        },
+                        {
+                            "duration": 1.0,
+                            "easing": "Linear",
+                            "rotation": [
+                                0.5005819201469421,
+                                0.21927399933338165,
+                                -0.4156009554862976,
+                                0.7270573973655701
+                            ],
+                            "scale": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ],
+                            "translate": [
+                                -11.067249298095703,
+                                10.354185104370117,
+                                7.893919944763184
+                            ]
+                        },
+                        {
+                            "duration": 1.0,
+                            "easing": "Linear",
+                            "rotation": [
+                                -0.8097960352897644,
+                                -0.06712441146373749,
+                                0.14427591860294342,
+                                0.5647205114364624
+                            ],
+                            "scale": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ],
+                            "translate": [
+                                -36.146690368652344,
+                                10.354185104370117,
+                                -2.7226357460021973
+                            ]
+                        },
+                        {
+                            "duration": 1.0,
+                            "easing": "Linear",
+                            "rotation": [
+                                0.12832754850387573,
+                                0.015458942390978336,
+                                -0.08349201828241348,
+                                0.9880901575088501
+                            ],
+                            "scale": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ],
+                            "translate": [
+                                -59.68767166137695,
+                                20.48048210144043,
+                                18.05607795715332
+                            ]
+                        },
+                        {
+                            "duration": 1.0,
+                            "easing": "Linear",
+                            "rotation": [
+                                -0.3356708586215973,
+                                -0.5132573246955872,
+                                0.19770564138889313,
+                                0.7647250294685364
+                            ],
+                            "scale": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ],
+                            "translate": [
+                                -105.05419158935547,
+                                20.48048210144043,
+                                0.8073363304138184
+                            ]
+                        },
+                        {
+                            "duration": 1.0,
+                            "easing": "Linear",
+                            "rotation": [
+                                -0.6980302333831787,
+                                0.38663092255592346,
+                                0.3074864149093628,
+                                0.5183844566345215
+                            ],
+                            "scale": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ],
+                            "translate": [
+                                -148.0618896484375,
+                                10.455385208129883,
+                                29.223403930664063
+                            ]
+                        },
+                        {
+                            "duration": 1.0,
+                            "easing": "Linear",
+                            "rotation": [
+                                0.0,
+                                0.0,
+                                0.0,
+                                1.0
+                            ],
+                            "scale": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ],
+                            "translate": [
+                                -184.46046447753906,
+                                6.552078723907471,
+                                2.1096537113189697
+                            ]
+                        }
+                    ],
+                    "loop": false,
+                    "playbackSpeed": 1.0,
+                    "playing": false,
+                    "useGlobalTiming": true
+                },
+                "TutorialMoverTag": null
             }
         },
         "Level": {
@@ -1004,7 +1264,7 @@
                     "fadeInDuration": 1.0,
                     "fadeOutDuration": 1.0,
                     "phase": "kPlayingRoutine",
-                    "playInEditor": true
+                    "playInEditor": false
                 },
                 "CameraLockTag": null,
                 "EditTag": {
@@ -1202,6 +1462,14 @@
                 }
             }
         },
+        "MiniItem": {
+            "components": {
+                "EditTag": {
+                    "name": "MiniItem",
+                    "parent": "Item"
+                }
+            }
+        },
         "PowerItem": {
             "components": {
                 "CollectibleItemTag": null,
@@ -1210,7 +1478,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -1509,7 +1777,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_10",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -1636,7 +1904,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_100",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -1890,7 +2158,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_102",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -2017,7 +2285,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_103",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -2144,7 +2412,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_104",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -2271,7 +2539,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_105",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -2398,7 +2666,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_106",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -2525,7 +2793,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_107",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -2652,7 +2920,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_108",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -2779,7 +3047,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_109",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -2906,7 +3174,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_11",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -3033,7 +3301,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_110",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -3160,7 +3428,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_111",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -3414,7 +3682,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_113",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -3541,7 +3809,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_114",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -3668,7 +3936,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_115",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -3795,7 +4063,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_116",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -3922,7 +4190,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_117",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -4049,7 +4317,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_118",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -4176,7 +4444,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_119",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -4303,7 +4571,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_12",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -4430,7 +4698,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_120",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -4557,7 +4825,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_121",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -4684,7 +4952,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_122",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -4938,7 +5206,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_124",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -5065,7 +5333,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_125",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -5192,7 +5460,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_126",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -5319,7 +5587,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_127",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -5446,7 +5714,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_128",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -5573,7 +5841,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_129",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -5700,7 +5968,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_13",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -5827,7 +6095,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_130",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -5954,7 +6222,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_131",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -6081,7 +6349,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_132",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -6208,7 +6476,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_133",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -6462,7 +6730,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_135",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -6589,7 +6857,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_136",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -6716,7 +6984,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_137",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -6843,7 +7111,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_138",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -6970,7 +7238,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_139",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -7097,7 +7365,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_14",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -7224,7 +7492,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_140",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -7351,7 +7619,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_141",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -7478,7 +7746,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_142",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -7605,7 +7873,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_143",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -7732,7 +8000,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_144",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -7986,7 +8254,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_146",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -8113,7 +8381,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_147",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -8240,7 +8508,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_148",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -8367,7 +8635,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_149",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -8494,7 +8762,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_15",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -8621,7 +8889,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_150",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -8748,7 +9016,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_151",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -8875,7 +9143,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_152",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -9002,7 +9270,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_153",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -9129,7 +9397,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_154",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -9256,7 +9524,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_155",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -9383,7 +9651,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_156",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -9510,7 +9778,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_157",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -9637,7 +9905,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_158",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -9764,7 +10032,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_159",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -9891,7 +10159,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_16",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -10018,7 +10286,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_160",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -10145,7 +10413,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_161",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -10272,7 +10540,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_162",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -10399,7 +10667,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_163",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -10526,7 +10794,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_164",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -10653,7 +10921,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_165",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -10780,7 +11048,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_166",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -11034,7 +11302,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_168",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -11161,7 +11429,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_169",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -11288,7 +11556,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_17",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -11415,7 +11683,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_170",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -11542,7 +11810,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_171",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -11669,7 +11937,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_172",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -11796,7 +12064,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_173",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -11923,7 +12191,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_174",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -12050,7 +12318,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_175",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -12177,7 +12445,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_176",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -12304,7 +12572,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_177",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -12431,7 +12699,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_18",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -12558,7 +12826,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_19",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -12685,7 +12953,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_2",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -12812,7 +13080,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_20",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -12939,7 +13207,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_21",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -13066,7 +13334,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_22",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -13193,7 +13461,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_23",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -13320,7 +13588,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_24",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -13447,7 +13715,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_25",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -13574,7 +13842,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_26",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -13701,7 +13969,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_27",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -13828,7 +14096,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_28",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -13955,7 +14223,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_29",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -14082,7 +14350,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_3",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -14209,7 +14477,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_30",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -14336,7 +14604,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_31",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -14463,7 +14731,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_32",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -14590,7 +14858,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_33",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -14717,7 +14985,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_34",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -14844,7 +15112,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_35",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -14971,7 +15239,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_36",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -15098,7 +15366,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_37",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -15225,7 +15493,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_38",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -15352,7 +15620,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_39",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -15479,7 +15747,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_4",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -15606,7 +15874,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_40",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -15733,7 +16001,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_41",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -15860,7 +16128,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_42",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -15987,7 +16255,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_43",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -16114,7 +16382,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_44",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -16241,7 +16509,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_45",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -16368,7 +16636,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_46",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -16495,7 +16763,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_47",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -16622,7 +16890,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_48",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -16749,7 +17017,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_49",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -16876,7 +17144,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_5",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -17003,7 +17271,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_50",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -17130,7 +17398,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_51",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -17257,7 +17525,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_52",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -17384,7 +17652,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_53",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -17511,7 +17779,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_54",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -17638,7 +17906,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_55",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -17765,7 +18033,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_56",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -17892,7 +18160,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_57",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -18019,7 +18287,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_58",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -18146,7 +18414,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_59",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -18273,7 +18541,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_6",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -18400,7 +18668,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_60",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -18527,7 +18795,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_61",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -18654,7 +18922,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_62",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -18908,7 +19176,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_64",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -19416,7 +19684,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_68",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -19543,7 +19811,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_69",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -19670,7 +19938,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_7",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -20559,7 +20827,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_76",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -20940,7 +21208,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_79",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -21067,7 +21335,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_8",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -21448,7 +21716,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_82",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -22210,7 +22478,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_88",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -22337,7 +22605,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_89",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -22464,7 +22732,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_9",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -22591,7 +22859,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_90",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -22718,7 +22986,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_91",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -22845,7 +23113,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_92",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -22972,7 +23240,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_93",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -23099,7 +23367,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_94",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -23226,7 +23494,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_95",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -23353,7 +23621,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_96",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -23480,7 +23748,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_97",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -23607,7 +23875,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_98",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -23734,7 +24002,7 @@
                 },
                 "EditTag": {
                     "name": "PowerItem_99",
-                    "parent": "Item"
+                    "parent": "MiniItem"
                 },
                 "EffectEmitModeSphereTag": null,
                 "EffectEmitterComponent": {
@@ -23853,11 +24121,85 @@
             },
             "prefabInstance": "resources/game/Prefabs\\PowerItem.json"
         },
+        "SavePoints": {
+            "components": {
+                "EditTag": {
+                    "name": "SavePoints",
+                    "parent": null
+                }
+            }
+        },
         "UI": {
             "components": {
                 "EditTag": {
                     "name": "UI",
                     "parent": null
+                }
+            }
+        },
+        "Up": {
+            "components": {
+                "EditTag": {
+                    "name": "Up",
+                    "parent": "Leimar"
+                },
+                "MaterialComponent": {
+                    "blendMode": "kNormal",
+                    "castShadow": true,
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "environmentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "receiveShadow": true,
+                    "renderMode": "kDefault",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "unlit": false,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "resources/game/ClockworksDisease/Model/npc/LeimarUp.gltf"
+                },
+                "TransformComponent": {
+                    "parent": "Leimar",
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
                 }
             }
         },
@@ -26732,6 +27074,54 @@
             },
             "prefabInstance": "resources/game/Prefabs\\directionalLight.json"
         },
+        "eventPoint": {
+            "components": {
+                "DialogueAutoTriggerComponent": {
+                    "once": true,
+                    "radius": 5.0
+                },
+                "DialogueComponent": {
+                    "fontName": "resources/engine/fonts/ISE-FONT4/Isego.otf",
+                    "interactDistance": 0.0,
+                    "interactable": true,
+                    "lines": [
+                        "ここは次元と次元を繋ぐ中心の次元。",
+                        "ニュークリアスディメンションだ。",
+                        "向こうにある教会が見えるか？",
+                        "あそこに強大な力が封じ込められている。それを取ってきて欲しい。",
+                        "そうしたら、奴を倒してやる。",
+                        "自分で行きたいんだが、のっぴきならない事情で入れないんだ。",
+                        "途中にある魔法の玉は取って自分の力にすると良い。",
+                        "魔力を蓄えないと教会へはたどり着けないだろうからな。",
+                        "頑張れよ。"
+                    ]
+                },
+                "EditTag": {
+                    "name": "eventPoint",
+                    "parent": null
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        -2.796849489212036,
+                        0.0,
+                        0.0
+                    ]
+                },
+                "TutorialSpeakerTag": null
+            }
+        },
         "goalCamera": {
             "components": {
                 "CameraComponent": {
@@ -27088,7 +27478,7 @@
                 },
                 "EditTag": {
                     "name": "savePoint",
-                    "parent": null
+                    "parent": "SavePoints"
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
@@ -27176,7 +27566,7 @@
                 },
                 "EditTag": {
                     "name": "savePoint_2",
-                    "parent": null
+                    "parent": "SavePoints"
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
@@ -27268,7 +27658,7 @@
                 },
                 "EditTag": {
                     "name": "savePoint_3",
-                    "parent": null
+                    "parent": "SavePoints"
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
@@ -27360,7 +27750,7 @@
                 },
                 "EditTag": {
                     "name": "savePoint_4",
-                    "parent": null
+                    "parent": "SavePoints"
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
@@ -27452,7 +27842,7 @@
                 },
                 "EditTag": {
                     "name": "savePoint_5",
-                    "parent": null
+                    "parent": "SavePoints"
                 },
                 "MaterialComponent": {
                     "blendMode": "kAdd",
@@ -27896,8 +28286,9 @@
         "MainStageProgressRestoreSystem",
         "PauseMenuSystem",
         "ModelLoadSystem",
-        "TerrainLoadSystem",
         "SpriteLoadSystem",
+        "FontLoadSystem",
+        "TerrainLoadSystem",
         "AnimationSystem",
         "BoxColliderUpdateSystem",
         "GameProgressInitSystem",
@@ -27922,15 +28313,21 @@
         "WarpBlockSystem",
         "PlayerLevelUpSystem",
         "LevelUISystem",
+        "DialogueAutoTriggerSystem",
+        "DialogueInteractSystem",
+        "DialogueSystem",
         "PlayerAbilityDebugSystem",
         "LevelUpTextSystem",
         "EffectEmitSystem",
         "ParticleEmitterSystem",
         "ParticleSystem",
         "CapturePlatformPrevTransformSystem",
+        "TutorialObjectSystem",
         "TransformRoutineSystem",
         "TransformRoutineSystem2D",
         "MovementSystem",
+        "FloatingSystem",
+        "RotationalSystem",
         "PlayerDeathSystem",
         "ComputePlatformDeltaSystem",
         "PlatformRideSystem",
