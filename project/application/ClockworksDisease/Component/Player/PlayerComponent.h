@@ -6,9 +6,14 @@ enum class PlayerState {
 	kWalk,					// 歩いている時
 	kJump,					// ジャンプ上昇中
 	kAirDash,				// 空中ダッシュ中
-	kHighJump,				// ハイジャンプ上昇中
 	kFall,					// 下降中
 	kSleep,					// 寝っ転がる
+};
+
+// ハイジャンプは独立した行動状態ではなく、JumpStateの種類として扱う。
+enum class PlayerJumpKind {
+	kNormal,
+	kHighJump,
 };
 
 struct PlayerComponent {
@@ -37,6 +42,7 @@ struct PlayerComponent {
 	bool infinityStamina = false;
 	bool canCreateScaffold = true;
 	PlayerState state = PlayerState::kWait;
+	PlayerJumpKind jumpKind = PlayerJumpKind::kNormal;
 
 	float highJumpCostRate = 10.0f;
 	float airDashStaminaCostRate = 2.0f;

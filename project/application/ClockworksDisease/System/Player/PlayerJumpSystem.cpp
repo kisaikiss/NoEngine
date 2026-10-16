@@ -1,5 +1,6 @@
 #include "PlayerJumpSystem.h"
 #include "application/ClockworksDisease/Component/Player/PlayerComponent.h"
+#include "PlayerStateMachine.h"
 #include "application/ClockworksDisease/Component/UI/UserInterfaceComponent.h"
 #include "application/ClockworksDisease/Component/Player/PlayerMoveTags.h"
 #include "application/ClockworksDisease/Component/Game/GoalDirectionComponent.h"
@@ -19,6 +20,7 @@ void HandleNormalJump(No::Registry& registry, No::Entity entity, PlayerComponent
 
 	if (isGrounded || playerVariables->infinityJump) {
 		playerVariables->yVelocity = playerVariables->jumpSpeed;
+		playerVariables->jumpKind = PlayerJumpKind::kNormal;
 		transientState->justJumped = true;
 		// ジャンプ直後は接地フラグを即座に落とす
 		// → このフレームの velocity.y 計算を「空中ブランチ」で処理させる
@@ -29,6 +31,7 @@ void HandleNormalJump(No::Registry& registry, No::Entity entity, PlayerComponent
 	if (registry.Has<MultiJumpTag>(entity) && playerVariables->stamina >= 1.0f) {
 		constexpr float kMultiJumpCost = 1.0f;
 		playerVariables->yVelocity = playerVariables->doubleJumpSpeed;
+		playerVariables->jumpKind = PlayerJumpKind::kNormal;
 		transientState->justJumped = true;
 		groundState->isGrounded = false;
 		playerVariables->stamina -= kMultiJumpCost;
@@ -43,9 +46,10 @@ void HandleHighJump(No::Registry& registry, No::Entity entity, PlayerComponent* 
 	const bool hasHighJumpTag = registry.Has<HighJumpTag>(entity);
 
 	if (No::InputIsPress("HighJump")) {
-		if (hasHighJumpTag && playerVariables->state == PlayerState::kJump && !isGrounded) {
+		if (hasHighJumpTag && PlayerStates::Get(playerVariables->state).IsJumpState() && !isGrounded) {
 			if (playerVariables->stamina > playerVariables->highJumpCostRate * deltaTime) {
 				playerVariables->yVelocity = playerVariables->highJumpSpeed;
+				playerVariables->jumpKind = PlayerJumpKind::kHighJump;
 				playerVariables->stamina -= playerVariables->highJumpCostRate * deltaTime;
 			}
 		}
@@ -55,6 +59,7 @@ void HandleHighJump(No::Registry& registry, No::Entity entity, PlayerComponent* 
 		if (isGrounded || playerVariables->infinityJump) {
 			if (playerVariables->stamina > playerVariables->highJumpCostRate * deltaTime) {
 				playerVariables->yVelocity = playerVariables->highJumpSpeed;
+				playerVariables->jumpKind = PlayerJumpKind::kHighJump;
 				transientState->justJumped = true;
 				groundState->isGrounded = false;
 			}
@@ -86,7 +91,6 @@ void HandleJumpRelease(PlayerComponent* playerVariables) {
 		if (playerVariables->yVelocity > 0.f) {
 			playerVariables->yVelocity *= 0.5f;
 		}
-		playerVariables->state = PlayerState::kFall;
 	}
 }
 
@@ -118,6 +122,7 @@ void CreateScaffold(No::Registry& registry, No::Entity entity, PlayerComponent* 
 		auto* scaffoldTransform = registry.GetComponent<No::TransformComponent>(e);
 		scaffoldTransform->translate = transform->translate;
 		playerVariables->yVelocity = playerVariables->doubleJumpSpeed;
+		playerVariables->jumpKind = PlayerJumpKind::kNormal;
 		playerVariables->canCreateScaffold = false;
 	}
 }
@@ -152,13 +157,13 @@ void PlayerJumpSystem::Update(No::Registry& registry, float deltaTime) {
 		bool isGrounded = groundState->isGrounded;
 
 		// コヨーテタイム内ならisGroundedをtrueにする
-		if (!isGrounded && playerVariables->state != PlayerState::kJump) {
+		if (!isGrounded && !PlayerStates::Get(playerVariables->state).IsJumpState()) {
 			if (playerVariables->coyoteTime > playerVariables->coyoteTimer) {
 				playerVariables->coyoteTimer += deltaTime;
 				isGrounded = true;
 			}
 		} else {
-			if (playerVariables->state == PlayerState::kJump) {
+			if (PlayerStates::Get(playerVariables->state).IsJumpState()) {
 				playerVariables->coyoteTimer = playerVariables->coyoteTime;
 			} else {
 				playerVariables->coyoteTimer = 0.0f;

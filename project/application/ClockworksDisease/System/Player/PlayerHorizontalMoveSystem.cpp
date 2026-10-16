@@ -1,5 +1,6 @@
 #include "PlayerHorizontalMoveSystem.h"
 #include "application/ClockworksDisease/Component/Player/PlayerComponent.h"
+#include "PlayerStateMachine.h"
 #include "application/ClockworksDisease/Component/Camera/FollowCameraComponent.h"
 #include "application/ClockworksDisease/Component/Game/GoalDirectionComponent.h"
 #include "../../Component/Camera/CameraIntroComponent.h"
@@ -56,8 +57,8 @@ void PlayerHorizontalMoveSystem::Update(No::Registry& registry, float deltaTime)
 		auto* transform = registry.GetComponent<No::TransformComponent>(entity);
 		auto* playerVariables = registry.GetComponent<PlayerComponent>(entity);
 
-		// プレイヤーが寝てたら横移動はできない
-		if (playerVariables->state == PlayerState::kSleep) continue;
+		// 水平移動の可否は現在Stateに委譲する。
+		if (!PlayerStates::Get(playerVariables->state).CanMoveHorizontally()) continue;
 
 		auto* velocity = registry.GetComponent<No::VelocityComponent>(entity);
 		auto* groundState = registry.GetComponent<No::GroundStateComponent>(entity);

@@ -1,6 +1,7 @@
 #include "PlayerVerticalVelocitySystem.h"
 #include "application/ClockworksDisease/Component/Player/PlayerComponent.h"
 #include "application/ClockworksDisease/Component/Game/GoalDirectionComponent.h"
+#include "PlayerStateMachine.h"
 
 void PlayerVerticalVelocitySystem::Update(No::Registry& registry, float deltaTime) {
 	auto view = registry.View<PlayerComponent, No::VelocityComponent, No::GroundStateComponent,
@@ -34,27 +35,9 @@ void PlayerVerticalVelocitySystem::Update(No::Registry& registry, float deltaTim
 			particleEmitter->active = false;
 		}
 
-		// ここでこのフレームの最終的なPlayerStateを決定する
-		if (transientState->isAirDashing) {
-			playerVariables->state = PlayerState::kAirDash;
-		} else if (!isGrounded) {
-			if (playerVariables->yVelocity > 0.f) {
-				playerVariables->state = PlayerState::kJump;
-			} else {
-				if (playerVariables->coyoteTimer >= playerVariables->coyoteTime)
-					playerVariables->state = PlayerState::kFall;
-			}
-		} else {
-			const bool isMoving = (velocity->linear.x != 0.f || velocity->linear.z != 0.f);
-			if (isMoving) {
-				playerVariables->state = PlayerState::kWalk;
-			} else {
-				// 寝てなかったら待機状態にする
-				if (playerVariables->state != PlayerState::kSleep)
-					playerVariables->state = PlayerState::kWait;
-			}
-
-		}
+		const bool isMoving = (velocity->linear.x != 0.f || velocity->linear.z != 0.f);
+		PlayerStateContext stateContext{ *playerVariables, isGrounded, isMoving, transientState->isAirDashing };
+		PlayerStates::Update(stateContext);
 
 		playerVariables->groundNormal = No::Vector3::ZERO;
 	}
