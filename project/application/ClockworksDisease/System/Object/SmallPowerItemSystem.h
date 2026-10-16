@@ -3,7 +3,7 @@
 
 class SmallPowerItemSystem : public No::ISystem {
 public:
-	void Update(No::Registry& registry, float deltaTime);
+	void Update(No::Registry& registry, float deltaTime) override;
 
 private:
 
