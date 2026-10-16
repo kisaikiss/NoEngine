@@ -8,6 +8,8 @@
 namespace NoEngine {
 struct Transform {
 public:
+	virtual ~Transform() = default;
+
 	Math::Vector3 scale{ Math::Vector3::UNIT_SCALE };
 	Math::Quaternion rotation{ Math::Quaternion::IDENTITY };
 	Math::Vector3 translate{ Math::Vector3::ZERO };

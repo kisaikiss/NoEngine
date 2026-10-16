@@ -7,6 +7,8 @@
 
 namespace NoEngine {
 struct Transform2D {
+	virtual ~Transform2D() = default;
+
 	Math::Vector2 scale{ Math::Vector2::UNIT_SCALE };
 	float rotation{};
 	Math::Vector2 translate{ Math::Vector2::ZERO };
