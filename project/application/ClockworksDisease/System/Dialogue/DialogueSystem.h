@@ -22,6 +22,8 @@ private:
 
 	bool IsLineFullyShown() const { return charCount_ >= totalChars_; }
 	void UpdateShownText(No::Registry& registry);
+	void UpdateLayout(No::Registry& registry);
+
 
 	bool Begin(No::Registry& registry, No::Entity speaker);
 	void Advance(No::Registry& registry);

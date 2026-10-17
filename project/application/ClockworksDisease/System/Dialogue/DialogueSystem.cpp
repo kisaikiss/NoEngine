@@ -23,6 +23,16 @@ size_t Utf8ByteLengthOfFirst(const std::string& utf8, size_t codepointCount) {
 	}
 	return std::min(bytes, utf8.size());
 }
+// 基準解像度(この解像度で見た目をデザインする)
+constexpr float kBaseWidth = 1280.f;
+constexpr float kBaseHeight = 720.f;
+
+// 基準解像度でのレイアウト値
+constexpr float kBaseBoxHeight = 180.f;
+constexpr float kBaseBoxOffsetY = -140.f;
+constexpr float kBaseTextPaddingX = 40.f;
+constexpr float kBaseTextScale = 0.65f;
+
 }
 
 void DialogueSystem::Update(No::Registry& registry, float deltaTime) {
@@ -32,10 +42,7 @@ void DialogueSystem::Update(No::Registry& registry, float deltaTime) {
 	}
 
 	// ウィンドウサイズ変更に追従
-	No::Vector2 windowSize = NoEngine::GraphicsCore::GetWindowSize();
-	boxWidth_ = windowSize.x * 0.8f;
-	registry.GetComponent<No::Transform2DComponent>(boxEntity_)->scale = { boxWidth_, 180.f };
-	registry.GetComponent<No::Transform2DComponent>(textEntity_)->translate = { -boxWidth_ * 0.5f + 40.f, -140.f };
+	UpdateLayout(registry);
 
 	auto startEvents = registry.PollAllEvents<DialogueStartEvent>();
 
@@ -89,6 +96,28 @@ void DialogueSystem::UpdateShownText(No::Registry& registry) {
 		full.substr(0, Utf8ByteLengthOfFirst(full, charCount_));
 }
 
+void DialogueSystem::UpdateLayout(No::Registry& registry) {
+	No::Vector2 windowSize = NoEngine::GraphicsCore::GetWindowSize();
+
+	// 幅・高さそれぞれの比率のうち小さい方を採用する。
+	// こうすると縦長・横長どちらのウィンドウでも文字がボックスに収まる
+	const float scale = std::min(windowSize.x / kBaseWidth, windowSize.y / kBaseHeight);
+
+	const float boxWidth = windowSize.x * 0.8f;
+	const float boxHeight = kBaseBoxHeight * scale;
+	const float boxOffsetY = kBaseBoxOffsetY * scale;
+
+	auto* boxT = registry.GetComponent<No::Transform2DComponent>(boxEntity_);
+	boxT->scale = { boxWidth, boxHeight };
+	boxT->translate = { 0.f, boxOffsetY };
+
+	auto* textT = registry.GetComponent<No::Transform2DComponent>(textEntity_);
+	textT->translate = { -boxWidth * 0.5f + kBaseTextPaddingX * scale, boxOffsetY };
+
+	registry.GetComponent<No::TextComponent>(textEntity_)->scale = kBaseTextScale * scale;
+
+}
+
 bool DialogueSystem::Begin(No::Registry& registry, No::Entity speaker) {
 	auto* dialogue = registry.GetComponent<DialogueComponent>(speaker);
 	if (!dialogue || dialogue->lines.empty()) return false;
@@ -129,7 +158,7 @@ void DialogueSystem::End(No::Registry& registry) {
 void DialogueSystem::CreateTextBox(No::Registry& registry) {
 	// 背景
 	boxEntity_ = registry.GenerateEntity();
-	registry.AddComponent<No::Transform2DComponent>(boxEntity_)->translate = { 0.f, -140.f };
+	registry.AddComponent<No::Transform2DComponent>(boxEntity_)->translate = { 0.f, kBaseBoxOffsetY };
 	auto* sprite = registry.AddComponent<No::SpriteComponent>(boxEntity_);
 	sprite->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/engine/white1x1.png");
 	sprite->color = No::Color(0.f, 0.f, 0.f, 0.75f);
@@ -143,7 +172,7 @@ void DialogueSystem::CreateTextBox(No::Registry& registry) {
 	registry.AddComponent<No::Transform2DComponent>(textEntity_);
 	auto* text = registry.AddComponent<No::TextComponent>(textEntity_);
 	text->fontName = "resources/engine/fonts/PixelMplus12-Regular.ttf";
-	text->scale = 0.8f;
+	text->scale = kBaseTextScale;
 	text->hAlign = No::TextComponent::HAlign::kLeft;
 	text->vAlign = No::TextComponent::VAlign::kMiddle;
 	text->space = NoEngine::SpriteSpace::Screen;
