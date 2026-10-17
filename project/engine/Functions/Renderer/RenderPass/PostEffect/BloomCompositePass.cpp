@@ -1,9 +1,27 @@
 #include "stdafx.h"
 #include "BloomCompositePass.h"
 #include "engine/Functions/Shader/ShaderReflection.h"
+#ifdef USE_IMGUI
+#include "externals/imgui/imgui.h"
+#endif
 
 namespace NoEngine {
 namespace Render {
+void BloomCompositePass::DrawEditor() {
+	RenderPass::DrawEditor();
+#ifdef USE_IMGUI
+    ImGui::DragFloat("Bloom intensity", &intensity_, 0.05f, 0.0f, 20.0f);
+#endif
+}
+nlohmann::json BloomCompositePass::SaveEditorSettings() const {
+    auto settings = RenderPass::SaveEditorSettings();
+    settings["intensity"] = intensity_;
+    return settings;
+}
+void BloomCompositePass::LoadEditorSettings(const nlohmann::json& settings) {
+    RenderPass::LoadEditorSettings(settings);
+    if (settings.is_object() && settings.contains("intensity") && settings["intensity"].is_number()) intensity_ = settings["intensity"].get<float>();
+}
 void BloomCompositePass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& resourceRegistry, ECS::Registry& registry) {
 	static_cast<void>(registry);
 

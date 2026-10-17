@@ -14,6 +14,9 @@ public:
 	void SetFocusRange(float focusRange) { focusRange_ = focusRange; }
 	// 最大ボケ半径（UV空間, 例: 0.01 = 画面幅の1%）
 	void SetMaxCoCRadius(float maxCoCRadius) { maxCoCRadius_ = maxCoCRadius; }
+	void DrawEditor() override;
+	nlohmann::json SaveEditorSettings() const override;
+	void LoadEditorSettings(const nlohmann::json& settings) override;
 
 private:
 	float focusDistance_ = 30.0f;

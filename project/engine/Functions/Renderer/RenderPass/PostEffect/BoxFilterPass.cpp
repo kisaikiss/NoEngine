@@ -2,9 +2,31 @@
 #include "BoxFilterPass.h"
 #include "engine/Runtime/GraphicsCore.h"
 #include "engine/Functions/Shader/ShaderReflection.h"
+#ifdef USE_IMGUI
+#include "externals/imgui/imgui.h"
+#endif
 
 namespace NoEngine {
 namespace Render {
+void BoxFilterPass::DrawEditor() {
+	RenderPass::DrawEditor();
+#ifdef USE_IMGUI
+	int kernelSize = static_cast<int>(kernelSize_);
+	if (ImGui::SliderInt("Kernel size", &kernelSize, 1, 7)) kernelSize_ = static_cast<uint32_t>(kernelSize);
+#endif
+}
+nlohmann::json BoxFilterPass::SaveEditorSettings() const {
+	auto settings = RenderPass::SaveEditorSettings();
+	settings["kernelSize"] = kernelSize_;
+	return settings;
+}
+void BoxFilterPass::LoadEditorSettings(const nlohmann::json& settings) {
+	RenderPass::LoadEditorSettings(settings);
+	if (settings.is_object() && settings.contains("kernelSize") && settings["kernelSize"].is_number_integer()) {
+		const int value = settings["kernelSize"].get<int>();
+		if (value >= 1 && value <= 7) kernelSize_ = static_cast<uint32_t>(value);
+	}
+}
 void BoxFilterPass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& resourceRegistry, ECS::Registry& registry) {
 	static_cast<void>(resourceRegistry);
 	static_cast<void>(registry);
@@ -23,8 +45,7 @@ void BoxFilterPass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& res
 		float kernelVec[KMaxKernelVec * 4];
 	}constants;
 
-	// ToDo: ApplicationでKernelSizeを設定できるようにする
-	constants.kernelSize = 5;
+	constants.kernelSize = kernelSize_;
 	int count = constants.kernelSize * constants.kernelSize;
 	float v = 1.0f / count;
 	for (int i = 0; i < count; ++i) constants.kernelVec[i] = v;

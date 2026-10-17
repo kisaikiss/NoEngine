@@ -220,7 +220,7 @@ void MeshPassBase::RenderItems(GraphicsContext& context, const RenderGraphRegist
 				context.SetDynamicConstantBufferView(rootIndex["gMaterial"], sizeof(constants), &constants);
 				auto* material = ModelSaver::Get().GetMaterial(item.materialHandles[subMesh.materialIndex]);
 				context.SetDynamicDescriptor(rootIndex["gTexture"], 0, material->textureHandle.GetSRV());
-				context.SetDynamicDescriptor(rootIndex["gShadowMask"], 0, resourceRegistry.GetColorBuffer("ShadowMask").GetSRV());
+				context.SetDynamicDescriptor(rootIndex["gShadowMask"], 0, resourceRegistry.GetColorBuffer(GetInput("ShadowMask")).GetSRV());
 				context.SetDynamicDescriptor(rootIndex["gEnvironmentTexture"], 0, skyBoxTexture_.GetSRV());
 			}
 

@@ -366,6 +366,304 @@
             }
         }
     },
+    "renderPasses": [
+        {
+            "name": "BLAS update",
+            "settings": {
+                "autoClear": false,
+                "clearDepth": false,
+                "depthOutput": "",
+                "inputs": {},
+                "outputs": [],
+                "targetCameraName": "GameCamera",
+                "targetCameraType": 0,
+                "uavOutputs": []
+            }
+        },
+        {
+            "name": "TLAS build",
+            "settings": {
+                "autoClear": false,
+                "clearDepth": false,
+                "depthOutput": "",
+                "inputs": {},
+                "outputs": [],
+                "targetCameraName": "GameCamera",
+                "targetCameraType": 0,
+                "uavOutputs": []
+            }
+        },
+        {
+            "name": "Lighting",
+            "settings": {
+                "autoClear": false,
+                "clearDepth": false,
+                "depthOutput": "",
+                "inputs": {},
+                "outputs": [],
+                "targetCameraName": "GameCamera",
+                "targetCameraType": 0,
+                "uavOutputs": []
+            }
+        },
+        {
+            "name": "Pre-render",
+            "settings": {
+                "autoClear": true,
+                "clearDepth": true,
+                "depthOutput": "MainDepth",
+                "inputs": {},
+                "outputs": [
+                    "WorldPosition",
+                    "Normal",
+                    "ObjectID"
+                ],
+                "targetCameraName": "GameCamera",
+                "targetCameraType": 0,
+                "uavOutputs": []
+            }
+        },
+        {
+            "name": "Raytracing shadow",
+            "settings": {
+                "autoClear": true,
+                "clearDepth": false,
+                "depthOutput": "",
+                "inputs": {
+                    "Normal": "Normal",
+                    "WorldPosition": "WorldPosition"
+                },
+                "outputs": [],
+                "targetCameraName": "GameCamera",
+                "targetCameraType": 0,
+                "uavOutputs": [
+                    "ShadowMask"
+                ]
+            }
+        },
+        {
+            "name": "Opaque mesh",
+            "settings": {
+                "autoClear": true,
+                "clearDepth": true,
+                "depthOutput": "MainDepth",
+                "inputs": {
+                    "ShadowMask": "ShadowMask"
+                },
+                "outputs": [
+                    "MainColor"
+                ],
+                "targetCameraName": "GameCamera",
+                "targetCameraType": 0,
+                "uavOutputs": []
+            }
+        },
+        {
+            "name": "Depth outline",
+            "settings": {
+                "autoClear": false,
+                "clearDepth": false,
+                "depthOutput": "",
+                "inputs": {
+                    "InputColor": "MainColor",
+                    "InputDepth": "MainDepth"
+                },
+                "outputs": [
+                    "PostEffect"
+                ],
+                "targetCameraName": "GameCamera",
+                "targetCameraType": 0,
+                "uavOutputs": []
+            }
+        },
+        {
+            "name": "Depth of field",
+            "settings": {
+                "autoClear": false,
+                "clearDepth": false,
+                "depthOutput": "",
+                "focusDistance": 30.0,
+                "focusRange": 60.0,
+                "inputs": {
+                    "InputColor": "PostEffect",
+                    "InputDepth": "MainDepth"
+                },
+                "maxCoCRadius": 0.009999999776482582,
+                "outputs": [
+                    "MainColor"
+                ],
+                "targetCameraName": "GameCamera",
+                "targetCameraType": 0,
+                "uavOutputs": []
+            }
+        },
+        {
+            "name": "Transparent mesh",
+            "settings": {
+                "autoClear": false,
+                "clearDepth": false,
+                "depthOutput": "MainDepth",
+                "inputs": {
+                    "ShadowMask": "ShadowMask"
+                },
+                "outputs": [
+                    "MainColor"
+                ],
+                "targetCameraName": "GameCamera",
+                "targetCameraType": 0,
+                "uavOutputs": []
+            }
+        },
+        {
+            "name": "CPU particles",
+            "settings": {
+                "autoClear": false,
+                "clearDepth": false,
+                "depthOutput": "MainDepth",
+                "inputs": {},
+                "outputs": [
+                    "MainColor"
+                ],
+                "targetCameraName": "GameCamera",
+                "targetCameraType": 0,
+                "uavOutputs": []
+            }
+        },
+        {
+            "name": "GPU particles",
+            "settings": {
+                "autoClear": false,
+                "clearDepth": false,
+                "depthOutput": "MainDepth",
+                "inputs": {},
+                "outputs": [
+                    "MainColor"
+                ],
+                "targetCameraName": "GameCamera",
+                "targetCameraType": 0,
+                "uavOutputs": []
+            }
+        },
+        {
+            "name": "Bloom threshold",
+            "settings": {
+                "autoClear": false,
+                "clearDepth": false,
+                "depthOutput": "",
+                "inputs": {
+                    "InputColor": "MainColor"
+                },
+                "outputs": [
+                    "BloomThreshold"
+                ],
+                "softKnee": 1.0,
+                "targetCameraName": "GameCamera",
+                "targetCameraType": 0,
+                "threshold": 1.0,
+                "uavOutputs": []
+            }
+        },
+        {
+            "name": "Bloom blur horizontal",
+            "settings": {
+                "autoClear": false,
+                "clearDepth": false,
+                "depthOutput": "",
+                "inputs": {
+                    "InputColor": "BloomThreshold"
+                },
+                "outputs": [
+                    "BloomBlurA"
+                ],
+                "targetCameraName": "GameCamera",
+                "targetCameraType": 0,
+                "uavOutputs": []
+            }
+        },
+        {
+            "name": "Bloom blur vertical",
+            "settings": {
+                "autoClear": false,
+                "clearDepth": false,
+                "depthOutput": "",
+                "inputs": {
+                    "InputColor": "BloomBlurA"
+                },
+                "outputs": [
+                    "BloomBlurB"
+                ],
+                "targetCameraName": "GameCamera",
+                "targetCameraType": 0,
+                "uavOutputs": []
+            }
+        },
+        {
+            "name": "Bloom composite",
+            "settings": {
+                "autoClear": false,
+                "clearDepth": false,
+                "depthOutput": "",
+                "inputs": {
+                    "BloomColor": "BloomBlurB",
+                    "SceneColor": "MainColor"
+                },
+                "intensity": 3.0,
+                "outputs": [
+                    "BloomComposite"
+                ],
+                "targetCameraName": "GameCamera",
+                "targetCameraType": 0,
+                "uavOutputs": []
+            }
+        },
+        {
+            "name": "Vignetting",
+            "settings": {
+                "autoClear": false,
+                "clearDepth": false,
+                "depthOutput": "",
+                "inputs": {
+                    "InputColor": "BloomComposite"
+                },
+                "outputs": [
+                    "MainColor"
+                ],
+                "targetCameraName": "GameCamera",
+                "targetCameraType": 0,
+                "uavOutputs": []
+            }
+        },
+        {
+            "name": "Main sprites",
+            "settings": {
+                "autoClear": false,
+                "clearDepth": false,
+                "depthOutput": "",
+                "inputs": {},
+                "outputs": [
+                    "MainColor"
+                ],
+                "targetCameraName": "GameCamera",
+                "targetCameraType": 0,
+                "uavOutputs": []
+            }
+        },
+        {
+            "name": "Main text",
+            "settings": {
+                "autoClear": false,
+                "clearDepth": false,
+                "depthOutput": "",
+                "inputs": {},
+                "outputs": [
+                    "MainColor"
+                ],
+                "targetCameraName": "GameCamera",
+                "targetCameraType": 0,
+                "uavOutputs": []
+            }
+        }
+    ],
     "systems": [
         "EditSystem",
         "ModelLoadSystem",

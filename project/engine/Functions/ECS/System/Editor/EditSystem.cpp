@@ -179,6 +179,7 @@ void EditSystem::SaveFile(Registry& registry, nlohmann::json j) {
 			try {
 				nlohmann::json previous; existing >> previous;
 				if (previous.contains("systems")) j["systems"] = previous["systems"];
+				if (previous.contains("renderPasses")) j["renderPasses"] = previous["renderPasses"];
 			} catch (const std::exception&) {}
 		}
 	}

@@ -38,8 +38,8 @@ void RaytracingShadowPass::Dispatch(GraphicsContext& gfx, const RenderGraphRegis
 	gfx.SetRaytracingRootSignature(Render::GetRootSignature(Render::GetRootSignatureID(L"RT Global RootSignature")));
 
 	gfx.SetComputeSRV(0, renderContext->GetTLAS()->GetGPUVirtualAddress());
-	gfx.SetRaytracingDynamicDescriptor(1, 0, resourceRegistry.GetColorBuffer("WorldPosition").GetSRV());
-	gfx.SetRaytracingDynamicDescriptor(6, 0, resourceRegistry.GetColorBuffer("Normal").GetSRV());
+	gfx.SetRaytracingDynamicDescriptor(1, 0, resourceRegistry.GetColorBuffer(GetInput("WorldPosition")).GetSRV());
+	gfx.SetRaytracingDynamicDescriptor(6, 0, resourceRegistry.GetColorBuffer(GetInput("Normal")).GetSRV());
 
 	if (lightNums->directionalLightNum) {
 		gfx.SetRaytracingDynamicDescriptor(2, 0, renderContext->GetDirectionalLightSRV());
@@ -51,7 +51,7 @@ void RaytracingShadowPass::Dispatch(GraphicsContext& gfx, const RenderGraphRegis
 		gfx.SetRaytracingDynamicDescriptor(8, 0, renderContext->GetSpotLightSRV());
 	}
 
-	gfx.SetRaytracingDynamicDescriptor(3, 0, resourceRegistry.GetColorBuffer("ShadowMask").GetUAV());
+	gfx.SetRaytracingDynamicDescriptor(3, 0, resourceRegistry.GetColorBuffer(GetEditorUavOutputs().at(0)).GetUAV());
 
 
 	// camera
