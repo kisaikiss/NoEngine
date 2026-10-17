@@ -235,10 +235,9 @@ std::vector<D3D12_INPUT_ELEMENT_DESC> InputLayoutBuilder::BuildFromReflection(co
 namespace {
 std::unordered_map<std::string, std::unordered_map<std::string, uint32_t>> rootPramIndexMapMap;
 }
-void RootSignatureBuilder::BuildFromReflection(
-	const std::vector<ShaderReflection>& reflections,
-	RootSignature& rootSig,
-	const std::string& rootSigName) {
+void RootSignatureBuilder::BuildFromReflection(const std::vector<ShaderReflection>& reflections,
+	RootSignature& rootSig, const std::string& rootSigName,
+	D3D12_FILTER samplerFilter) {
 
 	LogDebug("=== Reflection Dump ===\n");
 	for (auto& refl : reflections) {
@@ -318,7 +317,7 @@ void RootSignatureBuilder::BuildFromReflection(
 
 	// サンプラー共通設定
 	D3D12_SAMPLER_DESC defaultSampler = {};
-	defaultSampler.Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
+	defaultSampler.Filter = samplerFilter;
 	defaultSampler.AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
 	defaultSampler.AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
 	defaultSampler.AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;

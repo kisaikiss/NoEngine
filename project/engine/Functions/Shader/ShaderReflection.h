@@ -129,7 +129,9 @@ public:
     /// </summary>
     /// <param name="reflections">シェーダーリフレクション</param>
     /// <param name="rootSig">生成先ルートシグネチャ</param>
-    static void BuildFromReflection(const std::vector<ShaderReflection>& reflections, RootSignature& rootSig, const std::string& rootSigName);
+    static void BuildFromReflection(const std::vector<ShaderReflection>& reflections,
+        RootSignature& rootSig, const std::string& rootSigName,
+        D3D12_FILTER samplerFilter = D3D12_FILTER_MIN_MAG_MIP_LINEAR);
 
     /// <summary>
     /// ルートパラメータのインデックスマップを取得します。

@@ -14,8 +14,8 @@
                     "distance": 17.188852310180664,
                     "drawCenter": false,
                     "moveType": "kUnreal",
-                    "unityMoveSpeed": 10.0,
-                    "unitySensitivity": 0.20000000298023224
+                    "unrealMoveSpeed": 10.0,
+                    "unrealSensitivity": 0.20000000298023224
                 },
                 "EditTag": {
                     "name": "DebugCamera",
@@ -292,9 +292,9 @@
             "components": {
                 "DirectionalLightComponent": {
                     "color": [
-                        1.0,
-                        1.0,
-                        1.0,
+                        0.43772244453430176,
+                        0.43772244453430176,
+                        0.43772244453430176,
                         1.0
                     ],
                     "direction": [
@@ -302,7 +302,7 @@
                         -0.7280455231666565,
                         -0.2781014144420624
                     ],
-                    "intensity": 0.800000011920929
+                    "intensity": 0.30000001192092896
                 },
                 "EditTag": {
                     "name": "directionalLight",
@@ -322,6 +322,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kNormal",
+                    "castShadow": true,
                     "color": [
                         1.0,
                         1.0,
@@ -336,12 +337,14 @@
                         1.0
                     ],
                     "emissiveIntensity": 1.0,
-                    "enviromentCoefficient": 0.0,
+                    "environmentCoefficient": 0.0,
                     "noiseScrollSpeed": 0.30000001192092896,
                     "noiseTextureName": "noise0",
+                    "receiveShadow": true,
                     "renderMode": "kDefault",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "unlit": false,
                     "uvPosition": [
                         0.0,
                         0.0
@@ -393,6 +396,59 @@
                     "translate": [
                         39.253360748291016,
                         -22.186708450317383
+                    ]
+                }
+            }
+        },
+        "titleLogo": {
+            "components": {
+                "EditTag": {
+                    "name": "titleLogo",
+                    "parent": null
+                },
+                "SpriteComponent": {
+                    "anchor": [
+                        0.5,
+                        0.5
+                    ],
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "fill": 0.0,
+                    "flipX": false,
+                    "flipY": false,
+                    "isVisible": true,
+                    "layer": 0,
+                    "maskTextureName": "",
+                    "nonRenderAngle": 0.0,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "space": "Screen",
+                    "textureName": "resources/game/ClockworksDisease/Texture/Title/title.png",
+                    "useMask": false,
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "parent": null,
+                    "rotation": 0.0,
+                    "scale": [
+                        720.0,
+                        360.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0
                     ]
                 }
             }

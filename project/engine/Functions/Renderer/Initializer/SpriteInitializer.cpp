@@ -21,7 +21,7 @@ void SpriteInitializer::CreatePSO(RenderContext& ctx) {
 		reflectionSprite.push_back(spritePsReflection);
 		RootSignature defaultSpriteRootSignature;
 		std::wstring defaultSpritePSOName = L"Renderer : Default Sprite PSO";
-		RootSignatureBuilder::BuildFromReflection(reflectionSprite, defaultSpriteRootSignature, ConvertString(defaultSpritePSOName));
+		RootSignatureBuilder::BuildFromReflection(reflectionSprite, defaultSpriteRootSignature, ConvertString(defaultSpritePSOName), D3D12_FILTER_MIN_MAG_MIP_POINT);
 
 		D3D12_RASTERIZER_DESC rasterizerSpriteDesc{};
 		rasterizerSpriteDesc.CullMode = D3D12_CULL_MODE_NONE;
