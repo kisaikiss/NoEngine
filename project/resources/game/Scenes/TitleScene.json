@@ -179,6 +179,50 @@
                 }
             }
         },
+        "background": {
+            "components": {
+                "EditTag": {
+                    "name": "background",
+                    "parent": null
+                },
+                "ShaderBackgroundComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "isVisible": true,
+                    "param": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "shaderPath": "resources/game/ClockworksDisease/Shaders/Starfield.PS.hlsl",
+                    "timeScale": 1.0
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
         "cursor": {
             "components": {
                 "EditTag": {
@@ -356,7 +400,7 @@
                     ]
                 },
                 "MeshComponent": {
-                    "isVisible": true,
+                    "isVisible": false,
                     "meshName": "SampleStage"
                 },
                 "TransformComponent": {
@@ -405,6 +449,16 @@
                 "EditTag": {
                     "name": "titleLogo",
                     "parent": null
+                },
+                "Floating2DComponent": {
+                    "amplitude": [
+                        0.0,
+                        7.400000095367432
+                    ],
+                    "velocity": [
+                        0.0,
+                        1.899999976158142
+                    ]
                 },
                 "SpriteComponent": {
                     "anchor": [
@@ -538,6 +592,21 @@
                 "inputs": {
                     "ShadowMask": "ShadowMask"
                 },
+                "outputs": [
+                    "MainColor"
+                ],
+                "targetCameraName": "GameCamera",
+                "targetCameraType": 0,
+                "uavOutputs": []
+            }
+        },
+        {
+            "name": "ShaderBackground",
+            "settings": {
+                "autoClear": false,
+                "clearDepth": false,
+                "depthOutput": "MainDepth",
+                "inputs": {},
                 "outputs": [
                     "MainColor"
                 ],
@@ -763,6 +832,7 @@
         "ParticleEmitterSystem",
         "TitleCursorSystem",
         "MovementSystem",
+        "Floating2DSystem",
         "TransformRoutineSystem",
         "SpriteAnimationSystem",
         "DrawManipulatorSystem",

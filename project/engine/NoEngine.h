@@ -52,11 +52,15 @@
 
 #include "Assets/Audio/Audio.h"
 #include "Assets/AssetManager.h"
+#include "Functions/Renderer/RenderPass/RenderPassScheduler.h"
 #include "Functions/Renderer/RaytracingManager.h"
 #include "Functions/Renderer/Primitive.h"
 #include "Functions/Input/Input.h"
 #include "Functions/Input/InputConfig.h"
 #include "Functions/Scene/ITransitionEffect.h"
+#include "Functions/Shader/ShaderModule.h"
+
+#include "Utilities/Conversion/ConvertString.h"
 
 #include "Math/MathInclude.h"
 
@@ -80,4 +84,5 @@ using namespace NoEngine::Easing;
 using namespace NoEngine::Math;
 using namespace NoEngine::Editor;
 using namespace NoEngine::Random;
+using namespace NoEngine::Render;
 }

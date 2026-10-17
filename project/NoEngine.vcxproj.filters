@@ -46,6 +46,8 @@
     <FxCompile Include="resources\engine\Shaders\Text.VS.hlsl" />
     <FxCompile Include="resources\engine\Shaders\Text.PS.hlsl" />
     <FxCompile Include="resources\engine\Shaders\SpriteObjectID.PS.hlsl" />
+    <FxCompile Include="resources\game\ClockworksDisease\Shaders\ShaderBackground.VS.hlsl" />
+    <FxCompile Include="resources\game\ClockworksDisease\Shaders\Starfield.PS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="engine\Assets\Audio\Audio.cpp" />
@@ -325,6 +327,8 @@
     <ClCompile Include="engine\Functions\ECS\System\Movement\Floating2DSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\Component\Tutorial\TutorialObjectComponent.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Tutorial\TutorialObjectSystem.cpp" />
+    <ClCompile Include="application\ClockworksDisease\Component\Background\ShaderBackgroundComponent.cpp" />
+    <ClCompile Include="application\ClockworksDisease\Render\ShaderBackgroundPass.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -658,6 +662,8 @@
     <ClInclude Include="engine\Functions\ECS\System\Movement\Floating2DSystem.h" />
     <ClInclude Include="application\ClockworksDisease\Component\Tutorial\TutorialObjectComponent.h" />
     <ClInclude Include="application\ClockworksDisease\System\Tutorial\TutorialObjectSystem.h" />
+    <ClInclude Include="application\ClockworksDisease\Component\Background\ShaderBackgroundComponent.h" />
+    <ClInclude Include="application\ClockworksDisease\Render\ShaderBackgroundPass.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />
@@ -671,5 +677,6 @@
     <None Include="resources\game\td_2304\Json\tdSpriteConfig.json" />
     <None Include="resources\engine\Shaders\Random.hlsli" />
     <None Include="resources\engine\Shaders\Particle\Particle.hlsli" />
+    <None Include="resources\game\ClockworksDisease\Shaders\BackgroundCommon.hlsli" />
   </ItemGroup>
 </Project>

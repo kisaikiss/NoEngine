@@ -8,6 +8,8 @@ public:
 	/// </summary>
 	void Startup(void) override;
 
+
+	void SetupRenderPass(NoEngine::RenderPassScheduler& renderPassScheduler) override;
 	bool Exit() override;
 };
 

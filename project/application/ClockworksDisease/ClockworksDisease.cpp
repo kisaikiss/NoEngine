@@ -3,6 +3,8 @@
 #include "Scene/TitleScene.h"
 #include "Scene/GameClearScene.h"
 
+#include "Render/ShaderBackgroundPass.h"
+
 #include "Component/Game/GameQuitEvent.h"
 
 void ClockworksDisease::Startup(void) {
@@ -77,6 +79,16 @@ void ClockworksDisease::Startup(void) {
 
 	No::InputBindAction("ViewGoal", No::DeviceType::Keyboard, static_cast<int>('Z'));
 	No::InputBindAction("ViewGoal", No::DeviceType::GamepadButton, static_cast<int>(No::GamepadButton::RB));
+}
+
+void ClockworksDisease::SetupRenderPass(NoEngine::RenderPassScheduler& renderPassScheduler) {
+	NoEngine::CommonSetupRenderPass(renderPassScheduler);
+	auto shaderBackground = std::make_unique<ShaderBackgroundPass>();
+	shaderBackground->AddOutput("MainColor");
+	shaderBackground->SetDepthOutput("MainDepth");   // クリアしない
+	renderPassScheduler.AddPass(std::move(shaderBackground), "ShaderBackground", false);
+
+	NoEngine::CommonSetupDebugRenderPass(renderPassScheduler);
 }
 
 bool ClockworksDisease::Exit() {

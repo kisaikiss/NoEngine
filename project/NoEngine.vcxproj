@@ -195,6 +195,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="application\ClockworksDisease\ClockworksDisease.cpp" />
+    <ClCompile Include="application\ClockworksDisease\Component\Background\ShaderBackgroundComponent.cpp" />
     <ClCompile Include="application\ClockworksDisease\Component\Camera\CameraIntroComponent.cpp" />
     <ClCompile Include="application\ClockworksDisease\Component\Camera\FollowCameraComponent.cpp" />
     <ClCompile Include="application\ClockworksDisease\Component\Dialogue\DialogueComponent.cpp" />
@@ -211,6 +212,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="application\ClockworksDisease\Component\UI\PauseMenuComponent.cpp" />
     <ClCompile Include="application\ClockworksDisease\Component\UI\TitleUIComponent.cpp" />
     <ClCompile Include="application\ClockworksDisease\Component\UI\UserInterfaceComponent.cpp" />
+    <ClCompile Include="application\ClockworksDisease\Render\ShaderBackgroundPass.cpp" />
     <ClCompile Include="application\ClockworksDisease\Scene\GameClearScene.cpp" />
     <ClCompile Include="application\ClockworksDisease\Scene\GameScene.cpp" />
     <ClCompile Include="application\ClockworksDisease\Scene\TitleScene.cpp" />
@@ -515,6 +517,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="application\ClockworksDisease\ClockworksDisease.h" />
+    <ClInclude Include="application\ClockworksDisease\Component\Background\ShaderBackgroundComponent.h" />
     <ClInclude Include="application\ClockworksDisease\Component\Camera\CameraIntroComponent.h" />
     <ClInclude Include="application\ClockworksDisease\Component\Camera\FollowCameraComponent.h" />
     <ClInclude Include="application\ClockworksDisease\Component\Dialogue\DialogueComponent.h" />
@@ -522,6 +525,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="application\ClockworksDisease\Component\Game\StageTransitionComponent.h" />
     <ClInclude Include="application\ClockworksDisease\Component\Opening\OpeningPanelComponent.h" />
     <ClInclude Include="application\ClockworksDisease\Component\Tutorial\TutorialObjectComponent.h" />
+    <ClInclude Include="application\ClockworksDisease\Render\ShaderBackgroundPass.h" />
     <ClInclude Include="application\ClockworksDisease\Scene\GameClearScene.h" />
     <ClInclude Include="application\ClockworksDisease\Scene\GameScene.h" />
     <ClInclude Include="application\ClockworksDisease\System\Dialogue\DialogueAutoTriggerSystem.h" />
@@ -1226,6 +1230,22 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
+    <FxCompile Include="resources\game\ClockworksDisease\Shaders\ShaderBackground.VS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Development|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="resources\game\ClockworksDisease\Shaders\Starfield.PS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Development|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
     <FxCompile Include="resources\game\Shaders\BackGround.PS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
@@ -1266,6 +1286,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <None Include="resources\engine\Shaders\Particle\Particle.hlsli" />
     <None Include="resources\engine\Shaders\Default.hlsli" />
     <None Include="resources\engine\Shaders\Random.hlsli" />
+    <None Include="resources\game\ClockworksDisease\Shaders\BackgroundCommon.hlsli" />
     <None Include="resources\game\Shaders\ShaderMathUtil.hlsli" />
     <None Include="resources\game\td_2304\Json\tdSpriteConfig.json" />
   </ItemGroup>

@@ -24261,6 +24261,50 @@
             },
             "prefabInstance": "resources/game/Prefabs\\XButton.json"
         },
+        "background": {
+            "components": {
+                "EditTag": {
+                    "name": "background",
+                    "parent": null
+                },
+                "ShaderBackgroundComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "isVisible": true,
+                    "param": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "shaderPath": "resources/game/ClockworksDisease/Shaders/Starfield.PS.hlsl",
+                    "timeScale": 1.0
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
         "box": {
             "components": {
                 "AABBCollider": {
@@ -27415,6 +27459,7 @@
                     "highJumpSpeed": 15.0,
                     "infinityJump": false,
                     "infinityStamina": false,
+                    "jumpKind": "kNormal",
                     "jumpSpeed": 10.0,
                     "maxFallSpeed": -20.0,
                     "maxStamina": 0.0,
@@ -27962,7 +28007,7 @@
                     ]
                 },
                 "MeshComponent": {
-                    "isVisible": true,
+                    "isVisible": false,
                     "meshName": "skydome"
                 },
                 "NoClickSelectTag": null,
@@ -28365,6 +28410,21 @@
                 "inputs": {
                     "ShadowMask": "ShadowMask"
                 },
+                "outputs": [
+                    "MainColor"
+                ],
+                "targetCameraName": "GameCamera",
+                "targetCameraType": 0,
+                "uavOutputs": []
+            }
+        },
+        {
+            "name": "ShaderBackground",
+            "settings": {
+                "autoClear": false,
+                "clearDepth": false,
+                "depthOutput": "MainDepth",
+                "inputs": {},
                 "outputs": [
                     "MainColor"
                 ],
