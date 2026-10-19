@@ -4,6 +4,7 @@
 namespace MainStageProgress {
 void QueueCapture();
 void CaptureIfQueued(No::Registry& registry);
+bool RestoreCurrentStage(No::Registry& registry);
 void Reset();
 bool Restore(No::Registry& registry);
 void RecordCollectedItem(No::Registry& registry, No::Entity item);

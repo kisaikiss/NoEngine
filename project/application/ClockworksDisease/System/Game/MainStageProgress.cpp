@@ -8,17 +8,17 @@
 #include "application/ClockworksDisease/Component/Game/StageTransitionComponent.h"
 #include "application/ClockworksDisease/Component/UI/UserInterfaceComponent.h"
 
-
-#include <unordered_set>
-
 namespace MainStageProgress {
 namespace {
 nlohmann::json sMainStageSnapshot;
-std::unordered_set<std::string> sCollectedItemNames;
-bool sHasSnapshot = false;
+std::unordered_map<std::string, nlohmann::json> sStageSnapshots;
+std::unordered_map<std::string, std::unordered_set<std::string>> sCollectedItemNames;
 bool sCaptureQueued = false;
 PlayerAbilityDebugComponent sPlayerAbility{};
 float sPlayerStamina = 0.0f;
+float sPlayerCurrentStamina = 0.0f;
+LevelComponent sPlayerLevel{};
+bool sHasSharedProgress = false;
 }
 
 void QueueCapture() {
@@ -27,34 +27,52 @@ void QueueCapture() {
 
 void Reset() {
 	sMainStageSnapshot = nlohmann::json();
+	sStageSnapshots.clear();
 	sCollectedItemNames.clear();
-	sHasSnapshot = false;
 	sCaptureQueued = false;
+	sPlayerAbility = {};
+	sPlayerLevel = {};
+	sPlayerStamina = 0.0f;
+	sPlayerCurrentStamina = 0.0f;
+	sHasSharedProgress = false;
 }
 
 void CaptureIfQueued(No::Registry& registry) {
 	if (!sCaptureQueued) return;
+	const std::string sceneName = No::GetCurrentSceneName(registry);
+	if (sceneName.empty()) return;
 	sMainStageSnapshot = NoEngine::Editor::SaveScene(registry);
+	sStageSnapshots[sceneName] = sMainStageSnapshot;
 
 	// 現状のプレイヤーの状態を保持
 	for (auto e : registry.View<PlayerAbilityDebugComponent, PlayerComponent>()) {
 		sPlayerAbility = *registry.GetComponent<PlayerAbilityDebugComponent>(e);
-		sPlayerStamina = registry.GetComponent<PlayerComponent>(e)->maxStamina;
+		const auto* player = registry.GetComponent<PlayerComponent>(e);
+		sPlayerStamina = player->maxStamina;
+		sPlayerCurrentStamina = player->stamina;
+		if (const auto* level = registry.GetComponent<LevelComponent>(e)) sPlayerLevel = *level;
+		sHasSharedProgress = true;
 	}
-	sHasSnapshot = true;
 	sCaptureQueued = false;
 
 }
 
 bool Restore(No::Registry& registry) {
-	if (!sHasSnapshot) return false;
-	NoEngine::Editor::LoadScene(registry, sMainStageSnapshot, true);
+	return RestoreCurrentStage(registry);
+}
+
+bool RestoreCurrentStage(No::Registry& registry) {
+	const std::string sceneName = No::GetCurrentSceneName(registry);
+	const auto snapshot = sStageSnapshots.find(sceneName);
+	if (snapshot == sStageSnapshots.end()) return false;
+	NoEngine::Editor::LoadScene(registry, snapshot->second, true);
 
 	// 読み込み元のシーンファイルに存在する取得済みアイテムを再生成させない。
 	std::vector<No::Entity> collectedEntities;
 	for (auto entity : registry.View<No::EditTag>()) {
 		const auto* editTag = registry.GetComponent<No::EditTag>(entity);
-		if (editTag && sCollectedItemNames.contains(editTag->name)) {
+		const auto collected = sCollectedItemNames.find(sceneName);
+		if (editTag && collected != sCollectedItemNames.end() && collected->second.contains(editTag->name)) {
 			collectedEntities.push_back(entity);
 		}
 	}
@@ -94,9 +112,9 @@ bool Restore(No::Registry& registry) {
 }
 
 void RecordCollectedItem(No::Registry& registry, No::Entity item) {
-	if (No::GetCurrentSceneName(registry) != "GameScene") return;
+	const std::string sceneName = No::GetCurrentSceneName(registry);
 	const auto* editTag = registry.GetComponent<No::EditTag>(item);
-	if (editTag) sCollectedItemNames.insert(editTag->name);
+	if (editTag && !sceneName.empty()) sCollectedItemNames[sceneName].insert(editTag->name);
 }
 }
 
@@ -110,10 +128,9 @@ void MainStageProgressRestoreSystem::Update(No::Registry& registry, float deltaT
 	
 	if (restored_) return;
 
-	if (No::GetCurrentSceneName(registry) == "GameScene") {
-		restored_ = MainStageProgress::Restore(registry);
-	} else {
-		// メインステージでのプレイヤーのアビリティを入れる
+	restored_ = MainStageProgress::RestoreCurrentStage(registry);
+	if (MainStageProgress::sHasSharedProgress) {
+		// ステージ固有の保存状態を復元した後、全ステージ共通の育成状況を適用する。
 		for (auto e : registry.View<PlayerComponent, PlayerAbilityDebugComponent>()) {
 			auto* playerAbility = registry.GetComponent<PlayerAbilityDebugComponent>(e);
 			playerAbility->airDash = MainStageProgress::sPlayerAbility.airDash;
@@ -130,16 +147,44 @@ void MainStageProgressRestoreSystem::Update(No::Registry& registry, float deltaT
 			if (playerAbility->magicScaffold && !registry.Has<CreateMagicScaffoldTag>(e)) {
 				registry.AddComponent<CreateMagicScaffoldTag>(e);
 			}
-			registry.GetComponent<PlayerComponent>(e)->maxStamina = MainStageProgress::sPlayerStamina;
+			auto* player = registry.GetComponent<PlayerComponent>(e);
+			player->maxStamina = MainStageProgress::sPlayerStamina;
+			player->stamina = std::min(MainStageProgress::sPlayerCurrentStamina, player->maxStamina);
+			if (auto* level = registry.GetComponent<LevelComponent>(e)) {
+				level->power = MainStageProgress::sPlayerLevel.power;
+				level->nowLevel = MainStageProgress::sPlayerLevel.nowLevel;
+				level->nextLevelUp = MainStageProgress::sPlayerLevel.nextLevelUp;
+				// 各ステージで定義された報酬表を使い、共通レベルまでに解放した能力を再付与する。
+				for (const auto& reward : level->rewards) {
+					if (reward.level > level->nowLevel) continue;
+					switch (reward.ability) {
+					case PlayerAbility::kMultiJump:
+						if (!registry.Has<MultiJumpTag>(e)) registry.AddComponent<MultiJumpTag>(e);
+						break;
+					case PlayerAbility::kHighJump:
+						playerAbility->highJump = true;
+						if (!registry.Has<HighJumpTag>(e)) registry.AddComponent<HighJumpTag>(e);
+						break;
+					case PlayerAbility::kAirDash:
+						playerAbility->airDash = true;
+						if (!registry.Has<AirDashTag>(e)) registry.AddComponent<AirDashTag>(e);
+						break;
+					case PlayerAbility::kMagicScaffold:
+						playerAbility->magicScaffold = true;
+						if (!registry.Has<CreateMagicScaffoldTag>(e)) registry.AddComponent<CreateMagicScaffoldTag>(e);
+						break;
+					default:
+						break;
+					}
+				}
+			}
 		}
 	}
 }
 
 void MainStageProgressCaptureSystem::Update(No::Registry& registry, float deltaTime) {
 	static_cast<void>(deltaTime);
-	if (No::GetCurrentSceneName(registry) == "GameScene") {
-		MainStageProgress::CaptureIfQueued(registry);
-	}
+	MainStageProgress::CaptureIfQueued(registry);
 }
 
 REGISTER_SYSTEM(::MainStageProgressRestoreSystem, "MainStageProgressRestoreSystem", "Gameplay")

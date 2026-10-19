@@ -20,16 +20,16 @@ void WarpBlockSystem::Update(No::Registry& registry, float deltaTime) {
 			transform->SetWorldPosition(registry, warpBlockPos);
 
 			if (easingTime >= 1.0f) {
+				if (warpBlock->destinationScene != No::GetCurrentSceneName(registry)) {
+					MainStageProgress::QueueCapture();
+					MainStageProgress::CaptureIfQueued(registry);
+				}
 				No::SceneChangeEvent sceneChangeEvent;
 				sceneChangeEvent.nextScene = warpBlock->destinationScene;
 				sceneChangeEvent.transitionType = No::SceneTransitionType::kCircleScale;
 				registry.EmitEvent(sceneChangeEvent);
 				transform->scale = No::Vector3::ZERO;
 				warpBlock->scalingTimer = 0.0f;
-				if (No::GetCurrentSceneName(registry) == "GameScene" &&
-					warpBlock->destinationScene != "GameScene") {
-					MainStageProgress::QueueCapture();
-				}
 			}
 
 		}

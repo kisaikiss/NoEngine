@@ -24269,19 +24269,19 @@
                 },
                 "ShaderBackgroundComponent": {
                     "color": [
-                        1.0,
-                        1.0,
-                        1.0,
+                        0.4341636896133423,
+                        0.4341636896133423,
+                        0.4341636896133423,
                         1.0
                     ],
                     "isVisible": true,
                     "param": [
                         0.0,
-                        0.0,
+                        1.5709999799728394,
                         0.0,
                         0.0
                     ],
-                    "shaderPath": "resources/game/ClockworksDisease/Shaders/SkyDome.PS.hlsl",
+                    "shaderPath": "resources/game/ClockworksDisease/Shaders/Octagrams.PS.hlsl",
                     "timeScale": 1.0
                 },
                 "TransformComponent": {
@@ -28463,7 +28463,7 @@
                     "InputColor": "PostEffect",
                     "InputDepth": "MainDepth"
                 },
-                "maxCoCRadius": 0.009999999776482582,
+                "maxCoCRadius": 0.0020000000949949026,
                 "outputs": [
                     "MainColor"
                 ],
