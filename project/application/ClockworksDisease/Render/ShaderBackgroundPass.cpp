@@ -103,6 +103,11 @@ void ShaderBackgroundPass::Execute(NoEngine::GraphicsContext& gfx, const NoEngin
 			float pad;
 			No::Color color;
 			No::Vector4 param;
+			No::Vector4 cameraPosition;
+			No::Vector4 cameraRight;
+			No::Vector4 cameraUp;
+			No::Vector4 cameraForward;
+			No::Vector4 cameraParams;
 		} constants;
 		constants.resolution[0] = 720.0f * aspect;
 		constants.resolution[1] = 720.0f;
@@ -110,6 +115,13 @@ void ShaderBackgroundPass::Execute(NoEngine::GraphicsContext& gfx, const NoEngin
 		constants.pad = 0.0f;
 		constants.color = bg->color;
 		constants.param = bg->param;
+		const No::Vector3 right = cameraRotation.RotateVector(No::Vector3::RIGHT);
+		const No::Vector3 up = cameraRotation.RotateVector(No::Vector3::UP);
+		constants.cameraPosition = { cameraPosition.x, cameraPosition.y, cameraPosition.z, 1.0f };
+		constants.cameraRight = { right.x, right.y, right.z, 0.0f };
+		constants.cameraUp = { up.x, up.y, up.z, 0.0f };
+		constants.cameraForward = { forward.x, forward.y, forward.z, 0.0f };
+		constants.cameraParams = { camera->fov, camera->aspect, 0.0f, 0.0f };
 		gfx.SetDynamicConstantBufferView(rootIndex["BackgroundConst"], sizeof(constants), &constants);
 
 		gfx.Draw(6);

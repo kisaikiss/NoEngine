@@ -24281,7 +24281,7 @@
                         0.0,
                         0.0
                     ],
-                    "shaderPath": "resources/game/ClockworksDisease/Shaders/Starfield.PS.hlsl",
+                    "shaderPath": "resources/game/ClockworksDisease/Shaders/SkyDome.PS.hlsl",
                     "timeScale": 1.0
                 },
                 "TransformComponent": {

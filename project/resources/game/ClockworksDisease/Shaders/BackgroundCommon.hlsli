@@ -5,6 +5,11 @@ cbuffer BackgroundConst : register(b1)
     float _pad;
     float4 iColor;
     float4 iParam;
+    float4 iCameraPosition;
+    float4 iCameraRight;
+    float4 iCameraUp;
+    float4 iCameraForward;
+    float4 iCameraParams; // x: vertical FOV (radians), y: aspect ratio
 };
 
 struct PSInput

@@ -81,8 +81,8 @@
                 },
                 "SpriteComponent": {
                     "anchor": [
-                        0.0,
-                        1.0
+                        0.5,
+                        0.5
                     ],
                     "color": [
                         0.0,
@@ -134,14 +134,14 @@
                 },
                 "SpriteComponent": {
                     "anchor": [
-                        0.0,
-                        1.0
+                        0.5,
+                        0.5
                     ],
                     "color": [
-                        1.0,
-                        1.0,
-                        1.0,
-                        0.21960784494876862
+                        0.572549045085907,
+                        0.572549045085907,
+                        0.572549045085907,
+                        0.5529412031173706
                     ],
                     "fill": 0.0,
                     "flipX": false,
@@ -199,7 +199,7 @@
                         0.0,
                         0.0
                     ],
-                    "shaderPath": "resources/game/ClockworksDisease/Shaders/Starfield.PS.hlsl",
+                    "shaderPath": "resources/game/ClockworksDisease/Shaders/FractalPyramid.PS.hlsl",
                     "timeScale": 1.0
                 },
                 "TransformComponent": {
@@ -231,8 +231,8 @@
                 },
                 "SpriteComponent": {
                     "anchor": [
-                        0.0,
-                        1.0
+                        0.5,
+                        0.5
                     ],
                     "color": [
                         0.0,
@@ -287,8 +287,8 @@
                 },
                 "SpriteComponent": {
                     "anchor": [
-                        0.0,
-                        1.0
+                        0.5,
+                        0.5
                     ],
                     "color": [
                         1.0,
@@ -358,72 +358,6 @@
             },
             "prefabInstance": "resources/game/Prefabs\\directionalLight.json"
         },
-        "ground": {
-            "components": {
-                "EditTag": {
-                    "name": "ground",
-                    "parent": null
-                },
-                "MaterialComponent": {
-                    "blendMode": "kNormal",
-                    "castShadow": true,
-                    "color": [
-                        1.0,
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "drawOutline": false,
-                    "edgeColor": [
-                        1.0,
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "emissiveIntensity": 1.0,
-                    "environmentCoefficient": 0.0,
-                    "noiseScrollSpeed": 0.30000001192092896,
-                    "noiseTextureName": "noise0",
-                    "receiveShadow": true,
-                    "renderMode": "kDefault",
-                    "rimPower": 2.0,
-                    "shininess": 60.0,
-                    "unlit": false,
-                    "uvPosition": [
-                        0.0,
-                        0.0
-                    ],
-                    "uvRotate": 0.0,
-                    "uvScale": [
-                        1.0,
-                        1.0
-                    ]
-                },
-                "MeshComponent": {
-                    "isVisible": false,
-                    "meshName": "SampleStage"
-                },
-                "TransformComponent": {
-                    "parent": null,
-                    "rotation": [
-                        0.0,
-                        0.0,
-                        0.0,
-                        1.0
-                    ],
-                    "scale": [
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "translate": [
-                        0.0,
-                        0.0,
-                        0.0
-                    ]
-                }
-            }
-        },
         "selector": {
             "components": {
                 "EditTag": {
@@ -438,8 +372,8 @@
                         1.0
                     ],
                     "translate": [
-                        39.253360748291016,
-                        -22.186708450317383
+                        -181.73736572265625,
+                        336.1221618652344
                     ]
                 }
             }
@@ -502,7 +436,7 @@
                     ],
                     "translate": [
                         0.0,
-                        0.0
+                        -62.53436279296875
                     ]
                 }
             }
@@ -655,6 +589,21 @@
             }
         },
         {
+            "name": "Main sprites",
+            "settings": {
+                "autoClear": false,
+                "clearDepth": false,
+                "depthOutput": "",
+                "inputs": {},
+                "outputs": [
+                    "MainColor"
+                ],
+                "targetCameraName": "GameCamera",
+                "targetCameraType": 0,
+                "uavOutputs": []
+            }
+        },
+        {
             "name": "Transparent mesh",
             "settings": {
                 "autoClear": false,
@@ -782,21 +731,6 @@
                 "inputs": {
                     "InputColor": "BloomComposite"
                 },
-                "outputs": [
-                    "MainColor"
-                ],
-                "targetCameraName": "GameCamera",
-                "targetCameraType": 0,
-                "uavOutputs": []
-            }
-        },
-        {
-            "name": "Main sprites",
-            "settings": {
-                "autoClear": false,
-                "clearDepth": false,
-                "depthOutput": "",
-                "inputs": {},
                 "outputs": [
                     "MainColor"
                 ],
