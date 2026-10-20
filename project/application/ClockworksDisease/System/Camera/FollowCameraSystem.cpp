@@ -108,7 +108,10 @@ void FollowCameraSystem::Update(No::Registry& registry, float deltaTime) {
 
 
 		// 実際の移動
-		constexpr float moveTime = 0.1f;
+		// 60 FPS時に 0.1/フレーム となる応答性は維持しつつ、
+		// 追従速度がフレームレートに依存しないようにする。
+		constexpr float positionSmoothSpeed = 6.32163f;
+		const float moveTime = 1.0f - std::exp(-positionSmoothSpeed * deltaTime);
 		No::Vector3 nowTranslate = transform->translate;
 		transform->translate = No::Lerp(nowTranslate, nextPosition, moveTime);
 
@@ -143,7 +146,7 @@ void FollowCameraSystem::Update(No::Registry& registry, float deltaTime) {
 		
 
 		followCameraVariables->nextRotation = transform->rotation;
-		float slerpTime = deltaTime;
+		float viewSpeed = followCameraVariables->playerViewSpeed;
 		if (No::InputIsPress("ViewGoal")) {
 			// ゴールオブジェクト座標を見る
 			for (auto goalItemE : registry.View<GoalItemTag, No::TransformComponent>()) {
@@ -151,15 +154,15 @@ void FollowCameraSystem::Update(No::Registry& registry, float deltaTime) {
 				followCameraVariables->nextRotation.LookRotation(goalItemPos - transform->GetWorldPosition(registry), No::Vector3::UP);
 			}
 
-			slerpTime *= followCameraVariables->goalViewSpeed;
+			viewSpeed = followCameraVariables->goalViewSpeed;
 		} else {
 			// プレイヤー + Offset座標を見る
 			playerPos.y += followCameraVariables->playerPosOffset;
 			followCameraVariables->nextRotation.LookRotation(playerPos - transform->GetWorldPosition(registry), No::Vector3::UP);
-			slerpTime *= followCameraVariables->playerViewSpeed;
 		}
 
-		transform->rotation = No::Quaternion::Slerp(transform->rotation, followCameraVariables->nextRotation, slerpTime);
+		const float rotationAlpha = 1.0f - std::exp(-viewSpeed * deltaTime);
+		transform->rotation = No::Quaternion::Slerp(transform->rotation, followCameraVariables->nextRotation, rotationAlpha);
 	
 	}
 
