@@ -37,6 +37,8 @@ void ClockworksDisease::Startup(void) {
 
 	No::InputBindAction("Cancel", No::DeviceType::Keyboard, static_cast<int>(VK_BACK));
 	No::InputBindAction("Cancel", No::DeviceType::GamepadButton, static_cast<int>(No::GamepadButton::B));
+	No::InputBindAxis("MenuHorizontal", No::DeviceType::GamepadAxis, static_cast<int>(No::GamepadAxis::LeftStickX), 1.0f, 0.2f);
+	No::InputBindAxis("MenuVertical", No::DeviceType::GamepadAxis, static_cast<int>(No::GamepadAxis::LeftStickY), 1.0f, 0.2f);
 
 	// 会話
 	No::InputBindAction("Talk", No::DeviceType::Keyboard, static_cast<int>('F'));

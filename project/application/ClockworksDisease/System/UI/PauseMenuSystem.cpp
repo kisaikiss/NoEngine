@@ -156,10 +156,12 @@ void PauseMenuSystem::UpdateMainMenu(No::Registry& registry) {
 		return;
 	}
 
-	if (No::InputIsTrigger("Down")) {
+	const float verticalInput = No::GetInputAxisValue("MenuVertical");
+	const float previousVerticalInput = No::GetInputPreAxisValue("MenuVertical");
+	if (No::InputIsTrigger("Down") || (verticalInput < 0.f && previousVerticalInput >= 0.f)) {
 		menu->mainSelectedIndex = (menu->mainSelectedIndex + 1) % kMainItemCount;
 	}
-	if (No::InputIsTrigger("Up")) {
+	if (No::InputIsTrigger("Up") || (verticalInput > 0.f && previousVerticalInput <= 0.f)) {
 		menu->mainSelectedIndex = (menu->mainSelectedIndex + kMainItemCount - 1) % kMainItemCount;
 	}
 
@@ -211,12 +213,16 @@ void PauseMenuSystem::UpdateOptionMenu(No::Registry& registry) {
 		return;
 	}
 
+	const float horizontalInput = No::GetInputAxisValue("MenuHorizontal");
+	const float previousHorizontalInput = No::GetInputPreAxisValue("MenuHorizontal");
+	const bool stickRight = horizontalInput > 0.f && previousHorizontalInput <= 0.f;
+	const bool stickLeft = horizontalInput < 0.f && previousHorizontalInput >= 0.f;
 	for (auto e : registry.View<FollowCameraComponent>()) {
 		auto* fc = registry.GetComponent<FollowCameraComponent>(e);
-		if (No::InputIsTrigger("Right")) {
+		if (No::InputIsTrigger("Right") || stickRight) {
 			fc->moveSpeed = std::min(fc->moveSpeed + kMoveSpeedStep, kMoveSpeedMax);
 		}
-		if (No::InputIsTrigger("Left")) {
+		if (No::InputIsTrigger("Left") || stickLeft) {
 			fc->moveSpeed = std::max(fc->moveSpeed - kMoveSpeedStep, kMoveSpeedMin);
 		}
 	}

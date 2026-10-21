@@ -724,9 +724,190 @@
                         2.0
                     ],
                     "translate": [
-                        -124.38592529296875,
+                        -108.79871368408203,
                         41.191261291503906,
                         -159.585693359375
+                    ]
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\BigPowerItem.json"
+        },
+        "BigPowerItem_5": {
+            "components": {
+                "BigPowerItemComponent": {
+                    "grantPower": 30
+                },
+                "CollectibleItemTag": null,
+                "CollisionLayerComponent": {
+                    "layer": "Item"
+                },
+                "EditTag": {
+                    "name": "BigPowerItem_5",
+                    "parent": null
+                },
+                "EffectEmitModeSphereTag": null,
+                "EffectEmitterComponent": {
+                    "color": [
+                        1.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ],
+                    "count": 200,
+                    "emitRange": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "maxLifeTime": 2.0,
+                    "maxRotate": 3.1415927410125732,
+                    "maxScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "maxSpeed": [
+                        4.0,
+                        2.0,
+                        0.5
+                    ],
+                    "minLifeTime": 1.0,
+                    "minRotate": 0.0,
+                    "minScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "minSpeed": [
+                        4.0,
+                        0.0,
+                        -0.5
+                    ],
+                    "textureName": "getBigItem"
+                },
+                "MaterialComponent": {
+                    "blendMode": "kAdd",
+                    "castShadow": true,
+                    "color": [
+                        2.0999999046325684,
+                        2.0,
+                        2.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        0.5,
+                        0.0,
+                        1.0,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "environmentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "resources/engine/Texture/noise/Noise_Gradients/T_Random_22.png",
+                    "receiveShadow": true,
+                    "renderMode": "kEmissive",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "unlit": false,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "power"
+                },
+                "ParticleEmitterComponent": {
+                    "active": false,
+                    "color": [
+                        1.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ],
+                    "count": 10,
+                    "emitRange": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "frequency": 0.10000000149011612,
+                    "localPosition": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "maxCount": 100,
+                    "maxLifeTime": 1.899999976158142,
+                    "maxScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "maxSpeed": [
+                        1.0,
+                        -1.0,
+                        1.0
+                    ],
+                    "minLifeTime": 0.699999988079071,
+                    "minScale": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "minSpeed": [
+                        -1.0,
+                        -2.0,
+                        -1.0
+                    ],
+                    "textureName": "getEffect"
+                },
+                "PointLightComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "decay": 1.5,
+                    "intensity": 1.0,
+                    "radius": 5.199999809265137
+                },
+                "PrefabInstanceTag": {
+                    "prefabPath": "resources/game/Prefabs\\BigPowerItem.json"
+                },
+                "SphereCollider": {
+                    "localCenter": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "radius": 0.699999988079071
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        2.0,
+                        2.0,
+                        2.0
+                    ],
+                    "translate": [
+                        -35.40084457397461,
+                        53.95513916015625,
+                        -123.12712097167969
                     ]
                 }
             },
@@ -865,9 +1046,9 @@
                 },
                 "DebugCameraComponent": {
                     "center": [
-                        -177.43519592285156,
-                        66.1809310913086,
-                        13.131771087646484
+                        -63.9447021484375,
+                        12.94676399230957,
+                        -196.79574584960938
                     ],
                     "distance": 160.12806701660156,
                     "drawCenter": false,
@@ -882,10 +1063,10 @@
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
-                        0.028532618656754494,
-                        0.733103334903717,
-                        -0.030814314261078835,
-                        0.678819477558136
+                        -0.03980046883225441,
+                        -0.8626470565795898,
+                        0.0687318816781044,
+                        -0.49953174591064453
                     ],
                     "scale": [
                         1.0,
@@ -893,9 +1074,9 @@
                         1.0
                     ],
                     "translate": [
-                        -336.5274353027344,
-                        79.61842346191406,
-                        25.383039474487305
+                        -201.07325744628906,
+                        38.30238723754883,
+                        -118.09471893310547
                     ]
                 }
             }
@@ -38209,12 +38390,12 @@
                 "AABBCollider": {
                     "max": [
                         4.059700012207031,
-                        0.324538916349411,
+                        0.9425472617149353,
                         5.748013496398926
                     ],
                     "min": [
                         -4.059700012207031,
-                        -0.324538916349411,
+                        -0.9425472617149353,
                         -5.748013496398926
                     ]
                 },
@@ -38278,7 +38459,7 @@
                     ],
                     "scale": [
                         8.119400024414063,
-                        0.649077832698822,
+                        1.8850945234298706,
                         11.496026992797852
                     ],
                     "translate": [
@@ -38295,12 +38476,12 @@
                 "AABBCollider": {
                     "max": [
                         4.059700012207031,
-                        0.324538916349411,
+                        0.752078652381897,
                         5.748013496398926
                     ],
                     "min": [
                         -4.059700012207031,
-                        -0.324538916349411,
+                        -0.752078652381897,
                         -5.748013496398926
                     ]
                 },
@@ -38364,7 +38545,7 @@
                     ],
                     "scale": [
                         8.119400024414063,
-                        0.649077832698822,
+                        1.504157304763794,
                         11.496026992797852
                     ],
                     "translate": [
@@ -40132,7 +40313,107 @@
                         5.985604763031006
                     ],
                     "translate": [
-                        -124.1376724243164,
+                        -108.63480377197266,
+                        39.2985954284668,
+                        -159.615966796875
+                    ]
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\box.json"
+        },
+        "box_8_2": {
+            "components": {
+                "ColliderUpdateTag": null,
+                "CollisionLayerComponent": {
+                    "layer": "Terrain"
+                },
+                "EditTag": {
+                    "name": "box_8_2",
+                    "parent": null
+                },
+                "MaterialComponent": {
+                    "blendMode": "kNormal",
+                    "castShadow": true,
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "environmentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "receiveShadow": true,
+                    "renderMode": "kDefault",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "unlit": false,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "resources/game/ClockworksDisease/Model/gimmick/movingBlock.obj"
+                },
+                "OBBCollider": {
+                    "extents": [
+                        3.153557300567627,
+                        0.649077832698822,
+                        11.029905319213867
+                    ]
+                },
+                "PlatformDeltaComponent": {
+                    "frameDelta": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "previousTranslate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                "PrefabInstanceTag": {
+                    "prefabPath": "resources/game/Prefabs\\box.json"
+                },
+                "RotationalVelocityComponent": {
+                    "linear": [
+                        0.0,
+                        2.0,
+                        0.0
+                    ]
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        3.153557300567627,
+                        0.649077832698822,
+                        11.029905319213867
+                    ],
+                    "translate": [
+                        -120.40265655517578,
                         39.2985954284668,
                         -159.615966796875
                     ]
@@ -40221,6 +40502,92 @@
                         -203.4247283935547,
                         33.31802749633789,
                         -121.17384338378906
+                    ]
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\box.json"
+        },
+        "box_9_2": {
+            "components": {
+                "AABBCollider": {
+                    "max": [
+                        2.5014219284057617,
+                        0.324538916349411,
+                        1.9435561895370483
+                    ],
+                    "min": [
+                        -2.5014219284057617,
+                        -0.324538916349411,
+                        -1.9435561895370483
+                    ]
+                },
+                "ColliderUpdateTag": null,
+                "CollisionLayerComponent": {
+                    "layer": "Terrain"
+                },
+                "EditTag": {
+                    "name": "box_9_2",
+                    "parent": null
+                },
+                "MaterialComponent": {
+                    "blendMode": "kNormal",
+                    "castShadow": true,
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "environmentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "receiveShadow": true,
+                    "renderMode": "kDefault",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "unlit": false,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "resources/game/ClockworksDisease/Model/gimmick/movingBlock.obj"
+                },
+                "PrefabInstanceTag": {
+                    "prefabPath": "resources/game/Prefabs\\box.json"
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        5.002843856811523,
+                        0.649077832698822,
+                        3.8871123790740967
+                    ],
+                    "translate": [
+                        -185.02191162109375,
+                        37.143211364746094,
+                        -128.28427124023438
                     ]
                 }
             },
@@ -40354,7 +40721,7 @@
                         -0.8890671730041504,
                         -4.548983997665346e-05
                     ],
-                    "intensity": 1.0
+                    "intensity": 0.699999988079071
                 },
                 "EditTag": {
                     "name": "directionalLight",
@@ -40379,7 +40746,9 @@
                     "lines": [
                         "いつもはこの次元からどこにでも行けるんだが、",
                         "今日はゲートが開いていないな。",
-                        "作られていないのかもな。"
+                        "作られていないのかもな。",
+                        "そういえば、RBでいつでも砦の方向を確認できるって知ってたか？",
+                        "俺は知らなかった。"
                     ]
                 },
                 "EditTag": {
@@ -40418,7 +40787,6 @@
                     "interactDistance": 0.0,
                     "interactable": true,
                     "lines": [
-                        "ここは次元と次元を繋ぐ中心の次元だ。",
                         "向こうにある砦が見えるか？",
                         "あそこに強大な力が封じ込められている。それを取ってきて欲しい。",
                         "そうしたら、奴を倒してやる。",
@@ -41437,6 +41805,98 @@
             },
             "prefabInstance": "resources/game/Prefabs\\savePoint.json"
         },
+        "savePoint_8": {
+            "components": {
+                "AnimatorComponent": {
+                    "animationSpeedMagnification": 1.0,
+                    "blendDuration": 0.20000000298023224,
+                    "currentAnimation": 0,
+                    "drawSkeleton": false,
+                    "enableSkinning": false
+                },
+                "CollisionLayerComponent": {
+                    "layer": "Item"
+                },
+                "EditTag": {
+                    "name": "savePoint_8",
+                    "parent": null
+                },
+                "MaterialComponent": {
+                    "blendMode": "kAdd",
+                    "castShadow": true,
+                    "color": [
+                        2.1764705181121826,
+                        2.1764705181121826,
+                        2.1764705181121826,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "environmentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "receiveShadow": true,
+                    "renderMode": "kToon",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "unlit": false,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "savePoint"
+                },
+                "PrefabInstanceTag": {
+                    "prefabPath": "resources/game/Prefabs\\savePoint.json"
+                },
+                "SavePointComponent": {
+                    "colorMagnification": 5.0,
+                    "rotateTime": 1.0
+                },
+                "SphereCollider": {
+                    "localCenter": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "radius": 0.699999988079071
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        -307.4639892578125,
+                        17.55826759338379,
+                        75.48724365234375
+                    ]
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\savePoint.json"
+        },
         "skydome": {
             "components": {
                 "EditTag": {
@@ -41587,8 +42047,8 @@
                 "StageIntroDisplayComponent": {
                     "fadeInDuration": 0.800000011920929,
                     "fadeOutDuration": 0.699999988079071,
-                    "holdDuration": 12.899999618530273,
-                    "startDelay": 0.5
+                    "holdDuration": 11.199999809265137,
+                    "startDelay": 1.0
                 },
                 "TextComponent": {
                     "anchor": [
