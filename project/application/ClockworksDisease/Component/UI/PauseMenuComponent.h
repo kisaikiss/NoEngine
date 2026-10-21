@@ -5,6 +5,7 @@ enum class PauseMenuState {
 	kClosed, // 非表示
 	kMain,   // Resume/Option/タイトルへ戻る/ゲームをやめる の選択画面
 	kOption, // オプション画面
+	kControls, // 操作方法画面
 };
 
 // ポーズメニュー全体の状態を保持する。PauseMenuSystemが初回Updateで生成する

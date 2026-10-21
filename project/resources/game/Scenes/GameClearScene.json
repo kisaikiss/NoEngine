@@ -1,5 +1,47 @@
 {
     "entities": {
+        "Clear": {
+            "components": {
+                "EditTag": {
+                    "name": "Clear",
+                    "parent": null
+                },
+                "TextComponent": {
+                    "anchor": [
+                        0.5,
+                        0.5
+                    ],
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "fontName": "resources/engine/fonts/ISE-FONT4/Isego.otf",
+                    "hAlign": "kCenter",
+                    "isVisible": true,
+                    "layer": 0,
+                    "letterSpacing": 0.0,
+                    "orderInLayer": 0,
+                    "scale": 3.0,
+                    "space": "Screen",
+                    "text": "GameClear",
+                    "vAlign": "kMiddle"
+                },
+                "Transform2DComponent": {
+                    "parent": null,
+                    "rotation": 0.0,
+                    "scale": [
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
         "ClearMinutes": {
             "components": {
                 "EditTag": {
@@ -54,8 +96,8 @@
                     "distance": 279.6287841796875,
                     "drawCenter": false,
                     "moveType": "kBlender",
-                    "unityMoveSpeed": 10.0,
-                    "unitySensitivity": 0.20000000298023224
+                    "unrealMoveSpeed": 10.0,
+                    "unrealSensitivity": 0.20000000298023224
                 },
                 "EditTag": {
                     "name": "DebugCamera",
@@ -65,9 +107,9 @@
                     "parent": null,
                     "rotation": [
                         0.3353213965892792,
-                        0.5340462327003479,
-                        -0.24294467270374298,
-                        0.7371106147766113
+                        0.5340462923049927,
+                        -0.24294473230838776,
+                        0.7371105551719666
                     ],
                     "scale": [
                         1.0,
@@ -75,9 +117,9 @@
                         1.0
                     ],
                     "translate": [
-                        -160.90283203125,
-                        181.45925903320313,
-                        -22.17770004272461
+                        -160.90281677246094,
+                        181.4592742919922,
+                        -22.17764663696289
                     ]
                 }
             }
@@ -129,6 +171,50 @@
                         -41.50959777832031,
                         33.72611618041992,
                         16.98214340209961
+                    ]
+                }
+            }
+        },
+        "background": {
+            "components": {
+                "EditTag": {
+                    "name": "background",
+                    "parent": null
+                },
+                "ShaderBackgroundComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "isVisible": true,
+                    "param": [
+                        0.0,
+                        1.0,
+                        0.0,
+                        0.0
+                    ],
+                    "shaderPath": "resources/game/ClockworksDisease/Shaders/Octagrams.PS.hlsl",
+                    "timeScale": 1.0
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0,
+                        0.0
                     ]
                 }
             }
@@ -251,73 +337,6 @@
                 }
             },
             "prefabInstance": "resources/game/Prefabs\\directionalLight.json"
-        },
-        "ground": {
-            "components": {
-                "EditTag": {
-                    "name": "ground",
-                    "parent": null
-                },
-                "MaterialComponent": {
-                    "blendMode": "kNormal",
-                    "color": [
-                        1.0,
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "drawOutline": true,
-                    "edgeColor": [
-                        0.1708185076713562,
-                        0.0,
-                        0.0,
-                        1.0
-                    ],
-                    "emissiveIntensity": 1.0,
-                    "enviromentCoefficient": 0.0,
-                    "noiseScrollSpeed": 0.30000001192092896,
-                    "noiseTextureName": "noise0",
-                    "renderMode": "kDefault",
-                    "rimPower": 2.0,
-                    "shininess": 60.0,
-                    "uvPosition": [
-                        0.0,
-                        0.0
-                    ],
-                    "uvRotate": 0.0,
-                    "uvScale": [
-                        1.0,
-                        1.0
-                    ]
-                },
-                "MeshComponent": {
-                    "isVisible": true,
-                    "meshName": "SampleStage"
-                },
-                "PrefabInstanceTag": {
-                    "prefabPath": "resources/game/Prefabs\\girl.json"
-                },
-                "TransformComponent": {
-                    "parent": null,
-                    "rotation": [
-                        0.0,
-                        1.0,
-                        0.0,
-                        -4.371138828673793e-08
-                    ],
-                    "scale": [
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "translate": [
-                        2.0981467514502583e-06,
-                        2.0981467514502583e-06,
-                        0.0
-                    ]
-                }
-            },
-            "prefabInstance": "resources/game/Prefabs\\girl.json"
         },
         "powerText": {
             "components": {
@@ -592,6 +611,21 @@
             }
         },
         {
+            "name": "ShaderBackground",
+            "settings": {
+                "autoClear": false,
+                "clearDepth": false,
+                "depthOutput": "MainDepth",
+                "inputs": {},
+                "outputs": [
+                    "MainColor"
+                ],
+                "targetCameraName": "GameCamera",
+                "targetCameraType": 0,
+                "uavOutputs": []
+            }
+        },
+        {
             "name": "Depth outline",
             "settings": {
                 "autoClear": false,
@@ -801,6 +835,7 @@
         "EditSystem",
         "ModelLoadSystem",
         "SpriteLoadSystem",
+        "FontLoadSystem",
         "AnimationSystem",
         "EffectEmitSystem",
         "ParticleEmitterSystem",
