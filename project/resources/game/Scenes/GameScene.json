@@ -1332,7 +1332,7 @@
                     "fadeInDuration": 1.0,
                     "fadeOutDuration": 1.0,
                     "phase": "kPlayingRoutine",
-                    "playInEditor": false
+                    "playInEditor": true
                 },
                 "CameraLockTag": null,
                 "EditTag": {
@@ -37164,20 +37164,20 @@
                 },
                 "ShaderBackgroundComponent": {
                     "color": [
-                        0.4341636896133423,
-                        0.4341636896133423,
-                        0.4341636896133423,
+                        2.1764705181121826,
+                        2.9450979232788086,
+                        2.56862735748291,
                         1.0
                     ],
                     "isVisible": true,
                     "param": [
                         0.0,
-                        1.5709999799728394,
+                        0.0,
                         0.0,
                         0.0
                     ],
-                    "shaderPath": "resources/game/ClockworksDisease/Shaders/Octagrams.PS.hlsl",
-                    "timeScale": 1.0
+                    "shaderPath": "resources/game/ClockworksDisease/Shaders/Starfield.PS.hlsl",
+                    "timeScale": 1.7000000476837158
                 },
                 "TransformComponent": {
                     "parent": null,
@@ -41258,7 +41258,7 @@
                     ]
                 },
                 "MeshComponent": {
-                    "isVisible": true,
+                    "isVisible": false,
                     "meshName": "skydome"
                 },
                 "NoClickSelectTag": null,
@@ -41351,6 +41351,54 @@
                     ],
                     "translate": [
                         0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "stageName": {
+            "components": {
+                "EditTag": {
+                    "name": "stageName",
+                    "parent": null
+                },
+                "StageIntroDisplayComponent": {
+                    "fadeInDuration": 0.10000000149011612,
+                    "fadeOutDuration": 0.20000000298023224,
+                    "holdDuration": 2.0,
+                    "startDelay": 0.5
+                },
+                "TextComponent": {
+                    "anchor": [
+                        0.5,
+                        0.5
+                    ],
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "fontName": "resources/engine/fonts/ISE-FONT4/Isego.otf",
+                    "hAlign": "kCenter",
+                    "isVisible": true,
+                    "layer": 0,
+                    "letterSpacing": 0.0,
+                    "orderInLayer": 0,
+                    "scale": 3.0,
+                    "space": "Screen",
+                    "text": "Nucleus\nDimension",
+                    "vAlign": "kMiddle"
+                },
+                "Transform2DComponent": {
+                    "parent": null,
+                    "rotation": 0.0,
+                    "scale": [
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
                         0.0,
                         0.0
                     ]
@@ -41891,6 +41939,7 @@
         "BoxColliderUpdateSystem",
         "GameProgressInitSystem",
         "GameTimerSystem",
+        "StageIntroDisplaySystem",
         "PlayerStaminaSystem",
         "PlayerJumpSystem",
         "PlayerHorizontalMoveSystem",
