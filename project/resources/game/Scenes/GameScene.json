@@ -41366,8 +41366,8 @@
                 "StageIntroDisplayComponent": {
                     "fadeInDuration": 0.10000000149011612,
                     "fadeOutDuration": 0.20000000298023224,
-                    "holdDuration": 2.0,
-                    "startDelay": 0.5
+                    "holdDuration": 4.5,
+                    "startDelay": 1.0
                 },
                 "TextComponent": {
                     "anchor": [

@@ -157,7 +157,9 @@ float CalculateDeltaTime() {
 
 		steady_clock::time_point tickTimePoint = steady_clock::now();
 		duration<float> time_span = tickTimePoint - sLastTickTime;
-		deltaTime = time_span.count();
+		constexpr float kMaxDeltaTime = 1.0f / 15.0f; // 最低15FPS相当まで
+
+		deltaTime = std::min(time_span.count(), kMaxDeltaTime);
 
 		sLastTickTime = tickTimePoint;
 	}
