@@ -2,13 +2,14 @@
 #include "CameraIntroSystem.h"
 #include "../../Component/Camera/CameraIntroComponent.h"
 #include "engine/Runtime/GraphicsCore.h"
+#include "../../Component/Player/PlayerComponent.h"
 
 void CameraIntroSystem::Update(No::Registry& registry, float deltaTime) {
-	// 注意: Viewの絞り込み条件にCameraIntroLockTagは含めない。
-	// kFadeOut完了時にRemoveComponent<CameraIntroLockTag>するため、
+	// 注意: Viewの絞り込み条件にCameraLockTagは含めない。
+	// kFadeOut完了時にRemoveComponent<CameraLockTag>するため、
 	// 含めてしまうと次フレーム以降このEntityがViewから外れ、
 	// kFadeIn(暗転復帰)が二度と処理されなくなる。
-	for (auto e : registry.View<CameraIntroComponent>()) {
+	for (auto e : registry.View<CameraIntroComponent, No::TransformComponent>()) {
 		auto* intro = registry.GetComponent<CameraIntroComponent>(e);
 
 #ifdef USE_IMGUI
@@ -75,6 +76,10 @@ void CameraIntroSystem::Update(No::Registry& registry, float deltaTime) {
 				registry.RemoveComponent<CameraLockTag>(e);
 				intro->fadeTimer = 0.0f;
 				intro->phase = CameraIntroComponent::Phase::kFadeIn;
+				auto* transform = registry.GetComponent<No::TransformComponent>(e);
+				for (auto playerEntity : registry.View<PlayerComponent, No::TransformComponent>()) {
+					transform->SetWorldPosition(registry, registry.GetComponent<No::TransformComponent>(playerEntity)->GetWorldPosition(registry));
+				}
 			}
 			break;
 		}
