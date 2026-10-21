@@ -10,8 +10,9 @@ void CapturePlatformPrevTransformSystem::Update(Registry& registry, float deltaT
 	auto view = registry.View<Component::TransformComponent, Component::PlatformDeltaComponent>();
 	for (auto entity : view) {
 		auto* delta = registry.GetComponent<Component::PlatformDeltaComponent>(entity);
-		auto* transform = registry.GetComponent<Component::TransformComponent>(entity);
-		delta->previousTranslate = transform->translate;
+		auto* transform = registry.GetComponent<Component::TransformComponent>(entity); 
+		delta->previousTranslate = transform->GetWorldPosition(registry);
+		delta->previousRotation = transform->GetWorldRotation(registry);
 	}
 }
 }

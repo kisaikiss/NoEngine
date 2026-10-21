@@ -11,7 +11,9 @@ void ComputePlatformDeltaSystem::Update(Registry& registry, float deltaTime) {
 	for (auto entity : view) {
 		auto* delta = registry.GetComponent<Component::PlatformDeltaComponent>(entity);
 		auto* transform = registry.GetComponent<Component::TransformComponent>(entity);
-		delta->frameDelta = transform->translate - delta->previousTranslate;
+		delta->currentTranslate = transform->GetWorldPosition(registry);
+		delta->currentRotation = transform->GetWorldRotation(registry);
+		delta->frameDelta = delta->currentTranslate - delta->previousTranslate;
 	}
 }
 }

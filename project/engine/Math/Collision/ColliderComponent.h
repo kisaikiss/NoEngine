@@ -1,6 +1,7 @@
 #pragma once
 #include "../Types/Vector3.h"
 #include "../Types/Vector2.h"
+#include "../Types/Quaternion.h"
 #include "engine/Functions/ECS/Entity.h"
 
 namespace NoEngine {
@@ -113,8 +114,13 @@ struct GroundStateComponent {
 /// 足場の移動量を保持する構造体
 /// </summary>
 struct PlatformDeltaComponent {
-	Math::Vector3 previousTranslate = Math::Vector3::ZERO;
+	Math::Vector3 previousTranslate = Math::Vector3::ZERO; // ワールド座標
 	Math::Vector3 frameDelta = Math::Vector3::ZERO;
+
+	// 以下ランタイム専用
+	Math::Quaternion previousRotation = Math::Quaternion::IDENTITY; // ワールド回転
+	Math::Vector3 currentTranslate = Math::Vector3::ZERO;
+	Math::Quaternion currentRotation = Math::Quaternion::IDENTITY;
 };
 
 /// <summary>
