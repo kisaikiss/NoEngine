@@ -7,6 +7,7 @@
 #include "application/ClockworksDisease/Component/Camera/FollowCameraComponent.h"
 #include "../../Component/Camera/CameraIntroComponent.h"
 #include "../../Component/Dialogue/DialogueComponent.h"
+#include "../../Component/Player/PlayerDeathComponent.h"
 
 namespace {
 
@@ -138,6 +139,11 @@ void PlayerJumpSystem::Update(No::Registry& registry, float deltaTime) {
 	auto view = registry.View<PlayerComponent, No::TransformComponent, No::GroundStateComponent, PlayerMoveTransientComponent>();
 	for (auto entity : view) {
 		if (isSkip) continue;
+		// リスポーン位置への移動が完了するまでは操作を止める。
+		auto* deathSequence = registry.GetComponent<PlayerDeathSequenceComponent>(entity);
+		if (deathSequence && deathSequence->phase != PlayerDeathSequenceComponent::Phase::kBlackOut &&
+			deathSequence->phase != PlayerDeathSequenceComponent::Phase::kFadeIn) continue;
+
 		if (registry.Has<GoalDirectionLockTag>(entity) || registry.Has<DialogueLockTag>(entity)) continue;
 
 		auto* playerVariables = registry.GetComponent<PlayerComponent>(entity);

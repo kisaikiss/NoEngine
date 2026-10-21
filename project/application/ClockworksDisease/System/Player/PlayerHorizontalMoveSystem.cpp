@@ -5,6 +5,7 @@
 #include "application/ClockworksDisease/Component/Game/GoalDirectionComponent.h"
 #include "../../Component/Camera/CameraIntroComponent.h"
 #include "../../Component/Dialogue/DialogueComponent.h"
+#include "../../Component/Player/PlayerDeathComponent.h"
 
 namespace {
 
@@ -53,6 +54,13 @@ void PlayerHorizontalMoveSystem::Update(No::Registry& registry, float deltaTime)
 
 	for (auto entity : view) {
 		if (isSkip) continue;
+		// 死亡後はリスポーン地点へ移動するまで操作を止める。
+		// PlayerDeathSystemがkBlackOutへ進めた時点で位置が更新済みなので、暗転中から操作可能。
+		auto* deathSequence = registry.GetComponent<PlayerDeathSequenceComponent>(entity);
+		if (deathSequence && deathSequence->phase != PlayerDeathSequenceComponent::Phase::kBlackOut &&
+			deathSequence->phase != PlayerDeathSequenceComponent::Phase::kFadeIn) {
+			continue;
+		}
 
 		auto* transform = registry.GetComponent<No::TransformComponent>(entity);
 		auto* playerVariables = registry.GetComponent<PlayerComponent>(entity);
