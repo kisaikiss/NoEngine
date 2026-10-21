@@ -13,14 +13,12 @@ void LoadMeshCollider(const std::string& filePath, TerrainMesh* outTerrain) {
 	Assimp::Importer importer;
 	const aiScene* scene = importer.ReadFile(filePath.c_str(), 
 		aiProcess_Triangulate |
-		aiProcess_GenSmoothNormals |
 		aiProcess_JoinIdenticalVertices |
-		aiProcess_ImproveCacheLocality |
 		aiProcess_RemoveRedundantMaterials |
 		aiProcess_FixInfacingNormals
 	);
 
-    if (!scene->HasMeshes()) {
+    if (scene && !scene->HasMeshes()) {
         LogWarning("LoadMeshCollider : Mesh not found. file path : " + filePath);
         return;
     }

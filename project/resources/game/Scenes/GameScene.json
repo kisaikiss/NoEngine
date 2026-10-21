@@ -684,9 +684,9 @@
                 },
                 "DebugCameraComponent": {
                     "center": [
-                        -142.1865234375,
-                        58.05289077758789,
-                        -11.690278053283691
+                        -152.990478515625,
+                        136.15345764160156,
+                        97.32683563232422
                     ],
                     "distance": 160.12806701660156,
                     "drawCenter": false,
@@ -701,10 +701,10 @@
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
-                        0.07226931303739548,
-                        0.7475584745407104,
-                        -0.08247146010398865,
-                        0.655081570148468
+                        -0.07219066470861435,
+                        0.4165872633457184,
+                        -0.033208008855581284,
+                        -0.905616283416748
                     ],
                     "scale": [
                         1.0,
@@ -712,9 +712,9 @@
                         1.0
                     ],
                     "translate": [
-                        -297.1109619140625,
-                        92.95906829833984,
-                        8.827435493469238
+                        -32.93578338623047,
+                        161.5212860107422,
+                        -5.553389549255371
                     ]
                 }
             }
@@ -6402,7 +6402,7 @@
                     ],
                     "translate": [
                         -268.94146728515625,
-                        33.392826080322266,
+                        32.425445556640625,
                         141.55030822753906
                     ]
                 }
@@ -9196,7 +9196,7 @@
                     ],
                     "translate": [
                         -268.94146728515625,
-                        33.392826080322266,
+                        32.49568176269531,
                         143.43020629882813
                     ]
                 }
@@ -10847,7 +10847,7 @@
                     ],
                     "translate": [
                         -267.1722106933594,
-                        33.392826080322266,
+                        32.36581802368164,
                         143.43020629882813
                     ]
                 }
@@ -12244,7 +12244,7 @@
                     ],
                     "translate": [
                         -267.1722106933594,
-                        33.392826080322266,
+                        32.371612548828125,
                         141.62420654296875
                     ]
                 }
@@ -12371,7 +12371,7 @@
                     ],
                     "translate": [
                         -270.76849365234375,
-                        33.392826080322266,
+                        32.570186614990234,
                         143.43020629882813
                     ]
                 }
@@ -12752,7 +12752,7 @@
                     ],
                     "translate": [
                         -270.66156005859375,
-                        33.392826080322266,
+                        32.51438522338867,
                         141.55030822753906
                     ]
                 }
@@ -14337,23 +14337,23 @@
                     "blendMode": "kAdd",
                     "castShadow": true,
                     "color": [
-                        2.0,
-                        2.0,
+                        1.0,
+                        1.0,
                         3.0,
                         1.0
                     ],
                     "drawOutline": false,
                     "edgeColor": [
                         0.0,
-                        0.10000000149011612,
-                        0.6000000238418579,
+                        0.0,
+                        1.0,
                         1.0
                     ],
                     "emissiveIntensity": 1.0,
                     "environmentCoefficient": 0.0,
                     "noiseScrollSpeed": 0.30000001192092896,
                     "noiseTextureName": "resources/engine/Texture/noise/Noise_Gradients/T_Random_22.png",
-                    "receiveShadow": true,
+                    "receiveShadow": false,
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
@@ -14464,16 +14464,16 @@
                     "blendMode": "kAdd",
                     "castShadow": true,
                     "color": [
-                        2.0,
-                        2.0,
+                        1.0,
+                        1.0,
                         3.0,
                         1.0
                     ],
                     "drawOutline": false,
                     "edgeColor": [
                         0.0,
-                        0.10000000149011612,
-                        0.6000000238418579,
+                        0.0,
+                        1.0,
                         1.0
                     ],
                     "emissiveIntensity": 1.0,
@@ -14591,16 +14591,16 @@
                     "blendMode": "kAdd",
                     "castShadow": true,
                     "color": [
-                        2.0,
-                        2.0,
+                        1.0,
+                        1.0,
                         3.0,
                         1.0
                     ],
                     "drawOutline": false,
                     "edgeColor": [
                         0.0,
-                        0.10000000149011612,
-                        0.6000000238418579,
+                        0.0,
+                        1.0,
                         1.0
                     ],
                     "emissiveIntensity": 1.0,
@@ -14718,16 +14718,16 @@
                     "blendMode": "kAdd",
                     "castShadow": true,
                     "color": [
-                        2.0,
-                        2.0,
+                        1.0,
+                        1.0,
                         3.0,
                         1.0
                     ],
                     "drawOutline": false,
                     "edgeColor": [
                         0.0,
-                        0.10000000149011612,
-                        0.6000000238418579,
+                        0.0,
+                        1.0,
                         1.0
                     ],
                     "emissiveIntensity": 1.0,
@@ -14845,16 +14845,16 @@
                     "blendMode": "kAdd",
                     "castShadow": true,
                     "color": [
-                        2.0,
-                        2.0,
+                        1.0,
+                        0.9882352948188782,
                         3.0,
                         1.0
                     ],
                     "drawOutline": false,
                     "edgeColor": [
                         0.0,
-                        0.10000000149011612,
-                        0.6000000238418579,
+                        0.0,
+                        1.0,
                         1.0
                     ],
                     "emissiveIntensity": 1.0,
@@ -14972,16 +14972,16 @@
                     "blendMode": "kAdd",
                     "castShadow": true,
                     "color": [
-                        2.0,
-                        2.0,
+                        1.0,
+                        1.0,
                         3.0,
                         1.0
                     ],
                     "drawOutline": false,
                     "edgeColor": [
                         0.0,
-                        0.10000000149011612,
-                        0.6000000238418579,
+                        0.0,
+                        1.0,
                         1.0
                     ],
                     "emissiveIntensity": 1.0,
@@ -15099,16 +15099,16 @@
                     "blendMode": "kAdd",
                     "castShadow": true,
                     "color": [
-                        2.0,
-                        2.0,
+                        1.0,
+                        1.0,
                         3.0,
                         1.0
                     ],
                     "drawOutline": false,
                     "edgeColor": [
                         0.0,
-                        0.10000000149011612,
-                        0.6000000238418579,
+                        0.0,
+                        1.0,
                         1.0
                     ],
                     "emissiveIntensity": 1.0,
@@ -15226,16 +15226,16 @@
                     "blendMode": "kAdd",
                     "castShadow": true,
                     "color": [
-                        2.0,
-                        2.0,
+                        1.0,
+                        1.0,
                         3.0,
                         1.0
                     ],
                     "drawOutline": false,
                     "edgeColor": [
                         0.0,
-                        0.10000000149011612,
-                        0.6000000238418579,
+                        0.0,
+                        1.0,
                         1.0
                     ],
                     "emissiveIntensity": 1.0,
@@ -15353,16 +15353,16 @@
                     "blendMode": "kAdd",
                     "castShadow": true,
                     "color": [
-                        2.0,
-                        2.0,
+                        1.0,
+                        1.0,
                         3.0,
                         1.0
                     ],
                     "drawOutline": false,
                     "edgeColor": [
                         0.0,
-                        0.10000000149011612,
-                        0.6000000238418579,
+                        0.0,
+                        1.0,
                         1.0
                     ],
                     "emissiveIntensity": 1.0,
@@ -15480,16 +15480,16 @@
                     "blendMode": "kAdd",
                     "castShadow": true,
                     "color": [
-                        2.0,
-                        2.0,
+                        1.0,
+                        1.0,
                         3.0,
                         1.0
                     ],
                     "drawOutline": false,
                     "edgeColor": [
                         0.0,
-                        0.10000000149011612,
-                        0.6000000238418579,
+                        0.0,
+                        1.0,
                         1.0
                     ],
                     "emissiveIntensity": 1.0,
@@ -15607,16 +15607,16 @@
                     "blendMode": "kAdd",
                     "castShadow": true,
                     "color": [
-                        2.0,
-                        2.0,
+                        1.0,
+                        1.0,
                         3.0,
                         1.0
                     ],
                     "drawOutline": false,
                     "edgeColor": [
                         0.0,
-                        0.10000000149011612,
-                        0.6000000238418579,
+                        0.0,
+                        1.0,
                         1.0
                     ],
                     "emissiveIntensity": 1.0,
@@ -15734,16 +15734,16 @@
                     "blendMode": "kAdd",
                     "castShadow": true,
                     "color": [
-                        2.0,
-                        2.0,
+                        1.0,
+                        1.0,
                         3.0,
                         1.0
                     ],
                     "drawOutline": false,
                     "edgeColor": [
                         0.0,
-                        0.10000000149011612,
-                        0.6000000238418579,
+                        0.0,
+                        1.0,
                         1.0
                     ],
                     "emissiveIntensity": 1.0,
@@ -15861,16 +15861,16 @@
                     "blendMode": "kAdd",
                     "castShadow": true,
                     "color": [
-                        2.0,
-                        2.0,
+                        1.0,
+                        0.9921568632125854,
                         3.0,
                         1.0
                     ],
                     "drawOutline": false,
                     "edgeColor": [
                         0.0,
-                        0.10000000149011612,
-                        0.6000000238418579,
+                        0.0,
+                        1.0,
                         1.0
                     ],
                     "emissiveIntensity": 1.0,
@@ -15988,16 +15988,16 @@
                     "blendMode": "kAdd",
                     "castShadow": true,
                     "color": [
-                        2.0,
-                        2.0,
+                        1.0,
+                        1.0,
                         3.0,
                         1.0
                     ],
                     "drawOutline": false,
                     "edgeColor": [
                         0.0,
-                        0.10000000149011612,
-                        0.6000000238418579,
+                        0.0,
+                        1.0,
                         1.0
                     ],
                     "emissiveIntensity": 1.0,
@@ -23100,16 +23100,16 @@
                     "blendMode": "kAdd",
                     "castShadow": true,
                     "color": [
-                        2.0,
-                        2.0,
+                        1.0,
+                        1.0,
                         3.0,
                         1.0
                     ],
                     "drawOutline": false,
                     "edgeColor": [
                         0.0,
-                        0.10000000149011612,
-                        0.6000000238418579,
+                        0.0,
+                        1.0,
                         1.0
                     ],
                     "emissiveIntensity": 1.0,
@@ -38027,14 +38027,14 @@
             "components": {
                 "AABBCollider": {
                     "max": [
-                        1.8724595308303833,
+                        4.059700012207031,
                         0.324538916349411,
-                        1.9435561895370483
+                        5.748013496398926
                     ],
                     "min": [
-                        -1.8724595308303833,
+                        -4.059700012207031,
                         -0.324538916349411,
-                        -1.9435561895370483
+                        -5.748013496398926
                     ]
                 },
                 "ColliderUpdateTag": null,
@@ -38096,13 +38096,13 @@
                         1.0
                     ],
                     "scale": [
-                        3.7449190616607666,
+                        8.119400024414063,
                         0.649077832698822,
-                        3.8871123790740967
+                        11.496026992797852
                     ],
                     "translate": [
-                        -104.86270904541016,
-                        19.56934928894043,
+                        -112.31861877441406,
+                        17.250022888183594,
                         -0.5840392112731934
                     ]
                 }
@@ -38113,14 +38113,14 @@
             "components": {
                 "AABBCollider": {
                     "max": [
-                        1.8724595308303833,
+                        4.147733688354492,
                         0.324538916349411,
-                        1.9435561895370483
+                        4.66151237487793
                     ],
                     "min": [
-                        -1.8724595308303833,
+                        -4.147733688354492,
                         -0.324538916349411,
-                        -1.9435561895370483
+                        -4.66151237487793
                     ]
                 },
                 "ColliderUpdateTag": null,
@@ -38182,14 +38182,14 @@
                         1.0
                     ],
                     "scale": [
-                        3.7449190616607666,
+                        8.295467376708984,
                         0.649077832698822,
-                        3.8871123790740967
+                        9.32302474975586
                     ],
                     "translate": [
-                        -140.5474395751953,
-                        11.383321762084961,
-                        -0.5840468406677246
+                        -144.74136352539063,
+                        13.368547439575195,
+                        -0.5840466618537903
                     ]
                 }
             },
@@ -39959,6 +39959,92 @@
             },
             "prefabInstance": "resources/game/Prefabs\\box.json"
         },
+        "box_9": {
+            "components": {
+                "AABBCollider": {
+                    "max": [
+                        2.5014219284057617,
+                        0.324538916349411,
+                        1.9435561895370483
+                    ],
+                    "min": [
+                        -2.5014219284057617,
+                        -0.324538916349411,
+                        -1.9435561895370483
+                    ]
+                },
+                "ColliderUpdateTag": null,
+                "CollisionLayerComponent": {
+                    "layer": "Terrain"
+                },
+                "EditTag": {
+                    "name": "box_9",
+                    "parent": "platform"
+                },
+                "MaterialComponent": {
+                    "blendMode": "kNormal",
+                    "castShadow": true,
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "environmentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "receiveShadow": true,
+                    "renderMode": "kDefault",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "unlit": false,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "resources/game/ClockworksDisease/Model/gimmick/movingBlock.obj"
+                },
+                "PrefabInstanceTag": {
+                    "prefabPath": "resources/game/Prefabs\\box.json"
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        5.002843856811523,
+                        0.649077832698822,
+                        3.8871123790740967
+                    ],
+                    "translate": [
+                        -203.4247283935547,
+                        33.31802749633789,
+                        -121.17384338378906
+                    ]
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\box.json"
+        },
         "canMagicUI": {
             "components": {
                 "CanMagicUITag": {
@@ -41138,11 +41224,11 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kNormal",
-                    "castShadow": true,
+                    "castShadow": false,
                     "color": [
-                        0.4092526435852051,
-                        0.4092526435852051,
-                        0.4092526435852051,
+                        1.0,
+                        1.0,
+                        1.0,
                         1.0
                     ],
                     "drawOutline": false,
@@ -41172,28 +41258,17 @@
                     ]
                 },
                 "MeshComponent": {
-                    "isVisible": false,
+                    "isVisible": true,
                     "meshName": "skydome"
                 },
                 "NoClickSelectTag": null,
-                "PointLightComponent": {
-                    "color": [
-                        0.0,
-                        0.0,
-                        0.0,
-                        0.0
-                    ],
-                    "decay": 1.5,
-                    "intensity": 0.0,
-                    "radius": 1.0
-                },
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
-                        0.0,
-                        0.0,
-                        0.0,
-                        1.0
+                        0.8196606636047363,
+                        -0.4951995611190796,
+                        0.014699709601700306,
+                        0.2876068651676178
                     ],
                     "scale": [
                         1.0,
@@ -41258,7 +41333,7 @@
                 },
                 "NoClickSelectTag": null,
                 "StageComponent": {
-                    "stageColliderName": "resources/game/ClockworksDisease/Model/StageMap/MainStage/mainStage.gltf"
+                    "stageColliderName": "resources/game/ClockworksDisease/Model/StageMap/MainStage/Collider/mainStageCollider.gltf"
                 },
                 "TerrainMesh": null,
                 "TransformComponent": {

@@ -14,7 +14,7 @@
 // カメラ位置 -> パターン空間への倍率。小さいほど「遠くの背景」として動きが緩やかになる
 static const float kSpaceScale = 0.25;
 // パターン空間上で自動的に流れる速度(元GLSLは z 方向に 4/sec)。止めたいときは 0
-static const float3 kFlow = float3(-1.0, 0.0, 0.0);
+static const float3 kFlow = float3(-0.01, 0.0, 0.0);
 // 元GLSLのカメラ高さオフセット
 static const float3 kOriginBias = float3(0.0, -0.2, 0.0);
 
