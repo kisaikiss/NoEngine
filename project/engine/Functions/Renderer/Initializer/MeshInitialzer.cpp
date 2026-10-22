@@ -34,6 +34,16 @@ void MeshInitialzer::CreatePSO(RenderContext& ctx) {
 	addBlendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
 	addBlendDesc.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
 
+	D3D12_BLEND_DESC alphaBlendDesc{};
+	alphaBlendDesc.RenderTarget[0].BlendEnable = TRUE;
+	alphaBlendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
+	alphaBlendDesc.RenderTarget[0].DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
+	alphaBlendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
+	alphaBlendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
+	alphaBlendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_INV_SRC_ALPHA;
+	alphaBlendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
+	alphaBlendDesc.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
+
 	D3D12_BLEND_DESC subBlendDesc = addBlendDesc;
 	subBlendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_SUBTRACT;
 
@@ -93,6 +103,12 @@ void MeshInitialzer::CreatePSO(RenderContext& ctx) {
 		defaultPSO.Finalize();
 		
 		ctx.RegisterGraphicsPSO(defaultPSOName, defaultPSO);
+
+		defaultPSOName = "Renderer : Default Alpha PSO";
+		defaultPSO.SetBlendState(alphaBlendDesc);
+		defaultPSO.SetDepthStencilState(transparentDepthStencilDesc);
+		defaultPSO.Finalize();
+		ctx.RegisterGraphicsPSO(defaultPSOName, defaultPSO);
 		// 加算合成
 		defaultPSOName = "Renderer : Default Add PSO";
 		defaultPSO.SetBlendState(addBlendDesc);
@@ -145,6 +161,12 @@ void MeshInitialzer::CreatePSO(RenderContext& ctx) {
 		toonPSO.SetVertexShader(defaultVS.GetBytecode());
 		toonPSO.SetPixelShader(ToonPS.GetBytecode());
 		toonPSO.SetSampleMask(D3D12_DEFAULT_SAMPLE_MASK);
+		toonPSO.Finalize();
+		ctx.RegisterGraphicsPSO(toonPSOName, toonPSO);
+
+		toonPSOName = "Renderer : Toon Alpha PSO";
+		toonPSO.SetBlendState(alphaBlendDesc);
+		toonPSO.SetDepthStencilState(transparentDepthStencilDesc);
 		toonPSO.Finalize();
 		ctx.RegisterGraphicsPSO(toonPSOName, toonPSO);
 

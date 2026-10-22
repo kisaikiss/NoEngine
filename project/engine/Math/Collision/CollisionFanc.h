@@ -46,6 +46,13 @@ struct SpherePushResult {
 	float penetration = 0.0f;
 };
 
+struct RayTriangleHit {
+	bool hit = false;
+	float distance = 0.0f;
+	Vector3 position = Vector3::ZERO;
+	Vector3 normal = Vector3::UP;
+};
+
 struct Collision2D {
 	bool hit = false;
 	Vector2 closestOnA;
@@ -56,6 +63,10 @@ struct Collision2D {
 
 
 SpherePushResult TestSphereTriangle(const Vector3& center, float radius, const TriangleCollider& triangle);
+
+/// <summary>有限長レイと三角形の交差を両面判定する。</summary>
+RayTriangleHit IntersectRayTriangle(const Vector3& origin, const Vector3& direction,
+	float maxDistance, const TriangleCollider& triangle);
 
 Math::Vector3 ClosestPointOnTriangle(const Math::Vector3& p, const Math::Vector3& a, const Math::Vector3& b, const Math::Vector3& c);
 CapsuleAABBCollision TestCapsuleAABB(const Transform* capsuleTransform, const Math::CapsuleCollider* capsule, const Transform* aabbTransform, const Math::AABBCollider* aabb, ECS::Registry& registry);

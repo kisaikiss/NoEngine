@@ -15,6 +15,8 @@ enum class BlendMode {
 
 	kScreen,
 
+	kAlpha,
+
 };
 
 enum class RenderMode {

@@ -8,6 +8,69 @@
 #include "../../Component/Camera/CameraIntroComponent.h"
 #include "../../Component/Dialogue/DialogueComponent.h"
 #include "../../Component/Player/PlayerDeathComponent.h"
+#include "engine/Math/Collision/MeshColliderLoader.h"
+#include "engine/Math/Collision/CollisionFanc.h"
+
+namespace {
+struct JumpLandingShadowTag {};
+
+No::Entity EnsureJumpLandingShadow(No::Registry& registry) {
+	No::Entity result = No::INVALID_ENTITY;
+	for (auto entity : registry.View<JumpLandingShadowTag>()) {
+		result = entity;
+	}
+	if (result != No::INVALID_ENTITY) {
+		return result;
+	}
+
+	auto entity = registry.GenerateEntity();
+	registry.AddComponent<JumpLandingShadowTag>(entity);
+	registry.AddComponent<No::TransformComponent>(entity);
+	auto* mesh = registry.AddComponent<No::MeshComponent>(entity);
+	mesh->meshName = "resources/game/ClockworksDisease/Model/JumpShadow/shadowPlane.obj";
+	mesh->isVisible = false;
+	auto* material = registry.AddComponent<No::MaterialComponent>(entity);
+	constexpr float shadowAlpha = 0.7f;
+	material->color = No::Color{ 0.0f, 0.0f, 0.0f, shadowAlpha };
+	material->blendMode = NoEngine::BlendMode::kAlpha;
+	material->unlit = true;
+	material->receiveShadow = false;
+	material->castShadow = false;
+	return entity;
+}
+
+bool FindGroundBelow(No::Registry& registry, const No::Vector3& playerPosition,
+	No::RayTriangleHit& nearestHit) {
+	constexpr float rayLength = 200.0f;
+	constexpr float boundsPadding = 0.002f;
+	const No::Vector3 rayOrigin = playerPosition + No::Vector3::UP * 0.1f;
+	const No::Vector3 rayDirection{ 0.0f, -1.0f, 0.0f };
+	nearestHit.distance = rayLength;
+	bool foundHit = false;
+
+	No::AABBCollider rayBounds;
+	rayBounds.min = { playerPosition.x - boundsPadding,
+		playerPosition.y - rayLength, playerPosition.z - boundsPadding };
+	rayBounds.max = { playerPosition.x + boundsPadding,
+		playerPosition.y + 0.1f, playerPosition.z + boundsPadding };
+
+	for (auto terrainEntity : registry.View<No::TerrainMesh>()) {
+		auto* terrain = registry.GetComponent<No::TerrainMesh>(terrainEntity);
+		if (!terrain || !terrain->bvhRoot || terrain->triangles.empty()) continue;
+
+		std::vector<int> candidates;
+		No::QueryBVH(terrain->bvhRoot.get(), rayBounds, terrain->triangles, candidates);
+		for (int index : candidates) {
+			const auto hit = No::IntersectRayTriangle(rayOrigin, rayDirection,
+				rayLength, terrain->triangles[static_cast<size_t>(index)]);
+			if (!hit.hit || (foundHit && hit.distance >= nearestHit.distance)) continue;
+			nearestHit = hit;
+			foundHit = true;
+		}
+	}
+	return foundHit;
+}
+}
 
 namespace {
 
@@ -131,11 +194,16 @@ void CreateScaffold(No::Registry& registry, No::Entity entity, PlayerComponent* 
 } // namespace
 
 void PlayerJumpSystem::Update(No::Registry& registry, float deltaTime) {
+	const No::Entity shadowEntity = EnsureJumpLandingShadow(registry);
+	auto* shadowMesh = registry.GetComponent<No::MeshComponent>(shadowEntity);
+	auto* shadowTransform = registry.GetComponent<No::TransformComponent>(shadowEntity);
+	if (shadowMesh) shadowMesh->isVisible = false;
+
 	bool isSkip = false;
 	for (auto e : registry.View<No::TransformComponent, No::CameraComponent, FollowCameraComponent>()) {
 		if (registry.Has<CameraLockTag>(e)) isSkip = true; // 演出中は操作できない
 	}
-	
+
 	auto view = registry.View<PlayerComponent, No::TransformComponent, No::GroundStateComponent, PlayerMoveTransientComponent>();
 	for (auto entity : view) {
 		if (isSkip) continue;
@@ -181,6 +249,75 @@ void PlayerJumpSystem::Update(No::Registry& registry, float deltaTime) {
 		HandleAirDash(registry, entity, playerVariables, isGrounded, transientState, deltaTime);
 		HandleJumpRelease(playerVariables);
 		CreateScaffold(registry, entity, playerVariables, groundState, registry.GetComponent<No::TransformComponent>(entity));
+
+		const bool isJumping = PlayerStates::Get(playerVariables->state).IsJumpState()
+			|| transientState->justJumped || !groundState->isGrounded;
+		if (!isJumping || !shadowMesh || !shadowTransform) continue;
+
+		const auto* playerTransform = registry.GetComponent<No::TransformComponent>(entity);
+		if (!playerTransform) continue;
+		const No::Vector3 playerPosition = playerTransform->GetWorldPosition(registry);
+		No::RayTriangleHit centerHit;
+		if (!FindGroundBelow(registry, playerPosition, centerHit)) continue;
+
+		// 周囲の地面サンプルから局所的な平均法線と凹凸量を求める。
+		// 影自体は1枚だけにし、凹凸が強い場所では小さくして地形へのめり込みを抑える。
+		No::Vector3 normalSum = centerHit.normal;
+		float heightVariation = 0.0f;
+		int normalSamples = 1;
+		constexpr float sampleRadius = 0.5f;
+		const No::Vector3 sampleOffsets[] = {
+			{ sampleRadius, 0.0f, 0.0f }, { -sampleRadius, 0.0f, 0.0f },
+			{ 0.0f, 0.0f, sampleRadius }, { 0.0f, 0.0f, -sampleRadius },
+			{ sampleRadius * 0.7071f, 0.0f, sampleRadius * 0.7071f },
+			{ -sampleRadius * 0.7071f, 0.0f, sampleRadius * 0.7071f },
+			{ sampleRadius * 0.7071f, 0.0f, -sampleRadius * 0.7071f },
+			{ -sampleRadius * 0.7071f, 0.0f, -sampleRadius * 0.7071f },
+		};
+		for (const auto& offset : sampleOffsets) {
+			No::RayTriangleHit sampleHit;
+			if (!FindGroundBelow(registry, playerPosition + offset, sampleHit)) continue;
+			const float heightDelta = std::abs(sampleHit.position.y - centerHit.position.y);
+			if (heightDelta > 0.45f) continue; // 段差の向こう側を平均法線に混ぜない
+			heightVariation = std::max(heightVariation, heightDelta);
+			normalSum += sampleHit.normal;
+			++normalSamples;
+		}
+
+		No::Vector3 surfaceNormal = (normalSum / static_cast<float>(normalSamples)).Normalize();
+		if (surfaceNormal.LengthSquared() < 1e-6f) surfaceNormal = centerHit.normal;
+		float shadowScale = std::max(0.3f, 0.6f - heightVariation * 1.6f);
+		constexpr float minimumShadowScale = 0.2f;
+		constexpr int edgeProbeCount = 24;
+		constexpr float pi = 3.14159265358979323846f;
+		bool fitsOnGround = false;
+		for (int attempt = 0; attempt < 8; ++attempt) {
+			bool ringIsSupported = true;
+			const float probeRadius = shadowScale * 1.05f;
+			for (int probe = 0; probe < edgeProbeCount; ++probe) {
+				const float angle = 2.0f * pi * static_cast<float>(probe) / edgeProbeCount;
+				const No::Vector3 probePosition = playerPosition + No::Vector3{
+					std::cos(angle) * probeRadius, 0.0f, std::sin(angle) * probeRadius };
+				No::RayTriangleHit edgeHit;
+				if (!FindGroundBelow(registry, probePosition, edgeHit)
+					|| std::abs(edgeHit.position.y - centerHit.position.y) > 0.45f) {
+					ringIsSupported = false;
+					break;
+				}
+			}
+			if (ringIsSupported) {
+				fitsOnGround = true;
+				break;
+			}
+			if (shadowScale <= minimumShadowScale) break;
+			shadowScale = std::max(minimumShadowScale, shadowScale * 0.8f);
+		}
+		if (!fitsOnGround) continue;
+		shadowTransform->translate = centerHit.position + surfaceNormal * 0.018f;
+		shadowTransform->rotation.LookRotation(surfaceNormal,
+			std::abs(surfaceNormal.y) > 0.99f ? No::Vector3::FORWARD : No::Vector3::UP);
+		shadowTransform->scale = { shadowScale, shadowScale, 1.0f };
+		shadowMesh->isVisible = true;
 	}
 }
 

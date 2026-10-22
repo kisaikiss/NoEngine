@@ -19,6 +19,44 @@ SpherePushResult TestSphereTriangle(const Vector3& center, float radius, const T
 	return result;
 }
 
+RayTriangleHit IntersectRayTriangle(const Vector3& origin, const Vector3& direction,
+	float maxDistance, const TriangleCollider& triangle) {
+	RayTriangleHit result;
+	if (maxDistance < 0.0f || direction.LengthSquared() < 1e-12f) return result;
+
+	// Moller–Trambore交差判定。三角形のどちらの面も許容する。
+	constexpr float epsilon = 1e-6f;
+	const Vector3 edge1 = triangle.v[1] - triangle.v[0];
+	const Vector3 edge2 = triangle.v[2] - triangle.v[0];
+	const Vector3 p = direction.Cross(edge2);
+	const float determinant = edge1.Dot(p);
+	if (std::abs(determinant) < epsilon) return result;
+
+	const float inverseDeterminant = 1.0f / determinant;
+	const Vector3 fromVertex = origin - triangle.v[0];
+	const float u = fromVertex.Dot(p) * inverseDeterminant;
+	if (u < 0.0f || u > 1.0f) return result;
+
+	const Vector3 q = fromVertex.Cross(edge1);
+	const float v = direction.Dot(q) * inverseDeterminant;
+	if (v < 0.0f || u + v > 1.0f) return result;
+
+	const float distance = edge2.Dot(q) * inverseDeterminant;
+	if (distance < 0.0f || distance > maxDistance) return result;
+
+	result.hit = true;
+	result.distance = distance;
+	result.position = origin + direction * distance;
+	result.normal = triangle.normal;
+	if (result.normal.LengthSquared() < epsilon) {
+		result.normal = edge1.Cross(edge2).Normalize();
+	} else {
+		result.normal = result.normal.Normalize();
+	}
+	if (result.normal.Dot(direction) > 0.0f) result.normal = -result.normal;
+	return result;
+}
+
 Math::Vector3 ClosestPointOnTriangle(const Math::Vector3& p, const Math::Vector3& a, const Math::Vector3& b, const Math::Vector3& c) {
 	// 辺 AB
 	Math::Vector3 ab = b - a;

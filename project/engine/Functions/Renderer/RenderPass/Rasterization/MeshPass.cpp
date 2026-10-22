@@ -33,12 +33,14 @@ void MeshPassBase::EnsurePSOsInitialized() {
 
 	auto& context = *GetRenderContext();
 	psoIDs_[RenderMode::kDefault][BlendMode::kNormal] = context.GetPSOID("Renderer : Default PSO");
+	psoIDs_[RenderMode::kDefault][BlendMode::kAlpha] = context.GetPSOID("Renderer : Default Alpha PSO");
 	psoIDs_[RenderMode::kDefault][BlendMode::kAdd] = context.GetPSOID("Renderer : Default Add PSO");
 	psoIDs_[RenderMode::kDefault][BlendMode::kSubtract] = context.GetPSOID("Renderer : Default Sub PSO");
 	psoIDs_[RenderMode::kDefault][BlendMode::kMultiply] = context.GetPSOID("Renderer : Default Mul PSO");
 	psoIDs_[RenderMode::kDefault][BlendMode::kScreen] = context.GetPSOID("Renderer : Default Screen PSO");
 
 	psoIDs_[RenderMode::kToon][BlendMode::kNormal] = context.GetPSOID("Renderer : Toon PSO");
+	psoIDs_[RenderMode::kToon][BlendMode::kAlpha] = context.GetPSOID("Renderer : Toon Alpha PSO");
 	psoIDs_[RenderMode::kToon][BlendMode::kAdd] = context.GetPSOID("Renderer : Toon Add PSO");
 	psoIDs_[RenderMode::kToon][BlendMode::kSubtract] = context.GetPSOID("Renderer : Toon Sub PSO");
 	psoIDs_[RenderMode::kToon][BlendMode::kMultiply] = context.GetPSOID("Renderer : Toon Mul PSO");
@@ -115,7 +117,11 @@ void MeshPassBase::RenderItems(GraphicsContext& context, const RenderGraphRegist
 		auto& rootIndex = RootSignatureBuilder::GetRootIndexMap(basePsoName);
 
 		// psoIDs_から対象のPSO IDとRootSignature IDを取得する
-		uint32_t targetPSO = psoIDs_[item.material->renderMode][item.material->blendMode];
+		BlendMode blendMode = item.material->blendMode;
+		if (blendMode == BlendMode::kNormal && item.material->color.a < 1.0f) {
+			blendMode = BlendMode::kAlpha;
+		}
+		uint32_t targetPSO = psoIDs_[item.material->renderMode][blendMode];
 		uint32_t targetRootSig = rootSigIDs_[item.material->renderMode];
 
 		if (targetPSO != currentPSO) {
