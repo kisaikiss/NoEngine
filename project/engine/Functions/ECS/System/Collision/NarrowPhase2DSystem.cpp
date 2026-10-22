@@ -7,6 +7,11 @@ namespace NoEngine {
 namespace ECS {
 using namespace Math;
 
+namespace {
+constexpr float kBroadPhaseCellSize = 150.0f;
+constexpr size_t kBroadPhaseInitialCapacity = 1024;
+}
+
 
 void NarrowPhase2DSystem::Update(Registry& registry, float deltaTime) {
 	// 前フレームからの経過時間は使用しない
@@ -19,7 +24,7 @@ void NarrowPhase2DSystem::Update(Registry& registry, float deltaTime) {
 	// 衝突情報
 	Event::Contact2DEvent contactEvent;
 
-	auto pairs = BroadPhaseGrid(registry, 150.0f /* cell size */);
+	auto pairs = BroadPhaseGrid(registry, kBroadPhaseCellSize);
 
 	for (auto pair : pairs) {
 		Entity boxA = pair.a;
@@ -84,7 +89,7 @@ std::vector<NarrowPhase2DSystem::BroadPhasePair> NarrowPhase2DSystem::BroadPhase
 		};
 
 	std::unordered_map<int64_t, std::vector<Entity>> grid;
-	grid.reserve(1024);
+	grid.reserve(kBroadPhaseInitialCapacity);
 
 	auto view = registry.View<Math::AABBCollider2D, Component::Transform2DComponent>();
 
@@ -110,7 +115,7 @@ std::vector<NarrowPhase2DSystem::BroadPhasePair> NarrowPhase2DSystem::BroadPhase
 
 	// 2. 同じセル内のペアだけ NarrowPhase に渡す
 	std::vector<BroadPhasePair> pairs;
-	pairs.reserve(1024);
+	pairs.reserve(kBroadPhaseInitialCapacity);
 
 	for (auto& kv : grid) {
 		auto& list = kv.second;

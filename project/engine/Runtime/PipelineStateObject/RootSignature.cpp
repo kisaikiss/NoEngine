@@ -135,7 +135,7 @@ void RootSignature::Finalize(const std::wstring& name, D3D12_ROOT_SIGNATURE_FLAG
         lock_guard<mutex> CS(s_HashMapMutex);
         auto iter = sRootSignatureHashMap.find(HashCode);
 
-        // Reserve space so the next inquiry will find that someone got here first.
+        // 次の問い合わせで先行処理が見つかるよう、領域を確保する
         if (iter == sRootSignatureHashMap.end()) {
             RSRef = sRootSignatureHashMap[HashCode].GetAddressOf();
             firstCompile = true;

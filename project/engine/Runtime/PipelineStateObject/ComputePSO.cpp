@@ -12,7 +12,7 @@ ComputePSO::ComputePSO(std::wstring name) : PSO(name) {
 }
 
 void ComputePSO::Finalize() {
-    // Make sure the root signature is finalized first
+    // 先にルートシグネチャを確定しておく
     psoDesc_.pRootSignature = rootSignature_->GetSignature();
     assert(psoDesc_.pRootSignature != nullptr);
 
@@ -25,7 +25,7 @@ void ComputePSO::Finalize() {
         lock_guard<mutex> CS(s_HashMapMutex);
         auto iter = sComputePSOHashMap.find(HashCode);
 
-        // Reserve space so the next inquiry will find that someone got here first.
+        // 次の問い合わせで先行処理が見つかるよう、領域を確保する
         if (iter == sComputePSOHashMap.end()) {
             firstCompile = true;
             PSORef = sComputePSOHashMap[HashCode].GetAddressOf();

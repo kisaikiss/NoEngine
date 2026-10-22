@@ -183,13 +183,13 @@ void Initialize() {
 		// バッファ先頭のアライメント調整用の余白(+64)を含めたサイズ
 		const UINT tableSize = totalTableSizeUnaligned + tableAlignment;
 
-		// Create upload buffer
+		// アップロードバッファを作成する
 		CD3DX12_HEAP_PROPERTIES heapProps(D3D12_HEAP_TYPE_UPLOAD);
 		CD3DX12_RESOURCE_DESC bufferDesc = CD3DX12_RESOURCE_DESC::Buffer(tableSize);
 		GraphicsCore::sGraphicsDevice->GetDevice()->CreateCommittedResource(&heapProps, D3D12_HEAP_FLAG_NONE, &bufferDesc,
 			D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&sTestShaderTable));
 
-		// Map and write identifiers at offsets relative to an aligned base
+		// アライメント済みの基準位置からのオフセットに識別子を書き込む
 		uint8_t* mapped = nullptr;
 		sTestShaderTable->Map(0, nullptr, reinterpret_cast<void**>(&mapped));
 		UINT64 gpuBase = sTestShaderTable->GetGPUVirtualAddress();
@@ -407,13 +407,13 @@ void CreateShadowShaderTable() {
 	// バッファ先頭のアライメント調整用の余白(+64)を含めたサイズ
 	const UINT tableSize = totalTableSizeUnaligned + tableAlignment;
 
-	// Create upload buffer
+	// アップロードバッファを作成する
 	CD3DX12_HEAP_PROPERTIES heapProps(D3D12_HEAP_TYPE_UPLOAD);
 	CD3DX12_RESOURCE_DESC bufferDesc = CD3DX12_RESOURCE_DESC::Buffer(tableSize);
 	GraphicsCore::sGraphicsDevice->GetDevice()->CreateCommittedResource(&heapProps, D3D12_HEAP_FLAG_NONE, &bufferDesc,
 		D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&sShadowShaderTable));
 
-	// Map and write identifiers at offsets relative to an aligned base
+	// アライメント済みの基準位置からのオフセットに識別子を書き込む
 	uint8_t* mapped = nullptr;
 	sShadowShaderTable->Map(0, nullptr, reinterpret_cast<void**>(&mapped));
 	UINT64 gpuBase = sShadowShaderTable->GetGPUVirtualAddress();

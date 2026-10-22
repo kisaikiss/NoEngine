@@ -85,7 +85,7 @@ void GraphicsPSO::SetPrimitiveRestart(D3D12_INDEX_BUFFER_STRIP_CUT_VALUE ibProps
 
 void GraphicsPSO::Finalize() {
 
-	// Make sure the root signature is finalized first
+	// 先にルートシグネチャを確定しておく
 	psoDesc_.pRootSignature = rootSignature_->GetSignature();
 	assert(psoDesc_.pRootSignature != nullptr);
 
@@ -101,7 +101,7 @@ void GraphicsPSO::Finalize() {
 		std::lock_guard<std::mutex> CS(s_HashMapMutex);
 		auto iter = sGraphicsPSOHashMap.find(HashCode);
 
-		// Reserve space so the next inquiry will find that someone got here first.
+		// 次の問い合わせで先行処理が見つかるよう、領域を確保する
 		if (iter == sGraphicsPSOHashMap.end()) {
 			firstCompile = true;
 			PSORef = sGraphicsPSOHashMap[HashCode].GetAddressOf();

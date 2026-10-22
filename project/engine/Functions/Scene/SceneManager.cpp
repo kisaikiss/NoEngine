@@ -171,7 +171,7 @@ void SceneManager::Update(ComputeContext& ctx, float deltaTime) {
 			}
 			ImGui::Separator();
 			if (currentScene_ && ImGui::MenuItem("Delete current scene...")) { pendingDelete = GetCurrentSceneName(*currentScene_->GetRegistry()); requestDelete = true; }
-			// Persist the app's scene catalog after creation/copy as well as deletion.
+			// 作成・コピー・削除の後にアプリのシーン一覧を保存する
 			static size_t knownCount = editorScenes_.size();
 			if (knownCount != editorScenes_.size()) {
 				nlohmann::json list; list["scenes"] = nlohmann::json::array(); for (const auto& item : editorScenes_) list["scenes"].push_back(item);
@@ -183,7 +183,7 @@ void SceneManager::Update(ComputeContext& ctx, float deltaTime) {
 		}
 		ImGui::EndMainMenuBar();
 	}
-	// Open and draw modal popups after closing the menu bar so they use the root popup stack.
+	// メニューバーを閉じてからモーダルポップアップを開いて描画し、ルートのポップアップスタックを使う
 	if (requestCreate) { ImGui::OpenPopup("Create new scene"); requestCreate = false; }
 	if (ImGui::BeginPopupModal("Create new scene", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
 		ImGui::InputText("Name", sceneName, sizeof(sceneName));
