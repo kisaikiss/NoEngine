@@ -68,6 +68,32 @@ bool FindGroundBelow(No::Registry& registry, const No::Vector3& playerPosition,
 			foundHit = true;
 		}
 	}
+
+	for (auto boxEntity : registry.View<No::TransformComponent, No::AABBCollider>()) {
+		auto* transform = registry.GetComponent<No::TransformComponent>(boxEntity);
+		auto* collider = registry.GetComponent<No::AABBCollider>(boxEntity);
+		const auto worldBox = NoEngine::GetWorldAABB(transform, collider, registry);
+		const No::Vector3 center = (worldBox.min + worldBox.max) * 0.5f;
+		const No::Vector3 halfExtents = (worldBox.max - worldBox.min) * 0.5f;
+		const auto hit = No::IntersectRayBox(rayOrigin, rayDirection, rayLength,
+			center, halfExtents);
+		if (hit.hit && (!foundHit || hit.distance < nearestHit.distance)) {
+			nearestHit = hit;
+			foundHit = true;
+		}
+	}
+
+	for (auto boxEntity : registry.View<No::TransformComponent, No::OBBCollider>()) {
+		auto* transform = registry.GetComponent<No::TransformComponent>(boxEntity);
+		auto* collider = registry.GetComponent<No::OBBCollider>(boxEntity);
+		const auto worldBox = NoEngine::GetWorldOBB(transform, collider, registry);
+		const auto hit = No::IntersectRayBox(rayOrigin, rayDirection, rayLength,
+			worldBox.center, worldBox.halfExtents, worldBox.rotation);
+		if (hit.hit && (!foundHit || hit.distance < nearestHit.distance)) {
+			nearestHit = hit;
+			foundHit = true;
+		}
+	}
 	return foundHit;
 }
 }

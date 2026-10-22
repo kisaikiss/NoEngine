@@ -68,6 +68,11 @@ SpherePushResult TestSphereTriangle(const Vector3& center, float radius, const T
 RayTriangleHit IntersectRayTriangle(const Vector3& origin, const Vector3& direction,
 	float maxDistance, const TriangleCollider& triangle);
 
+/// <summary>中心と半サイズで表したAABB/OBBに対する有限長レイ判定。</summary>
+RayTriangleHit IntersectRayBox(const Vector3& origin, const Vector3& direction,
+	float maxDistance, const Vector3& center, const Vector3& halfExtents,
+	const Quaternion& rotation = Quaternion::IDENTITY);
+
 Math::Vector3 ClosestPointOnTriangle(const Math::Vector3& p, const Math::Vector3& a, const Math::Vector3& b, const Math::Vector3& c);
 CapsuleAABBCollision TestCapsuleAABB(const Transform* capsuleTransform, const Math::CapsuleCollider* capsule, const Transform* aabbTransform, const Math::AABBCollider* aabb, ECS::Registry& registry);
 CapsuleOBBCollision TestCapsuleOBB(const Transform* capsuleTransform, const Math::CapsuleCollider* capsule, const Transform* obbTransform, const Math::OBBCollider* obb, ECS::Registry& registry);

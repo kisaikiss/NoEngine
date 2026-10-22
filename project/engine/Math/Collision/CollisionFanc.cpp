@@ -57,6 +57,56 @@ RayTriangleHit IntersectRayTriangle(const Vector3& origin, const Vector3& direct
 	return result;
 }
 
+RayTriangleHit IntersectRayBox(const Vector3& origin, const Vector3& direction,
+	float maxDistance, const Vector3& center, const Vector3& halfExtents,
+	const Quaternion& rotation) {
+	RayTriangleHit result;
+	if (maxDistance < 0.0f || direction.LengthSquared() < 1e-12f) return result;
+
+	Quaternion inverseRotation = rotation;
+	inverseRotation.Inverse();
+	const Vector3 localOrigin = inverseRotation.RotateVector(origin - center);
+	const Vector3 localDirection = inverseRotation.RotateVector(direction);
+	float enterDistance = 0.0f;
+	float exitDistance = maxDistance;
+	Vector3 enterNormal = Vector3::ZERO;
+	const float origins[3] = { localOrigin.x, localOrigin.y, localOrigin.z };
+	const float directions[3] = { localDirection.x, localDirection.y, localDirection.z };
+	const float extents[3] = { std::abs(halfExtents.x), std::abs(halfExtents.y), std::abs(halfExtents.z) };
+	for (int axis = 0; axis < 3; ++axis) {
+		if (std::abs(directions[axis]) < 1e-7f) {
+			if (origins[axis] < -extents[axis] || origins[axis] > extents[axis]) return result;
+			continue;
+		}
+
+		float nearDistance = (-extents[axis] - origins[axis]) / directions[axis];
+		float farDistance = (extents[axis] - origins[axis]) / directions[axis];
+		float nearSign = -1.0f;
+		if (nearDistance > farDistance) {
+			std::swap(nearDistance, farDistance);
+			nearSign = 1.0f;
+		}
+		if (nearDistance > enterDistance) {
+			enterDistance = nearDistance;
+			enterNormal = Vector3::ZERO;
+			if (axis == 0) enterNormal.x = nearSign;
+			if (axis == 1) enterNormal.y = nearSign;
+			if (axis == 2) enterNormal.z = nearSign;
+		}
+		exitDistance = std::min(exitDistance, farDistance);
+		if (enterDistance > exitDistance) return result;
+	}
+
+	// レイ開始点がボックス内部にある場合、下面を地面として誤検出しない。
+	if (enterDistance <= 1e-6f || enterDistance > maxDistance || enterNormal.LengthSquared() == 0.0f) return result;
+	result.hit = true;
+	result.distance = enterDistance;
+	result.position = origin + direction * enterDistance;
+	result.normal = rotation.RotateVector(enterNormal).Normalize();
+	if (result.normal.Dot(direction) > 0.0f) result.normal = -result.normal;
+	return result;
+}
+
 Math::Vector3 ClosestPointOnTriangle(const Math::Vector3& p, const Math::Vector3& a, const Math::Vector3& b, const Math::Vector3& c) {
 	// 辺 AB
 	Math::Vector3 ab = b - a;
