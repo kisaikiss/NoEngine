@@ -49,11 +49,17 @@ void EmitDeathEffect(No::Registry& registry, const No::Vector3& position) {
 	}
 }
 
-// 暗転中にカメラをリスポーン地点へ寄せる(元のPlayerDeathSystemの処理 + XZも即座にスナップ)
+// 暗転中にカメラをリスポーン地点へ寄せる
 void SnapFollowCamera(No::Registry& registry, const No::Vector3& playerPos) {
 	for (auto e : registry.View<FollowCameraComponent, No::TransformComponent>()) {
 		auto* camera = registry.GetComponent<FollowCameraComponent>(e);
 		auto* transform = registry.GetComponent<No::TransformComponent>(e);
+		// リスポーン前の高さ追従状態を引き継ぐと、FollowCameraSystemが
+		// 古い高さを目標にしてカメラを地面の下へ戻してしまう。
+		camera->followHeight = playerPos.y;
+		camera->followHeightInitialized = true;
+		camera->followHeightAirborneCatchUp = false;
+		camera->followHeightCatchUpInProgress = false;
 		camera->phi = 1.0f;
 		camera->currentDistance = 0.1f;
 		transform->translate.x = playerPos.x + camera->currentDistance * std::sin(camera->phi) * std::cos(camera->theta);
