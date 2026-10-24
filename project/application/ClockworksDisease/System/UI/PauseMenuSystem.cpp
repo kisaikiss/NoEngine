@@ -48,7 +48,7 @@ void PauseMenuSystem::Update(No::Registry& registry, float deltaTime) {
 	}
 
 	No::Vector2 windowSize = NoEngine::GraphicsCore::GetWindowSize();
-	auto* t2d = registry.AddComponent<No::Transform2DComponent>(backgroundEntity_);
+	auto* t2d = registry.GetComponent<No::Transform2DComponent>(backgroundEntity_);
 	t2d->scale = windowSize;
 	t2d->translate = windowSize / 2.f;
 }
