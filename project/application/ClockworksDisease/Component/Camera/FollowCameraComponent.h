@@ -29,6 +29,7 @@ struct FollowCameraComponent {
 	float heightRiseFollowSpeed = 2.0f; // 高台へ上がる時の高さ追従速度。小さいほどゆっくり動く
 	float heightFallFollowSpeed = 12.0f; // 下へ降りる時の高さ追従速度。大きいほど早く追いつく
 	float heightRiseCatchUpThreshold = 4.0f; // ジャンプ中、この高さ以上上昇したらカメラも追従する
+	float lookUpCameraClearance = 1.25f; // 見上げる角度の時にプレイヤーより上へ保つカメラの高さ
 	float followHeight = 0.0f; // ジャンプ中の上下移動でカメラが追いかけないための追従基準高さ
 	bool followHeightInitialized = false;
 	bool followHeightAirborneCatchUp = false;

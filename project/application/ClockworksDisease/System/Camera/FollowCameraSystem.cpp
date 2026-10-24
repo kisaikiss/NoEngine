@@ -94,27 +94,31 @@ void FollowCameraSystem::Update(No::Registry& registry, float deltaTime) {
 		// Phi(縦方向の移動)によって「プレイヤーとカメラの距離」と「視野角」を調整する
 		float normalizedPhi = (followCameraVariables->phi - minPhi) / (maxPhi - minPhi);
 		followCameraVariables->distance = No::Lerp(followCameraVariables->maxDistance, followCameraVariables->minDistance, normalizedPhi);
+		const float lookUpBlend = std::clamp((normalizedPhi - 0.75f) / 0.25f, 0.0f, 1.0f);
+		const float smoothLookUpBlend = lookUpBlend * lookUpBlend * (3.0f - 2.0f * lookUpBlend);
+		const float lookUpMinHeight = playerPos.y + std::max(followCameraVariables->lookUpCameraClearance, 0.0f);
 
 		cameraComponent->fov = No::Lerp(followCameraVariables->minFov, followCameraVariables->maxFov, normalizedPhi);
 
 		// 理想位置(衝突を考慮しない、zoom後のdistanceそのまま)
 		No::Vector3 idealPos;
 		idealPos.x = playerPos.x + followCameraVariables->distance * std::sin(followCameraVariables->phi) * std::cos(followCameraVariables->theta);
-		idealPos.y = cameraFollowPos.y + followCameraVariables->distance * std::cos(followCameraVariables->phi);
+		const float idealCameraY = cameraFollowPos.y + followCameraVariables->distance * std::cos(followCameraVariables->phi);
+		idealPos.y = No::Lerp(idealCameraY, std::max(idealCameraY, lookUpMinHeight), smoothLookUpBlend);
 		idealPos.z = playerPos.z + followCameraVariables->distance * std::sin(followCameraVariables->phi) * std::sin(followCameraVariables->theta);
 
 		// playerPos -> idealPos の経路上を地形と判定し、詰めるべき距離を求める
 		float targetDistance = followCameraVariables->distance;
 
 		// 判定する範囲をカメラからプレイヤーまでではなく、プレイヤーから少しカメラに近い位置にする
-		No::Vector3 toCamera = idealPos - cameraFollowPos;
+		No::Vector3 toCamera = idealPos - playerPos;
 		float toCameraLength = toCamera.Length();
 
-		No::Vector3 sweepStart = cameraFollowPos;
+		No::Vector3 sweepStart = playerPos;
 		if (toCameraLength > 1e-4f) {
 			// distance未満にclampしてから始点をずらす(始点が終点を追い越さないように)
 			float offset = std::min(followCameraVariables->collisionStartOffset, toCameraLength);
-			sweepStart = cameraFollowPos + (toCamera / toCameraLength) * offset;
+			sweepStart = playerPos + (toCamera / toCameraLength) * offset;
 		}
 
 		auto terrainView = registry.View<No::TerrainMesh>();
@@ -143,7 +147,7 @@ void FollowCameraSystem::Update(No::Registry& registry, float deltaTime) {
 				if (!collide.hit) continue;
 
 				// playerPosから衝突点までの距離を「その方向で許容できる距離」とみなす
-				float hitDistance = (collide.closestOnCapsule - cameraFollowPos).Length();
+				float hitDistance = (collide.closestOnCapsule - playerPos).Length();
 				targetDistance = std::min(targetDistance, std::max(hitDistance - followCameraVariables->collisionMargin, 0.5f));
 			}
 		}
@@ -157,7 +161,8 @@ void FollowCameraSystem::Update(No::Registry& registry, float deltaTime) {
 		// 移動する先の座標計算
 		No::Vector3 nextPosition = No::Vector3::ZERO;
 		nextPosition.x = cameraFollowPos.x + followCameraVariables->currentDistance * std::sin(followCameraVariables->phi) * std::cos(followCameraVariables->theta);
-		nextPosition.y = cameraFollowPos.y + followCameraVariables->currentDistance * std::cos(followCameraVariables->phi);
+		const float nextCameraY = cameraFollowPos.y + followCameraVariables->currentDistance * std::cos(followCameraVariables->phi);
+		nextPosition.y = No::Lerp(nextCameraY, std::max(nextCameraY, lookUpMinHeight), smoothLookUpBlend);
 		nextPosition.z = cameraFollowPos.z + followCameraVariables->currentDistance * std::sin(followCameraVariables->phi) * std::sin(followCameraVariables->theta);
 
 
