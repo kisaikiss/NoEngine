@@ -28,6 +28,8 @@ struct PlayerComponent {
 	No::Vector3 respawnPoint = No::Vector3::ZERO;
 	// 空中で目標速度へ近づく速さ。小さいほど空中での慣性が強くなる。
 	float airAcceleration = 20.f;
+	// 接地中に最高速（現在の歩行/ダッシュ速度）へ到達するまでの時間。0以下なら即時に速度を合わせる。
+	float accelerationTime = 0.35f;
 	float gravity = -9.8f;
 	float yVelocity = 0.f;
 	float maxFallSpeed = -25.f;

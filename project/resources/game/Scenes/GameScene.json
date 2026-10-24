@@ -1694,7 +1694,7 @@
                     "fadeInDuration": 1.0,
                     "fadeOutDuration": 1.0,
                     "phase": "kPlayingRoutine",
-                    "playInEditor": true
+                    "playInEditor": false
                 },
                 "CameraLockTag": null,
                 "EditTag": {
@@ -41102,6 +41102,7 @@
                     "magicScaffold": false
                 },
                 "PlayerComponent": {
+                    "accelerationTime": 0.10000000149011612,
                     "airAcceleration": 20.0,
                     "airDashSpeed": 16.0,
                     "airDashStaminaCostRate": 2.0,

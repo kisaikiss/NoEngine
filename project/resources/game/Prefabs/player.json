@@ -148,6 +148,7 @@
         },
         "PlayerComponent": {
             "airAcceleration": 20.0,
+            "accelerationTime": 0.35,
             "airDashSpeed": 10.0,
             "airDashStaminaCostRate": 2.0,
             "coyoteTime": 0.30000001192092896,

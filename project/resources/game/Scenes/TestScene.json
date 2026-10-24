@@ -8005,6 +8005,7 @@
                     "magicScaffold": false
                 },
                 "PlayerComponent": {
+                    "accelerationTime": 0.05000000074505806,
                     "airAcceleration": 20.0,
                     "airDashSpeed": 10.0,
                     "airDashStaminaCostRate": 2.0,

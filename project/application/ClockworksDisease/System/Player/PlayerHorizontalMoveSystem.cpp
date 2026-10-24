@@ -136,12 +136,17 @@ void PlayerHorizontalMoveSystem::Update(No::Registry& registry, float deltaTime)
 		const No::Vector3 targetVelocity = finalDir * speed;
 		No::Vector3 finalVelocity = targetVelocity;
 
-		if (!groundState->isGrounded && !isAirDashing) {
+		if (!isAirDashing) {
 			// 空中では入力を目標速度として扱い、加速量を制限して現在の速度から
-			// 徐々に近づける。入力を離した場合も同じく徐々に減速する。
+			// 徐々に近づける。接地中は accelerationTime で最高速までの時間を調整する。
+			// 入力を離した場合も同じく徐々に減速する。
 			const No::Vector3 velocityDelta = targetVelocity - currentHorizontalVelocity;
 			const float deltaLength = velocityDelta.Length();
-			const float maxSpeedChange = playerVariables->airAcceleration * deltaTime;
+			const float maxSpeedChange = groundState->isGrounded
+				? (playerVariables->accelerationTime > 0.f
+					? speed * deltaTime / playerVariables->accelerationTime
+					: deltaLength)
+				: playerVariables->airAcceleration * deltaTime;
 			if (deltaLength > maxSpeedChange && deltaLength > 1e-6f) {
 				finalVelocity = currentHorizontalVelocity + velocityDelta * (maxSpeedChange / deltaLength);
 			}
