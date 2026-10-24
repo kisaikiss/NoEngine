@@ -220,10 +220,10 @@ void PauseMenuSystem::UpdateOptionMenu(No::Registry& registry) {
 	for (auto e : registry.View<FollowCameraComponent>()) {
 		auto* fc = registry.GetComponent<FollowCameraComponent>(e);
 		if (No::InputIsTrigger("Right") || stickRight) {
-			fc->moveSpeed = std::min(fc->moveSpeed + kMoveSpeedStep, kMoveSpeedMax);
+			fc->rotationSpeed = std::min(fc->rotationSpeed + kMoveSpeedStep, kMoveSpeedMax);
 		}
 		if (No::InputIsTrigger("Left") || stickLeft) {
-			fc->moveSpeed = std::max(fc->moveSpeed - kMoveSpeedStep, kMoveSpeedMin);
+			fc->rotationSpeed = std::max(fc->rotationSpeed - kMoveSpeedStep, kMoveSpeedMin);
 		}
 	}
 
@@ -295,7 +295,7 @@ void PauseMenuSystem::RefreshOptionMenuVisuals(No::Registry& registry) {
 
 	float moveSpeed = 0.f;
 	for (auto e : registry.View<FollowCameraComponent>()) {
-		moveSpeed = registry.GetComponent<FollowCameraComponent>(e)->moveSpeed;
+		moveSpeed = registry.GetComponent<FollowCameraComponent>(e)->rotationSpeed;
 	}
 	if (auto* t = registry.GetComponent<No::TextComponent>(optionValueEntity_)) {
 		t->isVisible = true;

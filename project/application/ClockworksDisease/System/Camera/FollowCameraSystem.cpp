@@ -6,9 +6,11 @@
 
 void FollowCameraSystem::Update(No::Registry& registry, float deltaTime) {
 	No::Vector3 playerPos{};
-	auto playerView = registry.View<No::TransformComponent, No::VelocityComponent, PlayerComponent>();
+	bool playerGrounded = false;
+	auto playerView = registry.View<No::TransformComponent, No::VelocityComponent, No::GroundStateComponent, PlayerComponent>();
 	for (auto e : playerView) {
 		playerPos = registry.GetComponent<No::TransformComponent>(e)->GetWorldPosition(registry);
+		playerGrounded = registry.GetComponent<No::GroundStateComponent>(e)->isGrounded;
 	}
 
 	auto view = registry.View<No::TransformComponent, No::CameraComponent, FollowCameraComponent>();
@@ -20,11 +22,63 @@ void FollowCameraSystem::Update(No::Registry& registry, float deltaTime) {
 		auto* followCameraVariables = registry.GetComponent<FollowCameraComponent>(e);
 		auto* cameraComponent = registry.GetComponent<No::CameraComponent>(e);
 
+		// 通常のジャンプでは高さを保ち、ジャンプ中に一定以上上昇したら空中でも追従する。
+		if (!followCameraVariables->followHeightInitialized) {
+			followCameraVariables->followHeight = playerPos.y;
+			followCameraVariables->followHeightInitialized = true;
+			followCameraVariables->followHeightAirborneCatchUp = false;
+			followCameraVariables->followHeightCatchUpInProgress = false;
+		} else if (playerGrounded) {
+			followCameraVariables->followHeightAirborneCatchUp = false;
+			followCameraVariables->followHeightCatchUpInProgress = false;
+			const float heightDelta = playerPos.y - followCameraVariables->followHeight;
+			if (heightDelta > 0.0f) {
+				// 着地後の高台追従は目標へ近づくほど減速し、滑らかに止める。
+				const float riseAlpha = 1.0f - std::exp(-std::max(followCameraVariables->heightRiseFollowSpeed, 0.0f) * deltaTime);
+				followCameraVariables->followHeight = No::Lerp(followCameraVariables->followHeight, playerPos.y, riseAlpha);
+			} else if (heightDelta < 0.0f) {
+				// 着地して低い場所へ移動した場合も下降速度を使う。
+				const float maxFallStep = std::max(followCameraVariables->heightFallFollowSpeed, 0.0f) * deltaTime;
+				followCameraVariables->followHeight += std::max(-maxFallStep, heightDelta);
+			}
+		} else {
+			const float riseThreshold = std::max(followCameraVariables->heightRiseCatchUpThreshold, 0.0f);
+			if (!followCameraVariables->followHeightAirborneCatchUp
+				&& playerPos.y - followCameraVariables->followHeight >= riseThreshold) {
+				followCameraVariables->followHeightAirborneCatchUp = true;
+				followCameraVariables->followHeightCatchUpInProgress = true;
+			}
+			if (followCameraVariables->followHeightAirborneCatchUp) {
+				if (followCameraVariables->followHeightCatchUpInProgress) {
+					// 通常追従へ切り替える前に、追従基準を滑らかにプレイヤーへ近づける。
+					const float heightDelta = playerPos.y - followCameraVariables->followHeight;
+					const float catchUpSpeed = heightDelta >= 0.0f
+						? followCameraVariables->heightRiseFollowSpeed
+						: followCameraVariables->heightFallFollowSpeed;
+					const float catchUpAlpha = 1.0f - std::exp(-std::max(catchUpSpeed, 0.0f) * deltaTime);
+					followCameraVariables->followHeight = No::Lerp(followCameraVariables->followHeight, playerPos.y, catchUpAlpha);
+					if (std::abs(playerPos.y - followCameraVariables->followHeight) <= 0.05f) {
+						followCameraVariables->followHeight = playerPos.y;
+						followCameraVariables->followHeightCatchUpInProgress = false;
+					}
+				} else {
+					// 追いついた後は通常のカメラ位置補間に高さ追従を任せる。
+					followCameraVariables->followHeight = playerPos.y;
+				}
+			} else if (playerPos.y < followCameraVariables->followHeight) {
+				// 閾値未満のジャンプで基準高さより下がった場合は、下降方向へ速く追従する。
+				const float maxFallStep = std::max(followCameraVariables->heightFallFollowSpeed, 0.0f) * deltaTime;
+				followCameraVariables->followHeight += std::max(-maxFallStep, playerPos.y - followCameraVariables->followHeight);
+			}
+		}
+		No::Vector3 cameraFollowPos = playerPos;
+		cameraFollowPos.y = followCameraVariables->followHeight;
+
 		float hInput = No::GetInputAxisValue("CameraHorizontal");
 		float vInput = No::GetInputAxisValue("CameraVertical");
 
-		followCameraVariables->phi += vInput * deltaTime * followCameraVariables->moveSpeed;
-		followCameraVariables->theta += hInput * deltaTime * followCameraVariables->moveSpeed;
+		followCameraVariables->phi += vInput * deltaTime * followCameraVariables->rotationSpeed;
+		followCameraVariables->theta += hInput * deltaTime * followCameraVariables->rotationSpeed;
 
 
 		const float& minPhi = followCameraVariables->minPhi;
@@ -46,21 +100,21 @@ void FollowCameraSystem::Update(No::Registry& registry, float deltaTime) {
 		// 理想位置(衝突を考慮しない、zoom後のdistanceそのまま)
 		No::Vector3 idealPos;
 		idealPos.x = playerPos.x + followCameraVariables->distance * std::sin(followCameraVariables->phi) * std::cos(followCameraVariables->theta);
-		idealPos.y = playerPos.y + followCameraVariables->distance * std::cos(followCameraVariables->phi);
+		idealPos.y = cameraFollowPos.y + followCameraVariables->distance * std::cos(followCameraVariables->phi);
 		idealPos.z = playerPos.z + followCameraVariables->distance * std::sin(followCameraVariables->phi) * std::sin(followCameraVariables->theta);
 
 		// playerPos -> idealPos の経路上を地形と判定し、詰めるべき距離を求める
 		float targetDistance = followCameraVariables->distance;
 
 		// 判定する範囲をカメラからプレイヤーまでではなく、プレイヤーから少しカメラに近い位置にする
-		No::Vector3 toCamera = idealPos - playerPos;
+		No::Vector3 toCamera = idealPos - cameraFollowPos;
 		float toCameraLength = toCamera.Length();
 
-		No::Vector3 sweepStart = playerPos;
+		No::Vector3 sweepStart = cameraFollowPos;
 		if (toCameraLength > 1e-4f) {
 			// distance未満にclampしてから始点をずらす(始点が終点を追い越さないように)
 			float offset = std::min(followCameraVariables->collisionStartOffset, toCameraLength);
-			sweepStart = playerPos + (toCamera / toCameraLength) * offset;
+			sweepStart = cameraFollowPos + (toCamera / toCameraLength) * offset;
 		}
 
 		auto terrainView = registry.View<No::TerrainMesh>();
@@ -89,7 +143,7 @@ void FollowCameraSystem::Update(No::Registry& registry, float deltaTime) {
 				if (!collide.hit) continue;
 
 				// playerPosから衝突点までの距離を「その方向で許容できる距離」とみなす
-				float hitDistance = (collide.closestOnCapsule - playerPos).Length();
+				float hitDistance = (collide.closestOnCapsule - cameraFollowPos).Length();
 				targetDistance = std::min(targetDistance, std::max(hitDistance - followCameraVariables->collisionMargin, 0.5f));
 			}
 		}
@@ -102,16 +156,14 @@ void FollowCameraSystem::Update(No::Registry& registry, float deltaTime) {
 
 		// 移動する先の座標計算
 		No::Vector3 nextPosition = No::Vector3::ZERO;
-		nextPosition.x = playerPos.x + followCameraVariables->currentDistance * std::sin(followCameraVariables->phi) * std::cos(followCameraVariables->theta);
-		nextPosition.y = playerPos.y + followCameraVariables->currentDistance * std::cos(followCameraVariables->phi);
-		nextPosition.z = playerPos.z + followCameraVariables->currentDistance * std::sin(followCameraVariables->phi) * std::sin(followCameraVariables->theta);
+		nextPosition.x = cameraFollowPos.x + followCameraVariables->currentDistance * std::sin(followCameraVariables->phi) * std::cos(followCameraVariables->theta);
+		nextPosition.y = cameraFollowPos.y + followCameraVariables->currentDistance * std::cos(followCameraVariables->phi);
+		nextPosition.z = cameraFollowPos.z + followCameraVariables->currentDistance * std::sin(followCameraVariables->phi) * std::sin(followCameraVariables->theta);
 
 
 		// 実際の移動
-		// 60 FPS時に 0.1/フレーム となる応答性は維持しつつ、
 		// 追従速度がフレームレートに依存しないようにする。
-		constexpr float positionSmoothSpeed = 6.32163f;
-		const float moveTime = 1.0f - std::exp(-positionSmoothSpeed * deltaTime);
+		const float moveTime = 1.0f - std::exp(-followCameraVariables->moveSpeed * deltaTime);
 		No::Vector3 nowTranslate = transform->translate;
 		transform->translate = No::Lerp(nowTranslate, nextPosition, moveTime);
 
@@ -157,8 +209,8 @@ void FollowCameraSystem::Update(No::Registry& registry, float deltaTime) {
 			viewSpeed = followCameraVariables->goalViewSpeed;
 		} else {
 			// プレイヤー + Offset座標を見る
-			playerPos.y += followCameraVariables->playerPosOffset;
-			followCameraVariables->nextRotation.LookRotation(playerPos - transform->GetWorldPosition(registry), No::Vector3::UP);
+			cameraFollowPos.y += followCameraVariables->playerPosOffset;
+			followCameraVariables->nextRotation.LookRotation(cameraFollowPos - transform->GetWorldPosition(registry), No::Vector3::UP);
 		}
 
 		const float rotationAlpha = 1.0f - std::exp(-viewSpeed * deltaTime);
