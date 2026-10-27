@@ -835,6 +835,7 @@
         "EditSystem",
         "ModelLoadSystem",
         "SpriteLoadSystem",
+        "LevelDoorSystem",
         "FontLoadSystem",
         "AnimationSystem",
         "EffectEmitSystem",

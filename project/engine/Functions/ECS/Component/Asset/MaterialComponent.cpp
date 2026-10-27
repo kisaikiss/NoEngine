@@ -2,6 +2,7 @@
 #include "engine/Editor/Reflection/ReflectionMacros.h"
 
 REFLECT_STRUCT_BEGIN(NoEngine::Component::MaterialComponent, "Asset")
+REFLECT_FIELD(textureName),
 REFLECT_ENUM_FIELD(blendMode),
 REFLECT_ENUM_FIELD(renderMode),
 REFLECT_FIELD(color),

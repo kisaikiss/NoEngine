@@ -279,6 +279,7 @@
     <ClCompile Include="engine\Functions\ECS\System\Movement\ComputePlatformDeltaSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Game\PlatformRideSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\Component\Game\GameProgressComponent.cpp" />
+    <ClCompile Include="application\ClockworksDisease\Component\Game\LevelDoorComponent.cpp" />
     <ClCompile Include="application\ClockworksDisease\Component\Game\StageTransitionComponent.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Game\MainStageProgress.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Game\GameResult.cpp" />
@@ -306,6 +307,7 @@
     <ClCompile Include="application\ClockworksDisease\System\Player\PlayerAnimationSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Player\PlayerDeathSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Object\SavePointSystem.cpp" />
+    <ClCompile Include="application\ClockworksDisease\System\Object\LevelDoorSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Object\SmallPowerItemSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Object\WarpBlockSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\Component\Opening\OpeningPanelComponent.cpp" />
@@ -611,6 +613,7 @@
     <ClInclude Include="engine\Functions\ECS\System\Movement\ComputePlatformDeltaSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Game\PlatformRideSystem.h" />
     <ClInclude Include="application\ClockworksDisease\Component\Game\GameProgressComponent.h" />
+    <ClInclude Include="application\ClockworksDisease\Component\Game\LevelDoorComponent.h" />
     <ClInclude Include="application\ClockworksDisease\Component\Game\StageTransitionComponent.h" />
     <ClInclude Include="application\ClockworksDisease\System\Game\MainStageProgress.h" />
     <ClInclude Include="application\ClockworksDisease\System\Game\GameResult.h" />
@@ -643,6 +646,7 @@
     <ClInclude Include="application\ClockworksDisease\System\Player\PlayerAnimationSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Player\PlayerDeathSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Object\SavePointSystem.h" />
+    <ClInclude Include="application\ClockworksDisease\System\Object\LevelDoorSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Object\SmallPowerItemSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Object\WarpBlockSystem.h" />
     <ClInclude Include="application\ClockworksDisease\Component\Opening\OpeningPanelComponent.h" />

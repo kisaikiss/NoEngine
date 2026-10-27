@@ -32,6 +32,11 @@ namespace Component {
 /// </summary>
 struct MaterialComponent {
 	std::vector<Asset::MaterialHandle> handles;
+	// このエンティティの各サブメッシュに対して、AddressableNameを個別に上書き指定できます。
+	std::string textureName;
+	TextureRef textureHandle;
+	uint64_t loadedTextureGeneration = 0;
+	std::string loadedTextureName;
 	Math::Color color = Math::Color::WHITE;
 	uint32_t psoId = 0;
 	uint32_t rootSigId = 0;

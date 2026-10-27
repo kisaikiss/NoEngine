@@ -1,0 +1,87 @@
+{
+    "components": {
+        "AABBCollider": {
+            "max": [
+                0.5,
+                1.0,
+                0.25
+            ],
+            "min": [
+                -0.5,
+                -1.0,
+                -0.25
+            ]
+        },
+        "ColliderUpdateTag": null,
+        "CollisionLayerComponent": {
+            "layer": "Terrain"
+        },
+        "EditTag": {
+            "name": "levelDoor",
+            "parent": null
+        },
+        "LevelDoorComponent": {
+            "activationDistance": 3.0,
+            "animationDuration": 0.8,
+            "requiredLevel": 2
+        },
+        "MaterialComponent": {
+            "blendMode": "kNormal",
+            "color": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+            ],
+            "drawOutline": false,
+            "edgeColor": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+            ],
+            "emissiveIntensity": 1.0,
+            "environmentCoefficient": 0.0,
+            "noiseScrollSpeed": 0.3,
+            "noiseTextureName": "noise0",
+            "receiveShadow": true,
+            "renderMode": "kDefault",
+            "rimPower": 2.0,
+            "shininess": 60.0,
+            "unlit": false,
+            "uvPosition": [
+                0.0,
+                0.0
+            ],
+            "uvRotate": 0.0,
+            "uvScale": [
+                1.0,
+                1.0
+            ]
+        },
+        "MeshComponent": {
+            "isVisible": true,
+            "meshName": "resources/engine/Model/block/block.obj"
+        },
+        "TransformComponent": {
+            "parent": null,
+            "rotation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "scale": [
+                1.0,
+                2.0,
+                0.5
+            ],
+            "translate": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        }
+    },
+    "prefabInstance": "resources/game/Prefabs/levelDoor.json"
+}

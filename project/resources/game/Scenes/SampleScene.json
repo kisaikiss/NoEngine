@@ -28524,6 +28524,7 @@
         "PauseMenuSystem",
         "ModelLoadSystem",
         "SpriteLoadSystem",
+        "LevelDoorSystem",
         "TerrainLoadSystem",
         "AnimationSystem",
         "BoxColliderUpdateSystem",

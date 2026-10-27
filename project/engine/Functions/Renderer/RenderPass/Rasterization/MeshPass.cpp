@@ -225,7 +225,19 @@ void MeshPassBase::RenderItems(GraphicsContext& context, const RenderGraphRegist
 				);
 				context.SetDynamicConstantBufferView(rootIndex["gMaterial"], sizeof(constants), &constants);
 				auto* material = ModelSaver::Get().GetMaterial(item.materialHandles[subMesh.materialIndex]);
-				context.SetDynamicDescriptor(rootIndex["gTexture"], 0, material->textureHandle.GetSRV());
+				TextureRef textureHandle = material->textureHandle;
+				if (!item.material->textureName.empty()) {
+					const uint64_t generation = AssetManager::GetAddressableGeneration();
+					if (item.material->loadedTextureGeneration != generation ||
+						item.material->loadedTextureName != item.material->textureName) {
+						const std::string path = AssetManager::GetFilePathFromAddressableName(item.material->textureName);
+						item.material->textureHandle = path.empty() ? TextureRef{} : TextureManager::LoadCovertTexture(path);
+						item.material->loadedTextureName = item.material->textureName;
+						item.material->loadedTextureGeneration = generation;
+					}
+					if (item.material->textureHandle.IsValid()) textureHandle = item.material->textureHandle;
+				}
+				context.SetDynamicDescriptor(rootIndex["gTexture"], 0, textureHandle.GetSRV());
 				context.SetDynamicDescriptor(rootIndex["gShadowMask"], 0, resourceRegistry.GetColorBuffer(GetInput("ShadowMask")).GetSRV());
 				context.SetDynamicDescriptor(rootIndex["gEnvironmentTexture"], 0, skyBoxTexture_.GetSRV());
 			}

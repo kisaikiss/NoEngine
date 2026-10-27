@@ -668,6 +668,7 @@
         "EditSystem",
         "ModelLoadSystem",
         "SpriteLoadSystem",
+        "LevelDoorSystem",
         "AnimationSystem",
         "EffectEmitSystem",
         "ParticleEmitterSystem",

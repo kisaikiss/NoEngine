@@ -76,6 +76,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -252,6 +253,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -417,6 +419,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -582,6 +585,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -747,6 +751,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -912,6 +917,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -1062,9 +1068,9 @@
                 },
                 "DebugCameraComponent": {
                     "center": [
-                        3.2668590545654297,
-                        -0.6247892379760742,
-                        4.070994853973389
+                        9.216901779174805,
+                        -7.182405471801758,
+                        1.9075202941894531
                     ],
                     "distance": 24.76100730895996,
                     "drawCenter": false,
@@ -1079,10 +1085,10 @@
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
-                        0.1431576907634735,
-                        0.7782626748085022,
-                        -0.19192929565906525,
-                        0.5804965496063232
+                        0.0128752076998353,
+                        0.9605367183685303,
+                        -0.2741692066192627,
+                        0.045107584446668625
                     ],
                     "scale": [
                         1.0,
@@ -1090,9 +1096,9 @@
                         1.0
                     ],
                     "translate": [
-                        -17.74546241760254,
-                        10.887788772583008,
-                        10.320025444030762
+                        7.246049404144287,
+                        5.887957572937012,
+                        22.845258712768555
                     ]
                 }
             }
@@ -1432,6 +1438,10 @@
                     "currentDistance": 15.0,
                     "distance": 15.0,
                     "goalViewSpeed": 1.0,
+                    "heightFallFollowSpeed": 12.0,
+                    "heightRiseCatchUpThreshold": 4.0,
+                    "heightRiseFollowSpeed": 2.0,
+                    "lookUpCameraClearance": 1.25,
                     "maxDistance": 15.0,
                     "maxFov": 0.8500000238418579,
                     "maxPhi": 1.5707963705062866,
@@ -1442,6 +1452,7 @@
                     "phi": 1.3188129663467407,
                     "playerPosOffset": 2.0,
                     "playerViewSpeed": 10.0,
+                    "rotationSpeed": 2.0,
                     "theta": 3.1280524730682373
                 },
                 "TransformComponent": {
@@ -1541,6 +1552,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -1710,6 +1722,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -1831,6 +1844,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -1952,6 +1966,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -2073,6 +2088,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -2194,6 +2210,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -2315,6 +2332,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -2436,6 +2454,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -2557,6 +2576,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -2678,6 +2698,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -2799,6 +2820,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -2920,6 +2942,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -3041,6 +3064,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -3162,6 +3186,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -3283,6 +3308,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -3404,6 +3430,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -3525,6 +3552,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -3646,6 +3674,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -3767,6 +3796,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -3888,6 +3918,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -4009,6 +4040,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -4130,6 +4162,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -4251,6 +4284,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -4372,6 +4406,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -4493,6 +4528,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -4614,6 +4650,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -4735,6 +4772,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -4856,6 +4894,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -4977,6 +5016,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -5098,6 +5138,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -5219,6 +5260,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -5340,6 +5382,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -5461,6 +5504,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -5582,6 +5626,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -5703,6 +5748,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -5824,6 +5870,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -5945,6 +5992,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -6066,6 +6114,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -6187,6 +6236,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -6308,6 +6358,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -6429,6 +6480,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -6550,6 +6602,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -6671,6 +6724,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -6792,6 +6846,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -6913,6 +6968,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -7034,6 +7090,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -7155,6 +7212,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -7280,6 +7338,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -7405,6 +7464,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -7530,6 +7590,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -7679,6 +7740,7 @@
                     "renderMode": "kDefault",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -7767,6 +7829,103 @@
                 }
             }
         },
+        "levelDoor": {
+            "components": {
+                "AABBCollider": {
+                    "max": [
+                        0.5,
+                        1.0,
+                        0.25
+                    ],
+                    "min": [
+                        -0.5,
+                        -1.0,
+                        -0.25
+                    ]
+                },
+                "ColliderUpdateTag": null,
+                "CollisionLayerComponent": {
+                    "layer": "Terrain"
+                },
+                "EditTag": {
+                    "name": "levelDoor",
+                    "parent": null
+                },
+                "LevelDoorComponent": {
+                    "activationDistance": 3.0,
+                    "animationDuration": 0.800000011920929,
+                    "digitsOffset": [
+                        0.0,
+                        0.20000000298023224,
+                        0.5099999904632568
+                    ],
+                    "requiredLevel": 2
+                },
+                "MaterialComponent": {
+                    "blendMode": "kNormal",
+                    "castShadow": true,
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "environmentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "receiveShadow": true,
+                    "renderMode": "kDefault",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "textureName": "",
+                    "unlit": false,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "resources/engine/Model/block/block.obj"
+                },
+                "PrefabInstanceTag": {
+                    "prefabPath": "resources/game/Prefabs\\levelDoor.json"
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        2.0,
+                        0.5
+                    ],
+                    "translate": [
+                        9.568532943725586,
+                        0.0,
+                        11.689437866210938
+                    ]
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\levelDoor.json"
+        },
         "magicScaffold": {
             "components": {
                 "AABBCollider": {
@@ -7819,6 +7978,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -7977,6 +8137,7 @@
                     "renderMode": "kToon",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -8102,6 +8263,7 @@
                     "renderMode": "kDefault",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -8286,6 +8448,7 @@
                     "renderMode": "kToon",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -8644,6 +8807,7 @@
         "PauseMenuSystem",
         "ModelLoadSystem",
         "SpriteLoadSystem",
+        "LevelDoorSystem",
         "FontLoadSystem",
         "TerrainLoadSystem",
         "AnimationSystem",

@@ -42617,6 +42617,7 @@
         "PauseMenuSystem",
         "ModelLoadSystem",
         "SpriteLoadSystem",
+        "LevelDoorSystem",
         "FontLoadSystem",
         "TerrainLoadSystem",
         "AnimationSystem",
