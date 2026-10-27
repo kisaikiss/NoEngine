@@ -15,7 +15,12 @@ private:
 
 class CommandManager {
 public:
-	~CommandManager() {
+	~CommandManager() = default;
+
+	/// <summary>
+	/// Undo/Redo履歴を破棄します。
+	/// </summary>
+	void Clear() {
 		undoStack_.clear();
 		redoStack_.clear();
 	}

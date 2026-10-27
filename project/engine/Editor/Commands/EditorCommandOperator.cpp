@@ -42,11 +42,11 @@ void EditorCommandOperator::Redo() {
 
 void EditorCommandOperator::Reset() {
 	LogDebug("EditorCommand Reset");
-	sEditorCommands.~CommandManager();
+	sEditorCommands.Clear();
 }
 
 void EditorCommandOperator::Shutdown() {
-	sEditorCommands.~CommandManager();
+	sEditorCommands.Clear();
 }
 
 }
