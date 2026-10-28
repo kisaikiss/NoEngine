@@ -272,6 +272,12 @@
     <ClCompile Include="engine\Functions\Command\EditCommand\DeleteEntitiesCommand.cpp" />
     <ClCompile Include="engine\Functions\Command\EditCommand\InstantiateEntitiesCommand.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Common\TransformRoutineComponent.cpp" />
+    <ClCompile Include="engine\Functions\ECS\Component\Common\TriggerComponent.cpp" />
+    <ClCompile Include="engine\Functions\ECS\Component\Common\EventLinkComponent.cpp" />
+    <ClCompile Include="engine\Functions\ECS\Component\Common\MoverComponent.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\Gameplay\TriggerSystem.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\Gameplay\EventLinkSystem.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\Gameplay\MoverSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Animation\TransformRoutineSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Editor\DrawWaypointRouteSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\Scene\TitleScene.cpp" />
@@ -498,6 +504,13 @@
     <ClInclude Include="engine\Functions\ECS\Event\CollisionEvents.h" />
     <ClInclude Include="engine\Functions\ECS\System\Collision\NarrowPhaseSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\Collision\CollisionResolutionSystem.h" />
+    <ClInclude Include="engine\Functions\ECS\Component\Common\TriggerComponent.h" />
+    <ClInclude Include="engine\Functions\ECS\Component\Common\EventLinkComponent.h" />
+    <ClInclude Include="engine\Functions\ECS\Component\Common\MoverComponent.h" />
+    <ClInclude Include="engine\Functions\ECS\Event\GameplayEvents.h" />
+    <ClInclude Include="engine\Functions\ECS\System\Gameplay\TriggerSystem.h" />
+    <ClInclude Include="engine\Functions\ECS\System\Gameplay\EventLinkSystem.h" />
+    <ClInclude Include="engine\Functions\ECS\System\Gameplay\MoverSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\Movement\GroundResetSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Game\CollisionEventSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Game\CollisionLayer.h" />

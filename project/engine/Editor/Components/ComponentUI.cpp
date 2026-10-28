@@ -590,7 +590,9 @@ void DrawFieldUI(ECS::Registry& registry, ECS::Entity e, const FieldInfo& field,
 		ImGui::Button(label.c_str(), ImVec2(160, 0));
 
 		if (ImGui::BeginDragDropTarget()) {
-			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ENTITY")) {
+			const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ENTITY_MULTI");
+			if (!payload) payload = ImGui::AcceptDragDropPayload("ENTITY");
+			if (payload) {
 				ECS::Entity dropped = *(ECS::Entity*)payload->Data;
 				ECS::Entity oldValue = *ePtr;
 

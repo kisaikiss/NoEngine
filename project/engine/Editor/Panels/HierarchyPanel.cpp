@@ -83,23 +83,10 @@ void HierarchyPanel::DrawEntityNode(ECS::Registry& registry, ECS::Entity e, cons
 
 	bool open = ImGui::TreeNodeEx(reinterpret_cast<void*>(static_cast<intptr_t>(e)), flags, "%s", tag->name.c_str());
 
-	// クリックで選択（矢印の開閉クリックとは区別する。単一/Ctrl+追加解除/Shift+範囲選択をまとめて処理する）
-	// 注意：IsItemClickedはマウス押下のタイミングで発火するため、ここで即座に単一選択へ
-	// 潰してしまうと、その直後のBeginDragDropSourceが複数選択を拾えなくなる（＝1個しかドラッグできない）。
-	// そのため「既に複数選択済みの1つを無修飾でクリックした」場合だけ選択確定を保留し、
-	// 実際にドラッグへ移行しなかった（マウスを離した）時点で単一選択に還元する。
-	bool alreadySelected = selection_.count(e) > 0;
-	bool multiSelectActive = selection_.size() > 1;
-	bool ctrlHeld = ImGui::GetIO().KeyCtrl;
-	bool shiftHeld = ImGui::GetIO().KeyShift;
-
+	// 選択はマウスを離した時点で確定する。押下時に選択を変えるとInspectorが切り替わり、
+	// Inspector内のEntity参照フィールドへドラッグ＆ドロップできなくなる。
 	if (ImGui::IsItemClicked(ImGuiMouseButton_Left) && !ImGui::IsItemToggledOpen()) {
-		if (alreadySelected && multiSelectActive && !ctrlHeld && !shiftHeld) {
-			pendingSingleSelectEntity_ = e;
-		} else {
-			HandleClick(registry, e);
-			pendingSingleSelectEntity_ = ECS::INVALID_ENTITY;
-		}
+		pendingSingleSelectEntity_ = e;
 	}
 
 	// ドラッグ開始（複数選択中にその一員をドラッグした場合は選択されている全Entityを一緒に運ぶ）
@@ -110,6 +97,9 @@ void HierarchyPanel::DrawEntityNode(ECS::Registry& registry, ECS::Entity e, cons
 		std::vector<ECS::Entity> dragEntities;
 		if (selection_.count(e) && selection_.size() > 1) {
 			dragEntities.assign(selection_.begin(), selection_.end());
+			// 単一Entity参照フィールドへドロップした場合に、ドラッグ元を取得できるよう先頭にする。
+			auto draggedEntity = std::find(dragEntities.begin(), dragEntities.end(), e);
+			if (draggedEntity != dragEntities.end()) std::rotate(dragEntities.begin(), draggedEntity, draggedEntity + 1);
 		} else {
 			dragEntities.push_back(e);
 		}
@@ -123,7 +113,7 @@ void HierarchyPanel::DrawEntityNode(ECS::Registry& registry, ECS::Entity e, cons
 		ImGui::EndDragDropSource();
 	}
 
-	// ドラッグに発展せずマウスを離した場合は、ここで単一選択に還元する
+	// ドラッグに発展せずマウスを離した場合に選択を確定する
 	if (pendingSingleSelectEntity_ == e && ImGui::IsMouseReleased(ImGuiMouseButton_Left)) {
 		HandleClick(registry, e);
 		pendingSingleSelectEntity_ = ECS::INVALID_ENTITY;

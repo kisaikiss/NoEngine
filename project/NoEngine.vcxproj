@@ -289,6 +289,9 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="engine\Functions\ECS\Component\Common\FloatingComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Common\RotationalVelocityComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Common\TransformRoutineComponent.cpp" />
+    <ClCompile Include="engine\Functions\ECS\Component\Common\TriggerComponent.cpp" />
+    <ClCompile Include="engine\Functions\ECS\Component\Common\EventLinkComponent.cpp" />
+    <ClCompile Include="engine\Functions\ECS\Component\Common\MoverComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Common\TransformRoutineComponent2D.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Effect\EffectEmitterComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Asset\MeshComponent.cpp" />
@@ -309,6 +312,9 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="engine\Functions\ECS\Component\Common\Transform2DComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Common\TransformComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Collision\CollisionResolutionSystem.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\Gameplay\TriggerSystem.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\Gameplay\EventLinkSystem.cpp" />
+    <ClCompile Include="engine\Functions\ECS\System\Gameplay\MoverSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Camera\DebugCamera2DSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Camera\DebugCameraSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Editor\DrawCameraFrustumSystem.cpp" />
@@ -649,6 +655,13 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="engine\Functions\ECS\EventBus.h" />
     <ClInclude Include="engine\Functions\ECS\Event\SceneChangeEvent.h" />
     <ClInclude Include="engine\Functions\ECS\System\Collision\CollisionResolutionSystem.h" />
+    <ClInclude Include="engine\Functions\ECS\Component\Common\TriggerComponent.h" />
+    <ClInclude Include="engine\Functions\ECS\Component\Common\EventLinkComponent.h" />
+    <ClInclude Include="engine\Functions\ECS\Component\Common\MoverComponent.h" />
+    <ClInclude Include="engine\Functions\ECS\Event\GameplayEvents.h" />
+    <ClInclude Include="engine\Functions\ECS\System\Gameplay\TriggerSystem.h" />
+    <ClInclude Include="engine\Functions\ECS\System\Gameplay\EventLinkSystem.h" />
+    <ClInclude Include="engine\Functions\ECS\System\Gameplay\MoverSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\Camera\DebugCamera2DSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\Camera\DebugCameraSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\Editor\DrawCameraFrustumSystem.h" />

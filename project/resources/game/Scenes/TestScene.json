@@ -1068,9 +1068,9 @@
                 },
                 "DebugCameraComponent": {
                     "center": [
-                        9.216901779174805,
-                        -7.182405471801758,
-                        1.9075202941894531
+                        12.688979148864746,
+                        -1.5701904296875,
+                        2.748598098754883
                     ],
                     "distance": 24.76100730895996,
                     "drawCenter": false,
@@ -1085,10 +1085,10 @@
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
-                        0.0128752076998353,
-                        0.9605367183685303,
-                        -0.2741692066192627,
-                        0.045107584446668625
+                        0.012633868493139744,
+                        0.9853836894035339,
+                        -0.14739692211151123,
+                        0.08446042984724045
                     ],
                     "scale": [
                         1.0,
@@ -1096,9 +1096,9 @@
                         1.0
                     ],
                     "translate": [
-                        7.246049404144287,
-                        5.887957572937012,
-                        22.845258712768555
+                        8.659683227539063,
+                        5.67535400390625,
+                        26.080427169799805
                     ]
                 }
             }
@@ -7644,6 +7644,54 @@
             },
             "prefabInstance": "resources/game/Prefabs\\PowerItem.json"
         },
+        "Trigger": {
+            "components": {
+                "EditTag": {
+                    "name": "Trigger",
+                    "parent": null
+                },
+                "EventLinkComponent": {
+                    "links": [
+                        {
+                            "eventName": "OnEnter",
+                            "targetEntity": "box_2"
+                        }
+                    ]
+                },
+                "SphereCollider": {
+                    "localCenter": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "radius": 0.6000000238418579
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        12.443277359008789,
+                        1.7682119607925415,
+                        13.000216484069824
+                    ]
+                },
+                "TriggerComponent": {
+                    "activated": false,
+                    "oneShot": true,
+                    "wasTouching": false
+                }
+            }
+        },
         "UI": {
             "components": {
                 "EditTag": {
@@ -7803,6 +7851,181 @@
                         1.635406732559204,
                         6.69582462310791
                     ]
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\box.json"
+        },
+        "box_2": {
+            "components": {
+                "AABBCollider": {
+                    "max": [
+                        0.9724538922309875,
+                        0.324538916349411,
+                        1.9435561895370483
+                    ],
+                    "min": [
+                        -0.9724538922309875,
+                        -0.324538916349411,
+                        -1.9435561895370483
+                    ]
+                },
+                "ColliderUpdateTag": null,
+                "CollisionLayerComponent": {
+                    "layer": "Terrain"
+                },
+                "EditTag": {
+                    "name": "box_2",
+                    "parent": null
+                },
+                "MaterialComponent": {
+                    "blendMode": "kNormal",
+                    "castShadow": true,
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "environmentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "receiveShadow": true,
+                    "renderMode": "kDefault",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "textureName": "",
+                    "unlit": false,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "resources/game/ClockworksDisease/Model/gimmick/movingBlock.obj"
+                },
+                "MoverComponent": {
+                    "active": false,
+                    "initialized": false,
+                    "startOnAwake": false
+                },
+                "PlatformDeltaComponent": {
+                    "frameDelta": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "previousTranslate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                "PrefabInstanceTag": {
+                    "prefabPath": "resources/game/Prefabs\\box.json"
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.944907784461975,
+                        0.649077832698822,
+                        3.8871123790740967
+                    ],
+                    "translate": [
+                        12.415112495422363,
+                        1.000138282775879,
+                        13.048506736755371
+                    ]
+                },
+                "TransformRoutineComponent": {
+                    "globalDuration": 3.0,
+                    "globalEasing": "Linear",
+                    "interpolation": "CatmullRom",
+                    "keyframes": [
+                        {
+                            "duration": 1.0,
+                            "easing": "Linear",
+                            "rotation": [
+                                0.0,
+                                0.0,
+                                0.0,
+                                1.0
+                            ],
+                            "scale": [
+                                1.944907784461975,
+                                0.649077832698822,
+                                3.8871123790740967
+                            ],
+                            "translate": [
+                                12.415112495422363,
+                                1.000138282775879,
+                                13.048506736755371
+                            ]
+                        },
+                        {
+                            "duration": 1.0,
+                            "easing": "Linear",
+                            "rotation": [
+                                0.0,
+                                0.0,
+                                0.0,
+                                1.0
+                            ],
+                            "scale": [
+                                1.944907784461975,
+                                0.649077832698822,
+                                3.8871123790740967
+                            ],
+                            "translate": [
+                                12.415112495422363,
+                                3.2921395301818848,
+                                13.048506736755371
+                            ]
+                        },
+                        {
+                            "duration": 1.0,
+                            "easing": "Linear",
+                            "rotation": [
+                                0.0,
+                                0.0,
+                                0.0,
+                                1.0
+                            ],
+                            "scale": [
+                                1.944907784461975,
+                                0.649077832698822,
+                                3.8871123790740967
+                            ],
+                            "translate": [
+                                8.662870407104492,
+                                3.2921395301818848,
+                                13.048506736755371
+                            ]
+                        }
+                    ],
+                    "loop": true,
+                    "playbackSpeed": 1.0,
+                    "playing": false,
+                    "useGlobalTiming": false
                 }
             },
             "prefabInstance": "resources/game/Prefabs\\box.json"
@@ -8824,6 +9047,9 @@
         "MagicScaffoldSystem",
         "NarrowPhaseSystem",
         "CollisionResolutionSystem",
+        "TriggerSystem",
+        "EventLinkSystem",
+        "MoverSystem",
         "CollisionEventSystem",
         "PlayerPushBackSystem",
         "ItemGetSystem",
