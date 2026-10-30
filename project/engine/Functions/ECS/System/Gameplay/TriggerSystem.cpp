@@ -2,6 +2,7 @@
 #include "engine/Functions/ECS/Event/CollisionEvents.h"
 #include "engine/Functions/ECS/Event/GameplayEvents.h"
 #include "engine/Functions/ECS/Component/Common/TriggerComponent.h"
+#include "engine/Functions/ECS/Gameplay/GameplayCatalog.h"
 
 namespace NoEngine::ECS {
 void TriggerSystem::Update(Registry& registry, float deltaTime) {
@@ -25,8 +26,7 @@ void TriggerSystem::Update(Registry& registry, float deltaTime) {
 			}
 		}
 		if (touching && !trigger->wasTouching && (!trigger->oneShot || !trigger->activated)) {
-			// ToDo: 状況に応じてOnEnter, OnExitなどの別のイベントを発行する
-			registry.EmitEvent(Event::GameplayEvent{ triggerEntity, "OnEnter", instigator});
+			Gameplay::EmitGameplayEvent(registry, triggerEntity, Event::GameplayId::TriggerEnter, instigator);
 			if (trigger->oneShot) trigger->activated = true;
 		}
 		trigger->wasTouching = touching;

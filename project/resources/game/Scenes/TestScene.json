@@ -7653,7 +7653,8 @@
                 "EventLinkComponent": {
                     "links": [
                         {
-                            "eventName": "OnEnter",
+                            "eventId": "engine.trigger.enter",
+                            "actionId": "engine.mover.activate",
                             "targetEntity": "box_2"
                         }
                     ]

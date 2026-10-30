@@ -3,8 +3,9 @@
 
 namespace NoEngine::Component {
 struct EventLink {
-    std::string eventName;
-    ECS::Entity targetEntity;
+	std::string eventId;
+	std::string actionId;
+	ECS::Entity targetEntity = ECS::INVALID_ENTITY;
 };
 
 struct EventLinkComponent {

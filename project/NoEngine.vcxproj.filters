@@ -274,6 +274,7 @@
     <ClCompile Include="engine\Functions\ECS\Component\Common\TransformRoutineComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Common\TriggerComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Common\EventLinkComponent.cpp" />
+    <ClCompile Include="engine\Functions\ECS\Gameplay\GameplayCatalog.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Common\MoverComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Gameplay\TriggerSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Gameplay\EventLinkSystem.cpp" />
@@ -508,6 +509,7 @@
     <ClInclude Include="engine\Functions\ECS\Component\Common\EventLinkComponent.h" />
     <ClInclude Include="engine\Functions\ECS\Component\Common\MoverComponent.h" />
     <ClInclude Include="engine\Functions\ECS\Event\GameplayEvents.h" />
+    <ClInclude Include="engine\Functions\ECS\Gameplay\GameplayCatalog.h" />
     <ClInclude Include="engine\Functions\ECS\System\Gameplay\TriggerSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\Gameplay\EventLinkSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\Gameplay\MoverSystem.h" />

@@ -19,6 +19,7 @@
 #include "Functions/ECS/Component/Common/VelocityComponent.h"
 #include "Functions/ECS/Component/Effect/EffectEmitterComponent.h"
 #include "Functions/ECS/Event/SceneChangeEvent.h"
+#include "Functions/ECS/Gameplay/GameplayCatalog.h"
 #include "Editor/Utilities/EditUtils.h"
 #include "Editor/DataDriven/PrefabSerializer.h"
 

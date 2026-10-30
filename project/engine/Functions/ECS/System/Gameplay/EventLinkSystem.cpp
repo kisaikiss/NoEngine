@@ -1,7 +1,7 @@
 #include "EventLinkSystem.h"
 #include "engine/Functions/ECS/Event/GameplayEvents.h"
 #include "engine/Functions/ECS/Component/Common/EventLinkComponent.h"
-#include "engine/Editor/DataDriven/SceneSerializer.h"
+#include "engine/Functions/ECS/Gameplay/GameplayCatalog.h"
 
 namespace NoEngine::ECS {
 void EventLinkSystem::Update(Registry& registry, float deltaTime) {
@@ -11,11 +11,17 @@ void EventLinkSystem::Update(Registry& registry, float deltaTime) {
 		if (!links) continue;
 
 		for (const auto& link : links->links) {
-			if (link.eventName != event.eventName || link.targetEntity == ECS::INVALID_ENTITY) continue;
-
-			// 現状はActivateMoverEventのみなのでここで発行している
-			// いずれはEventLinkComponentで指定して汎用的にイベントを発行できるようにする
-			registry.EmitEvent(Event::ActivateMoverEvent{ link.targetEntity });
+			if (link.eventId != event.eventId) continue;
+			auto* action = Gameplay::GameplayCatalog::Get().FindAction(link.actionId);
+			if (!action) {
+				LogWarning("EventLinkSystem: unregistered action id: " + link.actionId);
+				continue;
+			}
+			if (action->requiresTarget && link.targetEntity == ECS::INVALID_ENTITY) {
+				LogWarning("EventLinkSystem: action requires a target entity: " + link.actionId);
+				continue;
+			}
+			action->execute(registry, event, link.targetEntity);
 		}
 	}
 }
