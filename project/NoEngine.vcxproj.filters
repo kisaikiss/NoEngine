@@ -344,6 +344,10 @@
     <ClCompile Include="application\ClockworksDisease\Component\Player\PlayerDeathComponent.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\UI\StageIntroDisplaySystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\Component\Stage\StageIntroDisplayComponent.cpp" />
+    <ClCompile Include="externals\imgui\crude_json.cpp" />
+    <ClCompile Include="externals\imgui\imgui_canvas.cpp" />
+    <ClCompile Include="externals\imgui\imgui_node_editor.cpp" />
+    <ClCompile Include="externals\imgui\imgui_node_editor_api.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -692,6 +696,12 @@
     <ClInclude Include="application\ClockworksDisease\Component\Player\PlayerDeathComponent.h" />
     <ClInclude Include="application\ClockworksDisease\System\UI\StageIntroDisplaySystem.h" />
     <ClInclude Include="application\ClockworksDisease\Component\Stage\StageIntroDisplayComponent.h" />
+    <ClInclude Include="externals\imgui\crude_json.h" />
+    <ClInclude Include="externals\imgui\imgui_bezier_math.h" />
+    <ClInclude Include="externals\imgui\imgui_canvas.h" />
+    <ClInclude Include="externals\imgui\imgui_extra_math.h" />
+    <ClInclude Include="externals\imgui\imgui_node_editor.h" />
+    <ClInclude Include="externals\imgui\imgui_node_editor_internal.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />
@@ -706,5 +716,8 @@
     <None Include="resources\engine\Shaders\Random.hlsli" />
     <None Include="resources\engine\Shaders\Particle\Particle.hlsli" />
     <None Include="resources\game\ClockworksDisease\Shaders\BackgroundCommon.hlsli" />
+    <None Include="externals\imgui\imgui_bezier_math.inl" />
+    <None Include="externals\imgui\imgui_extra_math.inl" />
+    <None Include="externals\imgui\imgui_node_editor_internal.inl" />
   </ItemGroup>
 </Project>
