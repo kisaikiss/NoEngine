@@ -11,7 +11,7 @@ GameplayCatalog& GameplayCatalog::Get() {
 GameplayCatalog::GameplayCatalog() {
 	RegisterEvent({ Event::GameplayId::TriggerEnter, "Trigger Enter", "Trigger" });
 	RegisterAction({ Event::GameplayId::MoverActivate, "Activate Mover", "Movement",
-		[](ECS::Registry& registry, const Event::GameplayEvent&, ECS::Entity target) {
+		[](ECS::Registry& registry, const Event::GameplayEvent&, ECS::Entity target, const nlohmann::json&) {
 			registry.EmitEvent(Event::ActivateMoverEvent{ target });
 		}, true, {{ "targetEntity", "Target Entity", ActionPropertyType::EntityReference, true }} });
 }

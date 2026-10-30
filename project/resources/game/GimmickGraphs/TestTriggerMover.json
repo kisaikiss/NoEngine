@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "nodes": [
+    {
+      "id": "event-trigger-enter",
+      "kind": "event",
+      "typeId": "engine.trigger.enter",
+      "position": [100.0, 180.0],
+      "properties": {}
+    },
+    {
+      "id": "action-mover-activate",
+      "kind": "action",
+      "typeId": "engine.mover.activate",
+      "position": [420.0, 180.0],
+      "properties": {
+        "targetEntity": "box_2"
+      }
+    }
+  ],
+  "links": [
+    {
+      "id": "link-trigger-to-mover",
+      "fromNodeId": "event-trigger-enter",
+      "fromPinId": "exec.out",
+      "toNodeId": "action-mover-activate",
+      "toPinId": "exec.in"
+    }
+  ]
+}

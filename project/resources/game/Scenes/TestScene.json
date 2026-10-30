@@ -7650,14 +7650,8 @@
                     "name": "Trigger",
                     "parent": null
                 },
-                "EventLinkComponent": {
-                    "links": [
-                        {
-                            "eventId": "engine.trigger.enter",
-                            "actionId": "engine.mover.activate",
-                            "targetEntity": "box_2"
-                        }
-                    ]
+                "GimmickGraphComponent": {
+                    "graphPath": "resources/game/GimmickGraphs/TestTriggerMover.json"
                 },
                 "SphereCollider": {
                     "localCenter": [

@@ -30,7 +30,7 @@ struct ActionDescriptor {
 	std::string id;
 	std::string displayName;
 	std::string category;
-	std::function<void(ECS::Registry&, const Event::GameplayEvent&, ECS::Entity)> execute;
+	std::function<void(ECS::Registry&, const Event::GameplayEvent&, ECS::Entity, const nlohmann::json&)> execute;
 	bool requiresTarget = true;
 	std::vector<ActionPropertyDescriptor> properties;
 };
