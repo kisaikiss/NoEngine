@@ -11,6 +11,7 @@
 #include "Functions/ECS/Component/Common/TriggerComponent.h"
 #include "Functions/ECS/Component/Common/EventLinkComponent.h"
 #include "Functions/ECS/Component/Common/MoverComponent.h"
+#include "Functions/ECS/Component/Common/GimmickGraphComponent.h"
 #include "Functions/ECS/Component/Common/TransformRoutineComponent2D.h"
 #include "Functions/ECS/Component/Asset/MaterialComponent.h"
 #include "Functions/ECS/Component/Asset/LightComponent.h"
@@ -20,6 +21,7 @@
 #include "Functions/ECS/Component/Effect/EffectEmitterComponent.h"
 #include "Functions/ECS/Event/SceneChangeEvent.h"
 #include "Functions/ECS/Gameplay/GameplayCatalog.h"
+#include "Functions/ECS/Gameplay/GimmickGraph.h"
 #include "Editor/Utilities/EditUtils.h"
 #include "Editor/DataDriven/PrefabSerializer.h"
 

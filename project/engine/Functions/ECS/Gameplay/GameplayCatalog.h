@@ -1,6 +1,7 @@
 #pragma once
 #include "engine/Functions/ECS/Event/GameplayEvents.h"
 #include "engine/Functions/ECS/Registry.h"
+#include "externals/nlohmann/json.hpp"
 
 namespace NoEngine::Gameplay {
 
@@ -10,12 +11,28 @@ struct EventDescriptor {
 	std::string category;
 };
 
+enum class ActionPropertyType {
+	Boolean,
+	Integer,
+	Number,
+	String,
+	EntityReference
+};
+
+struct ActionPropertyDescriptor {
+	std::string id;
+	std::string displayName;
+	ActionPropertyType type = ActionPropertyType::String;
+	bool required = false;
+};
+
 struct ActionDescriptor {
 	std::string id;
 	std::string displayName;
 	std::string category;
 	std::function<void(ECS::Registry&, const Event::GameplayEvent&, ECS::Entity)> execute;
 	bool requiresTarget = true;
+	std::vector<ActionPropertyDescriptor> properties;
 };
 
 // イベント／Actionの安定IDと表示情報を登録するカタログ。
@@ -27,6 +44,7 @@ public:
 	bool RegisterEvent(EventDescriptor descriptor);
 	bool RegisterAction(ActionDescriptor descriptor);
 	bool HasEvent(const std::string& id) const;
+	const EventDescriptor* FindEvent(const std::string& id) const;
 	const ActionDescriptor* FindAction(const std::string& id) const;
 	const std::vector<EventDescriptor>& GetEvents() const { return events_; }
 	const std::vector<ActionDescriptor>& GetActions() const { return actions_; }
