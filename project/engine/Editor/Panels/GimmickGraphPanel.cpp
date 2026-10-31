@@ -74,7 +74,7 @@ std::string NodeTitle(const Gameplay::GimmickNode& node) {
 }
 
 void DrawActionProperties(ECS::Registry& registry, Gameplay::GimmickNode& node,
-	const Gameplay::ActionDescriptor& action, bool& dirty) {
+	const Gameplay::ActionDescriptor& action, bool& dirty, bool& valueInputActive) {
 	// 入力欄はActionDescriptorから生成するため、新Actionを登録すると対応UIも自動で増える。
 	for (const auto& property : action.properties) {
 		// 同じ名前のプロパティを持つノードが複数あっても、ImGuiのWidget IDを混同しない。
@@ -84,11 +84,26 @@ void DrawActionProperties(ECS::Registry& registry, Gameplay::GimmickNode& node,
 			bool value = it != node.properties.end() && it->is_boolean() ? it->get<bool>() : false;
 			if (ImGui::Checkbox(property.displayName.c_str(), &value)) { node.properties[property.id] = value; dirty = true; }
 		} else if (property.type == Gameplay::ActionPropertyType::Integer) {
-			int value = it != node.properties.end() && it->is_number_integer() ? it->get<int>() : 0;
-			if (ImGui::InputInt(property.displayName.c_str(), &value)) { node.properties[property.id] = value; dirty = true; }
+			const int currentValue = it != node.properties.end() && it->is_number_integer() ? it->get<int>() : 0;
+			char value[64] = {};
+			_snprintf_s(value, sizeof(value), _TRUNCATE, "%d", currentValue);
+			// InputIntはEnterReturnsTrueを禁止しているため、文字列欄で編集しEnter時に数値化する。
+			if (ImGui::InputText(property.displayName.c_str(), value, sizeof(value), ImGuiInputTextFlags_EnterReturnsTrue)) {
+				char* end = nullptr;
+				const long parsedValue = std::strtol(value, &end, 10);
+				if (end != value && *end == '\0' && parsedValue >= INT_MIN && parsedValue <= INT_MAX) {
+					node.properties[property.id] = static_cast<int>(parsedValue);
+					dirty = true;
+				}
+			}
 		} else if (property.type == Gameplay::ActionPropertyType::Number) {
 			float value = it != node.properties.end() && it->is_number() ? it->get<float>() : 0.0f;
-			if (ImGui::InputFloat(property.displayName.c_str(), &value)) { node.properties[property.id] = value; dirty = true; }
+			ImGui::SetNextItemWidth(180.0f);
+			if (ImGui::DragFloat(property.displayName.c_str(), &value, 0.1f, 0.0f, 0.0f, "%.3f")) {
+				node.properties[property.id] = value;
+				dirty = true;
+			}
+			valueInputActive = valueInputActive || ImGui::IsItemActive();
 		} else if (property.type == Gameplay::ActionPropertyType::String) {
 			char value[256] = {};
 			if (it != node.properties.end() && it->is_string()) {
@@ -96,7 +111,7 @@ void DrawActionProperties(ECS::Registry& registry, Gameplay::GimmickNode& node,
 				strncpy_s(value, current.c_str(), _TRUNCATE);
 			}
 			ImGui::SetNextItemWidth(180.0f);
-			if (ImGui::InputText(property.displayName.c_str(), value, sizeof(value))) {
+			if (ImGui::InputText(property.displayName.c_str(), value, sizeof(value), ImGuiInputTextFlags_EnterReturnsTrue)) {
 				node.properties[property.id] = value;
 				dirty = true;
 			}
@@ -108,7 +123,7 @@ void DrawActionProperties(ECS::Registry& registry, Gameplay::GimmickNode& node,
 				strncpy_s(value, current.c_str(), _TRUNCATE);
 			}
 			ImGui::SetNextItemWidth(180.0f);
-			if (ImGui::InputText(property.displayName.c_str(), value, sizeof(value))) {
+			if (ImGui::InputText(property.displayName.c_str(), value, sizeof(value), ImGuiInputTextFlags_EnterReturnsTrue)) {
 				node.properties[property.id] = value;
 				dirty = true;
 			}
@@ -131,7 +146,7 @@ void DrawActionProperties(ECS::Registry& registry, Gameplay::GimmickNode& node,
 				const std::string current = it->get<std::string>();
 				strncpy_s(value, current.c_str(), _TRUNCATE);
 			}
-			if (ImGui::InputText(property.displayName.c_str(), value, sizeof(value))) { node.properties[property.id] = value; dirty = true; }
+			if (ImGui::InputText(property.displayName.c_str(), value, sizeof(value), ImGuiInputTextFlags_EnterReturnsTrue)) { node.properties[property.id] = value; dirty = true; }
 		}
 		ImGui::PopID();
 	}
@@ -241,6 +256,7 @@ void GimmickGraphPanel::Draw(ECS::Registry& registry, ECS::Entity selectedEntity
 
 	// このフレーム中の操作をひとつの差分として比較し、既存Undo履歴へ積む。
 	const Gameplay::GimmickGraph graphBeforeFrame = graph_;
+	bool valueInputActive = false;
 	if (ImGui::BeginCombo("Add node", "Choose event or action...")) {
 		// ノード一覧はカタログを直接参照する。アプリがActionを登録するとこの一覧にも現れる。
 		ImGui::TextDisabled("Events");
@@ -295,7 +311,13 @@ void GimmickGraphPanel::Draw(ECS::Registry& registry, ECS::Entity selectedEntity
 		ImGui::PushID(node.id.c_str());
 		NodeEditor::BeginNode(nodeEditorId);
 		ImGui::TextUnformatted(NodeTitle(node).c_str());
-		ImGui::Separator();
+		// SeparatorはNodeEditor内のウィンドウ幅まで伸びるため、ノード内容幅に合わせて線を描く。
+		const ImVec2 dividerStart = ImGui::GetCursorScreenPos();
+		ImGui::GetWindowDrawList()->AddLine(
+			ImVec2(dividerStart.x, dividerStart.y + 3.0f),
+			ImVec2(dividerStart.x + 180.0f, dividerStart.y + 3.0f),
+			IM_COL32(110, 110, 110, 255), 1.0f);
+		ImGui::Dummy(ImVec2(180.0f, 8.0f));
 		if (node.kind == Gameplay::GimmickNodeKind::Action) {
 			// 入力ピンの当たり判定と配線の接続点を文字ラベルではなく丸印に限定する。
 			NodeEditor::BeginPin(NodeEditor::PinId(PinStableId(node.id, Gameplay::PinId::ExecInput)), NodeEditor::PinKind::Input);
@@ -311,7 +333,7 @@ void GimmickGraphPanel::Draw(ECS::Registry& registry, ECS::Entity selectedEntity
 		}
 		if (node.kind == Gameplay::GimmickNodeKind::Action) {
 			if (const auto* action = Gameplay::GameplayCatalog::Get().FindAction(node.typeId))
-				DrawActionProperties(registry, node, *action, dirty_);
+				DrawActionProperties(registry, node, *action, dirty_, valueInputActive);
 		}
 		NodeEditor::BeginPin(NodeEditor::PinId(PinStableId(node.id, Gameplay::PinId::ExecOutput)), NodeEditor::PinKind::Output);
 		// 前フレームに計測されたノード幅から出力を右寄せする。丸印をPinPivotにして線をそこへ接続する。
@@ -462,7 +484,7 @@ void GimmickGraphPanel::Draw(ECS::Registry& registry, ECS::Entity selectedEntity
 	// NodeEditorの位置変更も含めて前後JSONを比較し、変更分を既存のUndo/Redo履歴に登録する。
 	const bool graphChanged = graphBeforeFrame.ToJson() != graph_.ToJson();
 	if (graphChanged) {
-		if (ImGui::IsMouseDown(ImGuiMouseButton_Left)) {
+		if (ImGui::IsMouseDown(ImGuiMouseButton_Left) || valueInputActive) {
 			// ノード移動中は各フレームを別Undoにせず、ドラッグ開始時の状態を一つだけ保持する。
 			if (!pendingMouseEditStart_) pendingMouseEditStart_ = graphBeforeFrame;
 		} else if (pendingMouseEditStart_) {
@@ -471,7 +493,7 @@ void GimmickGraphPanel::Draw(ECS::Registry& registry, ECS::Entity selectedEntity
 		} else {
 			AddGraphSnapshotCommand(document_, graphBeforeFrame, graph_);
 		}
-	} else if (pendingMouseEditStart_ && !ImGui::IsMouseDown(ImGuiMouseButton_Left)) {
+	} else if (pendingMouseEditStart_ && !ImGui::IsMouseDown(ImGuiMouseButton_Left) && !valueInputActive) {
 		AddGraphSnapshotCommand(document_, *pendingMouseEditStart_, graph_);
 		pendingMouseEditStart_.reset();
 	}
