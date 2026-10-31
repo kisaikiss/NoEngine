@@ -247,6 +247,11 @@ void GimmickGraphPanel::Draw(ECS::Registry& registry, ECS::Entity selectedEntity
 	const auto context = GetNodeEditorContext();
 	NodeEditor::SetCurrentEditor(context);
 	NodeEditor::Begin("GimmickGraphCanvas", ImVec2(0.0f, 0.0f));
+	NodeEditor::PushStyleVar(NodeEditor::StyleVar_PinRounding, 5.0f);
+	NodeEditor::PushStyleVar(NodeEditor::StyleVar_PinBorderWidth, 1.5f);
+	NodeEditor::PushStyleVar(NodeEditor::StyleVar_PinRadius, 5.0f);
+	NodeEditor::PushStyleColor(NodeEditor::StyleColor_PinRect, ImVec4(0.25f, 0.72f, 1.0f, 0.45f));
+	NodeEditor::PushStyleColor(NodeEditor::StyleColor_PinRectBorder, ImVec4(0.55f, 0.85f, 1.0f, 0.9f));
 	for (size_t i = 0; i < graph_.nodes.size(); ++i) {
 		auto& node = graph_.nodes[i];
 		const NodeEditor::NodeId nodeEditorId(StableId(node.id));
@@ -257,7 +262,14 @@ void GimmickGraphPanel::Draw(ECS::Registry& registry, ECS::Entity selectedEntity
 		ImGui::Separator();
 		if (node.kind == Gameplay::GimmickNodeKind::Action) {
 			NodeEditor::BeginPin(NodeEditor::PinId(PinStableId(node.id, Gameplay::PinId::ExecInput)), NodeEditor::PinKind::Input);
-			ImGui::Text("In");
+			ImGui::Dummy(ImVec2(10.0f, 10.0f));
+			const ImVec2 inputPinMin = ImGui::GetItemRectMin();
+			const ImVec2 inputPinMax = ImGui::GetItemRectMax();
+			ImGui::GetWindowDrawList()->AddCircleFilled(ImVec2((inputPinMin.x + inputPinMax.x) / 2.0f, (inputPinMin.y + inputPinMax.y) / 2.0f), 4.0f, IM_COL32(90, 205, 255, 255));
+			ImGui::SameLine(0.0f, 4.0f);
+			ImGui::TextUnformatted("In");
+			NodeEditor::PinRect(inputPinMin, inputPinMax);
+			NodeEditor::PinPivotRect(inputPinMin, inputPinMax);
 			NodeEditor::EndPin();
 		}
 		if (node.kind == Gameplay::GimmickNodeKind::Action) {
@@ -265,13 +277,28 @@ void GimmickGraphPanel::Draw(ECS::Registry& registry, ECS::Entity selectedEntity
 				DrawActionProperties(registry, node, *action, dirty_);
 		}
 		NodeEditor::BeginPin(NodeEditor::PinId(PinStableId(node.id, Gameplay::PinId::ExecOutput)), NodeEditor::PinKind::Output);
-		ImGui::Text("Out");
+		const auto& nodeStyle = NodeEditor::GetStyle();
+		const float nodeWidth = NodeEditor::GetNodeSize(nodeEditorId).x;
+		const float outputLabelWidth = ImGui::CalcTextSize("Out").x + 14.0f;
+		const float rightOffset = std::max(120.0f,
+			nodeWidth - nodeStyle.NodePadding.x - nodeStyle.NodePadding.z - outputLabelWidth);
+		ImGui::SetCursorPosX(ImGui::GetCursorPosX() + rightOffset);
+		ImGui::TextUnformatted("Out");
+		ImGui::SameLine(0.0f, 4.0f);
+		ImGui::Dummy(ImVec2(10.0f, 10.0f));
+		const ImVec2 outputPinMin = ImGui::GetItemRectMin();
+		const ImVec2 outputPinMax = ImGui::GetItemRectMax();
+		ImGui::GetWindowDrawList()->AddCircleFilled(ImVec2((outputPinMin.x + outputPinMax.x) / 2.0f, (outputPinMin.y + outputPinMax.y) / 2.0f), 4.0f, IM_COL32(255, 174, 64, 255));
+		NodeEditor::PinRect(outputPinMin, outputPinMax);
+		NodeEditor::PinPivotRect(outputPinMin, outputPinMax);
 		NodeEditor::EndPin();
 		NodeEditor::EndNode();
 		ImGui::PopID();
 		const ImVec2 position = NodeEditor::GetNodePosition(nodeEditorId);
 		if (position.x != node.x || position.y != node.y) { node.x = position.x; node.y = position.y; dirty_ = true; }
 	}
+	NodeEditor::PopStyleColor(2);
+	NodeEditor::PopStyleVar(3);
 	for (size_t i = 0; i < graph_.links.size(); ++i) {
 		const auto& link = graph_.links[i];
 		NodeEditor::Link(NodeEditor::LinkId(StableId(link.id)),
@@ -290,7 +317,7 @@ void GimmickGraphPanel::Draw(ECS::Registry& registry, ECS::Entity selectedEntity
 					if (PinStableId(node.id, candidate) == pinId) { nodeId = node.id; pinName = candidate; return true; }
 				}
 				return false;
-			};
+				};
 			Gameplay::GimmickLink link;
 			const bool valid = (findEndpoint(startId, true, link.fromNodeId, link.fromPinId)
 				&& findEndpoint(endId, false, link.toNodeId, link.toPinId))
@@ -299,8 +326,7 @@ void GimmickGraphPanel::Draw(ECS::Registry& registry, ECS::Entity selectedEntity
 			if (valid) {
 				link.id = NewId(graph_, "link");
 				graph_.links.push_back(link);
-				if (!Gameplay::ValidateGimmickGraph(graph_).HasErrors()) { NodeEditor::AcceptNewItem(); dirty_ = true; }
-				else { graph_.links.pop_back(); NodeEditor::RejectNewItem(); }
+				if (!Gameplay::ValidateGimmickGraph(graph_).HasErrors()) { NodeEditor::AcceptNewItem(); dirty_ = true; } else { graph_.links.pop_back(); NodeEditor::RejectNewItem(); }
 			} else NodeEditor::RejectNewItem();
 		}
 	}
@@ -315,7 +341,7 @@ void GimmickGraphPanel::Draw(ECS::Registry& registry, ECS::Entity selectedEntity
 				const std::string stableNodeId = nodeIt->id;
 				graph_.links.erase(std::remove_if(graph_.links.begin(), graph_.links.end(), [&](const auto& link) {
 					return link.fromNodeId == stableNodeId || link.toNodeId == stableNodeId;
-				}), graph_.links.end());
+					}), graph_.links.end());
 				graph_.nodes.erase(nodeIt);
 				NodeEditor::AcceptDeletedItem();
 				dirty_ = true;
@@ -361,10 +387,10 @@ void GimmickGraphPanel::Draw(ECS::Registry& registry, ECS::Entity selectedEntity
 		if (ImGui::MenuItem("Delete Node")) {
 			graph_.links.erase(std::remove_if(graph_.links.begin(), graph_.links.end(), [&](const auto& link) {
 				return link.fromNodeId == contextNodeId_ || link.toNodeId == contextNodeId_;
-			}), graph_.links.end());
+				}), graph_.links.end());
 			graph_.nodes.erase(std::remove_if(graph_.nodes.begin(), graph_.nodes.end(), [&](const auto& node) {
 				return node.id == contextNodeId_;
-			}), graph_.nodes.end());
+				}), graph_.nodes.end());
 			positionedNodeIds_.erase(contextNodeId_);
 			dirty_ = true;
 		}
@@ -374,7 +400,7 @@ void GimmickGraphPanel::Draw(ECS::Registry& registry, ECS::Entity selectedEntity
 		if (ImGui::MenuItem("Delete Link")) {
 			graph_.links.erase(std::remove_if(graph_.links.begin(), graph_.links.end(), [&](const auto& link) {
 				return link.id == contextLinkId_;
-			}), graph_.links.end());
+				}), graph_.links.end());
 			dirty_ = true;
 		}
 		ImGui::EndPopup();
