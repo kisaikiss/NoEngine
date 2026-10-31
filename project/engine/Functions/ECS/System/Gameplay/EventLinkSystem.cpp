@@ -12,6 +12,7 @@ namespace {
 using namespace Gameplay;
 
 struct CachedGraph {
+	// 更新時刻が同じなら毎イベントJSONを読み直さず、ロード済みGraphを再利用する。
 	std::filesystem::file_time_type lastWriteTime{};
 	bool hasTimestamp = false;
 	std::optional<GimmickGraph> graph;
@@ -26,6 +27,7 @@ const GimmickGraph* GetGraph(const std::string& graphPath) {
 	std::error_code error;
 	const auto normalizedPath = std::filesystem::path(graphPath).lexically_normal();
 	const std::string key = normalizedPath.generic_string();
+	// エディタ保存で更新時刻が変われば次のイベント時に新しいGraphを取り込む。
 	const auto timestamp = std::filesystem::last_write_time(normalizedPath, error);
 	auto& cache = GetGraphCache()[key];
 	if (error) {
@@ -46,6 +48,7 @@ const GimmickGraph* GetGraph(const std::string& graphPath) {
 		LogWarning("EventLinkSystem: could not load graph '" + key + "': " + loadError);
 		return nullptr;
 	}
+	// 壊れた接続や未登録Actionを実行しないよう、ランタイム読込時にも検証する。
 	const auto validation = ValidateGimmickGraph(*cache.graph);
 	if (validation.HasErrors()) {
 		for (const auto& diagnostic : validation.diagnostics) {
@@ -60,6 +63,7 @@ const GimmickGraph* GetGraph(const std::string& graphPath) {
 }
 
 void AppendOutgoingNodes(const GimmickGraph& graph, const std::string& nodeId, std::vector<std::string>& pending) {
+	// 後入れ先出しのpendingへ逆順に積むことで、JSONのリンク順にActionを実行する。
 	for (auto it = graph.links.rbegin(); it != graph.links.rend(); ++it) {
 		if (it->fromNodeId == nodeId && it->fromPinId == PinId::ExecOutput) pending.push_back(it->toNodeId);
 	}
@@ -71,6 +75,7 @@ void EventLinkSystem::AdvanceGraphExecution(Registry& registry, GraphExecution& 
 	const auto& catalog = Gameplay::GameplayCatalog::Get();
 
 	if (execution.waiting) {
+		// 実行中Actionが未完了ならこのグラフだけを一時停止し、別のイベント処理は続けられる。
 		const auto* waitingAction = catalog.FindAction(execution.waitingActionId);
 		if (waitingAction && waitingAction->isComplete
 			&& !waitingAction->isComplete(registry, execution.waitingTarget, execution.waitingProperties)) return;
@@ -78,6 +83,7 @@ void EventLinkSystem::AdvanceGraphExecution(Registry& registry, GraphExecution& 
 		execution.waiting = false;
 	}
 
+	// 同期Actionは戻り後すぐ次へ進み、非同期ActionはisCompleteがtrueになるまで待つ。
 	while (!execution.pendingNodes.empty()) {
 		if (execution.executedActions >= kMaxActionsPerEvent) {
 			LogWarning("EventLinkSystem: graph execution limit exceeded for " + execution.event.eventId);
@@ -93,6 +99,7 @@ void EventLinkSystem::AdvanceGraphExecution(Registry& registry, GraphExecution& 
 		const auto* action = catalog.FindAction(nodeIt->typeId);
 		if (!action) continue;
 
+		// Action定義のEntityReferenceプロパティをEntity名から実Entityへ解決する。
 		Entity target = INVALID_ENTITY;
 		for (const auto& property : action->properties) {
 			if (property.type != Gameplay::ActionPropertyType::EntityReference) continue;
@@ -122,6 +129,7 @@ void EventLinkSystem::AdvanceGraphExecution(Registry& registry, GraphExecution& 
 
 void EventLinkSystem::Update(Registry& registry, float deltaTime) {
 	static_cast<void>(deltaTime);
+	// 前フレームから待っているグラフを先に進め、完了した実行状態は破棄する。
 	for (auto it = graphExecutions_.begin(); it != graphExecutions_.end();) {
 		AdvanceGraphExecution(registry, *it);
 		if (!it->waiting && it->pendingNodes.empty()) it = graphExecutions_.erase(it);
@@ -146,6 +154,7 @@ void EventLinkSystem::Update(Registry& registry, float deltaTime) {
 		}
 
 		if (auto* graphComponent = registry.GetComponent<Component::GimmickGraphComponent>(event.source)) {
+			// イベント発行元EntityにGraph参照がある場合、同じIDのEventノードから実行を開始する。
 			if (const GimmickGraph* graph = GetGraph(graphComponent->graphPath)) {
 				for (const auto& eventNode : graph->nodes) {
 					if (eventNode.kind != Gameplay::GimmickNodeKind::Event || eventNode.typeId != event.eventId) continue;

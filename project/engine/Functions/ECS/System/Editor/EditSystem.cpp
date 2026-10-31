@@ -41,6 +41,7 @@ void EditSystem::Update(Registry& registry, float deltaTime) {
 	hierarchyPanel_.Draw(registry);
 	inspectorPanel_.Draw(registry);
 	prefabEditorPanel_.Draw(registry);
+	// 選択EntityのGimmickGraphComponentを見て、参照先JSONを編集する専用パネルを更新する。
 	gimmickGraphPanel_.Draw(registry, SelectedNow(registry));
 
 	HandleGlobalShortcuts(registry, deltaTime);

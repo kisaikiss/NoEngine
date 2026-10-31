@@ -4,6 +4,7 @@
 
 namespace NoEngine::Editor {
 
+// UI表示中のGraphデータ。共有Documentにすることでパネル切替後もUndoコマンドが安全に参照できる。
 struct GimmickGraphEditorDocument {
 	Gameplay::GimmickGraph graph;
 	bool dirty = false;
@@ -12,6 +13,7 @@ struct GimmickGraphEditorDocument {
 
 class GimmickGraphPanel {
 public:
+	// 選択EntityのGimmickGraphComponentを読み、imgui-node-editor UIを描画・更新する。
 	void Draw(ECS::Registry& registry, ECS::Entity selectedEntity);
 	bool OwnsKeyboardFocus() const { return ownsKeyboardFocus_; }
 

@@ -37,6 +37,7 @@ void AddDiagnostic(GimmickGraphValidation& result, DiagnosticSeverity severity,
 }
 
 json GimmickGraph::ToJson() const {
+	// エディタ上のデータ構造を、バージョン付きの安定したJSON形式へ変換する。
 	json output;
 	output["version"] = version;
 	output["nodes"] = json::array();
@@ -64,6 +65,7 @@ json GimmickGraph::ToJson() const {
 
 std::optional<GimmickGraph> GimmickGraph::FromJson(const json& input, std::string* error) {
 	try {
+		// 配列や必須キーが欠けたファイルは、中途半端なGraphとして使わず読み込み失敗にする。
 		if (!input.is_object() || !input.contains("nodes") || !input["nodes"].is_array()
 			|| !input.contains("links") || !input["links"].is_array()) {
 			SetError(error, "Graph must contain nodes and links arrays.");
@@ -119,6 +121,7 @@ std::optional<GimmickGraph> GimmickGraph::FromJson(const json& input, std::strin
 
 bool SaveGimmickGraph(const std::filesystem::path& path, const GimmickGraph& graph, std::string* error) {
 	try {
+		// 保存前検証は呼び出し側が行う。ここでは指定先へJSONを書き出すだけにする。
 		std::ofstream file(path, std::ios::binary | std::ios::trunc);
 		if (!file) { SetError(error, "Could not open graph file for writing: " + path.string()); return false; }
 		file << graph.ToJson().dump(2);
@@ -132,6 +135,7 @@ bool SaveGimmickGraph(const std::filesystem::path& path, const GimmickGraph& gra
 
 std::optional<GimmickGraph> LoadGimmickGraph(const std::filesystem::path& path, std::string* error) {
 	try {
+		// ファイル読込とJSON構造変換をまとめ、失敗理由を呼び出し側へ返す。
 		std::ifstream file(path, std::ios::binary);
 		if (!file) { SetError(error, "Could not open graph file: " + path.string()); return std::nullopt; }
 		json input;
@@ -151,6 +155,7 @@ bool GimmickGraphValidation::HasErrors() const {
 
 GimmickGraphValidation ValidateGimmickGraph(const GimmickGraph& graph, const GameplayCatalog& catalog) {
 	GimmickGraphValidation result;
+	// まずノードとAction定義を照合し、その後リンク構造と到達可能性を検証する。
 	if (graph.version != kGimmickGraphVersion) {
 		AddDiagnostic(result, DiagnosticSeverity::Error, "graph.version.unsupported",
 			"Unsupported graph version " + std::to_string(graph.version) + ".");
@@ -230,6 +235,7 @@ GimmickGraphValidation ValidateGimmickGraph(const GimmickGraph& graph, const Gam
 		AddDiagnostic(result, DiagnosticSeverity::Warning, "graph.event.none", "Graph has no valid event source node.");
 	}
 
+	// 実行リンクは「出力ピンからAction入力ピンへ」の向きだけを許可する。
 	for (const auto& link : graph.links) {
 		if (link.id.empty()) {
 			AddDiagnostic(result, DiagnosticSeverity::Error, "link.id.empty", "Link ID must not be empty.", {}, link.id);
@@ -262,7 +268,7 @@ GimmickGraphValidation ValidateGimmickGraph(const GimmickGraph& graph, const Gam
 		adjacency[from.id].push_back(to.id);
 	}
 
-	// 最初のグラフ形式ではサイクルは許容されませんが、明示的なループノードを用いることで、後からこれを緩和することが可能です。
+	// 無限実行を防ぐため現形式ではサイクルを禁止する。ループ専用ノード追加時に見直す。
 	std::unordered_map<std::string, uint8_t> visitState;
 	std::function<void(const std::string&)> visit = [&](const std::string& nodeId) {
 		visitState[nodeId] = 1;
@@ -280,6 +286,7 @@ GimmickGraphValidation ValidateGimmickGraph(const GimmickGraph& graph, const Gam
 		if (visitState[nodeId] == 0) visit(nodeId);
 	}
 
+	// Eventノードから到達できないActionは実行されないので、警告として検出する。
 	std::unordered_set<std::string> reachable;
 	std::queue<std::string> pending;
 	for (const auto& eventNodeId : eventNodes) pending.push(eventNodeId);

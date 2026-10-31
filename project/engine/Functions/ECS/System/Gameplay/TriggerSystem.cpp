@@ -7,6 +7,7 @@
 namespace NoEngine::ECS {
 void TriggerSystem::Update(Registry& registry, float deltaTime) {
 	static_cast<void>(deltaTime);
+	// NarrowPhaseSystemが前段で発行した接触一覧を一度受け取り、Triggerごとに接触状態を調べる。
 	auto contacts = registry.PollEvent<Event::ContactEvent>();
 	for (auto triggerEntity : registry.View<Component::TriggerComponent>()) {
 		auto* trigger = registry.GetComponent<Component::TriggerComponent>(triggerEntity);
@@ -25,13 +26,15 @@ void TriggerSystem::Update(Registry& registry, float deltaTime) {
 				}
 			}
 		}
+		// 前フレームは非接触で今フレーム接触した場合だけEnterを発行する。
+		// oneShotなら最初のEnter後にactivatedを立て、以後は再発火させない。
 		if (touching && !trigger->wasTouching && (!trigger->oneShot || !trigger->activated)) {
 			Gameplay::EmitGameplayEvent(registry, triggerEntity, Event::GameplayId::TriggerEnter, instigator);
 			if (trigger->oneShot) trigger->activated = true;
 		}
 		trigger->wasTouching = touching;
 	}
-	// ContactEventは他のゲームシステムにも渡す。
+	// PollEventで取り出した接触イベントを消費し切らないよう、後続システム用に再発行する。
 	if (contacts) registry.EmitEvent(*contacts);
 }
 }

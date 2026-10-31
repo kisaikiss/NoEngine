@@ -3,6 +3,7 @@
 
 namespace NoEngine::Gameplay {
 
+// JSON保存形式の世代。形式を変更するときは読み込み互換処理と合わせて更新する。
 inline constexpr uint32_t kGimmickGraphVersion = 1;
 
 namespace PinId {
@@ -15,7 +16,7 @@ enum class GimmickNodeKind {
 	Action
 };
 
-// idは保存データ上の安定ID。imgui-node-editorのNodeIdとは独立させる。
+// グラフのノード本体。idは保存データ上の安定IDで、UIライブラリのNodeIdとは独立。
 struct GimmickNode {
 	std::string id;
 	GimmickNodeKind kind = GimmickNodeKind::Action;
@@ -27,17 +28,17 @@ struct GimmickNode {
 };
 
 struct GimmickLink {
-	std::string id;
-	std::string fromNodeId;
-	std::string fromPinId;
-	std::string toNodeId;
-	std::string toPinId;
+	std::string id;          // 保存データ上のリンクID
+	std::string fromNodeId;  // 出力元Nodeの安定ID
+	std::string fromPinId;   // 通常はexec.out
+	std::string toNodeId;    // 入力先Nodeの安定ID
+	std::string toPinId;     // 通常はexec.in
 };
 
 struct GimmickGraph {
 	uint32_t version = kGimmickGraphVersion;
-	std::vector<GimmickNode> nodes;
-	std::vector<GimmickLink> links;
+	std::vector<GimmickNode> nodes; // イベント開始点とAction処理
+	std::vector<GimmickLink> links; // 実行順を定める有向接続
 
 	nlohmann::json ToJson() const;
 	static std::optional<GimmickGraph> FromJson(const nlohmann::json& json, std::string* error = nullptr);
@@ -66,7 +67,7 @@ struct GimmickGraphValidation {
 	bool HasErrors() const;
 };
 
-// エディタの接続操作・保存前検証・ランタイムのロード検証で共用する。
+// エディタで接続を受け付けるとき、保存前、ランタイムで読むときに共用する検証処理。
 GimmickGraphValidation ValidateGimmickGraph(const GimmickGraph& graph,
 	const GameplayCatalog& catalog = GameplayCatalog::Get());
 

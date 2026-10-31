@@ -2,7 +2,8 @@
 #include "engine/Editor/Reflection/ReflectionMacros.h"
 
 namespace NoEngine::Component {
-// Scene Entityから独立したギミックグラフJSONへの参照。
+// シーンEntityと別ファイルに置いたギミックグラフJSONへの参照。
+// Triggerなどイベントを発行するEntityに付けると、EventLinkSystemがこのパスを実行する。
 struct GimmickGraphComponent {
 	std::string graphPath;
 };

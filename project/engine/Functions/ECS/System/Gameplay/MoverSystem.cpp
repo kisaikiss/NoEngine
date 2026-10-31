@@ -6,7 +6,7 @@
 namespace NoEngine::ECS {
 void MoverSystem::Update(Registry& registry, float deltaTime) {
 	static_cast<void>(deltaTime);
-	// 初期停止状態を先に適用し、その後の起動イベントを同フレームに反映する。
+	// シーン読込後の初回だけMoverの開始状態をTransformRoutineへ反映する。
 	for (auto entity : registry.View<Component::MoverComponent, Component::TransformRoutineComponent>()) {
 		auto* mover = registry.GetComponent<Component::MoverComponent>(entity);
 		auto* routine = registry.GetComponent<Component::TransformRoutineComponent>(entity);
@@ -16,6 +16,7 @@ void MoverSystem::Update(Registry& registry, float deltaTime) {
 		routine->playing = mover->startOnAwake;
 	}
 
+	// GameplayCatalogのMover Actionが出した内部イベントを受けて、ルートを先頭から再生する。
 	for (const auto& event : registry.PollAllEvents<Event::ActivateMoverEvent>()) {
 		auto* mover = registry.GetComponent<Component::MoverComponent>(event.targetEntity);
 		auto* routine = registry.GetComponent<Component::TransformRoutineComponent>(event.targetEntity);
