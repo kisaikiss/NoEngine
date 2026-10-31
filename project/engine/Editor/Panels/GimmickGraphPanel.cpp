@@ -3,6 +3,8 @@
 #include "engine/Functions/ECS/Component/Common/GimmickGraphComponent.h"
 #include "engine/Functions/ECS/Gameplay/GameplayCatalog.h"
 #include "engine/Editor/Commands/EditTag.h"
+#include "engine/Editor/Commands/EditorCommandOperator.h"
+#include "engine/Functions/Command/EditCommand/FunctionCommand.h"
 #include "externals/imgui/imgui.h"
 #include "externals/imgui/imgui_node_editor.h"
 
@@ -13,6 +15,25 @@ namespace NodeEditor = ax::NodeEditor;
 NodeEditor::EditorContext* GetNodeEditorContext() {
 	static NodeEditor::EditorContext* context = NodeEditor::CreateEditor();
 	return context;
+}
+
+std::unordered_map<std::string, std::shared_ptr<GimmickGraphEditorDocument>>& GetGraphDocuments() {
+	static std::unordered_map<std::string, std::shared_ptr<GimmickGraphEditorDocument>> documents;
+	return documents;
+}
+
+std::string NormalizeGraphPath(const std::string& path) {
+	return std::filesystem::path(path).lexically_normal().generic_string();
+}
+
+void AddGraphSnapshotCommand(const std::shared_ptr<GimmickGraphEditorDocument>& document,
+	const Gameplay::GimmickGraph& before, const Gameplay::GimmickGraph& after) {
+	auto oldGraph = before;
+	auto newGraph = after;
+	EditorCommandOperator::AddCommand(std::make_unique<Command::FunctionCommand>(
+		[document, newGraph]() { document->graph = newGraph; document->dirty = true; ++document->revision; },
+		[document, oldGraph]() { document->graph = oldGraph; document->dirty = true; ++document->revision; },
+		"Edit Gimmick Graph"));
 }
 
 uint64_t StableId(const std::string& value) {
@@ -99,6 +120,19 @@ uint64_t PinStableId(const std::string& nodeId, const char* pinId) {
 }
 
 bool GimmickGraphPanel::Load(const std::string& path) {
+	const std::string normalizedPath = NormalizeGraphPath(path);
+	if (auto documentIt = GetGraphDocuments().find(normalizedPath); documentIt != GetGraphDocuments().end()) {
+		document_ = documentIt->second;
+		activePath_ = path;
+		loaded_ = true;
+		observedDocumentRevision_ = document_->revision;
+		pendingMouseEditStart_.reset();
+		contextNodeId_.clear();
+		contextLinkId_.clear();
+		positionedNodeIds_.clear();
+		status_.clear();
+		return true;
+	}
 	std::string error;
 	auto graph = Gameplay::LoadGimmickGraph(path, &error);
 	if (!graph) {
@@ -106,30 +140,33 @@ bool GimmickGraphPanel::Load(const std::string& path) {
 		loaded_ = false;
 		return false;
 	}
-	graph_ = std::move(*graph);
+	document_ = std::make_shared<GimmickGraphEditorDocument>();
+	document_->graph = std::move(*graph);
 	activePath_ = path;
+	observedDocumentRevision_ = document_->revision;
+	pendingMouseEditStart_.reset();
+	GetGraphDocuments().emplace(normalizedPath, document_);
 	contextNodeId_.clear();
 	contextLinkId_.clear();
 	loaded_ = true;
-	dirty_ = false;
 	positionedNodeIds_.clear();
 	status_.clear();
 	return true;
 }
 
 void GimmickGraphPanel::Save() {
-	if (!loaded_) return;
-	const auto validation = Gameplay::ValidateGimmickGraph(graph_);
+	if (!loaded_ || !document_) return;
+	const auto validation = Gameplay::ValidateGimmickGraph(document_->graph);
 	if (validation.HasErrors()) {
 		status_ = "Cannot save: graph has validation errors.";
 		return;
 	}
 	std::string error;
-	if (!Gameplay::SaveGimmickGraph(activePath_, graph_, &error)) {
+	if (!Gameplay::SaveGimmickGraph(activePath_, document_->graph, &error)) {
 		status_ = "Save failed: " + error;
 		return;
 	}
-	dirty_ = false;
+	document_->dirty = false;
 	status_ = "Saved.";
 }
 
@@ -154,12 +191,23 @@ void GimmickGraphPanel::Draw(ECS::Registry& registry, ECS::Entity selectedEntity
 		ImGui::End();
 		return;
 	}
+	auto& graph_ = document_->graph;
+	bool& dirty_ = document_->dirty;
+	if (observedDocumentRevision_ != document_->revision) {
+		positionedNodeIds_.clear();
+		observedDocumentRevision_ = document_->revision;
+	}
 
 	if (ImGui::Button("Save Graph")) Save();
+	ImGui::SameLine();
+	if (ImGui::Button("Undo")) EditorCommandOperator::Undo();
+	ImGui::SameLine();
+	if (ImGui::Button("Redo")) EditorCommandOperator::Redo();
 	ImGui::SameLine();
 	if (dirty_) ImGui::TextColored(ImVec4(1.0f, 0.75f, 0.2f, 1.0f), "Unsaved changes");
 	else if (!status_.empty()) ImGui::Text("%s", status_.c_str());
 
+	const Gameplay::GimmickGraph graphBeforeFrame = graph_;
 	if (ImGui::BeginCombo("Add node", "Choose event or action...")) {
 		ImGui::TextDisabled("Events");
 		for (const auto& event : Gameplay::GameplayCatalog::Get().GetEvents()) {
@@ -335,6 +383,20 @@ void GimmickGraphPanel::Draw(ECS::Registry& registry, ECS::Entity selectedEntity
 	const auto validation = Gameplay::ValidateGimmickGraph(graph_);
 	for (const auto& diagnostic : validation.diagnostics) {
 		if (diagnostic.severity == Gameplay::DiagnosticSeverity::Error) ImGui::TextColored(ImVec4(1.0f, 0.35f, 0.35f, 1.0f), "%s", diagnostic.message.c_str());
+	}
+	const bool graphChanged = graphBeforeFrame.ToJson() != graph_.ToJson();
+	if (graphChanged) {
+		if (ImGui::IsMouseDown(ImGuiMouseButton_Left)) {
+			if (!pendingMouseEditStart_) pendingMouseEditStart_ = graphBeforeFrame;
+		} else if (pendingMouseEditStart_) {
+			AddGraphSnapshotCommand(document_, *pendingMouseEditStart_, graph_);
+			pendingMouseEditStart_.reset();
+		} else {
+			AddGraphSnapshotCommand(document_, graphBeforeFrame, graph_);
+		}
+	} else if (pendingMouseEditStart_ && !ImGui::IsMouseDown(ImGuiMouseButton_Left)) {
+		AddGraphSnapshotCommand(document_, *pendingMouseEditStart_, graph_);
+		pendingMouseEditStart_.reset();
 	}
 	ImGui::End();
 }
