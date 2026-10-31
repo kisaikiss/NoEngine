@@ -276,6 +276,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="engine\Editor\Panels\HierarchyPanel.cpp" />
     <ClCompile Include="engine\Editor\Panels\InspectorPanel.cpp" />
     <ClCompile Include="engine\Editor\Panels\PrefabEditorPanel.cpp" />
+    <ClCompile Include="engine\Editor\Panels\GimmickGraphPanel.cpp" />
     <ClCompile Include="engine\Functions\Command\CommandManager.cpp" />
     <ClCompile Include="engine\Functions\Command\EditCommand\AddComponentCommand.cpp" />
     <ClCompile Include="engine\Functions\Command\EditCommand\DeleteEntityCommand.cpp" />
@@ -633,6 +634,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="engine\Editor\Panels\HierarchyPanel.h" />
     <ClInclude Include="engine\Editor\Panels\InspectorPanel.h" />
     <ClInclude Include="engine\Editor\Panels\PrefabEditorPanel.h" />
+    <ClInclude Include="engine\Editor\Panels\GimmickGraphPanel.h" />
     <ClInclude Include="engine\Functions\Command\CommandManager.h" />
     <ClInclude Include="engine\Functions\Command\EditCommand\AddComponentCommand.h" />
     <ClInclude Include="engine\Functions\Command\EditCommand\ChangeValueCommand.h" />

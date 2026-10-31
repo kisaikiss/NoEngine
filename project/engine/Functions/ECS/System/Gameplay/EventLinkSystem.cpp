@@ -59,58 +59,74 @@ const GimmickGraph* GetGraph(const std::string& graphPath) {
 	return &*cache.graph;
 }
 
-void ExecuteGraph(Registry& registry, const Event::GameplayEvent& event, const GimmickGraph& graph) {
-	const auto& catalog = GameplayCatalog::Get();
-	std::unordered_map<std::string, const GimmickNode*> nodesById;
-	for (const auto& node : graph.nodes) nodesById.emplace(node.id, &node);
-
-	constexpr size_t kMaxActionsPerEvent = 1024;
-	size_t executedActions = 0;
-	for (const auto& eventNode : graph.nodes) {
-		if (eventNode.kind != GimmickNodeKind::Event || eventNode.typeId != event.eventId) continue;
-		std::vector<std::string> pending;
-		for (auto it = graph.links.rbegin(); it != graph.links.rend(); ++it) {
-			if (it->fromNodeId == eventNode.id && it->fromPinId == PinId::ExecOutput) pending.push_back(it->toNodeId);
-		}
-		while (!pending.empty()) {
-			if (executedActions >= kMaxActionsPerEvent) {
-				LogWarning("EventLinkSystem: graph execution limit exceeded for " + event.eventId);
-				return;
-			}
-			const std::string nodeId = std::move(pending.back());
-			pending.pop_back();
-			auto nodeIt = nodesById.find(nodeId);
-			if (nodeIt == nodesById.end()) continue;
-			const GimmickNode& node = *nodeIt->second;
-			if (node.kind != GimmickNodeKind::Action) continue;
-			const ActionDescriptor* action = catalog.FindAction(node.typeId);
-			if (!action) continue;
-
-			Entity target = INVALID_ENTITY;
-			for (const auto& property : action->properties) {
-				if (property.type != ActionPropertyType::EntityReference) continue;
-				auto valueIt = node.properties.find(property.id);
-				if (valueIt == node.properties.end() || !valueIt->is_string()) continue;
-				target = Editor::FindEntityByName(registry, valueIt->get<std::string>());
-				if (target == INVALID_ENTITY && property.required) {
-					LogWarning("EventLinkSystem: graph action target entity was not found: " + valueIt->get<std::string>());
-				}
-				break;
-			}
-			if (action->requiresTarget && target == INVALID_ENTITY) continue;
-			++executedActions;
-			action->execute(registry, event, target, node.properties);
-
-			for (auto it = graph.links.rbegin(); it != graph.links.rend(); ++it) {
-				if (it->fromNodeId == node.id && it->fromPinId == PinId::ExecOutput) pending.push_back(it->toNodeId);
-			}
-		}
+void AppendOutgoingNodes(const GimmickGraph& graph, const std::string& nodeId, std::vector<std::string>& pending) {
+	for (auto it = graph.links.rbegin(); it != graph.links.rend(); ++it) {
+		if (it->fromNodeId == nodeId && it->fromPinId == PinId::ExecOutput) pending.push_back(it->toNodeId);
 	}
 }
 }
 
+void EventLinkSystem::AdvanceGraphExecution(Registry& registry, GraphExecution& execution) {
+	constexpr size_t kMaxActionsPerEvent = 1024;
+	const auto& catalog = Gameplay::GameplayCatalog::Get();
+
+	if (execution.waiting) {
+		const auto* waitingAction = catalog.FindAction(execution.waitingActionId);
+		if (waitingAction && waitingAction->isComplete
+			&& !waitingAction->isComplete(registry, execution.waitingTarget, execution.waitingProperties)) return;
+		AppendOutgoingNodes(execution.graph, execution.waitingNodeId, execution.pendingNodes);
+		execution.waiting = false;
+	}
+
+	while (!execution.pendingNodes.empty()) {
+		if (execution.executedActions >= kMaxActionsPerEvent) {
+			LogWarning("EventLinkSystem: graph execution limit exceeded for " + execution.event.eventId);
+			execution.pendingNodes.clear();
+			return;
+		}
+		const std::string nodeId = std::move(execution.pendingNodes.back());
+		execution.pendingNodes.pop_back();
+		auto nodeIt = std::find_if(execution.graph.nodes.begin(), execution.graph.nodes.end(), [&](const auto& node) {
+			return node.id == nodeId;
+		});
+		if (nodeIt == execution.graph.nodes.end() || nodeIt->kind != Gameplay::GimmickNodeKind::Action) continue;
+		const auto* action = catalog.FindAction(nodeIt->typeId);
+		if (!action) continue;
+
+		Entity target = INVALID_ENTITY;
+		for (const auto& property : action->properties) {
+			if (property.type != Gameplay::ActionPropertyType::EntityReference) continue;
+			auto valueIt = nodeIt->properties.find(property.id);
+			if (valueIt == nodeIt->properties.end() || !valueIt->is_string()) continue;
+			target = Editor::FindEntityByName(registry, valueIt->get<std::string>());
+			if (target == INVALID_ENTITY && property.required) {
+				LogWarning("EventLinkSystem: graph action target entity was not found: " + valueIt->get<std::string>());
+			}
+			break;
+		}
+		if (action->requiresTarget && target == INVALID_ENTITY) continue;
+
+		++execution.executedActions;
+		action->execute(registry, execution.event, target, nodeIt->properties);
+		if (action->isComplete && !action->isComplete(registry, target, nodeIt->properties)) {
+			execution.waiting = true;
+			execution.waitingNodeId = nodeIt->id;
+			execution.waitingActionId = nodeIt->typeId;
+			execution.waitingTarget = target;
+			execution.waitingProperties = nodeIt->properties;
+			return;
+		}
+		AppendOutgoingNodes(execution.graph, nodeIt->id, execution.pendingNodes);
+	}
+}
+
 void EventLinkSystem::Update(Registry& registry, float deltaTime) {
 	static_cast<void>(deltaTime);
+	for (auto it = graphExecutions_.begin(); it != graphExecutions_.end();) {
+		AdvanceGraphExecution(registry, *it);
+		if (!it->waiting && it->pendingNodes.empty()) it = graphExecutions_.erase(it);
+		else ++it;
+	}
 	for (const auto& event : registry.PollAllEvents<Event::GameplayEvent>()) {
 		// 旧EventLinkComponentとの互換を保ちながら、同じイベントをグラフにも配送する。
 		if (auto* links = registry.GetComponent<Component::EventLinkComponent>(event.source)) {
@@ -131,7 +147,15 @@ void EventLinkSystem::Update(Registry& registry, float deltaTime) {
 
 		if (auto* graphComponent = registry.GetComponent<Component::GimmickGraphComponent>(event.source)) {
 			if (const GimmickGraph* graph = GetGraph(graphComponent->graphPath)) {
-				ExecuteGraph(registry, event, *graph);
+				for (const auto& eventNode : graph->nodes) {
+					if (eventNode.kind != Gameplay::GimmickNodeKind::Event || eventNode.typeId != event.eventId) continue;
+					GraphExecution execution;
+					execution.graph = *graph;
+					execution.event = event;
+					AppendOutgoingNodes(execution.graph, eventNode.id, execution.pendingNodes);
+					graphExecutions_.push_back(std::move(execution));
+					AdvanceGraphExecution(registry, graphExecutions_.back());
+				}
 			}
 		}
 	}

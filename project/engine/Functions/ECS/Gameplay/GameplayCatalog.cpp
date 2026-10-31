@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "GameplayCatalog.h"
+#include "engine/Functions/ECS/Component/Common/MoverComponent.h"
+#include "engine/Functions/ECS/Component/Common/TransformRoutineComponent.h"
 
 namespace NoEngine::Gameplay {
 
@@ -12,8 +14,14 @@ GameplayCatalog::GameplayCatalog() {
 	RegisterEvent({ Event::GameplayId::TriggerEnter, "Trigger Enter", "Trigger" });
 	RegisterAction({ Event::GameplayId::MoverActivate, "Activate Mover", "Movement",
 		[](ECS::Registry& registry, const Event::GameplayEvent&, ECS::Entity target, const nlohmann::json&) {
+			if (auto* mover = registry.GetComponent<NoEngine::Component::MoverComponent>(target)) mover->active = false;
 			registry.EmitEvent(Event::ActivateMoverEvent{ target });
-		}, true, {{ "targetEntity", "Target Entity", ActionPropertyType::EntityReference, true }} });
+		}, true, {{ "targetEntity", "Target Entity", ActionPropertyType::EntityReference, true }},
+		[](ECS::Registry& registry, ECS::Entity target, const nlohmann::json&) {
+			auto* mover = registry.GetComponent<NoEngine::Component::MoverComponent>(target);
+			auto* routine = registry.GetComponent<NoEngine::Component::TransformRoutineComponent>(target);
+			return !mover || !routine || (mover->active && (!routine->playing || routine->keyframes.size() < 2));
+		} });
 }
 
 bool GameplayCatalog::RegisterEvent(EventDescriptor descriptor) {

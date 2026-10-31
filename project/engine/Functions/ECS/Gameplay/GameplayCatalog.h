@@ -33,6 +33,8 @@ struct ActionDescriptor {
 	std::function<void(ECS::Registry&, const Event::GameplayEvent&, ECS::Entity, const nlohmann::json&)> execute;
 	bool requiresTarget = true;
 	std::vector<ActionPropertyDescriptor> properties;
+	// 未設定ならexecuteのreturnで完了。設定時はtrueになるまで次のグラフActionを待つ。
+	std::function<bool(ECS::Registry&, ECS::Entity, const nlohmann::json&)> isComplete;
 };
 
 // イベント／Actionの安定IDと表示情報を登録するカタログ。

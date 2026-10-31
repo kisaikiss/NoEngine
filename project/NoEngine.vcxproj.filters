@@ -269,6 +269,7 @@
     <ClCompile Include="engine\Editor\Panels\HierarchyPanel.cpp" />
     <ClCompile Include="engine\Editor\Panels\InspectorPanel.cpp" />
     <ClCompile Include="engine\Editor\Panels\PrefabEditorPanel.cpp" />
+    <ClCompile Include="engine\Editor\Panels\GimmickGraphPanel.cpp" />
     <ClCompile Include="engine\Functions\Command\EditCommand\DeleteEntitiesCommand.cpp" />
     <ClCompile Include="engine\Functions\Command\EditCommand\InstantiateEntitiesCommand.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Common\TransformRoutineComponent.cpp" />
@@ -624,6 +625,7 @@
     <ClInclude Include="engine\Editor\Panels\HierarchyPanel.h" />
     <ClInclude Include="engine\Editor\Panels\InspectorPanel.h" />
     <ClInclude Include="engine\Editor\Panels\PrefabEditorPanel.h" />
+    <ClInclude Include="engine\Editor\Panels\GimmickGraphPanel.h" />
     <ClInclude Include="engine\Functions\Command\EditCommand\DeleteEntitiesCommand.h" />
     <ClInclude Include="engine\Functions\Command\EditCommand\InstantiateEntitiesCommand.h" />
     <ClInclude Include="engine\Math\EasingType.h" />

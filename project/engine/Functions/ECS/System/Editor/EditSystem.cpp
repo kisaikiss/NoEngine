@@ -41,6 +41,7 @@ void EditSystem::Update(Registry& registry, float deltaTime) {
 	hierarchyPanel_.Draw(registry);
 	inspectorPanel_.Draw(registry);
 	prefabEditorPanel_.Draw(registry);
+	gimmickGraphPanel_.Draw(registry, SelectedNow(registry));
 
 	HandleGlobalShortcuts(registry, deltaTime);
 #else
@@ -84,7 +85,7 @@ void EditSystem::HandleGlobalShortcuts(Registry& registry, float deltaTime) {
 	// Undo/Redoが子孫にも効くことと、削除範囲そのものを両経路で一致させることを保証する）
 	if (Input::Keyboard::IsTrigger(VK_DELETE)) {
 		Entity selected = SelectedNow(registry);
-		if (!ImGui::IsAnyItemActive() && selected != ECS::INVALID_ENTITY) {
+		if (!ImGui::IsAnyItemActive() && !gimmickGraphPanel_.OwnsKeyboardFocus() && selected != ECS::INVALID_ENTITY) {
 			std::vector<Entity> subtree;
 			Editor::CollectSubtreeEntities(registry, selected, subtree);
 

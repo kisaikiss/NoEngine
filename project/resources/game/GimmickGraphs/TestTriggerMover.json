@@ -1,30 +1,55 @@
 {
-  "version": 1,
+  "links": [
+    {
+      "fromNodeId": "event-trigger-enter",
+      "fromPinId": "exec.out",
+      "id": "link-trigger-to-mover",
+      "toNodeId": "action-mover-activate",
+      "toPinId": "exec.in"
+    },
+    {
+      "fromNodeId": "action-mover-activate",
+      "fromPinId": "exec.out",
+      "id": "link-5",
+      "toNodeId": "action-4",
+      "toPinId": "exec.in"
+    }
+  ],
   "nodes": [
     {
       "id": "event-trigger-enter",
       "kind": "event",
-      "typeId": "engine.trigger.enter",
-      "position": [100.0, 180.0],
-      "properties": {}
+      "position": [
+        100.0,
+        180.0
+      ],
+      "properties": {},
+      "typeId": "engine.trigger.enter"
     },
     {
       "id": "action-mover-activate",
       "kind": "action",
-      "typeId": "engine.mover.activate",
-      "position": [420.0, 180.0],
+      "position": [
+        256.0,
+        163.0
+      ],
       "properties": {
         "targetEntity": "box_2"
-      }
+      },
+      "typeId": "engine.mover.activate"
+    },
+    {
+      "id": "action-4",
+      "kind": "action",
+      "position": [
+        570.0,
+        283.0
+      ],
+      "properties": {
+        "targetEntity": "box"
+      },
+      "typeId": "engine.mover.activate"
     }
   ],
-  "links": [
-    {
-      "id": "link-trigger-to-mover",
-      "fromNodeId": "event-trigger-enter",
-      "fromPinId": "exec.out",
-      "toNodeId": "action-mover-activate",
-      "toPinId": "exec.in"
-    }
-  ]
+  "version": 1
 }
