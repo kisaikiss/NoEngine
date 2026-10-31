@@ -7,6 +7,9 @@
 #include "engine/Functions/Command/EditCommand/FunctionCommand.h"
 #include "externals/imgui/imgui.h"
 #include "externals/imgui/imgui_node_editor.h"
+#include <commdlg.h>
+
+#pragma comment(lib, "Comdlg32.lib")
 
 namespace NoEngine::Editor {
 namespace {
@@ -27,6 +30,37 @@ std::unordered_map<std::string, std::shared_ptr<GimmickGraphEditorDocument>>& Ge
 std::string NormalizeGraphPath(const std::string& path) {
 	// "a/../b"のような異なる表記で同じDocumentが二重に作られないようにする。
 	return std::filesystem::path(path).lexically_normal().generic_string();
+}
+
+std::optional<std::filesystem::path> ChooseGraphFile(bool save) {
+	// Windows標準ダイアログで既存Graphを選ぶか、新規Graphの保存先を指定する。
+	std::array<char, 32768> pathBuffer{};
+	const char filter[] = "Gimmick Graph (*.json)\0*.json\0JSON files (*.json)\0*.json\0All files (*.*)\0*.*\0\0";
+	const auto currentDirectory = std::filesystem::current_path().string();
+	OPENFILENAMEA dialog{};
+	dialog.lStructSize = sizeof(dialog);
+	dialog.lpstrFilter = filter;
+	dialog.lpstrFile = pathBuffer.data();
+	dialog.nMaxFile = static_cast<DWORD>(pathBuffer.size());
+	dialog.lpstrInitialDir = currentDirectory.c_str();
+	dialog.lpstrDefExt = "json";
+	dialog.lpstrTitle = save ? "Create Gimmick Graph" : "Open Gimmick Graph";
+	// ファイルダイアログの移動先でアプリの相対パス基準が変わらないようにする。
+	dialog.Flags = OFN_PATHMUSTEXIST | OFN_NOCHANGEDIR
+		| (save ? OFN_OVERWRITEPROMPT : OFN_FILEMUSTEXIST);
+	const BOOL accepted = save ? GetSaveFileNameA(&dialog) : GetOpenFileNameA(&dialog);
+	// Windowsの設定や環境によって作業ディレクトリが変わる場合にも元の場所へ戻す。
+	std::error_code restoreError;
+	std::filesystem::current_path(currentDirectory, restoreError);
+	if (!accepted) return std::nullopt;
+	return std::filesystem::path(pathBuffer.data()).lexically_normal();
+}
+
+std::string ToStoredGraphPath(const std::filesystem::path& path) {
+	// プロジェクトの作業ディレクトリ内なら相対パスにし、シーンデータを持ち運びやすくする。
+	std::error_code error;
+	const auto relativePath = std::filesystem::relative(path, std::filesystem::current_path(), error);
+	return (error || relativePath.empty() ? path : relativePath).generic_string();
 }
 
 void AddGraphSnapshotCommand(const std::shared_ptr<GimmickGraphEditorDocument>& document,
@@ -177,6 +211,10 @@ bool GimmickGraphPanel::Load(const std::string& path) {
 	std::string error;
 	auto graph = Gameplay::LoadGimmickGraph(path, &error);
 	if (!graph) {
+		activePath_ = path;
+		document_.reset();
+		pendingMouseEditStart_.reset();
+		positionedNodeIds_.clear();
 		status_ = "Load failed: " + error;
 		loaded_ = false;
 		return false;
@@ -225,14 +263,42 @@ void GimmickGraphPanel::Draw(ECS::Registry& registry, ECS::Entity selectedEntity
 	}
 	auto* component = registry.GetComponent<Component::GimmickGraphComponent>(selectedEntity);
 	// Graphファイルの場所は選択中EntityのComponentが指す。別EntityならそのDocumentへ切り替える。
-	if (!component || component->graphPath.empty()) {
+	if (!component) {
 		ImGui::TextDisabled("Select an entity with GimmickGraphComponent.");
 		ImGui::End();
 		return;
 	}
-	if (!loaded_ || activePath_ != component->graphPath) Load(component->graphPath);
+	if (component->graphPath.empty()) {
+		activePath_.clear();
+		document_.reset();
+		loaded_ = false;
+		pendingMouseEditStart_.reset();
+		positionedNodeIds_.clear();
+		status_ = "No Gimmick Graph is assigned to this entity.";
+	} else if (activePath_ != component->graphPath) {
+		Load(component->graphPath);
+	}
 	if (!loaded_) {
 		ImGui::TextWrapped("%s", status_.c_str());
+		if (ImGui::Button("Open")) {
+			if (const auto selectedPath = ChooseGraphFile(false)) {
+				component->graphPath = ToStoredGraphPath(*selectedPath);
+				Load(component->graphPath);
+			}
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("New")) {
+			if (const auto selectedPath = ChooseGraphFile(true)) {
+				Gameplay::GimmickGraph newGraph;
+				std::string error;
+				if (Gameplay::SaveGimmickGraph(*selectedPath, newGraph, &error)) {
+					component->graphPath = ToStoredGraphPath(*selectedPath);
+					Load(component->graphPath);
+				} else {
+					status_ = "Create failed: " + error;
+				}
+			}
+		}
 		ImGui::End();
 		return;
 	}
