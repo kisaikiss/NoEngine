@@ -444,3 +444,4 @@ project/Dumps
 project/externals/DirectXTex/Bin/
 /generated/outputs/Development
 project/resources/engine/cache
+/project/NodeEditor.json

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "GimmickGraphPanel.h"
+#ifdef USE_IMGUI
 #include "engine/Functions/ECS/Component/Common/GimmickGraphComponent.h"
 #include "engine/Functions/ECS/Gameplay/GameplayCatalog.h"
 #include "engine/Editor/Commands/EditTag.h"
@@ -567,3 +568,14 @@ void GimmickGraphPanel::Draw(ECS::Registry& registry, ECS::Entity selectedEntity
 }
 
 }
+
+#else
+
+namespace NoEngine::Editor {
+void GimmickGraphPanel::Draw(ECS::Registry& registry, ECS::Entity selectedEntity) {
+	static_cast<void>(registry);
+	static_cast<void>(selectedEntity);
+}
+}
+
+#endif // USE_IMGUI
