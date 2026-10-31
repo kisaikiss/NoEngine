@@ -1,37 +1,48 @@
 {
   "links": [
     {
-      "fromNodeId": "event-trigger-enter",
-      "fromPinId": "exec.out",
-      "id": "link-trigger-to-mover",
-      "toNodeId": "action-mover-activate",
-      "toPinId": "exec.in"
-    },
-    {
       "fromNodeId": "action-mover-activate",
       "fromPinId": "exec.out",
       "id": "link-5",
       "toNodeId": "action-4",
       "toPinId": "exec.in"
+    },
+    {
+      "fromNodeId": "action-4",
+      "fromPinId": "exec.out",
+      "id": "link-12",
+      "toNodeId": "action-11",
+      "toPinId": "exec.in"
+    },
+    {
+      "fromNodeId": "event-9",
+      "fromPinId": "exec.out",
+      "id": "link-10",
+      "toNodeId": "action-9",
+      "toPinId": "exec.in"
+    },
+    {
+      "fromNodeId": "event-8",
+      "fromPinId": "exec.out",
+      "id": "link-11",
+      "toNodeId": "action-12",
+      "toPinId": "exec.in"
+    },
+    {
+      "fromNodeId": "action-12",
+      "fromPinId": "exec.out",
+      "id": "link-13",
+      "toNodeId": "action-mover-activate",
+      "toPinId": "exec.in"
     }
   ],
   "nodes": [
     {
-      "id": "event-trigger-enter",
-      "kind": "event",
-      "position": [
-        100.0,
-        180.0
-      ],
-      "properties": {},
-      "typeId": "engine.trigger.enter"
-    },
-    {
       "id": "action-mover-activate",
       "kind": "action",
       "position": [
-        256.0,
-        163.0
+        227.0,
+        157.0
       ],
       "properties": {
         "targetEntity": "box_2"
@@ -42,13 +53,69 @@
       "id": "action-4",
       "kind": "action",
       "position": [
-        570.0,
-        283.0
+        594.0,
+        221.0
       ],
       "properties": {
         "targetEntity": "box"
       },
       "typeId": "engine.mover.activate"
+    },
+    {
+      "id": "action-11",
+      "kind": "action",
+      "position": [
+        947.0,
+        221.0
+      ],
+      "properties": {
+        "outputString": "EndMove"
+      },
+      "typeId": "engine.debug.log"
+    },
+    {
+      "id": "event-8",
+      "kind": "event",
+      "position": [
+        -100.0,
+        133.0
+      ],
+      "properties": {},
+      "typeId": "engine.trigger.exit"
+    },
+    {
+      "id": "event-9",
+      "kind": "event",
+      "position": [
+        -20.0,
+        37.0
+      ],
+      "properties": {},
+      "typeId": "engine.trigger.enter"
+    },
+    {
+      "id": "action-9",
+      "kind": "action",
+      "position": [
+        195.0,
+        29.0
+      ],
+      "properties": {
+        "outputString": "OnEnter"
+      },
+      "typeId": "engine.debug.log"
+    },
+    {
+      "id": "action-12",
+      "kind": "action",
+      "position": [
+        35.0,
+        309.0
+      ],
+      "properties": {
+        "outputString": "OnExit"
+      },
+      "typeId": "engine.debug.log"
     }
   ],
   "version": 1

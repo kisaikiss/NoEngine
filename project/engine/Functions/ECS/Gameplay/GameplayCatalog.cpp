@@ -2,6 +2,7 @@
 #include "GameplayCatalog.h"
 #include "engine/Functions/ECS/Component/Common/MoverComponent.h"
 #include "engine/Functions/ECS/Component/Common/TransformRoutineComponent.h"
+#include "engine/Assets/Audio/Audio.h"
 
 namespace NoEngine::Gameplay {
 
@@ -14,6 +15,7 @@ GameplayCatalog& GameplayCatalog::Get() {
 GameplayCatalog::GameplayCatalog() {
 	// エンジン標準のイベント／Action。アプリ固有の登録は起動時にRegister系関数で追加する。
 	RegisterEvent({ Event::GameplayId::TriggerEnter, "Trigger Enter", "Trigger" });
+	RegisterEvent({ Event::GameplayId::TriggerExit, "Trigger Exit", "Trigger" });
 	RegisterAction({ Event::GameplayId::MoverActivate, "Activate Mover", "Movement",
 		[](ECS::Registry& registry, const Event::GameplayEvent&, ECS::Entity target, const nlohmann::json&) {
 			// MoverSystemが起動イベントを処理した後、完了判定が新しい再生を待てるよう状態を戻す。
@@ -25,6 +27,30 @@ GameplayCatalog::GameplayCatalog() {
 			auto* mover = registry.GetComponent<NoEngine::Component::MoverComponent>(target);
 			auto* routine = registry.GetComponent<NoEngine::Component::TransformRoutineComponent>(target);
 			return !mover || !routine || (mover->active && (!routine->playing || routine->keyframes.size() < 2));
+		} });
+	RegisterAction({ Event::GameplayId::MoverStop, "Stop Mover", "Movement",
+		[](ECS::Registry& registry, const Event::GameplayEvent&, ECS::Entity target, const nlohmann::json&) {
+			if (auto* mover = registry.GetComponent<NoEngine::Component::MoverComponent>(target)) mover->active = false;
+			if (auto* routine = registry.GetComponent<NoEngine::Component::TransformRoutineComponent>(target)) {
+				routine->playing = false;
+				routine->elapsed = 0.0f;
+			}
+		}, true, {{ "targetEntity", "Target Entity", ActionPropertyType::EntityReference, true }}});
+	RegisterAction({ Event::GameplayId::SoundPlay, "Play Sound", "Audio",
+		[](ECS::Registry&, const Event::GameplayEvent&, ECS::Entity, const nlohmann::json& properties) {
+			const std::string soundName = properties.value("soundName", std::string{});
+			const float volume = properties.value("volume", 1.0f);
+			if (!soundName.empty()) NoEngine::Asset::SoundEffectPlay(soundName, std::clamp(volume, 0.0f, 1.0f));
+		}, false, {
+			{ "soundName", "Sound Name", ActionPropertyType::String, true },
+			{ "volume", "Volume", ActionPropertyType::Number, false }
+		}});
+	RegisterAction({ Event::GameplayId::DebugLog, "Output Log", "Debug",
+		[](ECS::Registry&, const Event::GameplayEvent&, ECS::Entity, const nlohmann::json& properties) {
+			const std::string outputString = properties.value("outputString", std::string{});
+			if (!outputString.empty()) LogDebug(outputString);
+		}, false, {
+			{ "outputString", "Output String", ActionPropertyType::String, true }
 		} });
 }
 

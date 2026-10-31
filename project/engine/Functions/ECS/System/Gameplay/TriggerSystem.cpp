@@ -32,6 +32,11 @@ void TriggerSystem::Update(Registry& registry, float deltaTime) {
 			Gameplay::EmitGameplayEvent(registry, triggerEntity, Event::GameplayId::TriggerEnter, instigator);
 			if (trigger->oneShot) trigger->activated = true;
 		}
+		// 前フレームは接触中で今フレーム離れた場合にExitを発行する。
+		if (!touching && trigger->wasTouching) {
+			Gameplay::EmitGameplayEvent(registry, triggerEntity, Event::GameplayId::TriggerExit, trigger->lastInstigator);
+		}
+		if (touching) trigger->lastInstigator = instigator;
 		trigger->wasTouching = touching;
 	}
 	// PollEventで取り出した接触イベントを消費し切らないよう、後続システム用に再発行する。

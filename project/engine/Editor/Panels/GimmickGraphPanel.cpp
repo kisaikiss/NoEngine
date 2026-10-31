@@ -89,6 +89,17 @@ void DrawActionProperties(ECS::Registry& registry, Gameplay::GimmickNode& node,
 		} else if (property.type == Gameplay::ActionPropertyType::Number) {
 			float value = it != node.properties.end() && it->is_number() ? it->get<float>() : 0.0f;
 			if (ImGui::InputFloat(property.displayName.c_str(), &value)) { node.properties[property.id] = value; dirty = true; }
+		} else if (property.type == Gameplay::ActionPropertyType::String) {
+			char value[256] = {};
+			if (it != node.properties.end() && it->is_string()) {
+				const std::string current = it->get<std::string>();
+				strncpy_s(value, current.c_str(), _TRUNCATE);
+			}
+			ImGui::SetNextItemWidth(180.0f);
+			if (ImGui::InputText(property.displayName.c_str(), value, sizeof(value))) {
+				node.properties[property.id] = value;
+				dirty = true;
+			}
 		} else if (property.type == Gameplay::ActionPropertyType::EntityReference) {
 			// JSONにはEntityハンドルではなく名前を保存する。シーンを再ロードしても参照を解決できるため。
 			char value[256] = {};

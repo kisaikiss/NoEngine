@@ -5,7 +5,11 @@ namespace NoEngine::Event {
 namespace GameplayId {
 // グラフやアプリケーションから参照する安定ID。表示名を変更しても保存データは変わらない。
 inline constexpr char TriggerEnter[] = "engine.trigger.enter";
+inline constexpr char TriggerExit[] = "engine.trigger.exit";
 inline constexpr char MoverActivate[] = "engine.mover.activate";
+inline constexpr char MoverStop[] = "engine.mover.stop";
+inline constexpr char SoundPlay[] = "engine.sound.play";
+inline constexpr char DebugLog[] = "engine.debug.log";
 }
 
 // EventLinkSystemへ渡す共通イベント。sourceは発行元、instigatorは接触者など発生原因のEntity。
