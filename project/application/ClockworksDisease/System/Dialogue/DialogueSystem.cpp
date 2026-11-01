@@ -5,6 +5,7 @@
 #include "engine/Runtime/GraphicsCore.h"
 
 #include "engine/Utilities/Conversion/ConvertString.h"
+#include "engine/Assets/Audio/Audio.h"
 
 namespace {
 // UTF-8文字列の先頭 codepointCount 文字ぶんのバイト長を返す
@@ -31,7 +32,18 @@ constexpr float kBaseHeight = 720.f;
 constexpr float kBaseBoxHeight = 180.f;
 constexpr float kBaseBoxOffsetY = -140.f;
 constexpr float kBaseTextPaddingX = 40.f;
-constexpr float kBaseTextScale = 0.65f;
+constexpr float kBaseTextScale = 0.55f;
+constexpr float kBasePortraitSize = 128.0f;
+
+std::mt19937& VoiceRandom() {
+	static std::mt19937 generator{ std::random_device{}() };
+	return generator;
+}
+
+std::unordered_map<std::string, bool>& LoadedDialogueVoices() {
+	static std::unordered_map<std::string, bool> loaded;
+	return loaded;
+}
 
 }
 
@@ -57,12 +69,27 @@ void DialogueSystem::Update(No::Registry& registry, float deltaTime) {
 	if (!IsLineFullyShown()) {
 		charTimer_ += deltaTime;
 		bool changed = false;
+		size_t previousCharCount = charCount_;
 		while (charTimer_ >= secondsPerChar_ && !IsLineFullyShown()) {
 			charTimer_ -= secondsPerChar_;
 			++charCount_;
 			changed = true;
 		}
-		if (changed) UpdateShownText(registry);
+		if (changed) {
+			UpdateShownText(registry);
+			// 表示が進んだ文字数ぶん顔を動かし、音声は新しく表示された文字ごとに鳴らす。
+			auto* dialogue = registry.GetComponent<DialogueComponent>(speaker_);
+			const auto codepoints = NoEngine::Utf8ToCodepoints(dialogue->lines[lineIndex_]);
+			for (size_t i = previousCharCount; i < charCount_; ++i) {
+				UpdatePortraitFrame(registry, ++portraitFrame_ % std::max<uint32_t>(1, dialogue->portraitFrameCount));
+				PlayVoiceForCharacter(registry, codepoints[i]);
+			}
+			// 行末まで表示したら、次の入力待ち中は先頭フレームにする。
+			if (IsLineFullyShown()) {
+				portraitFrame_ = 0;
+				UpdatePortraitFrame(registry, 0);
+			}
+		}
 	}
 
 	// ボタン入力
@@ -71,6 +98,8 @@ void DialogueSystem::Update(No::Registry& registry, float deltaTime) {
 			// 途中なら全文を即表示する
 			charCount_ = totalChars_;
 			UpdateShownText(registry);
+			// スキップ表示では音声やアニメーションを連続再生しない。
+			UpdatePortraitFrame(registry, 0);
 		} else {
 			Advance(registry);
 		}
@@ -85,6 +114,9 @@ void DialogueSystem::ShowLine(No::Registry& registry) {
 
 	registry.GetComponent<No::TextComponent>(textEntity_)->isVisible = true;
 	registry.GetComponent<No::SpriteComponent>(boxEntity_)->isVisible = true;
+	registry.GetComponent<No::SpriteComponent>(portraitEntity_)->isVisible = true;
+	portraitFrame_ = 0;
+	UpdatePortraitFrame(registry, 0);
 	UpdateShownText(registry); // 空文字から始める
 }
 
@@ -94,6 +126,42 @@ void DialogueSystem::UpdateShownText(No::Registry& registry) {
 	const std::string& full = dialogue->lines[lineIndex_];
 	registry.GetComponent<No::TextComponent>(textEntity_)->text =
 		full.substr(0, Utf8ByteLengthOfFirst(full, charCount_));
+}
+
+void DialogueSystem::UpdatePortraitFrame(No::Registry& registry, size_t frame) {
+	auto* dialogue = registry.GetComponent<DialogueComponent>(speaker_);
+	auto* sprite = registry.GetComponent<No::SpriteComponent>(portraitEntity_);
+	if (!dialogue || !sprite) return;
+	const uint32_t count = std::max<uint32_t>(1, dialogue->portraitFrameCount);
+	frame %= count;
+	sprite->textureHandle = NoEngine::TextureManager::LoadCovertTexture(dialogue->portraitTexture);
+	sprite->uv = { static_cast<float>(frame) / count, 0.0f, 1.0f / count, 1.0f };
+}
+
+void DialogueSystem::PlayVoiceForCharacter(No::Registry& registry, char32_t codepoint) {
+	if (codepoint == U' ' || codepoint == U'\n' || codepoint == U'\r' || codepoint == U'\t') return;
+	auto* dialogue = registry.GetComponent<DialogueComponent>(speaker_);
+	if (!dialogue) return;
+	std::vector<std::string> paths = dialogue->voiceFiles;
+	if (paths.empty()) {
+		for (int i = 1; i <= 3; ++i) {
+			char filename[8];
+			sprintf_s(filename, "%02d.wav", i);
+			paths.push_back(std::string("resources/game/ClockworksDisease/Sounds/Voice/Leimar/") + filename);
+		}
+	}
+	if (paths.empty()) return;
+	std::uniform_int_distribution<size_t> pick(0, paths.size() - 1);
+	size_t index = pick(VoiceRandom());
+	if (paths.size() > 1 && index == lastVoiceIndex_) index = (index + 1 + pick(VoiceRandom()) % (paths.size() - 1)) % paths.size();
+	lastVoiceIndex_ = index;
+	const std::string& path = paths[index];
+	auto& loaded = LoadedDialogueVoices();
+	if (!loaded[path]) {
+		NoEngine::Asset::SoundLoad(NoEngine::ConvertString(path), path);
+		loaded[path] = true;
+	}
+	NoEngine::Asset::SoundEffectPlay(path, std::clamp(dialogue->voiceVolume, 0.0f, 1.0f));
 }
 
 void DialogueSystem::UpdateLayout(No::Registry& registry) {
@@ -112,7 +180,10 @@ void DialogueSystem::UpdateLayout(No::Registry& registry) {
 	boxT->translate = { 0.f, boxOffsetY };
 
 	auto* textT = registry.GetComponent<No::Transform2DComponent>(textEntity_);
-	textT->translate = { -boxWidth * 0.5f + kBaseTextPaddingX * scale, boxOffsetY };
+	textT->translate = { -boxWidth * 0.5f + (kBasePortraitSize + kBaseTextPaddingX) * scale, boxOffsetY };
+	auto* portraitT = registry.GetComponent<No::Transform2DComponent>(portraitEntity_);
+	portraitT->scale = { kBasePortraitSize * scale, kBasePortraitSize * scale };
+	portraitT->translate = { -boxWidth * 0.5f + kBasePortraitSize * 0.65f * scale, boxOffsetY + kBasePortraitSize * 0.12f * scale };
 
 	registry.GetComponent<No::TextComponent>(textEntity_)->scale = kBaseTextScale * scale;
 
@@ -126,6 +197,7 @@ bool DialogueSystem::Begin(No::Registry& registry, No::Entity speaker) {
 	speaker_ = speaker;
 	auto* text = registry.GetComponent<No::TextComponent>(textEntity_);
 	text->fontName = dialogue->fontName;
+	lastVoiceIndex_ = static_cast<size_t>(-1);
 	lineIndex_ = 0;
 	for (auto player : registry.View<PlayerComponent>()) {
 		if (!registry.Has<DialogueLockTag>(player)) registry.AddComponent<DialogueLockTag>(player);
@@ -147,6 +219,9 @@ void DialogueSystem::Advance(No::Registry& registry) {
 void DialogueSystem::End(No::Registry& registry) {
 	registry.GetComponent<No::TextComponent>(textEntity_)->isVisible = false;
 	registry.GetComponent<No::SpriteComponent>(boxEntity_)->isVisible = false;
+	registry.GetComponent<No::SpriteComponent>(portraitEntity_)->isVisible = false;
+	UpdatePortraitFrame(registry, 0);
+	portraitFrame_ = 0;
 	for (auto player : registry.View<PlayerComponent>()) {
 		if (registry.Has<DialogueLockTag>(player)) registry.RemoveComponent<DialogueLockTag>(player);
 	}
@@ -167,6 +242,17 @@ void DialogueSystem::CreateTextBox(No::Registry& registry) {
 	sprite->layer = 150000;
 	sprite->isVisible = false;
 
+	// 話者の顔アイコン。4コマを横に並べたシートを想定。
+	portraitEntity_ = registry.GenerateEntity();
+	registry.AddComponent<No::Transform2DComponent>(portraitEntity_);
+	auto* portrait = registry.AddComponent<No::SpriteComponent>(portraitEntity_);
+	portrait->textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/game/ClockworksDisease/Texture/Portrait/Leimar.png");
+	portrait->uv = { 0.0f, 0.0f, 0.25f, 1.0f };
+	portrait->space = NoEngine::SpriteSpace::Screen;
+	portrait->anchor = { 0.5f, 1.0f };
+	portrait->layer = 150001;
+	portrait->isVisible = false;
+
 	// テキスト
 	textEntity_ = registry.GenerateEntity();
 	registry.AddComponent<No::Transform2DComponent>(textEntity_);
@@ -177,7 +263,7 @@ void DialogueSystem::CreateTextBox(No::Registry& registry) {
 	text->vAlign = No::TextComponent::VAlign::kMiddle;
 	text->space = NoEngine::SpriteSpace::Screen;
 	text->anchor = { 0.5f, 1.0f };
-	text->layer = 150001;
+	text->layer = 150002;
 	text->isVisible = false;
 }
 

@@ -11,6 +11,7 @@ private:
 	size_t lineIndex_ = 0;
 
 	No::Entity boxEntity_ = No::INVALID_ENTITY;
+	No::Entity portraitEntity_ = No::INVALID_ENTITY;
 	No::Entity textEntity_ = No::INVALID_ENTITY;
 	No::Entity speaker_ = No::INVALID_ENTITY;
 
@@ -19,10 +20,14 @@ private:
 	size_t totalChars_ = 0;         // 現在の行の総文字数
 	float charTimer_ = 0.0f;        // 次の1文字までの経過時間
 	float secondsPerChar_ = 0.04f;  // 1文字あたりの秒数(小さいほど速い)
+	size_t portraitFrame_ = 0;
+	size_t lastVoiceIndex_ = static_cast<size_t>(-1);
 
 	bool IsLineFullyShown() const { return charCount_ >= totalChars_; }
 	void UpdateShownText(No::Registry& registry);
 	void UpdateLayout(No::Registry& registry);
+	void UpdatePortraitFrame(No::Registry& registry, size_t frame);
+	void PlayVoiceForCharacter(No::Registry& registry, char32_t codepoint);
 
 
 	bool Begin(No::Registry& registry, No::Entity speaker);

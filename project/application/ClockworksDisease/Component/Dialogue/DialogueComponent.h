@@ -5,6 +5,12 @@
 struct DialogueComponent {
 	std::vector<std::string> lines;   // 表示する文字列。改行したい箇所は \n を入れる
 	std::string fontName;
+	// 横一列の顔スプライトシート。空欄時はLeimarの既定素材を使う。
+	std::string portraitTexture = "resources/game/ClockworksDisease/Texture/Portrait/Leimar.png";
+	uint32_t portraitFrameCount = 4;
+	// 空欄時はLeimar/01.wav〜03.wav。指定時はこのリストからランダム再生。
+	std::vector<std::string> voiceFiles;
+	float voiceVolume = 0.35f;
 	float interactDistance = 3.0f;    // 話しかけられる距離
 	bool interactable = true;         // ボタンで話しかけられるか(自動発火専用ならfalse)
 };
