@@ -39,7 +39,7 @@ public:
 	const Font* operator->(void) const;
 
 	bool operator<(const FontRef& other) const {
-		return ref_ < other.ref_; // TextPassでフォントをまとめて描画するために使用します。
+		return ref_ < other.ref_; // フォントごとの描画をまとめるために使用します。
 	}
 	bool operator==(const FontRef& other) const {
 		return ref_ == other.ref_;

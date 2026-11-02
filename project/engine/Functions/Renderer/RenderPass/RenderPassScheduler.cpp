@@ -23,7 +23,6 @@
 #include "PostEffect/BloomThresholdPass.h"
 #include "PostEffect/BloomBlurPass.h"
 #include "PostEffect/BloomCompositePass.h"
-#include "Rasterization/TextPass.h"
 #include "Rasterization/SpriteIDPass.h"
 
 #include "../Primitive.h"
@@ -506,11 +505,6 @@ void CommonSetupRenderPass(RenderPassScheduler& renderPassScheduler) {
 	spritePass->SetTargetCameraType(RenderPass::TargetCameraType::kMain);
 	renderPassScheduler.AddPass(std::move(spritePass), "Main sprites");
 
-	auto textPass = std::make_unique<TextPass>();
-	textPass->AddOutput("MainColor");
-	textPass->SetTargetCameraType(RenderPass::TargetCameraType::kMain);
-	renderPassScheduler.AddPass(std::move(textPass), "Main text");
-
 	// エディタから追加できる、コードに実装済みのポストエフェクト。
 	// 既定のシーン構成には含めず、シーンごとに必要なものだけ追加する。
 	auto grayscale = std::make_unique<GrayscalePass>();
@@ -614,11 +608,6 @@ void CommonSetupDebugRenderPass(RenderPassScheduler& renderPassScheduler) {
 	spritePass->AddOutput("DebugColor");
 	spritePass->SetTargetCameraType(RenderPass::TargetCameraType::kDebug);
 	renderPassScheduler.AddPass(std::move(spritePass), "Debug sprites", true, false);
-
-	auto textPass = std::make_unique<TextPass>();
-	textPass->AddOutput("DebugColor");
-	textPass->SetTargetCameraType(RenderPass::TargetCameraType::kDebug);
-	renderPassScheduler.AddPass(std::move(textPass), "Debug text", true, false);
 #else
 	static_cast<void>(renderPassScheduler);
 #endif // USE_IMGUI

@@ -16,6 +16,7 @@ struct SpriteComponent {
 	bool flipX = false;
 	bool flipY = false;
 	Rect uv{};
+	// 同じ空間のスプライト・テキスト共通。layer、orderInLayer の昇順で描画（大きいほど手前）。
 	uint32_t layer = 0;
 	uint32_t orderInLayer = 0;
 	TextureRef textureHandle;

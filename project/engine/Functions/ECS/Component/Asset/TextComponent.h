@@ -20,6 +20,7 @@ struct TextComponent {
 	// advanceに加算する追加スペース。フォントのベイク基準ピクセル単位(scale適用前)。
 	float letterSpacing = 0.f;
 
+	// 同じ空間のスプライト・テキスト共通。layer、orderInLayer の昇順で描画（大きいほど手前）。
 	int layer = 0;
 	int orderInLayer = 0;
 

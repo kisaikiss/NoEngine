@@ -310,7 +310,6 @@
     <ClCompile Include="engine\Functions\ECS\Component\Common\TransformRoutineComponent2D.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Animation\TransformRoutineSystem2D.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Editor\DrawWaypointRouteSystem2D.cpp" />
-    <ClCompile Include="engine\Functions\Renderer\RenderPass\Rasterization\TextPass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\Initializer\TextInitializer.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\Rasterization\SpriteIDPass.cpp" />
     <ClCompile Include="application\ClockworksDisease\Component\UI\PauseMenuComponent.cpp" />
@@ -664,7 +663,6 @@
     <ClInclude Include="engine\Functions\ECS\System\Animation\TransformRoutineSystem2D.h" />
     <ClInclude Include="engine\Functions\ECS\System\Editor\DrawWaypointRouteSystem2D.h" />
     <ClInclude Include="externals\stb\stb_truetype.h" />
-    <ClInclude Include="engine\Functions\Renderer\RenderPass\Rasterization\TextPass.h" />
     <ClInclude Include="engine\Functions\Renderer\Initializer\TextInitializer.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\Rasterization\SpriteIDPass.h" />
     <ClInclude Include="application\ClockworksDisease\Component\UI\PauseMenuComponent.h" />
