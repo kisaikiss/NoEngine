@@ -268,8 +268,9 @@ std::vector<AnimationHandle> ModelLoader::ProcessAnimation(const aiScene* scene)
 	animations.resize(scene->mNumAnimations);
 	result.resize(scene->mNumAnimations);
 	for (uint32_t i = 0; i < scene->mNumAnimations; i++) {
-		aiAnimation* animationAssimp = scene->mAnimations[i]; // 最初のアニメーションだけ採用
+		aiAnimation* animationAssimp = scene->mAnimations[i];
 		Animation& animation = animations[i];
+		animation.name = animationAssimp->mName.C_Str();
 		animation.duration = float(animationAssimp->mDuration / animationAssimp->mTicksPerSecond); // 時間単位を秒へ変換
 
 		// assimpでは個々のNodeのAnimationをchannelと呼んでいるのでchannelを回してNodeAnimationの情報をとってくる

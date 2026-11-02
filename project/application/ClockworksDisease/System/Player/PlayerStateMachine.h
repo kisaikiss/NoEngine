@@ -14,7 +14,7 @@ class IPlayerState {
 public:
 	virtual ~IPlayerState() = default;
 	virtual PlayerState Update(const PlayerStateContext& context) const = 0;
-	virtual int AnimationIndex(const PlayerStateContext& context) const = 0;
+	virtual const char* AnimationName(const PlayerStateContext& context) const = 0;
 	virtual bool CanMoveHorizontally() const { return true; }
 	virtual bool IsJumpState() const { return false; }
 	virtual void OnEnter(PlayerStateContext&) const {}
@@ -33,7 +33,7 @@ public:
 		}
 		return c.moving ? PlayerState::kWalk : PlayerState::kWait;
 	}
-	int AnimationIndex(const PlayerStateContext&) const override { return 2; }
+	const char* AnimationName(const PlayerStateContext&) const override { return "wait"; }
 };
 
 class WalkState final : public IPlayerState {
@@ -46,7 +46,7 @@ public:
 		}
 		return c.moving ? PlayerState::kWalk : PlayerState::kWait;
 	}
-	int AnimationIndex(const PlayerStateContext&) const override { return 3; }
+	const char* AnimationName(const PlayerStateContext&) const override { return "walk"; }
 };
 
 class JumpState final : public IPlayerState {
@@ -58,12 +58,12 @@ public:
 			return PlayerState::kFall;
 		return PlayerState::kJump;
 	}
-	int AnimationIndex(const PlayerStateContext& c) const override {
+	const char* AnimationName(const PlayerStateContext& c) const override {
 		switch (c.player.jumpKind) {
 		case PlayerJumpKind::kHighJump:
 		case PlayerJumpKind::kNormal:
 		default:
-			return 0;
+			return "fall";
 		}
 	}
 	bool IsJumpState() const override { return true; }
@@ -76,7 +76,7 @@ public:
 		if (c.grounded) return c.moving ? PlayerState::kWalk : PlayerState::kWait;
 		return c.player.yVelocity > 0.f ? PlayerState::kJump : PlayerState::kFall;
 	}
-	int AnimationIndex(const PlayerStateContext&) const override { return 0; }
+	const char* AnimationName(const PlayerStateContext&) const override { return "fall"; }
 };
 
 class AirDashState final : public IPlayerState {
@@ -86,7 +86,7 @@ public:
 		if (c.grounded) return c.moving ? PlayerState::kWalk : PlayerState::kWait;
 		return c.player.yVelocity > 0.f ? PlayerState::kJump : PlayerState::kFall;
 	}
-	int AnimationIndex(const PlayerStateContext&) const override { return 0; }
+	const char* AnimationName(const PlayerStateContext&) const override { return "fall"; }
 };
 
 class SleepState final : public IPlayerState {
@@ -99,7 +99,7 @@ public:
 		}
 		return PlayerState::kSleep;
 	}
-	int AnimationIndex(const PlayerStateContext&) const override { return 1; }
+	const char* AnimationName(const PlayerStateContext&) const override { return "sleep"; }
 	bool CanMoveHorizontally() const override { return false; }
 };
 

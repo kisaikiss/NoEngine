@@ -6,6 +6,11 @@ namespace NoEngine {
 
 namespace Component {
 struct AnimatorComponent {
+	// モデルに含まれるアニメーション名を読み込み順に取得する。
+	std::vector<std::string> GetAnimationNames() const;
+	// 名前が見つからない場合は再生状態を変更せず、falseを返す。
+	bool SetAnimation(const std::string& name);
+
 	std::vector<Asset::AnimationHandle> animationHandles;
 	Transform local;
 	uint32_t currentAnimation = 0;

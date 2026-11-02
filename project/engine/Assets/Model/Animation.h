@@ -26,6 +26,7 @@ struct NodeAnimation {
 
 
 struct Animation {
+	std::string name;
 	float duration;
 	std::map<std::string, NodeAnimation> nodeAnimations;
 };

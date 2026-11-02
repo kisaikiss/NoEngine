@@ -13,7 +13,7 @@ void PlayerAnimationSystem::Update(No::Registry& registry, float deltaTime) {
 
 		const bool moving = false;
 		PlayerStateContext stateContext{ *playerVariables, false, moving, false };
-		animator->currentAnimation = PlayerStates::Get(playerVariables->state).AnimationIndex(stateContext);
+		animator->SetAnimation(PlayerStates::Get(playerVariables->state).AnimationName(stateContext));
 
 	}
 
