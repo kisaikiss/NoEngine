@@ -166,6 +166,7 @@
     <ClCompile Include="engine\Math\Collision\CollisionHelper.cpp" />
     <ClCompile Include="engine\Math\MathUtility.cpp" />
     <ClCompile Include="engine\Math\Collision\CollisionFanc.cpp" />
+    <ClCompile Include="engine\Math\Collision\MeshCollision.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Collision\NarrowPhaseSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Collision\CollisionResolutionSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Movement\GroundResetSystem.cpp" />

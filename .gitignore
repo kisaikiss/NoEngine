@@ -443,5 +443,7 @@ project/logs
 project/Dumps
 project/externals/DirectXTex/Bin/
 /generated/outputs/Development
+/generated/tests/
 project/resources/engine/cache
 /project/NodeEditor.json
+/tests

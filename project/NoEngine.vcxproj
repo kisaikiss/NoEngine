@@ -413,6 +413,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="engine\Math\Collision\BVH.cpp" />
     <ClCompile Include="engine\Math\Collision\ColliderComponent.cpp" />
     <ClCompile Include="engine\Math\Collision\CollisionFanc.cpp" />
+    <ClCompile Include="engine\Math\Collision\MeshCollision.cpp" />
     <ClCompile Include="engine\Math\Collision\CollisionHelper.cpp" />
     <ClCompile Include="engine\Math\Collision\MeshColliderLoader.cpp" />
     <ClCompile Include="engine\Math\Color\Color.cpp" />

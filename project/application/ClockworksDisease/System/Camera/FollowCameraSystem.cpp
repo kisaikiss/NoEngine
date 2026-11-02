@@ -107,100 +107,47 @@ void FollowCameraSystem::Update(No::Registry& registry, float deltaTime) {
 		idealPos.y = No::Lerp(idealCameraY, std::max(idealCameraY, lookUpMinHeight), smoothLookUpBlend);
 		idealPos.z = playerPos.z + followCameraVariables->distance * std::sin(followCameraVariables->phi) * std::sin(followCameraVariables->theta);
 
-		// playerPos -> idealPos の経路上を地形と判定し、詰めるべき距離を求める
-		float targetDistance = followCameraVariables->distance;
+		// 注視対象に向けてスイープ（空間走査）を行う際、近接する壁を無視してはならない。
+		// プレイヤーの原点は足元にあるため、球体を（上方へ）移動させて、床の中に埋まった状態で開始されるのを防ぐ必要がある。
+		const float radius = std::max(followCameraVariables->collisionRadius, 0.001f);
+		No::Vector3 anchor = playerPos + No::Vector3{ 0.0f,
+			std::max(followCameraVariables->playerPosOffset, radius), 0.0f };
+		anchor += No::MoveCapsuleTerrain(registry, NoEngine::CapsuleWorld{ anchor, anchor, radius }, No::Vector3::ZERO);
+		auto visiblePosition = [&](const No::Vector3& target) {
+			const No::Vector3 path = target - anchor;
+			const float length = path.Length();
+			if (length <= 1e-6f) return anchor;
+			const auto hit = No::SweepCapsuleTerrain(registry,
+				NoEngine::CapsuleWorld{ anchor, anchor, radius }, path);
+			if (!hit.hit) return target;
+			const float distance = std::max(0.0f,
+				length * hit.fraction - std::max(followCameraVariables->collisionMargin, 0.0f));
+			return anchor + path * (distance / length);
+		};
 
-		// 判定する範囲をカメラからプレイヤーまでではなく、プレイヤーから少しカメラに近い位置にする
-		No::Vector3 toCamera = idealPos - playerPos;
-		float toCameraLength = toCamera.Length();
-
-		No::Vector3 sweepStart = playerPos;
-		if (toCameraLength > 1e-4f) {
-			// distance未満にclampしてから始点をずらす(始点が終点を追い越さないように)
-			float offset = std::min(followCameraVariables->collisionStartOffset, toCameraLength);
-			sweepStart = playerPos + (toCamera / toCameraLength) * offset;
+		const No::Vector3 safeIdeal = visiblePosition(idealPos);
+		const float targetDistance = (safeIdeal - anchor).Length();
+		// すぐに収縮させます。収縮を滑らかにしようとすると、カメラが壁の後ろに隠れてしまいます。
+		if (targetDistance < followCameraVariables->currentDistance) {
+			followCameraVariables->currentDistance = targetDistance;
+		} else {
+			const float alpha = 1.0f - std::exp(-4.0f * deltaTime);
+			followCameraVariables->currentDistance = No::Lerp(
+				followCameraVariables->currentDistance, targetDistance, alpha);
 		}
+		const No::Vector3 idealPath = idealPos - anchor;
+		const float idealLength = idealPath.Length();
+		const No::Vector3 nextPosition = idealLength > 1e-6f
+			? anchor + idealPath * (followCameraVariables->currentDistance / idealLength)
+			: anchor;
 
-		auto terrainView = registry.View<No::TerrainMesh>();
-		for (auto terrainE : terrainView) {
-			auto* terrain = registry.GetComponent<No::TerrainMesh>(terrainE);
-
-			// 線分(半径込み)を包むAABBでBVHに問い合わせ、候補三角形を絞り込む
-			No::AABBCollider sweepBounds;
-			sweepBounds.min = No::Vector3{
-				std::min(sweepStart.x, idealPos.x) - followCameraVariables->collisionRadius,
-				std::min(sweepStart.y, idealPos.y) - followCameraVariables->collisionRadius,
-				std::min(sweepStart.z, idealPos.z) - followCameraVariables->collisionRadius
-			};
-			sweepBounds.max = No::Vector3{
-				std::max(sweepStart.x, idealPos.x) + followCameraVariables->collisionRadius,
-				std::max(sweepStart.y, idealPos.y) + followCameraVariables->collisionRadius,
-				std::max(sweepStart.z, idealPos.z) + followCameraVariables->collisionRadius
-			};
-
-			candidateIndices_.clear();
-			No::QueryBVH(terrain->bvhRoot.get(), sweepBounds, terrain->triangles, candidateIndices_);
-
-			for (int idx : candidateIndices_) {
-				const auto& triangle = terrain->triangles[idx];
-				auto collide = No::TestSegmentTriangle(sweepStart, idealPos, followCameraVariables->collisionRadius, triangle);
-				if (!collide.hit) continue;
-
-				// playerPosから衝突点までの距離を「その方向で許容できる距離」とみなす
-				float hitDistance = (collide.closestOnCapsule - playerPos).Length();
-				targetDistance = std::min(targetDistance, std::max(hitDistance - followCameraVariables->collisionMargin, 0.5f));
-			}
-		}
-
-		// 詰めるときは速く、戻すときはゆっくり
-		float smoothSpeed = (targetDistance < followCameraVariables->currentDistance) ? 25.0f : 4.0f;
-		followCameraVariables->currentDistance = No::Lerp(
-			followCameraVariables->currentDistance, targetDistance,
-			1.0f - std::exp(-smoothSpeed * deltaTime));
-
-		// 移動する先の座標計算
-		No::Vector3 nextPosition = No::Vector3::ZERO;
-		nextPosition.x = cameraFollowPos.x + followCameraVariables->currentDistance * std::sin(followCameraVariables->phi) * std::cos(followCameraVariables->theta);
-		const float nextCameraY = cameraFollowPos.y + followCameraVariables->currentDistance * std::cos(followCameraVariables->phi);
-		nextPosition.y = No::Lerp(nextCameraY, std::max(nextCameraY, lookUpMinHeight), smoothLookUpBlend);
-		nextPosition.z = cameraFollowPos.z + followCameraVariables->currentDistance * std::sin(followCameraVariables->phi) * std::sin(followCameraVariables->theta);
-
-
-		// 実際の移動
-		// 追従速度がフレームレートに依存しないようにする。
+		const No::Vector3 nowPosition = transform->GetWorldPosition(registry);
 		const float moveTime = 1.0f - std::exp(-followCameraVariables->moveSpeed * deltaTime);
-		No::Vector3 nowTranslate = transform->translate;
-		transform->translate = No::Lerp(nowTranslate, nextPosition, moveTime);
-
-		// カメラの実座標での衝突判定
-		for (int iter = 0; iter < 2; ++iter) {
-			No::Vector3 camPos = transform->GetWorldPosition(registry);
-
-			No::AABBCollider probeBounds;
-			probeBounds.min = camPos - No::Vector3{ followCameraVariables->collisionRadius, followCameraVariables->collisionRadius, followCameraVariables->collisionRadius };
-			probeBounds.max = camPos + No::Vector3{ followCameraVariables->collisionRadius, followCameraVariables->collisionRadius, followCameraVariables->collisionRadius };
-
-			bool anyHit = false;
-			for (auto terrainE : terrainView) {
-				auto* terrain = registry.GetComponent<No::TerrainMesh>(terrainE);
-
-				candidateIndices_.clear();
-				No::QueryBVH(terrain->bvhRoot.get(), probeBounds, terrain->triangles, candidateIndices_);
-
-				for (int idx : candidateIndices_) {
-					const auto& triangle = terrain->triangles[idx];
-					auto push = No::TestSphereTriangle(camPos, followCameraVariables->collisionRadius, triangle);
-					if (!push.hit) continue;
-
-					// めり込み分だけ即座に(Lerpなしで)押し戻す
-					transform->translate += push.normal * push.penetration;
-					camPos += push.normal * push.penetration;
-					anyHit = true;
-				}
-			}
-			if (!anyHit) break;
-		}
-		
+		const No::Vector3 desiredPosition = visiblePosition(No::Lerp(nowPosition, nextPosition, moveTime));
+		// 軌道運動と位置補間についても、広範囲にわたるテストを行う。
+		const No::Vector3 moved = No::MoveCapsuleTerrain(registry,
+			NoEngine::CapsuleWorld{ nowPosition, nowPosition, radius }, desiredPosition - nowPosition);
+		transform->SetWorldPosition(registry, visiblePosition(nowPosition + moved));
 
 		followCameraVariables->nextRotation = transform->rotation;
 		float viewSpeed = followCameraVariables->playerViewSpeed;

@@ -25,7 +25,7 @@ struct FollowCameraComponent {
 	float currentDistance = maxDistance; // 実際にカメラが使う距離(地形で短縮される)
 	float collisionRadius = 0.95f;       // カメラの太さ(壁の角へのめり込み防止)
 	float collisionMargin = 0.3f;        // 壁面からの余白
-	float collisionStartOffset = 5.0f; // プレイヤーから何m分カメラ側にずらして判定を始めるか
+	float collisionStartOffset = 5.0f; // 旧シーン互換用。近い壁を見落とすため判定始点には使用しない。
 	float heightRiseFollowSpeed = 2.0f; // 高台へ上がる時の高さ追従速度。小さいほどゆっくり動く
 	float heightFallFollowSpeed = 12.0f; // 下へ降りる時の高さ追従速度。大きいほど早く追いつく
 	float heightRiseCatchUpThreshold = 4.0f; // ジャンプ中、この高さ以上上昇したらカメラも追従する

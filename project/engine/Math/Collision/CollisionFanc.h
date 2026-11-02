@@ -38,7 +38,23 @@ struct CapsuleTriangleCollision {
 	Vector3 closestOnTriangle;
 	Vector3 normal;	// triangle -> capsule
 	float penetration = 0.0f;
+	float distance = 0.0f;
 };
+
+struct CapsuleSweepHit {
+	bool hit = false;
+	float fraction = 1.0f;
+	Vector3 normal = Vector3::ZERO;
+};
+
+// 並進のみの、両面連続衝突判定（球体の場合、p0 == p1 となる）。
+CapsuleSweepHit SweepCapsuleTriangle(const CapsuleWorld& capsule, const Vector3& displacement,
+	const TriangleCollider& triangle);
+CapsuleSweepHit SweepCapsuleTerrain(ECS::Registry& registry, const CapsuleWorld& capsule,
+	const Vector3& displacement);
+// 初期の重なりを解消し、続いてスイープおよびスライドを行う。許容されるワールド空間での変位を返す。
+Vector3 MoveCapsuleTerrain(ECS::Registry& registry, CapsuleWorld capsule,
+	const Vector3& displacement, Vector3* velocity = nullptr);
 
 struct SpherePushResult {
 	bool hit = false;

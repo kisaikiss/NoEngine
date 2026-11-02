@@ -94,6 +94,9 @@ void NarrowPhaseSystem::Update(Registry& registry, float deltaTime) {
 
 		// カプセルのワールドAABBを一度だけ計算
 		Math::AABBCollider capsuleBounds = ComputeCapsuleWorldBounds(capsuleTransform, capsuleCollider, registry);
+		// TestCapsuleTriangleにおける静止接触許容値を一致させる。
+		capsuleBounds.min -= Vector3{ 0.001f, 0.001f, 0.001f };
+		capsuleBounds.max += Vector3{ 0.001f, 0.001f, 0.001f };
 
 		for (auto terrainE : terrainView) {
 			auto* terrain = registry.GetComponent<Math::TerrainMesh>(terrainE);

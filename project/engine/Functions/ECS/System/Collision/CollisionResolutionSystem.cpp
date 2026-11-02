@@ -50,6 +50,9 @@ void CollisionResolutionSystem::Update(Registry& registry, float deltaTime) {
         auto* bodyA = registry.GetComponent<Component::CollisionBody>(contact.a);
         auto* bodyB = registry.GetComponent<Component::CollisionBody>(contact.b);
 
+        if ((bodyA && bodyA->type == Component::BodyType::Through) ||
+            (bodyB && bodyB->type == Component::BodyType::Through)) continue;
+
         if (bodyA && bodyA->type == Component::BodyType::Dynamic) {
             if (velocityA) Slide(velocityA->linear, contact.normal);
             if (contact.penetration > 0.0f) {
@@ -57,7 +60,7 @@ void CollisionResolutionSystem::Update(Registry& registry, float deltaTime) {
             }
         }
         if (bodyB && bodyB->type == Component::BodyType::Dynamic) {
-            if (velocityB) Slide(velocityB->linear, contact.normal);
+            if (velocityB) Slide(velocityB->linear, -contact.normal);
             if (contact.penetration > 0.0f) {
                 AddCorrection(pending, contact.b, contact.normal * -1.0f, contact.penetration);
             }
