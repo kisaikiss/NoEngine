@@ -329,6 +329,7 @@
     <ClCompile Include="engine\Functions\ECS\System\PlayModeController.cpp" />
     <ClCompile Include="engine\Editor\Panels\GameControllerPanel.cpp" />
     <ClCompile Include="engine\Editor\Panels\SystemListPanel.cpp" />
+    <ClCompile Include="engine\Editor\Panels\EditorWindowManager.cpp" />
     <ClCompile Include="application\ClockworksDisease\Scene\GameClearScene.cpp" />
     <ClCompile Include="application\ClockworksDisease\Scene\GameScene.cpp" />
     <ClCompile Include="application\ClockworksDisease\Component\Dialogue\DialogueComponent.cpp" />
@@ -686,6 +687,7 @@
     <ClInclude Include="engine\Functions\ECS\System\PlayModeController.h" />
     <ClInclude Include="engine\Editor\Panels\GameControllerPanel.h" />
     <ClInclude Include="engine\Editor\Panels\SystemListPanel.h" />
+    <ClInclude Include="engine\Editor\Panels\EditorWindowManager.h" />
     <ClInclude Include="application\ClockworksDisease\Scene\GameClearScene.h" />
     <ClInclude Include="application\ClockworksDisease\Scene\GameScene.h" />
     <ClInclude Include="engine\Functions\ECS\System\Loader\FontLoadSystem.h" />

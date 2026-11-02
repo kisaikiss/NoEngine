@@ -1,4 +1,5 @@
 #include "SceneManager.h"
+#include "engine/Editor/Panels/EditorWindowManager.h"
 
 #include "CircleScaleTransitionEffect.h"
 #include "FadeTransitionEffect.h"
@@ -181,6 +182,8 @@ void SceneManager::Update(ComputeContext& ctx, float deltaTime) {
 
 			ImGui::EndMenu();
 		}
+		// Fileはシーン更新中に描画済みなので、Sceneの後ろにWindowを追加する。
+		Editor::EditorWindowManager::GetInstance().DrawMenu();
 		ImGui::EndMainMenuBar();
 	}
 	// メニューバーを閉じてからモーダルポップアップを開いて描画し、ルートのポップアップスタックを使う

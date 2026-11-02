@@ -1,4 +1,5 @@
 #include "RenderPassScheduler.h"
+#include "engine/Editor/Panels/EditorWindowManager.h"
 #include "Rasterization/SpritePass.h"
 #include "Rasterization/MeshPass.h"
 #include "Rasterization/TransparentMeshPass.h"
@@ -291,7 +292,9 @@ void RenderPassScheduler::DrawPassEditor(ECS::Registry& registry) {
     for (auto& node : nodes_) {
         if (node.editorName == "Debug grid") node.pass->DrawEditor();
     }
-	if (!ImGui::Begin("Render Passes")) { ImGui::End(); return; }
+	auto& state = Editor::EditorWindowManager::GetInstance().Get(Editor::EditorWindowId::RenderPasses);
+	if (!state.open) return;
+	if (!ImGui::Begin(state.label, &state.open)) { ImGui::End(); return; }
 	bool changed = false;
 	for (size_t i = 0; i < activePassNames_.size();) {
 		const std::string name = activePassNames_[i];

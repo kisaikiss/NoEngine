@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "SystemListPanel.h"
+#include "EditorWindowManager.h"
 #include "engine/Functions/ECS/System/SystemManager.h"
 #include "engine/Functions/ECS/System/SystemCatalog.h"
 
@@ -44,9 +45,12 @@ bool AcceptReorderDrop(size_t targetIndex, size_t count, size_t& outFrom, size_t
 bool SystemListPanel::Draw(ECS::SystemManager& manager) {
 	bool changed = false;
 #ifdef USE_IMGUI
-	ImGui::Begin("Systems");
-	changed |= DrawAddCombo(manager);
-	changed |= DrawSystemList(manager);
+	auto& state = EditorWindowManager::GetInstance().Get(EditorWindowId::Systems);
+	if (!state.open) return false;
+	if (ImGui::Begin(state.label, &state.open)) {
+		changed |= DrawAddCombo(manager);
+		changed |= DrawSystemList(manager);
+	}
 	ImGui::End();
 #else
 	static_cast<void>(manager);

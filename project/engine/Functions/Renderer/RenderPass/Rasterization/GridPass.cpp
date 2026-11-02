@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "GridPass.h"
+#include "engine/Editor/Panels/EditorWindowManager.h"
 #include "engine/Functions/Shader/ShaderModule.h"
 #include "engine/Functions/ECS/Component/Common/CameraComponent.h"
 #include "engine/Functions/ECS/System/PlayModeController.h"
@@ -108,7 +109,9 @@ void GridPass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& resource
 
 void GridPass::DrawEditor() {
 #ifdef USE_IMGUI
-    if (ImGui::Begin("Grid")) {
+    auto& state = Editor::EditorWindowManager::GetInstance().Get(Editor::EditorWindowId::Grid);
+    if (!state.open) return;
+    if (ImGui::Begin(state.label, &state.open)) {
         ImGui::Checkbox("Show grid", &settings_.enabled);
         ImGui::Checkbox("Show while playing", &settings_.showInPlay);
         ImGui::Combo("Plane", &settings_.plane, "XZ\0XY\0YZ\0");
