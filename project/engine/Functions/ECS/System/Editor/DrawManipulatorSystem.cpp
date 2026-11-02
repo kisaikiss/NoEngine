@@ -9,8 +9,6 @@
 #include "engine/Functions/Command/EditCommand/ChangeValueCommand.h"
 #include "engine/Math/Types/Calculations/Matrix4x4Calculations.h"
 #include "engine/Runtime/GraphicsCore.h"
-#include <algorithm>
-#include <string>
 
 #ifdef USE_IMGUI
 #include "externals/imgui/ImGuizmo.h"
@@ -27,6 +25,141 @@ int  sSelectedWaypointIndex = 0;    // 現在ギズモで掴んでいるwaypoint
 int  sSelectedWaypointIndex2D = 0; 
 Entity sVector3GizmoEntity = INVALID_ENTITY;
 Math::Vector3* sVector3GizmoValue = nullptr;
+
+#ifdef USE_IMGUI
+struct GizmoSettings {
+	ImGuizmo::MODE mode = ImGuizmo::WORLD;
+	ImGuizmo::OPERATION operation = ImGuizmo::TRANSLATE;
+	bool snapEnabled = false;
+	float translationSnap[3] = { 1.f, 1.f, 1.f };
+	float rotationSnap = 15.f; // ImGuizmoには度数法で渡す。
+	float scaleSnap = 0.1f;
+
+	const float* GetSnap(ImGuizmo::OPERATION requestedOperation) const {
+		if (!snapEnabled) return nullptr;
+		switch (requestedOperation) {
+		case ImGuizmo::TRANSLATE: return translationSnap;
+		case ImGuizmo::ROTATE: return &rotationSnap;
+		case ImGuizmo::SCALE: return &scaleSnap;
+		default: return nullptr;
+		}
+	}
+};
+GizmoSettings sGizmoSettings;
+
+// 設定はボタンを押したときだけ開き、通常はシーンを広く表示する。
+bool DrawGizmoSettings(const Math::Vector4& rect, bool* routeMode, int* waypointIndex, size_t waypointCount) {
+	const float panelWidth = std::max(1.f, std::min(330.f, rect.z - 16.f));
+	const float panelHeight = std::max(1.f, rect.w - 16.f);
+	ImGui::SetCursorScreenPos(ImVec2(rect.x + 8.f, rect.y + 8.f));
+	// 閉じるためのクリックを、背後のオブジェクト選択へ通さない。
+	bool blocked = ImGui::IsPopupOpen("GizmoSettingsPopup");
+	ImGui::BeginDisabled(ImGuizmo::IsUsingAny());
+	if (ImGui::Button("Gizmo")) ImGui::OpenPopup("GizmoSettingsPopup");
+	blocked |= ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)
+		|| ImGui::IsItemActive() || ImGui::IsItemDeactivated();
+	const ImVec2 buttonMin = ImGui::GetItemRectMin();
+	const ImVec2 buttonMax = ImGui::GetItemRectMax();
+	ImGui::EndDisabled();
+	ImGui::SetNextWindowPos(ImVec2(buttonMin.x, buttonMax.y + 4.f), ImGuiCond_Appearing);
+	ImGui::SetNextWindowSizeConstraints(ImVec2(panelWidth, 0.f), ImVec2(panelWidth, panelHeight));
+	if (ImGui::BeginPopup("GizmoSettingsPopup", ImGuiWindowFlags_NoMove)) {
+		blocked = true;
+		ImGui::BeginDisabled(ImGuizmo::IsUsingAny());
+		auto trackInteraction = [&blocked] {
+			blocked |= ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)
+				|| ImGui::IsItemActive() || ImGui::IsItemDeactivated();
+		};
+		ImGui::TextUnformatted("Gizmo");
+		const char* operationLabels[] = { "Move", "Rotate", "Scale" };
+		const ImGuizmo::OPERATION operations[] = { ImGuizmo::TRANSLATE, ImGuizmo::ROTATE, ImGuizmo::SCALE };
+		for (int i = 0; i < 3; ++i) {
+			if (i > 0) ImGui::SameLine();
+			if (ImGui::RadioButton(operationLabels[i], sGizmoSettings.operation == operations[i])) {
+				sGizmoSettings.operation = operations[i];
+			}
+			trackInteraction();
+		}
+		if (ImGui::RadioButton("World", sGizmoSettings.mode == ImGuizmo::WORLD)) {
+			sGizmoSettings.mode = ImGuizmo::WORLD;
+		}
+		trackInteraction();
+		ImGui::SameLine();
+		if (ImGui::RadioButton("Local", sGizmoSettings.mode == ImGuizmo::LOCAL)) {
+			sGizmoSettings.mode = ImGuizmo::LOCAL;
+		}
+		trackInteraction();
+		if (ImGui::IsItemHovered()) ImGui::SetTooltip("Move/rotate in object axes. Scale always uses local axes.");
+		ImGui::SameLine();
+		ImGui::Checkbox("Snap", &sGizmoSettings.snapEnabled);
+		trackInteraction();
+		const bool showSnapSettings = ImGui::TreeNode("Snap settings");
+		trackInteraction();
+		if (showSnapSettings) {
+			auto drawStep = [&trackInteraction](const char* label, float& value) {
+				ImGui::SetNextItemWidth(85.f);
+				ImGui::DragFloat(label, &value, 0.01f, 0.001f, 10000.f, "%.3f", ImGuiSliderFlags_AlwaysClamp);
+				trackInteraction();
+				// テキスト入力による非有限値やゼロ以下の刻み幅も除外する。
+				if (!std::isfinite(value) || value <= 0.f) value = 0.001f;
+			};
+			drawStep("Move step", sGizmoSettings.translationSnap[0]);
+			drawStep("Rotate step (deg)", sGizmoSettings.rotationSnap);
+			drawStep("Scale step", sGizmoSettings.scaleSnap);
+			ImGui::TreePop();
+		}
+		sGizmoSettings.translationSnap[1] = sGizmoSettings.translationSnap[0];
+		sGizmoSettings.translationSnap[2] = sGizmoSettings.translationSnap[0];
+
+		if (routeMode && waypointIndex) {
+			ImGui::Separator();
+			ImGui::TextUnformatted("Routine / Edit target");
+			if (ImGui::RadioButton("Object", !*routeMode)) *routeMode = false;
+			trackInteraction();
+			ImGui::SameLine();
+			if (ImGui::RadioButton("Route", *routeMode)) *routeMode = true;
+			trackInteraction();
+			if (waypointCount == 0) {
+				ImGui::TextDisabled("No keyframes. Add them in Inspector.");
+			} else {
+				*waypointIndex = std::clamp(*waypointIndex, 0, static_cast<int>(waypointCount) - 1);
+				ImGui::BeginDisabled(!*routeMode);
+				ImGui::Text("Selected index: %d   Total: %d", *waypointIndex, static_cast<int>(waypointCount));
+				ImGui::SetNextItemWidth(-1.f);
+				const std::string preview = "Keyframe [" + std::to_string(*waypointIndex) + "]";
+				const bool comboOpen = ImGui::BeginCombo("##Keyframe", preview.c_str(), ImGuiComboFlags_HeightRegular);
+				trackInteraction();
+				if (comboOpen) {
+					for (int i = 0; i < static_cast<int>(waypointCount); ++i) {
+						const std::string label = "Keyframe [" + std::to_string(i) + "]";
+						if (ImGui::Selectable(label.c_str(), i == *waypointIndex)) *waypointIndex = i;
+						trackInteraction();
+						if (i == *waypointIndex) ImGui::SetItemDefaultFocus();
+					}
+					ImGui::EndCombo();
+				}
+				ImGui::BeginDisabled(*waypointIndex == 0);
+				if (ImGui::Button("< Previous")) --*waypointIndex;
+				trackInteraction();
+				ImGui::EndDisabled();
+				ImGui::SameLine();
+				ImGui::BeginDisabled(*waypointIndex == static_cast<int>(waypointCount) - 1);
+				if (ImGui::Button("Next >")) ++*waypointIndex;
+				trackInteraction();
+				ImGui::EndDisabled();
+				ImGui::EndDisabled();
+			}
+		}
+		ImGui::Separator();
+		if (ImGui::Button("Close")) ImGui::CloseCurrentPopup();
+		trackInteraction();
+		ImGui::EndDisabled();
+		ImGui::EndPopup();
+	}
+	// ボタン登録後のカーソルを維持し、アイテム未登録の座標復元を避ける。
+	return blocked;
+}
+#endif
 }
 
 using namespace Editor;
@@ -40,7 +173,30 @@ void DrawManipulatorSystem::Update(Registry& registry, float deltaTime) {
 	SetGizmoCallback([this, &registry](const Math::Vector4& rect) {
 		ImGuizmo::SetDrawlist();
 		ImGuizmo::SetRect(rect.x, rect.y, rect.z, rect.w);
-		ImGuizmo::Enable(true);
+		bool settingsBlocked = false;
+		for (auto e : registry.View<EditTag, EditSelectedTag>()) {
+			if (registry.Has<TransformComponent>(e) || registry.Has<Transform2DComponent>(e)) {
+				bool* routeMode = nullptr;
+				int* waypointIndex = nullptr;
+				size_t waypointCount = 0;
+				if (registry.Has<TransformComponent>(e)) {
+					if (auto* routine = registry.GetComponent<TransformRoutineComponent>(e)) {
+						routeMode = &routineEditMode_;
+						waypointIndex = &sSelectedWaypointIndex;
+						waypointCount = routine->keyframes.size();
+					}
+				} else if (auto* routine = registry.GetComponent<TransformRoutineComponent2D>(e)) {
+					routeMode = &routineEditMode2D_;
+					waypointIndex = &sSelectedWaypointIndex2D;
+					waypointCount = routine->keyframes.size();
+				}
+				settingsBlocked = DrawGizmoSettings(rect, routeMode, waypointIndex, waypointCount);
+				break;
+			}
+		}
+		sTriggerButton |= settingsBlocked;
+		// パネルのクリックやドラッグで背後のギズモをつかまないようにする。
+		ImGuizmo::Enable(!settingsBlocked || ImGuizmo::IsUsingAny());
 		Manipulate3D(registry, rect);
 		Manipulate2D(registry, rect);
 		ManipulateRoutineWaypoints(registry, rect);
@@ -80,6 +236,7 @@ bool DrawManipulatorSystem::IsVector3GizmoTarget(Entity entity, const Math::Vect
 }
 
 void DrawManipulatorSystem::Manipulate3D(Registry& registry, const Math::Vector4& sceneRect) {
+	static_cast<void>(sceneRect);
 
 #ifdef USE_IMGUI
 	ImGuizmo::SetOrthographic(false);
@@ -90,52 +247,8 @@ void DrawManipulatorSystem::Manipulate3D(Registry& registry, const Math::Vector4
 	isActivePreFrame_ = isActive_;
 	auto view = registry.View<TransformComponent, EditTag, EditSelectedTag>();
 	for (auto e : view) {
-		float imgX = sceneRect.x;
-		float imgY = sceneRect.y;
-
-		constexpr float margin = 8.0f;
-		constexpr float buttonSizeY = 28.f;
-
-		// 左上に配置する
-		ImVec2 toolbarPos = ImVec2(imgX + margin, imgY + margin);
-
-		// SetCursorScreenPos はウィンドウ内の次のウィジェット位置を移動する
-		ImGui::SetCursorScreenPos(toolbarPos);
-		// 横並びでボタンを置く
-		static ImGuizmo::OPERATION currentOp = ImGuizmo::TRANSLATE;
-		if (ImGui::Button("T")) {
-			currentOp = ImGuizmo::TRANSLATE;
-			sTriggerButton = true;
-		}
-		toolbarPos.y += buttonSizeY;
-		ImGui::SetCursorScreenPos(toolbarPos);
-		if (ImGui::Button("R")) {
-			currentOp = ImGuizmo::ROTATE;
-			sTriggerButton = true;
-		}
-		toolbarPos.y += buttonSizeY;
-		ImGui::SetCursorScreenPos(toolbarPos);
-		if (ImGui::Button("S")) {
-			currentOp = ImGuizmo::SCALE;
-			sTriggerButton = true;
-		}
-
-		// TransformRoutineComponentを持つエンティティは、自身のTransform編集と
-		// waypoint編集(ManipulateRoutineWaypoints)を切り替えられるようにする
+		const auto currentOp = sGizmoSettings.operation;
 		bool hasRoutine = registry.Has<TransformRoutineComponent>(e);
-		if (hasRoutine) {
-			toolbarPos.y += buttonSizeY;
-			ImGui::SetCursorScreenPos(toolbarPos);
-			// Push/Popの対応を崩さないよう、クリック前の状態をローカルに固定してから使う
-			// (routineEditMode_をボタン内で書き換えた後の値をPop側で読むとPush/Popが不一致になる)
-			bool wasRouteEditMode = routineEditMode_;
-			if (wasRouteEditMode) ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.3f, 0.6f, 1.0f, 1.0f));
-			if (ImGui::Button("Route")) {
-				routineEditMode_ = !routineEditMode_;
-				sTriggerButton = true;
-			}
-			if (wasRouteEditMode) ImGui::PopStyleColor();
-		}
 
 		// waypoint編集モード中は、このエンティティ自体のTransformは動かさない
 		// (1フレームに2つのImGuizmo::Manipulateを重ねて呼ぶと競合するため)
@@ -153,7 +266,7 @@ void DrawManipulatorSystem::Manipulate3D(Registry& registry, const Math::Vector4
 			Math::Matrix4x4 fieldMatrix;
 			fieldMatrix.MakeTranslate(*sVector3GizmoValue);
 			ImGuizmo::Manipulate(*(viewMatrix.m), *(projection.m), ImGuizmo::TRANSLATE,
-				ImGuizmo::WORLD, *(fieldMatrix.m));
+				ImGuizmo::WORLD, *(fieldMatrix.m), nullptr, sGizmoSettings.GetSnap(ImGuizmo::TRANSLATE));
 			const bool isUsingVectorGizmo = ImGuizmo::IsUsing();
 			if (isUsingVectorGizmo) {
 				if (!vectorGizmoWasUsing) oldGizmoValue = *sVector3GizmoValue;
@@ -171,7 +284,8 @@ void DrawManipulatorSystem::Manipulate3D(Registry& registry, const Math::Vector4
 			continue;
 		}
 
-        ImGuizmo::Manipulate(*(viewMatrix.m), *(projection.m), currentOp, ImGuizmo::WORLD, *(m.m));
+		ImGuizmo::Manipulate(*(viewMatrix.m), *(projection.m), currentOp,
+			sGizmoSettings.mode, *(m.m), nullptr, sGizmoSettings.GetSnap(currentOp));
 
 		// ワールド行列 → ローカル行列へ変換
 		Math::Matrix4x4 localMatrix = m;
@@ -192,15 +306,14 @@ void DrawManipulatorSystem::Manipulate3D(Registry& registry, const Math::Vector4
 		static Math::Vector3 oldVector;
 		switch (currentOp) {
 		case ImGuizmo::TRANSLATE: {
+			if (ImGuizmo::IsUsing() && !isActivePreFrame_) {
+				oldVector = t->translate;
+			}
 			if (ImGuizmo::IsUsing()) {
 				t->translate = localMatrix.GetTranslate();
 				isActive_ = true;
 			} else {
 				isActive_ = false;
-			}
-
-			if (isActive_ && !isActivePreFrame_) {
-				oldVector = t->translate;
 			}
 
 			if (!isActive_ && isActivePreFrame_) {
@@ -212,6 +325,9 @@ void DrawManipulatorSystem::Manipulate3D(Registry& registry, const Math::Vector4
 		}
 		case ImGuizmo::ROTATE: {
 			static Math::Quaternion oldQuaternion;
+			if (ImGuizmo::IsUsing() && !isActivePreFrame_) {
+				oldQuaternion = t->rotation;
+			}
 			if (ImGuizmo::IsUsing()) {
 				constexpr float kDegreeToRadian = PI / 180.0f;
 				Math::Matrix4x4 rotateMatrix;
@@ -222,10 +338,6 @@ void DrawManipulatorSystem::Manipulate3D(Registry& registry, const Math::Vector4
 				isActive_ = false;
 			}
 
-			if (isActive_ && !isActivePreFrame_) {
-				oldQuaternion = t->rotation;
-			}
-
 			if (!isActive_ && isActivePreFrame_) {
 				EditorCommandOperator::AddCommand(
 					std::make_unique<Command::ChangeValueCommand<Math::Quaternion>>(&t->rotation, oldQuaternion, t->rotation)
@@ -234,6 +346,9 @@ void DrawManipulatorSystem::Manipulate3D(Registry& registry, const Math::Vector4
 			break;
 		}
 		case ImGuizmo::SCALE: {
+			if (ImGuizmo::IsUsing() && !isActivePreFrame_) {
+				oldVector = t->scale;
+			}
 			if (ImGuizmo::IsUsing()) {
 				t->scale.x = scale[0];
 				t->scale.y = scale[1];
@@ -241,10 +356,6 @@ void DrawManipulatorSystem::Manipulate3D(Registry& registry, const Math::Vector4
 				isActive_ = true;
 			} else {
 				isActive_ = false;
-			}
-
-			if (isActive_ && !isActivePreFrame_) {
-				oldVector = t->scale;
 			}
 
 			if (!isActive_ && isActivePreFrame_) {
@@ -263,6 +374,7 @@ void DrawManipulatorSystem::Manipulate3D(Registry& registry, const Math::Vector4
 #endif // USE_IMGUI
 }
 void DrawManipulatorSystem::Manipulate2D(Registry& registry, const Math::Vector4& sceneRect) {
+	static_cast<void>(sceneRect);
 
 #ifdef USE_IMGUI
 	ImGuizmo::SetOrthographic(true);
@@ -296,46 +408,8 @@ void DrawManipulatorSystem::Manipulate2D(Registry& registry, const Math::Vector4
 	isActivePreFrame_ = isActive_;
 	auto view = registry.View<Transform2DComponent, EditTag, EditSelectedTag>();
 	for (auto e : view) {
-		float imgX = sceneRect.x;
-		float imgY = sceneRect.y;
-
-		constexpr float margin = 8.0f;
-		constexpr float buttonSizeY = 28.f;
-
-		ImVec2 toolbarPos = ImVec2(imgX + margin, imgY + margin);
-		ImGui::SetCursorScreenPos(toolbarPos);
-		static ImGuizmo::OPERATION currentOp = ImGuizmo::TRANSLATE;
-		if (ImGui::Button("T")) {
-			currentOp = ImGuizmo::TRANSLATE;
-			sTriggerButton = true;
-		}
-		toolbarPos.y += buttonSizeY;
-		ImGui::SetCursorScreenPos(toolbarPos);
-		if (ImGui::Button("R")) {
-			currentOp = ImGuizmo::ROTATE;
-			sTriggerButton = true;
-		}
-		toolbarPos.y += buttonSizeY;
-		ImGui::SetCursorScreenPos(toolbarPos);
-		if (ImGui::Button("S")) {
-			currentOp = ImGuizmo::SCALE;
-			sTriggerButton = true;
-		}
-
-		// TransformRoutineComponent2Dを持つエンティティは、自身のTransform編集と
-		// waypoint編集(ManipulateRoutineWaypoints2D)を切り替えられるようにする
+		const auto currentOp = sGizmoSettings.operation;
 		bool hasRoutine2D = registry.Has<TransformRoutineComponent2D>(e);
-		if (hasRoutine2D) {
-			toolbarPos.y += buttonSizeY;
-			ImGui::SetCursorScreenPos(toolbarPos);
-			bool wasRouteEditMode2D = routineEditMode2D_;
-			if (wasRouteEditMode2D) ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.3f, 0.6f, 1.0f, 1.0f));
-			if (ImGui::Button("Route")) {
-				routineEditMode2D_ = !routineEditMode2D_;
-				sTriggerButton = true;
-			}
-			if (wasRouteEditMode2D) ImGui::PopStyleColor();
-		}
 
 		// waypoint編集モード中は、このエンティティ自体のTransformは動かさない
 		if (hasRoutine2D && routineEditMode2D_) {
@@ -365,7 +439,8 @@ void DrawManipulatorSystem::Manipulate2D(Registry& registry, const Math::Vector4
 		const Math::Matrix4x4& viewMatrix = isScreenSpace ? screenViewMatrix : worldViewMatrix;
 		const Math::Matrix4x4& projection = isScreenSpace ? screenProjection : worldProjection;
 
-		ImGuizmo::Manipulate(*(viewMatrix.m), *(projection.m), currentOp, ImGuizmo::WORLD, *(m.m));
+		ImGuizmo::Manipulate(*(viewMatrix.m), *(projection.m), currentOp,
+			sGizmoSettings.mode, *(m.m), nullptr, sGizmoSettings.GetSnap(currentOp));
 
 		// 補正を元に戻す
 		if (isScreenSpace) {
@@ -395,16 +470,15 @@ void DrawManipulatorSystem::Manipulate2D(Registry& registry, const Math::Vector4
 		static Math::Vector2 oldVector;
 		switch (currentOp) {
 		case ImGuizmo::TRANSLATE: {
+			if (ImGuizmo::IsUsing() && !isActivePreFrame_) {
+				oldVector = t->translate;
+			}
 			if (ImGuizmo::IsUsing()) {
 				t->translate.x = localMatrix.GetTranslate().x;
 				t->translate.y = localMatrix.GetTranslate().y;
 				isActive_ = true;
 			} else {
 				isActive_ = false;
-			}
-
-			if (isActive_ && !isActivePreFrame_) {
-				oldVector = t->translate;
 			}
 
 			if (!isActive_ && isActivePreFrame_) {
@@ -416,16 +490,15 @@ void DrawManipulatorSystem::Manipulate2D(Registry& registry, const Math::Vector4
 		}
 		case ImGuizmo::ROTATE: {
 			static float oldRotate;
+			if (ImGuizmo::IsUsing() && !isActivePreFrame_) {
+				oldRotate = t->rotation;
+			}
 			if (ImGuizmo::IsUsing()) {
 				constexpr float kDegreeToRadian = PI / 180.0f;
 				t->rotation = rotation[2] * kDegreeToRadian;
 				isActive_ = true;
 			} else {
 				isActive_ = false;
-			}
-
-			if (isActive_ && !isActivePreFrame_) {
-				oldRotate = t->rotation;
 			}
 
 			if (!isActive_ && isActivePreFrame_) {
@@ -436,16 +509,15 @@ void DrawManipulatorSystem::Manipulate2D(Registry& registry, const Math::Vector4
 			break;
 		}
 		case ImGuizmo::SCALE: {
+			if (ImGuizmo::IsUsing() && !isActivePreFrame_) {
+				oldVector = t->scale;
+			}
 			if (ImGuizmo::IsUsing()) {
 				t->scale.x = scale[0];
 				t->scale.y = scale[1];
 				isActive_ = true;
 			} else {
 				isActive_ = false;
-			}
-
-			if (isActive_ && !isActivePreFrame_) {
-				oldVector = t->scale;
 			}
 
 			if (!isActive_ && isActivePreFrame_) {
@@ -557,51 +629,7 @@ void DrawManipulatorSystem::ManipulateRoutineWaypoints(Registry& registry, const
 
 		Math::Matrix4x4 parentWorld = GetParentWorld3D(registry, baseT);
 
-		float imgX = sceneRect.x;
-		float imgY = sceneRect.y;
-		constexpr float margin = 8.0f;
-		constexpr float buttonSizeY = 28.f;
-		constexpr float buttonSizeX = 28.f;
-
-		// waypoint番号ボタン列（既存のT/R/S/Routeツールバーの下に配置）
-		ImVec2 waypointBarPos = ImVec2(imgX + margin, imgY + margin + buttonSizeY * 4 + margin);
-		ImGui::SetCursorScreenPos(waypointBarPos);
-		for (size_t i = 0; i < routine->keyframes.size(); ++i) {
-			if (i > 0) {
-				ImGui::SameLine();
-			}
-			ImGui::PushID(static_cast<int>(i));
-			bool isSelected = (static_cast<int>(i) == sSelectedWaypointIndex);
-			if (isSelected) {
-				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.3f, 0.6f, 1.0f, 1.0f));
-			}
-			if (ImGui::Button(std::to_string(i).c_str(), ImVec2(buttonSizeX, buttonSizeY))) {
-				sSelectedWaypointIndex = static_cast<int>(i);
-			}
-			if (isSelected) {
-				ImGui::PopStyleColor();
-			}
-			ImGui::PopID();
-		}
-
-		// 選択中waypointの操作切り替え(T/R/S)
-		static ImGuizmo::OPERATION currentWaypointOp = ImGuizmo::TRANSLATE;
-		ImVec2 opBarPos = ImVec2(imgX + margin, imgY + margin + buttonSizeY * 4 + margin + buttonSizeY + margin);
-		ImGui::SetCursorScreenPos(opBarPos);
-		if (ImGui::Button("wT")) {
-			currentWaypointOp = ImGuizmo::TRANSLATE;
-			sTriggerButton = true;
-		}
-		ImGui::SameLine();
-		if (ImGui::Button("wR")) {
-			currentWaypointOp = ImGuizmo::ROTATE;
-			sTriggerButton = true;
-		}
-		ImGui::SameLine();
-		if (ImGui::Button("wS")) {
-			currentWaypointOp = ImGuizmo::SCALE;
-			sTriggerButton = true;
-		}
+		const auto currentWaypointOp = sGizmoSettings.operation;
 
 		// 非選択waypointはマーカーとして描画し、クリックで選択を切り替える
 		for (size_t i = 0; i < routine->keyframes.size(); ++i) {
@@ -626,8 +654,10 @@ void DrawManipulatorSystem::ManipulateRoutineWaypoints(Registry& registry, const
 			}
 
 			ImVec2 center(screenPos.x, screenPos.y);
-			ImGui::GetForegroundDrawList()->AddCircleFilled(center, 6.0f, IM_COL32(255, 200, 0, 255));
+			ImGui::GetWindowDrawList()->AddCircleFilled(center, 6.0f, IM_COL32(255, 200, 0, 255));
 
+			// 操作できないマーカーでは、アイテム登録を伴わないカーソル移動も行わない。
+			if (sTriggerButton || ImGuizmo::IsUsingAny()) continue;
 			ImGui::SetCursorScreenPos(ImVec2(center.x - 8.0f, center.y - 8.0f));
 			ImGui::PushID(10000 + static_cast<int>(i));
 			if (ImGui::InvisibleButton("waypointMarker", ImVec2(16.0f, 16.0f))) {
@@ -641,7 +671,8 @@ void DrawManipulatorSystem::ManipulateRoutineWaypoints(Registry& registry, const
 		auto& kf = routine->keyframes[sSelectedWaypointIndex];
 		Math::Matrix4x4 world = kf.MakeAffineMatrix4x4(registry) * parentWorld;
 
-		ImGuizmo::Manipulate(*(viewMatrix.m), *(projection.m), currentWaypointOp, ImGuizmo::WORLD, *(world.m));
+		ImGuizmo::Manipulate(*(viewMatrix.m), *(projection.m), currentWaypointOp,
+			sGizmoSettings.mode, *(world.m), nullptr, sGizmoSettings.GetSnap(currentWaypointOp));
 
 		// world → 親のワールド行列基準のローカルへ変換（TransformRoutineSystemが書き込む空間と揃える）
 		Math::Matrix4x4 parentInverse = parentWorld;
@@ -659,6 +690,9 @@ void DrawManipulatorSystem::ManipulateRoutineWaypoints(Registry& registry, const
 
 		switch (currentWaypointOp) {
 		case ImGuizmo::TRANSLATE: {
+			if (ImGuizmo::IsUsing() && !waypointIsActivePreFrame_) {
+				oldTranslate = kf.translate;
+			}
 			if (ImGuizmo::IsUsing()) {
 				kf.translate = local.GetTranslate();
 				waypointIsActive_ = true;
@@ -666,9 +700,6 @@ void DrawManipulatorSystem::ManipulateRoutineWaypoints(Registry& registry, const
 				waypointIsActive_ = false;
 			}
 
-			if (waypointIsActive_ && !waypointIsActivePreFrame_) {
-				oldTranslate = kf.translate;
-			}
 			if (!waypointIsActive_ && waypointIsActivePreFrame_) {
 				EditorCommandOperator::AddCommand(
 					std::make_unique<Command::ChangeValueCommand<Math::Vector3>>(&kf.translate, oldTranslate, kf.translate)
@@ -677,6 +708,9 @@ void DrawManipulatorSystem::ManipulateRoutineWaypoints(Registry& registry, const
 			break;
 		}
 		case ImGuizmo::ROTATE: {
+			if (ImGuizmo::IsUsing() && !waypointIsActivePreFrame_) {
+				oldRotation = kf.rotation;
+			}
 			if (ImGuizmo::IsUsing()) {
 				constexpr float kDegreeToRadian = PI / 180.0f;
 				Math::Matrix4x4 rotateMatrix;
@@ -688,9 +722,6 @@ void DrawManipulatorSystem::ManipulateRoutineWaypoints(Registry& registry, const
 				waypointIsActive_ = false;
 			}
 
-			if (waypointIsActive_ && !waypointIsActivePreFrame_) {
-				oldRotation = kf.rotation;
-			}
 			if (!waypointIsActive_ && waypointIsActivePreFrame_) {
 				EditorCommandOperator::AddCommand(
 					std::make_unique<Command::ChangeValueCommand<Math::Quaternion>>(&kf.rotation, oldRotation, kf.rotation)
@@ -699,6 +730,9 @@ void DrawManipulatorSystem::ManipulateRoutineWaypoints(Registry& registry, const
 			break;
 		}
 		case ImGuizmo::SCALE: {
+			if (ImGuizmo::IsUsing() && !waypointIsActivePreFrame_) {
+				oldScale = kf.scale;
+			}
 			if (ImGuizmo::IsUsing()) {
 				kf.scale.x = scale[0];
 				kf.scale.y = scale[1];
@@ -708,9 +742,6 @@ void DrawManipulatorSystem::ManipulateRoutineWaypoints(Registry& registry, const
 				waypointIsActive_ = false;
 			}
 
-			if (waypointIsActive_ && !waypointIsActivePreFrame_) {
-				oldScale = kf.scale;
-			}
 			if (!waypointIsActive_ && waypointIsActivePreFrame_) {
 				EditorCommandOperator::AddCommand(
 					std::make_unique<Command::ChangeValueCommand<Math::Vector3>>(&kf.scale, oldScale, kf.scale)
@@ -790,36 +821,7 @@ void DrawManipulatorSystem::ManipulateRoutineWaypoints2D(Registry& registry, con
 		const Math::Matrix4x4& projection = isScreenSpace ? screenProjection : worldProjection;
 		Math::Matrix4x4 viewProjection = viewMatrix * projection;
 
-		float imgX = sceneRect.x;
-		float imgY = sceneRect.y;
-		constexpr float margin = 8.0f;
-		constexpr float buttonSizeY = 28.f;
-		constexpr float buttonSizeX = 28.f;
-
-		// waypoint番号ボタン列
-		ImVec2 waypointBarPos = ImVec2(imgX + margin, imgY + margin + buttonSizeY * 4 + margin);
-		ImGui::SetCursorScreenPos(waypointBarPos);
-		for (size_t i = 0; i < routine->keyframes.size(); ++i) {
-			if (i > 0) ImGui::SameLine();
-			ImGui::PushID(static_cast<int>(i));
-			bool isSelected = (static_cast<int>(i) == sSelectedWaypointIndex2D);
-			if (isSelected) ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.3f, 0.6f, 1.0f, 1.0f));
-			if (ImGui::Button(std::to_string(i).c_str(), ImVec2(buttonSizeX, buttonSizeY))) {
-				sSelectedWaypointIndex2D = static_cast<int>(i);
-			}
-			if (isSelected) ImGui::PopStyleColor();
-			ImGui::PopID();
-		}
-
-		// 選択中waypointの操作切り替え(T/R/S)
-		static ImGuizmo::OPERATION currentWaypointOp2D = ImGuizmo::TRANSLATE;
-		ImVec2 opBarPos = ImVec2(imgX + margin, imgY + margin + buttonSizeY * 4 + margin + buttonSizeY + margin);
-		ImGui::SetCursorScreenPos(opBarPos);
-		if (ImGui::Button("wT")) { currentWaypointOp2D = ImGuizmo::TRANSLATE; sTriggerButton = true; }
-		ImGui::SameLine();
-		if (ImGui::Button("wR")) { currentWaypointOp2D = ImGuizmo::ROTATE; sTriggerButton = true; }
-		ImGui::SameLine();
-		if (ImGui::Button("wS")) { currentWaypointOp2D = ImGuizmo::SCALE; sTriggerButton = true; }
+		const auto currentWaypointOp2D = sGizmoSettings.operation;
 
 		// 非選択waypointはマーカーとして描画し、クリックで選択を切り替える
 		for (size_t i = 0; i < routine->keyframes.size(); ++i) {
@@ -846,8 +848,10 @@ void DrawManipulatorSystem::ManipulateRoutineWaypoints2D(Registry& registry, con
 			if (!insideSceneView) continue;
 
 			ImVec2 center(screenPos.x, screenPos.y);
-			ImGui::GetForegroundDrawList()->AddCircleFilled(center, 6.0f, IM_COL32(255, 200, 0, 255));
+			ImGui::GetWindowDrawList()->AddCircleFilled(center, 6.0f, IM_COL32(255, 200, 0, 255));
 
+			// 操作できないマーカーでは、アイテム登録を伴わないカーソル移動も行わない。
+			if (sTriggerButton || ImGuizmo::IsUsingAny()) continue;
 			ImGui::SetCursorScreenPos(ImVec2(center.x - 8.0f, center.y - 8.0f));
 			ImGui::PushID(20000 + static_cast<int>(i));
 			if (ImGui::InvisibleButton("waypointMarker2D", ImVec2(16.0f, 16.0f))) {
@@ -869,7 +873,8 @@ void DrawManipulatorSystem::ManipulateRoutineWaypoints2D(Registry& registry, con
 			world.m[3][1] += static_cast<float>(size.clientHeight) / 2.f * cameraSize.y;
 		}
 
-		ImGuizmo::Manipulate(*(viewMatrix.m), *(projection.m), currentWaypointOp2D, ImGuizmo::WORLD, *(world.m));
+		ImGuizmo::Manipulate(*(viewMatrix.m), *(projection.m), currentWaypointOp2D,
+			sGizmoSettings.mode, *(world.m), nullptr, sGizmoSettings.GetSnap(currentWaypointOp2D));
 
 		if (isScreenSpace) {
 			world.m[3][0] -= anchorOffset.x;
@@ -895,6 +900,9 @@ void DrawManipulatorSystem::ManipulateRoutineWaypoints2D(Registry& registry, con
 
 		switch (currentWaypointOp2D) {
 		case ImGuizmo::TRANSLATE: {
+			if (ImGuizmo::IsUsing() && !waypointIsActivePreFrame2D_) {
+				oldTranslate2D = kf.translate;
+			}
 			if (ImGuizmo::IsUsing()) {
 				kf.translate.x = local.GetTranslate().x;
 				kf.translate.y = local.GetTranslate().y;
@@ -902,7 +910,6 @@ void DrawManipulatorSystem::ManipulateRoutineWaypoints2D(Registry& registry, con
 			} else {
 				waypointIsActive2D_ = false;
 			}
-			if (waypointIsActive2D_ && !waypointIsActivePreFrame2D_) oldTranslate2D = kf.translate;
 			if (!waypointIsActive2D_ && waypointIsActivePreFrame2D_) {
 				Editor::EditorCommandOperator::AddCommand(
 					std::make_unique<Command::ChangeValueCommand<Math::Vector2>>(&kf.translate, oldTranslate2D, kf.translate)
@@ -911,6 +918,9 @@ void DrawManipulatorSystem::ManipulateRoutineWaypoints2D(Registry& registry, con
 			break;
 		}
 		case ImGuizmo::ROTATE: {
+			if (ImGuizmo::IsUsing() && !waypointIsActivePreFrame2D_) {
+				oldRotation2D = kf.rotation;
+			}
 			if (ImGuizmo::IsUsing()) {
 				constexpr float kDegreeToRadian = PI / 180.0f;
 				kf.rotation = rotation[2] * kDegreeToRadian; // Transform2Dの回転はZ軸まわりのfloat(ラジアン)
@@ -918,7 +928,6 @@ void DrawManipulatorSystem::ManipulateRoutineWaypoints2D(Registry& registry, con
 			} else {
 				waypointIsActive2D_ = false;
 			}
-			if (waypointIsActive2D_ && !waypointIsActivePreFrame2D_) oldRotation2D = kf.rotation;
 			if (!waypointIsActive2D_ && waypointIsActivePreFrame2D_) {
 				Editor::EditorCommandOperator::AddCommand(
 					std::make_unique<Command::ChangeValueCommand<float>>(&kf.rotation, oldRotation2D, kf.rotation)
@@ -927,6 +936,9 @@ void DrawManipulatorSystem::ManipulateRoutineWaypoints2D(Registry& registry, con
 			break;
 		}
 		case ImGuizmo::SCALE: {
+			if (ImGuizmo::IsUsing() && !waypointIsActivePreFrame2D_) {
+				oldScale2D = kf.scale;
+			}
 			if (ImGuizmo::IsUsing()) {
 				kf.scale.x = scale[0];
 				kf.scale.y = scale[1];
@@ -934,7 +946,6 @@ void DrawManipulatorSystem::ManipulateRoutineWaypoints2D(Registry& registry, con
 			} else {
 				waypointIsActive2D_ = false;
 			}
-			if (waypointIsActive2D_ && !waypointIsActivePreFrame2D_) oldScale2D = kf.scale;
 			if (!waypointIsActive2D_ && waypointIsActivePreFrame2D_) {
 				Editor::EditorCommandOperator::AddCommand(
 					std::make_unique<Command::ChangeValueCommand<Math::Vector2>>(&kf.scale, oldScale2D, kf.scale)
