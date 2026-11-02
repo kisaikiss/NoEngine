@@ -53,8 +53,10 @@ CapsuleSweepHit SweepCapsuleTriangle(const CapsuleWorld& capsule, const Vector3&
 CapsuleSweepHit SweepCapsuleTerrain(ECS::Registry& registry, const CapsuleWorld& capsule,
 	const Vector3& displacement);
 // 初期の重なりを解消し、続いてスイープおよびスライドを行う。許容されるワールド空間での変位を返す。
+// 追従距離が正なら、移動後に歩行可能な地面へ下向きに追従する。空中移動では0を指定する。
 Vector3 MoveCapsuleTerrain(ECS::Registry& registry, CapsuleWorld capsule,
-	const Vector3& displacement, Vector3* velocity = nullptr);
+	const Vector3& displacement, Vector3* velocity = nullptr,
+	float groundSnapDistance = 0.f, float minGroundNormalY = 0.75f);
 
 struct SpherePushResult {
 	bool hit = false;

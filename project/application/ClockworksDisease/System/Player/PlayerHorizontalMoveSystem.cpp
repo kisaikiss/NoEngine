@@ -124,7 +124,8 @@ void PlayerHorizontalMoveSystem::Update(No::Registry& registry, float deltaTime)
 		// 接地中（かつ空中ダッシュ中でない）なら、水平方向を地面平面へ投影して
 		// 実際の斜面に沿った方向ベクトルにする
 		No::Vector3 finalDir = horizontalDir;
-		if (groundState->isGrounded && !isAirDashing && horizontalDir.Length() > 1e-6f) {
+		const bool followsGround = groundState->isGrounded && !transientState->justJumped && !isAirDashing;
+		if (followsGround && horizontalDir.Length() > 1e-6f) {
 			finalDir = ProjectOnGroundPlane(horizontalDir, groundNormal);
 		}
 
@@ -135,7 +136,8 @@ void PlayerHorizontalMoveSystem::Update(No::Registry& registry, float deltaTime)
 		}
 		const float playerMoveSpeed = inputForce > playerVariables->dashStartInput ? playerVariables->moveSpeed : playerVariables->walkSpeed;
 		const float speed = isAirDashing ? playerVariables->airDashSpeed : playerMoveSpeed;
-		const No::Vector3 targetVelocity = finalDir * speed;
+		// 加減速は水平成分だけで行い、上下成分は確定した水平速度から求める。
+		const No::Vector3 targetVelocity{ finalDir.x * speed, 0.f, finalDir.z * speed };
 		No::Vector3 finalVelocity = targetVelocity;
 
 		if (!isAirDashing) {
@@ -157,8 +159,10 @@ void PlayerHorizontalMoveSystem::Update(No::Registry& registry, float deltaTime)
 		velocity->linear.x = finalVelocity.x;
 		velocity->linear.z = finalVelocity.z;
 
-		// 斜面追従によるy成分を記録し、PlayerVerticalVelocitySystemへ渡す
-		transientState->slopeY = finalVelocity.y;
+		// 加速中・減速中・方向転換中も、実際の移動速度を地面の接平面に合わせる。
+		transientState->slopeY = followsGround && groundNormal.y > 1e-6f
+			? -(finalVelocity.x * groundNormal.x + finalVelocity.z * groundNormal.z) / groundNormal.y
+			: 0.f;
 
 		FacePlayerTowardsMoveDirection(transform, finalVelocity, deltaTime);
 	}

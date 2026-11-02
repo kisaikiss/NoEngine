@@ -289,7 +289,7 @@ CapsuleSweepHit SweepCapsuleTerrain(ECS::Registry& registry, const CapsuleWorld&
 }
 
 Vector3 MoveCapsuleTerrain(ECS::Registry& registry, CapsuleWorld capsule,
-	const Vector3& displacement, Vector3* velocity) {
+	const Vector3& displacement, Vector3* velocity, float groundSnapDistance, float minGroundNormalY) {
 	Vector3 moved = Vector3::ZERO;
 	std::vector<int> candidates;
 	// 修正のたびに再クエリを行うこと。ある面を押し出すと、別の面に影響が及ぶ可能性があるためである。
@@ -335,6 +335,15 @@ Vector3 MoveCapsuleTerrain(ECS::Registry& registry, CapsuleWorld capsule,
 					if (speed < 0.0f) *velocity -= normal * speed;
 				}
 			}
+		}
+	}
+	// 移動先の足元をカプセル全体で調べ、曲面で接平面から離れた分だけ下へ追従する。
+	// 最初の障害物が壁や急斜面なら、その先にある地面には吸着しない。
+	if (groundSnapDistance > 0.f) {
+		const Vector3 down{ 0.f, -groundSnapDistance, 0.f };
+		const auto ground = SweepCapsuleTerrain(registry, capsule, down);
+		if (ground.hit && ground.normal.y >= minGroundNormalY) {
+			moved += down * ground.fraction;
 		}
 	}
 	return moved;

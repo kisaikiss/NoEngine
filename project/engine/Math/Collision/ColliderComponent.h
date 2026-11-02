@@ -108,6 +108,9 @@ struct GroundStateComponent {
 	bool preIsGrounded = false;
 	float groundHeight = 0.f;	// 接地している場合の地面の高さ
 	ECS::Entity groundEntity = ECS::INVALID_ENTITY;
+	// 移動前に指定する、このフレームだけの地面追従距離。0なら追従しない。
+	float snapDistance = 0.f;
+	float snapMinNormalY = 0.75f;
 };
 
 /// <summary>

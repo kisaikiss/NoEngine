@@ -23,6 +23,13 @@ void PlayerVerticalVelocitySystem::Update(No::Registry& registry, float deltaTim
 		const bool justJumped = transientState->justJumped;
 
 		const bool isAirDashing = playerAction->activeAction == PlayerActionType::kAirDash;
+		// 接地した歩行だけ追従を予約する。段差や崖への吸着は短い距離に制限する。
+		groundState->snapDistance = 0.f;
+		groundState->snapMinNormalY = playerVariables->minGroundNormalY;
+		if (isGrounded && !justJumped && !isAirDashing) {
+			const No::Vector3 horizontalVelocity{ velocity->linear.x, 0.f, velocity->linear.z };
+			groundState->snapDistance = std::min(0.25f, horizontalVelocity.Length() * deltaTime + 0.002f);
+		}
 		if (isAirDashing) {
 			velocity->linear.y = 0.f;
 			particleEmitter->active = false;
