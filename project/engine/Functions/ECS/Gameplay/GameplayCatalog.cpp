@@ -3,6 +3,7 @@
 #include "engine/Functions/ECS/Component/Common/MoverComponent.h"
 #include "engine/Functions/ECS/Component/Common/TransformRoutineComponent.h"
 #include "engine/Assets/Audio/Audio.h"
+#include "engine/Functions/ECS/Component/Common/GameplayFlagComponent.h"
 
 namespace NoEngine::Gameplay {
 
@@ -52,6 +53,23 @@ GameplayCatalog::GameplayCatalog() {
 		}, false, {
 			{ "outputString", "Output String", ActionPropertyType::String, true }
 		} });
+	RegisterAction({ "engine.flag.set", "Set Flag", "Gameplay",
+		[](ECS::Registry& registry, const Event::GameplayEvent&, ECS::Entity, const nlohmann::json& properties) {
+			const auto name = properties.value("flagName", std::string{});
+			if (name.empty()) return;
+			Component::GameplayFlagComponent* flags = nullptr;
+			for (auto entity : registry.View<Component::GameplayFlagComponent>()) {
+				if (!flags) flags = registry.GetComponent<Component::GameplayFlagComponent>(entity);
+			}
+			if (!flags) {
+				const auto stateEntity = registry.GenerateEntity();
+				flags = registry.AddComponent<Component::GameplayFlagComponent>(stateEntity);
+			}
+			if (flags) flags->values[name] = properties.value("value", true);
+		}, false, {
+			{ "flagName", "Flag Name", ActionPropertyType::String, true },
+			{ "value", "Value", ActionPropertyType::Boolean, true }
+		}});
 }
 
 bool GameplayCatalog::RegisterEvent(EventDescriptor descriptor) {

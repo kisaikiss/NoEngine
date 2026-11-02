@@ -6,11 +6,14 @@ namespace {
 using json = nlohmann::json;
 
 const char* KindToString(GimmickNodeKind kind) {
-	return kind == GimmickNodeKind::Event ? "event" : "action";
+	if (kind == GimmickNodeKind::Event) return "event";
+	if (kind == GimmickNodeKind::Branch) return "branch";
+	return "action";
 }
 
 bool TryParseKind(const std::string& value, GimmickNodeKind& kind) {
 	if (value == "event") { kind = GimmickNodeKind::Event; return true; }
+	if (value == "branch") { kind = GimmickNodeKind::Branch; return true; }
 	if (value == "action") { kind = GimmickNodeKind::Action; return true; }
 	return false;
 }
@@ -197,6 +200,14 @@ GimmickGraphValidation ValidateGimmickGraph(const GimmickGraph& graph, const Gam
 				AddDiagnostic(result, DiagnosticSeverity::Warning, "node.event.unused_properties",
 					"This event node type does not define configurable properties.", node.id);
 			}
+		} else if (node.kind == GimmickNodeKind::Branch) {
+			if (!node.properties.contains("flagName") || !node.properties["flagName"].is_string()
+				|| node.properties["flagName"].get<std::string>().empty()) {
+				AddDiagnostic(result, DiagnosticSeverity::Error, "node.branch.flag.empty", "Branch needs a flag name.", node.id);
+			}
+			if (!node.properties.contains("expectedValue") || !node.properties["expectedValue"].is_boolean()) {
+				AddDiagnostic(result, DiagnosticSeverity::Error, "node.branch.value.invalid", "Branch expected value must be boolean.", node.id);
+			}
 		} else {
 			const ActionDescriptor* action = catalog.FindAction(node.typeId);
 			if (!action) {
@@ -250,14 +261,16 @@ GimmickGraphValidation ValidateGimmickGraph(const GimmickGraph& graph, const Gam
 		}
 		const GimmickNode& from = *fromIt->second;
 		const GimmickNode& to = *toIt->second;
-		const bool validFrom = link.fromPinId == PinId::ExecOutput;
-		const bool validTo = link.toPinId == PinId::ExecInput && to.kind == GimmickNodeKind::Action;
+		const bool validFrom = (from.kind == GimmickNodeKind::Branch)
+			? (link.fromPinId == PinId::TrueOutput || link.fromPinId == PinId::FalseOutput)
+			: link.fromPinId == PinId::ExecOutput;
+		const bool validTo = link.toPinId == PinId::ExecInput && to.kind != GimmickNodeKind::Event;
 		if (!validFrom || !validTo) {
 			AddDiagnostic(result, DiagnosticSeverity::Error, "link.pin.invalid",
 				"Execution links must connect exec.out to an action's exec.in.", {}, link.id);
 			continue;
 		}
-		if (from.kind != GimmickNodeKind::Event && from.kind != GimmickNodeKind::Action) {
+		if (from.kind != GimmickNodeKind::Event && from.kind != GimmickNodeKind::Action && from.kind != GimmickNodeKind::Branch) {
 			AddDiagnostic(result, DiagnosticSeverity::Error, "link.source.invalid", "Invalid link source node.", from.id, link.id);
 			continue;
 		}

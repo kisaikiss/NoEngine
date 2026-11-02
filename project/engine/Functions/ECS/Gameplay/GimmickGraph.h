@@ -9,11 +9,14 @@ inline constexpr uint32_t kGimmickGraphVersion = 1;
 namespace PinId {
 inline constexpr char ExecInput[] = "exec.in";
 inline constexpr char ExecOutput[] = "exec.out";
+inline constexpr char TrueOutput[] = "exec.true";
+inline constexpr char FalseOutput[] = "exec.false";
 }
 
 enum class GimmickNodeKind {
 	Event,
-	Action
+	Action,
+	Branch
 };
 
 // グラフのノード本体。idは保存データ上の安定IDで、UIライブラリのNodeIdとは独立。

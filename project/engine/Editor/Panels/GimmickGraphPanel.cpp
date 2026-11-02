@@ -102,6 +102,8 @@ std::string NodeTitle(const Gameplay::GimmickNode& node) {
 	const auto& catalog = Gameplay::GameplayCatalog::Get();
 	if (node.kind == Gameplay::GimmickNodeKind::Event) {
 		if (const auto* event = catalog.FindEvent(node.typeId)) return event->displayName;
+	} else if (node.kind == Gameplay::GimmickNodeKind::Branch) {
+		return "Branch";
 	} else if (const auto* action = catalog.FindAction(node.typeId)) {
 		return action->displayName;
 	}
@@ -358,6 +360,17 @@ void GimmickGraphPanel::Draw(ECS::Registry& registry, ECS::Entity selectedEntity
 				graph_.nodes.push_back(std::move(node)); dirty_ = true;
 			}
 		}
+		ImGui::Separator();
+		if (ImGui::Selectable("Branch (Flag)")) {
+			Gameplay::GimmickNode node;
+			node.id = NewId(graph_, "branch");
+			node.kind = Gameplay::GimmickNodeKind::Branch;
+			node.typeId = "engine.branch.flag";
+			node.x = 420.0f + 40.0f * graph_.nodes.size();
+			node.y = 120.0f + 40.0f * graph_.nodes.size();
+			node.properties = {{ "flagName", "" }, { "expectedValue", true }};
+			graph_.nodes.push_back(std::move(node)); dirty_ = true;
+		}
 		ImGui::EndCombo();
 	}
 
@@ -385,7 +398,7 @@ void GimmickGraphPanel::Draw(ECS::Registry& registry, ECS::Entity selectedEntity
 			ImVec2(dividerStart.x + 180.0f, dividerStart.y + 3.0f),
 			IM_COL32(110, 110, 110, 255), 1.0f);
 		ImGui::Dummy(ImVec2(180.0f, 8.0f));
-		if (node.kind == Gameplay::GimmickNodeKind::Action) {
+		if (node.kind != Gameplay::GimmickNodeKind::Event) {
 			// 入力ピンの当たり判定と配線の接続点を文字ラベルではなく丸印に限定する。
 			NodeEditor::BeginPin(NodeEditor::PinId(PinStableId(node.id, Gameplay::PinId::ExecInput)), NodeEditor::PinKind::Input);
 			ImGui::Dummy(ImVec2(10.0f, 10.0f));
@@ -401,24 +414,46 @@ void GimmickGraphPanel::Draw(ECS::Registry& registry, ECS::Entity selectedEntity
 		if (node.kind == Gameplay::GimmickNodeKind::Action) {
 			if (const auto* action = Gameplay::GameplayCatalog::Get().FindAction(node.typeId))
 				DrawActionProperties(registry, node, *action, dirty_, valueInputActive);
+		} else if (node.kind == Gameplay::GimmickNodeKind::Branch) {
+			char flagName[128] = {};
+			const auto currentFlagName = node.properties.value("flagName", std::string{});
+			strncpy_s(flagName, currentFlagName.c_str(), _TRUNCATE);
+			if (ImGui::InputText("Flag Name", flagName, sizeof(flagName), ImGuiInputTextFlags_EnterReturnsTrue)) {
+				node.properties["flagName"] = flagName; dirty_ = true;
+			}
+			bool expected = node.properties.value("expectedValue", true);
+			if (ImGui::Checkbox("Branch when true", &expected)) { node.properties["expectedValue"] = expected; dirty_ = true; }
 		}
-		NodeEditor::BeginPin(NodeEditor::PinId(PinStableId(node.id, Gameplay::PinId::ExecOutput)), NodeEditor::PinKind::Output);
-		// 前フレームに計測されたノード幅から出力を右寄せする。丸印をPinPivotにして線をそこへ接続する。
-		const auto& nodeStyle = NodeEditor::GetStyle();
-		const float nodeWidth = NodeEditor::GetNodeSize(nodeEditorId).x;
-		const float outputLabelWidth = ImGui::CalcTextSize("Out").x + 14.0f;
-		const float rightOffset = std::max(120.0f,
-			nodeWidth - nodeStyle.NodePadding.x - nodeStyle.NodePadding.z - outputLabelWidth);
-		ImGui::SetCursorPosX(ImGui::GetCursorPosX() + rightOffset);
-		ImGui::TextUnformatted("Out");
-		ImGui::SameLine(0.0f, 4.0f);
-		ImGui::Dummy(ImVec2(10.0f, 10.0f));
-		const ImVec2 outputPinMin = ImGui::GetItemRectMin();
-		const ImVec2 outputPinMax = ImGui::GetItemRectMax();
-		ImGui::GetWindowDrawList()->AddCircleFilled(ImVec2((outputPinMin.x + outputPinMax.x) / 2.0f, (outputPinMin.y + outputPinMax.y) / 2.0f), 4.0f, IM_COL32(255, 174, 64, 255));
-		NodeEditor::PinRect(outputPinMin, outputPinMax);
-		NodeEditor::PinPivotRect(outputPinMin, outputPinMax);
-		NodeEditor::EndPin();
+		if (node.kind == Gameplay::GimmickNodeKind::Branch) {
+			for (const auto* branchPin : { Gameplay::PinId::TrueOutput, Gameplay::PinId::FalseOutput }) {
+				NodeEditor::BeginPin(NodeEditor::PinId(PinStableId(node.id, branchPin)), NodeEditor::PinKind::Output);
+				const auto& nodeStyle = NodeEditor::GetStyle();
+				const float nodeWidth = NodeEditor::GetNodeSize(nodeEditorId).x;
+				const char* label = branchPin == Gameplay::PinId::TrueOutput ? "True" : "False";
+				const float labelWidth = ImGui::CalcTextSize(label).x + 14.0f;
+				const float rightOffset = std::max(120.0f,
+					nodeWidth - nodeStyle.NodePadding.x - nodeStyle.NodePadding.z - labelWidth);
+				ImGui::SetCursorPosX(ImGui::GetCursorPosX() + rightOffset);
+				ImGui::TextUnformatted(label);
+				ImGui::SameLine(0.0f, 4.0f); ImGui::Dummy(ImVec2(10.0f, 10.0f));
+				const ImVec2 pmin = ImGui::GetItemRectMin(), pmax = ImGui::GetItemRectMax();
+				ImGui::GetWindowDrawList()->AddCircleFilled(ImVec2((pmin.x+pmax.x)/2, (pmin.y+pmax.y)/2), 4.0f, IM_COL32(255,174,64,255));
+				NodeEditor::PinRect(pmin,pmax); NodeEditor::PinPivotRect(pmin,pmax); NodeEditor::EndPin();
+			}
+		} else {
+			NodeEditor::BeginPin(NodeEditor::PinId(PinStableId(node.id, Gameplay::PinId::ExecOutput)), NodeEditor::PinKind::Output);
+			// 右端にピンを寄せ、入力ピンと見分けやすくする。
+			const auto& nodeStyle = NodeEditor::GetStyle();
+			const float nodeWidth = NodeEditor::GetNodeSize(nodeEditorId).x;
+			const float labelWidth = ImGui::CalcTextSize("Out").x + 14.0f;
+			const float rightOffset = std::max(120.0f,
+				nodeWidth - nodeStyle.NodePadding.x - nodeStyle.NodePadding.z - labelWidth);
+			ImGui::SetCursorPosX(ImGui::GetCursorPosX() + rightOffset);
+			ImGui::TextUnformatted("Out"); ImGui::SameLine(0.0f, 4.0f); ImGui::Dummy(ImVec2(10.0f, 10.0f));
+			const ImVec2 pmin = ImGui::GetItemRectMin(), pmax = ImGui::GetItemRectMax();
+			ImGui::GetWindowDrawList()->AddCircleFilled(ImVec2((pmin.x+pmax.x)/2, (pmin.y+pmax.y)/2), 4.0f, IM_COL32(255,174,64,255));
+			NodeEditor::PinRect(pmin,pmax); NodeEditor::PinPivotRect(pmin,pmax); NodeEditor::EndPin();
+		}
 		NodeEditor::EndNode();
 		ImGui::PopID();
 		// NodeEditor内で動かされた位置をDocumentへ戻す。これが次回JSON保存される座標になる。
@@ -444,8 +479,14 @@ void GimmickGraphPanel::Draw(ECS::Registry& registry, ECS::Entity selectedEntity
 			// マウス操作で返るPin IDから、保存形式で使うNode ID／exec.in・exec.outへ戻す。
 			const auto findEndpoint = [&](uint64_t pinId, bool wantOutput, std::string& nodeId, std::string& pinName) {
 				for (const auto& node : graph_.nodes) {
-					const char* candidate = wantOutput ? Gameplay::PinId::ExecOutput : Gameplay::PinId::ExecInput;
-					if (PinStableId(node.id, candidate) == pinId) { nodeId = node.id; pinName = candidate; return true; }
+					const std::array<const char*, 3> outputCandidates{ Gameplay::PinId::ExecOutput, Gameplay::PinId::TrueOutput, Gameplay::PinId::FalseOutput };
+					if (wantOutput) {
+						for (const char* candidate : outputCandidates) if ((node.kind == Gameplay::GimmickNodeKind::Branch || candidate == Gameplay::PinId::ExecOutput)
+							&& PinStableId(node.id, candidate) == pinId) { nodeId = node.id; pinName = candidate; return true; }
+					} else {
+						const char* candidate = Gameplay::PinId::ExecInput;
+						if (node.kind != Gameplay::GimmickNodeKind::Event && PinStableId(node.id, candidate) == pinId) { nodeId = node.id; pinName = candidate; return true; }
+					}
 				}
 				return false;
 				};

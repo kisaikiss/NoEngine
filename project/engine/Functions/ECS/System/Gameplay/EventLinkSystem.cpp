@@ -3,6 +3,7 @@
 #include "engine/Functions/ECS/Event/GameplayEvents.h"
 #include "engine/Functions/ECS/Component/Common/EventLinkComponent.h"
 #include "engine/Functions/ECS/Component/Common/GimmickGraphComponent.h"
+#include "engine/Functions/ECS/Component/Common/GameplayFlagComponent.h"
 #include "engine/Functions/ECS/Gameplay/GameplayCatalog.h"
 #include "engine/Functions/ECS/Gameplay/GimmickGraph.h"
 #include "engine/Editor/DataDriven/SceneSerializer.h"
@@ -62,10 +63,11 @@ const GimmickGraph* GetGraph(const std::string& graphPath) {
 	return &*cache.graph;
 }
 
-void AppendOutgoingNodes(const GimmickGraph& graph, const std::string& nodeId, std::vector<std::string>& pending) {
+void AppendOutgoingNodes(const GimmickGraph& graph, const std::string& nodeId, std::vector<std::string>& pending,
+	const std::string& outputPin = PinId::ExecOutput) {
 	// 後入れ先出しのpendingへ逆順に積むことで、JSONのリンク順にActionを実行する。
 	for (auto it = graph.links.rbegin(); it != graph.links.rend(); ++it) {
-		if (it->fromNodeId == nodeId && it->fromPinId == PinId::ExecOutput) pending.push_back(it->toNodeId);
+		if (it->fromNodeId == nodeId && it->fromPinId == outputPin) pending.push_back(it->toNodeId);
 	}
 }
 }
@@ -95,7 +97,24 @@ void EventLinkSystem::AdvanceGraphExecution(Registry& registry, GraphExecution& 
 		auto nodeIt = std::find_if(execution.graph.nodes.begin(), execution.graph.nodes.end(), [&](const auto& node) {
 			return node.id == nodeId;
 		});
-		if (nodeIt == execution.graph.nodes.end() || nodeIt->kind != Gameplay::GimmickNodeKind::Action) continue;
+		if (nodeIt == execution.graph.nodes.end()) continue;
+		if (nodeIt->kind == Gameplay::GimmickNodeKind::Branch) {
+			const auto flagName = nodeIt->properties.value("flagName", std::string{});
+			const bool expected = nodeIt->properties.value("expectedValue", true);
+			bool actual = false;
+			Component::GameplayFlagComponent* flags = nullptr;
+			for (auto entity : registry.View<Component::GameplayFlagComponent>()) {
+				if (!flags) flags = registry.GetComponent<Component::GameplayFlagComponent>(entity);
+			}
+			if (flags) {
+				if (auto flag = flags->values.find(flagName); flag != flags->values.end()) actual = flag->second;
+			}
+			AppendOutgoingNodes(execution.graph, nodeIt->id, execution.pendingNodes,
+				actual == expected ? Gameplay::PinId::TrueOutput : Gameplay::PinId::FalseOutput);
+			++execution.executedActions;
+			continue;
+		}
+		if (nodeIt->kind != Gameplay::GimmickNodeKind::Action) continue;
 		const auto* action = catalog.FindAction(nodeIt->typeId);
 		if (!action) continue;
 

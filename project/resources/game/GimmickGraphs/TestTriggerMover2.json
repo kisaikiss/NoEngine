@@ -1,0 +1,132 @@
+{
+  "links": [
+    {
+      "fromNodeId": "event-1",
+      "fromPinId": "exec.out",
+      "id": "link-12",
+      "toNodeId": "action-11",
+      "toPinId": "exec.in"
+    },
+    {
+      "fromNodeId": "action-11",
+      "fromPinId": "exec.out",
+      "id": "link-13",
+      "toNodeId": "branch-2",
+      "toPinId": "exec.in"
+    },
+    {
+      "fromNodeId": "branch-2",
+      "fromPinId": "exec.true",
+      "id": "link-14",
+      "toNodeId": "action-8",
+      "toPinId": "exec.in"
+    },
+    {
+      "fromNodeId": "action-8",
+      "fromPinId": "exec.out",
+      "id": "link-15",
+      "toNodeId": "action-4",
+      "toPinId": "exec.in"
+    },
+    {
+      "fromNodeId": "action-10",
+      "fromPinId": "exec.out",
+      "id": "link-16",
+      "toNodeId": "action-6",
+      "toPinId": "exec.in"
+    },
+    {
+      "fromNodeId": "branch-2",
+      "fromPinId": "exec.false",
+      "id": "link-17",
+      "toNodeId": "action-10",
+      "toPinId": "exec.in"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "event-1",
+      "kind": "event",
+      "position": [
+        -151.0,
+        45.0
+      ],
+      "properties": {},
+      "typeId": "engine.trigger.enter"
+    },
+    {
+      "id": "branch-2",
+      "kind": "branch",
+      "position": [
+        394.0,
+        83.0
+      ],
+      "properties": {
+        "expectedValue": true,
+        "flagName": "OnEnter"
+      },
+      "typeId": "engine.branch.flag"
+    },
+    {
+      "id": "action-4",
+      "kind": "action",
+      "position": [
+        1634.0,
+        197.0
+      ],
+      "properties": {
+        "targetEntity": "box_2"
+      },
+      "typeId": "engine.mover.activate"
+    },
+    {
+      "id": "action-6",
+      "kind": "action",
+      "position": [
+        1298.0,
+        373.0
+      ],
+      "properties": {
+        "targetEntity": "box"
+      },
+      "typeId": "engine.mover.activate"
+    },
+    {
+      "id": "action-8",
+      "kind": "action",
+      "position": [
+        1115.0,
+        189.0
+      ],
+      "properties": {
+        "outputString": "True"
+      },
+      "typeId": "engine.debug.log"
+    },
+    {
+      "id": "action-10",
+      "kind": "action",
+      "position": [
+        875.0,
+        325.0
+      ],
+      "properties": {
+        "outputString": "False"
+      },
+      "typeId": "engine.debug.log"
+    },
+    {
+      "id": "action-11",
+      "kind": "action",
+      "position": [
+        -5.0,
+        149.0
+      ],
+      "properties": {
+        "outputString": "OnEnter2"
+      },
+      "typeId": "engine.debug.log"
+    }
+  ],
+  "version": 1
+}

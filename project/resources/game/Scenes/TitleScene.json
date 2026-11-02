@@ -223,6 +223,48 @@
                 }
             }
         },
+        "credit": {
+            "components": {
+                "EditTag": {
+                    "name": "credit",
+                    "parent": null
+                },
+                "TextComponent": {
+                    "anchor": [
+                        0.0,
+                        1.0
+                    ],
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "fontName": "resources/engine/fonts/UbuntuMono-RI.ttf",
+                    "hAlign": "kLeft",
+                    "isVisible": true,
+                    "layer": 0,
+                    "letterSpacing": 0.0,
+                    "orderInLayer": 0,
+                    "scale": 1.0,
+                    "space": "Screen",
+                    "text": "Credit\nVOICEVOX Nemo",
+                    "vAlign": "kBaseline"
+                },
+                "Transform2DComponent": {
+                    "parent": null,
+                    "rotation": 0.0,
+                    "scale": [
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        45.25806427001953,
+                        -76.74195098876953
+                    ]
+                }
+            }
+        },
         "cursor": {
             "components": {
                 "EditTag": {

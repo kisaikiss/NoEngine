@@ -1068,9 +1068,9 @@
                 },
                 "DebugCameraComponent": {
                     "center": [
-                        8.906516075134277,
-                        2.5049242973327637,
-                        7.9632720947265625
+                        10.0300931930542,
+                        -1.8320503234863281,
+                        3.3549413681030273
                     ],
                     "distance": 24.76100730895996,
                     "drawCenter": false,
@@ -1085,10 +1085,10 @@
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
-                        0.055958863347768784,
-                        0.837432861328125,
-                        -0.08732961863279343,
-                        0.5366082191467285
+                        0.19007307291030884,
+                        0.7919900417327881,
+                        -0.30500298738479614,
+                        0.4935557246208191
                     ],
                     "scale": [
                         1.0,
@@ -1096,9 +1096,9 @@
                         1.0
                     ],
                     "translate": [
-                        -13.105351448059082,
-                        7.613648891448975,
-                        18.08681869506836
+                        -6.456694602966309,
+                        14.776195526123047,
+                        11.445648193359375
                     ]
                 }
             }
@@ -7678,6 +7678,49 @@
                         12.443277359008789,
                         1.7682119607925415,
                         13.000216484069824
+                    ]
+                },
+                "TriggerComponent": {
+                    "activated": false,
+                    "oneShot": true,
+                    "wasTouching": false
+                }
+            }
+        },
+        "Trigger_2": {
+            "components": {
+                "EditTag": {
+                    "name": "Trigger_2",
+                    "parent": null
+                },
+                "GimmickGraphComponent": {
+                    "graphPath": "resources/game/GimmickGraphs/TestTriggerMover2.json"
+                },
+                "SphereCollider": {
+                    "localCenter": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "radius": 0.6000000238418579
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        2.5266518592834473,
+                        2.5541341304779053,
+                        6.340549945831299
                     ]
                 },
                 "TriggerComponent": {
