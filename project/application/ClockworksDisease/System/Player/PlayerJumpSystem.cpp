@@ -167,40 +167,6 @@ void HandleJumpRelease(PlayerComponent* playerVariables, const PlayerInputCompon
 	}
 }
 
-// 足場を生成する処理
-void CreateScaffold(No::Registry& registry, No::Entity entity, PlayerComponent* playerVariables,
-	No::GroundStateComponent* groundState, No::TransformComponent* transform,
-	const PlayerInputComponent& input) {
-
-	const bool hasCreateMagicScaffoldTag = registry.Has<CreateMagicScaffoldTag>(entity);
-	if (hasCreateMagicScaffoldTag && playerVariables->canCreateScaffold) {
-		for (auto e : registry.View<No::SpriteComponent, CanMagicUITag>()) {
-			registry.GetComponent<No::SpriteComponent>(e)->isVisible = true;
-		}
-	} else {
-		for (auto e : registry.View<No::SpriteComponent, CanMagicUITag>()) {
-			if (!registry.GetComponent<CanMagicUITag>(e)->isBackground) {
-				registry.GetComponent<No::SpriteComponent>(e)->isVisible = false;
-			}
-		}
-	}
-
-	if (input.createScaffoldTriggered) {
-		if (groundState->isGrounded || playerVariables->infinityJump || !playerVariables->canCreateScaffold || !hasCreateMagicScaffoldTag) {
-			return;
-		}
-
-
-		// 足場をプレイヤーの下に生成する
-		auto e = No::InstantiatePreset(registry, "resources/game/Prefabs/magicScaffold.json");
-		auto* scaffoldTransform = registry.GetComponent<No::TransformComponent>(e);
-		scaffoldTransform->translate = transform->translate;
-		playerVariables->yVelocity = playerVariables->doubleJumpSpeed;
-		playerVariables->jumpKind = PlayerJumpKind::kNormal;
-		playerVariables->canCreateScaffold = false;
-	}
-}
-
 } // namespace
 
 void PlayerJumpSystem::Update(No::Registry& registry, float deltaTime) {
@@ -254,9 +220,6 @@ void PlayerJumpSystem::Update(No::Registry& registry, float deltaTime) {
 		HandleNormalJump(registry, entity, playerVariables, groundState, isGrounded, transientState, *input);
 		HandleHighJump(registry, entity, playerVariables, groundState, isGrounded, transientState, *input, deltaTime);
 		HandleJumpRelease(playerVariables, *input);
-		CreateScaffold(registry, entity, playerVariables, groundState,
-			registry.GetComponent<No::TransformComponent>(entity), *input);
-
 		const bool isJumping = PlayerStates::Get(playerVariables->state).IsJumpState()
 			|| transientState->justJumped || !groundState->isGrounded;
 		if (!isJumping || !shadowMesh || !shadowTransform) continue;

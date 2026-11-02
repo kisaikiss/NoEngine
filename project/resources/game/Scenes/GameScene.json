@@ -42970,6 +42970,7 @@
         "PlayerInputSystem",
         "PlayerJumpSystem",
         "PlayerActionSystem",
+        "PlayerScaffoldActionSystem",
         "PlayerHorizontalMoveSystem",
         "PlayerVerticalVelocitySystem",
         "PlayerAnimationSystem",
