@@ -8522,6 +8522,10 @@
                     "highJump": false,
                     "magicScaffold": false
                 },
+                "PlayerActionComponent": {
+                    "activeAction": "kNone",
+                    "elapsedTime": 0.0
+                },
                 "PlayerComponent": {
                     "accelerationTime": 0.05000000074505806,
                     "airAcceleration": 20.0,
@@ -8554,6 +8558,7 @@
                     "state": "kWait",
                     "walkSpeed": 4.0
                 },
+                "PlayerInputComponent": null,
                 "PlayerMoveTransientComponent": null,
                 "PrefabInstanceTag": {
                     "prefabPath": "resources/game/Prefabs\\player.json"
@@ -9172,7 +9177,9 @@
         "GameProgressInitSystem",
         "GameTimerSystem",
         "PlayerStaminaSystem",
+        "PlayerInputSystem",
         "PlayerJumpSystem",
+        "PlayerActionSystem",
         "PlayerHorizontalMoveSystem",
         "PlayerVerticalVelocitySystem",
         "PlayerAnimationSystem",

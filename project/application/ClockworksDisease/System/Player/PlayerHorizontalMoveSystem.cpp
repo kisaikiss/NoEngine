@@ -44,7 +44,8 @@ No::Vector3 ProjectOnGroundPlane(const No::Vector3& horizontalDir, const No::Vec
 void PlayerHorizontalMoveSystem::Update(No::Registry& registry, float deltaTime) {
 	const No::Quaternion cameraRotate = GetActiveCameraRotation(registry);
 
-	auto view = registry.View<PlayerComponent, No::TransformComponent, No::VelocityComponent,
+	auto view = registry.View<PlayerComponent, PlayerInputComponent, PlayerActionComponent,
+		No::TransformComponent, No::VelocityComponent,
 		No::GroundStateComponent, PlayerMoveTransientComponent>();
 
 	bool isSkip = false;
@@ -64,6 +65,8 @@ void PlayerHorizontalMoveSystem::Update(No::Registry& registry, float deltaTime)
 
 		auto* transform = registry.GetComponent<No::TransformComponent>(entity);
 		auto* playerVariables = registry.GetComponent<PlayerComponent>(entity);
+		auto* playerInput = registry.GetComponent<PlayerInputComponent>(entity);
+		auto* playerAction = registry.GetComponent<PlayerActionComponent>(entity);
 
 		// 水平移動の可否は現在Stateに委譲する。
 		if (!PlayerStates::Get(playerVariables->state).CanMoveHorizontally()) continue;
@@ -88,13 +91,12 @@ void PlayerHorizontalMoveSystem::Update(No::Registry& registry, float deltaTime)
 		const No::Vector3 currentHorizontalVelocity = { velocity->linear.x, 0.f, velocity->linear.z };
 		velocity->linear = No::Vector3::ZERO;
 		No::Vector3 inputDir = No::Vector3::ZERO;
-		inputDir.x = No::GetInputAxisValue("Lateral");
-		inputDir.z = No::GetInputAxisValue("Forward");
+		inputDir = playerInput->moveAxis;
 
 		float inputForce = (std::fabsf(inputDir.x) + std::fabsf(inputDir.z)) / 2.0f;
 
 		const bool hasInput = (inputDir.x != 0.f || inputDir.z != 0.f);
-		const bool isAirDashing = transientState->isAirDashing;
+		const bool isAirDashing = playerAction->activeAction == PlayerActionType::kAirDash;
 
 		if (!hasInput && !isAirDashing) {
 			if (particleEmitterSphere)

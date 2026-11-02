@@ -85,6 +85,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -266,6 +267,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -447,6 +449,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -628,6 +631,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -809,6 +813,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -1111,6 +1116,7 @@
                     "renderMode": "kDefault",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -1708,7 +1714,10 @@
                     "currentDistance": 15.0,
                     "distance": 15.0,
                     "goalViewSpeed": 10.0,
-                    "heightFollowSpeed": 6.0,
+                    "heightFallFollowSpeed": 12.0,
+                    "heightRiseCatchUpThreshold": 4.0,
+                    "heightRiseFollowSpeed": 2.0,
+                    "lookUpCameraClearance": 1.25,
                     "maxDistance": 15.0,
                     "maxFov": 0.8500000238418579,
                     "maxPhi": 1.5707963705062866,
@@ -1977,6 +1986,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -2275,6 +2285,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -2402,6 +2413,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -2529,6 +2541,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -2656,6 +2669,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -2783,6 +2797,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -2910,6 +2925,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -3037,6 +3053,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -3164,6 +3181,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -3291,6 +3309,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -3418,6 +3437,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -3545,6 +3565,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -3672,6 +3693,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -3799,6 +3821,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -3926,6 +3949,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -4053,6 +4077,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -4180,6 +4205,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -4307,6 +4333,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -4434,6 +4461,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -4561,6 +4589,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -4688,6 +4717,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -4815,6 +4845,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -4942,6 +4973,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -5069,6 +5101,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -5196,6 +5229,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -5323,6 +5357,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -5450,6 +5485,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -5577,6 +5613,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -5704,6 +5741,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -5831,6 +5869,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -5958,6 +5997,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -6085,6 +6125,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -6212,6 +6253,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -6339,6 +6381,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -6466,6 +6509,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -6593,6 +6637,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -6720,6 +6765,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -6847,6 +6893,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -6974,6 +7021,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -7101,6 +7149,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -7228,6 +7277,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -7355,6 +7405,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -7482,6 +7533,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -7609,6 +7661,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -7736,6 +7789,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -7863,6 +7917,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -7990,6 +8045,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -8117,6 +8173,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -8244,6 +8301,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -8371,6 +8429,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -8498,6 +8557,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -8625,6 +8685,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -8752,6 +8813,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -8879,6 +8941,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -9006,6 +9069,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -9133,6 +9197,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -9260,6 +9325,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -9387,6 +9453,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -9514,6 +9581,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -9641,6 +9709,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -9768,6 +9837,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -9895,6 +9965,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -10022,6 +10093,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -10149,6 +10221,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -10276,6 +10349,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -10403,6 +10477,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -10530,6 +10605,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -10657,6 +10733,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -10784,6 +10861,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -10911,6 +10989,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -11038,6 +11117,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -11165,6 +11245,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -11292,6 +11373,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -11419,6 +11501,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -11546,6 +11629,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -11673,6 +11757,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -11800,6 +11885,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -11927,6 +12013,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -12054,6 +12141,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -12181,6 +12269,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -12308,6 +12397,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -12435,6 +12525,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -12562,6 +12653,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -12689,6 +12781,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -12816,6 +12909,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -12943,6 +13037,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -13070,6 +13165,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -13197,6 +13293,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -13324,6 +13421,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -13451,6 +13549,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -13578,6 +13677,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -13705,6 +13805,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -13832,6 +13933,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -13959,6 +14061,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -14086,6 +14189,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -14213,6 +14317,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -14340,6 +14445,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -14467,6 +14573,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -14594,6 +14701,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -14721,6 +14829,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -14848,6 +14957,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -14975,6 +15085,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -15102,6 +15213,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -15229,6 +15341,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -15356,6 +15469,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -15483,6 +15597,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -15610,6 +15725,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -15737,6 +15853,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -15864,6 +15981,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -15991,6 +16109,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -16118,6 +16237,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -16245,6 +16365,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -16372,6 +16493,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -16499,6 +16621,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -16626,6 +16749,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -16753,6 +16877,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -16880,6 +17005,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -17007,6 +17133,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -17134,6 +17261,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -17261,6 +17389,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -17388,6 +17517,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -17515,6 +17645,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -17642,6 +17773,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -17769,6 +17901,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -17896,6 +18029,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -18023,6 +18157,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -18150,6 +18285,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -18277,6 +18413,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -18404,6 +18541,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -18531,6 +18669,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -18658,6 +18797,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -18785,6 +18925,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -18912,6 +19053,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -19039,6 +19181,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -19166,6 +19309,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -19293,6 +19437,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -19420,6 +19565,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -19547,6 +19693,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -19674,6 +19821,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -19801,6 +19949,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -19928,6 +20077,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -20055,6 +20205,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -20182,6 +20333,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -20309,6 +20461,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -20436,6 +20589,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -20563,6 +20717,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -20690,6 +20845,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -20817,6 +20973,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -20944,6 +21101,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -21071,6 +21229,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -21198,6 +21357,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -21325,6 +21485,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -21452,6 +21613,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -21579,6 +21741,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -21706,6 +21869,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -21833,6 +21997,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -21960,6 +22125,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -22087,6 +22253,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -22214,6 +22381,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -22341,6 +22509,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -22468,6 +22637,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -22595,6 +22765,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -22722,6 +22893,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -22849,6 +23021,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -22976,6 +23149,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -23103,6 +23277,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -23230,6 +23405,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -23357,6 +23533,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -23484,6 +23661,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -23611,6 +23789,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -23738,6 +23917,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -23865,6 +24045,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -23992,6 +24173,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -24119,6 +24301,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -24246,6 +24429,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -24373,6 +24557,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -24500,6 +24685,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -24627,6 +24813,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -24754,6 +24941,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -24881,6 +25069,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -25008,6 +25197,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -25135,6 +25325,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -25262,6 +25453,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -25389,6 +25581,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -25516,6 +25709,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -25643,6 +25837,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -25770,6 +25965,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -25897,6 +26093,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -26024,6 +26221,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -26151,6 +26349,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -26278,6 +26477,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -26405,6 +26605,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -26532,6 +26733,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -26659,6 +26861,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -26786,6 +26989,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -26913,6 +27117,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -27040,6 +27245,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -27167,6 +27373,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -27294,6 +27501,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -27421,6 +27629,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -27548,6 +27757,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -27675,6 +27885,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -27802,6 +28013,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -27929,6 +28141,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -28056,6 +28269,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -28183,6 +28397,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -28310,6 +28525,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -28437,6 +28653,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -28564,6 +28781,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -28691,6 +28909,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -28818,6 +29037,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -28945,6 +29165,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -29072,6 +29293,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -29199,6 +29421,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -29326,6 +29549,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -29453,6 +29677,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -29580,6 +29805,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -29707,6 +29933,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -29834,6 +30061,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -29961,6 +30189,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -30088,6 +30317,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -30215,6 +30445,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -30342,6 +30573,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -30469,6 +30701,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -30596,6 +30829,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -30723,6 +30957,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -30850,6 +31085,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -30977,6 +31213,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -31104,6 +31341,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -31231,6 +31469,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -31358,6 +31597,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -31485,6 +31725,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -31612,6 +31853,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -31739,6 +31981,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -31866,6 +32109,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -31993,6 +32237,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -32120,6 +32365,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -32247,6 +32493,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -32374,6 +32621,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -32501,6 +32749,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -32628,6 +32877,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -32755,6 +33005,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -32882,6 +33133,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -33009,6 +33261,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -33136,6 +33389,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -33263,6 +33517,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -33390,6 +33645,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -33517,6 +33773,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -33644,6 +33901,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -33771,6 +34029,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -33898,6 +34157,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -34025,6 +34285,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -34152,6 +34413,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -34279,6 +34541,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -34406,6 +34669,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -34533,6 +34797,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -34660,6 +34925,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -34787,6 +35053,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -34914,6 +35181,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -35041,6 +35309,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -35168,6 +35437,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -35295,6 +35565,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -35422,6 +35693,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -35549,6 +35821,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -35676,6 +35949,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -35803,6 +36077,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -35930,6 +36205,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -36057,6 +36333,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -36184,6 +36461,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -36311,6 +36589,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -36438,6 +36717,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -36565,6 +36845,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -36692,6 +36973,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -36819,6 +37101,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -36946,6 +37229,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -37073,6 +37357,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -37200,6 +37485,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -37327,6 +37613,7 @@
                     "renderMode": "kEmissive",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -37426,6 +37713,7 @@
                     "renderMode": "kDefault",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -37610,6 +37898,7 @@
                     "renderMode": "kDefault",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -37708,6 +37997,7 @@
                     "renderMode": "kDefault",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -37806,6 +38096,7 @@
                     "renderMode": "kDefault",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -37904,6 +38195,7 @@
                     "renderMode": "kDefault",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -38002,6 +38294,7 @@
                     "renderMode": "kDefault",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -38151,6 +38444,7 @@
                     "renderMode": "kDefault",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -38249,6 +38543,7 @@
                     "renderMode": "kDefault",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -38347,6 +38642,7 @@
                     "renderMode": "kDefault",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -38433,6 +38729,7 @@
                     "renderMode": "kDefault",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -38519,6 +38816,7 @@
                     "renderMode": "kDefault",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -38605,6 +38903,7 @@
                     "renderMode": "kDefault",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -38790,6 +39089,7 @@
                     "renderMode": "kDefault",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -38888,6 +39188,7 @@
                     "renderMode": "kDefault",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -38986,6 +39287,7 @@
                     "renderMode": "kDefault",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -39084,6 +39386,7 @@
                     "renderMode": "kDefault",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -39182,6 +39485,7 @@
                     "renderMode": "kDefault",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -39331,6 +39635,7 @@
                     "renderMode": "kDefault",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -39480,6 +39785,7 @@
                     "renderMode": "kDefault",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -39629,6 +39935,7 @@
                     "renderMode": "kDefault",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -39778,6 +40085,7 @@
                     "renderMode": "kDefault",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -39927,6 +40235,7 @@
                     "renderMode": "kDefault",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -40025,6 +40334,7 @@
                     "renderMode": "kDefault",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -40111,6 +40421,7 @@
                     "renderMode": "kDefault",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -40197,6 +40508,7 @@
                     "renderMode": "kDefault",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -40283,6 +40595,7 @@
                     "renderMode": "kDefault",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -40357,6 +40670,7 @@
                     "renderMode": "kDefault",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -40469,6 +40783,7 @@
                     "renderMode": "kDefault",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -40555,6 +40870,7 @@
                     "renderMode": "kDefault",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -40751,7 +41067,11 @@
                         "作られていないのかもな。",
                         "そういえば、RBでいつでも砦の方向を確認できるって知ってたか？",
                         "俺は知らなかった。"
-                    ]
+                    ],
+                    "portraitFrameCount": 4,
+                    "portraitTexture": "resources/game/ClockworksDisease/Texture/Portrait/Leimar.png",
+                    "voiceFiles": [],
+                    "voiceVolume": 0.3499999940395355
                 },
                 "EditTag": {
                     "name": "eventPoint",
@@ -40796,7 +41116,11 @@
                         "途中にある魔法の玉は取って自分の力にすると良い。",
                         "魔力を蓄えないと砦へはたどり着けないだろうからな。",
                         "頑張れよ。"
-                    ]
+                    ],
+                    "portraitFrameCount": 4,
+                    "portraitTexture": "resources/game/ClockworksDisease/Texture/Portrait/Leimar.png",
+                    "voiceFiles": [],
+                    "voiceVolume": 0.3499999940395355
                 },
                 "EditTag": {
                     "name": "eventPoint_2",
@@ -41076,6 +41400,7 @@
                     "renderMode": "kToon",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -41102,6 +41427,10 @@
                     "airDash": false,
                     "highJump": false,
                     "magicScaffold": false
+                },
+                "PlayerActionComponent": {
+                    "activeAction": "kNone",
+                    "elapsedTime": 0.0
                 },
                 "PlayerComponent": {
                     "accelerationTime": 0.10000000149011612,
@@ -41135,6 +41464,7 @@
                     "state": "kWait",
                     "walkSpeed": 4.0
                 },
+                "PlayerInputComponent": null,
                 "PlayerMoveTransientComponent": null,
                 "PrefabInstanceTag": {
                     "prefabPath": "resources/game/Prefabs\\player.json"
@@ -41208,6 +41538,7 @@
                     "renderMode": "kToon",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -41296,6 +41627,7 @@
                     "renderMode": "kToon",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -41388,6 +41720,7 @@
                     "renderMode": "kToon",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -41480,6 +41813,7 @@
                     "renderMode": "kToon",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -41572,6 +41906,7 @@
                     "renderMode": "kToon",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -41664,6 +41999,7 @@
                     "renderMode": "kToon",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -41756,6 +42092,7 @@
                     "renderMode": "kToon",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -41848,6 +42185,7 @@
                     "renderMode": "kToon",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -41930,6 +42268,7 @@
                     "renderMode": "kDefault",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": true,
                     "uvPosition": [
                         0.0,
@@ -42000,6 +42339,7 @@
                     "renderMode": "kToon",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -42240,6 +42580,7 @@
                     "renderMode": "kToon",
                     "rimPower": 2.0,
                     "shininess": 60.0,
+                    "textureName": "",
                     "unlit": false,
                     "uvPosition": [
                         0.0,
@@ -42626,7 +42967,9 @@
         "GameTimerSystem",
         "StageIntroDisplaySystem",
         "PlayerStaminaSystem",
+        "PlayerInputSystem",
         "PlayerJumpSystem",
+        "PlayerActionSystem",
         "PlayerHorizontalMoveSystem",
         "PlayerVerticalVelocitySystem",
         "PlayerAnimationSystem",

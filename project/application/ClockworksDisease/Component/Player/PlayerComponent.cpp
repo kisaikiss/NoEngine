@@ -36,6 +36,14 @@ REFLECT_FIELD(airDash),
 REFLECT_FIELD(magicScaffold)
 REFLECT_STRUCT_END(PlayerAbilityDebugComponent)
 
+REFLECT_STRUCT_BEGIN(PlayerInputComponent, "ApplicationTag")
+REFLECT_STRUCT_END(PlayerInputComponent)
+
+REFLECT_STRUCT_BEGIN(PlayerActionComponent, "Application")
+REFLECT_ENUM_FIELD(activeAction),
+REFLECT_FIELD(elapsedTime)
+REFLECT_STRUCT_END(PlayerActionComponent)
+
 REFLECT_STRUCT_BEGIN(PlayerMoveTransientComponent, "ApplicationTag")
 REFLECT_STRUCT_END(PlayerMoveTransientComponent)
 

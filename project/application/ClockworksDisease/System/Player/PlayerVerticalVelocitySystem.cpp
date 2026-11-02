@@ -5,7 +5,7 @@
 
 void PlayerVerticalVelocitySystem::Update(No::Registry& registry, float deltaTime) {
 	auto view = registry.View<PlayerComponent, No::VelocityComponent, No::GroundStateComponent,
-		No::ParticleEmitterSphereComponent, PlayerMoveTransientComponent>();
+		No::ParticleEmitterSphereComponent, PlayerMoveTransientComponent, PlayerActionComponent>();
 
 	for (auto entity : view) {
 		auto* playerVariables = registry.GetComponent<PlayerComponent>(entity);
@@ -13,6 +13,7 @@ void PlayerVerticalVelocitySystem::Update(No::Registry& registry, float deltaTim
 		auto* groundState = registry.GetComponent<No::GroundStateComponent>(entity);
 		auto* particleEmitter = registry.GetComponent<No::ParticleEmitterSphereComponent>(entity);
 		auto* transientState = registry.GetComponent<PlayerMoveTransientComponent>(entity);
+		auto* playerAction = registry.GetComponent<PlayerActionComponent>(entity);
 
 		if (registry.Has<GoalDirectionLockTag>(entity)) {
 			particleEmitter->active = false;
@@ -21,7 +22,8 @@ void PlayerVerticalVelocitySystem::Update(No::Registry& registry, float deltaTim
 		const bool isGrounded = groundState->isGrounded;
 		const bool justJumped = transientState->justJumped;
 
-		if (transientState->isAirDashing) {
+		const bool isAirDashing = playerAction->activeAction == PlayerActionType::kAirDash;
+		if (isAirDashing) {
 			velocity->linear.y = 0.f;
 			particleEmitter->active = false;
 		} else if (isGrounded && !justJumped) {
@@ -36,7 +38,7 @@ void PlayerVerticalVelocitySystem::Update(No::Registry& registry, float deltaTim
 		}
 
 		const bool isMoving = (velocity->linear.x != 0.f || velocity->linear.z != 0.f);
-		PlayerStateContext stateContext{ *playerVariables, isGrounded, isMoving, transientState->isAirDashing };
+		PlayerStateContext stateContext{ *playerVariables, isGrounded, isMoving, isAirDashing };
 		PlayerStates::Update(stateContext);
 
 		playerVariables->groundNormal = No::Vector3::ZERO;

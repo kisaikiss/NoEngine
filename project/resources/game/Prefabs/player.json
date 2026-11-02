@@ -98,6 +98,7 @@
         },
         "MaterialComponent": {
             "blendMode": "kNormal",
+            "castShadow": true,
             "color": [
                 1.0,
                 1.0,
@@ -119,6 +120,7 @@
             "renderMode": "kToon",
             "rimPower": 2.0,
             "shininess": 60.0,
+            "textureName": "",
             "unlit": false,
             "uvPosition": [
                 0.0,
@@ -146,10 +148,13 @@
             "highJump": false,
             "magicScaffold": false
         },
+        "PlayerActionComponent": {
+            "activeAction": "kNone",
+            "elapsedTime": 0.0
+        },
         "PlayerComponent": {
-            "airAcceleration": 20.0,
-            "accelerationTime": 0.35,
-            "decelerationTime": 0.35,
+            "accelerationTime": 0.10000000149011612,
+            "airAcceleration": 40.0,
             "airDashSpeed": 10.0,
             "airDashStaminaCostRate": 2.0,
             "coyoteTime": 0.30000001192092896,
@@ -162,11 +167,12 @@
             "highJumpSpeed": 15.0,
             "infinityJump": false,
             "infinityStamina": false,
+            "jumpKind": "kNormal",
             "jumpSpeed": 10.0,
             "maxFallSpeed": -20.0,
             "maxStamina": 0.0,
             "minGroundNormalY": 0.8500000238418579,
-            "moveSpeed": 9.0,
+            "moveSpeed": 11.0,
             "respawnPoint": [
                 0.0,
                 0.5,
@@ -175,9 +181,10 @@
             "stamina": 0.0,
             "staminaRecoveryRate": 1.0,
             "staminaUpPerLevel": 1.0,
-            "state": "kWait",
-            "walkSpeed": 4.0
+            "state": "kSleep",
+            "walkSpeed": 7.0
         },
+        "PlayerInputComponent": null,
         "PlayerMoveTransientComponent": null,
         "PrefabInstanceTag": {
             "prefabPath": "resources/game/Prefabs\\player.json"
@@ -185,10 +192,10 @@
         "TransformComponent": {
             "parent": null,
             "rotation": [
-                -4.337023256084649e-06,
-                -0.7890259027481079,
-                -2.020248075496056e-06,
-                0.6143598556518555
+                -7.666791930205363e-07,
+                0.7216740846633911,
+                7.155207640607841e-06,
+                0.6922329664230347
             ],
             "scale": [
                 1.0,
@@ -196,9 +203,9 @@
                 1.0
             ],
             "translate": [
-                6.1407599449157715,
-                0.09782293438911438,
-                0.16148066520690918
+                -2.8651061058044434,
+                0.0,
+                1.0656254291534424
             ]
         },
         "VelocityComponent": {

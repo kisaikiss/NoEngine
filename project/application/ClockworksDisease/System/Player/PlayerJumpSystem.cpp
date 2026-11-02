@@ -102,9 +102,10 @@ namespace {
 
 // 通常ジャンプ・多段ジャンプのトリガー処理
 void HandleNormalJump(No::Registry& registry, No::Entity entity, PlayerComponent* playerVariables,
-	No::GroundStateComponent* groundState, bool isGrounded, PlayerMoveTransientComponent* transientState) {
+	No::GroundStateComponent* groundState, bool isGrounded, PlayerMoveTransientComponent* transientState,
+	const PlayerInputComponent& input) {
 
-	if (!No::InputIsTrigger("Jump")) {
+	if (!input.jumpTriggered) {
 		return;
 	}
 
@@ -131,11 +132,11 @@ void HandleNormalJump(No::Registry& registry, No::Entity entity, PlayerComponent
 // ハイジャンプの「保持中の加速」と「発動トリガー」を担当
 void HandleHighJump(No::Registry& registry, No::Entity entity, PlayerComponent* playerVariables,
 	No::GroundStateComponent* groundState, bool isGrounded, PlayerMoveTransientComponent* transientState,
-	float deltaTime) {
+	const PlayerInputComponent& input, float deltaTime) {
 
 	const bool hasHighJumpTag = registry.Has<HighJumpTag>(entity);
 
-	if (No::InputIsPress("HighJump")) {
+	if (input.highJumpPressed) {
 		if (hasHighJumpTag && PlayerStates::Get(playerVariables->state).IsJumpState() && !isGrounded) {
 			if (playerVariables->stamina > playerVariables->highJumpCostRate * deltaTime) {
 				playerVariables->yVelocity = playerVariables->highJumpSpeed;
@@ -145,7 +146,7 @@ void HandleHighJump(No::Registry& registry, No::Entity entity, PlayerComponent* 
 		}
 	}
 
-	if (No::InputIsTrigger("HighJump") && hasHighJumpTag) {
+	if (input.highJumpTriggered && hasHighJumpTag) {
 		if (isGrounded || playerVariables->infinityJump) {
 			if (playerVariables->stamina > playerVariables->highJumpCostRate * deltaTime) {
 				playerVariables->yVelocity = playerVariables->highJumpSpeed;
@@ -157,27 +158,9 @@ void HandleHighJump(No::Registry& registry, No::Entity entity, PlayerComponent* 
 	}
 }
 
-// 空中で "AirDash" を押している間、スタミナを消費して空中ダッシュ状態にする。
-// 実際の移動速度は PlayerHorizontalMoveSystem、重力無視は PlayerVerticalVelocitySystem が
-// この isAirDashing フラグを見て処理する。
-void HandleAirDash(No::Registry& registry, No::Entity entity, PlayerComponent* playerVariables,
-	bool isGrounded, PlayerMoveTransientComponent* transientState, float deltaTime) {
-
-	if (isGrounded || !registry.Has<AirDashTag>(entity) || !No::InputIsPress("AirDash")) {
-		return;
-	}
-
-	if (playerVariables->stamina <= playerVariables->airDashStaminaCostRate * deltaTime) {
-		return;
-	}
-
-	transientState->isAirDashing = true;
-	playerVariables->stamina -= playerVariables->airDashStaminaCostRate * deltaTime;
-}
-
 // ジャンプ/ハイジャンプ入力を離した瞬間の減速処理
-void HandleJumpRelease(PlayerComponent* playerVariables) {
-	if (No::InputIsRelease("Jump") || No::InputIsRelease("HighJump")) {
+void HandleJumpRelease(PlayerComponent* playerVariables, const PlayerInputComponent& input) {
+	if (input.jumpReleased || input.highJumpReleased) {
 		if (playerVariables->yVelocity > 0.f) {
 			playerVariables->yVelocity *= 0.5f;
 		}
@@ -186,7 +169,8 @@ void HandleJumpRelease(PlayerComponent* playerVariables) {
 
 // 足場を生成する処理
 void CreateScaffold(No::Registry& registry, No::Entity entity, PlayerComponent* playerVariables,
-	No::GroundStateComponent* groundState, No::TransformComponent* transform) {
+	No::GroundStateComponent* groundState, No::TransformComponent* transform,
+	const PlayerInputComponent& input) {
 
 	const bool hasCreateMagicScaffoldTag = registry.Has<CreateMagicScaffoldTag>(entity);
 	if (hasCreateMagicScaffoldTag && playerVariables->canCreateScaffold) {
@@ -201,7 +185,7 @@ void CreateScaffold(No::Registry& registry, No::Entity entity, PlayerComponent* 
 		}
 	}
 
-	if (No::InputIsTrigger("CreateScaffold")) {
+	if (input.createScaffoldTriggered) {
 		if (groundState->isGrounded || playerVariables->infinityJump || !playerVariables->canCreateScaffold || !hasCreateMagicScaffoldTag) {
 			return;
 		}
@@ -230,7 +214,8 @@ void PlayerJumpSystem::Update(No::Registry& registry, float deltaTime) {
 		if (registry.Has<CameraLockTag>(e)) isSkip = true; // 演出中は操作できない
 	}
 
-	auto view = registry.View<PlayerComponent, No::TransformComponent, No::GroundStateComponent, PlayerMoveTransientComponent>();
+	auto view = registry.View<PlayerComponent, PlayerInputComponent, No::TransformComponent,
+		No::GroundStateComponent, PlayerMoveTransientComponent>();
 	for (auto entity : view) {
 		if (isSkip) continue;
 		// リスポーン位置への移動が完了するまでは操作を止める。
@@ -241,17 +226,13 @@ void PlayerJumpSystem::Update(No::Registry& registry, float deltaTime) {
 		if (registry.Has<GoalDirectionLockTag>(entity) || registry.Has<DialogueLockTag>(entity)) continue;
 
 		auto* playerVariables = registry.GetComponent<PlayerComponent>(entity);
+		auto* input = registry.GetComponent<PlayerInputComponent>(entity);
 		auto* groundState = registry.GetComponent<No::GroundStateComponent>(entity);
 		auto* transientState = registry.GetComponent<PlayerMoveTransientComponent>(entity);
-
-		if (No::InputIsRelease("AirDash") && transientState->isAirDashing) {
-			playerVariables->yVelocity = 0.0f;
-		}
 
 		// このフレームの一時状態をリセット（このシステムが一番最初に触るため）
 		transientState->justJumped = false;
 		transientState->slopeY = 0.f;
-		transientState->isAirDashing = false;
 
 		// isGrounded は各ハンドラ内で isGrounded を書き換える前の値を使う必要があるため先に確定
 		bool isGrounded = groundState->isGrounded;
@@ -270,11 +251,11 @@ void PlayerJumpSystem::Update(No::Registry& registry, float deltaTime) {
 			}
 		}
 
-		HandleNormalJump(registry, entity, playerVariables, groundState, isGrounded, transientState);
-		HandleHighJump(registry, entity, playerVariables, groundState, isGrounded, transientState, deltaTime);
-		HandleAirDash(registry, entity, playerVariables, isGrounded, transientState, deltaTime);
-		HandleJumpRelease(playerVariables);
-		CreateScaffold(registry, entity, playerVariables, groundState, registry.GetComponent<No::TransformComponent>(entity));
+		HandleNormalJump(registry, entity, playerVariables, groundState, isGrounded, transientState, *input);
+		HandleHighJump(registry, entity, playerVariables, groundState, isGrounded, transientState, *input, deltaTime);
+		HandleJumpRelease(playerVariables, *input);
+		CreateScaffold(registry, entity, playerVariables, groundState,
+			registry.GetComponent<No::TransformComponent>(entity), *input);
 
 		const bool isJumping = PlayerStates::Get(playerVariables->state).IsJumpState()
 			|| transientState->justJumped || !groundState->isGrounded;

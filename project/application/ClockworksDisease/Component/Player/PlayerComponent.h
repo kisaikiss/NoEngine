@@ -60,6 +60,31 @@ struct PlayerAbilityDebugComponent {
 	bool magicScaffold = false;
 };
 
+// PlayerInputSystemが物理入力を1フレーム分だけ収集し、プレイヤー処理へ渡す。
+// ゲームプレイSystemからInputConfigを直接参照しないための境界。
+struct PlayerInputComponent {
+	No::Vector3 moveAxis = No::Vector3::ZERO;
+	bool jumpTriggered = false;
+	bool jumpReleased = false;
+	bool highJumpTriggered = false;
+	bool highJumpPressed = false;
+	bool highJumpReleased = false;
+	bool airDashPressed = false;
+	bool airDashReleased = false;
+	bool createScaffoldTriggered = false;
+};
+
+enum class PlayerActionType {
+	kNone,
+	kAirDash,
+};
+
+// 実行中アクションの共通状態。移動・物理Systemはこの状態を参照して効果を適用する。
+struct PlayerActionComponent {
+	PlayerActionType activeAction = PlayerActionType::kNone;
+	float elapsedTime = 0.0f;
+};
+
 // PlayerJumpSystem / PlayerHorizontalMoveSystem / PlayerVerticalVelocitySystem の間で
 // フレーム内だけ受け渡す一時データ。
 // PlayerComponent（永続データ）とは意図的に分離している。
@@ -67,7 +92,6 @@ struct PlayerAbilityDebugComponent {
 struct PlayerMoveTransientComponent {
 	bool justJumped = false;   // このフレームでジャンプ入力を処理したか（接地/重力判定の分岐に使用）
 	float slopeY = 0.f;        // 斜面投影による水平移動のy寄与分（PlayerHorizontalMoveSystemが算出）
-	bool isAirDashing = false; // このフレーム、空中ダッシュ中か（移動速度/重力の分岐に使用）
 };
 
 

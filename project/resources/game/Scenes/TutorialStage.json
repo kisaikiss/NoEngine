@@ -210,7 +210,11 @@
                         "おーい！まさか死んでないよな？",
                         "呼吸はしてるな。じゃあ早く起きろ。",
                         "Aでジャンプして起き上がってみろ。"
-                    ]
+                    ],
+                    "portraitFrameCount": 4,
+                    "portraitTexture": "resources/game/ClockworksDisease/Texture/Portrait/Leimar.png",
+                    "voiceFiles": [],
+                    "voiceVolume": 0.3499999940395355
                 },
                 "EditTag": {
                     "name": "Leimar",
@@ -2033,7 +2037,11 @@
                         "分からなかったらポーズメニューのControlsから確認しろよ。",
                         "ポーズメニューはスタートボタンで開くからな。",
                         "それから、右スティックで周りを見渡せるのも忘れるなよ。"
-                    ]
+                    ],
+                    "portraitFrameCount": 4,
+                    "portraitTexture": "resources/game/ClockworksDisease/Texture/Portrait/Leimar.png",
+                    "voiceFiles": [],
+                    "voiceVolume": 0.3499999940395355
                 },
                 "EditTag": {
                     "name": "eventPoint",
@@ -2070,7 +2078,11 @@
                     "lines": [
                         "なんだ？",
                         "早く箱に入れ。ここから脱出する唯一の道だ。"
-                    ]
+                    ],
+                    "portraitFrameCount": 4,
+                    "portraitTexture": "resources/game/ClockworksDisease/Texture/Portrait/Leimar.png",
+                    "voiceFiles": [],
+                    "voiceVolume": 0.3499999940395355
                 },
                 "EditTag": {
                     "name": "eventPoint2",
@@ -2111,7 +2123,11 @@
                         "おーい！聞こえてるかー！",
                         "Aボタンを押す長さでジャンプの高さが変わるからな！",
                         "早く上がってこーい！"
-                    ]
+                    ],
+                    "portraitFrameCount": 4,
+                    "portraitTexture": "resources/game/ClockworksDisease/Texture/Portrait/Leimar.png",
+                    "voiceFiles": [],
+                    "voiceVolume": 0.3499999940395355
                 },
                 "EditTag": {
                     "name": "eventPoint3",
@@ -2152,7 +2168,11 @@
                     "lines": [
                         "よく来たな",
                         "この箱が俺の作った脱出路だ。入って外に出るぞ。"
-                    ]
+                    ],
+                    "portraitFrameCount": 4,
+                    "portraitTexture": "resources/game/ClockworksDisease/Texture/Portrait/Leimar.png",
+                    "voiceFiles": [],
+                    "voiceVolume": 0.3499999940395355
                 },
                 "EditTag": {
                     "name": "eventPoint4",
@@ -2329,6 +2349,10 @@
                     "highJump": false,
                     "magicScaffold": false
                 },
+                "PlayerActionComponent": {
+                    "activeAction": "kNone",
+                    "elapsedTime": 0.0
+                },
                 "PlayerComponent": {
                     "accelerationTime": 0.10000000149011612,
                     "airAcceleration": 40.0,
@@ -2361,6 +2385,7 @@
                     "state": "kSleep",
                     "walkSpeed": 7.0
                 },
+                "PlayerInputComponent": null,
                 "PlayerMoveTransientComponent": null,
                 "PrefabInstanceTag": {
                     "prefabPath": "resources/game/Prefabs\\player.json"
@@ -2979,7 +3004,9 @@
         "GameProgressInitSystem",
         "GameTimerSystem",
         "PlayerStaminaSystem",
+        "PlayerInputSystem",
         "PlayerJumpSystem",
+        "PlayerActionSystem",
         "PlayerHorizontalMoveSystem",
         "PlayerVerticalVelocitySystem",
         "PlayerAnimationSystem",
