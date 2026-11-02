@@ -66,6 +66,7 @@
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PrePasses\LightPass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\Rasterization\MeshPass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\Rasterization\PrimitivePass.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\RenderPass\Rasterization\GridPass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\RenderPassScheduler.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RaytracingManager.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\Rasterization\SpritePass.cpp" />
@@ -351,6 +352,9 @@
     <ClCompile Include="externals\imgui\imgui_canvas.cpp" />
     <ClCompile Include="externals\imgui\imgui_node_editor.cpp" />
     <ClCompile Include="externals\imgui\imgui_node_editor_api.cpp" />
+    <ClCompile Include="application\ClockworksDisease\System\Player\PlayerActionSystem.cpp" />
+    <ClCompile Include="application\ClockworksDisease\System\Player\PlayerScaffoldActionSystem.cpp" />
+    <ClCompile Include="application\ClockworksDisease\System\Player\PlayerInputSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
@@ -381,6 +385,7 @@
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PrePasses\LightPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\Rasterization\MeshPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\Rasterization\PrimitivePass.h" />
+    <ClInclude Include="engine\Functions\Renderer\RenderPass\Rasterization\GridPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\RenderPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\RenderPassScheduler.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\Rasterization\SpritePass.h" />
@@ -707,6 +712,9 @@
     <ClInclude Include="externals\imgui\imgui_extra_math.h" />
     <ClInclude Include="externals\imgui\imgui_node_editor.h" />
     <ClInclude Include="externals\imgui\imgui_node_editor_internal.h" />
+    <ClInclude Include="application\ClockworksDisease\System\Player\PlayerActionSystem.h" />
+    <ClInclude Include="application\ClockworksDisease\System\Player\PlayerScaffoldActionSystem.h" />
+    <ClInclude Include="application\ClockworksDisease\System\Player\PlayerInputSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NoEngine.rc" />
@@ -724,5 +732,8 @@
     <None Include="externals\imgui\imgui_bezier_math.inl" />
     <None Include="externals\imgui\imgui_extra_math.inl" />
     <None Include="externals\imgui\imgui_node_editor_internal.inl" />
+    <None Include="resources\engine\Shaders\Grid.hlsli" />
+    <None Include="resources\engine\Shaders\Grid.VS.hlsl" />
+    <None Include="resources\engine\Shaders\Grid.PS.hlsl" />
   </ItemGroup>
 </Project>

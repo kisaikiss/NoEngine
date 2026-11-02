@@ -396,6 +396,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PrePasses\PreRenderPass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\Rasterization\ParticlePass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\Rasterization\PrimitivePass.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\RenderPass\Rasterization\GridPass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\Rasterization\SpriteIDPass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\Rasterization\TransparentMeshPass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\Raytracing\RaytracingShadowPass.cpp" />
@@ -774,6 +775,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PrePasses\PreRenderPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\Rasterization\ParticlePass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\Rasterization\PrimitivePass.h" />
+    <ClInclude Include="engine\Functions\Renderer\RenderPass\Rasterization\GridPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\Rasterization\SpriteIDPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\Rasterization\TransparentMeshPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\Raytracing\RaytracingShadowPass.h" />
@@ -1384,6 +1386,17 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     </None>
     <None Include="resources\engine\Shaders\Particle\Particle.hlsli" />
     <None Include="resources\engine\Shaders\Default.hlsli" />
+    <None Include="resources\engine\Shaders\Grid.hlsli" />
+    <None Include="resources\engine\Shaders\Grid.VS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
+    <None Include="resources\engine\Shaders\Grid.PS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
     <None Include="resources\engine\Shaders\Random.hlsli" />
     <None Include="resources\game\ClockworksDisease\Shaders\BackgroundCommon.hlsli" />
     <None Include="resources\game\Shaders\ShaderMathUtil.hlsli" />

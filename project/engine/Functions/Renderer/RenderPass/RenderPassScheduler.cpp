@@ -3,6 +3,7 @@
 #include "Rasterization/MeshPass.h"
 #include "Rasterization/TransparentMeshPass.h"
 #include "Rasterization/PrimitivePass.h"
+#include "Rasterization/GridPass.h"
 #include "PrePasses/LightPass.h"
 #include "Rasterization/CPUParticlePass.h"
 #include "Rasterization/ParticlePass.h"
@@ -286,6 +287,10 @@ void RenderPassScheduler::SavePassConfiguration(ECS::Registry& registry) {
 
 void RenderPassScheduler::DrawPassEditor(ECS::Registry& registry) {
 #ifdef USE_IMGUI
+    // グリッドはシーンのパス編集・保存から独立したエディタ表示として扱う。
+    for (auto& node : nodes_) {
+        if (node.editorName == "Debug grid") node.pass->DrawEditor();
+    }
 	if (!ImGui::Begin("Render Passes")) { ImGui::End(); return; }
 	bool changed = false;
 	for (size_t i = 0; i < activePassNames_.size();) {
@@ -586,12 +591,6 @@ void CommonSetupDebugRenderPass(RenderPassScheduler& renderPassScheduler) {
 	transparentMeshPass->SetTargetCameraType(RenderPass::TargetCameraType::kDebug);
 	renderPassScheduler.AddPass(std::move(transparentMeshPass), "Debug transparent mesh", true, false);
 
-	auto primitivePass = std::make_unique<PrimitivePass>();
-	primitivePass->AddOutput("DebugColor");
-	primitivePass->SetDepthOutput("MainDepth");
-	primitivePass->SetTargetCameraType(RenderPass::TargetCameraType::kDebug);
-	renderPassScheduler.AddPass(std::move(primitivePass), "Debug primitives", true, false);
-
 	auto cpuParticlePass = std::make_unique<CPUParticlePass>();
 	cpuParticlePass->AddOutput("DebugColor");
 	cpuParticlePass->SetDepthOutput("MainDepth");
@@ -603,6 +602,19 @@ void CommonSetupDebugRenderPass(RenderPassScheduler& renderPassScheduler) {
 	particlePass->SetDepthOutput("MainDepth");
 	particlePass->SetTargetCameraType(RenderPass::TargetCameraType::kDebug);
 	renderPassScheduler.AddPass(std::move(particlePass), "Debug GPU particles", true, false);
+
+    // 色の加工が終わったシーンへ重ね、深度を書き込むデバッグ線より先に描く。
+    auto gridPass = std::make_unique<GridPass>();
+    gridPass->AddOutput("DebugColor");
+    gridPass->SetDepthOutput("MainDepth");
+    gridPass->SetTargetCameraType(RenderPass::TargetCameraType::kDebug);
+    renderPassScheduler.AddPass(std::move(gridPass), "Debug grid", true, false);
+
+    auto primitivePass = std::make_unique<PrimitivePass>();
+    primitivePass->AddOutput("DebugColor");
+    primitivePass->SetDepthOutput("MainDepth");
+    primitivePass->SetTargetCameraType(RenderPass::TargetCameraType::kDebug);
+    renderPassScheduler.AddPass(std::move(primitivePass), "Debug primitives", true, false);
 
 	auto spritePass = std::make_unique<SpritePass>();
 	spritePass->AddOutput("DebugColor");
