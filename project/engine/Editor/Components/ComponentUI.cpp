@@ -24,29 +24,26 @@ void DrawComponentUI(Registry& registry, Entity e) {
 		if (!registry.Has(compInfo.typeId, e))
 			continue;
 
-		if (ImGui::CollapsingHeader(compInfo.name.c_str())) {
+		// コンポーネントごとにIDを分け、メニューやフィールドの衝突を防ぐ。
+		ImGui::PushID(&compInfo);
+		const bool isOpen = ImGui::CollapsingHeader(compInfo.name.c_str());
+		bool removeComponent = false;
+		if (ImGui::BeginPopupContextItem("ComponentContext")) {
+			removeComponent = ImGui::MenuItem("Remove");
+			ImGui::EndPopup();
+		}
+
+		if (removeComponent) {
+			Editor::EditorCommandOperator::AddCommand(std::make_unique<Command::RemoveComponentCommand>(registry, e, compInfo.typeId));
+			registry.RemoveComponent(compInfo.typeId, e);
+		} else if (isOpen) {
 			void* compPtr = compInfo.getter(registry, e);
 
 			for (auto& field : compInfo.fields) {
 				DrawFieldUI(registry, e, field, compPtr);
 			}
-			// 削除ボタン
-			if (ImGui::SmallButton("Remove")) {
-				ImGui::OpenPopup("ConfirmRemove");
-			}
-			if (ImGui::BeginPopupModal("ConfirmRemove")) {
-				ImGui::Text("Remove this component?");
-				if (ImGui::Button("Yes")) {
-					Editor::EditorCommandOperator::AddCommand(std::make_unique<Command::RemoveComponentCommand>(registry, e, compInfo.typeId));
-					registry.RemoveComponent(compInfo.typeId, e);
-				}
-				ImGui::SameLine();
-				if (ImGui::Button("No")) {
-					ImGui::CloseCurrentPopup();
-				}
-				ImGui::EndPopup();
-			}
 		}
+		ImGui::PopID();
 	}
 #else
 	static_cast<void>(registry);
