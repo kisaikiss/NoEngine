@@ -1,4 +1,5 @@
 #include "ImGuiManager.h"
+#include "engine/Assets/AssetBrowserWindow.h"
 #include "EditorWindowManager.h"
 #include "engine/Runtime/GraphicsCore.h"
 #include "engine/Functions/Renderer/RaytracingManager.h"
@@ -131,6 +132,7 @@ void ImGuiManager::BeginFrame() {
 }
 
 void ImGuiManager::Shutdown() {
+	Editor::ReleaseAssetBrowserPreviews();
 	Editor::EditorWindowManager::GetInstance().SaveSettings();
 	ImGui_ImplDX12_Shutdown();
 	ImGui_ImplWin32_Shutdown();

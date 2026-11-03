@@ -17,6 +17,7 @@ struct BrowserItem {
 	std::string displayName;          // グリッド表示用の名前
 	std::string path;                 // 実体ファイルパス（Prefab: .json、Asset: ソースファイル）
 	std::string metaFilePath;         // Assetのみ使用。Prefabの場合は空
+	std::string sourceFilePath;       // プレビュー用の元ファイルパス
 	std::string dragPayloadType;      // "PREFAB_PATH" or "ASSET_PATH"
 	std::string folderPath;			  // resources/ からの相対パス（"" ならルート直下）
 	EBrowserItemType type = EBrowserItemType::Unknown;

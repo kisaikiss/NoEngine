@@ -7,6 +7,10 @@
 
 #ifdef USE_IMGUI
 #include "externals/imgui/imgui.h"
+#include "engine/Assets/Texture/Texture.h"
+#include "engine/Runtime/GraphicsCore.h"
+#include "engine/Functions/Renderer/RaytracingManager.h"
+#include "externals/DirectXTex/DirectXTex.h"
 #endif // USE_IMGUI
 
 namespace NoEngine {
@@ -25,6 +29,62 @@ std::string sSelectedFolder; // "" = ルート直下を表示
 
 char sSearchBuf[128] = {};
 
+#ifdef USE_IMGUI
+struct TexturePreview {
+	std::unique_ptr<Texture> texture;
+	DescriptorHandle slot;
+	bool hasSlot = false;
+	bool attempted = false;
+	size_t width = 0;
+	size_t height = 0;
+};
+
+std::unordered_map<std::string, TexturePreview> sTexturePreviews;
+bool sRefreshPreviews = false;
+
+TexturePreview& GetTexturePreview(const BrowserItem& item) {
+	auto& preview = sTexturePreviews[item.sourceFilePath];
+	if (preview.attempted) return preview;
+	preview.attempted = true;
+	if (!preview.hasSlot && !Render::gTextureHeap.HasAvailableSpace(1)) return preview;
+
+	// 元画像を直接読み、ゲーム用のDDS変換やテクスチャキャッシュに影響させない。
+	DirectX::ScratchImage source;
+	const auto filePath = ConvertString(item.sourceFilePath);
+	if (FAILED(DirectX::LoadFromWICFile(filePath.c_str(), DirectX::WIC_FLAGS_FORCE_RGB, nullptr, source))) return preview;
+	const auto& metadata = source.GetMetadata();
+	preview.width = metadata.width;
+	preview.height = metadata.height;
+	if (preview.width == 0 || preview.height == 0) return preview;
+
+	const float scale = std::min(1.0f, 256.0f / static_cast<float>(std::max(preview.width, preview.height)));
+	const size_t width = std::max(size_t(1), static_cast<size_t>(static_cast<float>(preview.width) * scale));
+	const size_t height = std::max(size_t(1), static_cast<size_t>(static_cast<float>(preview.height) * scale));
+	DirectX::ScratchImage resized;
+	if (FAILED(DirectX::Resize(*source.GetImage(0, 0, 0), width, height, DirectX::TEX_FILTER_DEFAULT, resized))) return preview;
+	const DirectX::Image* image = resized.GetImage(0, 0, 0);
+	DirectX::ScratchImage converted;
+	if (image->format != DXGI_FORMAT_R8G8B8A8_UNORM) {
+		if (FAILED(DirectX::Convert(*image, DXGI_FORMAT_R8G8B8A8_UNORM, DirectX::TEX_FILTER_DEFAULT, 0.5f, converted))) return preview;
+		image = converted.GetImage(0, 0, 0);
+	}
+
+	preview.texture = std::make_unique<Texture>();
+	preview.texture->Create2D(image->rowPitch, image->width, image->height, image->format, image->pixels);
+	if (!preview.hasSlot) {
+		preview.slot = Render::gTextureHeap.Alloc();
+		preview.hasSlot = true;
+	}
+	GraphicsCore::sGraphicsDevice->GetDevice()->CopyDescriptorsSimple(1,
+		D3D12_CPU_DESCRIPTOR_HANDLE(preview.slot), preview.texture->GetSRV(), D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	return preview;
+}
+
+ImVec2 FitPreview(const TexturePreview& preview, float width, float height) {
+	const float scale = std::min(width / static_cast<float>(preview.width), height / static_cast<float>(preview.height));
+	return ImVec2(static_cast<float>(preview.width) * scale, static_cast<float>(preview.height) * scale);
+}
+#endif
 
 // 指定パスの親ディレクトリを resources/ からの相対パスで返す
 std::string GetFolderPathOf(const std::string& fullPath) {
@@ -42,6 +102,7 @@ void RebuildItemList() {
 		item.displayName = asset.currentAddressableName;
 		item.path = asset.currentAddressableName.c_str();
 		item.metaFilePath = asset.metaFilePath;
+		item.sourceFilePath = (std::filesystem::path(asset.metaFilePath).parent_path() / asset.sourceFile).generic_string();
 		item.type = AssetManager::GetAssetTypeFromExtension(asset.sourceFile);
 		item.dragPayloadType = item.type == EBrowserItemType::Model ? "ASSET_MODEL_NAME"
 			: item.type == EBrowserItemType::Texture ? "ASSET_TEXTURE_NAME" : "ASSET_PATH";
@@ -140,11 +201,23 @@ void DrawFolderNode(const FolderNode& node) {
 } // namespace
 
 void RefreshAssetBrowser() {
+#ifdef USE_IMGUI
+	sRefreshPreviews = true;
+#endif
 	AssetManager::CreateMetaFileForAllFiles();
 	AssetManager::CreateEditorDataList();
 	LoadPrefabsFromDirectory();
 	RebuildItemList();
 	BuildFolderTree();
+}
+
+void ReleaseAssetBrowserPreviews() {
+#ifdef USE_IMGUI
+	if (!sTexturePreviews.empty()) {
+		GraphicsCore::sCommandListManager.IdleGPU();
+		sTexturePreviews.clear();
+	}
+#endif
 }
 
 void DrawAssetBrowserFolderWindow() {
@@ -175,6 +248,16 @@ void DrawAssetBrowserFolderWindow() {
 
 void DrawAssetBrowserWindow(ECS::Registry& registry) {
 #ifdef USE_IMGUI
+	if (sRefreshPreviews) {
+		// 前フレームの描画完了後、今フレームの画像を登録する前にキャッシュを更新する。
+		if (!sTexturePreviews.empty()) GraphicsCore::sCommandListManager.IdleGPU();
+		for (auto& entry : sTexturePreviews) {
+			entry.second.texture.reset();
+			entry.second.attempted = false;
+		}
+		sRefreshPreviews = false;
+	}
+	bool refreshRequested = false;
 	ImGui::SetNextWindowSizeConstraints(ImVec2(300, 300), ImVec2(FLT_MAX, FLT_MAX));
 	ImGui::Begin("Assets");
 
@@ -240,9 +323,26 @@ void DrawAssetBrowserWindow(ECS::Registry& registry) {
 
 			ImGui::PushID(i);
 			bool selected = (sSelectedIndex == i);
+			const ImVec2 tilePos = ImGui::GetCursorScreenPos();
 			std::string label = std::string(GetIconLabel(item.type)) + "\n" + item.displayName;
-			if (ImGui::Selectable(label.c_str(), selected, 0, ImVec2(cellSize - 10, cellSize - 10))) {
+			const bool isTexture = item.type == EBrowserItemType::Texture;
+			if (ImGui::Selectable(isTexture ? "##texture" : label.c_str(), selected, 0, ImVec2(cellSize - 10, cellSize - 10))) {
 				sSelectedIndex = i;
+			}
+			if (isTexture && ImGui::IsItemVisible()) {
+				auto& preview = GetTexturePreview(item);
+				auto* drawList = ImGui::GetWindowDrawList();
+				if (preview.texture) {
+					const ImVec2 size = FitPreview(preview, cellSize - 18, cellSize - 34);
+					const ImVec2 pos(tilePos.x + (cellSize - 10 - size.x) * 0.5f, tilePos.y + 2);
+					drawList->AddImage(static_cast<ImTextureID>(preview.slot.GetGpuPtr()), pos, ImVec2(pos.x + size.x, pos.y + size.y));
+				} else {
+					drawList->AddText(tilePos, ImGui::GetColorU32(ImGuiCol_TextDisabled), "[Tex]");
+				}
+				const ImVec4 clip(tilePos.x, tilePos.y, tilePos.x + cellSize - 10, tilePos.y + cellSize - 10);
+				drawList->AddText(nullptr, 0.0f, ImVec2(tilePos.x, tilePos.y + cellSize - 30),
+					ImGui::GetColorU32(ImGuiCol_Text), item.displayName.c_str(), nullptr, 0.0f, &clip);
+				if (ImGui::IsItemHovered()) ImGui::SetTooltip("%s", item.displayName.c_str());
 			}
 
 			if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID)) {
@@ -266,6 +366,16 @@ void DrawAssetBrowserWindow(ECS::Registry& registry) {
 	if (sSelectedIndex >= 0 && sSelectedIndex < (int)sItems.size()) {
 		auto& item = sItems[sSelectedIndex];
 		ImGui::Text("Path: %s", item.path.c_str());
+		if (item.type == EBrowserItemType::Texture) {
+			auto& preview = GetTexturePreview(item);
+			if (preview.texture) {
+				ImGui::Text("%zu x %zu", preview.width, preview.height);
+				ImGui::Image(static_cast<ImTextureID>(preview.slot.GetGpuPtr()),
+					FitPreview(preview, std::max(1.0f, ImGui::GetContentRegionAvail().x), 160.0f));
+			} else {
+				ImGui::TextDisabled("プレビューを読み込めません");
+			}
+		}
 
 		if (item.type == EBrowserItemType::Prefab) {
 			ImGui::TextDisabled("(Prefab)");
@@ -287,7 +397,7 @@ void DrawAssetBrowserWindow(ECS::Registry& registry) {
 					data.metaFilePath = item.metaFilePath;
 					strcpy_s(data.nameInputBuffer, item.nameInputBuffer);
 					AssetManager::SaveMetaFile(data);
-					RefreshAssetBrowser();
+					refreshRequested = true;
 				}
 				ImGui::PopStyleColor();
 			}
@@ -315,11 +425,12 @@ void DrawAssetBrowserWindow(ECS::Registry& registry) {
 
 	ImGui::Separator();
 	if (ImGui::Button("Refresh")) {
-		RefreshAssetBrowser();
+		refreshRequested = true;
 	}
 
 	static_cast<void>(registry);
 	ImGui::End();
+	if (refreshRequested) RefreshAssetBrowser();
 #else
 	static_cast<void>(registry);
 #endif
