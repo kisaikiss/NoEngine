@@ -11,6 +11,10 @@
 #include "engine/Runtime/GraphicsCore.h"
 #include "engine/Functions/Renderer/RaytracingManager.h"
 #include "externals/DirectXTex/DirectXTex.h"
+#include <shellapi.h>
+#include <shlobj.h>
+#pragma comment(lib, "Shell32.lib")
+#pragma comment(lib, "Ole32.lib")
 #endif // USE_IMGUI
 
 namespace NoEngine {
@@ -19,8 +23,6 @@ namespace {
 
 std::vector<BrowserItem> sItems;
 int sSelectedIndex = -1;
-// 前フレームで実測したインスペクタの高さ（初期値は適当な最小値）
-float sInspectorHeight = 60.0f;
 
 const std::filesystem::path sResourcesRoot = "resources";
 
@@ -28,6 +30,40 @@ FolderNode sRootFolder;
 std::string sSelectedFolder; // "" = ルート直下を表示
 
 char sSearchBuf[128] = {};
+int sTypeFilter = 0;
+int sSortMode = 0;
+bool sSortDescending = false;
+bool sListView = false;
+bool sSearchAllFolders = true;
+float sThumbnailSize = 90.0f;
+
+const std::string& GetSourcePath(const BrowserItem& item) {
+	return item.type == EBrowserItemType::Prefab ? item.path : item.sourceFilePath;
+}
+
+// UTF-8の日本語を維持し、ASCIIの英字とパス区切りだけを正規化する。
+std::string NormalizeSearch(std::string text) {
+	for (char& c : text) {
+		if (c >= 'A' && c <= 'Z') c += 'a' - 'A';
+		if (c == '\\') c = '/';
+	}
+	return text;
+}
+
+std::vector<std::string> GetSearchTerms() {
+	std::istringstream stream(NormalizeSearch(sSearchBuf));
+	std::vector<std::string> terms;
+	std::string term;
+	while (stream >> term) terms.push_back(term);
+	return terms;
+}
+
+bool MatchesSearch(const BrowserItem& item, const std::vector<std::string>& terms) {
+	const std::string text = NormalizeSearch(item.displayName + "\n" + GetSourcePath(item));
+	return std::all_of(terms.begin(), terms.end(), [&](const std::string& term) {
+		return text.find(term) != std::string::npos;
+	});
+}
 
 #ifdef USE_IMGUI
 struct TexturePreview {
@@ -89,11 +125,16 @@ ImVec2 FitPreview(const TexturePreview& preview, float width, float height) {
 // 指定パスの親ディレクトリを resources/ からの相対パスで返す
 std::string GetFolderPathOf(const std::string& fullPath) {
 	std::filesystem::path parent = std::filesystem::path(fullPath).parent_path();
-	return std::filesystem::relative(parent, sResourcesRoot).generic_string();
+	const auto relative = std::filesystem::relative(parent, sResourcesRoot).generic_string();
+	return relative == "." ? "" : relative;
 }
 
 // AssetManagerとPrefabSerializerの結果を統合BrowserItemに変換
 void RebuildItemList() {
+	// 更新で項目の順番が変わっても、同じ素材の選択を維持する。
+	const std::string selectedPath = sSelectedIndex >= 0 && sSelectedIndex < static_cast<int>(sItems.size())
+		? GetSourcePath(sItems[sSelectedIndex]) : "";
+	sSelectedIndex = -1;
 	sItems.clear();
 
 	// --- アセット側 ---
@@ -122,6 +163,9 @@ void RebuildItemList() {
 		item.folderPath = GetFolderPathOf(prefab.path);
 		sItems.push_back(item);
 	}
+	for (int i = 0; i < static_cast<int>(sItems.size()); ++i) {
+		if (!selectedPath.empty() && GetSourcePath(sItems[i]) == selectedPath) sSelectedIndex = i;
+	}
 }
 
 const char* GetIconLabel(EBrowserItemType type) {
@@ -134,6 +178,177 @@ const char* GetIconLabel(EBrowserItemType type) {
 	default:                        return "[?]";
 	}
 }
+
+#ifdef USE_IMGUI
+std::string sBrowserError;
+std::string sPreviewPath;
+std::string sPlayingPreviewAudio;
+std::string sAddressableMetaPath;
+char sAddressableName[128] = {};
+bool sFocusPreview = false;
+bool sFocusAddressable = false;
+
+void StopPreviewAudio() {
+	if (!sPlayingPreviewAudio.empty()) {
+		Asset::SoundCompleteStop(sPlayingPreviewAudio);
+		sPlayingPreviewAudio.clear();
+	}
+}
+
+void DrawAssetToolWindows(bool& refreshRequested) {
+	if (!sPreviewPath.empty()) {
+		bool open = true;
+		ImGui::SetNextWindowSize(ImVec2(480, 420), ImGuiCond_FirstUseEver);
+		if (sFocusPreview) ImGui::SetNextWindowFocus();
+		sFocusPreview = false;
+		if (ImGui::Begin("アセットプレビュー###AssetPreview", &open)) {
+			const auto it = std::find_if(sItems.begin(), sItems.end(), [](const BrowserItem& item) {
+				return GetSourcePath(item) == sPreviewPath;
+			});
+			if (it == sItems.end()) {
+				ImGui::TextDisabled("アセットが見つかりません");
+			} else {
+				ImGui::TextWrapped("%s", it->displayName.c_str());
+				ImGui::TextWrapped("%s", GetSourcePath(*it).c_str());
+				ImGui::Separator();
+				if (it->type == EBrowserItemType::Texture) {
+					auto& preview = GetTexturePreview(*it);
+					if (preview.texture) {
+						ImGui::Text("%zu x %zu", preview.width, preview.height);
+						const auto available = ImGui::GetContentRegionAvail();
+						ImGui::Image(static_cast<ImTextureID>(preview.slot.GetGpuPtr()),
+							FitPreview(preview, std::max(1.0f, available.x), std::max(1.0f, available.y)));
+					} else {
+						ImGui::TextDisabled("プレビューを読み込めません");
+					}
+				} else if (it->type == EBrowserItemType::Audio) {
+					if (ImGui::Button("Play")) {
+						StopPreviewAudio();
+						Asset::SoundLoad(ConvertString(it->sourceFilePath), it->path);
+						Asset::SoundPlay(it->path, 1.0f, false);
+						sPlayingPreviewAudio = it->path;
+					}
+					ImGui::SameLine();
+					if (ImGui::Button("Stop")) StopPreviewAudio();
+				}
+			}
+		}
+		ImGui::End();
+		if (!open) {
+			StopPreviewAudio();
+			sPreviewPath.clear();
+		}
+	}
+	if (!sAddressableMetaPath.empty()) {
+		bool open = true;
+		ImGui::SetNextWindowSize(ImVec2(480, 200), ImGuiCond_FirstUseEver);
+		if (sFocusAddressable) ImGui::SetNextWindowFocus();
+		sFocusAddressable = false;
+		if (ImGui::Begin("Addressable名の変更###AssetAddressableEditor", &open)) {
+			// 選択や並び順に依存せず、メタファイルで編集対象を特定する。
+			const auto it = std::find_if(sItems.begin(), sItems.end(), [](const BrowserItem& item) {
+				return item.metaFilePath == sAddressableMetaPath;
+			});
+			if (it == sItems.end()) {
+				ImGui::TextDisabled("アセットが見つかりません");
+			} else {
+				ImGui::TextWrapped("%s", it->sourceFilePath.c_str());
+				ImGui::SetNextItemWidth(-1);
+				ImGui::InputText("##AddressableName", sAddressableName, sizeof(sAddressableName));
+				const bool empty = sAddressableName[0] == '\0';
+				const bool duplicate = std::any_of(sItems.begin(), sItems.end(), [&](const BrowserItem& item) {
+					return item.type != EBrowserItemType::Prefab && item.metaFilePath != sAddressableMetaPath
+						&& item.currentAddressableName == sAddressableName;
+				});
+				if (empty) ImGui::TextDisabled("名前を入力してください");
+				if (duplicate) ImGui::TextDisabled("このAddressable名は既に使用されています");
+				ImGui::BeginDisabled(empty || duplicate || it->currentAddressableName == sAddressableName);
+				if (ImGui::Button("保存")) {
+					AssetManager::EditorAssetData data{};
+					data.metaFilePath = it->metaFilePath;
+					strcpy_s(data.nameInputBuffer, sAddressableName);
+					AssetManager::SaveMetaFile(data);
+					refreshRequested = true;
+					open = false;
+				}
+				ImGui::EndDisabled();
+				ImGui::SameLine();
+				if (ImGui::Button("キャンセル")) open = false;
+			}
+		}
+		ImGui::End();
+		if (!open) sAddressableMetaPath.clear();
+	}
+	if (!sBrowserError.empty()) {
+		bool open = true;
+		if (ImGui::Begin("アセット操作エラー###AssetBrowserError", &open, ImGuiWindowFlags_AlwaysAutoResize)) {
+			ImGui::TextUnformatted(sBrowserError.c_str());
+			if (ImGui::Button("閉じる")) open = false;
+		}
+		ImGui::End();
+		if (!open) sBrowserError.clear();
+	}
+}
+
+void OpenSourcePath(const std::filesystem::path& path, bool reveal) {
+	std::error_code error;
+	auto absolute = std::filesystem::absolute(path, error);
+	absolute.make_preferred();
+	if (error || !std::filesystem::exists(absolute, error) || error) {
+		sBrowserError = "ファイルまたはフォルダが見つかりません";
+		return;
+	}
+	bool succeeded = false;
+	if (reveal) {
+		// シェルのパスAPIを使い、空白や日本語を含むファイルも選択する。
+		PIDLIST_ABSOLUTE itemId = ILCreateFromPathW(absolute.c_str());
+		if (itemId) {
+			succeeded = SUCCEEDED(SHOpenFolderAndSelectItems(itemId, 0, nullptr, 0));
+			ILFree(itemId);
+		}
+	} else {
+		succeeded = reinterpret_cast<INT_PTR>(ShellExecuteW(nullptr, L"open", absolute.c_str(), nullptr, nullptr, SW_SHOWNORMAL)) > 32;
+	}
+	sBrowserError = succeeded ? "" : "ファイルまたはフォルダを開けませんでした";
+}
+
+void DrawFolderContextMenu(const std::string& relativePath) {
+	if (ImGui::BeginPopupContextItem()) {
+		const auto path = sResourcesRoot / relativePath;
+		if (ImGui::MenuItem("エクスプローラーで開く")) OpenSourcePath(path, false);
+		if (ImGui::MenuItem("パスをコピー")) ImGui::SetClipboardText(path.generic_string().c_str());
+		ImGui::EndPopup();
+	}
+}
+
+void DrawAssetContextMenu(BrowserItem& item, int index, ECS::Registry& registry) {
+	if (ImGui::BeginPopupContextItem()) {
+		sSelectedIndex = index;
+		const auto& source = GetSourcePath(item);
+		if ((item.type == EBrowserItemType::Texture || item.type == EBrowserItemType::Audio)
+			&& ImGui::MenuItem("プレビューを開く")) {
+			if (sPreviewPath != source) StopPreviewAudio();
+			sPreviewPath = source;
+			sFocusPreview = true;
+		}
+		if (item.type != EBrowserItemType::Prefab && ImGui::MenuItem("Addressable名を変更")) {
+			sAddressableMetaPath = item.metaFilePath;
+			strcpy_s(sAddressableName, item.currentAddressableName.c_str());
+			sFocusAddressable = true;
+		}
+		ImGui::Separator();
+		if (ImGui::MenuItem("エクスプローラーで表示")) OpenSourcePath(ConvertString(source), true);
+		if (ImGui::MenuItem("元ファイルを開く")) OpenSourcePath(ConvertString(source), false);
+		ImGui::Separator();
+		if (ImGui::MenuItem("Addressable名をコピー", nullptr, false, item.type != EBrowserItemType::Prefab))
+			ImGui::SetClipboardText(item.currentAddressableName.c_str());
+		if (ImGui::MenuItem("パスをコピー")) ImGui::SetClipboardText(source.c_str());
+		if (item.type == EBrowserItemType::Prefab && ImGui::MenuItem("Prefabを編集"))
+			RequestEditPrefab(registry, item.path);
+		ImGui::EndPopup();
+	}
+}
+#endif
 
 // resources/ 以下のディレクトリ階層を再帰的に構築
 void BuildFolderTreeRecursive(FolderNode& node, const std::filesystem::path& dir) {
@@ -187,6 +402,7 @@ void DrawFolderNode(const FolderNode& node) {
 	if (ImGui::IsItemClicked()) {
 		sSelectedFolder = node.relativePath;
 	}
+	DrawFolderContextMenu(node.relativePath);
 	if (open) {
 		for (auto& child : node.children) {
 			DrawFolderNode(child);
@@ -209,6 +425,7 @@ void RefreshAssetBrowser() {
 	LoadPrefabsFromDirectory();
 	RebuildItemList();
 	BuildFolderTree();
+	if (!FindFolderNode(sRootFolder, sSelectedFolder)) sSelectedFolder.clear();
 }
 
 void ReleaseAssetBrowserPreviews() {
@@ -226,7 +443,10 @@ void DrawAssetBrowserFolderWindow() {
 	ImGui::Begin("Folders");
 
 	ImGui::SetNextItemWidth(-1);
-	ImGui::InputTextWithHint("##search", "検索...", sSearchBuf, sizeof(sSearchBuf));
+	ImGui::InputTextWithHint("##search", "名前・ファイル名・パスで検索", sSearchBuf, sizeof(sSearchBuf));
+	if (ImGui::Button("検索をクリア")) sSearchBuf[0] = '\0';
+	ImGui::Checkbox("検索時は全フォルダを対象", &sSearchAllFolders);
+	ImGui::TextDisabled("空白区切りでAND検索 / 英字の大小を区別しません");
 	ImGui::Separator();
 
 	ImGuiTreeNodeFlags rootFlags = ImGuiTreeNodeFlags_OpenOnArrow
@@ -235,6 +455,7 @@ void DrawAssetBrowserFolderWindow() {
 
 	bool rootOpen = ImGui::TreeNodeEx("##RootFolder", rootFlags, "%s", sRootFolder.name.c_str());
 	if (ImGui::IsItemClicked()) sSelectedFolder = sRootFolder.relativePath;
+	DrawFolderContextMenu("");
 	if (rootOpen) {
 		for (auto& child : sRootFolder.children) {
 			DrawFolderNode(child);
@@ -259,36 +480,87 @@ void DrawAssetBrowserWindow(ECS::Registry& registry) {
 	}
 	bool refreshRequested = false;
 	ImGui::SetNextWindowSizeConstraints(ImVec2(300, 300), ImVec2(FLT_MAX, FLT_MAX));
-	ImGui::Begin("Assets");
+	if (!ImGui::Begin("Assets", nullptr, ImGuiWindowFlags_MenuBar)) {
+		ImGui::End();
+		DrawAssetToolWindows(refreshRequested);
+		if (refreshRequested) RefreshAssetBrowser();
+		return;
+	}
 
-	const float footerHeight = sInspectorHeight + 8.0f;
-	const float minGridHeight = 80.0f;
-	float gridHeight = std::max(ImGui::GetContentRegionAvail().y - footerHeight, minGridHeight);
-
-	// --- グリッド（選択フォルダ内のみ表示） ---
-	ImGui::BeginChild("BrowserGrid", ImVec2(0, gridHeight), true);
-	{
-		bool isSearching = (sSearchBuf[0] != '\0');
-		if (isSearching) {
-			ImGui::TextDisabled("全フォルダから検索中: \"%s\"", sSearchBuf);
-		} else {
-			ImGui::TextDisabled("フォルダ: %s", sSelectedFolder.empty() ? "resources" : sSelectedFolder.c_str());
+	if (ImGui::BeginMenuBar()) {
+		if (ImGui::BeginMenu("表示")) {
+			if (ImGui::MenuItem("サムネイル", nullptr, !sListView)) sListView = false;
+			if (ImGui::MenuItem("一覧", nullptr, sListView)) sListView = true;
+			ImGui::Separator();
+			ImGui::SetNextItemWidth(160.0f);
+			ImGui::SliderFloat("サイズ", &sThumbnailSize, 64.0f, 192.0f, "%.0f");
+			if (ImGui::BeginMenu("並び順")) {
+				const char* labels[] = { "名前", "種類", "パス" };
+				for (int i = 0; i < 3; ++i) {
+					if (ImGui::MenuItem(labels[i], nullptr, sSortMode == i)) sSortMode = i;
+				}
+				ImGui::Separator();
+				ImGui::MenuItem("降順", nullptr, &sSortDescending);
+				ImGui::EndMenu();
+			}
+			ImGui::EndMenu();
 		}
+		if (ImGui::BeginMenu("種類")) {
+			const char* labels[] = { "すべて", "Model", "Texture", "Audio", "Font", "Prefab", "Unknown" };
+			for (int i = 0; i < 7; ++i) {
+				if (ImGui::MenuItem(labels[i], nullptr, sTypeFilter == i)) sTypeFilter = i;
+			}
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("操作")) {
+			if (ImGui::MenuItem("Refresh")) refreshRequested = true;
+			ImGui::EndMenu();
+		}
+		ImGui::EndMenuBar();
+	}
 
-		const float cellSize = 90.0f;
+	const auto searchTerms = GetSearchTerms();
+	const bool isSearching = !searchTerms.empty();
+	const bool globalSearch = isSearching && sSearchAllFolders;
+	std::vector<int> visibleItems;
+	for (int i = 0; i < static_cast<int>(sItems.size()); ++i) {
+		const auto& item = sItems[i];
+		if (!globalSearch && item.folderPath != sSelectedFolder) continue;
+		if (sTypeFilter != 0 && static_cast<int>(item.type) != sTypeFilter - 1) continue;
+		if (MatchesSearch(item, searchTerms)) visibleItems.push_back(i);
+	}
+	// 元配列を並べ替えず、選択とドラッグ対象の対応を保つ。
+	std::sort(visibleItems.begin(), visibleItems.end(), [](int left, int right) {
+		const auto& a = sItems[left];
+		const auto& b = sItems[right];
+		int order = 0;
+		if (sSortMode == 1) order = static_cast<int>(a.type) - static_cast<int>(b.type);
+		if (sSortMode == 2) order = NormalizeSearch(GetSourcePath(a)).compare(NormalizeSearch(GetSourcePath(b)));
+		if (order == 0) order = NormalizeSearch(a.displayName).compare(NormalizeSearch(b.displayName));
+		if (order == 0) order = GetSourcePath(a).compare(GetSourcePath(b));
+		if (order == 0) order = left < right ? -1 : (left > right ? 1 : 0);
+		return sSortDescending ? order > 0 : order < 0;
+	});
+
+	// メニューバー以外の領域全体をアセット一覧に割り当てる。
+	ImGui::BeginChild("BrowserGrid", ImVec2(0, 0));
+	{
+		const float cellSize = sThumbnailSize;
 		float panelWidth = ImGui::GetContentRegionAvail().x;
-		int columns = std::max(1, (int)(panelWidth / cellSize));
+		int columns = sListView ? 1 : std::max(1, (int)(panelWidth / cellSize));
 		ImGui::Columns(columns, nullptr, false);
+		const ImVec2 itemSize = sListView ? ImVec2(0, ImGui::GetTextLineHeightWithSpacing() + 4.0f)
+			: ImVec2(std::max(1.0f, std::min(cellSize - 10, panelWidth)), cellSize - 10);
+		std::string nextFolder = sSelectedFolder;
 
 		// --- フォルダアイテム（検索中は表示しない） ---
 		if (!isSearching) {
 			// 親フォルダへ戻る
 			if (!sSelectedFolder.empty()) {
 				ImGui::PushID("..UpFolder");
-				ImGui::Selectable("[Folder]\n..", false, 0, ImVec2(cellSize - 10, cellSize - 10));
+				ImGui::Selectable(sListView ? "[Folder] .." : "[Folder]\n..", false, 0, itemSize);
 				if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
-					sSelectedFolder = GetParentFolderPath(sSelectedFolder);
-					sSelectedIndex = -1;
+					nextFolder = GetParentFolderPath(sSelectedFolder);
 				}
 				ImGui::PopID();
 				ImGui::NextColumn();
@@ -298,138 +570,75 @@ void DrawAssetBrowserWindow(ECS::Registry& registry) {
 			if (currentFolder) {
 				for (auto& child : currentFolder->children) {
 					ImGui::PushID(child.relativePath.c_str());
-					std::string label = "[Folder]\n" + child.name;
-					ImGui::Selectable(label.c_str(), false, 0, ImVec2(cellSize - 10, cellSize - 10));
+					std::string label = std::string(sListView ? "[Folder] " : "[Folder]\n") + child.name;
+					ImGui::Selectable(label.c_str(), false, 0, itemSize);
 					if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
-						sSelectedFolder = child.relativePath;
-						sSelectedIndex = -1;
+						nextFolder = child.relativePath;
 					}
+					DrawFolderContextMenu(child.relativePath);
 					ImGui::PopID();
 					ImGui::NextColumn();
 				}
 			}
 		}
 
-		for (int i = 0; i < (int)sItems.size(); ++i) {
+		for (int i : visibleItems) {
 			auto& item = sItems[i];
-
-			// 検索中はフォルダ絞り込みをスキップして全件対象にする
-			if (!isSearching && item.folderPath != sSelectedFolder) continue;
-
-			if (isSearching &&
-				item.displayName.find(sSearchBuf) == std::string::npos) {
-				continue;
-			}
 
 			ImGui::PushID(i);
 			bool selected = (sSelectedIndex == i);
 			const ImVec2 tilePos = ImGui::GetCursorScreenPos();
-			std::string label = std::string(GetIconLabel(item.type)) + "\n" + item.displayName;
 			const bool isTexture = item.type == EBrowserItemType::Texture;
-			if (ImGui::Selectable(isTexture ? "##texture" : label.c_str(), selected, 0, ImVec2(cellSize - 10, cellSize - 10))) {
+			if (ImGui::Selectable("##asset", selected, 0, itemSize)) {
 				sSelectedIndex = i;
 			}
-			if (isTexture && ImGui::IsItemVisible()) {
-				auto& preview = GetTexturePreview(item);
+			if (ImGui::IsItemVisible()) {
 				auto* drawList = ImGui::GetWindowDrawList();
-				if (preview.texture) {
-					const ImVec2 size = FitPreview(preview, cellSize - 18, cellSize - 34);
-					const ImVec2 pos(tilePos.x + (cellSize - 10 - size.x) * 0.5f, tilePos.y + 2);
-					drawList->AddImage(static_cast<ImTextureID>(preview.slot.GetGpuPtr()), pos, ImVec2(pos.x + size.x, pos.y + size.y));
+				const float tileWidth = sListView ? ImGui::GetContentRegionAvail().x : itemSize.x;
+				const ImVec4 clip(tilePos.x, tilePos.y, tilePos.x + tileWidth, tilePos.y + itemSize.y);
+				if (sListView) {
+					const std::string text = std::string(GetIconLabel(item.type)) + " " + item.displayName + "    " + GetSourcePath(item);
+					drawList->AddText(nullptr, 0.0f, tilePos, ImGui::GetColorU32(ImGuiCol_Text), text.c_str(), nullptr, 0.0f, &clip);
 				} else {
-					drawList->AddText(tilePos, ImGui::GetColorU32(ImGuiCol_TextDisabled), "[Tex]");
+					if (isTexture) {
+						auto& preview = GetTexturePreview(item);
+						if (preview.texture) {
+							const ImVec2 size = FitPreview(preview, std::max(1.0f, tileWidth - 8), cellSize - 34);
+							const ImVec2 pos(tilePos.x + (tileWidth - size.x) * 0.5f, tilePos.y + 2);
+							drawList->AddImage(static_cast<ImTextureID>(preview.slot.GetGpuPtr()), pos, ImVec2(pos.x + size.x, pos.y + size.y));
+						} else {
+							drawList->AddText(tilePos, ImGui::GetColorU32(ImGuiCol_TextDisabled), "[Tex]");
+						}
+					} else {
+						drawList->AddText(nullptr, 0.0f, tilePos, ImGui::GetColorU32(ImGuiCol_TextDisabled), GetIconLabel(item.type), nullptr, 0.0f, &clip);
+					}
+					drawList->AddText(nullptr, 0.0f, ImVec2(tilePos.x, tilePos.y + cellSize - 30),
+						ImGui::GetColorU32(ImGuiCol_Text), item.displayName.c_str(), nullptr, 0.0f, &clip);
 				}
-				const ImVec4 clip(tilePos.x, tilePos.y, tilePos.x + cellSize - 10, tilePos.y + cellSize - 10);
-				drawList->AddText(nullptr, 0.0f, ImVec2(tilePos.x, tilePos.y + cellSize - 30),
-					ImGui::GetColorU32(ImGuiCol_Text), item.displayName.c_str(), nullptr, 0.0f, &clip);
-				if (ImGui::IsItemHovered()) ImGui::SetTooltip("%s", item.displayName.c_str());
 			}
+			if (ImGui::IsItemHovered()) ImGui::SetTooltip("%s\n%s\n%s", item.displayName.c_str(), GetIconLabel(item.type), GetSourcePath(item).c_str());
 
 			if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID)) {
 				ImGui::SetDragDropPayload(item.dragPayloadType.c_str(), item.path.c_str(), item.path.size() + 1);
 				ImGui::Text("Place %s", item.displayName.c_str());
 				ImGui::EndDragDropSource();
 			}
+			DrawAssetContextMenu(item, i, registry);
 
 			ImGui::PopID();
 			ImGui::NextColumn();
 		}
 		ImGui::Columns(1);
+		if (visibleItems.empty()) ImGui::TextDisabled("該当するアセットはありません");
+		if (nextFolder != sSelectedFolder) {
+			sSelectedFolder = nextFolder;
+			sSelectedIndex = -1;
+		}
 	}
 	ImGui::EndChild();
 
-	ImGui::Separator();
-
-	// --- インスペクタ ---
-	float inspectorStartY = ImGui::GetCursorPosY();
-
-	if (sSelectedIndex >= 0 && sSelectedIndex < (int)sItems.size()) {
-		auto& item = sItems[sSelectedIndex];
-		ImGui::Text("Path: %s", item.path.c_str());
-		if (item.type == EBrowserItemType::Texture) {
-			auto& preview = GetTexturePreview(item);
-			if (preview.texture) {
-				ImGui::Text("%zu x %zu", preview.width, preview.height);
-				ImGui::Image(static_cast<ImTextureID>(preview.slot.GetGpuPtr()),
-					FitPreview(preview, std::max(1.0f, ImGui::GetContentRegionAvail().x), 160.0f));
-			} else {
-				ImGui::TextDisabled("プレビューを読み込めません");
-			}
-		}
-
-		if (item.type == EBrowserItemType::Prefab) {
-			ImGui::TextDisabled("(Prefab)");
-			ImGui::SameLine();
-			if (ImGui::SmallButton("Edit")) {
-				// 実際の編集処理はEditSystem側に委譲する（ComponentUIの編集関数を再利用するため）
-				RequestEditPrefab(registry, item.path);
-			}
-		} else {
-			ImGui::SetNextItemWidth(250.0f);
-			if (ImGui::InputText("Addressable", item.nameInputBuffer, sizeof(item.nameInputBuffer))) {
-				item.isModified = (item.currentAddressableName != item.nameInputBuffer);
-			}
-			if (item.isModified) {
-				ImGui::SameLine();
-				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.7f, 0.2f, 1.0f));
-				if (ImGui::Button("Save")) {
-					AssetManager::EditorAssetData data;
-					data.metaFilePath = item.metaFilePath;
-					strcpy_s(data.nameInputBuffer, item.nameInputBuffer);
-					AssetManager::SaveMetaFile(data);
-					refreshRequested = true;
-				}
-				ImGui::PopStyleColor();
-			}
-
-			// --- 音声の試聴 ---
-			if (item.type == EBrowserItemType::Audio) {
-				if (ImGui::Button("Play")) {
-					std::string filePath = AssetManager::GetFilePathFromAddressableName(item.path);
-					if (!filePath.empty()) {
-						Asset::SoundLoad(ConvertString(filePath), item.path);
-						Asset::SoundPlay(item.path, 1.0f, false);
-					}
-				}
-				ImGui::SameLine();
-				if (ImGui::Button("Stop")) {
-					Asset::SoundCompleteStop(item.path);
-				}
-			}
-		}
-	} else {
-		ImGui::TextDisabled("アイテムを選択してください");
-	}
-
-	sInspectorHeight = ImGui::GetCursorPosY() - inspectorStartY;
-
-	ImGui::Separator();
-	if (ImGui::Button("Refresh")) {
-		refreshRequested = true;
-	}
-
-	static_cast<void>(registry);
 	ImGui::End();
+	DrawAssetToolWindows(refreshRequested);
 	if (refreshRequested) RefreshAssetBrowser();
 #else
 	static_cast<void>(registry);
