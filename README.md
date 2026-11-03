@@ -62,6 +62,12 @@ generated/       ビルド成果物と中間ファイル
 
 右クリックメニューには、エクスプローラーでの表示、元ファイルを開く、Addressable名・パスのコピー、Prefabの編集もあります。フォルダの右クリックにも、エクスプローラーで開く操作とパスのコピーがあります。
 
+`Assets` の素材をInspectorやPrefab編集内のアセット指定欄へドロップして割り当てられます。モデルは `MeshComponent.meshName`、画像はSprite・Material・Dissolve・各Emitterのテクスチャ欄、フォントは `TextComponent.fontName` と `DialogueComponent.fontName` に対応します。会話の `portraitTexture` と `voiceFiles` の各要素、Prefab参照の `prefabPath` にも割り当てられます。音声リストが空の場合は `+ Add` で要素を追加してからドロップします。
+
+指定欄は対応する種類の素材だけを受け付け、通常の文字列欄や会話本文はドロップ対象になりません。欄にカーソルを合わせると受け付ける種類と参照方法を確認できます。ドロップした変更は `Ctrl+Z` でUndo、`Ctrl+Shift+Z` でRedoできます。通常はAddressable名を格納し、Prefab参照には元ファイルパスを格納します。
+
+新しいアセット指定欄はリフレクションに `REFLECT_ASSET_FIELD(field, Texture)` のように登録します。元ファイルパスを使う欄には `REFLECT_ASSET_PATH_FIELD`、パスの配列には `REFLECT_ASSET_PATH_ARRAY_FIELD` を使います。
+
 ## エディタのグリッド表示
 
 Debug / Development 構成では、シーンビューにグリッドを表示します。`Grid` ウィンドウで表示の切り替え、XZ / XY / YZ 平面、基準位置、セル間隔、主線間隔、ピクセル単位の線幅、色、描画範囲、フェードを調整できます。

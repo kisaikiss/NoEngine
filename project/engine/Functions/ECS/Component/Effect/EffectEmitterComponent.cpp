@@ -27,5 +27,5 @@ REFLECT_FIELD(color),
 REFLECT_FIELD(maxRotate),
 REFLECT_FIELD(minRotate),
 REFLECT_FIELD(emitRange),
-REFLECT_FIELD(textureName)
+REFLECT_ASSET_FIELD(textureName, Texture)
 REFLECT_STRUCT_END(NoEngine::Component::EffectEmitterComponent)

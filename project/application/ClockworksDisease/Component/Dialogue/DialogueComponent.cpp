@@ -2,10 +2,10 @@
 
 REFLECT_STRUCT_BEGIN(DialogueComponent, "Application")
 REFLECT_ARRAY_FIELD(lines),
-REFLECT_FIELD(fontName),
-REFLECT_FIELD(portraitTexture),
+REFLECT_ASSET_FIELD(fontName, Font),
+REFLECT_ASSET_PATH_FIELD(portraitTexture, Texture),
 REFLECT_FIELD(portraitFrameCount),
-REFLECT_ARRAY_FIELD(voiceFiles),
+REFLECT_ASSET_PATH_ARRAY_FIELD(voiceFiles, Audio),
 REFLECT_FIELD(voiceVolume),
 REFLECT_FIELD(interactDistance),
 REFLECT_FIELD(interactable)

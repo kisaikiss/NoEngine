@@ -186,8 +186,11 @@ void MeshPassBase::RenderItems(GraphicsContext& context, const RenderGraphRegist
 					GameCore::GetElapsedTime()
 				};
 				context.SetDynamicConstantBufferView(rootIndex["gEmissive"], sizeof(emissiveConstants), &emissiveConstants);
-				if (!item.material->noiseTextureHandle.IsValid()) {
+				if (!item.material->noiseTextureHandle.IsValid() || item.material->loadedNoiseTextureName != item.material->noiseTextureName
+					|| item.material->loadedNoiseTextureGeneration != AssetManager::GetAddressableGeneration()) {
 					item.material->noiseTextureHandle = TextureManager::LoadCovertTexture(AssetManager::GetFilePathFromAddressableName(item.material->noiseTextureName));
+					item.material->loadedNoiseTextureName = item.material->noiseTextureName;
+					item.material->loadedNoiseTextureGeneration = AssetManager::GetAddressableGeneration();
 				}
 				context.SetDynamicDescriptor(rootIndex["gNoiseTexture"], 0, item.material->noiseTextureHandle.GetSRV());
 			}

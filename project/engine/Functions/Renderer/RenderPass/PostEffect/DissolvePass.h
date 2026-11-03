@@ -10,6 +10,8 @@ public:
 	void Execute(GraphicsContext& gfx, const RenderGraphRegistry& resourceRegistry, ECS::Registry& registry) override;
 private:
 	TextureRef maskTexture_;
+	std::string loadedMaskTextureName_;
+	uint64_t loadedMaskTextureGeneration_ = 0;
 	float threshold_ = 0.5f;
 };
 }

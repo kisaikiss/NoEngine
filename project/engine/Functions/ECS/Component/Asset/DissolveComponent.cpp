@@ -3,5 +3,5 @@
 
 REFLECT_STRUCT_BEGIN(NoEngine::Component::DissolveComponent, "PostEffect")
 REFLECT_FIELD(threshold),
-REFLECT_FIELD(maskTextureName)
+REFLECT_ASSET_FIELD(maskTextureName, Texture)
 REFLECT_STRUCT_END(NoEngine::Component::DissolveComponent)

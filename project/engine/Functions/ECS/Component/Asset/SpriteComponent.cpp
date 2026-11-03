@@ -12,9 +12,9 @@ REFLECT_FIELD(layer),
 REFLECT_FIELD(orderInLayer),
 REFLECT_FIELD(color),
 REFLECT_FIELD(uv),
-REFLECT_FIELD(textureName),
+REFLECT_ASSET_FIELD(textureName, Texture),
 REFLECT_FIELD(nonRenderAngle),
 REFLECT_FIELD(useMask),
 REFLECT_FIELD(fill),
-REFLECT_FIELD(maskTextureName)
+REFLECT_ASSET_FIELD(maskTextureName, Texture)
 REFLECT_STRUCT_END(NoEngine::Component::SpriteComponent)

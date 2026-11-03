@@ -58,6 +58,8 @@ struct MaterialComponent {
 	float noiseScrollSpeed = 0.3f;
 	Math::Color edgeColor = Math::Color::WHITE;
 	std::string noiseTextureName = "noise0";
+	std::string loadedNoiseTextureName;
+	uint64_t loadedNoiseTextureGeneration = 0;
 	TextureRef noiseTextureHandle;// ノイズテクスチャ
 };
 }

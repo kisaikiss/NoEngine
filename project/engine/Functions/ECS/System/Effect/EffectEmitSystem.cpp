@@ -15,9 +15,13 @@ void EffectEmitSystem::Update(Registry& registry, float deltaTime) {
 	for (auto e : view) {
 		TransformComponent t = *registry.GetComponent<TransformComponent>(e);
 		auto* emitter = registry.GetComponent<EffectEmitterComponent>(e);
-		if (!emitter->texture.IsValid()) {
+		// 初回にコードから直接設定されたハンドルを保持し、以後の名前変更を反映する。
+		if (!emitter->texture.IsValid() || (!emitter->loadedTextureName.empty() && emitter->loadedTextureName != emitter->textureName)
+			|| (emitter->loadedTextureGeneration != 0 && emitter->loadedTextureGeneration != AssetManager::GetAddressableGeneration())) {
 			emitter->texture = TextureManager::LoadCovertTexture(AssetManager::GetFilePathFromAddressableName(emitter->textureName));
 		}
+		emitter->loadedTextureName = emitter->textureName;
+		emitter->loadedTextureGeneration = AssetManager::GetAddressableGeneration();
 
 		EmitParticle(registry, *emitter, t, e);
 		registry.RemoveComponent<EffectEmitTag>(e);

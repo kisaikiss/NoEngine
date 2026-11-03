@@ -15,8 +15,11 @@ void DissolvePass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& reso
 	for (auto e : registry.View<Component::DissolveComponent>()) {
 		auto* dissolve = registry.GetComponent<Component::DissolveComponent>(e);
 		threshold_ = dissolve->threshold;
-		if (!maskTexture_.IsValid()) {
+		if (!maskTexture_.IsValid() || loadedMaskTextureName_ != dissolve->maskTextureName
+			|| loadedMaskTextureGeneration_ != AssetManager::GetAddressableGeneration()) {
 			maskTexture_ = TextureManager::LoadCovertTexture(AssetManager::GetFilePathFromAddressableName(dissolve->maskTextureName));
+			loadedMaskTextureName_ = dissolve->maskTextureName;
+			loadedMaskTextureGeneration_ = AssetManager::GetAddressableGeneration();
 		}
 	}
 	if (!maskTexture_.IsValid()) return;

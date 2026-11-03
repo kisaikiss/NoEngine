@@ -112,9 +112,13 @@ void ParticleEmitterSystem::Update(Registry& registry, float deltaTime) {
 		auto* transform = registry.GetComponent<TransformComponent>(entity);
 		TransformComponent t = *transform;
 		emitter->frequencyTime += deltaTime;
-		if (!emitter->texture.IsValid()) {
+		// 初回にコードから直接設定されたハンドルを保持し、以後の名前変更を反映する。
+		if (!emitter->texture.IsValid() || (!emitter->loadedTextureName.empty() && emitter->loadedTextureName != emitter->textureName)
+			|| (emitter->loadedTextureGeneration != 0 && emitter->loadedTextureGeneration != AssetManager::GetAddressableGeneration())) {
 			emitter->texture = TextureManager::LoadCovertTexture(AssetManager::GetFilePathFromAddressableName(emitter->textureName));
 		}
+		emitter->loadedTextureName = emitter->textureName;
+		emitter->loadedTextureGeneration = AssetManager::GetAddressableGeneration();
 
 		if (emitter->frequency <= emitter->frequencyTime) {
 				EmitParticle(registry, t, emitter);

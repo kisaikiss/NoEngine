@@ -2,7 +2,7 @@
 #include "engine/Editor/Reflection/ReflectionMacros.h"
 
 REFLECT_STRUCT_BEGIN(NoEngine::Component::MaterialComponent, "Asset")
-REFLECT_FIELD(textureName),
+REFLECT_ASSET_FIELD(textureName, Texture),
 REFLECT_ENUM_FIELD(blendMode),
 REFLECT_ENUM_FIELD(renderMode),
 REFLECT_FIELD(color),
@@ -19,5 +19,5 @@ REFLECT_FIELD(emissiveIntensity),
 REFLECT_FIELD(rimPower),
 REFLECT_FIELD(noiseScrollSpeed),
 REFLECT_FIELD(edgeColor),
-REFLECT_FIELD(noiseTextureName)
+REFLECT_ASSET_FIELD(noiseTextureName, Texture)
 REFLECT_STRUCT_END(NoEngine::Component::MaterialComponent)

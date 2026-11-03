@@ -15,7 +15,7 @@ REFLECT_FIELD(minLifeTime),
 REFLECT_FIELD(emitRange),
 REFLECT_FIELD(localPosition),
 REFLECT_FIELD(color),
-REFLECT_FIELD(textureName)
+REFLECT_ASSET_FIELD(textureName, Texture)
 REFLECT_STRUCT_END(NoEngine::Component::ParticleEmitterComponent)
 
 REFLECT_STRUCT_BEGIN(NoEngine::Component::ParticleEmitterSphereComponent, "Effect")

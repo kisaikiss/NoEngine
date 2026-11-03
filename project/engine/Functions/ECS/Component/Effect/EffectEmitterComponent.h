@@ -38,6 +38,8 @@ struct EffectEmitterComponent {
     ParticleShape shape = ParticleShape::kPlane;
     std::string textureName = "white1x1";
     TextureRef texture;			// 使用するテクスチャ
+    std::string loadedTextureName;
+    uint64_t loadedTextureGeneration = 0;
 };
 }
 }

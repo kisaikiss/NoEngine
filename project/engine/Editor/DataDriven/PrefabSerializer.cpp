@@ -3,7 +3,6 @@
 #include "SceneSerializer.h"
 #include "engine/Functions/ECS/Component/Common/TransformComponent.h"
 #include "../Reflection/ReflectionMacros.h"
-#include <functional>
 
 #ifdef USE_IMGUI
 #include "externals/imgui/imgui.h"
@@ -11,7 +10,7 @@
 
 
 REFLECT_STRUCT_BEGIN(NoEngine::Editor::PrefabInstanceTag)
-REFLECT_FIELD(prefabPath)
+REFLECT_ASSET_PATH_FIELD(prefabPath, Prefab)
 REFLECT_STRUCT_END(NoEngine::Editor::PrefabInstanceTag)
 namespace NoEngine {
 using namespace ECS;

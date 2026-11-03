@@ -145,8 +145,7 @@ void RebuildItemList() {
 		item.metaFilePath = asset.metaFilePath;
 		item.sourceFilePath = (std::filesystem::path(asset.metaFilePath).parent_path() / asset.sourceFile).generic_string();
 		item.type = AssetManager::GetAssetTypeFromExtension(asset.sourceFile);
-		item.dragPayloadType = item.type == EBrowserItemType::Model ? "ASSET_MODEL_NAME"
-			: item.type == EBrowserItemType::Texture ? "ASSET_TEXTURE_NAME" : "ASSET_PATH";
+		item.dragPayloadType = GetAssetDragPayloadType(item.type);
 		item.currentAddressableName = asset.currentAddressableName;
 		item.folderPath = GetFolderPathOf(asset.metaFilePath);
 		strcpy_s(item.nameInputBuffer, asset.currentAddressableName.c_str());

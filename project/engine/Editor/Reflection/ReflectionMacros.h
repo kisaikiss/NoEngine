@@ -64,6 +64,37 @@ NoEngine::TypeInfo* GetTypeInfo();
         NoEngine::FieldAttributes{} \
     }
 
+// Addressable名で参照するアセット指定欄に使う。
+#define REFLECT_ASSET_FIELD(field_name, asset_type) \
+    [] { \
+        NoEngine::FieldInfo info = REFLECT_FIELD(field_name); \
+        static_assert(std::is_same_v<decltype(((ThisType*)0)->field_name), std::string> || \
+            std::is_same_v<decltype(((ThisType*)0)->field_name), std::wstring>, \
+            #field_name " must be a string asset reference"); \
+        info.attributes.assetType = NoEngine::Editor::EBrowserItemType::asset_type; \
+        return info; \
+    }()
+
+// 元ファイルパスで読み込むフィールドに使う。
+#define REFLECT_ASSET_PATH_FIELD(field_name, asset_type) \
+    [] { \
+        NoEngine::FieldInfo info = REFLECT_ASSET_FIELD(field_name, asset_type); \
+        info.attributes.assetSourcePath = true; \
+        return info; \
+    }()
+
+// 配列の各要素にも素材の種類とパス指定を引き継ぐ。
+#define REFLECT_ASSET_PATH_ARRAY_FIELD(field_name, asset_type) \
+    [] { \
+        NoEngine::FieldInfo info = REFLECT_ARRAY_FIELD(field_name); \
+        using ElementT = decltype(((ThisType*)0)->field_name)::value_type; \
+        static_assert(std::is_same_v<ElementT, std::string> || std::is_same_v<ElementT, std::wstring>, \
+            #field_name " must be an array of string asset references"); \
+        info.attributes.assetType = NoEngine::Editor::EBrowserItemType::asset_type; \
+        info.attributes.assetSourcePath = true; \
+        return info; \
+    }()
+
 // Vector3フィールドをシーン上のImGuizmoで編集できるようにする
 #define REFLECT_GIZMO_FIELD(field_name) \
     [] { \

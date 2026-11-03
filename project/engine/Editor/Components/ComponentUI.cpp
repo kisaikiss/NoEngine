@@ -10,6 +10,7 @@
 #include "../DataDriven/SceneSerializer.h"
 #include "../Commands/EditorCommandOperator.h"
 #include "engine/Math/MathInclude.h"
+#include "engine/Assets/AssetManager.h"
 
 
 #ifdef USE_IMGUI
@@ -18,6 +19,49 @@
 
 namespace NoEngine {
 using namespace ECS;
+#ifdef USE_IMGUI
+namespace {
+std::optional<std::string> AcceptAssetReferenceDrop(const FieldInfo& field) {
+	const auto type = field.attributes.assetType;
+	if (type == Editor::EBrowserItemType::Unknown) return std::nullopt;
+	const char* typeName = type == Editor::EBrowserItemType::Model ? "Model"
+		: type == Editor::EBrowserItemType::Texture ? "Texture"
+		: type == Editor::EBrowserItemType::Audio ? "Audio"
+		: type == Editor::EBrowserItemType::Font ? "Font" : "Prefab";
+	if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenBlockedByActiveItem)) {
+		ImGui::SetTooltip("%sをドロップして割り当て（%s）", typeName,
+			field.attributes.assetSourcePath ? "ファイルパス" : "Addressable名");
+	}
+	std::optional<std::string> result;
+	if (ImGui::BeginDragDropTarget()) {
+		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(Editor::GetAssetDragPayloadType(type))) {
+			// サイズ内に終端がある文字列だけを受け取り、通常の文字列欄には適用しない。
+			if (payload->Data && payload->DataSize > 1) {
+				const char* data = static_cast<const char*>(payload->Data);
+				const size_t length = static_cast<size_t>(payload->DataSize - 1);
+				if (std::memchr(data, '\0', static_cast<size_t>(payload->DataSize)) == data + length) {
+					result = std::string(data, length);
+					if (field.attributes.assetSourcePath && type != Editor::EBrowserItemType::Prefab) {
+						// ブラウザの最新一覧から解決し、追加直後の素材のパスも扱う。
+						std::optional<std::string> sourcePath;
+						for (const auto& asset : AssetManager::GetEditorAssets()) {
+							if (asset.currentAddressableName == *result) {
+								sourcePath = (std::filesystem::path(asset.metaFilePath).parent_path() / asset.sourceFile).generic_string();
+								break;
+							}
+						}
+						result = std::move(sourcePath);
+					}
+				}
+			}
+		}
+		ImGui::EndDragDropTarget();
+	}
+	return result;
+}
+}
+#endif
+
 void DrawComponentUI(Registry& registry, Entity e) {
 #ifdef USE_IMGUI
 	for (auto& compInfo : ComponentRegistry::GetAll()) {
@@ -284,12 +328,6 @@ void DrawFieldUI(ECS::Registry& registry, ECS::Entity e, const FieldInfo& field,
 				field.name.c_str(), editBuf, sizeof(editBuf),
 				ImVec2(-FLT_MIN, ImGui::GetTextLineHeight() * 6.0f), flags);
 		}
-		if (ImGui::BeginDragDropTarget()) {
-			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ASSET_PATH")) {
-				const char* path = (const char*)payload->Data;
-				*s = path;
-			}
-		}
 		// 編集が開始された瞬間（クリックした時など）
 		if (ImGui::IsItemActivated()) {
 			oldStringValue = *s;
@@ -310,6 +348,17 @@ void DrawFieldUI(ECS::Registry& registry, ECS::Entity e, const FieldInfo& field,
 		// 編集状態が解除された時（Enter確定後、フォーカス外れ、Escキーでのキャンセル等）
 		if (ImGui::IsItemDeactivated()) {
 			activePtr = nullptr; // マークを外す
+		}
+		// 手入力の確定後に適用し、古い編集バッファでドロップ結果を上書きしない。
+		if (const auto dropped = AcceptAssetReferenceDrop(field)) {
+			if (*s != *dropped) {
+				Editor::EditorCommandOperator::AddCommand(
+					std::make_unique<Command::ChangeValueCommand<std::string>>(s, *s, *dropped));
+				*s = *dropped;
+			}
+			strncpy_s(editBuf, s->c_str(), _TRUNCATE);
+			oldStringValue = *s;
+			activePtr = nullptr;
 		}
 
 		break;
@@ -357,6 +406,17 @@ void DrawFieldUI(ECS::Registry& registry, ECS::Entity e, const FieldInfo& field,
 			activePtr = nullptr; // マークを外す
 		}
 
+		if (const auto dropped = AcceptAssetReferenceDrop(field)) {
+			const std::wstring value = ConvertString(*dropped);
+			if (*s != value) {
+				Editor::EditorCommandOperator::AddCommand(
+					std::make_unique<Command::ChangeValueCommand<std::wstring>>(s, *s, value));
+				*s = value;
+			}
+			strncpy_s(editBuf, ConvertString(*s).c_str(), _TRUNCATE);
+			oldStringValue = *s;
+			activePtr = nullptr;
+		}
 		break;
 	}
 	case FieldType::Enum: {

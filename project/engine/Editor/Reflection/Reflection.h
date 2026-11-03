@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include "engine/Assets/AssetBrowserTypes.h"
 #include "engine/Functions/ECS/Registry.h"
 // データドリブンに必要な基本型・メタ情報定義ファイル
 
@@ -36,6 +37,8 @@ struct FieldAttributes {
     float maxValue = 0.0f;  // 最大値
     float valueSpeed = 0.1f; // エディタで動かすときの速度;
     bool gizmoEditable = false; // Vector3をシーン上のギズモで編集するか
+    Editor::EBrowserItemType assetType = Editor::EBrowserItemType::Unknown; // ドロップを受け付ける素材の種類
+    bool assetSourcePath = false; // Addressable名の代わりに元ファイルパスを格納するか
 };
 
 struct TypeInfo; // 前方宣言

@@ -3,5 +3,5 @@
 
 REFLECT_STRUCT_BEGIN(NoEngine::Component::MeshComponent, "Asset")
 REFLECT_FIELD(isVisible),
-REFLECT_FIELD(meshName)
+REFLECT_ASSET_FIELD(meshName, Model)
 REFLECT_STRUCT_END(NoEngine::Component::MeshComponent)
