@@ -2,6 +2,7 @@
 #include "DrawManipulatorSystem.h"
 #include "engine/Editor/Commands/EditTag.h"
 #include "engine/Editor/Utilities/EditUtils.h"
+#include "engine/Editor/Utilities/ScenePlacement.h"
 #include "engine/Editor/Commands/EditorCommandOperator.h"
 #include "engine/Functions/ECS/Component/Asset/SpriteComponent.h"
 #include "engine/Functions/ECS/Component/Common/TransformRoutineComponent.h"
@@ -171,6 +172,11 @@ void DrawManipulatorSystem::Update(Registry& registry, float deltaTime) {
 #ifdef USE_IMGUI
 	sTriggerButton = false;
 	SetGizmoCallback([this, &registry](const Math::Vector4& rect) {
+		// 配置ドラッグ中は、既存オブジェクトのギズモ操作と設定表示を止める。
+		if (Editor::IsScenePlacementActive()) {
+			sTriggerButton = true;
+			return;
+		}
 		ImGuizmo::SetDrawlist();
 		ImGuizmo::SetRect(rect.x, rect.y, rect.z, rect.w);
 		bool settingsBlocked = false;

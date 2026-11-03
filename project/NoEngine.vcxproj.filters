@@ -145,6 +145,7 @@
     <ClCompile Include="engine\Runtime\PipelineStateObject\ComputePSO.cpp" />
     <ClCompile Include="engine\Runtime\Command\ComputeContext.cpp" />
     <ClCompile Include="engine\Editor\Utilities\EditUtils.cpp" />
+    <ClCompile Include="engine\Editor\Utilities\ScenePlacement.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Editor\EditSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Common\TransformComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Common\Transform2DComponent.cpp" />
@@ -491,6 +492,7 @@
     <ClInclude Include="engine\Editor\Reflection\ReflectionTypeTraits.h" />
     <ClInclude Include="engine\Editor\Reflection\ReflectionMacros.h" />
     <ClInclude Include="engine\Editor\Utilities\EditUtils.h" />
+    <ClInclude Include="engine\Editor\Utilities\ScenePlacement.h" />
     <ClInclude Include="engine\Functions\ECS\System\Editor\EditSystem.h" />
     <ClInclude Include="engine\Editor\Reflection\ComponentRegistry.h" />
     <ClInclude Include="engine\Editor\DataDriven\SceneSerializer.h" />

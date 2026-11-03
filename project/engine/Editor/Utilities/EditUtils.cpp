@@ -1,4 +1,5 @@
 #include "EditUtils.h"
+#include "ScenePlacement.h"
 #include "engine/Functions/ECS/Component/Common/Transform2DComponent.h"
 #include "engine/Functions/ECS/Component/Common/TransformComponent.h"
 #include "engine/Functions/ECS/Component/Asset/SpriteComponent.h"
@@ -131,6 +132,10 @@ ECS::Entity PickObject(CommandContext& ctx, ColorBuffer& idColorBuffer, Readback
 #ifdef USE_IMGUI
 
 	static bool isPickObject = false;
+	if (Editor::IsScenePlacementActive()) {
+		isPickObject = false;
+		return ECS::INVALID_ENTITY;
+	}
 	if (isPickObject) {
 		const uint8_t* pixelData = reinterpret_cast<const uint8_t*>(readBackBuffer.Map());
 
@@ -346,90 +351,7 @@ void DrawSceneImGuiWindow(ECS::Registry& registry, CommandContext& ctx, ColorBuf
 		}
 	}
 
-	static ECS::Entity instantiateTransformObjectEntity = ECS::INVALID_ENTITY;
-	if (instantiateTransformObjectEntity != ECS::INVALID_ENTITY) {
-		registry.AddComponent<Editor::EditSelectedTag>(instantiateTransformObjectEntity);
-		if (registry.Has<Component::TransformComponent>(instantiateTransformObjectEntity)) {
-			const float* pixelData = reinterpret_cast<const float*>(readBackBuffer.Map());
-
-			float r = pixelData[0];
-			float g = pixelData[1];
-			float b = pixelData[2];
-
-			readBackBuffer.Unmap();
-
-			const Math::Color clearColor = worldPositionColorBuffer.GetClearColor();
-			if (r != clearColor.r || g != clearColor.g || b != clearColor.b) {
-				auto& translate = registry.GetComponent<Component::TransformComponent>(instantiateTransformObjectEntity)->translate;
-				translate = Math::Vector3(r, g, b);
-			}
-		} else if (registry.Has<Component::Transform2DComponent>(instantiateTransformObjectEntity)) {
-			auto& translate = registry.GetComponent<Component::Transform2DComponent>(instantiateTransformObjectEntity)->translate;
-			translate = Editor::Get2DSceneWindowMousePosition(registry);
-		}
-		// Undo 用コマンド登録
-		Editor::EditorCommandOperator::AddCommand(std::make_unique<Command::InstantiateEntityCommand>(registry, instantiateTransformObjectEntity));
-		instantiateTransformObjectEntity = ECS::INVALID_ENTITY;
-	}
-
-	if (ImGui::BeginDragDropTarget()) {
-		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("PREFAB_PATH")) {
-			const char* path = (const char*)payload->Data;
-			// インスタンス化
-			auto e = Editor::InstantiatePreset(registry, std::string(path));
-			registry.AddComponent<Editor::EditSelectedTag>(e);
-
-			// Transform があるなら
-			if (auto* t = registry.GetComponent<Component::TransformComponent>(e)) {
-				ctx.CopyPixelToBuffer(readBackBuffer, worldPositionColorBuffer,
-					static_cast<UINT>(sSceneWindowMousePosition.x), static_cast<UINT>(sSceneWindowMousePosition.y), DXGI_FORMAT_R32G32B32A32_TYPELESS);
-
-				// カメラの向いている方向から50m離れた場所に配置
-				auto cameraView = registry.View<Component::CameraComponent, Component::DebugCameraComponent>();
-				Component::CameraComponent* camera = nullptr;
-				Component::TransformComponent* transform = nullptr;
-				for (auto entity : cameraView) {
-					camera = registry.GetComponent<Component::CameraComponent>(entity);
-					transform = registry.GetComponent<Component::TransformComponent>(entity);
-				}
-				if (camera && transform) {
-					Math::Vector3 worldPos = camera->forGPU.worldPosition;
-					const float kOffset = 50.f;
-					worldPos += transform->rotation.zAxis() * kOffset;
-					t->translate = worldPos;
-				}
-				instantiateTransformObjectEntity = e;
-			} else {
-				// Undo 用コマンド登録
-				Editor::EditorCommandOperator::AddCommand(std::make_unique<Command::InstantiateEntityCommand>(registry, e));
-			}
-		}
-		auto createAssetEntity = [&](const char* payloadType, bool isModel) {
-			const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(payloadType);
-			if (!payload) return;
-
-			const std::string assetName(static_cast<const char*>(payload->Data));
-			const ECS::Entity entity = registry.GenerateEntity();
-			registry.AddComponent<Editor::EditTag>(entity)->name = assetName;
-			if (isModel) {
-				registry.AddComponent<Component::MeshComponent>(entity)->meshName = assetName;
-				registry.AddComponent<Component::MaterialComponent>(entity);
-				registry.AddComponent<Component::TransformComponent>(entity);
-				ctx.CopyPixelToBuffer(readBackBuffer, worldPositionColorBuffer,
-					static_cast<UINT>(sSceneWindowMousePosition.x), static_cast<UINT>(sSceneWindowMousePosition.y), DXGI_FORMAT_R32G32B32A32_TYPELESS);
-			} else {
-				auto* sprite = registry.AddComponent<Component::SpriteComponent>(entity);
-				registry.AddComponent<Component::Transform2DComponent>(entity);
-				sprite->textureName = assetName;
-				sprite->matchScaleToTexture = true;
-			}
-
-			instantiateTransformObjectEntity = entity;
-		};
-		createAssetEntity("ASSET_MODEL_NAME", true);
-		createAssetEntity("ASSET_TEXTURE_NAME", false);
-		ImGui::EndDragDropTarget();
-	}
+	Editor::DrawScenePlacement(registry, sSceneTexRect);
 
 	if (sGizmoCallback) sGizmoCallback(sSceneTexRect);
 	ImGui::End();
