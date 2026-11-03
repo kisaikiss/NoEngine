@@ -78,15 +78,15 @@ struct TexturePreview {
 std::unordered_map<std::string, TexturePreview> sTexturePreviews;
 bool sRefreshPreviews = false;
 
-TexturePreview& GetTexturePreview(const BrowserItem& item) {
-	auto& preview = sTexturePreviews[item.sourceFilePath];
+TexturePreview& GetTexturePreview(const std::string& sourceFilePath) {
+	auto& preview = sTexturePreviews[sourceFilePath];
 	if (preview.attempted) return preview;
 	preview.attempted = true;
 	if (!preview.hasSlot && !Render::gTextureHeap.HasAvailableSpace(1)) return preview;
 
 	// 元画像を直接読み、ゲーム用のDDS変換やテクスチャキャッシュに影響させない。
 	DirectX::ScratchImage source;
-	const auto filePath = ConvertString(item.sourceFilePath);
+	const auto filePath = ConvertString(sourceFilePath);
 	if (FAILED(DirectX::LoadFromWICFile(filePath.c_str(), DirectX::WIC_FLAGS_FORCE_RGB, nullptr, source))) return preview;
 	const auto& metadata = source.GetMetadata();
 	preview.width = metadata.width;
@@ -116,9 +116,49 @@ TexturePreview& GetTexturePreview(const BrowserItem& item) {
 	return preview;
 }
 
+TexturePreview& GetTexturePreview(const BrowserItem& item) {
+	return GetTexturePreview(item.sourceFilePath);
+}
+
+const char* GetAssetIconPath(EBrowserItemType type) {
+	switch (type) {
+	case EBrowserItemType::Model: return "resources/engine/AssetIcon/modelIcon.png";
+	case EBrowserItemType::Audio: return "resources/engine/AssetIcon/soundIcon.png";
+	case EBrowserItemType::Font: return "resources/engine/AssetIcon/fontIcon.png";
+	case EBrowserItemType::Prefab: return "resources/engine/AssetIcon/prefabIcon.png";
+	default: return "resources/engine/AssetIcon/OthersIcon.png";
+	}
+}
+
 ImVec2 FitPreview(const TexturePreview& preview, float width, float height) {
 	const float scale = std::min(width / static_cast<float>(preview.width), height / static_cast<float>(preview.height));
 	return ImVec2(static_cast<float>(preview.width) * scale, static_cast<float>(preview.height) * scale);
+}
+
+// Selectableの操作領域を保ち、画像と名前だけを重ねて描画する。
+void DrawBrowserThumbnail(const std::string& imagePath, const char* fallbackLabel,
+	const std::string& name, const std::string& details, const ImVec2& tilePos, const ImVec2& tileSize) {
+	if (!ImGui::IsItemVisible()) return;
+	auto& preview = GetTexturePreview(imagePath);
+	auto* drawList = ImGui::GetWindowDrawList();
+	const ImVec4 clip(tilePos.x, tilePos.y, tilePos.x + tileSize.x, tilePos.y + tileSize.y);
+	const float imageWidth = sListView ? tileSize.y : std::max(1.0f, tileSize.x - 8.0f);
+	const float imageHeight = sListView ? tileSize.y : std::max(1.0f, tileSize.y - 24.0f);
+	if (preview.texture) {
+		const ImVec2 size = FitPreview(preview, imageWidth, imageHeight);
+		const ImVec2 pos(tilePos.x + ((sListView ? imageWidth : tileSize.x) - size.x) * 0.5f,
+			tilePos.y + (imageHeight - size.y) * 0.5f);
+		drawList->AddImage(static_cast<ImTextureID>(preview.slot.GetGpuPtr()), pos, ImVec2(pos.x + size.x, pos.y + size.y));
+	} else if (!sListView) {
+		drawList->AddText(nullptr, 0.0f, tilePos, ImGui::GetColorU32(ImGuiCol_TextDisabled), fallbackLabel, nullptr, 0.0f, &clip);
+	}
+	const std::string text = sListView
+		? (preview.texture ? "" : std::string(fallbackLabel) + " ") + name + (details.empty() ? "" : "    " + details)
+		: name;
+	const ImVec2 textPos = sListView
+		? ImVec2(tilePos.x + (preview.texture ? imageWidth + 6.0f : 0.0f), tilePos.y)
+		: ImVec2(tilePos.x, tilePos.y + tileSize.y - 20.0f);
+	drawList->AddText(nullptr, 0.0f, textPos, ImGui::GetColorU32(ImGuiCol_Text), text.c_str(), nullptr, 0.0f, &clip);
 }
 #endif
 
@@ -557,7 +597,10 @@ void DrawAssetBrowserWindow(ECS::Registry& registry) {
 			// 親フォルダへ戻る
 			if (!sSelectedFolder.empty()) {
 				ImGui::PushID("..UpFolder");
-				ImGui::Selectable(sListView ? "[Folder] .." : "[Folder]\n..", false, 0, itemSize);
+				const ImVec2 tilePos = ImGui::GetCursorScreenPos();
+				ImGui::Selectable("##parentFolder", false, 0, itemSize);
+				DrawBrowserThumbnail("resources/engine/AssetIcon/folderIcon.png", "[Folder]", "..", "", tilePos,
+					ImVec2(sListView ? ImGui::GetContentRegionAvail().x : itemSize.x, itemSize.y));
 				if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
 					nextFolder = GetParentFolderPath(sSelectedFolder);
 				}
@@ -569,8 +612,10 @@ void DrawAssetBrowserWindow(ECS::Registry& registry) {
 			if (currentFolder) {
 				for (auto& child : currentFolder->children) {
 					ImGui::PushID(child.relativePath.c_str());
-					std::string label = std::string(sListView ? "[Folder] " : "[Folder]\n") + child.name;
-					ImGui::Selectable(label.c_str(), false, 0, itemSize);
+					const ImVec2 tilePos = ImGui::GetCursorScreenPos();
+					ImGui::Selectable("##folder", false, 0, itemSize);
+					DrawBrowserThumbnail("resources/engine/AssetIcon/folderIcon.png", "[Folder]", child.name, "", tilePos,
+						ImVec2(sListView ? ImGui::GetContentRegionAvail().x : itemSize.x, itemSize.y));
 					if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
 						nextFolder = child.relativePath;
 					}
@@ -587,34 +632,12 @@ void DrawAssetBrowserWindow(ECS::Registry& registry) {
 			ImGui::PushID(i);
 			bool selected = (sSelectedIndex == i);
 			const ImVec2 tilePos = ImGui::GetCursorScreenPos();
-			const bool isTexture = item.type == EBrowserItemType::Texture;
 			if (ImGui::Selectable("##asset", selected, 0, itemSize)) {
 				sSelectedIndex = i;
 			}
-			if (ImGui::IsItemVisible()) {
-				auto* drawList = ImGui::GetWindowDrawList();
-				const float tileWidth = sListView ? ImGui::GetContentRegionAvail().x : itemSize.x;
-				const ImVec4 clip(tilePos.x, tilePos.y, tilePos.x + tileWidth, tilePos.y + itemSize.y);
-				if (sListView) {
-					const std::string text = std::string(GetIconLabel(item.type)) + " " + item.displayName + "    " + GetSourcePath(item);
-					drawList->AddText(nullptr, 0.0f, tilePos, ImGui::GetColorU32(ImGuiCol_Text), text.c_str(), nullptr, 0.0f, &clip);
-				} else {
-					if (isTexture) {
-						auto& preview = GetTexturePreview(item);
-						if (preview.texture) {
-							const ImVec2 size = FitPreview(preview, std::max(1.0f, tileWidth - 8), cellSize - 34);
-							const ImVec2 pos(tilePos.x + (tileWidth - size.x) * 0.5f, tilePos.y + 2);
-							drawList->AddImage(static_cast<ImTextureID>(preview.slot.GetGpuPtr()), pos, ImVec2(pos.x + size.x, pos.y + size.y));
-						} else {
-							drawList->AddText(tilePos, ImGui::GetColorU32(ImGuiCol_TextDisabled), "[Tex]");
-						}
-					} else {
-						drawList->AddText(nullptr, 0.0f, tilePos, ImGui::GetColorU32(ImGuiCol_TextDisabled), GetIconLabel(item.type), nullptr, 0.0f, &clip);
-					}
-					drawList->AddText(nullptr, 0.0f, ImVec2(tilePos.x, tilePos.y + cellSize - 30),
-						ImGui::GetColorU32(ImGuiCol_Text), item.displayName.c_str(), nullptr, 0.0f, &clip);
-				}
-			}
+			const std::string imagePath = item.type == EBrowserItemType::Texture ? item.sourceFilePath : GetAssetIconPath(item.type);
+			DrawBrowserThumbnail(imagePath, GetIconLabel(item.type), item.displayName, GetSourcePath(item), tilePos,
+				ImVec2(sListView ? ImGui::GetContentRegionAvail().x : itemSize.x, itemSize.y));
 			if (ImGui::IsItemHovered()) ImGui::SetTooltip("%s\n%s\n%s", item.displayName.c_str(), GetIconLabel(item.type), GetSourcePath(item).c_str());
 
 			if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID)) {
