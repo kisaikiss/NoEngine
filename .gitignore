@@ -436,6 +436,7 @@ FodyWeavers.xsd
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
 /project/imgui.ini
+editor-windows.json
 
 # DirectXTex Compiled Shaders
 **/DirectXTex/Shaders/Compiled/

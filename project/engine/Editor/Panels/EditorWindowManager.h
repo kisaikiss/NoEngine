@@ -23,6 +23,8 @@ public:
     EditorWindowState& Get(EditorWindowId id);
     void DrawMenu();
     void ResetToDefaults();
+    void LoadSettings();
+    void SaveSettings() const;
 
 private:
     EditorWindowManager() = default;

@@ -1,4 +1,5 @@
 #include "ImGuiManager.h"
+#include "EditorWindowManager.h"
 #include "engine/Runtime/GraphicsCore.h"
 #include "engine/Functions/Renderer/RaytracingManager.h"
 
@@ -10,6 +11,7 @@
 namespace NoEngine {
 
 void ImGuiManager::Initialize() {
+	Editor::EditorWindowManager::GetInstance().LoadSettings();
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO();
@@ -129,6 +131,7 @@ void ImGuiManager::BeginFrame() {
 }
 
 void ImGuiManager::Shutdown() {
+	Editor::EditorWindowManager::GetInstance().SaveSettings();
 	ImGui_ImplDX12_Shutdown();
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
