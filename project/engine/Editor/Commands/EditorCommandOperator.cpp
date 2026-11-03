@@ -1,6 +1,12 @@
 #include "stdafx.h"
 #include "EditorCommandOperator.h"
+#include "engine/Editor/Utilities/MultiEdit.h"
+#include "engine/Functions/ECS/System/Editor/DrawManipulatorSystem.h"
 #include "engine/Functions/Input/input.h"
+#ifdef USE_IMGUI
+#include "externals/imgui/imgui.h"
+#include "externals/imgui/ImGuizmo.h"
+#endif
 
 namespace NoEngine {
 namespace Editor {
@@ -18,6 +24,10 @@ void EditorCommandOperator::Update(float deltaTime) {
 		sTimeInterval -= deltaTime;
 	}
 
+#ifdef USE_IMGUI
+	// 入力欄自身のUndoやギズモのドラッグ中に、シーンの履歴を操作しない。
+	if (ImGui::IsAnyItemActive() || ImGuizmo::IsUsingAny()) return;
+#endif
 	static const float kIntervalTime = 0.3f;
 	if (Input::Keyboard::IsPress(VK_LCONTROL) && Input::Keyboard::IsPress(VK_LSHIFT) && Input::Keyboard::IsPress('Z')) {
 		if (sTimeInterval <= 0.0f) {
@@ -42,10 +52,14 @@ void EditorCommandOperator::Redo() {
 
 void EditorCommandOperator::Reset() {
 	LogDebug("EditorCommand Reset");
+	ResetPendingMultiEdit();
+	ECS::DrawManipulatorSystem::ResetSelectionEdit();
 	sEditorCommands.Clear();
 }
 
 void EditorCommandOperator::Shutdown() {
+	ResetPendingMultiEdit();
+	ECS::DrawManipulatorSystem::ResetSelectionEdit();
 	sEditorCommands.Clear();
 }
 

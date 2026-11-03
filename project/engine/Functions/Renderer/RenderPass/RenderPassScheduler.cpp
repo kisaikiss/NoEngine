@@ -1,3 +1,4 @@
+#include "engine/Editor/Utilities/MultiEdit.h"
 #include "RenderPassScheduler.h"
 #include "engine/Editor/Panels/EditorWindowManager.h"
 #include "Rasterization/SpritePass.h"
@@ -196,9 +197,19 @@ void RenderPassScheduler::Render(GraphicsContext& gfx, ECS::Registry& registry) 
 		gfx.TransitionResource(*resourceRegistry_.GetColorBufferPointer("ObjectID"), D3D12_RESOURCE_STATE_COPY_SOURCE);
 		gfx.TransitionResource(idReadbackBuffer_, D3D12_RESOURCE_STATE_COPY_DEST);
 		gfx.FlushResourceBarriers();
-		auto e = PickObject(gfx, *resourceRegistry_.GetColorBufferPointer("ObjectID"), idReadbackBuffer_);
+		bool toggleSelection = false;
+		bool addSelection = false;
+		auto e = PickObject(gfx, *resourceRegistry_.GetColorBufferPointer("ObjectID"), idReadbackBuffer_, &toggleSelection, &addSelection);
 		if (e != ECS::INVALID_ENTITY && registry.Has<Editor::EditTag>(e) && !registry.Has<Editor::NoClickSelectTag>(e)) {
-			registry.AddComponent<Editor::EditSelectedTag>(e);
+			if (toggleSelection || addSelection) {
+				auto selection = Editor::GetEditorSelection(registry);
+				const auto found = std::find(selection.begin(), selection.end(), e);
+				if (toggleSelection && found != selection.end()) selection.erase(found);
+				else if (found == selection.end()) selection.push_back(e);
+				Editor::SetEditorSelection(registry, selection, e);
+			} else {
+				registry.AddComponent<Editor::EditSelectedTag>(e);
+			}
 		}
 	}
 

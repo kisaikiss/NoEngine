@@ -1,5 +1,6 @@
 #include "HierarchyPanel.h"
 #include "../Utilities/EntityHierarchyUtils.h"
+#include "../Utilities/MultiEdit.h"
 #include "engine/Editor/Commands/EditorCommandOperator.h"
 #include "engine/Functions/Command/EditCommand/InstantiateEntityCommand.h"
 
@@ -14,6 +15,9 @@ namespace Editor {
 void HierarchyPanel::Draw(ECS::Registry& registry) {
 #ifdef USE_IMGUI
 	ImGui::Begin("Hierarchy");
+	// 他のパネルやシーン上のクリックによる選択変更も同じ表示へ同期する。
+	const auto sharedSelection = GetEditorSelection(registry);
+	selection_ = std::set<ECS::Entity>(sharedSelection.begin(), sharedSelection.end());
 
 	if (ImGui::BeginPopupContextWindow()) {
 		if (ImGui::MenuItem("Generate newEntity")) {
@@ -44,6 +48,7 @@ void HierarchyPanel::Draw(ECS::Registry& registry) {
 	// ウィンドウの何もない場所をクリックしたら選択解除する
 	if (ImGui::IsWindowHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Left) && !ImGui::IsAnyItemHovered()) {
 		selection_.clear();
+		SetEditorSelection(registry, {});
 		lastClickedEntity_ = ECS::INVALID_ENTITY;
 	}
 
@@ -139,12 +144,21 @@ void HierarchyPanel::DrawEntityNode(ECS::Registry& registry, ECS::Entity e, cons
 			ImGui::OpenPopup("RenameEntityPopup");
 		}
 		if (ImGui::MenuItem("Delete")) {
-			// 削除処理（子孫ごと消す。Undo/Redoが子孫にも効くよう、破棄するEntity毎にコマンドを記録する）
+			// 選択中の対象と子孫を重複なく集め、一回のUndoで戻せるように削除する。
 			std::vector<ECS::Entity> subtree;
-			CollectSubtreeEntities(registry, e, subtree);
+			std::set<ECS::Entity> unique;
+			const auto roots = selection_.contains(e) ? std::vector<ECS::Entity>(selection_.begin(), selection_.end()) : std::vector<ECS::Entity>{e};
+			for (auto root : roots) {
+				std::vector<ECS::Entity> members;
+				CollectSubtreeEntities(registry, root, members);
+				for (auto member : members) if (unique.insert(member).second) subtree.push_back(member);
+			}
 			for (auto member : subtree) {
 				ClearSelectionOf(member);
 			}
+			auto remaining = GetEditorSelection(registry);
+			std::erase_if(remaining, [&](auto member) { return unique.contains(member); });
+			SetEditorSelection(registry, remaining);
 			DeleteEntitiesWithUndo(registry, subtree);
 			ImGui::EndPopup();
 			if (open && hasChildren) ImGui::TreePop();
@@ -188,11 +202,9 @@ void HierarchyPanel::HandleClick(ECS::Registry& registry, ECS::Entity e) {
 	const bool shift = ImGui::GetIO().KeyShift;
 
 	auto setPrimary = [&](ECS::Entity primary) {
-		// Inspector用の代表選択はEditSelectedTagと1対1（既存の排他処理により他Entityからは自動的に外れる）
-		if (primary != ECS::INVALID_ENTITY) {
-			registry.AddComponent<Editor::EditSelectedTag>(primary);
-		}
-		};
+		const std::vector<ECS::Entity> selected(selection_.begin(), selection_.end());
+		SetEditorSelection(registry, selected, primary);
+	};
 
 	if (shift && lastClickedEntity_ != ECS::INVALID_ENTITY) {
 		// 範囲選択：直前にクリックしたEntity～今回クリックしたEntityまでを表示順で選択する
@@ -224,6 +236,10 @@ void HierarchyPanel::HandleClick(ECS::Registry& registry, ECS::Entity e) {
 				registry.RemoveComponent<Editor::EditSelectedTag>(e);
 				ECS::Entity newPrimary = selection_.empty() ? ECS::INVALID_ENTITY : *selection_.rbegin();
 				setPrimary(newPrimary);
+			} else {
+				ECS::Entity primary = ECS::INVALID_ENTITY;
+				for (auto current : registry.View<EditSelectedTag>()) primary = current;
+				setPrimary(primary);
 			}
 		} else {
 			selection_.insert(e);

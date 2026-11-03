@@ -2,6 +2,7 @@
 #include "DrawManipulatorSystem.h"
 #include "engine/Editor/Commands/EditTag.h"
 #include "engine/Editor/Utilities/EditUtils.h"
+#include "engine/Editor/Utilities/MultiEdit.h"
 #include "engine/Editor/Utilities/ScenePlacement.h"
 #include "engine/Editor/Commands/EditorCommandOperator.h"
 #include "engine/Functions/ECS/Component/Asset/SpriteComponent.h"
@@ -160,6 +161,126 @@ bool DrawGizmoSettings(const Math::Vector4& rect, bool* routeMode, int* waypoint
 	// ボタン登録後のカーソルを維持し、アイテム未登録の座標復元を避ける。
 	return blocked;
 }
+
+using GroupTransformItem = Editor::GroupTransformItem;
+struct GroupTransformState {
+	Math::Matrix4x4 start;
+	Math::Matrix4x4 current;
+	Registry* registry = nullptr;
+	std::vector<Entity> selection;
+	std::vector<GroupTransformItem> items;
+	Editor::BatchSnapshot before;
+	Editor::BatchSnapshot after;
+	size_t componentType = 0;
+};
+GroupTransformState sGroupTransform;
+
+void FinishGroupTransform() {
+	if (sGroupTransform.registry) Editor::RecordBatchEdit(*sGroupTransform.registry, sGroupTransform.before, sGroupTransform.after);
+	sGroupTransform = {};
+}
+
+bool DrawGroupTransform(Registry& registry, const std::vector<Entity>& selection) {
+	if (sGroupTransform.registry && sGroupTransform.registry != &registry) sGroupTransform = {};
+	if (sGroupTransform.registry && sGroupTransform.selection != selection) FinishGroupTransform();
+	if (selection.size() < 2) return false;
+	using namespace Component;
+	const bool all3D = std::all_of(selection.begin(), selection.end(), [&](Entity e) { return registry.Has<TransformComponent>(e); });
+	const bool all2D = !all3D && std::all_of(selection.begin(), selection.end(), [&](Entity e) { return registry.Has<Transform2DComponent>(e); });
+	if (!all3D && !all2D) return true;
+	const auto roots = Editor::GetTransformSelectionRoots(registry, selection, all2D);
+	if (roots.empty()) return true;
+	Math::Matrix4x4 view;
+	Math::Matrix4x4 projection;
+	Math::Vector3 worldOffset = Math::Vector3::ZERO;
+	const auto windowSize = GraphicsCore::sWindowManager.GetMainWindow()->GetWindowSize();
+	bool screenSpace = false;
+	if (all3D) {
+		auto cameras = registry.View<CameraComponent, DebugCameraComponent>();
+		auto camera = cameras.begin();
+		if (!(camera != cameras.end())) return true;
+		view = registry.GetComponent<CameraComponent>(*camera)->view;
+		projection = registry.GetComponent<CameraComponent>(*camera)->projection;
+	} else {
+		auto isScreen = [&](Entity e) { auto* sprite = registry.GetComponent<SpriteComponent>(e); return sprite && sprite->space == SpriteSpace::Screen; };
+		screenSpace = isScreen(selection.front());
+		// 画面座標とワールド座標のUIを同じ投影で操作しない。
+		if (!std::all_of(selection.begin(), selection.end(), [&](Entity e) { return isScreen(e) == screenSpace; })) return true;
+		projection = MathCalculations::MakeOrthographicMatrix(0.f, 0.f,
+			static_cast<float>(windowSize.clientWidth), static_cast<float>(windowSize.clientHeight), 0.1f, 100.f);
+		if (!screenSpace) {
+			for (auto camera : registry.View<Camera2DComponent, DebugCamera2DComponent, Transform2DComponent>()) {
+				auto* t = registry.GetComponent<Transform2DComponent>(camera);
+				auto* c = registry.GetComponent<Camera2DComponent>(camera);
+				view = t->MakeAffineMatrix4x4(registry);
+				projection = c->projection;
+				worldOffset = { c->width * t->scale.x * 0.5f, c->height * t->scale.y * 0.5f, 0.f };
+			}
+			view.Inverse();
+		}
+	}
+	auto offsetOf = [&](Entity e) {
+		if (!screenSpace) return worldOffset;
+		auto* sprite = registry.GetComponent<SpriteComponent>(e);
+		return Math::Vector3{ sprite->anchor.x * static_cast<float>(windowSize.clientWidth), sprite->anchor.y * static_cast<float>(windowSize.clientHeight), 0.f };
+	};
+	Math::Matrix4x4 pivot;
+	if (sGroupTransform.registry) pivot = sGroupTransform.current;
+	else {
+		Math::Vector3 center = Math::Vector3::ZERO;
+		for (auto e : roots) center += (all3D ? registry.GetComponent<TransformComponent>(e)->GetWorldPosition(registry)
+			: registry.GetComponent<Transform2DComponent>(e)->MakeAffineMatrix4x4(registry).GetTranslate()) + offsetOf(e);
+		Math::Quaternion rotation = Math::Quaternion::IDENTITY;
+		if (sGizmoSettings.mode == ImGuizmo::LOCAL) {
+			Entity primary = roots.front();
+			for (auto e : registry.View<Editor::EditSelectedTag>()) primary = e;
+			if (all3D) rotation = registry.GetComponent<TransformComponent>(primary)->GetWorldRotation(registry);
+			else {
+				auto matrix = registry.GetComponent<Transform2DComponent>(primary)->MakeAffineMatrix4x4(registry);
+				float position[3], angles[3], scale[3];
+				ImGuizmo::DecomposeMatrixToComponents(*matrix.m, position, angles, scale);
+				rotation.FromAxisAngle(Math::Vector3::FORWARD, angles[2] * PI / 180.f);
+			}
+		}
+		pivot.MakeAffine(Math::Vector3::UNIT_SCALE, rotation, center / static_cast<float>(roots.size()));
+	}
+	const auto beforeManipulate = pivot;
+	ImGuizmo::SetOrthographic(all2D);
+	ImGuizmo::Manipulate(*view.m, *projection.m, sGizmoSettings.operation, sGizmoSettings.mode,
+		*pivot.m, nullptr, sGizmoSettings.GetSnap(sGizmoSettings.operation));
+	if (ImGuizmo::IsUsing()) {
+		if (!sGroupTransform.registry) {
+			sGroupTransform.registry = &registry;
+			sGroupTransform.selection = selection;
+			sGroupTransform.start = beforeManipulate;
+			sGroupTransform.componentType = all3D ? Utilities::TypeID<TransformComponent>() : Utilities::TypeID<Transform2DComponent>();
+			sGroupTransform.before = Editor::CaptureBatch(registry, roots, sGroupTransform.componentType);
+			for (auto e : roots) {
+				auto world = all3D ? registry.GetComponent<TransformComponent>(e)->MakeAffineMatrix4x4(registry)
+					: registry.GetComponent<Transform2DComponent>(e)->MakeAffineMatrix4x4(registry);
+				const auto offset = offsetOf(e);
+				world.m[3][0] += offset.x; world.m[3][1] += offset.y;
+				Math::Vector3 scale;
+				if (all3D) scale = registry.GetComponent<TransformComponent>(e)->scale;
+				else { const auto value = registry.GetComponent<Transform2DComponent>(e)->scale; scale = { value.x, value.y, 1.f }; }
+				sGroupTransform.items.push_back({ world, e, offset, scale });
+			}
+		}
+		sGroupTransform.current = pivot;
+		auto inverseStart = sGroupTransform.start;
+		inverseStart.Inverse();
+		const auto delta = inverseStart * pivot;
+		float pivotPosition[3], pivotRotation[3], pivotScale[3];
+		ImGuizmo::DecomposeMatrixToComponents(*pivot.m, pivotPosition, pivotRotation, pivotScale);
+		const auto operation = sGizmoSettings.operation == ImGuizmo::ROTATE ? Editor::GroupTransformOperation::Rotate
+			: sGizmoSettings.operation == ImGuizmo::SCALE ? Editor::GroupTransformOperation::Scale : Editor::GroupTransformOperation::Move;
+		Editor::ApplyGroupTransform(registry, sGroupTransform.items, delta,
+			{ pivotScale[0], pivotScale[1], pivotScale[2] }, all2D, operation);
+		sGroupTransform.after = Editor::CaptureBatch(registry, roots, sGroupTransform.componentType);
+	} else if (sGroupTransform.registry) FinishGroupTransform();
+	return true;
+}
+
 #endif
 }
 
@@ -179,19 +300,21 @@ void DrawManipulatorSystem::Update(Registry& registry, float deltaTime) {
 		}
 		ImGuizmo::SetDrawlist();
 		ImGuizmo::SetRect(rect.x, rect.y, rect.z, rect.w);
+		const auto selection = Editor::GetEditorSelection(registry);
 		bool settingsBlocked = false;
 		for (auto e : registry.View<EditTag, EditSelectedTag>()) {
 			if (registry.Has<TransformComponent>(e) || registry.Has<Transform2DComponent>(e)) {
 				bool* routeMode = nullptr;
 				int* waypointIndex = nullptr;
 				size_t waypointCount = 0;
-				if (registry.Has<TransformComponent>(e)) {
+				if (selection.size() == 1 && registry.Has<TransformComponent>(e)) {
 					if (auto* routine = registry.GetComponent<TransformRoutineComponent>(e)) {
 						routeMode = &routineEditMode_;
 						waypointIndex = &sSelectedWaypointIndex;
 						waypointCount = routine->keyframes.size();
 					}
-				} else if (auto* routine = registry.GetComponent<TransformRoutineComponent2D>(e)) {
+				} else if (selection.size() == 1 && registry.Has<TransformRoutineComponent2D>(e)) {
+					auto* routine = registry.GetComponent<TransformRoutineComponent2D>(e);
 					routeMode = &routineEditMode2D_;
 					waypointIndex = &sSelectedWaypointIndex2D;
 					waypointCount = routine->keyframes.size();
@@ -203,6 +326,7 @@ void DrawManipulatorSystem::Update(Registry& registry, float deltaTime) {
 		sTriggerButton |= settingsBlocked;
 		// パネルのクリックやドラッグで背後のギズモをつかまないようにする。
 		ImGuizmo::Enable(!settingsBlocked || ImGuizmo::IsUsingAny());
+		if (DrawGroupTransform(registry, selection)) return;
 		Manipulate3D(registry, rect);
 		Manipulate2D(registry, rect);
 		ManipulateRoutineWaypoints(registry, rect);
@@ -217,6 +341,15 @@ void DrawManipulatorSystem::Update(Registry& registry, float deltaTime) {
 
 bool DrawManipulatorSystem::TriggerManipulateButton() {
 	return sTriggerButton;
+}
+
+void DrawManipulatorSystem::ResetSelectionEdit() {
+	// シーン切り替え後へ、古いRegistryやComponentへの参照を持ち越さない。
+#ifdef USE_IMGUI
+	sGroupTransform = {};
+#endif
+	sVector3GizmoEntity = INVALID_ENTITY;
+	sVector3GizmoValue = nullptr;
 }
 
 void DrawManipulatorSystem::SetSelectWaypointIndex(int index) {

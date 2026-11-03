@@ -1,4 +1,5 @@
 #include "InspectorPanel.h"
+#include "engine/Editor/Utilities/MultiEdit.h"
 #include "engine/Editor/DataDriven/PrefabSerializer.h"
 #include "engine/Editor/Components/ComponentUI.h"
 #include "engine/Editor/Commands/EditorCommandOperator.h"
@@ -21,6 +22,12 @@ namespace Editor {
 void InspectorPanel::Draw(ECS::Registry& registry) {
 #ifdef USE_IMGUI
 	ImGui::Begin("Inspector");
+	const auto selection = GetEditorSelection(registry);
+	DrawMultiInspector(registry, selection);
+	if (selection.size() > 1) {
+		ImGui::End();
+		return;
+	}
 
 	auto selectedView = registry.View<Editor::EditSelectedTag, Editor::EditTag>();
 	for (auto e : selectedView) {

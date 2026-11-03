@@ -9,6 +9,8 @@ struct EditTag {
 };
 
 struct EditSelectedTag {};
+// 代表選択とは別に、Inspectorとギズモで共有する複数選択を保持する。
+struct EditMultiSelectedTag {};
 // このタグを付けるとシーンクリックで選択できなくなる
 struct NoClickSelectTag{};
 }

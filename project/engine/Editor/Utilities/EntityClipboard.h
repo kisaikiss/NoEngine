@@ -1,6 +1,7 @@
 #pragma once
 #include "engine/Functions/ECS/Registry.h"
 #include "externals/nlohmann/json.hpp"
+#include <span>
 
 namespace NoEngine {
 namespace Editor {
@@ -11,6 +12,7 @@ class EntityClipboard {
 public:
 	// root自身とその子孫を再帰的にコピーする
 	void Copy(ECS::Registry& registry, ECS::Entity root);
+	void Copy(ECS::Registry& registry, std::span<const ECS::Entity> roots);
 
 	// コピーした階層をそのまま新規Entityとして貼り付ける。
 	// 戻り値は生成された全Entity（先頭がコピー元ルートに対応する新規Entity）。

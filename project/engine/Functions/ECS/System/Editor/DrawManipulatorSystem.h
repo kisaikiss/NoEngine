@@ -13,6 +13,7 @@ public:
 	void Update(Registry& registry, float deltaTime) override;
 
 	static bool TriggerManipulateButton();
+	static void ResetSelectionEdit();
 	static void SetSelectWaypointIndex(int index);
 	static void SetSelectWaypointIndex2D(int index);
 	static void ToggleVector3Gizmo(ECS::Entity entity, Math::Vector3* value);

@@ -7,10 +7,7 @@ namespace Editor {
 // Hierarchyウィンドウの描画・選択（単一/複数）・ドラッグ&ドロップによる親子付け替え・
 // 生成/リネーム/削除を担当するパネル。
 //
-// 選択状態はこのクラスが内部で保持するが、「Inspectorに何を表示するか」の正は
-// 常にEditSelectedTagが付いているEntity（ECS側）にある。このクラスはクリック時に
-// EditSelectedTagを付け替えるだけで、他の場所（ビューポート等）から選択が変わる
-// ケースについては関与しない＝呼び出し側がEditSelectedTagを見て判断すること。
+// 選択はECS上で共有し、このパネルのキャッシュは毎フレーム同期する。
 class HierarchyPanel {
 public:
 	void Draw(ECS::Registry& registry);
@@ -24,7 +21,7 @@ private:
 	void HandleClick(ECS::Registry& registry, ECS::Entity e);
 	void HandleDrop(ECS::Registry& registry, ECS::Entity newParent);
 
-	std::set<ECS::Entity> selection_;                              // Hierarchy上の複数選択（ECSタグではない内部状態）
+	std::set<ECS::Entity> selection_;                              // Hierarchy描画用の選択キャッシュ
 	ECS::Entity lastClickedEntity_ = ECS::INVALID_ENTITY;           // Shift+Click範囲選択の基準Entity
 	ECS::Entity pendingSingleSelectEntity_ = ECS::INVALID_ENTITY;   // ドラッグに発展するか判定待ちの単一選択候補
 

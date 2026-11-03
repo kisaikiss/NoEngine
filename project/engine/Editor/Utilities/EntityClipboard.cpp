@@ -7,10 +7,21 @@ namespace NoEngine {
 namespace Editor {
 
 void EntityClipboard::Copy(ECS::Registry& registry, ECS::Entity root) {
-	if (root == ECS::INVALID_ENTITY) return;
+	const std::array roots{ root };
+	Copy(registry, std::span<const ECS::Entity>(roots));
+}
 
+void EntityClipboard::Copy(ECS::Registry& registry, std::span<const ECS::Entity> roots) {
 	std::vector<ECS::Entity> subtree;
-	CollectSubtreeEntities(registry, root, subtree);
+	std::set<ECS::Entity> seen;
+	// 親と子を同時選択していても、コピーするEntityは一度だけ登録する。
+	for (auto root : roots) {
+		if (root == ECS::INVALID_ENTITY || !registry.Has<EditTag>(root)) continue;
+		std::vector<ECS::Entity> members;
+		CollectSubtreeEntities(registry, root, members);
+		for (auto member : members) if (seen.insert(member).second) subtree.push_back(member);
+	}
+	if (subtree.empty()) return;
 
 	// Entity -> subtree内でのインデックス（貼り付け時に親子関係を復元するため）
 	std::unordered_map<ECS::Entity, int> indexOf;
@@ -31,7 +42,7 @@ void EntityClipboard::Copy(ECS::Registry& registry, ECS::Entity root) {
 
 	copyObject_ = nlohmann::json{ {"nodes", nodesJson} };
 
-	auto* rootTag = registry.GetComponent<Editor::EditTag>(root);
+	auto* rootTag = registry.GetComponent<Editor::EditTag>(roots.front());
 	LogInfo("CopyObject name : " + (rootTag ? rootTag->name : std::string())
 		+ " (" + std::to_string(subtree.size()) + " entities)");
 }

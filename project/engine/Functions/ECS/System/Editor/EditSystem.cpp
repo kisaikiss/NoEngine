@@ -1,4 +1,5 @@
 #include "EditSystem.h"
+#include "engine/Editor/Utilities/MultiEdit.h"
 #include "engine/Editor/Utilities/EntityHierarchyUtils.h"
 #include "engine/Editor/DataDriven/SceneSerializer.h"
 #include "engine/Editor/DataDriven/PrefabSerializer.h"
@@ -11,6 +12,7 @@
 #include "engine/Functions/Input/input.h"
 #ifdef USE_IMGUI
 #include "externals/imgui/imgui.h"
+#include "externals/imgui/ImGuizmo.h"
 #endif // USE_IMGUI
 
 #include <unordered_map>
@@ -86,9 +88,14 @@ void EditSystem::HandleGlobalShortcuts(Registry& registry, float deltaTime) {
 	// Undo/Redoが子孫にも効くことと、削除範囲そのものを両経路で一致させることを保証する）
 	if (Input::Keyboard::IsTrigger(VK_DELETE)) {
 		Entity selected = SelectedNow(registry);
-		if (!ImGui::IsAnyItemActive() && !gimmickGraphPanel_.OwnsKeyboardFocus() && selected != ECS::INVALID_ENTITY) {
+		if (!ImGui::IsAnyItemActive() && !ImGuizmo::IsUsingAny() && !gimmickGraphPanel_.OwnsKeyboardFocus() && selected != ECS::INVALID_ENTITY) {
 			std::vector<Entity> subtree;
-			Editor::CollectSubtreeEntities(registry, selected, subtree);
+			std::set<Entity> unique;
+			for (auto root : Editor::GetEditorSelection(registry)) {
+				std::vector<Entity> members;
+				Editor::CollectSubtreeEntities(registry, root, members);
+				for (auto member : members) if (unique.insert(member).second) subtree.push_back(member);
+			}
 
 			LogInfo("DestroyEntity name : " + registry.GetComponent<Editor::EditTag>(selected)->name
 				+ " (" + std::to_string(subtree.size()) + " entities)");
@@ -96,6 +103,7 @@ void EditSystem::HandleGlobalShortcuts(Registry& registry, float deltaTime) {
 			for (auto e : subtree) {
 				hierarchyPanel_.ClearSelectionOf(e);
 			}
+			Editor::SetEditorSelection(registry, {});
 			Editor::DeleteEntitiesWithUndo(registry, subtree);
 		}
 	}
@@ -110,7 +118,7 @@ void EditSystem::HandleGlobalShortcuts(Registry& registry, float deltaTime) {
 		Entity selected = SelectedNow(registry);
 		if (selected != ECS::INVALID_ENTITY && selected != prefabEditorPanel_.GetEditingEntity()) {
 			if (!ImGui::IsAnyItemActive() && timeInterval_ <= 0.0f) {
-				clipboard_.Copy(registry, selected);
+				clipboard_.Copy(registry, Editor::GetEditorSelection(registry));
 				static constexpr float kIntervalTime = 0.3f;
 				timeInterval_ = kIntervalTime;
 			}
@@ -129,9 +137,14 @@ void EditSystem::HandleGlobalShortcuts(Registry& registry, float deltaTime) {
 					Editor::EditorCommandOperator::AddCommand(std::make_unique<Command::InstantiateEntitiesCommand>(registry, pasted));
 				}
 
-				// コピー元のルートに対応する新規Entityだけを選択状態にする
+				// 貼り付けた階層のルートをまとめて選択する
 				if (!pasted.empty()) {
-					registry.AddComponent<Editor::EditSelectedTag>(pasted.front());
+					std::vector<Entity> roots;
+					for (auto entity : pasted) {
+						const auto* tag = registry.GetComponent<Editor::EditTag>(entity);
+						if (tag && std::find(pasted.begin(), pasted.end(), tag->parent) == pasted.end()) roots.push_back(entity);
+					}
+					Editor::SetEditorSelection(registry, roots);
 				}
 
 				LogInfo("PasteObject : " + std::to_string(pasted.size()) + " entities");

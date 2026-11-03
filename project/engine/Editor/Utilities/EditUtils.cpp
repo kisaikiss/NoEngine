@@ -128,10 +128,12 @@ std::unordered_set<std::string> CollectEditTagNames(ECS::Registry& registry, ECS
 	return names;
 }
 
-ECS::Entity PickObject(CommandContext& ctx, ColorBuffer& idColorBuffer, ReadbackBuffer& readBackBuffer) {
+ECS::Entity PickObject(CommandContext& ctx, ColorBuffer& idColorBuffer, ReadbackBuffer& readBackBuffer, bool* toggleSelection, bool* addSelection) {
 #ifdef USE_IMGUI
 
 	static bool isPickObject = false;
+	static bool toggleRequested = false;
+	static bool addRequested = false;
 	if (Editor::IsScenePlacementActive()) {
 		isPickObject = false;
 		return ECS::INVALID_ENTITY;
@@ -155,6 +157,9 @@ ECS::Entity PickObject(CommandContext& ctx, ColorBuffer& idColorBuffer, Readback
 			return ECS::INVALID_ENTITY;
 		}
 
+		// GPU読み戻しの間にキーが離されても、クリック時の修飾キーを使う。
+		if (toggleSelection) *toggleSelection = toggleRequested;
+		if (addSelection) *addSelection = addRequested;
 		LogDebug("Object click select ID : " + std::to_string(pickedID));
 		isPickObject = false;
 		return static_cast<ECS::Entity>(pickedID);
@@ -166,6 +171,8 @@ ECS::Entity PickObject(CommandContext& ctx, ColorBuffer& idColorBuffer, Readback
 		}
 
 		ctx.CopyPixelToBuffer(readBackBuffer, idColorBuffer, static_cast<UINT>(sSceneWindowMousePosition.x), static_cast<UINT>(sSceneWindowMousePosition.y));
+		toggleRequested = ImGui::GetIO().KeyCtrl;
+		addRequested = ImGui::GetIO().KeyShift;
 		isPickObject = true;
 	}
 	
@@ -175,6 +182,8 @@ ECS::Entity PickObject(CommandContext& ctx, ColorBuffer& idColorBuffer, Readback
 	static_cast<void>(ctx);
 	static_cast<void>(idColorBuffer);
 	static_cast<void>(readBackBuffer);
+	static_cast<void>(toggleSelection);
+	static_cast<void>(addSelection);
 
 #endif // USE_IMGUI
 

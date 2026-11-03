@@ -83,6 +83,10 @@ inline Component::ActiveCamera2DTag* Registry::AddComponent<Component::ActiveCam
 /// <returns>選択タグ</returns>
 template<>
 inline Editor::EditSelectedTag* Registry::AddComponent<Editor::EditSelectedTag>(const Entity e) {
+	// シーン上のクリックなどで単一選択されたら、古い複数選択を解除する。
+	std::vector<Entity> previousSelection;
+	for (auto selected : View<Editor::EditMultiSelectedTag>()) previousSelection.push_back(selected);
+	for (auto selected : previousSelection) RemoveComponent<Editor::EditMultiSelectedTag>(selected);
 	// すでに付いているなら何もしない
 	if (Has<Editor::EditSelectedTag>(e))
 		return GetComponent<Editor::EditSelectedTag>(e);
