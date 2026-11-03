@@ -444,8 +444,12 @@ project/logs
 project/Dumps
 project/externals/DirectXTex/Bin/
 /generated/outputs/Development
+/generated/outputs/systems-debug/
 /generated/tests/
 project/resources/engine/cache
 /project/NodeEditor.json
-/tests
+/tests/*
+!/tests/SystemListPanelTests.cpp
+!/tests/RunSystemListPanelTests.cmd
 /AGENTS.md
+/tests

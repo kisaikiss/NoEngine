@@ -26,12 +26,18 @@ public:
 		// 保存したJSONが読み込まれないことがある(REGISTER_SYSTEMの追加を推奨)。
 		if (name.empty()) name = typeid(T).name();
 		entries_.push_back({ std::move(name), std::move(system) });
+		ResetEditorState();
 		return ptr;
 	}
 
 	bool AddSystemByName(const std::string& name);
 	void RemoveSystem(size_t index);
 	void MoveSystem(size_t from, size_t to);
+
+	/// <summary>エディター操作を共通のUndo/Redo履歴に登録する。</summary>
+	bool EditAddSystem(const std::string& name, size_t insertionIndex);
+	bool EditRemoveSystem(size_t index);
+	bool EditMoveSystem(size_t from, size_t to);
 
 	bool HasSystem(const std::string& name) const;
 	std::vector<std::string> GetSystemNames() const;
@@ -43,6 +49,9 @@ public:
 	void SaveConfiguration(Registry& registry);
 
 private:
+	class EditCommand;
+	void ResetEditorState();
+	void MoveEntry(size_t from, size_t to);
 	struct Entry {
 		std::string name;
 		std::unique_ptr<ISystem> system;
@@ -52,6 +61,9 @@ private:
 
 	Editor::GameControllerPanel gameControllerPanel_;
 	Editor::SystemListPanel systemListPanel_;
+	bool configurationDirty_ = false;
+	// シーンの構成変更や破棄後に、古い履歴がマネージャーを参照しないための寿命管理。
+	std::shared_ptr<int> editLifetime_ = std::make_shared<int>(0);
 };
 
 }

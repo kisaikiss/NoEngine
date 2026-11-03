@@ -41,6 +41,9 @@ public:
 	/// </summary>
 	void Redo();
 
+	bool CanUndo() const { return !undoStack_.empty(); }
+	bool CanRedo() const { return !redoStack_.empty(); }
+
 private:
 	std::deque<std::unique_ptr<ICommand>> undoStack_;
 	std::deque<std::unique_ptr<ICommand>> redoStack_;

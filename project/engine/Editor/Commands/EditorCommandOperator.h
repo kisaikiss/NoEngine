@@ -26,6 +26,9 @@ public:
 	/// </summary>
 	static void Redo();
 
+	static bool CanUndo();
+	static bool CanRedo();
+
 	static void Reset();
 
 	static void Shutdown();

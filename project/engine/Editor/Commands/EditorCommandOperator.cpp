@@ -50,6 +50,14 @@ void EditorCommandOperator::Redo() {
 	sEditorCommands.Redo();
 }
 
+bool EditorCommandOperator::CanUndo() {
+	return sEditorCommands.CanUndo();
+}
+
+bool EditorCommandOperator::CanRedo() {
+	return sEditorCommands.CanRedo();
+}
+
 void EditorCommandOperator::Reset() {
 	LogDebug("EditorCommand Reset");
 	ResetPendingMultiEdit();
