@@ -18,6 +18,7 @@ void MagicScaffoldSystem::Update(No::Registry& registry, float deltaTime) {
 
 		if (scaffold->generation == 0) {
 			static uint32_t generation = 0;
+			REGISTER_PLAY_MODE_STATIC(generation);
 			scaffold->generation = ++generation;
 		}
 		if (scaffold->isDead) {

@@ -20,6 +20,8 @@ class EditSystem :
 public:
     EditSystem() { SetStopInGameStop(false); SetStopInPause(false); }
     void Update(Registry& registry, float deltaTime) override;
+    std::unique_ptr<ISystem> CloneForPlayMode() const override;
+    void OnPlayModeRestore(Registry&) override;
 
 private:
     Editor::HierarchyPanel hierarchyPanel_;

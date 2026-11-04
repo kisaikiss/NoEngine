@@ -29,8 +29,10 @@ AnimationSystem::AnimationSystem() {
 
 	std::vector<ShaderReflection> reflections;
 	reflections.push_back(csReflection);
-	RootSignatureBuilder::BuildFromReflection(reflections, rootSignature_, ConvertString(sPsoName));
-	pso_.SetRootSignature(rootSignature_);
+	auto rootSignature = std::make_shared<RootSignature>();
+	RootSignatureBuilder::BuildFromReflection(reflections, *rootSignature, ConvertString(sPsoName));
+	pso_.SetRootSignature(*rootSignature);
+	rootSignature_ = std::move(rootSignature);
 
 	pso_.Finalize();
 }
@@ -46,7 +48,7 @@ void AnimationSystem::Update(ComputeContext& ctx, Registry& registry, float delt
 		if (animeComp->enableSkinning && mesh->numJoints) {
 			auto& rootIndex = RootSignatureBuilder::GetRootIndexMap(ConvertString(sPsoName));
 			ctx.SetPipelineState(pso_);
-			ctx.SetRootSignature(rootSignature_);
+			ctx.SetRootSignature(*rootSignature_);
 			// ジョイント
 			ctx.CopyBufferRegion(mesh->paletteResource, 0, mesh->paletteUpload, 0, sizeof(SkeletonWell) * mesh->mappedPalette.size());
 			ctx.TransitionResource(mesh->paletteResource, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, true);

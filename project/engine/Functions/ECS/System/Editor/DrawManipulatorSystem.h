@@ -11,6 +11,7 @@ class DrawManipulatorSystem :
 public:
 	DrawManipulatorSystem() { SetStopInGameStop(false); SetStopInPause(false); }
 	void Update(Registry& registry, float deltaTime) override;
+	void OnPlayModeRestore(Registry& registry) override { Update(registry, 0.0f); }
 
 	static bool TriggerManipulateButton();
 	static void ResetSelectionEdit();

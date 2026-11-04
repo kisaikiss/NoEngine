@@ -37,11 +37,13 @@ constexpr float kBasePortraitSize = 128.0f;
 
 std::mt19937& VoiceRandom() {
 	static std::mt19937 generator{ std::random_device{}() };
+	REGISTER_PLAY_MODE_STATIC(generator);
 	return generator;
 }
 
 std::unordered_map<std::string, bool>& LoadedDialogueVoices() {
 	static std::unordered_map<std::string, bool> loaded;
+	REGISTER_PLAY_MODE_STATIC(loaded);
 	return loaded;
 }
 

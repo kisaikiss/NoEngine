@@ -1,11 +1,14 @@
 #include "Random.h"
+#include "engine/Functions/ECS/System/PlayModeStaticState.h"
 
 namespace NoEngine {
 namespace Random {
 namespace {
 std::random_device seedGenerator;
 std::mt19937 randomEngine(seedGenerator());
+REGISTER_PLAY_MODE_STATIC(randomEngine);
 std::uniform_real_distribution<float> normalizeDistribution(-1.0f, 1.0f);
+REGISTER_PLAY_MODE_STATIC(normalizeDistribution);
 }
 
 float GetRandomValNormalized() {

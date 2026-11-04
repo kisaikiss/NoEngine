@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "DrawManipulatorSystem.h"
+#include "../PlayModeStaticState.h"
 #include "engine/Editor/Commands/EditTag.h"
 #include "engine/Editor/Utilities/EditUtils.h"
 #include "engine/Editor/Utilities/MultiEdit.h"
@@ -25,6 +26,9 @@ namespace {
 bool sTriggerButton = false;
 int  sSelectedWaypointIndex = 0;    // 現在ギズモで掴んでいるwaypointの添字
 int  sSelectedWaypointIndex2D = 0; 
+REGISTER_PLAY_MODE_STATIC(sTriggerButton);
+REGISTER_PLAY_MODE_STATIC(sSelectedWaypointIndex);
+REGISTER_PLAY_MODE_STATIC(sSelectedWaypointIndex2D);
 Entity sVector3GizmoEntity = INVALID_ENTITY;
 Math::Vector3* sVector3GizmoValue = nullptr;
 
@@ -48,6 +52,7 @@ struct GizmoSettings {
 	}
 };
 GizmoSettings sGizmoSettings;
+REGISTER_PLAY_MODE_STATIC(sGizmoSettings);
 
 // 設定はボタンを押したときだけ開き、通常はシーンを広く表示する。
 bool DrawGizmoSettings(const Math::Vector4& rect, bool* routeMode, int* waypointIndex, size_t waypointCount) {
@@ -401,7 +406,9 @@ void DrawManipulatorSystem::Manipulate3D(Registry& registry, const Math::Vector4
 		// Inspectorで選んだVector3だけをギズモで操作する。未選択時は通常のTransformギズモを使う。
 		if (sVector3GizmoEntity == e && sVector3GizmoValue) {
 			static Math::Vector3 oldGizmoValue;
+			REGISTER_PLAY_MODE_STATIC(oldGizmoValue);
 			static bool vectorGizmoWasUsing = false;
+			REGISTER_PLAY_MODE_STATIC(vectorGizmoWasUsing);
 			Math::Matrix4x4 fieldMatrix;
 			fieldMatrix.MakeTranslate(*sVector3GizmoValue);
 			ImGuizmo::Manipulate(*(viewMatrix.m), *(projection.m), ImGuizmo::TRANSLATE,
@@ -443,6 +450,7 @@ void DrawManipulatorSystem::Manipulate3D(Registry& registry, const Math::Vector4
 		ImGuizmo::DecomposeMatrixToComponents(*(localMatrix.m), translate, rotation, scale);
 
 		static Math::Vector3 oldVector;
+		REGISTER_PLAY_MODE_STATIC(oldVector);
 		switch (currentOp) {
 		case ImGuizmo::TRANSLATE: {
 			if (ImGuizmo::IsUsing() && !isActivePreFrame_) {
@@ -464,6 +472,7 @@ void DrawManipulatorSystem::Manipulate3D(Registry& registry, const Math::Vector4
 		}
 		case ImGuizmo::ROTATE: {
 			static Math::Quaternion oldQuaternion;
+			REGISTER_PLAY_MODE_STATIC(oldQuaternion);
 			if (ImGuizmo::IsUsing() && !isActivePreFrame_) {
 				oldQuaternion = t->rotation;
 			}
@@ -607,6 +616,7 @@ void DrawManipulatorSystem::Manipulate2D(Registry& registry, const Math::Vector4
 		ImGuizmo::DecomposeMatrixToComponents(*(localMatrix.m), translate, rotation, scale);
 
 		static Math::Vector2 oldVector;
+		REGISTER_PLAY_MODE_STATIC(oldVector);
 		switch (currentOp) {
 		case ImGuizmo::TRANSLATE: {
 			if (ImGuizmo::IsUsing() && !isActivePreFrame_) {
@@ -629,6 +639,7 @@ void DrawManipulatorSystem::Manipulate2D(Registry& registry, const Math::Vector4
 		}
 		case ImGuizmo::ROTATE: {
 			static float oldRotate;
+			REGISTER_PLAY_MODE_STATIC(oldRotate);
 			if (ImGuizmo::IsUsing() && !isActivePreFrame_) {
 				oldRotate = t->rotation;
 			}
@@ -826,6 +837,9 @@ void DrawManipulatorSystem::ManipulateRoutineWaypoints(Registry& registry, const
 		static Math::Vector3 oldTranslate;
 		static Math::Quaternion oldRotation;
 		static Math::Vector3 oldScale;
+		REGISTER_PLAY_MODE_STATIC(oldTranslate);
+		REGISTER_PLAY_MODE_STATIC(oldRotation);
+		REGISTER_PLAY_MODE_STATIC(oldScale);
 
 		switch (currentWaypointOp) {
 		case ImGuizmo::TRANSLATE: {
@@ -1036,6 +1050,9 @@ void DrawManipulatorSystem::ManipulateRoutineWaypoints2D(Registry& registry, con
 		static Math::Vector2 oldTranslate2D;
 		static float oldRotation2D;
 		static Math::Vector2 oldScale2D;
+		REGISTER_PLAY_MODE_STATIC(oldTranslate2D);
+		REGISTER_PLAY_MODE_STATIC(oldRotation2D);
+		REGISTER_PLAY_MODE_STATIC(oldScale2D);
 
 		switch (currentWaypointOp2D) {
 		case ImGuizmo::TRANSLATE: {

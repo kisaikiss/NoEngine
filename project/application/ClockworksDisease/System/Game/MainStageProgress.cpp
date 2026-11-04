@@ -19,6 +19,15 @@ float sPlayerStamina = 0.0f;
 float sPlayerCurrentStamina = 0.0f;
 LevelComponent sPlayerLevel{};
 bool sHasSharedProgress = false;
+REGISTER_PLAY_MODE_STATIC(sMainStageSnapshot);
+REGISTER_PLAY_MODE_STATIC(sStageSnapshots);
+REGISTER_PLAY_MODE_STATIC(sCollectedItemNames);
+REGISTER_PLAY_MODE_STATIC(sCaptureQueued);
+REGISTER_PLAY_MODE_STATIC(sPlayerAbility);
+REGISTER_PLAY_MODE_STATIC(sPlayerStamina);
+REGISTER_PLAY_MODE_STATIC(sPlayerCurrentStamina);
+REGISTER_PLAY_MODE_STATIC(sPlayerLevel);
+REGISTER_PLAY_MODE_STATIC(sHasSharedProgress);
 }
 
 void QueueCapture() {

@@ -15,8 +15,23 @@ namespace ECS {
 /// PlayModeController / 各Panel が担当する。
 /// </summary>
 class SystemManager {
+	struct Entry {
+		std::string name;
+		std::unique_ptr<ISystem> system;
+		SystemCatalog::SystemCloner cloner = {};
+	};
 public:
 	SystemManager() = default;
+
+	class Snapshot {
+		friend class SystemManager;
+		std::vector<Entry> entries_;
+		std::string configuredSceneName_;
+		Editor::SystemListPanel systemListPanel_;
+		bool configurationDirty_ = false;
+	};
+	std::unique_ptr<Snapshot> CaptureSnapshot() const;
+	void RestoreSnapshot(std::unique_ptr<Snapshot> snapshot, Registry& registry);
 
 	template<typename T>
 	T* AddSystem(std::unique_ptr<T> system) {
@@ -25,7 +40,7 @@ public:
 		// 未登録型はtypeid名で保持する。この名前はLoad時に未登録扱いとなるため、
 		// 保存したJSONが読み込まれないことがある(REGISTER_SYSTEMの追加を推奨)。
 		if (name.empty()) name = typeid(T).name();
-		entries_.push_back({ std::move(name), std::move(system) });
+		entries_.push_back({ std::move(name), std::move(system), CloneSystemForPlayMode<T> });
 		ResetEditorState();
 		return ptr;
 	}
@@ -52,10 +67,6 @@ private:
 	class EditCommand;
 	void ResetEditorState();
 	void MoveEntry(size_t from, size_t to);
-	struct Entry {
-		std::string name;
-		std::unique_ptr<ISystem> system;
-	};
 	std::vector<Entry> entries_;
 	std::string configuredSceneName_;
 

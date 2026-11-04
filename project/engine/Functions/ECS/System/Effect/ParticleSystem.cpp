@@ -28,15 +28,17 @@ ParticleSystem::ParticleSystem() {
 
 	std::vector<ShaderReflection> reflections;
 	reflections.push_back(csReflection);
-	RootSignatureBuilder::BuildFromReflection(reflections, rootSignature_, ConvertString(sPsoName));
-	pso_.SetRootSignature(rootSignature_);
+	auto rootSignature = std::make_shared<RootSignature>();
+	RootSignatureBuilder::BuildFromReflection(reflections, *rootSignature, ConvertString(sPsoName));
+	pso_.SetRootSignature(*rootSignature);
+	rootSignature_ = std::move(rootSignature);
 
 	pso_.Finalize();
 }
 
 void ParticleSystem::Update(ComputeContext& ctx, Registry& registry, float deltaTime) {
 	ctx.SetPipelineState(pso_);
-	ctx.SetRootSignature(rootSignature_);
+	ctx.SetRootSignature(*rootSignature_);
 
 	auto& rootIndex = RootSignatureBuilder::GetRootIndexMap(ConvertString(sPsoName));
 

@@ -12,20 +12,22 @@ namespace ECS {
 class SystemCatalog {
 public:
 	using SystemFactory = std::function<std::unique_ptr<ISystem>()>;
+	using SystemCloner = std::function<std::unique_ptr<ISystem>(const ISystem&)>;
 
 	static SystemCatalog& Get();
 
 	bool Register(const std::string& name, const std::string& category,
-		std::type_index type, SystemFactory factory);
+		std::type_index type, SystemFactory factory, SystemCloner cloner = {});
 
 	template<typename T>
 	bool Register(const std::string& name, const std::string& category) {
 		return Register(name, category, std::type_index(typeid(T)),
-			[] { return std::make_unique<T>(); });
+			[] { return std::make_unique<T>(); }, CloneSystemForPlayMode<T>);
 	}
 
 	/// <summary>名前からシステムを生成する。未登録ならnullptr</summary>
 	std::unique_ptr<ISystem> Create(const std::string& name) const;
+	std::unique_ptr<ISystem> Clone(const std::string& name, const ISystem& system) const;
 
 	bool Contains(const std::string& name) const;
 
@@ -41,6 +43,7 @@ private:
 	struct Entry {
 		std::string category;
 		SystemFactory factory;
+		SystemCloner cloner;
 	};
 	std::unordered_map<std::string, Entry> entries_;
 	std::unordered_map<std::type_index, std::string> types_;

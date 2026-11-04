@@ -1,5 +1,6 @@
 #pragma once
 #include "Runtime/GameCore.h"
+#include "Functions/ECS/System/PlayModeStaticState.h"
 
 #include "Functions/ECS/Component/Asset/MeshComponent.h"
 #include "Functions/ECS/Component/Asset/Animator2DComponent.h"

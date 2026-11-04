@@ -29,7 +29,8 @@ private:
 	Math::Quaternion CalculateValue(const std::vector<KeyframeQuaternion>& keyframes, float time);
 
 	ComputePSO pso_;
-	RootSignature rootSignature_;
+	// 初期化後は不変なので、スナップショットと同じGPU設定を共有する。
+	std::shared_ptr<const RootSignature> rootSignature_;
 };
 
 }

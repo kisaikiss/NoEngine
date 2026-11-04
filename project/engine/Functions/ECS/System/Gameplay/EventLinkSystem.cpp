@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "EventLinkSystem.h"
+#include "../PlayModeStaticState.h"
 #include "engine/Functions/ECS/Event/GameplayEvents.h"
 #include "engine/Functions/ECS/Component/Common/EventLinkComponent.h"
 #include "engine/Functions/ECS/Component/Common/GimmickGraphComponent.h"
@@ -21,6 +22,7 @@ struct CachedGraph {
 
 std::unordered_map<std::string, CachedGraph>& GetGraphCache() {
 	static std::unordered_map<std::string, CachedGraph> cache;
+	REGISTER_PLAY_MODE_STATIC(cache);
 	return cache;
 }
 

@@ -18,6 +18,30 @@ bool IsPaused(Registry& registry) {
 }
 }
 
+std::unique_ptr<SystemManager::Snapshot> SystemManager::CaptureSnapshot() const {
+	auto snapshot = std::make_unique<Snapshot>();
+	snapshot->entries_.reserve(entries_.size());
+	for (const auto& entry : entries_) {
+		auto clone = entry.cloner ? entry.cloner(*entry.system) :
+			SystemCatalog::Get().Clone(entry.name, *entry.system);
+		if (!clone) throw std::logic_error("System snapshot cannot be null: " + entry.name);
+		snapshot->entries_.push_back({ entry.name, std::move(clone), entry.cloner });
+	}
+	snapshot->configuredSceneName_ = configuredSceneName_;
+	snapshot->systemListPanel_ = systemListPanel_;
+	snapshot->configurationDirty_ = configurationDirty_;
+	return snapshot;
+}
+
+void SystemManager::RestoreSnapshot(std::unique_ptr<Snapshot> snapshot, Registry& registry) {
+	ResetEditorState();
+	entries_ = std::move(snapshot->entries_);
+	configuredSceneName_ = std::move(snapshot->configuredSceneName_);
+	systemListPanel_ = snapshot->systemListPanel_;
+	configurationDirty_ = snapshot->configurationDirty_;
+	for (auto& entry : entries_) entry.system->OnPlayModeRestore(registry);
+}
+
 // 追加・削除した実体を履歴側に預け、Undo/Redoで内部状態を失わずに戻す。
 class SystemManager::EditCommand : public Command::ICommand {
 public:
@@ -186,8 +210,8 @@ void SystemManager::UpdateAll(ComputeContext& ctx, Registry& registry, float del
 	}
 
 #ifdef USE_IMGUI
-	PlayModeController::Update(registry);
-	gameControllerPanel_.Draw(registry);
+	PlayModeController::Update(registry, this);
+	gameControllerPanel_.Draw(registry, this);
 	const bool changed = systemListPanel_.Draw(*this);
 	// 共通ショートカットによるUndo/Redoも、ウィンドウの開閉に関係なく保存する。
 	if (changed || configurationDirty_) {

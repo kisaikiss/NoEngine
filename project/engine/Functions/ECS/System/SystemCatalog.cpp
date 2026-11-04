@@ -11,8 +11,8 @@ SystemCatalog& SystemCatalog::Get() {
 }
 
 bool SystemCatalog::Register(const std::string& name, const std::string& category,
-	std::type_index type, SystemFactory factory) {
-	entries_[name] = Entry{ category, std::move(factory) };
+	std::type_index type, SystemFactory factory, SystemCloner cloner) {
+	entries_[name] = Entry{ category, std::move(factory), std::move(cloner) };
 	types_[type] = name;
 	return true;
 }
@@ -25,6 +25,13 @@ std::unique_ptr<ISystem> SystemCatalog::Create(const std::string& name) const {
 
 bool SystemCatalog::Contains(const std::string& name) const {
 	return entries_.find(name) != entries_.end();
+}
+
+std::unique_ptr<ISystem> SystemCatalog::Clone(const std::string& name, const ISystem& system) const {
+	auto it = entries_.find(name);
+	if (it != entries_.end() && it->second.cloner) return it->second.cloner(system);
+	if (auto clone = system.CloneForPlayMode()) return clone;
+	throw std::logic_error("System has no play mode cloner: " + name);
 }
 
 std::string SystemCatalog::NameOf(std::type_index type) const {

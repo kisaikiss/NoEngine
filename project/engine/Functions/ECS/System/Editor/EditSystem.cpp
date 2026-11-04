@@ -24,15 +24,27 @@ const std::string sDirectoryPath = "resources/game/Scenes/";
 namespace NoEngine {
 namespace ECS {
 
+std::unique_ptr<ISystem> EditSystem::CloneForPlayMode() const {
+	auto clone = std::make_unique<EditSystem>(*this);
+	clone->gimmickGraphPanel_ = gimmickGraphPanel_.CloneForPlayMode();
+	return clone;
+}
+
+void EditSystem::OnPlayModeRestore(Registry&) {
+	gimmickGraphPanel_.OnPlayModeRestore();
+	// 復元前のEditSystemを参照していたコールバックを、復元した実体へ付け替える。
+	Editor::SetEditPrefabCallback([this](ECS::Registry& reg, const std::string& prefabPath) {
+		prefabEditorPanel_.Begin(reg, prefabPath);
+	});
+}
+
 void EditSystem::Update(Registry& registry, float deltaTime) {
 	if (!FirstLoaded_) {
 		LoadFile(registry);
 
 		// Prefab一覧(DrawPrefabWindow / AssetBrowserWindow)からの「編集」要求を
 		// EditSystemが受け取れるようにコールバックを登録する
-		Editor::SetEditPrefabCallback([this](ECS::Registry& reg, const std::string& prefabPath) {
-			prefabEditorPanel_.Begin(reg, prefabPath);
-			});
+		OnPlayModeRestore(registry);
 
 		FirstLoaded_ = true;
 	}

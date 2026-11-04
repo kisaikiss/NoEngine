@@ -1,4 +1,5 @@
 #include "GameCore.h"
+#include "engine/Functions/ECS/System/PlayModeStaticState.h"
 #include "engine/Window/WindowManager.h"
 #include "engine/Functions/Debug/CrashHandler/ExportDump.h"
 #include "engine/Functions/Debug/GraphicsResourceLeakChecker.h"
@@ -29,6 +30,7 @@ namespace {
 std::chrono::steady_clock::time_point sLastTickTime{ std::chrono::steady_clock::now() };
 
 static float sElapsedTime = 0.f;
+REGISTER_PLAY_MODE_STATIC(sElapsedTime);
 static float sFrameTimes[120] = {};
 static int sFrameIndex = 0;
 }

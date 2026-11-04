@@ -13,6 +13,12 @@ struct GimmickGraphEditorDocument {
 
 class GimmickGraphPanel {
 public:
+	GimmickGraphPanel CloneForPlayMode() const {
+		auto clone = *this;
+		if (document_) clone.document_ = std::make_shared<GimmickGraphEditorDocument>(*document_);
+		return clone;
+	}
+	void OnPlayModeRestore();
 	// 選択EntityのGimmickGraphComponentを読み、imgui-node-editor UIを描画・更新する。
 	void Draw(ECS::Registry& registry, ECS::Entity selectedEntity);
 	bool OwnsKeyboardFocus() const { return ownsKeyboardFocus_; }

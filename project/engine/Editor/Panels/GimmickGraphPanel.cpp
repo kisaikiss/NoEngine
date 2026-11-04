@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "GimmickGraphPanel.h"
+#include "engine/Functions/ECS/System/PlayModeStaticState.h"
 #ifdef USE_IMGUI
 #include "engine/Functions/ECS/Component/Common/GimmickGraphComponent.h"
 #include "engine/Functions/ECS/Gameplay/GameplayCatalog.h"
@@ -22,10 +23,24 @@ NodeEditor::EditorContext* GetNodeEditorContext() {
 	return context;
 }
 
+struct GraphDocumentCache {
+	std::unordered_map<std::string, std::shared_ptr<GimmickGraphEditorDocument>> documents;
+	GraphDocumentCache() = default;
+	GraphDocumentCache(GraphDocumentCache&&) = default;
+	GraphDocumentCache& operator=(GraphDocumentCache&&) = default;
+	// キャッシュのコピーでも、編集対象のDocumentを共有せず内容を保存する。
+	GraphDocumentCache(const GraphDocumentCache& other) {
+		for (const auto& [path, document] : other.documents) {
+			documents.emplace(path, std::make_shared<GimmickGraphEditorDocument>(*document));
+		}
+	}
+};
+
 std::unordered_map<std::string, std::shared_ptr<GimmickGraphEditorDocument>>& GetGraphDocuments() {
 	// パネルを閉じたり別Entityを選んだりしても未保存編集とUndo対象を保持する。
-	static std::unordered_map<std::string, std::shared_ptr<GimmickGraphEditorDocument>> documents;
-	return documents;
+	static GraphDocumentCache cache;
+	REGISTER_PLAY_MODE_STATIC(cache);
+	return cache.documents;
 }
 
 std::string NormalizeGraphPath(const std::string& path) {
@@ -193,6 +208,14 @@ uint64_t PinStableId(const std::string& nodeId, const char* pinId) {
 	// 同じ種類のピンでもノードごとに一意なIDになるよう、Node IDとPin IDを組み合わせる。
 	return StableId(nodeId + ":" + pinId);
 }
+}
+
+void GimmickGraphPanel::OnPlayModeRestore() {
+	if (document_ && !activePath_.empty()) {
+		GetGraphDocuments()[NormalizeGraphPath(activePath_)] = document_;
+	}
+	// ノードエディタに、復元済みDocumentの座標を再適用する。
+	positionedNodeIds_.clear();
 }
 
 bool GimmickGraphPanel::Load(const std::string& path) {
@@ -613,6 +636,7 @@ void GimmickGraphPanel::Draw(ECS::Registry& registry, ECS::Entity selectedEntity
 #else
 
 namespace NoEngine::Editor {
+void GimmickGraphPanel::OnPlayModeRestore() {}
 void GimmickGraphPanel::Draw(ECS::Registry& registry, ECS::Entity selectedEntity) {
 	static_cast<void>(registry);
 	static_cast<void>(selectedEntity);

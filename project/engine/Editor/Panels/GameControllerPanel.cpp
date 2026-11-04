@@ -9,7 +9,7 @@
 namespace NoEngine {
 namespace Editor {
 
-void GameControllerPanel::Draw(ECS::Registry& registry) {
+void GameControllerPanel::Draw(ECS::Registry& registry, ECS::SystemManager* systems) {
 #ifdef USE_IMGUI
 	if (ImGui::Begin("GameController", nullptr, ImGuiWindowFlags_NoTitleBar)) {
 		using Controller = ECS::PlayModeController;
@@ -41,12 +41,12 @@ void GameControllerPanel::Draw(ECS::Registry& registry) {
 
 		center(rowWidth);
 		if (button("■", stopWidth, !editing, "再生を停止し、再生開始前のシーン状態に戻します。")) {
-			Controller::Stop(registry);
+			Controller::Stop(registry, systems);
 		}
 		ImGui::SameLine();
 		if (button(paused ? ">###Play" : ">###Play", playWidth, !playing,
 			paused ? "一時停止した位置から再開します。" : "現在のシーンを再生します。")) {
-			Controller::Play(registry);
+			Controller::Play(registry, systems);
 		}
 		ImGui::SameLine();
 		if (button("||", pauseWidth, playing, "ゲームの進行を一時停止します。")) {
@@ -67,6 +67,7 @@ void GameControllerPanel::Draw(ECS::Registry& registry) {
 	ImGui::End();
 #else
 	static_cast<void>(registry);
+	static_cast<void>(systems);
 #endif // USE_IMGUI
 }
 

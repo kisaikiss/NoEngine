@@ -4,6 +4,7 @@
 
 namespace NoEngine {
 namespace ECS {
+class SystemManager;
 
 /// <summary>
 /// エディタの再生状態(Editing/Playing/Paused)とGameStopフラグ、
@@ -28,15 +29,15 @@ public:
 	/// <summary>">"を押した瞬間(Editing→Playing)に取得したシーンのスナップショット</summary>
 	static const nlohmann::json& GetSnapshot();
 
-	static void Play(Registry& registry);  // ">"
+	static void Play(Registry& registry, SystemManager* systems = nullptr);  // ">"
 	static void Pause();                   // "||"
-	static void Stop(Registry& registry);  // "■"
+	static void Stop(Registry& registry, SystemManager* systems = nullptr);  // "■"
 
 	/// <summary>SceneManagerが停止時のシーン復帰要求を一度だけ取り出します。</summary>
 	static std::optional<std::string> TakeSceneRestoreRequest();
 
 	/// <summary>元シーンの初期化後に、Registry全体のスナップショットを復元します。</summary>
-	static void Update(Registry& registry);
+	static void Update(Registry& registry, SystemManager* systems = nullptr);
 
 private:
 	PlayModeController() = delete;
