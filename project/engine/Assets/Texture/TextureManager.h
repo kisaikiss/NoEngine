@@ -33,18 +33,18 @@ public:
         DXGI_FORMAT format, const void* pixelData, size_t rowPitchBytes);
 private:
     static DirectX::ScratchImage LoadTexture(const std::string& filePath);
-    static ManagedTexture* FindOrLoadTexture(const std::wstring& fileName, Graphics::eDefaultTexture fallback, bool forceSRGB = false);
+    static std::shared_ptr<ManagedTexture> FindOrLoadTexture(const std::wstring& fileName, Graphics::eDefaultTexture fallback, bool forceSRGB = false);
 };
 
 class TextureRef {
 public:
 
     TextureRef(const TextureRef& ref);
-    TextureRef(ManagedTexture* tex = nullptr);
+    TextureRef(TextureRef&& ref) noexcept;
+    TextureRef(std::shared_ptr<ManagedTexture> tex = nullptr);
     ~TextureRef();
 
     void operator= (std::nullptr_t);
-    void operator= (TextureRef& rhs);
     TextureRef& operator=(const TextureRef& rhs);
     TextureRef& operator=(TextureRef&& rhs) noexcept;
 
@@ -73,7 +73,7 @@ public:
     const Texture* operator->(void) const;
 
     bool operator<(const TextureRef& other) const {
-        return ref_ < other.ref_; // SpritePassでテクスチャをまとめて描画するために使用します。
+        return ref_.get() < other.ref_.get(); // SpritePassでテクスチャをまとめて描画するために使用します。
     }
 
     bool operator==(const TextureRef& other) const {
@@ -81,6 +81,7 @@ public:
     }
 
 private:
-    ManagedTexture* ref_;
+    // キャッシュの破棄後も、残っている参照がテクスチャの寿命を保証する。
+    std::shared_ptr<ManagedTexture> ref_;
 };
 }

@@ -14,7 +14,7 @@ class ManagedTexture : public Texture {
 	friend class TextureRef;
 	friend class TextureManager;
 public:
-	ManagedTexture(const wstring& FileName) : mapKey_(FileName), isValid_(false), isLoading_(true), referenceCount_(0) {
+	ManagedTexture() : isValid_(false), isLoading_(true) {
 		cpuDescriptorHandle_.ptr = D3D12_GPU_VIRTUAL_ADDRESS_UNKNOWN;
 	}
 
@@ -26,14 +26,8 @@ public:
 private:
 
 	bool IsValid(void) const { return isValid_; }
-	void Unload() {
-		TextureManager::DestroyTexture(mapKey_);
-	}
-
-	std::wstring mapKey_;		// 後でマップから削除するために使用します。
 	bool isValid_;
 	bool isLoading_;
-	size_t referenceCount_;
 };
 
 void ManagedTexture::CreateFromMemory(ByteArray ba, eDefaultTexture fallback, bool forceSRGB) {
@@ -128,13 +122,15 @@ void ManagedTexture::CreateFromMemory(ByteArray ba, eDefaultTexture fallback, bo
 #pragma region TextureManager
 namespace {
 wstring sRootPath = L"";
-unordered_map<wstring, unique_ptr<ManagedTexture>> sTextureCache;
+// キャッシュは所有せず、最後のTextureRefが解放された時点でテクスチャを破棄する。
+unordered_map<wstring, weak_ptr<ManagedTexture>> sTextureCache;
 mutex sMutex;
 }
 void TextureManager::Initialize(const std::wstring& TextureRoot) {
 	sRootPath = TextureRoot;
 }
 void TextureManager::Shutdown() {
+	lock_guard<mutex> Guard(sMutex);
 	sTextureCache.clear();
 }
 void TextureManager::DestroyTexture(std::wstring mapKey) {
@@ -162,8 +158,8 @@ TextureRef TextureManager::LoadCovertTexture(const std::string& filePath, eDefau
 	return LoadCovertTexture(ConvertString(filePath), fallback, forceSRGB);
 }
 
-ManagedTexture* TextureManager::FindOrLoadTexture(const std::wstring& fileName, eDefaultTexture fallback, bool forceSRGB) {
-	ManagedTexture* tex = nullptr;
+std::shared_ptr<ManagedTexture> TextureManager::FindOrLoadTexture(const std::wstring& fileName, eDefaultTexture fallback, bool forceSRGB) {
+	std::shared_ptr<ManagedTexture> tex;
 
 	{
 		std::lock_guard<std::mutex> Guard(sMutex);
@@ -172,18 +168,17 @@ ManagedTexture* TextureManager::FindOrLoadTexture(const std::wstring& fileName, 
 		if (forceSRGB)
 			key += L"_sRGB";
 
-		// 既存の管理テクスチャを検索する
 		auto iter = sTextureCache.find(key);
 		if (iter != sTextureCache.end()) {
-			// テクスチャがすでに作成されている場合は、テクスチャにポイントを返す前に、読み込みが完了していることを確認
-			tex = iter->second.get();
-			tex->WaitForLoad();
-			return tex;
-		} else {
-			// 見つからない場合は、新しい管理テクスチャを作成し、読み込みを開始します
-			tex = new ManagedTexture(key);
-			sTextureCache[key].reset(tex);
+			tex = iter->second.lock();
+			if (tex) {
+				tex->WaitForLoad();
+				return tex;
+			}
 		}
+
+		tex = std::make_shared<ManagedTexture>();
+		sTextureCache[key] = tex;
 	}
 
 	ByteArray ba = ReadFileSync(sRootPath + fileName);
@@ -195,14 +190,17 @@ ManagedTexture* TextureManager::FindOrLoadTexture(const std::wstring& fileName, 
 
 bool TextureManager::UpdatePixels(const std::wstring& key, uint32_t width, uint32_t height,
 	DXGI_FORMAT format, const void* pixelData, size_t rowPitchBytes) {
-	ManagedTexture* tex = nullptr;
+	std::shared_ptr<ManagedTexture> tex;
 	{
 		std::lock_guard<std::mutex> Guard(sMutex);
 		auto iter = sTextureCache.find(key);
 		if (iter == sTextureCache.end()) {
 			return false;
 		}
-		tex = iter->second.get();
+		tex = iter->second.lock();
+		if (!tex) {
+			return false;
+		}
 	}
 
 	tex->WaitForLoad();
@@ -230,19 +228,21 @@ DirectX::ScratchImage TextureManager::LoadTexture(const std::string& filePath) {
 
 TextureRef TextureManager::CreateFromPixels(const std::wstring& key, uint32_t width, uint32_t height,
 	DXGI_FORMAT format, const void* pixelData, size_t rowPitchBytes) {
-	ManagedTexture* tex = nullptr;
+	std::shared_ptr<ManagedTexture> tex;
 	{
 		std::lock_guard<std::mutex> Guard(sMutex);
 
 		auto iter = sTextureCache.find(key);
 		if (iter != sTextureCache.end()) {
-			tex = iter->second.get();
-			tex->WaitForLoad();
-			return tex;
-		} else {
-			tex = new ManagedTexture(key);
-			sTextureCache[key].reset(tex);
+			tex = iter->second.lock();
+			if (tex) {
+				tex->WaitForLoad();
+				return tex;
+			}
 		}
+
+		tex = std::make_shared<ManagedTexture>();
+		sTextureCache[key] = tex;
 	}
 
 	// ManagedTextureはTextureを継承しているので、Create2D()をそのまま使ってGPUへアップロードする
@@ -256,68 +256,15 @@ TextureRef TextureManager::CreateFromPixels(const std::wstring& key, uint32_t wi
 #pragma endregion
 
 #pragma region TextureRef
-TextureRef::TextureRef(const TextureRef& ref) : ref_(ref.ref_) {
-	if (ref_ != nullptr) {
-		++ref_->referenceCount_;
-	}
+TextureRef::TextureRef(const TextureRef& ref) = default;
+TextureRef::TextureRef(TextureRef&& ref) noexcept = default;
+TextureRef::TextureRef(std::shared_ptr<ManagedTexture> tex) : ref_(std::move(tex)) {}
+TextureRef::~TextureRef() = default;
+void TextureRef::operator=(std::nullptr_t) {
+	ref_.reset();
 }
-TextureRef::TextureRef(ManagedTexture* tex) : ref_(tex) {
-	if (ref_ != nullptr) {
-		++ref_->referenceCount_;
-	}
-}
-TextureRef::~TextureRef() {
-	if (ref_ != nullptr && --ref_->referenceCount_ == 0)
-		ref_->Unload();
-}
-void TextureRef::operator= (std::nullptr_t) {
-	if (ref_ != nullptr)
-		--ref_->referenceCount_;
-
-	ref_ = nullptr;
-}
-void TextureRef::operator= (TextureRef& rhs) {
-	if (ref_ != nullptr)
-		--ref_->referenceCount_;
-
-	ref_ = rhs.ref_;
-
-	if (ref_ != nullptr)
-		++ref_->referenceCount_;
-}
-TextureRef& TextureRef::operator=(const TextureRef& rhs) {
-	if (this == &rhs)
-		return *this;
-
-	if (ref_ != nullptr) {
-		--ref_->referenceCount_;
-		if (ref_->referenceCount_ == 0)
-			ref_->Unload();
-	}
-
-	ref_ = rhs.ref_;
-
-	if (ref_ != nullptr)
-		++ref_->referenceCount_;
-
-	return *this;
-}
-
-TextureRef& TextureRef::operator=(TextureRef&& rhs) noexcept {
-	if (this == &rhs)
-		return *this;
-
-	if (ref_ != nullptr) {
-		--ref_->referenceCount_;
-		if (ref_->referenceCount_ == 0)
-			ref_->Unload();
-	}
-
-	ref_ = rhs.ref_;
-	rhs.ref_ = nullptr;
-
-	return *this;
-}
+TextureRef& TextureRef::operator=(const TextureRef& rhs) = default;
+TextureRef& TextureRef::operator=(TextureRef&& rhs) noexcept = default;
 bool TextureRef::IsValid() const {
 	return ref_ && ref_->IsValid();
 }
@@ -328,11 +275,11 @@ uint32_t TextureRef::GetHeight() {
 	return ref_ ? ref_->GetHeight() : 0;
 }
 const Texture* TextureRef::Get(void) const {
-	return ref_;
+	return ref_.get();
 }
 const Texture* TextureRef::operator->(void) const {
 	assert(ref_ != nullptr);
-	return ref_;
+	return ref_.get();
 }
 D3D12_CPU_DESCRIPTOR_HANDLE TextureRef::GetSRV() const {
 	if (ref_ != nullptr)
