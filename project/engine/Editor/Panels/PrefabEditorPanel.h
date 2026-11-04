@@ -19,7 +19,7 @@ public:
 
 private:
 	enum class PendingAction { None, Close, Switch };
-	void Open(const std::string& prefabPath);
+	void Open(std::string prefabPath);
 	void Clear();
 	void CompletePendingAction();
 	bool SaveAndApply(ECS::Registry& sceneRegistry);
@@ -28,6 +28,7 @@ private:
 	ECS::Entity prefabEntity_ = ECS::INVALID_ENTITY;
 	std::string prefabPath_;
 	nlohmann::json savedJson_;
+	nlohmann::json diskJson_;
 	PendingAction pendingAction_ = PendingAction::None;
 	std::string pendingPath_;
 	std::string errorMessage_;

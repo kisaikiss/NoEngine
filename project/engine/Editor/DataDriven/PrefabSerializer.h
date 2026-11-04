@@ -11,9 +11,22 @@ struct PrefabInfo {
 	std::string path;
 };
 
+// 専用シリアライザで保存し、通常のComponent UIからは編集させない。
 struct PrefabInstanceTag {
 	std::string prefabPath;
+	// 最後に反映したPrefabの値。現在値との差から個別変更を判定する。
+	nlohmann::json base;
 };
+
+void LinkPrefabInstance(ECS::Registry& registry, ECS::Entity entity, const std::string& path);
+// 差分はJSON Pointerのパスで識別する。配列はフィールド全体を一つの差分とする。
+nlohmann::json GetPrefabOverrides(ECS::Registry& registry, ECS::Entity entity);
+nlohmann::json GetPrefabOverrides(const nlohmann::json& base, const nlohmann::json& current);
+// fieldPathが空なら全差分を対象にする。名前と階層は常に保持する。
+void RevertPrefabOverrides(ECS::Registry& registry, ECS::Entity entity, const std::string& fieldPath = "");
+void ApplyInstanceOverrides(ECS::Registry& registry, ECS::Entity entity, const std::string& fieldPath = "");
+void RefreshPrefabInstance(ECS::Registry& registry, ECS::Entity entity);
+void SavePrefabFile(const std::string& path, const nlohmann::json& data);
 
 // Entityとコンポーネントのプリセット保存と読み込みを行う関数群
 

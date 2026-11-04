@@ -255,7 +255,7 @@ void CommitPlacement(ECS::Registry& registry, const Vector3& translation) {
 	try {
 		if (sPreview.type == "PREFAB_PATH") {
 			LoadEntityFromJson(registry, entity, sPreview.prefab);
-			registry.AddComponent<PrefabInstanceTag>(entity)->prefabPath = sPreview.asset;
+			LinkPrefabInstance(registry, entity, sPreview.asset);
 		} else if (sPreview.is2D) {
 			registry.AddComponent<Component::SpriteComponent>(entity)->textureName = sPreview.asset;
 			registry.GetComponent<Component::SpriteComponent>(entity)->matchScaleToTexture = true;

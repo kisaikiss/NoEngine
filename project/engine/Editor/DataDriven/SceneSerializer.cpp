@@ -26,6 +26,7 @@ json SaveScene(ECS::Registry& registry) {
 json SaveEntityToJson(ECS::Registry& registry, ECS::Entity entity) {
 	json result;
 	for (auto& typeInfo : ComponentRegistry::GetAll()) {
+		if (typeInfo.typeId == Utilities::TypeID<PrefabInstanceTag>()) continue;
 		if (!registry.Has(typeInfo.typeId, entity)) continue;
 
 		void* compPtr = typeInfo.getter(registry, entity);
@@ -44,6 +45,10 @@ json SaveEntityToJson(ECS::Registry& registry, ECS::Entity entity) {
 	// ComponentRegistryを介さないEditor専用の付加情報。
 	if (auto* prefabTag = registry.GetComponent<PrefabInstanceTag>(entity)) {
 		result["prefabInstance"] = prefabTag->prefabPath;
+		if (!prefabTag->base.is_null()) {
+			result["prefabBase"] = prefabTag->base;
+			result["prefabOverrides"] = GetPrefabOverrides(prefabTag->base, result);
+		}
 	}
 
 	return result;
@@ -157,6 +162,12 @@ void LoadScene(ECS::Registry& registry, const json& scene, bool removeMissing) {
 	for (auto& [e, entityJsonPtr] : pending) {
 		LoadEntityFromJson(registry, e, *entityJsonPtr, removeMissing);
 	}
+	// 全参照先を復元した後、最新Prefabに保存済みの個別変更を重ねる。
+	for (const auto& [entity, data] : pending) {
+		if (!registry.Has<PrefabInstanceTag>(entity)) continue;
+		try { RefreshPrefabInstance(registry, entity); }
+		catch (const std::exception& error) { LogWarning(std::string("Prefab更新を保留しました: ") + error.what()); }
+	}
 }
 
 ECS::Entity FindEntityByName(ECS::Registry& registry, const std::string& name) {
@@ -174,12 +185,14 @@ ECS::Entity FindEntityByName(ECS::Registry& registry, const std::string& name) {
 void LoadEntityFromJson(ECS::Registry& registry, ECS::Entity entity, const json& j, bool removeMissing) {
 	if (removeMissing) {
 		for (auto& info : ComponentRegistry::GetAll()) {
+			if (info.typeId == Utilities::TypeID<PrefabInstanceTag>()) continue;
 			if (info.typeId == Utilities::TypeID<EditTag>()) continue; // EditTagは残す
 			if (!j["components"].contains(info.name)) registry.RemoveComponent(info.typeId, entity);
 		}
 	}
 
 	for (auto& [compName, compJson] : j["components"].items()) {
+		if (compName == "PrefabInstanceTag") continue;
 		TypeInfo* typeInfo = ComponentRegistry::FindByName(compName);
 		if (!typeInfo) continue;
 
@@ -209,6 +222,9 @@ void LoadEntityFromJson(ECS::Registry& registry, ECS::Entity entity, const json&
 			prefabTag = registry.AddComponent<PrefabInstanceTag>(entity);
 		}
 		prefabTag->prefabPath = j["prefabInstance"].get<std::string>();
+		prefabTag->base = j.value("prefabBase", json());
+	} else if (removeMissing) {
+		registry.RemoveComponent<PrefabInstanceTag>(entity);
 	}
 }
 
