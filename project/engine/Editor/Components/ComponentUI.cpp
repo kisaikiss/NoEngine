@@ -177,7 +177,7 @@ void DrawFieldUI(ECS::Registry& registry, ECS::Entity e, const FieldInfo& field,
 			);
 		}
 
-		if (field.attributes.gizmoEditable) {
+		if (field.attributes.gizmoEditable && !Editor::ScopedEditorRegistry::IsIsolated()) {
 			ImGui::SameLine();
 			const bool isGizmoTarget = ECS::DrawManipulatorSystem::IsVector3GizmoTarget(e, vPtr);
 			if (ImGui::SmallButton(isGizmoTarget ? "G*" : "G")) {
@@ -592,7 +592,7 @@ void DrawFieldUI(ECS::Registry& registry, ECS::Entity e, const FieldInfo& field,
 									}
 								}
 							}
-							ECS::DrawManipulatorSystem::SetSelectWaypointIndex(static_cast<int>(newIndex));
+							if (!Editor::ScopedEditorRegistry::IsIsolated()) ECS::DrawManipulatorSystem::SetSelectWaypointIndex(static_cast<int>(newIndex));
 						} else if (translateField && translateField->type == FieldType::Float2) {
 							// --- 2D版: TransformRoutineComponent2D::keyframes ---
 							auto* transform2d = (prevElemPtr == nullptr)
@@ -625,7 +625,7 @@ void DrawFieldUI(ECS::Registry& registry, ECS::Entity e, const FieldInfo& field,
 									}
 								}
 							}
-							ECS::DrawManipulatorSystem::SetSelectWaypointIndex2D(static_cast<int>(newIndex));
+							if (!Editor::ScopedEditorRegistry::IsIsolated()) ECS::DrawManipulatorSystem::SetSelectWaypointIndex2D(static_cast<int>(newIndex));
 						}
 					}
 				}
@@ -646,7 +646,8 @@ void DrawFieldUI(ECS::Registry& registry, ECS::Entity e, const FieldInfo& field,
 		// ドロップ先として機能するボタン
 		ImGui::Button(label.c_str(), ImVec2(160, 0));
 
-		if (ImGui::BeginDragDropTarget()) {
+		// シーンからのEntity IDは専用Registryでは別Entityを指すため受け取らない。
+		if (!Editor::ScopedEditorRegistry::IsIsolated() && ImGui::BeginDragDropTarget()) {
 			const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ENTITY_MULTI");
 			if (!payload) payload = ImGui::AcceptDragDropPayload("ENTITY");
 			if (payload) {

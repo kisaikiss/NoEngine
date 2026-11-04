@@ -2,7 +2,20 @@
 #include "engine/Functions/Command/CommandManager.h"
 
 namespace NoEngine {
+namespace ECS { class Registry; }
 namespace Editor {
+// このスコープ内のコマンドが参照する専用Registryを、履歴の寿命まで保持する。
+class ScopedEditorRegistry {
+public:
+	explicit ScopedEditorRegistry(std::shared_ptr<ECS::Registry> registry);
+	~ScopedEditorRegistry();
+	ScopedEditorRegistry(const ScopedEditorRegistry&) = delete;
+	ScopedEditorRegistry& operator=(const ScopedEditorRegistry&) = delete;
+	static bool IsIsolated();
+private:
+	std::shared_ptr<ECS::Registry> previous_;
+};
+
 class EditorCommandOperator {
 public:
 	/// <summary>

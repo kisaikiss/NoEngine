@@ -13,9 +13,34 @@ namespace Editor {
 namespace {
 Command::CommandManager sEditorCommands;
 float sTimeInterval = 0.0f;
+std::shared_ptr<ECS::Registry> sEditingRegistry;
+
+class RegistryOwnedCommand final : public Command::ICommand {
+public:
+	RegistryOwnedCommand(std::shared_ptr<ECS::Registry> registry, std::unique_ptr<Command::ICommand> command)
+		: ICommand("Prefab edit"), registry_(std::move(registry)), command_(std::move(command)) {}
+	void Execute() override { command_->Execute(); }
+	void Undo() override { command_->Undo(); }
+private:
+	// コマンドを先に破棄し、その後に参照先のRegistryを解放する。
+	std::shared_ptr<ECS::Registry> registry_;
+	std::unique_ptr<Command::ICommand> command_;
+};
 }
 
+ScopedEditorRegistry::ScopedEditorRegistry(std::shared_ptr<ECS::Registry> registry)
+	: previous_(std::move(sEditingRegistry)) {
+	sEditingRegistry = std::move(registry);
+}
+
+ScopedEditorRegistry::~ScopedEditorRegistry() {
+	sEditingRegistry = std::move(previous_);
+}
+
+bool ScopedEditorRegistry::IsIsolated() { return sEditingRegistry != nullptr; }
+
 void EditorCommandOperator::AddCommand(std::unique_ptr<Command::ICommand> cmd) {
+	if (sEditingRegistry) cmd = std::make_unique<RegistryOwnedCommand>(sEditingRegistry, std::move(cmd));
 	sEditorCommands.AddCommand(std::move(cmd));
 }
 

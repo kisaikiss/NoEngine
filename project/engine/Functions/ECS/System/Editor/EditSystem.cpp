@@ -33,8 +33,8 @@ std::unique_ptr<ISystem> EditSystem::CloneForPlayMode() const {
 void EditSystem::OnPlayModeRestore(Registry&) {
 	gimmickGraphPanel_.OnPlayModeRestore();
 	// 復元前のEditSystemを参照していたコールバックを、復元した実体へ付け替える。
-	Editor::SetEditPrefabCallback([this](ECS::Registry& reg, const std::string& prefabPath) {
-		prefabEditorPanel_.Begin(reg, prefabPath);
+	Editor::SetEditPrefabCallback([this](ECS::Registry&, const std::string& prefabPath) {
+		prefabEditorPanel_.Begin(prefabPath);
 	});
 }
 
@@ -128,7 +128,7 @@ void EditSystem::HandleGlobalShortcuts(Registry& registry, float deltaTime) {
 	// コピー（選択エンティティ＋その子孫を全て再帰的にコピーする）
 	if (Input::Keyboard::IsPress(VK_LCONTROL) && Input::Keyboard::IsPress('C')) {
 		Entity selected = SelectedNow(registry);
-		if (selected != ECS::INVALID_ENTITY && selected != prefabEditorPanel_.GetEditingEntity()) {
+		if (selected != ECS::INVALID_ENTITY) {
 			if (!ImGui::IsAnyItemActive() && timeInterval_ <= 0.0f) {
 				clipboard_.Copy(registry, Editor::GetEditorSelection(registry));
 				static constexpr float kIntervalTime = 0.3f;
