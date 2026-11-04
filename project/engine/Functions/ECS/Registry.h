@@ -10,6 +10,9 @@ namespace ECS {
 /// </summary>
 class Registry final {
 public:
+	/// <summary>Entityの発行状態、全コンポーネント、保留中のイベントを複製します。</summary>
+	std::unique_ptr<Registry> Clone() const;
+
 	/// <summary>
 	/// 有効なエンティティを新規作成します。
 	/// </summary>

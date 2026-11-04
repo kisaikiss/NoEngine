@@ -3,6 +3,20 @@
 
 namespace NoEngine {
 namespace ECS {
+std::unique_ptr<Registry> Registry::Clone() const {
+	auto snapshot = std::make_unique<Registry>();
+	snapshot->entityToActive_ = entityToActive_;
+	snapshot->freeEntities_ = freeEntities_;
+	snapshot->pendingDestroy_ = pendingDestroy_;
+	snapshot->eventBus_ = eventBus_;
+	snapshot->nextID_ = nextID_;
+	snapshot->componentPools_.reserve(componentPools_.size());
+	for (const auto& pool : componentPools_) {
+		snapshot->componentPools_.push_back(pool ? pool->Clone() : nullptr);
+	}
+	return snapshot;
+}
+
 Entity Registry::GenerateEntity() {
 	Entity newEntity;
 	// リサイクル待ちエンティティがあればそこから1つ取り出す

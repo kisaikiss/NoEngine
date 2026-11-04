@@ -32,7 +32,10 @@ public:
 	static void Pause();                   // "||"
 	static void Stop(Registry& registry);  // "■"
 
-	/// <summary>毎フレーム呼ぶ。再生中のシーン切替後に、元シーンのスナップショットを復元する</summary>
+	/// <summary>SceneManagerが停止時のシーン復帰要求を一度だけ取り出します。</summary>
+	static std::optional<std::string> TakeSceneRestoreRequest();
+
+	/// <summary>元シーンの初期化後に、Registry全体のスナップショットを復元します。</summary>
 	static void Update(Registry& registry);
 
 private:

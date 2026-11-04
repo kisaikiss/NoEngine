@@ -5,6 +5,7 @@
 #include "FadeTransitionEffect.h"
 #include "engine/Functions/ECS/System/Editor/EditSystem.h"
 #include "engine/Functions/ECS/System/Editor/DrawManipulatorSystem.h"
+#include "engine/Functions/ECS/System/PlayModeController.h"
 #include "engine/Editor/DataDriven/SceneSerializer.h"
 #include <fstream>
 #include <filesystem>
@@ -149,6 +150,19 @@ void SceneManager::Update(ComputeContext& ctx, float deltaTime) {
 	}
 
 	if (currentScene_) currentScene_->Update(ctx, deltaTime);
+
+	// シーンの更新を抜けてから遷移を中断し、更新中のシーン自身を破棄しないようにする。
+	if (auto restoreScene = ECS::PlayModeController::TakeSceneRestoreRequest()) {
+		isChanging_ = false;
+		isTransitioning_ = false;
+		transitionPhase_ = TransitionPhase::None;
+		transitionTimer_ = 0.0f;
+		pendingName_.clear();
+		currentEffect_.reset();
+		if (currentScene_ && GetCurrentSceneName(*currentScene_->GetRegistry()) != *restoreScene) {
+			ChangeScene(*restoreScene, true);
+		}
+	}
 
 #ifdef USE_IMGUI
 	static bool requestCreate = false;

@@ -13,6 +13,8 @@ public:
 	virtual size_t Size() const = 0;
 	virtual bool Has(Entity entity) const = 0;
 	virtual const std::vector<Entity>& Entities() const = 0;
+	// リフレクションの登録内容に依存せず、全メンバを値として複製する。
+	virtual std::unique_ptr<IComponentPool> Clone() const = 0;
 };
 
 /// <summary>
@@ -111,6 +113,9 @@ public:
 
 	size_t Size() const override { return components_.size(); }
 	const std::vector<Entity>& Entities() const override { return indexToEntity_; }
+	std::unique_ptr<IComponentPool> Clone() const override {
+		return std::make_unique<ComponentPool<CompType>>(*this);
+	}
 
 
 private:
