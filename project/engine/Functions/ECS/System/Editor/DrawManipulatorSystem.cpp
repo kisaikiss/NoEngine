@@ -350,6 +350,8 @@ bool DrawManipulatorSystem::TriggerManipulateButton() {
 
 void DrawManipulatorSystem::ResetSelectionEdit() {
 	// シーン切り替え後へ、古いRegistryやComponentへの参照を持ち越さない。
+	// 停止によるシーン復帰は更新後に行われ、新シーンの更新より先に描画される。
+	SetGizmoCallback({});
 #ifdef USE_IMGUI
 	sGroupTransform = {};
 #endif
