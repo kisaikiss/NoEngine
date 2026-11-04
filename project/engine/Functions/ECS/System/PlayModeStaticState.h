@@ -47,6 +47,11 @@ public:
 		active_ = false;
 	}
 
+	void Discard() {
+		for (auto* state : states_) state->Discard();
+		active_ = false;
+	}
+
 private:
 	bool active_ = false;
 	std::vector<IPlayModeStaticState*> states_;

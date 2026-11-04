@@ -50,6 +50,19 @@ bool PlayModeController::IsInPlayMode() { return sState != State::kEditing; }
 bool PlayModeController::IsGameStopped() { return sGameStop; }
 const nlohmann::json& PlayModeController::GetSnapshot() { return sSnapshot; }
 
+void PlayModeController::Shutdown() {
+	// グラフィックスや音声の終了前に、保存したリソース参照を解放する。
+	sSystemSnapshot.reset();
+	sRegistrySnapshot.reset();
+	PlayModeStaticStates::Get().Discard();
+	sSnapshot = nlohmann::json{};
+	sStartSceneName.clear();
+	sSceneRestoreRequest.reset();
+	sRestoreAfterSceneChange = false;
+	sState = State::kEditing;
+	sGameStop = true;
+}
+
 void PlayModeController::Play(Registry& registry, SystemManager* systems) {
 	if (sRestoreAfterSceneChange || sSceneRestoreRequest) return;
 	if (sState == State::kEditing) {

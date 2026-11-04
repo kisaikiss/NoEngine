@@ -1,4 +1,5 @@
 #include "GameCore.h"
+#include "engine/Functions/ECS/System/PlayModeController.h"
 #include "engine/Functions/ECS/System/PlayModeStaticState.h"
 #include "engine/Window/WindowManager.h"
 #include "engine/Functions/Debug/CrashHandler/ExportDump.h"
@@ -140,10 +141,11 @@ void EngineInitialize() {
 }
 
 void EngineFinalize() {
+	Editor::EditorCommandOperator::Shutdown();
+	ECS::PlayModeController::Shutdown();
 #ifdef USE_IMGUI
 	sImGuiManager.Shutdown();
 #endif // USE_IMGUI
-	Editor::EditorCommandOperator::Shutdown();
 	ParticleManager::Shutdown();
 	AudioShutdown();
 	InputShutdown();

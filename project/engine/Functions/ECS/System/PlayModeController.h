@@ -29,6 +29,9 @@ public:
 	/// <summary>">"を押した瞬間(Editing→Playing)に取得したシーンのスナップショット</summary>
 	static const nlohmann::json& GetSnapshot();
 
+	/// <summary>終了時に、復元せずすべてのスナップショットと復帰要求を破棄します。</summary>
+	static void Shutdown();
+
 	static void Play(Registry& registry, SystemManager* systems = nullptr);  // ">"
 	static void Pause();                   // "||"
 	static void Stop(Registry& registry, SystemManager* systems = nullptr);  // "■"
