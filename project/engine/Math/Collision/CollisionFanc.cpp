@@ -247,7 +247,8 @@ CapsuleSphereCollision TestCapsuleSphere(const Transform* capsuleTransform, cons
 	float l = v.LengthSquared();
 
 	// 投影比率 t を内積から計算
-	float t = w.Dot(v) / l;
+	// 端点が一致したカプセルは球として扱い、ゼロ除算を防ぐ。
+	float t = l > 1e-12f ? w.Dot(v) / l : 0.0f;
 
 	// 線分の範囲内にクランプ
 	t = std::clamp(t, 0.0f, 1.0f);
@@ -256,14 +257,29 @@ CapsuleSphereCollision TestCapsuleSphere(const Transform* capsuleTransform, cons
 	Vector3 nearPoint = cap.p0 + v * t;
 
 	// 距離を算出
-	float length = (sph.center - nearPoint).LengthSquared();
+	Vector3 delta = nearPoint - sph.center;
+	float distanceSquared = delta.LengthSquared();
+	float radiusSum = cap.radius + sph.radius;
 
 	// 半径の合計以下かどうかを返す
-	result.hit = length <= (cap.radius + sph.radius) * (cap.radius + sph.radius);
+	result.hit = distanceSquared <= radiusSum * radiusSum;
 	if (!result.hit) return result;
 
-	// ToDo: 押し戻し用の貫通量や法線の計算を入れる
-	
+	float distance = std::sqrt(distanceSquared);
+	if (distanceSquared > 1e-12f) {
+		result.normal = delta / distance;
+	} else if (l > 1e-12f) {
+		// 中心が軸上にある場合は、軸に垂直な方向へ押し出す。
+		Vector3 axis = v / std::sqrt(l);
+		Vector3 reference = std::abs(axis.x) < 0.9f ? Vector3::RIGHT : Vector3::UP;
+		result.normal = axis.Cross(reference).Normalize();
+	} else {
+		// 球同士の中心も一致した場合は、一定の方向を選ぶ。
+		result.normal = Vector3::RIGHT;
+	}
+	result.penetration = std::max(radiusSum - distance, 0.0f);
+	result.closestOnCapsule = nearPoint;
+	result.closestOnSphere = sph.center + result.normal * sph.radius;
 
 	return result;
 }
