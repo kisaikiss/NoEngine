@@ -5,8 +5,12 @@
 #include "engine/Assets/Model/Skeleton.h"
 
 namespace NoEngine {
+namespace ECS { class AnimationSystem; }
+struct Animation;
 
 namespace Component {
+enum class AnimationPlaybackState { Playing, Paused, Stopped, Finished };
+
 // 変形結果とBLASはキャラクターごとに所有する。
 struct AnimatorSkinningResources {
 	StructuredBuffer vertexBuffer;
@@ -28,6 +32,21 @@ struct AnimatorComponent {
 	std::vector<std::string> GetAnimationNames() const;
 	// 名前が見つからない場合は再生状態を変更せず、falseを返す。
 	bool SetAnimation(const std::string& name);
+	// 明示的なPlayは同じクリップでも先頭から再生する。falseで単発再生する。
+	bool Play(const std::string& name, bool shouldLoop = true);
+	bool Play();
+	void Pause();
+	bool Resume();
+	// 先頭のポーズに戻して停止する。表示の更新は次回のAnimationSystemで行う。
+	void Stop();
+	bool Restart();
+	// 秒単位で範囲内に移動し、ブレンドと終了状態を解除する。再生・一時停止は維持する。
+	bool Seek(float seconds);
+	bool IsPlaying() const;
+	bool IsPaused() const { return playbackState == AnimationPlaybackState::Paused; }
+	bool IsFinished() const { return playbackState == AnimationPlaybackState::Finished; }
+	float GetDuration() const;
+	float GetNormalizedTime() const;
 	AnimatorSkinningResources& EnsureSkinningResources(const Mesh& mesh);
 	StructuredBuffer& GetVertexBuffer(Mesh& mesh) const;
 	RaytracingMesh* GetRaytracingMesh(Mesh& mesh) const;
@@ -40,6 +59,7 @@ struct AnimatorComponent {
 	float animationSpeedMagnification = 1.0f;
 	bool drawSkeleton = false;
 	bool enableSkinning = false;
+	bool loop = true;
 
 	// アニメーション切り替え時のブレンドにかける時間(秒)。0以下にすると即切り替えになる
 	float blendDuration = 0.2f;
@@ -50,7 +70,14 @@ struct AnimatorComponent {
 	float previousAnimationTime = 0.f;  // 切り替わった瞬間に凍結した、ブレンド元の再生時刻
 	bool isBlending = false;
 	float blendTimer = 0.f;
+	AnimationPlaybackState playbackState = AnimationPlaybackState::Playing;
 	AnimatorRuntimeState runtime;
+
+private:
+	friend class NoEngine::ECS::AnimationSystem;
+	const Animation* GetCurrentAnimation() const;
+	void OnAnimationChanged();
+	void UpdatePlayback(float deltaTime);
 };
 }
 }

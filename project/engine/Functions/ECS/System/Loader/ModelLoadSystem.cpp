@@ -48,6 +48,7 @@ void ModelLoadSystem::Update(Registry& registry, float deltaTime) {
 				animator->blendTimer = 0.0f;
 				if (animator->currentAnimation >= asset.animations.size()) animator->currentAnimation = 0;
 				animator->preCurrentAnimation = animator->currentAnimation;
+				animator->playbackState = AnimationPlaybackState::Playing;
 			}
 			animator->animationHandles = asset.animations;
 			animator->skeletonHandle = asset.skeleton;

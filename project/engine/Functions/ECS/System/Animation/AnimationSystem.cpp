@@ -110,30 +110,19 @@ void AnimationSystem::AnimationUpdate(Registry& registry, float deltaTime) {
 		}
 		if (animeComp->currentAnimation >= animeComp->animationHandles.size()) continue;
 
-		if (animeComp->currentAnimation != animeComp->preCurrentAnimation) {
-			animeComp->previousAnimation = animeComp->preCurrentAnimation;
-			animeComp->previousAnimationTime = animeComp->time;
-			animeComp->isBlending = (animeComp->blendDuration > 0.0f);
-			animeComp->blendTimer = 0.0f;
-			animeComp->time = 0.0f;
-			animeComp->preCurrentAnimation = animeComp->currentAnimation;
-		}
-
-		animeComp->time += deltaTime * animeComp->animationSpeedMagnification;
 		uint32_t currentIndex = animeComp->currentAnimation;
 
 		Animation* currentAnimation = modelSaver.GetAnimation(animeComp->animationHandles[currentIndex]);
 		auto* skeleton = bindSkeleton ? &runtime.skeleton : nullptr;
 		if (!currentAnimation) continue;
 
-		animeComp->time = currentAnimation->duration > 0.0f
-			? std::fmod(animeComp->time, currentAnimation->duration) : 0.0f;
+		animeComp->UpdatePlayback(deltaTime);
 
 		Animation* previousAnimation = nullptr;
 		float blendT = 1.0f;
 		if (animeComp->isBlending && animeComp->blendDuration > 0.0f &&
 			animeComp->previousAnimation < animeComp->animationHandles.size()) {
-			animeComp->blendTimer += deltaTime;
+			if (animeComp->IsPlaying() && std::isfinite(deltaTime) && deltaTime > 0.0f) animeComp->blendTimer += deltaTime;
 			previousAnimation = modelSaver.GetAnimation(animeComp->animationHandles[animeComp->previousAnimation]);
 			blendT = std::clamp(animeComp->blendTimer / animeComp->blendDuration, 0.0f, 1.0f);
 			if (animeComp->blendTimer >= animeComp->blendDuration) {

@@ -86,6 +86,31 @@ Debug / Development 構成では、シーンビューにグリッドを表示し
 
 `Adaptive spacing` は遠方の表示を滑らかに粗くします。配置用スナップの値は変更しません。通常は地形の深度で隠れ、`Overlay through geometry` で透過表示に切り替えられます。再生中は初期設定で非表示です。設定は起動中のみ保持し、ファイルへの保存は行いません。
 
+## 3Dアニメーションの再生操作
+
+`AnimatorComponent`は自動再生・ループが既定です。Inspectorの`loop`をオフにするか、`Play(name, false)`で単発再生します。単発再生の完了後は最後のポーズを保持し、`IsFinished()`が`true`になります。この状態は再生・再スタート・停止・シーク・別クリップへの切り替えまで保持します。
+
+```cpp
+animator->Play("Attack", false); // 同じ名前でも先頭から単発再生
+if (animator->IsFinished()) {
+    animator->Play("Idle");     // ループ再生に切り替え
+}
+```
+
+| API | 動作 |
+| --- | --- |
+| `Play(name, shouldLoop = true)` | 名前で指定して再生。別クリップへの切り替えは`blendDuration`で補間。同じクリップは先頭から再生 |
+| `Play()` / `Restart()` | 現在のクリップを先頭から再生。`loop`の設定は保持し、ブレンドを解除 |
+| `Pause()` / `Resume()` | 時刻とブレンドを一時停止／再開。`Resume()`は一時停止中だけ有効 |
+| `Stop()` | 選択中のクリップの先頭ポーズへ戻して停止。ブレンドと終了状態を解除 |
+| `Seek(seconds)` | 秒単位で移動。範囲外は端に補正し、ブレンドを解除。再生・一時停止・停止の状態は保持。完了後のシークは一時停止へ移行 |
+| `IsPlaying()` / `IsPaused()` / `IsFinished()` | 現在の再生・一時停止・単発完了状態を取得 |
+| `GetDuration()` / `GetNormalizedTime()` | 長さを秒で取得／再生位置を0〜1で取得 |
+
+`Play`・`Restart`・`Seek`・`Resume`は成功時に`true`を返します。不明な名前や未ロードのクリップなどで失敗した場合は状態を変更しません。シークへのNaNや無限大の指定も無視します。ポーズの表示には次回の`AnimationSystem`更新が必要で、一時停止・停止中も更新を通すことでシーク先や先頭ポーズを反映します。
+
+毎フレームの状態選択には`SetAnimation(name)`を使います。同じ名前なら再スタートせず、単発再生の完了状態も保持します。`animationSpeedMagnification`が負の場合、`Play`と`Restart`は終端から逆再生し、単発再生は先頭で完了します。モデルを差し替えると再生状態はリセットされます。
+
 ## アプリケーションの構成
 
 ゲームアプリケーションは `NoEngine::IGameApp` を継承して作成します。`Startup()` でシーンを登録し、起動時のシーンを選びます。各シーンは `NoEngine::Scene::IScene` を継承し、`Setup()` でエンティティやコンポーネントを用意してシステムを追加します。
