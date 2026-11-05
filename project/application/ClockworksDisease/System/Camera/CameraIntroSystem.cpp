@@ -21,9 +21,10 @@ void CameraIntroSystem::Update(No::Registry& registry, float deltaTime) {
 				// playingをfalseにしておかないと、TransformRoutineSystemが
 				// 以降もカメラのtranslateを上書きし続けFollowCameraSystemと競合する
 				routine->playing = false;
-				if (!routine->keyframes.empty()) {
+				const auto* route = routine->GetActiveRoutine();
+				if (route && !route->keyframes.empty()) {
 					if (auto* transform = registry.GetComponent<No::TransformComponent>(e)) {
-						const auto& last = routine->keyframes.back();
+						const auto& last = route->keyframes.back();
 						transform->translate = last.translate;
 						transform->rotation = last.rotation;
 						transform->scale = last.scale;

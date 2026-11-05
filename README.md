@@ -68,6 +68,18 @@ generated/       ビルド成果物と中間ファイル
 
 新しいアセット指定欄はリフレクションに `REFLECT_ASSET_FIELD(field, Texture)` のように登録します。元ファイルパスを使う欄には `REFLECT_ASSET_PATH_FIELD`、パスの配列には `REFLECT_ASSET_PATH_ARRAY_FIELD` を使います。
 
+## TransformRoutineの複数ルート
+
+`TransformRoutineComponent`は、ID付きの`routines`と一つの再生状態を持ちます。Inspectorの`Add Routine`でルートを追加し、`Edit Routine`で編集対象を選びます。`Routine ID`は空欄・重複を避けて入力し、Enterで確定してください。IDを変更した場合は、グラフ側の参照も更新します。
+
+選択したルートの`keyframes`、時間、Easing、補間方式、`loop`を編集できます。シーンビューの経路表示とWaypointギズモも`Edit Routine`の選択に追従します。追加したルートは現在のTransformを最初のWaypointに使い、`loop = false`で作成します。`keyframes`の`+ Add`で移動先を追加してください。ルートの追加・削除や各値の編集はUndo/Redoに対応します。
+
+グラフの`Activate Mover`には、`Target Entity`と`Routine ID`を設定します。例えば、一度目の会話では`to_gate`、次の会話では`to_shop`を指定します。対象には`TransformComponent`、`TransformRoutineComponent`、`MoverComponent`を付け、`MoverSystem`と`TransformRoutineSystem`を有効にしてください。`Routine ID`を省略する既存グラフは、Inspectorの`Default Routine`を再生します。`startOnAwake`もこの既定ルートを使用します。
+
+同時に再生するルートは一つです。再生中に別の`Activate Mover`が来ると、指定ルートを先頭から再生します。存在しないIDや重複IDの指定はログを出して無視します。非ループの移動完了まで後続Actionを待つため、会話後の移動には`loop = false`を使用してください。座標は従来どおり親基準の絶対値なので、連続するルートの終点と始点を合わせます。
+
+従来の単一`keyframes`形式のシーン・Prefabは、読み込み時にIDが`default`のルートへ移行し、次回保存時に複数ルート形式で保存します。`TransformRoutineComponent2D`は単一ルート形式です。
+
 ## エディタのグリッド表示
 
 Debug / Development 構成では、シーンビューにグリッドを表示します。`Grid` ウィンドウで表示の切り替え、XZ / XY / YZ 平面、基準位置、セル間隔、主線間隔、ピクセル単位の線幅、色、描画範囲、フェードを調整できます。

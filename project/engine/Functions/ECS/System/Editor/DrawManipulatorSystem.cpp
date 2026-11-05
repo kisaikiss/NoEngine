@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "engine/Functions/Command/EditCommand/FunctionCommand.h"
 #include "DrawManipulatorSystem.h"
 #include "../PlayModeStaticState.h"
 #include "engine/Editor/Commands/EditTag.h"
@@ -316,7 +317,7 @@ void DrawManipulatorSystem::Update(Registry& registry, float deltaTime) {
 					if (auto* routine = registry.GetComponent<TransformRoutineComponent>(e)) {
 						routeMode = &routineEditMode_;
 						waypointIndex = &sSelectedWaypointIndex;
-						waypointCount = routine->keyframes.size();
+						waypointCount = routine->GetEditorRoutine() ? routine->GetEditorRoutine()->keyframes.size() : 0;
 					}
 				} else if (selection.size() == 1 && registry.Has<TransformRoutineComponent2D>(e)) {
 					auto* routine = registry.GetComponent<TransformRoutineComponent2D>(e);
@@ -751,6 +752,21 @@ bool DrawManipulatorSystem::WorldToScreen(const Math::Vector3& worldPos, const M
 	return true;
 }
 
+namespace {
+template<class T, class Owner>
+std::unique_ptr<Command::ICommand> MakeRoutineWaypointCommand(Registry& registry, Entity entity,
+	int routineIndex, int waypointIndex, T Owner::* member, T before, T after) {
+	auto apply = [&registry, entity, routineIndex, waypointIndex, member](const T& value) {
+		auto* component = registry.GetComponent<TransformRoutineComponent>(entity);
+		if (!component || routineIndex < 0 || routineIndex >= static_cast<int>(component->routines.size())) return;
+		auto& frames = component->routines[routineIndex].keyframes;
+		if (waypointIndex >= 0 && waypointIndex < static_cast<int>(frames.size())) frames[waypointIndex].*member = value;
+	};
+	return std::make_unique<Command::FunctionCommand>(
+		[apply, after] { apply(after); }, [apply, before] { apply(before); }, "Edit routine waypoint");
+}
+}
+
 void DrawManipulatorSystem::ManipulateRoutineWaypoints(Registry& registry, const Math::Vector4& sceneRect) {
 #ifdef USE_IMGUI
 	if (!routineEditMode_) {
@@ -769,7 +785,9 @@ void DrawManipulatorSystem::ManipulateRoutineWaypoints(Registry& registry, const
 
 	auto view = registry.View<TransformRoutineComponent, TransformComponent, EditTag, EditSelectedTag>();
 	for (auto e : view) {
-		auto* routine = registry.GetComponent<TransformRoutineComponent>(e);
+		auto* component = registry.GetComponent<TransformRoutineComponent>(e);
+		auto* routine = component->GetEditorRoutine();
+		if (!routine) continue;
 		auto* baseT = registry.GetComponent<TransformComponent>(e);
 		if (routine->keyframes.empty()) {
 			continue;
@@ -857,7 +875,8 @@ void DrawManipulatorSystem::ManipulateRoutineWaypoints(Registry& registry, const
 
 			if (!waypointIsActive_ && waypointIsActivePreFrame_) {
 				EditorCommandOperator::AddCommand(
-					std::make_unique<Command::ChangeValueCommand<Math::Vector3>>(&kf.translate, oldTranslate, kf.translate)
+					MakeRoutineWaypointCommand(registry, e, component->selectedRoutineIndex,
+						sSelectedWaypointIndex, &TransformKeyframe::translate, oldTranslate, kf.translate)
 				);
 			}
 			break;
@@ -879,7 +898,8 @@ void DrawManipulatorSystem::ManipulateRoutineWaypoints(Registry& registry, const
 
 			if (!waypointIsActive_ && waypointIsActivePreFrame_) {
 				EditorCommandOperator::AddCommand(
-					std::make_unique<Command::ChangeValueCommand<Math::Quaternion>>(&kf.rotation, oldRotation, kf.rotation)
+					MakeRoutineWaypointCommand(registry, e, component->selectedRoutineIndex,
+						sSelectedWaypointIndex, &TransformKeyframe::rotation, oldRotation, kf.rotation)
 				);
 			}
 			break;
@@ -899,7 +919,8 @@ void DrawManipulatorSystem::ManipulateRoutineWaypoints(Registry& registry, const
 
 			if (!waypointIsActive_ && waypointIsActivePreFrame_) {
 				EditorCommandOperator::AddCommand(
-					std::make_unique<Command::ChangeValueCommand<Math::Vector3>>(&kf.scale, oldScale, kf.scale)
+					MakeRoutineWaypointCommand(registry, e, component->selectedRoutineIndex,
+						sSelectedWaypointIndex, &TransformKeyframe::scale, oldScale, kf.scale)
 				);
 			}
 			break;

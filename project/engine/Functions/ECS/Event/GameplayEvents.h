@@ -22,5 +22,6 @@ struct GameplayEvent {
 // MoverActivate ActionからMoverSystemへ渡す、Mover再生開始専用の内部イベント。
 struct ActivateMoverEvent {
 	ECS::Entity targetEntity = ECS::INVALID_ENTITY;
+	std::string routineId; // 空なら対象ComponentのdefaultRoutineIdを使う。
 };
 }

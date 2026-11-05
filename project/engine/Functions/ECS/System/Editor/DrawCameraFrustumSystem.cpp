@@ -84,7 +84,9 @@ void DrawCameraFrustumSystem::Update(Registry& registry, float deltaTime) {
 		DrawFrustumLines(worldMatrix, camera->nearClip, camera->farClip, camera->fov, camera->aspect, kFrustumColor);
 
 		// TransformRoutineComponentを持つ場合、各keyframeでも視錐台を描画する
-		if (auto* routine = registry.GetComponent<TransformRoutineComponent>(e)) {
+		if (auto* component = registry.GetComponent<TransformRoutineComponent>(e)) {
+			auto* routine = component->GetEditorRoutine();
+			if (!routine) continue;
 			if (routine->keyframes.empty()) continue;
 
 			Math::Matrix4x4 parentWorld = GetParentWorld3D(registry, transform);

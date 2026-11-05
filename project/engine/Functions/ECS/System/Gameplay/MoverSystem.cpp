@@ -13,7 +13,8 @@ void MoverSystem::Update(Registry& registry, float deltaTime) {
 		if (mover->initialized) continue;
 		mover->initialized = true;
 		mover->active = mover->startOnAwake;
-		routine->playing = mover->startOnAwake;
+		routine->playing = false;
+		if (mover->startOnAwake) routine->StartRoutine();
 	}
 
 	// GameplayCatalogのMover Actionが出した内部イベントを受けて、ルートを先頭から再生する。
@@ -21,10 +22,12 @@ void MoverSystem::Update(Registry& registry, float deltaTime) {
 		auto* mover = registry.GetComponent<Component::MoverComponent>(event.targetEntity);
 		auto* routine = registry.GetComponent<Component::TransformRoutineComponent>(event.targetEntity);
 		if (!mover || !routine) continue;
+		mover->activationPending = false;
+		if (!routine->StartRoutine(event.routineId)) {
+			LogWarning("MoverSystem: routine id was not found or is duplicated: " + event.routineId);
+			continue;
+		}
 		mover->active = true;
-		routine->currentIndex = 0;
-		routine->elapsed = 0.0f;
-		routine->playing = true;
 	}
 }
 }

@@ -9,13 +9,19 @@ REFLECT_FIELD(duration),
 REFLECT_ENUM_FIELD(easing)
 REFLECT_STRUCT_END(NoEngine::TransformKeyframe)
 
-REFLECT_STRUCT_BEGIN(NoEngine::Component::TransformRoutineComponent, "Transform")
+REFLECT_STRUCT_BEGIN(NoEngine::Component::TransformRoutineDefinition)
+REFLECT_FIELD(id),
 REFLECT_STRUCT_ARRAY_FIELD(keyframes),
 REFLECT_FIELD(useGlobalTiming),
 REFLECT_FIELD(globalDuration),
 REFLECT_ENUM_FIELD(globalEasing),
 REFLECT_ENUM_FIELD(interpolation),
-REFLECT_FIELD(loop),
+REFLECT_FIELD(loop)
+REFLECT_STRUCT_END(NoEngine::Component::TransformRoutineDefinition)
+
+REFLECT_STRUCT_BEGIN(NoEngine::Component::TransformRoutineComponent, "Transform")
+REFLECT_STRUCT_ARRAY_FIELD(routines),
+REFLECT_FIELD(defaultRoutineId),
 REFLECT_FIELD(playing),
 REFLECT_FIELD(playbackSpeed)
 REFLECT_STRUCT_END(NoEngine::Component::TransformRoutineComponent)

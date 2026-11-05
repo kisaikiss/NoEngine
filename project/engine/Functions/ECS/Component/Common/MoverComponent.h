@@ -7,5 +7,6 @@ struct MoverComponent {
 	bool startOnAwake = false; // 初回更新時にルートを自動再生する。
 	bool active = false;       // 起動イベントを受けてMoverが有効になった状態。
 	bool initialized = false;  // startOnAwakeの初期化を二重に行わないための内部状態。
+	bool activationPending = false; // 起動イベントが処理される前に完了扱いにしない。
 };
 }

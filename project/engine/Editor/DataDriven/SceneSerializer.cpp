@@ -4,6 +4,7 @@
 #include "PrefabSerializer.h"
 #include "../Utilities/EditUtils.h"
 #include "engine/Functions/ECS/Component/Common/TransformComponent.h"
+#include "engine/Functions/ECS/Component/Common/TransformRoutineComponent.h"
 
 namespace NoEngine {
 namespace Editor {
@@ -200,9 +201,25 @@ void LoadEntityFromJson(ECS::Registry& registry, ECS::Entity entity, const json&
 		if (!compPtr) {
 			compPtr = registry.AddComponent(typeInfo->typeId, entity);
 		}
+		// 単一ルート形式のシーン・Prefabは、読込時にdefaultルートへ移行する。
+		json migrated;
+		const json* values = &compJson;
+		const bool isRoutine = typeInfo->typeId == Utilities::TypeID<Component::TransformRoutineComponent>();
+		if (isRoutine && !compJson.contains("routines")) {
+			migrated = compJson;
+			json route = compJson;
+			route["id"] = "default";
+			migrated["routines"] = json::array({ route });
+			migrated["defaultRoutineId"] = "default";
+			values = &migrated;
+		}
+		if (isRoutine) {
+			// 再読込やPlay復元時に、以前のルートの再生位置を持ち越さない。
+			*static_cast<Component::TransformRoutineComponent*>(compPtr) = Component::TransformRoutineComponent{};
+		}
 		for (auto& field : typeInfo->fields) {
 			uint8_t* base = (uint8_t*)compPtr + field.offset;
-			ReadFieldFromJson(registry, compJson, field, base);
+			ReadFieldFromJson(registry, *values, field, base);
 		}
 	}
 

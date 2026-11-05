@@ -4,6 +4,7 @@
 #include "engine/Functions/Command/EditCommand/FunctionCommand.h"
 #include "engine/Functions/Command/EditCommand/RemoveComponentCommand.h"
 #include "engine/Functions/ECS/Component/Common/TransformComponent.h"
+#include "engine/Functions/ECS/Component/Common/TransformRoutineComponent.h"
 #include "engine/Functions/ECS/Component/Common/Transform2DComponent.h"
 #include "engine/Functions/ECS/System/Editor/DrawManipulatorSystem.h"
 #include "engine/Utilities/Conversion/ConvertString.h"
@@ -21,6 +22,144 @@ namespace NoEngine {
 using namespace ECS;
 #ifdef USE_IMGUI
 namespace {
+// ルート内のフィールド履歴は、配列要素のアドレスを保持せずComponent単位で記録する。
+std::vector<std::unique_ptr<Command::ICommand>>* sRoutineFieldCommands = nullptr;
+void RecordFieldCommand(std::unique_ptr<Command::ICommand> command) {
+	if (sRoutineFieldCommands) sRoutineFieldCommands->push_back(std::move(command));
+	else Editor::EditorCommandOperator::AddCommand(std::move(command));
+}
+
+void RecordRoutineEdit(ECS::Registry& registry, ECS::Entity entity,
+	const Component::TransformRoutineComponent& before, const Component::TransformRoutineComponent& after) {
+	auto apply = [&registry, entity](const Component::TransformRoutineComponent& value) {
+		if (auto* component = registry.GetComponent<Component::TransformRoutineComponent>(entity)) *component = value;
+	};
+	Editor::EditorCommandOperator::AddCommand(std::make_unique<Command::FunctionCommand>(
+		[apply, after] { apply(after); }, [apply, before] { apply(before); }, "Edit transform routine"));
+}
+
+void DrawTransformRoutineUI(ECS::Registry& registry, ECS::Entity entity,
+	const TypeInfo& type, Component::TransformRoutineComponent& component) {
+	using Component::TransformRoutineDefinition;
+	auto* selected = component.GetEditorRoutine();
+	const char* preview = selected ? selected->id.c_str() : "(No routines)";
+	if (ImGui::BeginCombo("Edit Routine", preview)) {
+		for (size_t i = 0; i < component.routines.size(); ++i) {
+			ImGui::PushID(static_cast<int>(i));
+			if (ImGui::Selectable(component.routines[i].id.c_str(), selected == &component.routines[i])) {
+				component.selectedRoutineIndex = static_cast<int>(i);
+				if (!Editor::ScopedEditorRegistry::IsIsolated()) ECS::DrawManipulatorSystem::SetSelectWaypointIndex(0);
+			}
+			ImGui::PopID();
+		}
+		ImGui::EndCombo();
+	}
+	selected = component.GetEditorRoutine();
+	if (ImGui::Button("Add Routine")) {
+		const auto before = component;
+		TransformRoutineDefinition route;
+		// 空欄・重複を作らず、追加直後からイベントで指定できるIDを割り当てる。
+		int suffix = 1;
+		do { route.id = "routine_" + std::to_string(suffix++); }
+		while (std::any_of(component.routines.begin(), component.routines.end(),
+			[&](const auto& existing) { return existing.id == route.id; }));
+		route.loop = false;
+		TransformKeyframe first;
+		if (const auto* transform = registry.GetComponent<Component::TransformComponent>(entity)) {
+			first.translate = transform->translate;
+			first.rotation = transform->rotation;
+			first.scale = transform->scale;
+		}
+		route.keyframes.push_back(first);
+		component.routines.push_back(std::move(route));
+		component.selectedRoutineIndex = static_cast<int>(component.routines.size()) - 1;
+		if (component.routines.size() == 1) component.defaultRoutineId = component.routines.front().id;
+		RecordRoutineEdit(registry, entity, before, component);
+		if (!Editor::ScopedEditorRegistry::IsIsolated()) ECS::DrawManipulatorSystem::SetSelectWaypointIndex(0);
+		return;
+	}
+	ImGui::SameLine();
+	ImGui::BeginDisabled(!selected || component.routines.size() <= 1);
+	const bool remove = ImGui::Button("Remove Routine");
+	ImGui::EndDisabled();
+	if (remove && selected && component.routines.size() > 1) {
+		const auto before = component;
+		const auto removedId = selected->id;
+		component.routines.erase(component.routines.begin() + component.selectedRoutineIndex);
+		component.GetEditorRoutine();
+		if (component.defaultRoutineId == removedId) component.defaultRoutineId = component.routines.front().id;
+		if (component.activeRoutineId == removedId) {
+			component.playing = false;
+			component.activeRoutineId.clear();
+			component.currentIndex = 0;
+			component.elapsed = 0.0f;
+		}
+		RecordRoutineEdit(registry, entity, before, component);
+		if (!Editor::ScopedEditorRegistry::IsIsolated()) ECS::DrawManipulatorSystem::SetSelectWaypointIndex(0);
+		return;
+	}
+	if (ImGui::BeginCombo("Default Routine", component.defaultRoutineId.c_str())) {
+		for (const auto& route : component.routines) {
+			if (ImGui::Selectable(route.id.c_str(), route.id == component.defaultRoutineId)) {
+				const auto before = component;
+				component.defaultRoutineId = route.id;
+				RecordRoutineEdit(registry, entity, before, component);
+			}
+		}
+		ImGui::EndCombo();
+	}
+	if (!component.FindRoutine(component.defaultRoutineId)) ImGui::TextDisabled("Default Routine ID is missing or duplicated.");
+	if (!selected) return;
+	ImGui::PushID(component.selectedRoutineIndex);
+	char idBuffer[256];
+	strncpy_s(idBuffer, selected->id.c_str(), _TRUNCATE);
+	if (ImGui::InputText("Routine ID", idBuffer, sizeof(idBuffer), ImGuiInputTextFlags_EnterReturnsTrue)) {
+		const std::string newId = idBuffer;
+		const bool duplicate = std::any_of(component.routines.begin(), component.routines.end(),
+			[&](const auto& route) { return &route != selected && route.id == newId; });
+		if (!newId.empty() && !duplicate && newId != selected->id) {
+			const auto before = component;
+			if (component.defaultRoutineId == selected->id) component.defaultRoutineId = newId;
+			if (component.activeRoutineId == selected->id) component.activeRoutineId = newId;
+			selected->id = newId;
+			RecordRoutineEdit(registry, entity, before, component);
+		}
+	}
+	ImGui::TextDisabled("ID: unique, non-empty; Enter to apply. Update graph references after renaming.");
+	// 既存フィールドUIのドラッグ開始値・配列追加時の初期値をそのまま利用する。
+	static ECS::Registry* editingRegistry = nullptr;
+	static ECS::Entity editingEntity = ECS::INVALID_ENTITY;
+	static int editingRoutineIndex = -1;
+	static std::optional<Component::TransformRoutineComponent> editBefore;
+	if (editingRegistry != &registry || editingEntity != entity || editingRoutineIndex != component.selectedRoutineIndex) {
+		editBefore.reset();
+	}
+	editingRegistry = &registry;
+	editingEntity = entity;
+	editingRoutineIndex = component.selectedRoutineIndex;
+	if (!editBefore) editBefore = component;
+	std::vector<std::unique_ptr<Command::ICommand>> commands;
+	sRoutineFieldCommands = &commands;
+	const auto* routeType = ComponentRegistry::FindByTypeID(Utilities::TypeID<TransformRoutineDefinition>());
+	if (routeType) {
+		for (const auto& field : routeType->fields) {
+			if (field.name != "id") DrawFieldUI(registry, entity, field, selected);
+		}
+	}
+	sRoutineFieldCommands = nullptr;
+	if (!commands.empty()) {
+		// 削除で無効になった配列要素へのコマンドは実行せず、編集開始前の値を記録する。
+		RecordRoutineEdit(registry, entity, *editBefore, component);
+		editBefore.reset();
+	} else if (!ImGui::IsAnyItemActive()) {
+		editBefore.reset();
+	}
+	ImGui::PopID();
+	for (const auto& field : type.fields) {
+		if (field.name == "playing" || field.name == "playbackSpeed") DrawFieldUI(registry, entity, field, &component);
+	}
+}
+
 std::optional<std::string> AcceptAssetReferenceDrop(const FieldInfo& field) {
 	const auto type = field.attributes.assetType;
 	if (type == Editor::EBrowserItemType::Unknown) return std::nullopt;
@@ -78,13 +217,15 @@ void DrawComponentUI(Registry& registry, Entity e) {
 		}
 
 		if (removeComponent) {
-			Editor::EditorCommandOperator::AddCommand(std::make_unique<Command::RemoveComponentCommand>(registry, e, compInfo.typeId));
+			RecordFieldCommand(std::make_unique<Command::RemoveComponentCommand>(registry, e, compInfo.typeId));
 			registry.RemoveComponent(compInfo.typeId, e);
 		} else if (isOpen) {
 			void* compPtr = compInfo.getter(registry, e);
 
-			for (auto& field : compInfo.fields) {
-				DrawFieldUI(registry, e, field, compPtr);
+			if (compInfo.typeId == Utilities::TypeID<Component::TransformRoutineComponent>()) {
+				DrawTransformRoutineUI(registry, e, compInfo, *static_cast<Component::TransformRoutineComponent*>(compPtr));
+			} else {
+				for (auto& field : compInfo.fields) DrawFieldUI(registry, e, field, compPtr);
 			}
 		}
 		ImGui::PopID();
@@ -122,7 +263,7 @@ void DrawFieldUI(ECS::Registry& registry, ECS::Entity e, const FieldInfo& field,
 
 		// 編集が確定した瞬間（マウスを離した時、Enterを押した時など）にコマンドを発行
 		if (ImGui::IsItemDeactivatedAfterEdit()) {
-			Editor::EditorCommandOperator::AddCommand(
+			RecordFieldCommand(
 				std::make_unique<Command::ChangeValueCommand<float>>(fPtr, oldFloatValue, *fPtr)
 			);
 		}
@@ -147,7 +288,7 @@ void DrawFieldUI(ECS::Registry& registry, ECS::Entity e, const FieldInfo& field,
 
 		// 編集が確定した瞬間（マウスを離した時、Enterを押した時など）にコマンドを発行
 		if (ImGui::IsItemDeactivatedAfterEdit()) {
-			Editor::EditorCommandOperator::AddCommand(
+			RecordFieldCommand(
 				std::make_unique<Command::ChangeValueCommand<Math::Vector2>>(vPtr, oldVector2Value, *vPtr)
 			);
 		}
@@ -172,7 +313,7 @@ void DrawFieldUI(ECS::Registry& registry, ECS::Entity e, const FieldInfo& field,
 
 		// 編集が確定した瞬間（マウスを離した時、Enterを押した時など）にコマンドを発行
 		if (ImGui::IsItemDeactivatedAfterEdit()) {
-			Editor::EditorCommandOperator::AddCommand(
+			RecordFieldCommand(
 				std::make_unique<Command::ChangeValueCommand<Math::Vector3>>(vPtr, oldVectorValue, *vPtr)
 			);
 		}
@@ -206,7 +347,7 @@ void DrawFieldUI(ECS::Registry& registry, ECS::Entity e, const FieldInfo& field,
 
 		// 編集が確定した瞬間（マウスを離した時、Enterを押した時など）にコマンドを発行
 		if (ImGui::IsItemDeactivatedAfterEdit()) {
-			Editor::EditorCommandOperator::AddCommand(
+			RecordFieldCommand(
 				std::make_unique<Command::ChangeValueCommand<Math::Vector4>>(vPtr, oldVectorValue, *vPtr)
 			);
 		}
@@ -227,7 +368,7 @@ void DrawFieldUI(ECS::Registry& registry, ECS::Entity e, const FieldInfo& field,
 
 		// 編集が確定した瞬間（マウスを離した時、Enterを押した時など）にコマンドを発行
 		if (ImGui::IsItemDeactivatedAfterEdit()) {
-			Editor::EditorCommandOperator::AddCommand(
+			RecordFieldCommand(
 				std::make_unique<Command::ChangeValueCommand<Math::Vector4>>(vPtr, oldVectorValue, *vPtr)
 			);
 		}
@@ -252,7 +393,7 @@ void DrawFieldUI(ECS::Registry& registry, ECS::Entity e, const FieldInfo& field,
 
 		// 編集が確定した瞬間（マウスを離した時、Enterを押した時など）にコマンドを発行
 		if (ImGui::IsItemDeactivatedAfterEdit()) {
-			Editor::EditorCommandOperator::AddCommand(
+			RecordFieldCommand(
 				std::make_unique<Command::ChangeValueCommand<int>>(iPtr, oldIntValue, *iPtr)
 			);
 		}
@@ -273,7 +414,7 @@ void DrawFieldUI(ECS::Registry& registry, ECS::Entity e, const FieldInfo& field,
 
 		// 編集が確定した瞬間（マウスを離した時、Enterを押した時など）にコマンドを発行
 		if (ImGui::IsItemDeactivatedAfterEdit()) {
-			Editor::EditorCommandOperator::AddCommand(
+			RecordFieldCommand(
 				std::make_unique<Command::ChangeValueCommand<uint32_t>>(iPtr, oldIntValue, *iPtr)
 			);
 		}
@@ -294,7 +435,7 @@ void DrawFieldUI(ECS::Registry& registry, ECS::Entity e, const FieldInfo& field,
 
 		// 編集が確定した瞬間（マウスを離した時、Enterを押した時など）にコマンドを発行
 		if (ImGui::IsItemDeactivatedAfterEdit()) {
-			Editor::EditorCommandOperator::AddCommand(
+			RecordFieldCommand(
 				std::make_unique<Command::ChangeValueCommand<bool>>(bPtr, oldBoolValue, *bPtr)
 			);
 		}
@@ -338,7 +479,7 @@ void DrawFieldUI(ECS::Registry& registry, ECS::Entity e, const FieldInfo& field,
 		if (enterPressed || ImGui::IsItemDeactivatedAfterEdit()) {
 			if (*s != editBuf) {
 				// 変更があればコマンドを積んでから、実際の値に反映
-				Editor::EditorCommandOperator::AddCommand(
+				RecordFieldCommand(
 					std::make_unique<Command::ChangeValueCommand<std::string>>(s, oldStringValue, editBuf)
 				);
 				*s = editBuf;
@@ -352,7 +493,7 @@ void DrawFieldUI(ECS::Registry& registry, ECS::Entity e, const FieldInfo& field,
 		// 手入力の確定後に適用し、古い編集バッファでドロップ結果を上書きしない。
 		if (const auto dropped = AcceptAssetReferenceDrop(field)) {
 			if (*s != *dropped) {
-				Editor::EditorCommandOperator::AddCommand(
+				RecordFieldCommand(
 					std::make_unique<Command::ChangeValueCommand<std::string>>(s, *s, *dropped));
 				*s = *dropped;
 			}
@@ -394,7 +535,7 @@ void DrawFieldUI(ECS::Registry& registry, ECS::Entity e, const FieldInfo& field,
 		if (enterPressed || ImGui::IsItemDeactivatedAfterEdit()) {
 			if (ConvertString(*s) != editBuf) {
 				// 変更があればコマンドを積んでから、実際の値に反映
-				Editor::EditorCommandOperator::AddCommand(
+				RecordFieldCommand(
 					std::make_unique<Command::ChangeValueCommand<std::wstring>>(s, oldStringValue, ConvertString(editBuf))
 				);
 				*s = ConvertString(editBuf);
@@ -409,7 +550,7 @@ void DrawFieldUI(ECS::Registry& registry, ECS::Entity e, const FieldInfo& field,
 		if (const auto dropped = AcceptAssetReferenceDrop(field)) {
 			const std::wstring value = ConvertString(*dropped);
 			if (*s != value) {
-				Editor::EditorCommandOperator::AddCommand(
+				RecordFieldCommand(
 					std::make_unique<Command::ChangeValueCommand<std::wstring>>(s, *s, value));
 				*s = value;
 			}
@@ -433,7 +574,7 @@ void DrawFieldUI(ECS::Registry& registry, ECS::Entity e, const FieldInfo& field,
 		if (changed && currentIndex != oldIndex) {
 			auto setIndex = field.enumOps->setIndex;
 
-			Editor::EditorCommandOperator::AddCommand(
+			RecordFieldCommand(
 				std::make_unique<Command::FunctionCommand>(
 					[valuePtr, setIndex, currentIndex] { setIndex(valuePtr, currentIndex); },
 					[valuePtr, setIndex, oldIndex] { setIndex(valuePtr, oldIndex); },
@@ -507,7 +648,7 @@ void DrawFieldUI(ECS::Registry& registry, ECS::Entity e, const FieldInfo& field,
 				auto arrayRemove = field.arrayOps->removeElement;
 				auto arrayInsert = field.arrayOps->insertElement;
 
-				Editor::EditorCommandOperator::AddCommand(
+				RecordFieldCommand(
 					std::make_unique<Command::FunctionCommand>(
 						[valuePtr, arrayRemove, index] {
 							arrayRemove(valuePtr, index);
@@ -528,7 +669,7 @@ void DrawFieldUI(ECS::Registry& registry, ECS::Entity e, const FieldInfo& field,
 				auto arrayRemove = field.arrayOps->removeElement;
 				size_t newIndex = field.arrayOps->size(valuePtr);
 
-				Editor::EditorCommandOperator::AddCommand(
+				RecordFieldCommand(
 					std::make_unique<Command::FunctionCommand>(
 						[valuePtr, arrayAdd] { arrayAdd(valuePtr); },
 						[valuePtr, arrayRemove, newIndex] { arrayRemove(valuePtr, newIndex); },
@@ -561,7 +702,7 @@ void DrawFieldUI(ECS::Registry& registry, ECS::Entity e, const FieldInfo& field,
 						void* prevElemPtr = (newIndex > 0) ? field.arrayOps->getElement(valuePtr, newIndex - 1) : nullptr;
 
 						if (translateField && translateField->type == FieldType::Float3) {
-							// --- 3D版: TransformRoutineComponent::keyframes ---
+							// --- 3D版: TransformRoutineDefinition::keyframes ---
 							auto* transform = (prevElemPtr == nullptr)
 								? registry.GetComponent<Component::TransformComponent>(e)
 								: nullptr;
@@ -656,7 +797,7 @@ void DrawFieldUI(ECS::Registry& registry, ECS::Entity e, const FieldInfo& field,
 
 				if (dropped != oldValue) {
 					*ePtr = dropped;
-					Editor::EditorCommandOperator::AddCommand(
+					RecordFieldCommand(
 						std::make_unique<Command::ChangeValueCommand<ECS::Entity>>(ePtr, oldValue, dropped)
 					);
 				}
@@ -669,7 +810,7 @@ void DrawFieldUI(ECS::Registry& registry, ECS::Entity e, const FieldInfo& field,
 			if (ImGui::MenuItem("Clear")) {
 				ECS::Entity oldValue = *ePtr;
 				*ePtr = ECS::INVALID_ENTITY;
-				Editor::EditorCommandOperator::AddCommand(
+				RecordFieldCommand(
 					std::make_unique<Command::ChangeValueCommand<ECS::Entity>>(ePtr, oldValue, ECS::INVALID_ENTITY)
 				);
 			}

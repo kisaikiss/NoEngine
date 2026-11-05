@@ -18,20 +18,40 @@ GameplayCatalog::GameplayCatalog() {
 	RegisterEvent({ Event::GameplayId::TriggerEnter, "Trigger Enter", "Trigger" });
 	RegisterEvent({ Event::GameplayId::TriggerExit, "Trigger Exit", "Trigger" });
 	RegisterAction({ Event::GameplayId::MoverActivate, "Activate Mover", "Movement",
-		[](ECS::Registry& registry, const Event::GameplayEvent&, ECS::Entity target, const nlohmann::json&) {
+		[](ECS::Registry& registry, const Event::GameplayEvent&, ECS::Entity target, const nlohmann::json& properties) {
+			const auto id = properties.value("routineId", std::string{});
+			auto* routine = registry.GetComponent<NoEngine::Component::TransformRoutineComponent>(target);
+			if (!registry.Has<NoEngine::Component::MoverComponent>(target) || !routine || !routine->FindRoutine(id.empty() ? routine->defaultRoutineId : id)) {
+				LogWarning("Activate Mover: routine id was not found or is duplicated: " + id);
+				return;
+			}
 			// MoverSystemが起動イベントを処理した後、完了判定が新しい再生を待てるよう状態を戻す。
-			if (auto* mover = registry.GetComponent<NoEngine::Component::MoverComponent>(target)) mover->active = false;
-			registry.EmitEvent(Event::ActivateMoverEvent{ target });
-		}, true, {{ "targetEntity", "Target Entity", ActionPropertyType::EntityReference, true }},
-		[](ECS::Registry& registry, ECS::Entity target, const nlohmann::json&) {
+			if (auto* mover = registry.GetComponent<NoEngine::Component::MoverComponent>(target)) {
+				mover->active = false;
+				mover->activationPending = true;
+			}
+			registry.EmitEvent(Event::ActivateMoverEvent{ target, id });
+		}, true, {
+			{ "targetEntity", "Target Entity", ActionPropertyType::EntityReference, true },
+			{ "routineId", "Routine ID", ActionPropertyType::String, false }
+		},
+		[](ECS::Registry& registry, ECS::Entity target, const nlohmann::json& properties) {
 			// 対象の移動ルートが非ループ再生を終えるまで、後続Actionを待たせる。
 			auto* mover = registry.GetComponent<NoEngine::Component::MoverComponent>(target);
 			auto* routine = registry.GetComponent<NoEngine::Component::TransformRoutineComponent>(target);
-			return !mover || !routine || (mover->active && (!routine->playing || routine->keyframes.size() < 2));
+			if (!mover || !routine) return true;
+			const auto id = properties.value("routineId", std::string{});
+			const auto* route = routine->FindRoutine(id.empty() ? routine->defaultRoutineId : id);
+			if (!route) return true;
+			// 別ルートへの切替やStopでも、以前のルートを待ち続けない。
+			return !mover->activationPending && (routine->activeRoutineId != route->id || !routine->playing);
 		} });
 	RegisterAction({ Event::GameplayId::MoverStop, "Stop Mover", "Movement",
 		[](ECS::Registry& registry, const Event::GameplayEvent&, ECS::Entity target, const nlohmann::json&) {
-			if (auto* mover = registry.GetComponent<NoEngine::Component::MoverComponent>(target)) mover->active = false;
+			if (auto* mover = registry.GetComponent<NoEngine::Component::MoverComponent>(target)) {
+				mover->active = false;
+				mover->activationPending = false;
+			}
 			if (auto* routine = registry.GetComponent<NoEngine::Component::TransformRoutineComponent>(target)) {
 				routine->playing = false;
 				routine->elapsed = 0.0f;

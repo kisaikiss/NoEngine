@@ -78,7 +78,9 @@ void DrawWaypointRouteSystem::Update(Registry& registry, float deltaTime) {
 
 	auto view = registry.View<TransformRoutineComponent, TransformComponent, EditTag, EditSelectedTag>();
 	for (auto e : view) {
-		auto* routine = registry.GetComponent<TransformRoutineComponent>(e);
+		auto* component = registry.GetComponent<TransformRoutineComponent>(e);
+		auto* routine = component->GetEditorRoutine();
+		if (!routine) continue;
 		auto* t = registry.GetComponent<TransformComponent>(e);
 		if (routine->keyframes.size() < 2) {
 			continue;

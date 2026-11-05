@@ -18,7 +18,8 @@ void NoEngine::ECS::FloatingSystem::Update(Registry& registry, float deltaTime) 
 		// TransformRoutineSystemは、毎フレーム、絶対的なキーフレーム位置を書き込みます。
 		// そのため、現在の位置には、以前のオフセットは含まれていません。
 		const auto* routine = registry.GetComponent<Component::TransformRoutineComponent>(e);
-		const bool routineIsDrivingPosition = routine && routine->playing && routine->keyframes.size() >= 2;
+		const auto* route = routine ? routine->GetActiveRoutine() : nullptr;
+		const bool routineIsDrivingPosition = routine && routine->playing && route && route->keyframes.size() >= 2;
 		if (!routineIsDrivingPosition) {
 			transform->translate -= floating->previousOffset;
 		}
