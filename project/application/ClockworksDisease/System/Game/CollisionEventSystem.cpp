@@ -3,9 +3,9 @@
 #include "CollisionEvents.h"
 #include "../../Component/Player/PlayerComponent.h"
 #include "../../Component/Game/StageTransitionComponent.h"
+#include "../Object/MagicScaffoldSystem.h"
 #include "MainStageProgress.h"
 
-struct MagicScaffoldComponent{};
 
 void CollisionEventSystem::Update(No::Registry& registry, float deltaTime) {
 	static_cast<void>(deltaTime);
