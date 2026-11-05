@@ -49,6 +49,9 @@ void ModelLoadSystem::Update(Registry& registry, float deltaTime) {
 				if (animator->currentAnimation >= asset.animations.size()) animator->currentAnimation = 0;
 				animator->preCurrentAnimation = animator->currentAnimation;
 				animator->playbackState = AnimationPlaybackState::Playing;
+				animator->triggeredEvents.clear();
+				animator->droppedEventCount = 0;
+				animator->eventStartPending = true;
 			}
 			animator->animationHandles = asset.animations;
 			animator->skeletonHandle = asset.skeleton;

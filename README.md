@@ -111,6 +111,35 @@ if (animator->IsFinished()) {
 
 毎フレームの状態選択には`SetAnimation(name)`を使います。同じ名前なら再スタートせず、単発再生の完了状態も保持します。`animationSpeedMagnification`が負の場合、`Play`と`Restart`は終端から逆再生し、単発再生は先頭で完了します。モデルを差し替えると再生状態はリセットされます。
 
+## アニメーションイベント
+
+`AnimatorComponent.animationEvents`に、クリップ名`animationName`・時刻`time`（秒）・イベント名`name`・任意の文字列`parameter`を登録します。Inspectorの配列編集から追加でき、シーン／Prefabに保存されます。クリップ名は`GetAnimationNames()`で取得する名前を使います。同じモデルでもイベント設定と発火状態はAnimatorごとに独立します。
+
+モデルの読み込み後に、一度だけコードで登録することもできます。`AddEventMarker`は、名前が見つからない、イベント名が空、時刻がクリップの範囲外・NaN・無限大の場合に`false`を返し、設定を変更しません。Inspectorで不正な値を指定したマーカーは再生時に無視します。
+
+```cpp
+// モデルの読み込み後、初期設定として登録する。
+animator->AddEventMarker("Attack", 0.25f, "Hit", "right_hand");
+
+// 攻撃開始時に単発再生する。
+animator->Play("Attack", false);
+
+// AnimationSystemより後に動くゲーム側のSystemで受け取る。
+for (const auto& event : animator->ConsumeEvents()) {
+    if (event.name == "Hit") {
+        LogInfo("Attack hit marker: " + event.parameter);
+    }
+}
+```
+
+発火イベントにはクリップ名・マーカー時刻・イベント名・任意文字列と、逆再生かどうかの`reverse`が含まれます。`ConsumeEvents()`は一覧を返して消費します。読み取りのみの`GetTriggeredEvents()`は消費せず、複数のSystemで同じ一覧を確認できます。一覧は次回の`AnimationSystem`更新でクリアされるため、受信側のSystemをその後に配置してください。受信処理中に`Play`や`Stop`を呼ぶ場合は、先に`ConsumeEvents()`で取り出します。
+
+通常は直前の時刻を除き、到達した時刻までのマーカーを再生方向の順に発火します。同時刻のマーカーは登録順です。再生開始時のマーカーは最初の更新で一度発火します。ループでは周回した回数分を検出し、正再生の境界は終端→先頭、逆再生は先頭→終端の順になります。ブレンド中は切り替え先クリップのイベントだけを発火します。
+
+一時停止・停止・単発再生の完了後には発火しません。`Seek`は移動した区間のイベントを発火せず、既存の発火一覧もクリアします。`Play`・`Restart`・別クリップへの切り替えは開始時のイベントを再び有効にします。`Stop`も既存の一覧をクリアします。
+
+非常に大きい経過時間による大量発火は、1更新につき先頭1024件まで保持します。超過数は`GetDroppedEventCount()`で取得でき、次回更新でリセットされます。数え切れない場合は`uint64_t`の最大値になります。
+
 ## アプリケーションの構成
 
 ゲームアプリケーションは `NoEngine::IGameApp` を継承して作成します。`Startup()` でシーンを登録し、起動時のシーンを選びます。各シーンは `NoEngine::Scene::IScene` を継承し、`Setup()` でエンティティやコンポーネントを用意してシステムを追加します。

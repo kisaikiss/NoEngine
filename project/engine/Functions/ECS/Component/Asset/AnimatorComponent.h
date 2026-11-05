@@ -11,6 +11,21 @@ struct Animation;
 namespace Component {
 enum class AnimationPlaybackState { Playing, Paused, Stopped, Finished };
 
+struct AnimationEventMarker {
+	std::string animationName;
+	float time = 0.0f;
+	std::string name;
+	std::string parameter;
+};
+
+struct TriggeredAnimationEvent {
+	std::string animationName;
+	float time = 0.0f;
+	std::string name;
+	std::string parameter;
+	bool reverse = false;
+};
+
 // 変形結果とBLASはキャラクターごとに所有する。
 struct AnimatorSkinningResources {
 	StructuredBuffer vertexBuffer;
@@ -47,6 +62,14 @@ struct AnimatorComponent {
 	bool IsFinished() const { return playbackState == AnimationPlaybackState::Finished; }
 	float GetDuration() const;
 	float GetNormalizedTime() const;
+	// 指定したクリップの範囲内にマーカーを追加する。不正な指定では変更しない。
+	bool AddEventMarker(const std::string& animationName, float seconds,
+		const std::string& name, const std::string& parameter = {});
+	// 発火一覧は次回のAnimationSystem更新で消える。ConsumeEventsは取得時に消費する。
+	const std::vector<TriggeredAnimationEvent>& GetTriggeredEvents() const { return triggeredEvents; }
+	std::vector<TriggeredAnimationEvent> ConsumeEvents();
+	uint64_t GetDroppedEventCount() const { return droppedEventCount; }
+	static constexpr size_t kMaxEventsPerUpdate = 1024;
 	AnimatorSkinningResources& EnsureSkinningResources(const Mesh& mesh);
 	StructuredBuffer& GetVertexBuffer(Mesh& mesh) const;
 	RaytracingMesh* GetRaytracingMesh(Mesh& mesh) const;
@@ -60,6 +83,7 @@ struct AnimatorComponent {
 	bool drawSkeleton = false;
 	bool enableSkinning = false;
 	bool loop = true;
+	std::vector<AnimationEventMarker> animationEvents;
 
 	// アニメーション切り替え時のブレンドにかける時間(秒)。0以下にすると即切り替えになる
 	float blendDuration = 0.2f;
@@ -72,12 +96,16 @@ struct AnimatorComponent {
 	float blendTimer = 0.f;
 	AnimationPlaybackState playbackState = AnimationPlaybackState::Playing;
 	AnimatorRuntimeState runtime;
+	std::vector<TriggeredAnimationEvent> triggeredEvents;
+	uint64_t droppedEventCount = 0;
+	bool eventStartPending = true;
 
 private:
 	friend class NoEngine::ECS::AnimationSystem;
 	const Animation* GetCurrentAnimation() const;
 	void OnAnimationChanged();
 	void UpdatePlayback(float deltaTime);
+	void CollectAnimationEvents(double step, bool reverse);
 };
 }
 }

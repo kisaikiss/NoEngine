@@ -96,6 +96,8 @@ void AnimationSystem::AnimationUpdate(Registry& registry, float deltaTime) {
 	for (auto entity : view) {
 		auto* animeComp = registry.GetComponent<Component::AnimatorComponent>(entity);
 		auto* meshComp = registry.GetComponent<Component::MeshComponent>(entity);
+		animeComp->triggeredEvents.clear();
+		animeComp->droppedEventCount = 0;
 		auto& modelSaver = ModelSaver::Get();
 		auto* mesh = modelSaver.GetMesh(meshComp->handle);
 		if (!mesh) continue;
