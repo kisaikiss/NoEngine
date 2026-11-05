@@ -93,7 +93,8 @@ void PlayerHorizontalMoveSystem::Update(No::Registry& registry, float deltaTime)
 		No::Vector3 inputDir = No::Vector3::ZERO;
 		inputDir = playerInput->moveAxis;
 
-		float inputForce = (std::fabsf(inputDir.x) + std::fabsf(inputDir.z)) / 2.0f;
+		// 倒した方向によらず同じ長さで判定し、キーボードの斜め入力は1に収める。
+		const float inputForce = std::clamp(inputDir.Length(), 0.0f, 1.0f);
 
 		const bool hasInput = (inputDir.x != 0.f || inputDir.z != 0.f);
 		const bool isAirDashing = playerAction->activeAction == PlayerActionType::kAirDash;
@@ -129,12 +130,13 @@ void PlayerHorizontalMoveSystem::Update(No::Registry& registry, float deltaTime)
 			finalDir = ProjectOnGroundPlane(horizontalDir, groundNormal);
 		}
 
-		if (playerVariables->state == PlayerState::kWalk && inputForce < playerVariables->dashStartInput) {
+		const bool isRunning = inputForce > playerVariables->dashStartInput;
+		if (playerVariables->state == PlayerState::kWalk && !isRunning) {
 			animator->animationSpeedMagnification = 0.8f;
 		} else {
 			animator->animationSpeedMagnification = 1.2f;
 		}
-		const float playerMoveSpeed = inputForce > playerVariables->dashStartInput ? playerVariables->moveSpeed : playerVariables->walkSpeed;
+		const float playerMoveSpeed = isRunning ? playerVariables->moveSpeed : playerVariables->walkSpeed;
 		const float speed = isAirDashing ? playerVariables->airDashSpeed : playerMoveSpeed;
 		// 加減速は水平成分だけで行い、上下成分は確定した水平速度から求める。
 		const No::Vector3 targetVelocity{ finalDir.x * speed, 0.f, finalDir.z * speed };

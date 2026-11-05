@@ -1,6 +1,9 @@
 {
     "components": {
         "CollectibleItemTag": null,
+        "CollisionBody": {
+            "type": "Through"
+        },
         "CollisionLayerComponent": {
             "layer": "Item"
         },
@@ -72,6 +75,7 @@
             "renderMode": "kEmissive",
             "rimPower": 2.0,
             "shininess": 60.0,
+            "textureName": "",
             "unlit": false,
             "uvPosition": [
                 0.0,
@@ -101,7 +105,6 @@
             "radius": 0.4000000059604645
         },
         "TransformComponent": {
-            "parent": null,
             "rotation": [
                 0.0,
                 0.0,

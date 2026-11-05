@@ -105,7 +105,7 @@ void HandleNormalJump(No::Registry& registry, No::Entity entity, PlayerComponent
 	No::GroundStateComponent* groundState, bool isGrounded, PlayerMoveTransientComponent* transientState,
 	const PlayerInputComponent& input) {
 
-	if (!input.jumpTriggered) {
+	if (!input.jumpTriggered && transientState->jumpBufferTimer <= 0.f) {
 		return;
 	}
 
@@ -119,7 +119,8 @@ void HandleNormalJump(No::Registry& registry, No::Entity entity, PlayerComponent
 		return;
 	}
 
-	if (registry.Has<MultiJumpTag>(entity) && playerVariables->stamina >= 1.0f) {
+	// 空中ジャンプは押した瞬間だけ実行し、先行入力が後からスタミナを消費するのを防ぐ。
+	if (input.jumpTriggered && registry.Has<MultiJumpTag>(entity) && playerVariables->stamina >= 1.0f) {
 		constexpr float kMultiJumpCost = 1.0f;
 		playerVariables->yVelocity = playerVariables->doubleJumpSpeed;
 		playerVariables->jumpKind = PlayerJumpKind::kNormal;
@@ -183,22 +184,42 @@ void PlayerJumpSystem::Update(No::Registry& registry, float deltaTime) {
 	auto view = registry.View<PlayerComponent, PlayerInputComponent, No::TransformComponent,
 		No::GroundStateComponent, PlayerMoveTransientComponent>();
 	for (auto entity : view) {
-		if (isSkip) continue;
+		auto* transientState = registry.GetComponent<PlayerMoveTransientComponent>(entity);
+		transientState->justJumped = false;
+		transientState->slopeY = 0.f;
+		auto clearJumpBuffer = [&]() {
+			transientState->jumpBufferTimer = 0.f;
+			transientState->bufferedJumpReleased = false;
+		};
+		if (isSkip) {
+			clearJumpBuffer();
+			continue;
+		}
 		// リスポーン位置への移動が完了するまでは操作を止める。
 		auto* deathSequence = registry.GetComponent<PlayerDeathSequenceComponent>(entity);
 		if (deathSequence && deathSequence->phase != PlayerDeathSequenceComponent::Phase::kBlackOut &&
-			deathSequence->phase != PlayerDeathSequenceComponent::Phase::kFadeIn) continue;
+			deathSequence->phase != PlayerDeathSequenceComponent::Phase::kFadeIn) {
+			clearJumpBuffer();
+			continue;
+		}
 
-		if (registry.Has<GoalDirectionLockTag>(entity) || registry.Has<DialogueLockTag>(entity)) continue;
+		if (registry.Has<GoalDirectionLockTag>(entity) || registry.Has<DialogueLockTag>(entity)) {
+			clearJumpBuffer();
+			continue;
+		}
 
 		auto* playerVariables = registry.GetComponent<PlayerComponent>(entity);
 		auto* input = registry.GetComponent<PlayerInputComponent>(entity);
 		auto* groundState = registry.GetComponent<No::GroundStateComponent>(entity);
-		auto* transientState = registry.GetComponent<PlayerMoveTransientComponent>(entity);
-
-		// このフレームの一時状態をリセット（このシステムが一番最初に触るため）
-		transientState->justJumped = false;
-		transientState->slopeY = 0.f;
+		transientState->jumpBufferTimer = std::max(0.f,
+			transientState->jumpBufferTimer - std::max(deltaTime, 0.f));
+		if (input->jumpTriggered) {
+			transientState->jumpBufferTimer = std::max(playerVariables->jumpBufferTime, 0.f);
+			transientState->bufferedJumpReleased = false;
+		}
+		if (input->jumpReleased && transientState->jumpBufferTimer > 0.f) {
+			transientState->bufferedJumpReleased = true;
+		}
 
 		// isGrounded は各ハンドラ内で isGrounded を書き換える前の値を使う必要があるため先に確定
 		bool isGrounded = groundState->isGrounded;
@@ -218,7 +239,15 @@ void PlayerJumpSystem::Update(No::Registry& registry, float deltaTime) {
 		}
 
 		HandleNormalJump(registry, entity, playerVariables, groundState, isGrounded, transientState, *input);
+		if (transientState->justJumped) {
+			// 入力を離したフレームはHandleJumpReleaseが減速するため、二重適用しない。
+			if (transientState->bufferedJumpReleased && !input->jumpReleased) {
+				playerVariables->yVelocity *= 0.5f;
+			}
+			clearJumpBuffer();
+		}
 		HandleHighJump(registry, entity, playerVariables, groundState, isGrounded, transientState, *input, deltaTime);
+		if (transientState->justJumped) clearJumpBuffer();
 		HandleJumpRelease(playerVariables, *input);
 		const bool isJumping = PlayerStates::Get(playerVariables->state).IsJumpState()
 			|| transientState->justJumped || !groundState->isGrounded;

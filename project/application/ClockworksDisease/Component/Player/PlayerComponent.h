@@ -52,6 +52,8 @@ struct PlayerComponent {
 	// コヨーテタイム
 	float coyoteTime = 0.3f;
 	float coyoteTimer = 0.0f;
+	// 通常ジャンプを着地前に受け付ける時間（秒）。0以下なら先行入力を無効にする。
+	float jumpBufferTime = 0.15f;
 };
 
 struct PlayerAbilityDebugComponent {
@@ -85,13 +87,15 @@ struct PlayerActionComponent {
 	float elapsedTime = 0.0f;
 };
 
-// PlayerJumpSystem / PlayerHorizontalMoveSystem / PlayerVerticalVelocitySystem の間で
-// フレーム内だけ受け渡す一時データ。
+// PlayerJumpSystem / PlayerHorizontalMoveSystem / PlayerVerticalVelocitySystem が共有する
+// 移動処理の実行時データ。シーンへの保存対象にはしない。
 // PlayerComponent（永続データ）とは意図的に分離している。
-// 値は PlayerJumpSystem の冒頭で毎フレームリセットされる。
+// justJumpedとslopeYはPlayerJumpSystemの冒頭で毎フレームリセットされる。
 struct PlayerMoveTransientComponent {
 	bool justJumped = false;   // このフレームでジャンプ入力を処理したか（接地/重力判定の分岐に使用）
 	float slopeY = 0.f;        // 斜面投影による水平移動のy寄与分（PlayerHorizontalMoveSystemが算出）
+	float jumpBufferTimer = 0.f; // 未消費の通常ジャンプ入力の残り保持時間
+	bool bufferedJumpReleased = false; // 着地前に離した入力でも小ジャンプにする
 };
 
 

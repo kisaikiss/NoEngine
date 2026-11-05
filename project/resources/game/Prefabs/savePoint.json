@@ -1,11 +1,16 @@
 {
     "components": {
         "AnimatorComponent": {
+            "animationEvents": [],
             "animationSpeedMagnification": 1.0,
             "blendDuration": 0.20000000298023224,
             "currentAnimation": 0,
             "drawSkeleton": false,
-            "enableSkinning": false
+            "enableSkinning": false,
+            "loop": true
+        },
+        "CollisionBody": {
+            "type": "Through"
         },
         "CollisionLayerComponent": {
             "layer": "Item"
@@ -16,6 +21,7 @@
         },
         "MaterialComponent": {
             "blendMode": "kAdd",
+            "castShadow": true,
             "color": [
                 2.1764705181121826,
                 2.1764705181121826,
@@ -37,6 +43,7 @@
             "renderMode": "kToon",
             "rimPower": 2.0,
             "shininess": 60.0,
+            "textureName": "",
             "unlit": false,
             "uvPosition": [
                 0.0,
@@ -53,6 +60,7 @@
             "meshName": "savePoint"
         },
         "SavePointComponent": {
+            "colorMagnification": 5.0,
             "rotateTime": 1.0
         },
         "SphereCollider": {
@@ -64,7 +72,6 @@
             "radius": 0.699999988079071
         },
         "TransformComponent": {
-            "parent": null,
             "rotation": [
                 0.0,
                 0.0,
