@@ -45,14 +45,23 @@ void AnimationSystem::Update(ComputeContext& ctx, Registry& registry, float delt
 
 		auto& modelSaver = ModelSaver::Get();
 		auto* mesh = modelSaver.GetMesh(meshComp->handle);
-		if (animeComp->enableSkinning && mesh->numJoints) {
+		if (mesh && animeComp->enableSkinning && !mesh->skinClusterData.empty() &&
+			!mesh->vertices.empty() && !animeComp->runtime.palette.empty()) {
+			auto& runtime = animeComp->runtime;
+			auto& skinning = animeComp->EnsureSkinningResources(*mesh);
+			// StopによるRegistry復元が同じフレーム内で起きても、記録済み参照を失わない。
+			ctx.KeepAlive(runtime.skinning);
 			auto& rootIndex = RootSignatureBuilder::GetRootIndexMap(ConvertString(sPsoName));
 			ctx.SetPipelineState(pso_);
 			ctx.SetRootSignature(*rootSignature_);
 			// ジョイント
-			ctx.CopyBufferRegion(mesh->paletteResource, 0, mesh->paletteUpload, 0, sizeof(SkeletonWell) * mesh->mappedPalette.size());
-			ctx.TransitionResource(mesh->paletteResource, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, true);
-			ctx.SetDynamicDescriptor(rootIndex["gJoints"], 0, mesh->paletteResource.GetSRV());
+			// フレーム間でも上書きしない、フェンス管理された転送領域を使う。
+			const size_t paletteSize = sizeof(SkeletonWell) * runtime.palette.size();
+			auto upload = ctx.ReserveUploadMemory(paletteSize);
+			memcpy(upload.DataPtr, runtime.palette.data(), paletteSize);
+			ctx.CopyBufferRegion(skinning.paletteResource, 0, upload.Buffer, upload.Offset, paletteSize);
+			ctx.TransitionResource(skinning.paletteResource, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, true);
+			ctx.SetDynamicDescriptor(rootIndex["gJoints"], 0, skinning.paletteResource.GetSRV());
 			// 入力頂点 + インフルエンス
 			ctx.TransitionResource(mesh->baseVertexBuffer, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE);
 			ctx.SetDynamicDescriptor(rootIndex["gInputVertices"], 0, mesh->baseVertexBuffer.GetSRV());
@@ -64,11 +73,13 @@ void AnimationSystem::Update(ComputeContext& ctx, Registry& registry, float delt
 			constants.numVertices = static_cast<uint32_t>(mesh->vertices.size());
 			ctx.SetDynamicConstantBufferView(rootIndex["gSkinningInformation"], sizeof(constants), &constants);
 			// 出力頂点
-			ctx.TransitionResource(mesh->useVertexBuffer, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
-			ctx.SetDynamicDescriptor(rootIndex["gOutputVertices"], 0, mesh->useVertexBuffer.GetUAV());
+			ctx.TransitionResource(skinning.vertexBuffer, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+			ctx.SetDynamicDescriptor(rootIndex["gOutputVertices"], 0, skinning.vertexBuffer.GetUAV());
 
 			// 実行
 			ctx.Dispatch1D((mesh->vertices.size() + 1023) / 1024, 1);
+			// 描画キューへの受け渡しでは、Computeで扱えるCOMMONに戻す。
+			ctx.TransitionResource(skinning.vertexBuffer, D3D12_RESOURCE_STATE_COMMON, true);
 
 		}
 	}
@@ -85,6 +96,19 @@ void AnimationSystem::AnimationUpdate(Registry& registry, float deltaTime) {
 	for (auto entity : view) {
 		auto* animeComp = registry.GetComponent<Component::AnimatorComponent>(entity);
 		auto* meshComp = registry.GetComponent<Component::MeshComponent>(entity);
+		auto& modelSaver = ModelSaver::Get();
+		auto* mesh = modelSaver.GetMesh(meshComp->handle);
+		if (!mesh) continue;
+		const auto* bindSkeleton = modelSaver.GetSkeleton(animeComp->skeletonHandle);
+		auto& runtime = animeComp->runtime;
+		if (runtime.meshHandle != meshComp->handle || runtime.skeletonHandle != animeComp->skeletonHandle) {
+			runtime = {};
+			runtime.meshHandle = meshComp->handle;
+			runtime.skeletonHandle = animeComp->skeletonHandle;
+			if (bindSkeleton) runtime.skeleton = *bindSkeleton;
+			animeComp->local = mesh->rootNode.transform;
+		}
+		if (animeComp->currentAnimation >= animeComp->animationHandles.size()) continue;
 
 		if (animeComp->currentAnimation != animeComp->preCurrentAnimation) {
 			animeComp->previousAnimation = animeComp->preCurrentAnimation;
@@ -97,39 +121,41 @@ void AnimationSystem::AnimationUpdate(Registry& registry, float deltaTime) {
 
 		animeComp->time += deltaTime * animeComp->animationSpeedMagnification;
 		uint32_t currentIndex = animeComp->currentAnimation;
-		auto& modelSaver = ModelSaver::Get();
 
 		Animation* currentAnimation = modelSaver.GetAnimation(animeComp->animationHandles[currentIndex]);
-		auto* skeleton = modelSaver.GetSkeleton(animeComp->skeletonHandle);
+		auto* skeleton = bindSkeleton ? &runtime.skeleton : nullptr;
 		if (!currentAnimation) continue;
 
-		animeComp->time = std::fmod(animeComp->time, currentAnimation->duration);
+		animeComp->time = currentAnimation->duration > 0.0f
+			? std::fmod(animeComp->time, currentAnimation->duration) : 0.0f;
 
 		Animation* previousAnimation = nullptr;
 		float blendT = 1.0f;
-		if (animeComp->isBlending) {
+		if (animeComp->isBlending && animeComp->blendDuration > 0.0f &&
+			animeComp->previousAnimation < animeComp->animationHandles.size()) {
 			animeComp->blendTimer += deltaTime;
 			previousAnimation = modelSaver.GetAnimation(animeComp->animationHandles[animeComp->previousAnimation]);
 			blendT = std::clamp(animeComp->blendTimer / animeComp->blendDuration, 0.0f, 1.0f);
 			if (animeComp->blendTimer >= animeComp->blendDuration) {
 				animeComp->isBlending = false;
 			}
+		} else {
+			animeComp->isBlending = false;
 		}
 
 		if (skeleton) {
 			SkeletonUpdate(animeComp, skeleton, currentAnimation, previousAnimation);
 			if (animeComp->drawSkeleton) SkeletonDraw(skeleton);
-			SkinUpdate(skeleton, meshComp);
+			SkinUpdate(skeleton, animeComp);
 		}
-		auto* mesh = ModelSaver::Get().GetMesh(meshComp->handle);
-		if (!mesh) return;
+		animeComp->local = mesh->rootNode.transform;
 
 		if (currentAnimation->nodeAnimations.contains(mesh->rootNode.name)) {
-			Transform rootLocal = SampleNodeAnimation(currentAnimation->nodeAnimations[mesh->rootNode.name], animeComp->time);
+			Transform rootLocal = SampleNodeAnimation(currentAnimation->nodeAnimations[mesh->rootNode.name], animeComp->time, mesh->rootNode.transform);
 
 			if (previousAnimation && previousAnimation->nodeAnimations.contains(mesh->rootNode.name)) {
 				Transform prevRootLocal = SampleNodeAnimation(
-					previousAnimation->nodeAnimations[mesh->rootNode.name], animeComp->previousAnimationTime);
+					previousAnimation->nodeAnimations[mesh->rootNode.name], animeComp->previousAnimationTime, mesh->rootNode.transform);
 				rootLocal.translate = Easing::Lerp(prevRootLocal.translate, rootLocal.translate, blendT);
 				rootLocal.rotation = Math::Quaternion::Slerp(prevRootLocal.rotation, rootLocal.rotation, blendT);
 				rootLocal.scale = Easing::Lerp(prevRootLocal.scale, rootLocal.scale, blendT);
@@ -145,18 +171,20 @@ void AnimationSystem::SkeletonUpdate(Component::AnimatorComponent* animeComp, Sk
 		blendT = std::clamp(animeComp->blendTimer / animeComp->blendDuration, 0.0f, 1.0f);
 	}
 
+	const auto* bindSkeleton = ModelSaver::Get().GetSkeleton(animeComp->skeletonHandle);
 	for (Joint& joint : skeleton->joints) {
+		const Transform& bindPose = bindSkeleton->joints[joint.index].transform;
 		// 現在のアニメーションでのローカルTransformをサンプリング(なければバインドポーズのまま)
-		Transform local = joint.transform;
+		Transform local = bindPose;
 		if (auto it = currentAnimation->nodeAnimations.find(joint.name); it != currentAnimation->nodeAnimations.end()) {
-			local = SampleNodeAnimation(it->second, animeComp->time);
+			local = SampleNodeAnimation(it->second, animeComp->time, bindPose);
 		}
 
 		// ブレンド中なら、切り替え時に凍結した旧アニメーションのポーズと補間する
 		if (animeComp->isBlending && previousAnimation) {
-			Transform prevLocal = joint.transform;
+			Transform prevLocal = bindPose;
 			if (auto it = previousAnimation->nodeAnimations.find(joint.name); it != previousAnimation->nodeAnimations.end()) {
-				prevLocal = SampleNodeAnimation(it->second, animeComp->previousAnimationTime);
+				prevLocal = SampleNodeAnimation(it->second, animeComp->previousAnimationTime, bindPose);
 			}
 			local.translate = Easing::Lerp(prevLocal.translate, local.translate, blendT);
 			local.rotation = Math::Quaternion::Slerp(prevLocal.rotation, local.rotation, blendT);
@@ -189,25 +217,23 @@ void AnimationSystem::SkeletonDraw(Skeleton* skeleton) {
 	}
 }
 
-void AnimationSystem::SkinUpdate(Skeleton* skeleton, Component::MeshComponent* meshComp) {
-	auto* mesh = ModelSaver::Get().GetMesh(meshComp->handle);
-	if (!mesh) return;
+void AnimationSystem::SkinUpdate(const Skeleton* skeleton, Component::AnimatorComponent* animeComp) {
+	auto& palette = animeComp->runtime.palette;
+	palette.resize(skeleton->joints.size());
 	for (size_t jointIndex = 0; jointIndex < skeleton->joints.size(); jointIndex++) {
-		mesh->mappedPalette[jointIndex].skeletonSpaceMatrix =
+		palette[jointIndex].skeletonSpaceMatrix =
 			skeleton->inverseBindPoseMatrices[jointIndex] * skeleton->joints[jointIndex].skeletonSpaceMatrix;
-		mesh->mappedPalette[jointIndex].skeletonSpaceInverseTransposeMatrix =
-			MathCalculations::Transpose(MathCalculations::Inverse(mesh->mappedPalette[jointIndex].skeletonSpaceMatrix));
-
-		memcpy(mesh->paletteUpload.Map(), mesh->mappedPalette.data(), sizeof(SkeletonWell) * mesh->mappedPalette.size());
+		palette[jointIndex].skeletonSpaceInverseTransposeMatrix =
+			MathCalculations::Transpose(MathCalculations::Inverse(palette[jointIndex].skeletonSpaceMatrix));
 		
 	}
 }
 
-Transform AnimationSystem::SampleNodeAnimation(const NodeAnimation& keyframes, float time) {
-	Transform result;
-	result.translate = CalculateValue(keyframes.translate.keyframes, time);
-	result.rotation = CalculateValue(keyframes.rotation.keyframes, time);
-	result.scale = CalculateValue(keyframes.scale.keyframes, time);
+Transform AnimationSystem::SampleNodeAnimation(const NodeAnimation& keyframes, float time, const Transform& bindPose) {
+	Transform result = bindPose;
+	if (!keyframes.translate.keyframes.empty()) result.translate = CalculateValue(keyframes.translate.keyframes, time);
+	if (!keyframes.rotation.keyframes.empty()) result.rotation = CalculateValue(keyframes.rotation.keyframes, time);
+	if (!keyframes.scale.keyframes.empty()) result.scale = CalculateValue(keyframes.scale.keyframes, time);
 	return result;
 }
 

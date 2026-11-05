@@ -828,6 +828,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="engine\Runtime\Command\CommandAllocator.h" />
     <ClInclude Include="engine\Runtime\Command\CommandAllocatorPool.h" />
     <ClInclude Include="engine\Runtime\Command\CommandContext.h" />
+    <ClInclude Include="engine\Runtime\Command\CommandResourceLifetime.h" />
     <ClInclude Include="engine\Runtime\Command\CommandListManager.h" />
     <ClInclude Include="engine\Runtime\Command\CommandQueue.h" />
     <ClInclude Include="engine\Runtime\Command\GraphicsContext.h" />

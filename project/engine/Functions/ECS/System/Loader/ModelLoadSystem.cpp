@@ -40,6 +40,15 @@ void ModelLoadSystem::Update(Registry& registry, float deltaTime) {
 		}
 		if (registry.Has<AnimatorComponent>(e)) {
 			auto* animator = registry.GetComponent<AnimatorComponent>(e);
+			if (animator->runtime.meshHandle != asset.mesh || animator->skeletonHandle != asset.skeleton) {
+				animator->runtime = {};
+				animator->local = {};
+				animator->time = 0.0f;
+				animator->isBlending = false;
+				animator->blendTimer = 0.0f;
+				if (animator->currentAnimation >= asset.animations.size()) animator->currentAnimation = 0;
+				animator->preCurrentAnimation = animator->currentAnimation;
+			}
 			animator->animationHandles = asset.animations;
 			animator->skeletonHandle = asset.skeleton;
 		}

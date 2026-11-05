@@ -320,16 +320,6 @@ SkeletonHandle ModelLoader::ProcessSkeleton(const Node& rootNode,Mesh& mesh) {
 	// スキニング
 	{
 		mesh.numJoints = static_cast<uint32_t>(skeleton.joints.size());
-		mesh.mappedPalette.resize(skeleton.joints.size());
-		mesh.paletteUpload.Create(L"SkinningUpload", sizeof(SkeletonWell) * mesh.mappedPalette.size());
-		memcpy(mesh.paletteUpload.Map(), mesh.mappedPalette.data(), sizeof(SkeletonWell) * mesh.mappedPalette.size());
-
-		mesh.paletteResource.Create(
-			L"Skinning Joints",
-			static_cast<uint32_t>(mesh.mappedPalette.size()),
-			sizeof(SkeletonWell),
-			mesh.paletteUpload
-		);
 
 
 		skeleton.inverseBindPoseMatrices.assign(skeleton.joints.size(), Math::Matrix4x4::IDENTITY);
@@ -344,12 +334,12 @@ SkeletonHandle ModelLoader::ProcessSkeleton(const Node& rootNode,Mesh& mesh) {
 	return ModelSaver::Get().AddSkeleton(std::move(skeleton));
 }
 
-RaytracingMesh ModelLoader::ProcessRaytracingMesh(const Mesh& mesh) {
+RaytracingMesh ModelLoader::ProcessRaytracingMesh(const Mesh& mesh, const StructuredBuffer* vertexBuffer) {
 	RaytracingMesh rtMesh;
 	rtMesh.geometries.reserve(mesh.subMeshes.size());
 
 	for (const SubMesh& sm : mesh.subMeshes) {
-		rtMesh.geometries.push_back(MakeGeometryDesc(mesh, sm));
+		rtMesh.geometries.push_back(MakeGeometryDesc(mesh, sm, vertexBuffer));
 	}
 
 	// BLAS inputs
@@ -440,7 +430,7 @@ int32_t ModelLoader::CreateJoint(const Node& node, const std::optional<int32_t>&
 	return joint.index;
 }
 
-RaytracingGeometry ModelLoader::MakeGeometryDesc(const Mesh& mesh, const SubMesh& sm) {
+RaytracingGeometry ModelLoader::MakeGeometryDesc(const Mesh& mesh, const SubMesh& sm, const StructuredBuffer* vertexBuffer) {
 	D3D12_RAYTRACING_GEOMETRY_DESC geom = {};
 	geom.Type = D3D12_RAYTRACING_GEOMETRY_TYPE_TRIANGLES;
 	geom.Flags = D3D12_RAYTRACING_GEOMETRY_FLAG_OPAQUE;
@@ -455,7 +445,7 @@ RaytracingGeometry ModelLoader::MakeGeometryDesc(const Mesh& mesh, const SubMesh
 
 	// Vertex
 	geom.Triangles.VertexBuffer.StartAddress =
-		mesh.useVertexBuffer.GetGpuVirtualAddress() +
+		(vertexBuffer ? *vertexBuffer : mesh.useVertexBuffer).GetGpuVirtualAddress() +
 		sizeof(Vertex) * sm.vertexStart;
 
 	geom.Triangles.VertexBuffer.StrideInBytes = sizeof(Vertex);

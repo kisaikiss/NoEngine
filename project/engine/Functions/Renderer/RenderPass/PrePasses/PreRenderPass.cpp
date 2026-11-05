@@ -36,7 +36,7 @@ void PreRenderPass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& res
 			animeLocal = &anime->local;
 		}
 
-		items_.push_back({ mesh->handle, material, transform, animeLocal, static_cast<uint32_t>(entity) });
+		items_.push_back({ mesh->handle, material, transform, animeLocal, static_cast<uint32_t>(entity), anime });
 	}
 
 	CameraComponent* camera = GetTargetCamera();
@@ -78,11 +78,15 @@ void PreRenderPass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& res
 
 		auto* mesh = ModelSaver::Get().GetMesh(item.mesh);
 		if (!mesh) continue;
-		gfx.SetVertexBuffer(0, mesh->useVertexBuffer.VertexBufferView());
+		auto& vertices = item.animator ? item.animator->GetVertexBuffer(*mesh) : mesh->useVertexBuffer;
+		gfx.TransitionResource(vertices, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER | D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, true);
+		gfx.SetVertexBuffer(0, vertices.VertexBufferView());
 		gfx.SetIndexBuffer(mesh->indexBuffer.IndexBufferView());
 		for (const auto& subMesh : mesh->subMeshes) {
 			gfx.DrawIndexedInstanced(subMesh.indexCount, 1, subMesh.indexStart, subMesh.vertexStart, 0);
 		}
+		// 次回のCompute更新へ描画専用の状態を持ち越さない。
+		if (item.animator) gfx.TransitionResource(vertices, D3D12_RESOURCE_STATE_COMMON, true);
 	}
 }
 }

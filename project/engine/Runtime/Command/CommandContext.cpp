@@ -30,6 +30,9 @@ void CommandContext::Reset(void) {
 	// Reset() は、以前に解放されたコンテキストに対してのみ呼び出します。コマンドリストは保持されますが、
 	// 新しいアロケータを要求する必要があります。
 	assert(commandList_ != nullptr && currentAllocator_ == nullptr);
+	resourceLifetime_.ReleaseCompleted([this](uint64_t fence) {
+		return GraphicsCore::sCommandListManager.IsFenceComplete(fence);
+	});
 	currentAllocator_ = GraphicsCore::sCommandListManager.GetQueue(type_).RequestAllocator();
 	commandList_->Reset(currentAllocator_, nullptr);
 
@@ -42,6 +45,9 @@ void CommandContext::Reset(void) {
 }
 
 CommandContext::~CommandContext(void) {
+	// 非同期送信したリソースも、コンテキストの破棄前に完了を待つ。
+	const uint64_t fence = resourceLifetime_.LastSubmissionFence();
+	if (fence != 0) GraphicsCore::sCommandListManager.WaitForFence(fence);
 	if (commandList_) {
 		commandList_->Release();
 	}
@@ -68,6 +74,7 @@ uint64_t CommandContext::Finish(bool WaitForCompletion) {
 
 	CommandQueue& queue = GraphicsCore::sCommandListManager.GetQueue(type_);
 	uint64_t fenceValue = queue.ExecuteCommandList(commandList_);
+	resourceLifetime_.OnSubmitted(fenceValue);
 
 	queue.DiscardAllocator(fenceValue, currentAllocator_);
 	currentAllocator_ = nullptr;
@@ -79,6 +86,9 @@ uint64_t CommandContext::Finish(bool WaitForCompletion) {
 	if (WaitForCompletion) {
 		GraphicsCore::sCommandListManager.WaitForFence(fenceValue);
 	}
+	resourceLifetime_.ReleaseCompleted([&queue](uint64_t fence) {
+		return queue.IsFenceComplete(fence);
+	});
 
 	GraphicsCore::sContextManager.FreeContext(this);
 

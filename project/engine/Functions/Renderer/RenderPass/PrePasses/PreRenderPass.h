@@ -6,6 +6,7 @@
 #include "engine/Assets/AssetHandles.h"
 
 namespace NoEngine {
+namespace Component { struct AnimatorComponent; }
 namespace Render {
 
 class PreRenderPass :
@@ -24,6 +25,7 @@ private:
         Component::TransformComponent* transform;
         Transform* local;
         uint32_t id;
+        Component::AnimatorComponent* animator;
     };
     std::vector<DrawItem> items_;
 };

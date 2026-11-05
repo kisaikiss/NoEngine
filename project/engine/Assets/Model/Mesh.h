@@ -53,12 +53,9 @@ struct Mesh {
 	ByteAddressBuffer indexBuffer;
 	Node rootNode;
 	std::vector<SubMesh> subMeshes; // モデルに複数のメッシュが含まれている場合のaiMeshごとの範囲
-	uint32_t numJoints;
+	uint32_t numJoints = 0;
 
 	std::unique_ptr<RaytracingMesh> raytracingMesh; // レイトレーシング有効時のみ生成
 
-	std::vector<SkeletonWell> mappedPalette;
-	UploadBuffer paletteUpload;
-	StructuredBuffer paletteResource;
 };
 }

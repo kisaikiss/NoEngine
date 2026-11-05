@@ -37,11 +37,13 @@ void TLASBuildPass::BuildRaytracingInstances(ECS::Registry& registry) {
 		auto* transform = registry.GetComponent<Component::TransformComponent>(entity);
 
 		auto* mesh = ModelSaver::Get().GetMesh(meshComp->handle);
-		if (!mesh) return;
-		if (!meshComp || !transform || !mesh || !mesh->raytracingMesh) continue;
+		if (!mesh) continue;
+		auto* animator = registry.GetComponent<Component::AnimatorComponent>(entity);
+		auto* rtMesh = animator ? animator->GetRaytracingMesh(*mesh) : mesh->raytracingMesh.get();
+		if (!rtMesh) continue;
 
 		RaytracingInstance inst = {};
-		inst.rtMesh = mesh->raytracingMesh.get();
+		inst.rtMesh = rtMesh;
 
 		auto& desc = inst.desc;
 		memset(&desc, 0, sizeof(desc));
@@ -56,7 +58,6 @@ void TLASBuildPass::BuildRaytracingInstances(ECS::Registry& registry) {
 		desc.InstanceID = static_cast<UINT>(entity);
 		desc.InstanceContributionToHitGroupIndex = 0;
 
-		auto* animator = registry.GetComponent<Component::AnimatorComponent>(entity);
 		FillInstanceTransform(desc, transform, animator, registry);
 		desc.AccelerationStructure = inst.rtMesh->blas->GetGPUVirtualAddress();
 

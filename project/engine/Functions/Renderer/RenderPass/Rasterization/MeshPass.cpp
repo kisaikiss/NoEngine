@@ -79,7 +79,7 @@ void MeshPassBase::Collect(ECS::Registry& registry) {
 
 		float distance = MathCalculations::LengthSquared(transform->translate - cameraPos);
 
-		DrawItem item{ mesh->handle, material->handles, material, transform, animeLocal, distance };
+		DrawItem item{ mesh->handle, material->handles, material, transform, animeLocal, distance, anime };
 
 		if (IsTransparent(material)) {
 			transparentItems_.push_back(std::move(item));
@@ -198,7 +198,9 @@ void MeshPassBase::RenderItems(GraphicsContext& context, const RenderGraphRegist
 		}
 		auto* mesh = ModelSaver::Get().GetMesh(item.meshHandle);
 		if (!mesh) continue;
-		context.SetVertexBuffer(0, mesh->useVertexBuffer.VertexBufferView());
+		auto& vertices = item.animator ? item.animator->GetVertexBuffer(*mesh) : mesh->useVertexBuffer;
+		context.TransitionResource(vertices, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER | D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, true);
+		context.SetVertexBuffer(0, vertices.VertexBufferView());
 		context.SetIndexBuffer(mesh->indexBuffer.IndexBufferView());
 
 		for (const auto& subMesh : mesh->subMeshes) {
@@ -247,6 +249,8 @@ void MeshPassBase::RenderItems(GraphicsContext& context, const RenderGraphRegist
 
 			context.DrawIndexedInstanced(subMesh.indexCount, 1, subMesh.indexStart, subMesh.vertexStart, 0);
 		}
+		// 次回のCompute更新へ描画専用の状態を持ち越さない。
+		if (item.animator) context.TransitionResource(vertices, D3D12_RESOURCE_STATE_COMMON, true);
 	}
 }
 
@@ -288,12 +292,15 @@ void MeshPass::RenderOutline(GraphicsContext& context, ECS::Registry& registry) 
 
 		auto* mesh = ModelSaver::Get().GetMesh(item.meshHandle);
 		if (!mesh) continue;
-		context.SetVertexBuffer(0, mesh->useVertexBuffer.VertexBufferView());
+		auto& vertices = item.animator ? item.animator->GetVertexBuffer(*mesh) : mesh->useVertexBuffer;
+		context.TransitionResource(vertices, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER | D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, true);
+		context.SetVertexBuffer(0, vertices.VertexBufferView());
 		context.SetIndexBuffer(mesh->indexBuffer.IndexBufferView());
 
 		for (const auto& subMesh : mesh->subMeshes) {
 			context.DrawIndexedInstanced(subMesh.indexCount, 1, subMesh.indexStart, subMesh.vertexStart, 0);
 		}
+		if (item.animator) context.TransitionResource(vertices, D3D12_RESOURCE_STATE_COMMON, true);
 	}
 }
 

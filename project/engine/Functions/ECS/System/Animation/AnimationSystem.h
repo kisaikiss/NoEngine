@@ -20,10 +20,10 @@ private:
 	void AnimationUpdate(Registry& registry, float deltaTime);
 	void SkeletonUpdate(Component::AnimatorComponent* animeComp, Skeleton* skeleton, Animation* currentAnimation, Animation* previousAnimation);
 	void SkeletonDraw(Skeleton* skeleton);
-	void SkinUpdate(Skeleton* skeleton, Component::MeshComponent* meshComp);
+	void SkinUpdate(const Skeleton* skeleton, Component::AnimatorComponent* animeComp);
 
 	// NodeAnimationから指定時刻のローカルTransformをサンプリングする(ブレンド用に値を返す版)
-	Transform SampleNodeAnimation(const NodeAnimation& keyframes, float time);
+	Transform SampleNodeAnimation(const NodeAnimation& keyframes, float time, const Transform& bindPose = Transform{});
 
 	Math::Vector3 CalculateValue(const std::vector<KeyframeVector3>& keyframes, float time);
 	Math::Quaternion CalculateValue(const std::vector<KeyframeQuaternion>& keyframes, float time);

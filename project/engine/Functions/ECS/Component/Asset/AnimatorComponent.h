@@ -1,15 +1,36 @@
 #pragma once
 #include "engine/Assets/AssetHandles.h"
 #include "engine/Math/Types/Transform.h"
+#include "engine/Assets/Model/Mesh.h"
+#include "engine/Assets/Model/Skeleton.h"
 
 namespace NoEngine {
 
 namespace Component {
+// 変形結果とBLASはキャラクターごとに所有する。
+struct AnimatorSkinningResources {
+	StructuredBuffer vertexBuffer;
+	StructuredBuffer paletteResource;
+	std::unique_ptr<RaytracingMesh> raytracingMesh;
+};
+
+struct AnimatorRuntimeState {
+	Asset::MeshHandle meshHandle;
+	Asset::SkeletonHandle skeletonHandle;
+	Skeleton skeleton;
+	std::vector<SkeletonWell> palette;
+	// スナップショットは描画結果を保持し、次の書き込み前にGPUリソースを分離する。
+	std::shared_ptr<AnimatorSkinningResources> skinning;
+};
+
 struct AnimatorComponent {
 	// モデルに含まれるアニメーション名を読み込み順に取得する。
 	std::vector<std::string> GetAnimationNames() const;
 	// 名前が見つからない場合は再生状態を変更せず、falseを返す。
 	bool SetAnimation(const std::string& name);
+	AnimatorSkinningResources& EnsureSkinningResources(const Mesh& mesh);
+	StructuredBuffer& GetVertexBuffer(Mesh& mesh) const;
+	RaytracingMesh* GetRaytracingMesh(Mesh& mesh) const;
 
 	std::vector<Asset::AnimationHandle> animationHandles;
 	Transform local;
@@ -29,6 +50,7 @@ struct AnimatorComponent {
 	float previousAnimationTime = 0.f;  // 切り替わった瞬間に凍結した、ブレンド元の再生時刻
 	bool isBlending = false;
 	float blendTimer = 0.f;
+	AnimatorRuntimeState runtime;
 };
 }
 }

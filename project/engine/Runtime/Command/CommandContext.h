@@ -4,6 +4,7 @@
 #include "../ContextManager.h"
 #include "../GpuResource/LinearAllocator/LinearAllocator.h"
 #include "CommandListManager.h"
+#include "CommandResourceLifetime.h"
 #include "../DescriptorHeap/DynamicDescriptorHeap.h"
 #include "engine/Runtime/PipelineStateObject/PSO.h"
 
@@ -41,6 +42,8 @@ public:
 	/// <param name="WaitForCompletion">完了まで待機するかどうかを示すフラグ。true の場合、関数は処理が完了するまでブロッキングします。デフォルトは false。</param>
 	/// <returns>処理の結果を表す uint64_t 値。</returns>
 	uint64_t Finish(bool WaitForCompletion = false);
+	// コンポーネントが途中で破棄されても、記録済みコマンドのGPU実行完了まで保持する。
+	void KeepAlive(std::shared_ptr<void> resource) { resourceLifetime_.KeepAlive(std::move(resource)); }
 
 	// Prepare to render by reserving a command list and command allocator
 	void Initialize(void);
@@ -145,6 +148,7 @@ protected:
 	void SetID(const std::wstring& id) { id_ = id; }
 	//
 	D3D12_COMMAND_LIST_TYPE type_;
+	CommandResourceLifetime resourceLifetime_;
 };
 
 

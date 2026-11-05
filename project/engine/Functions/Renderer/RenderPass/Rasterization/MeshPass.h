@@ -7,6 +7,7 @@
 #include "engine/Assets/AssetHandles.h"
 
 namespace NoEngine {
+namespace Component { struct AnimatorComponent; }
 namespace Render {
 
 /// <summary>
@@ -30,6 +31,7 @@ protected:
         Component::TransformComponent* transform;
         Transform* animationLocal;
         float distanceToCamera;
+        Component::AnimatorComponent* animator;
     };
 
     std::vector<DrawItem> opaqueItems_;
