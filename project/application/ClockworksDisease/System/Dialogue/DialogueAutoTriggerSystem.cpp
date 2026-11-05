@@ -10,6 +10,8 @@ void DialogueAutoTriggerSystem::Update(No::Registry& registry, float deltaTime) 
 		No::Vector3 playerPos = registry.GetComponent<No::TransformComponent>(player)->GetWorldPosition(registry);
 
 		for (auto e : registry.View<DialogueAutoTriggerComponent, DialogueComponent, No::TransformComponent>()) {
+			const auto* dialogue = registry.GetComponent<DialogueComponent>(e);
+			if (!dialogue->enabled || dialogue->lines.empty()) continue;
 			auto* trigger = registry.GetComponent<DialogueAutoTriggerComponent>(e);
 			if (trigger->once && trigger->triggered) continue;
 

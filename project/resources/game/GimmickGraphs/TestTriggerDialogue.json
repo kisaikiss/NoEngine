@@ -1,0 +1,56 @@
+{
+  "links": [
+    {
+      "fromNodeId": "event-1",
+      "fromPinId": "exec.out",
+      "id": "link-3",
+      "toNodeId": "action-2",
+      "toPinId": "exec.in"
+    },
+    {
+      "fromNodeId": "action-2",
+      "fromPinId": "exec.out",
+      "id": "link-5",
+      "toNodeId": "action-4",
+      "toPinId": "exec.in"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "event-1",
+      "kind": "event",
+      "position": [
+        89.0,
+        157.0
+      ],
+      "properties": {},
+      "typeId": "engine.trigger.enter"
+    },
+    {
+      "id": "action-2",
+      "kind": "action",
+      "position": [
+        323.0,
+        157.0
+      ],
+      "properties": {
+        "targetEntity": "newEntity"
+      },
+      "typeId": "application.dialogue.play"
+    },
+    {
+      "id": "action-4",
+      "kind": "action",
+      "position": [
+        706.0,
+        131.0
+      ],
+      "properties": {
+        "routineId": "default",
+        "targetEntity": "box_2"
+      },
+      "typeId": "engine.mover.activate"
+    }
+  ],
+  "version": 1
+}

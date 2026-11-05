@@ -13,6 +13,7 @@ struct DialogueComponent {
 	float voiceVolume = 0.35f;
 	float interactDistance = 3.0f;    // 話しかけられる距離
 	bool interactable = true;         // ボタンで話しかけられるか(自動発火専用ならfalse)
+	bool enabled = true;              // 自動発火・グラフを含め、新しい会話の開始を許可するか
 };
 
 // 自動発火用(プレイヤーが半径内に入ったら会話を始める)
@@ -26,4 +27,17 @@ struct DialogueAutoTriggerComponent {
 struct DialogueLockTag {};
 
 struct DialogueStartEvent { No::Entity speaker = No::INVALID_ENTITY; };
+struct DialogueStopEvent { No::Entity speaker = No::INVALID_ENTITY; };
 struct DialogueEndEvent { No::Entity speaker = No::INVALID_ENTITY; };
+
+namespace DialogueGameplayId {
+inline constexpr char Play[] = "application.dialogue.play";
+inline constexpr char Stop[] = "application.dialogue.stop";
+inline constexpr char SetEnabled[] = "application.dialogue.set_enabled";
+inline constexpr char Started[] = "application.dialogue.started";
+inline constexpr char Finished[] = "application.dialogue.finished";
+inline constexpr char Cancelled[] = "application.dialogue.cancelled";
+}
+
+// アプリ起動時にエディタとランタイム共通のカタログへ登録する。
+void RegisterDialogueGameplay();

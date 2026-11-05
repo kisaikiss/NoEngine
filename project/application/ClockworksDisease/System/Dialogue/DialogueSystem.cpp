@@ -6,6 +6,7 @@
 
 #include "engine/Utilities/Conversion/ConvertString.h"
 #include "engine/Assets/Audio/Audio.h"
+#include "engine/Functions/ECS/Gameplay/GameplayCatalog.h"
 
 namespace {
 // UTF-8文字列の先頭 codepointCount 文字ぶんのバイト長を返す
@@ -59,13 +60,27 @@ void DialogueSystem::Update(No::Registry& registry, float deltaTime) {
 	UpdateLayout(registry);
 
 	auto startEvents = registry.PollAllEvents<DialogueStartEvent>();
-
+	bool began = false;
 	if (!active_) {
 		for (auto& ev : startEvents) {
-			if (Begin(registry, ev.speaker)) break;
+			if (Begin(registry, ev.speaker)) {
+				began = true;
+				break;
+			}
 		}
-		return; // 開始したフレームは入力を見ない
 	}
+	// 同じフレームの開始要求にもStopを適用し、他の話者へのStopは無視する。
+	for (const auto& ev : registry.PollAllEvents<DialogueStopEvent>()) {
+		if (active_ && ev.speaker == speaker_) End(registry, true);
+	}
+	if (!active_) return;
+	// 会話中に対象や本文が削除された場合もロックとUIを確実に解除する。
+	const auto* currentDialogue = registry.GetComponent<DialogueComponent>(speaker_);
+	if (!currentDialogue || lineIndex_ >= currentDialogue->lines.size()) {
+		End(registry, true);
+		return;
+	}
+	if (began) return; // 開始したフレームは入力を見ない
 
 	// 文字送り
 	if (!IsLineFullyShown()) {
@@ -193,7 +208,7 @@ void DialogueSystem::UpdateLayout(No::Registry& registry) {
 
 bool DialogueSystem::Begin(No::Registry& registry, No::Entity speaker) {
 	auto* dialogue = registry.GetComponent<DialogueComponent>(speaker);
-	if (!dialogue || dialogue->lines.empty()) return false;
+	if (!dialogue || !dialogue->enabled || dialogue->lines.empty()) return false;
 
 	active_ = true;
 	speaker_ = speaker;
@@ -205,20 +220,26 @@ bool DialogueSystem::Begin(No::Registry& registry, No::Entity speaker) {
 		if (!registry.Has<DialogueLockTag>(player)) registry.AddComponent<DialogueLockTag>(player);
 	}
 	ShowLine(registry);
+	NoEngine::Gameplay::EmitGameplayEvent(registry, speaker_, DialogueGameplayId::Started);
 	return true;
 }
 
 void DialogueSystem::Advance(No::Registry& registry) {
 	++lineIndex_;
 	auto* dialogue = registry.GetComponent<DialogueComponent>(speaker_); // 相手が消えていてもnullで安全に終われる
-	if (!dialogue || lineIndex_ >= dialogue->lines.size()) {
+	if (!dialogue) {
+		End(registry, true);
+		return;
+	}
+	if (lineIndex_ >= dialogue->lines.size()) {
 		End(registry);
 		return;
 	}
 	ShowLine(registry);
 }
 
-void DialogueSystem::End(No::Registry& registry) {
+void DialogueSystem::End(No::Registry& registry, bool cancelled) {
+	if (!active_) return;
 	registry.GetComponent<No::TextComponent>(textEntity_)->isVisible = false;
 	registry.GetComponent<No::SpriteComponent>(boxEntity_)->isVisible = false;
 	registry.GetComponent<No::SpriteComponent>(portraitEntity_)->isVisible = false;
@@ -227,7 +248,10 @@ void DialogueSystem::End(No::Registry& registry) {
 	for (auto player : registry.View<PlayerComponent>()) {
 		if (registry.Has<DialogueLockTag>(player)) registry.RemoveComponent<DialogueLockTag>(player);
 	}
-	registry.EmitEvent(DialogueEndEvent{ speaker_ }); // 終了時の処理(アイテム付与など)はこれを購読する
+	// 既存の報酬・チュートリアル処理には正常終了だけを通知する。
+	if (!cancelled) registry.EmitEvent(DialogueEndEvent{ speaker_ });
+	NoEngine::Gameplay::EmitGameplayEvent(registry, speaker_,
+		cancelled ? DialogueGameplayId::Cancelled : DialogueGameplayId::Finished);
 	active_ = false;
 	speaker_ = No::INVALID_ENTITY;
 }

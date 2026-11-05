@@ -33,6 +33,6 @@ private:
 	bool Begin(No::Registry& registry, No::Entity speaker);
 	void Advance(No::Registry& registry);
 	void ShowLine(No::Registry& registry);
-	void End(No::Registry& registry);
+	void End(No::Registry& registry, bool cancelled = false);
 	void CreateTextBox(No::Registry& registry);
 };

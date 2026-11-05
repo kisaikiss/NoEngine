@@ -6,8 +6,10 @@
 #include "Render/ShaderBackgroundPass.h"
 
 #include "Component/Game/GameQuitEvent.h"
+#include "Component/Dialogue/DialogueComponent.h"
 
 void ClockworksDisease::Startup(void) {
+	RegisterDialogueGameplay();
 	RegisterScene("TestScene", []() { return std::make_unique<GameScene>();	});
 	RegisterScene("SampleScene", []() { return std::make_unique<GameScene>();	});
 

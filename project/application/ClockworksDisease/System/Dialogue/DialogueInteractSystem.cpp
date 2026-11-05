@@ -16,7 +16,7 @@ void DialogueInteractSystem::Update(No::Registry& registry, float deltaTime) {
 		float best = 1e30f;
 		for (auto e : registry.View<DialogueComponent, No::TransformComponent>()) {
 			auto* dialogue = registry.GetComponent<DialogueComponent>(e);
-			if (!dialogue->interactable || dialogue->lines.empty()) continue;
+			if (!dialogue->enabled || !dialogue->interactable || dialogue->lines.empty()) continue;
 
 			float dist = (registry.GetComponent<No::TransformComponent>(e)->GetWorldPosition(registry) - playerPos).Length();
 			if (dist <= dialogue->interactDistance && dist < best) {
