@@ -7142,6 +7142,9 @@
         },
         "PowerItem_5": {
             "components": {
+                "CollisionBody": {
+                    "type": "Through"
+                },
                 "CollisionLayerComponent": {
                     "layer": "Item"
                 },
@@ -7264,6 +7267,9 @@
             "prefabBase": {
                 "components": {
                     "CollectibleItemTag": null,
+                    "CollisionBody": {
+                        "type": "Through"
+                    },
                     "CollisionLayerComponent": {
                         "layer": "Item"
                     },
@@ -7468,6 +7474,9 @@
         },
         "PowerItem_5_2": {
             "components": {
+                "CollisionBody": {
+                    "type": "Through"
+                },
                 "CollisionLayerComponent": {
                     "layer": "Item"
                 },
@@ -7590,6 +7599,9 @@
             "prefabBase": {
                 "components": {
                     "CollectibleItemTag": null,
+                    "CollisionBody": {
+                        "type": "Through"
+                    },
                     "CollisionLayerComponent": {
                         "layer": "Item"
                     },
@@ -7794,6 +7806,9 @@
         },
         "PowerItem_5_3": {
             "components": {
+                "CollisionBody": {
+                    "type": "Through"
+                },
                 "CollisionLayerComponent": {
                     "layer": "Item"
                 },
@@ -7916,6 +7931,9 @@
             "prefabBase": {
                 "components": {
                     "CollectibleItemTag": null,
+                    "CollisionBody": {
+                        "type": "Through"
+                    },
                     "CollisionLayerComponent": {
                         "layer": "Item"
                     },
@@ -8120,6 +8138,9 @@
         },
         "PowerItem_5_4": {
             "components": {
+                "CollisionBody": {
+                    "type": "Through"
+                },
                 "CollisionLayerComponent": {
                     "layer": "Item"
                 },
@@ -8242,6 +8263,9 @@
             "prefabBase": {
                 "components": {
                     "CollectibleItemTag": null,
+                    "CollisionBody": {
+                        "type": "Through"
+                    },
                     "CollisionLayerComponent": {
                         "layer": "Item"
                     },
@@ -9795,6 +9819,82 @@
                 }
             }
         },
+        "magiclash": {
+            "components": {
+                "AnimatorComponent": {
+                    "animationEvents": [],
+                    "animationSpeedMagnification": 1.0,
+                    "blendDuration": 0.20000000298023224,
+                    "currentAnimation": 0,
+                    "drawSkeleton": false,
+                    "enableSkinning": true,
+                    "loop": true
+                },
+                "EditTag": {
+                    "name": "magiclash",
+                    "parent": null
+                },
+                "MaterialComponent": {
+                    "blendMode": "kNormal",
+                    "castShadow": true,
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "environmentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "receiveShadow": true,
+                    "renderMode": "kDefault",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "textureName": "",
+                    "unlit": false,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "magiclash"
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        -2.110367774963379,
+                        -0.0009329377207905054,
+                        5.557161808013916
+                    ]
+                }
+            }
+        },
         "newEntity": {
             "components": {
                 "DialogueComponent": {
@@ -9819,11 +9919,13 @@
         "player": {
             "components": {
                 "AnimatorComponent": {
+                    "animationEvents": [],
                     "animationSpeedMagnification": 1.0,
                     "blendDuration": 0.20000000298023224,
                     "currentAnimation": 0,
                     "drawSkeleton": false,
-                    "enableSkinning": true
+                    "enableSkinning": true,
+                    "loop": true
                 },
                 "CapsuleCollider": {
                     "localP0": [
@@ -9985,6 +10087,7 @@
                     "highJumpSpeed": 15.0,
                     "infinityJump": false,
                     "infinityStamina": false,
+                    "jumpBufferTime": 0.15000000596046448,
                     "jumpKind": "kNormal",
                     "jumpSpeed": 10.0,
                     "maxFallSpeed": -20.0,
@@ -10034,11 +10137,13 @@
             "prefabBase": {
                 "components": {
                     "AnimatorComponent": {
+                        "animationEvents": [],
                         "animationSpeedMagnification": 1.0,
                         "blendDuration": 0.20000000298023224,
                         "currentAnimation": 0,
                         "drawSkeleton": false,
-                        "enableSkinning": true
+                        "enableSkinning": true,
+                        "loop": true
                     },
                     "CapsuleCollider": {
                         "localP0": [
@@ -10196,6 +10301,7 @@
                         "highJumpSpeed": 15.0,
                         "infinityJump": false,
                         "infinityStamina": false,
+                        "jumpBufferTime": 0.15000000596046448,
                         "jumpKind": "kNormal",
                         "jumpSpeed": 10.0,
                         "maxFallSpeed": -20.0,

@@ -2065,9 +2065,9 @@
                 },
                 "DebugCameraComponent": {
                     "center": [
-                        -71.97488403320313,
-                        21.707088470458984,
-                        -35.40125274658203
+                        -186.235107421875,
+                        -51.510826110839844,
+                        -95.77616882324219
                     ],
                     "distance": 160.12806701660156,
                     "drawCenter": false,
@@ -2082,10 +2082,10 @@
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
-                        0.10838960111141205,
-                        0.8232348561286926,
-                        -0.16793009638786316,
-                        0.5313526391983032
+                        -0.014032953418791294,
+                        0.9652308225631714,
+                        -0.25558561086654663,
+                        -0.05299609154462814
                     ],
                     "scale": [
                         1.0,
@@ -2093,9 +2093,9 @@
                         1.0
                     ],
                     "translate": [
-                        -206.23463439941406,
-                        84.42573547363281,
-                        25.275718688964844
+                        -171.0015411376953,
+                        27.7342472076416,
+                        42.53202819824219
                     ]
                 }
             }
@@ -76849,6 +76849,225 @@
                 }
             }
         },
+        "WanderHopEnemy": {
+            "components": {
+                "CapsuleCollider": {
+                    "localP0": [
+                        0.0,
+                        -0.05000000074505806,
+                        0.0
+                    ],
+                    "localP1": [
+                        0.0,
+                        0.05000000074505806,
+                        0.0
+                    ],
+                    "radius": 0.44999998807907104
+                },
+                "CollisionBody": {
+                    "type": "Dynamic"
+                },
+                "CollisionLayerComponent": {
+                    "layer": "Enemy"
+                },
+                "EditTag": {
+                    "name": "WanderHopEnemy",
+                    "parent": null
+                },
+                "GroundStateComponent": {
+                    "groundHeight": 0.0,
+                    "isGrounded": false
+                },
+                "MaterialComponent": {
+                    "blendMode": "kNormal",
+                    "castShadow": true,
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "environmentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "receiveShadow": true,
+                    "renderMode": "kDefault",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "textureName": "",
+                    "unlit": false,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "resources/engine/Model/enemy.obj"
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        -182.10498046875,
+                        5.6199951171875,
+                        -7.738686561584473
+                    ]
+                },
+                "VelocityComponent": {
+                    "linear": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                "WanderHopEnemyComponent": {
+                    "chaseSpeed": 3.5,
+                    "detectionDistance": 5.0,
+                    "jumpSpeed": 5.0,
+                    "loseDistance": 8.0,
+                    "maxHeightDifference": 2.0,
+                    "walkSpeed": 1.399999976158142,
+                    "wanderRadius": 2.0
+                }
+            },
+            "prefabBase": {
+                "components": {
+                    "CapsuleCollider": {
+                        "localP0": [
+                            0.0,
+                            -0.05000000074505806,
+                            0.0
+                        ],
+                        "localP1": [
+                            0.0,
+                            0.05000000074505806,
+                            0.0
+                        ],
+                        "radius": 0.44999998807907104
+                    },
+                    "CollisionBody": {
+                        "type": "Dynamic"
+                    },
+                    "CollisionLayerComponent": {
+                        "layer": "Enemy"
+                    },
+                    "GroundStateComponent": {
+                        "groundHeight": 0.0,
+                        "isGrounded": false
+                    },
+                    "MaterialComponent": {
+                        "blendMode": "kNormal",
+                        "castShadow": true,
+                        "color": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0
+                        ],
+                        "drawOutline": false,
+                        "edgeColor": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0
+                        ],
+                        "emissiveIntensity": 1.0,
+                        "environmentCoefficient": 0.0,
+                        "noiseScrollSpeed": 0.30000001192092896,
+                        "noiseTextureName": "noise0",
+                        "receiveShadow": true,
+                        "renderMode": "kDefault",
+                        "rimPower": 2.0,
+                        "shininess": 60.0,
+                        "textureName": "",
+                        "unlit": false,
+                        "uvPosition": [
+                            0.0,
+                            0.0
+                        ],
+                        "uvRotate": 0.0,
+                        "uvScale": [
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "MeshComponent": {
+                        "isVisible": true,
+                        "meshName": "resources/engine/Model/enemy.obj"
+                    },
+                    "TransformComponent": {
+                        "rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ],
+                        "translate": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ]
+                    },
+                    "VelocityComponent": {
+                        "linear": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ]
+                    },
+                    "WanderHopEnemyComponent": {
+                        "chaseSpeed": 3.5,
+                        "detectionDistance": 5.0,
+                        "jumpSpeed": 5.0,
+                        "loseDistance": 8.0,
+                        "maxHeightDifference": 2.0,
+                        "walkSpeed": 1.399999976158142,
+                        "wanderRadius": 2.0
+                    }
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\WanderHopEnemy.json",
+            "prefabOverrides": [
+                {
+                    "op": "replace",
+                    "path": "/components/TransformComponent/translate",
+                    "value": [
+                        -182.10498046875,
+                        5.6199951171875,
+                        -7.738686561584473
+                    ]
+                }
+            ]
+        },
         "XButton": {
             "components": {
                 "CloseLevelUpUITag": null,
@@ -87148,6 +87367,7 @@
         "PlayerScaffoldActionSystem",
         "PlayerHorizontalMoveSystem",
         "PlayerVerticalVelocitySystem",
+        "WanderHopEnemySystem",
         "PlayerAnimationSystem",
         "StaminaUISystem",
         "GroundResetSystem",

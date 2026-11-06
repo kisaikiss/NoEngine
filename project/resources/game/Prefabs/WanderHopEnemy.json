@@ -1,0 +1,46 @@
+{
+    "components": {
+        "CapsuleCollider": {
+            "localP0": [0.0, -0.05, 0.0],
+            "localP1": [0.0, 0.05, 0.0],
+            "radius": 0.45
+        },
+        "CollisionBody": {
+            "type": "Dynamic"
+        },
+        "CollisionLayerComponent": {
+            "layer": "Enemy"
+        },
+        "EditTag": {
+            "name": "WanderHopEnemy_Prefab",
+            "parent": null
+        },
+        "GroundStateComponent": {
+            "isGrounded": false,
+            "groundHeight": 0.0
+        },
+        "MaterialComponent": {},
+        "MeshComponent": {
+            "isVisible": true,
+            "meshName": "resources/engine/Model/enemy.obj"
+        },
+        "TransformComponent": {
+            "parent": null,
+            "rotation": [0.0, 0.0, 0.0, 1.0],
+            "scale": [1.0, 1.0, 1.0],
+            "translate": [0.0, 0.0, 0.0]
+        },
+        "VelocityComponent": {
+            "linear": [0.0, 0.0, 0.0]
+        },
+        "WanderHopEnemyComponent": {
+            "walkSpeed": 1.4,
+            "chaseSpeed": 3.5,
+            "wanderRadius": 2.0,
+            "detectionDistance": 5.0,
+            "loseDistance": 8.0,
+            "maxHeightDifference": 2.0,
+            "jumpSpeed": 5.0
+        }
+    }
+}

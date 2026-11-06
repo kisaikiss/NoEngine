@@ -245,6 +245,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="application\ClockworksDisease\System\Opening\SceneChangeTimerSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Player\PlayerAnimationSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Player\PlayerDeathSystem.cpp" />
+    <ClCompile Include="application\ClockworksDisease\System\Enemy\WanderHopEnemySystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Player\PlayerHorizontalMoveSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Player\PlayerJumpSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Player\PlayerActionSystem.cpp" />
@@ -573,6 +574,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="application\ClockworksDisease\Component\Game\GoalDirectionComponent.h" />
     <ClInclude Include="application\ClockworksDisease\Component\Item\ItemComponent.h" />
     <ClInclude Include="application\ClockworksDisease\Component\Option\EditorSettingComponent.h" />
+    <ClInclude Include="application\ClockworksDisease\Component\Enemy\WanderHopEnemyComponent.h" />
     <ClInclude Include="application\ClockworksDisease\Component\Player\PlayerComponent.h" />
     <ClInclude Include="application\ClockworksDisease\Component\Player\PlayerMoveTags.h" />
     <ClInclude Include="application\ClockworksDisease\Component\Stage\StageComponent.h" />

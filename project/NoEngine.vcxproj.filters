@@ -255,6 +255,7 @@
     <ClCompile Include="engine\Functions\Particle\ParticleManager.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Player\PlayerStaminaSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Player\PlayerJumpSystem.cpp" />
+    <ClCompile Include="application\ClockworksDisease\System\Enemy\WanderHopEnemySystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Player\PlayerHorizontalMoveSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Player\PlayerVerticalVelocitySystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Object\MagicScaffoldSystem.cpp" />
@@ -511,6 +512,7 @@
     <ClInclude Include="engine\Functions\ECS\System\Animation\SpriteAnimationSystem.h" />
     <ClInclude Include="engine\Functions\Renderer\LightForGPU.h" />
     <ClInclude Include="application\ClockworksDisease\ClockworksDisease.h" />
+    <ClInclude Include="application\ClockworksDisease\Component\Enemy\WanderHopEnemyComponent.h" />
     <ClInclude Include="application\ClockworksDisease\Component\Player\PlayerComponent.h" />
     <ClInclude Include="application\ClockworksDisease\System\Camera\FollowCameraSystem.h" />
     <ClInclude Include="application\ClockworksDisease\Component\Camera\FollowCameraComponent.h" />

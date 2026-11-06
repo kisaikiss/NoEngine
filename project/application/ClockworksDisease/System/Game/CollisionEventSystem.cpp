@@ -1,6 +1,7 @@
 #include "CollisionEventSystem.h"
 #include "CollisionLayer.h"
 #include "CollisionEvents.h"
+#include "../../Component/Enemy/WanderHopEnemyComponent.h"
 #include "../../Component/Player/PlayerComponent.h"
 #include "../../Component/Game/StageTransitionComponent.h"
 #include "../Object/MagicScaffoldSystem.h"
@@ -35,6 +36,20 @@ void CollisionEventSystem::Update(No::Registry& registry, float deltaTime) {
 				registry.GetComponent<PlayerComponent>(contact.a)->canCreateScaffold = true;
 			}
 			registry.EmitEvent(event);
+		} else if ((layerA->layer & CollisionLayerComponent::Enemy) != CollisionLayerComponent::None &&
+			(layerB->layer & CollisionLayerComponent::Terrain) != CollisionLayerComponent::None) {
+			auto* ground = registry.GetComponent<No::GroundStateComponent>(contact.a);
+			auto* velocity = registry.GetComponent<No::VelocityComponent>(contact.a);
+			auto* enemy = registry.GetComponent<WanderHopEnemyStateComponent>(contact.a);
+			if (!ground || !velocity) continue;
+			const bool hoppingUp = enemy && enemy->phase == WanderHopEnemyStateComponent::Phase::AlertHop &&
+				(enemy->justJumped || velocity->linear.y > 0.0f);
+			if (!hoppingUp && contact.contactPosition == No::ContactPosition::UP &&
+				contact.normal.y >= ground->snapMinNormalY) {
+				ground->isGrounded = true;
+				ground->groundHeight = registry.GetComponent<No::TransformComponent>(contact.a)->GetWorldPosition(registry).y;
+				ground->groundEntity = contact.b;
+			}
 		} else if ((layerA->layer & CollisionLayerComponent::Player) != CollisionLayerComponent::None &&
 			(layerB->layer & CollisionLayerComponent::Item) != CollisionLayerComponent::None) {
 			ItemGetEvent event;
