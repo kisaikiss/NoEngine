@@ -98,6 +98,7 @@ void PlayerHorizontalMoveSystem::Update(No::Registry& registry, float deltaTime)
 
 		const bool hasInput = (inputDir.x != 0.f || inputDir.z != 0.f);
 		const bool isAirDashing = playerAction->activeAction == PlayerActionType::kAirDash;
+		const bool isSpinAttacking = playerAction->activeAction == PlayerActionType::kSpinAttack;
 
 		if (!hasInput && !isAirDashing) {
 			if (particleEmitterSphere)
@@ -131,10 +132,9 @@ void PlayerHorizontalMoveSystem::Update(No::Registry& registry, float deltaTime)
 		}
 
 		const bool isRunning = inputForce > playerVariables->dashStartInput;
-		if (playerVariables->state == PlayerState::kWalk && !isRunning) {
-			animator->animationSpeedMagnification = 0.8f;
-		} else {
-			animator->animationSpeedMagnification = 1.2f;
+		if (animator && !isSpinAttacking) {
+			const bool isWalking = playerVariables->state == PlayerState::kWalk && !isRunning;
+			animator->animationSpeedMagnification = isWalking ? 0.8f : 1.2f;
 		}
 		const float playerMoveSpeed = isRunning ? playerVariables->moveSpeed : playerVariables->walkSpeed;
 		const float speed = isAirDashing ? playerVariables->airDashSpeed : playerMoveSpeed;
@@ -166,7 +166,8 @@ void PlayerHorizontalMoveSystem::Update(No::Registry& registry, float deltaTime)
 			? -(finalVelocity.x * groundNormal.x + finalVelocity.z * groundNormal.z) / groundNormal.y
 			: 0.f;
 
-		FacePlayerTowardsMoveDirection(transform, finalVelocity, deltaTime);
+		// 回転攻撃中の見た目の回転はHurricaneKickに任せる。
+		if (!isSpinAttacking) FacePlayerTowardsMoveDirection(transform, finalVelocity, deltaTime);
 	}
 }
 

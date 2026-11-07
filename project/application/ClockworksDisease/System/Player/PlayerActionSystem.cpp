@@ -33,31 +33,33 @@ void PlayerActionSystem::Update(No::Registry& registry, float deltaTime) {
 		const bool actionLocked = cameraLocked || deathLocked
 			|| registry.Has<GoalDirectionLockTag>(entity)
 			|| registry.Has<DialogueLockTag>(entity);
-		if (actionLocked) {
-			if (action->activeAction == PlayerActionType::kSpinAttack) {
-				action->activeAction = PlayerActionType::kNone;
-				action->elapsedTime = 0.0f;
-			}
-			continue;
-		}
-
 		auto* animator = registry.GetComponent<No::AnimatorComponent>(entity);
 		if (action->activeAction == PlayerActionType::kSpinAttack) {
-			if (animator && animator->IsPlaying()) {
+			if (!actionLocked && animator && animator->IsPlaying()) {
 				attackSensor->enabled = true;
 				action->elapsedTime += deltaTime;
 				continue;
 			}
+			if (animator) animator->animationSpeedMagnification = action->animationSpeedBeforeSpinAttack;
 			action->activeAction = PlayerActionType::kNone;
 			action->elapsedTime = 0.0f;
 		}
+		if (actionLocked) continue;
 
 		// 押した瞬間だけ開始し、連打で再生途中の攻撃を巻き戻さない。
-		if (input->attackTriggered && animator && animator->Play("HurricaneKick", false)) {
-			attackSensor->enabled = true;
-			action->activeAction = PlayerActionType::kSpinAttack;
-			action->elapsedTime = 0.0f;
-			continue;
+		if (input->attackTriggered && animator) {
+			const float previousSpeed = animator->animationSpeedMagnification;
+			const float attackSpeed = player->spinAttackAnimationSpeed;
+			// 0や不正な値で再生が止まり、攻撃が終了しなくなるのを防ぐ。
+			animator->animationSpeedMagnification = std::isfinite(attackSpeed) && attackSpeed > 0.0f ? attackSpeed : 1.0f;
+			if (animator->Play("HurricaneKick", false)) {
+				action->animationSpeedBeforeSpinAttack = previousSpeed;
+				attackSensor->enabled = true;
+				action->activeAction = PlayerActionType::kSpinAttack;
+				action->elapsedTime = 0.0f;
+				continue;
+			}
+			animator->animationSpeedMagnification = previousSpeed;
 		}
 
 		if (action->activeAction == PlayerActionType::kAirDash) {
