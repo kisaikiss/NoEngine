@@ -25,7 +25,7 @@ void DialogueInteractSystem::Update(No::Registry& registry, float deltaTime) {
 			}
 		}
 		if (nearest != No::INVALID_ENTITY) {
-			registry.EmitEvent(DialogueStartEvent{ nearest });
+			registry.EmitEvent(DialogueStartEvent{ nearest, player });
 		}
 	}
 }

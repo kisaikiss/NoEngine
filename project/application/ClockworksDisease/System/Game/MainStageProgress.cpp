@@ -5,6 +5,7 @@
 #include "application/ClockworksDisease/Component/Camera/CameraIntroComponent.h"
 #include "application/ClockworksDisease/Component/Player/PlayerComponent.h"
 #include "application/ClockworksDisease/Component/Player/PlayerMoveTags.h"
+#include "application/ClockworksDisease/Component/Player/SkillProgressComponent.h"
 #include "application/ClockworksDisease/Component/Game/StageTransitionComponent.h"
 #include "application/ClockworksDisease/Component/UI/UserInterfaceComponent.h"
 
@@ -18,6 +19,7 @@ PlayerAbilityDebugComponent sPlayerAbility{};
 float sPlayerStamina = 0.0f;
 float sPlayerCurrentStamina = 0.0f;
 LevelComponent sPlayerLevel{};
+SkillProgressComponent sPlayerSkills{};
 bool sHasSharedProgress = false;
 REGISTER_PLAY_MODE_STATIC(sMainStageSnapshot);
 REGISTER_PLAY_MODE_STATIC(sStageSnapshots);
@@ -27,6 +29,7 @@ REGISTER_PLAY_MODE_STATIC(sPlayerAbility);
 REGISTER_PLAY_MODE_STATIC(sPlayerStamina);
 REGISTER_PLAY_MODE_STATIC(sPlayerCurrentStamina);
 REGISTER_PLAY_MODE_STATIC(sPlayerLevel);
+REGISTER_PLAY_MODE_STATIC(sPlayerSkills);
 REGISTER_PLAY_MODE_STATIC(sHasSharedProgress);
 }
 
@@ -41,6 +44,7 @@ void Reset() {
 	sCaptureQueued = false;
 	sPlayerAbility = {};
 	sPlayerLevel = {};
+	sPlayerSkills = {};
 	sPlayerStamina = 0.0f;
 	sPlayerCurrentStamina = 0.0f;
 	sHasSharedProgress = false;
@@ -54,12 +58,15 @@ void CaptureIfQueued(No::Registry& registry) {
 	sStageSnapshots[sceneName] = sMainStageSnapshot;
 
 	// 現状のプレイヤーの状態を保持
-	for (auto e : registry.View<PlayerAbilityDebugComponent, PlayerComponent>()) {
-		sPlayerAbility = *registry.GetComponent<PlayerAbilityDebugComponent>(e);
+	for (auto e : registry.View<PlayerComponent, LevelComponent>()) {
+		const auto* debug = registry.GetComponent<PlayerAbilityDebugComponent>(e);
+		const auto* skills = registry.GetComponent<SkillProgressComponent>(e);
+		sPlayerAbility = debug ? *debug : PlayerAbilityDebugComponent{};
+		sPlayerSkills = skills ? *skills : SkillProgressComponent{};
 		const auto* player = registry.GetComponent<PlayerComponent>(e);
 		sPlayerStamina = player->maxStamina;
 		sPlayerCurrentStamina = player->stamina;
-		if (const auto* level = registry.GetComponent<LevelComponent>(e)) sPlayerLevel = *level;
+		sPlayerLevel = *registry.GetComponent<LevelComponent>(e);
 		sHasSharedProgress = true;
 	}
 	sCaptureQueued = false;
@@ -140,14 +147,23 @@ void MainStageProgressRestoreSystem::Update(No::Registry& registry, float deltaT
 	restored_ = MainStageProgress::RestoreCurrentStage(registry);
 	if (MainStageProgress::sHasSharedProgress) {
 		// ステージ固有の保存状態を復元した後、全ステージ共通の育成状況を適用する。
+		for (auto e : registry.View<PlayerComponent, LevelComponent>()) {
+			auto* skills = registry.GetComponent<SkillProgressComponent>(e);
+			if (!skills) skills = registry.AddComponent<SkillProgressComponent>(e);
+			*skills = MainStageProgress::sPlayerSkills;
+			PlayerSkills::ApplyPurchasedAbilities(registry, e);
+			auto* player = registry.GetComponent<PlayerComponent>(e);
+			player->maxStamina = MainStageProgress::sPlayerStamina;
+			player->stamina = std::min(MainStageProgress::sPlayerCurrentStamina, player->maxStamina);
+			auto* level = registry.GetComponent<LevelComponent>(e);
+			level->power = MainStageProgress::sPlayerLevel.power;
+			level->nowLevel = MainStageProgress::sPlayerLevel.nowLevel;
+			level->nextLevelUp = MainStageProgress::sPlayerLevel.nextLevelUp;
+		}
 		for (auto e : registry.View<PlayerComponent, PlayerAbilityDebugComponent>()) {
 			auto* playerAbility = registry.GetComponent<PlayerAbilityDebugComponent>(e);
-			playerAbility->airDash = MainStageProgress::sPlayerAbility.airDash;
 			playerAbility->highJump = MainStageProgress::sPlayerAbility.highJump;
 			playerAbility->magicScaffold = MainStageProgress::sPlayerAbility.magicScaffold;
-			if (playerAbility->airDash && !registry.Has<AirDashTag>(e)) {
-				registry.AddComponent<AirDashTag>(e);
-			}
 
 			if (playerAbility->highJump && !registry.Has<HighJumpTag>(e)) {
 				registry.AddComponent<HighJumpTag>(e);
@@ -156,14 +172,8 @@ void MainStageProgressRestoreSystem::Update(No::Registry& registry, float deltaT
 			if (playerAbility->magicScaffold && !registry.Has<CreateMagicScaffoldTag>(e)) {
 				registry.AddComponent<CreateMagicScaffoldTag>(e);
 			}
-			auto* player = registry.GetComponent<PlayerComponent>(e);
-			player->maxStamina = MainStageProgress::sPlayerStamina;
-			player->stamina = std::min(MainStageProgress::sPlayerCurrentStamina, player->maxStamina);
-			if (auto* level = registry.GetComponent<LevelComponent>(e)) {
-				level->power = MainStageProgress::sPlayerLevel.power;
-				level->nowLevel = MainStageProgress::sPlayerLevel.nowLevel;
-				level->nextLevelUp = MainStageProgress::sPlayerLevel.nextLevelUp;
-				// 各ステージで定義された報酬表を使い、共通レベルまでに解放した能力を再付与する。
+			if (const auto* level = registry.GetComponent<LevelComponent>(e)) {
+				// 購入に移行していない能力は、各ステージのレベル報酬から再付与する。
 				for (const auto& reward : level->rewards) {
 					if (reward.level > level->nowLevel) continue;
 					switch (reward.ability) {
@@ -173,10 +183,6 @@ void MainStageProgressRestoreSystem::Update(No::Registry& registry, float deltaT
 					case PlayerAbility::kHighJump:
 						playerAbility->highJump = true;
 						if (!registry.Has<HighJumpTag>(e)) registry.AddComponent<HighJumpTag>(e);
-						break;
-					case PlayerAbility::kAirDash:
-						playerAbility->airDash = true;
-						if (!registry.Has<AirDashTag>(e)) registry.AddComponent<AirDashTag>(e);
 						break;
 					case PlayerAbility::kMagicScaffold:
 						playerAbility->magicScaffold = true;

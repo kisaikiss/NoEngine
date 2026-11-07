@@ -84242,6 +84242,46 @@
                 }
             ]
         },
+        "SkillShopkeeper": {
+            "components": {
+                "AnimatorComponent": {
+                    "animationSpeedMagnification": 1.0,
+                    "currentAnimation": 0,
+                    "drawSkeleton": false,
+                    "enableSkinning": false
+                },
+                "DialogueComponent": {
+                    "enabled": true,
+                    "fontName": "resources/engine/fonts/ISE-FONT4/Isego.otf",
+                    "interactDistance": 3.0,
+                    "interactable": true,
+                    "lines": [
+                        "いらっしゃい。レベルアップで貯めたSPを、スキルと交換できますよ。"
+                    ],
+                    "portraitFrameCount": 1,
+                    "portraitTexture": "resources/game/ClockworksDisease/Texture/UI/SkillShop/ShopkeeperPortrait.png",
+                    "voiceVolume": 0.0
+                },
+                "EditTag": {
+                    "name": "SkillShopkeeper",
+                    "parent": null
+                },
+                "MaterialComponent": {
+                    "drawOutline": true
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "resources/engine/Model/test/TD_girl/test7.gltf"
+                },
+                "SkillShopNpcTag": null,
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [0.0, 0.0, 0.0, 1.0],
+                    "scale": [1.0, 1.0, 1.0],
+                    "translate": [5.4, 0.0, -2.8]
+                }
+            }
+        },
         "eventPoint": {
             "components": {
                 "DialogueAutoTriggerComponent": {
@@ -87372,6 +87412,7 @@
         "DialogueAutoTriggerSystem",
         "DialogueInteractSystem",
         "DialogueSystem",
+        "SkillShopSystem",
         "PlayerAbilityDebugSystem",
         "LevelUpTextSystem",
         "EffectEmitSystem",

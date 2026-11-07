@@ -2,6 +2,7 @@
 #include "PlayerLevelUpSystem.h"
 #include "../../Component/Player/PlayerComponent.h"
 #include "../../Component/Player/PlayerMoveTags.h"
+#include "../../Component/Player/SkillProgressComponent.h"
 #include "../../Component/UI/UserInterfaceComponent.h"
 #include "application/ClockworksDisease/Component/Camera/FollowCameraComponent.h"
 #include "../../Component/Camera/CameraIntroComponent.h"
@@ -52,6 +53,8 @@ void PlayerLevelUpSystem::Update(No::Registry& registry, float deltaTime) {
 
 	for (auto e : registry.View<No::TransformComponent, PlayerComponent, LevelComponent>()) {
 		auto* levelComponent = registry.GetComponent<LevelComponent>(e);
+		auto* skillProgress = registry.GetComponent<SkillProgressComponent>(e);
+		if (!skillProgress) skillProgress = registry.AddComponent<SkillProgressComponent>(e);
 		// レベルが1の時に次にレベルが上がるまでの経験値を設定と一致させる
 		if (levelComponent->nowLevel == 1) {
 			if (!levelComponent->levelUpRequirements.empty()) {
@@ -59,10 +62,11 @@ void PlayerLevelUpSystem::Update(No::Registry& registry, float deltaTime) {
 			}
 		}
 
-		if (levelComponent->power >= levelComponent->nextLevelUp) {
+		if (levelComponent->nextLevelUp > 0 && levelComponent->power >= levelComponent->nextLevelUp) {
 			levelComponent->nowLevel++;
 			levelComponent->power -= levelComponent->nextLevelUp;
 			levelComponent->nextLevelUp = GetRequirementForLevel(levelComponent, levelComponent->nowLevel);
+			++skillProgress->skillPoints;
 			EnhancementsUponLevelingUp(registry, e, levelComponent->nowLevel);
 
 			for (auto effectEntity : registry.View<No::TransformComponent, No::EffectEmitterComponent, LevelUpEffectTag>()) {
@@ -79,6 +83,7 @@ void PlayerLevelUpSystem::EnhancementsUponLevelingUp(No::Registry& registry, No:
 
 	auto* levelComponent = registry.GetComponent<LevelComponent>(e);
 	for (auto& reward : levelComponent->rewards) {
+		// 旧シーンに空中ダッシュのレベル報酬が残っていても、習得は購入時に行う。
 		if (reward.level == level && reward.ability != PlayerAbility::kNone) {
 			GrantAbility(registry, e, reward.ability);
 		}
@@ -100,15 +105,6 @@ void PlayerLevelUpSystem::GrantAbility(No::Registry& registry, No::Entity e, Pla
 				debug->highJump = true;
 			}
 			EnqueueOrShowLevelUpHint(registry, "HighJumpHint");
-		}
-		break;
-	case PlayerAbility::kAirDash:
-		if (!registry.Has<AirDashTag>(e)) {
-			registry.AddComponent<AirDashTag>(e);
-			if (auto* debug = registry.GetComponent<PlayerAbilityDebugComponent>(e)) {
-				debug->airDash = true;
-			}
-			EnqueueOrShowLevelUpHint(registry, "AirDashHint");
 		}
 		break;
 	case PlayerAbility::kMagicScaffold:

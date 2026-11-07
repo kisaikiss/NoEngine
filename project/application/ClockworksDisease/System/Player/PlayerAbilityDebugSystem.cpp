@@ -2,13 +2,14 @@
 #include "PlayerAbilityDebugSystem.h"
 #include "application/ClockworksDisease/Component/Player/PlayerComponent.h"
 #include "application/ClockworksDisease/Component/Player/PlayerMoveTags.h"
+#include "application/ClockworksDisease/Component/Player/SkillProgressComponent.h"
 
 void PlayerAbilityDebugSystem::Update(No::Registry& registry, float deltaTime) {
 #ifdef USE_IMGUI
 	for (auto e : registry.View<PlayerAbilityDebugComponent>()) {
 		auto* debug = registry.GetComponent<PlayerAbilityDebugComponent>(e);
 
-		if (debug->airDash) {
+		if (debug->airDash || PlayerSkills::HasPurchasedAirDash(registry, e)) {
 			if (!registry.Has<AirDashTag>(e)) {
 				registry.AddComponent<AirDashTag>(e);
 			}

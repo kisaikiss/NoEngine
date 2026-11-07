@@ -244,6 +244,7 @@
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\RandomNoisePass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PrePasses\BLASUpdatePass.cpp" />
     <ClCompile Include="application\ClockworksDisease\Component\Player\PlayerMoveTags.cpp" />
+    <ClCompile Include="application\ClockworksDisease\Component\Player\SkillProgressComponent.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Player\PlayerLevelUpSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\UI\LevelUISystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\Component\UI\UserInterfaceComponent.cpp" />
@@ -318,6 +319,7 @@
     <ClCompile Include="engine\Functions\Renderer\RenderPass\Rasterization\SpriteIDPass.cpp" />
     <ClCompile Include="application\ClockworksDisease\Component\UI\PauseMenuComponent.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\UI\PauseMenuSystem.cpp" />
+    <ClCompile Include="application\ClockworksDisease\System\UI\SkillShopSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Player\PlayerAnimationSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Player\PlayerDeathSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Object\SavePointSystem.cpp" />
@@ -609,6 +611,7 @@
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\RandomNoisePass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PrePasses\BLASUpdatePass.h" />
     <ClInclude Include="application\ClockworksDisease\Component\Player\PlayerMoveTags.h" />
+    <ClInclude Include="application\ClockworksDisease\Component\Player\SkillProgressComponent.h" />
     <ClInclude Include="application\ClockworksDisease\System\Player\PlayerLevelUpSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\UI\LevelUISystem.h" />
     <ClInclude Include="application\ClockworksDisease\Component\UI\UserInterfaceComponent.h" />
@@ -685,6 +688,7 @@
     <ClInclude Include="engine\Functions\Renderer\RenderPass\Rasterization\SpriteIDPass.h" />
     <ClInclude Include="application\ClockworksDisease\Component\UI\PauseMenuComponent.h" />
     <ClInclude Include="application\ClockworksDisease\System\UI\PauseMenuSystem.h" />
+    <ClInclude Include="application\ClockworksDisease\System\UI\SkillShopSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Player\PlayerAnimationSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Player\PlayerDeathSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Object\SavePointSystem.h" />

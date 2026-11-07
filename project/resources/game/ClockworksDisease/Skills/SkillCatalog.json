@@ -1,0 +1,9 @@
+{
+    "air_dash": {
+        "name": "空中ダッシュ",
+        "cost": 1,
+        "iconTexture": "resources/game/ClockworksDisease/Texture/UI/SkillShop/AirDashIcon.png",
+        "previewTexture": "resources/game/ClockworksDisease/Texture/UI/SkillShop/AirDashPreview.png",
+        "description": "空中をすばやく横に移動する。\n空中で LB / 左Shift を長押し。\n発動中はスタミナを消費する。"
+    }
+}

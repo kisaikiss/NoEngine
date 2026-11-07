@@ -2,6 +2,7 @@
 #include "DialogueSystem.h"
 #include "../../Component/Dialogue/DialogueComponent.h"
 #include "../../Component/Player/PlayerComponent.h"
+#include "../UI/SkillShopSystem.h"
 #include "engine/Runtime/GraphicsCore.h"
 
 #include "engine/Utilities/Conversion/ConvertString.h"
@@ -63,7 +64,7 @@ void DialogueSystem::Update(No::Registry& registry, float deltaTime) {
 	bool began = false;
 	if (!active_) {
 		for (auto& ev : startEvents) {
-			if (Begin(registry, ev.speaker)) {
+			if (Begin(registry, ev.speaker, ev.interactingPlayer)) {
 				began = true;
 				break;
 			}
@@ -158,7 +159,7 @@ void DialogueSystem::UpdatePortraitFrame(No::Registry& registry, size_t frame) {
 void DialogueSystem::PlayVoiceForCharacter(No::Registry& registry, char32_t codepoint) {
 	if (codepoint == U' ' || codepoint == U'\n' || codepoint == U'\r' || codepoint == U'\t') return;
 	auto* dialogue = registry.GetComponent<DialogueComponent>(speaker_);
-	if (!dialogue) return;
+	if (!dialogue || dialogue->voiceVolume <= 0.f) return;
 	std::vector<std::string> paths = dialogue->voiceFiles;
 	if (paths.empty()) {
 		for (int i = 1; i <= 3; ++i) {
@@ -206,12 +207,13 @@ void DialogueSystem::UpdateLayout(No::Registry& registry) {
 
 }
 
-bool DialogueSystem::Begin(No::Registry& registry, No::Entity speaker) {
+bool DialogueSystem::Begin(No::Registry& registry, No::Entity speaker, No::Entity interactingPlayer) {
 	auto* dialogue = registry.GetComponent<DialogueComponent>(speaker);
 	if (!dialogue || !dialogue->enabled || dialogue->lines.empty()) return false;
 
 	active_ = true;
 	speaker_ = speaker;
+	interactingPlayer_ = interactingPlayer;
 	auto* text = registry.GetComponent<No::TextComponent>(textEntity_);
 	text->fontName = dialogue->fontName;
 	lastVoiceIndex_ = static_cast<size_t>(-1);
@@ -248,12 +250,18 @@ void DialogueSystem::End(No::Registry& registry, bool cancelled) {
 	for (auto player : registry.View<PlayerComponent>()) {
 		if (registry.Has<DialogueLockTag>(player)) registry.RemoveComponent<DialogueLockTag>(player);
 	}
-	// 既存の報酬・チュートリアル処理には正常終了だけを通知する。
-	if (!cancelled) registry.EmitEvent(DialogueEndEvent{ speaker_ });
+	if (!cancelled) {
+		if (interactingPlayer_ != No::INVALID_ENTITY && registry.Has<SkillShopNpcTag>(speaker_)) {
+			registry.EmitEvent(OpenSkillShopEvent{ interactingPlayer_ });
+		} else {
+			registry.EmitEvent(DialogueEndEvent{ speaker_ });
+		}
+	}
 	NoEngine::Gameplay::EmitGameplayEvent(registry, speaker_,
 		cancelled ? DialogueGameplayId::Cancelled : DialogueGameplayId::Finished);
 	active_ = false;
 	speaker_ = No::INVALID_ENTITY;
+	interactingPlayer_ = No::INVALID_ENTITY;
 }
 
 void DialogueSystem::CreateTextBox(No::Registry& registry) {

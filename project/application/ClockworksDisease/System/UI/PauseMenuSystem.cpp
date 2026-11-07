@@ -122,6 +122,9 @@ void PauseMenuSystem::CreateMenuEntities(No::Registry& registry) {
 }
 
 void PauseMenuSystem::OpenMenu(No::Registry& registry) {
+	for (auto e : registry.View<No::PauseComponent>()) {
+		if (registry.GetComponent<No::PauseComponent>(e)->isPause) return;
+	}
 	auto* menu = registry.GetComponent<PauseMenuComponent>(menuEntity_);
 	menu->state = PauseMenuState::kMain;
 	menu->mainSelectedIndex = 0;

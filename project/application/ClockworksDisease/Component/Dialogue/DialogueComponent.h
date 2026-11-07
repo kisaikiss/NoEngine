@@ -26,7 +26,10 @@ struct DialogueAutoTriggerComponent {
 // 会話中にプレイヤーへ付ける。移動/ジャンプ系Systemがこれを見てスキップする
 struct DialogueLockTag {};
 
-struct DialogueStartEvent { No::Entity speaker = No::INVALID_ENTITY; };
+struct DialogueStartEvent {
+	No::Entity speaker = No::INVALID_ENTITY;
+	No::Entity interactingPlayer = No::INVALID_ENTITY;
+};
 struct DialogueStopEvent { No::Entity speaker = No::INVALID_ENTITY; };
 struct DialogueEndEvent { No::Entity speaker = No::INVALID_ENTITY; };
 

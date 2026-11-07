@@ -14,6 +14,7 @@ private:
 	No::Entity portraitEntity_ = No::INVALID_ENTITY;
 	No::Entity textEntity_ = No::INVALID_ENTITY;
 	No::Entity speaker_ = No::INVALID_ENTITY;
+	No::Entity interactingPlayer_ = No::INVALID_ENTITY;
 
 	// 文字送り用
 	size_t charCount_ = 0;          // 現在表示している文字数(コードポイント単位)
@@ -30,7 +31,7 @@ private:
 	void PlayVoiceForCharacter(No::Registry& registry, char32_t codepoint);
 
 
-	bool Begin(No::Registry& registry, No::Entity speaker);
+	bool Begin(No::Registry& registry, No::Entity speaker, No::Entity interactingPlayer);
 	void Advance(No::Registry& registry);
 	void ShowLine(No::Registry& registry);
 	void End(No::Registry& registry, bool cancelled = false);
