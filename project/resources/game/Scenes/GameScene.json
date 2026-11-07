@@ -84601,21 +84601,7 @@
                     ],
                     "nextLevelUp": 30,
                     "nowLevel": 1,
-                    "power": 0,
-                    "rewards": [
-                        {
-                            "ability": "kAirDash",
-                            "level": 2
-                        },
-                        {
-                            "ability": "kHighJump",
-                            "level": 4
-                        },
-                        {
-                            "ability": "kMagicScaffold",
-                            "level": 6
-                        }
-                    ]
+                    "power": 0
                 },
                 "MaterialComponent": {
                     "blendMode": "kNormal",
@@ -84692,7 +84678,7 @@
                     "jumpKind": "kNormal",
                     "jumpSpeed": 10.0,
                     "maxFallSpeed": -20.0,
-                    "maxStamina": 0.0,
+                    "maxStamina": 1.0,
                     "minGroundNormalY": 0.8500000238418579,
                     "moveSpeed": 11.0,
                     "respawnPoint": [
@@ -84700,9 +84686,8 @@
                         0.5,
                         0.0
                     ],
-                    "stamina": 0.0,
+                    "stamina": 1.0,
                     "staminaRecoveryRate": 1.0,
-                    "staminaUpPerLevel": 1.0,
                     "state": "kWait",
                     "walkSpeed": 4.0
                 },
@@ -84815,21 +84800,7 @@
                         ],
                         "nextLevelUp": 30,
                         "nowLevel": 1,
-                        "power": 0,
-                        "rewards": [
-                            {
-                                "ability": "kAirDash",
-                                "level": 2
-                            },
-                            {
-                                "ability": "kHighJump",
-                                "level": 3
-                            },
-                            {
-                                "ability": "kMagicScaffold",
-                                "level": 4
-                            }
-                        ]
+                        "power": 0
                     },
                     "MaterialComponent": {
                         "blendMode": "kNormal",
@@ -84906,7 +84877,7 @@
                         "jumpKind": "kNormal",
                         "jumpSpeed": 10.0,
                         "maxFallSpeed": -20.0,
-                        "maxStamina": 0.0,
+                        "maxStamina": 1.0,
                         "minGroundNormalY": 0.8500000238418579,
                         "moveSpeed": 11.0,
                         "respawnPoint": [
@@ -84914,9 +84885,8 @@
                             0.5,
                             0.0
                         ],
-                        "stamina": 0.0,
+                        "stamina": 1.0,
                         "staminaRecoveryRate": 1.0,
-                        "staminaUpPerLevel": 1.0,
                         "state": "kSleep",
                         "walkSpeed": 7.0
                     },
@@ -84951,24 +84921,6 @@
             },
             "prefabInstance": "resources/game/Prefabs\\player.json",
             "prefabOverrides": [
-                {
-                    "op": "replace",
-                    "path": "/components/LevelComponent/rewards",
-                    "value": [
-                        {
-                            "ability": "kAirDash",
-                            "level": 2
-                        },
-                        {
-                            "ability": "kHighJump",
-                            "level": 4
-                        },
-                        {
-                            "ability": "kMagicScaffold",
-                            "level": 6
-                        }
-                    ]
-                },
                 {
                     "op": "replace",
                     "path": "/components/PlayerComponent/airDashSpeed",

@@ -8,6 +8,7 @@ bool RestoreCurrentStage(No::Registry& registry);
 void Reset();
 bool Restore(No::Registry& registry);
 void RecordCollectedItem(No::Registry& registry, No::Entity item);
+bool HasReachedStage(const std::string& sceneName);
 }
 
 class MainStageProgressRestoreSystem : public No::ISystem {

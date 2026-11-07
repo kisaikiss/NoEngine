@@ -1,9 +1,84 @@
 {
-    "air_dash": {
-        "name": "空中ダッシュ",
-        "cost": 1,
-        "iconTexture": "resources/game/ClockworksDisease/Texture/UI/SkillShop/AirDashIcon.png",
-        "previewTexture": "resources/game/ClockworksDisease/Texture/UI/SkillShop/AirDashPreview.png",
-        "description": "空中をすばやく横に移動する。\n空中で LB / 左Shift を長押し。\n発動中はスタミナを消費する。"
-    }
+    "groups": [
+        {
+            "name": "ダッシュ",
+            "skills": [
+                {
+                    "id": "air_dash",
+                    "name": "空中ダッシュ",
+                    "cost": 1,
+                    "iconTexture": "resources/game/ClockworksDisease/Texture/UI/SkillShop/AirDashIcon.png",
+                    "previewTexture": "resources/game/ClockworksDisease/Texture/UI/SkillShop/AirDashPreview.png",
+                    "description": "空中をすばやく横に移動する。\n空中で LB / 左Shift を長押し。\n発動中はスタミナを消費する。",
+                    "ability": "kAirDash"
+                }
+            ]
+        },
+        {
+            "name": "ジャンプ",
+            "skills": [
+                {
+                    "id": "high_jump",
+                    "name": "ハイジャンプ",
+                    "cost": 1,
+                    "iconTexture": "resources/game/ClockworksDisease/Texture/UI/SkillShop/HighJumpIcon.png",
+                    "previewTexture": "resources/game/ClockworksDisease/Texture/UI/SkillShop/HighJumpPreview.png",
+                    "description": "スタミナを使って高く跳ぶ。\n地上で B / E を押し、長押しで上昇を維持する。",
+                    "ability": "kHighJump"
+                },
+                {
+                    "id": "air_jump",
+                    "name": "空中ジャンプ",
+                    "cost": 1,
+                    "iconTexture": "resources/game/ClockworksDisease/Texture/UI/SkillShop/AirJumpIcon.png",
+                    "previewTexture": "resources/game/ClockworksDisease/Texture/UI/SkillShop/AirJumpPreview.png",
+                    "description": "空中でもう一度跳ぶ。\n空中で A / Space。スタミナを1消費する。",
+                    "ability": "kMultiJump",
+                    "prerequisites": [
+                        "high_jump"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "魔法",
+            "skills": [
+                {
+                    "id": "magic_scaffold",
+                    "name": "魔法足場",
+                    "cost": 1,
+                    "iconTexture": "resources/game/ClockworksDisease/Texture/UI/SkillShop/MagicScaffoldIcon.png",
+                    "previewTexture": "resources/game/ClockworksDisease/Texture/UI/SkillShop/MagicScaffoldPreview.png",
+                    "description": "空中に魔法の足場を作る。\n空中で Y / Q。着地するとまた使える。",
+                    "ability": "kMagicScaffold"
+                }
+            ]
+        },
+        {
+            "name": "スタミナ",
+            "skills": [
+                {
+                    "id": "stamina_1",
+                    "name": "スタミナ強化 I",
+                    "cost": 1,
+                    "iconTexture": "resources/game/ClockworksDisease/Texture/UI/SkillShop/StaminaIcon.png",
+                    "previewTexture": "resources/game/ClockworksDisease/Texture/UI/SkillShop/StaminaPreview.png",
+                    "description": "最大スタミナが1増える。\n購入時に増加した分だけスタミナが回復する。",
+                    "staminaIncrease": 1
+                },
+                {
+                    "id": "stamina_2",
+                    "name": "スタミナ強化 II",
+                    "cost": 2,
+                    "iconTexture": "resources/game/ClockworksDisease/Texture/UI/SkillShop/Stamina2Icon.png",
+                    "previewTexture": "resources/game/ClockworksDisease/Texture/UI/SkillShop/StaminaPreview.png",
+                    "description": "最大スタミナがさらに1増える。\n購入時に増加した分だけスタミナが回復する。",
+                    "staminaIncrease": 1,
+                    "prerequisites": [
+                        "stamina_1"
+                    ]
+                }
+            ]
+        }
+    ]
 }

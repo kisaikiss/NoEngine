@@ -37,10 +37,9 @@ struct PlayerComponent {
 	float gravity = -9.8f;
 	float yVelocity = 0.f;
 	float maxFallSpeed = -25.f;
-	float stamina = 0.0f;
-	float maxStamina = 0.0f;
+	float stamina = 1.0f;
+	float maxStamina = 1.0f;
 	float staminaRecoveryRate = 1.0f;   // 秒あたりのスタミナ回復量
-	float staminaUpPerLevel = 1.0f;     // レベルアップ時のスタミナ最大値上昇量
  	No::Vector3 groundNormal = No::Vector3::UP;
 	// この値未満の上向き法線は壁・角への接触として扱い、接地しない。
 	float minGroundNormalY = 0.75f;
@@ -114,11 +113,6 @@ enum class PlayerAbility {
 	kMagicScaffold,
 };
 
-struct LevelUpReward {
-	uint32_t level = 0;
-	PlayerAbility ability = PlayerAbility::kNone;
-};
-
 struct LevelComponent {
 	uint32_t power = 0;
 	uint32_t nowLevel = 1;
@@ -126,6 +120,4 @@ struct LevelComponent {
 	// レベルごとの必要経験値テーブル。index[0] = Lv1→2, index[1] = Lv2→3 ...
 	// テーブルの長さを超えたレベルでは最後の要素を使い続ける。
 	std::vector<uint32_t> levelUpRequirements;
-
-	std::vector<LevelUpReward> rewards;
 };

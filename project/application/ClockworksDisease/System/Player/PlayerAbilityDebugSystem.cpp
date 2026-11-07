@@ -9,7 +9,7 @@ void PlayerAbilityDebugSystem::Update(No::Registry& registry, float deltaTime) {
 	for (auto e : registry.View<PlayerAbilityDebugComponent>()) {
 		auto* debug = registry.GetComponent<PlayerAbilityDebugComponent>(e);
 
-		if (debug->airDash || PlayerSkills::HasPurchasedAirDash(registry, e)) {
+		if (debug->airDash || PlayerSkills::HasPurchasedAbility(registry, e, PlayerAbility::kAirDash)) {
 			if (!registry.Has<AirDashTag>(e)) {
 				registry.AddComponent<AirDashTag>(e);
 			}
@@ -18,7 +18,7 @@ void PlayerAbilityDebugSystem::Update(No::Registry& registry, float deltaTime) {
 				registry.RemoveComponent<AirDashTag>(e);
 			}
 		}
-		if (debug->highJump) {
+		if (debug->highJump || PlayerSkills::HasPurchasedAbility(registry, e, PlayerAbility::kHighJump)) {
 			if (!registry.Has<HighJumpTag>(e)) {
 				registry.AddComponent<HighJumpTag>(e);
 			}
@@ -27,7 +27,7 @@ void PlayerAbilityDebugSystem::Update(No::Registry& registry, float deltaTime) {
 				registry.RemoveComponent<HighJumpTag>(e);
 			}
 		}
-		if (debug->magicScaffold) {
+		if (debug->magicScaffold || PlayerSkills::HasPurchasedAbility(registry, e, PlayerAbility::kMagicScaffold)) {
 			if (!registry.Has<CreateMagicScaffoldTag>(e)) {
 				registry.AddComponent<CreateMagicScaffoldTag>(e);
 			}

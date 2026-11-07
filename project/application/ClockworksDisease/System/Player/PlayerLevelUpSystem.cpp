@@ -1,11 +1,7 @@
 #include "stdafx.h"
 #include "PlayerLevelUpSystem.h"
 #include "../../Component/Player/PlayerComponent.h"
-#include "../../Component/Player/PlayerMoveTags.h"
 #include "../../Component/Player/SkillProgressComponent.h"
-#include "../../Component/UI/UserInterfaceComponent.h"
-#include "application/ClockworksDisease/Component/Camera/FollowCameraComponent.h"
-#include "../../Component/Camera/CameraIntroComponent.h"
 
 REFLECT_STRUCT_BEGIN(LevelUpEffectTag, "ApplicationTag")
 REFLECT_STRUCT_END(LevelUpEffectTag)
@@ -24,32 +20,10 @@ uint32_t GetRequirementForLevel(const LevelComponent* levelComponent, uint32_t l
 	return levelComponent->levelUpRequirements[index];
 }
 
-void EnqueueOrShowLevelUpHint(No::Registry& registry, const std::string& textureName) {
-	for (auto e : registry.View<LevelUpTextComponent>()) {
-		auto* queue = registry.GetComponent<LevelUpHintQueueComponent>(e);
-		if (!queue) {
-			queue = registry.AddComponent<LevelUpHintQueueComponent>(e);
-		}
-
-		if (registry.Has<LevelUpFrameTag>(e)) {
-			queue->pendingTextureNames.push_back(textureName);
-			continue;
-		}
-
-		CreateLevelUpHintEntity(registry, textureName);
-		registry.AddComponent<LevelUpFrameTag>(e);
-	}
-}
-
 }
 
 void PlayerLevelUpSystem::Update(No::Registry& registry, float deltaTime) {
 	static_cast<void>(deltaTime);
-
-	bool isSkip = false;
-	for (auto e : registry.View<No::TransformComponent, No::CameraComponent, FollowCameraComponent>()) {
-		if (registry.Has<CameraLockTag>(e)) isSkip = true; 
-	}
 
 	for (auto e : registry.View<No::TransformComponent, PlayerComponent, LevelComponent>()) {
 		auto* levelComponent = registry.GetComponent<LevelComponent>(e);
@@ -67,57 +41,12 @@ void PlayerLevelUpSystem::Update(No::Registry& registry, float deltaTime) {
 			levelComponent->power -= levelComponent->nextLevelUp;
 			levelComponent->nextLevelUp = GetRequirementForLevel(levelComponent, levelComponent->nowLevel);
 			++skillProgress->skillPoints;
-			EnhancementsUponLevelingUp(registry, e, levelComponent->nowLevel);
 
 			for (auto effectEntity : registry.View<No::TransformComponent, No::EffectEmitterComponent, LevelUpEffectTag>()) {
 				registry.GetComponent<No::TransformComponent>(effectEntity)->translate = registry.GetComponent<No::TransformComponent>(e)->GetWorldPosition(registry);
 				registry.AddComponent<No::EffectEmitTag>(effectEntity);
 			}
 		}
-	}
-}
-
-void PlayerLevelUpSystem::EnhancementsUponLevelingUp(No::Registry& registry, No::Entity e, uint32_t level) {
-	auto* player = registry.GetComponent<PlayerComponent>(e);
-	player->maxStamina += player->staminaUpPerLevel;
-
-	auto* levelComponent = registry.GetComponent<LevelComponent>(e);
-	for (auto& reward : levelComponent->rewards) {
-		// 旧シーンに空中ダッシュのレベル報酬が残っていても、習得は購入時に行う。
-		if (reward.level == level && reward.ability != PlayerAbility::kNone) {
-			GrantAbility(registry, e, reward.ability);
-		}
-	}
-}
-
-void PlayerLevelUpSystem::GrantAbility(No::Registry& registry, No::Entity e, PlayerAbility ability) {
-	switch (ability) {
-	case PlayerAbility::kMultiJump:
-		if (!registry.Has<MultiJumpTag>(e)) {
-			registry.AddComponent<MultiJumpTag>(e);
-			EnqueueOrShowLevelUpHint(registry, "MultiJumpHint");
-		}
-		break;
-	case PlayerAbility::kHighJump:
-		if (!registry.Has<HighJumpTag>(e)) {
-			registry.AddComponent<HighJumpTag>(e);
-			if (auto* debug = registry.GetComponent<PlayerAbilityDebugComponent>(e)) {
-				debug->highJump = true;
-			}
-			EnqueueOrShowLevelUpHint(registry, "HighJumpHint");
-		}
-		break;
-	case PlayerAbility::kMagicScaffold:
-		if (!registry.Has<CreateMagicScaffoldTag>(e)) {
-			registry.AddComponent<CreateMagicScaffoldTag>(e);
-			if (auto* debug = registry.GetComponent<PlayerAbilityDebugComponent>(e)) {
-				debug->magicScaffold = true;
-			}
-			EnqueueOrShowLevelUpHint(registry, "MagicHint");
-		}
-		break;
-	default:
-		break;
 	}
 }
 

@@ -18,7 +18,6 @@ REFLECT_FIELD(maxFallSpeed),
 REFLECT_FIELD(stamina),
 REFLECT_FIELD(maxStamina),
 REFLECT_FIELD(staminaRecoveryRate),
-REFLECT_FIELD(staminaUpPerLevel),
 REFLECT_FIELD(minGroundNormalY),
 REFLECT_FIELD(coyoteTime),
 REFLECT_FIELD(coyoteTimer),
@@ -50,15 +49,9 @@ REFLECT_STRUCT_END(PlayerActionComponent)
 REFLECT_STRUCT_BEGIN(PlayerMoveTransientComponent, "ApplicationTag")
 REFLECT_STRUCT_END(PlayerMoveTransientComponent)
 
-REFLECT_STRUCT_BEGIN(LevelUpReward, "ApplicationTag")
-REFLECT_FIELD(level),
-REFLECT_ENUM_FIELD(ability)
-REFLECT_STRUCT_END(LevelUpReward)
-
 REFLECT_STRUCT_BEGIN(LevelComponent, "Application")
 REFLECT_FIELD(nowLevel),
 REFLECT_FIELD(nextLevelUp),
 REFLECT_FIELD(power),
-REFLECT_ARRAY_FIELD(levelUpRequirements),
-REFLECT_STRUCT_ARRAY_FIELD(rewards)
+REFLECT_ARRAY_FIELD(levelUpRequirements)
 REFLECT_STRUCT_END(LevelComponent)

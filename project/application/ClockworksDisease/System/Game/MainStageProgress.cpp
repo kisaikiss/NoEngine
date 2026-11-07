@@ -4,7 +4,6 @@
 #include "application/ClockworksDisease/Component/Camera/FollowCameraComponent.h"
 #include "application/ClockworksDisease/Component/Camera/CameraIntroComponent.h"
 #include "application/ClockworksDisease/Component/Player/PlayerComponent.h"
-#include "application/ClockworksDisease/Component/Player/PlayerMoveTags.h"
 #include "application/ClockworksDisease/Component/Player/SkillProgressComponent.h"
 #include "application/ClockworksDisease/Component/Game/StageTransitionComponent.h"
 #include "application/ClockworksDisease/Component/UI/UserInterfaceComponent.h"
@@ -15,7 +14,7 @@ nlohmann::json sMainStageSnapshot;
 std::unordered_map<std::string, nlohmann::json> sStageSnapshots;
 std::unordered_map<std::string, std::unordered_set<std::string>> sCollectedItemNames;
 bool sCaptureQueued = false;
-PlayerAbilityDebugComponent sPlayerAbility{};
+std::unordered_set<std::string> sReachedStages;
 float sPlayerStamina = 0.0f;
 float sPlayerCurrentStamina = 0.0f;
 LevelComponent sPlayerLevel{};
@@ -25,12 +24,16 @@ REGISTER_PLAY_MODE_STATIC(sMainStageSnapshot);
 REGISTER_PLAY_MODE_STATIC(sStageSnapshots);
 REGISTER_PLAY_MODE_STATIC(sCollectedItemNames);
 REGISTER_PLAY_MODE_STATIC(sCaptureQueued);
-REGISTER_PLAY_MODE_STATIC(sPlayerAbility);
+REGISTER_PLAY_MODE_STATIC(sReachedStages);
 REGISTER_PLAY_MODE_STATIC(sPlayerStamina);
 REGISTER_PLAY_MODE_STATIC(sPlayerCurrentStamina);
 REGISTER_PLAY_MODE_STATIC(sPlayerLevel);
 REGISTER_PLAY_MODE_STATIC(sPlayerSkills);
 REGISTER_PLAY_MODE_STATIC(sHasSharedProgress);
+}
+
+bool HasReachedStage(const std::string& sceneName) {
+	return sReachedStages.contains(sceneName);
 }
 
 void QueueCapture() {
@@ -42,7 +45,7 @@ void Reset() {
 	sStageSnapshots.clear();
 	sCollectedItemNames.clear();
 	sCaptureQueued = false;
-	sPlayerAbility = {};
+	sReachedStages.clear();
 	sPlayerLevel = {};
 	sPlayerSkills = {};
 	sPlayerStamina = 0.0f;
@@ -59,9 +62,7 @@ void CaptureIfQueued(No::Registry& registry) {
 
 	// 現状のプレイヤーの状態を保持
 	for (auto e : registry.View<PlayerComponent, LevelComponent>()) {
-		const auto* debug = registry.GetComponent<PlayerAbilityDebugComponent>(e);
 		const auto* skills = registry.GetComponent<SkillProgressComponent>(e);
-		sPlayerAbility = debug ? *debug : PlayerAbilityDebugComponent{};
 		sPlayerSkills = skills ? *skills : SkillProgressComponent{};
 		const auto* player = registry.GetComponent<PlayerComponent>(e);
 		sPlayerStamina = player->maxStamina;
@@ -144,6 +145,8 @@ void MainStageProgressRestoreSystem::Update(No::Registry& registry, float deltaT
 	
 	if (restored_) return;
 
+	const auto sceneName = No::GetCurrentSceneName(registry);
+	if (!sceneName.empty()) MainStageProgress::sReachedStages.insert(sceneName);
 	restored_ = MainStageProgress::RestoreCurrentStage(registry);
 	if (MainStageProgress::sHasSharedProgress) {
 		// ステージ固有の保存状態を復元した後、全ステージ共通の育成状況を適用する。
@@ -159,40 +162,6 @@ void MainStageProgressRestoreSystem::Update(No::Registry& registry, float deltaT
 			level->power = MainStageProgress::sPlayerLevel.power;
 			level->nowLevel = MainStageProgress::sPlayerLevel.nowLevel;
 			level->nextLevelUp = MainStageProgress::sPlayerLevel.nextLevelUp;
-		}
-		for (auto e : registry.View<PlayerComponent, PlayerAbilityDebugComponent>()) {
-			auto* playerAbility = registry.GetComponent<PlayerAbilityDebugComponent>(e);
-			playerAbility->highJump = MainStageProgress::sPlayerAbility.highJump;
-			playerAbility->magicScaffold = MainStageProgress::sPlayerAbility.magicScaffold;
-
-			if (playerAbility->highJump && !registry.Has<HighJumpTag>(e)) {
-				registry.AddComponent<HighJumpTag>(e);
-			}
-
-			if (playerAbility->magicScaffold && !registry.Has<CreateMagicScaffoldTag>(e)) {
-				registry.AddComponent<CreateMagicScaffoldTag>(e);
-			}
-			if (const auto* level = registry.GetComponent<LevelComponent>(e)) {
-				// 購入に移行していない能力は、各ステージのレベル報酬から再付与する。
-				for (const auto& reward : level->rewards) {
-					if (reward.level > level->nowLevel) continue;
-					switch (reward.ability) {
-					case PlayerAbility::kMultiJump:
-						if (!registry.Has<MultiJumpTag>(e)) registry.AddComponent<MultiJumpTag>(e);
-						break;
-					case PlayerAbility::kHighJump:
-						playerAbility->highJump = true;
-						if (!registry.Has<HighJumpTag>(e)) registry.AddComponent<HighJumpTag>(e);
-						break;
-					case PlayerAbility::kMagicScaffold:
-						playerAbility->magicScaffold = true;
-						if (!registry.Has<CreateMagicScaffoldTag>(e)) registry.AddComponent<CreateMagicScaffoldTag>(e);
-						break;
-					default:
-						break;
-					}
-				}
-			}
 		}
 	}
 }
