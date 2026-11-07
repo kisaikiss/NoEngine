@@ -21,6 +21,10 @@ void PlayerActionSystem::Update(No::Registry& registry, float deltaTime) {
 		auto* input = registry.GetComponent<PlayerInputComponent>(entity);
 		auto* action = registry.GetComponent<PlayerActionComponent>(entity);
 		auto* ground = registry.GetComponent<No::GroundStateComponent>(entity);
+		auto* attackSensor = registry.GetComponent<No::CapsuleSensorComponent>(entity);
+		if (!attackSensor) attackSensor = registry.AddComponent<No::CapsuleSensorComponent>(entity);
+		attackSensor->enabled = false;
+		attackSensor->radius = player->spinAttackRadius;
 
 		const auto* death = registry.GetComponent<PlayerDeathSequenceComponent>(entity);
 		const bool deathLocked = death
@@ -40,6 +44,7 @@ void PlayerActionSystem::Update(No::Registry& registry, float deltaTime) {
 		auto* animator = registry.GetComponent<No::AnimatorComponent>(entity);
 		if (action->activeAction == PlayerActionType::kSpinAttack) {
 			if (animator && animator->IsPlaying()) {
+				attackSensor->enabled = true;
 				action->elapsedTime += deltaTime;
 				continue;
 			}
@@ -49,6 +54,7 @@ void PlayerActionSystem::Update(No::Registry& registry, float deltaTime) {
 
 		// 押した瞬間だけ開始し、連打で再生途中の攻撃を巻き戻さない。
 		if (input->attackTriggered && animator && animator->Play("HurricaneKick", false)) {
+			attackSensor->enabled = true;
 			action->activeAction = PlayerActionType::kSpinAttack;
 			action->elapsedTime = 0.0f;
 			continue;

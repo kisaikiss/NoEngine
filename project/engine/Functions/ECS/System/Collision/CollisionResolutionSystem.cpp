@@ -45,6 +45,7 @@ void CollisionResolutionSystem::Update(Registry& registry, float deltaTime) {
 
     // 1パス目：速度のSlideと、補正量の集計（まだtranslateは動かさない）
     for (const auto& contact : contactEvent->contacts) {
+        if (contact.isSensor) continue;
         auto* velocityA = registry.GetComponent<Component::VelocityComponent>(contact.a);
         auto* velocityB = registry.GetComponent<Component::VelocityComponent>(contact.b);
         auto* bodyA = registry.GetComponent<Component::CollisionBody>(contact.a);

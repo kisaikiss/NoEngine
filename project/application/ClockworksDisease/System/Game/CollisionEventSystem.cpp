@@ -13,15 +13,39 @@ void CollisionEventSystem::Update(No::Registry& registry, float deltaTime) {
 	// 衝突イベントを取り出す
 	auto contactEvent = registry.PollEvent<No::ContactEvent>();
 	if (!contactEvent.has_value()) return;
-	for (const auto& contact : contactEvent->contacts) {
+	for (auto contact : contactEvent->contacts) {
 		// ここでゲームアプリケーション用の衝突イベントを発行する
 		// 例えば、プレイヤーと地面の接触イベントを発行するなど
 		// プレイヤーと地面の接触イベントは、プレイヤーが接地しているかどうかを管理するために使用される
 		auto* layerA = registry.GetComponent<CollisionLayerComponent>(contact.a);
 		auto* layerB = registry.GetComponent<CollisionLayerComponent>(contact.b);
 
-		
 		if (!layerA || !layerB) continue;
+
+		const auto actorMask = CollisionLayerComponent::Player | CollisionLayerComponent::Enemy;
+		// 本体接触ではプレイヤー・敵をa側に揃え、法線と接触方向も反転する。
+		if (!contact.isSensor && (layerA->layer & actorMask) == CollisionLayerComponent::None
+			&& (layerB->layer & actorMask) != CollisionLayerComponent::None) {
+			std::swap(contact.a, contact.b);
+			std::swap(layerA, layerB);
+			contact.normal = -contact.normal;
+			if (contact.contactPosition == No::ContactPosition::UP) contact.contactPosition = No::ContactPosition::DOWN;
+			else if (contact.contactPosition == No::ContactPosition::DOWN) contact.contactPosition = No::ContactPosition::UP;
+		}
+		const bool playerA = (layerA->layer & CollisionLayerComponent::Player) != CollisionLayerComponent::None;
+		const bool playerB = (layerB->layer & CollisionLayerComponent::Player) != CollisionLayerComponent::None;
+		const bool enemyA = (layerA->layer & CollisionLayerComponent::Enemy) != CollisionLayerComponent::None;
+		const bool enemyB = (layerB->layer & CollisionLayerComponent::Enemy) != CollisionLayerComponent::None;
+		if (contact.isSensor) {
+			if (playerA && enemyB) registry.EmitEvent(PlayerAttackHitEvent{contact.a, contact.b});
+			continue;
+		}
+		if (playerA && enemyB) {
+			registry.EmitEvent(PlayerEnemyContactEvent{contact.a, contact.b});
+		} else if (enemyA && playerB) {
+			registry.EmitEvent(PlayerEnemyContactEvent{contact.b, contact.a});
+		}
+
 
 		if ((layerA->layer & CollisionLayerComponent::Player) != CollisionLayerComponent::None &&
 			(layerB->layer & CollisionLayerComponent::Terrain) != CollisionLayerComponent::None) {

@@ -8,6 +8,12 @@
 namespace NoEngine {
 namespace Math {
 
+struct CapsuleCapsuleCollision {
+	bool hit = false;
+	Vector3 normal = Vector3::ZERO; // bからaへの方向
+	float penetration = 0.0f;
+};
+
 struct CapsuleAABBCollision {
 	bool hit = false;
 	Vector3 closestOnCapsule;
@@ -106,7 +112,7 @@ CapsuleTriangleCollision TestCapsuleTriangle(
 CapsuleSphereCollision TestCapsuleSphere(const Transform* capsuleTransform, const Math::CapsuleCollider* capsule, const Transform* sphereTransform, const Math::SphereCollider* sphere, ECS::Registry& registry);
 
 // カプセルの中心軸間の最短距離で、表面の接触も含めて判定する。
-bool TestCapsuleCapsule(const CapsuleWorld& capsuleA, const CapsuleWorld& capsuleB);
+CapsuleCapsuleCollision TestCapsuleCapsule(const CapsuleWorld& capsuleA, const CapsuleWorld& capsuleB);
 
 Collision2D TestAABB2D(const Transform2D* transformA, const Math::AABBCollider2D* aabbA, const Transform2D* transformB, const Math::AABBCollider2D* aabbB);
 Collision2D TestAABB2DHorizontal(const Transform2D* transformA, const Math::AABBCollider2D* aabbA, const Transform2D* transformB, const Math::AABBCollider2D* aabbB);

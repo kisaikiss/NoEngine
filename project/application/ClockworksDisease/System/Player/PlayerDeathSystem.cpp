@@ -4,26 +4,10 @@
 #include "application/ClockworksDisease/Component/Player/PlayerDeathComponent.h"
 #include "application/ClockworksDisease/Component/Camera/FollowCameraComponent.h"
 #include "application/ClockworksDisease/System/Game/CollisionLayer.h"
-#include "engine/Math/Collision/CollisionFanc.h"
+#include "application/ClockworksDisease/System/Game/CollisionEvents.h"
 #include "engine/Runtime/GraphicsCore.h"
 
 namespace {
-
-bool IsTouchingEnemy(No::Registry& registry, No::Entity player, const No::TransformComponent* transform) {
-	const auto* collider = registry.GetComponent<No::CapsuleCollider>(player);
-	if (!collider) return false;
-	const auto playerCapsule = NoEngine::GetWorldCapsule(transform, collider, registry);
-	for (auto enemy : registry.View<CollisionLayerComponent, No::TransformComponent, No::CapsuleCollider>()) {
-		if (enemy == player) continue;
-		const auto* layer = registry.GetComponent<CollisionLayerComponent>(enemy);
-		if ((layer->layer & CollisionLayerComponent::Enemy) == CollisionLayerComponent::None) continue;
-		const auto enemyCapsule = NoEngine::GetWorldCapsule(
-			registry.GetComponent<No::TransformComponent>(enemy),
-			registry.GetComponent<No::CapsuleCollider>(enemy), registry);
-		if (NoEngine::Math::TestCapsuleCapsule(playerCapsule, enemyCapsule)) return true;
-	}
-	return false;
-}
 
 No::Entity CreateFadeOverlay(No::Registry& registry) {
 	auto overlay = registry.GenerateEntity();
@@ -95,6 +79,15 @@ float Progress(float timer, float duration) {
 void PlayerDeathSystem::Update(No::Registry& registry, float deltaTime) {
 	using Phase = PlayerDeathSequenceComponent::Phase;
 
+	// 攻撃処理後も敵として残っている接触相手だけを死亡の原因にする。
+	std::unordered_set<No::Entity> touchingEnemies;
+	for (const auto& contact : registry.PollAllEvents<PlayerEnemyContactEvent>()) {
+		const auto* layer = registry.GetComponent<CollisionLayerComponent>(contact.enemy);
+		if (layer && (layer->layer & CollisionLayerComponent::Enemy) != CollisionLayerComponent::None) {
+			touchingEnemies.insert(contact.player);
+		}
+	}
+
 	for (auto e : registry.View<PlayerComponent, No::TransformComponent, No::VelocityComponent>()) {
 		auto* player = registry.GetComponent<PlayerComponent>(e);
 		auto* transform = registry.GetComponent<No::TransformComponent>(e);
@@ -104,7 +97,7 @@ void PlayerDeathSystem::Update(No::Registry& registry, float deltaTime) {
 		// --- 演出開始 ---
 		if (!seq) {
 			if (transform->GetWorldPosition(registry).y >= player->deathHeight &&
-				!IsTouchingEnemy(registry, e, transform)) continue;
+				!touchingEnemies.contains(e)) continue;
 
 			seq = registry.AddComponent<PlayerDeathSequenceComponent>(e);
 			seq->deathPosition = transform->GetWorldPosition(registry);

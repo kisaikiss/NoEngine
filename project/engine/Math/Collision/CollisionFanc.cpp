@@ -6,7 +6,10 @@ namespace NoEngine {
 namespace Math {
 using namespace MathCalculations;
 
-bool TestCapsuleCapsule(const CapsuleWorld& capsuleA, const CapsuleWorld& capsuleB) {
+CapsuleCapsuleCollision TestCapsuleCapsule(const CapsuleWorld& capsuleA, const CapsuleWorld& capsuleB) {
+	CapsuleCapsuleCollision result;
+	if (!std::isfinite(capsuleA.radius) || !std::isfinite(capsuleB.radius)
+		|| capsuleA.radius < 0.0f || capsuleB.radius < 0.0f) return result;
 	const Vector3 axisA = capsuleA.p1 - capsuleA.p0;
 	const Vector3 axisB = capsuleB.p1 - capsuleB.p0;
 	const Vector3 offset = capsuleA.p0 - capsuleB.p0;
@@ -41,7 +44,22 @@ bool TestCapsuleCapsule(const CapsuleWorld& capsuleA, const CapsuleWorld& capsul
 	}
 	const Vector3 separation = offset + axisA * parameterA - axisB * parameterB;
 	const float radii = capsuleA.radius + capsuleB.radius;
-	return separation.LengthSquared() <= radii * radii;
+	const float distanceSquared = separation.LengthSquared();
+	if (!std::isfinite(distanceSquared) || !std::isfinite(radii)
+		|| distanceSquared > radii * radii) return result;
+	const float distance = std::sqrt(distanceSquared);
+	result.hit = true;
+	result.penetration = std::max(radii - distance, 0.0f);
+	if (distanceSquared > epsilon) {
+		result.normal = separation / distance;
+	} else {
+		// 中心軸が重なる場合も、有限で長さ1の補正方向を返す。
+		const auto centerOffset = (capsuleA.p0 + capsuleA.p1 - capsuleB.p0 - capsuleB.p1) * 0.5f;
+		const float centerDistance = centerOffset.Length();
+		result.normal = std::isfinite(centerDistance) && centerDistance > 1e-4f
+			? centerOffset / centerDistance : Vector3{1.0f, 0.0f, 0.0f};
+	}
+	return result;
 }
 
 SpherePushResult TestSphereTriangle(const Vector3& center, float radius, const TriangleCollider& triangle) {

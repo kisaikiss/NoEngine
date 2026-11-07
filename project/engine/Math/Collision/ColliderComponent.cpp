@@ -22,7 +22,6 @@ REFLECT_FIELD(localP1),
 REFLECT_FIELD(radius)
 REFLECT_STRUCT_END(NoEngine::Math::CapsuleCollider)
 
-
 REFLECT_STRUCT_BEGIN(NoEngine::Math::SphereCollider, "Collision")
 REFLECT_FIELD(localCenter),
 REFLECT_FIELD(radius)

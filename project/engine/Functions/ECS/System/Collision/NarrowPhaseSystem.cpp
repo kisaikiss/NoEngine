@@ -29,6 +29,49 @@ void NarrowPhaseSystem::Update(Registry& registry, float deltaTime) {
 	auto terrainView = registry.View<Math::TerrainMesh>();
 	auto capsuleView = registry.View<Math::CapsuleCollider, Component::TransformComponent>();
 
+	// ワールド形状を一度だけ作り、本体ペアは順序による重複と自己接触を除外する。
+	struct CapsuleEntry {
+		Entity entity;
+		CapsuleWorld body;
+		const Component::CapsuleSensorComponent* sensor;
+	};
+	std::vector<CapsuleEntry> capsules;
+	for (auto entity : capsuleView) {
+		capsules.push_back({entity, GetWorldCapsule(
+			registry.GetComponent<Component::TransformComponent>(entity),
+			registry.GetComponent<Math::CapsuleCollider>(entity), registry),
+			registry.GetComponent<Component::CapsuleSensorComponent>(entity)});
+	}
+	auto addCapsuleContact = [&](Entity a, Entity b, const CapsuleWorld& shapeA,
+		const CapsuleWorld& shapeB, bool isSensor) {
+		const auto collide = Math::TestCapsuleCapsule(shapeA, shapeB);
+		if (!collide.hit) return;
+		Contact contact;
+		contact.a = a;
+		contact.b = b;
+		contact.normal = collide.normal;
+		contact.penetration = collide.penetration;
+		contact.contactPosition = ClassifyContact(collide.normal);
+		contact.isSensor = isSensor;
+		contactEvent.contacts.push_back(contact);
+	};
+	auto testSensor = [&](const CapsuleEntry& source, const CapsuleEntry& target) {
+		if (!source.sensor || !source.sensor->enabled || !std::isfinite(source.sensor->radius)
+			|| source.sensor->radius <= 0.0f) return;
+		auto sensor = source.body;
+		sensor.radius = source.sensor->radius;
+		addCapsuleContact(source.entity, target.entity, sensor, target.body, true);
+	};
+	for (size_t i = 0; i < capsules.size(); ++i) {
+		for (size_t j = i + 1; j < capsules.size(); ++j) {
+			const auto& a = capsules[i];
+			const auto& b = capsules[j];
+			addCapsuleContact(a.entity, b.entity, a.body, b.body, false);
+			testSensor(a, b);
+			testSensor(b, a);
+		}
+	}
+
 	for (auto capsuleE : capsuleView) {
 		auto* capsuleTransform = registry.GetComponent<Component::TransformComponent>(capsuleE);
 		auto* capsuleCollider = registry.GetComponent<Math::CapsuleCollider>(capsuleE);

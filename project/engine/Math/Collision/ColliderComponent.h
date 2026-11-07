@@ -100,6 +100,13 @@ struct TriangleCollider {
 
 }
 namespace Component {
+// 同じエンティティのCapsuleColliderの端点を使う、押し戻しのない検出領域。
+// 半径はワールド座標で指定し、本体のコライダーには影響させない。
+struct CapsuleSensorComponent {
+	float radius = 0.0f;
+	bool enabled = false;
+};
+
 /// <summary>
 /// オブジェクトの接地状態と地面の高さを表す構造体。
 /// </summary>

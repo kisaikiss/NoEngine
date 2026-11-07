@@ -26,6 +26,8 @@ struct Contact {
     Math::Vector3 normal;      // b → a の方向
     float penetration;
     Math::ContactPosition contactPosition;          // bから見たaの位置
+    // trueならaがセンサー所有者。通知のみ行い、物理的には押し戻さない。
+    bool isSensor = false;
 };
 
 struct Contact2D {

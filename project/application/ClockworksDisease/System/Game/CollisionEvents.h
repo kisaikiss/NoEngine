@@ -1,6 +1,16 @@
 #pragma once
 #include "engine/NoEngine.h"
 
+struct PlayerEnemyContactEvent {
+	No::Entity player;
+	No::Entity enemy;
+};
+
+struct PlayerAttackHitEvent {
+	No::Entity player;
+	No::Entity enemy;
+};
+
 struct PlayerPushBackEvent { 
 	No::Entity player;
 	No::Entity platform;
