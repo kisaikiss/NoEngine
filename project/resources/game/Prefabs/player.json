@@ -1,11 +1,13 @@
 {
     "components": {
         "AnimatorComponent": {
+            "animationEvents": [],
             "animationSpeedMagnification": 1.0,
             "blendDuration": 0.20000000298023224,
             "currentAnimation": 0,
             "drawSkeleton": false,
-            "enableSkinning": true
+            "enableSkinning": true,
+            "loop": true
         },
         "CapsuleCollider": {
             "localP0": [
@@ -155,7 +157,7 @@
         "PlayerComponent": {
             "accelerationTime": 0.10000000149011612,
             "airAcceleration": 40.0,
-            "airDashSpeed": 10.0,
+            "airDashSpeed": 16.0,
             "airDashStaminaCostRate": 2.0,
             "coyoteTime": 0.30000001192092896,
             "coyoteTimer": 0.0,
@@ -167,6 +169,7 @@
             "highJumpSpeed": 15.0,
             "infinityJump": false,
             "infinityStamina": false,
+            "jumpBufferTime": 0.15000000596046448,
             "jumpKind": "kNormal",
             "jumpSpeed": 10.0,
             "maxFallSpeed": -20.0,
@@ -178,6 +181,8 @@
                 0.5,
                 0.0
             ],
+            "spinAttackAnimationSpeed": 1.7999999523162842,
+            "spinAttackRadius": 1.5,
             "stamina": 0.0,
             "staminaRecoveryRate": 1.0,
             "staminaUpPerLevel": 1.0,
@@ -186,11 +191,7 @@
         },
         "PlayerInputComponent": null,
         "PlayerMoveTransientComponent": null,
-        "PrefabInstanceTag": {
-            "prefabPath": "resources/game/Prefabs\\player.json"
-        },
         "TransformComponent": {
-            "parent": null,
             "rotation": [
                 -7.666791930205363e-07,
                 0.7216740846633911,
@@ -215,6 +216,5 @@
                 0.0
             ]
         }
-    },
-    "prefabInstance": "resources/game/Prefabs\\player.json"
+    }
 }
