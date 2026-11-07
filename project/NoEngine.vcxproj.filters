@@ -358,6 +358,7 @@
     <ClCompile Include="externals\imgui\imgui_node_editor_api.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Player\PlayerActionSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Player\PlayerAttackHitSystem.cpp" />
+    <ClCompile Include="application\ClockworksDisease\System\Player\PlayerSpinAttackEffectSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Player\PlayerScaffoldActionSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Player\PlayerInputSystem.cpp" />
   </ItemGroup>

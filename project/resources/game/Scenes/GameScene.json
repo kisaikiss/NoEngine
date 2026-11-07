@@ -87388,6 +87388,7 @@
         "PlayerDeathSystem",
         "ComputePlatformDeltaSystem",
         "PlatformRideSystem",
+        "PlayerSpinAttackEffectSystem",
         "CameraIntroSystem",
         "GoalDirectionSystem",
         "ColliderDrawSystem",
