@@ -3,6 +3,7 @@
 #include "engine/Functions/ECS/Registry.h"
 #include "../RenderContext.h"
 #include "../RenderGraph.h"
+#include "RenderPassEditorModel.h"
 #include "externals/nlohmann/json.hpp"
 #ifdef USE_IMGUI
 #include "externals/imgui/imgui.h"
@@ -41,43 +42,35 @@ public:
 	virtual void Execute(GraphicsContext& gfx, const RenderGraphRegistry& resourceRegistry, ECS::Registry& registry) = 0;
 	virtual void DrawEditor() {
 #ifdef USE_IMGUI
-		auto copyToBuffer = [](char* destination, size_t capacity, const std::string& source) {
-			const size_t length = std::min(capacity - 1, source.size());
-			std::memcpy(destination, source.data(), length);
-			destination[length] = '\0';
-		};
-		int cameraType = static_cast<int>(targetCameraType_);
-		const char* cameraTypes[] = { "Main", "Debug", "Custom" };
-		if (ImGui::Combo("Target camera", &cameraType, cameraTypes, 3)) targetCameraType_ = static_cast<TargetCameraType>(cameraType);
-		if (targetCameraType_ == TargetCameraType::kCustom) {
-			char cameraName[128]{};
-			copyToBuffer(cameraName, sizeof(cameraName), targetCameraName_);
-			if (ImGui::InputText("Camera name", cameraName, sizeof(cameraName))) targetCameraName_ = cameraName;
-		}
-		ImGui::Checkbox("Clear color target", &autoClear_);
-		ImGui::Checkbox("Clear depth target", &clearDepth_);
-		for (auto& input : inputs_) {
-			char label[128]{}; char value[128]{};
-			copyToBuffer(label, sizeof(label), input.first);
-			copyToBuffer(value, sizeof(value), input.second);
-			if (ImGui::InputText(label, value, sizeof(value))) input.second = value;
-		}
-		for (size_t i = 0; i < outputs_.size(); ++i) {
-			char label[64]{}; char value[128]{};
-			std::snprintf(label, sizeof(label), "Output %zu", i);
-			copyToBuffer(value, sizeof(value), outputs_[i]);
-			if (ImGui::InputText(label, value, sizeof(value))) outputs_[i] = value;
-		}
-		for (size_t i = 0; i < uavOutputs_.size(); ++i) {
-			char label[64]{}; char value[128]{};
-			std::snprintf(label, sizeof(label), "UAV output %zu", i);
-			copyToBuffer(value, sizeof(value), uavOutputs_[i]);
-			if (ImGui::InputText(label, value, sizeof(value))) uavOutputs_[i] = value;
-		}
-		if (!depthOutput_.empty()) {
-			char value[128]{}; copyToBuffer(value, sizeof(value), depthOutput_);
-			if (ImGui::InputText("Depth output", value, sizeof(value))) depthOutput_ = value;
-		}
+        if (!ImGui::CollapsingHeader("詳細設定：リソースとカメラ")) return;
+        int cameraType = static_cast<int>(targetCameraType_);
+        const char* cameraTypes[] = { "メイン", "デバッグ", "名前で指定" };
+        if (ImGui::Combo("描画カメラ", &cameraType, cameraTypes, 3)) targetCameraType_ = static_cast<TargetCameraType>(cameraType);
+        if (targetCameraType_ == TargetCameraType::kCustom) {
+            char cameraName[128]{};
+            const size_t length = std::min(sizeof(cameraName) - 1, targetCameraName_.size());
+            std::memcpy(cameraName, targetCameraName_.data(), length);
+            if (ImGui::InputText("カメラ名", cameraName, sizeof(cameraName))) targetCameraName_ = cameraName;
+        }
+        if (!outputs_.empty()) ImGui::Checkbox("カラー出力をクリア", &autoClear_);
+        if (!depthOutput_.empty()) ImGui::Checkbox("深度出力をクリア", &clearDepth_);
+        auto selectResource = [&](const std::string& label, std::string& value) {
+            if (ImGui::BeginCombo(label.c_str(), value.c_str())) {
+                const auto options = editorResourceOptions_.find(label);
+                if (options != editorResourceOptions_.end()) for (const auto& option : options->second) {
+                    if (ImGui::Selectable(option.c_str(), option == value)) value = option;
+                }
+                ImGui::EndCombo();
+            }
+        };
+        // 順序を固定し、unordered_mapの列挙順に表示を依存させない。
+        std::vector<std::string> roles;
+        for (const auto& [role, resource] : inputs_) { static_cast<void>(resource); roles.push_back(role); }
+        std::sort(roles.begin(), roles.end());
+        for (const auto& role : roles) selectResource(role + (inputTypes_.at(role) == EditorModel::ResourceType::Depth ? " [深度]" : " [カラー]"), inputs_.at(role));
+        for (size_t i = 0; i < outputs_.size(); ++i) selectResource("出力 " + std::to_string(i) + " [カラー]", outputs_[i]);
+        for (size_t i = 0; i < uavOutputs_.size(); ++i) selectResource("UAV出力 " + std::to_string(i) + " [UAV]", uavOutputs_[i]);
+        if (!depthOutput_.empty()) selectResource("深度出力 [深度]", depthOutput_);
 #endif
 	}
 	virtual nlohmann::json SaveEditorSettings() const {
@@ -101,13 +94,15 @@ public:
 		if (settings.contains("targetCameraName") && settings["targetCameraName"].is_string()) targetCameraName_ = settings["targetCameraName"].get<std::string>();
 		if (settings.contains("autoClear") && settings["autoClear"].is_boolean()) autoClear_ = settings["autoClear"].get<bool>();
 		if (settings.contains("clearDepth") && settings["clearDepth"].is_boolean()) clearDepth_ = settings["clearDepth"].get<bool>();
-		if (settings.contains("inputs") && settings["inputs"].is_object()) for (auto it = settings["inputs"].begin(); it != settings["inputs"].end(); ++it) if (it.value().is_string()) inputs_[it.key()] = it.value().get<std::string>();
+		if (settings.contains("inputs") && settings["inputs"].is_object()) for (auto it = settings["inputs"].begin(); it != settings["inputs"].end(); ++it) if (it.value().is_string()) if (inputs_.contains(it.key())) inputs_[it.key()] = it.value().get<std::string>();
 		if (settings.contains("outputs") && settings["outputs"].is_array()) for (size_t i = 0; i < std::min(outputs_.size(), settings["outputs"].size()); ++i) if (settings["outputs"][i].is_string()) outputs_[i] = settings["outputs"][i].get<std::string>();
 		if (settings.contains("uavOutputs") && settings["uavOutputs"].is_array()) for (size_t i = 0; i < std::min(uavOutputs_.size(), settings["uavOutputs"].size()); ++i) if (settings["uavOutputs"][i].is_string()) uavOutputs_[i] = settings["uavOutputs"][i].get<std::string>();
 		if (settings.contains("depthOutput") && settings["depthOutput"].is_string()) depthOutput_ = settings["depthOutput"].get<std::string>();
 	}
 
-	void AddInput(const std::string& role, const std::string& input) { inputs_[role] = input; }
+	void AddInput(const std::string& role, const std::string& input, EditorModel::ResourceType type = EditorModel::ResourceType::Color) { inputs_[role] = input; inputTypes_[role] = type; }
+    const auto& GetEditorInputTypes() const { return inputTypes_; }
+    void SetEditorResourceOptions(std::unordered_map<std::string, std::vector<std::string>> options) { editorResourceOptions_ = std::move(options); }
 	const std::unordered_map<std::string, std::string>& GetEditorInputs() const { return inputs_; }
 	const std::vector<std::string>& GetEditorUavOutputs() const { return uavOutputs_; }
 	void AddOutput(const std::string& output) { outputs_.emplace_back(output); }
@@ -163,6 +158,8 @@ protected:
 
 private:
 	std::unordered_map<std::string, std::string> inputs_;
+    std::unordered_map<std::string, EditorModel::ResourceType> inputTypes_;
+    std::unordered_map<std::string, std::vector<std::string>> editorResourceOptions_;
 	std::vector<std::string> outputs_;
 	std::vector<std::string> uavOutputs_;
 	std::string depthOutput_;

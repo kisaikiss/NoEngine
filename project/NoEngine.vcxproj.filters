@@ -392,6 +392,9 @@
     <ClInclude Include="engine\Functions\Renderer\RenderPass\Rasterization\GridPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\RenderPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\RenderPassScheduler.h" />
+    <ClInclude Include="engine\Functions\Renderer\RenderPass\RenderPassEditorModel.h" />
+    <ClInclude Include="engine\Functions\Renderer\RenderPass\RenderPassEditorCommand.h" />
+    <ClInclude Include="engine\Functions\Renderer\RenderPass\RenderPassConfigurationFile.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\Rasterization\SpritePass.h" />
     <ClInclude Include="engine\Functions\Renderer\RaytracingManager.h" />
     <ClInclude Include="engine\Functions\Scene\IScene.h" />
