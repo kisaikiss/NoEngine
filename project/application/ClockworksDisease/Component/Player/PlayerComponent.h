@@ -24,6 +24,8 @@ struct PlayerComponent {
 	float jumpSpeed = 16.f;
 	float highJumpSpeed = 17.f;
 	float airDashSpeed = 10.f;
+	// 回転攻撃のワールド座標での判定半径。
+	float spinAttackRadius = 1.5f;
 	float deathHeight = -30.0f;
 	No::Vector3 respawnPoint = No::Vector3::ZERO;
 	// 空中で目標速度へ近づく速さ。小さいほど空中での慣性が強くなる。
@@ -74,11 +76,13 @@ struct PlayerInputComponent {
 	bool airDashPressed = false;
 	bool airDashReleased = false;
 	bool createScaffoldTriggered = false;
+	bool attackTriggered = false;
 };
 
 enum class PlayerActionType {
 	kNone,
 	kAirDash,
+	kSpinAttack,
 };
 
 // 実行中アクションの共通状態。移動・物理Systemはこの状態を参照して効果を適用する。

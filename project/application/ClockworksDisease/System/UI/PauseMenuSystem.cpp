@@ -261,13 +261,13 @@ void PauseMenuSystem::RefreshControlsMenuVisuals(No::Registry& registry) {
 	if (auto* t = registry.GetComponent<No::TextComponent>(optionValueEntity_)) t->isVisible = false;
 	if (auto* t = registry.GetComponent<No::TextComponent>(optionHintEntity_)) t->isVisible = false;
 
-	std::vector<std::string> lines = { "Move: Left Stick", "Jump: A Button" };
+	std::vector<std::string> lines = { "Move: Left Stick", "Jump: A Button", "Spin Attack: X Button / Z Key" };
 	bool firstPlayer = true;
 	for (auto e : registry.View<PlayerComponent>()) {
 		if (firstPlayer) {
 			if (registry.Has<HighJumpTag>(e)) lines.push_back("High Jump: B Button");
 			if (registry.Has<AirDashTag>(e)) lines.push_back("Air Dash: Hold LB in the air");
-			if (registry.Has<CreateMagicScaffoldTag>(e)) lines.push_back("Create Scaffold: X Button in the air");
+			if (registry.Has<CreateMagicScaffoldTag>(e)) lines.push_back("Create Scaffold: Y Button in the air");
 			firstPlayer = false;
 		}
 	}

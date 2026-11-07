@@ -10994,6 +10994,7 @@
         "TransformRoutineSystem2D",
         "RotationalSystem",
         "MovementSystem",
+        "PlayerAttackHitSystem",
         "PlayerDeathSystem",
         "ComputePlatformDeltaSystem",
         "PlatformRideSystem",

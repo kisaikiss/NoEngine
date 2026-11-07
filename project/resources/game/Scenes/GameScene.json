@@ -87384,6 +87384,7 @@
         "MovementSystem",
         "FloatingSystem",
         "RotationalSystem",
+        "PlayerAttackHitSystem",
         "PlayerDeathSystem",
         "ComputePlatformDeltaSystem",
         "PlatformRideSystem",

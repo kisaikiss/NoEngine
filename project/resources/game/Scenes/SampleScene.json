@@ -28769,6 +28769,7 @@
         "TransformRoutineSystem",
         "TransformRoutineSystem2D",
         "MovementSystem",
+        "PlayerAttackHitSystem",
         "PlayerDeathSystem",
         "ComputePlatformDeltaSystem",
         "PlatformRideSystem",

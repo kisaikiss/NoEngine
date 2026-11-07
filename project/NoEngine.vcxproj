@@ -249,6 +249,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="application\ClockworksDisease\System\Player\PlayerHorizontalMoveSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Player\PlayerJumpSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Player\PlayerActionSystem.cpp" />
+    <ClCompile Include="application\ClockworksDisease\System\Player\PlayerAttackHitSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Player\PlayerScaffoldActionSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Player\PlayerInputSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Player\PlayerLevelUpSystem.cpp" />

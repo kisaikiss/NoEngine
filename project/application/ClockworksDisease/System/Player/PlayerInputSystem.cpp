@@ -18,6 +18,7 @@ void PlayerInputSystem::Update(No::Registry& registry, float deltaTime) {
 		input->airDashPressed = No::InputIsPress("AirDash");
 		input->airDashReleased = No::InputIsRelease("AirDash");
 		input->createScaffoldTriggered = No::InputIsTrigger("CreateScaffold");
+		input->attackTriggered = No::InputIsTrigger("Attack");
 	}
 }
 

@@ -80,10 +80,13 @@ void ClockworksDisease::Startup(void) {
 	No::InputBindAction("AirDash", No::DeviceType::GamepadButton, static_cast<int>(No::GamepadButton::LB));
 
 	No::InputBindAction("CreateScaffold", No::DeviceType::Keyboard, static_cast<int>('Q'));
-	No::InputBindAction("CreateScaffold", No::DeviceType::GamepadButton, static_cast<int>(No::GamepadButton::X));
+	No::InputBindAction("CreateScaffold", No::DeviceType::GamepadButton, static_cast<int>(No::GamepadButton::Y));
 
-	No::InputBindAction("ViewGoal", No::DeviceType::Keyboard, static_cast<int>('Z'));
+	No::InputBindAction("ViewGoal", No::DeviceType::Keyboard, static_cast<int>('C'));
 	No::InputBindAction("ViewGoal", No::DeviceType::GamepadButton, static_cast<int>(No::GamepadButton::RB));
+
+	No::InputBindAction("Attack", No::DeviceType::Keyboard, static_cast<int>('Z'));
+	No::InputBindAction("Attack", No::DeviceType::GamepadButton, static_cast<int>(No::GamepadButton::X));
 }
 
 void ClockworksDisease::SetupRenderPass(NoEngine::RenderPassScheduler& renderPassScheduler) {

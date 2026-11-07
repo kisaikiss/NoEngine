@@ -8,6 +8,7 @@
 #include "../../Component/Camera/CameraIntroComponent.h"
 
 void PlayerActionSystem::Update(No::Registry& registry, float deltaTime) {
+	if (deltaTime <= 0.0f) return;
 	bool cameraLocked = false;
 	for (auto entity : registry.View<No::TransformComponent, No::CameraComponent, FollowCameraComponent>()) {
 		if (registry.Has<CameraLockTag>(entity)) cameraLocked = true;
@@ -28,7 +29,30 @@ void PlayerActionSystem::Update(No::Registry& registry, float deltaTime) {
 		const bool actionLocked = cameraLocked || deathLocked
 			|| registry.Has<GoalDirectionLockTag>(entity)
 			|| registry.Has<DialogueLockTag>(entity);
-		if (actionLocked) continue;
+		if (actionLocked) {
+			if (action->activeAction == PlayerActionType::kSpinAttack) {
+				action->activeAction = PlayerActionType::kNone;
+				action->elapsedTime = 0.0f;
+			}
+			continue;
+		}
+
+		auto* animator = registry.GetComponent<No::AnimatorComponent>(entity);
+		if (action->activeAction == PlayerActionType::kSpinAttack) {
+			if (animator && animator->IsPlaying()) {
+				action->elapsedTime += deltaTime;
+				continue;
+			}
+			action->activeAction = PlayerActionType::kNone;
+			action->elapsedTime = 0.0f;
+		}
+
+		// 押した瞬間だけ開始し、連打で再生途中の攻撃を巻き戻さない。
+		if (input->attackTriggered && animator && animator->Play("HurricaneKick", false)) {
+			action->activeAction = PlayerActionType::kSpinAttack;
+			action->elapsedTime = 0.0f;
+			continue;
+		}
 
 		if (action->activeAction == PlayerActionType::kAirDash) {
 			if (input->airDashReleased) player->yVelocity = 0.0f;
