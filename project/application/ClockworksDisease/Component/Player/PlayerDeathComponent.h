@@ -1,10 +1,10 @@
 #pragma once
 #include "engine/NoEngine.h"
 
-// 落下死パーティクル用。EffectEmitterComponent + TransformComponent を持つEntityに付けておく
+// 死亡パーティクル用。EffectEmitterComponent + TransformComponent を持つEntityに付けておく
 struct PlayerDeathEffectTag {};
 
-// 落下死演出の進行状態。死亡した瞬間にPlayerDeathSystemがプレイヤーへ付け、演出終了時に外す。
+// 死亡演出の進行状態。死亡した瞬間にPlayerDeathSystemがプレイヤーへ付け、演出終了時に外す。
 // 付いている間は移動/ジャンプ系Systemが操作を受け付けない(ロックを兼ねる)。
 struct PlayerDeathSequenceComponent {
 	enum class Phase {

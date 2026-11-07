@@ -77,7 +77,7 @@ public:
 				horizontalVelocity = MoveToward(Horizontal(state->wanderTarget - position),
 					settings->walkSpeed, 0.0f, deltaTime);
 			} else if (state->phase == Phase::Chase && ground->isGrounded) {
-				horizontalVelocity = MoveToward(horizontalToPlayer, settings->chaseSpeed, 0.85f, deltaTime);
+				horizontalVelocity = MoveToward(horizontalToPlayer, settings->chaseSpeed, 0.0f, deltaTime);
 			}
 
 			const auto facing = state->phase == Phase::AlertHop && player ? horizontalToPlayer : horizontalVelocity;

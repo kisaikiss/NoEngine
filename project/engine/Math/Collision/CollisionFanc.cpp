@@ -6,6 +6,44 @@ namespace NoEngine {
 namespace Math {
 using namespace MathCalculations;
 
+bool TestCapsuleCapsule(const CapsuleWorld& capsuleA, const CapsuleWorld& capsuleB) {
+	const Vector3 axisA = capsuleA.p1 - capsuleA.p0;
+	const Vector3 axisB = capsuleB.p1 - capsuleB.p0;
+	const Vector3 offset = capsuleA.p0 - capsuleB.p0;
+	const float lengthA = axisA.LengthSquared();
+	const float lengthB = axisB.LengthSquared();
+	const float projectionA = axisA.Dot(offset);
+	const float projectionB = axisB.Dot(offset);
+	constexpr float epsilon = 1e-8f;
+	float parameterA = 0.0f;
+	float parameterB = 0.0f;
+
+	if (lengthA <= epsilon && lengthB <= epsilon) {
+		// 両方の中心軸が点に縮退した場合は、球同士として扱う。
+	} else if (lengthA <= epsilon) {
+		parameterB = std::clamp(projectionB / lengthB, 0.0f, 1.0f);
+	} else if (lengthB <= epsilon) {
+		parameterA = std::clamp(-projectionA / lengthA, 0.0f, 1.0f);
+	} else {
+		const float axesDot = axisA.Dot(axisB);
+		const float denominator = lengthA * lengthB - axesDot * axesDot;
+		if (denominator > epsilon * lengthA * lengthB) {
+			parameterA = std::clamp((axesDot * projectionB - projectionA * lengthB) / denominator, 0.0f, 1.0f);
+		}
+		parameterB = (axesDot * parameterA + projectionB) / lengthB;
+		if (parameterB < 0.0f) {
+			parameterB = 0.0f;
+			parameterA = std::clamp(-projectionA / lengthA, 0.0f, 1.0f);
+		} else if (parameterB > 1.0f) {
+			parameterB = 1.0f;
+			parameterA = std::clamp((axesDot - projectionA) / lengthA, 0.0f, 1.0f);
+		}
+	}
+	const Vector3 separation = offset + axisA * parameterA - axisB * parameterB;
+	const float radii = capsuleA.radius + capsuleB.radius;
+	return separation.LengthSquared() <= radii * radii;
+}
+
 SpherePushResult TestSphereTriangle(const Vector3& center, float radius, const TriangleCollider& triangle) {
 	SpherePushResult result;
 	Vector3 closest = ClosestPointOnTriangle(center, triangle.v[0], triangle.v[1], triangle.v[2]);

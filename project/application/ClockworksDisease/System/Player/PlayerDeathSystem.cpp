@@ -3,9 +3,27 @@
 #include "application/ClockworksDisease/Component/Player/PlayerComponent.h"
 #include "application/ClockworksDisease/Component/Player/PlayerDeathComponent.h"
 #include "application/ClockworksDisease/Component/Camera/FollowCameraComponent.h"
+#include "application/ClockworksDisease/System/Game/CollisionLayer.h"
+#include "engine/Math/Collision/CollisionFanc.h"
 #include "engine/Runtime/GraphicsCore.h"
 
 namespace {
+
+bool IsTouchingEnemy(No::Registry& registry, No::Entity player, const No::TransformComponent* transform) {
+	const auto* collider = registry.GetComponent<No::CapsuleCollider>(player);
+	if (!collider) return false;
+	const auto playerCapsule = NoEngine::GetWorldCapsule(transform, collider, registry);
+	for (auto enemy : registry.View<CollisionLayerComponent, No::TransformComponent, No::CapsuleCollider>()) {
+		if (enemy == player) continue;
+		const auto* layer = registry.GetComponent<CollisionLayerComponent>(enemy);
+		if ((layer->layer & CollisionLayerComponent::Enemy) == CollisionLayerComponent::None) continue;
+		const auto enemyCapsule = NoEngine::GetWorldCapsule(
+			registry.GetComponent<No::TransformComponent>(enemy),
+			registry.GetComponent<No::CapsuleCollider>(enemy), registry);
+		if (NoEngine::Math::TestCapsuleCapsule(playerCapsule, enemyCapsule)) return true;
+	}
+	return false;
+}
 
 No::Entity CreateFadeOverlay(No::Registry& registry) {
 	auto overlay = registry.GenerateEntity();
@@ -85,7 +103,8 @@ void PlayerDeathSystem::Update(No::Registry& registry, float deltaTime) {
 
 		// --- 演出開始 ---
 		if (!seq) {
-			if (transform->GetWorldPosition(registry).y >= player->deathHeight) continue;
+			if (transform->GetWorldPosition(registry).y >= player->deathHeight &&
+				!IsTouchingEnemy(registry, e, transform)) continue;
 
 			seq = registry.AddComponent<PlayerDeathSequenceComponent>(e);
 			seq->deathPosition = transform->GetWorldPosition(registry);
