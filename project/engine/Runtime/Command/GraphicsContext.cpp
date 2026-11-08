@@ -1,4 +1,5 @@
 #include "GraphicsContext.h"
+#include "engine/Editor/Panels/FrameProfiler.h"
 
 #include "engine/Runtime/GpuResource/PixelBuffer/ColorBuffer.h"
 #include "engine/Runtime/GpuResource/PixelBuffer/DepthBuffer.h"
@@ -204,6 +205,9 @@ void GraphicsContext::DrawInstanced(UINT vertexCountPerInstance, UINT instanceCo
 	dynamicViewDescriptorHeap_.CommitGraphicsRootDescriptorTables(commandList_);
 	dynamicSamplerDescriptorHeap_.CommitGraphicsRootDescriptorTables(commandList_);
 	commandList_->DrawInstanced(vertexCountPerInstance, instanceCount, StartVertexLocation, startInstanceLocation);
+#ifdef USE_IMGUI
+	Editor::FrameProfiler::RecordDrawCall();
+#endif
 }
 
 void GraphicsContext::DrawIndexedInstanced(UINT indexCountPerInstance, UINT instanceCount, UINT startIndexLocation, INT baseVertexLocation, UINT startInstanceLocation) {
@@ -211,6 +215,9 @@ void GraphicsContext::DrawIndexedInstanced(UINT indexCountPerInstance, UINT inst
 	dynamicViewDescriptorHeap_.CommitGraphicsRootDescriptorTables(commandList_);
 	dynamicSamplerDescriptorHeap_.CommitGraphicsRootDescriptorTables(commandList_);
 	commandList_->DrawIndexedInstanced(indexCountPerInstance, instanceCount, startIndexLocation, baseVertexLocation, startInstanceLocation);
+#ifdef USE_IMGUI
+	Editor::FrameProfiler::RecordDrawCall();
+#endif
 }
 
 void GraphicsContext::DispatchRays(const D3D12_DISPATCH_RAYS_DESC& desc) {

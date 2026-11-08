@@ -95,6 +95,7 @@
     <ClCompile Include="engine\Runtime\DescriptorHeap\DescriptorHeap.cpp" />
     <ClCompile Include="engine\Runtime\DescriptorHeap\DynamicDescriptorHeap.cpp" />
     <ClCompile Include="engine\Runtime\GameCore.cpp" />
+    <ClCompile Include="engine\Editor\Panels\FrameProfiler.cpp" />
     <ClCompile Include="engine\Runtime\GpuResource\GpuBuffer.cpp" />
     <ClCompile Include="engine\Runtime\GpuResource\GpuResource.cpp" />
     <ClCompile Include="engine\Runtime\GpuResource\LinearAllocator\LinearAllocationPage.cpp" />
@@ -434,6 +435,7 @@
     <ClInclude Include="engine\Runtime\DescriptorHeap\DescriptorHeap.h" />
     <ClInclude Include="engine\Runtime\DescriptorHeap\DynamicDescriptorHeap.h" />
     <ClInclude Include="engine\Runtime\GameCore.h" />
+    <ClInclude Include="engine\Editor\Panels\FrameProfiler.h" />
     <ClInclude Include="engine\Runtime\GpuResource\GpuBuffer.h" />
     <ClInclude Include="engine\Runtime\GpuResource\GpuResource.h" />
     <ClInclude Include="engine\Runtime\GpuResource\LinearAllocator\LinearAllocationPage.h" />

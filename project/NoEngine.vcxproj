@@ -454,6 +454,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="engine\Runtime\GameCore.cpp" />
+    <ClCompile Include="engine\Editor\Panels\FrameProfiler.cpp" />
     <ClCompile Include="engine\Runtime\GpuResource\GpuBuffer.cpp" />
     <ClCompile Include="engine\Runtime\GpuResource\GpuResource.cpp" />
     <ClCompile Include="engine\Runtime\GpuResource\LinearAllocator\LinearAllocationPage.cpp" />
@@ -855,6 +856,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="engine\Runtime\GameCore.h" />
+    <ClInclude Include="engine\Editor\Panels\FrameProfiler.h" />
     <ClInclude Include="engine\Runtime\GpuResource\GpuBuffer.h" />
     <ClInclude Include="engine\Runtime\GpuResource\GpuResource.h" />
     <ClInclude Include="engine\Runtime\GpuResource\LinearAllocator\LinearAllocationPage.h" />

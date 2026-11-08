@@ -4,6 +4,7 @@
 #include "../Component/Common/PauseComponent.h"
 #include "../../Scene/IScene.h"
 #include "engine/Editor/Commands/EditorCommandOperator.h"
+#include "engine/Editor/Panels/FrameProfiler.h"
 
 namespace NoEngine {
 namespace ECS {
@@ -206,7 +207,14 @@ void SystemManager::UpdateAll(ComputeContext& ctx, Registry& registry, float del
 		ISystem& system = *entry.system;
 		if (gameStopped && system.GetStopInGameStop()) continue;
 		if (isPause && system.GetStopInPause()) continue;
+#ifdef USE_IMGUI
+		auto* profiler = Editor::FrameProfiler::Active();
+		const auto start = profiler ? Editor::FrameProfiler::Clock::now() : Editor::FrameProfiler::Clock::time_point{};
+#endif
 		system.Update(ctx, registry, deltaTime);
+#ifdef USE_IMGUI
+		if (profiler) profiler->RecordSystem(entry.name, Editor::FrameProfiler::MillisecondsSince(start));
+#endif
 	}
 
 #ifdef USE_IMGUI

@@ -1,5 +1,6 @@
 #include "engine/Editor/Utilities/MultiEdit.h"
 #include "RenderPassScheduler.h"
+#include "engine/Editor/Panels/FrameProfiler.h"
 #include "RenderPassConfigurationFile.h"
 #include "engine/Editor/Panels/EditorWindowManager.h"
 #include "engine/Editor/Commands/EditorCommandOperator.h"
@@ -124,6 +125,10 @@ void RenderPassScheduler::Render(GraphicsContext& gfx, ECS::Registry& registry) 
 	for (const auto& node : nodes_) {
 		if (!node.editorVisible) renderPassNames.push_back(node.editorName);
 	}
+#ifdef USE_IMGUI
+	auto* profiler = Editor::FrameProfiler::Active();
+	if (profiler) profiler->PrepareRenderPasses(renderPassNames.size());
+#endif
 	for (const auto& passName : renderPassNames) {
 		auto foundNode = std::find_if(nodes_.begin(), nodes_.end(), [&](const RenderPassNode& candidate) { return candidate.editorName == passName; });
 		if (foundNode == nodes_.end()) continue;
@@ -142,6 +147,9 @@ void RenderPassScheduler::Render(GraphicsContext& gfx, ECS::Registry& registry) 
 			if (invalidPassWarnings_.insert(node.editorName).second) LogWarning("Render pass skipped because a referenced render resource was not found: " + node.editorName);
 			continue;
 		}
+#ifdef USE_IMGUI
+		if (profiler) profiler->BeginRenderPass(gfx, node.editorName);
+#endif
 		// 入力リソース（SRVとして読むもの）を PIXEL_SHADER_RESOURCE ステートへ
 		for (const auto& inputName : node.inputs) {
 			ColorBuffer* buffer = resourceRegistry_.GetColorBufferPointer(inputName);
@@ -207,10 +215,14 @@ void RenderPassScheduler::Render(GraphicsContext& gfx, ECS::Registry& registry) 
 		// 複数回の遷移を一つの ResourceBarrier 呼び出しに混在させない。
 		gfx.FlushResourceBarriers();
 		node.pass->Execute(gfx, resourceRegistry_, registry);
+#ifdef USE_IMGUI
+		if (profiler) profiler->EndRenderPass(gfx);
+#endif
 	}
 
 	DebugPrimitive::FrameEnd();
 #ifdef USE_IMGUI
+	if (profiler) profiler->ResolveRenderPasses(gfx);
 	gfx.TransitionResource(*resourceRegistry_.GetColorBufferPointer(screenDrawBufferName_), D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 	gfx.TransitionResource(*resourceRegistry_.GetColorBufferPointer("DebugColor"), D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 	gfx.TransitionResource(*resourceRegistry_.GetColorBufferPointer("WorldPosition"), D3D12_RESOURCE_STATE_COPY_SOURCE);

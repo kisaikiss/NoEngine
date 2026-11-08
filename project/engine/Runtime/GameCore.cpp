@@ -17,8 +17,8 @@
 #include "engine/Assets/Font/FontManager.h"
 
 #ifdef USE_IMGUI
+#include "engine/Editor/Panels/FrameProfiler.h"
 #include "engine/Editor/Panels/ImGuiManager.h"
-#include "externals/imgui/imgui.h"
 namespace {
 NoEngine::ImGuiManager sImGuiManager;
 }
@@ -32,8 +32,6 @@ std::chrono::steady_clock::time_point sLastTickTime{ std::chrono::steady_clock::
 
 static float sElapsedTime = 0.f;
 REGISTER_PLAY_MODE_STATIC(sElapsedTime);
-static float sFrameTimes[120] = {};
-static int sFrameIndex = 0;
 }
 
 
@@ -58,11 +56,16 @@ int RunApplication(std::unique_ptr<IGameApp> game) {
 	game->Startup();
 	game->SetupRenderPass(renderPassScheduler);
 	renderPassScheduler.Compile();
+#ifdef USE_IMGUI
+	Editor::FrameProfiler frameProfiler;
+#endif
 	
 	CalculateDeltaTime();
 	// メインループ
 	while (GraphicsCore::sWindowManager.ProcessMessage() == 0) {
-
+#ifdef USE_IMGUI
+		frameProfiler.BeginFrame();
+#endif
 		GraphicsCore::CheckDeviceStatus();
 
 		UINT newWidth, newHeight;
@@ -93,13 +96,21 @@ int RunApplication(std::unique_ptr<IGameApp> game) {
 		Editor::EditorCommandOperator::Update(deltaTime);
 		renderPassScheduler.Render(context, game->GetRegistry());
 
-		DrawPerformance(deltaTime);
+#ifdef USE_IMGUI
+		frameProfiler.Draw();
+#endif
 		Log::GetInstance().DrawImGuiWindow("Console");
 
 		GraphicsCore::EndFrame(context, renderPassScheduler.GetScreenDrawBuffer());
+#ifdef USE_IMGUI
+		frameProfiler.EndFrame();
+#endif
 		if (game->Exit()) break;
 	}
 
+#ifdef USE_IMGUI
+	frameProfiler.ReleaseGpuResources();
+#endif
 	game->Cleanup();
 	EngineFinalize();
 
@@ -168,31 +179,6 @@ float CalculateDeltaTime() {
 		sLastTickTime = tickTimePoint;
 	}
 	return deltaTime;
-}
-
-void DrawPerformance(float deltaTime) {
-#ifdef USE_IMGUI
-
-	sFrameTimes[sFrameIndex] = deltaTime * 1000.0f; // msに変換
-	sFrameIndex = (sFrameIndex + 1) % IM_ARRAYSIZE(sFrameTimes);
-
-	ImGui::Begin("Performance");
-	ImGui::Text("FPS: %.1f", ImGui::GetIO().Framerate);
-	ImGui::PlotLines(
-		"Frame Time (ms)",
-		sFrameTimes,
-		IM_ARRAYSIZE(sFrameTimes),
-		sFrameIndex,
-		nullptr,
-		0.0f,
-		40.0f,   // Y軸の最大値（40ms = 25FPS）
-		ImVec2(0, 80)
-	);
-	ImGui::End();
-#else
-	static_cast<void>(deltaTime);
-#endif // USE_IMGUI
-
 }
 
 float GetElapsedTime() {
