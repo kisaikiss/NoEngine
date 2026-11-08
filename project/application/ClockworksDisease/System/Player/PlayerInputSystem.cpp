@@ -12,9 +12,7 @@ void PlayerInputSystem::Update(No::Registry& registry, float deltaTime) {
 		input->moveAxis.z = No::GetInputAxisValue("Forward");
 		input->jumpTriggered = No::InputIsTrigger("Jump");
 		input->jumpReleased = No::InputIsRelease("Jump");
-		input->highJumpTriggered = No::InputIsTrigger("HighJump");
-		input->highJumpPressed = No::InputIsPress("HighJump");
-		input->highJumpReleased = No::InputIsRelease("HighJump");
+		input->crouchPressed = No::GetInputAxisValue("Crouch") > 0.0f;
 		input->airDashPressed = No::InputIsPress("AirDash");
 		input->airDashReleased = No::InputIsRelease("AirDash");
 		input->createScaffoldTriggered = No::InputIsTrigger("CreateScaffold");

@@ -45,6 +45,8 @@ void PlayerActionSystem::Update(No::Registry& registry, float deltaTime) {
 			action->elapsedTime = 0.0f;
 		}
 		if (actionLocked) continue;
+		const auto* move = registry.GetComponent<PlayerMoveTransientComponent>(entity);
+		if (move && (move->crouching || move->backflipPhase != PlayerBackflipPhase::kNone)) continue;
 
 		// 押した瞬間だけ開始し、連打で再生途中の攻撃を巻き戻さない。
 		if (input->attackTriggered && animator) {

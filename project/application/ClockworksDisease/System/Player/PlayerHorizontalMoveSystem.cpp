@@ -100,6 +100,15 @@ void PlayerHorizontalMoveSystem::Update(No::Registry& registry, float deltaTime)
 		const bool isAirDashing = playerAction->activeAction == PlayerActionType::kAirDash;
 		const bool isSpinAttacking = playerAction->activeAction == PlayerActionType::kSpinAttack;
 
+		const auto backflipPhase = transientState->backflipPhase;
+		const bool isBackflipping = backflipPhase != PlayerBackflipPhase::kNone;
+		if (transientState->crouching || backflipPhase == PlayerBackflipPhase::kWindup
+			|| backflipPhase == PlayerBackflipPhase::kLanding) {
+			if (particleEmitterSphere) particleEmitterSphere->active = false;
+			if (particleEmitter) particleEmitter->active = false;
+			continue;
+		}
+
 		if (!hasInput && !isAirDashing) {
 			if (particleEmitterSphere)
 				particleEmitterSphere->active = false;
@@ -132,7 +141,7 @@ void PlayerHorizontalMoveSystem::Update(No::Registry& registry, float deltaTime)
 		}
 
 		const bool isRunning = inputForce > playerVariables->dashStartInput;
-		if (animator && !isSpinAttacking) {
+		if (animator && !isSpinAttacking && !isBackflipping) {
 			const bool isWalking = playerVariables->state == PlayerState::kWalk && !isRunning;
 			animator->animationSpeedMagnification = isWalking ? 0.8f : 1.2f;
 		}
@@ -167,7 +176,7 @@ void PlayerHorizontalMoveSystem::Update(No::Registry& registry, float deltaTime)
 			: 0.f;
 
 		// 回転攻撃中の見た目の回転はHurricaneKickに任せる。
-		if (!isSpinAttacking) FacePlayerTowardsMoveDirection(transform, finalVelocity, deltaTime);
+		if (!isSpinAttacking && !isBackflipping) FacePlayerTowardsMoveDirection(transform, finalVelocity, deltaTime);
 	}
 }
 

@@ -10,7 +10,7 @@ enum class PlayerState {
 	kSleep,					// 寝っ転がる
 };
 
-// ハイジャンプは独立した行動状態ではなく、JumpStateの種類として扱う。
+// kHighJumpは既存データで使用するバックフリップのジャンプ種別。
 enum class PlayerJumpKind {
 	kNormal,
 	kHighJump,
@@ -49,7 +49,7 @@ struct PlayerComponent {
 	PlayerState state = PlayerState::kWait;
 	PlayerJumpKind jumpKind = PlayerJumpKind::kNormal;
 
-	float highJumpCostRate = 10.0f;
+	float backflipStaminaCost = 1.0f;
 	float airDashStaminaCostRate = 2.0f;
 
 	// コヨーテタイム
@@ -71,9 +71,7 @@ struct PlayerInputComponent {
 	No::Vector3 moveAxis = No::Vector3::ZERO;
 	bool jumpTriggered = false;
 	bool jumpReleased = false;
-	bool highJumpTriggered = false;
-	bool highJumpPressed = false;
-	bool highJumpReleased = false;
+	bool crouchPressed = false;
 	bool airDashPressed = false;
 	bool airDashReleased = false;
 	bool createScaffoldTriggered = false;
@@ -97,7 +95,16 @@ struct PlayerActionComponent {
 // 移動処理の実行時データ。シーンへの保存対象にはしない。
 // PlayerComponent（永続データ）とは意図的に分離している。
 // justJumpedとslopeYはPlayerJumpSystemの冒頭で毎フレームリセットされる。
+enum class PlayerBackflipPhase {
+	kNone,
+	kWindup,
+	kAirborne,
+	kLanding,
+};
+
 struct PlayerMoveTransientComponent {
+	bool crouching = false;
+	PlayerBackflipPhase backflipPhase = PlayerBackflipPhase::kNone;
 	bool justJumped = false;   // このフレームでジャンプ入力を処理したか（接地/重力判定の分岐に使用）
 	float slopeY = 0.f;        // 斜面投影による水平移動のy寄与分（PlayerHorizontalMoveSystemが算出）
 	float jumpBufferTimer = 0.f; // 未消費の通常ジャンプ入力の残り保持時間

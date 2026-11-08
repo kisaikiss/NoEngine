@@ -116,7 +116,7 @@ void PauseMenuSystem::CreateMenuEntities(No::Registry& registry) {
 	optionHintEntity_ = createText("<-/-> : Change   B Button : Back", 120.f, 0.8f);
 	controlsTitleEntity_ = createText("CONTROLS", -180.f, 2.0f);
 	for (int i = 0; i < kControlLineCount; ++i) {
-		controlLineEntities_[i] = createText("", -80.f + static_cast<float>(i) * 48.f, 1.0f);
+		controlLineEntities_[i] = createText("", -80.f + static_cast<float>(i) * 40.f, 1.0f);
 	}
 	controlsHintEntity_ = createText("B Button : Back", 190.f, 0.8f);
 }
@@ -264,11 +264,11 @@ void PauseMenuSystem::RefreshControlsMenuVisuals(No::Registry& registry) {
 	if (auto* t = registry.GetComponent<No::TextComponent>(optionValueEntity_)) t->isVisible = false;
 	if (auto* t = registry.GetComponent<No::TextComponent>(optionHintEntity_)) t->isVisible = false;
 
-	std::vector<std::string> lines = { "Move: Left Stick", "Jump: A Button", "Spin Attack: X Button / Z Key" };
+	std::vector<std::string> lines = { "Move: Left Stick", "Jump: A Button", "Crouch: Hold LT / E", "Spin Attack: X Button / Z Key" };
 	bool firstPlayer = true;
 	for (auto e : registry.View<PlayerComponent>()) {
 		if (firstPlayer) {
-			if (registry.Has<HighJumpTag>(e)) lines.push_back("High Jump: B Button");
+			if (registry.Has<HighJumpTag>(e)) lines.push_back("Backflip: LT + A / E + Space");
 			if (registry.Has<AirDashTag>(e)) lines.push_back("Air Dash: Hold LB in the air");
 			if (registry.Has<CreateMagicScaffoldTag>(e)) lines.push_back("Create Scaffold: Y Button in the air");
 			firstPlayer = false;

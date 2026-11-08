@@ -7,7 +7,7 @@ public:
 	void Update(No::Registry& registry, float deltaTime) override;
 
 	static constexpr int kMainItemCount = 5;
-	static constexpr int kControlLineCount = 6;
+	static constexpr int kControlLineCount = 7;
 private:
 
 	bool initialized_ = false;

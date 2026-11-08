@@ -130,41 +130,88 @@ void HandleNormalJump(No::Registry& registry, No::Entity entity, PlayerComponent
 	}
 }
 
-// ハイジャンプの「保持中の加速」と「発動トリガー」を担当
-void HandleHighJump(No::Registry& registry, No::Entity entity, PlayerComponent* playerVariables,
-	No::GroundStateComponent* groundState, bool isGrounded, PlayerMoveTransientComponent* transientState,
-	const PlayerInputComponent& input, float deltaTime) {
+// Backflipの30fpsキーフレーム。つま先が床を離れる直前と、床に触れる時刻。
+constexpr float kBackflipTakeoff = 21.0f / 30.0f;
+constexpr float kBackflipContact = 40.0f / 30.0f;
+constexpr float kBackflipBeforeContact = 39.0f / 30.0f;
 
-	const bool hasHighJumpTag = registry.Has<HighJumpTag>(entity);
-
-	if (input.highJumpPressed) {
-		if (hasHighJumpTag && PlayerStates::Get(playerVariables->state).IsJumpState() && !isGrounded) {
-			if (playerVariables->stamina > playerVariables->highJumpCostRate * deltaTime) {
-				playerVariables->yVelocity = playerVariables->highJumpSpeed;
-				playerVariables->jumpKind = PlayerJumpKind::kHighJump;
-				playerVariables->stamina -= playerVariables->highJumpCostRate * deltaTime;
-			}
-		}
+void ResetCrouchAndBackflip(PlayerMoveTransientComponent& move, No::AnimatorComponent* animator) {
+	if (move.backflipPhase != PlayerBackflipPhase::kNone && animator) {
+		animator->animationSpeedMagnification = 1.0f;
 	}
+	move.backflipPhase = PlayerBackflipPhase::kNone;
+	move.crouching = false;
+}
 
-	if (input.highJumpTriggered && hasHighJumpTag) {
-		if (isGrounded || playerVariables->infinityJump) {
-			if (playerVariables->stamina > playerVariables->highJumpCostRate * deltaTime) {
-				playerVariables->yVelocity = playerVariables->highJumpSpeed;
-				playerVariables->jumpKind = PlayerJumpKind::kHighJump;
-				transientState->justJumped = true;
-				groundState->isGrounded = false;
-			}
+void UpdateBackflip(PlayerComponent& player, No::GroundStateComponent& ground,
+	PlayerMoveTransientComponent& move, No::AnimatorComponent& animator, float deltaTime) {
+	switch (move.backflipPhase) {
+	case PlayerBackflipPhase::kWindup:
+		if (!ground.isGrounded || !animator.IsPlaying()) {
+			ResetCrouchAndBackflip(move, &animator);
+		} else if (animator.time >= kBackflipTakeoff) {
+			const float launchSpeed = std::max(player.highJumpSpeed, player.jumpSpeed * 1.15f);
+			// 同じ高さに戻るまでの飛行時間に、クリップの空中区間を合わせる。
+			const float flightTime = 2.0f * launchSpeed / std::max(-player.gravity, 0.01f);
+			animator.Seek(kBackflipTakeoff);
+			animator.animationSpeedMagnification = (kBackflipContact - kBackflipTakeoff) / flightTime;
+			player.yVelocity = launchSpeed;
+			player.coyoteTimer = player.coyoteTime;
+			player.jumpKind = PlayerJumpKind::kHighJump;
+			player.stamina = std::max(0.0f, player.stamina - std::max(player.backflipStaminaCost, 0.0f));
+			ground.isGrounded = false;
+			move.justJumped = true;
+			move.backflipPhase = PlayerBackflipPhase::kAirborne;
 		}
+		break;
+	case PlayerBackflipPhase::kAirborne:
+		if (ground.isGrounded) {
+			animator.Seek(kBackflipContact);
+			animator.animationSpeedMagnification = 1.0f;
+			player.yVelocity = 0.0f;
+			move.backflipPhase = PlayerBackflipPhase::kLanding;
+		} else if (animator.animationSpeedMagnification > 0.0f
+			&& animator.time + animator.animationSpeedMagnification * deltaTime >= kBackflipBeforeContact) {
+			// 低い足場へ落ちる場合は、接地するまで着地直前のポーズを保つ。
+			animator.Seek(kBackflipBeforeContact);
+			animator.animationSpeedMagnification = 0.0f;
+		}
+		break;
+	case PlayerBackflipPhase::kLanding:
+		if (!ground.isGrounded || !animator.IsPlaying()) {
+			ResetCrouchAndBackflip(move, &animator);
+		}
+		break;
+	default:
+		break;
 	}
 }
 
-// ジャンプ/ハイジャンプ入力を離した瞬間の減速処理
-void HandleJumpRelease(PlayerComponent* playerVariables, const PlayerInputComponent& input) {
-	if (input.jumpReleased || input.highJumpReleased) {
-		if (playerVariables->yVelocity > 0.f) {
-			playerVariables->yVelocity *= 0.5f;
+void UpdateCrouchAndBackflip(No::Registry& registry, No::Entity entity, PlayerComponent& player,
+	No::GroundStateComponent& ground, PlayerMoveTransientComponent& move,
+	const PlayerInputComponent& input, No::AnimatorComponent* animator, float deltaTime) {
+	if (move.backflipPhase != PlayerBackflipPhase::kNone) {
+		if (animator) {
+			UpdateBackflip(player, ground, move, *animator, deltaTime);
+		} else {
+			ResetCrouchAndBackflip(move, animator);
 		}
+		if (move.backflipPhase != PlayerBackflipPhase::kNone) return;
+	}
+
+	const auto* action = registry.GetComponent<PlayerActionComponent>(entity);
+	move.crouching = ground.isGrounded && input.crouchPressed
+		&& (!action || action->activeAction == PlayerActionType::kNone);
+	if (!move.crouching || !input.jumpTriggered || !animator || !registry.Has<HighJumpTag>(entity)
+		|| player.stamina < std::max(player.backflipStaminaCost, 0.0f)) return;
+
+	const float previousSpeed = animator->animationSpeedMagnification;
+	animator->animationSpeedMagnification = 1.0f;
+	if (animator->Play("Backflip", false) && animator->GetDuration() > kBackflipContact) {
+		move.backflipPhase = PlayerBackflipPhase::kWindup;
+		move.crouching = false;
+	} else {
+		animator->animationSpeedMagnification = previousSpeed;
 	}
 }
 
@@ -191,64 +238,66 @@ void PlayerJumpSystem::Update(No::Registry& registry, float deltaTime) {
 			transientState->jumpBufferTimer = 0.f;
 			transientState->bufferedJumpReleased = false;
 		};
-		if (isSkip) {
-			clearJumpBuffer();
-			continue;
-		}
+		auto* animator = registry.GetComponent<No::AnimatorComponent>(entity);
 		// リスポーン位置への移動が完了するまでは操作を止める。
-		auto* deathSequence = registry.GetComponent<PlayerDeathSequenceComponent>(entity);
-		if (deathSequence && deathSequence->phase != PlayerDeathSequenceComponent::Phase::kBlackOut &&
-			deathSequence->phase != PlayerDeathSequenceComponent::Phase::kFadeIn) {
+		const auto* deathSequence = registry.GetComponent<PlayerDeathSequenceComponent>(entity);
+		const bool deathLocked = deathSequence
+			&& deathSequence->phase != PlayerDeathSequenceComponent::Phase::kBlackOut
+			&& deathSequence->phase != PlayerDeathSequenceComponent::Phase::kFadeIn;
+		if (isSkip || deathLocked || registry.Has<GoalDirectionLockTag>(entity) || registry.Has<DialogueLockTag>(entity)) {
 			clearJumpBuffer();
-			continue;
-		}
-
-		if (registry.Has<GoalDirectionLockTag>(entity) || registry.Has<DialogueLockTag>(entity)) {
-			clearJumpBuffer();
+			ResetCrouchAndBackflip(*transientState, animator);
 			continue;
 		}
 
 		auto* playerVariables = registry.GetComponent<PlayerComponent>(entity);
 		auto* input = registry.GetComponent<PlayerInputComponent>(entity);
 		auto* groundState = registry.GetComponent<No::GroundStateComponent>(entity);
-		transientState->jumpBufferTimer = std::max(0.f,
-			transientState->jumpBufferTimer - std::max(deltaTime, 0.f));
-		if (input->jumpTriggered) {
-			transientState->jumpBufferTimer = std::max(playerVariables->jumpBufferTime, 0.f);
-			transientState->bufferedJumpReleased = false;
-		}
-		if (input->jumpReleased && transientState->jumpBufferTimer > 0.f) {
-			transientState->bufferedJumpReleased = true;
-		}
-
-		// isGrounded は各ハンドラ内で isGrounded を書き換える前の値を使う必要があるため先に確定
-		bool isGrounded = groundState->isGrounded;
-
-		// コヨーテタイム内ならisGroundedをtrueにする
-		if (!isGrounded && !PlayerStates::Get(playerVariables->state).IsJumpState()) {
-			if (playerVariables->coyoteTime > playerVariables->coyoteTimer) {
-				playerVariables->coyoteTimer += deltaTime;
-				isGrounded = true;
-			}
+		UpdateCrouchAndBackflip(registry, entity, *playerVariables, *groundState, *transientState,
+			*input, animator, deltaTime);
+		if (transientState->crouching || transientState->backflipPhase != PlayerBackflipPhase::kNone) {
+			if (groundState->isGrounded) playerVariables->coyoteTimer = 0.0f;
+			clearJumpBuffer();
 		} else {
-			if (PlayerStates::Get(playerVariables->state).IsJumpState()) {
-				playerVariables->coyoteTimer = playerVariables->coyoteTime;
-			} else {
-				playerVariables->coyoteTimer = 0.0f;
+			transientState->jumpBufferTimer = std::max(0.f,
+				transientState->jumpBufferTimer - std::max(deltaTime, 0.f));
+			if (input->jumpTriggered) {
+				transientState->jumpBufferTimer = std::max(playerVariables->jumpBufferTime, 0.f);
+				transientState->bufferedJumpReleased = false;
 			}
-		}
+			if (input->jumpReleased && transientState->jumpBufferTimer > 0.f) {
+				transientState->bufferedJumpReleased = true;
+			}
 
-		HandleNormalJump(registry, entity, playerVariables, groundState, isGrounded, transientState, *input);
-		if (transientState->justJumped) {
-			// 入力を離したフレームはHandleJumpReleaseが減速するため、二重適用しない。
-			if (transientState->bufferedJumpReleased && !input->jumpReleased) {
+			// isGrounded は各ハンドラ内で isGrounded を書き換える前の値を使う必要があるため先に確定
+			bool isGrounded = groundState->isGrounded;
+
+			// コヨーテタイム内ならisGroundedをtrueにする
+			if (!isGrounded && !PlayerStates::Get(playerVariables->state).IsJumpState()) {
+				if (playerVariables->coyoteTime > playerVariables->coyoteTimer) {
+					playerVariables->coyoteTimer += deltaTime;
+					isGrounded = true;
+				}
+			} else {
+				if (PlayerStates::Get(playerVariables->state).IsJumpState()) {
+					playerVariables->coyoteTimer = playerVariables->coyoteTime;
+				} else {
+					playerVariables->coyoteTimer = 0.0f;
+				}
+			}
+
+			HandleNormalJump(registry, entity, playerVariables, groundState, isGrounded, transientState, *input);
+			if (transientState->justJumped) {
+				// 入力を離したフレームの減速を二重に適用しない。
+				if (transientState->bufferedJumpReleased && !input->jumpReleased) {
+					playerVariables->yVelocity *= 0.5f;
+				}
+				clearJumpBuffer();
+			}
+			if (input->jumpReleased && playerVariables->yVelocity > 0.f) {
 				playerVariables->yVelocity *= 0.5f;
 			}
-			clearJumpBuffer();
 		}
-		HandleHighJump(registry, entity, playerVariables, groundState, isGrounded, transientState, *input, deltaTime);
-		if (transientState->justJumped) clearJumpBuffer();
-		HandleJumpRelease(playerVariables, *input);
 		const bool isJumping = PlayerStates::Get(playerVariables->state).IsJumpState()
 			|| transientState->justJumped || !groundState->isGrounded;
 		if (!isJumping || !shadowMesh || !shadowTransform) continue;

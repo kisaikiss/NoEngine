@@ -42,6 +42,8 @@ void PlayerScaffoldActionSystem::Update(No::Registry& registry, float deltaTime)
 			}
 		}
 
+		const auto* move = registry.GetComponent<PlayerMoveTransientComponent>(entity);
+		if (move && move->backflipPhase != PlayerBackflipPhase::kNone) continue;
 		if (!input->createScaffoldTriggered || ground->isGrounded || player->infinityJump
 			|| !player->canCreateScaffold || !hasAbility) continue;
 

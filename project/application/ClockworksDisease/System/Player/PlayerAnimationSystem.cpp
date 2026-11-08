@@ -13,7 +13,14 @@ void PlayerAnimationSystem::Update(No::Registry& registry, float deltaTime) {
 		const auto* action = registry.GetComponent<PlayerActionComponent>(entity);
 		// 攻撃の単発再生は移動状態のアニメーションで上書きしない。
 		if (action && action->activeAction == PlayerActionType::kSpinAttack) continue;
+		const auto* move = registry.GetComponent<PlayerMoveTransientComponent>(entity);
+		if (move && move->backflipPhase != PlayerBackflipPhase::kNone) continue;
 		animator->loop = true;
+		if (move && move->crouching) {
+			animator->animationSpeedMagnification = 1.0f;
+			animator->SetAnimation("Kneeling");
+			continue;
+		}
 
 		const bool moving = false;
 		PlayerStateContext stateContext{ *playerVariables, false, moving, false };

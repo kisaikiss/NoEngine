@@ -19,11 +19,11 @@
             "skills": [
                 {
                     "id": "high_jump",
-                    "name": "ハイジャンプ",
+                    "name": "バックフリップ",
                     "cost": 1,
                     "iconTexture": "resources/game/ClockworksDisease/Texture/UI/SkillShop/HighJumpIcon.png",
                     "previewTexture": "resources/game/ClockworksDisease/Texture/UI/SkillShop/HighJumpPreview.png",
-                    "description": "スタミナを使って高く跳ぶ。\n地上で B / E を押し、長押しで上昇を維持する。",
+                    "description": "しゃがんだ状態から後方宙返りで高く跳ぶ。\n地上で LT + A / E + Space。スタミナを1消費する。",
                     "ability": "kHighJump"
                 },
                 {
