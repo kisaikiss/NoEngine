@@ -1,9 +1,10 @@
 #include "MeshPass.h"
-#include "engine/Math/Types/Calculations/Vector3Calculations.h"
 #include "engine/Functions/Shader/ShaderReflection.h"
 #include "engine/Utilities/Conversion/ConvertString.h"
 #include "engine/Runtime/GraphicsCore.h"
 #include "engine/Functions/ECS/Component/Asset/AnimatorComponent.h"
+#include "engine/Functions/ECS/Component/Common/CameraComponent.h"
+#include "engine/Functions/ECS/Component/Common/TransformComponent.h"
 #include "engine/Assets/Model/ModelSaver.h"
 #include "engine/Assets/AssetManager.h"
 #include "engine/Assets/Texture/TextureManager.h"
@@ -15,16 +16,9 @@ namespace Render {
 
 using namespace Component;
 
-static bool IsTransparent(MaterialComponent* m) {
-	if (m->renderMode == RenderMode::kEmissive) {
-		m->blendMode = BlendMode::kAdd;
-	}
-	return m->blendMode != BlendMode::kNormal || m->color.a < 1.0f;
-}
-
 // ============================== MeshPassBase ==============================
 
-MeshPassBase::MeshPassBase() : camera_(nullptr) {
+MeshPassBase::MeshPassBase() {
 	skyBoxTexture_ = TextureManager::LoadTextureFile("resources/engine/Texture/rostock_laage_airport_4k.dds");
 }
 
@@ -53,57 +47,8 @@ void MeshPassBase::EnsurePSOsInitialized() {
 	rootSigIDs_[RenderMode::kEmissive] = context.GetRootSignatureID("Renderer : Emissive PSO");
 }
 
-void MeshPassBase::Collect(ECS::Registry& registry) {
-	auto view = registry.View<
-		TransformComponent,
-		MeshComponent,
-		MaterialComponent
-	>();
-	opaqueItems_.clear();
-	transparentItems_.clear();
-
-	camera_ = GetTargetCamera();
-	if (camera_ == nullptr) return;
-	Math::Vector3 cameraPos = camera_->forGPU.worldPosition;
-
-	for (auto entity : view) {
-		auto* mesh = registry.GetComponent<MeshComponent>(entity);
-		if (!mesh->isVisible) continue;
-		auto* material = registry.GetComponent<MaterialComponent>(entity);
-		auto* transform = registry.GetComponent<TransformComponent>(entity);
-		auto* anime = registry.GetComponent<AnimatorComponent>(entity);
-		Transform* animeLocal = nullptr;
-		if (anime) {
-			animeLocal = &anime->local;
-		}
-
-		float distance = MathCalculations::LengthSquared(transform->translate - cameraPos);
-
-		DrawItem item{ mesh->handle, material->handles, material, transform, animeLocal, distance, anime };
-
-		if (IsTransparent(material)) {
-			transparentItems_.push_back(std::move(item));
-		} else {
-			opaqueItems_.push_back(std::move(item));
-		}
-	}
-}
-
-void MeshPassBase::Sort() {
-	// 不透明: Early-Z効率を上げるため前→奥。PSO単位でまとめてステート変更コストを削減してもよい
-	std::sort(opaqueItems_.begin(), opaqueItems_.end(),
-		[](const DrawItem& a, const DrawItem& b) {
-			return a.distanceToCamera < b.distanceToCamera;
-		});
-
-	// 半透明: PSOを無視して奥→前(距離降順)で厳密にソートし、正しい合成順を保証する
-	std::sort(transparentItems_.begin(), transparentItems_.end(),
-		[](const DrawItem& a, const DrawItem& b) {
-			return a.distanceToCamera > b.distanceToCamera;
-		});
-}
-
-void MeshPassBase::RenderItems(GraphicsContext& context, const RenderGraphRegistry& resourceRegistry, const std::vector<DrawItem>& items, ECS::Registry& registry) {
+void MeshPassBase::RenderItems(GraphicsContext& context, const RenderGraphRegistry& resourceRegistry,
+	const std::vector<RenderContext::MeshDrawItem>& items, const CameraComponent& camera, ECS::Registry& registry) {
 	(void)resourceRegistry;
 	uint32_t currentPSO = 0xFFFFFFFF;
 	auto* renderCtx = GetRenderContext();
@@ -147,7 +92,7 @@ void MeshPassBase::RenderItems(GraphicsContext& context, const RenderGraphRegist
 		m.worldIT.Inverse();
 		m.worldIT.Transpose();
 		context.SetDynamicConstantBufferView(rootIndex["gWorldMatrix"], sizeof(MeshConstants), &m);
-		context.SetDynamicConstantBufferView(rootIndex["gCameraMatrix"], sizeof(Component::CameraForGPU), &camera_->forGPU);
+		context.SetDynamicConstantBufferView(rootIndex["gCameraMatrix"], sizeof(Component::CameraForGPU), &camera.forGPU);
 
 		{
 			if (item.material->renderMode != RenderMode::kEmissive) {
@@ -229,7 +174,7 @@ void MeshPassBase::RenderItems(GraphicsContext& context, const RenderGraphRegist
 					Math::Vector3(item.material->uvPosition.x, item.material->uvPosition.y, 0.0f)
 				);
 				context.SetDynamicConstantBufferView(rootIndex["gMaterial"], sizeof(constants), &constants);
-				auto* material = ModelSaver::Get().GetMaterial(item.materialHandles[subMesh.materialIndex]);
+				auto* material = ModelSaver::Get().GetMaterial(item.material->handles[subMesh.materialIndex]);
 				TextureRef textureHandle = material->textureHandle;
 				if (!item.material->textureName.empty()) {
 					const uint64_t generation = AssetManager::GetAddressableGeneration();
@@ -257,16 +202,18 @@ void MeshPassBase::RenderItems(GraphicsContext& context, const RenderGraphRegist
 // =================================== MeshPass ===================================
 
 void MeshPass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& resourceRegistry, ECS::Registry& registry) {
+	const auto* camera = GetTargetCamera();
+	if (!camera) return;
 	EnsurePSOsInitialized();
 
-	Collect(registry);
-	Sort();
-	RenderItems(gfx, resourceRegistry, opaqueItems_, registry); // 不透明のみ。半透明はTransparentMeshPassが担当
-	RenderOutline(gfx, registry);
+	const auto& items = GetRenderContext()->GetMeshDrawLists(registry, *camera).opaque;
+	RenderItems(gfx, resourceRegistry, items, *camera, registry);
+	RenderOutline(gfx, items, *camera, registry);
 }
 
-void MeshPass::RenderOutline(GraphicsContext& context, ECS::Registry& registry) {
-	if (opaqueItems_.empty()) return;
+void MeshPass::RenderOutline(GraphicsContext& context, const std::vector<RenderContext::MeshDrawItem>& items,
+	const CameraComponent& camera, ECS::Registry& registry) {
+	if (items.empty()) return;
 	auto* renderCtx = GetRenderContext();
 	outlinePSOName_ = "Renderer : outline PSO";
 	uint32_t a = renderCtx->GetRootSignatureID(outlinePSOName_);
@@ -278,7 +225,7 @@ void MeshPass::RenderOutline(GraphicsContext& context, ECS::Registry& registry) 
 	context.SetRootSignature(renderCtx->GetRootSignature(outlineRootSigID));
 	context.SetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	for (auto& item : opaqueItems_) {
+	for (const auto& item : items) {
 		if (!item.material->drawOutline) continue;
 
 		auto& rootIndex = RootSignatureBuilder::GetRootIndexMap(outlinePSOName_);
@@ -288,7 +235,7 @@ void MeshPass::RenderOutline(GraphicsContext& context, ECS::Registry& registry) 
 			worldData = item.animationLocal->MakeAffineMatrix4x4(registry) * worldData;
 		}
 		context.SetDynamicConstantBufferView(rootIndex["gWorldMatrix"], sizeof(Math::Matrix4x4), &worldData);
-		context.SetDynamicConstantBufferView(rootIndex["gCameraMatrix"], sizeof(Component::CameraForGPU), &camera_->forGPU);
+		context.SetDynamicConstantBufferView(rootIndex["gCameraMatrix"], sizeof(Component::CameraForGPU), &camera.forGPU);
 
 		auto* mesh = ModelSaver::Get().GetMesh(item.meshHandle);
 		if (!mesh) continue;

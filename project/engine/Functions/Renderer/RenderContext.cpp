@@ -1,5 +1,10 @@
 #include "RenderContext.h"
+#include "engine/Functions/ECS/Component/Asset/AnimatorComponent.h"
 #include "engine/Functions/ECS/Component/Asset/LightComponent.h"
+#include "engine/Functions/ECS/Component/Asset/MaterialComponent.h"
+#include "engine/Functions/ECS/Component/Asset/MeshComponent.h"
+#include "engine/Functions/ECS/Component/Common/TransformComponent.h"
+#include "engine/Math/Types/Calculations/Vector3Calculations.h"
 #include "engine/Runtime/GraphicsCore.h"
 #include "engine/Editor/Utilities/EditUtils.h"
 
@@ -17,6 +22,9 @@ RenderContext::RenderContext() {
 }
 
 void RenderContext::Update(ECS::Registry& registry) {
+	// 収集済みのリストを無効化し、確保済みの領域は次の描画で再利用する。
+	activeMeshDrawListCount_ = 0;
+
 	// 3Dカメラ収集
 	{
 		auto cameraView = registry.View<CameraComponent, ActiveCameraTag>();
@@ -59,6 +67,46 @@ void RenderContext::Update(ECS::Registry& registry) {
 		}
 	}
 
+}
+
+const RenderContext::MeshDrawLists& RenderContext::GetMeshDrawLists(ECS::Registry& registry, const CameraComponent& camera) {
+	for (size_t i = 0; i < activeMeshDrawListCount_; ++i) {
+		if (meshDrawLists_[i].camera == &camera) return meshDrawLists_[i].lists;
+	}
+
+	if (activeMeshDrawListCount_ == meshDrawLists_.size()) meshDrawLists_.emplace_back();
+	auto& entry = meshDrawLists_[activeMeshDrawListCount_];
+	auto& lists = entry.lists;
+	lists.opaque.clear();
+	lists.transparent.clear();
+
+	const auto cameraPos = camera.forGPU.worldPosition;
+	for (auto entity : registry.View<TransformComponent, MeshComponent, MaterialComponent>()) {
+		auto* mesh = registry.GetComponent<MeshComponent>(entity);
+		if (!mesh->isVisible) continue;
+		auto* material = registry.GetComponent<MaterialComponent>(entity);
+		auto* transform = registry.GetComponent<TransformComponent>(entity);
+		auto* animator = registry.GetComponent<AnimatorComponent>(entity);
+		Transform* animationLocal = animator ? &animator->local : nullptr;
+		const float distance = MathCalculations::LengthSquared(transform->translate - cameraPos);
+
+		if (material->renderMode == RenderMode::kEmissive) material->blendMode = BlendMode::kAdd;
+		const bool transparent = material->blendMode != BlendMode::kNormal || material->color.a < 1.0f;
+		auto& items = transparent ? lists.transparent : lists.opaque;
+		items.push_back({mesh->handle, material, transform, animationLocal, distance, animator});
+	}
+
+	// 不透明は手前から奥、半透明は奥から手前の順に描画する。
+	std::sort(lists.opaque.begin(), lists.opaque.end(), [](const MeshDrawItem& a, const MeshDrawItem& b) {
+		return a.distanceToCamera < b.distanceToCamera;
+	});
+	std::sort(lists.transparent.begin(), lists.transparent.end(), [](const MeshDrawItem& a, const MeshDrawItem& b) {
+		return a.distanceToCamera > b.distanceToCamera;
+	});
+
+	entry.camera = &camera;
+	++activeMeshDrawListCount_;
+	return lists;
 }
 
 void RenderContext::SetDirectionalLight(GraphicsContext& gfx, UploadBuffer& directionalLightUpload, uint32_t directionalLightNum) {

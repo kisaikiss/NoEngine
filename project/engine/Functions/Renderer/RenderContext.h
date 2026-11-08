@@ -1,4 +1,5 @@
 #pragma once
+#include "engine/Assets/AssetHandles.h"
 #include "engine/Utilities/NonCopyable.h"
 #include "engine/Runtime/GpuResource/GpuBuffer.h"
 #include "engine/Runtime/GpuResource/UploadBuffer.h"
@@ -10,6 +11,13 @@
 #include "PipelineState/StateObjectManager.h"
 
 namespace NoEngine {
+struct Transform;
+namespace Component {
+struct AnimatorComponent;
+struct MaterialComponent;
+struct TransformComponent;
+}
+
 /// <summary>
 /// 描画に必要な情報を描画Passから他の描画Passへ受け渡しするためのクラス
 /// </summary>
@@ -18,6 +26,22 @@ public:
 	RenderContext();
 
 	void Update(ECS::Registry& registry);
+
+	struct MeshDrawItem {
+		Asset::MeshHandle meshHandle;
+		Component::MaterialComponent* material;
+		Component::TransformComponent* transform;
+		Transform* animationLocal;
+		float distanceToCamera;
+		Component::AnimatorComponent* animator;
+	};
+
+	struct MeshDrawLists {
+		std::vector<MeshDrawItem> opaque;
+		std::vector<MeshDrawItem> transparent;
+	};
+
+	const MeshDrawLists& GetMeshDrawLists(ECS::Registry& registry, const Component::CameraComponent& camera);
 
 	/// <summary>
 	/// それぞれのライトの数
@@ -132,6 +156,13 @@ private:
 	Component::CameraComponent* camera_;
 	Component::CameraComponent* debugCamera_;
 	std::unordered_map<std::string, Component::CameraComponent*> cameras_;
+
+	struct CameraMeshDrawLists {
+		const Component::CameraComponent* camera;
+		MeshDrawLists lists;
+	};
+	std::vector<CameraMeshDrawLists> meshDrawLists_;
+	size_t activeMeshDrawListCount_ = 0;
 
 	// 2Dカメラ
 	Component::Camera2DComponent* camera2d_;
