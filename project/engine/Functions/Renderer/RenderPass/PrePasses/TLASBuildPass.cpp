@@ -42,11 +42,7 @@ void TLASBuildPass::BuildRaytracingInstances(ECS::Registry& registry) {
 		auto* rtMesh = animator ? animator->GetRaytracingMesh(*mesh) : mesh->raytracingMesh.get();
 		if (!rtMesh) continue;
 
-		RaytracingInstance inst = {};
-		inst.rtMesh = rtMesh;
-
-		auto& desc = inst.desc;
-		memset(&desc, 0, sizeof(desc));
+		D3D12_RAYTRACING_INSTANCE_DESC desc{};
 
 		// このエンティティが自身にPoint/SpotLightを持っているか(=発光体メッシュか)を判定
 		const bool isShadowOff =
@@ -59,9 +55,9 @@ void TLASBuildPass::BuildRaytracingInstances(ECS::Registry& registry) {
 		desc.InstanceContributionToHitGroupIndex = 0;
 
 		FillInstanceTransform(desc, transform, animator, registry);
-		desc.AccelerationStructure = inst.rtMesh->blas->GetGPUVirtualAddress();
+		desc.AccelerationStructure = rtMesh->blas->GetGPUVirtualAddress();
 
-		instances_.push_back(inst);
+		instances_.push_back(desc);
 	}
 
 }
@@ -70,74 +66,64 @@ void TLASBuildPass::BuildTLAS(GraphicsContext& gfx) {
 	if (instances_.empty()) return;
 
 	auto* renderContext = GetRenderContext();
+	auto& tlas = renderContext->GetTLAS();
 
-	// インスタンスバッファ
-	const UINT instanceBufferSize = UINT(sizeof(D3D12_RAYTRACING_INSTANCE_DESC) * instances_.size());
-
-	auto instDesc = CD3DX12_RESOURCE_DESC::Buffer(instanceBufferSize);
-	D3D12_HEAP_PROPERTIES uploadHeap{};
-	uploadHeap.Type = D3D12_HEAP_TYPE_UPLOAD;
-
-	renderContext->CreateRaytraceInstanceBuffer(uploadHeap, instDesc);
-
-	auto& instanceBuffer = renderContext->GetRaytracingInstanceBuffer();
-
-	// マップしてコピー
-	{
-		void* mapped = nullptr;
-		instanceBuffer->Map(0, nullptr, &mapped);
-		auto* dst = reinterpret_cast<D3D12_RAYTRACING_INSTANCE_DESC*>(mapped);
-		for (size_t i = 0; i < instances_.size(); ++i) {
-			dst[i] = instances_[i].desc;
-		}
-		instanceBuffer->Unmap(0, nullptr);
-	}
+	const size_t instanceBufferSize = sizeof(D3D12_RAYTRACING_INSTANCE_DESC) * instances_.size();
+	const auto upload = gfx.ReserveUploadMemory(instanceBufferSize);
+	std::memcpy(upload.DataPtr, instances_.data(), instanceBufferSize);
 
 	// TLAS inputs
 	D3D12_BUILD_RAYTRACING_ACCELERATION_STRUCTURE_INPUTS inputs{};
 	inputs.Type = D3D12_RAYTRACING_ACCELERATION_STRUCTURE_TYPE_TOP_LEVEL;
 	inputs.Flags = D3D12_RAYTRACING_ACCELERATION_STRUCTURE_BUILD_FLAG_PREFER_FAST_TRACE;
-	inputs.NumDescs = (UINT)instances_.size();
+	inputs.NumDescs = static_cast<UINT>(instances_.size());
 	inputs.DescsLayout = D3D12_ELEMENTS_LAYOUT_ARRAY;
-	inputs.InstanceDescs = instanceBuffer->GetGPUVirtualAddress();
+	inputs.InstanceDescs = upload.GpuAddress;
 
-	D3D12_RAYTRACING_ACCELERATION_STRUCTURE_PREBUILD_INFO prebuild{};
-	GraphicsCore::sGraphicsDevice->GetDevice()->GetRaytracingAccelerationStructurePrebuildInfo(&inputs, &prebuild);
+	// 同じ設定では、照会済みのインスタンス数以下のビルドにも確保済みの容量を使える。
+	if (inputs.NumDescs > instanceCapacity_ || !tlas) {
+		auto* device = GraphicsCore::sGraphicsDevice->GetDevice();
+		D3D12_RAYTRACING_ACCELERATION_STRUCTURE_PREBUILD_INFO prebuild{};
+		device->GetRaytracingAccelerationStructurePrebuildInfo(&inputs, &prebuild);
+		if (prebuild.ResultDataMaxSizeInBytes == 0) {
+			tlas.Reset();
+			LogError("TLAS の必要容量を取得できませんでした。");
+			return;
+		}
 
-	// TLAS / Scratch
-	auto tlasDesc = CD3DX12_RESOURCE_DESC::Buffer(prebuild.ResultDataMaxSizeInBytes,
-		D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
-	auto scratchDesc = CD3DX12_RESOURCE_DESC::Buffer(prebuild.ScratchDataSizeInBytes,
-		D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
+		if (!tlasScratch_ || tlasScratch_->GetDesc().Width < prebuild.ScratchDataSizeInBytes) {
+			const auto scratchDesc = CD3DX12_RESOURCE_DESC::Buffer(prebuild.ScratchDataSizeInBytes,
+				D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
+			const auto defaultHeap = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
+			if (FAILED(device->CreateCommittedResource(&defaultHeap, D3D12_HEAP_FLAG_NONE,
+				&scratchDesc, D3D12_RESOURCE_STATE_COMMON, nullptr, IID_PPV_ARGS(&tlasScratch_)))) {
+				tlas.Reset();
+				LogError("TLAS のスクラッチを確保できませんでした。");
+				return;
+			}
+		}
 
-	D3D12_HEAP_PROPERTIES defaultHeap{};
-	defaultHeap.Type = D3D12_HEAP_TYPE_DEFAULT;
-
-	renderContext->CreateTLAS(tlasDesc);
-	tlasScratch_.Reset();
-	GraphicsCore::sGraphicsDevice->GetDevice()->CreateCommittedResource(
-		&defaultHeap,
-		D3D12_HEAP_FLAG_NONE,
-		&scratchDesc,
-		D3D12_RESOURCE_STATE_COMMON,
-		nullptr,
-		IID_PPV_ARGS(&tlasScratch_)
-	);
+		if (FAILED(renderContext->EnsureTLASCapacity(prebuild.ResultDataMaxSizeInBytes))) {
+			LogError("TLAS の結果バッファを確保できませんでした。");
+			return;
+		}
+		instanceCapacity_ = inputs.NumDescs;
+	}
 
 	// Build TLAS
 	D3D12_BUILD_RAYTRACING_ACCELERATION_STRUCTURE_DESC build{};
 	build.Inputs = inputs;
 	build.ScratchAccelerationStructureData = tlasScratch_->GetGPUVirtualAddress();
-	auto* tlas = renderContext->GetTLAS().Get();
 	build.DestAccelerationStructureData = tlas->GetGPUVirtualAddress();
 
 	// BLAS 更新と同じコマンドリストに記録し、後続パスからの TLAS 参照を同期する。
 	auto* commandList = gfx.GetCommandList();
+	// スクラッチはフレームのコマンド実行完了時に COMMON に戻る。
 	const auto scratchBarrier = CD3DX12_RESOURCE_BARRIER::Transition(tlasScratch_.Get(),
 		D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 	commandList->ResourceBarrier(1, &scratchBarrier);
 	commandList->BuildRaytracingAccelerationStructure(&build, 0, nullptr);
-	const auto tlasBarrier = CD3DX12_RESOURCE_BARRIER::UAV(tlas);
+	const auto tlasBarrier = CD3DX12_RESOURCE_BARRIER::UAV(tlas.Get());
 	commandList->ResourceBarrier(1, &tlasBarrier);
 }
 

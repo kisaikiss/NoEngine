@@ -78,18 +78,8 @@ public:
 	void SetSpotLight(GraphicsContext& gfx, UploadBuffer& spotLightUpload, uint32_t spotLightNum);
 	void DestroySpotLight() { spotLightBuffer_.Destroy(); lightNums_.spotLightNum = 0; }
 
-	/// <summary>
-	/// レイトレーシング用のインスタンスバッファを作成する。
-	/// </summary>
-	/// <param name="uploadHeap">アップロード用ヒープのプロパティ。バッファ作成に使用するヒープ情報を参照で受け取る。</param>
-	/// <param name="instDesc">作成するインスタンスバッファのリソース記述（サイズや使用法など）を参照で受け取る。</param>
-	void CreateRaytraceInstanceBuffer(D3D12_HEAP_PROPERTIES& uploadHeap, CD3DX12_RESOURCE_DESC& instDesc);
-
-	/// <summary>
-	/// 指定されたリソース記述に基づいてトップレベルアクセラレーション構造（TLAS）を作成する。
-	/// </summary>
-	/// <param name="tlasDesc">TLAS作成に使用するCD3DX12_RESOURCE_DESC構造体への参照。</param>
-	void CreateTLAS(CD3DX12_RESOURCE_DESC& tlasDesc);
+	// TLAS の結果バッファは、必要容量を満たせない場合に作成する。
+	HRESULT EnsureTLASCapacity(UINT64 sizeInBytes);
 
 	/// <summary>
 	/// それぞれのライトの数を取得します。
@@ -127,7 +117,6 @@ public:
 
 	StructuredBuffer& GetDirectionalLightBuffer() { return directionalLightBuffer_; }
 
-	Microsoft::WRL::ComPtr<ID3D12Resource>& GetRaytracingInstanceBuffer() { return instanceBuffer_; }
 	Microsoft::WRL::ComPtr<ID3D12Resource>& GetTLAS() { return tlas_; }
 private:
 	// 初期化済みか
@@ -156,7 +145,6 @@ private:
 
 	// Raytracing
 	Microsoft::WRL::ComPtr<ID3D12Resource> tlas_;
-	Microsoft::WRL::ComPtr<ID3D12Resource> instanceBuffer_;
 };
 }
 
