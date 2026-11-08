@@ -8,7 +8,6 @@
 namespace NoEngine {
 namespace ECS {
 void SpriteLoadSystem::Update(Registry& registry, float deltaTime) {
-	static_cast<void>(deltaTime);
 	auto view = registry.View<Component::SpriteComponent>();
 	const uint64_t currentGeneration = AssetManager::GetAddressableGeneration();
 
@@ -16,26 +15,31 @@ void SpriteLoadSystem::Update(Registry& registry, float deltaTime) {
 		auto* sprite = registry.GetComponent<Component::SpriteComponent>(e);
 		const bool tableChanged = (sprite->loadedGeneration != currentGeneration);
 
-		// 通常テクスチャ
+		bool assignedTexture = false;
+		// Addressableから画像を割り当て、GIFなら再生を開始する。
 		if (tableChanged || sprite->loadedTextureName != sprite->textureName) {
 			sprite->loadedTextureName = sprite->textureName;
 
-			std::string path = AssetManager::GetFilePathFromAddressableName(sprite->textureName);
+			const auto path = sprite->textureName.empty() ? std::string{} : AssetManager::GetFilePathFromAddressableName(sprite->textureName);
 			if (!path.empty()) {
-				auto texture = TextureManager::LoadCovertTexture(path);
-				if (texture.IsValid()) {
-					sprite->textureHandle = texture;
-					if (registry.Has<Component::Transform2DComponent>(e)) {
-						
-						if (sprite->matchScaleToTexture) {
-							registry.GetComponent<Component::Transform2DComponent>(e)->scale =
-								Math::Vector2(static_cast<float>(sprite->textureHandle.GetWidth()),
-									static_cast<float>(sprite->textureHandle.GetHeight()));
-							sprite->matchScaleToTexture = false;
-						}
+				assignedTexture = sprite->SetTextureFromPath(path);
+				sprite->gifFromAddressable = sprite->gifTexture.IsLoaded();
+				if (assignedTexture && sprite->matchScaleToTexture) {
+					if (auto* transform = registry.GetComponent<Component::Transform2DComponent>(e)) {
+						transform->scale = { static_cast<float>(sprite->textureHandle.GetWidth()),
+							static_cast<float>(sprite->textureHandle.GetHeight()) };
+						sprite->matchScaleToTexture = false;
 					}
 				}
+			} else if (sprite->gifFromAddressable) {
+				sprite->gifFromAddressable = false;
+				sprite->gifTexture = {};
+				sprite->textureHandle = nullptr;
 			}
+		}
+		if (!assignedTexture && sprite->gifTexture.IsLoaded()) {
+			sprite->gifTexture.Advance(deltaTime);
+			sprite->textureHandle = sprite->gifTexture.GetFrame();
 		}
 
 		// マスク用テクスチャ

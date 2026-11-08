@@ -11,7 +11,7 @@ void SpriteAnimationSystem::Update(Registry& registry, float deltaTime) {
 		// コンポーネントの取得
 		auto* sprite = registry.GetComponent<SpriteComponent>(entity);
 		auto* animator = registry.GetComponent<Animator2DComponent>(entity);
-		if (animator->stopAnimation) continue;
+		if (animator->stopAnimation || sprite->gifTexture.IsLoaded() || !sprite->textureHandle.IsValid()) continue;
 
 		animator->isAnimationEnd = false;
 

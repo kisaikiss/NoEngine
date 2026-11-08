@@ -78,6 +78,7 @@
     <ClCompile Include="engine\Math\Types\Transform2D.cpp" />
     <ClCompile Include="engine\Runtime\GpuResource\PixelBuffer\DepthBuffer.cpp" />
     <ClCompile Include="engine\Assets\Texture\TextureManager.cpp" />
+    <ClCompile Include="engine\Assets\Texture\GifTexture.cpp" />
     <ClCompile Include="engine\Functions\Debug\CrashHandler\ExportDump.cpp" />
     <ClCompile Include="engine\Functions\Debug\GraphicsResourceLeakChecker.cpp" />
     <ClCompile Include="engine\Functions\Debug\Logger\Log.cpp" />
@@ -412,6 +413,7 @@
     <ClInclude Include="engine\Runtime\GpuResource\PixelBuffer\DepthBuffer.h" />
     <ClInclude Include="engine\Assets\Model\Mesh.h" />
     <ClInclude Include="engine\Assets\Texture\TextureManager.h" />
+    <ClInclude Include="engine\Assets\Texture\GifTexture.h" />
     <ClInclude Include="engine\Assets\Material.h" />
     <ClInclude Include="engine\Functions\Debug\CrashHandler\ExportDump.h" />
     <ClInclude Include="engine\Functions\Debug\GraphicsResourceLeakChecker.h" />

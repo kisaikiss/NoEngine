@@ -1,4 +1,5 @@
 #include "TextureManager.h"
+#include "GifTexture.h"
 
 #include "engine/Utilities/Conversion/ConvertString.h"
 #include "engine/Utilities/FileUtilities.h"
@@ -147,6 +148,7 @@ TextureRef TextureManager::LoadTextureFile(const std::string& filePath, eDefault
 	return LoadTextureFile(ConvertString(filePath), fallback, sRGB);
 }
 TextureRef TextureManager::LoadCovertTexture(const std::wstring& filePath, eDefaultTexture fallback, bool forceSRGB) {
+	if (IsGifTexture(filePath)) return LoadGifFirstFrame(filePath);
 	std::wstring originalFile = filePath;
 	CompileTextureOnDemand(originalFile, TextureOptions(true));
 

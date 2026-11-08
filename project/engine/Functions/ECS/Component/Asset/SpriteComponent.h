@@ -1,6 +1,6 @@
 #pragma once
 #include "engine/Math/MathInclude.h"
-#include "engine/Assets/Texture/TextureManager.h"
+#include "engine/Assets/Texture/GifTexture.h"
 
 namespace NoEngine {
 enum class SpriteSpace {
@@ -34,6 +34,11 @@ struct SpriteComponent {
 	std::string loadedMaskTextureName;
 
 	bool matchScaleToTexture = false;
+
+	GifTexturePlayer gifTexture;
+	bool gifFromAddressable = false;
+	// UTF-8のファイルパスを直接指定する。自動再生はSpriteLoadSystemが更新する。
+	bool SetTextureFromPath(const std::string& path);
 };
 }
 }

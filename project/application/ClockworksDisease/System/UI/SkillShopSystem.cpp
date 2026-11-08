@@ -190,7 +190,8 @@ bool SkillShopSystem::UpdateSelection() {
 
 void SkillShopSystem::RefreshSelection(No::Registry& registry) const {
 	const auto& skill = PlayerSkills::GetCatalog()[selectedColumn_].skills[selectedRow_];
-	registry.GetComponent<No::SpriteComponent>(preview_)->textureHandle = NoEngine::TextureManager::LoadCovertTexture(skill.previewTexture);
+	auto* preview = registry.GetComponent<No::SpriteComponent>(preview_);
+	if (!preview->SetTextureFromPath(skill.previewTexture)) preview->textureHandle = nullptr;
 	registry.GetComponent<No::TextComponent>(nameLabel_)->text = skill.name;
 	registry.GetComponent<No::TextComponent>(costLabel_)->text = std::to_string(skill.cost) + " SP";
 	registry.GetComponent<No::TextComponent>(descriptionLabel_)->text = skill.description;

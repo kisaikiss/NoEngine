@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "AssetManager.h"
+#include "Texture/GifTexture.h"
 #ifdef USE_IMGUI
 #include "externals/Imgui/imgui.h"
 #endif // USE_IMGUI
@@ -198,6 +199,7 @@ uint64_t AssetManager::GetAddressableGeneration() {
 }
 
 bool AssetManager::IsSupportedFile(const std::filesystem::path& filePath) {
+	if (IsGifTexture(filePath)) return true;
 	for (auto& ext : sSupportedExtensions) {
 		if (filePath.extension().string() == ext) { return true; }
 	}
@@ -212,6 +214,7 @@ nlohmann::json AssetManager::CreateMetaFileForFile(const std::filesystem::path& 
 }
 
 Editor::EBrowserItemType AssetManager::GetAssetTypeFromExtension(const std::filesystem::path& path) {
+	if (IsGifTexture(path)) return Editor::EBrowserItemType::Texture;
 	static const std::unordered_map<std::string, Editor::EBrowserItemType> table = {
 		{".obj",  Editor::EBrowserItemType::Model},
 		{".gltf", Editor::EBrowserItemType::Model},
