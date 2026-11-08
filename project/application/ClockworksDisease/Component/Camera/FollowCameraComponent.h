@@ -36,3 +36,11 @@ struct FollowCameraComponent {
 	bool followHeightCatchUpInProgress = false;
 	No::Quaternion nextRotation = No::Quaternion::IDENTITY; // 見たい方向の回転。滑らかに角度を変えるための変数
 };
+
+inline No::Quaternion GetFollowCameraRotation(No::Registry& registry) {
+	No::Quaternion rotation = No::Quaternion::IDENTITY;
+	for (auto entity : registry.View<FollowCameraComponent, No::TransformComponent>()) {
+		rotation = registry.GetComponent<No::TransformComponent>(entity)->rotation;
+	}
+	return rotation;
+}

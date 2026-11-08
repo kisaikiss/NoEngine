@@ -27405,7 +27405,7 @@
                     "accelerationTime": 0.3499999940395355,
                     "airAcceleration": 20.0,
                     "airDashSpeed": 10.0,
-                    "airDashStaminaCostRate": 2.0,
+                    "airDashStaminaCost": 0.4,
                     "coyoteTime": 0.30000001192092896,
                     "coyoteTimer": 0.0,
                     "dashStartInput": 0.20000000298023224,

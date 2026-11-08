@@ -269,7 +269,7 @@ void PauseMenuSystem::RefreshControlsMenuVisuals(No::Registry& registry) {
 	for (auto e : registry.View<PlayerComponent>()) {
 		if (firstPlayer) {
 			if (registry.Has<HighJumpTag>(e)) lines.push_back("Backflip: LT + A / E + Space");
-			if (registry.Has<AirDashTag>(e)) lines.push_back("Air Dash: Hold LB in the air");
+			if (registry.Has<AirDashTag>(e)) lines.push_back("Air Dash: Press LB in the air");
 			if (registry.Has<CreateMagicScaffoldTag>(e)) lines.push_back("Create Scaffold: Y Button in the air");
 			firstPlayer = false;
 		}

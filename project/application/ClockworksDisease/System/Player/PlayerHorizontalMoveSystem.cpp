@@ -9,15 +9,6 @@
 
 namespace {
 
-No::Quaternion GetActiveCameraRotation(No::Registry& registry) {
-	No::Quaternion cameraRotate{};
-	auto cameraView = registry.View<FollowCameraComponent>();
-	for (auto entity : cameraView) {
-		cameraRotate = registry.GetComponent<No::TransformComponent>(entity)->rotation;
-	}
-	return cameraRotate;
-}
-
 void FacePlayerTowardsMoveDirection(No::TransformComponent* transform, const No::Vector3& worldDir, float deltaTime) {
 	const No::Vector3 lookDir = { worldDir.x, 0.f, worldDir.z };
 	if (lookDir.Length() <= 1e-6f) {
@@ -42,7 +33,7 @@ No::Vector3 ProjectOnGroundPlane(const No::Vector3& horizontalDir, const No::Vec
 } // namespace
 
 void PlayerHorizontalMoveSystem::Update(No::Registry& registry, float deltaTime) {
-	const No::Quaternion cameraRotate = GetActiveCameraRotation(registry);
+	const No::Quaternion cameraRotate = GetFollowCameraRotation(registry);
 
 	auto view = registry.View<PlayerComponent, PlayerInputComponent, PlayerActionComponent,
 		No::TransformComponent, No::VelocityComponent,
@@ -90,15 +81,6 @@ void PlayerHorizontalMoveSystem::Update(No::Registry& registry, float deltaTime)
 		// 保持するため、ここでは現在の水平速度だけを退避しておく。
 		const No::Vector3 currentHorizontalVelocity = { velocity->linear.x, 0.f, velocity->linear.z };
 		velocity->linear = No::Vector3::ZERO;
-		No::Vector3 inputDir = No::Vector3::ZERO;
-		inputDir = playerInput->moveAxis;
-
-		// 倒した方向によらず同じ長さで判定し、キーボードの斜め入力は1に収める。
-		const float inputForce = std::clamp(inputDir.Length(), 0.0f, 1.0f);
-
-		const bool hasInput = (inputDir.x != 0.f || inputDir.z != 0.f);
-		const bool isAirDashing = playerAction->activeAction == PlayerActionType::kAirDash;
-		const bool isSpinAttacking = playerAction->activeAction == PlayerActionType::kSpinAttack;
 
 		const auto backflipPhase = transientState->backflipPhase;
 		const bool isBackflipping = backflipPhase != PlayerBackflipPhase::kNone;
@@ -109,17 +91,40 @@ void PlayerHorizontalMoveSystem::Update(No::Registry& registry, float deltaTime)
 			continue;
 		}
 
-		if (!hasInput && !isAirDashing) {
-			if (particleEmitterSphere)
-				particleEmitterSphere->active = false;
-			if (particleEmitter)
-				particleEmitter->active = false;
-		} else if (particleEmitterSphere)
-			particleEmitterSphere->active = true;
-		if (hasInput || isAirDashing) {
-			if (particleEmitter)
-				particleEmitter->active = true;
+		if (playerAction->activeAction == PlayerActionType::kAirDash) {
+			if (deltaTime > 0.f) {
+				// 最終フレームは残り時間ぶんだけ進み、フレーム時間による射程の超過を防ぐ。
+				const float remainingTime = playerVariables->airDashDuration - playerAction->elapsedTime;
+				const float stepTime = std::min(deltaTime, remainingTime);
+				const auto& dashDirection = playerAction->airDashDirection;
+				velocity->linear = dashDirection * (playerVariables->airDashSpeed * (stepTime / deltaTime));
+				playerAction->elapsedTime += stepTime;
+
+				// モデルの正面を、発動時に確定したダッシュ方向へ合わせる。
+				No::Vector3 localDirection = dashDirection;
+				No::Vector3 localUp = No::Vector3::UP;
+				if (const auto* parent = registry.GetComponent<No::TransformComponent>(transform->parent)) {
+					auto inverseParent = parent->MakeAffineMatrix4x4(registry);
+					inverseParent.Inverse();
+					localDirection = inverseParent.TransformNormal(dashDirection);
+					localUp = inverseParent.TransformNormal(No::Vector3::UP);
+				}
+				transform->rotation.LookRotation(localDirection, localUp);
+			}
+			transientState->slopeY = 0.f;
+			if (animator) animator->animationSpeedMagnification = 1.2f;
+			if (particleEmitterSphere) particleEmitterSphere->active = true;
+			if (particleEmitter) particleEmitter->active = true;
+			continue;
 		}
+
+		const No::Vector3& inputDir = playerInput->moveAxis;
+		// 倒した方向によらず同じ長さで判定し、キーボードの斜め入力は1に収める。
+		const float inputForce = std::clamp(inputDir.Length(), 0.0f, 1.0f);
+		const bool hasInput = (inputDir.x != 0.f || inputDir.z != 0.f);
+		const bool isSpinAttacking = playerAction->activeAction == PlayerActionType::kSpinAttack;
+		if (particleEmitterSphere) particleEmitterSphere->active = hasInput;
+		if (particleEmitter) particleEmitter->active = hasInput;
 
 		const No::Vector3& groundNormal = playerVariables->groundNormal;
 
@@ -132,10 +137,10 @@ void PlayerHorizontalMoveSystem::Update(No::Registry& registry, float deltaTime)
 		const float len = worldDir.Length();
 		No::Vector3 horizontalDir = (len > 1e-6f) ? worldDir * (1.f / len) : No::Vector3::ZERO;
 
-		// 接地中（かつ空中ダッシュ中でない）なら、水平方向を地面平面へ投影して
+		// 接地中なら、水平方向を地面平面へ投影して
 		// 実際の斜面に沿った方向ベクトルにする
 		No::Vector3 finalDir = horizontalDir;
-		const bool followsGround = groundState->isGrounded && !transientState->justJumped && !isAirDashing;
+		const bool followsGround = groundState->isGrounded && !transientState->justJumped;
 		if (followsGround && horizontalDir.Length() > 1e-6f) {
 			finalDir = ProjectOnGroundPlane(horizontalDir, groundNormal);
 		}
@@ -145,26 +150,23 @@ void PlayerHorizontalMoveSystem::Update(No::Registry& registry, float deltaTime)
 			const bool isWalking = playerVariables->state == PlayerState::kWalk && !isRunning;
 			animator->animationSpeedMagnification = isWalking ? 0.8f : 1.2f;
 		}
-		const float playerMoveSpeed = isRunning ? playerVariables->moveSpeed : playerVariables->walkSpeed;
-		const float speed = isAirDashing ? playerVariables->airDashSpeed : playerMoveSpeed;
+		const float speed = isRunning ? playerVariables->moveSpeed : playerVariables->walkSpeed;
 		// 加減速は水平成分だけで行い、上下成分は確定した水平速度から求める。
 		const No::Vector3 targetVelocity{ finalDir.x * speed, 0.f, finalDir.z * speed };
 		No::Vector3 finalVelocity = targetVelocity;
 
-		if (!isAirDashing) {
-			// 空中では入力を目標速度として扱い、加速量を制限して現在の速度から
-			// 徐々に近づける。接地中は accelerationTime で最高速までの時間を調整する。
-			// 入力を離した場合も同じく徐々に減速する。
-			const No::Vector3 velocityDelta = targetVelocity - currentHorizontalVelocity;
-			const float deltaLength = velocityDelta.Length();
-			const float maxSpeedChange = groundState->isGrounded
-				? (playerVariables->accelerationTime > 0.f
-					? speed * deltaTime / playerVariables->accelerationTime
-					: deltaLength)
-				: playerVariables->airAcceleration * deltaTime;
-			if (deltaLength > maxSpeedChange && deltaLength > 1e-6f) {
-				finalVelocity = currentHorizontalVelocity + velocityDelta * (maxSpeedChange / deltaLength);
-			}
+		// 空中では入力を目標速度として扱い、加速量を制限して現在の速度から
+		// 徐々に近づける。接地中は accelerationTime で最高速までの時間を調整する。
+		// 入力を離した場合も同じく徐々に減速する。
+		const No::Vector3 velocityDelta = targetVelocity - currentHorizontalVelocity;
+		const float deltaLength = velocityDelta.Length();
+		const float maxSpeedChange = groundState->isGrounded
+			? (playerVariables->accelerationTime > 0.f
+				? speed * deltaTime / playerVariables->accelerationTime
+				: deltaLength)
+			: playerVariables->airAcceleration * deltaTime;
+		if (deltaLength > maxSpeedChange && deltaLength > 1e-6f) {
+			finalVelocity = currentHorizontalVelocity + velocityDelta * (maxSpeedChange / deltaLength);
 		}
 
 		velocity->linear.x = finalVelocity.x;

@@ -13,8 +13,7 @@ void PlayerInputSystem::Update(No::Registry& registry, float deltaTime) {
 		input->jumpTriggered = No::InputIsTrigger("Jump");
 		input->jumpReleased = No::InputIsRelease("Jump");
 		input->crouchPressed = No::GetInputAxisValue("Crouch") > 0.0f;
-		input->airDashPressed = No::InputIsPress("AirDash");
-		input->airDashReleased = No::InputIsRelease("AirDash");
+		input->airDashTriggered = No::InputIsTrigger("AirDash");
 		input->createScaffoldTriggered = No::InputIsTrigger("CreateScaffold");
 		input->attackTriggered = No::InputIsTrigger("Attack");
 	}

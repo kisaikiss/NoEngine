@@ -76774,6 +76774,96 @@
                 }
             }
         },
+        "SkillShopkeeper": {
+            "components": {
+                "AnimatorComponent": {
+                    "animationEvents": [],
+                    "animationSpeedMagnification": 1.0,
+                    "blendDuration": 0.20000000298023224,
+                    "currentAnimation": 0,
+                    "drawSkeleton": false,
+                    "enableSkinning": false,
+                    "loop": true
+                },
+                "DialogueComponent": {
+                    "enabled": true,
+                    "fontName": "resources/engine/fonts/ISE-FONT4/Isego.otf",
+                    "interactDistance": 3.0,
+                    "interactable": true,
+                    "lines": [
+                        "いらっしゃい。レベルアップで貯めたSPを、スキルと交換できますよ。"
+                    ],
+                    "portraitFrameCount": 1,
+                    "portraitTexture": "resources/game/ClockworksDisease/Texture/UI/SkillShop/ShopkeeperPortrait.png",
+                    "voiceFiles": [],
+                    "voiceVolume": 0.0
+                },
+                "EditTag": {
+                    "name": "SkillShopkeeper",
+                    "parent": null
+                },
+                "MaterialComponent": {
+                    "blendMode": "kNormal",
+                    "castShadow": true,
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": true,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "environmentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "receiveShadow": true,
+                    "renderMode": "kDefault",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "textureName": "",
+                    "unlit": false,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "resources/engine/Model/test/TD_girl/test7.gltf"
+                },
+                "SkillShopNpcTag": null,
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        5.400000095367432,
+                        0.0,
+                        -2.799999952316284
+                    ]
+                }
+            }
+        },
         "UI": {
             "components": {
                 "EditTag": {
@@ -76959,15 +77049,15 @@
                     "CapsuleCollider": {
                         "localP0": [
                             0.0,
-                            -0.05000000074505806,
+                            -0.05,
                             0.0
                         ],
                         "localP1": [
                             0.0,
-                            0.05000000074505806,
+                            0.05,
                             0.0
                         ],
-                        "radius": 0.44999998807907104
+                        "radius": 0.45
                     },
                     "CollisionBody": {
                         "type": "Dynamic"
@@ -77050,7 +77140,7 @@
                         "jumpSpeed": 5.0,
                         "loseDistance": 8.0,
                         "maxHeightDifference": 2.0,
-                        "walkSpeed": 1.399999976158142,
+                        "walkSpeed": 1.4,
                         "wanderRadius": 2.0
                     }
                 }
@@ -77059,12 +77149,40 @@
             "prefabOverrides": [
                 {
                     "op": "replace",
+                    "path": "/components/CapsuleCollider/localP0",
+                    "value": [
+                        0.0,
+                        -0.05000000074505806,
+                        0.0
+                    ]
+                },
+                {
+                    "op": "replace",
+                    "path": "/components/CapsuleCollider/localP1",
+                    "value": [
+                        0.0,
+                        0.05000000074505806,
+                        0.0
+                    ]
+                },
+                {
+                    "op": "replace",
+                    "path": "/components/CapsuleCollider/radius",
+                    "value": 0.44999998807907104
+                },
+                {
+                    "op": "replace",
                     "path": "/components/TransformComponent/translate",
                     "value": [
                         -182.10498046875,
                         5.6199951171875,
                         -7.738686561584473
                     ]
+                },
+                {
+                    "op": "replace",
+                    "path": "/components/WanderHopEnemyComponent/walkSpeed",
+                    "value": 1.399999976158142
                 }
             ]
         },
@@ -84242,46 +84360,6 @@
                 }
             ]
         },
-        "SkillShopkeeper": {
-            "components": {
-                "AnimatorComponent": {
-                    "animationSpeedMagnification": 1.0,
-                    "currentAnimation": 0,
-                    "drawSkeleton": false,
-                    "enableSkinning": false
-                },
-                "DialogueComponent": {
-                    "enabled": true,
-                    "fontName": "resources/engine/fonts/ISE-FONT4/Isego.otf",
-                    "interactDistance": 3.0,
-                    "interactable": true,
-                    "lines": [
-                        "いらっしゃい。レベルアップで貯めたSPを、スキルと交換できますよ。"
-                    ],
-                    "portraitFrameCount": 1,
-                    "portraitTexture": "resources/game/ClockworksDisease/Texture/UI/SkillShop/ShopkeeperPortrait.png",
-                    "voiceVolume": 0.0
-                },
-                "EditTag": {
-                    "name": "SkillShopkeeper",
-                    "parent": null
-                },
-                "MaterialComponent": {
-                    "drawOutline": true
-                },
-                "MeshComponent": {
-                    "isVisible": true,
-                    "meshName": "resources/engine/Model/test/TD_girl/test7.gltf"
-                },
-                "SkillShopNpcTag": null,
-                "TransformComponent": {
-                    "parent": null,
-                    "rotation": [0.0, 0.0, 0.0, 1.0],
-                    "scale": [1.0, 1.0, 1.0],
-                    "translate": [5.4, 0.0, -2.8]
-                }
-            }
-        },
         "eventPoint": {
             "components": {
                 "DialogueAutoTriggerComponent": {
@@ -84662,15 +84740,16 @@
                 "PlayerComponent": {
                     "accelerationTime": 0.10000000149011612,
                     "airAcceleration": 40.0,
-                    "airDashSpeed": 16.0,
-                    "airDashStaminaCostRate": 2.0,
+                    "airDashDuration": 0.30000001192092896,
+                    "airDashSpeed": 30.0,
+                    "airDashStaminaCost": 0.4000000059604645,
+                    "backflipStaminaCost": 1.0,
                     "coyoteTime": 0.30000001192092896,
                     "coyoteTimer": 0.0,
                     "dashStartInput": 0.20000000298023224,
                     "deathHeight": -10.0,
                     "doubleJumpSpeed": 4.0,
                     "gravity": -20.0,
-                    "backflipStaminaCost": 1.0,
                     "highJumpSpeed": 15.0,
                     "infinityJump": false,
                     "infinityStamina": false,
@@ -84686,6 +84765,8 @@
                         0.5,
                         0.0
                     ],
+                    "spinAttackAnimationSpeed": 1.0,
+                    "spinAttackRadius": 1.5,
                     "stamina": 1.0,
                     "staminaRecoveryRate": 1.0,
                     "state": "kWait",
@@ -84861,15 +84942,16 @@
                     "PlayerComponent": {
                         "accelerationTime": 0.10000000149011612,
                         "airAcceleration": 40.0,
-                        "airDashSpeed": 10.0,
-                        "airDashStaminaCostRate": 2.0,
+                        "airDashDuration": 0.20000000298023224,
+                        "airDashSpeed": 16.0,
+                        "airDashStaminaCost": 0.4,
+                        "backflipStaminaCost": 1.0,
                         "coyoteTime": 0.30000001192092896,
                         "coyoteTimer": 0.0,
                         "dashStartInput": 0.20000000298023224,
                         "deathHeight": -10.0,
                         "doubleJumpSpeed": 4.0,
                         "gravity": -20.0,
-                        "backflipStaminaCost": 1.0,
                         "highJumpSpeed": 15.0,
                         "infinityJump": false,
                         "infinityStamina": false,
@@ -84885,6 +84967,8 @@
                             0.5,
                             0.0
                         ],
+                        "spinAttackAnimationSpeed": 1.7999999523162842,
+                        "spinAttackRadius": 1.5,
                         "stamina": 1.0,
                         "staminaRecoveryRate": 1.0,
                         "state": "kSleep",
@@ -84923,8 +85007,23 @@
             "prefabOverrides": [
                 {
                     "op": "replace",
+                    "path": "/components/PlayerComponent/airDashDuration",
+                    "value": 0.30000001192092896
+                },
+                {
+                    "op": "replace",
                     "path": "/components/PlayerComponent/airDashSpeed",
-                    "value": 16.0
+                    "value": 30.0
+                },
+                {
+                    "op": "replace",
+                    "path": "/components/PlayerComponent/airDashStaminaCost",
+                    "value": 0.4000000059604645
+                },
+                {
+                    "op": "replace",
+                    "path": "/components/PlayerComponent/spinAttackAnimationSpeed",
+                    "value": 1.0
                 },
                 {
                     "op": "replace",

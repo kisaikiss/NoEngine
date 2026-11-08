@@ -24,6 +24,7 @@ struct PlayerComponent {
 	float jumpSpeed = 16.f;
 	float highJumpSpeed = 17.f;
 	float airDashSpeed = 10.f;
+	float airDashDuration = 0.2f;
 	// 回転攻撃のワールド座標での判定半径。
 	float spinAttackRadius = 1.5f;
 	// HurricaneKickの再生速度倍率。1.0で元の速度。
@@ -50,7 +51,7 @@ struct PlayerComponent {
 	PlayerJumpKind jumpKind = PlayerJumpKind::kNormal;
 
 	float backflipStaminaCost = 1.0f;
-	float airDashStaminaCostRate = 2.0f;
+	float airDashStaminaCost = 0.4f;
 
 	// コヨーテタイム
 	float coyoteTime = 0.3f;
@@ -72,8 +73,7 @@ struct PlayerInputComponent {
 	bool jumpTriggered = false;
 	bool jumpReleased = false;
 	bool crouchPressed = false;
-	bool airDashPressed = false;
-	bool airDashReleased = false;
+	bool airDashTriggered = false;
 	bool createScaffoldTriggered = false;
 	bool attackTriggered = false;
 };
@@ -88,6 +88,7 @@ enum class PlayerActionType {
 struct PlayerActionComponent {
 	PlayerActionType activeAction = PlayerActionType::kNone;
 	float elapsedTime = 0.0f;
+	No::Vector3 airDashDirection = No::Vector3::ZERO;
 	float animationSpeedBeforeSpinAttack = 1.0f;
 };
 
