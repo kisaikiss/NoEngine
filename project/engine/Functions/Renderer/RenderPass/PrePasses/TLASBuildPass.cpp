@@ -128,9 +128,17 @@ void TLASBuildPass::BuildTLAS(GraphicsContext& gfx) {
 	D3D12_BUILD_RAYTRACING_ACCELERATION_STRUCTURE_DESC build{};
 	build.Inputs = inputs;
 	build.ScratchAccelerationStructureData = tlasScratch_->GetGPUVirtualAddress();
-	build.DestAccelerationStructureData = renderContext->GetTLAS()->GetGPUVirtualAddress();
+	auto* tlas = renderContext->GetTLAS().Get();
+	build.DestAccelerationStructureData = tlas->GetGPUVirtualAddress();
 
-	gfx.BuildRaytracingAccelerationStructure(build, tlasScratch_.Get());
+	// BLAS 更新と同じコマンドリストに記録し、後続パスからの TLAS 参照を同期する。
+	auto* commandList = gfx.GetCommandList();
+	const auto scratchBarrier = CD3DX12_RESOURCE_BARRIER::Transition(tlasScratch_.Get(),
+		D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+	commandList->ResourceBarrier(1, &scratchBarrier);
+	commandList->BuildRaytracingAccelerationStructure(&build, 0, nullptr);
+	const auto tlasBarrier = CD3DX12_RESOURCE_BARRIER::UAV(tlas);
+	commandList->ResourceBarrier(1, &tlasBarrier);
 }
 
 void TLASBuildPass::FillInstanceTransform(D3D12_RAYTRACING_INSTANCE_DESC& instance, const Component::TransformComponent* transform, Component::AnimatorComponent* animator, ECS::Registry& registry) {
