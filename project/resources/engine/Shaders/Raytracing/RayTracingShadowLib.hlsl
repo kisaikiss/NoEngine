@@ -37,6 +37,8 @@ struct PointLight
     float intensity;
     float radius;
     float decay;
+    float shadowRadius;
+    uint shadowSamples;
 };
 StructuredBuffer<PointLight> gPointLights : register(t4);
 
@@ -50,19 +52,22 @@ struct SpotLight
     float decay;
     float cosAngle;
     float cosFalloffStart;
+    float shadowRadius;
+    uint shadowSamples;
 };
 StructuredBuffer<SpotLight> gSpotLights : register(t5);
 
 static const float gShadowMaxDistance = asfloat(0x7F7FFFFF);
 
 static const uint kInstanceMaskShadowCasterBit = 0x01;
+static const float kShadowRayMinDistance = 0.01f;
 
 float TraceShadowRay(float3 origin, float3 direction, float tMax)
 {
     RayDesc rayDesc;
     rayDesc.Origin = origin;
     rayDesc.Direction = direction;
-    rayDesc.TMin = 0.01f;
+    rayDesc.TMin = kShadowRayMinDistance;
     rayDesc.TMax = tMax;
 
     ShadowPayload payload;
@@ -83,30 +88,70 @@ uint HashShadowSample(uint seed)
     return seed ^ (seed >> 16);
 }
 
+uint ShadowSampleSeed(uint2 pixel, uint slice)
+{
+    return pixel.x * 0x9e3779b9u ^ pixel.y * 0x85ebca6bu ^ slice * 0xc2b2ae35u;
+}
+
+float2 SampleShadowDisk(uint seed, uint sampleIndex)
+{
+    // 円盤の各象限から1点ずつ、画素ごとに異なる位置を選ぶ。
+    uint random = HashShadowSample(seed + (sampleIndex + 1u) * 0x27d4eb2du);
+    float2 jitter = (float2(random & 0xffffu, random >> 16) + 0.5f) / 65536.0f;
+    float angle = (sampleIndex + jitter.x) * 1.57079632679f;
+    return float2(cos(angle), sin(angle)) * sqrt(jitter.y);
+}
+
+void BuildShadowDiskBasis(float3 diskNormal, out float3 tangent, out float3 bitangent)
+{
+    float3 basisAxis = abs(diskNormal.y) < 0.99f ? float3(0, 1, 0) : float3(1, 0, 0);
+    tangent = normalize(cross(basisAxis, diskNormal));
+    bitangent = cross(diskNormal, tangent);
+}
+
 float TraceDirectionalShadow(float3 origin, DirectionalLight light, uint2 pixel, uint slice)
 {
     float3 toLight = -light.direction;
     if (light.shadowSamples != 4 || !(light.shadowAngularRadiusDegrees > 0.0f))
         return TraceShadowRay(origin, toLight, gShadowMaxDistance);
 
-    float3 basisAxis = abs(toLight.y) < 0.99f ? float3(0, 1, 0) : float3(1, 0, 0);
-    float3 tangent = normalize(cross(basisAxis, toLight));
-    float3 bitangent = cross(toLight, tangent);
+    float3 tangent, bitangent;
+    BuildShadowDiskBasis(toLight, tangent, bitangent);
     float diskRadius = tan(radians(min(light.shadowAngularRadiusDegrees, 45.0f)));
 
-    // 円盤の各象限から1点ずつ、画素ごとに異なる位置を選ぶ。
-    uint seed = pixel.x * 0x9e3779b9u ^ pixel.y * 0x85ebca6bu ^ slice * 0xc2b2ae35u;
+    uint seed = ShadowSampleSeed(pixel, slice);
     float visibility = 0.0f;
     [unroll]
     for (uint sampleIndex = 0; sampleIndex < 4; ++sampleIndex)
     {
-        uint random = HashShadowSample(seed + (sampleIndex + 1u) * 0x27d4eb2du);
-        float2 jitter = (float2(random & 0xffffu, random >> 16) + 0.5f) / 65536.0f;
-        float angle = (sampleIndex + jitter.x) * 1.57079632679f;
-        float radius = sqrt(jitter.y) * diskRadius;
-        float2 offset = float2(cos(angle), sin(angle)) * radius;
+        float2 offset = SampleShadowDisk(seed, sampleIndex) * diskRadius;
         float3 direction = normalize(toLight + tangent * offset.x + bitangent * offset.y);
         visibility += TraceShadowRay(origin, direction, gShadowMaxDistance);
+    }
+    return visibility * 0.25f;
+}
+
+float TraceLocalShadow(float3 origin, float3 toLight, float distanceToLight, float3 diskNormal,
+    float shadowRadius, uint shadowSamples, uint2 pixel, uint slice)
+{
+    if (shadowSamples != 4 || !(shadowRadius > 0.0f))
+        return TraceShadowRay(origin, toLight / distanceToLight, distanceToLight);
+
+    float3 tangent, bitangent;
+    BuildShadowDiskBasis(normalize(diskNormal), tangent, bitangent);
+    uint seed = ShadowSampleSeed(pixel, slice);
+    float visibility = 0.0f;
+    [unroll]
+    for (uint sampleIndex = 0; sampleIndex < 4; ++sampleIndex)
+    {
+        float2 offset = SampleShadowDisk(seed, sampleIndex) * shadowRadius;
+        float3 toSample = toLight + tangent * offset.x + bitangent * offset.y;
+        float sampleDistance = length(toSample);
+        // 各レイは光源円盤上のサンプル位置まで追跡する。
+        if (sampleDistance > kShadowRayMinDistance)
+            visibility += TraceShadowRay(origin, toSample / sampleDistance, sampleDistance);
+        else
+            visibility += 1.0f;
     }
     return visibility * 0.25f;
 }
@@ -144,12 +189,14 @@ void RayGen_Shadow()
         float3 toLight = light.position - offsetPos;
         float dist = length(toLight);
 
-        if (dist > light.radius)
+        if (dist <= kShadowRayMinDistance || dist > light.radius)
         {
             gShadowMask[uint3(dispatchIdx, slice)] = 1.0f;
             continue;
         }
-        gShadowMask[uint3(dispatchIdx, slice)] = TraceShadowRay(offsetPos, toLight / dist, dist);
+        // ポイントライトは受け面から見た円盤で発光面を近似する。
+        gShadowMask[uint3(dispatchIdx, slice)] = TraceLocalShadow(offsetPos, toLight, dist, toLight,
+            light.shadowRadius, light.shadowSamples, dispatchIdx, slice);
     }
 
     // スポットライト（円錐外・distance超過は無条件で影なし）
@@ -158,17 +205,19 @@ void RayGen_Shadow()
         SpotLight light = gSpotLights[s];
         float3 toLight = light.position - offsetPos;
         float dist = length(toLight);
-        float3 dirToLight = toLight / dist;
+        float3 dirToLight = toLight / max(dist, kShadowRayMinDistance);
 
         // Default_PS.hlsl と同じ向き規約（光→サーフェス方向とdirectionの内積）
         float cosAngle = dot(-dirToLight, light.direction);
 
-        if (dist > light.distance || cosAngle < light.cosAngle)
+        if (dist <= kShadowRayMinDistance || dist > light.distance || cosAngle < light.cosAngle)
         {
             gShadowMask[uint3(dispatchIdx, slice)] = 1.0f;
             continue;
         }
-        gShadowMask[uint3(dispatchIdx, slice)] = TraceShadowRay(offsetPos, dirToLight, dist);
+        // スポットライトの円盤は照射方向に向ける。
+        gShadowMask[uint3(dispatchIdx, slice)] = TraceLocalShadow(offsetPos, toLight, dist, light.direction,
+            light.shadowRadius, light.shadowSamples, dispatchIdx, slice);
     }
 }
 

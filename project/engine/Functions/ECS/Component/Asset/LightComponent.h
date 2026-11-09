@@ -2,7 +2,7 @@
 #include "engine/Math/MathInclude.h"
 
 namespace NoEngine::Component {
-enum class DirectionalShadowSamples : uint32_t {
+enum class ShadowSamples : uint32_t {
 	kOneRay = 1,
 	kFourRays = 4,
 };
@@ -15,7 +15,7 @@ struct DirectionalLightComponent {
 	Math::Vector3 direction;
 	float intensity;
 	float shadowAngularRadiusDegrees = 0.f;
-	DirectionalShadowSamples shadowSamples = DirectionalShadowSamples::kOneRay;
+	ShadowSamples shadowSamples = ShadowSamples::kOneRay;
 };
 static_assert(sizeof(DirectionalLightComponent) == 40);
 
@@ -27,6 +27,8 @@ struct PointLightComponent {
 	float intensity = 1.f;
 	float radius = 1.f;
 	float decay = 1.5f;
+	float shadowRadius = 0.1f;
+	ShadowSamples shadowSamples = ShadowSamples::kOneRay;
 };
 
 /// <summary>
@@ -39,6 +41,8 @@ struct SpotLightComponent {
 	float decay = 1.5f;
 	float cosAngle = 0.8f;
 	float cosFalloffStart = 1.f;
+	float shadowRadius = 0.1f;
+	ShadowSamples shadowSamples = ShadowSamples::kOneRay;
 };
 
 }

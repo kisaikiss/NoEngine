@@ -43,6 +43,8 @@ struct PointLight
     float intensity;
     float radius;
     float decay;
+    float shadowRadius;
+    uint shadowSamples;
 };
 StructuredBuffer<PointLight> gPointLights : register(t3);
 
@@ -56,6 +58,8 @@ struct SpotLight
     float decay;
     float cosAngle;
     float cosFalloffStart;
+    float shadowRadius;
+    uint shadowSamples;
 };
 StructuredBuffer<SpotLight> gSpotLights : register(t4);
 

@@ -36,6 +36,8 @@ void LightPass::Collect(ECS::Registry& registry) {
 		pointLight.decay = pointLightComponent->decay;
 		pointLight.radius = pointLightComponent->radius;
 		pointLight.position = transformComponent->GetWorldPosition(registry);
+		pointLight.shadowRadius = pointLightComponent->shadowRadius;
+		pointLight.shadowSamples = static_cast<uint32_t>(pointLightComponent->shadowSamples);
 		pointLights_.push_back(pointLight);
 	}
 
@@ -57,6 +59,8 @@ void LightPass::Collect(ECS::Registry& registry) {
 		spotLight.distance = spotLightComponent->distance;
 		spotLight.position = transformComponent->GetWorldPosition(registry);
 		spotLight.direction = transformComponent->rotation.zAxis();
+		spotLight.shadowRadius = spotLightComponent->shadowRadius;
+		spotLight.shadowSamples = static_cast<uint32_t>(spotLightComponent->shadowSamples);
 
 		spotLights_.push_back(spotLight);
 	}
@@ -65,6 +69,23 @@ void LightPass::Collect(ECS::Registry& registry) {
 
 void LightPass::UploadToGpu(GraphicsContext& gfx) {
 	RenderContext* renderContext = GetRenderContext();
+	uint64_t softShadowSlices = 0;
+	size_t slice = 0;
+	auto collectSoftShadowSlices = [&](const auto& lights, auto radiusMember) {
+		for (const auto& light : lights) {
+			if (slice == 64) break;
+			if (static_cast<ShadowSamples>(light.shadowSamples) == ShadowSamples::kFourRays && (light.*radiusMember) > 0.f) {
+				softShadowSlices |= uint64_t{1} << slice;
+			}
+			++slice;
+		}
+	};
+	// 影シェーダーと同じ順にスライスを割り当てる。
+	collectSoftShadowSlices(directionalLights_, &DirectionalLightComponent::shadowAngularRadiusDegrees);
+	collectSoftShadowSlices(pointLights_, &PointLightForGPU::shadowRadius);
+	collectSoftShadowSlices(spotLights_, &SpotLightForGPU::shadowRadius);
+	renderContext->SetSoftShadowSlices(softShadowSlices);
+
 	// 方向ライトをGPUへ送る
 	if (directionalLights_.size() != 0) {
 		if (directionalLights_.size() != directionalLightsSize_) {
@@ -73,15 +94,7 @@ void LightPass::UploadToGpu(GraphicsContext& gfx) {
 		}
 		memcpy(directionalLightUpload_.Map(), directionalLights_.data(), sizeof(DirectionalLightComponent) * directionalLightsSize_);
 
-		uint64_t softShadowSlices = 0;
-		const size_t shadowLightCount = std::min<size_t>(directionalLights_.size(), 64);
-		for (size_t index = 0; index < shadowLightCount; ++index) {
-			const auto& light = directionalLights_[index];
-			if (light.shadowSamples == DirectionalShadowSamples::kFourRays && light.shadowAngularRadiusDegrees > 0.f) {
-				softShadowSlices |= uint64_t{1} << index;
-			}
-		}
-		renderContext->SetDirectionalLight(gfx, directionalLightUpload_, static_cast<uint32_t>(directionalLightsSize_), softShadowSlices);
+		renderContext->SetDirectionalLight(gfx, directionalLightUpload_, static_cast<uint32_t>(directionalLightsSize_));
 	} else {
 		if (directionalLights_.size() != directionalLightsSize_) {
 			directionalLightsSize_ = 0;

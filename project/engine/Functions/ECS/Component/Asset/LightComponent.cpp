@@ -14,7 +14,9 @@ REFLECT_STRUCT_BEGIN(NoEngine::Component::PointLightComponent, "Light")
 REFLECT_FIELD(color),
 REFLECT_FIELD(intensity),
 REFLECT_FIELD(radius),
-REFLECT_FIELD(decay)
+REFLECT_FIELD(decay),
+REFLECT_FIELD(shadowRadius),
+REFLECT_ENUM_FIELD(shadowSamples)
 REFLECT_STRUCT_END(NoEngine::Component::PointLightComponent)
 
 
@@ -24,5 +26,7 @@ REFLECT_FIELD(intensity),
 REFLECT_FIELD(distance),
 REFLECT_FIELD(decay),
 REFLECT_FIELD(cosAngle),
-REFLECT_FIELD(cosFalloffStart)
+REFLECT_FIELD(cosFalloffStart),
+REFLECT_FIELD(shadowRadius),
+REFLECT_ENUM_FIELD(shadowSamples)
 REFLECT_STRUCT_END(NoEngine::Component::SpotLightComponent)

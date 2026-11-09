@@ -10,7 +10,10 @@ struct PointLightForGPU {
 	float intensity;
 	float radius;
 	float decay;
+	float shadowRadius;
+	uint32_t shadowSamples;
 };
+static_assert(sizeof(PointLightForGPU) == 48);
 
 /// <summary>
 /// GPUへスポットライトの情報を送るための構造体
@@ -24,7 +27,10 @@ struct SpotLightForGPU {
 	float decay;
 	float cosAngle;
 	float cosFalloffStart;
+	float shadowRadius;
+	uint32_t shadowSamples;
 };
+static_assert(sizeof(SpotLightForGPU) == 68);
 
 
 

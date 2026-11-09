@@ -109,11 +109,10 @@ const RenderContext::MeshDrawLists& RenderContext::GetMeshDrawLists(ECS::Registr
 	return lists;
 }
 
-void RenderContext::SetDirectionalLight(GraphicsContext& gfx, UploadBuffer& directionalLightUpload, uint32_t directionalLightNum, uint64_t softShadowSlices) {
+void RenderContext::SetDirectionalLight(GraphicsContext& gfx, UploadBuffer& directionalLightUpload, uint32_t directionalLightNum) {
 	bool recreate = false;
 	if (lightNums_.directionalLightNum != directionalLightNum) recreate = true;
 	if (directionalLightNum == 0) return;
-	softShadowSlices_ = softShadowSlices;
 	
 	if (recreate) {
 		lightNums_.directionalLightNum = directionalLightNum;
