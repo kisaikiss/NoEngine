@@ -61,14 +61,14 @@
                 },
                 "DebugCameraComponent": {
                     "center": [
-                        38.95201873779297,
-                        15.919054985046387,
-                        3.2081308364868164
+                        16.183996200561523,
+                        18.35785675048828,
+                        11.078365325927734
                     ],
                     "distance": 24.76100730895996,
                     "drawCenter": false,
                     "moveType": "kUnreal",
-                    "unrealMoveSpeed": 10.0,
+                    "unrealMoveSpeed": 30.0,
                     "unrealSensitivity": 0.20000000298023224
                 },
                 "EditTag": {
@@ -78,10 +78,10 @@
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
-                        0.23885734379291534,
-                        -0.4044874310493469,
-                        0.11030567437410355,
-                        0.8758823275566101
+                        0.17797286808490753,
+                        -0.5086971521377563,
+                        0.10837908834218979,
+                        0.83534836769104
                     ],
                     "scale": [
                         1.0,
@@ -89,9 +89,9 @@
                         1.0
                     ],
                     "translate": [
-                        55.192073822021484,
-                        28.489137649536133,
-                        -10.625204086303711
+                        36.272640228271484,
+                        28.450515747070313,
+                        0.7008838653564453
                     ]
                 }
             }
@@ -3903,15 +3903,16 @@
                 "PlayerComponent": {
                     "accelerationTime": 0.10000000149011612,
                     "airAcceleration": 40.0,
-                    "airDashSpeed": 10.0,
-                    "airDashStaminaCost": 0.4,
+                    "airDashDuration": 0.20000000298023224,
+                    "airDashSpeed": 30.0,
+                    "airDashStaminaCost": 0.4000000059604645,
+                    "backflipStaminaCost": 1.0,
                     "coyoteTime": 0.30000001192092896,
                     "coyoteTimer": 0.0,
                     "dashStartInput": 0.20000000298023224,
                     "deathHeight": -10.0,
                     "doubleJumpSpeed": 4.0,
                     "gravity": -20.0,
-                    "backflipStaminaCost": 1.0,
                     "highJumpSpeed": 15.0,
                     "infinityJump": false,
                     "infinityStamina": false,
@@ -3927,6 +3928,8 @@
                         0.5,
                         0.0
                     ],
+                    "spinAttackAnimationSpeed": 1.0,
+                    "spinAttackRadius": 1.5,
                     "stamina": 1.0,
                     "staminaRecoveryRate": 1.0,
                     "state": "kSleep",
@@ -4102,15 +4105,16 @@
                     "PlayerComponent": {
                         "accelerationTime": 0.10000000149011612,
                         "airAcceleration": 40.0,
-                        "airDashSpeed": 10.0,
+                        "airDashDuration": 0.30000001192092896,
+                        "airDashSpeed": 30.0,
                         "airDashStaminaCost": 0.4,
+                        "backflipStaminaCost": 1.0,
                         "coyoteTime": 0.30000001192092896,
                         "coyoteTimer": 0.0,
                         "dashStartInput": 0.20000000298023224,
                         "deathHeight": -10.0,
                         "doubleJumpSpeed": 4.0,
                         "gravity": -20.0,
-                        "backflipStaminaCost": 1.0,
                         "highJumpSpeed": 15.0,
                         "infinityJump": false,
                         "infinityStamina": false,
@@ -4126,6 +4130,8 @@
                             0.5,
                             0.0
                         ],
+                        "spinAttackAnimationSpeed": 1.7999999523162842,
+                        "spinAttackRadius": 1.5,
                         "stamina": 1.0,
                         "staminaRecoveryRate": 1.0,
                         "state": "kSleep",
@@ -4161,7 +4167,23 @@
                 }
             },
             "prefabInstance": "resources/game/Prefabs\\player.json",
-            "prefabOverrides": []
+            "prefabOverrides": [
+                {
+                    "op": "replace",
+                    "path": "/components/PlayerComponent/airDashDuration",
+                    "value": 0.20000000298023224
+                },
+                {
+                    "op": "replace",
+                    "path": "/components/PlayerComponent/airDashStaminaCost",
+                    "value": 0.4000000059604645
+                },
+                {
+                    "op": "replace",
+                    "path": "/components/PlayerComponent/spinAttackAnimationSpeed",
+                    "value": 1.0
+                }
+            ]
         },
         "stage": {
             "components": {
