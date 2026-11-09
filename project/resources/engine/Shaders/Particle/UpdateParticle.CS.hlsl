@@ -26,7 +26,7 @@ void main(uint3 DTid : SV_DispatchThreadID)
         return;
     }
 
-    gParticles[particleIndex].translate += gParticles[particleIndex].velocity;
+    gParticles[particleIndex].translate += gParticles[particleIndex].velocity * gPerFrame.deltaTime;
     float currentTime = gParticles[particleIndex].currentTime + gPerFrame.deltaTime;
     gParticles[particleIndex].currentTime = currentTime;
     float lifeTime = gParticles[particleIndex].lifeTime;

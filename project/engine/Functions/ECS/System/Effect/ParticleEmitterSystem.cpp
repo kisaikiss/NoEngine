@@ -111,8 +111,6 @@ void ParticleEmitterSystem::Update(Registry& registry, float deltaTime) {
 			continue;
 		}
 
-		auto* transform = registry.GetComponent<TransformComponent>(entity);
-		TransformComponent t = *transform;
 		emitter->frequencyTime += deltaTime;
 		// 初回にコードから直接設定されたハンドルを保持し、以後の名前変更を反映する。
 		if (!emitter->texture.IsValid() || (!emitter->loadedTextureName.empty() && emitter->loadedTextureName != emitter->textureName)
@@ -123,38 +121,33 @@ void ParticleEmitterSystem::Update(Registry& registry, float deltaTime) {
 		emitter->loadedTextureGeneration = AssetManager::GetAddressableGeneration();
 
 		if (emitter->frequency <= emitter->frequencyTime) {
-				EmitParticle(registry, t, emitter);
-				emitter->frequencyTime -= emitter->frequency;
+			const auto* transform = registry.GetComponent<TransformComponent>(entity);
+			EmitParticle(registry, transform->GetWorldPosition(registry), *emitter);
+			emitter->frequencyTime -= emitter->frequency;
 		}
 	}
 }
 
-void ParticleEmitterSystem::EmitParticle(Registry& registry, const Component::TransformComponent& emitterTransform, Component::ParticleEmitterComponent* emitter) {
-	for (uint32_t count = 0; count < emitter->count; count++) {
+void ParticleEmitterSystem::EmitParticle(Registry& registry, const Math::Vector3& worldPosition, const Component::ParticleEmitterComponent& emitter) {
+	// 発生範囲とオフセットはワールド軸に沿って適用する。
+	const auto center = worldPosition + emitter.localPosition;
+	const auto halfRange = emitter.emitRange / 2.0f;
+	const auto minPosition = center - halfRange;
+	const auto maxPosition = center + halfRange;
+	for (uint32_t count = 0; count < emitter.count; count++) {
 		auto e = registry.GenerateEntity();
 		auto* particle = registry.AddComponent<ParticleComponent>(e);
-		particle->lifeTime = Random::GetRandomVal(emitter->minLifeTime, emitter->maxLifeTime);
-		particle->texture = emitter->texture;
-		particle->shape = emitter->shape;
-		particle->color = emitter->color;
-		registry.AddComponent<VelocityComponent>(e)->linear = Random::GetRandomVal(emitter->minSpeed, emitter->maxSpeed);
+		particle->lifeTime = Random::GetRandomVal(emitter.minLifeTime, emitter.maxLifeTime);
+		particle->texture = emitter.texture;
+		particle->shape = emitter.shape;
+		particle->color = emitter.color;
+		registry.AddComponent<VelocityComponent>(e)->linear = Random::GetRandomVal(emitter.minSpeed, emitter.maxSpeed);
 		auto* transform = registry.AddComponent<TransformComponent>(e);
-		transform->translate = GetNewPosition(emitterTransform, emitter);
-		transform->rotation = Math::Quaternion::IDENTITY; 
-		transform->scale = Random::GetRandomVal(emitter->minScale, emitter->maxScale);
+		transform->translate = Random::GetRandomVal(minPosition, maxPosition);
+		transform->rotation = Math::Quaternion::IDENTITY;
+		transform->scale = Random::GetRandomVal(emitter.minScale, emitter.maxScale);
 	}
 }
-
-Math::Vector3 ParticleEmitterSystem::GetNewPosition(const Component::TransformComponent& emitterTransform, Component::ParticleEmitterComponent* emitter) {
-	Math::Vector3 min, max;
-	max = emitterTransform.translate + (emitter->emitRange / 2.f);
-	min = emitterTransform.translate - (emitter->emitRange / 2.f);
-	Math::Vector3 result;
-	result = Random::GetRandomVal(min, max) + emitter->localPosition;
-	return result;
-}
-
-
 }
 }
 #include "../SystemManager.h"

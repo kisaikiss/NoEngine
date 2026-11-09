@@ -65,7 +65,8 @@ void main(uint3 DTid : SV_DispatchThreadID)
                 gParticles[particleIndex].color = float4(1.0f,1.0f,1.0f, 1.0f);
                 gParticles[particleIndex].lifeTime = generator.Generate1d();
                 gParticles[particleIndex].currentTime = 0.0f;
-                gParticles[particleIndex].velocity = 0.01f - generator.Generate3d() / 50.0f;
+                // 60 FPS 時のフレームあたりの移動量を秒あたりに換算する。
+                gParticles[particleIndex].velocity = (0.01f - generator.Generate3d() / 50.0f) * 60.0f;
                 gParticles[particleIndex].active = 1;
             }
             else

@@ -193,7 +193,12 @@ void CPUParticlePass::UploadMatrices(GraphicsContext& gfx, ECS::Registry& regist
 		Math::Matrix4x4 rotateMatrix;
 		rotateMatrix.MakeRotate(item.transform->rotation);
 		Math::Matrix4x4 worldMatrix = scaleMatrix * rotateMatrix * billBoardMatrix * translateMatrix;
-		particleForGpu_.push_back({ worldMatrix, particle.color });
+		const float fade = particle.lifeTime > 0.0f
+			? std::clamp(1.0f - particle.currentTime / particle.lifeTime, 0.0f, 1.0f)
+			: 0.0f;
+		auto color = particle.color;
+		color.a *= fade;
+		particleForGpu_.push_back({ worldMatrix, color });
 	}
 
 	size_t size = particleForGpu_.size() * sizeof(ParticleForGPU);

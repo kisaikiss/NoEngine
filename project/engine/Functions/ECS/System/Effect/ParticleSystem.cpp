@@ -73,7 +73,6 @@ void ParticleSystem::Update(Registry& registry, float deltaTime) {
 	for (auto entity : particleView) {
 		auto* particle = registry.GetComponent<ParticleComponent>(entity);
 		particle->currentTime += deltaTime;
-		particle->color.a = 1.0f - (particle->currentTime / particle->lifeTime);
 		if (particle->currentTime >= particle->lifeTime) {
 			registry.DestroyEntity(entity);
 		}

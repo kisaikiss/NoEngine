@@ -14,8 +14,7 @@ public:
     void Update(ComputeContext& ctx, Registry& registry, float deltaTime) override;
     void Update(Registry& registry, float deltaTime) override;
 private:
-    void EmitParticle(Registry& registry, const Component::TransformComponent& transform, Component::ParticleEmitterComponent* emitter);
-    Math::Vector3 GetNewPosition(const Component::TransformComponent& emitterTransform, Component::ParticleEmitterComponent* emitter);
+    void EmitParticle(Registry& registry, const Math::Vector3& worldPosition, const Component::ParticleEmitterComponent& emitter);
 
     ComputePSO pso_;
     // 初期化後は不変なので、スナップショットと同じGPU設定を共有する。
