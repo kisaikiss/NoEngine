@@ -3,6 +3,7 @@
 #include "engine/Functions/Scene/SceneNameComponent.h"
 #include "PrefabSerializer.h"
 #include "../Utilities/EditUtils.h"
+#include "engine/Functions/ECS/Component/Asset/MaterialComponent.h"
 #include "engine/Functions/ECS/Component/Common/TransformComponent.h"
 #include "engine/Functions/ECS/Component/Common/TransformRoutineComponent.h"
 
@@ -31,9 +32,12 @@ json SaveEntityToJson(ECS::Registry& registry, ECS::Entity entity) {
 		if (!registry.Has(typeInfo.typeId, entity)) continue;
 
 		void* compPtr = typeInfo.getter(registry, entity);
+		const bool omitSubMeshOverrides = typeInfo.typeId == Utilities::TypeID<Component::MaterialComponent>() &&
+			static_cast<Component::MaterialComponent*>(compPtr)->subMeshOverrides.empty();
 
 		json compJson;
 		for (auto& field : typeInfo.fields) {
+			if (omitSubMeshOverrides && field.name == "subMeshOverrides") continue;
 			uint8_t* base = (uint8_t*)compPtr + field.offset;
 			WriteFieldToJson(registry, compJson, field, base);
 		}
@@ -216,6 +220,9 @@ void LoadEntityFromJson(ECS::Registry& registry, ECS::Entity entity, const json&
 		if (isRoutine) {
 			// 再読込やPlay復元時に、以前のルートの再生位置を持ち越さない。
 			*static_cast<Component::TransformRoutineComponent*>(compPtr) = Component::TransformRoutineComponent{};
+		}
+		if (typeInfo->typeId == Utilities::TypeID<Component::MaterialComponent>() && !compJson.contains("subMeshOverrides")) {
+			static_cast<Component::MaterialComponent*>(compPtr)->subMeshOverrides.clear();
 		}
 		for (auto& field : typeInfo->fields) {
 			uint8_t* base = (uint8_t*)compPtr + field.offset;

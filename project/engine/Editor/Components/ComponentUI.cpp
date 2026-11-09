@@ -1,5 +1,8 @@
 #include "ComponentUI.h"
 #include "engine/Editor/Reflection/ComponentRegistry.h"
+#include "engine/Assets/Model/ModelSaver.h"
+#include "engine/Functions/ECS/Component/Asset/MaterialComponent.h"
+#include "engine/Functions/ECS/Component/Asset/MeshComponent.h"
 #include "engine/Functions/Command/EditCommand/ChangeValueCommand.h"
 #include "engine/Functions/Command/EditCommand/FunctionCommand.h"
 #include "engine/Functions/Command/EditCommand/RemoveComponentCommand.h"
@@ -22,10 +25,10 @@ namespace NoEngine {
 using namespace ECS;
 #ifdef USE_IMGUI
 namespace {
-// ルート内のフィールド履歴は、配列要素のアドレスを保持せずComponent単位で記録する。
-std::vector<std::unique_ptr<Command::ICommand>>* sRoutineFieldCommands = nullptr;
+// 配列要素のアドレスを履歴に残さず、呼び出し側で要素の変更を記録する。
+std::vector<std::unique_ptr<Command::ICommand>>* sNestedFieldCommands = nullptr;
 void RecordFieldCommand(std::unique_ptr<Command::ICommand> command) {
-	if (sRoutineFieldCommands) sRoutineFieldCommands->push_back(std::move(command));
+	if (sNestedFieldCommands) sNestedFieldCommands->push_back(std::move(command));
 	else Editor::EditorCommandOperator::AddCommand(std::move(command));
 }
 
@@ -139,14 +142,14 @@ void DrawTransformRoutineUI(ECS::Registry& registry, ECS::Entity entity,
 	editingRoutineIndex = component.selectedRoutineIndex;
 	if (!editBefore) editBefore = component;
 	std::vector<std::unique_ptr<Command::ICommand>> commands;
-	sRoutineFieldCommands = &commands;
+	sNestedFieldCommands = &commands;
 	const auto* routeType = ComponentRegistry::FindByTypeID(Utilities::TypeID<TransformRoutineDefinition>());
 	if (routeType) {
 		for (const auto& field : routeType->fields) {
 			if (field.name != "id") DrawFieldUI(registry, entity, field, selected);
 		}
 	}
-	sRoutineFieldCommands = nullptr;
+	sNestedFieldCommands = nullptr;
 	if (!commands.empty()) {
 		// 削除で無効になった配列要素へのコマンドは実行せず、編集開始前の値を記録する。
 		RecordRoutineEdit(registry, entity, *editBefore, component);
@@ -158,6 +161,112 @@ void DrawTransformRoutineUI(ECS::Registry& registry, ECS::Entity entity,
 	for (const auto& field : type.fields) {
 		if (field.name == "playing" || field.name == "playbackSpeed") DrawFieldUI(registry, entity, field, &component);
 	}
+}
+
+void RecordSubMeshEdit(Registry& registry, Entity entity, const std::string& meshName, uint32_t index,
+	std::optional<Component::SubMeshMaterialOverride> before, std::optional<Component::SubMeshMaterialOverride> after) {
+	auto matchesSlot = [meshName, index](const auto& entry) {
+		return entry.meshName == meshName && entry.subMeshIndex == index;
+	};
+	const auto& overrides = registry.GetComponent<Component::MaterialComponent>(entity)->subMeshOverrides;
+	const auto position = std::ranges::find_if(overrides, matchesSlot) - overrides.begin();
+	auto apply = [&registry, entity, matchesSlot, position](const auto& value) {
+		auto* material = registry.GetComponent<Component::MaterialComponent>(entity);
+		if (!material) return;
+		auto& entries = material->subMeshOverrides;
+		if (!value) {
+			std::erase_if(entries, matchesSlot);
+		} else if (auto it = std::ranges::find_if(entries, matchesSlot); it != entries.end()) {
+			*it = *value;
+		} else {
+			entries.insert(entries.begin() + std::min(position, entries.end() - entries.begin()), *value);
+		}
+	};
+	apply(after);
+	RecordFieldCommand(std::make_unique<Command::FunctionCommand>(
+		[apply, after = std::move(after)] { apply(after); },
+		[apply, before = std::move(before)] { apply(before); }, "Edit submesh material"));
+}
+
+void DrawSubMeshMaterials(Registry& registry, Entity entity, const FieldInfo& field, Component::MaterialComponent& material) {
+	if (!ImGui::TreeNode("Submesh Materials")) return;
+	const auto* model = registry.GetComponent<Component::MeshComponent>(entity);
+	const Mesh* mesh = nullptr;
+	if (model && model->meshName == model->loadedMeshName) {
+		mesh = ModelSaver::Get().GetMesh(model->handle);
+	}
+	// Prefab編集用のRegistryではModelLoadSystemが動かないので、モデルキャッシュから取得する。
+	if (!mesh && model && !model->meshName.empty() && Editor::ScopedEditorRegistry::IsIsolated()) {
+		const auto path = AssetManager::GetFilePathFromAddressableName(model->meshName);
+		if (!path.empty() && AssetManager::GetAssetTypeFromExtension(path) == Editor::EBrowserItemType::Model) {
+			mesh = ModelSaver::Get().GetMesh(ModelSaver::Get().LoadOrGetModel(path).mesh);
+		}
+	}
+	if (!mesh || mesh->subMeshes.empty()) {
+		ImGui::TextDisabled("Assign and load a model to edit its submeshes.");
+		ImGui::TreePop();
+		return;
+	}
+
+	ImGui::PushID(&registry);
+	ImGui::PushID(static_cast<int>(entity));
+	ImGui::PushID(model->meshName.c_str());
+	auto* storage = ImGui::GetStateStorage();
+	const auto selectionId = ImGui::GetID("Submesh selection");
+	int selected = std::clamp(storage->GetInt(selectionId), 0, static_cast<int>(mesh->subMeshes.size()) - 1);
+	auto label = [&](int index) {
+		const auto& name = mesh->subMeshes[index].name;
+		return name.empty() ? std::format("Submesh {}", index + 1) : std::format("{}  {}", index + 1, name);
+	};
+	if (ImGui::BeginCombo("Submesh", label(selected).c_str())) {
+		for (int i = 0; i < static_cast<int>(mesh->subMeshes.size()); ++i) {
+			ImGui::PushID(i);
+			if (ImGui::Selectable(label(i).c_str(), i == selected)) {
+				selected = i;
+				storage->SetInt(selectionId, selected);
+			}
+			ImGui::PopID();
+		}
+		ImGui::EndCombo();
+	}
+
+	ImGui::PushID(selected);
+	const auto index = static_cast<uint32_t>(selected);
+	if (auto* slot = material.FindSubMeshOverride(model->meshName, index)) {
+		static ImGuiID editingId = 0;
+		static std::optional<Component::SubMeshMaterialOverride> editBefore;
+		const auto id = ImGui::GetID("Submesh fields");
+		if (editingId != id || !editBefore) editBefore = *slot;
+		editingId = id;
+		std::vector<std::unique_ptr<Command::ICommand>> commands;
+		sNestedFieldCommands = &commands;
+		for (const auto& setting : field.arrayOps->elementStructTypeInfo()->fields) {
+			if (setting.name != "meshName" && setting.name != "subMeshIndex") DrawFieldUI(registry, entity, setting, slot);
+		}
+		sNestedFieldCommands = nullptr;
+		if (!commands.empty()) {
+			RecordSubMeshEdit(registry, entity, model->meshName, index, *editBefore, *slot);
+			editBefore.reset();
+		} else if (!ImGui::IsAnyItemActive()) {
+			editBefore.reset();
+		}
+		ImGui::TextDisabled("An empty textureName uses the model texture.");
+		if (ImGui::Button("Use Shared Material")) {
+			RecordSubMeshEdit(registry, entity, model->meshName, index, *slot, std::nullopt);
+			editBefore.reset();
+		}
+	} else {
+		ImGui::TextDisabled("Using shared material settings.");
+		if (ImGui::Button("Override Material")) {
+			Component::SubMeshMaterialOverride overrideSettings{ material, model->meshName, index };
+			RecordSubMeshEdit(registry, entity, model->meshName, index, std::nullopt, std::move(overrideSettings));
+		}
+	}
+	ImGui::PopID();
+	ImGui::PopID();
+	ImGui::PopID();
+	ImGui::PopID();
+	ImGui::TreePop();
 }
 
 std::optional<std::string> AcceptAssetReferenceDrop(const FieldInfo& field) {
@@ -224,6 +333,14 @@ void DrawComponentUI(Registry& registry, Entity e) {
 
 			if (compInfo.typeId == Utilities::TypeID<Component::TransformRoutineComponent>()) {
 				DrawTransformRoutineUI(registry, e, compInfo, *static_cast<Component::TransformRoutineComponent*>(compPtr));
+			} else if (compInfo.typeId == Utilities::TypeID<Component::MaterialComponent>()) {
+				for (const auto& field : compInfo.fields) {
+					if (field.name == "subMeshOverrides") {
+						DrawSubMeshMaterials(registry, e, field, *static_cast<Component::MaterialComponent*>(compPtr));
+					} else {
+						DrawFieldUI(registry, e, field, compPtr);
+					}
+				}
 			} else {
 				for (auto& field : compInfo.fields) DrawFieldUI(registry, e, field, compPtr);
 			}

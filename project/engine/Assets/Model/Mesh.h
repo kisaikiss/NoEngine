@@ -38,6 +38,7 @@ struct SubMesh {
 	uint32_t indexCount = 0;
 
 	Asset::MaterialHandle material;
+	std::string name;
 };
 
 _declspec(align(16))struct SkeletonWell {

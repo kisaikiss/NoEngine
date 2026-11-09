@@ -90,10 +90,12 @@ ModelAsset ModelLoader::Load(const std::string& filePath) {
 		sub.indexCount = indexCount;
 		sub.vertexStart = vertexBase;
 		sub.vertexCount = vertexCount;
+		sub.name = mesh->mName.C_Str();
 
 
 		if (scene->HasMaterials()) {
 			aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+			if (sub.name.empty()) sub.name = material->GetName().C_Str();
 			if (material->GetTextureCount(aiTextureType_DIFFUSE) > 0) {
 				aiString texPath;
 				material->GetTexture(aiTextureType_DIFFUSE, 0, &texPath);

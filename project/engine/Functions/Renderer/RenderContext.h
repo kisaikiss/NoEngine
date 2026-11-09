@@ -12,10 +12,12 @@
 
 namespace NoEngine {
 enum class BlendMode;
+struct Mesh;
+struct SubMesh;
 struct Transform;
 namespace Component {
 struct AnimatorComponent;
-struct MaterialComponent;
+struct MeshMaterialSettings;
 struct TransformComponent;
 }
 
@@ -29,8 +31,9 @@ public:
 	void Update(ECS::Registry& registry);
 
 	struct MeshDrawItem {
-		Asset::MeshHandle meshHandle;
-		Component::MaterialComponent* material;
+		Mesh* mesh;
+		std::span<const SubMesh> subMeshes;
+		Component::MeshMaterialSettings* material;
 		BlendMode blendMode;
 		Component::TransformComponent* transform;
 		Transform* animationLocal;

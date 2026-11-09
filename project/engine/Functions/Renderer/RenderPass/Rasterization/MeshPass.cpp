@@ -49,7 +49,6 @@ void MeshPassBase::EnsurePSOsInitialized() {
 
 void MeshPassBase::RenderItems(GraphicsContext& context, const RenderGraphRegistry& resourceRegistry,
 	const std::vector<RenderContext::MeshDrawItem>& items, const CameraComponent& camera, ECS::Registry& registry) {
-	(void)resourceRegistry;
 	uint32_t currentPSO = 0xFFFFFFFF;
 	auto* renderCtx = GetRenderContext();
 	for (auto& item : items) {
@@ -137,14 +136,13 @@ void MeshPassBase::RenderItems(GraphicsContext& context, const RenderGraphRegist
 			}
 
 		}
-		auto* mesh = ModelSaver::Get().GetMesh(item.meshHandle);
-		if (!mesh) continue;
+		auto* mesh = item.mesh;
 		auto& vertices = item.animator ? item.animator->GetVertexBuffer(*mesh) : mesh->useVertexBuffer;
 		context.TransitionResource(vertices, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER | D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, true);
 		context.SetVertexBuffer(0, vertices.VertexBufferView());
 		context.SetIndexBuffer(mesh->indexBuffer.IndexBufferView());
 
-		for (const auto& subMesh : mesh->subMeshes) {
+		for (const auto& subMesh : item.subMeshes) {
 
 			if (item.material->renderMode != RenderMode::kEmissive) {
 				_declspec(align(16)) struct {
@@ -233,14 +231,13 @@ void MeshPass::RenderOutline(GraphicsContext& context, const std::vector<RenderC
 		context.SetDynamicConstantBufferView(rootIndex["gWorldMatrix"], sizeof(Math::Matrix4x4), &worldData);
 		context.SetDynamicConstantBufferView(rootIndex["gCameraMatrix"], sizeof(Component::CameraForGPU), &camera.forGPU);
 
-		auto* mesh = ModelSaver::Get().GetMesh(item.meshHandle);
-		if (!mesh) continue;
+		auto* mesh = item.mesh;
 		auto& vertices = item.animator ? item.animator->GetVertexBuffer(*mesh) : mesh->useVertexBuffer;
 		context.TransitionResource(vertices, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER | D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, true);
 		context.SetVertexBuffer(0, vertices.VertexBufferView());
 		context.SetIndexBuffer(mesh->indexBuffer.IndexBufferView());
 
-		for (const auto& subMesh : mesh->subMeshes) {
+		for (const auto& subMesh : item.subMeshes) {
 			context.DrawIndexedInstanced(subMesh.indexCount, 1, subMesh.indexStart, subMesh.vertexStart, 0);
 		}
 		if (item.animator) context.TransitionResource(vertices, D3D12_RESOURCE_STATE_COMMON, true);

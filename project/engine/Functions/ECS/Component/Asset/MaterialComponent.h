@@ -27,11 +27,8 @@ enum class RenderMode {
 };
 
 namespace Component {
-/// <summary>
-/// エンティティの全サブメッシュに共通のマテリアル設定。
-/// </summary>
-struct MaterialComponent {
-	// テクスチャのAddressableNameを指定すると、全サブメッシュのテクスチャを上書きする。
+struct MeshMaterialSettings {
+	// 空欄の場合はモデルから読み込んだテクスチャを使う。
 	std::string textureName;
 	TextureRef textureHandle;
 	uint64_t loadedTextureGeneration = 0;
@@ -44,7 +41,6 @@ struct MaterialComponent {
 	bool drawOutline = false;
 	bool unlit = false;          // true : ライトの影響を受けない
 	bool receiveShadow = true;   // false : 他オブジェクトが落とす影の影響を受けない
-	bool castShadow = true;
 	float shininess = 60.f;
 	float environmentCoefficient = 0.f;
 	Math::Vector2 uvPosition = Math::Vector2::ZERO;
@@ -60,6 +56,18 @@ struct MaterialComponent {
 	std::string loadedNoiseTextureName;
 	uint64_t loadedNoiseTextureGeneration = 0;
 	TextureRef noiseTextureHandle;// ノイズテクスチャ
+};
+
+struct SubMeshMaterialOverride : MeshMaterialSettings {
+	std::string meshName;
+	uint32_t subMeshIndex = UINT32_MAX;
+};
+
+struct MaterialComponent : MeshMaterialSettings {
+	bool castShadow = true;
+	std::vector<SubMeshMaterialOverride> subMeshOverrides;
+
+	SubMeshMaterialOverride* FindSubMeshOverride(std::string_view meshName, uint32_t subMeshIndex);
 };
 }
 }

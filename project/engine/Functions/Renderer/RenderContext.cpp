@@ -1,4 +1,5 @@
 #include "RenderContext.h"
+#include "engine/Assets/Model/ModelSaver.h"
 #include "engine/Functions/ECS/Component/Asset/AnimatorComponent.h"
 #include "engine/Functions/ECS/Component/Asset/LightComponent.h"
 #include "engine/Functions/ECS/Component/Asset/MaterialComponent.h"
@@ -82,22 +83,47 @@ const RenderContext::MeshDrawLists& RenderContext::GetMeshDrawLists(ECS::Registr
 
 	const auto cameraPos = camera.forGPU.worldPosition;
 	for (auto entity : registry.View<TransformComponent, MeshComponent, MaterialComponent>()) {
-		auto* mesh = registry.GetComponent<MeshComponent>(entity);
-		if (!mesh->isVisible) continue;
+		const auto* meshComponent = registry.GetComponent<MeshComponent>(entity);
+		if (!meshComponent->isVisible) continue;
+		auto* mesh = ModelSaver::Get().GetMesh(meshComponent->handle);
+		if (!mesh || mesh->subMeshes.empty()) continue;
 		auto* material = registry.GetComponent<MaterialComponent>(entity);
 		auto* transform = registry.GetComponent<TransformComponent>(entity);
 		auto* animator = registry.GetComponent<AnimatorComponent>(entity);
 		Transform* animationLocal = animator ? &animator->local : nullptr;
 		const float distance = MathCalculations::LengthSquared(transform->translate - cameraPos);
 
-		BlendMode blendMode = material->blendMode;
-		if (material->renderMode == RenderMode::kEmissive) {
-			blendMode = BlendMode::kAdd;
-		} else if (blendMode == BlendMode::kNormal && material->color.a < 1.0f) {
-			blendMode = BlendMode::kAlpha;
+		auto addDraw = [&](std::span<const SubMesh> subMeshes, MeshMaterialSettings& settings) {
+			BlendMode blendMode = settings.blendMode;
+			if (settings.renderMode == RenderMode::kEmissive) {
+				blendMode = BlendMode::kAdd;
+			} else if (blendMode == BlendMode::kNormal && settings.color.a < 1.0f) {
+				blendMode = BlendMode::kAlpha;
+			}
+			auto& items = blendMode == BlendMode::kNormal ? lists.opaque : lists.transparent;
+			items.push_back({mesh, subMeshes, &settings, blendMode, transform, animationLocal, distance, animator});
+		};
+
+		const auto& modelName = meshComponent->meshName;
+		const std::span<const SubMesh> subMeshes = mesh->subMeshes;
+		const bool hasOverrides = meshComponent->loadedMeshName == modelName &&
+			std::ranges::any_of(material->subMeshOverrides, [&](const auto& entry) {
+				return entry.meshName == modelName && entry.subMeshIndex < subMeshes.size();
+			});
+		if (!hasOverrides) {
+			addDraw(subMeshes, *material);
+			continue;
 		}
-		auto& items = blendMode == BlendMode::kNormal ? lists.opaque : lists.transparent;
-		items.push_back({mesh->handle, material, blendMode, transform, animationLocal, distance, animator});
+		// 共通設定が続く範囲はまとめ、差し替えたサブメッシュだけを別々に振り分ける。
+		uint32_t sharedStart = 0;
+		for (uint32_t i = 0; i < subMeshes.size(); ++i) {
+			if (auto* slot = material->FindSubMeshOverride(modelName, i)) {
+				if (sharedStart < i) addDraw(subMeshes.subspan(sharedStart, i - sharedStart), *material);
+				addDraw(subMeshes.subspan(i, 1), *slot);
+				sharedStart = i + 1;
+			}
+		}
+		if (sharedStart < subMeshes.size()) addDraw(subMeshes.subspan(sharedStart), *material);
 	}
 
 	// 不透明は手前から奥、半透明は奥から手前の順に描画する。
