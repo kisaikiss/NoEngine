@@ -2,6 +2,7 @@
 
 #include "Command/CommandListManager.h"
 #include "ContextManager.h"
+#include "Graphics/GraphicsCommon.h"
 #include "engine/Functions/Renderer/RaytracingManager.h"
 #include "engine/Functions/Shader/ShaderModule.h"
 
@@ -66,6 +67,7 @@ void GraphicsCore::Initialize(float windowWidth, float windowHeight) {
 	sGraphicsDevice = make_unique<Graphics::GraphicsDevice>(sGraphicsInfrastructures->GetDXGIAdapter());
 	sCommandListManager.Create();
 	SettingDebugLayer();
+	Graphics::InitializeCommonState();
 	CheckRaytracingEnable();
 	Render::Initialize();
 	GraphicsCore::sWindowManager.Create(L"NoEngine", UINT(windowWidth), UINT(windowHeight), L"resources/engine/noicon.ico");
@@ -96,10 +98,12 @@ void GraphicsCore::Initialize(float windowWidth, float windowHeight) {
 }
 
 void GraphicsCore::Shutdown(void) {
+	sCommandListManager.IdleGPU();
 	DestroyPixelBuffer();
 	sSwapChain.reset();
 	sWindowManager.Shutdown();
 	Render::Shutdown();
+	Graphics::DestroyCommonState();
 	CommandContext::DestroyAllContexts();
 
 	for (auto& descriptorAllocator : sDescriptorAllocator) {
