@@ -1,7 +1,6 @@
 #pragma once
 #include "../ISystem.h"
 #include "engine/Functions/ECS/Component/Effect/EffectEmitterComponent.h"
-#include "engine/Functions/ECS/Component/Common/TransformComponent.h"
 namespace NoEngine {
 namespace ECS {
 
@@ -11,8 +10,17 @@ public:
     EffectEmitSystem() { SetStopInGameStop(false); SetStopInPause(false); }
     void Update(Registry& registry, float deltaTime) override;
 private:
-    void EmitParticle(Registry& registry, Component::EffectEmitterComponent& effectEmitter, Component::TransformComponent& emitterTransform, Entity entity);
-    Math::Vector3 GetNewPosition(Registry& registry, Component::EffectEmitterComponent& effectEmitter, Component::TransformComponent& emitterTransform);
+    friend class Registry;
+
+    struct Playback {
+        Component::EffectPreset preset;
+        Math::Vector3 worldPosition;
+        Math::Quaternion rotation = Math::Quaternion::IDENTITY;
+        double timeToNextBurst = 0.0;
+        uint32_t burstsRemaining = 0;
+    };
+
+    std::vector<Playback> playbacks_;
 };
 
 }

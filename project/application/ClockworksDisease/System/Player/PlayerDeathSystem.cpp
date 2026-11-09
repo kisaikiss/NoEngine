@@ -45,9 +45,8 @@ void SetPlayerVisible(No::Registry& registry, No::Entity player, bool visible) {
 }
 
 void EmitDeathEffect(No::Registry& registry, const No::Vector3& position) {
-	for (auto e : registry.View<No::TransformComponent, No::EffectEmitterComponent, PlayerDeathEffectTag>()) {
-		registry.GetComponent<No::TransformComponent>(e)->translate = position;
-		registry.AddComponent<No::EffectEmitTag>(e);
+	for (auto e : registry.View<No::EffectEmitterComponent, PlayerDeathEffectTag>()) {
+		registry.PlayEffect(e, position);
 	}
 }
 

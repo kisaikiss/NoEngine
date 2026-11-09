@@ -76,17 +76,17 @@ public:
 			texture_ = NoEngine::TextureManager::LoadCovertTexture("resources/game/ClockworksDisease/Texture/Effect/getEffect.png");
 		}
 		if (!texture_.IsValid()) return;
+		No::EffectPreset preset;
+		preset.count = 1;
+		preset.spawnShape = No::EffectSpawnShape::kPoint;
+		preset.minScale = preset.maxScale = No::Vector3{ kParticleSize, kParticleSize, kParticleSize };
+		preset.minSpeed = preset.maxSpeed = No::Vector3::ZERO;
+		preset.minLifeTime = preset.maxLifeTime = kParticleLifetime;
+		preset.minRotate = preset.maxRotate = 0.0f;
+		preset.color = No::Color(0.3f, 0.85f, 1.0f, 1.0f);
+		preset.texture = texture_;
 		for (const auto& position : particlePositions) {
-			const auto particleEntity = registry.GenerateEntity();
-			auto* transform = registry.AddComponent<No::TransformComponent>(particleEntity);
-			transform->translate = position;
-			transform->scale = {kParticleSize, kParticleSize, kParticleSize};
-			// 発生した位置に残し、既存のParticleSystemで減衰と削除を行う。
-			registry.AddComponent<No::VelocityComponent>(particleEntity)->linear = No::Vector3::ZERO;
-			auto* particle = registry.AddComponent<No::ParticleComponent>(particleEntity);
-			particle->lifeTime = kParticleLifetime;
-			particle->color = No::Color(0.3f, 0.85f, 1.0f, 1.0f);
-			particle->texture = texture_;
+			registry.PlayEffect(preset, position);
 		}
 	}
 

@@ -1,36 +1,44 @@
 #pragma once
 #include "engine/Math/MathInclude.h"
-#include "engine/Assets/Texture/TextureManager.h"
-#include "../Effect/ParticleEmitterComponent.h"
+#include "ParticleEmitterComponent.h"
 
 namespace NoEngine {
-enum class EmitMode {
-    Box,
-    Circle,   // 円形（平面 XZ）
-    Ring,     // ドーナツ（平面 XZ）
-    Cone      // 円錐（3D）
-};
 namespace Component {
 
+// 保存済みのシーンと Prefab 用。
 struct EffectEmitTag{};
 
-struct EffectEmitModeCircleTag{
-    bool useXYPlane;
+enum class EffectSpawnShape {
+    kPoint,
+    kBox,
+    kDiskXZ,
+    kRingXZ,
+    kSphere
 };
 
-struct EffectEmitModeRingTag{};
-
-struct EffectEmitModeSphereTag{};
+enum class EffectVelocityDistribution {
+    kBox,
+    kDiskXZ,
+    kDiskXY,
+    kRingXZ,
+    kSphere
+};
 
 struct EffectEmitterComponent {
-    uint32_t count = 10;		// 発生数
+    float startDelay = 0.0f;      // 初回発生までの秒数
+    uint32_t burstCount = 1;    // 発生の回数
+    float burstInterval = 0.1f;  // 繰り返しの間隔（秒）
+    uint32_t count = 10;        // 1 回の発生数
+    EffectSpawnShape spawnShape = EffectSpawnShape::kBox;
+    Math::Vector3 spawnOffset = Math::Vector3::ZERO;
+    Math::Vector3 emitRange = Math::Vector3::ZERO;
+    float spawnRadius = 1.0f;
+    EffectVelocityDistribution velocityDistribution = EffectVelocityDistribution::kBox;
     Math::Vector3 maxSpeed = Math::Vector3::UNIT_SCALE;
     Math::Vector3 minSpeed = -Math::Vector3::UNIT_SCALE;
     Math::Vector3 maxScale = Math::Vector3::UNIT_SCALE;
     Math::Vector3 minScale = Math::Vector3::ZERO;
-    Math::Vector3 emitRange = Math::Vector3::ZERO;
     Math::Color color = Math::Color::WHITE;
-    EmitMode emitMode = EmitMode::Box;
     float maxLifeTime = 6.f;
     float minLifeTime = 2.f;
     float maxRotate = PI;
@@ -38,8 +46,8 @@ struct EffectEmitterComponent {
     ParticleShape shape = ParticleShape::kPlane;
     std::string textureName = "white1x1";
     TextureRef texture;			// 使用するテクスチャ
-    std::string loadedTextureName;
-    uint64_t loadedTextureGeneration = 0;
 };
+
+using EffectPreset = EffectEmitterComponent;
 }
 }

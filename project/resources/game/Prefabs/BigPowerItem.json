@@ -14,8 +14,9 @@
             "name": "BigPowerItem_Prefab",
             "parent": null
         },
-        "EffectEmitModeSphereTag": null,
         "EffectEmitterComponent": {
+            "burstCount": 1,
+            "burstInterval": 0.10000000149011612,
             "color": [
                 1.0,
                 0.0,
@@ -52,7 +53,17 @@
                 0.0,
                 -0.5
             ],
-            "textureName": "getBigItem"
+            "shape": "kPlane",
+            "spawnOffset": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "spawnRadius": 1.0,
+            "spawnShape": "kBox",
+            "startDelay": 0.0,
+            "textureName": "getBigItem",
+            "velocityDistribution": "kSphere"
         },
         "MaterialComponent": {
             "blendMode": "kAdd",
@@ -148,7 +159,9 @@
             ],
             "decay": 1.5,
             "intensity": 1.0,
-            "radius": 5.199999809265137
+            "radius": 5.199999809265137,
+            "shadowRadius": 0.10000000149011612,
+            "shadowSamples": "kOneRay"
         },
         "SphereCollider": {
             "localCenter": [

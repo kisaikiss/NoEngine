@@ -42,9 +42,9 @@ void PlayerLevelUpSystem::Update(No::Registry& registry, float deltaTime) {
 			levelComponent->nextLevelUp = GetRequirementForLevel(levelComponent, levelComponent->nowLevel);
 			++skillProgress->skillPoints;
 
-			for (auto effectEntity : registry.View<No::TransformComponent, No::EffectEmitterComponent, LevelUpEffectTag>()) {
-				registry.GetComponent<No::TransformComponent>(effectEntity)->translate = registry.GetComponent<No::TransformComponent>(e)->GetWorldPosition(registry);
-				registry.AddComponent<No::EffectEmitTag>(effectEntity);
+			const auto position = registry.GetComponent<No::TransformComponent>(e)->GetWorldPosition(registry);
+			for (auto effectEntity : registry.View<No::EffectEmitterComponent, LevelUpEffectTag>()) {
+				registry.PlayEffect(effectEntity, position);
 			}
 		}
 	}

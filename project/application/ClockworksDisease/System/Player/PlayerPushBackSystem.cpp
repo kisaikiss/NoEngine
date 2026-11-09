@@ -32,7 +32,7 @@ void PlayerPushBackSystem::Update(No::Registry& registry, float deltaTime) {
 
             if (player->yVelocity < 0.f) {
                 if (!ground->preIsGrounded && player->yVelocity < -3.5f) {
-                    registry.AddComponent<No::EffectEmitTag>(event.player);
+                    registry.PlayEffect(event.player, transform->GetWorldPosition(registry));
                 }
                 player->yVelocity = 0.f;
             }

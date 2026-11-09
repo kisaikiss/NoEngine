@@ -177,7 +177,7 @@ void LinkPrefabInstance(ECS::Registry& registry, Entity entity, const std::strin
 
 nlohmann::json GetPrefabOverrides(const nlohmann::json& base, const nlohmann::json& current) {
 	Json changes = Json::array();
-	CollectChanges(PrefabData(base), PrefabData(current), "", changes);
+	CollectChanges(base, PrefabData(current), "", changes);
 	return changes;
 }
 

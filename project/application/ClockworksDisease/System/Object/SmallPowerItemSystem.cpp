@@ -24,7 +24,7 @@ void SmallPowerItemSystem::Update(No::Registry& registry, float deltaTime) {
 			if (item->moveTimer > item->attractTime) {
 				// エフェクトを出す位置をプレイヤーの座標に合わせる
 				transform->SetWorldPosition(registry,playerPos);
-				registry.AddComponent<No::EffectEmitTag>(e);
+				registry.PlayEffect(e, playerPos);
 				registry.DestroyEntity(e);
 			}
 

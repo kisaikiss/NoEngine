@@ -4,6 +4,8 @@
 #include "EventBus.h"
 
 namespace NoEngine {
+namespace Component { struct EffectEmitterComponent; }
+namespace Math { struct Vector3; }
 namespace ECS {
 /// <summary>
 /// Entityの発行とコンポーネントとの紐づけを行うクラス
@@ -12,6 +14,10 @@ class Registry final {
 public:
 	/// <summary>Entityの発行状態、全コンポーネント、保留中のイベントを複製します。</summary>
 	std::unique_ptr<Registry> Clone() const;
+
+	// 設定と発生位置をコピーし、EffectEmitSystem に再生を予約する。
+	void PlayEffect(const Component::EffectEmitterComponent& preset, const Math::Vector3& worldPosition);
+	void PlayEffect(Entity presetEntity, const Math::Vector3& worldPosition);
 
 	/// <summary>
 	/// 有効なエンティティを新規作成します。
