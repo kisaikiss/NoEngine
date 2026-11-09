@@ -66,6 +66,7 @@ void main(uint3 DTid : SV_DispatchThreadID)
                 gParticles[particleIndex].lifeTime = generator.Generate1d();
                 gParticles[particleIndex].currentTime = 0.0f;
                 gParticles[particleIndex].velocity = 0.01f - generator.Generate3d() / 50.0f;
+                gParticles[particleIndex].active = 1;
             }
             else
             {

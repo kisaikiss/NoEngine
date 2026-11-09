@@ -6,7 +6,7 @@
 namespace NoEngine {
 __declspec(align(16))struct Particle {
     Math::Vector3 translate;
-    float pad;
+    uint32_t active;
     Math::Vector3 scale;
     float lifeTime;
     Math::Vector3 velocity;

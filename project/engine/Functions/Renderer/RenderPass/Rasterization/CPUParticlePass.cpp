@@ -98,7 +98,7 @@ void CPUParticlePass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& r
 	// GPUへ行列を転送
 	UploadMatrices(gfx, registry);
 
-	if (items_.empty()) return;
+	if (batches_.empty()) return;
 
 	gfx.SetPipelineState(renderCtx->GetGraphicsPSO("Renderer : cpu particle PSO"));
 	gfx.SetRootSignature(renderCtx->GetRootSignature("Renderer : cpu particle PSO"));
@@ -113,55 +113,39 @@ void CPUParticlePass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& r
 		0,
 		worldMatrixBuffer_.GetSRV()
 	);
-
-
-	uint32_t count = 0;
-	for (size_t i = 0; i < baseIndices_.size() - 1; i++) {
-		size_t baseIndex = baseIndices_[i];
-		size_t nextIndex = baseIndices_[i + 1];
-		size_t instanceCount = nextIndex - baseIndex; // インスタンス数を計算
-
-		if (instanceCount == 0) continue;
-
-		// ここで textures_[count] に対応する最初の item の shape を取得する
-		Component::ParticleShape shape = items_[baseIndex].particle->shape;
-
-		// baseIndex
+	for (const auto& batch : batches_) {
+		// 頂点シェーダーでバッチの先頭位置を加算する。
 		_declspec(align(16)) struct {
 			uint32_t index;
 			uint32_t pad[3];
-		} indexConstant;
-		indexConstant.index = (uint32_t)baseIndex;
+		} indexConstant{ batch.firstInstance, {} };
 		gfx.SetDynamicConstantBufferView(rootIndex["gBaseIndex"], sizeof(indexConstant), &indexConstant);
 
-		gfx.SetDynamicDescriptor(rootIndex["gTexture"], 0, textures_[count]->GetSRV());
-		switch (shape) {
+		gfx.SetDynamicDescriptor(rootIndex["gTexture"], 0, batch.texture.GetSRV());
+		switch (batch.shape) {
 		case NoEngine::Component::ParticleShape::kPlane:
 			gfx.SetVertexBuffer(0, vertex_.VertexBufferView());
 			gfx.SetIndexBuffer(index_.IndexBufferView());
-			gfx.DrawIndexedInstanced(6, static_cast<UINT>(instanceCount), 0, 0, static_cast<UINT>(baseIndex));
+			gfx.DrawIndexedInstanced(6, batch.instanceCount, 0, 0, 0);
 			break;
 		case NoEngine::Component::ParticleShape::kRing:
 			gfx.SetVertexBuffer(0, ringVertex_.VertexBufferView());
 			gfx.SetIndexBuffer(ringIndex_.IndexBufferView());
-			gfx.DrawIndexedInstanced(ringIndexCount_, static_cast<UINT>(instanceCount), 0, 0, static_cast<UINT>(baseIndex));
+			gfx.DrawIndexedInstanced(ringIndexCount_, batch.instanceCount, 0, 0, 0);
 			break;
 		case NoEngine::Component::ParticleShape::kCylinder:
 			gfx.SetVertexBuffer(0, cylinderVertex_.VertexBufferView());
 			gfx.SetIndexBuffer(cylinderIndex_.IndexBufferView());
-			gfx.DrawIndexedInstanced(cylinderIndexCount_, static_cast<UINT>(instanceCount), 0, 0, static_cast<UINT>(baseIndex));
+			gfx.DrawIndexedInstanced(cylinderIndexCount_, batch.instanceCount, 0, 0, 0);
 			break;
 		}
-
-
-		count++;
 	}
-
-	particleCount_ = 0;
-	particleForGpu_.clear();
 }
 
 void CPUParticlePass::UploadMatrices(GraphicsContext& gfx, ECS::Registry& registry) {
+	items_.clear();
+	batches_.clear();
+	particleForGpu_.clear();
 	auto view = registry.View<Component::ParticleComponent, Component::TransformComponent>();
 
 	Math::Matrix4x4 billBoardMatrix{};
@@ -176,8 +160,7 @@ void CPUParticlePass::UploadMatrices(GraphicsContext& gfx, ECS::Registry& regist
 		billBoardMatrix.m[3][2] = 0.0f;
 	}
 
-	// collect
-	items_.clear();
+	// 描画対象の粒子を集める。
 	for (auto entity : view) {
 		auto* particle = registry.GetComponent<Component::ParticleComponent>(entity);
 		auto* transform = registry.GetComponent<Component::TransformComponent>(entity);
@@ -187,23 +170,21 @@ void CPUParticlePass::UploadMatrices(GraphicsContext& gfx, ECS::Registry& regist
 
 	if (items_.empty()) return;
 
-	// sort
+	// 形状とテクスチャが同じ粒子をまとめる。
 	std::sort(items_.begin(), items_.end(), [](const DrawItem& a, const DrawItem& b) {
 		if (a.particle->shape != b.particle->shape) return a.particle->shape < b.particle->shape;
 		return a.particle->texture < b.particle->texture;
 		});
 
-	// build
-	size_t baseIndex = 0;
-	baseIndices_.clear();
-	TextureRef currentTexture;
-	textures_.clear();
-	for (auto& item : items_) {
-		if (currentTexture != item.particle->texture) {
-			currentTexture = item.particle->texture;
-			baseIndices_.push_back(baseIndex);
-			textures_.push_back(item.particle->texture);
+	if (items_.size() > maxParticles_) {
+		items_.resize(maxParticles_);
+	}
+	for (const auto& item : items_) {
+		const auto& particle = *item.particle;
+		if (batches_.empty() || batches_.back().shape != particle.shape || batches_.back().texture != particle.texture) {
+			batches_.push_back({ particle.shape, particle.texture, static_cast<uint32_t>(particleForGpu_.size()), 0 });
 		}
+		++batches_.back().instanceCount;
 
 		Math::Matrix4x4 scaleMatrix;
 		scaleMatrix.MakeScale(item.transform->scale);
@@ -212,19 +193,10 @@ void CPUParticlePass::UploadMatrices(GraphicsContext& gfx, ECS::Registry& regist
 		Math::Matrix4x4 rotateMatrix;
 		rotateMatrix.MakeRotate(item.transform->rotation);
 		Math::Matrix4x4 worldMatrix = scaleMatrix * rotateMatrix * billBoardMatrix * translateMatrix;
-		particleForGpu_.push_back({ worldMatrix, item.particle->color });
-
-		baseIndex++;
+		particleForGpu_.push_back({ worldMatrix, particle.color });
 	}
 
-	baseIndices_.push_back(baseIndex);
-
-
-
-	size_t count = std::min(maxParticles_, baseIndex);
-	if (count == 0) return;
-
-	size_t size = count * sizeof(ParticleForGPU);
+	size_t size = particleForGpu_.size() * sizeof(ParticleForGPU);
 	memcpy(worldMatrixUpload_.Map(), particleForGpu_.data(), size);
 	worldMatrixUpload_.Unmap();
 	gfx.CopyBufferRegion(
@@ -234,7 +206,7 @@ void CPUParticlePass::UploadMatrices(GraphicsContext& gfx, ECS::Registry& regist
 		0,
 		size
 	);
-
+	gfx.TransitionResource(worldMatrixBuffer_, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE);
 }
 
 void CPUParticlePass::Initialize(size_t maxParticles) {

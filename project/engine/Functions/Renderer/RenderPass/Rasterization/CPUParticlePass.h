@@ -37,6 +37,14 @@ private:
 	};
 	std::vector<DrawItem> items_;
 
+	struct DrawBatch {
+		Component::ParticleShape shape;
+		TextureRef texture;
+		uint32_t firstInstance;
+		uint32_t instanceCount;
+	};
+	std::vector<DrawBatch> batches_;
+
 	__declspec(align(16))struct ParticleForGPU {
 		Math::Matrix4x4 worldMatrix;
 		Math::Color color;
@@ -48,9 +56,6 @@ private:
 
 	Component::CameraComponent* camera_;
 	std::vector<ParticleForGPU> particleForGpu_;
-	std::vector<size_t> baseIndices_;
-	std::vector<TextureRef> textures_;
-	size_t particleCount_ = 0;
 
 	void UploadMatrices(GraphicsContext& gfx, ECS::Registry& registry);
 	void Initialize(size_t maxParticles);
