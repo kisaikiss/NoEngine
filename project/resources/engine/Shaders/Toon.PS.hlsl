@@ -1,21 +1,10 @@
 #include "Default.hlsli"
-
-struct Material
-{
-    float4 color;
-    float shininess;
-    float environmentCoefficient;
-    float unlit;
-    float receiveShadow;
-};
-ConstantBuffer<Material> gMaterial : register(b0);
+#include "MeshMaterial.hlsli"
 
 struct PixelShaderOutput
 {
     float4 color : SV_TARGET0;
 };
-Texture2D<float4> gTexture : register(t0);
-SamplerState gSampler : register(s0);
 
 struct LightNums
 {
@@ -70,12 +59,11 @@ PixelShaderOutput main(VertexShaderOutput input)
     PixelShaderOutput output;
     output.color = 0;
 
-    float4 textureColor = gTexture.Sample(gSampler, input.texcoord);
+    float4 baseColor = SampleBaseColor(input.texcoord);
 
     if (gMaterial.unlit > 0.5f)
     {
-        output.color = gMaterial.color * textureColor;
-        output.color.a = gMaterial.color.a;
+        output.color = baseColor;
         return output;
     }
 
@@ -91,7 +79,7 @@ PixelShaderOutput main(VertexShaderOutput input)
         float NdotL = dot(normalize(input.normal), -gDirectionalLights[i].direction);
         float toonIntensity = (NdotL > 0.6) ? 1.0 : 0.3;
         float totalIntensity = toonIntensity * gDirectionalLights[i].intensity;
-        output.color += gMaterial.color * textureColor * gDirectionalLights[i].color * totalIntensity * shadowFactor;
+        output.color += baseColor * gDirectionalLights[i].color * totalIntensity * shadowFactor;
     }
 
     // ポイントライト
@@ -109,7 +97,7 @@ PixelShaderOutput main(VertexShaderOutput input)
         float toonIntensity = (NdotL > 0.6) ? 1.0 : 0.3;
         float totalIntensity = toonIntensity * gPointLights[j].intensity * attenuation;
 
-        output.color += gMaterial.color * textureColor * gPointLights[j].color * totalIntensity * shadowFactor;
+        output.color += baseColor * gPointLights[j].color * totalIntensity * shadowFactor;
     }
 
     // スポットライト
@@ -129,13 +117,13 @@ PixelShaderOutput main(VertexShaderOutput input)
         float toonIntensity = (NdotL > 0.6) ? 1.0 : 0.3;
         float totalIntensity = toonIntensity * gSpotLights[k].intensity * falloff * attenuation;
 
-        output.color += gMaterial.color * textureColor * gSpotLights[k].color * totalIntensity * shadowFactor;
+        output.color += baseColor * gSpotLights[k].color * totalIntensity * shadowFactor;
     }
 
     float3 cameraToPosition = normalize(input.worldPosition - gCameraMatrix.worldPosition);
     float3 reflectedVector = reflect(cameraToPosition, normalize(input.normal));
     float4 environmentColor = gEnvironmentTexture.Sample(gSampler, reflectedVector);
     output.color.rgb += environmentColor.rgb * gMaterial.environmentCoefficient;
-    output.color.a = gMaterial.color.a;
+    output.color.a = baseColor.a;
     return output;
 }

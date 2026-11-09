@@ -62,11 +62,7 @@ void MeshPassBase::RenderItems(GraphicsContext& context, const RenderGraphRegist
 		auto& rootIndex = RootSignatureBuilder::GetRootIndexMap(basePsoName);
 
 		// psoIDs_から対象のPSO IDとRootSignature IDを取得する
-		BlendMode blendMode = item.material->blendMode;
-		if (blendMode == BlendMode::kNormal && item.material->color.a < 1.0f) {
-			blendMode = BlendMode::kAlpha;
-		}
-		uint32_t targetPSO = psoIDs_[item.material->renderMode][blendMode];
+		uint32_t targetPSO = psoIDs_[item.material->renderMode][item.blendMode];
 		uint32_t targetRootSig = rootSigIDs_[item.material->renderMode];
 
 		if (targetPSO != currentPSO) {
@@ -174,8 +170,8 @@ void MeshPassBase::RenderItems(GraphicsContext& context, const RenderGraphRegist
 					Math::Vector3(item.material->uvPosition.x, item.material->uvPosition.y, 0.0f)
 				);
 				context.SetDynamicConstantBufferView(rootIndex["gMaterial"], sizeof(constants), &constants);
-				auto* material = ModelSaver::Get().GetMaterial(item.material->handles[subMesh.materialIndex]);
-				TextureRef textureHandle = material->textureHandle;
+				const auto* material = ModelSaver::Get().GetMaterial(subMesh.material);
+				auto textureSRV = material ? material->textureHandle.GetSRV() : Graphics::GetDefaultTexture(Graphics::kWhiteOpaque2D);
 				if (!item.material->textureName.empty()) {
 					const uint64_t generation = AssetManager::GetAddressableGeneration();
 					if (item.material->loadedTextureGeneration != generation ||
@@ -185,9 +181,9 @@ void MeshPassBase::RenderItems(GraphicsContext& context, const RenderGraphRegist
 						item.material->loadedTextureName = item.material->textureName;
 						item.material->loadedTextureGeneration = generation;
 					}
-					if (item.material->textureHandle.IsValid()) textureHandle = item.material->textureHandle;
+					if (item.material->textureHandle.IsValid()) textureSRV = item.material->textureHandle.GetSRV();
 				}
-				context.SetDynamicDescriptor(rootIndex["gTexture"], 0, textureHandle.GetSRV());
+				context.SetDynamicDescriptor(rootIndex["gTexture"], 0, textureSRV);
 				context.SetDynamicDescriptor(rootIndex["gShadowMask"], 0, resourceRegistry.GetColorBuffer(GetInput("ShadowMask")).GetSRV());
 				context.SetDynamicDescriptor(rootIndex["gEnvironmentTexture"], 0, skyBoxTexture_.GetSRV());
 			}

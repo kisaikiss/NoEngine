@@ -1,4 +1,5 @@
 #pragma once
+#include "engine/Assets/AssetHandles.h"
 #include "engine/Math/MathInclude.h"
 #include "engine/Runtime/GpuResource/GpuBuffer.h"
 #include "engine/Runtime/GpuResource/UploadBuffer.h"
@@ -36,7 +37,7 @@ struct SubMesh {
 	uint32_t indexStart = 0;
 	uint32_t indexCount = 0;
 
-	uint32_t materialIndex = 0;
+	Asset::MaterialHandle material;
 };
 
 _declspec(align(16))struct SkeletonWell {

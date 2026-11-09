@@ -90,10 +90,14 @@ const RenderContext::MeshDrawLists& RenderContext::GetMeshDrawLists(ECS::Registr
 		Transform* animationLocal = animator ? &animator->local : nullptr;
 		const float distance = MathCalculations::LengthSquared(transform->translate - cameraPos);
 
-		if (material->renderMode == RenderMode::kEmissive) material->blendMode = BlendMode::kAdd;
-		const bool transparent = material->blendMode != BlendMode::kNormal || material->color.a < 1.0f;
-		auto& items = transparent ? lists.transparent : lists.opaque;
-		items.push_back({mesh->handle, material, transform, animationLocal, distance, animator});
+		BlendMode blendMode = material->blendMode;
+		if (material->renderMode == RenderMode::kEmissive) {
+			blendMode = BlendMode::kAdd;
+		} else if (blendMode == BlendMode::kNormal && material->color.a < 1.0f) {
+			blendMode = BlendMode::kAlpha;
+		}
+		auto& items = blendMode == BlendMode::kNormal ? lists.opaque : lists.transparent;
+		items.push_back({mesh->handle, material, blendMode, transform, animationLocal, distance, animator});
 	}
 
 	// 不透明は手前から奥、半透明は奥から手前の順に描画する。

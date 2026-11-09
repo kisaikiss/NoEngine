@@ -11,6 +11,7 @@
 #include "PipelineState/StateObjectManager.h"
 
 namespace NoEngine {
+enum class BlendMode;
 struct Transform;
 namespace Component {
 struct AnimatorComponent;
@@ -30,6 +31,7 @@ public:
 	struct MeshDrawItem {
 		Asset::MeshHandle meshHandle;
 		Component::MaterialComponent* material;
+		BlendMode blendMode;
 		Component::TransformComponent* transform;
 		Transform* animationLocal;
 		float distanceToCamera;

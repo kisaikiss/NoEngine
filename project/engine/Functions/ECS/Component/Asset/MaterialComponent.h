@@ -1,6 +1,7 @@
 #pragma once
-#include "engine/Assets/Material.h"
-#include "engine/Assets/AssetHandles.h"
+#include "engine/Assets/Texture/TextureManager.h"
+#include "engine/Math/Color/Color.h"
+#include "engine/Math/Types/Vector2.h"
 
 namespace NoEngine {
 enum class BlendMode {
@@ -27,12 +28,10 @@ enum class RenderMode {
 
 namespace Component {
 /// <summary>
-/// マテリアルを表すコンポーネント。
-/// マルチマテリアルなのでメッシュごとのマテリアルはstd::spanでこのコンポーネントに管理されている
+/// エンティティの全サブメッシュに共通のマテリアル設定。
 /// </summary>
 struct MaterialComponent {
-	std::vector<Asset::MaterialHandle> handles;
-	// このエンティティの各サブメッシュに対して、AddressableNameを個別に上書き指定できます。
+	// テクスチャのAddressableNameを指定すると、全サブメッシュのテクスチャを上書きする。
 	std::string textureName;
 	TextureRef textureHandle;
 	uint64_t loadedTextureGeneration = 0;

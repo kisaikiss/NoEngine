@@ -1412,6 +1412,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     </None>
     <None Include="resources\engine\Shaders\Particle\Particle.hlsli" />
     <None Include="resources\engine\Shaders\Default.hlsli" />
+    <None Include="resources\engine\Shaders\MeshMaterial.hlsli" />
     <None Include="resources\engine\Shaders\Grid.hlsli" />
     <None Include="resources\engine\Shaders\Grid.VS.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</ExcludedFromBuild>

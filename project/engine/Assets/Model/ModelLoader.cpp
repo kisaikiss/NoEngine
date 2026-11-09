@@ -19,8 +19,8 @@ ModelAsset ModelLoader::Load(const std::string& filePath) {
 	assert(scene->HasMeshes());
 	std::string directoryPath = Utilities::GetBasePath(filePath);
 
+	ModelSaver& modelSaver = ModelSaver::Get();
 	Mesh newMesh;
-	std::vector<Material> newMaterial;
 	for (uint32_t meshIndex = 0; meshIndex < scene->mNumMeshes; ++meshIndex) {
 		aiMesh* mesh = scene->mMeshes[meshIndex];
 		assert(mesh->HasNormals());
@@ -100,15 +100,7 @@ ModelAsset ModelLoader::Load(const std::string& filePath) {
 				Material m{};
 
 				m.textureHandle = NoEngine::TextureManager::LoadCovertTexture(directoryPath + "/" + texPath.C_Str());
-				sub.materialIndex = static_cast<uint32_t>(newMaterial.size());
-				newMaterial.push_back(m);
-			} else {
-				// ToDo : テクスチャがないとwhite1x1.pngをテクスチャとして利用するようになっていますが、
-				// テクスチャのないマテリアルはテクスチャがない状態で管理できるようにすべきです。
-				Material m{};
-				m.textureHandle = NoEngine::TextureManager::LoadCovertTexture("resources/engine/white1x1.png");
-				sub.materialIndex = static_cast<uint32_t>(newMaterial.size());
-				newMaterial.push_back(m);
+				sub.material = modelSaver.AddMaterial(std::move(m));
 			}
 		}
 
@@ -232,11 +224,7 @@ ModelAsset ModelLoader::Load(const std::string& filePath) {
 	}
 
 	
-	ModelSaver& modelSaver = ModelSaver::Get();
 	modelAsset.mesh = modelSaver.AddMesh(std::move(newMesh));
-	for (auto& m : newMaterial) {
-		modelAsset.materials.push_back(modelSaver.AddMaterial(std::move(m)));
-	}
 
 	return modelAsset;
 }

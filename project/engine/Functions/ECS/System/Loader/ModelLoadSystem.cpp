@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "ModelLoadSystem.h"
 #include "engine/Functions/ECS/Component/Asset/MeshComponent.h"
-#include "engine/Functions/ECS/Component/Asset/MaterialComponent.h"
 #include "engine/Functions/ECS/Component/Asset/AnimatorComponent.h"
 
 #include "engine/Assets/Model/ModelSaver.h"
@@ -34,10 +33,6 @@ void ModelLoadSystem::Update(Registry& registry, float deltaTime) {
 
 		auto asset = ModelSaver::Get().LoadOrGetModel(path);
 		mesh->handle = asset.mesh;
-		if (registry.Has<MaterialComponent>(e)) {
-			auto* material = registry.GetComponent<MaterialComponent>(e);
-			material->handles = asset.materials;
-		}
 		if (registry.Has<AnimatorComponent>(e)) {
 			auto* animator = registry.GetComponent<AnimatorComponent>(e);
 			if (animator->runtime.meshHandle != asset.mesh || animator->skeletonHandle != asset.skeleton) {

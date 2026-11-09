@@ -1,22 +1,10 @@
 #include "Default.hlsli"
-
-struct Material
-{
-    float4 color;
-    float shininess;
-    float environmentCoefficient;
-    float unlit;
-    float receiveShadow;
-    float4x4 uvTransform;
-};
-ConstantBuffer<Material> gMaterial : register(b0);
+#include "MeshMaterial.hlsli"
 
 struct PixelShaderOutput
 {
     float4 color : SV_TARGET0;
 };
-Texture2D<float4> gTexture : register(t0);
-SamplerState gSampler : register(s0);
 
 struct LightNums
 {
@@ -72,14 +60,12 @@ PixelShaderOutput main(VertexShaderOutput input)
     PixelShaderOutput output;
     output.color = 0;
 
-    float4 transformedUV = mul(float4(input.texcoord, 0.0f, 1.0f), gMaterial.uvTransform);
-    float4 textureColor = gTexture.Sample(gSampler, transformedUV.xy);
+    float4 baseColor = SampleBaseColor(input.texcoord);
 
     // Unlit: ライティング計算を一切行わずアルベドのみ出力
     if (gMaterial.unlit > 0.5f)
     {
-        output.color = gMaterial.color * textureColor;
-        output.color.a = gMaterial.color.a * textureColor.a;
+        output.color = baseColor;
         return output;
     }
 
@@ -168,8 +154,8 @@ PixelShaderOutput main(VertexShaderOutput input)
     float3 reflectedVector = reflect(cameraToPosition, normalize(input.normal));
     float4 environmentColor = gEnvironmentTexture.Sample(gSampler, reflectedVector);
 
-    output.color += gMaterial.color * textureColor * lightColor;
+    output.color = baseColor * lightColor;
     output.color.rgb += environmentColor.rgb * gMaterial.environmentCoefficient;
-    output.color.a = gMaterial.color.a * textureColor.a;
+    output.color.a = baseColor.a;
     return output;
 }
