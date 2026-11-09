@@ -3,6 +3,7 @@
 #include "engine/Editor/Panels/HierarchyPanel.h"
 #include "engine/Editor/Panels/InspectorPanel.h"
 #include "engine/Editor/Panels/PrefabEditorPanel.h"
+#include "engine/Editor/Panels/EffectPreviewPanel.h"
 #include "engine/Editor/Panels/GimmickGraphPanel.h"
 #include "engine/Editor/Utilities/EntityClipboard.h"
 #include "externals/nlohmann/json.hpp"
@@ -27,6 +28,7 @@ private:
     Editor::HierarchyPanel hierarchyPanel_;
     Editor::InspectorPanel inspectorPanel_;
     Editor::PrefabEditorPanel prefabEditorPanel_;
+    Editor::EffectPreviewPanel effectPreviewPanel_;
     Editor::GimmickGraphPanel gimmickGraphPanel_;
     Editor::EntityClipboard clipboard_;
 

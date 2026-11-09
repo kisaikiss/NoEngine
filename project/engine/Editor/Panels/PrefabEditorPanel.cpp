@@ -1,4 +1,5 @@
 #include "PrefabEditorPanel.h"
+#include "EffectPreviewPanel.h"
 #include "engine/Editor/Components/ComponentUI.h"
 #include "engine/Editor/DataDriven/PrefabSerializer.h"
 #include "engine/Editor/DataDriven/SceneSerializer.h"
@@ -104,7 +105,7 @@ bool PrefabEditorPanel::SaveAndApply(ECS::Registry& sceneRegistry) {
 	return true;
 }
 
-void PrefabEditorPanel::Draw(ECS::Registry& sceneRegistry) {
+void PrefabEditorPanel::Draw(ECS::Registry& sceneRegistry, EffectPreviewPanel& effectPreview) {
 #ifdef USE_IMGUI
 	if (!IsEditing() && errorMessage_.empty()) return;
 
@@ -118,6 +119,8 @@ void PrefabEditorPanel::Draw(ECS::Registry& sceneRegistry) {
 	}
 	ImGui::TextDisabled("%s", prefabPath_.c_str());
 	ImGui::Separator();
+	const auto* previewSource = editingRegistry_.get();
+	effectPreview.Draw(*editingRegistry_, prefabEntity_);
 
 	{
 		ScopedEditorRegistry scope(editingRegistry_);
@@ -175,9 +178,11 @@ void PrefabEditorPanel::Draw(ECS::Registry& sceneRegistry) {
 		ImGui::EndPopup();
 	}
 
+	if (editingRegistry_.get() != previewSource) effectPreview.Reset();
 	ImGui::End();
 #else
 	static_cast<void>(sceneRegistry);
+	static_cast<void>(effectPreview);
 #endif // USE_IMGUI
 }
 

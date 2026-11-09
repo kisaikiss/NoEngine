@@ -804,7 +804,7 @@ void CommonSetupDebugRenderPass(RenderPassScheduler& renderPassScheduler) {
 	transparentMeshPass->SetTargetCameraType(RenderPass::TargetCameraType::kDebug);
 	renderPassScheduler.AddPass(std::move(transparentMeshPass), "Debug transparent mesh", true, false);
 
-	auto cpuParticlePass = std::make_unique<CPUParticlePass>();
+	auto cpuParticlePass = std::make_unique<CPUParticlePass>(true);
 	cpuParticlePass->AddOutput("DebugColor");
 	cpuParticlePass->SetDepthOutput("MainDepth");
 	cpuParticlePass->SetTargetCameraType(RenderPass::TargetCameraType::kDebug);

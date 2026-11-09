@@ -27,6 +27,7 @@ namespace ECS {
 std::unique_ptr<ISystem> EditSystem::CloneForPlayMode() const {
 	auto clone = std::make_unique<EditSystem>(*this);
 	clone->gimmickGraphPanel_ = gimmickGraphPanel_.CloneForPlayMode();
+	clone->effectPreviewPanel_.Reset();
 	return clone;
 }
 
@@ -53,12 +54,13 @@ void EditSystem::Update(Registry& registry, float deltaTime) {
 	DrawMenuBar(registry);
 
 	hierarchyPanel_.Draw(registry);
-	inspectorPanel_.Draw(registry);
-	prefabEditorPanel_.Draw(registry);
+	inspectorPanel_.Draw(registry, prefabEditorPanel_.IsEditing() ? nullptr : &effectPreviewPanel_);
+	prefabEditorPanel_.Draw(registry, effectPreviewPanel_);
 	// 選択EntityのGimmickGraphComponentを見て、参照先JSONを編集する専用パネルを更新する。
 	gimmickGraphPanel_.Draw(registry, SelectedNow(registry));
 
 	HandleGlobalShortcuts(registry, deltaTime);
+	effectPreviewPanel_.Update(registry, deltaTime);
 #else
 	static_cast<void>(registry);
 	static_cast<void>(deltaTime);
@@ -238,6 +240,7 @@ void EditSystem::LoadFile(Registry& registry) {
 	nlohmann::json scene;
 	file >> scene;
 
+	effectPreviewPanel_.Reset();
 	Editor::LoadScene(registry, scene);
 }
 

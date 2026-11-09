@@ -5,7 +5,7 @@
 
 namespace NoEngine {
 namespace Component { struct EffectEmitterComponent; }
-namespace Math { struct Vector3; }
+namespace Math { struct Quaternion; struct Vector3; }
 namespace ECS {
 /// <summary>
 /// Entityの発行とコンポーネントとの紐づけを行うクラス
@@ -17,6 +17,7 @@ public:
 
 	// 設定と発生位置をコピーし、EffectEmitSystem に再生を予約する。
 	void PlayEffect(const Component::EffectEmitterComponent& preset, const Math::Vector3& worldPosition);
+	void PlayEffect(const Component::EffectEmitterComponent& preset, const Math::Vector3& worldPosition, const Math::Quaternion& rotation);
 	void PlayEffect(Entity presetEntity, const Math::Vector3& worldPosition);
 
 	/// <summary>

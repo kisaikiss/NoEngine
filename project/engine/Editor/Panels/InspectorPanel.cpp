@@ -1,4 +1,5 @@
 #include "InspectorPanel.h"
+#include "EffectPreviewPanel.h"
 #include "engine/Editor/Utilities/MultiEdit.h"
 #include "engine/Editor/DataDriven/PrefabSerializer.h"
 #include "engine/Editor/Components/ComponentUI.h"
@@ -85,7 +86,7 @@ void DrawPrefabOverrides(NoEngine::ECS::Registry& registry, NoEngine::ECS::Entit
 namespace NoEngine {
 namespace Editor {
 
-void InspectorPanel::Draw(ECS::Registry& registry) {
+void InspectorPanel::Draw(ECS::Registry& registry, EffectPreviewPanel* effectPreview) {
 #ifdef USE_IMGUI
 	ImGui::Begin("Inspector");
 	const auto selection = GetEditorSelection(registry);
@@ -101,6 +102,7 @@ void InspectorPanel::Draw(ECS::Registry& registry) {
 		if (tag) {
 			ImGui::BeginChild(tag->name.c_str());
 			ImGui::Text(tag->name.c_str());
+			if (effectPreview) effectPreview->Draw(registry, e);
 			DrawPrefabOverrides(registry, e);
 			DrawComponentUI(registry, e);
 			if (ImGui::Button("SavePreset")) {
@@ -114,6 +116,7 @@ void InspectorPanel::Draw(ECS::Registry& registry) {
 	ImGui::End();
 #else
 	static_cast<void>(registry);
+	static_cast<void>(effectPreview);
 #endif // USE_IMGUI
 }
 

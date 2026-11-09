@@ -1,12 +1,13 @@
 #include "stdafx.h"
 #include "CPUParticlePass.h"
+#include "engine/Functions/ECS/System/PlayModeController.h"
 #include "engine/Runtime/GpuResource/UploadBuffer.h"
 #include "engine/Functions/Shader/ShaderReflection.h"
 
 namespace NoEngine {
 namespace Render {
 
-CPUParticlePass::CPUParticlePass() {
+CPUParticlePass::CPUParticlePass(bool showEffectPreview) : showEffectPreview_(showEffectPreview) {
 	{
 
 		// --- シリンダーメッシュ生成 ---
@@ -146,7 +147,6 @@ void CPUParticlePass::UploadMatrices(GraphicsContext& gfx, ECS::Registry& regist
 	items_.clear();
 	batches_.clear();
 	particleForGpu_.clear();
-	auto view = registry.View<Component::ParticleComponent, Component::TransformComponent>();
 
 	Math::Matrix4x4 billBoardMatrix{};
 	{
@@ -160,18 +160,30 @@ void CPUParticlePass::UploadMatrices(GraphicsContext& gfx, ECS::Registry& regist
 		billBoardMatrix.m[3][2] = 0.0f;
 	}
 
-	// 描画対象の粒子を集める。
-	for (auto entity : view) {
-		auto* particle = registry.GetComponent<Component::ParticleComponent>(entity);
-		auto* transform = registry.GetComponent<Component::TransformComponent>(entity);
-
-		items_.push_back({ transform,particle });
+	auto collect = [this](ECS::Registry& source, bool isPreview) {
+		for (auto entity : source.View<Component::ParticleComponent, Component::TransformComponent>()) {
+			auto* particle = source.GetComponent<Component::ParticleComponent>(entity);
+			auto* transform = source.GetComponent<Component::TransformComponent>(entity);
+			items_.push_back({ transform, particle, isPreview });
+		}
+	};
+	std::shared_ptr<ECS::Registry> preview;
+	if (showEffectPreview_ && !ECS::PlayModeController::IsInPlayMode()) {
+		for (auto entity : registry.View<EffectPreviewSource>()) {
+			preview = registry.GetComponent<EffectPreviewSource>(entity)->particles.lock();
+			if (preview) {
+				collect(*preview, true);
+				break;
+			}
+		}
 	}
+	collect(registry, false);
 
 	if (items_.empty()) return;
 
-	// 形状とテクスチャが同じ粒子をまとめる。
+	// 描画枠が足りない場合はプレビューを優先し、形状とテクスチャごとにまとめる。
 	std::sort(items_.begin(), items_.end(), [](const DrawItem& a, const DrawItem& b) {
+		if (a.isPreview != b.isPreview) return a.isPreview;
 		if (a.particle->shape != b.particle->shape) return a.particle->shape < b.particle->shape;
 		return a.particle->texture < b.particle->texture;
 		});

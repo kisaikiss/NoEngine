@@ -9,9 +9,14 @@
 namespace NoEngine {
 namespace Render {
 
+// Scene ビューだけが参照する、編集プレビュー専用の粒子。
+struct EffectPreviewSource {
+	std::weak_ptr<ECS::Registry> particles;
+};
+
 class CPUParticlePass : public RenderPass{
 public:
-	CPUParticlePass();
+	explicit CPUParticlePass(bool showEffectPreview = false);
 	void Execute(GraphicsContext& gfx, const RenderGraphRegistry& resourceRegistry, ECS::Registry& registry) override;
 private:
 	ByteAddressBuffer vertex_;
@@ -34,6 +39,7 @@ private:
 	struct DrawItem {
 		Component::TransformComponent* transform;
 		Component::ParticleComponent* particle;
+		bool isPreview;
 	};
 	std::vector<DrawItem> items_;
 
@@ -53,6 +59,7 @@ private:
 	std::vector< Component::ParticleEmitterComponent*> emitters_;
 
 	size_t maxParticles_;
+	bool showEffectPreview_;
 
 	Component::CameraComponent* camera_;
 	std::vector<ParticleForGPU> particleForGpu_;

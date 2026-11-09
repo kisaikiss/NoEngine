@@ -5,6 +5,8 @@
 namespace NoEngine {
 namespace Editor {
 
+class EffectPreviewPanel;
+
 // AssetBrowser等から「編集」要求を受け取り、Prefab本体を専用RegistryのEntityとしてロードして
 // ComponentUIで編集させ、保存時にPrefabファイルへ書き戻すウィンドウ。
 class PrefabEditorPanel {
@@ -12,7 +14,7 @@ public:
 	// 編集中の切り替え・終了要求は、Drawで入力確定と未保存確認を行ってから実行する。
 	void Begin(const std::string& prefabPath);
 	void End();
-	void Draw(ECS::Registry& sceneRegistry);
+	void Draw(ECS::Registry& sceneRegistry, EffectPreviewPanel& effectPreview);
 
 	bool IsEditing() const { return prefabEntity_ != ECS::INVALID_ENTITY; }
 	bool HasUnsavedChanges() const;
