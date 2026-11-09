@@ -17,6 +17,8 @@ Microsoft::WRL::ComPtr<ID3D12StateObject> sRtShadowStateObject;
 D3D12_DISPATCH_RAYS_DESC sShadowDispatchRaysDesc;
 
 Microsoft::WRL::ComPtr<ID3D12Resource> sShadowShaderTable;
+RootSignature sShadowFilterRootSignature;
+ComputePSO sShadowFilterPSO(L"Shadow Filter PSO");
 
 Microsoft::WRL::ComPtr<ID3D12StateObject> sRtTestStateObject;
 D3D12_DISPATCH_RAYS_DESC sTestDispatchRaysDesc;
@@ -329,7 +331,17 @@ void Initialize() {
 		}
 		CreateShadowShaderTable();
 	}
-	
+
+	ShaderModule shadowFilter(ShaderStage::Compute,
+		L"resources/engine/Shaders/Compute/ShadowFilter.CS.hlsl", L"cs_6_0");
+	sShadowFilterRootSignature.Reset(3, 0);
+	sShadowFilterRootSignature[0].InitAsDescriptorRange(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 0, 3);
+	sShadowFilterRootSignature[1].InitAsDescriptorRange(D3D12_DESCRIPTOR_RANGE_TYPE_UAV, 0, 1);
+	sShadowFilterRootSignature[2].InitAsConstantBuffer(0);
+	sShadowFilterRootSignature.Finalize(L"Shadow Filter RootSignature");
+	sShadowFilterPSO.SetRootSignature(sShadowFilterRootSignature);
+	sShadowFilterPSO.SetComputeShader(shadowFilter.GetBytecode());
+	sShadowFilterPSO.Finalize();
 }
 
 void Shutdown() {
@@ -360,6 +372,10 @@ Microsoft::WRL::ComPtr<ID3D12StateObject>& GetShadowRtStateObject() {
 
 D3D12_DISPATCH_RAYS_DESC& GetShadowDispatchRaysDesc() {
 	return sShadowDispatchRaysDesc;
+}
+
+const ComputePSO& GetShadowFilterPSO() {
+	return sShadowFilterPSO;
 }
 
 Microsoft::WRL::ComPtr<ID3D12StateObject>& GetRtStateObject() {
@@ -455,17 +471,16 @@ void InitRaytracingGlobalRootSignature() {
 	std::unique_ptr<RootSignature> rtGlobalRSptr = std::make_unique<RootSignature>();
 	auto& rtGlobalRS = *rtGlobalRSptr.get();
 
-	rtGlobalRS.Reset(9, 0); // 7 → 9
+	rtGlobalRS.Reset(8, 0);
 
 	rtGlobalRS[0].InitAsBufferSRV(0);                                              // TLAS
 	rtGlobalRS[1].InitAsDescriptorRange(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 1);     // worldPos
 	rtGlobalRS[2].InitAsDescriptorRange(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 2, 1);     // Directional Lights
 	rtGlobalRS[3].InitAsDescriptorRange(D3D12_DESCRIPTOR_RANGE_TYPE_UAV, 0, 1);     // Shadow Mask (Array)
-	rtGlobalRS[4].InitAsConstantBuffer(0);                                         // CameraCB
-	rtGlobalRS[5].InitAsConstantBuffer(1);                                         // LightNums
-	rtGlobalRS[6].InitAsDescriptorRange(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 3, 1);     // Normal
-	rtGlobalRS[7].InitAsDescriptorRange(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 4, 1);     // Point Lights
-	rtGlobalRS[8].InitAsDescriptorRange(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 5, 1);     // Spot Lights
+	rtGlobalRS[4].InitAsConstantBuffer(0);                                         // LightNums
+	rtGlobalRS[5].InitAsDescriptorRange(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 3, 1);     // Normal
+	rtGlobalRS[6].InitAsDescriptorRange(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 4, 1);     // Point Lights
+	rtGlobalRS[7].InitAsDescriptorRange(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 5, 1);     // Spot Lights
 
 	rtGlobalRS.Finalize(L"RT Global RootSignature");
 	sRootSignatures.push_back(std::move(rtGlobalRSptr));

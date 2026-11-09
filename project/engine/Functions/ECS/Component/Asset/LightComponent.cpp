@@ -5,7 +5,9 @@
 REFLECT_STRUCT_BEGIN(NoEngine::Component::DirectionalLightComponent, "Light")
 REFLECT_FIELD(color),
 REFLECT_FIELD(direction),
-REFLECT_FIELD(intensity)
+REFLECT_FIELD(intensity),
+REFLECT_FIELD(shadowAngularRadiusDegrees),
+REFLECT_ENUM_FIELD(shadowSamples)
 REFLECT_STRUCT_END(NoEngine::Component::DirectionalLightComponent)
 
 REFLECT_STRUCT_BEGIN(NoEngine::Component::PointLightComponent, "Light")

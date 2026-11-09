@@ -73,7 +73,15 @@ void LightPass::UploadToGpu(GraphicsContext& gfx) {
 		}
 		memcpy(directionalLightUpload_.Map(), directionalLights_.data(), sizeof(DirectionalLightComponent) * directionalLightsSize_);
 
-		renderContext->SetDirectionalLight(gfx, directionalLightUpload_, static_cast<uint32_t>(directionalLightsSize_));
+		uint64_t softShadowSlices = 0;
+		const size_t shadowLightCount = std::min<size_t>(directionalLights_.size(), 64);
+		for (size_t index = 0; index < shadowLightCount; ++index) {
+			const auto& light = directionalLights_[index];
+			if (light.shadowSamples == DirectionalShadowSamples::kFourRays && light.shadowAngularRadiusDegrees > 0.f) {
+				softShadowSlices |= uint64_t{1} << index;
+			}
+		}
+		renderContext->SetDirectionalLight(gfx, directionalLightUpload_, static_cast<uint32_t>(directionalLightsSize_), softShadowSlices);
 	} else {
 		if (directionalLights_.size() != directionalLightsSize_) {
 			directionalLightsSize_ = 0;

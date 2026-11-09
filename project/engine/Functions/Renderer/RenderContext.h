@@ -81,8 +81,9 @@ public:
 	/// <param name="gfx">描画用コマンドリストのラッパークラス</param>
 	/// <param name="directionalLightUpload">方向ライトのUploadバッファ</param>
 	/// <param name="directionalLightNum">方向ライトの数</param>
-	void SetDirectionalLight(GraphicsContext& gfx, UploadBuffer& directionalLightUpload, uint32_t directionalLightNum);
-	void DestroyDirectionalLight() { directionalLightBuffer_.Destroy(); lightNums_.directionalLightNum = 0; }
+	void SetDirectionalLight(GraphicsContext& gfx, UploadBuffer& directionalLightUpload, uint32_t directionalLightNum, uint64_t softShadowSlices);
+	void DestroyDirectionalLight() { directionalLightBuffer_.Destroy(); lightNums_.directionalLightNum = 0; softShadowSlices_ = 0; }
+	uint64_t GetSoftShadowSlices() const { return softShadowSlices_; }
 
 	/// <summary>
 	/// ポイントライトをセットします。
@@ -151,6 +152,7 @@ private:
 	StructuredBuffer pointLightBuffer_;
 	StructuredBuffer spotLightBuffer_;
 	LightNums lightNums_;
+	uint64_t softShadowSlices_ = 0;
 
 	// カメラ
 	Component::CameraComponent* camera_;

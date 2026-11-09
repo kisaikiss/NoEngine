@@ -3562,7 +3562,9 @@
                         -0.9184932112693787,
                         -0.0010049871634691954
                     ],
-                    "intensity": 0.30000001192092896
+                    "intensity": 0.30000001192092896,
+                    "shadowAngularRadiusDegrees": 1.5,
+                    "shadowSamples": "kFourRays"
                 },
                 "EditTag": {
                     "name": "directionalLight",

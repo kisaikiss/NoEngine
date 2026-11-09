@@ -453,3 +453,4 @@ project/resources/engine/cache
 !/tests/RunSystemListPanelTests.cmd
 /AGENTS.md
 /tests
+/generated/shadow-check

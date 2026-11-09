@@ -16,6 +16,7 @@
     <FxCompile Include="resources\game\Shaders\BallTrail.PS.hlsl" />
     <FxCompile Include="resources\game\Shaders\BallTrail.VS.hlsl" />
     <FxCompile Include="resources\engine\Shaders\Compute\Skinning.CS.hlsl" />
+    <FxCompile Include="resources\engine\Shaders\Compute\ShadowFilter.CS.hlsl" />
     <FxCompile Include="resources\engine\Shaders\Particle\Particle.PS.hlsl" />
     <FxCompile Include="resources\engine\Shaders\CPUParticle.VS.hlsl" />
     <FxCompile Include="resources\engine\Shaders\FullScreen.VS.hlsl" />

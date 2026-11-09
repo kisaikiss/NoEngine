@@ -12,28 +12,21 @@ Texture2D<float4> gNormalTex : register(t3);
 
 RWTexture2DArray<float> gShadowMask : register(u0);
 
-cbuffer CameraCB : register(b0)
-{
-    float4x4 gInvViewProj;
-    float3 gCameraPos;
-    float pad0;
-    float3 gLightDir;
-    float pad1;
-};
-
 struct LightNums
 {
     int directionalLightNum;
     int pointLightNum;
     int spotLightNum;
 };
-ConstantBuffer<LightNums> gLightNums : register(b1);
+ConstantBuffer<LightNums> gLightNums : register(b0);
 
 struct DirectionalLight
 {
     float4 color;
     float3 direction;
     float intensity;
+    float shadowAngularRadiusDegrees;
+    uint shadowSamples;
 };
 StructuredBuffer<DirectionalLight> gDirectionalLights : register(t2);
 
@@ -81,6 +74,43 @@ float TraceShadowRay(float3 origin, float3 direction, float tMax)
     return payload.occluded ? 0.3f : 1.0f;
 }
 
+uint HashShadowSample(uint seed)
+{
+    seed ^= seed >> 16;
+    seed *= 0x7feb352du;
+    seed ^= seed >> 15;
+    seed *= 0x846ca68bu;
+    return seed ^ (seed >> 16);
+}
+
+float TraceDirectionalShadow(float3 origin, DirectionalLight light, uint2 pixel, uint slice)
+{
+    float3 toLight = -light.direction;
+    if (light.shadowSamples != 4 || !(light.shadowAngularRadiusDegrees > 0.0f))
+        return TraceShadowRay(origin, toLight, gShadowMaxDistance);
+
+    float3 basisAxis = abs(toLight.y) < 0.99f ? float3(0, 1, 0) : float3(1, 0, 0);
+    float3 tangent = normalize(cross(basisAxis, toLight));
+    float3 bitangent = cross(toLight, tangent);
+    float diskRadius = tan(radians(min(light.shadowAngularRadiusDegrees, 45.0f)));
+
+    // 円盤の各象限から1点ずつ、画素ごとに異なる位置を選ぶ。
+    uint seed = pixel.x * 0x9e3779b9u ^ pixel.y * 0x85ebca6bu ^ slice * 0xc2b2ae35u;
+    float visibility = 0.0f;
+    [unroll]
+    for (uint sampleIndex = 0; sampleIndex < 4; ++sampleIndex)
+    {
+        uint random = HashShadowSample(seed + (sampleIndex + 1u) * 0x27d4eb2du);
+        float2 jitter = (float2(random & 0xffffu, random >> 16) + 0.5f) / 65536.0f;
+        float angle = (sampleIndex + jitter.x) * 1.57079632679f;
+        float radius = sqrt(jitter.y) * diskRadius;
+        float2 offset = float2(cos(angle), sin(angle)) * radius;
+        float3 direction = normalize(toLight + tangent * offset.x + bitangent * offset.y);
+        visibility += TraceShadowRay(origin, direction, gShadowMaxDistance);
+    }
+    return visibility * 0.25f;
+}
+
 [shader("raygeneration")]
 void RayGen_Shadow()
 {
@@ -94,7 +124,8 @@ void RayGen_Shadow()
         return;
     }
 
-    float3 normal = normalize(gNormalTex.Load(int3(dispatchIdx, 0)).xyz);
+    float3 encodedNormal = gNormalTex.Load(int3(dispatchIdx, 0)).xyz;
+    float3 normal = normalize(encodedNormal * 2.0f - 1.0f);
     const float offsetScale = 0.01f;
     float3 offsetPos = worldPos.xyz + (normal * offsetScale);
 
@@ -103,7 +134,7 @@ void RayGen_Shadow()
     // ディレクショナルライト（無限遠）
     for (int d = 0; d < gLightNums.directionalLightNum && slice < MAX_SHADOW_LIGHTS; ++d, ++slice)
     {
-        gShadowMask[uint3(dispatchIdx, slice)] = TraceShadowRay(offsetPos, gLightDir, gShadowMaxDistance);
+        gShadowMask[uint3(dispatchIdx, slice)] = TraceDirectionalShadow(offsetPos, gDirectionalLights[d], dispatchIdx, slice);
     }
 
     // ポイントライト（radiusを超えたら無条件で影なし＝トレース省略）

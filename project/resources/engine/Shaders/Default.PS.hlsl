@@ -31,6 +31,8 @@ struct DirectionalLight
     float4 color;
     float3 direction;
     float intensity;
+    float shadowAngularRadiusDegrees;
+    uint shadowSamples;
 };
 StructuredBuffer<DirectionalLight> gDirectionalLights : register(t2);
 

@@ -109,10 +109,11 @@ const RenderContext::MeshDrawLists& RenderContext::GetMeshDrawLists(ECS::Registr
 	return lists;
 }
 
-void RenderContext::SetDirectionalLight(GraphicsContext& gfx, UploadBuffer& directionalLightUpload, uint32_t directionalLightNum) {
+void RenderContext::SetDirectionalLight(GraphicsContext& gfx, UploadBuffer& directionalLightUpload, uint32_t directionalLightNum, uint64_t softShadowSlices) {
 	bool recreate = false;
 	if (lightNums_.directionalLightNum != directionalLightNum) recreate = true;
 	if (directionalLightNum == 0) return;
+	softShadowSlices_ = softShadowSlices;
 	
 	if (recreate) {
 		lightNums_.directionalLightNum = directionalLightNum;
@@ -126,6 +127,7 @@ void RenderContext::SetDirectionalLight(GraphicsContext& gfx, UploadBuffer& dire
 	
 
 	gfx.CopyBufferRegion(directionalLightBuffer_, 0, directionalLightUpload, 0, sizeof(DirectionalLightComponent) * directionalLightNum);
+	gfx.TransitionResource(directionalLightBuffer_, D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE);
 
 }
 
@@ -146,6 +148,7 @@ void RenderContext::SetPointLight(GraphicsContext& gfx, UploadBuffer& pointLight
 
 
 	gfx.CopyBufferRegion(pointLightBuffer_, 0, pointLightUpload, 0, sizeof(PointLightForGPU) * pointLightNum);
+	gfx.TransitionResource(pointLightBuffer_, D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE);
 
 }
 
@@ -166,6 +169,7 @@ void RenderContext::SetSpotLight(GraphicsContext& gfx, UploadBuffer& spotLightUp
 
 
 	gfx.CopyBufferRegion(spotLightBuffer_, 0, spotLightUpload, 0, sizeof(SpotLightForGPU) * spotLightNum);
+	gfx.TransitionResource(spotLightBuffer_, D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE);
 }
 
 HRESULT RenderContext::EnsureTLASCapacity(UINT64 sizeInBytes) {

@@ -615,7 +615,8 @@ void CommonSetupRenderPass(RenderPassScheduler& renderPassScheduler) {
 	
 
 	resourceRegistry.CreateColorBuffer("ShadowMask", windowSize.x, windowSize.y, 64, DXGI_FORMAT_R8_UNORM);
-	resourceRegistry.CreateColorBuffer("WorldPosition", windowSize.x, windowSize.y, DXGI_FORMAT_R32G32B32A32_FLOAT);
+	resourceRegistry.CreateColorBuffer("ShadowFilterScratch", windowSize.x, windowSize.y, DXGI_FORMAT_R8_UNORM);
+	resourceRegistry.CreateColorBuffer("WorldPosition", windowSize.x, windowSize.y, 1, DXGI_FORMAT_R32G32B32A32_FLOAT, Math::Color(0.f, 0.f, 0.f, 0.f));
 	resourceRegistry.CreateColorBuffer("Normal", windowSize.x, windowSize.y, DXGI_FORMAT_R10G10B10A2_UNORM);
 	resourceRegistry.CreateColorBuffer("ObjectID", windowSize.x, windowSize.y, DXGI_FORMAT_R8G8B8A8_UNORM);
 

@@ -6,10 +6,6 @@ class RaytracingShadowPass : public RenderPass {
 public:
 	void Execute(GraphicsContext& gfx, const RenderGraphRegistry& resourceRegistry, ECS::Registry& registry) override;
 private:
-	Component::CameraComponent* camera_ = nullptr;
-	Math::Vector3 lightDir_;
-
-	void Collect(ECS::Registry& registry);
 	void Dispatch(GraphicsContext& gfx, const RenderGraphRegistry& resourceRegistry);
 };
 }
