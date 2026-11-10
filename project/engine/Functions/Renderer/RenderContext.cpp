@@ -23,6 +23,8 @@ RenderContext::RenderContext() {
 }
 
 void RenderContext::Update(ECS::Registry& registry) {
+	tlasReady_ = false;
+	fogSpotLight_.reset();
 	// 収集済みのリストを無効化し、確保済みの領域は次の描画で再利用する。
 	activeMeshDrawListCount_ = 0;
 

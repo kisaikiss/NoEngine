@@ -392,6 +392,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\BoxFilterPass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\DepthBasedOutlinePass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\DepthOfFieldPass.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\RenderPass\Raytracing\VolumetricFogPass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\DissolvePass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\GaussianFilterPass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\GrayscalePass.cpp" />
@@ -781,6 +782,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\BoxFilterPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\DepthBasedOutlinePass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\DepthOfFieldPass.h" />
+    <ClInclude Include="engine\Functions\Renderer\RenderPass\Raytracing\VolumetricFogPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\DissolvePass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\GaussianFilterPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\GrayscalePass.h" />
@@ -1205,6 +1207,12 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="resources\engine\Shaders\PostEffect\VolumetricFogComposite.PS.hlsl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="resources\engine\Shaders\Raytracing\VolumetricFogLib.hlsl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="resources\engine\Shaders\PostEffect\DepthOfField.PS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Development|x64'">Pixel</ShaderType>

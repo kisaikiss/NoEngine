@@ -17,6 +17,7 @@
 #include "PrePasses/BLASUpdatePass.h"
 #include "PrePasses/PreRenderPass.h"
 #include "Raytracing/RaytracingShadowPass.h"
+#include "Raytracing/VolumetricFogPass.h"
 #include "Rasterization/SkyBoxPass.h"
 #include "PostEffect/GrayscalePass.h"
 #include "PostEffect/BoxFilterPass.h"
@@ -628,6 +629,8 @@ void CommonSetupRenderPass(RenderPassScheduler& renderPassScheduler) {
 
 	resourceRegistry.CreateColorBuffer("PostEffect", windowSize.x, windowSize.y, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
 	resourceRegistry.CreateColorBuffer("DepthOfField", windowSize.x, windowSize.y, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
+	resourceRegistry.CreateColorBuffer("VolumetricFog", windowSize.x, windowSize.y, 1, DXGI_FORMAT_R16G16B16A16_FLOAT,
+		Math::Color(0.f, 0.f, 0.f, 1.f));
 	renderPassScheduler.SetScreenDrawBuffer("MainColor");
 	
 	resourceRegistry.CreateDepthBuffer("MainDepth", windowSize.x, windowSize.y);
@@ -672,6 +675,16 @@ void CommonSetupRenderPass(RenderPassScheduler& renderPassScheduler) {
 	depthOfField->AddOutput("MainColor");
 	depthOfField->SetFocusRange(60.0f);
 	renderPassScheduler.AddPass(std::move(depthOfField), "Depth of field");
+
+	auto fogPass = std::make_unique<VolumetricFogPass>();
+	fogPass->AddInput("InputDepth", "MainDepth", EditorModel::ResourceType::Depth);
+	fogPass->AddUAVOutput("VolumetricFog");
+	renderPassScheduler.AddPass(std::move(fogPass), "Fog integrate", false, true, {"TLAS build", "Lighting", "Opaque mesh"});
+
+	auto fogCompositePass = std::make_unique<VolumetricFogCompositePass>();
+	fogCompositePass->AddInput("Fog", "VolumetricFog");
+	fogCompositePass->AddOutput("MainColor");
+	renderPassScheduler.AddPass(std::move(fogCompositePass), "Fog composite", false, true, {"Fog integrate"});
 
 	auto transparentMeshPass = std::make_unique<TransparentMeshPass>();
 	transparentMeshPass->AddInput("ShadowMask", "ShadowMask");

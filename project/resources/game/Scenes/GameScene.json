@@ -2308,6 +2308,47 @@
                 }
             }
         },
+        "FogSpotLight": {
+            "components": {
+                "EditTag": {
+                    "name": "FogSpotLight",
+                    "parent": "Lights"
+                },
+                "SpotLightComponent": {
+                    "color": [
+                        0.8,
+                        0.88,
+                        1.0,
+                        1.0
+                    ],
+                    "cosAngle": 0.77,
+                    "cosFalloffStart": 0.94,
+                    "decay": 1.1,
+                    "distance": 32.0,
+                    "intensity": 4.0,
+                    "volumetricFog": true
+                },
+                "TransformComponent": {
+                    "parent": "Lights",
+                    "rotation": [
+                        0.9238795325112867,
+                        0.0,
+                        0.0,
+                        0.38268343236508984
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        3.0,
+                        8.0,
+                        -3.0
+                    ]
+                }
+            }
+        },
         "GameProgress": {
             "components": {
                 "EditTag": {
@@ -93569,6 +93610,48 @@
                     "InputDepth": "MainDepth"
                 },
                 "maxCoCRadius": 0.0020000000949949026,
+                "outputs": [
+                    "MainColor"
+                ],
+                "targetCameraName": "GameCamera",
+                "targetCameraType": 0,
+                "uavOutputs": []
+            }
+        },
+        {
+            "name": "Fog integrate",
+            "settings": {
+                "ambient": 0.15,
+                "autoClear": false,
+                "baseHeight": 6.0,
+                "clearDepth": false,
+                "density": 0.008,
+                "depthOutput": "",
+                "heightFalloff": 0.035,
+                "inputs": {
+                    "InputDepth": "MainDepth"
+                },
+                "maxDistance": 110.0,
+                "outputs": [],
+                "scatteringAlbedo": 0.85,
+                "stepCount": 24,
+                "targetCameraName": "GameCamera",
+                "targetCameraType": 0,
+                "traceShadows": true,
+                "uavOutputs": [
+                    "VolumetricFog"
+                ]
+            }
+        },
+        {
+            "name": "Fog composite",
+            "settings": {
+                "autoClear": false,
+                "clearDepth": false,
+                "depthOutput": "",
+                "inputs": {
+                    "Fog": "VolumetricFog"
+                },
                 "outputs": [
                     "MainColor"
                 ],

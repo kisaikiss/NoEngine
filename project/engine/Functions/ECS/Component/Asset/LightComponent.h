@@ -43,6 +43,7 @@ struct SpotLightComponent {
 	float cosFalloffStart = 1.f;
 	float shadowRadius = 0.1f;
 	ShadowSamples shadowSamples = ShadowSamples::kOneRay;
+	bool volumetricFog = false;
 };
 
 }

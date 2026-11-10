@@ -2,6 +2,7 @@
 #include "engine/Assets/Model/ModelSaver.h"
 #include "engine/Utilities/Conversion/ConvertString.h"
 #include "engine/Functions/Shader/ShaderModule.h"
+#include "engine/Math/Common.h"
 #include "engine/Runtime/GraphicsCore.h"
 
 namespace NoEngine {
@@ -24,6 +25,50 @@ Microsoft::WRL::ComPtr<ID3D12StateObject> sRtTestStateObject;
 D3D12_DISPATCH_RAYS_DESC sTestDispatchRaysDesc;
 
 Microsoft::WRL::ComPtr<ID3D12Resource> sTestShaderTable;
+
+Microsoft::WRL::ComPtr<ID3D12StateObject> sFogRtStateObject;
+Microsoft::WRL::ComPtr<ID3D12Resource> sFogShaderTable;
+RootSignature sFogRootSignature;
+D3D12_DISPATCH_RAYS_DESC sFogDispatchRaysDesc{};
+
+bool CreateVisibilityShaderTable(ID3D12StateObject* pipeline, const wchar_t* rayGen, const wchar_t* miss,
+	const wchar_t* hitGroup, Microsoft::WRL::ComPtr<ID3D12Resource>& table, D3D12_DISPATCH_RAYS_DESC& dispatch);
+
+void InitializeVolumetricFog() {
+	if (!GraphicsCore::IsEnableRaytracing()) return;
+
+	ShaderModule shader(ShaderStage::RaytraceLib,
+		L"resources/engine/Shaders/Raytracing/VolumetricFogLib.hlsl", L"lib_6_3", true);
+	sFogRootSignature.Reset(4, 0);
+	sFogRootSignature[0].InitAsBufferSRV(0);
+	sFogRootSignature[1].InitAsDescriptorRange(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 1);
+	sFogRootSignature[2].InitAsDescriptorRange(D3D12_DESCRIPTOR_RANGE_TYPE_UAV, 0, 1);
+	sFogRootSignature[3].InitAsConstantBuffer(0);
+	sFogRootSignature.Finalize(L"Volumetric Fog Raytracing Root Signature");
+
+	CD3DX12_STATE_OBJECT_DESC desc(D3D12_STATE_OBJECT_TYPE_RAYTRACING_PIPELINE);
+	auto* library = desc.CreateSubobject<CD3DX12_DXIL_LIBRARY_SUBOBJECT>();
+	const auto bytecode = shader.GetBytecode();
+	library->SetDXILLibrary(&bytecode);
+	library->DefineExport(L"RayGen_Fog");
+	library->DefineExport(L"Miss_Fog");
+	library->DefineExport(L"ClosestHit_Fog");
+	auto* hitGroup = desc.CreateSubobject<CD3DX12_HIT_GROUP_SUBOBJECT>();
+	hitGroup->SetHitGroupExport(L"FogHitGroup");
+	hitGroup->SetHitGroupType(D3D12_HIT_GROUP_TYPE_TRIANGLES);
+	hitGroup->SetClosestHitShaderImport(L"ClosestHit_Fog");
+	desc.CreateSubobject<CD3DX12_RAYTRACING_SHADER_CONFIG_SUBOBJECT>()->Config(sizeof(uint32_t), sizeof(float) * 2);
+	desc.CreateSubobject<CD3DX12_GLOBAL_ROOT_SIGNATURE_SUBOBJECT>()->SetRootSignature(sFogRootSignature.GetSignature());
+	desc.CreateSubobject<CD3DX12_RAYTRACING_PIPELINE_CONFIG_SUBOBJECT>()->Config(1);
+
+	auto* device = GraphicsCore::sGraphicsDevice->GetDevice();
+	if (FAILED(device->CreateStateObject(desc, IID_PPV_ARGS(&sFogRtStateObject))) ||
+		!CreateVisibilityShaderTable(sFogRtStateObject.Get(), L"RayGen_Fog", L"Miss_Fog", L"FogHitGroup",
+			sFogShaderTable, sFogDispatchRaysDesc)) {
+		sFogRtStateObject.Reset();
+		LogError("ボリューメトリックフォグの DXR パイプラインを作成できませんでした。");
+	}
+}
 }
 
 void Initialize() {
@@ -329,8 +374,13 @@ void Initialize() {
 		if (FAILED(hr)) {
 			assert(false);
 		}
-		CreateShadowShaderTable();
+		if (!CreateVisibilityShaderTable(sRtShadowStateObject.Get(), L"RayGen_Shadow", L"Miss_Shadow",
+			L"ShadowHitGroup", sShadowShaderTable, sShadowDispatchRaysDesc)) {
+			LogError("シャドウのシェーダーテーブルを作成できませんでした。");
+			assert(false);
+		}
 	}
+	InitializeVolumetricFog();
 
 	ShaderModule shadowFilter(ShaderStage::Compute,
 		L"resources/engine/Shaders/Compute/ShadowFilter.CS.hlsl", L"cs_6_0");
@@ -345,6 +395,8 @@ void Initialize() {
 }
 
 void Shutdown() {
+	sFogShaderTable.Reset();
+	sFogRtStateObject.Reset();
 	sShadowShaderTable.Reset();
 	sRtShadowStateObject.Reset();
 
@@ -378,6 +430,10 @@ const ComputePSO& GetShadowFilterPSO() {
 	return sShadowFilterPSO;
 }
 
+ID3D12StateObject* GetFogRtStateObject() { return sFogRtStateObject.Get(); }
+const RootSignature& GetFogRtRootSignature() { return sFogRootSignature; }
+const D3D12_DISPATCH_RAYS_DESC& GetFogDispatchRaysDesc() { return sFogDispatchRaysDesc; }
+
 Microsoft::WRL::ComPtr<ID3D12StateObject>& GetRtStateObject() {
 	return sRtTestStateObject;
 }
@@ -391,80 +447,50 @@ void ResizeRaytracingDesc(UINT width, UINT height) {
 	sShadowDispatchRaysDesc.Height = height;
 }
 
-void CreateShadowShaderTable() {
-	using namespace Microsoft::WRL;
-	// 1. シェーダー識別子を取る
-	ComPtr<ID3D12StateObjectProperties> props;
-	sRtShadowStateObject.As(&props);
+namespace {
 
-	void* raygenId = props->GetShaderIdentifier(L"RayGen_Shadow");
-	void* missId = props->GetShaderIdentifier(L"Miss_Shadow");
-	void* hitId = props->GetShaderIdentifier(L"ShadowHitGroup");
+bool CreateVisibilityShaderTable(ID3D12StateObject* pipeline, const wchar_t* rayGen, const wchar_t* miss,
+	const wchar_t* hitGroup, Microsoft::WRL::ComPtr<ID3D12Resource>& table, D3D12_DISPATCH_RAYS_DESC& dispatch) {
+	Microsoft::WRL::ComPtr<ID3D12StateObjectProperties> properties;
+	if (!pipeline || FAILED(pipeline->QueryInterface(IID_PPV_ARGS(&properties)))) return false;
 
-	// 2.ShaderTableバッファ作成
-	const UINT shaderIdSize = D3D12_SHADER_IDENTIFIER_SIZE_IN_BYTES; // 32
-	const UINT recordStride = (shaderIdSize + (D3D12_RAYTRACING_SHADER_RECORD_BYTE_ALIGNMENT - 1))
-		& ~(D3D12_RAYTRACING_SHADER_RECORD_BYTE_ALIGNMENT - 1); // 32
+	const void* records[] = {
+		properties->GetShaderIdentifier(rayGen),
+		properties->GetShaderIdentifier(miss),
+		properties->GetShaderIdentifier(hitGroup),
+	};
+	if (!records[0] || !records[1] || !records[2]) return false;
 
-	const UINT tableAlignment = D3D12_RAYTRACING_SHADER_TABLE_BYTE_ALIGNMENT; // 64
+	constexpr UINT identifierSize = D3D12_SHADER_IDENTIFIER_SIZE_IN_BYTES;
+	const UINT recordSize = Math::AlignUp(identifierSize, D3D12_RAYTRACING_SHADER_RECORD_BYTE_ALIGNMENT);
+	constexpr UINT alignment = D3D12_RAYTRACING_SHADER_TABLE_BYTE_ALIGNMENT;
+	const UINT sectionSize = Math::AlignUp(recordSize, alignment);
+	const auto heap = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
+	const auto buffer = CD3DX12_RESOURCE_DESC::Buffer(sectionSize * _countof(records) + alignment);
+	auto* device = GraphicsCore::sGraphicsDevice->GetDevice();
+	if (FAILED(device->CreateCommittedResource(&heap, D3D12_HEAP_FLAG_NONE, &buffer,
+		D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&table)))) return false;
 
-	// 各テーブルが64バイトアライメントの境界から始まるようにセクションサイズを計算
-	const UINT rayGenSectionSize = (recordStride + tableAlignment - 1) & ~(tableAlignment - 1);   // 64
-	const UINT missSectionSize = (recordStride + tableAlignment - 1) & ~(tableAlignment - 1);   // 64
-	const UINT hitGroupSectionSize = (recordStride + tableAlignment - 1) & ~(tableAlignment - 1); // 64
-
-	// オフセットの計算
-	const UINT rayGenOffset = 0;
-	const UINT missOffset = rayGenOffset + rayGenSectionSize;     // 64
-	const UINT hitGroupOffset = missOffset + missSectionSize;         // 128
-
-	const UINT totalTableSizeUnaligned = hitGroupOffset + hitGroupSectionSize; // 192
-
-	// バッファ先頭のアライメント調整用の余白(+64)を含めたサイズ
-	const UINT tableSize = totalTableSizeUnaligned + tableAlignment;
-
-	// アップロードバッファを作成する
-	CD3DX12_HEAP_PROPERTIES heapProps(D3D12_HEAP_TYPE_UPLOAD);
-	CD3DX12_RESOURCE_DESC bufferDesc = CD3DX12_RESOURCE_DESC::Buffer(tableSize);
-	GraphicsCore::sGraphicsDevice->GetDevice()->CreateCommittedResource(&heapProps, D3D12_HEAP_FLAG_NONE, &bufferDesc,
-		D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&sShadowShaderTable));
-
-	// アライメント済みの基準位置からのオフセットに識別子を書き込む
 	uint8_t* mapped = nullptr;
-	sShadowShaderTable->Map(0, nullptr, reinterpret_cast<void**>(&mapped));
-	UINT64 gpuBase = sShadowShaderTable->GetGPUVirtualAddress();
+	const D3D12_RANGE readRange{ 0, 0 };
+	if (FAILED(table->Map(0, &readRange, reinterpret_cast<void**>(&mapped)))) return false;
 
-	// compute aligned GPU base (>= gpuBase) aligned to 64
-	UINT64 alignedGpuBase = (gpuBase + (tableAlignment - 1)) & ~(UINT64)(tableAlignment - 1);
+	const auto base = table->GetGPUVirtualAddress();
+	const auto alignedBase = Math::AlignUp(base, static_cast<UINT64>(alignment));
+	for (size_t i = 0; i < _countof(records); ++i) {
+		memcpy(mapped + (alignedBase - base) + sectionSize * i, records[i], identifierSize);
+	}
+	table->Unmap(0, nullptr);
 
-	// compute CPU offset corresponding to alignedGpuBase
-	SIZE_T cpuOffset = static_cast<SIZE_T>(alignedGpuBase - gpuBase);
+	dispatch.RayGenerationShaderRecord = { alignedBase, recordSize };
+	dispatch.MissShaderTable = { alignedBase + sectionSize, recordSize, recordSize };
+	dispatch.HitGroupTable = { alignedBase + 2 * sectionSize, recordSize, recordSize };
+	dispatch.Width = 1280;
+	dispatch.Height = 720;
+	dispatch.Depth = 1;
+	return true;
+}
 
-	// 計算したアライメント済みのオフセットを使って書き込む
-	memcpy(mapped + cpuOffset + rayGenOffset, raygenId, shaderIdSize);
-	memcpy(mapped + cpuOffset + missOffset, missId, shaderIdSize);
-	memcpy(mapped + cpuOffset + hitGroupOffset, hitId, shaderIdSize);
-
-	sShadowShaderTable->Unmap(0, nullptr);
-
-	// Fill dispatch desc using alignedGpuBase
-	auto& desc = sShadowDispatchRaysDesc;
-
-	// 各StartAddressに計算したオフセットを足す
-	desc.RayGenerationShaderRecord.StartAddress = alignedGpuBase + rayGenOffset;
-	desc.RayGenerationShaderRecord.SizeInBytes = recordStride;
-
-	desc.MissShaderTable.StartAddress = alignedGpuBase + missOffset;
-	desc.MissShaderTable.SizeInBytes = recordStride;
-	desc.MissShaderTable.StrideInBytes = recordStride;
-
-	desc.HitGroupTable.StartAddress = alignedGpuBase + hitGroupOffset;
-	desc.HitGroupTable.SizeInBytes = recordStride;
-	desc.HitGroupTable.StrideInBytes = recordStride;
-
-	desc.Width = 1280;
-	desc.Height = 720;
-	desc.Depth = 1;
 }
 
 void InitRaytracingGlobalRootSignature() {

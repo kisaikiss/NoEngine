@@ -44,6 +44,8 @@
     <FxCompile Include="resources\engine\Shaders\PostEffect\BloomBlur.PS.hlsl" />
     <FxCompile Include="resources\engine\Shaders\PostEffect\BloomComposite.PS.hlsl" />
     <FxCompile Include="resources\engine\Shaders\PostEffect\DepthOfField.PS.hlsl" />
+    <FxCompile Include="resources\engine\Shaders\PostEffect\VolumetricFogComposite.PS.hlsl" />
+    <FxCompile Include="resources\engine\Shaders\Raytracing\VolumetricFogLib.hlsl" />
     <FxCompile Include="resources\engine\Shaders\Text.VS.hlsl" />
     <FxCompile Include="resources\engine\Shaders\Text.PS.hlsl" />
     <FxCompile Include="resources\engine\Shaders\SpriteObjectID.PS.hlsl" />
@@ -272,6 +274,7 @@
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\BloomBlurPass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\BloomCompositePass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\PostEffect\DepthOfFieldPass.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\RenderPass\Raytracing\VolumetricFogPass.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\Rasterization\TransparentMeshPass.cpp" />
     <ClCompile Include="engine\Editor\Utilities\EntityClipboard.cpp" />
     <ClCompile Include="engine\Editor\Utilities\EntityHierarchyUtils.cpp" />
@@ -646,6 +649,7 @@
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\BloomBlurPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\BloomCompositePass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\PostEffect\DepthOfFieldPass.h" />
+    <ClInclude Include="engine\Functions\Renderer\RenderPass\Raytracing\VolumetricFogPass.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\Rasterization\TransparentMeshPass.h" />
     <ClInclude Include="engine\Editor\Utilities\EntityClipboard.h" />
     <ClInclude Include="engine\Editor\Utilities\EntityHierarchyUtils.h" />

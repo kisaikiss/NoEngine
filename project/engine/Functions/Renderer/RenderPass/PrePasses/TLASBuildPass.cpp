@@ -125,6 +125,7 @@ void TLASBuildPass::BuildTLAS(GraphicsContext& gfx) {
 	commandList->BuildRaytracingAccelerationStructure(&build, 0, nullptr);
 	const auto tlasBarrier = CD3DX12_RESOURCE_BARRIER::UAV(tlas.Get());
 	commandList->ResourceBarrier(1, &tlasBarrier);
+	renderContext->MarkTLASReady();
 }
 
 void TLASBuildPass::FillInstanceTransform(D3D12_RAYTRACING_INSTANCE_DESC& instance, const Component::TransformComponent* transform, Component::AnimatorComponent* animator, ECS::Registry& registry) {

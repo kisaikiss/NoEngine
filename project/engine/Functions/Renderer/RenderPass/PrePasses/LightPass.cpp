@@ -43,6 +43,7 @@ void LightPass::Collect(ECS::Registry& registry) {
 
 	// スポットライトの収集
 	auto spotLightView = registry.View<SpotLightComponent, TransformComponent>();
+	auto& fogSpotLight = GetRenderContext()->GetFogSpotLight();
 	spotLights_.clear();
 	for (auto entity : spotLightView) {
 		// コンポーネントの取得
@@ -63,6 +64,7 @@ void LightPass::Collect(ECS::Registry& registry) {
 		spotLight.shadowSamples = static_cast<uint32_t>(spotLightComponent->shadowSamples);
 
 		spotLights_.push_back(spotLight);
+		if (spotLightComponent->volumetricFog && !fogSpotLight) fogSpotLight = spotLight;
 	}
 	
 }

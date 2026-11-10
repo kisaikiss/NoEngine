@@ -9,6 +9,7 @@
 #include "PipelineState/GraphicsPSOManager.h"
 #include "PipelineState/RootSignatureManager.h"
 #include "PipelineState/StateObjectManager.h"
+#include "LightForGPU.h"
 
 namespace NoEngine {
 enum class BlendMode;
@@ -149,7 +150,12 @@ public:
 	StructuredBuffer& GetDirectionalLightBuffer() { return directionalLightBuffer_; }
 
 	Microsoft::WRL::ComPtr<ID3D12Resource>& GetTLAS() { return tlas_; }
+	bool IsTLASReady() const { return tlasReady_; }
+	void MarkTLASReady() { tlasReady_ = true; }
+	std::optional<SpotLightForGPU>& GetFogSpotLight() { return fogSpotLight_; }
 private:
+	bool tlasReady_ = false;
+	std::optional<SpotLightForGPU> fogSpotLight_;
 	// 初期化済みか
 	bool isInitialized_ = false;
 

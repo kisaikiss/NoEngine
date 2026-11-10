@@ -217,5 +217,29 @@ void PostEffectInitialzer::CreatePSO(RenderContext& ctx) {
 		ctx.RegisterGraphicsPSO("Renderer : BloomComposite PSO", defaultPSO);
 		ctx.RegisterRootSignature("Renderer : BloomComposite", std::move(rootSignature));
 	}
+
+	{
+		ShaderModule fogPS(ShaderStage::Pixel, L"resources/engine/Shaders/PostEffect/VolumetricFogComposite.PS.hlsl", L"ps_6_0");
+		RootSignature rootSignature;
+		RootSignatureBuilder::BuildFromReflection({ vsReflection, fogPS.GetReflection() }, rootSignature, "Renderer : VolumetricFogComposite");
+
+		D3D12_BLEND_DESC fogBlend{};
+		auto& target = fogBlend.RenderTarget[0];
+		target.BlendEnable = TRUE;
+		target.SrcBlend = D3D12_BLEND_ONE;
+		target.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
+		target.BlendOp = D3D12_BLEND_OP_ADD;
+		target.SrcBlendAlpha = D3D12_BLEND_ZERO;
+		target.DestBlendAlpha = D3D12_BLEND_ONE;
+		target.BlendOpAlpha = D3D12_BLEND_OP_ADD;
+		target.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_RED | D3D12_COLOR_WRITE_ENABLE_GREEN | D3D12_COLOR_WRITE_ENABLE_BLUE;
+
+		defaultPSO.SetBlendState(fogBlend);
+		defaultPSO.SetPixelShader(fogPS.GetBytecode());
+		defaultPSO.SetRootSignature(rootSignature);
+		defaultPSO.Finalize();
+		ctx.RegisterGraphicsPSO("Renderer : VolumetricFogComposite PSO", defaultPSO);
+		ctx.RegisterRootSignature("Renderer : VolumetricFogComposite", std::move(rootSignature));
+	}
 }
 }

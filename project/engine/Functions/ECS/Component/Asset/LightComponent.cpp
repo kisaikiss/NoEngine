@@ -28,5 +28,6 @@ REFLECT_FIELD(decay),
 REFLECT_FIELD(cosAngle),
 REFLECT_FIELD(cosFalloffStart),
 REFLECT_FIELD(shadowRadius),
-REFLECT_ENUM_FIELD(shadowSamples)
+REFLECT_ENUM_FIELD(shadowSamples),
+REFLECT_FIELD(volumetricFog)
 REFLECT_STRUCT_END(NoEngine::Component::SpotLightComponent)

@@ -19,12 +19,14 @@ Microsoft::WRL::ComPtr<ID3D12StateObject>& GetShadowRtStateObject();
 D3D12_DISPATCH_RAYS_DESC& GetShadowDispatchRaysDesc();
 const ComputePSO& GetShadowFilterPSO();
 
+ID3D12StateObject* GetFogRtStateObject();
+const RootSignature& GetFogRtRootSignature();
+const D3D12_DISPATCH_RAYS_DESC& GetFogDispatchRaysDesc();
+
 Microsoft::WRL::ComPtr<ID3D12StateObject>& GetRtStateObject();
 D3D12_DISPATCH_RAYS_DESC& GetDispatchRaysDesc();
 
 void ResizeRaytracingDesc(UINT width, UINT height);
-
-void CreateShadowShaderTable();
 
 void InitRaytracingGlobalRootSignature();
 void InitRaytracingLocalRootSignature();
