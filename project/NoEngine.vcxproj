@@ -324,6 +324,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="engine\Editor\Utilities\MultiEdit.cpp" />
     <ClCompile Include="engine\Editor\Utilities\ScenePlacement.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Asset\LightComponent.cpp" />
+    <ClCompile Include="engine\Functions\ECS\Component\Asset\FogVolumeComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Asset\SpriteComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Common\Transform2DComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Common\TransformComponent.cpp" />
@@ -695,6 +696,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="engine\Editor\Reflection\ReflectionTypeTraits.h" />
     <ClInclude Include="engine\Functions\ECS\Component\Common\CameraComponent.h" />
     <ClInclude Include="engine\Functions\ECS\Component\Asset\LightComponent.h" />
+    <ClInclude Include="engine\Functions\ECS\Component\Asset\FogVolumeComponent.h" />
     <ClInclude Include="engine\Functions\ECS\EventBus.h" />
     <ClInclude Include="engine\Functions\ECS\Event\SceneChangeEvent.h" />
     <ClInclude Include="engine\Functions\ECS\System\Collision\CollisionResolutionSystem.h" />

@@ -1,18 +1,19 @@
 #include "stdafx.h"
 #include "VolumetricFogPass.h"
 #include "../../RaytracingManager.h"
+#include "engine/Functions/ECS/Component/Asset/FogVolumeComponent.h"
+#include "engine/Functions/ECS/Component/Common/TransformComponent.h"
 #include "engine/Functions/Shader/ShaderReflection.h"
 #include "engine/Runtime/Command/ComputeContext.h"
 
 namespace NoEngine::Render {
 
 void VolumetricFogPass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& resources, ECS::Registry& registry) {
-	static_cast<void>(registry);
 	auto* context = GetRenderContext();
 	const auto* camera = GetTargetCamera();
 	auto& fog = const_cast<ColorBuffer&>(resources.GetColorBuffer(GetEditorUavOutputs().front()));
 	auto* pipeline = GetFogRtStateObject();
-	if (!pipeline || !camera || density_ <= 0.f) {
+	if (!pipeline || !camera) {
 		gfx.GetComputeContext().ClearUAV(fog);
 		return;
 	}
@@ -35,8 +36,40 @@ void VolumetricFogPass::Execute(GraphicsContext& gfx, const RenderGraphRegistry&
 		float ambient;
 		float scatteringAlbedo;
 		uint32_t traceShadows;
+		Math::Matrix4x4 worldToBox;
+		float boxDensity;
+		float boxEdgeFade;
 	} constants{};
-	static_assert(sizeof(FogConstants) == 160);
+	static_assert(sizeof(FogConstants) == 240);
+
+	// 1つの有効な Box をレイ生成シェーダーへ渡す。
+	for (auto entity : registry.View<Component::FogVolumeComponent, Component::TransformComponent>()) {
+		const auto* volume = registry.GetComponent<Component::FogVolumeComponent>(entity);
+		if (!volume->enabled || volume->density <= 0.f || !std::isfinite(volume->density) || !std::isfinite(volume->edgeFade)) continue;
+
+		const auto* transform = registry.GetComponent<Component::TransformComponent>(entity);
+		auto worldToBox = transform->MakeAffineMatrix4x4(registry);
+		const auto& m = worldToBox.m;
+		const Math::Vector3 x(m[0][0], m[0][1], m[0][2]);
+		const Math::Vector3 y(m[1][0], m[1][1], m[1][2]);
+		const Math::Vector3 z(m[2][0], m[2][1], m[2][2]);
+		const float determinant = x.Dot(y.Cross(z));
+		if (determinant == 0.f || !std::isfinite(determinant)) continue;
+		worldToBox.Inverse();
+		if (!std::ranges::all_of(worldToBox.m, [](const auto& row) {
+			return std::ranges::all_of(row, [](float value) { return std::isfinite(value); });
+		})) continue;
+
+		constants.worldToBox = worldToBox;
+		constants.boxDensity = volume->density;
+		constants.boxEdgeFade = std::clamp(volume->edgeFade, 0.f, 0.5f);
+		break;
+	}
+
+	if (density_ <= 0.f && constants.boxDensity <= 0.f) {
+		gfx.GetComputeContext().ClearUAV(fog);
+		return;
+	}
 
 	constants.inverseViewProjection = camera->forGPU.viewProjection;
 	constants.inverseViewProjection.Inverse();

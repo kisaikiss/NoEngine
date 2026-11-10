@@ -3416,6 +3416,38 @@
                 }
             }
         },
+        "PlatformFog": {
+            "components": {
+                "EditTag": {
+                    "name": "PlatformFog",
+                    "parent": "box_3_2"
+                },
+                "FogVolumeComponent": {
+                    "density": 0.35,
+                    "edgeFade": 0.15,
+                    "enabled": true
+                },
+                "TransformComponent": {
+                    "parent": "box_3_2",
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        0.94,
+                        4.8,
+                        0.94
+                    ],
+                    "translate": [
+                        0.0,
+                        -2.92,
+                        0.0
+                    ]
+                }
+            }
+        },
         "PowerItem": {
             "components": {
                 "CollectibleItemTag": null,
@@ -93625,7 +93657,7 @@
                 "autoClear": false,
                 "baseHeight": 6.0,
                 "clearDepth": false,
-                "density": 0.008,
+                "density": 0.0,
                 "depthOutput": "",
                 "heightFalloff": 0.035,
                 "inputs": {
