@@ -1,0 +1,66 @@
+{
+  "links": [
+    {
+      "fromNodeId": "event-1",
+      "fromPinId": "exec.out",
+      "id": "link-3",
+      "toNodeId": "action-2",
+      "toPinId": "exec.in"
+    },
+    {
+      "fromNodeId": "event-4",
+      "fromPinId": "exec.out",
+      "id": "link-6",
+      "toNodeId": "action-5",
+      "toPinId": "exec.in"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "event-1",
+      "kind": "event",
+      "position": [
+        -183.0,
+        61.0
+      ],
+      "properties": {},
+      "typeId": "engine.trigger.enter"
+    },
+    {
+      "id": "action-2",
+      "kind": "action",
+      "position": [
+        83.0,
+        69.0
+      ],
+      "properties": {
+        "targetEntity": "eventPoint1"
+      },
+      "typeId": "application.dialogue.play"
+    },
+    {
+      "id": "event-4",
+      "kind": "event",
+      "position": [
+        -183.0,
+        205.0
+      ],
+      "properties": {},
+      "typeId": "application.dialogue.finished"
+    },
+    {
+      "id": "action-5",
+      "kind": "action",
+      "position": [
+        115.0,
+        237.0
+      ],
+      "properties": {
+        "routineId": "One",
+        "targetEntity": "Leimar"
+      },
+      "typeId": "engine.mover.activate"
+    }
+  ],
+  "version": 1
+}

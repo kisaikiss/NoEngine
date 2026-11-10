@@ -61,9 +61,9 @@
                 },
                 "DebugCameraComponent": {
                     "center": [
-                        16.183996200561523,
-                        18.35785675048828,
-                        11.078365325927734
+                        10.64255142211914,
+                        -2.682175874710083,
+                        -12.922507286071777
                     ],
                     "distance": 24.76100730895996,
                     "drawCenter": false,
@@ -78,10 +78,10 @@
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
-                        0.17797286808490753,
-                        -0.5086971521377563,
-                        0.10837908834218979,
-                        0.83534836769104
+                        -0.044067852199077606,
+                        -0.9091259837150574,
+                        0.09965584427118301,
+                        -0.4020158648490906
                     ],
                     "scale": [
                         1.0,
@@ -89,9 +89,9 @@
                         1.0
                     ],
                     "translate": [
-                        36.272640228271484,
-                        28.450515747070313,
-                        0.7008838653564453
+                        -7.239423751831055,
+                        2.6818344593048096,
+                        3.3430967330932617
                     ]
                 }
             }
@@ -104,7 +104,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kNormal",
-                    "castShadow": true,
+                    "castShadow": false,
                     "color": [
                         1.0,
                         1.0,
@@ -122,12 +122,12 @@
                     "environmentCoefficient": 0.0,
                     "noiseScrollSpeed": 0.30000001192092896,
                     "noiseTextureName": "noise0",
-                    "receiveShadow": true,
+                    "receiveShadow": false,
                     "renderMode": "kDefault",
                     "rimPower": 2.0,
                     "shininess": 60.0,
                     "textureName": "",
-                    "unlit": false,
+                    "unlit": true,
                     "uvPosition": [
                         0.0,
                         0.0
@@ -184,7 +184,7 @@
                     "parent": null
                 },
                 "EditorSettingComponent": {
-                    "drawCollider": false
+                    "drawCollider": true
                 }
             }
         },
@@ -206,7 +206,7 @@
                     "enabled": true,
                     "fontName": "resources/engine/fonts/ISE-FONT4/Isego.otf",
                     "interactDistance": 0.0,
-                    "interactable": true,
+                    "interactable": false,
                     "lines": [
                         "おーい！まさか死んでないよな？",
                         "呼吸はしてるな。じゃあ早く起きろ。",
@@ -233,12 +233,38 @@
                         1.0
                     ]
                 },
+                "MoverComponent": {
+                    "active": false,
+                    "initialized": false,
+                    "startOnAwake": false
+                },
+                "PointLightComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        0.0
+                    ],
+                    "decay": 1.5,
+                    "intensity": 1.0,
+                    "radius": 6.0,
+                    "shadowRadius": 0.10000000149011612,
+                    "shadowSamples": "kFourRays"
+                },
                 "RotationalVelocityComponent": {
                     "linear": [
                         0.0,
                         2.0,
                         0.0
                     ]
+                },
+                "SphereCollider": {
+                    "localCenter": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "radius": 1.0
                 },
                 "TransformComponent": {
                     "parent": null,
@@ -260,14 +286,14 @@
                     ]
                 },
                 "TransformRoutineComponent": {
-                    "defaultRoutineId": "default",
+                    "defaultRoutineId": "One",
                     "playbackSpeed": 1.0,
                     "playing": false,
                     "routines": [
                         {
                             "globalDuration": 7.0,
-                            "globalEasing": "EaseOutQuad",
-                            "id": "default",
+                            "globalEasing": "EaseInQuad",
+                            "id": "One",
                             "interpolation": "CatmullRom",
                             "keyframes": [
                                 {
@@ -465,9 +491,119 @@
                                         1.0
                                     ],
                                     "translate": [
-                                        76.2392578125,
-                                        21.859846115112305,
-                                        -2.2993109226226807
+                                        80.0,
+                                        22.0,
+                                        -2.0
+                                    ]
+                                }
+                            ],
+                            "loop": false,
+                            "useGlobalTiming": true
+                        },
+                        {
+                            "globalDuration": 7.0,
+                            "globalEasing": "EaseInOutQuad",
+                            "id": "Two",
+                            "interpolation": "CatmullRom",
+                            "keyframes": [
+                                {
+                                    "duration": 1.0,
+                                    "easing": "Linear",
+                                    "rotation": [
+                                        0.0,
+                                        0.0,
+                                        0.0,
+                                        1.0
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "translate": [
+                                        80.0,
+                                        22.0,
+                                        -2.0
+                                    ]
+                                },
+                                {
+                                    "duration": 1.0,
+                                    "easing": "Linear",
+                                    "rotation": [
+                                        0.33525770902633667,
+                                        -0.008280634880065918,
+                                        0.2223888486623764,
+                                        0.9154654145240784
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "translate": [
+                                        95.5055923461914,
+                                        23.935789108276367,
+                                        -2.484687328338623
+                                    ]
+                                },
+                                {
+                                    "duration": 1.0,
+                                    "easing": "Linear",
+                                    "rotation": [
+                                        0.5447304248809814,
+                                        -0.29157909750938416,
+                                        -0.1531725823879242,
+                                        0.7712253332138062
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "translate": [
+                                        108.01737213134766,
+                                        22.87541961669922,
+                                        0.4801260232925415
+                                    ]
+                                },
+                                {
+                                    "duration": 1.0,
+                                    "easing": "Linear",
+                                    "rotation": [
+                                        -0.4627309739589691,
+                                        0.3782420754432678,
+                                        -0.027127835899591446,
+                                        0.801297128200531
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "translate": [
+                                        121.0397720336914,
+                                        17.675119400024414,
+                                        5.441450119018555
+                                    ]
+                                },
+                                {
+                                    "duration": 1.0,
+                                    "easing": "Linear",
+                                    "rotation": [
+                                        0.0,
+                                        0.0,
+                                        0.0,
+                                        1.0
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "translate": [
+                                        141.11407470703125,
+                                        15.989394187927246,
+                                        -3.098106861114502
                                     ]
                                 }
                             ],
@@ -477,291 +613,6 @@
                     ]
                 },
                 "TutorialMoverTag": null
-            }
-        },
-        "Level": {
-            "components": {
-                "EditTag": {
-                    "name": "Level",
-                    "parent": null
-                },
-                "SpriteComponent": {
-                    "anchor": [
-                        0.0,
-                        0.0
-                    ],
-                    "color": [
-                        1.0,
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "fill": 0.0,
-                    "flipX": false,
-                    "flipY": false,
-                    "isVisible": true,
-                    "layer": 1,
-                    "maskTextureName": "",
-                    "nonRenderAngle": 0.0,
-                    "orderInLayer": 0,
-                    "pivot": [
-                        0.5,
-                        0.5
-                    ],
-                    "space": "World",
-                    "textureName": "level",
-                    "useMask": false,
-                    "uv": [
-                        0.0,
-                        0.0,
-                        1.0,
-                        1.0
-                    ]
-                },
-                "Transform2DComponent": {
-                    "parent": null,
-                    "rotation": 0.0,
-                    "scale": [
-                        451.0,
-                        83.0
-                    ],
-                    "translate": [
-                        252.0,
-                        65.4000015258789
-                    ]
-                }
-            }
-        },
-        "LevelGauge": {
-            "components": {
-                "EditTag": {
-                    "name": "LevelGauge",
-                    "parent": null
-                },
-                "LevelGaugeTag": null,
-                "SpriteComponent": {
-                    "anchor": [
-                        0.0,
-                        0.0
-                    ],
-                    "color": [
-                        1.0,
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "fill": 0.0,
-                    "flipX": false,
-                    "flipY": false,
-                    "isVisible": true,
-                    "layer": 0,
-                    "maskTextureName": "levelGaugeMask",
-                    "nonRenderAngle": 0.0,
-                    "orderInLayer": 0,
-                    "pivot": [
-                        0.5,
-                        0.5
-                    ],
-                    "space": "World",
-                    "textureName": "levelGauge",
-                    "useMask": true,
-                    "uv": [
-                        0.0,
-                        0.0,
-                        1.0,
-                        1.0
-                    ]
-                },
-                "Transform2DComponent": {
-                    "parent": null,
-                    "rotation": 0.0,
-                    "scale": [
-                        451.0,
-                        83.0
-                    ],
-                    "translate": [
-                        252.0,
-                        65.4000015258789
-                    ]
-                }
-            }
-        },
-        "LevelNumber": {
-            "components": {
-                "EditTag": {
-                    "name": "LevelNumber",
-                    "parent": null
-                },
-                "LevelNumberTag": null,
-                "SpriteComponent": {
-                    "anchor": [
-                        0.0,
-                        0.0
-                    ],
-                    "color": [
-                        1.0,
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "fill": 0.0,
-                    "flipX": false,
-                    "flipY": false,
-                    "isVisible": true,
-                    "layer": 3,
-                    "maskTextureName": "",
-                    "nonRenderAngle": 0.0,
-                    "orderInLayer": 0,
-                    "pivot": [
-                        0.5,
-                        0.5
-                    ],
-                    "space": "World",
-                    "textureName": "levelNumbers",
-                    "useMask": false,
-                    "uv": [
-                        0.10000000149011612,
-                        0.0,
-                        0.10000000149011612,
-                        1.0
-                    ]
-                },
-                "Transform2DComponent": {
-                    "parent": null,
-                    "rotation": 0.0,
-                    "scale": [
-                        64.0,
-                        64.0
-                    ],
-                    "translate": [
-                        223.60000610351563,
-                        47.599998474121094
-                    ]
-                }
-            }
-        },
-        "LevelUpEffect": {
-            "components": {
-                "EditTag": {
-                    "name": "LevelUpEffect",
-                    "parent": null
-                },
-                "EffectEmitterComponent": {
-                    "color": [
-                        1.0,
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "count": 30,
-                    "emitRange": [
-                        2.0,
-                        0.0,
-                        2.0
-                    ],
-                    "maxLifeTime": 2.0,
-                    "maxRotate": 0.0,
-                    "maxScale": [
-                        0.5,
-                        3.0,
-                        0.5
-                    ],
-                    "maxSpeed": [
-                        0.0,
-                        5.400000095367432,
-                        0.0
-                    ],
-                    "minLifeTime": 1.0,
-                    "minRotate": 0.0,
-                    "minScale": [
-                        0.5,
-                        1.0,
-                        0.5
-                    ],
-                    "minSpeed": [
-                        0.0,
-                        1.899999976158142,
-                        0.0
-                    ],
-                    "textureName": "LevelUpParticle"
-                },
-                "LevelUpEffectTag": null,
-                "TransformComponent": {
-                    "parent": null,
-                    "rotation": [
-                        0.0,
-                        0.0,
-                        0.0,
-                        1.0
-                    ],
-                    "scale": [
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "translate": [
-                        40.19668197631836,
-                        -9.838600158691406,
-                        -2.6863276958465576
-                    ]
-                }
-            }
-        },
-        "LevelUpUI": {
-            "components": {
-                "EditTag": {
-                    "name": "LevelUpUI",
-                    "parent": null
-                },
-                "LevelUpTextComponent": {
-                    "closeTime": 1.5,
-                    "isClose": false
-                },
-                "SpriteComponent": {
-                    "anchor": [
-                        0.0,
-                        0.0
-                    ],
-                    "color": [
-                        1.0,
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "fill": 0.0,
-                    "flipX": false,
-                    "flipY": false,
-                    "isVisible": false,
-                    "layer": 0,
-                    "maskTextureName": "",
-                    "nonRenderAngle": 0.0,
-                    "orderInLayer": 0,
-                    "pivot": [
-                        0.5,
-                        0.5
-                    ],
-                    "space": "World",
-                    "textureName": "levelUpBackground",
-                    "useMask": false,
-                    "uv": [
-                        0.0,
-                        0.0,
-                        1.0,
-                        1.0
-                    ]
-                },
-                "Transform2DComponent": {
-                    "parent": null,
-                    "rotation": 0.0,
-                    "scale": [
-                        468.0,
-                        720.0
-                    ],
-                    "translate": [
-                        1000.0,
-                        360.0
-                    ]
-                }
             }
         },
         "MainCamera": {
@@ -827,14 +678,6 @@
                 }
             }
         },
-        "UI": {
-            "components": {
-                "EditTag": {
-                    "name": "UI",
-                    "parent": null
-                }
-            }
-        },
         "Up": {
             "components": {
                 "EditTag": {
@@ -843,7 +686,7 @@
                 },
                 "MaterialComponent": {
                     "blendMode": "kNormal",
-                    "castShadow": true,
+                    "castShadow": false,
                     "color": [
                         1.0,
                         1.0,
@@ -861,12 +704,12 @@
                     "environmentCoefficient": 0.0,
                     "noiseScrollSpeed": 0.30000001192092896,
                     "noiseTextureName": "noise0",
-                    "receiveShadow": true,
+                    "receiveShadow": false,
                     "renderMode": "kDefault",
                     "rimPower": 2.0,
                     "shininess": 60.0,
                     "textureName": "",
-                    "unlit": false,
+                    "unlit": true,
                     "uvPosition": [
                         0.0,
                         0.0
@@ -902,56 +745,203 @@
                 }
             }
         },
-        "XButton": {
+        "block": {
             "components": {
-                "CloseLevelUpUITag": null,
                 "EditTag": {
-                    "name": "XButton",
+                    "name": "block",
                     "parent": null
                 },
-                "SpriteComponent": {
-                    "anchor": [
-                        0.0,
-                        0.0
-                    ],
+                "MaterialComponent": {
+                    "blendMode": "kNormal",
+                    "castShadow": false,
                     "color": [
                         1.0,
                         1.0,
                         1.0,
-                        -0.01630599983036518
+                        1.0
                     ],
-                    "fill": 0.0,
-                    "flipX": false,
-                    "flipY": false,
-                    "isVisible": true,
-                    "layer": 10,
-                    "maskTextureName": "",
-                    "nonRenderAngle": 0.0,
-                    "orderInLayer": 0,
-                    "pivot": [
-                        0.5,
-                        0.5
+                    "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
                     ],
-                    "space": "World",
-                    "textureName": "xButton",
-                    "useMask": false,
-                    "uv": [
+                    "emissiveIntensity": 1.0,
+                    "environmentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "receiveShadow": false,
+                    "renderMode": "kDefault",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "textureName": "resources/game/ClockworksDisease/Model/StageMap/TutorialStage/carpet_color.png",
+                    "unlit": false,
+                    "uvPosition": [
                         0.0,
-                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
                         1.0,
                         1.0
                     ]
                 },
-                "Transform2DComponent": {
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "resources/engine/Model/block/block.obj"
+                },
+                "TransformComponent": {
                     "parent": null,
-                    "rotation": 0.0,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
                     "scale": [
-                        64.0,
-                        64.0
+                        139.53810119628906,
+                        1.0,
+                        56.35580062866211
                     ],
                     "translate": [
-                        965.0999755859375,
-                        672.5999755859375
+                        29.93342399597168,
+                        52.68962097167969,
+                        -0.2842886447906494
+                    ]
+                }
+            }
+        },
+        "block_2": {
+            "components": {
+                "EditTag": {
+                    "name": "block_2",
+                    "parent": null
+                },
+                "MaterialComponent": {
+                    "blendMode": "kNormal",
+                    "castShadow": false,
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "environmentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "receiveShadow": false,
+                    "renderMode": "kDefault",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "textureName": "resources/game/ClockworksDisease/Model/StageMap/TutorialStage/pool_tiles_color.png",
+                    "unlit": true,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "resources/engine/Model/block/block.obj"
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        70.48209381103516,
+                        1.0,
+                        56.35580062866211
+                    ],
+                    "translate": [
+                        136.7005157470703,
+                        32.42296600341797,
+                        -0.2842886447906494
+                    ]
+                }
+            }
+        },
+        "block_2_2": {
+            "components": {
+                "EditTag": {
+                    "name": "block_2_2",
+                    "parent": null
+                },
+                "MaterialComponent": {
+                    "blendMode": "kNormal",
+                    "castShadow": false,
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "environmentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "receiveShadow": false,
+                    "renderMode": "kDefault",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "textureName": "resources/game/ClockworksDisease/Model/StageMap/TutorialStage/carpet_color.png",
+                    "unlit": false,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "resources/engine/Model/block/block.obj"
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        32.78899002075195,
+                        1.0,
+                        40.907867431640625
+                    ],
+                    "translate": [
+                        184.8048858642578,
+                        51.187557220458984,
+                        -0.2842886447906494
                     ]
                 }
             }
@@ -3572,29 +3562,31 @@
                 }
             }
         },
-        "eventPoint": {
+        "eventPoint1": {
             "components": {
-                "DialogueAutoTriggerComponent": {
-                    "once": true,
-                    "radius": 2.0
+                "AABBCollider": {
+                    "max": [
+                        2.3998208045959473,
+                        0.5,
+                        2.91188907623291
+                    ],
+                    "min": [
+                        -2.3998208045959473,
+                        -0.5,
+                        -2.91188907623291
+                    ]
+                },
+                "ColliderUpdateTag": null,
+                "CollisionBody": {
+                    "type": "Through"
                 },
                 "DialogueComponent": {
                     "enabled": true,
                     "fontName": "resources/engine/fonts/ISE-FONT4/Isego.otf",
-                    "interactDistance": 0.0,
-                    "interactable": true,
+                    "interactDistance": 3.0,
+                    "interactable": false,
                     "lines": [
-                        "起き上がれたな。",
-                        "おいおい、警戒するな。俺は味方だ。",
-                        "お前がさっき負けた奴を俺も追ってるんだ。",
-                        "勝てると思って見ていたんだが、そうでもなかったな。",
-                        "協力してくれたら代わりに倒してやるよ",
-                        "とりあえず奴が作りだしたこの次元から出た方が良い。",
-                        "奥に脱出路を作っておいた。",
-                        "身体の動かし方は覚えてるな？",
-                        "分からなかったらポーズメニューのControlsから確認しろよ。",
-                        "ポーズメニューはスタートボタンで開くからな。",
-                        "それから、右スティックで周りを見渡せるのも忘れるなよ。"
+                        "起きたか、ついてこい"
                     ],
                     "portraitFrameCount": 4,
                     "portraitTexture": "resources/game/ClockworksDisease/Texture/Portrait/Leimar.png",
@@ -3602,8 +3594,11 @@
                     "voiceVolume": 0.3499999940395355
                 },
                 "EditTag": {
-                    "name": "eventPoint",
+                    "name": "eventPoint1",
                     "parent": null
+                },
+                "GimmickGraphComponent": {
+                    "graphPath": "resources/game/ClockworksDisease/GimmickGraph/TutorialStage/EventPoint1.json"
                 },
                 "TransformComponent": {
                     "parent": null,
@@ -3614,29 +3609,49 @@
                         1.0
                     ],
                     "scale": [
+                        4.7996416091918945,
                         1.0,
-                        1.0,
-                        1.0
+                        5.82377815246582
                     ],
                     "translate": [
-                        -2.8233206272125244,
-                        2.195502519607544,
-                        1.0292812585830688
+                        -3.42213773727417,
+                        2.5305075645446777,
+                        0.9746763706207275
                     ]
                 },
-                "TutorialSpeakerTag": null
+                "TriggerComponent": {
+                    "activated": false,
+                    "oneShot": true,
+                    "wasTouching": false
+                }
             }
         },
         "eventPoint2": {
             "components": {
+                "AABBCollider": {
+                    "max": [
+                        2.3998208045959473,
+                        3.1280903816223145,
+                        10.043503761291504
+                    ],
+                    "min": [
+                        -2.3998208045959473,
+                        -3.1280903816223145,
+                        -10.043503761291504
+                    ]
+                },
+                "ColliderUpdateTag": null,
+                "CollisionBody": {
+                    "type": "Through"
+                },
                 "DialogueComponent": {
                     "enabled": true,
                     "fontName": "resources/engine/fonts/ISE-FONT4/Isego.otf",
                     "interactDistance": 3.0,
-                    "interactable": true,
+                    "interactable": false,
                     "lines": [
-                        "なんだ？",
-                        "早く箱に入れ。ここから脱出する唯一の道だ。"
+                        "Aボタンを押す長さでジャンプ力が変わるぞ。",
+                        "早く上がってこい。"
                     ],
                     "portraitFrameCount": 4,
                     "portraitTexture": "resources/game/ClockworksDisease/Texture/Portrait/Leimar.png",
@@ -3647,6 +3662,9 @@
                     "name": "eventPoint2",
                     "parent": null
                 },
+                "GimmickGraphComponent": {
+                    "graphPath": "resources/game/ClockworksDisease/GimmickGraph/TutorialStage/EventPoint2.json"
+                },
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
@@ -3656,33 +3674,49 @@
                         1.0
                     ],
                     "scale": [
-                        1.0,
-                        1.0,
-                        1.0
+                        4.7996416091918945,
+                        6.256180763244629,
+                        20.087007522583008
                     ],
                     "translate": [
-                        76.81733703613281,
-                        21.063762664794922,
-                        -2.683025360107422
+                        53.90068054199219,
+                        7.400647163391113,
+                        -0.026886343955993652
                     ]
+                },
+                "TriggerComponent": {
+                    "activated": false,
+                    "oneShot": true,
+                    "wasTouching": false
                 }
             }
         },
         "eventPoint3": {
             "components": {
-                "DialogueAutoTriggerComponent": {
-                    "once": true,
-                    "radius": 5.0
+                "AABBCollider": {
+                    "max": [
+                        4.2255024909973145,
+                        3.1280903816223145,
+                        4.916828155517578
+                    ],
+                    "min": [
+                        -4.2255024909973145,
+                        -3.1280903816223145,
+                        -4.916828155517578
+                    ]
+                },
+                "ColliderUpdateTag": null,
+                "CollisionBody": {
+                    "type": "Through"
                 },
                 "DialogueComponent": {
                     "enabled": true,
                     "fontName": "resources/engine/fonts/ISE-FONT4/Isego.otf",
-                    "interactDistance": 0.0,
-                    "interactable": true,
+                    "interactDistance": 3.0,
+                    "interactable": false,
                     "lines": [
-                        "おーい！聞こえてるかー！",
-                        "Aボタンを押す長さでジャンプの高さが変わるからな！",
-                        "早く上がってこーい！"
+                        "この奥に疋面（ひきおもて）がいるな。気をつけろ。 ",
+                        "お前ならXボタンの攻撃で殺せるかもな。"
                     ],
                     "portraitFrameCount": 4,
                     "portraitTexture": "resources/game/ClockworksDisease/Texture/Portrait/Leimar.png",
@@ -3693,51 +3727,8 @@
                     "name": "eventPoint3",
                     "parent": null
                 },
-                "TransformComponent": {
-                    "parent": null,
-                    "rotation": [
-                        0.0,
-                        0.0,
-                        0.0,
-                        1.0
-                    ],
-                    "scale": [
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "translate": [
-                        55.377235412597656,
-                        4.970301628112793,
-                        4.902151584625244
-                    ]
-                },
-                "TutorialSpeakerTag": null
-            }
-        },
-        "eventPoint4": {
-            "components": {
-                "DialogueAutoTriggerComponent": {
-                    "once": true,
-                    "radius": 4.699999809265137
-                },
-                "DialogueComponent": {
-                    "enabled": true,
-                    "fontName": "resources/engine/fonts/ISE-FONT4/Isego.otf",
-                    "interactDistance": 0.0,
-                    "interactable": true,
-                    "lines": [
-                        "よく来たな",
-                        "この箱が俺の作った脱出路だ。入って外に出るぞ。"
-                    ],
-                    "portraitFrameCount": 4,
-                    "portraitTexture": "resources/game/ClockworksDisease/Texture/Portrait/Leimar.png",
-                    "voiceFiles": [],
-                    "voiceVolume": 0.3499999940395355
-                },
-                "EditTag": {
-                    "name": "eventPoint4",
-                    "parent": null
+                "GimmickGraphComponent": {
+                    "graphPath": "resources/game/ClockworksDisease/GimmickGraph/TutorialStage/EventPoint3.json"
                 },
                 "TransformComponent": {
                     "parent": null,
@@ -3748,15 +3739,20 @@
                         1.0
                     ],
                     "scale": [
-                        1.0,
-                        1.0,
-                        1.0
+                        8.451004981994629,
+                        6.256180763244629,
+                        9.833656311035156
                     ],
                     "translate": [
-                        78.76738739013672,
-                        21.063762664794922,
-                        0.23631197214126587
+                        78.96778106689453,
+                        23.276344299316406,
+                        -0.026886343955993652
                     ]
+                },
+                "TriggerComponent": {
+                    "activated": false,
+                    "oneShot": true,
+                    "wasTouching": false
                 }
             }
         },
@@ -3794,8 +3790,9 @@
                     "name": "player",
                     "parent": null
                 },
-                "EffectEmitModeRingTag": null,
                 "EffectEmitterComponent": {
+                    "burstCount": 1,
+                    "burstInterval": 0.10000000149011612,
                     "color": [
                         1.0,
                         1.0,
@@ -3832,7 +3829,17 @@
                         0.0,
                         -3.0
                     ],
-                    "textureName": "smokeEffect"
+                    "shape": "kPlane",
+                    "spawnOffset": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "spawnRadius": 1.0,
+                    "spawnShape": "kBox",
+                    "startDelay": 0.0,
+                    "textureName": "smokeEffect",
+                    "velocityDistribution": "kRingXZ"
                 },
                 "GroundStateComponent": {
                     "groundHeight": 0.0,
@@ -3905,7 +3912,7 @@
                 "PlayerComponent": {
                     "accelerationTime": 0.10000000149011612,
                     "airAcceleration": 40.0,
-                    "airDashDuration": 0.20000000298023224,
+                    "airDashDuration": 0.30000001192092896,
                     "airDashSpeed": 30.0,
                     "airDashStaminaCost": 0.4000000059604645,
                     "backflipStaminaCost": 1.0,
@@ -3930,7 +3937,7 @@
                         0.5,
                         0.0
                     ],
-                    "spinAttackAnimationSpeed": 1.0,
+                    "spinAttackAnimationSpeed": 1.7999999523162842,
                     "spinAttackRadius": 1.5,
                     "stamina": 1.0,
                     "staminaRecoveryRate": 1.0,
@@ -3996,8 +4003,9 @@
                     "CollisionLayerComponent": {
                         "layer": "Player"
                     },
-                    "EffectEmitModeRingTag": null,
                     "EffectEmitterComponent": {
+                        "burstCount": 1,
+                        "burstInterval": 0.10000000149011612,
                         "color": [
                             1.0,
                             1.0,
@@ -4034,7 +4042,17 @@
                             0.0,
                             -3.0
                         ],
-                        "textureName": "smokeEffect"
+                        "shape": "kPlane",
+                        "spawnOffset": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "spawnRadius": 1.0,
+                        "spawnShape": "kBox",
+                        "startDelay": 0.0,
+                        "textureName": "smokeEffect",
+                        "velocityDistribution": "kRingXZ"
                     },
                     "GroundStateComponent": {
                         "groundHeight": 0.0,
@@ -4172,18 +4190,8 @@
             "prefabOverrides": [
                 {
                     "op": "replace",
-                    "path": "/components/PlayerComponent/airDashDuration",
-                    "value": 0.20000000298023224
-                },
-                {
-                    "op": "replace",
                     "path": "/components/PlayerComponent/airDashStaminaCost",
                     "value": 0.4000000059604645
-                },
-                {
-                    "op": "replace",
-                    "path": "/components/PlayerComponent/spinAttackAnimationSpeed",
-                    "value": 1.0
                 }
             ]
         },
@@ -4258,116 +4266,6 @@
                         0.0,
                         0.0,
                         0.0
-                    ]
-                }
-            }
-        },
-        "staminaGauge": {
-            "components": {
-                "EditTag": {
-                    "name": "staminaGauge",
-                    "parent": null
-                },
-                "SpriteComponent": {
-                    "anchor": [
-                        0.0,
-                        0.0
-                    ],
-                    "color": [
-                        1.0,
-                        1.0,
-                        1.0,
-                        0.0
-                    ],
-                    "fill": 0.0,
-                    "flipX": false,
-                    "flipY": false,
-                    "isVisible": true,
-                    "layer": 5,
-                    "maskTextureName": "",
-                    "nonRenderAngle": 0.0,
-                    "orderInLayer": 0,
-                    "pivot": [
-                        0.5,
-                        0.5
-                    ],
-                    "space": "World",
-                    "textureName": "staminaGauge",
-                    "useMask": false,
-                    "uv": [
-                        0.0,
-                        0.0,
-                        1.0,
-                        1.0
-                    ]
-                },
-                "StaminaGaugeComponent": {
-                    "disappearanceTime": 1.0
-                },
-                "Transform2DComponent": {
-                    "parent": null,
-                    "rotation": 0.0,
-                    "scale": [
-                        110.0,
-                        110.0
-                    ],
-                    "translate": [
-                        130.10000610351563,
-                        592.7000122070313
-                    ]
-                }
-            }
-        },
-        "staminaGaugeFrame": {
-            "components": {
-                "EditTag": {
-                    "name": "staminaGaugeFrame",
-                    "parent": null
-                },
-                "SpriteComponent": {
-                    "anchor": [
-                        0.0,
-                        0.0
-                    ],
-                    "color": [
-                        1.0,
-                        1.0,
-                        1.0,
-                        0.0
-                    ],
-                    "fill": 0.0,
-                    "flipX": false,
-                    "flipY": false,
-                    "isVisible": true,
-                    "layer": 10,
-                    "maskTextureName": "",
-                    "nonRenderAngle": 0.0,
-                    "orderInLayer": 0,
-                    "pivot": [
-                        0.5,
-                        0.5
-                    ],
-                    "space": "World",
-                    "textureName": "staminaFrame",
-                    "useMask": false,
-                    "uv": [
-                        0.0,
-                        0.0,
-                        1.0,
-                        1.0
-                    ]
-                },
-                "StaminaGaugeParentTag": null,
-                "Transform2DComponent": {
-                    "parent": null,
-                    "rotation": 0.0,
-                    "scale": [
-                        150.0,
-                        150.0
-                    ],
-                    "translate": [
-                        130.10000610351563,
-                        592.7000122070313
                     ]
                 }
             }
@@ -4452,8 +4350,8 @@
                         1.0
                     ],
                     "translate": [
-                        79.29510498046875,
-                        21.535911560058594,
+                        191.08558654785156,
+                        16.598098754882813,
                         0.12081241607666016
                     ]
                 }

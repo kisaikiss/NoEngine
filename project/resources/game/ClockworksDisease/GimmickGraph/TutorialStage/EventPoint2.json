@@ -1,0 +1,36 @@
+{
+  "links": [
+    {
+      "fromNodeId": "event-1",
+      "fromPinId": "exec.out",
+      "id": "link-3",
+      "toNodeId": "action-2",
+      "toPinId": "exec.in"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "event-1",
+      "kind": "event",
+      "position": [
+        89.0,
+        109.0
+      ],
+      "properties": {},
+      "typeId": "engine.trigger.enter"
+    },
+    {
+      "id": "action-2",
+      "kind": "action",
+      "position": [
+        340.0,
+        140.0
+      ],
+      "properties": {
+        "targetEntity": "eventPoint2"
+      },
+      "typeId": "application.dialogue.play"
+    }
+  ],
+  "version": 1
+}
