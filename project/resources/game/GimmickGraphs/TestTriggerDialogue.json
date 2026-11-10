@@ -42,14 +42,13 @@
       "id": "action-4",
       "kind": "action",
       "position": [
-        706.0,
-        131.0
+        702.0,
+        181.0
       ],
       "properties": {
-        "routineId": "default",
-        "targetEntity": "box_2"
+        "targetCamera": "DebugCamera"
       },
-      "typeId": "engine.mover.activate"
+      "typeId": "engine.camera.changeActive"
     }
   ],
   "version": 1

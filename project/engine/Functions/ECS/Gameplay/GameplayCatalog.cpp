@@ -46,6 +46,7 @@ GameplayCatalog::GameplayCatalog() {
 			// 別ルートへの切替やStopでも、以前のルートを待ち続けない。
 			return !mover->activationPending && (routine->activeRoutineId != route->id || !routine->playing);
 		} });
+
 	RegisterAction({ Event::GameplayId::MoverStop, "Stop Mover", "Movement",
 		[](ECS::Registry& registry, const Event::GameplayEvent&, ECS::Entity target, const nlohmann::json&) {
 			if (auto* mover = registry.GetComponent<NoEngine::Component::MoverComponent>(target)) {
@@ -90,6 +91,12 @@ GameplayCatalog::GameplayCatalog() {
 			{ "flagName", "Flag Name", ActionPropertyType::String, true },
 			{ "value", "Value", ActionPropertyType::Boolean, true }
 		}});
+	RegisterAction({ "engine.camera.changeActive", "Active Camera Change", "Camera",
+		[](ECS::Registry& registry, const Event::GameplayEvent&, ECS::Entity target, const nlohmann::json&) {
+			registry.AddComponent<Component::ActiveCameraTag>(target);
+		}, true, {
+			{"targetCamera", "TargetCamera", ActionPropertyType::EntityReference, true}
+		} });
 }
 
 bool GameplayCatalog::RegisterEvent(EventDescriptor descriptor) {
