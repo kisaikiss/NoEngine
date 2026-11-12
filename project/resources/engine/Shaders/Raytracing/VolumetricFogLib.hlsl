@@ -38,6 +38,7 @@ cbuffer FogConstants : register(b0)
     float gBoxNoiseStrength;
     float3 gBoxNoiseOffset;
     uint gDirectionalLightCount;
+    float gScatteringAnisotropy;
 };
 
 struct ShadowPayload
@@ -70,10 +71,20 @@ bool IsFogLightOccluded(float3 position, float3 directionToLight, float maxDista
     return payload.occluded;
 }
 
-float3 EvaluateDirectional(float3 position)
+float EvaluateScatteringPhase(float3 directionToLight, float3 viewDirection)
+{
+    // 両方向をカメラから光源へ向く向きで比較し、正の g で前方散乱を強める。
+    float cosTheta = clamp(dot(directionToLight, viewDirection), -1.0, 1.0);
+    float g = clamp(gScatteringAnisotropy, -0.95, 0.95);
+    float denominator = max(1.0 + g * g - 2.0 * g * cosTheta, 1e-4);
+    float inverseRoot = rsqrt(denominator);
+    // g = 0 では従来と同じ 1 / (4 * PI) の等方性散乱になる。
+    return 0.07957747 * (1.0 - g * g) * inverseRoot * inverseRoot * inverseRoot;
+}
+
+float3 EvaluateDirectional(float3 position, float3 viewDirection)
 {
     float3 scattering = 0.0;
-    const float isotropicPhase = 0.07957747;
     for (uint i = 0; i < gDirectionalLightCount; ++i)
     {
         DirectionalLight light = gDirectionalLights[i];
@@ -84,12 +95,12 @@ float3 EvaluateDirectional(float3 position)
         // 光の進行方向の逆へ飛ばし、視線の最大距離より遠い遮蔽物も判定する。
         float3 toLight = -light.direction * rsqrt(directionLengthSquared);
         if (!IsFogLightOccluded(position, toLight, asfloat(0x7F7FFFFF)))
-            scattering += light.color.rgb * light.intensity * isotropicPhase;
+            scattering += light.color.rgb * light.intensity * EvaluateScatteringPhase(toLight, viewDirection);
     }
     return scattering;
 }
 
-float3 EvaluateSpot(float3 position)
+float3 EvaluateSpot(float3 position, float3 viewDirection)
 {
     const float rayBias = 0.01;
     if (gSpotRange <= 0.0)
@@ -110,8 +121,7 @@ float3 EvaluateSpot(float3 position)
         return 0.0;
 
     float attenuation = pow(saturate(1.0 - distanceToLight / gSpotRange), gSpotDecay);
-    const float isotropicPhase = 0.07957747;
-    return gSpotRadiance * (attenuation * cone * isotropicPhase);
+    return gSpotRadiance * (attenuation * cone * EvaluateScatteringPhase(directionToLight, viewDirection));
 }
 
 struct FogRay
@@ -206,7 +216,7 @@ void IntegrateInterval(FogRay ray, float2 interval, bool insideBox, inout float4
         float stepT = exp(-extinction * stepLength);
         float weight = fog.a * (1.0 - stepT) * gScatteringAlbedo;
         if (weight > 0.0)
-            fog.rgb += weight * (gAmbient + EvaluateDirectional(position) + EvaluateSpot(position));
+            fog.rgb += weight * (gAmbient + EvaluateDirectional(position, ray.direction) + EvaluateSpot(position, ray.direction));
         fog.a *= stepT;
         if (fog.a < 1e-3)
             break;

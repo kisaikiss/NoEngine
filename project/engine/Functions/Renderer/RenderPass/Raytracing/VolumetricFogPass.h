@@ -17,6 +17,7 @@ private:
 	float maxDistance_ = 140.0f;
 	float ambient_ = 0.15f;
 	float scatteringAlbedo_ = 0.85f;
+	float scatteringAnisotropy_ = 0.0f;
 	int stepCount_ = 16;
 	bool traceShadows_ = true;
 };

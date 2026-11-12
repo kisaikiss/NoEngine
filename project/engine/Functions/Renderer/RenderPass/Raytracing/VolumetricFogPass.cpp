@@ -45,8 +45,9 @@ void VolumetricFogPass::Execute(GraphicsContext& gfx, const RenderGraphRegistry&
 		float boxNoiseStrength;
 		Math::Vector3 boxNoiseOffset;
 		uint32_t directionalLightCount;
+		float scatteringAnisotropy;
 	} constants{};
-	static_assert(sizeof(FogConstants) == 256);
+	static_assert(sizeof(FogConstants) == 272);
 
 	// 1つの有効な Box をレイ生成シェーダーへ渡す。
 	for (auto entity : registry.View<Component::FogVolumeComponent, Component::TransformComponent>()) {
@@ -101,6 +102,7 @@ void VolumetricFogPass::Execute(GraphicsContext& gfx, const RenderGraphRegistry&
 	constants.stepCount = static_cast<uint32_t>(stepCount_);
 	constants.ambient = ambient_;
 	constants.scatteringAlbedo = scatteringAlbedo_;
+	constants.scatteringAnisotropy = scatteringAnisotropy_;
 	constants.traceShadows = traceShadows_ && context->IsTLASReady();
 	constants.directionalLightCount = context->GetLightNums()->directionalLightNum;
 	if (const auto& light = context->GetFogSpotLight(); light && light->intensity > 0.f && light->distance > 0.f) {
@@ -139,6 +141,9 @@ void VolumetricFogPass::DrawEditor() {
 	ImGui::DragFloat("Max distance", &maxDistance_, 1.f, 1.f, 10000.f, "%.1f", ImGuiSliderFlags_AlwaysClamp);
 	ImGui::DragFloat("Ambient", &ambient_, 0.01f, 0.f, 1.f, "%.2f", ImGuiSliderFlags_AlwaysClamp);
 	ImGui::DragFloat("Scattering albedo", &scatteringAlbedo_, 0.01f, 0.f, 1.f, "%.2f", ImGuiSliderFlags_AlwaysClamp);
+	ImGui::DragFloat("Anisotropy (g)", &scatteringAnisotropy_, 0.01f, -0.95f, 0.95f, "%.2f", ImGuiSliderFlags_AlwaysClamp);
+	if (ImGui::IsItemHovered())
+		ImGui::SetTooltip("0: isotropic, >0: forward scattering, <0: backward scattering.");
 	ImGui::DragInt("Steps", &stepCount_, 1.f, 1, 64, "%d", ImGuiSliderFlags_AlwaysClamp);
 	ImGui::Checkbox("Trace fog shadows", &traceShadows_);
 #endif
@@ -152,6 +157,7 @@ nlohmann::json VolumetricFogPass::SaveEditorSettings() const {
 	settings["maxDistance"] = maxDistance_;
 	settings["ambient"] = ambient_;
 	settings["scatteringAlbedo"] = scatteringAlbedo_;
+	settings["scatteringAnisotropy"] = scatteringAnisotropy_;
 	settings["stepCount"] = stepCount_;
 	settings["traceShadows"] = traceShadows_;
 	return settings;
@@ -166,6 +172,8 @@ void VolumetricFogPass::LoadEditorSettings(const nlohmann::json& settings) {
 	maxDistance_ = std::clamp(settings.value("maxDistance", maxDistance_), 1.f, 10000.f);
 	ambient_ = std::clamp(settings.value("ambient", ambient_), 0.f, 1.f);
 	scatteringAlbedo_ = std::clamp(settings.value("scatteringAlbedo", scatteringAlbedo_), 0.f, 1.f);
+	const float anisotropy = settings.value("scatteringAnisotropy", scatteringAnisotropy_);
+	scatteringAnisotropy_ = std::isfinite(anisotropy) ? std::clamp(anisotropy, -0.95f, 0.95f) : 0.f;
 	stepCount_ = std::clamp(settings.value("stepCount", stepCount_), 1, 64);
 	traceShadows_ = settings.value("traceShadows", traceShadows_);
 }
