@@ -2308,49 +2308,6 @@
                 }
             }
         },
-        "FogSpotLight": {
-            "components": {
-                "EditTag": {
-                    "name": "FogSpotLight",
-                    "parent": "Lights"
-                },
-                "SpotLightComponent": {
-                    "color": [
-                        0.800000011920929,
-                        0.8799999952316284,
-                        1.0,
-                        1.0
-                    ],
-                    "cosAngle": 0.7699999809265137,
-                    "cosFalloffStart": 0.9399999976158142,
-                    "decay": 1.100000023841858,
-                    "distance": 32.0,
-                    "intensity": 4.0,
-                    "shadowRadius": 0.10000000149011612,
-                    "shadowSamples": "kOneRay",
-                    "volumetricFog": true
-                },
-                "TransformComponent": {
-                    "parent": "Lights",
-                    "rotation": [
-                        0.9238795042037964,
-                        0.0,
-                        0.0,
-                        0.3826834261417389
-                    ],
-                    "scale": [
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "translate": [
-                        3.0,
-                        8.0,
-                        8.039666175842285
-                    ]
-                }
-            }
-        },
         "GameProgress": {
             "components": {
                 "EditTag": {
@@ -93662,20 +93619,20 @@
         {
             "name": "Fog integrate",
             "settings": {
-                "ambient": 0.15,
+                "ambient": 0.009999999776482582,
                 "autoClear": false,
-                "baseHeight": 6.0,
+                "baseHeight": 0.0,
                 "clearDepth": false,
-                "density": 0.0,
+                "density": 0.012000000104308128,
                 "depthOutput": "",
-                "heightFalloff": 0.035,
+                "heightFalloff": 0.03500000014901161,
                 "inputs": {
                     "InputDepth": "MainDepth"
                 },
-                "maxDistance": 110.0,
+                "maxDistance": 140.0,
                 "outputs": [],
-                "scatteringAlbedo": 0.85,
-                "stepCount": 24,
+                "scatteringAlbedo": 0.8500000238418579,
+                "stepCount": 16,
                 "targetCameraName": "GameCamera",
                 "targetCameraType": 0,
                 "traceShadows": true,

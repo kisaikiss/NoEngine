@@ -127,9 +127,9 @@ public:
 	StateObject& GetStateObject(const std::string& name) { return stateObjects_.Get(name); }
 	uint32_t GetPSOID(const std::string& name) { return graphicsPSOs_.GetID(name); }
 	uint32_t GetRootSignatureID(const std::string& name) { return rootSignatures_.GetID(name); }
-	D3D12_CPU_DESCRIPTOR_HANDLE GetDirectionalLightSRV() { return directionalLightBuffer_.GetSRV(); }
-	D3D12_CPU_DESCRIPTOR_HANDLE GetPointLightSRV() { return pointLightBuffer_.GetSRV(); }
-	D3D12_CPU_DESCRIPTOR_HANDLE GetSpotLightSRV() { return spotLightBuffer_.GetSRV(); }
+	D3D12_CPU_DESCRIPTOR_HANDLE GetDirectionalLightSRV();
+	D3D12_CPU_DESCRIPTOR_HANDLE GetPointLightSRV();
+	D3D12_CPU_DESCRIPTOR_HANDLE GetSpotLightSRV();
 
 	Component::CameraComponent* GetCamera(const std::string& name) {
 		if (cameras_.contains(name)) return cameras_[name];

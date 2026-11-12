@@ -15,6 +15,35 @@
 namespace NoEngine {
 using namespace Component;
 
+namespace {
+D3D12_CPU_DESCRIPTOR_HANDLE CreateNullLightSRV(uint32_t stride) {
+	const auto handle = GraphicsCore::AllocateDescriptor(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	D3D12_SHADER_RESOURCE_VIEW_DESC desc{};
+	desc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
+	desc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+	desc.Buffer.NumElements = 1;
+	desc.Buffer.StructureByteStride = stride;
+	GraphicsCore::sGraphicsDevice->GetDevice()->CreateShaderResourceView(nullptr, &desc, handle);
+	return handle;
+}
+}
+
+D3D12_CPU_DESCRIPTOR_HANDLE RenderContext::GetDirectionalLightSRV() {
+	// ライト数が0でも、シェーダーが宣言するテーブルには有効な null SRV を設定する。
+	static const auto nullSRV = CreateNullLightSRV(sizeof(DirectionalLightComponent));
+	return lightNums_.directionalLightNum ? directionalLightBuffer_.GetSRV() : nullSRV;
+}
+
+D3D12_CPU_DESCRIPTOR_HANDLE RenderContext::GetPointLightSRV() {
+	static const auto nullSRV = CreateNullLightSRV(sizeof(PointLightForGPU));
+	return lightNums_.pointLightNum ? pointLightBuffer_.GetSRV() : nullSRV;
+}
+
+D3D12_CPU_DESCRIPTOR_HANDLE RenderContext::GetSpotLightSRV() {
+	static const auto nullSRV = CreateNullLightSRV(sizeof(SpotLightForGPU));
+	return lightNums_.spotLightNum ? spotLightBuffer_.GetSRV() : nullSRV;
+}
+
 RenderContext::RenderContext() {
 	if (isInitialized_) return;
 	RenderInitializer::Initialize(*this);

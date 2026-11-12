@@ -75,15 +75,9 @@ void RaytracingShadowPass::Dispatch(GraphicsContext& gfx, const RenderGraphRegis
 	gfx.SetRaytracingDynamicDescriptor(1, 0, worldPosition.GetSRV());
 	gfx.SetRaytracingDynamicDescriptor(5, 0, normal.GetSRV());
 
-	if (lightNums->directionalLightNum) {
-		gfx.SetRaytracingDynamicDescriptor(2, 0, renderContext->GetDirectionalLightSRV());
-	}
-	if (lightNums->pointLightNum) {
-		gfx.SetRaytracingDynamicDescriptor(6, 0, renderContext->GetPointLightSRV());
-	}
-	if (lightNums->spotLightNum) {
-		gfx.SetRaytracingDynamicDescriptor(7, 0, renderContext->GetSpotLightSRV());
-	}
+	gfx.SetRaytracingDynamicDescriptor(2, 0, renderContext->GetDirectionalLightSRV());
+	gfx.SetRaytracingDynamicDescriptor(6, 0, renderContext->GetPointLightSRV());
+	gfx.SetRaytracingDynamicDescriptor(7, 0, renderContext->GetSpotLightSRV());
 
 	gfx.SetRaytracingDynamicDescriptor(3, 0, shadowMask.GetUAV());
 

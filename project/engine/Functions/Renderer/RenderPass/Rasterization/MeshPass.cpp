@@ -102,12 +102,9 @@ void MeshPassBase::RenderItems(GraphicsContext& context, const RenderGraphRegist
 				constants.spotLightNum = renderCtx->GetLightNums()->spotLightNum;
 				context.SetDynamicConstantBufferView(rootIndex["gLightNums"], sizeof(constants), &constants);
 
-				if (constants.directionalLightNum)
-					context.SetDynamicDescriptor(rootIndex["gDirectionalLights"], 0, renderCtx->GetDirectionalLightSRV());
-				if (constants.pointLightNum)
-					context.SetDynamicDescriptor(rootIndex["gPointLights"], 0, renderCtx->GetPointLightSRV());
-				if (constants.spotLightNum)
-					context.SetDynamicDescriptor(rootIndex["gSpotLights"], 0, renderCtx->GetSpotLightSRV());
+				context.SetDynamicDescriptor(rootIndex["gDirectionalLights"], 0, renderCtx->GetDirectionalLightSRV());
+				context.SetDynamicDescriptor(rootIndex["gPointLights"], 0, renderCtx->GetPointLightSRV());
+				context.SetDynamicDescriptor(rootIndex["gSpotLights"], 0, renderCtx->GetSpotLightSRV());
 			} else {
 
 				_declspec(align(16)) struct {
