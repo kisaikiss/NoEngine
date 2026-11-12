@@ -5,6 +5,8 @@
 #include "engine/Functions/ECS/Component/Common/TransformComponent.h"
 #include "engine/Functions/Shader/ShaderReflection.h"
 #include "engine/Runtime/Command/ComputeContext.h"
+#include "engine/Runtime/GameCore.h"
+#include <cmath>
 
 namespace NoEngine::Render {
 
@@ -39,8 +41,11 @@ void VolumetricFogPass::Execute(GraphicsContext& gfx, const RenderGraphRegistry&
 		Math::Matrix4x4 worldToBox;
 		float boxDensity;
 		float boxEdgeFade;
+		float boxNoiseFrequency;
+		float boxNoiseStrength;
+		Math::Vector3 boxNoiseOffset;
 	} constants{};
-	static_assert(sizeof(FogConstants) == 240);
+	static_assert(sizeof(FogConstants) == 256);
 
 	// 1つの有効な Box をレイ生成シェーダーへ渡す。
 	for (auto entity : registry.View<Component::FogVolumeComponent, Component::TransformComponent>()) {
@@ -63,6 +68,20 @@ void VolumetricFogPass::Execute(GraphicsContext& gfx, const RenderGraphRegistry&
 		constants.worldToBox = worldToBox;
 		constants.boxDensity = volume->density;
 		constants.boxEdgeFade = std::clamp(volume->edgeFade, 0.f, 0.5f);
+		if (std::isfinite(volume->noiseFrequency) && volume->noiseFrequency > 0.f &&
+			std::isfinite(volume->noiseStrength) && volume->noiseStrength > 0.f) {
+			constants.boxNoiseFrequency = std::min(volume->noiseFrequency, 32.f);
+			constants.boxNoiseStrength = std::min(volume->noiseStrength, 1.f);
+			const float time = GameCore::GetElapsedTime();
+			const double noiseTime = std::isfinite(time) ? static_cast<double>(time) * constants.boxNoiseFrequency : 0.0;
+			const auto noiseOffset = [noiseTime](float velocity) {
+				// シェーダーの格子周期で折り返し、長時間の再生でも座標の精度を保つ。
+				return std::isfinite(velocity) ? static_cast<float>(std::fmod(velocity * noiseTime, 256.0)) : 0.f;
+			};
+			constants.boxNoiseOffset = {
+				noiseOffset(volume->windVelocity.x), noiseOffset(volume->windVelocity.y), noiseOffset(volume->windVelocity.z)
+			};
+		}
 		break;
 	}
 

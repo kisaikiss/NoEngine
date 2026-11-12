@@ -24,6 +24,9 @@ cbuffer FogConstants : register(b0)
     row_major float4x4 gWorldToBox;
     float gBoxDensity;
     float gBoxEdgeFade;
+    float gBoxNoiseFrequency;
+    float gBoxNoiseStrength;
+    float3 gBoxNoiseOffset;
 };
 
 struct ShadowPayload
@@ -109,6 +112,32 @@ bool IntersectFogBox(FogRay ray, out float2 interval)
     return true;
 }
 
+float FogNoiseCorner(int3 cell)
+{
+    // C++ 側の風による移動量と同じ 256 格子の周期を使う。
+    uint3 grid = asuint(cell) & 255u;
+    uint hash = grid.x * 0x8da6b343u ^ grid.y * 0xd8163841u ^ grid.z * 0xcb1ab31fu;
+    hash ^= hash >> 16;
+    hash *= 0x7feb352du;
+    hash ^= hash >> 15;
+    hash *= 0x846ca68bu;
+    hash ^= hash >> 16;
+    return (hash >> 8) * (1.0 / 16777216.0);
+}
+
+float FogValueNoise(float3 position)
+{
+    int3 cell = int3(floor(position));
+    float3 blend = frac(position);
+    blend = blend * blend * (3.0 - 2.0 * blend);
+
+    float xy00 = lerp(FogNoiseCorner(cell), FogNoiseCorner(cell + int3(1, 0, 0)), blend.x);
+    float xy10 = lerp(FogNoiseCorner(cell + int3(0, 1, 0)), FogNoiseCorner(cell + int3(1, 1, 0)), blend.x);
+    float xy01 = lerp(FogNoiseCorner(cell + int3(0, 0, 1)), FogNoiseCorner(cell + int3(1, 0, 1)), blend.x);
+    float xy11 = lerp(FogNoiseCorner(cell + int3(0, 1, 1)), FogNoiseCorner(cell + int3(1, 1, 1)), blend.x);
+    return lerp(lerp(xy00, xy10, blend.y), lerp(xy01, xy11, blend.y), blend.z);
+}
+
 void IntegrateInterval(FogRay ray, float2 interval, bool insideBox, inout float4 fog)
 {
     float intervalLength = interval.y - interval.x;
@@ -126,10 +155,17 @@ void IntegrateInterval(FogRay ray, float2 interval, bool insideBox, inout float4
         float extinction = gDensity * exp(-height * gHeightFalloff);
         if (insideBox)
         {
-            float3 toFace = 0.5 - abs(ray.boxOrigin + ray.boxDirection * t);
+            float3 boxPosition = ray.boxOrigin + ray.boxDirection * t;
+            float3 toFace = 0.5 - abs(boxPosition);
             float nearestFace = min(toFace.x, min(toFace.y, toFace.z));
             float fade = gBoxEdgeFade > 0.0 ? smoothstep(0.0, gBoxEdgeFade, nearestFace) : 1.0;
-            extinction += gBoxDensity * fade;
+            float variation = 1.0;
+            if (gBoxNoiseStrength > 0.0 && fade > 0.0)
+            {
+                float3 noisePosition = boxPosition * gBoxNoiseFrequency - gBoxNoiseOffset;
+                variation += gBoxNoiseStrength * (2.0 * FogValueNoise(noisePosition) - 1.0);
+            }
+            extinction += gBoxDensity * fade * variation;
         }
 
         float stepT = exp(-extinction * stepLength);
