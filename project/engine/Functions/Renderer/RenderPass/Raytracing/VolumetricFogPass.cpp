@@ -44,6 +44,7 @@ void VolumetricFogPass::Execute(GraphicsContext& gfx, const RenderGraphRegistry&
 		float boxNoiseFrequency;
 		float boxNoiseStrength;
 		Math::Vector3 boxNoiseOffset;
+		uint32_t directionalLightCount;
 	} constants{};
 	static_assert(sizeof(FogConstants) == 256);
 
@@ -101,6 +102,7 @@ void VolumetricFogPass::Execute(GraphicsContext& gfx, const RenderGraphRegistry&
 	constants.ambient = ambient_;
 	constants.scatteringAlbedo = scatteringAlbedo_;
 	constants.traceShadows = traceShadows_ && context->IsTLASReady();
+	constants.directionalLightCount = context->GetLightNums()->directionalLightNum;
 	if (const auto& light = context->GetFogSpotLight(); light && light->intensity > 0.f && light->distance > 0.f) {
 		constants.spotPosition = light->position;
 		constants.spotRange = light->distance;
@@ -119,6 +121,7 @@ void VolumetricFogPass::Execute(GraphicsContext& gfx, const RenderGraphRegistry&
 	gfx.SetRaytracingDynamicDescriptor(1, 0, depth.GetDepthSRV());
 	gfx.SetRaytracingDynamicDescriptor(2, 0, fog.GetUAV());
 	gfx.SetRaytracingDynamicConstantBufferView(3, sizeof(constants), &constants);
+	gfx.SetComputeSRV(4, constants.directionalLightCount > 0 ? context->GetDirectionalLightBuffer().GetGpuVirtualAddress() : 0);
 	gfx.GetCommandList()->SetPipelineState1(pipeline);
 
 	auto dispatch = GetFogDispatchRaysDesc();

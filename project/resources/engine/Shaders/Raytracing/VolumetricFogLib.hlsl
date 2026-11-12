@@ -2,6 +2,16 @@ RaytracingAccelerationStructure gScene : register(t0);
 Texture2D<float> gDepth : register(t1);
 RWTexture2D<float4> gFog : register(u0);
 
+struct DirectionalLight
+{
+    float4 color;
+    float3 direction;
+    float intensity;
+    float shadowAngularRadiusDegrees;
+    uint shadowSamples;
+};
+StructuredBuffer<DirectionalLight> gDirectionalLights : register(t2);
+
 cbuffer FogConstants : register(b0)
 {
     row_major float4x4 gInverseViewProjection;
@@ -27,6 +37,7 @@ cbuffer FogConstants : register(b0)
     float gBoxNoiseFrequency;
     float gBoxNoiseStrength;
     float3 gBoxNoiseOffset;
+    uint gDirectionalLightCount;
 };
 
 struct ShadowPayload
@@ -38,6 +49,44 @@ float3 Unproject(float2 ndc, float depth)
 {
     float4 world = mul(float4(ndc, depth, 1.0), gInverseViewProjection);
     return world.xyz / world.w;
+}
+
+bool IsFogLightOccluded(float3 position, float3 directionToLight, float maxDistance)
+{
+    if (gTraceShadows == 0)
+        return false;
+
+    RayDesc ray;
+    ray.Origin = position;
+    ray.Direction = directionToLight;
+    ray.TMin = 0.01;
+    ray.TMax = maxDistance;
+
+    ShadowPayload payload;
+    payload.occluded = true;
+    // TLAS の表面シャドウと同じキャスターマスクを使う。
+    TraceRay(gScene, RAY_FLAG_ACCEPT_FIRST_HIT_AND_END_SEARCH | RAY_FLAG_SKIP_CLOSEST_HIT_SHADER,
+             0x01, 0, 0, 0, ray, payload);
+    return payload.occluded;
+}
+
+float3 EvaluateDirectional(float3 position)
+{
+    float3 scattering = 0.0;
+    const float isotropicPhase = 0.07957747;
+    for (uint i = 0; i < gDirectionalLightCount; ++i)
+    {
+        DirectionalLight light = gDirectionalLights[i];
+        float directionLengthSquared = dot(light.direction, light.direction);
+        if (!(light.intensity > 0.0) || !(directionLengthSquared > 0.0))
+            continue;
+
+        // 光の進行方向の逆へ飛ばし、視線の最大距離より遠い遮蔽物も判定する。
+        float3 toLight = -light.direction * rsqrt(directionLengthSquared);
+        if (!IsFogLightOccluded(position, toLight, asfloat(0x7F7FFFFF)))
+            scattering += light.color.rgb * light.intensity * isotropicPhase;
+    }
+    return scattering;
 }
 
 float3 EvaluateSpot(float3 position)
@@ -57,22 +106,8 @@ float3 EvaluateSpot(float3 position)
     if (cone <= 0.0)
         return 0.0;
 
-    if (gTraceShadows != 0)
-    {
-        RayDesc ray;
-        ray.Origin = position;
-        ray.Direction = directionToLight;
-        ray.TMin = rayBias;
-        ray.TMax = distanceToLight - rayBias;
-
-        ShadowPayload payload;
-        payload.occluded = true;
-        // TLAS の表面シャドウと同じキャスターマスクを使う。
-        TraceRay(gScene, RAY_FLAG_ACCEPT_FIRST_HIT_AND_END_SEARCH | RAY_FLAG_SKIP_CLOSEST_HIT_SHADER,
-                 0x01, 0, 0, 0, ray, payload);
-        if (payload.occluded)
-            return 0.0;
-    }
+    if (IsFogLightOccluded(position, directionToLight, distanceToLight - rayBias))
+        return 0.0;
 
     float attenuation = pow(saturate(1.0 - distanceToLight / gSpotRange), gSpotDecay);
     const float isotropicPhase = 0.07957747;
@@ -171,7 +206,7 @@ void IntegrateInterval(FogRay ray, float2 interval, bool insideBox, inout float4
         float stepT = exp(-extinction * stepLength);
         float weight = fog.a * (1.0 - stepT) * gScatteringAlbedo;
         if (weight > 0.0)
-            fog.rgb += weight * (gAmbient + EvaluateSpot(position));
+            fog.rgb += weight * (gAmbient + EvaluateDirectional(position) + EvaluateSpot(position));
         fog.a *= stepT;
         if (fog.a < 1e-3)
             break;

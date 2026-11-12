@@ -39,11 +39,12 @@ void InitializeVolumetricFog() {
 
 	ShaderModule shader(ShaderStage::RaytraceLib,
 		L"resources/engine/Shaders/Raytracing/VolumetricFogLib.hlsl", L"lib_6_3", true);
-	sFogRootSignature.Reset(4, 0);
+	sFogRootSignature.Reset(5, 0);
 	sFogRootSignature[0].InitAsBufferSRV(0);
 	sFogRootSignature[1].InitAsDescriptorRange(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 1);
 	sFogRootSignature[2].InitAsDescriptorRange(D3D12_DESCRIPTOR_RANGE_TYPE_UAV, 0, 1);
 	sFogRootSignature[3].InitAsConstantBuffer(0);
+	sFogRootSignature[4].InitAsBufferSRV(2);
 	sFogRootSignature.Finalize(L"Volumetric Fog Raytracing Root Signature");
 
 	CD3DX12_STATE_OBJECT_DESC desc(D3D12_STATE_OBJECT_TYPE_RAYTRACING_PIPELINE);
