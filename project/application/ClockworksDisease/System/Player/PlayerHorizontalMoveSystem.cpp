@@ -67,7 +67,7 @@ void PlayerHorizontalMoveSystem::Update(No::Registry& registry, float deltaTime)
 		auto* transientState = registry.GetComponent<PlayerMoveTransientComponent>(entity);
 		auto* animator = registry.GetComponent<No::AnimatorComponent>(entity);
 
-		if (registry.Has<GoalDirectionLockTag>(entity) || registry.Has<DialogueLockTag>(entity)) {
+		if (registry.Has<GoalDirectionLockTag>(entity) || registry.Has<DialogueLockTag>(entity) || registry.Has<PlayerControlLockTag>(entity)) {
 			velocity->linear = No::Vector3::ZERO;
 			transientState->slopeY = 0.f;
 			if (particleEmitterSphere) particleEmitterSphere->active = false;

@@ -244,7 +244,7 @@ void PlayerJumpSystem::Update(No::Registry& registry, float deltaTime) {
 		const bool deathLocked = deathSequence
 			&& deathSequence->phase != PlayerDeathSequenceComponent::Phase::kBlackOut
 			&& deathSequence->phase != PlayerDeathSequenceComponent::Phase::kFadeIn;
-		if (isSkip || deathLocked || registry.Has<GoalDirectionLockTag>(entity) || registry.Has<DialogueLockTag>(entity)) {
+		if (isSkip || deathLocked || registry.Has<GoalDirectionLockTag>(entity) || registry.Has<DialogueLockTag>(entity) || registry.Has<PlayerControlLockTag>(entity)) {
 			clearJumpBuffer();
 			ResetCrouchAndBackflip(*transientState, animator);
 			continue;

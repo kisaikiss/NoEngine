@@ -8,7 +8,7 @@ void DialogueInteractSystem::Update(No::Registry& registry, float deltaTime) {
 	if (!No::InputIsTrigger("Talk")) return;
 
 	for (auto player : registry.View<PlayerComponent, No::TransformComponent>()) {
-		if (registry.Has<DialogueLockTag>(player)) continue; // 会話中は新規に始めない
+		if (registry.Has<DialogueLockTag>(player) || registry.Has<PlayerControlLockTag>(player)) continue; // 会話中は新規に始めない
 		No::Vector3 playerPos = registry.GetComponent<No::TransformComponent>(player)->GetWorldPosition(registry);
 
 		// 範囲内で最も近い話し相手を選ぶ

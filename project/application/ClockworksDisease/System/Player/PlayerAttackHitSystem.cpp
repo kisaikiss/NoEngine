@@ -137,7 +137,7 @@ public:
 			const auto player = hit.player;
 			const auto* action = registry.GetComponent<PlayerActionComponent>(player);
 			if (!action || action->activeAction != PlayerActionType::kSpinAttack) continue;
-			if (registry.Has<DialogueLockTag>(player) || registry.Has<GoalDirectionLockTag>(player)) continue;
+			if (registry.Has<DialogueLockTag>(player) || registry.Has<GoalDirectionLockTag>(player) || registry.Has<PlayerControlLockTag>(player)) continue;
 			const auto* death = registry.GetComponent<PlayerDeathSequenceComponent>(player);
 			if (death && death->phase != PlayerDeathSequenceComponent::Phase::kBlackOut
 				&& death->phase != PlayerDeathSequenceComponent::Phase::kFadeIn) continue;

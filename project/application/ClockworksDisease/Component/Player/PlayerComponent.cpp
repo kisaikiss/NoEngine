@@ -1,4 +1,34 @@
 #include "PlayerComponent.h"
+#include "engine/Functions/ECS/Gameplay/GameplayCatalog.h"
+
+void RegisterPlayerGameplay() {
+	using namespace NoEngine::Gameplay;
+	auto& catalog = GameplayCatalog::Get();
+	catalog.RegisterAction({ PlayerGameplayId::Lock, "Lock Player", "Player",
+		[](No::Registry& registry, const NoEngine::Event::GameplayEvent&, No::Entity target, const nlohmann::json&) {
+			if (!registry.Has<PlayerComponent>(target)) {
+				LogWarning("Lock Player: target has no PlayerComponent");
+				return;
+			}
+			if (!registry.Has<PlayerControlLockTag>(target)) registry.AddComponent<PlayerControlLockTag>(target);
+			if (auto* input = registry.GetComponent<PlayerInputComponent>(target)) *input = {};
+			if (auto* velocity = registry.GetComponent<No::VelocityComponent>(target)) {
+				velocity->linear.x = 0.f;
+				velocity->linear.z = 0.f;
+			}
+		}, true, {{ "targetEntity", "Target Entity", ActionPropertyType::EntityReference, true }} });
+	catalog.RegisterAction({ PlayerGameplayId::Unlock, "Unlock Player", "Player",
+		[](No::Registry& registry, const NoEngine::Event::GameplayEvent&, No::Entity target, const nlohmann::json&) {
+			if (!registry.Has<PlayerComponent>(target)) {
+				LogWarning("Unlock Player: target has no PlayerComponent");
+				return;
+			}
+			if (registry.Has<PlayerControlLockTag>(target)) registry.RemoveComponent<PlayerControlLockTag>(target);
+		}, true, {{ "targetEntity", "Target Entity", ActionPropertyType::EntityReference, true }} });
+}
+
+REFLECT_STRUCT_BEGIN(PlayerControlLockTag, "ApplicationTag")
+REFLECT_STRUCT_END(PlayerControlLockTag)
 
 
 REFLECT_STRUCT_BEGIN(PlayerComponent, "Application")

@@ -22,7 +22,7 @@ void PlayerScaffoldActionSystem::Update(No::Registry& registry, float deltaTime)
 		const auto* death = registry.GetComponent<PlayerDeathSequenceComponent>(entity);
 		if (death && death->phase != PlayerDeathSequenceComponent::Phase::kBlackOut
 			&& death->phase != PlayerDeathSequenceComponent::Phase::kFadeIn) continue;
-		if (registry.Has<GoalDirectionLockTag>(entity) || registry.Has<DialogueLockTag>(entity)) continue;
+		if (registry.Has<GoalDirectionLockTag>(entity) || registry.Has<DialogueLockTag>(entity) || registry.Has<PlayerControlLockTag>(entity)) continue;
 
 		auto* player = registry.GetComponent<PlayerComponent>(entity);
 		auto* input = registry.GetComponent<PlayerInputComponent>(entity);

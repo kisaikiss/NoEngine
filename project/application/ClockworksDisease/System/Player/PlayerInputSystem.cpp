@@ -6,6 +6,10 @@ void PlayerInputSystem::Update(No::Registry& registry, float deltaTime) {
 	for (auto entity : registry.View<PlayerInputComponent>()) {
 		auto* input = registry.GetComponent<PlayerInputComponent>(entity);
 		if (!input) continue;
+		if (registry.Has<PlayerControlLockTag>(entity)) {
+			*input = {};
+			continue;
+		}
 
 		input->moveAxis.x = No::GetInputAxisValue("Lateral");
 		input->moveAxis.y = 0.0f;

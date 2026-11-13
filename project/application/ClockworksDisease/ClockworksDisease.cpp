@@ -4,9 +4,11 @@
 
 #include "Component/Game/GameQuitEvent.h"
 #include "Component/Dialogue/DialogueComponent.h"
+#include "Component/Player/PlayerComponent.h"
 
 void ClockworksDisease::Startup(void) {
 	RegisterDialogueGameplay();
+	RegisterPlayerGameplay();
 	ChangeScene("TitleScene");
 
 	// ポーズメニュー

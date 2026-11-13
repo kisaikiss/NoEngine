@@ -1,6 +1,16 @@
 #pragma once
 #include "engine/NoEngine.h"
 
+// ギミックグラフによる操作ロック。他の演出のロックとは独立して管理する。
+struct PlayerControlLockTag {};
+
+namespace PlayerGameplayId {
+inline constexpr char Lock[] = "game.player.lock";
+inline constexpr char Unlock[] = "game.player.unlock";
+}
+
+void RegisterPlayerGameplay();
+
 enum class PlayerState {
 	kWait,					// 何もしていないとき
 	kWalk,					// 歩いている時

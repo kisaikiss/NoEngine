@@ -33,7 +33,8 @@ void PlayerActionSystem::Update(No::Registry& registry, float deltaTime) {
 			&& death->phase != PlayerDeathSequenceComponent::Phase::kFadeIn;
 		const bool actionLocked = cameraLocked || deathLocked
 			|| registry.Has<GoalDirectionLockTag>(entity)
-			|| registry.Has<DialogueLockTag>(entity);
+			|| registry.Has<DialogueLockTag>(entity)
+			|| registry.Has<PlayerControlLockTag>(entity);
 		auto* animator = registry.GetComponent<No::AnimatorComponent>(entity);
 		if (action->activeAction == PlayerActionType::kSpinAttack) {
 			if (!actionLocked && animator && animator->IsPlaying()) {
