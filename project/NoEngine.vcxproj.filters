@@ -286,6 +286,7 @@
     <ClCompile Include="engine\Editor\Panels\PrefabEditorPanel.cpp" />
     <ClCompile Include="engine\Editor\Panels\GimmickGraphPanel.cpp" />
     <ClCompile Include="engine\Functions\Command\EditCommand\DeleteEntitiesCommand.cpp" />
+    <ClCompile Include="engine\Functions\Command\EditCommand\EntityBatchSnapshot.cpp" />
     <ClCompile Include="engine\Functions\Command\EditCommand\InstantiateEntitiesCommand.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Common\TransformRoutineComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Common\TriggerComponent.cpp" />
@@ -660,6 +661,7 @@
     <ClInclude Include="engine\Editor\Panels\PrefabEditorPanel.h" />
     <ClInclude Include="engine\Editor\Panels\GimmickGraphPanel.h" />
     <ClInclude Include="engine\Functions\Command\EditCommand\DeleteEntitiesCommand.h" />
+    <ClInclude Include="engine\Functions\Command\EditCommand\EntityBatchSnapshot.h" />
     <ClInclude Include="engine\Functions\Command\EditCommand\InstantiateEntitiesCommand.h" />
     <ClInclude Include="engine\Math\EasingType.h" />
     <ClInclude Include="engine\Functions\ECS\Component\Common\TransformRoutineComponent.h" />

@@ -1,8 +1,6 @@
 #pragma once
 #include "../CommandManager.h"
-#include "engine/Functions/ECS/Registry.h"
-
-#include "externals/nlohmann/json.hpp"
+#include "EntityBatchSnapshot.h"
 
 namespace NoEngine {
 namespace Command {
@@ -20,14 +18,8 @@ public:
 	void Undo() override;
 
 private:
-	struct Item {
-		ECS::Entity entity = ECS::INVALID_ENTITY;
-		nlohmann::json snapshotJson;
-		int parentIndexInBatch = -1; // 親もバッチに含まれている場合のitems_内インデックス。含まれなければ-1
-	};
-
 	ECS::Registry& registry_;
-	std::vector<Item> items_;
+	std::vector<EntityBatchSnapshotItem> items_;
 };
 
 }
