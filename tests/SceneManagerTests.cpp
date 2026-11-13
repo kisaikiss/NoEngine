@@ -2,6 +2,8 @@
 #include "engine/Functions/ECS/System/PlayModeController.h"
 #include "engine/Editor/Commands/EditorCommandOperator.h"
 #include "engine/Editor/DataDriven/SceneSerializer.h"
+#include "engine/Functions/ECS/System/Gameplay/EventLinkSystem.h"
+#include "engine/Functions/ECS/Component/Common/GimmickGraphComponent.h"
 #include <iostream>
 
 namespace {
@@ -29,6 +31,64 @@ public:
 	void Execute() override {}
 	void Undo() override {}
 };
+
+void CheckObjectGraph() {
+	using namespace NoEngine;
+	Gameplay::GimmickGraph graph;
+	graph.nodes = {
+		{"both", Gameplay::GimmickNodeKind::Event, Event::GameplayId::AllObjectsDestroyed, 0, 0,
+			{{"objectEntities", {"ObjectA", "ObjectB"}}}},
+		{"single", Gameplay::GimmickNodeKind::Event, Event::GameplayId::AllObjectsDestroyed, 0, 0,
+			{{"objectEntities", {"ObjectB"}}}},
+		{"action", Gameplay::GimmickNodeKind::Action, "test.objectGraph.record"},
+		{"single-action", Gameplay::GimmickNodeKind::Action, "test.objectGraph.record"}
+	};
+	static int fired = 0;
+	fired = 0;
+	Gameplay::GameplayCatalog::Get().RegisterAction({"test.objectGraph.record", "Record", "Test",
+		[](ECS::Registry&, const Event::GameplayEvent& event, ECS::Entity, const nlohmann::json&) {
+			Check(event.eventId == Event::GameplayId::AllObjectsDestroyed, "completion event context");
+			++fired;
+		}, false});
+	graph.links = {{"both-out", "both", Gameplay::PinId::ExecOutput, "action", Gameplay::PinId::ExecInput},
+		{"single-out", "single", Gameplay::PinId::ExecOutput, "single-action", Gameplay::PinId::ExecInput}};
+	Check(!Gameplay::ValidateGimmickGraph(graph).HasErrors(), "valid object list accepted");
+	const auto valid = graph.nodes[0].properties;
+	for (const auto& names : {nlohmann::json::array(), nlohmann::json::array({""}),
+		nlohmann::json::array({"A", "A"}), nlohmann::json::array({1}), nlohmann::json("A")}) {
+		graph.nodes[0].properties["objectEntities"] = names;
+		Check(Gameplay::ValidateGimmickGraph(graph).HasErrors(), "invalid object list rejected");
+	}
+	graph.nodes[0].properties = valid;
+	Check(Gameplay::SaveGimmickGraph("object-graph.json", graph), "object graph saved");
+	ECS::Registry registry;
+	const auto owner = registry.GenerateEntity();
+	registry.AddComponent<Component::GimmickGraphComponent>(owner)->graphPath = "object-graph.json";
+	ECS::EventLinkSystem system;
+	system.Update(registry, 0.016f);
+	Check(fired == 0, "object graph does not fire initially");
+	registry.EmitEvent(Event::ObjectDestroyedEvent{"Other"});
+	registry.EmitEvent(Event::ObjectDestroyedEvent{"ObjectB"});
+	system.Update(registry, 0.016f);
+	Check(fired == 1, "only the completed event node fires");
+	registry.EmitEvent(Event::ObjectDestroyedEvent{"ObjectB"});
+	system.Update(registry, 0.016f);
+	Check(fired == 1, "duplicate destruction does not complete the group");
+	// Systemの再生成でもRegistry側の消滅履歴を引き継ぐ。
+	ECS::EventLinkSystem nextSystem;
+	registry.EmitEvent(Event::ObjectDestroyedEvent{"ObjectA"});
+	nextSystem.Update(registry, 0.016f);
+	Check(fired == 2, "all designated objects complete the group");
+	registry.EmitEvent(Event::ObjectDestroyedEvent{"ObjectA"});
+	nextSystem.Update(registry, 0.016f);
+	Check(fired == 2, "completed group fires once");
+	ECS::Registry fresh;
+	const auto freshOwner = fresh.GenerateEntity();
+	fresh.AddComponent<Component::GimmickGraphComponent>(freshOwner)->graphPath = "object-graph.json";
+	fresh.EmitEvent(Event::ObjectDestroyedEvent{"ObjectA"});
+	nextSystem.Update(fresh, 0.016f);
+	Check(fired == 2, "new registry has no previous destructions");
+}
 
 void CheckFixtures() {
 	using namespace NoEngine;
@@ -125,6 +185,7 @@ int main(int argc, char** argv) {
 		std::filesystem::create_directories(fixtures);
 		std::filesystem::current_path(fixtures);
 		CheckFixtures();
+		CheckObjectGraph();
 		{
 			NoEngine::ECS::SystemManager systems;
 			const std::vector<std::string> order{ "NumberDisplaySystem", "GameClearInputSystem" };

@@ -17,6 +17,7 @@ GameplayCatalog::GameplayCatalog() {
 	// エンジン標準のイベント／Action。アプリ固有の登録は起動時にRegister系関数で追加する。
 	RegisterEvent({ Event::GameplayId::TriggerEnter, "Trigger Enter", "Trigger" });
 	RegisterEvent({ Event::GameplayId::TriggerExit, "Trigger Exit", "Trigger" });
+	RegisterEvent({ Event::GameplayId::AllObjectsDestroyed, "All Objects Destroyed", "Object" });
 	RegisterAction({ Event::GameplayId::MoverActivate, "Activate Mover", "Movement",
 		[](ECS::Registry& registry, const Event::GameplayEvent&, ECS::Entity target, const nlohmann::json& properties) {
 			const auto id = properties.value("routineId", std::string{});

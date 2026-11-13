@@ -196,7 +196,19 @@ GimmickGraphValidation ValidateGimmickGraph(const GimmickGraph& graph, const Gam
 			} else {
 				eventNodes.insert(node.id);
 			}
-			if (!node.properties.empty()) {
+			if (node.typeId == Event::GameplayId::AllObjectsDestroyed) {
+				const auto objects = node.properties.find("objectEntities");
+				bool valid = objects != node.properties.end() && objects->is_array() && !objects->empty();
+				std::unordered_set<std::string> names;
+				if (valid) {
+					for (const auto& name : *objects) {
+						if (!name.is_string() || name.get<std::string>().empty()
+							|| !names.insert(name.get<std::string>()).second) { valid = false; break; }
+					}
+				}
+				if (!valid) AddDiagnostic(result, DiagnosticSeverity::Error, "node.event.objects.invalid",
+					"All Objects Destroyed needs a non-empty list of unique object entity names.", node.id);
+			} else if (!node.properties.empty()) {
 				AddDiagnostic(result, DiagnosticSeverity::Warning, "node.event.unused_properties",
 					"This event node type does not define configurable properties.", node.id);
 			}

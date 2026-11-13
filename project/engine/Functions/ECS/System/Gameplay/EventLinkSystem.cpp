@@ -13,6 +13,13 @@ namespace NoEngine::ECS {
 namespace {
 using namespace Gameplay;
 
+// Registry内に保持し、シーン切替とPlayモードの復元で消滅履歴も一緒に破棄・復元する。
+struct ObjectGraphState {
+	std::string graphPath;
+	std::unordered_set<std::string> destroyedNames;
+	std::unordered_set<std::string> firedNodes;
+};
+
 struct CachedGraph {
 	// 更新時刻が同じなら毎イベントJSONを読み直さず、ロード済みGraphを再利用する。
 	std::filesystem::file_time_type lastWriteTime{};
@@ -150,6 +157,33 @@ void EventLinkSystem::AdvanceGraphExecution(Registry& registry, GraphExecution& 
 
 void EventLinkSystem::Update(Registry& registry, float deltaTime) {
 	static_cast<void>(deltaTime);
+	const auto destructions = registry.PollAllEvents<Event::ObjectDestroyedEvent>();
+	for (auto owner : registry.View<Component::GimmickGraphComponent>()) {
+		const auto path = registry.GetComponent<Component::GimmickGraphComponent>(owner)->graphPath;
+		if (path.empty()) continue;
+		auto* state = registry.GetComponent<ObjectGraphState>(owner);
+		if (!state) state = registry.AddComponent<ObjectGraphState>(owner);
+		if (state->graphPath != path) { *state = {}; state->graphPath = path; }
+		for (const auto& destruction : destructions) state->destroyedNames.insert(destruction.objectName);
+		if (destructions.empty()) continue;
+		const auto* graph = GetGraph(path);
+		if (!graph) continue;
+		for (const auto& node : graph->nodes) {
+			if (node.kind != GimmickNodeKind::Event || node.typeId != Event::GameplayId::AllObjectsDestroyed
+				|| state->firedNodes.contains(node.id)) continue;
+			const auto& names = node.properties.at("objectEntities");
+			const bool complete = std::all_of(names.begin(), names.end(), [&](const auto& name) {
+				return state->destroyedNames.contains(name.template get<std::string>());
+			});
+			if (!complete) continue;
+			state->firedNodes.insert(node.id);
+			GraphExecution execution;
+			execution.graph = *graph;
+			execution.event = {owner, Event::GameplayId::AllObjectsDestroyed, destructions.back().instigator};
+			AppendOutgoingNodes(execution.graph, node.id, execution.pendingNodes);
+			graphExecutions_.push_back(std::move(execution));
+		}
+	}
 	// 前フレームから待っているグラフを先に進め、完了した実行状態は破棄する。
 	for (auto it = graphExecutions_.begin(); it != graphExecutions_.end();) {
 		AdvanceGraphExecution(registry, *it);
@@ -178,7 +212,8 @@ void EventLinkSystem::Update(Registry& registry, float deltaTime) {
 			// イベント発行元EntityにGraph参照がある場合、同じIDのEventノードから実行を開始する。
 			if (const GimmickGraph* graph = GetGraph(graphComponent->graphPath)) {
 				for (const auto& eventNode : graph->nodes) {
-					if (eventNode.kind != Gameplay::GimmickNodeKind::Event || eventNode.typeId != event.eventId) continue;
+					if (eventNode.kind != Gameplay::GimmickNodeKind::Event || eventNode.typeId != event.eventId
+						|| eventNode.typeId == Event::GameplayId::AllObjectsDestroyed) continue;
 					GraphExecution execution;
 					execution.graph = *graph;
 					execution.event = event;

@@ -7,7 +7,6 @@
 #include "application/ClockworksDisease/Component/Camera/CameraIntroComponent.h"
 #include "application/ClockworksDisease/System/Game/CollisionLayer.h"
 #include "application/ClockworksDisease/System/Game/CollisionEvents.h"
-#include "engine/Math/Collision/CollisionFanc.h"
 
 namespace {
 constexpr float kLaunchHorizontalSpeed = 4.5f;
@@ -24,9 +23,17 @@ struct EnemyDefeatMotionComponent {
 	No::CapsuleCollider collider;
 	No::Vector3 velocity;
 	float launchHeight;
+	No::Entity instigator = NoEngine::ECS::INVALID_ENTITY;
 	bool settled = false;
 	float restTime = 0.0f;
 };
+
+void DestroyDefeatedEnemy(No::Registry& registry, No::Entity enemy, No::Entity instigator) {
+	if (const auto* tag = registry.GetComponent<NoEngine::Editor::EditTag>(enemy)) {
+		registry.EmitEvent(NoEngine::Event::ObjectDestroyedEvent{tag->name, instigator});
+	}
+	registry.DestroyEntity(enemy);
+}
 
 bool IsSolidPlatform(No::Registry& registry, No::Entity entity) {
 	const auto* layer = registry.GetComponent<CollisionLayerComponent>(entity);
@@ -75,7 +82,7 @@ void UpdateDefeatMotion(No::Registry& registry, No::Entity enemy, float deltaTim
 	auto& motion = *registry.GetComponent<EnemyDefeatMotionComponent>(enemy);
 	if (motion.settled) {
 		motion.restTime += deltaTime;
-		if (motion.restTime >= kRestDuration) registry.DestroyEntity(enemy);
+		if (motion.restTime >= kRestDuration) DestroyDefeatedEnemy(registry, enemy, motion.instigator);
 		return;
 	}
 
@@ -117,7 +124,7 @@ void UpdateDefeatMotion(No::Registry& registry, No::Entity enemy, float deltaTim
 	}
 	transform.SetWorldPosition(registry, position);
 	// 崖から地面のない場所に落ちた場合も残り続けないようにする。
-	if (position.y < motion.launchHeight - kMaxFallDistance) registry.DestroyEntity(enemy);
+	if (position.y < motion.launchHeight - kMaxFallDistance) DestroyDefeatedEnemy(registry, enemy, motion.instigator);
 }
 
 class PlayerAttackHitSystem : public No::ISystem {
@@ -157,7 +164,7 @@ public:
 				away.y = 0.0f;
 			}
 			const auto launchVelocity = away.Normalize() * kLaunchHorizontalSpeed + No::Vector3::UP * kLaunchUpSpeed;
-			*registry.AddComponent<EnemyDefeatMotionComponent>(hit.enemy) = {*enemyCollider, launchVelocity, startPosition.y};
+			*registry.AddComponent<EnemyDefeatMotionComponent>(hit.enemy) = {*enemyCollider, launchVelocity, startPosition.y, player};
 
 			// 撃破時点で本体の接触と通常移動を止め、保存した形状を吹き飛びの地面判定に使う。
 			layer->layer = CollisionLayerComponent::None;

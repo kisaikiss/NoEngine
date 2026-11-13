@@ -1,0 +1,43 @@
+{
+  "links": [
+    {
+      "fromNodeId": "event-1",
+      "fromPinId": "exec.out",
+      "id": "link-3",
+      "toNodeId": "action-2",
+      "toPinId": "exec.in"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "event-1",
+      "kind": "event",
+      "position": [
+        80.0,
+        80.0
+      ],
+      "properties": {
+        "objectEntities": [
+          "WanderHopEnemy",
+          "WanderHopEnemy_1",
+          "WanderHopEnemy_2"
+        ]
+      },
+      "typeId": "engine.object.allDestroyed"
+    },
+    {
+      "id": "action-2",
+      "kind": "action",
+      "position": [
+        402.0,
+        157.0
+      ],
+      "properties": {
+        "routineId": "default",
+        "targetEntity": "wall"
+      },
+      "typeId": "engine.mover.activate"
+    }
+  ],
+  "version": 1
+}

@@ -208,6 +208,37 @@ uint64_t PinStableId(const std::string& nodeId, const char* pinId) {
 	// 同じ種類のピンでもノードごとに一意なIDになるよう、Node IDとPin IDを組み合わせる。
 	return StableId(nodeId + ":" + pinId);
 }
+
+void DrawObjectList(ECS::Registry& registry, Gameplay::GimmickNode& node, bool& dirty, bool& valueInputActive) {
+	auto& names = node.properties["objectEntities"];
+	if (!names.is_array()) names = nlohmann::json::array();
+	ImGui::TextUnformatted("Object Entities");
+	for (size_t i = 0; i < names.size(); ++i) {
+		ImGui::PushID(static_cast<int>(i));
+		char value[256] = {};
+		if (names[i].is_string()) strncpy_s(value, names[i].get<std::string>().c_str(), _TRUNCATE);
+		ImGui::SetNextItemWidth(180.0f);
+		if (ImGui::InputText("##Object", value, sizeof(value), ImGuiInputTextFlags_EnterReturnsTrue)) {
+			names[i] = value; dirty = true;
+		}
+		valueInputActive = valueInputActive || ImGui::IsItemActive();
+		// 既存のEntity参照と同じく、Hierarchyから名前を設定できる。
+		if (ImGui::BeginDragDropTarget()) {
+			if (const auto* payload = ImGui::AcceptDragDropPayload("ENTITY_MULTI")) {
+				if (payload->DataSize >= static_cast<int>(sizeof(ECS::Entity))) {
+					const auto entity = *static_cast<const ECS::Entity*>(payload->Data);
+					if (const auto* tag = registry.GetComponent<EditTag>(entity)) { names[i] = tag->name; dirty = true; }
+				}
+			}
+			ImGui::EndDragDropTarget();
+		}
+		ImGui::SameLine();
+		const bool remove = ImGui::SmallButton("Remove");
+		ImGui::PopID();
+		if (remove) { names.erase(names.begin() + i); dirty = true; break; }
+	}
+	if (ImGui::Button("Add Object")) { names.push_back(""); dirty = true; }
+}
 }
 
 void GimmickGraphPanel::OnPlayModeRestore() {
@@ -358,6 +389,7 @@ void GimmickGraphPanel::Draw(ECS::Registry& registry, ECS::Entity selectedEntity
 				node.id = NewId(graph_, "event");
 				node.kind = Gameplay::GimmickNodeKind::Event;
 				node.typeId = event.id;
+				if (event.id == Event::GameplayId::AllObjectsDestroyed) node.properties["objectEntities"] = nlohmann::json::array({""});
 				node.x = 80.0f + 40.0f * graph_.nodes.size();
 				node.y = 80.0f + 40.0f * graph_.nodes.size();
 				graph_.nodes.push_back(std::move(node)); dirty_ = true;
@@ -434,7 +466,9 @@ void GimmickGraphPanel::Draw(ECS::Registry& registry, ECS::Entity selectedEntity
 			NodeEditor::PinPivotRect(inputPinMin, inputPinMax);
 			NodeEditor::EndPin();
 		}
-		if (node.kind == Gameplay::GimmickNodeKind::Action) {
+		if (node.kind == Gameplay::GimmickNodeKind::Event && node.typeId == Event::GameplayId::AllObjectsDestroyed) {
+			DrawObjectList(registry, node, dirty_, valueInputActive);
+		} else if (node.kind == Gameplay::GimmickNodeKind::Action) {
 			if (const auto* action = Gameplay::GameplayCatalog::Get().FindAction(node.typeId))
 				DrawActionProperties(registry, node, *action, dirty_, valueInputActive);
 		} else if (node.kind == Gameplay::GimmickNodeKind::Branch) {
