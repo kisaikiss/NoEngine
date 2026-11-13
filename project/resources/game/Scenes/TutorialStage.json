@@ -1,5 +1,294 @@
 {
     "entities": {
+        "Camera": {
+            "components": {
+                "CameraComponent": {
+                    "fov": 0.44999998807907104
+                },
+                "EditTag": {
+                    "name": "Camera",
+                    "parent": null
+                },
+                "MoverComponent": {
+                    "active": false,
+                    "initialized": false,
+                    "startOnAwake": false
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.48861566185951233,
+                        0.0,
+                        0.8724991679191589
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        70.74932861328125,
+                        26.525983810424805,
+                        -7.185501575469971
+                    ]
+                },
+                "TransformRoutineComponent": {
+                    "defaultRoutineId": "default",
+                    "playbackSpeed": 1.0,
+                    "playing": false,
+                    "routines": [
+                        {
+                            "globalDuration": 6.0,
+                            "globalEasing": "EaseOutSine",
+                            "id": "default",
+                            "interpolation": "CatmullRom",
+                            "keyframes": [
+                                {
+                                    "duration": 1.0,
+                                    "easing": "Linear",
+                                    "rotation": [
+                                        0.0,
+                                        0.48861566185951233,
+                                        0.0,
+                                        0.8724991679191589
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "translate": [
+                                        70.74932861328125,
+                                        26.525983810424805,
+                                        -7.185501575469971
+                                    ]
+                                },
+                                {
+                                    "duration": 1.0,
+                                    "easing": "Linear",
+                                    "rotation": [
+                                        0.0,
+                                        0.5536039471626282,
+                                        0.0,
+                                        0.832780122756958
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "translate": [
+                                        78.33389282226563,
+                                        26.525983810424805,
+                                        -0.4822147488594055
+                                    ]
+                                },
+                                {
+                                    "duration": 1.0,
+                                    "easing": "Linear",
+                                    "rotation": [
+                                        -1.415076944510929e-08,
+                                        0.714839518070221,
+                                        -1.415076944510929e-08,
+                                        0.699288547039032
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "translate": [
+                                        105.78630065917969,
+                                        26.525983810424805,
+                                        -0.4822147488594055
+                                    ]
+                                },
+                                {
+                                    "duration": 1.0,
+                                    "easing": "Linear",
+                                    "rotation": [
+                                        0.19533981382846832,
+                                        0.6876325011253357,
+                                        -0.19108997285366058,
+                                        0.672672688961029
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "translate": [
+                                        112.45655059814453,
+                                        24.219511032104492,
+                                        -0.4822157025337219
+                                    ]
+                                }
+                            ],
+                            "loop": false,
+                            "useGlobalTiming": true
+                        }
+                    ]
+                }
+            },
+            "prefabBase": {
+                "components": {
+                    "CameraComponent": {
+                        "fov": 0.44999998807907104
+                    },
+                    "TransformComponent": {
+                        "rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ],
+                        "translate": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ]
+                    }
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\Camera.json",
+            "prefabOverrides": [
+                {
+                    "op": "replace",
+                    "path": "/components/TransformComponent/rotation",
+                    "value": [
+                        0.0,
+                        0.48861566185951233,
+                        0.0,
+                        0.8724991679191589
+                    ]
+                },
+                {
+                    "op": "replace",
+                    "path": "/components/TransformComponent/translate",
+                    "value": [
+                        70.74932861328125,
+                        26.525983810424805,
+                        -7.185501575469971
+                    ]
+                },
+                {
+                    "op": "add",
+                    "path": "/components/MoverComponent",
+                    "value": {
+                        "active": false,
+                        "initialized": false,
+                        "startOnAwake": false
+                    }
+                },
+                {
+                    "op": "add",
+                    "path": "/components/TransformRoutineComponent",
+                    "value": {
+                        "defaultRoutineId": "default",
+                        "playbackSpeed": 1.0,
+                        "playing": false,
+                        "routines": [
+                            {
+                                "globalDuration": 6.0,
+                                "globalEasing": "EaseOutSine",
+                                "id": "default",
+                                "interpolation": "CatmullRom",
+                                "keyframes": [
+                                    {
+                                        "duration": 1.0,
+                                        "easing": "Linear",
+                                        "rotation": [
+                                            0.0,
+                                            0.48861566185951233,
+                                            0.0,
+                                            0.8724991679191589
+                                        ],
+                                        "scale": [
+                                            1.0,
+                                            1.0,
+                                            1.0
+                                        ],
+                                        "translate": [
+                                            70.74932861328125,
+                                            26.525983810424805,
+                                            -7.185501575469971
+                                        ]
+                                    },
+                                    {
+                                        "duration": 1.0,
+                                        "easing": "Linear",
+                                        "rotation": [
+                                            0.0,
+                                            0.5536039471626282,
+                                            0.0,
+                                            0.832780122756958
+                                        ],
+                                        "scale": [
+                                            1.0,
+                                            1.0,
+                                            1.0
+                                        ],
+                                        "translate": [
+                                            78.33389282226563,
+                                            26.525983810424805,
+                                            -0.4822147488594055
+                                        ]
+                                    },
+                                    {
+                                        "duration": 1.0,
+                                        "easing": "Linear",
+                                        "rotation": [
+                                            -1.415076944510929e-08,
+                                            0.714839518070221,
+                                            -1.415076944510929e-08,
+                                            0.699288547039032
+                                        ],
+                                        "scale": [
+                                            1.0,
+                                            1.0,
+                                            1.0
+                                        ],
+                                        "translate": [
+                                            105.78630065917969,
+                                            26.525983810424805,
+                                            -0.4822147488594055
+                                        ]
+                                    },
+                                    {
+                                        "duration": 1.0,
+                                        "easing": "Linear",
+                                        "rotation": [
+                                            0.19533981382846832,
+                                            0.6876325011253357,
+                                            -0.19108997285366058,
+                                            0.672672688961029
+                                        ],
+                                        "scale": [
+                                            1.0,
+                                            1.0,
+                                            1.0
+                                        ],
+                                        "translate": [
+                                            112.45655059814453,
+                                            24.219511032104492,
+                                            -0.4822157025337219
+                                        ]
+                                    }
+                                ],
+                                "loop": false,
+                                "useGlobalTiming": true
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
         "CloseHint": {
             "components": {
                 "CloseLevelUpUITag": null,
@@ -61,9 +350,9 @@
                 },
                 "DebugCameraComponent": {
                     "center": [
-                        0.23616600036621094,
-                        4.965143203735352,
-                        3.0166163444519043
+                        76.51801300048828,
+                        23.953548431396484,
+                        -3.3503026962280273
                     ],
                     "distance": 24.76100730895996,
                     "drawCenter": false,
@@ -78,10 +367,10 @@
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
-                        0.15526431798934937,
-                        0.7655941843986511,
-                        -0.20112523436546326,
-                        0.5910221338272095
+                        0.05181005224585533,
+                        0.7420312762260437,
+                        -0.05773672088980675,
+                        0.6658617854118347
                     ],
                     "scale": [
                         1.0,
@@ -89,9 +378,9 @@
                         1.0
                     ],
                     "translate": [
-                        -20.625255584716797,
-                        17.134929656982422,
-                        8.475996017456055
+                        52.19780731201172,
+                        27.783618927001953,
+                        -0.7110453844070435
                     ]
                 }
             }
@@ -626,6 +915,9 @@
                     "parent": null
                 },
                 "FollowCameraComponent": {
+                    "autoFollowDeadzoneAngle": 0.15000000596046448,
+                    "autoFollowDelay": 1.0,
+                    "autoFollowEnabled": true,
                     "collisionMargin": 0.30000001192092896,
                     "collisionRadius": 0.949999988079071,
                     "collisionStartOffset": 5.0,
@@ -636,6 +928,7 @@
                     "heightRiseCatchUpThreshold": 4.0,
                     "heightRiseFollowSpeed": 2.0,
                     "lookUpCameraClearance": 1.25,
+                    "maxAutoFollowAngularSpeed": 0.6000000238418579,
                     "maxDistance": 15.0,
                     "maxFov": 0.8500000238418579,
                     "maxPhi": 1.5707963705062866,
@@ -647,6 +940,8 @@
                     "playerPosOffset": 2.0,
                     "playerViewSpeed": 20.0,
                     "rotationSpeed": 2.0,
+                    "terrainAvoidanceAngularSpeed": 2.5,
+                    "terrainAvoidanceStartRatio": 0.8500000238418579,
                     "theta": 2.200000047683716
                 },
                 "TransformComponent": {
@@ -744,6 +1039,747 @@
                     ]
                 }
             }
+        },
+        "WanderHopEnemy": {
+            "components": {
+                "CapsuleCollider": {
+                    "localP0": [
+                        0.0,
+                        -0.05000000074505806,
+                        0.0
+                    ],
+                    "localP1": [
+                        0.0,
+                        0.05000000074505806,
+                        0.0
+                    ],
+                    "radius": 0.44999998807907104
+                },
+                "CollisionBody": {
+                    "type": "Dynamic"
+                },
+                "CollisionLayerComponent": {
+                    "layer": "Enemy"
+                },
+                "EditTag": {
+                    "name": "WanderHopEnemy",
+                    "parent": null
+                },
+                "GroundStateComponent": {
+                    "groundHeight": 0.0,
+                    "isGrounded": false
+                },
+                "MaterialComponent": {
+                    "blendMode": "kNormal",
+                    "castShadow": true,
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "environmentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "receiveShadow": true,
+                    "renderMode": "kDefault",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "textureName": "",
+                    "unlit": false,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "resources/engine/Model/enemy.obj"
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        131.0033721923828,
+                        14.117135047912598,
+                        0.20301151275634766
+                    ]
+                },
+                "VelocityComponent": {
+                    "linear": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                "WanderHopEnemyComponent": {
+                    "chaseSpeed": 3.5,
+                    "detectionDistance": 5.0,
+                    "jumpSpeed": 5.0,
+                    "loseDistance": 8.0,
+                    "maxHeightDifference": 2.0,
+                    "walkSpeed": 1.399999976158142,
+                    "wanderRadius": 2.0
+                }
+            },
+            "prefabBase": {
+                "components": {
+                    "CapsuleCollider": {
+                        "localP0": [
+                            0.0,
+                            -0.05,
+                            0.0
+                        ],
+                        "localP1": [
+                            0.0,
+                            0.05,
+                            0.0
+                        ],
+                        "radius": 0.45
+                    },
+                    "CollisionBody": {
+                        "type": "Dynamic"
+                    },
+                    "CollisionLayerComponent": {
+                        "layer": "Enemy"
+                    },
+                    "GroundStateComponent": {
+                        "groundHeight": 0.0,
+                        "isGrounded": false
+                    },
+                    "MaterialComponent": {
+                        "blendMode": "kNormal",
+                        "castShadow": true,
+                        "color": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0
+                        ],
+                        "drawOutline": false,
+                        "edgeColor": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0
+                        ],
+                        "emissiveIntensity": 1.0,
+                        "environmentCoefficient": 0.0,
+                        "noiseScrollSpeed": 0.30000001192092896,
+                        "noiseTextureName": "noise0",
+                        "receiveShadow": true,
+                        "renderMode": "kDefault",
+                        "rimPower": 2.0,
+                        "shininess": 60.0,
+                        "textureName": "",
+                        "unlit": false,
+                        "uvPosition": [
+                            0.0,
+                            0.0
+                        ],
+                        "uvRotate": 0.0,
+                        "uvScale": [
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "MeshComponent": {
+                        "isVisible": true,
+                        "meshName": "resources/engine/Model/enemy.obj"
+                    },
+                    "TransformComponent": {
+                        "rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ],
+                        "translate": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ]
+                    },
+                    "VelocityComponent": {
+                        "linear": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ]
+                    },
+                    "WanderHopEnemyComponent": {
+                        "chaseSpeed": 3.5,
+                        "detectionDistance": 5.0,
+                        "jumpSpeed": 5.0,
+                        "loseDistance": 8.0,
+                        "maxHeightDifference": 2.0,
+                        "walkSpeed": 1.4,
+                        "wanderRadius": 2.0
+                    }
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\WanderHopEnemy.json",
+            "prefabOverrides": [
+                {
+                    "op": "replace",
+                    "path": "/components/CapsuleCollider/localP0",
+                    "value": [
+                        0.0,
+                        -0.05000000074505806,
+                        0.0
+                    ]
+                },
+                {
+                    "op": "replace",
+                    "path": "/components/CapsuleCollider/localP1",
+                    "value": [
+                        0.0,
+                        0.05000000074505806,
+                        0.0
+                    ]
+                },
+                {
+                    "op": "replace",
+                    "path": "/components/CapsuleCollider/radius",
+                    "value": 0.44999998807907104
+                },
+                {
+                    "op": "replace",
+                    "path": "/components/TransformComponent/translate",
+                    "value": [
+                        131.0033721923828,
+                        14.117135047912598,
+                        0.20301151275634766
+                    ]
+                },
+                {
+                    "op": "replace",
+                    "path": "/components/WanderHopEnemyComponent/walkSpeed",
+                    "value": 1.399999976158142
+                }
+            ]
+        },
+        "WanderHopEnemy_1": {
+            "components": {
+                "CapsuleCollider": {
+                    "localP0": [
+                        0.0,
+                        -0.05000000074505806,
+                        0.0
+                    ],
+                    "localP1": [
+                        0.0,
+                        0.05000000074505806,
+                        0.0
+                    ],
+                    "radius": 0.44999998807907104
+                },
+                "CollisionBody": {
+                    "type": "Dynamic"
+                },
+                "CollisionLayerComponent": {
+                    "layer": "Enemy"
+                },
+                "EditTag": {
+                    "name": "WanderHopEnemy_1",
+                    "parent": null
+                },
+                "GroundStateComponent": {
+                    "groundHeight": 0.0,
+                    "isGrounded": false
+                },
+                "MaterialComponent": {
+                    "blendMode": "kNormal",
+                    "castShadow": true,
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "environmentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "receiveShadow": true,
+                    "renderMode": "kDefault",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "textureName": "",
+                    "unlit": false,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "resources/engine/Model/enemy.obj"
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        136.55868530273438,
+                        14.117136001586914,
+                        -2.221463203430176
+                    ]
+                },
+                "VelocityComponent": {
+                    "linear": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                "WanderHopEnemyComponent": {
+                    "chaseSpeed": 3.5,
+                    "detectionDistance": 5.0,
+                    "jumpSpeed": 5.0,
+                    "loseDistance": 8.0,
+                    "maxHeightDifference": 2.0,
+                    "walkSpeed": 1.399999976158142,
+                    "wanderRadius": 2.0
+                }
+            },
+            "prefabBase": {
+                "components": {
+                    "CapsuleCollider": {
+                        "localP0": [
+                            0.0,
+                            -0.05,
+                            0.0
+                        ],
+                        "localP1": [
+                            0.0,
+                            0.05,
+                            0.0
+                        ],
+                        "radius": 0.45
+                    },
+                    "CollisionBody": {
+                        "type": "Dynamic"
+                    },
+                    "CollisionLayerComponent": {
+                        "layer": "Enemy"
+                    },
+                    "GroundStateComponent": {
+                        "groundHeight": 0.0,
+                        "isGrounded": false
+                    },
+                    "MaterialComponent": {
+                        "blendMode": "kNormal",
+                        "castShadow": true,
+                        "color": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0
+                        ],
+                        "drawOutline": false,
+                        "edgeColor": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0
+                        ],
+                        "emissiveIntensity": 1.0,
+                        "environmentCoefficient": 0.0,
+                        "noiseScrollSpeed": 0.30000001192092896,
+                        "noiseTextureName": "noise0",
+                        "receiveShadow": true,
+                        "renderMode": "kDefault",
+                        "rimPower": 2.0,
+                        "shininess": 60.0,
+                        "textureName": "",
+                        "unlit": false,
+                        "uvPosition": [
+                            0.0,
+                            0.0
+                        ],
+                        "uvRotate": 0.0,
+                        "uvScale": [
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "MeshComponent": {
+                        "isVisible": true,
+                        "meshName": "resources/engine/Model/enemy.obj"
+                    },
+                    "TransformComponent": {
+                        "rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ],
+                        "translate": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ]
+                    },
+                    "VelocityComponent": {
+                        "linear": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ]
+                    },
+                    "WanderHopEnemyComponent": {
+                        "chaseSpeed": 3.5,
+                        "detectionDistance": 5.0,
+                        "jumpSpeed": 5.0,
+                        "loseDistance": 8.0,
+                        "maxHeightDifference": 2.0,
+                        "walkSpeed": 1.4,
+                        "wanderRadius": 2.0
+                    }
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\WanderHopEnemy.json",
+            "prefabOverrides": [
+                {
+                    "op": "replace",
+                    "path": "/components/CapsuleCollider/localP0",
+                    "value": [
+                        0.0,
+                        -0.05000000074505806,
+                        0.0
+                    ]
+                },
+                {
+                    "op": "replace",
+                    "path": "/components/CapsuleCollider/localP1",
+                    "value": [
+                        0.0,
+                        0.05000000074505806,
+                        0.0
+                    ]
+                },
+                {
+                    "op": "replace",
+                    "path": "/components/CapsuleCollider/radius",
+                    "value": 0.44999998807907104
+                },
+                {
+                    "op": "replace",
+                    "path": "/components/TransformComponent/translate",
+                    "value": [
+                        136.55868530273438,
+                        14.117136001586914,
+                        -2.221463203430176
+                    ]
+                },
+                {
+                    "op": "replace",
+                    "path": "/components/WanderHopEnemyComponent/walkSpeed",
+                    "value": 1.399999976158142
+                }
+            ]
+        },
+        "WanderHopEnemy_2": {
+            "components": {
+                "CapsuleCollider": {
+                    "localP0": [
+                        0.0,
+                        -0.05000000074505806,
+                        0.0
+                    ],
+                    "localP1": [
+                        0.0,
+                        0.05000000074505806,
+                        0.0
+                    ],
+                    "radius": 0.44999998807907104
+                },
+                "CollisionBody": {
+                    "type": "Dynamic"
+                },
+                "CollisionLayerComponent": {
+                    "layer": "Enemy"
+                },
+                "EditTag": {
+                    "name": "WanderHopEnemy_2",
+                    "parent": null
+                },
+                "GroundStateComponent": {
+                    "groundHeight": 0.0,
+                    "isGrounded": false
+                },
+                "MaterialComponent": {
+                    "blendMode": "kNormal",
+                    "castShadow": true,
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "environmentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "receiveShadow": true,
+                    "renderMode": "kDefault",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "textureName": "",
+                    "unlit": false,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "resources/engine/Model/enemy.obj"
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        139.60125732421875,
+                        14.117135047912598,
+                        2.906195640563965
+                    ]
+                },
+                "VelocityComponent": {
+                    "linear": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                "WanderHopEnemyComponent": {
+                    "chaseSpeed": 3.5,
+                    "detectionDistance": 5.0,
+                    "jumpSpeed": 5.0,
+                    "loseDistance": 8.0,
+                    "maxHeightDifference": 2.0,
+                    "walkSpeed": 1.399999976158142,
+                    "wanderRadius": 2.0
+                }
+            },
+            "prefabBase": {
+                "components": {
+                    "CapsuleCollider": {
+                        "localP0": [
+                            0.0,
+                            -0.05,
+                            0.0
+                        ],
+                        "localP1": [
+                            0.0,
+                            0.05,
+                            0.0
+                        ],
+                        "radius": 0.45
+                    },
+                    "CollisionBody": {
+                        "type": "Dynamic"
+                    },
+                    "CollisionLayerComponent": {
+                        "layer": "Enemy"
+                    },
+                    "GroundStateComponent": {
+                        "groundHeight": 0.0,
+                        "isGrounded": false
+                    },
+                    "MaterialComponent": {
+                        "blendMode": "kNormal",
+                        "castShadow": true,
+                        "color": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0
+                        ],
+                        "drawOutline": false,
+                        "edgeColor": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0
+                        ],
+                        "emissiveIntensity": 1.0,
+                        "environmentCoefficient": 0.0,
+                        "noiseScrollSpeed": 0.30000001192092896,
+                        "noiseTextureName": "noise0",
+                        "receiveShadow": true,
+                        "renderMode": "kDefault",
+                        "rimPower": 2.0,
+                        "shininess": 60.0,
+                        "textureName": "",
+                        "unlit": false,
+                        "uvPosition": [
+                            0.0,
+                            0.0
+                        ],
+                        "uvRotate": 0.0,
+                        "uvScale": [
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "MeshComponent": {
+                        "isVisible": true,
+                        "meshName": "resources/engine/Model/enemy.obj"
+                    },
+                    "TransformComponent": {
+                        "rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ],
+                        "translate": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ]
+                    },
+                    "VelocityComponent": {
+                        "linear": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ]
+                    },
+                    "WanderHopEnemyComponent": {
+                        "chaseSpeed": 3.5,
+                        "detectionDistance": 5.0,
+                        "jumpSpeed": 5.0,
+                        "loseDistance": 8.0,
+                        "maxHeightDifference": 2.0,
+                        "walkSpeed": 1.4,
+                        "wanderRadius": 2.0
+                    }
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\WanderHopEnemy.json",
+            "prefabOverrides": [
+                {
+                    "op": "replace",
+                    "path": "/components/CapsuleCollider/localP0",
+                    "value": [
+                        0.0,
+                        -0.05000000074505806,
+                        0.0
+                    ]
+                },
+                {
+                    "op": "replace",
+                    "path": "/components/CapsuleCollider/localP1",
+                    "value": [
+                        0.0,
+                        0.05000000074505806,
+                        0.0
+                    ]
+                },
+                {
+                    "op": "replace",
+                    "path": "/components/CapsuleCollider/radius",
+                    "value": 0.44999998807907104
+                },
+                {
+                    "op": "replace",
+                    "path": "/components/TransformComponent/translate",
+                    "value": [
+                        139.60125732421875,
+                        14.117135047912598,
+                        2.906195640563965
+                    ]
+                },
+                {
+                    "op": "replace",
+                    "path": "/components/WanderHopEnemyComponent/walkSpeed",
+                    "value": 1.399999976158142
+                }
+            ]
         },
         "block": {
             "components": {
@@ -3755,7 +4791,8 @@
                     "interactable": false,
                     "lines": [
                         "この奥に疋面（ひきおもて）がいるな。気をつけろ。 ",
-                        "お前ならXボタンの攻撃で殺せるかもな。"
+                        "お前ならXボタンの攻撃で殺せるかもな。",
+                        "心配ならセーブディスクに触っておけ。"
                     ],
                     "portraitFrameCount": 4,
                     "portraitTexture": "resources/game/ClockworksDisease/Texture/Portrait/Leimar.png",
@@ -4231,6 +5268,201 @@
                     "op": "replace",
                     "path": "/components/PlayerComponent/airDashStaminaCost",
                     "value": 0.4000000059604645
+                }
+            ]
+        },
+        "savePoint": {
+            "components": {
+                "AnimatorComponent": {
+                    "animationEvents": [],
+                    "animationSpeedMagnification": 1.0,
+                    "blendDuration": 0.20000000298023224,
+                    "currentAnimation": 0,
+                    "drawSkeleton": false,
+                    "enableSkinning": false,
+                    "loop": true
+                },
+                "CollisionBody": {
+                    "type": "Through"
+                },
+                "CollisionLayerComponent": {
+                    "layer": "Item"
+                },
+                "EditTag": {
+                    "name": "savePoint",
+                    "parent": null
+                },
+                "MaterialComponent": {
+                    "blendMode": "kAdd",
+                    "castShadow": true,
+                    "color": [
+                        2.1764705181121826,
+                        2.1764705181121826,
+                        2.1764705181121826,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "environmentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "receiveShadow": true,
+                    "renderMode": "kToon",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "textureName": "",
+                    "unlit": false,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "savePoint"
+                },
+                "SavePointComponent": {
+                    "colorMagnification": 5.0,
+                    "rotateTime": 1.0
+                },
+                "SphereCollider": {
+                    "localCenter": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "radius": 0.699999988079071
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        103.41152954101563,
+                        21.80620002746582,
+                        0.011504411697387695
+                    ]
+                }
+            },
+            "prefabBase": {
+                "components": {
+                    "AnimatorComponent": {
+                        "animationEvents": [],
+                        "animationSpeedMagnification": 1.0,
+                        "blendDuration": 0.20000000298023224,
+                        "currentAnimation": 0,
+                        "drawSkeleton": false,
+                        "enableSkinning": false,
+                        "loop": true
+                    },
+                    "CollisionBody": {
+                        "type": "Through"
+                    },
+                    "CollisionLayerComponent": {
+                        "layer": "Item"
+                    },
+                    "MaterialComponent": {
+                        "blendMode": "kAdd",
+                        "castShadow": true,
+                        "color": [
+                            2.1764705181121826,
+                            2.1764705181121826,
+                            2.1764705181121826,
+                            1.0
+                        ],
+                        "drawOutline": false,
+                        "edgeColor": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0
+                        ],
+                        "emissiveIntensity": 1.0,
+                        "environmentCoefficient": 0.0,
+                        "noiseScrollSpeed": 0.30000001192092896,
+                        "noiseTextureName": "noise0",
+                        "receiveShadow": true,
+                        "renderMode": "kToon",
+                        "rimPower": 2.0,
+                        "shininess": 60.0,
+                        "textureName": "",
+                        "unlit": false,
+                        "uvPosition": [
+                            0.0,
+                            0.0
+                        ],
+                        "uvRotate": 0.0,
+                        "uvScale": [
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "MeshComponent": {
+                        "isVisible": true,
+                        "meshName": "savePoint"
+                    },
+                    "SavePointComponent": {
+                        "colorMagnification": 5.0,
+                        "rotateTime": 1.0
+                    },
+                    "SphereCollider": {
+                        "localCenter": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "radius": 0.699999988079071
+                    },
+                    "TransformComponent": {
+                        "rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ],
+                        "translate": [
+                            -85.57157135009766,
+                            21.73615264892578,
+                            -1.3793916702270508
+                        ]
+                    }
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\savePoint.json",
+            "prefabOverrides": [
+                {
+                    "op": "replace",
+                    "path": "/components/TransformComponent/translate",
+                    "value": [
+                        103.41152954101563,
+                        21.80620002746582,
+                        0.011504411697387695
+                    ]
                 }
             ]
         },

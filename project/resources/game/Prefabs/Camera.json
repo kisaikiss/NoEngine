@@ -1,0 +1,30 @@
+{
+    "components": {
+        "CameraComponent": {
+            "fov": 0.44999998807907104
+        },
+        "EditTag": {
+            "name": "Camera",
+            "parent": null
+        },
+        "TransformComponent": {
+            "parent": null,
+            "rotation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "translate": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        }
+    }
+}

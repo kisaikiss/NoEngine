@@ -93,7 +93,13 @@ GameplayCatalog::GameplayCatalog() {
 		}});
 	RegisterAction({ "engine.camera.changeActive", "Active Camera Change", "Camera",
 		[](ECS::Registry& registry, const Event::GameplayEvent&, ECS::Entity target, const nlohmann::json&) {
-			registry.AddComponent<Component::ActiveCameraTag>(target);
+			if (target != ECS::INVALID_ENTITY && registry.Has<Component::CameraComponent>(target)) {
+				registry.AddComponent<Component::ActiveCameraTag>(target);
+				
+			} else {
+				LogWarning("Activate Camera Change : The specified camera could not be found.");
+			}
+			
 		}, true, {
 			{"targetCamera", "TargetCamera", ActionPropertyType::EntityReference, true}
 		} });

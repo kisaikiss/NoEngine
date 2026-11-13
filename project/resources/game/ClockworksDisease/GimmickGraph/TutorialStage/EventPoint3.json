@@ -1,17 +1,38 @@
 {
   "links": [
     {
-      "fromNodeId": "event-1",
-      "fromPinId": "exec.out",
-      "id": "link-3",
-      "toNodeId": "action-2",
-      "toPinId": "exec.in"
-    },
-    {
       "fromNodeId": "event-4",
       "fromPinId": "exec.out",
       "id": "link-6",
       "toNodeId": "action-5",
+      "toPinId": "exec.in"
+    },
+    {
+      "fromNodeId": "event-1",
+      "fromPinId": "exec.out",
+      "id": "link-11",
+      "toNodeId": "action-7",
+      "toPinId": "exec.in"
+    },
+    {
+      "fromNodeId": "action-7",
+      "fromPinId": "exec.out",
+      "id": "link-13",
+      "toNodeId": "action-2",
+      "toPinId": "exec.in"
+    },
+    {
+      "fromNodeId": "action-2",
+      "fromPinId": "exec.out",
+      "id": "link-14",
+      "toNodeId": "action-9",
+      "toPinId": "exec.in"
+    },
+    {
+      "fromNodeId": "action-9",
+      "fromPinId": "exec.out",
+      "id": "link-12",
+      "toNodeId": "action-11",
       "toPinId": "exec.in"
     }
   ],
@@ -30,8 +51,8 @@
       "id": "action-2",
       "kind": "action",
       "position": [
-        291.0,
-        77.0
+        627.0,
+        125.0
       ],
       "properties": {
         "targetEntity": "eventPoint3"
@@ -60,6 +81,43 @@
         "targetEntity": "Leimar"
       },
       "typeId": "engine.mover.activate"
+    },
+    {
+      "id": "action-7",
+      "kind": "action",
+      "position": [
+        302.0,
+        93.0
+      ],
+      "properties": {
+        "targetCamera": "Camera"
+      },
+      "typeId": "engine.camera.changeActive"
+    },
+    {
+      "id": "action-9",
+      "kind": "action",
+      "position": [
+        1010.0,
+        189.0
+      ],
+      "properties": {
+        "routineId": "default",
+        "targetEntity": "Camera"
+      },
+      "typeId": "engine.mover.activate"
+    },
+    {
+      "id": "action-11",
+      "kind": "action",
+      "position": [
+        1347.0,
+        253.0
+      ],
+      "properties": {
+        "targetCamera": "MainCamera"
+      },
+      "typeId": "engine.camera.changeActive"
     }
   ],
   "version": 1
