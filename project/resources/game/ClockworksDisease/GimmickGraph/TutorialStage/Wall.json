@@ -1,10 +1,52 @@
 {
   "links": [
     {
+      "fromNodeId": "action-5",
+      "fromPinId": "exec.out",
+      "id": "link-8",
+      "toNodeId": "action-7",
+      "toPinId": "exec.in"
+    },
+    {
       "fromNodeId": "event-1",
       "fromPinId": "exec.out",
-      "id": "link-3",
+      "id": "link-9",
+      "toNodeId": "action-8",
+      "toPinId": "exec.in"
+    },
+    {
+      "fromNodeId": "action-9",
+      "fromPinId": "exec.out",
+      "id": "link-10",
       "toNodeId": "action-2",
+      "toPinId": "exec.in"
+    },
+    {
+      "fromNodeId": "action-8",
+      "fromPinId": "exec.out",
+      "id": "link-11",
+      "toNodeId": "action-9",
+      "toPinId": "exec.in"
+    },
+    {
+      "fromNodeId": "action-2",
+      "fromPinId": "exec.out",
+      "id": "link-12",
+      "toNodeId": "action-11",
+      "toPinId": "exec.in"
+    },
+    {
+      "fromNodeId": "action-11",
+      "fromPinId": "exec.out",
+      "id": "link-14",
+      "toNodeId": "action-13",
+      "toPinId": "exec.in"
+    },
+    {
+      "fromNodeId": "action-13",
+      "fromPinId": "exec.out",
+      "id": "link-15",
+      "toNodeId": "action-5",
       "toPinId": "exec.in"
     }
   ],
@@ -13,8 +55,8 @@
       "id": "event-1",
       "kind": "event",
       "position": [
-        80.0,
-        80.0
+        -195.0,
+        -145.0
       ],
       "properties": {
         "objectEntities": [
@@ -29,14 +71,88 @@
       "id": "action-2",
       "kind": "action",
       "position": [
-        402.0,
-        157.0
+        611.0,
+        -35.0
       ],
       "properties": {
         "routineId": "default",
         "targetEntity": "wall"
       },
       "typeId": "engine.mover.activate"
+    },
+    {
+      "id": "action-5",
+      "kind": "action",
+      "position": [
+        1394.0,
+        -13.0
+      ],
+      "properties": {
+        "routineId": "Three",
+        "targetEntity": "Leimar"
+      },
+      "typeId": "engine.mover.activate"
+    },
+    {
+      "id": "action-7",
+      "kind": "action",
+      "position": [
+        1698.0,
+        99.0
+      ],
+      "properties": {
+        "enabled": true,
+        "targetEntity": "Leimar"
+      },
+      "typeId": "application.dialogue.set_enabled"
+    },
+    {
+      "id": "action-8",
+      "kind": "action",
+      "position": [
+        126.0,
+        -35.0
+      ],
+      "properties": {
+        "targetCamera": "Camera_1"
+      },
+      "typeId": "engine.camera.changeActive"
+    },
+    {
+      "id": "action-9",
+      "kind": "action",
+      "position": [
+        355.0,
+        149.0
+      ],
+      "properties": {
+        "targetEntity": "player"
+      },
+      "typeId": "game.player.lock"
+    },
+    {
+      "id": "action-11",
+      "kind": "action",
+      "position": [
+        723.0,
+        141.0
+      ],
+      "properties": {
+        "targetEntity": "player"
+      },
+      "typeId": "game.player.unlock"
+    },
+    {
+      "id": "action-13",
+      "kind": "action",
+      "position": [
+        1086.0,
+        229.0
+      ],
+      "properties": {
+        "targetCamera": "MainCamera"
+      },
+      "typeId": "engine.camera.changeActive"
     }
   ],
   "version": 1

@@ -104,6 +104,17 @@ GameplayCatalog::GameplayCatalog() {
 		}, true, {
 			{"targetCamera", "TargetCamera", ActionPropertyType::EntityReference, true}
 		} });
+	RegisterAction({ "engine.object.destroy", "Destroy Object", "Object",
+		[](ECS::Registry& registry, const Event::GameplayEvent&, ECS::Entity target, const nlohmann::json&) {
+			if (target != ECS::INVALID_ENTITY) {
+				registry.DestroyEntity(target);
+			} else {
+				LogWarning("Destroy Object : The specified object cannot be found.");
+			}
+
+		}, true,{
+			{ "target", "Target", ActionPropertyType::EntityReference, true }
+		} });
 }
 
 bool GameplayCatalog::RegisterEvent(EventDescriptor descriptor) {

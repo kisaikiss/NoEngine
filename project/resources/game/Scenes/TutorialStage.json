@@ -289,6 +289,83 @@
                 }
             ]
         },
+        "Camera_1": {
+            "components": {
+                "CameraComponent": {
+                    "fov": 0.44999998807907104
+                },
+                "EditTag": {
+                    "name": "Camera_1",
+                    "parent": null
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.06324929744005203,
+                        0.6919561624526978,
+                        -0.06546274572610855,
+                        0.7161779403686523
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        125.67703247070313,
+                        24.259801864624023,
+                        -0.10829228162765503
+                    ]
+                }
+            },
+            "prefabBase": {
+                "components": {
+                    "CameraComponent": {
+                        "fov": 0.44999998807907104
+                    },
+                    "TransformComponent": {
+                        "rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ],
+                        "translate": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ]
+                    }
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\Camera.json",
+            "prefabOverrides": [
+                {
+                    "op": "replace",
+                    "path": "/components/TransformComponent/rotation",
+                    "value": [
+                        0.06324929744005203,
+                        0.6919561624526978,
+                        -0.06546274572610855,
+                        0.7161779403686523
+                    ]
+                },
+                {
+                    "op": "replace",
+                    "path": "/components/TransformComponent/translate",
+                    "value": [
+                        125.67703247070313,
+                        24.259801864624023,
+                        -0.10829228162765503
+                    ]
+                }
+            ]
+        },
         "CloseHint": {
             "components": {
                 "CloseLevelUpUITag": null,
@@ -350,9 +427,9 @@
                 },
                 "DebugCameraComponent": {
                     "center": [
-                        50.158058166503906,
-                        25.946693420410156,
-                        -10.77422046661377
+                        186.10110473632813,
+                        23.916275024414063,
+                        14.600503921508789
                     ],
                     "distance": 24.76100730895996,
                     "drawCenter": false,
@@ -367,10 +444,10 @@
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
-                        0.2149244099855423,
-                        0.5467367172241211,
-                        -0.14768491685390472,
-                        0.7956605553627014
+                        0.04743294417858124,
+                        0.9267709851264954,
+                        -0.35093387961387634,
+                        0.1252642720937729
                     ],
                     "scale": [
                         1.0,
@@ -378,9 +455,9 @@
                         1.0
                     ],
                     "translate": [
-                        30.18703269958496,
-                        38.4139404296875,
-                        -18.44451141357422
+                        181.17636108398438,
+                        40.31682586669922,
+                        32.485591888427734
                     ]
                 }
             }
@@ -487,19 +564,14 @@
         },
         "Leimar": {
             "components": {
-                "DialogueAutoTriggerComponent": {
-                    "once": true,
-                    "radius": 5.0
-                },
                 "DialogueComponent": {
-                    "enabled": true,
+                    "enabled": false,
                     "fontName": "resources/engine/fonts/ISE-FONT4/Isego.otf",
-                    "interactDistance": 0.0,
-                    "interactable": false,
+                    "interactDistance": 5.0,
+                    "interactable": true,
                     "lines": [
-                        "おーい！まさか死んでないよな？",
-                        "呼吸はしてるな。じゃあ早く起きろ。",
-                        "Aでジャンプして起き上がってみろ。"
+                        "早く箱に入れ。",
+                        "ここから脱出する唯一の方法だ。"
                     ],
                     "portraitFrameCount": 4,
                     "portraitTexture": "resources/game/ClockworksDisease/Texture/Portrait/Leimar.png",
@@ -890,9 +962,119 @@
                                         1.0
                                     ],
                                     "translate": [
-                                        141.11407470703125,
-                                        15.989394187927246,
-                                        -3.098106861114502
+                                        150.0,
+                                        16.0,
+                                        -4.0
+                                    ]
+                                }
+                            ],
+                            "loop": false,
+                            "useGlobalTiming": true
+                        },
+                        {
+                            "globalDuration": 6.0,
+                            "globalEasing": "EaseInOutQuad",
+                            "id": "Three",
+                            "interpolation": "CatmullRom",
+                            "keyframes": [
+                                {
+                                    "duration": 1.0,
+                                    "easing": "Linear",
+                                    "rotation": [
+                                        0.0,
+                                        0.0,
+                                        0.0,
+                                        1.0
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "translate": [
+                                        150.0,
+                                        16.0,
+                                        -4.0
+                                    ]
+                                },
+                                {
+                                    "duration": 1.0,
+                                    "easing": "Linear",
+                                    "rotation": [
+                                        0.18422871828079224,
+                                        0.07846371829509735,
+                                        0.18388588726520538,
+                                        0.9623352885246277
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "translate": [
+                                        162.60421752929688,
+                                        19.520349502563477,
+                                        2.4985239505767822
+                                    ]
+                                },
+                                {
+                                    "duration": 1.0,
+                                    "easing": "Linear",
+                                    "rotation": [
+                                        -0.3767108917236328,
+                                        -0.23609007894992828,
+                                        -0.4008820652961731,
+                                        0.8010268211364746
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "translate": [
+                                        171.39732360839844,
+                                        16.66141700744629,
+                                        0.6981751918792725
+                                    ]
+                                },
+                                {
+                                    "duration": 1.0,
+                                    "easing": "Linear",
+                                    "rotation": [
+                                        0.18232236802577972,
+                                        0.19330883026123047,
+                                        0.24410992860794067,
+                                        0.9326310157775879
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "translate": [
+                                        181.18719482421875,
+                                        16.66141700744629,
+                                        -3.470794200897217
+                                    ]
+                                },
+                                {
+                                    "duration": 1.0,
+                                    "easing": "Linear",
+                                    "rotation": [
+                                        0.0,
+                                        0.0,
+                                        0.0,
+                                        1.0
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "translate": [
+                                        189.31517028808594,
+                                        16.66141700744629,
+                                        4.061901092529297
                                     ]
                                 }
                             ],
@@ -4637,6 +4819,72 @@
                 }
             }
         },
+        "eventPoint": {
+            "components": {
+                "AABBCollider": {
+                    "max": [
+                        2.3998208045959473,
+                        0.5,
+                        2.91188907623291
+                    ],
+                    "min": [
+                        -2.3998208045959473,
+                        -0.5,
+                        -2.91188907623291
+                    ]
+                },
+                "ColliderUpdateTag": null,
+                "CollisionBody": {
+                    "type": "Through"
+                },
+                "DialogueComponent": {
+                    "enabled": true,
+                    "fontName": "resources/engine/fonts/ISE-FONT4/Isego.otf",
+                    "interactDistance": 3.0,
+                    "interactable": false,
+                    "lines": [
+                        "おーい！まさか死んでないよな？",
+                        "呼吸はしてるな。じゃあ早く起きろ。",
+                        "Aでジャンプして起き上がってみろ。"
+                    ],
+                    "portraitFrameCount": 4,
+                    "portraitTexture": "resources/game/ClockworksDisease/Texture/Portrait/Leimar.png",
+                    "voiceFiles": [],
+                    "voiceVolume": 0.3499999940395355
+                },
+                "EditTag": {
+                    "name": "eventPoint",
+                    "parent": null
+                },
+                "GimmickGraphComponent": {
+                    "graphPath": "resources/game/ClockworksDisease/GimmickGraph/TutorialStage/EventPoint.json"
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        4.7996416091918945,
+                        1.0,
+                        5.82377815246582
+                    ],
+                    "translate": [
+                        -3.42213773727417,
+                        0.42411214113235474,
+                        0.9746763706207275
+                    ]
+                },
+                "TriggerComponent": {
+                    "activated": false,
+                    "oneShot": true,
+                    "wasTouching": false
+                }
+            }
+        },
         "eventPoint1": {
             "components": {
                 "AABBCollider": {
@@ -4822,6 +5070,71 @@
                     "translate": [
                         78.96778106689453,
                         23.276344299316406,
+                        -0.026886343955993652
+                    ]
+                },
+                "TriggerComponent": {
+                    "activated": false,
+                    "oneShot": true,
+                    "wasTouching": false
+                }
+            }
+        },
+        "eventPoint4": {
+            "components": {
+                "AABBCollider": {
+                    "max": [
+                        2.893226385116577,
+                        3.1280903816223145,
+                        16.002153396606445
+                    ],
+                    "min": [
+                        -2.893226385116577,
+                        -3.1280903816223145,
+                        -16.002153396606445
+                    ]
+                },
+                "ColliderUpdateTag": null,
+                "CollisionBody": {
+                    "type": "Through"
+                },
+                "DialogueComponent": {
+                    "enabled": true,
+                    "fontName": "resources/engine/fonts/ISE-FONT4/Isego.otf",
+                    "interactDistance": 3.0,
+                    "interactable": false,
+                    "lines": [
+                        "この箱でこの次元から脱出できる。",
+                        "ここから出たら詳しく話す。入れ。"
+                    ],
+                    "portraitFrameCount": 4,
+                    "portraitTexture": "resources/game/ClockworksDisease/Texture/Portrait/Leimar.png",
+                    "voiceFiles": [],
+                    "voiceVolume": 0.3499999940395355
+                },
+                "EditTag": {
+                    "name": "eventPoint4",
+                    "parent": null
+                },
+                "GimmickGraphComponent": {
+                    "graphPath": "resources/game/ClockworksDisease/GimmickGraph/TutorialStage/EventPoint4.json"
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        5.786452770233154,
+                        6.256180763244629,
+                        32.00430679321289
+                    ],
+                    "translate": [
+                        185.1003875732422,
+                        16.727619171142578,
                         -0.026886343955993652
                     ]
                 },
@@ -5540,6 +5853,364 @@
                     ]
                 }
             }
+        },
+        "wall": {
+            "components": {
+                "AABBCollider": {
+                    "max": [
+                        0.9724538922309875,
+                        4.833462238311768,
+                        5.629769802093506
+                    ],
+                    "min": [
+                        -0.9724538922309875,
+                        -4.833462238311768,
+                        -5.629769802093506
+                    ]
+                },
+                "ColliderUpdateTag": null,
+                "CollisionLayerComponent": {
+                    "layer": "Terrain"
+                },
+                "EditTag": {
+                    "name": "wall",
+                    "parent": null
+                },
+                "GimmickGraphComponent": {
+                    "graphPath": "resources/game/ClockworksDisease/GimmickGraph/TutorialStage/Wall.json"
+                },
+                "MaterialComponent": {
+                    "blendMode": "kNormal",
+                    "castShadow": true,
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "environmentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "receiveShadow": true,
+                    "renderMode": "kDefault",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "textureName": "",
+                    "unlit": false,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "resources/game/ClockworksDisease/Model/gimmick/movingBlock.obj"
+                },
+                "MoverComponent": {
+                    "active": false,
+                    "initialized": false,
+                    "startOnAwake": false
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.944907784461975,
+                        9.666924476623535,
+                        11.259539604187012
+                    ],
+                    "translate": [
+                        157.6118927001953,
+                        18.760215759277344,
+                        0.08447325229644775
+                    ]
+                },
+                "TransformRoutineComponent": {
+                    "defaultRoutineId": "default",
+                    "playbackSpeed": 1.0,
+                    "playing": false,
+                    "routines": [
+                        {
+                            "globalDuration": 2.0,
+                            "globalEasing": "Linear",
+                            "id": "default",
+                            "interpolation": "Linear",
+                            "keyframes": [
+                                {
+                                    "duration": 1.0,
+                                    "easing": "Linear",
+                                    "rotation": [
+                                        0.0,
+                                        0.0,
+                                        0.0,
+                                        1.0
+                                    ],
+                                    "scale": [
+                                        1.944907784461975,
+                                        9.666924476623535,
+                                        11.259539604187012
+                                    ],
+                                    "translate": [
+                                        157.6118927001953,
+                                        18.760215759277344,
+                                        0.08447325229644775
+                                    ]
+                                },
+                                {
+                                    "duration": 1.0,
+                                    "easing": "Linear",
+                                    "rotation": [
+                                        0.0,
+                                        0.0,
+                                        0.0,
+                                        1.0
+                                    ],
+                                    "scale": [
+                                        1.944907784461975,
+                                        9.666924476623535,
+                                        11.259539604187012
+                                    ],
+                                    "translate": [
+                                        157.6118927001953,
+                                        27.06405258178711,
+                                        0.08447325229644775
+                                    ]
+                                }
+                            ],
+                            "loop": false,
+                            "useGlobalTiming": true
+                        }
+                    ]
+                }
+            },
+            "prefabBase": {
+                "components": {
+                    "AABBCollider": {
+                        "max": [
+                            0.9724538922309875,
+                            0.324538916349411,
+                            1.9435561895370483
+                        ],
+                        "min": [
+                            -0.9724538922309875,
+                            -0.324538916349411,
+                            -1.9435561895370483
+                        ]
+                    },
+                    "ColliderUpdateTag": null,
+                    "CollisionLayerComponent": {
+                        "layer": "Terrain"
+                    },
+                    "MaterialComponent": {
+                        "blendMode": "kNormal",
+                        "castShadow": true,
+                        "color": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0
+                        ],
+                        "drawOutline": false,
+                        "edgeColor": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0
+                        ],
+                        "emissiveIntensity": 1.0,
+                        "environmentCoefficient": 0.0,
+                        "noiseScrollSpeed": 0.30000001192092896,
+                        "noiseTextureName": "noise0",
+                        "receiveShadow": true,
+                        "renderMode": "kDefault",
+                        "rimPower": 2.0,
+                        "shininess": 60.0,
+                        "textureName": "",
+                        "unlit": false,
+                        "uvPosition": [
+                            0.0,
+                            0.0
+                        ],
+                        "uvRotate": 0.0,
+                        "uvScale": [
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "MeshComponent": {
+                        "isVisible": true,
+                        "meshName": "resources/game/ClockworksDisease/Model/gimmick/movingBlock.obj"
+                    },
+                    "PlatformDeltaComponent": {
+                        "frameDelta": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "previousTranslate": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ]
+                    },
+                    "TransformComponent": {
+                        "rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "scale": [
+                            1.944907784461975,
+                            0.649077832698822,
+                            3.8871123790740967
+                        ],
+                        "translate": [
+                            -82.14740753173828,
+                            15.939661026000977,
+                            -2.9765894412994385
+                        ]
+                    }
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\box.json",
+            "prefabOverrides": [
+                {
+                    "op": "replace",
+                    "path": "/components/AABBCollider/max",
+                    "value": [
+                        0.9724538922309875,
+                        4.833462238311768,
+                        5.629769802093506
+                    ]
+                },
+                {
+                    "op": "replace",
+                    "path": "/components/AABBCollider/min",
+                    "value": [
+                        -0.9724538922309875,
+                        -4.833462238311768,
+                        -5.629769802093506
+                    ]
+                },
+                {
+                    "op": "remove",
+                    "path": "/components/PlatformDeltaComponent"
+                },
+                {
+                    "op": "replace",
+                    "path": "/components/TransformComponent/scale",
+                    "value": [
+                        1.944907784461975,
+                        9.666924476623535,
+                        11.259539604187012
+                    ]
+                },
+                {
+                    "op": "replace",
+                    "path": "/components/TransformComponent/translate",
+                    "value": [
+                        157.6118927001953,
+                        18.760215759277344,
+                        0.08447325229644775
+                    ]
+                },
+                {
+                    "op": "add",
+                    "path": "/components/GimmickGraphComponent",
+                    "value": {
+                        "graphPath": "resources/game/ClockworksDisease/GimmickGraph/TutorialStage/Wall.json"
+                    }
+                },
+                {
+                    "op": "add",
+                    "path": "/components/MoverComponent",
+                    "value": {
+                        "active": false,
+                        "initialized": false,
+                        "startOnAwake": false
+                    }
+                },
+                {
+                    "op": "add",
+                    "path": "/components/TransformRoutineComponent",
+                    "value": {
+                        "defaultRoutineId": "default",
+                        "playbackSpeed": 1.0,
+                        "playing": false,
+                        "routines": [
+                            {
+                                "globalDuration": 2.0,
+                                "globalEasing": "Linear",
+                                "id": "default",
+                                "interpolation": "Linear",
+                                "keyframes": [
+                                    {
+                                        "duration": 1.0,
+                                        "easing": "Linear",
+                                        "rotation": [
+                                            0.0,
+                                            0.0,
+                                            0.0,
+                                            1.0
+                                        ],
+                                        "scale": [
+                                            1.944907784461975,
+                                            9.666924476623535,
+                                            11.259539604187012
+                                        ],
+                                        "translate": [
+                                            157.6118927001953,
+                                            18.760215759277344,
+                                            0.08447325229644775
+                                        ]
+                                    },
+                                    {
+                                        "duration": 1.0,
+                                        "easing": "Linear",
+                                        "rotation": [
+                                            0.0,
+                                            0.0,
+                                            0.0,
+                                            1.0
+                                        ],
+                                        "scale": [
+                                            1.944907784461975,
+                                            9.666924476623535,
+                                            11.259539604187012
+                                        ],
+                                        "translate": [
+                                            157.6118927001953,
+                                            27.06405258178711,
+                                            0.08447325229644775
+                                        ]
+                                    }
+                                ],
+                                "loop": false,
+                                "useGlobalTiming": true
+                            }
+                        ]
+                    }
+                }
+            ]
         },
         "warpBlock": {
             "components": {
