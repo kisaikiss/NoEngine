@@ -31,7 +31,7 @@ void PlayerActionSystem::Update(No::Registry& registry, float deltaTime) {
 		const bool deathLocked = death
 			&& death->phase != PlayerDeathSequenceComponent::Phase::kBlackOut
 			&& death->phase != PlayerDeathSequenceComponent::Phase::kFadeIn;
-		const bool actionLocked = cameraLocked || deathLocked
+		const bool actionLocked = cameraLocked || deathLocked || player->state == PlayerState::kSleep
 			|| registry.Has<GoalDirectionLockTag>(entity)
 			|| registry.Has<DialogueLockTag>(entity)
 			|| registry.Has<PlayerControlLockTag>(entity);
