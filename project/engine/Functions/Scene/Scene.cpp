@@ -34,8 +34,10 @@ void Scene::Update(ComputeContext& ctx, float deltaTime) {
 }
 
 std::string GetCurrentSceneName(ECS::Registry& registry) {
-	for (auto entity : registry.View<SceneNameComponent>()) {
-		return registry.GetComponent<SceneNameComponent>(entity)->GetName();
+	auto scenes = registry.View<SceneNameComponent>();
+	const auto first = scenes.begin();
+	if (first != scenes.end()) {
+		return registry.GetComponent<SceneNameComponent>(*first)->GetName();
 	}
 	return {};
 }
