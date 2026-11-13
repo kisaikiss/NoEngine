@@ -197,8 +197,20 @@ void FollowCameraSystem::Update(No::Registry& registry, float deltaTime) {
 
 		const float radius = std::max(followCameraVariables->collisionRadius, 0.001f);
 		const float margin = std::max(followCameraVariables->collisionMargin, 0.0f);
-		idealPos.y = std::max(idealPos.y, cameraFollowPos.y + radius + margin);
-		const No::Vector3 requestedAnchor = cameraFollowPos + No::Vector3{
+		// 高台へ着地した直後は高さ補間が遅れるため、判定始点と目標を足場の下へ置かない。
+		// 足場に遮られない通常ジャンプでは、従来の基準高さを保つ。
+		float collisionHeight = playerGrounded ? std::max(cameraFollowPos.y, playerPos.y) : cameraFollowPos.y;
+		if (!playerGrounded && playerPos.y > cameraFollowPos.y) {
+			// 高台を越えた空中でも、足場を貫く古い注視点からの判定を続けない。
+			const No::Vector3 upperAnchor = playerPos + No::Vector3{
+				0.0f, std::max(followCameraVariables->playerPosOffset, radius), 0.0f };
+			const auto support = No::SweepCapsuleTerrain(registry,
+				NoEngine::CapsuleWorld{ upperAnchor, upperAnchor, radius + margin },
+				No::Vector3{ 0.0f, cameraFollowPos.y - playerPos.y, 0.0f });
+			if (support.hit) collisionHeight = playerPos.y;
+		}
+		idealPos.y = std::max(idealPos.y, collisionHeight + radius + margin);
+		const No::Vector3 requestedAnchor = No::Vector3{ cameraFollowPos.x, collisionHeight, cameraFollowPos.z } + No::Vector3{
 			0.0f, std::max(followCameraVariables->playerPosOffset, radius), 0.0f };
 		// 判定始点は仮想的な注視点であり、前の足場に物理的につなぎ留めない。
 		// 現在の位置で重なりだけを解消し、崖で遅れが蓄積して再配置されるのを防ぐ。
@@ -396,7 +408,8 @@ void FollowCameraSystem::Update(No::Registry& registry, float deltaTime) {
 			}
 		}
 		const bool terrainCorrection = followCameraVariables->terrainAvoidanceActive || followCameraVariables->terrainYawRecovering
-			|| needsPositionRecovery || anchorCorrection.LengthSquared() > 0.0001f;
+			|| needsPositionRecovery || anchorCorrection.LengthSquared() > 0.0001f
+			|| collisionHeight > cameraFollowPos.y + 0.0001f;
 		if (!manualControl && terrainCorrection) {
 			// 安全位置の探索や視線判定の結果でも、一度の更新でカメラを大きく飛ばさない。
 			const float maxStep = std::max(kMaxCorrectionSpeed, playerVelocity.Length() * 1.5f) * std::max(deltaTime, 0.0f);
