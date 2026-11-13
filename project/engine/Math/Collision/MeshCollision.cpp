@@ -64,6 +64,24 @@ CapsuleTriangleCollision TestSegmentTriangle(const Vector3& segA, const Vector3&
 	Vector3 B = triangle.v[1];
 	Vector3 C = triangle.v[2];
 	float   r = radius;
+	// カメラの球体では、同じ点を端点・中点・三辺として繰り返し調べない。
+	if (segA == segB) {
+		result.closestOnCapsule = segA;
+		result.closestOnTriangle = ClosestPointOnTriangle(segA, A, B, C);
+		const Vector3 separation = segA - result.closestOnTriangle;
+		result.distance = separation.Length();
+		if (result.distance > 1e-6f) {
+			result.normal = separation / result.distance;
+		} else {
+			const float normalLength = triangle.normal.Length();
+			if (normalLength <= 1e-6f) return result;
+			result.normal = triangle.normal / normalLength;
+			if ((segA - A).Dot(result.normal) < 0.0f) result.normal *= -1.0f;
+		}
+		result.hit = result.distance <= r;
+		if (result.hit) result.penetration = r - result.distance;
+		return result;
+	}
 	// ----------------------------------------------------------------
 //  Step 1. カプセル線分の各端点 → 三角形 の最近接点を調べる
 //          （線分が面に突き刺さるケースをここで捕捉）
@@ -242,6 +260,54 @@ bool IsSolidTerrain(ECS::Registry& registry, ECS::Entity entity) {
 	auto* body = registry.GetComponent<Component::CollisionBody>(entity);
 	return !body || body->type != Component::BodyType::Through;
 }
+
+// カプセルを囲む箱を点へ縮め、膨張させたノードとの交差区間を求める。
+// 移動全体のAABBより狭く絞れ、既知の最近接接触より奥の枝も除外できる。
+bool SweepBoundsEntry(const AABBCollider& bounds, const Vector3& origin,
+	const Vector3& extent, const Vector3& displacement, float maximum, float& entry) {
+	entry = 0.0f;
+	float exit = maximum;
+	const auto axis = [&](float low, float high, float start, float size, float movement) {
+		low -= size;
+		high += size;
+		if (movement == 0.0f) return start >= low && start <= high;
+		float nearTime = (low - start) / movement;
+		float farTime = (high - start) / movement;
+		if (nearTime > farTime) std::swap(nearTime, farTime);
+		entry = std::max(entry, nearTime);
+		exit = std::min(exit, farTime);
+		return entry <= exit;
+	};
+	return axis(bounds.min.x, bounds.max.x, origin.x, extent.x, displacement.x)
+		&& axis(bounds.min.y, bounds.max.y, origin.y, extent.y, displacement.y)
+		&& axis(bounds.min.z, bounds.max.z, origin.z, extent.z, displacement.z);
+}
+
+void SweepTerrainNode(const BVHNode* node, const std::vector<TriangleCollider>& triangles,
+	const CapsuleWorld& capsule, const Vector3& origin, const Vector3& extent,
+	const Vector3& displacement, CapsuleSweepHit& nearest) {
+	float entry;
+	if (!node || !SweepBoundsEntry(node->bounds, origin, extent, displacement, nearest.fraction, entry)) return;
+	if (node->IsLeaf()) {
+		for (int index : node->triIndices) {
+			const auto hit = SweepCapsuleTriangle(capsule, displacement, triangles[index]);
+			if (hit.hit && (!nearest.hit || hit.fraction < nearest.fraction)) nearest = hit;
+			if (nearest.hit && nearest.fraction == 0.0f) return;
+		}
+		return;
+	}
+	float leftEntry = 0.0f, rightEntry = 0.0f;
+	const auto* first = node->left.get();
+	const auto* second = node->right.get();
+	const bool leftHit = first && SweepBoundsEntry(first->bounds, origin, extent, displacement, nearest.fraction, leftEntry);
+	const bool rightHit = second && SweepBoundsEntry(second->bounds, origin, extent, displacement, nearest.fraction, rightEntry);
+	if (!leftHit) first = nullptr;
+	if (!rightHit) second = nullptr;
+	if (rightHit && (!leftHit || rightEntry < leftEntry)) std::swap(first, second);
+	SweepTerrainNode(first, triangles, capsule, origin, extent, displacement, nearest);
+	if (nearest.hit && nearest.fraction == 0.0f) return;
+	SweepTerrainNode(second, triangles, capsule, origin, extent, displacement, nearest);
+}
 }
 
 CapsuleSweepHit SweepCapsuleTriangle(const CapsuleWorld& capsule, const Vector3& displacement,
@@ -273,17 +339,16 @@ CapsuleSweepHit SweepCapsuleTriangle(const CapsuleWorld& capsule, const Vector3&
 CapsuleSweepHit SweepCapsuleTerrain(ECS::Registry& registry, const CapsuleWorld& capsule,
 	const Vector3& displacement) {
 	CapsuleSweepHit nearest;
-	const auto bounds = SweptCapsuleBounds(capsule, displacement);
-	std::vector<int> candidates;
+	const Vector3 origin = (capsule.p0 + capsule.p1) * 0.5f;
+	const Vector3 halfSegment = (capsule.p1 - capsule.p0) * 0.5f;
+	const float padding = capsule.radius + kTerrainSkin;
+	const Vector3 extent{ std::abs(halfSegment.x) + padding,
+		std::abs(halfSegment.y) + padding, std::abs(halfSegment.z) + padding };
 	for (auto entity : registry.View<TerrainMesh>()) {
 		if (!IsSolidTerrain(registry, entity)) continue;
 		auto* terrain = registry.GetComponent<TerrainMesh>(entity);
-		candidates.clear();
-		QueryBVH(terrain->bvhRoot.get(), bounds, terrain->triangles, candidates);
-		for (int index : candidates) {
-			const auto hit = SweepCapsuleTriangle(capsule, displacement, terrain->triangles[index]);
-			if (hit.hit && (!nearest.hit || hit.fraction < nearest.fraction)) nearest = hit;
-		}
+		SweepTerrainNode(terrain->bvhRoot.get(), terrain->triangles, capsule, origin, extent, displacement, nearest);
+		if (nearest.hit && nearest.fraction == 0.0f) break;
 	}
 	return nearest;
 }

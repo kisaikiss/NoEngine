@@ -3,6 +3,7 @@
 #include "../../Component/Camera/FollowCameraComponent.h"
 #include "../../Component/Camera/CameraIntroComponent.h"
 #include "../../Component/Game/GameProgressComponent.h"
+#include <array>
 
 namespace {
 constexpr float kAvoidanceHoldTime = 0.4f;
@@ -245,10 +246,19 @@ void FollowCameraSystem::Update(No::Registry& registry, float deltaTime) {
 			planningAnchor += No::MoveCapsuleTerrain(registry,
 				NoEngine::CapsuleWorld{ planningAnchor, planningAnchor, planningRadius + margin }, No::Vector3::ZERO);
 		}
+		// 同一フレーム内の通常角度・継続目標の再評価では、地形スイープを再実行しない。
+		struct ClearanceSample { float theta; float distance; };
+		std::array<ClearanceSample, 32> clearanceSamples{};
+		size_t clearanceSampleCount = 0;
 		const auto clearance = [&](float theta) {
+			for (size_t i = 0; i < clearanceSampleCount; ++i) {
+				if (clearanceSamples[i].theta == theta) return clearanceSamples[i].distance;
+			}
 			const No::Vector3 candidate = orbitPosition(theta);
-			return std::min((visiblePosition(candidate) - anchor).Length(),
+			const float distance = std::min((visiblePosition(candidate) - anchor).Length(),
 				(visibleFrom(planningAnchor, candidate + planningAnchor - anchor, planningRadius) - planningAnchor).Length());
+			if (clearanceSampleCount < clearanceSamples.size()) clearanceSamples[clearanceSampleCount++] = { theta, distance };
+			return distance;
 		};
 		const bool wasAvoiding = followCameraVariables->terrainAvoidanceActive;
 		const float preferredClearance = terrainFollow ? clearance(followCameraVariables->theta) : orbitLength;
