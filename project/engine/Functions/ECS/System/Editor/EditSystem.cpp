@@ -5,6 +5,7 @@
 #include "engine/Editor/DataDriven/PrefabSerializer.h"
 #include "engine/Editor/Commands/EditorCommandOperator.h"
 #include "engine/Functions/Scene/SceneNameComponent.h"
+#include "engine/Functions/ECS/Event/SceneReloadEvent.h"
 #include "engine/Functions/Command/EditCommand/InstantiateEntitiesCommand.h"
 #include "engine/Functions/ECS/System/PlayModeController.h"
 #include "engine/Functions/ECS/System/SystemSceneConfig.h"
@@ -40,14 +41,12 @@ void EditSystem::OnPlayModeRestore(Registry&) {
 }
 
 void EditSystem::Update(Registry& registry, float deltaTime) {
-	if (!FirstLoaded_) {
-		LoadFile(registry);
-
+	if (!initialized_) {
 		// Prefab一覧(DrawPrefabWindow / AssetBrowserWindow)からの「編集」要求を
 		// EditSystemが受け取れるようにコールバックを登録する
 		OnPlayModeRestore(registry);
 
-		FirstLoaded_ = true;
+		initialized_ = true;
 	}
 #ifdef USE_IMGUI
 	EnsureUniqueEditTagNames(registry);
@@ -80,7 +79,7 @@ void EditSystem::DrawMenuBar(Registry& registry) {
 				}
 			}
 			if (ImGui::MenuItem("Load")) {
-				LoadFile(registry);
+				registry.EmitEvent(Event::SceneReloadEvent{});
 			}
 			ImGui::EndMenu();
 		}
@@ -220,28 +219,6 @@ void EditSystem::SaveFile(Registry& registry, nlohmann::json j) {
 
 	file << j.dump(4);
 	file.close();
-}
-
-void EditSystem::LoadFile(Registry& registry) {
-	std::string sceneName;
-	auto view = registry.View<SceneNameComponent>();
-	for (auto entity : view) {
-		auto* nameComp = registry.GetComponent<SceneNameComponent>(entity);
-		sceneName = nameComp->GetName();
-	}
-	std::string filePath = sDirectoryPath + sceneName + ".json";
-
-	std::ifstream file(filePath);
-	if (!file.is_open()) {
-		LogError("Failed to open scene file:" + filePath);
-		return;
-	}
-
-	nlohmann::json scene;
-	file >> scene;
-
-	effectPreviewPanel_.Reset();
-	Editor::LoadScene(registry, scene);
 }
 
 void EditSystem::EnsureUniqueEditTagNames(Registry& registry) {

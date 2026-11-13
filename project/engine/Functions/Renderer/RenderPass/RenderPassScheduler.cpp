@@ -38,7 +38,7 @@
 #include "engine/Runtime/GraphicsCore.h"
 #include "engine/Editor/Utilities/EditUtils.h"
 #include "engine/Functions/ECS/System/Editor/DrawManipulatorSystem.h"
-#include "engine/Functions/Scene/IScene.h"
+#include "engine/Functions/Scene/SceneNameComponent.h"
 
 #ifdef USE_IMGUI
 #include "externals/imgui/imgui.h"

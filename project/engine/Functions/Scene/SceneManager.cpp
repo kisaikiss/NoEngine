@@ -3,8 +3,12 @@
 
 #include "CircleScaleTransitionEffect.h"
 #include "FadeTransitionEffect.h"
-#include "engine/Functions/ECS/System/Editor/EditSystem.h"
-#include "engine/Functions/ECS/System/Editor/DrawManipulatorSystem.h"
+#include "engine/Editor/Commands/EditorCommandOperator.h"
+#include "engine/Editor/DataDriven/PrefabSerializer.h"
+#include "engine/Functions/ECS/Component/Common/TransformComponent.h"
+#include "engine/Functions/ECS/Component/Common/CameraComponent.h"
+#include "engine/Functions/ECS/System/SystemSceneConfig.h"
+#include "engine/Functions/ECS/Event/SceneReloadEvent.h"
 #include "engine/Functions/ECS/System/PlayModeController.h"
 #include "engine/Editor/DataDriven/SceneSerializer.h"
 #include <fstream>
@@ -17,17 +21,7 @@
 namespace NoEngine {
 namespace Scene {
 namespace {
-const char* kSceneDirectory = "resources/game/Scenes/";
 const char* kSceneListPath = "resources/game/application.json";
-
-class EditorScene final : public IScene {
-public:
-	void Setup() override { 
-		AddSystem(std::make_unique<ECS::EditSystem>());
-		AddSystem(std::make_unique<ECS::DrawManipulatorSystem>());
-	
-	}
-};
 
 bool IsValidSceneName(const std::string& name) {
 	if (name.empty() || name == "." || name == "..") return false;
@@ -42,13 +36,8 @@ SceneManager::SceneManager() {
 	if (list.is_open()) {
 		try {
 			nlohmann::json names; list >> names;
-			for (const auto& name : names.value("removedScenes", std::vector<std::string>{}))
-				if (IsValidSceneName(name)) removedScenes_.insert(name);
 			for (const auto& name : names.value("scenes", std::vector<std::string>{})) {
-				if (IsValidSceneName(name) && factories_.find(name) == factories_.end() && std::filesystem::exists(std::string(kSceneDirectory) + name + ".json")) {
-					RegisterScene(name, [] { return std::make_unique<EditorScene>(); });
-					editorScenes_.insert(name);
-				}
+				if (IsValidSceneName(name) && std::filesystem::is_regular_file(ECS::SystemSceneConfig::GetScenePath(name))) sceneNames_.insert(name);
 			}
 		} catch (...) { LogWarning("Failed to read application scene list."); }
 	}
@@ -71,99 +60,190 @@ std::unique_ptr<ITransitionEffect> SceneManager::CreateTransitionEffect(
 	return it->second();
 }
 
-void SceneManager::ChangeScene(const std::string& name, bool immediate,
+SceneManager::~SceneManager() {
+	Editor::EditorCommandOperator::Reset();
+	Editor::SetEditPrefabCallback({});
+}
+
+std::unique_ptr<Scene> SceneManager::LoadScene(const std::string& name) {
+	if (!IsValidSceneName(name)) return nullptr;
+	auto next = std::make_unique<Scene>(name);
+	if (!next->Load()) return nullptr;
+	return next;
+}
+
+void SceneManager::CommitScene(std::unique_ptr<Scene> next) {
+	// 読み込み成功後、古いRegistryやSystemを参照する履歴とコールバックを破棄する。
+	Editor::EditorCommandOperator::Reset();
+	Editor::SetEditPrefabCallback({});
+	currentScene_ = std::move(next);
+}
+
+void SceneManager::ResetTransition(bool finishEffect) {
+	if (finishEffect && currentEffect_ && currentScene_) currentEffect_->OnFinished(currentScene_->GetRegistry());
+	currentEffect_.reset();
+	pendingScene_.reset();
+	transitionPhase_ = TransitionPhase::None;
+	transitionTimer_ = 0.0f;
+}
+
+bool SceneManager::ChangeScene(const std::string& name, bool immediate,
 	Event::SceneTransitionType transitionType, const std::string& customTransitionName) {
-	auto it = factories_.find(name);
-	if (it == factories_.end()) return;
-	if (isChanging_) return;
-	isChanging_ = true;
-
+	if (!sceneNames_.contains(name) || transitionPhase_ != TransitionPhase::None) return false;
+	// 演出を始める前に検証し、失敗時は現在のシーンと履歴を維持する。
+	auto next = LoadScene(name);
+	if (!next) return false;
 	if (immediate || !currentScene_) {
-		if (currentScene_) currentScene_->OnExit();
-		currentScene_ = it->second();
-		currentScene_->SetName(name);
-		currentScene_->Setup();
-		currentScene_->OnEnter();
-
-		isTransitioning_ = false;
-		transitionPhase_ = TransitionPhase::None;
-		transitionTimer_ = 0.0f;
-		currentEffect_.reset();
-		isChanging_ = false;
-		return;
+		CommitScene(std::move(next));
+		return true;
 	}
-
-	pendingName_ = name;
-	isTransitioning_ = true;
+	pendingScene_ = std::move(next);
+	currentEffect_ = CreateTransitionEffect(transitionType, customTransitionName);
 	transitionPhase_ = TransitionPhase::FadingOut;
 	transitionTimer_ = 0.0f;
+	if (currentEffect_) currentEffect_->OnFadingOutStart(currentScene_->GetRegistry());
+	return true;
+}
 
-	currentEffect_ = CreateTransitionEffect(transitionType, customTransitionName);
-	if (currentEffect_ && currentScene_->GetRegistry()) {
-		currentEffect_->OnFadingOutStart(*currentScene_->GetRegistry());
+bool SceneManager::ReloadScene() {
+	if (!currentScene_) return false;
+	auto next = LoadScene(currentScene_->GetName());
+	if (!next) return false;
+	ResetTransition();
+	CommitScene(std::move(next));
+	return true;
+}
+
+bool SceneManager::SaveSceneList(const std::set<std::string>& names) {
+	nlohmann::json data;
+	data["scenes"] = names;
+	std::ofstream out(kSceneListPath);
+	if (out) out << data.dump(4);
+	out.close();
+	if (!out) LogWarning("Failed to save application scene list.");
+	return static_cast<bool>(out);
+}
+
+bool SceneManager::SaveNewScene(const std::string& name, const nlohmann::json& data) {
+	if (!IsValidSceneName(name) || sceneNames_.contains(name) || transitionPhase_ != TransitionPhase::None) return false;
+	const auto path = ECS::SystemSceneConfig::GetScenePath(name);
+	try {
+		if (std::filesystem::exists(path)) return false;
+		std::filesystem::create_directories(std::filesystem::path(path).parent_path());
+		std::ofstream out(path);
+		if (out) out << data.dump(4);
+		out.close();
+		if (!out) return false;
+		auto next = LoadScene(name);
+		auto names = sceneNames_;
+		names.insert(name);
+		if (!next || !SaveSceneList(names)) {
+			std::filesystem::remove(path);
+			return false;
+		}
+		sceneNames_ = std::move(names);
+		CommitScene(std::move(next));
+		return true;
+	} catch (const std::exception& error) {
+		LogWarning(std::string("Failed to create scene: ") + error.what());
+		return false;
 	}
 }
 
+bool SceneManager::CreateScene(const std::string& name) {
+	// カメラは新規作成時にだけ保存し、既存シーンを開く際は追加しない。
+	ECS::Registry registry;
+	const auto mainCamera = registry.GenerateEntity();
+	registry.AddComponent<Component::ActiveCameraTag>(mainCamera);
+	registry.AddComponent<Component::CameraComponent>(mainCamera);
+	registry.AddComponent<Component::TransformComponent>(mainCamera);
+	registry.AddComponent<Editor::EditTag>(mainCamera)->name = "MainCamera";
+	const auto debugCamera = registry.GenerateEntity();
+	registry.AddComponent<Component::DebugCameraComponent>(debugCamera);
+	registry.AddComponent<Component::CameraComponent>(debugCamera);
+	registry.AddComponent<Component::TransformComponent>(debugCamera);
+	registry.AddComponent<Editor::EditTag>(debugCamera)->name = "DebugCamera";
+	auto data = Editor::SaveScene(registry);
+	data["systems"] = { "EditSystem", "DrawManipulatorSystem" };
+	return SaveNewScene(name, data);
+}
+
+bool SceneManager::CopyScene(const std::string& name) {
+	if (!currentScene_) return false;
+	auto data = Editor::SaveScene(currentScene_->GetRegistry());
+	data["systems"] = currentScene_->GetSystemNames();
+	try {
+		std::ifstream source(ECS::SystemSceneConfig::GetScenePath(currentScene_->GetName()));
+		if (source) {
+			nlohmann::json original;
+			source >> original;
+			if (original.contains("renderPasses")) data["renderPasses"] = original["renderPasses"];
+		}
+	} catch (const std::exception& error) {
+		LogWarning(std::string("Failed to copy scene: ") + error.what());
+		return false;
+	}
+	return SaveNewScene(name, data);
+}
+
+bool SceneManager::DeleteScene(const std::string& name) {
+	if (!sceneNames_.contains(name) || transitionPhase_ != TransitionPhase::None) return false;
+	auto names = sceneNames_;
+	names.erase(name);
+	// 描画側がRegistryを使い続けられるよう、最後のシーンは残す。
+	if (names.empty()) return false;
+	std::unique_ptr<Scene> fallback;
+	if (currentScene_ && currentScene_->GetName() == name) {
+		for (const auto& candidate : names) {
+			fallback = LoadScene(candidate);
+			if (fallback) break;
+		}
+		if (!fallback) return false;
+	}
+	if (!SaveSceneList(names)) return false;
+	std::error_code error;
+	std::filesystem::remove(ECS::SystemSceneConfig::GetScenePath(name), error);
+	if (error) {
+		SaveSceneList(sceneNames_);
+		LogWarning("Failed to delete scene: " + error.message());
+		return false;
+	}
+	sceneNames_ = std::move(names);
+	if (fallback) CommitScene(std::move(fallback));
+	return true;
+}
+
 void SceneManager::Update(ComputeContext& ctx, float deltaTime) {
-
-	if (isTransitioning_) {
-		float half = transitionDuration_ * 0.5f;
+	if (transitionPhase_ != TransitionPhase::None) {
+		const float half = transitionDuration_ * 0.5f;
 		if (deltaTime > 0.0f && deltaTime < 0.1f) transitionTimer_ += deltaTime;
-
+		const float t = std::clamp(transitionTimer_ / half, 0.0f, 1.0f);
 		if (transitionPhase_ == TransitionPhase::FadingOut) {
-			float t = std::clamp(transitionTimer_ / half, 0.0f, 1.0f);
-			if (currentEffect_ && currentScene_->GetRegistry())
-				currentEffect_->UpdateFadingOut(*currentScene_->GetRegistry(), t);
-
+			if (currentEffect_) currentEffect_->UpdateFadingOut(currentScene_->GetRegistry(), t);
 			if (transitionTimer_ >= half) {
-				if (currentScene_) currentScene_->OnExit();
-				auto it = factories_.find(pendingName_);
-				if (it != factories_.end()) {
-					currentScene_ = it->second();
-					currentScene_->SetName(pendingName_);
-					currentScene_->Setup();
-					currentScene_->OnEnter();
-				}
-				if (currentEffect_ && currentScene_->GetRegistry())
-					currentEffect_->OnFadingInStart(*currentScene_->GetRegistry());
-
+				CommitScene(std::move(pendingScene_));
+				if (currentEffect_) currentEffect_->OnFadingInStart(currentScene_->GetRegistry());
 				transitionPhase_ = TransitionPhase::FadingIn;
 				transitionTimer_ = 0.0f;
 			}
-		} else if (transitionPhase_ == TransitionPhase::FadingIn) {
-			float t = std::clamp(transitionTimer_ / half, 0.0f, 1.0f);
-			if (currentEffect_ && currentScene_->GetRegistry())
-				currentEffect_->UpdateFadingIn(*currentScene_->GetRegistry(), t);
-
-			if (transitionTimer_ >= half) {
-				if (currentEffect_ && currentScene_->GetRegistry())
-					currentEffect_->OnFinished(*currentScene_->GetRegistry());
-				currentEffect_.reset();
-
-				isTransitioning_ = false;
-				transitionPhase_ = TransitionPhase::None;
-				transitionTimer_ = 0.0f;
-				isChanging_ = false;
-			}
+		} else {
+			if (currentEffect_) currentEffect_->UpdateFadingIn(currentScene_->GetRegistry(), t);
+			if (transitionTimer_ >= half) ResetTransition();
 		}
-
 	}
-
 	if (currentScene_) currentScene_->Update(ctx, deltaTime);
-
-	// シーンの更新を抜けてから遷移を中断し、更新中のシーン自身を破棄しないようにする。
-	if (auto restoreScene = ECS::PlayModeController::TakeSceneRestoreRequest()) {
-		isChanging_ = false;
-		isTransitioning_ = false;
-		transitionPhase_ = TransitionPhase::None;
-		transitionTimer_ = 0.0f;
-		pendingName_.clear();
-		currentEffect_.reset();
-		if (currentScene_ && GetCurrentSceneName(*currentScene_->GetRegistry()) != *restoreScene) {
-			ChangeScene(*restoreScene, true);
-		}
+	// 更新中のSystemを破棄しないよう、Stopと再読み込みを更新終了後に処理する。
+	if (auto restore = ECS::PlayModeController::TakeSceneRestoreRequest()) {
+		// 同名シーンでは既にスナップショットへ復元済みなので、演出の古いEntity IDに触れない。
+		ResetTransition(currentScene_ && currentScene_->GetName() != *restore);
+		if (currentScene_ && currentScene_->GetName() != *restore) ChangeScene(*restore);
+	} else if (currentScene_ && currentScene_->GetRegistry().PollEvent<Event::SceneReloadEvent>()) {
+		ReloadScene();
 	}
+	DrawSceneMenu();
+}
 
+void SceneManager::DrawSceneMenu() {
 #ifdef USE_IMGUI
 	static bool requestCreate = false;
 	static bool requestCopy = false;
@@ -175,24 +255,16 @@ void SceneManager::Update(ComputeContext& ctx, float deltaTime) {
 		if (ImGui::BeginMenu("Scene")) {
 			if (ImGui::MenuItem("Create new scene...")) { sceneName[0] = '\0'; requestCreate = true; }
 			if (ImGui::MenuItem("Copy current scene...")) { copyName[0] = '\0'; requestCopy = true; }
-			for (auto& factory : factories_) {
-				if (factory.first == "") continue;
-				if (ImGui::MenuItem(factory.first.c_str())) {
+			for (const auto& name : sceneNames_) {
+				if (ImGui::MenuItem(name.c_str()) && currentScene_) {
 					Event::SceneChangeEvent event;
-					event.nextScene = factory.first;
+					event.nextScene = name;
 					event.transitionType = Event::SceneTransitionType::kImmediate;
 					GetRegistry()->EmitEvent(event);
 				}
 			}
 			ImGui::Separator();
-			if (currentScene_ && ImGui::MenuItem("Delete current scene...")) { pendingDelete = GetCurrentSceneName(*currentScene_->GetRegistry()); requestDelete = true; }
-			// 作成・コピー・削除の後にアプリのシーン一覧を保存する
-			static size_t knownCount = editorScenes_.size();
-			if (knownCount != editorScenes_.size()) {
-				nlohmann::json list; list["scenes"] = nlohmann::json::array(); for (const auto& item : editorScenes_) list["scenes"].push_back(item);
-				list["removedScenes"] = nlohmann::json::array(); for (const auto& item : removedScenes_) list["removedScenes"].push_back(item);
-				std::ofstream out(kSceneListPath); out << list.dump(4); knownCount = editorScenes_.size();
-			}
+			if (ImGui::MenuItem("Delete current scene...", nullptr, false, currentScene_ && sceneNames_.size() > 1)) { pendingDelete = currentScene_->GetName(); requestDelete = true; }
 
 			ImGui::EndMenu();
 		}
@@ -204,51 +276,19 @@ void SceneManager::Update(ComputeContext& ctx, float deltaTime) {
 	if (requestCreate) { ImGui::OpenPopup("Create new scene"); requestCreate = false; }
 	if (ImGui::BeginPopupModal("Create new scene", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
 		ImGui::InputText("Name", sceneName, sizeof(sceneName));
-		if (ImGui::Button("Create") && IsValidSceneName(sceneName) && factories_.find(sceneName) == factories_.end() && !std::filesystem::exists(std::string(kSceneDirectory) + sceneName + ".json")) {
-			std::filesystem::create_directories(kSceneDirectory);
-			std::ofstream out(std::string(kSceneDirectory) + sceneName + ".json"); out << R"({"entities":{}})";
-			if (out) { removedScenes_.erase(sceneName); RegisterScene(sceneName, [] { return std::make_unique<EditorScene>(); }); editorScenes_.insert(sceneName); ChangeScene(sceneName); }
-			ImGui::CloseCurrentPopup();
-		}
+		if (ImGui::Button("Create") && CreateScene(sceneName)) ImGui::CloseCurrentPopup();
 		ImGui::SameLine(); if (ImGui::Button("Cancel")) ImGui::CloseCurrentPopup(); ImGui::EndPopup();
 	}
 	if (requestCopy) { ImGui::OpenPopup("Copy scene"); requestCopy = false; }
 	if (ImGui::BeginPopupModal("Copy scene", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
 		ImGui::InputText("Name", copyName, sizeof(copyName));
-		if (ImGui::Button("Copy") && IsValidSceneName(copyName) && factories_.find(copyName) == factories_.end() && !std::filesystem::exists(std::string(kSceneDirectory) + copyName + ".json") && currentScene_) {
-			auto data = Editor::SaveScene(*currentScene_->GetRegistry());
-			data["systems"] = currentScene_->GetSystemNames();
-			const std::string sourcePath = std::string(kSceneDirectory) + GetCurrentSceneName(*currentScene_->GetRegistry()) + ".json";
-			std::ifstream source(sourcePath);
-			if (source) {
-				try {
-					nlohmann::json sourceData; source >> sourceData;
-					if (sourceData.contains("renderPasses")) data["renderPasses"] = sourceData["renderPasses"];
-				} catch (const std::exception&) {}
-			}
-			std::ofstream out(std::string(kSceneDirectory) + copyName + ".json"); out << data.dump(4);
-			if (out) { removedScenes_.erase(copyName); RegisterScene(copyName, [] { return std::make_unique<EditorScene>(); }); editorScenes_.insert(copyName); ChangeScene(copyName); }
-			ImGui::CloseCurrentPopup();
-		}
+		if (ImGui::Button("Copy") && CopyScene(copyName)) ImGui::CloseCurrentPopup();
 		ImGui::SameLine(); if (ImGui::Button("Cancel")) ImGui::CloseCurrentPopup(); ImGui::EndPopup();
 	}
 	if (requestDelete) { ImGui::OpenPopup("Delete scene"); requestDelete = false; }
 	if (ImGui::BeginPopupModal("Delete scene", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
 		ImGui::Text("Delete '%s'?", pendingDelete.c_str());
-		if (ImGui::Button("Delete") && factories_.find(pendingDelete) != factories_.end()) {
-			std::string fallback;
-			for (const auto& item : factories_) if (item.first != pendingDelete) { fallback = item.first; break; }
-			if (editorScenes_.count(pendingDelete)) {
-				std::error_code ec; std::filesystem::remove(std::string(kSceneDirectory) + pendingDelete + ".json", ec);
-				editorScenes_.erase(pendingDelete);
-			} else removedScenes_.insert(pendingDelete);
-			factories_.erase(pendingDelete);
-			nlohmann::json list; list["scenes"] = nlohmann::json::array(); for (const auto& item : editorScenes_) list["scenes"].push_back(item);
-			list["removedScenes"] = nlohmann::json::array(); for (const auto& item : removedScenes_) list["removedScenes"].push_back(item);
-			std::ofstream out(kSceneListPath); out << list.dump(4);
-			if (!fallback.empty()) ChangeScene(fallback);
-			ImGui::CloseCurrentPopup();
-		}
+		if (ImGui::Button("Delete") && DeleteScene(pendingDelete)) ImGui::CloseCurrentPopup();
 		ImGui::SameLine(); if (ImGui::Button("Cancel")) ImGui::CloseCurrentPopup(); ImGui::EndPopup();
 	}
 #endif // USE_IMGUI

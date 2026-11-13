@@ -7,6 +7,7 @@
 #include "Functions/ECS/Component/Asset/SpriteComponent.h"
 #include "Functions/ECS/Component/Asset/TextComponent.h"
 #include "Functions/ECS/Component/Common/TransformComponent.h"
+#include "Functions/ECS/Component/Common/PauseComponent.h"
 #include "Functions/ECS/Component/Common/Transform2DComponent.h"
 #include "Functions/ECS/Component/Common/TransformRoutineComponent.h"
 #include "Functions/ECS/Component/Common/TriggerComponent.h"

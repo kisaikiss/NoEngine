@@ -54,13 +54,6 @@ public:
 
 protected:
 	/// <summary>
-	/// シーンを登録します。
-	/// </summary>
-	/// <param name="name">シーン変更時などに使用する名前を設定します。</param>
-	/// <param name="factory">シーンを生成する関数を登録します。(std::make_unique<>())</param>
-	void RegisterScene(const std::string& name, Scene::SceneManager::SceneFactory factory) { sceneManager_->RegisterScene(name, factory); }
-
-	/// <summary>
 	/// シーン遷移演出を登録します。
 	/// </summary>
 	/// <param name="name">シーン変更時などに使用する名前を設定します。</param>

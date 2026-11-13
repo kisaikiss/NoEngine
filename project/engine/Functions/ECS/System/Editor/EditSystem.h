@@ -35,11 +35,10 @@ private:
     // コピーやペーストを毎フレーム呼ばないためのインターバル計算用変数
     float timeInterval_ = 0.0f;
 
-    bool FirstLoaded_ = false;
+    bool initialized_ = false;
 
 
     void SaveFile(Registry& registry, nlohmann::json j);
-    void LoadFile(Registry& registry);
     void EnsureUniqueEditTagNames(Registry& registry);
 
     void DrawMenuBar(Registry& registry);

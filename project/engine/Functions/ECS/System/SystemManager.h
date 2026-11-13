@@ -26,7 +26,6 @@ public:
 	class Snapshot {
 		friend class SystemManager;
 		std::vector<Entry> entries_;
-		std::string configuredSceneName_;
 		Editor::SystemListPanel systemListPanel_;
 		bool configurationDirty_ = false;
 	};
@@ -59,8 +58,8 @@ public:
 
 	void UpdateAll(ComputeContext& ctx, Registry& registry, float deltaTime);
 
-	/// <summary>現在のシーン名に対応するJSONの"systems"を適用する(シーンごとに1回だけ)</summary>
-	void LoadConfiguration(Registry& registry);
+	/// <summary>全システムを生成できた場合だけ構成を入れ替える。</summary>
+	bool SetSystems(const std::vector<std::string>& names);
 	void SaveConfiguration(Registry& registry);
 
 private:
@@ -68,7 +67,6 @@ private:
 	void ResetEditorState();
 	void MoveEntry(size_t from, size_t to);
 	std::vector<Entry> entries_;
-	std::string configuredSceneName_;
 
 	Editor::GameControllerPanel gameControllerPanel_;
 	Editor::SystemListPanel systemListPanel_;

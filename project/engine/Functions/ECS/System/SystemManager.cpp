@@ -1,8 +1,9 @@
 #include "SystemManager.h"
+#include <unordered_set>
 #include "SystemSceneConfig.h"
 #include "PlayModeController.h"
 #include "../Component/Common/PauseComponent.h"
-#include "../../Scene/IScene.h"
+#include "../../Scene/SceneNameComponent.h"
 #include "engine/Editor/Commands/EditorCommandOperator.h"
 #include "engine/Editor/Panels/FrameProfiler.h"
 
@@ -28,7 +29,6 @@ std::unique_ptr<SystemManager::Snapshot> SystemManager::CaptureSnapshot() const 
 		if (!clone) throw std::logic_error("System snapshot cannot be null: " + entry.name);
 		snapshot->entries_.push_back({ entry.name, std::move(clone), entry.cloner });
 	}
-	snapshot->configuredSceneName_ = configuredSceneName_;
 	snapshot->systemListPanel_ = systemListPanel_;
 	snapshot->configurationDirty_ = configurationDirty_;
 	return snapshot;
@@ -37,7 +37,6 @@ std::unique_ptr<SystemManager::Snapshot> SystemManager::CaptureSnapshot() const 
 void SystemManager::RestoreSnapshot(std::unique_ptr<Snapshot> snapshot, Registry& registry) {
 	ResetEditorState();
 	entries_ = std::move(snapshot->entries_);
-	configuredSceneName_ = std::move(snapshot->configuredSceneName_);
 	systemListPanel_ = snapshot->systemListPanel_;
 	configurationDirty_ = snapshot->configurationDirty_;
 	for (auto& entry : entries_) entry.system->OnPlayModeRestore(registry);
@@ -174,23 +173,19 @@ std::vector<std::string> SystemManager::GetSystemNames() const {
 	return names;
 }
 
-void SystemManager::LoadConfiguration(Registry& registry) {
-	const std::string sceneName = Scene::GetCurrentSceneName(registry);
-	if (sceneName.empty() || sceneName == configuredSceneName_) return;
-	configuredSceneName_ = sceneName;
-	ResetEditorState();
-
-	auto names = SystemSceneConfig::Load(sceneName);
-	if (!names) return; // ファイルなし/不正ならコード側で組んだ構成のまま
-
+bool SystemManager::SetSystems(const std::vector<std::string>& names) {
 	std::vector<Entry> configured;
-	configured.reserve(names->size());
-	for (auto& name : *names) {
+	configured.reserve(names.size());
+	std::unordered_set<std::string> unique;
+	for (const auto& name : names) {
+		if (!unique.insert(name).second) return false;
 		auto system = SystemCatalog::Get().Create(name);
-		if (!system) return;
-		configured.push_back({ std::move(name), std::move(system) });
+		if (!system) return false;
+		configured.push_back({ name, std::move(system) });
 	}
+	ResetEditorState();
 	entries_ = std::move(configured);
+	return true;
 }
 
 void SystemManager::SaveConfiguration(Registry& registry) {
@@ -198,8 +193,6 @@ void SystemManager::SaveConfiguration(Registry& registry) {
 }
 
 void SystemManager::UpdateAll(ComputeContext& ctx, Registry& registry, float deltaTime) {
-	LoadConfiguration(registry);
-
 	const bool isPause = IsPaused(registry);
 	const bool gameStopped = PlayModeController::IsGameStopped();
 

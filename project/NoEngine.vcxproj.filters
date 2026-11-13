@@ -165,7 +165,7 @@
     <ClCompile Include="engine\Functions\ECS\Component\Common\CameraComponent.cpp" />
     <ClCompile Include="engine\Functions\Renderer\RenderPass\Rasterization\CPUParticlePass.cpp" />
     <ClCompile Include="engine\Utilities\Random.cpp" />
-    <ClCompile Include="engine\Functions\Scene\IScene.cpp" />
+    <ClCompile Include="engine\Functions\Scene\Scene.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\SystemManager.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Animation\SpriteAnimationSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Asset\MaterialComponent.cpp" />
@@ -377,6 +377,7 @@
     <ClInclude Include="engine\Functions\ECS\Component\Asset\FogVolumeComponent.h" />
     <ClInclude Include="engine\Functions\ECS\EventBus.h" />
     <ClInclude Include="engine\Functions\ECS\Event\SceneChangeEvent.h" />
+    <ClInclude Include="engine\Functions\ECS\Event\SceneReloadEvent.h" />
     <ClInclude Include="engine\Functions\Renderer\Primitive.h" />
     <ClInclude Include="application\TestApp\System\TestSystem.h" />
     <ClInclude Include="engine\Assets\Model\Animation.h" />
@@ -408,7 +409,7 @@
     <ClInclude Include="engine\Functions\Renderer\RenderPass\RenderPassConfigurationFile.h" />
     <ClInclude Include="engine\Functions\Renderer\RenderPass\Rasterization\SpritePass.h" />
     <ClInclude Include="engine\Functions\Renderer\RaytracingManager.h" />
-    <ClInclude Include="engine\Functions\Scene\IScene.h" />
+    <ClInclude Include="engine\Functions\Scene\Scene.h" />
     <ClInclude Include="engine\Functions\Scene\SceneManager.h" />
     <ClInclude Include="engine\Math\Easing.h" />
     <ClInclude Include="engine\Math\Types\Calculations\Matrix3x3Calculations.h" />
