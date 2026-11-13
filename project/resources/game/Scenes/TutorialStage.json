@@ -61,9 +61,9 @@
                 },
                 "DebugCameraComponent": {
                     "center": [
-                        10.64255142211914,
-                        -2.682175874710083,
-                        -12.922507286071777
+                        0.23616600036621094,
+                        4.965143203735352,
+                        3.0166163444519043
                     ],
                     "distance": 24.76100730895996,
                     "drawCenter": false,
@@ -78,10 +78,10 @@
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
-                        -0.044067852199077606,
-                        -0.9091259837150574,
-                        0.09965584427118301,
-                        -0.4020158648490906
+                        0.15526431798934937,
+                        0.7655941843986511,
+                        -0.20112523436546326,
+                        0.5910221338272095
                     ],
                     "scale": [
                         1.0,
@@ -89,9 +89,9 @@
                         1.0
                     ],
                     "translate": [
-                        -7.239423751831055,
-                        2.6818344593048096,
-                        3.3430967330932617
+                        -20.625255584716797,
+                        17.134929656982422,
+                        8.475996017456055
                     ]
                 }
             }
@@ -941,6 +941,45 @@
                     "translate": [
                         184.8048858642578,
                         51.187557220458984,
+                        -0.2842886447906494
+                    ]
+                }
+            }
+        },
+        "boxFog": {
+            "components": {
+                "EditTag": {
+                    "name": "boxFog",
+                    "parent": null
+                },
+                "FogVolumeComponent": {
+                    "density": 0.44999998807907104,
+                    "edgeFade": 1.75,
+                    "enabled": true,
+                    "noiseFrequency": 0.6000000238418579,
+                    "noiseStrength": 0.5,
+                    "windVelocity": [
+                        -0.5,
+                        0.0,
+                        0.8999999761581421
+                    ]
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        139.53810119628906,
+                        3.0,
+                        56.35580062866211
+                    ],
+                    "translate": [
+                        29.93342399597168,
+                        0.0,
                         -0.2842886447906494
                     ]
                 }
@@ -4481,6 +4520,49 @@
                     "InputDepth": "MainDepth"
                 },
                 "maxCoCRadius": 0.009999999776482582,
+                "outputs": [
+                    "MainColor"
+                ],
+                "targetCameraName": "GameCamera",
+                "targetCameraType": 0,
+                "uavOutputs": []
+            }
+        },
+        {
+            "name": "Fog integrate",
+            "settings": {
+                "ambient": 0.15000000596046448,
+                "autoClear": false,
+                "baseHeight": 0.0,
+                "clearDepth": false,
+                "density": 0.012000000104308128,
+                "depthOutput": "",
+                "heightFalloff": 0.03500000014901161,
+                "inputs": {
+                    "InputDepth": "MainDepth"
+                },
+                "maxDistance": 140.0,
+                "outputs": [],
+                "scatteringAlbedo": 0.8500000238418579,
+                "scatteringAnisotropy": 0.949999988079071,
+                "stepCount": 16,
+                "targetCameraName": "GameCamera",
+                "targetCameraType": 0,
+                "traceShadows": true,
+                "uavOutputs": [
+                    "VolumetricFog"
+                ]
+            }
+        },
+        {
+            "name": "Fog composite",
+            "settings": {
+                "autoClear": false,
+                "clearDepth": false,
+                "depthOutput": "",
+                "inputs": {
+                    "Fog": "VolumetricFog"
+                },
                 "outputs": [
                     "MainColor"
                 ],
