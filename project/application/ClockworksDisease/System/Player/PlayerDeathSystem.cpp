@@ -69,6 +69,7 @@ void SnapFollowCamera(No::Registry& registry, const No::Vector3& playerPos) {
 		camera->terrainAvoidanceHoldTimer = 0.0f;
 		camera->terrainYawRecovering = false;
 		camera->avoidanceAngularVelocity = 0.0f;
+		camera->movementReferenceLocked = false;
 		camera->phi = 1.0f;
 		camera->currentDistance = 0.1f;
 		transform->translate.x = playerPos.x + camera->currentDistance * std::sin(camera->phi) * std::cos(camera->theta);

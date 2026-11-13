@@ -44,8 +44,8 @@ void FollowCameraSystem::Update(No::Registry& registry, float deltaTime) {
 		playerVelocity = registry.GetComponent<No::VelocityComponent>(e)->linear;
 		playerGrounded = registry.GetComponent<No::GroundStateComponent>(e)->isGrounded;
 		if (const auto* input = registry.GetComponent<PlayerInputComponent>(e)) {
-			// 移動入力はカメラ基準。横・斜め・後ろ移動の速度を追うと、自動回転が次の移動方向を変え続ける。
-			playerAllowsMovementYaw = std::abs(input->moveAxis.x) <= 0.1f && input->moveAxis.z > 0.1f;
+			// 入力方向に制限を設けず、移動中は実際の進行方向の後ろへ追従する。
+			playerAllowsMovementYaw = input->moveAxis.x * input->moveAxis.x + input->moveAxis.z * input->moveAxis.z > 1e-8f;
 		} else {
 			playerAllowsMovementYaw = true;
 		}
@@ -65,6 +65,7 @@ void FollowCameraSystem::Update(No::Registry& registry, float deltaTime) {
 			follow->terrainAvoidanceHoldTimer = 0.0f;
 			follow->terrainYawRecovering = false;
 			follow->avoidanceAngularVelocity = 0.0f;
+			follow->movementReferenceLocked = false;
 			continue;
 		}
 		
@@ -147,6 +148,7 @@ void FollowCameraSystem::Update(No::Registry& registry, float deltaTime) {
 			return std::remainder(to - from, 2.0f * PI);
 		};
 		const bool manualControl = std::abs(hInput) > 0.01f || std::abs(vInput) > 0.01f || No::InputIsPress("ViewGoal");
+		if (manualControl || !playerAllowsMovementYaw) followCameraVariables->movementReferenceLocked = false;
 		if (manualControl) {
 			followCameraVariables->manualControlTimer = std::max(followCameraVariables->autoFollowDelay, 0.0f);
 		} else {

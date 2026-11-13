@@ -54,6 +54,10 @@ struct FollowCameraComponent {
 	No::Vector3 collisionAnchorOffset{};
 	bool collisionAnchorInitialized = false;
 	bool collisionMotionActive = false;
+	// 自動旋回中に同じ移動入力のワールド方向が変わらないよう、入力開始時のカメラ基準を保持する。
+	No::Quaternion movementReferenceRotation = No::Quaternion::IDENTITY;
+	No::Vector3 movementReferenceAxis{};
+	bool movementReferenceLocked = false;
 	No::Quaternion nextRotation = No::Quaternion::IDENTITY; // 見たい方向の回転。滑らかに角度を変えるための変数
 };
 
@@ -61,6 +65,29 @@ inline No::Quaternion GetFollowCameraRotation(No::Registry& registry) {
 	No::Quaternion rotation = No::Quaternion::IDENTITY;
 	for (auto entity : registry.View<FollowCameraComponent, No::TransformComponent>()) {
 		rotation = registry.GetComponent<No::TransformComponent>(entity)->rotation;
+	}
+	return rotation;
+}
+
+inline No::Quaternion GetPlayerMovementCameraRotation(No::Registry& registry, const No::Vector3& moveAxis) {
+	No::Quaternion rotation = No::Quaternion::IDENTITY;
+	const No::Vector3 horizontal{ moveAxis.x, 0.0f, moveAxis.z };
+	const float length = horizontal.Length();
+	for (auto entity : registry.View<FollowCameraComponent, No::TransformComponent>()) {
+		auto* follow = registry.GetComponent<FollowCameraComponent>(entity);
+		rotation = registry.GetComponent<No::TransformComponent>(entity)->rotation;
+		if (!follow->autoFollowEnabled || follow->manualControlTimer > 0.0f || length <= 0.0001f) {
+			follow->movementReferenceLocked = false;
+			continue;
+		}
+		const No::Vector3 direction = horizontal / length;
+		if (!follow->movementReferenceLocked || direction.Dot(follow->movementReferenceAxis) < 0.995f) {
+			// 入力を離す、倒す方向を変える、手動でカメラを操作した場合は現在の向きから再開する。
+			follow->movementReferenceRotation = rotation;
+			follow->movementReferenceAxis = direction;
+			follow->movementReferenceLocked = true;
+		}
+		rotation = follow->movementReferenceRotation;
 	}
 	return rotation;
 }

@@ -33,8 +33,6 @@ No::Vector3 ProjectOnGroundPlane(const No::Vector3& horizontalDir, const No::Vec
 } // namespace
 
 void PlayerHorizontalMoveSystem::Update(No::Registry& registry, float deltaTime) {
-	const No::Quaternion cameraRotate = GetFollowCameraRotation(registry);
-
 	auto view = registry.View<PlayerComponent, PlayerInputComponent, PlayerActionComponent,
 		No::TransformComponent, No::VelocityComponent,
 		No::GroundStateComponent, PlayerMoveTransientComponent>();
@@ -129,6 +127,7 @@ void PlayerHorizontalMoveSystem::Update(No::Registry& registry, float deltaTime)
 		const No::Vector3& groundNormal = playerVariables->groundNormal;
 
 		No::Vector3 worldDir = No::Vector3::ZERO;
+		const No::Quaternion cameraRotate = GetPlayerMovementCameraRotation(registry, inputDir);
 		if (hasInput) {
 			worldDir = cameraRotate.RotateVector(inputDir);
 			worldDir.y = 0.f;

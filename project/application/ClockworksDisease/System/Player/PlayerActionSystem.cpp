@@ -97,7 +97,7 @@ void PlayerActionSystem::Update(No::Registry& registry, float deltaTime) {
 
 		const auto* transform = registry.GetComponent<No::TransformComponent>(entity);
 		if (!transform) continue;
-		No::Vector3 direction = GetFollowCameraRotation(registry).RotateVector(input->moveAxis);
+		No::Vector3 direction = GetPlayerMovementCameraRotation(registry, input->moveAxis).RotateVector(input->moveAxis);
 		direction.y = 0.f;
 		float length = direction.Length();
 		if (length <= 1e-6f) {
