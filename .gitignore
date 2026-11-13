@@ -453,8 +453,4 @@ project/resources/engine/cache
 !/tests/RunSystemListPanelTests.cmd
 /AGENTS.md
 /tests
-!/tests/
-/tests/*
-!/tests/SceneManagerTests.cpp
-!/tests/RunSceneManagerTests.ps1
 /generated/shadow-check
