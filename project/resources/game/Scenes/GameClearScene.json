@@ -44,6 +44,17 @@
         },
         "ClearMinutes": {
             "components": {
+                "NumberDisplayComponent": {
+                    "value": 0,
+                    "digitCount": 2,
+                    "digitEntities": [
+                        "ClearMinutes_digit0",
+                        "ClearMinutes_digit1"
+                    ]
+                },
+                "GameResultNumberComponent": {
+                    "source": "ClearMinutes"
+                },
                 "EditTag": {
                     "name": "ClearMinutes",
                     "parent": "clearTime"
@@ -64,6 +75,17 @@
         },
         "ClearSeconds": {
             "components": {
+                "NumberDisplayComponent": {
+                    "value": 0,
+                    "digitCount": 2,
+                    "digitEntities": [
+                        "ClearSeconds_digit0",
+                        "ClearSeconds_digit1"
+                    ]
+                },
+                "GameResultNumberComponent": {
+                    "source": "ClearSeconds"
+                },
                 "EditTag": {
                     "name": "ClearSeconds",
                     "parent": "clearTime"
@@ -241,6 +263,18 @@
         },
         "collected": {
             "components": {
+                "NumberDisplayComponent": {
+                    "value": 0,
+                    "digitCount": 3,
+                    "digitEntities": [
+                        "collected_digit0",
+                        "collected_digit1",
+                        "collected_digit2"
+                    ]
+                },
+                "GameResultNumberComponent": {
+                    "source": "CollectedItems"
+                },
                 "EditTag": {
                     "name": "collected",
                     "parent": "Items"
@@ -499,6 +533,18 @@
         },
         "total": {
             "components": {
+                "NumberDisplayComponent": {
+                    "value": 0,
+                    "digitCount": 3,
+                    "digitEntities": [
+                        "total_digit0",
+                        "total_digit1",
+                        "total_digit2"
+                    ]
+                },
+                "GameResultNumberComponent": {
+                    "source": "TotalItems"
+                },
                 "EditTag": {
                     "name": "total",
                     "parent": "Items"
@@ -514,6 +560,336 @@
                         120.7474365234375,
                         0.0
                     ]
+                }
+            }
+        },
+        "collected_digit0": {
+            "components": {
+                "EditTag": {
+                    "name": "collected_digit0",
+                    "parent": "collected"
+                },
+                "Transform2DComponent": {
+                    "parent": "collected",
+                    "scale": [
+                        32.0,
+                        40.0
+                    ],
+                    "rotation": 0.0,
+                    "translate": [
+                        0.0,
+                        0.0
+                    ]
+                },
+                "SpriteComponent": {
+                    "textureName": "numbers",
+                    "layer": 1,
+                    "uv": [
+                        0.0,
+                        0.0,
+                        0.1,
+                        1.0
+                    ]
+                },
+                "NumberDigitTag": {
+                    "digitIndex": 0
+                }
+            }
+        },
+        "collected_digit1": {
+            "components": {
+                "EditTag": {
+                    "name": "collected_digit1",
+                    "parent": "collected"
+                },
+                "Transform2DComponent": {
+                    "parent": "collected",
+                    "scale": [
+                        32.0,
+                        40.0
+                    ],
+                    "rotation": 0.0,
+                    "translate": [
+                        32.0,
+                        0.0
+                    ]
+                },
+                "SpriteComponent": {
+                    "textureName": "numbers",
+                    "layer": 1,
+                    "uv": [
+                        0.0,
+                        0.0,
+                        0.1,
+                        1.0
+                    ]
+                },
+                "NumberDigitTag": {
+                    "digitIndex": 1
+                }
+            }
+        },
+        "collected_digit2": {
+            "components": {
+                "EditTag": {
+                    "name": "collected_digit2",
+                    "parent": "collected"
+                },
+                "Transform2DComponent": {
+                    "parent": "collected",
+                    "scale": [
+                        32.0,
+                        40.0
+                    ],
+                    "rotation": 0.0,
+                    "translate": [
+                        64.0,
+                        0.0
+                    ]
+                },
+                "SpriteComponent": {
+                    "textureName": "numbers",
+                    "layer": 1,
+                    "uv": [
+                        0.0,
+                        0.0,
+                        0.1,
+                        1.0
+                    ]
+                },
+                "NumberDigitTag": {
+                    "digitIndex": 2
+                }
+            }
+        },
+        "total_digit0": {
+            "components": {
+                "EditTag": {
+                    "name": "total_digit0",
+                    "parent": "total"
+                },
+                "Transform2DComponent": {
+                    "parent": "total",
+                    "scale": [
+                        32.0,
+                        40.0
+                    ],
+                    "rotation": 0.0,
+                    "translate": [
+                        0.0,
+                        0.0
+                    ]
+                },
+                "SpriteComponent": {
+                    "textureName": "numbers",
+                    "layer": 1,
+                    "uv": [
+                        0.0,
+                        0.0,
+                        0.1,
+                        1.0
+                    ]
+                },
+                "NumberDigitTag": {
+                    "digitIndex": 0
+                }
+            }
+        },
+        "total_digit1": {
+            "components": {
+                "EditTag": {
+                    "name": "total_digit1",
+                    "parent": "total"
+                },
+                "Transform2DComponent": {
+                    "parent": "total",
+                    "scale": [
+                        32.0,
+                        40.0
+                    ],
+                    "rotation": 0.0,
+                    "translate": [
+                        32.0,
+                        0.0
+                    ]
+                },
+                "SpriteComponent": {
+                    "textureName": "numbers",
+                    "layer": 1,
+                    "uv": [
+                        0.0,
+                        0.0,
+                        0.1,
+                        1.0
+                    ]
+                },
+                "NumberDigitTag": {
+                    "digitIndex": 1
+                }
+            }
+        },
+        "total_digit2": {
+            "components": {
+                "EditTag": {
+                    "name": "total_digit2",
+                    "parent": "total"
+                },
+                "Transform2DComponent": {
+                    "parent": "total",
+                    "scale": [
+                        32.0,
+                        40.0
+                    ],
+                    "rotation": 0.0,
+                    "translate": [
+                        64.0,
+                        0.0
+                    ]
+                },
+                "SpriteComponent": {
+                    "textureName": "numbers",
+                    "layer": 1,
+                    "uv": [
+                        0.0,
+                        0.0,
+                        0.1,
+                        1.0
+                    ]
+                },
+                "NumberDigitTag": {
+                    "digitIndex": 2
+                }
+            }
+        },
+        "ClearMinutes_digit0": {
+            "components": {
+                "EditTag": {
+                    "name": "ClearMinutes_digit0",
+                    "parent": "ClearMinutes"
+                },
+                "Transform2DComponent": {
+                    "parent": "ClearMinutes",
+                    "scale": [
+                        32.0,
+                        40.0
+                    ],
+                    "rotation": 0.0,
+                    "translate": [
+                        0.0,
+                        0.0
+                    ]
+                },
+                "SpriteComponent": {
+                    "textureName": "numbers",
+                    "layer": 1,
+                    "uv": [
+                        0.0,
+                        0.0,
+                        0.1,
+                        1.0
+                    ]
+                },
+                "NumberDigitTag": {
+                    "digitIndex": 0
+                }
+            }
+        },
+        "ClearMinutes_digit1": {
+            "components": {
+                "EditTag": {
+                    "name": "ClearMinutes_digit1",
+                    "parent": "ClearMinutes"
+                },
+                "Transform2DComponent": {
+                    "parent": "ClearMinutes",
+                    "scale": [
+                        32.0,
+                        40.0
+                    ],
+                    "rotation": 0.0,
+                    "translate": [
+                        32.0,
+                        0.0
+                    ]
+                },
+                "SpriteComponent": {
+                    "textureName": "numbers",
+                    "layer": 1,
+                    "uv": [
+                        0.0,
+                        0.0,
+                        0.1,
+                        1.0
+                    ]
+                },
+                "NumberDigitTag": {
+                    "digitIndex": 1
+                }
+            }
+        },
+        "ClearSeconds_digit0": {
+            "components": {
+                "EditTag": {
+                    "name": "ClearSeconds_digit0",
+                    "parent": "ClearSeconds"
+                },
+                "Transform2DComponent": {
+                    "parent": "ClearSeconds",
+                    "scale": [
+                        32.0,
+                        40.0
+                    ],
+                    "rotation": 0.0,
+                    "translate": [
+                        0.0,
+                        0.0
+                    ]
+                },
+                "SpriteComponent": {
+                    "textureName": "numbers",
+                    "layer": 1,
+                    "uv": [
+                        0.0,
+                        0.0,
+                        0.1,
+                        1.0
+                    ]
+                },
+                "NumberDigitTag": {
+                    "digitIndex": 0
+                }
+            }
+        },
+        "ClearSeconds_digit1": {
+            "components": {
+                "EditTag": {
+                    "name": "ClearSeconds_digit1",
+                    "parent": "ClearSeconds"
+                },
+                "Transform2DComponent": {
+                    "parent": "ClearSeconds",
+                    "scale": [
+                        32.0,
+                        40.0
+                    ],
+                    "rotation": 0.0,
+                    "translate": [
+                        32.0,
+                        0.0
+                    ]
+                },
+                "SpriteComponent": {
+                    "textureName": "numbers",
+                    "layer": 1,
+                    "uv": [
+                        0.0,
+                        0.0,
+                        0.1,
+                        1.0
+                    ]
+                },
+                "NumberDigitTag": {
+                    "digitIndex": 1
                 }
             }
         }
@@ -818,6 +1194,7 @@
     ],
     "systems": [
         "EditSystem",
+        "GameClearInputSystem",
         "ModelLoadSystem",
         "SpriteLoadSystem",
         "LevelDoorSystem",

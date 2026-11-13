@@ -784,6 +784,7 @@
     ],
     "systems": [
         "EditSystem",
+        "MainStageProgressResetSystem",
         "ModelLoadSystem",
         "SpriteLoadSystem",
         "LevelDoorSystem",

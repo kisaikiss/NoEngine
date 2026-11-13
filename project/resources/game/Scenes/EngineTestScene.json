@@ -591,7 +591,7 @@
                         0.5
                     ],
                     "space": "World",
-                    "textureName": "",
+                    "textureName": "resources/engine/uvChecker.png",
                     "useMask": false,
                     "uv": [
                         0.0,
@@ -1242,6 +1242,7 @@
                     "parent": null
                 },
                 "TextComponent": {
+                    "fontName": "resources/engine/fonts/PixelMplus12-Regular.ttf",
                     "anchor": [
                         0.0,
                         0.0
@@ -1276,5 +1277,25 @@
                 }
             }
         }
-    }
+    },
+    "systems": [
+        "EditSystem",
+        "DrawManipulatorSystem",
+        "TestSystem",
+        "ModelLoadSystem",
+        "SpriteLoadSystem",
+        "FontLoadSystem",
+        "AnimationSystem",
+        "SpriteAnimationSystem",
+        "ParticleEmitterSystem",
+        "EffectEmitSystem",
+        "ParticleSystem",
+        "DebugCameraSystem",
+        "DebugCamera2DSystem",
+        "CameraSystem",
+        "Camera2DSystem",
+        "MovementSystem",
+        "TransformRoutineSystem",
+        "DrawWaypointRouteSystem"
+    ]
 }

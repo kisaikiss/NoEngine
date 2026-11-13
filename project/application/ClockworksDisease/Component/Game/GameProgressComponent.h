@@ -9,7 +9,7 @@ struct CollectibleItemTag {};
 struct GoalItemTag {};
 
 // シーン内のアイテム総数・取得数・経過時間を保持する。
-// GameScene::Setup()で専用の管理Entity(1つだけ)に付ける。
+// エディタでシーン内の専用の管理Entity(1つだけ)に付ける。
 struct GameProgressComponent {
 	uint32_t totalItemCount = 0;
 	uint32_t collectedItemCount = 0;

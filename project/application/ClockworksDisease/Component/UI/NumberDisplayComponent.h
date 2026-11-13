@@ -14,3 +14,9 @@ struct NumberDisplayComponent {
 	uint32_t digitCount = 1;
 	std::vector<No::Entity> digitEntities;
 };
+
+// クリア結果のどの値を数値表示へ反映するかを指定する。
+struct GameResultNumberComponent {
+	enum class Source { CollectedItems, TotalItems, ClearMinutes, ClearSeconds };
+	Source source = Source::CollectedItems;
+};

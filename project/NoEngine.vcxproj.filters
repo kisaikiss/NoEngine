@@ -56,9 +56,10 @@
     <FxCompile Include="resources\game\ClockworksDisease\Shaders\Octagrams.PS.hlsl" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="application\ClockworksDisease\Component\UI\NumberDisplayComponent.cpp" />
+    <ClCompile Include="application\ClockworksDisease\System\UI\GameClearInputSystem.cpp" />
     <ClCompile Include="engine\Assets\Audio\Audio.cpp" />
     <ClCompile Include="engine\Functions\Renderer\Primitive.cpp" />
-    <ClCompile Include="application\TestApp\Scene\EngineTestScene.cpp" />
     <ClCompile Include="application\TestApp\System\TestSystem.cpp" />
     <ClCompile Include="engine\Assets\Model\ModelLoader.cpp" />
     <ClCompile Include="engine\Assets\Texture\TexUtil.cpp" />
@@ -298,7 +299,6 @@
     <ClCompile Include="engine\Functions\ECS\System\Gameplay\MoverSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Animation\TransformRoutineSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Editor\DrawWaypointRouteSystem.cpp" />
-    <ClCompile Include="application\ClockworksDisease\Scene\TitleScene.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Movement\CapturePlatformPrevTransformSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Movement\ComputePlatformDeltaSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Game\PlatformRideSystem.cpp" />
@@ -343,8 +343,6 @@
     <ClCompile Include="engine\Editor\Panels\GameControllerPanel.cpp" />
     <ClCompile Include="engine\Editor\Panels\SystemListPanel.cpp" />
     <ClCompile Include="engine\Editor\Panels\EditorWindowManager.cpp" />
-    <ClCompile Include="application\ClockworksDisease\Scene\GameClearScene.cpp" />
-    <ClCompile Include="application\ClockworksDisease\Scene\GameScene.cpp" />
     <ClCompile Include="application\ClockworksDisease\Component\Dialogue\DialogueComponent.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Dialogue\DialogueInteractSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Dialogue\DialogueSystem.cpp" />
@@ -373,13 +371,13 @@
     <ClCompile Include="application\ClockworksDisease\System\Player\PlayerInputSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="application\ClockworksDisease\System\UI\GameClearInputSystem.h" />
     <ClInclude Include="engine\Assets\Audio\Audio.h" />
     <ClInclude Include="engine\Functions\ECS\Component\Asset\LightComponent.h" />
     <ClInclude Include="engine\Functions\ECS\Component\Asset\FogVolumeComponent.h" />
     <ClInclude Include="engine\Functions\ECS\EventBus.h" />
     <ClInclude Include="engine\Functions\ECS\Event\SceneChangeEvent.h" />
     <ClInclude Include="engine\Functions\Renderer\Primitive.h" />
-    <ClInclude Include="application\TestApp\Scene\EngineTestScene.h" />
     <ClInclude Include="application\TestApp\System\TestSystem.h" />
     <ClInclude Include="engine\Assets\Model\Animation.h" />
     <ClInclude Include="engine\Assets\Model\ModelLoader.h" />
@@ -667,7 +665,6 @@
     <ClInclude Include="engine\Functions\ECS\System\Animation\TransformRoutineSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\Editor\DrawWaypointRouteSystem.h" />
     <ClInclude Include="engine\Math\TransformRoutineCurves.h" />
-    <ClInclude Include="application\ClockworksDisease\Scene\TitleScene.h" />
     <ClInclude Include="engine\Functions\ECS\System\Movement\CapturePlatformPrevTransformSystem.h" />
     <ClInclude Include="engine\Functions\ECS\System\Movement\ComputePlatformDeltaSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Game\PlatformRideSystem.h" />
@@ -717,8 +714,6 @@
     <ClInclude Include="engine\Editor\Panels\GameControllerPanel.h" />
     <ClInclude Include="engine\Editor\Panels\SystemListPanel.h" />
     <ClInclude Include="engine\Editor\Panels\EditorWindowManager.h" />
-    <ClInclude Include="application\ClockworksDisease\Scene\GameClearScene.h" />
-    <ClInclude Include="application\ClockworksDisease\Scene\GameScene.h" />
     <ClInclude Include="engine\Functions\ECS\System\Loader\FontLoadSystem.h" />
     <ClInclude Include="application\ClockworksDisease\Component\Dialogue\DialogueComponent.h" />
     <ClInclude Include="application\ClockworksDisease\System\Dialogue\DialogueInteractSystem.h" />

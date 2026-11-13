@@ -194,6 +194,8 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="application\ClockworksDisease\Component\UI\NumberDisplayComponent.cpp" />
+    <ClCompile Include="application\ClockworksDisease\System\UI\GameClearInputSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\ClockworksDisease.cpp" />
     <ClCompile Include="application\ClockworksDisease\Component\Background\ShaderBackgroundComponent.cpp" />
     <ClCompile Include="application\ClockworksDisease\Component\Camera\CameraIntroComponent.cpp" />
@@ -217,9 +219,6 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="application\ClockworksDisease\Component\UI\TitleUIComponent.cpp" />
     <ClCompile Include="application\ClockworksDisease\Component\UI\UserInterfaceComponent.cpp" />
     <ClCompile Include="application\ClockworksDisease\Render\ShaderBackgroundPass.cpp" />
-    <ClCompile Include="application\ClockworksDisease\Scene\GameClearScene.cpp" />
-    <ClCompile Include="application\ClockworksDisease\Scene\GameScene.cpp" />
-    <ClCompile Include="application\ClockworksDisease\Scene\TitleScene.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Camera\CameraIntroSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Camera\FollowCameraSystem.cpp" />
     <ClCompile Include="application\ClockworksDisease\System\Dialogue\DialogueAutoTriggerSystem.cpp" />
@@ -377,7 +376,6 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="engine\Functions\Renderer\PipelineState\RootSignatureManager.cpp" />
     <ClCompile Include="engine\Functions\Renderer\PipelineState\StateObjectManager.cpp" />
     <ClCompile Include="engine\Functions\Renderer\Primitive.cpp" />
-    <ClCompile Include="application\TestApp\Scene\EngineTestScene.cpp" />
     <ClCompile Include="application\TestApp\System\TestSystem.cpp" />
     <ClCompile Include="engine\Assets\Model\ModelLoader.cpp" />
     <ClCompile Include="engine\Assets\Texture\TexUtil.cpp" />
@@ -560,6 +558,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="application\ClockworksDisease\System\Game\TerrainLoadSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="application\ClockworksDisease\System\UI\GameClearInputSystem.h" />
     <ClInclude Include="application\ClockworksDisease\ClockworksDisease.h" />
     <ClInclude Include="application\ClockworksDisease\Component\Background\ShaderBackgroundComponent.h" />
     <ClInclude Include="application\ClockworksDisease\Component\Camera\CameraIntroComponent.h" />
@@ -573,8 +572,6 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="application\ClockworksDisease\Component\Stage\StageIntroDisplayComponent.h" />
     <ClInclude Include="application\ClockworksDisease\Component\Tutorial\TutorialObjectComponent.h" />
     <ClInclude Include="application\ClockworksDisease\Render\ShaderBackgroundPass.h" />
-    <ClInclude Include="application\ClockworksDisease\Scene\GameClearScene.h" />
-    <ClInclude Include="application\ClockworksDisease\Scene\GameScene.h" />
     <ClInclude Include="application\ClockworksDisease\System\Dialogue\DialogueAutoTriggerSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Dialogue\DialogueInteractSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Dialogue\DialogueSystem.h" />
@@ -592,7 +589,6 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="application\ClockworksDisease\Component\UI\PauseMenuComponent.h" />
     <ClInclude Include="application\ClockworksDisease\Component\UI\TitleUIComponent.h" />
     <ClInclude Include="application\ClockworksDisease\Component\UI\UserInterfaceComponent.h" />
-    <ClInclude Include="application\ClockworksDisease\Scene\TitleScene.h" />
     <ClInclude Include="application\ClockworksDisease\System\Camera\CameraIntroSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Camera\FollowCameraSystem.h" />
     <ClInclude Include="application\ClockworksDisease\System\Game\ColliderDrawSystem.h" />
@@ -756,7 +752,6 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="engine\Functions\Renderer\PipelineState\RootSignatureManager.h" />
     <ClInclude Include="engine\Functions\Renderer\PipelineState\StateObjectManager.h" />
     <ClInclude Include="engine\Functions\Renderer\Primitive.h" />
-    <ClInclude Include="application\TestApp\Scene\EngineTestScene.h" />
     <ClInclude Include="application\TestApp\System\TestSystem.h" />
     <ClInclude Include="engine\Assets\Model\Animation.h" />
     <ClInclude Include="engine\Assets\Model\ModelLoader.h" />

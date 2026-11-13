@@ -11,6 +11,15 @@ void RecordCollectedItem(No::Registry& registry, No::Entity item);
 bool HasReachedStage(const std::string& sceneName);
 }
 
+// タイトルへ入った最初の更新で、前回のプレイの進行状況を破棄する。
+class MainStageProgressResetSystem : public No::ISystem {
+public:
+	MainStageProgressResetSystem() { SetStopInGameStop(false); SetStopInPause(false); }
+	void Update(No::Registry& registry, float deltaTime) override;
+private:
+	bool reset_ = false;
+};
+
 class MainStageProgressRestoreSystem : public No::ISystem {
 public:
 	void Update(No::Registry& registry, float deltaTime) override;

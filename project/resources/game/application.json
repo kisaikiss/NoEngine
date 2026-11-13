@@ -3,6 +3,11 @@
     "scenes": [
         "OpeningScene",
         "GameScene",
-        "TutorialStage"
+        "TutorialStage",
+        "TitleScene",
+        "GameClearScene",
+        "TestScene",
+        "SampleScene",
+        "EngineTestScene"
     ]
 }

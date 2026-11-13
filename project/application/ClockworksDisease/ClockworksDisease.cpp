@@ -1,7 +1,4 @@
 #include "ClockworksDisease.h"
-#include "Scene/GameScene.h"
-#include "Scene/TitleScene.h"
-#include "Scene/GameClearScene.h"
 
 #include "Render/ShaderBackgroundPass.h"
 
@@ -10,11 +7,6 @@
 
 void ClockworksDisease::Startup(void) {
 	RegisterDialogueGameplay();
-	RegisterScene("TestScene", []() { return std::make_unique<GameScene>();	});
-	RegisterScene("SampleScene", []() { return std::make_unique<GameScene>();	});
-
-	RegisterScene("TitleScene", []() { return std::make_unique<TitleScene>();	});
-	RegisterScene("GameClearScene", []() {return std::make_unique<GameClearScene>(); });
 	ChangeScene("TitleScene");
 
 	// ポーズメニュー

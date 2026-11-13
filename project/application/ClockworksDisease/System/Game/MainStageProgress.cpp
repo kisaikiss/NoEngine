@@ -135,6 +135,16 @@ void RecordCollectedItem(No::Registry& registry, No::Entity item) {
 }
 }
 
+void MainStageProgressResetSystem::Update(No::Registry& registry, float deltaTime) {
+	static_cast<void>(registry);
+	static_cast<void>(deltaTime);
+	if (reset_) return;
+	MainStageProgress::Reset();
+	reset_ = true;
+}
+
+REGISTER_SYSTEM(::MainStageProgressResetSystem, "MainStageProgressResetSystem", "Gameplay")
+
 void MainStageProgressRestoreSystem::Update(No::Registry& registry, float deltaTime) {
 	static_cast<void>(deltaTime);
 	if (isFirstFrame_) {
