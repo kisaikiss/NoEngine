@@ -39,6 +39,7 @@ public:
 		BlendMode blendMode;
 		float distanceToCamera;
 		Component::AnimatorComponent* animator;
+		uint32_t id;
 	};
 
 	struct MeshDrawLists {

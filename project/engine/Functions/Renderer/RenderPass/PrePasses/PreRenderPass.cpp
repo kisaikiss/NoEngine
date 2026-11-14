@@ -5,7 +5,6 @@
 #include "engine/Functions/Shader/ShaderReflection.h"
 #include "engine/Functions/ECS/Component/Asset/AnimatorComponent.h"
 #include "engine/Assets/Model/ModelSaver.h"
-#include "engine/Functions/Renderer/MeshWorldTransform.h"
 
 namespace NoEngine {
 namespace Render {
@@ -17,29 +16,17 @@ PreRenderPass::PreRenderPass() {}
 void PreRenderPass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& resourceRegistry, ECS::Registry& registry) {
 	(void)resourceRegistry;
 	auto* renderCtx = GetRenderContext();
-	items_.clear();
 	CameraComponent* camera = GetTargetCamera();
 	if (camera == nullptr) return;
 
-	auto view = registry.View<
-		TransformComponent,
-		MeshComponent,
-		MaterialComponent
-	>();
-
-	for (auto entity : view) {
-		auto* mesh = registry.GetComponent<MeshComponent>(entity);
-		if (!mesh->isVisible) continue;
-		auto* anime = registry.GetComponent<AnimatorComponent>(entity);
-		const auto world = MakeMeshWorldMatrix(registry, entity, camera, renderCtx->GetCamera());
-		items_.push_back({ world, mesh->handle, static_cast<uint32_t>(entity), anime });
-	}
+	// 本描画と同じ分類を使い、半透明のサブメッシュを影計算用の情報に書き込まない。
+	const auto& items = renderCtx->GetMeshDrawLists(registry, *camera).opaque;
 
 	gfx.SetPipelineState(renderCtx->GetGraphicsPSO("Renderer : PreRender PSO"));
 	gfx.SetRootSignature(renderCtx->GetRootSignature("Renderer : PreRender PSO"));
 	auto& rootIndex = RootSignatureBuilder::GetRootIndexMap("Renderer : PreRender PSO");
 	gfx.SetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	for (auto& item : items_) {
+	for (const auto& item : items) {
 
 
 		struct MeshConstants {
@@ -64,13 +51,12 @@ void PreRenderPass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& res
 
 		gfx.SetDynamicConstantBufferView(rootIndex["gObjectID"], sizeof(constants), &constants);
 
-		auto* mesh = ModelSaver::Get().GetMesh(item.mesh);
-		if (!mesh) continue;
+		auto* mesh = item.mesh;
 		auto& vertices = item.animator ? item.animator->GetVertexBuffer(*mesh) : mesh->useVertexBuffer;
 		gfx.TransitionResource(vertices, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER | D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, true);
 		gfx.SetVertexBuffer(0, vertices.VertexBufferView());
 		gfx.SetIndexBuffer(mesh->indexBuffer.IndexBufferView());
-		for (const auto& subMesh : mesh->subMeshes) {
+		for (const auto& subMesh : item.subMeshes) {
 			gfx.DrawIndexedInstanced(subMesh.indexCount, 1, subMesh.indexStart, subMesh.vertexStart, 0);
 		}
 		// 次回のCompute更新へ描画専用の状態を持ち越さない。

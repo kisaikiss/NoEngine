@@ -15,17 +15,6 @@ public:
     PreRenderPass();
     void Execute(GraphicsContext& gfx, const RenderGraphRegistry& resourceRegistry, ECS::Registry& registry) override;
 
-private:
-   /// <summary>
-   /// 描画に必要な変数
-   /// </summary>
-    struct DrawItem {
-        Math::Matrix4x4 world;
-        Asset::MeshHandle mesh;
-        uint32_t id;
-        Component::AnimatorComponent* animator;
-    };
-    std::vector<DrawItem> items_;
 };
 
 }

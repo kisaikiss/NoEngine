@@ -137,7 +137,7 @@ const RenderContext::MeshDrawLists& RenderContext::GetMeshDrawLists(ECS::Registr
 				blendMode = BlendMode::kAlpha;
 			}
 			auto& items = blendMode == BlendMode::kNormal ? lists.opaque : lists.transparent;
-			items.push_back({world, mesh, subMeshes, &settings, blendMode, distance, animator});
+			items.push_back({world, mesh, subMeshes, &settings, blendMode, distance, animator, static_cast<uint32_t>(entity)});
 		};
 
 		const auto& modelName = meshComponent->meshName;

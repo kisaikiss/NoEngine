@@ -88,10 +88,10 @@
                                     "duration": 1.0,
                                     "easing": "Linear",
                                     "rotation": [
-                                        -1.415076944510929e-08,
-                                        0.714839518070221,
-                                        -1.415076944510929e-08,
-                                        0.699288547039032
+                                        0.08087968081235886,
+                                        0.710249662399292,
+                                        -0.0791202187538147,
+                                        0.6947977542877197
                                     ],
                                     "scale": [
                                         1.0,
@@ -244,10 +244,10 @@
                                         "duration": 1.0,
                                         "easing": "Linear",
                                         "rotation": [
-                                            -1.415076944510929e-08,
-                                            0.714839518070221,
-                                            -1.415076944510929e-08,
-                                            0.699288547039032
+                                            0.08087968081235886,
+                                            0.710249662399292,
+                                            -0.0791202187538147,
+                                            0.6947977542877197
                                         ],
                                         "scale": [
                                             1.0,
@@ -420,6 +420,161 @@
                 }
             }
         },
+        "DeathEffect": {
+            "components": {
+                "EditTag": {
+                    "name": "DeathEffect",
+                    "parent": null
+                },
+                "EffectEmitterComponent": {
+                    "burstCount": 1,
+                    "burstInterval": 0.10000000149011612,
+                    "color": [
+                        0.4056939482688904,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "count": 100,
+                    "emitRange": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "maxLifeTime": 6.0,
+                    "maxRotate": 3.1415927410125732,
+                    "maxScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "maxSpeed": [
+                        4.0,
+                        3.0,
+                        0.5
+                    ],
+                    "minLifeTime": 2.0,
+                    "minRotate": 0.0,
+                    "minScale": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "minSpeed": [
+                        4.0,
+                        0.0,
+                        -0.5
+                    ],
+                    "shape": "kPlane",
+                    "spawnOffset": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "spawnRadius": 1.0,
+                    "spawnShape": "kBox",
+                    "startDelay": 0.0,
+                    "textureName": "resources/engine/Texture/circle.png",
+                    "velocityDistribution": "kSphere"
+                },
+                "PlayerDeathEffectTag": null,
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            },
+            "prefabBase": {
+                "components": {
+                    "EffectEmitterComponent": {
+                        "burstCount": 1,
+                        "burstInterval": 0.10000000149011612,
+                        "color": [
+                            0.4056939482688904,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "count": 100,
+                        "emitRange": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "maxLifeTime": 6.0,
+                        "maxRotate": 3.1415927410125732,
+                        "maxScale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ],
+                        "maxSpeed": [
+                            4.0,
+                            3.0,
+                            0.5
+                        ],
+                        "minLifeTime": 2.0,
+                        "minRotate": 0.0,
+                        "minScale": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "minSpeed": [
+                            4.0,
+                            0.0,
+                            -0.5
+                        ],
+                        "shape": "kPlane",
+                        "spawnOffset": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "spawnRadius": 1.0,
+                        "spawnShape": "kBox",
+                        "startDelay": 0.0,
+                        "textureName": "resources/engine/Texture/circle.png",
+                        "velocityDistribution": "kSphere"
+                    },
+                    "PlayerDeathEffectTag": null,
+                    "TransformComponent": {
+                        "rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ],
+                        "translate": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ]
+                    }
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\DeathEffect.json",
+            "prefabOverrides": []
+        },
         "DebugCamera": {
             "components": {
                 "CameraComponent": {
@@ -427,9 +582,9 @@
                 },
                 "DebugCameraComponent": {
                     "center": [
-                        186.10110473632813,
-                        23.916275024414063,
-                        14.600503921508789
+                        16.27227020263672,
+                        13.648111343383789,
+                        3.102235794067383
                     ],
                     "distance": 24.76100730895996,
                     "drawCenter": false,
@@ -444,10 +599,10 @@
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
-                        0.04743294417858124,
-                        0.9267709851264954,
-                        -0.35093387961387634,
-                        0.1252642720937729
+                        0.2397373467683792,
+                        0.7584084272384644,
+                        -0.45792141556739807,
+                        0.39705243706703186
                     ],
                     "scale": [
                         1.0,
@@ -455,9 +610,9 @@
                         1.0
                     ],
                     "translate": [
-                        181.17636108398438,
-                        40.31682586669922,
-                        32.485591888427734
+                        6.796380043029785,
+                        35.56060028076172,
+                        9.6716947555542
                     ]
                 }
             }
