@@ -155,6 +155,8 @@
     <ClCompile Include="engine\Editor\Utilities\ScenePlacement.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Editor\EditSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Common\TransformComponent.cpp" />
+    <ClCompile Include="engine\Functions\ECS\Component\Common\BillboardComponent.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\MeshWorldTransform.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Common\Transform2DComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Asset\SpriteComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Asset\LightComponent.cpp" />
@@ -390,6 +392,8 @@
     <ClInclude Include="engine\Functions\ECS\Component\Asset\SpriteComponent.h" />
     <ClInclude Include="engine\Assets\Texture\TexUtil.h" />
     <ClInclude Include="engine\Functions\ECS\Component\Common\TransformComponent.h" />
+    <ClInclude Include="engine\Functions\ECS\Component\Common\BillboardComponent.h" />
+    <ClInclude Include="engine\Functions\Renderer\MeshWorldTransform.h" />
     <ClInclude Include="engine\Functions\ECS\Component\Common\Transform2DComponent.h" />
     <ClInclude Include="engine\Functions\ECS\ComponentPool.h" />
     <ClInclude Include="engine\Functions\ECS\Entity.h" />

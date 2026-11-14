@@ -11,6 +11,7 @@
 
 #include "Initializer/RenderInitializer.h"
 #include "LightForGPU.h"
+#include "MeshWorldTransform.h"
 
 namespace NoEngine {
 using namespace Component;
@@ -52,6 +53,11 @@ RenderContext::RenderContext() {
 }
 
 void RenderContext::Update(ECS::Registry& registry) {
+	// カメラ削除・シーン切替時に前フレームの参照を残さない。
+	camera_ = nullptr;
+	debugCamera_ = nullptr;
+	camera2d_ = nullptr;
+	debugCamera2d_ = nullptr;
 	tlasReady_ = false;
 	fogSpotLight_.reset();
 	// 収集済みのリストを無効化し、確保済みの領域は次の描画で再利用する。
@@ -119,10 +125,9 @@ const RenderContext::MeshDrawLists& RenderContext::GetMeshDrawLists(ECS::Registr
 		auto* mesh = ModelSaver::Get().GetMesh(meshComponent->handle);
 		if (!mesh || mesh->subMeshes.empty()) continue;
 		auto* material = registry.GetComponent<MaterialComponent>(entity);
-		auto* transform = registry.GetComponent<TransformComponent>(entity);
 		auto* animator = registry.GetComponent<AnimatorComponent>(entity);
-		Transform* animationLocal = animator ? &animator->local : nullptr;
-		const float distance = MathCalculations::LengthSquared(transform->translate - cameraPos);
+		const auto world = MakeMeshWorldMatrix(registry, entity, &camera, camera_);
+		const float distance = MathCalculations::LengthSquared(world.GetTranslate() - cameraPos);
 
 		auto addDraw = [&](std::span<const SubMesh> subMeshes, MeshMaterialSettings& settings) {
 			BlendMode blendMode = settings.blendMode;
@@ -132,7 +137,7 @@ const RenderContext::MeshDrawLists& RenderContext::GetMeshDrawLists(ECS::Registr
 				blendMode = BlendMode::kAlpha;
 			}
 			auto& items = blendMode == BlendMode::kNormal ? lists.opaque : lists.transparent;
-			items.push_back({mesh, subMeshes, &settings, blendMode, transform, animationLocal, distance, animator});
+			items.push_back({world, mesh, subMeshes, &settings, blendMode, distance, animator});
 		};
 
 		const auto& modelName = meshComponent->meshName;

@@ -49,6 +49,7 @@ void MeshPassBase::EnsurePSOsInitialized() {
 
 void MeshPassBase::RenderItems(GraphicsContext& context, const RenderGraphRegistry& resourceRegistry,
 	const std::vector<RenderContext::MeshDrawItem>& items, const CameraComponent& camera, ECS::Registry& registry) {
+	static_cast<void>(registry);
 	uint32_t currentPSO = 0xFFFFFFFF;
 	auto* renderCtx = GetRenderContext();
 	for (auto& item : items) {
@@ -76,13 +77,8 @@ void MeshPassBase::RenderItems(GraphicsContext& context, const RenderGraphRegist
 			Math::Matrix4x4 worldIT;
 		};
 		MeshConstants m;
-		if (item.animationLocal) {
-			m.world = item.animationLocal->MakeAffineMatrix4x4(registry) * item.transform->MakeAffineMatrix4x4(registry);
-			m.worldIT = m.world;
-		} else {
-			m.world = item.transform->MakeAffineMatrix4x4(registry);
-			m.worldIT = m.world;
-		}
+		m.world = item.world;
+		m.worldIT = m.world;
 
 		m.worldIT.Inverse();
 		m.worldIT.Transpose();
@@ -204,6 +200,7 @@ void MeshPass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& resource
 
 void MeshPass::RenderOutline(GraphicsContext& context, const std::vector<RenderContext::MeshDrawItem>& items,
 	const CameraComponent& camera, ECS::Registry& registry) {
+	static_cast<void>(registry);
 	if (items.empty()) return;
 	auto* renderCtx = GetRenderContext();
 	outlinePSOName_ = "Renderer : outline PSO";
@@ -221,10 +218,7 @@ void MeshPass::RenderOutline(GraphicsContext& context, const std::vector<RenderC
 
 		auto& rootIndex = RootSignatureBuilder::GetRootIndexMap(outlinePSOName_);
 
-		Math::Matrix4x4 worldData = item.transform->MakeAffineMatrix4x4(registry);
-		if (item.animationLocal) {
-			worldData = item.animationLocal->MakeAffineMatrix4x4(registry) * worldData;
-		}
+		const Math::Matrix4x4& worldData = item.world;
 		context.SetDynamicConstantBufferView(rootIndex["gWorldMatrix"], sizeof(Math::Matrix4x4), &worldData);
 		context.SetDynamicConstantBufferView(rootIndex["gCameraMatrix"], sizeof(Component::CameraForGPU), &camera.forGPU);
 

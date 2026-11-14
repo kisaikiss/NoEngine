@@ -328,6 +328,8 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="engine\Functions\ECS\Component\Asset\SpriteComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Common\Transform2DComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Common\TransformComponent.cpp" />
+    <ClCompile Include="engine\Functions\ECS\Component\Common\BillboardComponent.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\MeshWorldTransform.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Collision\CollisionResolutionSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Gameplay\TriggerSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Gameplay\EventLinkSystem.cpp" />
@@ -765,6 +767,8 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="engine\Functions\ECS\Component\Asset\SpriteComponent.h" />
     <ClInclude Include="engine\Assets\Texture\TexUtil.h" />
     <ClInclude Include="engine\Functions\ECS\Component\Common\TransformComponent.h" />
+    <ClInclude Include="engine\Functions\ECS\Component\Common\BillboardComponent.h" />
+    <ClInclude Include="engine\Functions\Renderer\MeshWorldTransform.h" />
     <ClInclude Include="engine\Functions\ECS\Component\Common\Transform2DComponent.h" />
     <ClInclude Include="engine\Functions\ECS\ComponentPool.h" />
     <ClInclude Include="engine\Functions\ECS\Entity.h" />

@@ -1,0 +1,84 @@
+{
+    "components": {
+        "BillboardComponent": {
+            "axis": [
+                0.0,
+                1.0,
+                0.0
+            ],
+            "cameraSource": "ActiveCamera",
+            "constraint": "Free",
+            "enabled": true,
+            "facing": "CameraPosition",
+            "rotationOffset": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ]
+        },
+        "EditTag": {
+            "name": "billboard",
+            "parent": null
+        },
+        "MaterialComponent": {
+            "blendMode": "kAlpha",
+            "castShadow": false,
+            "color": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+            ],
+            "drawOutline": false,
+            "edgeColor": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+            ],
+            "emissiveIntensity": 1.0,
+            "environmentCoefficient": 0.0,
+            "noiseScrollSpeed": 0.30000001192092896,
+            "noiseTextureName": "noise0",
+            "receiveShadow": false,
+            "renderMode": "kDefault",
+            "rimPower": 2.0,
+            "shininess": 60.0,
+            "textureName": "",
+            "unlit": false,
+            "uvPosition": [
+                0.0,
+                0.0
+            ],
+            "uvRotate": 0.0,
+            "uvScale": [
+                1.0,
+                1.0
+            ]
+        },
+        "MeshComponent": {
+            "isVisible": true,
+            "meshName": "resources/engine/Model/test/plane.obj"
+        },
+        "TransformComponent": {
+            "parent": null,
+            "rotation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "translate": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        }
+    }
+}

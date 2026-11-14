@@ -20,10 +20,8 @@ private:
    /// 描画に必要な変数
    /// </summary>
     struct DrawItem {
+        Math::Matrix4x4 world;
         Asset::MeshHandle mesh;
-        Component::MaterialComponent* material;
-        Component::TransformComponent* transform;
-        Transform* local;
         uint32_t id;
         Component::AnimatorComponent* animator;
     };

@@ -3,6 +3,7 @@
 #include "engine/Functions/ECS/Component/Asset/MeshComponent.h"
 #include "engine/Functions/ECS/Component/Asset/LightComponent.h"
 #include "engine/Runtime/GraphicsCore.h"
+#include "engine/Functions/Renderer/MeshWorldTransform.h"
 
 #include  "engine/Assets/Model/ModelSaver.h"
 
@@ -34,7 +35,6 @@ void TLASBuildPass::BuildRaytracingInstances(ECS::Registry& registry) {
 
 	for (auto entity : view) {
 		auto* meshComp = registry.GetComponent<Component::MeshComponent>(entity);
-		auto* transform = registry.GetComponent<Component::TransformComponent>(entity);
 
 		auto* mesh = ModelSaver::Get().GetMesh(meshComp->handle);
 		if (!mesh) continue;
@@ -54,7 +54,9 @@ void TLASBuildPass::BuildRaytracingInstances(ECS::Registry& registry) {
 		desc.InstanceID = static_cast<UINT>(entity);
 		desc.InstanceContributionToHitGroupIndex = 0;
 
-		FillInstanceTransform(desc, transform, animator, registry);
+		auto world = MakeMeshWorldMatrix(registry, entity, GetTargetCamera(), GetRenderContext()->GetCamera());
+		world.Transpose();
+		std::memcpy(desc.Transform, &world, sizeof(desc.Transform));
 		desc.AccelerationStructure = rtMesh->blas->GetGPUVirtualAddress();
 
 		instances_.push_back(desc);
@@ -126,15 +128,6 @@ void TLASBuildPass::BuildTLAS(GraphicsContext& gfx) {
 	const auto tlasBarrier = CD3DX12_RESOURCE_BARRIER::UAV(tlas.Get());
 	commandList->ResourceBarrier(1, &tlasBarrier);
 	renderContext->MarkTLASReady();
-}
-
-void TLASBuildPass::FillInstanceTransform(D3D12_RAYTRACING_INSTANCE_DESC& instance, const Component::TransformComponent* transform, Component::AnimatorComponent* animator, ECS::Registry& registry) {
-	Math::Matrix4x4 t = transform->MakeAffineMatrix4x4(registry);
-	if (animator) t = animator->local.MakeAffineMatrix4x4() * t;
-	t.Transpose();
-
-	// Matrix4x4 を Matrix3x4へ設定するために Transpose したものをコピーする。
-	std::memcpy(instance.Transform, &t, sizeof(instance.Transform));
 }
 
 }

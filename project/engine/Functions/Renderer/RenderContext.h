@@ -32,12 +32,11 @@ public:
 	void Update(ECS::Registry& registry);
 
 	struct MeshDrawItem {
+		Math::Matrix4x4 world;
 		Mesh* mesh;
 		std::span<const SubMesh> subMeshes;
 		Component::MeshMaterialSettings* material;
 		BlendMode blendMode;
-		Component::TransformComponent* transform;
-		Transform* animationLocal;
 		float distanceToCamera;
 		Component::AnimatorComponent* animator;
 	};
@@ -167,8 +166,8 @@ private:
 	uint64_t softShadowSlices_ = 0;
 
 	// カメラ
-	Component::CameraComponent* camera_;
-	Component::CameraComponent* debugCamera_;
+	Component::CameraComponent* camera_ = nullptr;
+	Component::CameraComponent* debugCamera_ = nullptr;
 	std::unordered_map<std::string, Component::CameraComponent*> cameras_;
 
 	struct CameraMeshDrawLists {
@@ -179,8 +178,8 @@ private:
 	size_t activeMeshDrawListCount_ = 0;
 
 	// 2Dカメラ
-	Component::Camera2DComponent* camera2d_;
-	Component::Camera2DComponent* debugCamera2d_;
+	Component::Camera2DComponent* camera2d_ = nullptr;
+	Component::Camera2DComponent* debugCamera2d_ = nullptr;
 	std::unordered_map<std::string, Component::Camera2DComponent*> cameras2d_;
 
 	// 描画Pipeline

@@ -5,6 +5,7 @@
 #include "engine/Functions/Shader/ShaderReflection.h"
 #include "engine/Functions/ECS/Component/Asset/AnimatorComponent.h"
 #include "engine/Assets/Model/ModelSaver.h"
+#include "engine/Functions/Renderer/MeshWorldTransform.h"
 
 namespace NoEngine {
 namespace Render {
@@ -17,6 +18,8 @@ void PreRenderPass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& res
 	(void)resourceRegistry;
 	auto* renderCtx = GetRenderContext();
 	items_.clear();
+	CameraComponent* camera = GetTargetCamera();
+	if (camera == nullptr) return;
 
 	auto view = registry.View<
 		TransformComponent,
@@ -27,20 +30,10 @@ void PreRenderPass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& res
 	for (auto entity : view) {
 		auto* mesh = registry.GetComponent<MeshComponent>(entity);
 		if (!mesh->isVisible) continue;
-		auto* material = registry.GetComponent<MaterialComponent>(entity);
-
-		auto* transform = registry.GetComponent<TransformComponent>(entity);
 		auto* anime = registry.GetComponent<AnimatorComponent>(entity);
-		Transform* animeLocal = nullptr;
-		if (anime) {
-			animeLocal = &anime->local;
-		}
-
-		items_.push_back({ mesh->handle, material, transform, animeLocal, static_cast<uint32_t>(entity), anime });
+		const auto world = MakeMeshWorldMatrix(registry, entity, camera, renderCtx->GetCamera());
+		items_.push_back({ world, mesh->handle, static_cast<uint32_t>(entity), anime });
 	}
-
-	CameraComponent* camera = GetTargetCamera();
-	if (camera == nullptr) return;
 
 	gfx.SetPipelineState(renderCtx->GetGraphicsPSO("Renderer : PreRender PSO"));
 	gfx.SetRootSignature(renderCtx->GetRootSignature("Renderer : PreRender PSO"));
@@ -54,13 +47,8 @@ void PreRenderPass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& res
 			Math::Matrix4x4 worldIT;
 		};
 		MeshConstants m;
-		if (item.local) {
-			m.world = item.local->MakeAffineMatrix4x4(registry) * item.transform->MakeAffineMatrix4x4(registry);
-			m.worldIT = m.world;
-		} else {
-			m.world = item.transform->MakeAffineMatrix4x4(registry);
-			m.worldIT = m.world;
-		}
+		m.world = item.world;
+		m.worldIT = m.world;
 		m.worldIT.Inverse();
 		m.worldIT.Transpose();
 		gfx.SetDynamicConstantBufferView(rootIndex["gWorldMatrix"], sizeof(MeshConstants), &m);
