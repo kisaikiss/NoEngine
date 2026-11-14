@@ -46,6 +46,12 @@ REFLECT_FIELD(interactable),
 REFLECT_FIELD(enabled)
 REFLECT_STRUCT_END(DialogueComponent)
 
+REFLECT_STRUCT_BEGIN(DialogueInteractPromptSettings, "Application")
+REFLECT_FIELD(offset),
+REFLECT_FIELD(size),
+REFLECT_FIELD(interval)
+REFLECT_STRUCT_END(DialogueInteractPromptSettings)
+
 REFLECT_STRUCT_BEGIN(DialogueAutoTriggerComponent, "Application")
 REFLECT_FIELD(radius),
 REFLECT_FIELD(once)

@@ -16,6 +16,15 @@ struct DialogueComponent {
 	bool enabled = true;              // 自動発火・グラフを含め、新しい会話の開始を許可するか
 };
 
+// 会話データの配置を変えず、表示設定だけを任意で追加できるようにする。
+// 未追加の話者には、ここに定義した初期値を使う。
+struct DialogueInteractPromptSettings {
+	// ワールド座標でのオフセット。話者の回転や拡大率には追従させない。
+	No::Vector3 offset = { 0.0f, 1.8f, 0.0f };
+	float size = 0.6f;  // ボタンの一辺のワールドサイズ
+	float interval = 0.5f; // テクスチャを切り替える秒数
+};
+
 // 自動発火用(プレイヤーが半径内に入ったら会話を始める)
 struct DialogueAutoTriggerComponent {
 	float radius = 3.0f;
