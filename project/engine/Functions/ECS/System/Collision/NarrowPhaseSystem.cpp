@@ -6,6 +6,7 @@
 #include "engine/Functions/Renderer/Primitive.h"
 #include "engine/Math/MathInclude.h"
 #include "engine/Math/Collision/CollisionHelper.h"
+#include "engine/Math/Collision/MeshColliderLoader.h"
 
 namespace NoEngine {
 namespace ECS {
