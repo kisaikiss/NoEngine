@@ -1,0 +1,44 @@
+{
+    "components": {
+        "EditTag": {
+            "name": "shaderBackground",
+            "parent": null
+        },
+        "ShaderBackgroundComponent": {
+            "color": [
+                2.1764705181121826,
+                2.9450979232788086,
+                2.56862735748291,
+                1.0
+            ],
+            "isVisible": true,
+            "param": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "shaderPath": "resources/game/ClockworksDisease/Shaders/Starfield.PS.hlsl",
+            "timeScale": 1.7000000476837158
+        },
+        "TransformComponent": {
+            "parent": null,
+            "rotation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "translate": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        }
+    }
+}

@@ -1,0 +1,2132 @@
+{
+    "entities": {
+        "CloseHint": {
+            "components": {
+                "CloseLevelUpUITag": null,
+                "EditTag": {
+                    "name": "CloseHint",
+                    "parent": null
+                },
+                "SpriteComponent": {
+                    "anchor": [
+                        0.0,
+                        0.0
+                    ],
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        -0.01630599983036518
+                    ],
+                    "fill": 0.0,
+                    "flipX": false,
+                    "flipY": false,
+                    "isVisible": true,
+                    "layer": 10,
+                    "maskTextureName": "",
+                    "nonRenderAngle": 0.0,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "space": "World",
+                    "textureName": "closeHint",
+                    "useMask": false,
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Transform2DComponent": {
+                    "parent": null,
+                    "rotation": 0.0,
+                    "scale": [
+                        237.3000030517578,
+                        64.0
+                    ],
+                    "translate": [
+                        1109.199951171875,
+                        672.5999755859375
+                    ]
+                }
+            }
+        },
+        "DeathEffect": {
+            "components": {
+                "EditTag": {
+                    "name": "DeathEffect",
+                    "parent": null
+                },
+                "EffectEmitterComponent": {
+                    "burstCount": 1,
+                    "burstInterval": 0.10000000149011612,
+                    "color": [
+                        0.4056939482688904,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "count": 100,
+                    "emitRange": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "maxLifeTime": 6.0,
+                    "maxRotate": 3.1415927410125732,
+                    "maxScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "maxSpeed": [
+                        4.0,
+                        3.0,
+                        0.5
+                    ],
+                    "minLifeTime": 2.0,
+                    "minRotate": 0.0,
+                    "minScale": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "minSpeed": [
+                        4.0,
+                        0.0,
+                        -0.5
+                    ],
+                    "shape": "kPlane",
+                    "spawnOffset": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "spawnRadius": 1.0,
+                    "spawnShape": "kBox",
+                    "startDelay": 0.0,
+                    "textureName": "resources/engine/Texture/circle.png",
+                    "velocityDistribution": "kSphere"
+                },
+                "PlayerDeathEffectTag": null,
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            },
+            "prefabBase": {
+                "components": {
+                    "EffectEmitterComponent": {
+                        "burstCount": 1,
+                        "burstInterval": 0.10000000149011612,
+                        "color": [
+                            0.4056939482688904,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "count": 100,
+                        "emitRange": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "maxLifeTime": 6.0,
+                        "maxRotate": 3.1415927410125732,
+                        "maxScale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ],
+                        "maxSpeed": [
+                            4.0,
+                            3.0,
+                            0.5
+                        ],
+                        "minLifeTime": 2.0,
+                        "minRotate": 0.0,
+                        "minScale": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "minSpeed": [
+                            4.0,
+                            0.0,
+                            -0.5
+                        ],
+                        "shape": "kPlane",
+                        "spawnOffset": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "spawnRadius": 1.0,
+                        "spawnShape": "kBox",
+                        "startDelay": 0.0,
+                        "textureName": "resources/engine/Texture/circle.png",
+                        "velocityDistribution": "kSphere"
+                    },
+                    "PlayerDeathEffectTag": null,
+                    "TransformComponent": {
+                        "rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ],
+                        "translate": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ]
+                    }
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\DeathEffect.json",
+            "prefabOverrides": []
+        },
+        "DebugCamera": {
+            "components": {
+                "CameraComponent": {
+                    "fov": 0.44999998807907104
+                },
+                "DebugCameraComponent": {
+                    "center": [
+                        47.3747673034668,
+                        47.979042053222656,
+                        22.712574005126953
+                    ],
+                    "distance": 24.76100730895996,
+                    "drawCenter": false,
+                    "moveType": "kUnreal",
+                    "unrealMoveSpeed": 30.0,
+                    "unrealSensitivity": 0.20000000298023224
+                },
+                "EditTag": {
+                    "name": "DebugCamera",
+                    "parent": null
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.23381902277469635,
+                        -0.5894407033920288,
+                        0.18348254263401031,
+                        0.7511475086212158
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        67.17639923095703,
+                        62.03262710571289,
+                        17.864946365356445
+                    ]
+                }
+            }
+        },
+        "Down": {
+            "components": {
+                "EditTag": {
+                    "name": "Down",
+                    "parent": "Leimar"
+                },
+                "MaterialComponent": {
+                    "blendMode": "kNormal",
+                    "castShadow": false,
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "environmentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "receiveShadow": false,
+                    "renderMode": "kDefault",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "textureName": "",
+                    "unlit": true,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "resources/game/ClockworksDisease/Model/npc/LeimarDown.gltf"
+                },
+                "TransformComponent": {
+                    "parent": "Leimar",
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "GameProgress": {
+            "components": {
+                "EditTag": {
+                    "name": "GameProgress",
+                    "parent": null
+                },
+                "GameProgressComponent": {
+                    "collectedItemCount": 0,
+                    "elapsedTime": 0.0,
+                    "totalCounted": false,
+                    "totalItemCount": 0
+                }
+            }
+        },
+        "GameSetting": {
+            "components": {
+                "EditTag": {
+                    "name": "GameSetting",
+                    "parent": null
+                },
+                "EditorSettingComponent": {
+                    "drawCollider": true
+                }
+            }
+        },
+        "Leimar": {
+            "components": {
+                "DialogueComponent": {
+                    "enabled": false,
+                    "fontName": "resources/engine/fonts/ISE-FONT4/Isego.otf",
+                    "interactDistance": 5.0,
+                    "interactable": true,
+                    "lines": [
+                        "早く箱に入れ。",
+                        "ここから脱出する唯一の方法だ。"
+                    ],
+                    "portraitFrameCount": 4,
+                    "portraitTexture": "resources/game/ClockworksDisease/Texture/Portrait/Leimar.png",
+                    "voiceFiles": [],
+                    "voiceVolume": 0.3499999940395355
+                },
+                "EditTag": {
+                    "name": "Leimar",
+                    "parent": null
+                },
+                "FloatingComponent": {
+                    "amplitude": [
+                        0.30000001192092896,
+                        0.20000000298023224,
+                        0.6000000238418579
+                    ],
+                    "velocity": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MoverComponent": {
+                    "active": false,
+                    "initialized": false,
+                    "startOnAwake": false
+                },
+                "PointLightComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        0.0
+                    ],
+                    "decay": 1.5,
+                    "intensity": 1.0,
+                    "radius": 6.0,
+                    "shadowRadius": 0.10000000149011612,
+                    "shadowSamples": "kFourRays"
+                },
+                "RotationalVelocityComponent": {
+                    "linear": [
+                        0.0,
+                        2.0,
+                        0.0
+                    ]
+                },
+                "SphereCollider": {
+                    "localCenter": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "radius": 1.0
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        -2.420149087905884,
+                        10.000415802001953,
+                        15.776201248168945
+                    ]
+                },
+                "TransformRoutineComponent": {
+                    "defaultRoutineId": "One",
+                    "playbackSpeed": 1.0,
+                    "playing": false,
+                    "routines": [
+                        {
+                            "globalDuration": 7.0,
+                            "globalEasing": "EaseInQuad",
+                            "id": "One",
+                            "interpolation": "CatmullRom",
+                            "keyframes": [
+                                {
+                                    "duration": 1.0,
+                                    "easing": "Linear",
+                                    "rotation": [
+                                        0.0,
+                                        0.0,
+                                        0.0,
+                                        1.0
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "translate": [
+                                        -2.420149087905884,
+                                        2.2430579662323,
+                                        -0.7344805002212524
+                                    ]
+                                },
+                                {
+                                    "duration": 1.0,
+                                    "easing": "Linear",
+                                    "rotation": [
+                                        0.2157314121723175,
+                                        -0.3227171301841736,
+                                        0.0009129931568168104,
+                                        0.9215816855430603
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "translate": [
+                                        2.1496715545654297,
+                                        4.2148237228393555,
+                                        -3.7922794818878174
+                                    ]
+                                },
+                                {
+                                    "duration": 1.0,
+                                    "easing": "Linear",
+                                    "rotation": [
+                                        -0.21613948047161102,
+                                        0.11332567036151886,
+                                        0.015902264043688774,
+                                        0.9696329832077026
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "translate": [
+                                        5.379858016967773,
+                                        6.078526973724365,
+                                        -2.0342612266540527
+                                    ]
+                                },
+                                {
+                                    "duration": 1.0,
+                                    "easing": "Linear",
+                                    "rotation": [
+                                        1.2791917924914742e-06,
+                                        -0.7800682783126831,
+                                        1.2791917924914742e-06,
+                                        0.6256943941116333
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "translate": [
+                                        12.052172660827637,
+                                        8.68338680267334,
+                                        -4.952589988708496
+                                    ]
+                                },
+                                {
+                                    "duration": 1.0,
+                                    "easing": "Linear",
+                                    "rotation": [
+                                        0.0,
+                                        0.5404558777809143,
+                                        0.0,
+                                        0.8413723707199097
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "translate": [
+                                        21.918384552001953,
+                                        8.68338680267334,
+                                        -1.4240913391113281
+                                    ]
+                                },
+                                {
+                                    "duration": 1.0,
+                                    "easing": "Linear",
+                                    "rotation": [
+                                        0.2677707076072693,
+                                        -0.043154891580343246,
+                                        0.15314611792564392,
+                                        0.9502540826797485
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "translate": [
+                                        34.02308654785156,
+                                        8.68338680267334,
+                                        -5.875184059143066
+                                    ]
+                                },
+                                {
+                                    "duration": 1.0,
+                                    "easing": "Linear",
+                                    "rotation": [
+                                        -0.5748730897903442,
+                                        0.45948347449302673,
+                                        -0.06463488936424255,
+                                        0.673957109451294
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "translate": [
+                                        44.09177780151367,
+                                        10.073880195617676,
+                                        -4.324830055236816
+                                    ]
+                                },
+                                {
+                                    "duration": 1.0,
+                                    "easing": "Linear",
+                                    "rotation": [
+                                        0.695408821105957,
+                                        -0.617878258228302,
+                                        -0.0030751307494938374,
+                                        0.3669108748435974
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "translate": [
+                                        55.86909103393555,
+                                        12.584385871887207,
+                                        -8.254419326782227
+                                    ]
+                                },
+                                {
+                                    "duration": 1.0,
+                                    "easing": "Linear",
+                                    "rotation": [
+                                        0.0,
+                                        0.0,
+                                        0.0,
+                                        1.0
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "translate": [
+                                        62.318328857421875,
+                                        19.18613052368164,
+                                        -5.224235534667969
+                                    ]
+                                },
+                                {
+                                    "duration": 1.0,
+                                    "easing": "Linear",
+                                    "rotation": [
+                                        0.0,
+                                        0.0,
+                                        0.0,
+                                        1.0
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "translate": [
+                                        80.0,
+                                        22.0,
+                                        -2.0
+                                    ]
+                                }
+                            ],
+                            "loop": false,
+                            "useGlobalTiming": true
+                        },
+                        {
+                            "globalDuration": 7.0,
+                            "globalEasing": "EaseInOutQuad",
+                            "id": "Two",
+                            "interpolation": "CatmullRom",
+                            "keyframes": [
+                                {
+                                    "duration": 1.0,
+                                    "easing": "Linear",
+                                    "rotation": [
+                                        0.0,
+                                        0.0,
+                                        0.0,
+                                        1.0
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "translate": [
+                                        80.0,
+                                        22.0,
+                                        -2.0
+                                    ]
+                                },
+                                {
+                                    "duration": 1.0,
+                                    "easing": "Linear",
+                                    "rotation": [
+                                        0.33525770902633667,
+                                        -0.008280634880065918,
+                                        0.2223888486623764,
+                                        0.9154654145240784
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "translate": [
+                                        95.5055923461914,
+                                        23.935789108276367,
+                                        -2.484687328338623
+                                    ]
+                                },
+                                {
+                                    "duration": 1.0,
+                                    "easing": "Linear",
+                                    "rotation": [
+                                        0.5447304248809814,
+                                        -0.29157909750938416,
+                                        -0.1531725823879242,
+                                        0.7712253332138062
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "translate": [
+                                        108.01737213134766,
+                                        22.87541961669922,
+                                        0.4801260232925415
+                                    ]
+                                },
+                                {
+                                    "duration": 1.0,
+                                    "easing": "Linear",
+                                    "rotation": [
+                                        -0.4627309739589691,
+                                        0.3782420754432678,
+                                        -0.027127835899591446,
+                                        0.801297128200531
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "translate": [
+                                        121.0397720336914,
+                                        17.675119400024414,
+                                        5.441450119018555
+                                    ]
+                                },
+                                {
+                                    "duration": 1.0,
+                                    "easing": "Linear",
+                                    "rotation": [
+                                        0.0,
+                                        0.0,
+                                        0.0,
+                                        1.0
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "translate": [
+                                        150.0,
+                                        16.0,
+                                        -4.0
+                                    ]
+                                }
+                            ],
+                            "loop": false,
+                            "useGlobalTiming": true
+                        },
+                        {
+                            "globalDuration": 6.0,
+                            "globalEasing": "EaseInOutQuad",
+                            "id": "Three",
+                            "interpolation": "CatmullRom",
+                            "keyframes": [
+                                {
+                                    "duration": 1.0,
+                                    "easing": "Linear",
+                                    "rotation": [
+                                        0.0,
+                                        0.0,
+                                        0.0,
+                                        1.0
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "translate": [
+                                        150.0,
+                                        16.0,
+                                        -4.0
+                                    ]
+                                },
+                                {
+                                    "duration": 1.0,
+                                    "easing": "Linear",
+                                    "rotation": [
+                                        0.18422871828079224,
+                                        0.07846371829509735,
+                                        0.18388588726520538,
+                                        0.9623352885246277
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "translate": [
+                                        162.60421752929688,
+                                        19.520349502563477,
+                                        2.4985239505767822
+                                    ]
+                                },
+                                {
+                                    "duration": 1.0,
+                                    "easing": "Linear",
+                                    "rotation": [
+                                        -0.3767108917236328,
+                                        -0.23609007894992828,
+                                        -0.4008820652961731,
+                                        0.8010268211364746
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "translate": [
+                                        171.39732360839844,
+                                        16.66141700744629,
+                                        0.6981751918792725
+                                    ]
+                                },
+                                {
+                                    "duration": 1.0,
+                                    "easing": "Linear",
+                                    "rotation": [
+                                        0.18232236802577972,
+                                        0.19330883026123047,
+                                        0.24410992860794067,
+                                        0.9326310157775879
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "translate": [
+                                        181.18719482421875,
+                                        16.66141700744629,
+                                        -3.470794200897217
+                                    ]
+                                },
+                                {
+                                    "duration": 1.0,
+                                    "easing": "Linear",
+                                    "rotation": [
+                                        0.0,
+                                        0.0,
+                                        0.0,
+                                        1.0
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "translate": [
+                                        189.31517028808594,
+                                        16.66141700744629,
+                                        4.061901092529297
+                                    ]
+                                }
+                            ],
+                            "loop": false,
+                            "useGlobalTiming": true
+                        }
+                    ]
+                },
+                "TutorialMoverTag": null
+            }
+        },
+        "MainCamera": {
+            "components": {
+                "ActiveCameraTag": null,
+                "CameraComponent": {
+                    "fov": 0.44999998807907104
+                },
+                "EditTag": {
+                    "name": "MainCamera",
+                    "parent": null
+                },
+                "FollowCameraComponent": {
+                    "autoFollowDeadzoneAngle": 0.15000000596046448,
+                    "autoFollowDelay": 1.0,
+                    "autoFollowEnabled": true,
+                    "collisionMargin": 0.30000001192092896,
+                    "collisionRadius": 0.949999988079071,
+                    "collisionStartOffset": 5.0,
+                    "currentDistance": 15.0,
+                    "distance": 15.0,
+                    "goalViewSpeed": 1.0,
+                    "heightFallFollowSpeed": 12.0,
+                    "heightRiseCatchUpThreshold": 4.0,
+                    "heightRiseFollowSpeed": 2.0,
+                    "lookUpCameraClearance": 1.25,
+                    "maxAutoFollowAngularSpeed": 0.6000000238418579,
+                    "maxDistance": 15.0,
+                    "maxFov": 0.8500000238418579,
+                    "maxPhi": 1.5707963705062866,
+                    "minDistance": 2.0,
+                    "minFov": 0.6499999761581421,
+                    "minPhi": 0.6283185482025146,
+                    "moveSpeed": 20.0,
+                    "phi": 0.800000011920929,
+                    "playerPosOffset": 2.0,
+                    "playerViewSpeed": 20.0,
+                    "rotationSpeed": 2.0,
+                    "terrainAvoidanceAngularSpeed": 2.5,
+                    "terrainAvoidanceStartRatio": 0.8500000238418579,
+                    "theta": 2.200000047683716
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.08825039118528366,
+                        0.7062349915504456,
+                        -0.08945348113775253,
+                        0.6967366933822632
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        -16.781492233276367,
+                        13.644932746887207,
+                        18.198490142822266
+                    ]
+                }
+            }
+        },
+        "Up": {
+            "components": {
+                "EditTag": {
+                    "name": "Up",
+                    "parent": "Leimar"
+                },
+                "MaterialComponent": {
+                    "blendMode": "kNormal",
+                    "castShadow": false,
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "environmentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "receiveShadow": false,
+                    "renderMode": "kDefault",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "textureName": "",
+                    "unlit": true,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "resources/game/ClockworksDisease/Model/npc/LeimarUp.gltf"
+                },
+                "TransformComponent": {
+                    "parent": "Leimar",
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
+        "blackboardIsland": {
+            "components": {
+                "CollisionLayerComponent": {
+                    "layer": "Terrain"
+                },
+                "EditTag": {
+                    "name": "blackboardIsland",
+                    "parent": null
+                },
+                "MaterialComponent": {
+                    "blendMode": "kNormal",
+                    "castShadow": true,
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": true,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "environmentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "receiveShadow": true,
+                    "renderMode": "kToon",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "textureName": "",
+                    "unlit": false,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "resources/game/ClockworksDisease/Model/StageMap/HubStage/blackboardIsland.gltf"
+                },
+                "StageComponent": {
+                    "stageColliderName": "resources/game/ClockworksDisease/Model/StageMap/HubStage/blackboardIsland.gltf"
+                },
+                "TerrainMesh": null,
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        2.4500820927642053e-07,
+                        0.9850170612335205,
+                        -1.2863249139627442e-05,
+                        0.17245696485042572
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        -22.92571258544922,
+                        13.561771392822266,
+                        65.30577087402344
+                    ]
+                }
+            }
+        },
+        "directionalLight": {
+            "components": {
+                "DirectionalLightComponent": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "direction": [
+                        0.14893284440040588,
+                        -0.90850830078125,
+                        -0.3904249668121338
+                    ],
+                    "intensity": 1.0,
+                    "shadowAngularRadiusDegrees": 1.5,
+                    "shadowSamples": "kFourRays"
+                },
+                "EditTag": {
+                    "name": "directionalLight",
+                    "parent": null
+                }
+            }
+        },
+        "player": {
+            "components": {
+                "AnimatorComponent": {
+                    "animationEvents": [],
+                    "animationSpeedMagnification": 1.0,
+                    "blendDuration": 0.20000000298023224,
+                    "currentAnimation": 0,
+                    "drawSkeleton": false,
+                    "enableSkinning": true,
+                    "loop": true
+                },
+                "CapsuleCollider": {
+                    "localP0": [
+                        0.0,
+                        0.3499999940395355,
+                        0.0
+                    ],
+                    "localP1": [
+                        0.0,
+                        1.350000023841858,
+                        0.0
+                    ],
+                    "radius": 0.3499999940395355
+                },
+                "CollisionBody": {
+                    "type": "Dynamic"
+                },
+                "CollisionLayerComponent": {
+                    "layer": "Player"
+                },
+                "EditTag": {
+                    "name": "player",
+                    "parent": null
+                },
+                "EffectEmitterComponent": {
+                    "burstCount": 1,
+                    "burstInterval": 0.10000000149011612,
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "count": 60,
+                    "emitRange": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "maxLifeTime": 1.0,
+                    "maxRotate": 0.0,
+                    "maxScale": [
+                        0.5,
+                        0.5,
+                        0.5
+                    ],
+                    "maxSpeed": [
+                        3.0,
+                        0.10000000149011612,
+                        3.0
+                    ],
+                    "minLifeTime": 0.5,
+                    "minRotate": 0.0,
+                    "minScale": [
+                        0.5,
+                        0.5,
+                        0.5
+                    ],
+                    "minSpeed": [
+                        3.0,
+                        0.0,
+                        -3.0
+                    ],
+                    "shape": "kPlane",
+                    "spawnOffset": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "spawnRadius": 1.0,
+                    "spawnShape": "kBox",
+                    "startDelay": 0.0,
+                    "textureName": "smokeEffect",
+                    "velocityDistribution": "kRingXZ"
+                },
+                "GroundStateComponent": {
+                    "groundHeight": 0.0,
+                    "isGrounded": false
+                },
+                "LevelComponent": {
+                    "levelUpRequirements": [
+                        60
+                    ],
+                    "nextLevelUp": 30,
+                    "nowLevel": 1,
+                    "power": 0
+                },
+                "MaterialComponent": {
+                    "blendMode": "kNormal",
+                    "castShadow": true,
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": true,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "environmentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "receiveShadow": true,
+                    "renderMode": "kToon",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "textureName": "",
+                    "unlit": false,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "magiclash"
+                },
+                "ParticleEmitterSphereComponent": {
+                    "active": true,
+                    "count": 20,
+                    "frequency": 0.20000000298023224,
+                    "frequencyTime": 0.0,
+                    "radius": 0.0
+                },
+                "PlayerAbilityDebugComponent": {
+                    "airDash": false,
+                    "highJump": false,
+                    "magicScaffold": false
+                },
+                "PlayerActionComponent": {
+                    "activeAction": "kNone",
+                    "elapsedTime": 0.0
+                },
+                "PlayerComponent": {
+                    "accelerationTime": 0.10000000149011612,
+                    "airAcceleration": 40.0,
+                    "airDashDuration": 0.30000001192092896,
+                    "airDashSpeed": 30.0,
+                    "airDashStaminaCost": 0.4000000059604645,
+                    "backflipStaminaCost": 1.0,
+                    "coyoteTime": 0.30000001192092896,
+                    "coyoteTimer": 0.0,
+                    "dashStartInput": 0.20000000298023224,
+                    "deathHeight": -10.0,
+                    "doubleJumpSpeed": 4.0,
+                    "gravity": -20.0,
+                    "highJumpSpeed": 15.0,
+                    "infinityJump": false,
+                    "infinityStamina": false,
+                    "jumpBufferTime": 0.15000000596046448,
+                    "jumpKind": "kNormal",
+                    "jumpSpeed": 10.0,
+                    "maxFallSpeed": -20.0,
+                    "maxStamina": 1.0,
+                    "minGroundNormalY": 0.8500000238418579,
+                    "moveSpeed": 11.0,
+                    "respawnPoint": [
+                        0.0,
+                        9.0,
+                        17.0
+                    ],
+                    "spinAttackAnimationSpeed": 1.7999999523162842,
+                    "spinAttackRadius": 1.5,
+                    "stamina": 1.0,
+                    "staminaRecoveryRate": 1.0,
+                    "state": "kWait",
+                    "walkSpeed": 7.0
+                },
+                "PlayerInputComponent": null,
+                "PlayerMoveTransientComponent": null,
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        -7.666791930205363e-07,
+                        0.7216740846633911,
+                        7.155207640607841e-06,
+                        0.6922329664230347
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        -2.8651061058044434,
+                        9.183887481689453,
+                        17.78240203857422
+                    ]
+                },
+                "VelocityComponent": {
+                    "linear": [
+                        0.0,
+                        -2.5044658184051514,
+                        0.0
+                    ]
+                }
+            },
+            "prefabBase": {
+                "components": {
+                    "AnimatorComponent": {
+                        "animationEvents": [],
+                        "animationSpeedMagnification": 1.0,
+                        "blendDuration": 0.20000000298023224,
+                        "currentAnimation": 0,
+                        "drawSkeleton": false,
+                        "enableSkinning": true,
+                        "loop": true
+                    },
+                    "CapsuleCollider": {
+                        "localP0": [
+                            0.0,
+                            0.3499999940395355,
+                            0.0
+                        ],
+                        "localP1": [
+                            0.0,
+                            1.350000023841858,
+                            0.0
+                        ],
+                        "radius": 0.3499999940395355
+                    },
+                    "CollisionBody": {
+                        "type": "Dynamic"
+                    },
+                    "CollisionLayerComponent": {
+                        "layer": "Player"
+                    },
+                    "EffectEmitterComponent": {
+                        "burstCount": 1,
+                        "burstInterval": 0.10000000149011612,
+                        "color": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0
+                        ],
+                        "count": 60,
+                        "emitRange": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "maxLifeTime": 1.0,
+                        "maxRotate": 0.0,
+                        "maxScale": [
+                            0.5,
+                            0.5,
+                            0.5
+                        ],
+                        "maxSpeed": [
+                            3.0,
+                            0.10000000149011612,
+                            3.0
+                        ],
+                        "minLifeTime": 0.5,
+                        "minRotate": 0.0,
+                        "minScale": [
+                            0.5,
+                            0.5,
+                            0.5
+                        ],
+                        "minSpeed": [
+                            3.0,
+                            0.0,
+                            -3.0
+                        ],
+                        "shape": "kPlane",
+                        "spawnOffset": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "spawnRadius": 1.0,
+                        "spawnShape": "kBox",
+                        "startDelay": 0.0,
+                        "textureName": "smokeEffect",
+                        "velocityDistribution": "kRingXZ"
+                    },
+                    "GroundStateComponent": {
+                        "groundHeight": 0.0,
+                        "isGrounded": false
+                    },
+                    "LevelComponent": {
+                        "levelUpRequirements": [
+                            60
+                        ],
+                        "nextLevelUp": 30,
+                        "nowLevel": 1,
+                        "power": 0
+                    },
+                    "MaterialComponent": {
+                        "blendMode": "kNormal",
+                        "castShadow": true,
+                        "color": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0
+                        ],
+                        "drawOutline": true,
+                        "edgeColor": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0
+                        ],
+                        "emissiveIntensity": 1.0,
+                        "environmentCoefficient": 0.0,
+                        "noiseScrollSpeed": 0.30000001192092896,
+                        "noiseTextureName": "noise0",
+                        "receiveShadow": true,
+                        "renderMode": "kToon",
+                        "rimPower": 2.0,
+                        "shininess": 60.0,
+                        "textureName": "",
+                        "unlit": false,
+                        "uvPosition": [
+                            0.0,
+                            0.0
+                        ],
+                        "uvRotate": 0.0,
+                        "uvScale": [
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "MeshComponent": {
+                        "isVisible": true,
+                        "meshName": "magiclash"
+                    },
+                    "ParticleEmitterSphereComponent": {
+                        "active": true,
+                        "count": 20,
+                        "frequency": 0.20000000298023224,
+                        "frequencyTime": 0.0,
+                        "radius": 0.0
+                    },
+                    "PlayerAbilityDebugComponent": {
+                        "airDash": false,
+                        "highJump": false,
+                        "magicScaffold": false
+                    },
+                    "PlayerActionComponent": {
+                        "activeAction": "kNone",
+                        "elapsedTime": 0.0
+                    },
+                    "PlayerComponent": {
+                        "accelerationTime": 0.10000000149011612,
+                        "airAcceleration": 40.0,
+                        "airDashDuration": 0.30000001192092896,
+                        "airDashSpeed": 30.0,
+                        "airDashStaminaCost": 0.4,
+                        "backflipStaminaCost": 1.0,
+                        "coyoteTime": 0.30000001192092896,
+                        "coyoteTimer": 0.0,
+                        "dashStartInput": 0.20000000298023224,
+                        "deathHeight": -10.0,
+                        "doubleJumpSpeed": 4.0,
+                        "gravity": -20.0,
+                        "highJumpSpeed": 15.0,
+                        "infinityJump": false,
+                        "infinityStamina": false,
+                        "jumpBufferTime": 0.15000000596046448,
+                        "jumpKind": "kNormal",
+                        "jumpSpeed": 10.0,
+                        "maxFallSpeed": -20.0,
+                        "maxStamina": 1.0,
+                        "minGroundNormalY": 0.8500000238418579,
+                        "moveSpeed": 11.0,
+                        "respawnPoint": [
+                            0.0,
+                            0.5,
+                            0.0
+                        ],
+                        "spinAttackAnimationSpeed": 1.7999999523162842,
+                        "spinAttackRadius": 1.5,
+                        "stamina": 1.0,
+                        "staminaRecoveryRate": 1.0,
+                        "state": "kSleep",
+                        "walkSpeed": 7.0
+                    },
+                    "PlayerInputComponent": null,
+                    "PlayerMoveTransientComponent": null,
+                    "TransformComponent": {
+                        "rotation": [
+                            -7.666791930205363e-07,
+                            0.7216740846633911,
+                            7.155207640607841e-06,
+                            0.6922329664230347
+                        ],
+                        "scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ],
+                        "translate": [
+                            -2.8651061058044434,
+                            0.0,
+                            1.0656254291534424
+                        ]
+                    },
+                    "VelocityComponent": {
+                        "linear": [
+                            0.0,
+                            -2.5044658184051514,
+                            0.0
+                        ]
+                    }
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\player.json",
+            "prefabOverrides": [
+                {
+                    "op": "replace",
+                    "path": "/components/PlayerComponent/airDashStaminaCost",
+                    "value": 0.4000000059604645
+                },
+                {
+                    "op": "replace",
+                    "path": "/components/PlayerComponent/respawnPoint",
+                    "value": [
+                        0.0,
+                        9.0,
+                        17.0
+                    ]
+                },
+                {
+                    "op": "replace",
+                    "path": "/components/PlayerComponent/state",
+                    "value": "kWait"
+                },
+                {
+                    "op": "replace",
+                    "path": "/components/TransformComponent/translate",
+                    "value": [
+                        -2.8651061058044434,
+                        9.183887481689453,
+                        17.78240203857422
+                    ]
+                }
+            ]
+        },
+        "shaderBackground": {
+            "components": {
+                "EditTag": {
+                    "name": "shaderBackground",
+                    "parent": null
+                },
+                "ShaderBackgroundComponent": {
+                    "color": [
+                        2.1764705181121826,
+                        2.9450979232788086,
+                        2.56862735748291,
+                        1.0
+                    ],
+                    "isVisible": true,
+                    "param": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "shaderPath": "resources/game/ClockworksDisease/Shaders/Starfield.PS.hlsl",
+                    "timeScale": 1.7000000476837158
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            },
+            "prefabBase": {
+                "components": {
+                    "ShaderBackgroundComponent": {
+                        "color": [
+                            2.1764705181121826,
+                            2.9450979232788086,
+                            2.56862735748291,
+                            1.0
+                        ],
+                        "isVisible": true,
+                        "param": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "shaderPath": "resources/game/ClockworksDisease/Shaders/Starfield.PS.hlsl",
+                        "timeScale": 1.7000000476837158
+                    },
+                    "TransformComponent": {
+                        "rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ],
+                        "translate": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ]
+                    }
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\shaderBackground.json",
+            "prefabOverrides": []
+        },
+        "stage": {
+            "components": {
+                "CollisionLayerComponent": {
+                    "layer": "Terrain"
+                },
+                "EditTag": {
+                    "name": "stage",
+                    "parent": null
+                },
+                "MaterialComponent": {
+                    "blendMode": "kNormal",
+                    "castShadow": true,
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "environmentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "receiveShadow": true,
+                    "renderMode": "kToon",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "textureName": "",
+                    "unlit": false,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "resources/game/ClockworksDisease/Model/StageMap/HubStage/mainIsland.gltf"
+                },
+                "NoClickSelectTag": null,
+                "StageComponent": {
+                    "stageColliderName": "resources/game/ClockworksDisease/Model/StageMap/HubStage/mainIsland.gltf"
+                },
+                "TerrainMesh": null,
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        }
+    },
+    "renderPasses": [
+        {
+            "name": "BLAS update",
+            "settings": {
+                "autoClear": false,
+                "clearDepth": false,
+                "depthOutput": "",
+                "inputs": {},
+                "outputs": [],
+                "targetCameraName": "GameCamera",
+                "targetCameraType": 0,
+                "uavOutputs": []
+            }
+        },
+        {
+            "name": "TLAS build",
+            "settings": {
+                "autoClear": false,
+                "clearDepth": false,
+                "depthOutput": "",
+                "inputs": {},
+                "outputs": [],
+                "targetCameraName": "GameCamera",
+                "targetCameraType": 0,
+                "uavOutputs": []
+            }
+        },
+        {
+            "name": "Lighting",
+            "settings": {
+                "autoClear": false,
+                "clearDepth": false,
+                "depthOutput": "",
+                "inputs": {},
+                "outputs": [],
+                "targetCameraName": "GameCamera",
+                "targetCameraType": 0,
+                "uavOutputs": []
+            }
+        },
+        {
+            "name": "Pre-render",
+            "settings": {
+                "autoClear": true,
+                "clearDepth": true,
+                "depthOutput": "MainDepth",
+                "inputs": {},
+                "outputs": [
+                    "WorldPosition",
+                    "Normal",
+                    "ObjectID"
+                ],
+                "targetCameraName": "GameCamera",
+                "targetCameraType": 0,
+                "uavOutputs": []
+            }
+        },
+        {
+            "name": "Raytracing shadow",
+            "settings": {
+                "autoClear": true,
+                "clearDepth": false,
+                "depthOutput": "",
+                "inputs": {
+                    "Normal": "Normal",
+                    "WorldPosition": "WorldPosition"
+                },
+                "outputs": [],
+                "targetCameraName": "GameCamera",
+                "targetCameraType": 0,
+                "uavOutputs": [
+                    "ShadowMask"
+                ]
+            }
+        },
+        {
+            "name": "Opaque mesh",
+            "settings": {
+                "autoClear": true,
+                "clearDepth": true,
+                "depthOutput": "MainDepth",
+                "inputs": {
+                    "ShadowMask": "ShadowMask"
+                },
+                "outputs": [
+                    "MainColor"
+                ],
+                "targetCameraName": "GameCamera",
+                "targetCameraType": 0,
+                "uavOutputs": []
+            }
+        },
+        {
+            "name": "ShaderBackground",
+            "settings": {
+                "autoClear": false,
+                "clearDepth": false,
+                "depthOutput": "MainDepth",
+                "inputs": {},
+                "outputs": [
+                    "MainColor"
+                ],
+                "targetCameraName": "GameCamera",
+                "targetCameraType": 0,
+                "uavOutputs": []
+            }
+        },
+        {
+            "name": "Depth outline",
+            "settings": {
+                "autoClear": false,
+                "clearDepth": false,
+                "depthOutput": "",
+                "inputs": {
+                    "InputColor": "MainColor",
+                    "InputDepth": "MainDepth"
+                },
+                "outputs": [
+                    "PostEffect"
+                ],
+                "targetCameraName": "GameCamera",
+                "targetCameraType": 0,
+                "uavOutputs": []
+            }
+        },
+        {
+            "name": "Depth of field",
+            "settings": {
+                "autoClear": false,
+                "clearDepth": false,
+                "depthOutput": "",
+                "focusDistance": 30.0,
+                "focusRange": 60.0,
+                "inputs": {
+                    "InputColor": "PostEffect",
+                    "InputDepth": "MainDepth"
+                },
+                "maxCoCRadius": 0.009999999776482582,
+                "outputs": [
+                    "MainColor"
+                ],
+                "targetCameraName": "GameCamera",
+                "targetCameraType": 0,
+                "uavOutputs": []
+            }
+        },
+        {
+            "name": "Fog integrate",
+            "settings": {
+                "ambient": 0.15000000596046448,
+                "autoClear": false,
+                "baseHeight": 0.0,
+                "clearDepth": false,
+                "density": 0.0020000000949949026,
+                "depthOutput": "",
+                "heightFalloff": 0.03500000014901161,
+                "inputs": {
+                    "InputDepth": "MainDepth"
+                },
+                "maxDistance": 140.0,
+                "outputs": [],
+                "scatteringAlbedo": 0.8500000238418579,
+                "scatteringAnisotropy": 0.949999988079071,
+                "stepCount": 16,
+                "targetCameraName": "GameCamera",
+                "targetCameraType": 0,
+                "traceShadows": true,
+                "uavOutputs": [
+                    "VolumetricFog"
+                ]
+            }
+        },
+        {
+            "name": "Fog composite",
+            "settings": {
+                "autoClear": false,
+                "clearDepth": false,
+                "depthOutput": "",
+                "inputs": {
+                    "Fog": "VolumetricFog"
+                },
+                "outputs": [
+                    "MainColor"
+                ],
+                "targetCameraName": "GameCamera",
+                "targetCameraType": 0,
+                "uavOutputs": []
+            }
+        },
+        {
+            "name": "Transparent mesh",
+            "settings": {
+                "autoClear": false,
+                "clearDepth": false,
+                "depthOutput": "MainDepth",
+                "inputs": {
+                    "ShadowMask": "ShadowMask"
+                },
+                "outputs": [
+                    "MainColor"
+                ],
+                "targetCameraName": "GameCamera",
+                "targetCameraType": 0,
+                "uavOutputs": []
+            }
+        },
+        {
+            "name": "CPU particles",
+            "settings": {
+                "autoClear": false,
+                "clearDepth": false,
+                "depthOutput": "MainDepth",
+                "inputs": {},
+                "outputs": [
+                    "MainColor"
+                ],
+                "targetCameraName": "GameCamera",
+                "targetCameraType": 0,
+                "uavOutputs": []
+            }
+        },
+        {
+            "name": "GPU particles",
+            "settings": {
+                "autoClear": false,
+                "clearDepth": false,
+                "depthOutput": "MainDepth",
+                "inputs": {},
+                "outputs": [
+                    "MainColor"
+                ],
+                "targetCameraName": "GameCamera",
+                "targetCameraType": 0,
+                "uavOutputs": []
+            }
+        },
+        {
+            "name": "Bloom threshold",
+            "settings": {
+                "autoClear": false,
+                "clearDepth": false,
+                "depthOutput": "",
+                "inputs": {
+                    "InputColor": "MainColor"
+                },
+                "outputs": [
+                    "BloomThreshold"
+                ],
+                "softKnee": 1.0,
+                "targetCameraName": "GameCamera",
+                "targetCameraType": 0,
+                "threshold": 1.0,
+                "uavOutputs": []
+            }
+        },
+        {
+            "name": "Bloom blur horizontal",
+            "settings": {
+                "autoClear": false,
+                "clearDepth": false,
+                "depthOutput": "",
+                "inputs": {
+                    "InputColor": "BloomThreshold"
+                },
+                "outputs": [
+                    "BloomBlurA"
+                ],
+                "targetCameraName": "GameCamera",
+                "targetCameraType": 0,
+                "uavOutputs": []
+            }
+        },
+        {
+            "name": "Bloom blur vertical",
+            "settings": {
+                "autoClear": false,
+                "clearDepth": false,
+                "depthOutput": "",
+                "inputs": {
+                    "InputColor": "BloomBlurA"
+                },
+                "outputs": [
+                    "BloomBlurB"
+                ],
+                "targetCameraName": "GameCamera",
+                "targetCameraType": 0,
+                "uavOutputs": []
+            }
+        },
+        {
+            "name": "Bloom composite",
+            "settings": {
+                "autoClear": false,
+                "clearDepth": false,
+                "depthOutput": "",
+                "inputs": {
+                    "BloomColor": "BloomBlurB",
+                    "SceneColor": "MainColor"
+                },
+                "intensity": 3.0,
+                "outputs": [
+                    "BloomComposite"
+                ],
+                "targetCameraName": "GameCamera",
+                "targetCameraType": 0,
+                "uavOutputs": []
+            }
+        },
+        {
+            "name": "Vignetting",
+            "settings": {
+                "autoClear": false,
+                "clearDepth": false,
+                "depthOutput": "",
+                "inputs": {
+                    "InputColor": "BloomComposite"
+                },
+                "outputs": [
+                    "MainColor"
+                ],
+                "targetCameraName": "GameCamera",
+                "targetCameraType": 0,
+                "uavOutputs": []
+            }
+        },
+        {
+            "name": "Main sprites",
+            "settings": {
+                "autoClear": false,
+                "clearDepth": false,
+                "depthOutput": "",
+                "inputs": {},
+                "outputs": [
+                    "MainColor"
+                ],
+                "targetCameraName": "GameCamera",
+                "targetCameraType": 0,
+                "uavOutputs": []
+            }
+        }
+    ],
+    "systems": [
+        "EditSystem",
+        "MainStageProgressRestoreSystem",
+        "PauseMenuSystem",
+        "ModelLoadSystem",
+        "SpriteLoadSystem",
+        "LevelDoorSystem",
+        "FontLoadSystem",
+        "TerrainLoadSystem",
+        "AnimationSystem",
+        "BoxColliderUpdateSystem",
+        "GameProgressInitSystem",
+        "GameTimerSystem",
+        "PlayerStaminaSystem",
+        "PlayerInputSystem",
+        "PlayerJumpSystem",
+        "PlayerActionSystem",
+        "PlayerScaffoldActionSystem",
+        "PlayerHorizontalMoveSystem",
+        "PlayerVerticalVelocitySystem",
+        "WanderHopEnemySystem",
+        "PlayerAnimationSystem",
+        "StaminaUISystem",
+        "GroundResetSystem",
+        "MagicScaffoldSystem",
+        "NarrowPhaseSystem",
+        "CollisionResolutionSystem",
+        "TriggerSystem",
+        "EventLinkSystem",
+        "MoverSystem",
+        "CollisionEventSystem",
+        "PlayerPushBackSystem",
+        "ItemGetSystem",
+        "MainStageProgressCaptureSystem",
+        "SmallPowerItemSystem",
+        "BigPowerItemSystem",
+        "SavePointSystem",
+        "WarpBlockSystem",
+        "PlayerLevelUpSystem",
+        "LevelUISystem",
+        "DialogueAutoTriggerSystem",
+        "DialogueInteractSystem",
+        "DialogueSystem",
+        "PlayerAbilityDebugSystem",
+        "LevelUpTextSystem",
+        "ParticleEmitterSystem",
+        "ParticleSystem",
+        "CapturePlatformPrevTransformSystem",
+        "TutorialObjectSystem",
+        "TransformRoutineSystem",
+        "TransformRoutineSystem2D",
+        "MovementSystem",
+        "FloatingSystem",
+        "RotationalSystem",
+        "PlayerAttackHitSystem",
+        "PlayerDeathSystem",
+        "ComputePlatformDeltaSystem",
+        "PlatformRideSystem",
+        "PlayerSpinAttackEffectSystem",
+        "EffectEmitSystem",
+        "CameraIntroSystem",
+        "GoalDirectionSystem",
+        "ColliderDrawSystem",
+        "DrawCameraFrustumSystem",
+        "FollowCameraSystem",
+        "SpriteAnimationSystem",
+        "DrawManipulatorSystem",
+        "DrawWaypointRouteSystem",
+        "DrawWaypointRouteSystem2D",
+        "DebugCameraSystem",
+        "CameraSystem"
+    ]
+}
