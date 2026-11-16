@@ -216,9 +216,9 @@
                 },
                 "DebugCameraComponent": {
                     "center": [
-                        47.3747673034668,
-                        47.979042053222656,
-                        22.712574005126953
+                        -26.802284240722656,
+                        19.80152130126953,
+                        9.211849212646484
                     ],
                     "distance": 24.76100730895996,
                     "drawCenter": false,
@@ -233,10 +233,10 @@
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
-                        0.23381902277469635,
-                        -0.5894407033920288,
-                        0.18348254263401031,
-                        0.7511475086212158
+                        0.39637520909309387,
+                        0.5645211338996887,
+                        -0.3544268012046814,
+                        0.6313353776931763
                     ],
                     "scale": [
                         1.0,
@@ -244,9 +244,9 @@
                         1.0
                     ],
                     "translate": [
-                        67.17639923095703,
-                        62.03262710571289,
-                        17.864946365356445
+                        -37.4948844909668,
+                        42.102622985839844,
+                        8.013285636901855
                     ]
                 }
             }
@@ -340,6 +340,14 @@
                 },
                 "EditorSettingComponent": {
                     "drawCollider": true
+                }
+            }
+        },
+        "Islands": {
+            "components": {
+                "EditTag": {
+                    "name": "Islands",
+                    "parent": null
                 }
             }
         },
@@ -873,6 +881,14 @@
                 "CameraComponent": {
                     "fov": 0.44999998807907104
                 },
+                "CameraIntroComponent": {
+                    "blackOutDuration": 0.5,
+                    "fadeInDuration": 0.5,
+                    "fadeOutDuration": 0.5,
+                    "phase": "kPlayingRoutine",
+                    "playInEditor": false
+                },
+                "CameraLockTag": null,
                 "EditTag": {
                     "name": "MainCamera",
                     "parent": null
@@ -924,6 +940,143 @@
                         -16.781492233276367,
                         13.644932746887207,
                         18.198490142822266
+                    ]
+                },
+                "TransformRoutineComponent": {
+                    "defaultRoutineId": "default",
+                    "playbackSpeed": 1.0,
+                    "playing": true,
+                    "routines": [
+                        {
+                            "globalDuration": 7.0,
+                            "globalEasing": "EaseOutQuad",
+                            "id": "default",
+                            "interpolation": "CatmullRom",
+                            "keyframes": [
+                                {
+                                    "duration": 1.0,
+                                    "easing": "Linear",
+                                    "rotation": [
+                                        0.05000672861933708,
+                                        0.9484323263168335,
+                                        -0.19164486229419708,
+                                        0.2474827617406845
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "translate": [
+                                        -29.397855758666992,
+                                        43.73508071899414,
+                                        35.574302673339844
+                                    ]
+                                },
+                                {
+                                    "duration": 1.0,
+                                    "easing": "Linear",
+                                    "rotation": [
+                                        0.04765251278877258,
+                                        0.9019617438316345,
+                                        -0.10773418098688126,
+                                        0.4154365360736847
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "translate": [
+                                        -26.602489471435547,
+                                        25.992252349853516,
+                                        18.331472396850586
+                                    ]
+                                },
+                                {
+                                    "duration": 1.0,
+                                    "easing": "Linear",
+                                    "rotation": [
+                                        0.07949148118495941,
+                                        0.6379328370094299,
+                                        -0.09731972962617874,
+                                        0.7597708106040955
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "translate": [
+                                        -6.624558448791504,
+                                        15.957145690917969,
+                                        12.35506820678711
+                                    ]
+                                },
+                                {
+                                    "duration": 1.0,
+                                    "easing": "Linear",
+                                    "rotation": [
+                                        0.056180816143751144,
+                                        0.45552772283554077,
+                                        -0.11239948123693466,
+                                        0.8813084363937378
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "translate": [
+                                        13.204156875610352,
+                                        16.159259796142578,
+                                        25.59170913696289
+                                    ]
+                                },
+                                {
+                                    "duration": 1.0,
+                                    "easing": "Linear",
+                                    "rotation": [
+                                        0.039443254470825195,
+                                        0.5774452686309814,
+                                        -0.11930689960718155,
+                                        0.8067013621330261
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "translate": [
+                                        24.09217071533203,
+                                        19.790142059326172,
+                                        26.45665740966797
+                                    ]
+                                },
+                                {
+                                    "duration": 1.0,
+                                    "easing": "Linear",
+                                    "rotation": [
+                                        -0.017901597544550896,
+                                        0.8765972852706909,
+                                        -0.12437844276428223,
+                                        0.46452853083610535
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "translate": [
+                                        38.876060485839844,
+                                        19.790143966674805,
+                                        23.2345027923584
+                                    ]
+                                }
+                            ],
+                            "loop": false,
+                            "useGlobalTiming": true
+                        }
                     ]
                 }
             }
@@ -995,6 +1148,140 @@
                 }
             }
         },
+        "ball": {
+            "components": {
+                "EditTag": {
+                    "name": "ball",
+                    "parent": null
+                },
+                "MaterialComponent": {
+                    "blendMode": "kNormal",
+                    "castShadow": true,
+                    "color": [
+                        0.38434165716171265,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        0.0,
+                        0.38790035247802734,
+                        0.06985880434513092,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "environmentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "T_Random_66",
+                    "receiveShadow": true,
+                    "renderMode": "kEmissive",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "textureName": "",
+                    "unlit": false,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "resources/game/ClockworksDisease/Model/item/ball.gltf"
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        12.204057693481445,
+                        12.204057693481445,
+                        12.204057693481445
+                    ],
+                    "translate": [
+                        85.08631896972656,
+                        10.19403076171875,
+                        0.4276268482208252
+                    ]
+                }
+            }
+        },
+        "ball_2": {
+            "components": {
+                "EditTag": {
+                    "name": "ball_2",
+                    "parent": "ball"
+                },
+                "MaterialComponent": {
+                    "blendMode": "kNormal",
+                    "castShadow": true,
+                    "color": [
+                        1.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        0.06087815389037132,
+                        0.7437722682952881,
+                        0.1838637888431549,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "environmentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "T_Random_04",
+                    "receiveShadow": true,
+                    "renderMode": "kEmissive",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "textureName": "",
+                    "unlit": false,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "resources/game/ClockworksDisease/Model/item/ball.gltf"
+                },
+                "TransformComponent": {
+                    "parent": "ball",
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        0.6700000166893005,
+                        0.6700000166893005,
+                        0.6700000166893005
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        },
         "blackboardIsland": {
             "components": {
                 "CollisionLayerComponent": {
@@ -1002,7 +1289,7 @@
                 },
                 "EditTag": {
                     "name": "blackboardIsland",
-                    "parent": null
+                    "parent": "Islands"
                 },
                 "MaterialComponent": {
                     "blendMode": "kNormal",
@@ -1051,10 +1338,10 @@
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
-                        2.4500820927642053e-07,
-                        0.9850170612335205,
-                        -1.2863249139627442e-05,
-                        0.17245696485042572
+                        -7.0699979914934374e-06,
+                        0.9536040425300598,
+                        -1.375984174956102e-05,
+                        -0.3010636568069458
                     ],
                     "scale": [
                         1.0,
@@ -1062,9 +1349,9 @@
                         1.0
                     ],
                     "translate": [
-                        -22.92571258544922,
-                        13.561771392822266,
-                        65.30577087402344
+                        51.968597412109375,
+                        4.179396152496338,
+                        47.0369758605957
                     ]
                 }
             }
@@ -1090,6 +1377,81 @@
                 "EditTag": {
                     "name": "directionalLight",
                     "parent": null
+                }
+            }
+        },
+        "mainIsland": {
+            "components": {
+                "CollisionLayerComponent": {
+                    "layer": "Terrain"
+                },
+                "EditTag": {
+                    "name": "mainIsland",
+                    "parent": "Islands"
+                },
+                "MaterialComponent": {
+                    "blendMode": "kNormal",
+                    "castShadow": true,
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "environmentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "receiveShadow": true,
+                    "renderMode": "kToon",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "textureName": "",
+                    "unlit": false,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "resources/game/ClockworksDisease/Model/StageMap/HubStage/mainIsland.gltf"
+                },
+                "NoClickSelectTag": null,
+                "StageComponent": {
+                    "stageColliderName": "resources/game/ClockworksDisease/Model/StageMap/HubStage/mainIsland.gltf"
+                },
+                "TerrainMesh": null,
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
                 }
             }
         },
@@ -1270,9 +1632,9 @@
                     "minGroundNormalY": 0.8500000238418579,
                     "moveSpeed": 11.0,
                     "respawnPoint": [
-                        0.0,
-                        9.0,
-                        17.0
+                        -20.0,
+                        7.0,
+                        10.0
                     ],
                     "spinAttackAnimationSpeed": 1.7999999523162842,
                     "spinAttackRadius": 1.5,
@@ -1297,9 +1659,9 @@
                         1.0
                     ],
                     "translate": [
-                        -2.8651061058044434,
-                        9.183887481689453,
-                        17.78240203857422
+                        -20.545846939086914,
+                        7.161202430725098,
+                        10.601919174194336
                     ]
                 },
                 "VelocityComponent": {
@@ -1534,9 +1896,9 @@
                     "op": "replace",
                     "path": "/components/PlayerComponent/respawnPoint",
                     "value": [
-                        0.0,
-                        9.0,
-                        17.0
+                        -20.0,
+                        7.0,
+                        10.0
                     ]
                 },
                 {
@@ -1548,9 +1910,9 @@
                     "op": "replace",
                     "path": "/components/TransformComponent/translate",
                     "value": [
-                        -2.8651061058044434,
-                        9.183887481689453,
-                        17.78240203857422
+                        -20.545846939086914,
+                        7.161202430725098,
+                        10.601919174194336
                     ]
                 }
             ]
@@ -1640,14 +2002,14 @@
             "prefabInstance": "resources/game/Prefabs\\shaderBackground.json",
             "prefabOverrides": []
         },
-        "stage": {
+        "subIsland1": {
             "components": {
                 "CollisionLayerComponent": {
                     "layer": "Terrain"
                 },
                 "EditTag": {
-                    "name": "stage",
-                    "parent": null
+                    "name": "subIsland1",
+                    "parent": "Islands"
                 },
                 "MaterialComponent": {
                     "blendMode": "kNormal",
@@ -1687,11 +2049,10 @@
                 },
                 "MeshComponent": {
                     "isVisible": true,
-                    "meshName": "resources/game/ClockworksDisease/Model/StageMap/HubStage/mainIsland.gltf"
+                    "meshName": "resources/game/ClockworksDisease/Model/StageMap/HubStage/subIsland1.gltf"
                 },
-                "NoClickSelectTag": null,
                 "StageComponent": {
-                    "stageColliderName": "resources/game/ClockworksDisease/Model/StageMap/HubStage/mainIsland.gltf"
+                    "stageColliderName": "resources/game/ClockworksDisease/Model/StageMap/HubStage/subIsland1.gltf"
                 },
                 "TerrainMesh": null,
                 "TransformComponent": {
@@ -1708,9 +2069,305 @@
                         1.0
                     ],
                     "translate": [
-                        0.0,
+                        23.561389923095703,
+                        8.085897445678711,
+                        31.34819793701172
+                    ]
+                }
+            }
+        },
+        "subIsland1_2": {
+            "components": {
+                "CollisionLayerComponent": {
+                    "layer": "Terrain"
+                },
+                "EditTag": {
+                    "name": "subIsland1_2",
+                    "parent": "Islands"
+                },
+                "MaterialComponent": {
+                    "blendMode": "kNormal",
+                    "castShadow": true,
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "environmentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "receiveShadow": true,
+                    "renderMode": "kToon",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "textureName": "",
+                    "unlit": false,
+                    "uvPosition": [
                         0.0,
                         0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "resources/game/ClockworksDisease/Model/StageMap/HubStage/subIsland1.gltf"
+                },
+                "StageComponent": {
+                    "stageColliderName": "resources/game/ClockworksDisease/Model/StageMap/HubStage/subIsland1.gltf"
+                },
+                "TerrainMesh": null,
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        -0.5237997174263,
+                        0.0,
+                        0.8518414497375488
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        22.478307723999023,
+                        7.586771488189697,
+                        25.678733825683594
+                    ]
+                }
+            }
+        },
+        "subIsland2": {
+            "components": {
+                "CollisionLayerComponent": {
+                    "layer": "Terrain"
+                },
+                "EditTag": {
+                    "name": "subIsland2",
+                    "parent": "Islands"
+                },
+                "MaterialComponent": {
+                    "blendMode": "kNormal",
+                    "castShadow": true,
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "environmentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "receiveShadow": true,
+                    "renderMode": "kToon",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "textureName": "",
+                    "unlit": false,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "resources/game/ClockworksDisease/Model/StageMap/HubStage/subIsland2.gltf"
+                },
+                "StageComponent": {
+                    "stageColliderName": "resources/game/ClockworksDisease/Model/StageMap/HubStage/subIsland2.gltf"
+                },
+                "TerrainMesh": null,
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        18.56004524230957,
+                        7.218556880950928,
+                        28.61826515197754
+                    ]
+                }
+            }
+        },
+        "subIsland2_2": {
+            "components": {
+                "CollisionLayerComponent": {
+                    "layer": "Terrain"
+                },
+                "EditTag": {
+                    "name": "subIsland2_2",
+                    "parent": "Islands"
+                },
+                "MaterialComponent": {
+                    "blendMode": "kNormal",
+                    "castShadow": true,
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "environmentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "receiveShadow": true,
+                    "renderMode": "kToon",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "textureName": "",
+                    "unlit": false,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "resources/game/ClockworksDisease/Model/StageMap/HubStage/subIsland2.gltf"
+                },
+                "StageComponent": {
+                    "stageColliderName": "resources/game/ClockworksDisease/Model/StageMap/HubStage/subIsland2.gltf"
+                },
+                "TerrainMesh": null,
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        -0.3356377184391022,
+                        0.0,
+                        0.9419911503791809
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        31.83991050720215,
+                        7.218556880950928,
+                        31.465084075927734
+                    ]
+                }
+            }
+        },
+        "subIsland2_2_2": {
+            "components": {
+                "CollisionLayerComponent": {
+                    "layer": "Terrain"
+                },
+                "EditTag": {
+                    "name": "subIsland2_2_2",
+                    "parent": "Islands"
+                },
+                "MaterialComponent": {
+                    "blendMode": "kNormal",
+                    "castShadow": true,
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "environmentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "noise0",
+                    "receiveShadow": true,
+                    "renderMode": "kToon",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "textureName": "",
+                    "unlit": false,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "resources/game/ClockworksDisease/Model/StageMap/HubStage/subIsland2.gltf"
+                },
+                "StageComponent": {
+                    "stageColliderName": "resources/game/ClockworksDisease/Model/StageMap/HubStage/subIsland2.gltf"
+                },
+                "TerrainMesh": null,
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.7034065127372742,
+                        0.0,
+                        0.7107877731323242
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        30.654382705688477,
+                        7.218556880950928,
+                        37.525543212890625
                     ]
                 }
             }
