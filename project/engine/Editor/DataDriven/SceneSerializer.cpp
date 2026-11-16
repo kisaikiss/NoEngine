@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "SceneSerializer.h"
+#include "engine/Editor/Reflection/ComponentHooks.h"
 #include "engine/Functions/Scene/SceneNameComponent.h"
 #include "PrefabSerializer.h"
 #include "../Utilities/EditUtils.h"
@@ -223,6 +224,11 @@ void LoadEntityFromJson(ECS::Registry& registry, ECS::Entity entity, const json&
 		}
 		if (typeInfo->typeId == Utilities::TypeID<Component::MaterialComponent>() && !compJson.contains("subMeshOverrides")) {
 			static_cast<Component::MaterialComponent*>(compPtr)->subMeshOverrides.clear();
+		}
+		if (const auto* hooks = ComponentHookRegistry::Find(typeInfo->typeId); hooks && hooks->beforeDeserialize) {
+			migrated = *values;
+			hooks->beforeDeserialize(compPtr, migrated);
+			values = &migrated;
 		}
 		for (auto& field : typeInfo->fields) {
 			uint8_t* base = (uint8_t*)compPtr + field.offset;

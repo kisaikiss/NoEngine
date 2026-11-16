@@ -582,9 +582,9 @@
                 },
                 "DebugCameraComponent": {
                     "center": [
-                        199.7156219482422,
-                        12.198097229003906,
-                        -4.519919395446777
+                        188.73008728027344,
+                        18.518779754638672,
+                        1.8458545207977295
                     ],
                     "distance": 24.76100730895996,
                     "drawCenter": false,
@@ -599,10 +599,10 @@
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
-                        0.11335843801498413,
-                        0.8598640561103821,
-                        -0.2177569568157196,
-                        0.4476222097873688
+                        0.14808744192123413,
+                        0.7197428941726685,
+                        -0.1618165671825409,
+                        0.6586772203445435
                     ],
                     "scale": [
                         1.0,
@@ -610,9 +610,9 @@
                         1.0
                     ],
                     "translate": [
-                        181.8773193359375,
-                        23.983501434326172,
-                        7.970338821411133
+                        166.43946838378906,
+                        29.116893768310547,
+                        3.824739694595337
                     ]
                 }
             }
@@ -720,16 +720,24 @@
         "Leimar": {
             "components": {
                 "DialogueComponent": {
+                    "defaultProfileId": "",
                     "enabled": false,
                     "fontName": "resources/engine/fonts/ISE-FONT4/Isego.otf",
                     "interactDistance": 5.0,
                     "interactable": true,
                     "lines": [
-                        "早く箱に入れ。",
-                        "ここから脱出する唯一の方法だ。"
+                        {
+                            "profileId": "",
+                            "text": "早く箱に入れ。"
+                        },
+                        {
+                            "profileId": "",
+                            "text": "ここから脱出する唯一の方法だ。"
+                        }
                     ],
                     "portraitFrameCount": 4,
                     "portraitTexture": "resources/game/ClockworksDisease/Texture/Portrait/Leimar.png",
+                    "profiles": [],
                     "voiceFiles": [],
                     "voiceVolume": 0.3499999940395355
                 },
@@ -4993,17 +5001,28 @@
                     "type": "Through"
                 },
                 "DialogueComponent": {
+                    "defaultProfileId": "",
                     "enabled": true,
                     "fontName": "resources/engine/fonts/ISE-FONT4/Isego.otf",
                     "interactDistance": 3.0,
                     "interactable": false,
                     "lines": [
-                        "おーい！まさか死んでないよな？",
-                        "呼吸はしてるな。じゃあ早く起きろ。",
-                        "Aでジャンプして起き上がってみろ。"
+                        {
+                            "profileId": "",
+                            "text": "おーい！まさか死んでないよな？"
+                        },
+                        {
+                            "profileId": "",
+                            "text": "呼吸はしてるな。じゃあ早く起きろ。"
+                        },
+                        {
+                            "profileId": "",
+                            "text": "Aでジャンプして起き上がってみろ。"
+                        }
                     ],
                     "portraitFrameCount": 4,
                     "portraitTexture": "resources/game/ClockworksDisease/Texture/Portrait/Leimar.png",
+                    "profiles": [],
                     "voiceFiles": [],
                     "voiceVolume": 0.3499999940395355
                 },
@@ -5059,15 +5078,20 @@
                     "type": "Through"
                 },
                 "DialogueComponent": {
+                    "defaultProfileId": "",
                     "enabled": true,
                     "fontName": "resources/engine/fonts/ISE-FONT4/Isego.otf",
                     "interactDistance": 3.0,
                     "interactable": false,
                     "lines": [
-                        "起きたか、ついてこい"
+                        {
+                            "profileId": "",
+                            "text": "起きたか、ついてこい"
+                        }
                     ],
                     "portraitFrameCount": 4,
                     "portraitTexture": "resources/game/ClockworksDisease/Texture/Portrait/Leimar.png",
+                    "profiles": [],
                     "voiceFiles": [],
                     "voiceVolume": 0.3499999940395355
                 },
@@ -5123,16 +5147,24 @@
                     "type": "Through"
                 },
                 "DialogueComponent": {
+                    "defaultProfileId": "",
                     "enabled": true,
                     "fontName": "resources/engine/fonts/ISE-FONT4/Isego.otf",
                     "interactDistance": 3.0,
                     "interactable": false,
                     "lines": [
-                        "Aボタンを押す長さでジャンプ力が変わるぞ。",
-                        "早く上がってこい。"
+                        {
+                            "profileId": "",
+                            "text": "Aボタンを押す長さでジャンプ力が変わるぞ。"
+                        },
+                        {
+                            "profileId": "",
+                            "text": "早く上がってこい。"
+                        }
                     ],
                     "portraitFrameCount": 4,
                     "portraitTexture": "resources/game/ClockworksDisease/Texture/Portrait/Leimar.png",
+                    "profiles": [],
                     "voiceFiles": [],
                     "voiceVolume": 0.3499999940395355
                 },
@@ -5188,17 +5220,28 @@
                     "type": "Through"
                 },
                 "DialogueComponent": {
+                    "defaultProfileId": "",
                     "enabled": true,
                     "fontName": "resources/engine/fonts/ISE-FONT4/Isego.otf",
                     "interactDistance": 3.0,
                     "interactable": false,
                     "lines": [
-                        "この奥に疋面（ひきおもて）がいるな。気をつけろ。 ",
-                        "お前ならXボタンの攻撃で殺せるかもな。",
-                        "心配ならセーブディスクに触っておけ。"
+                        {
+                            "profileId": "",
+                            "text": "この奥に疋面（ひきおもて）がいるな。気をつけろ。 "
+                        },
+                        {
+                            "profileId": "",
+                            "text": "お前ならXボタンの攻撃で殺せるかもな。"
+                        },
+                        {
+                            "profileId": "",
+                            "text": "心配ならセーブディスクに触っておけ。"
+                        }
                     ],
                     "portraitFrameCount": 4,
                     "portraitTexture": "resources/game/ClockworksDisease/Texture/Portrait/Leimar.png",
+                    "profiles": [],
                     "voiceFiles": [],
                     "voiceVolume": 0.3499999940395355
                 },
@@ -5254,16 +5297,38 @@
                     "type": "Through"
                 },
                 "DialogueComponent": {
+                    "defaultProfileId": "",
                     "enabled": true,
                     "fontName": "resources/engine/fonts/ISE-FONT4/Isego.otf",
                     "interactDistance": 3.0,
                     "interactable": false,
                     "lines": [
-                        "この箱でこの次元から脱出できる。",
-                        "ここから出たら詳しく話す。入れ。"
+                        {
+                            "profileId": "",
+                            "text": "この箱でこの次元から脱出できる。"
+                        },
+                        {
+                            "profileId": "profile_1",
+                            "text": "ちょっと待ってよ。ここはどこ？あんた誰？"
+                        },
+                        {
+                            "profileId": "",
+                            "text": "ここから出たら詳しく話す。入れ。"
+                        }
                     ],
                     "portraitFrameCount": 4,
                     "portraitTexture": "resources/game/ClockworksDisease/Texture/Portrait/Leimar.png",
+                    "profiles": [
+                        {
+                            "fontName": "resources/engine/fonts/ISE-FONT4/Isego.otf",
+                            "id": "profile_1",
+                            "portraitFrameCount": 1,
+                            "portraitTexture": "resources/game/ClockworksDisease/Texture/UI/SkillShop/ShopkeeperPortrait.png",
+                            "showPortrait": true,
+                            "voiceFiles": [],
+                            "voiceVolume": 0.3499999940395355
+                        }
+                    ],
                     "voiceFiles": [],
                     "voiceVolume": 0.3499999940395355
                 },

@@ -1,4 +1,5 @@
 #include "ComponentUI.h"
+#include "engine/Editor/Reflection/ComponentHooks.h"
 #include "engine/Editor/Reflection/ComponentRegistry.h"
 #include "engine/Assets/Model/ModelSaver.h"
 #include "engine/Functions/ECS/Component/Asset/MaterialComponent.h"
@@ -310,6 +311,23 @@ std::optional<std::string> AcceptAssetReferenceDrop(const FieldInfo& field) {
 }
 #endif
 
+bool CaptureFieldEditCommands(const std::function<void()>& draw) {
+#ifdef USE_IMGUI
+	std::vector<std::unique_ptr<Command::ICommand>> commands;
+	// 入れ子の呼び出しや例外でも、呼び出し元の記録先へ戻す。
+	struct RestoreCapture {
+		std::vector<std::unique_ptr<Command::ICommand>>* previous;
+		~RestoreCapture() { sNestedFieldCommands = previous; }
+	} restore{ sNestedFieldCommands };
+	sNestedFieldCommands = &commands;
+	draw();
+	return !commands.empty();
+#else
+	draw();
+	return false;
+#endif
+}
+
 void DrawComponentUI(Registry& registry, Entity e) {
 #ifdef USE_IMGUI
 	for (auto& compInfo : ComponentRegistry::GetAll()) {
@@ -331,7 +349,10 @@ void DrawComponentUI(Registry& registry, Entity e) {
 		} else if (isOpen) {
 			void* compPtr = compInfo.getter(registry, e);
 
-			if (compInfo.typeId == Utilities::TypeID<Component::TransformRoutineComponent>()) {
+			const auto* hooks = ComponentHookRegistry::Find(compInfo.typeId);
+			if (hooks && hooks->drawInspector) {
+				hooks->drawInspector(registry, e, compInfo, compPtr);
+			} else if (compInfo.typeId == Utilities::TypeID<Component::TransformRoutineComponent>()) {
 				DrawTransformRoutineUI(registry, e, compInfo, *static_cast<Component::TransformRoutineComponent*>(compPtr));
 			} else if (compInfo.typeId == Utilities::TypeID<Component::MaterialComponent>()) {
 				for (const auto& field : compInfo.fields) {

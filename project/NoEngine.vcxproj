@@ -692,6 +692,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="engine\Editor\Utilities\MultiEdit.h" />
     <ClInclude Include="engine\Editor\Utilities\ScenePlacement.h" />
     <ClInclude Include="engine\Editor\Reflection\Reflection.h" />
+    <ClInclude Include="engine\Editor\Reflection\ComponentHooks.h" />
     <ClInclude Include="engine\Editor\Reflection\ReflectionMacros.h" />
     <ClInclude Include="engine\Editor\Reflection\ReflectionTypeTraits.h" />
     <ClInclude Include="engine\Functions\ECS\Component\Common\CameraComponent.h" />

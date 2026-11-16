@@ -97,10 +97,10 @@ void DialogueSystem::Update(No::Registry& registry, float deltaTime) {
 			UpdateShownText(registry);
 			// 表示が進んだ文字数ぶん顔を動かし、音声は新しく表示された文字ごとに鳴らす。
 			auto* dialogue = registry.GetComponent<DialogueComponent>(speaker_);
-			const auto codepoints = NoEngine::Utf8ToCodepoints(dialogue->lines[lineIndex_]);
+			const auto codepoints = NoEngine::Utf8ToCodepoints(dialogue->lines[lineIndex_].text);
 			for (size_t i = previousCharCount; i < charCount_; ++i) {
-				UpdatePortraitFrame(registry, ++portraitFrame_ % std::max<uint32_t>(1, dialogue->portraitFrameCount));
-				PlayVoiceForCharacter(registry, codepoints[i]);
+				UpdatePortraitFrame(registry, ++portraitFrame_ % std::max<uint32_t>(1, currentProfile_.portraitFrameCount));
+				PlayVoiceForCharacter(codepoints[i]);
 			}
 			// 行末まで表示したら、次の入力待ち中は先頭フレームにする。
 			if (IsLineFullyShown()) {
@@ -126,13 +126,31 @@ void DialogueSystem::Update(No::Registry& registry, float deltaTime) {
 
 void DialogueSystem::ShowLine(No::Registry& registry) {
 	auto* dialogue = registry.GetComponent<DialogueComponent>(speaker_);
-	totalChars_ = NoEngine::Utf8ToCodepoints(dialogue->lines[lineIndex_]).size();
+	currentProfile_ = dialogue->ResolveProfile(dialogue->lines[lineIndex_]);
+	currentVoiceFiles_ = currentProfile_.voiceFiles;
+	// 空リストの既定音声は従来の会話と同じ。無音は音量0で指定する。
+	if (currentVoiceFiles_.empty()) {
+		for (int i = 1; i <= 3; ++i) {
+			char filename[8];
+			sprintf_s(filename, "%02d.wav", i);
+			currentVoiceFiles_.push_back(std::string("resources/game/ClockworksDisease/Sounds/Voice/Leimar/") + filename);
+		}
+	}
+	lastVoiceIndex_ = static_cast<size_t>(-1);
+	registry.GetComponent<No::TextComponent>(textEntity_)->fontName = currentProfile_.fontName;
+	auto* portrait = registry.GetComponent<No::SpriteComponent>(portraitEntity_);
+	if (currentProfile_.showPortrait) {
+		const auto& texture = currentProfile_.portraitTexture;
+		portrait->textureHandle = NoEngine::TextureManager::LoadCovertTexture(texture.empty()
+			? "resources/game/ClockworksDisease/Texture/Portrait/Leimar.png" : texture);
+	}
+	totalChars_ = NoEngine::Utf8ToCodepoints(dialogue->lines[lineIndex_].text).size();
 	charCount_ = 0;
 	charTimer_ = 0.0f;
 
 	registry.GetComponent<No::TextComponent>(textEntity_)->isVisible = true;
 	registry.GetComponent<No::SpriteComponent>(boxEntity_)->isVisible = true;
-	registry.GetComponent<No::SpriteComponent>(portraitEntity_)->isVisible = true;
+	registry.GetComponent<No::SpriteComponent>(portraitEntity_)->isVisible = currentProfile_.showPortrait;
 	portraitFrame_ = 0;
 	UpdatePortraitFrame(registry, 0);
 	UpdateShownText(registry); // 空文字から始める
@@ -141,7 +159,7 @@ void DialogueSystem::ShowLine(No::Registry& registry) {
 void DialogueSystem::UpdateShownText(No::Registry& registry) {
 	auto* dialogue = registry.GetComponent<DialogueComponent>(speaker_);
 	if (!dialogue) return;
-	const std::string& full = dialogue->lines[lineIndex_];
+	const std::string& full = dialogue->lines[lineIndex_].text;
 	registry.GetComponent<No::TextComponent>(textEntity_)->text =
 		full.substr(0, Utf8ByteLengthOfFirst(full, charCount_));
 }
@@ -150,24 +168,15 @@ void DialogueSystem::UpdatePortraitFrame(No::Registry& registry, size_t frame) {
 	auto* dialogue = registry.GetComponent<DialogueComponent>(speaker_);
 	auto* sprite = registry.GetComponent<No::SpriteComponent>(portraitEntity_);
 	if (!dialogue || !sprite) return;
-	const uint32_t count = std::max<uint32_t>(1, dialogue->portraitFrameCount);
+	const uint32_t count = std::max<uint32_t>(1, currentProfile_.portraitFrameCount);
 	frame %= count;
-	sprite->textureHandle = NoEngine::TextureManager::LoadCovertTexture(dialogue->portraitTexture);
 	sprite->uv = { static_cast<float>(frame) / count, 0.0f, 1.0f / count, 1.0f };
 }
 
-void DialogueSystem::PlayVoiceForCharacter(No::Registry& registry, char32_t codepoint) {
+void DialogueSystem::PlayVoiceForCharacter(char32_t codepoint) {
 	if (codepoint == U' ' || codepoint == U'\n' || codepoint == U'\r' || codepoint == U'\t') return;
-	auto* dialogue = registry.GetComponent<DialogueComponent>(speaker_);
-	if (!dialogue || dialogue->voiceVolume <= 0.f) return;
-	std::vector<std::string> paths = dialogue->voiceFiles;
-	if (paths.empty()) {
-		for (int i = 1; i <= 3; ++i) {
-			char filename[8];
-			sprintf_s(filename, "%02d.wav", i);
-			paths.push_back(std::string("resources/game/ClockworksDisease/Sounds/Voice/Leimar/") + filename);
-		}
-	}
+	if (currentProfile_.voiceVolume <= 0.f) return;
+	const auto& paths = currentVoiceFiles_;
 	if (paths.empty()) return;
 	std::uniform_int_distribution<size_t> pick(0, paths.size() - 1);
 	size_t index = pick(VoiceRandom());
@@ -179,7 +188,7 @@ void DialogueSystem::PlayVoiceForCharacter(No::Registry& registry, char32_t code
 		NoEngine::Asset::SoundLoad(NoEngine::ConvertString(path), path);
 		loaded[path] = true;
 	}
-	NoEngine::Asset::SoundEffectPlay(path, std::clamp(dialogue->voiceVolume, 0.0f, 1.0f));
+	NoEngine::Asset::SoundEffectPlay(path, std::clamp(currentProfile_.voiceVolume, 0.0f, 1.0f));
 }
 
 void DialogueSystem::UpdateLayout(No::Registry& registry) {

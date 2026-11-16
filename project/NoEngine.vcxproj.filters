@@ -514,6 +514,7 @@
     <ClInclude Include="engine\Runtime\PipelineStateObject\ComputePSO.h" />
     <ClInclude Include="engine\Runtime\Command\ComputeContext.h" />
     <ClInclude Include="engine\Editor\Reflection\Reflection.h" />
+    <ClInclude Include="engine\Editor\Reflection\ComponentHooks.h" />
     <ClInclude Include="engine\Editor\Reflection\ReflectionTypeTraits.h" />
     <ClInclude Include="engine\Editor\Reflection\ReflectionMacros.h" />
     <ClInclude Include="engine\Editor\Utilities\EditUtils.h" />

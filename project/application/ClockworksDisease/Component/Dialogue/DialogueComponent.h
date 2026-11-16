@@ -1,9 +1,26 @@
 #pragma once
 #include "engine/NoEngine.h"
 
+struct DialogueProfile {
+	std::string id;
+	std::string portraitTexture = "resources/game/ClockworksDisease/Texture/Portrait/Leimar.png";
+	uint32_t portraitFrameCount = 4;
+	bool showPortrait = true;
+	std::vector<std::string> voiceFiles;
+	float voiceVolume = 0.35f;
+	std::string fontName;
+};
+
+struct DialogueLine {
+	std::string text;
+	std::string profileId; // 空欄なら会話の既定設定を使う
+};
+
 // 話しかけられる側(NPCや看板)に付ける
 struct DialogueComponent {
-	std::vector<std::string> lines;   // 表示する文字列。改行したい箇所は \n を入れる
+	std::vector<DialogueLine> lines;   // セリフとプロフィール。改行したい箇所は \n を入れる
+	std::vector<DialogueProfile> profiles;
+	std::string defaultProfileId;
 	std::string fontName;
 	// 横一列の顔スプライトシート。空欄時はLeimarの既定素材を使う。
 	std::string portraitTexture = "resources/game/ClockworksDisease/Texture/Portrait/Leimar.png";
@@ -14,6 +31,9 @@ struct DialogueComponent {
 	float interactDistance = 3.0f;    // 話しかけられる距離
 	bool interactable = true;         // ボタンで話しかけられるか(自動発火専用ならfalse)
 	bool enabled = true;              // 自動発火・グラフを含め、新しい会話の開始を許可するか
+
+	const DialogueProfile* FindProfile(const std::string& id) const;
+	DialogueProfile ResolveProfile(const DialogueLine& line) const;
 };
 
 // 会話データの配置を変えず、表示設定だけを任意で追加できるようにする。
