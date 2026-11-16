@@ -142,6 +142,7 @@ void AssetManager::DrawImGui() {
 
 	if (ImGui::Button("Refresh Meta Files")) {
 		CreateMetaFileForAllFiles(); // 新規ファイルがあればメタを作る
+		CreateAddressableList(); // 新規メタを実行時一覧へ反映し、配置済みアセットの再読み込みを促す
 		CreateEditorDataList();            // エディタ情報を再読み込み
 	}
 
