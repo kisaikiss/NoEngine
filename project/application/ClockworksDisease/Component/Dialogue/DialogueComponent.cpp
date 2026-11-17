@@ -79,7 +79,8 @@ REFLECT_FIELD(portraitFrameCount),
 REFLECT_FIELD(showPortrait),
 REFLECT_ASSET_PATH_ARRAY_FIELD(voiceFiles, Audio),
 REFLECT_FIELD(voiceVolume),
-REFLECT_ASSET_FIELD(fontName, Font)
+REFLECT_ASSET_FIELD(fontName, Font),
+REFLECT_FIELD(textScale)
 REFLECT_STRUCT_END(DialogueProfile)
 
 REFLECT_STRUCT_BEGIN(DialogueLine)

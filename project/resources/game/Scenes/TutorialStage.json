@@ -5320,13 +5320,18 @@
                     "portraitTexture": "resources/game/ClockworksDisease/Texture/Portrait/Leimar.png",
                     "profiles": [
                         {
-                            "fontName": "resources/engine/fonts/ISE-FONT4/Isego.otf",
+                            "fontName": "resources/game/ClockworksDisease/Font/Kiwi_Maru/KiwiMaru-Medium.ttf",
                             "id": "profile_1",
-                            "portraitFrameCount": 1,
-                            "portraitTexture": "resources/game/ClockworksDisease/Texture/UI/SkillShop/ShopkeeperPortrait.png",
+                            "portraitFrameCount": 6,
+                            "portraitTexture": "resources/game/ClockworksDisease/Texture/Portrait/player.png",
                             "showPortrait": true,
-                            "voiceFiles": [],
-                            "voiceVolume": 0.3499999940395355
+                            "textScale": 1.5,
+                            "voiceFiles": [
+                                "resources/game/ClockworksDisease/Sounds/Voice/Player/01.wav",
+                                "resources/game/ClockworksDisease/Sounds/Voice/Player/02.wav",
+                                "resources/game/ClockworksDisease/Sounds/Voice/Player/03.wav"
+                            ],
+                            "voiceVolume": 0.15000000596046448
                         }
                     ],
                     "voiceFiles": [],

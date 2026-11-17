@@ -127,6 +127,8 @@ void DialogueSystem::Update(No::Registry& registry, float deltaTime) {
 void DialogueSystem::ShowLine(No::Registry& registry) {
 	auto* dialogue = registry.GetComponent<DialogueComponent>(speaker_);
 	currentProfile_ = dialogue->ResolveProfile(dialogue->lines[lineIndex_]);
+	// セリフ切替のフレームから、新しいプロフィールの文字サイズを適用する。
+	UpdateLayout(registry);
 	currentVoiceFiles_ = currentProfile_.voiceFiles;
 	// 空リストの既定音声は従来の会話と同じ。無音は音量0で指定する。
 	if (currentVoiceFiles_.empty()) {
@@ -212,7 +214,7 @@ void DialogueSystem::UpdateLayout(No::Registry& registry) {
 	portraitT->scale = { kBasePortraitSize * scale, kBasePortraitSize * scale };
 	portraitT->translate = { -boxWidth * 0.5f + kBasePortraitSize * 0.65f * scale, boxOffsetY + kBasePortraitSize * 0.12f * scale };
 
-	registry.GetComponent<No::TextComponent>(textEntity_)->scale = kBaseTextScale * scale;
+	registry.GetComponent<No::TextComponent>(textEntity_)->scale = kBaseTextScale * std::max(0.01f, currentProfile_.textScale) * scale;
 
 }
 

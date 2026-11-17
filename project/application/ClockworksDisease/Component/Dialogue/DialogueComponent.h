@@ -9,6 +9,7 @@ struct DialogueProfile {
 	std::vector<std::string> voiceFiles;
 	float voiceVolume = 0.35f;
 	std::string fontName;
+	float textScale = 1.0f; // 文字サイズの倍率。
 };
 
 struct DialogueLine {
