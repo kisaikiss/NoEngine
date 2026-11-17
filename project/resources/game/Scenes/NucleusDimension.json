@@ -318,6 +318,14 @@
                 }
             }
         },
+        "Event": {
+            "components": {
+                "EditTag": {
+                    "name": "Event",
+                    "parent": null
+                }
+            }
+        },
         "GameProgress": {
             "components": {
                 "EditTag": {
@@ -354,16 +362,24 @@
         "Leimar": {
             "components": {
                 "DialogueComponent": {
+                    "defaultProfileId": "",
                     "enabled": false,
                     "fontName": "resources/engine/fonts/ISE-FONT4/Isego.otf",
                     "interactDistance": 5.0,
                     "interactable": true,
                     "lines": [
-                        "早く箱に入れ。",
-                        "ここから脱出する唯一の方法だ。"
+                        {
+                            "profileId": "",
+                            "text": "早く箱に入れ。"
+                        },
+                        {
+                            "profileId": "",
+                            "text": "ここから脱出する唯一の方法だ。"
+                        }
                     ],
                     "portraitFrameCount": 4,
                     "portraitTexture": "resources/game/ClockworksDisease/Texture/Portrait/Leimar.png",
+                    "profiles": [],
                     "voiceFiles": [],
                     "voiceVolume": 0.3499999940395355
                 },
@@ -923,6 +939,9 @@
                     "terrainAvoidanceStartRatio": 0.8500000238418579,
                     "theta": 2.200000047683716
                 },
+                "GimmickGraphComponent": {
+                    "graphPath": "resources/game/ClockworksDisease/GimmickGraph/NucleusDimension/StartEvent.json"
+                },
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
@@ -1078,6 +1097,32 @@
                             "useGlobalTiming": true
                         }
                     ]
+                }
+            }
+        },
+        "StartDialogue": {
+            "components": {
+                "DialogueComponent": {
+                    "defaultProfileId": "",
+                    "enabled": true,
+                    "fontName": "resources/engine/fonts/ISE-FONT4/Isego.otf",
+                    "interactDistance": 3.0,
+                    "interactable": true,
+                    "lines": [
+                        {
+                            "profileId": "",
+                            "text": "てすと"
+                        }
+                    ],
+                    "portraitFrameCount": 4,
+                    "portraitTexture": "resources/game/ClockworksDisease/Texture/Portrait/Leimar.png",
+                    "profiles": [],
+                    "voiceFiles": [],
+                    "voiceVolume": 0.3499999940395355
+                },
+                "EditTag": {
+                    "name": "StartDialogue",
+                    "parent": "Event"
                 }
             }
         },

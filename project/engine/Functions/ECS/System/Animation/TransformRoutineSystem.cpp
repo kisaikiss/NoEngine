@@ -2,6 +2,7 @@
 #include "TransformRoutineSystem.h"
 #include "engine/Functions/ECS/Component/Common/TransformRoutineComponent.h"
 #include "engine/Functions/ECS/Component/Common/TransformComponent.h"
+#include "engine/Functions/ECS/Gameplay/GameplayCatalog.h"
 #include "engine/Math/MathInclude.h"
 
 namespace NoEngine {
@@ -83,16 +84,25 @@ void TransformRoutineSystem::Update(Registry& registry, float deltaTime) {
 		transform->rotation = Math::Quaternion::Slerp(from.rotation, to.rotation, time);
 		transform->scale = Easing::Lerp(from.scale, to.scale, time);
 
+		bool completed = false;
 		if (route->useGlobalTiming && routineComplete) {
 			routine->elapsed = 0.0f;
 			routine->currentIndex = 0;
-			if (!route->loop) routine->playing = false;
+			if (!route->loop) {
+				routine->playing = false;
+				completed = true;
+			}
 		} else if (!route->useGlobalTiming && rawT >= 1.0f) {
 			routine->elapsed = 0.0f;
 			routine->currentIndex = nextIndex;
 			if (!route->loop && routine->currentIndex == route->keyframes.size() - 1) {
 				routine->playing = false;
+				completed = true;
 			}
+		}
+		// 非ループ再生が最後まで到達したときだけ、発行元のグラフへ完了を通知する。
+		if (completed) {
+			Gameplay::EmitGameplayEvent(registry, e, Event::GameplayId::TransformRoutineCompleted);
 		}
 	}
 }

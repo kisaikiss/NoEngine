@@ -7,6 +7,7 @@ namespace GameplayId {
 inline constexpr char TriggerEnter[] = "engine.trigger.enter";
 inline constexpr char TriggerExit[] = "engine.trigger.exit";
 inline constexpr char AllObjectsDestroyed[] = "engine.object.allDestroyed";
+inline constexpr char TransformRoutineCompleted[] = "engine.transformRoutine.completed";
 inline constexpr char MoverActivate[] = "engine.mover.activate";
 inline constexpr char MoverStop[] = "engine.mover.stop";
 inline constexpr char SoundPlay[] = "engine.sound.play";
