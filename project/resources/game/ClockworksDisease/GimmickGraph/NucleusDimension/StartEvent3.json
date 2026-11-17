@@ -1,0 +1,55 @@
+{
+  "links": [
+    {
+      "fromNodeId": "event-1",
+      "fromPinId": "exec.out",
+      "id": "link-3",
+      "toNodeId": "action-2",
+      "toPinId": "exec.in"
+    },
+    {
+      "fromNodeId": "action-2",
+      "fromPinId": "exec.out",
+      "id": "link-5",
+      "toNodeId": "action-4",
+      "toPinId": "exec.in"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "event-1",
+      "kind": "event",
+      "position": [
+        -9.0,
+        77.0
+      ],
+      "properties": {},
+      "typeId": "application.dialogue.finished"
+    },
+    {
+      "id": "action-2",
+      "kind": "action",
+      "position": [
+        275.0,
+        93.0
+      ],
+      "properties": {
+        "targetCamera": "Camera_1"
+      },
+      "typeId": "engine.camera.changeActive"
+    },
+    {
+      "id": "action-4",
+      "kind": "action",
+      "position": [
+        610.0,
+        117.0
+      ],
+      "properties": {
+        "targetEntity": "StartDialogue_3"
+      },
+      "typeId": "application.dialogue.play"
+    }
+  ],
+  "version": 1
+}

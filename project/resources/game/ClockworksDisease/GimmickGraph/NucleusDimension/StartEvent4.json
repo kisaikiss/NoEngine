@@ -1,0 +1,36 @@
+{
+  "links": [
+    {
+      "fromNodeId": "event-1",
+      "fromPinId": "exec.out",
+      "id": "link-3",
+      "toNodeId": "action-2",
+      "toPinId": "exec.in"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "event-1",
+      "kind": "event",
+      "position": [
+        80.0,
+        80.0
+      ],
+      "properties": {},
+      "typeId": "application.dialogue.finished"
+    },
+    {
+      "id": "action-2",
+      "kind": "action",
+      "position": [
+        340.0,
+        140.0
+      ],
+      "properties": {
+        "targetCamera": "MainCamera"
+      },
+      "typeId": "engine.camera.changeActive"
+    }
+  ],
+  "version": 1
+}

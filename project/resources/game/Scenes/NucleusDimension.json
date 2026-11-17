@@ -1,5 +1,159 @@
 {
     "entities": {
+        "Camera": {
+            "components": {
+                "CameraComponent": {
+                    "fov": 0.44999998807907104
+                },
+                "EditTag": {
+                    "name": "Camera",
+                    "parent": null
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        4.0468239603796974e-07,
+                        0.7967829704284668,
+                        4.0468239603796974e-07,
+                        0.604265570640564
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        -24.641010284423828,
+                        11.528522491455078,
+                        17.15386199951172
+                    ]
+                }
+            },
+            "prefabBase": {
+                "components": {
+                    "CameraComponent": {
+                        "fov": 0.44999998807907104
+                    },
+                    "TransformComponent": {
+                        "rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ],
+                        "translate": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ]
+                    }
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\Camera.json",
+            "prefabOverrides": [
+                {
+                    "op": "replace",
+                    "path": "/components/TransformComponent/rotation",
+                    "value": [
+                        4.0468239603796974e-07,
+                        0.7967829704284668,
+                        4.0468239603796974e-07,
+                        0.604265570640564
+                    ]
+                },
+                {
+                    "op": "replace",
+                    "path": "/components/TransformComponent/translate",
+                    "value": [
+                        -24.641010284423828,
+                        11.528522491455078,
+                        17.15386199951172
+                    ]
+                }
+            ]
+        },
+        "Camera_1": {
+            "components": {
+                "CameraComponent": {
+                    "fov": 0.44999998807907104
+                },
+                "EditTag": {
+                    "name": "Camera_1",
+                    "parent": null
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.5235008001327515,
+                        0.0,
+                        0.8520251512527466
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        -22.268386840820313,
+                        13.062463760375977,
+                        10.58586597442627
+                    ]
+                }
+            },
+            "prefabBase": {
+                "components": {
+                    "CameraComponent": {
+                        "fov": 0.44999998807907104
+                    },
+                    "TransformComponent": {
+                        "rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ],
+                        "translate": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ]
+                    }
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\Camera.json",
+            "prefabOverrides": [
+                {
+                    "op": "replace",
+                    "path": "/components/TransformComponent/rotation",
+                    "value": [
+                        0.0,
+                        0.5235008001327515,
+                        0.0,
+                        0.8520251512527466
+                    ]
+                },
+                {
+                    "op": "replace",
+                    "path": "/components/TransformComponent/translate",
+                    "value": [
+                        -22.268386840820313,
+                        13.062463760375977,
+                        10.58586597442627
+                    ]
+                }
+            ]
+        },
         "CloseHint": {
             "components": {
                 "CloseLevelUpUITag": null,
@@ -216,9 +370,9 @@
                 },
                 "DebugCameraComponent": {
                     "center": [
-                        -32.150108337402344,
-                        21.546993255615234,
-                        14.866203308105469
+                        -43.363162994384766,
+                        18.07412338256836,
+                        36.283302307128906
                     ],
                     "distance": 24.76100730895996,
                     "drawCenter": false,
@@ -233,10 +387,10 @@
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
-                        0.1442810595035553,
-                        0.7154421210289001,
-                        -0.15503884851932526,
-                        0.6657992005348206
+                        0.14212185144424438,
+                        0.8054724335670471,
+                        -0.21441619098186493,
+                        0.5338926911354065
                     ],
                     "scale": [
                         1.0,
@@ -244,9 +398,9 @@
                         1.0
                     ],
                     "translate": [
-                        -54.63169860839844,
-                        31.79723358154297,
-                        16.48430633544922
+                        -63.150306701660156,
+                        30.384510040283203,
+                        44.6517448425293
                     ]
                 }
             }
@@ -363,23 +517,38 @@
             "components": {
                 "DialogueComponent": {
                     "defaultProfileId": "",
-                    "enabled": false,
+                    "enabled": true,
                     "fontName": "resources/engine/fonts/ISE-FONT4/Isego.otf",
                     "interactDistance": 5.0,
                     "interactable": true,
                     "lines": [
                         {
-                            "profileId": "",
-                            "text": "早く箱に入れ。"
+                            "profileId": "profile_1",
+                            "text": "気づいてる？自分がありえないほど怪しいってこと。"
                         },
                         {
                             "profileId": "",
-                            "text": "ここから脱出する唯一の方法だ。"
+                            "text": "...ああ"
                         }
                     ],
                     "portraitFrameCount": 4,
                     "portraitTexture": "resources/game/ClockworksDisease/Texture/Portrait/Leimar.png",
-                    "profiles": [],
+                    "profiles": [
+                        {
+                            "fontName": "resources/game/ClockworksDisease/Font/Kiwi_Maru/KiwiMaru-Medium.ttf",
+                            "id": "profile_1",
+                            "portraitFrameCount": 6,
+                            "portraitTexture": "resources/game/ClockworksDisease/Texture/Portrait/player.png",
+                            "showPortrait": true,
+                            "textScale": 1.5,
+                            "voiceFiles": [
+                                "resources/game/ClockworksDisease/Sounds/Voice/Player/01.wav",
+                                "resources/game/ClockworksDisease/Sounds/Voice/Player/02.wav",
+                                "resources/game/ClockworksDisease/Sounds/Voice/Player/03.wav"
+                            ],
+                            "voiceVolume": 0.15000000596046448
+                        }
+                    ],
                     "voiceFiles": [],
                     "voiceVolume": 0.3499999940395355
                 },
@@ -446,9 +615,9 @@
                         1.0
                     ],
                     "translate": [
-                        -2.420149087905884,
+                        -17.838607788085938,
                         10.000415802001953,
-                        15.776201248168945
+                        8.285995483398438
                     ]
                 },
                 "TransformRoutineComponent": {
@@ -902,7 +1071,7 @@
                     "fadeInDuration": 0.5,
                     "fadeOutDuration": 0.5,
                     "phase": "kPlayingRoutine",
-                    "playInEditor": false
+                    "playInEditor": true
                 },
                 "CameraLockTag": null,
                 "EditTag": {
@@ -1110,19 +1279,161 @@
                     "interactable": true,
                     "lines": [
                         {
+                            "profileId": "profile_1",
+                            "text": "で、あんた誰？負けたってどういうこと？"
+                        },
+                        {
                             "profileId": "",
-                            "text": "てすと"
+                            "text": "本当に覚えていないんだな。フフフ..."
+                        },
+                        {
+                            "profileId": "",
+                            "text": "君は警察官で、犯罪者を追っていた。"
+                        },
+                        {
+                            "profileId": "",
+                            "text": "で、その犯罪者にやられてさっきの場所に飛ばされた。"
+                        },
+                        {
+                            "profileId": "",
+                            "text": "私はレイマー。その犯罪者に個人的な恨みがある。"
+                        },
+                        {
+                            "profileId": "",
+                            "text": "市民として協力させてもらうぞ。"
                         }
                     ],
                     "portraitFrameCount": 4,
                     "portraitTexture": "resources/game/ClockworksDisease/Texture/Portrait/Leimar.png",
-                    "profiles": [],
+                    "profiles": [
+                        {
+                            "fontName": "resources/game/ClockworksDisease/Font/Kiwi_Maru/KiwiMaru-Medium.ttf",
+                            "id": "profile_1",
+                            "portraitFrameCount": 6,
+                            "portraitTexture": "resources/game/ClockworksDisease/Texture/Portrait/player.png",
+                            "showPortrait": true,
+                            "textScale": 1.5,
+                            "voiceFiles": [
+                                "resources/game/ClockworksDisease/Sounds/Voice/Player/01.wav",
+                                "resources/game/ClockworksDisease/Sounds/Voice/Player/02.wav",
+                                "resources/game/ClockworksDisease/Sounds/Voice/Player/03.wav"
+                            ],
+                            "voiceVolume": 0.15000000596046448
+                        }
+                    ],
                     "voiceFiles": [],
                     "voiceVolume": 0.3499999940395355
                 },
                 "EditTag": {
                     "name": "StartDialogue",
                     "parent": "Event"
+                },
+                "GimmickGraphComponent": {
+                    "graphPath": "resources/game/ClockworksDisease/GimmickGraph/NucleusDimension/StartEvent2.json"
+                }
+            }
+        },
+        "StartDialogue_2": {
+            "components": {
+                "DialogueComponent": {
+                    "defaultProfileId": "",
+                    "enabled": true,
+                    "fontName": "resources/engine/fonts/ISE-FONT4/Isego.otf",
+                    "interactDistance": 3.0,
+                    "interactable": true,
+                    "lines": [
+                        {
+                            "profileId": "",
+                            "text": "あの巨大な魔力の塊を見ろ。"
+                        },
+                        {
+                            "profileId": "",
+                            "text": "あれさえ手に入れれば奴を捕まえるのも容易だろう。"
+                        },
+                        {
+                            "profileId": "profile_1",
+                            "text": "あんな遠くに浮いているもの取れるわけないわ。"
+                        },
+                        {
+                            "profileId": "",
+                            "text": "そうだ。あれを取るための魔力を蓄える必要がある。"
+                        },
+                        {
+                            "profileId": "profile_1",
+                            "text": "魔力を手に入れるための魔力が必要なわけね。"
+                        }
+                    ],
+                    "portraitFrameCount": 4,
+                    "portraitTexture": "resources/game/ClockworksDisease/Texture/Portrait/Leimar.png",
+                    "profiles": [
+                        {
+                            "fontName": "resources/game/ClockworksDisease/Font/Kiwi_Maru/KiwiMaru-Medium.ttf",
+                            "id": "profile_1",
+                            "portraitFrameCount": 6,
+                            "portraitTexture": "resources/game/ClockworksDisease/Texture/Portrait/player.png",
+                            "showPortrait": true,
+                            "textScale": 1.5,
+                            "voiceFiles": [
+                                "resources/game/ClockworksDisease/Sounds/Voice/Player/01.wav",
+                                "resources/game/ClockworksDisease/Sounds/Voice/Player/02.wav",
+                                "resources/game/ClockworksDisease/Sounds/Voice/Player/03.wav"
+                            ],
+                            "voiceVolume": 0.15000000596046448
+                        }
+                    ],
+                    "voiceFiles": [],
+                    "voiceVolume": 0.3499999940395355
+                },
+                "EditTag": {
+                    "name": "StartDialogue_2",
+                    "parent": "Event"
+                },
+                "GimmickGraphComponent": {
+                    "graphPath": "resources/game/ClockworksDisease/GimmickGraph/NucleusDimension/StartEvent3.json"
+                }
+            }
+        },
+        "StartDialogue_3": {
+            "components": {
+                "DialogueComponent": {
+                    "defaultProfileId": "",
+                    "enabled": true,
+                    "fontName": "resources/engine/fonts/ISE-FONT4/Isego.otf",
+                    "interactDistance": 3.0,
+                    "interactable": true,
+                    "lines": [
+                        {
+                            "profileId": "",
+                            "text": "まずはあの島で魔力を集めると良いだろう。"
+                        }
+                    ],
+                    "portraitFrameCount": 4,
+                    "portraitTexture": "resources/game/ClockworksDisease/Texture/Portrait/Leimar.png",
+                    "profiles": [
+                        {
+                            "fontName": "resources/game/ClockworksDisease/Font/Kiwi_Maru/KiwiMaru-Medium.ttf",
+                            "id": "profile_1",
+                            "portraitFrameCount": 6,
+                            "portraitTexture": "resources/game/ClockworksDisease/Texture/Portrait/player.png",
+                            "showPortrait": true,
+                            "textScale": 1.5,
+                            "voiceFiles": [
+                                "resources/game/ClockworksDisease/Sounds/Voice/Player/01.wav",
+                                "resources/game/ClockworksDisease/Sounds/Voice/Player/02.wav",
+                                "resources/game/ClockworksDisease/Sounds/Voice/Player/03.wav"
+                            ],
+                            "voiceVolume": 0.15000000596046448
+                        }
+                    ],
+                    "voiceFiles": [],
+                    "voiceVolume": 0.3499999940395355
+                },
+                "EditTag": {
+                    "name": "StartDialogue_3",
+                    "parent": "Event"
+                },
+                "GimmickGraphComponent": {
+                    "graphPath": "resources/game/ClockworksDisease/GimmickGraph/NucleusDimension/StartEvent4.json"
                 }
             }
         },
@@ -1400,6 +1711,228 @@
                     ]
                 }
             }
+        },
+        "canMagicUI": {
+            "components": {
+                "CanMagicUITag": {
+                    "isBackground": false
+                },
+                "EditTag": {
+                    "name": "canMagicUI",
+                    "parent": "staminaGauge"
+                },
+                "SpriteComponent": {
+                    "anchor": [
+                        0.0,
+                        0.0
+                    ],
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        0.0
+                    ],
+                    "fill": 0.0,
+                    "flipX": false,
+                    "flipY": false,
+                    "isVisible": true,
+                    "layer": 1,
+                    "maskTextureName": "",
+                    "nonRenderAngle": 0.0,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "space": "World",
+                    "textureName": "canMagicUI",
+                    "useMask": false,
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "StaminaGaugeParentTag": null,
+                "Transform2DComponent": {
+                    "parent": "staminaGauge",
+                    "rotation": 0.0,
+                    "scale": [
+                        0.5,
+                        0.5
+                    ],
+                    "translate": [
+                        0.7556419372558594,
+                        0.7559999823570251
+                    ]
+                }
+            },
+            "prefabBase": {
+                "components": {
+                    "CanMagicUITag": {
+                        "isBackground": false
+                    },
+                    "SpriteComponent": {
+                        "anchor": [
+                            0.0,
+                            0.0
+                        ],
+                        "color": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            0.0
+                        ],
+                        "fill": 0.0,
+                        "flipX": false,
+                        "flipY": false,
+                        "isVisible": true,
+                        "layer": 1,
+                        "maskTextureName": "",
+                        "nonRenderAngle": 0.0,
+                        "orderInLayer": 0,
+                        "pivot": [
+                            0.5,
+                            0.5
+                        ],
+                        "space": "World",
+                        "textureName": "canMagicUI",
+                        "useMask": false,
+                        "uv": [
+                            0.0,
+                            0.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "StaminaGaugeParentTag": null,
+                    "Transform2DComponent": {
+                        "rotation": 0.0,
+                        "scale": [
+                            0.5,
+                            0.5
+                        ],
+                        "translate": [
+                            0.7556419372558594,
+                            0.7559999823570251
+                        ]
+                    }
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\canMagicUI.json",
+            "prefabOverrides": []
+        },
+        "canMagicUIBack": {
+            "components": {
+                "CanMagicUITag": {
+                    "isBackground": true
+                },
+                "EditTag": {
+                    "name": "canMagicUIBack",
+                    "parent": "canMagicUI"
+                },
+                "SpriteComponent": {
+                    "anchor": [
+                        0.0,
+                        0.0
+                    ],
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        0.0
+                    ],
+                    "fill": 0.0,
+                    "flipX": false,
+                    "flipY": false,
+                    "isVisible": true,
+                    "layer": 0,
+                    "maskTextureName": "",
+                    "nonRenderAngle": 0.0,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "space": "World",
+                    "textureName": "canMagicUIBack",
+                    "useMask": false,
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "StaminaGaugeParentTag": null,
+                "Transform2DComponent": {
+                    "parent": "canMagicUI",
+                    "rotation": 0.0,
+                    "scale": [
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            },
+            "prefabBase": {
+                "components": {
+                    "CanMagicUITag": {
+                        "isBackground": true
+                    },
+                    "SpriteComponent": {
+                        "anchor": [
+                            0.0,
+                            0.0
+                        ],
+                        "color": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            0.0
+                        ],
+                        "fill": 0.0,
+                        "flipX": false,
+                        "flipY": false,
+                        "isVisible": true,
+                        "layer": 0,
+                        "maskTextureName": "",
+                        "nonRenderAngle": 0.0,
+                        "orderInLayer": 0,
+                        "pivot": [
+                            0.5,
+                            0.5
+                        ],
+                        "space": "World",
+                        "textureName": "canMagicUIBack",
+                        "useMask": false,
+                        "uv": [
+                            0.0,
+                            0.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "StaminaGaugeParentTag": null,
+                    "Transform2DComponent": {
+                        "rotation": 0.0,
+                        "scale": [
+                            1.0,
+                            1.0
+                        ],
+                        "translate": [
+                            0.0,
+                            0.0
+                        ]
+                    }
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\canMagicUIBack.json",
+            "prefabOverrides": []
         },
         "directionalLight": {
             "components": {
@@ -2046,6 +2579,237 @@
             },
             "prefabInstance": "resources/game/Prefabs\\shaderBackground.json",
             "prefabOverrides": []
+        },
+        "staminaGauge": {
+            "components": {
+                "EditTag": {
+                    "name": "staminaGauge",
+                    "parent": null
+                },
+                "SpriteComponent": {
+                    "anchor": [
+                        0.0,
+                        0.0
+                    ],
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        0.0
+                    ],
+                    "fill": 0.0,
+                    "flipX": false,
+                    "flipY": false,
+                    "isVisible": true,
+                    "layer": 5,
+                    "maskTextureName": "",
+                    "nonRenderAngle": 0.0,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "space": "World",
+                    "textureName": "staminaGauge",
+                    "useMask": false,
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "StaminaGaugeComponent": {
+                    "disappearanceTime": 1.0
+                },
+                "Transform2DComponent": {
+                    "parent": null,
+                    "rotation": 0.0,
+                    "scale": [
+                        110.0,
+                        110.0
+                    ],
+                    "translate": [
+                        130.10000610351563,
+                        592.7000122070313
+                    ]
+                }
+            },
+            "prefabBase": {
+                "components": {
+                    "SpriteComponent": {
+                        "anchor": [
+                            0.0,
+                            0.0
+                        ],
+                        "color": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            0.0
+                        ],
+                        "fill": 0.0,
+                        "flipX": false,
+                        "flipY": false,
+                        "isVisible": true,
+                        "layer": 5,
+                        "maskTextureName": "",
+                        "nonRenderAngle": 0.0,
+                        "orderInLayer": 0,
+                        "pivot": [
+                            0.5,
+                            0.5
+                        ],
+                        "space": "World",
+                        "textureName": "staminaGauge",
+                        "useMask": false,
+                        "uv": [
+                            0.0,
+                            0.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "StaminaGaugeComponent": {
+                        "disappearanceTime": 1.0
+                    },
+                    "Transform2DComponent": {
+                        "rotation": 0.0,
+                        "scale": [
+                            110.0,
+                            110.0
+                        ],
+                        "translate": [
+                            130.10000610351563,
+                            592.7000122070313
+                        ]
+                    }
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\staminaGauge.json",
+            "prefabOverrides": []
+        },
+        "staminaGaugeFrame": {
+            "components": {
+                "EditTag": {
+                    "name": "staminaGaugeFrame",
+                    "parent": "staminaGauge"
+                },
+                "SpriteComponent": {
+                    "anchor": [
+                        0.0,
+                        0.0
+                    ],
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        0.0
+                    ],
+                    "fill": 0.0,
+                    "flipX": false,
+                    "flipY": false,
+                    "isVisible": true,
+                    "layer": 10,
+                    "maskTextureName": "",
+                    "nonRenderAngle": 0.0,
+                    "orderInLayer": 0,
+                    "pivot": [
+                        0.5,
+                        0.5
+                    ],
+                    "space": "World",
+                    "textureName": "staminaFrame",
+                    "useMask": false,
+                    "uv": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "StaminaGaugeParentTag": null,
+                "Transform2DComponent": {
+                    "parent": "staminaGauge",
+                    "rotation": 0.0,
+                    "scale": [
+                        1.5,
+                        1.5
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            },
+            "prefabBase": {
+                "components": {
+                    "SpriteComponent": {
+                        "anchor": [
+                            0.0,
+                            0.0
+                        ],
+                        "color": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            0.0
+                        ],
+                        "fill": 0.0,
+                        "flipX": false,
+                        "flipY": false,
+                        "isVisible": true,
+                        "layer": 10,
+                        "maskTextureName": "",
+                        "nonRenderAngle": 0.0,
+                        "orderInLayer": 0,
+                        "pivot": [
+                            0.5,
+                            0.5
+                        ],
+                        "space": "World",
+                        "textureName": "staminaFrame",
+                        "useMask": false,
+                        "uv": [
+                            0.0,
+                            0.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "StaminaGaugeParentTag": null,
+                    "Transform2DComponent": {
+                        "rotation": 0.0,
+                        "scale": [
+                            150.0,
+                            150.0
+                        ],
+                        "translate": [
+                            130.10000610351563,
+                            592.7000122070313
+                        ]
+                    }
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\staminaGaugeFrame.json",
+            "prefabOverrides": [
+                {
+                    "op": "replace",
+                    "path": "/components/Transform2DComponent/scale",
+                    "value": [
+                        1.5,
+                        1.5
+                    ]
+                },
+                {
+                    "op": "replace",
+                    "path": "/components/Transform2DComponent/translate",
+                    "value": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            ]
         },
         "subIsland1": {
             "components": {
