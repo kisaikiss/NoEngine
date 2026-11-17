@@ -764,6 +764,7 @@
     <None Include="resources\engine\Shaders\Random.hlsli" />
     <None Include="resources\engine\Shaders\Particle\Particle.hlsli" />
     <None Include="resources\game\ClockworksDisease\Shaders\BackgroundCommon.hlsli" />
+    <None Include="resources\game\ClockworksDisease\Shaders\Chalkboard.PS.hlsl" />
     <None Include="externals\imgui\imgui_bezier_math.inl" />
     <None Include="externals\imgui\imgui_extra_math.inl" />
     <None Include="externals\imgui\imgui_node_editor_internal.inl" />

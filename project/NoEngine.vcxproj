@@ -1441,6 +1441,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     </None>
     <None Include="resources\engine\Shaders\Random.hlsli" />
     <None Include="resources\game\ClockworksDisease\Shaders\BackgroundCommon.hlsli" />
+    <None Include="resources\game\ClockworksDisease\Shaders\Chalkboard.PS.hlsl" />
     <None Include="resources\game\Shaders\ShaderMathUtil.hlsli" />
     <None Include="resources\game\td_2304\Json\tdSpriteConfig.json" />
   </ItemGroup>

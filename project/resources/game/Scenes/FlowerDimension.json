@@ -1071,7 +1071,7 @@
                     "fadeInDuration": 0.5,
                     "fadeOutDuration": 0.5,
                     "phase": "kPlayingRoutine",
-                    "playInEditor": true
+                    "playInEditor": false
                 },
                 "CameraLockTag": null,
                 "EditTag": {
@@ -2503,20 +2503,20 @@
                 },
                 "ShaderBackgroundComponent": {
                     "color": [
-                        2.1764705181121826,
-                        2.9450979232788086,
-                        2.56862735748291,
+                        1.0,
+                        1.0,
+                        1.0,
                         1.0
                     ],
                     "isVisible": true,
                     "param": [
-                        0.0,
-                        0.0,
-                        0.0,
-                        0.0
+                        0.5,
+                        0.18000000715255737,
+                        0.699999988079071,
+                        0.15000000596046448
                     ],
-                    "shaderPath": "resources/game/ClockworksDisease/Shaders/Starfield.PS.hlsl",
-                    "timeScale": 1.7000000476837158
+                    "shaderPath": "resources/game/ClockworksDisease/Shaders/Chalkboard.PS.hlsl",
+                    "timeScale": 0.0
                 },
                 "TransformComponent": {
                     "parent": null,
@@ -2578,7 +2578,38 @@
                 }
             },
             "prefabInstance": "resources/game/Prefabs\\shaderBackground.json",
-            "prefabOverrides": []
+            "prefabOverrides": [
+                {
+                    "op": "replace",
+                    "path": "/components/ShaderBackgroundComponent/color",
+                    "value": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                {
+                    "op": "replace",
+                    "path": "/components/ShaderBackgroundComponent/param",
+                    "value": [
+                        0.5,
+                        0.18000000715255737,
+                        0.699999988079071,
+                        0.15000000596046448
+                    ]
+                },
+                {
+                    "op": "replace",
+                    "path": "/components/ShaderBackgroundComponent/shaderPath",
+                    "value": "resources/game/ClockworksDisease/Shaders/Chalkboard.PS.hlsl"
+                },
+                {
+                    "op": "replace",
+                    "path": "/components/ShaderBackgroundComponent/timeScale",
+                    "value": 0.0
+                }
+            ]
         },
         "staminaGauge": {
             "components": {
@@ -3293,6 +3324,16 @@
             "name": "Depth outline",
             "settings": {
                 "autoClear": false,
+                "chalkColor": [
+                    0.9,
+                    0.92,
+                    0.82
+                ],
+                "chalkEnabled": true,
+                "chalkRoughness": 0.65,
+                "chalkSurfaceBrightness": 0.35,
+                "chalkThreshold": 0.015,
+                "chalkWidth": 1.6,
                 "clearDepth": false,
                 "depthOutput": "",
                 "inputs": {
@@ -3319,50 +3360,7 @@
                     "InputColor": "PostEffect",
                     "InputDepth": "MainDepth"
                 },
-                "maxCoCRadius": 0.009999999776482582,
-                "outputs": [
-                    "MainColor"
-                ],
-                "targetCameraName": "GameCamera",
-                "targetCameraType": 0,
-                "uavOutputs": []
-            }
-        },
-        {
-            "name": "Fog integrate",
-            "settings": {
-                "ambient": 0.15000000596046448,
-                "autoClear": false,
-                "baseHeight": 0.0,
-                "clearDepth": false,
-                "density": 0.0020000000949949026,
-                "depthOutput": "",
-                "heightFalloff": 0.03500000014901161,
-                "inputs": {
-                    "InputDepth": "MainDepth"
-                },
-                "maxDistance": 140.0,
-                "outputs": [],
-                "scatteringAlbedo": 0.8500000238418579,
-                "scatteringAnisotropy": 0.949999988079071,
-                "stepCount": 16,
-                "targetCameraName": "GameCamera",
-                "targetCameraType": 0,
-                "traceShadows": true,
-                "uavOutputs": [
-                    "VolumetricFog"
-                ]
-            }
-        },
-        {
-            "name": "Fog composite",
-            "settings": {
-                "autoClear": false,
-                "clearDepth": false,
-                "depthOutput": "",
-                "inputs": {
-                    "Fog": "VolumetricFog"
-                },
+                "maxCoCRadius": 0.0,
                 "outputs": [
                     "MainColor"
                 ],
@@ -3481,7 +3479,7 @@
                     "BloomColor": "BloomBlurB",
                     "SceneColor": "MainColor"
                 },
-                "intensity": 3.0,
+                "intensity": 0.0,
                 "outputs": [
                     "BloomComposite"
                 ],
