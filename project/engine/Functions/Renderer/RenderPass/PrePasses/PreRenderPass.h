@@ -9,12 +9,14 @@ namespace NoEngine {
 namespace Component { struct AnimatorComponent; }
 namespace Render {
 
-class PreRenderPass :
-    public RenderPass {
+class PreRenderPass : public RenderPass {
 public:
-    PreRenderPass();
     void Execute(GraphicsContext& gfx, const RenderGraphRegistry& resourceRegistry, ECS::Registry& registry) override;
+};
 
+class TransparentMeshIDPass : public RenderPass {
+public:
+    void Execute(GraphicsContext& gfx, const RenderGraphRegistry& resourceRegistry, ECS::Registry& registry) override;
 };
 
 }

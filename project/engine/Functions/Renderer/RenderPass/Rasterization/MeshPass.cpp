@@ -152,29 +152,9 @@ void MeshPassBase::RenderItems(GraphicsContext& context, const RenderGraphRegist
 				constants.unlit = item.material->unlit ? 1.0f : 0.0f;
 				constants.receiveShadow = item.material->receiveShadow ? 1.0f : 0.0f;
 
-				// uvTransform
-				Math::Quaternion uvRotate;
-				uvRotate.FromAxisAngle(Math::Vector3::FORWARD, item.material->uvRotate);
-				constants.uvTransform.MakeAffine(
-					Math::Vector3(item.material->uvScale.x, item.material->uvScale.y, 1.0f),
-					uvRotate,
-					Math::Vector3(item.material->uvPosition.x, item.material->uvPosition.y, 0.0f)
-				);
+				constants.uvTransform = item.material->MakeUVTransform();
 				context.SetDynamicConstantBufferView(rootIndex["gMaterial"], sizeof(constants), &constants);
-				const auto* material = ModelSaver::Get().GetMaterial(subMesh.material);
-				auto textureSRV = material ? material->textureHandle.GetSRV() : Graphics::GetDefaultTexture(Graphics::kWhiteOpaque2D);
-				if (!item.material->textureName.empty()) {
-					const uint64_t generation = AssetManager::GetAddressableGeneration();
-					if (item.material->loadedTextureGeneration != generation ||
-						item.material->loadedTextureName != item.material->textureName) {
-						const std::string path = AssetManager::GetFilePathFromAddressableName(item.material->textureName);
-						item.material->textureHandle = path.empty() ? TextureRef{} : TextureManager::LoadCovertTexture(path);
-						item.material->loadedTextureName = item.material->textureName;
-						item.material->loadedTextureGeneration = generation;
-					}
-					if (item.material->textureHandle.IsValid()) textureSRV = item.material->textureHandle.GetSRV();
-				}
-				context.SetDynamicDescriptor(rootIndex["gTexture"], 0, textureSRV);
+				context.SetDynamicDescriptor(rootIndex["gTexture"], 0, item.material->ResolveTextureSRV(subMesh.material));
 				context.SetDynamicDescriptor(rootIndex["gShadowMask"], 0, resourceRegistry.GetColorBuffer(GetInput("ShadowMask")).GetSRV());
 				context.SetDynamicDescriptor(rootIndex["gEnvironmentTexture"], 0, skyBoxTexture_.GetSRV());
 			}

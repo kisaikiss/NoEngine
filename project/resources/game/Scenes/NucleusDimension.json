@@ -370,9 +370,9 @@
                 },
                 "DebugCameraComponent": {
                     "center": [
-                        -43.363162994384766,
-                        18.07412338256836,
-                        36.283302307128906
+                        -63.95890808105469,
+                        56.44389343261719,
+                        31.532196044921875
                     ],
                     "distance": 24.76100730895996,
                     "drawCenter": false,
@@ -387,10 +387,10 @@
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
-                        0.14212185144424438,
-                        0.8054724335670471,
-                        -0.21441619098186493,
-                        0.5338926911354065
+                        0.17868906259536743,
+                        0.7729801535606384,
+                        -0.24856255948543549,
+                        0.5556874871253967
                     ],
                     "scale": [
                         1.0,
@@ -398,9 +398,9 @@
                         1.0
                     ],
                     "translate": [
-                        -63.150306701660156,
-                        30.384510040283203,
-                        44.6517448425293
+                        -83.03082275390625,
+                        70.87605285644531,
+                        37.941734313964844
                     ]
                 }
             }
@@ -1957,6 +1957,925 @@
                     "parent": null
                 }
             }
+        },
+        "gem": {
+            "components": {
+                "CapsuleCollider": {
+                    "localP0": [
+                        0.0,
+                        -3.5,
+                        0.0
+                    ],
+                    "localP1": [
+                        0.0,
+                        3.5,
+                        0.0
+                    ],
+                    "radius": 1.2000000476837158
+                },
+                "EditTag": {
+                    "name": "gem",
+                    "parent": null
+                },
+                "FloatingComponent": {
+                    "amplitude": [
+                        0.0,
+                        1.7000000476837158,
+                        0.0
+                    ],
+                    "velocity": [
+                        0.0,
+                        1.100000023841858,
+                        0.0
+                    ]
+                },
+                "MaterialComponent": {
+                    "blendMode": "kAdd",
+                    "castShadow": true,
+                    "color": [
+                        0.0,
+                        1.0,
+                        0.028469562530517578,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        0.1831699162721634,
+                        0.17856916785240173,
+                        0.501779317855835,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "environmentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "resources/engine/Texture/noise/Noise_Gradients/T_Random_56.png",
+                    "receiveShadow": true,
+                    "renderMode": "kEmissive",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "textureName": "",
+                    "unlit": false,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "resources/game/ClockworksDisease/Model/object/gem.gltf"
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        -20.44424819946289,
+                        14.771466255187988,
+                        38.022216796875
+                    ]
+                }
+            }
+        },
+        "gem_1": {
+            "components": {
+                "CapsuleCollider": {
+                    "localP0": [
+                        0.0,
+                        -3.5,
+                        0.0
+                    ],
+                    "localP1": [
+                        0.0,
+                        3.5,
+                        0.0
+                    ],
+                    "radius": 1.2000000476837158
+                },
+                "EditTag": {
+                    "name": "gem_1",
+                    "parent": null
+                },
+                "FloatingComponent": {
+                    "amplitude": [
+                        0.0,
+                        1.7000000476837158,
+                        0.0
+                    ],
+                    "velocity": [
+                        0.0,
+                        0.5,
+                        0.0
+                    ]
+                },
+                "MaterialComponent": {
+                    "blendMode": "kAdd",
+                    "castShadow": true,
+                    "color": [
+                        0.0,
+                        1.0,
+                        0.028469562530517578,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        0.1831699162721634,
+                        0.17856916785240173,
+                        0.501779317855835,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "environmentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "resources/engine/Texture/noise/Noise_Gradients/T_Random_56.png",
+                    "receiveShadow": true,
+                    "renderMode": "kEmissive",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "textureName": "",
+                    "unlit": false,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "resources/game/ClockworksDisease/Model/object/gem.gltf"
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        -40.184104919433594,
+                        23.043685913085938,
+                        0.6282134056091309
+                    ]
+                }
+            },
+            "prefabBase": {
+                "components": {
+                    "CapsuleCollider": {
+                        "localP0": [
+                            0.0,
+                            -3.5,
+                            0.0
+                        ],
+                        "localP1": [
+                            0.0,
+                            3.5,
+                            0.0
+                        ],
+                        "radius": 1.2000000476837158
+                    },
+                    "FloatingComponent": {
+                        "amplitude": [
+                            0.0,
+                            1.7000000476837158,
+                            0.0
+                        ],
+                        "velocity": [
+                            0.0,
+                            1.100000023841858,
+                            0.0
+                        ]
+                    },
+                    "MaterialComponent": {
+                        "blendMode": "kAdd",
+                        "castShadow": true,
+                        "color": [
+                            0.0,
+                            1.0,
+                            0.028469562530517578,
+                            1.0
+                        ],
+                        "drawOutline": false,
+                        "edgeColor": [
+                            0.1831699162721634,
+                            0.17856916785240173,
+                            0.501779317855835,
+                            1.0
+                        ],
+                        "emissiveIntensity": 1.0,
+                        "environmentCoefficient": 0.0,
+                        "noiseScrollSpeed": 0.30000001192092896,
+                        "noiseTextureName": "resources/engine/Texture/noise/Noise_Gradients/T_Random_56.png",
+                        "receiveShadow": true,
+                        "renderMode": "kEmissive",
+                        "rimPower": 2.0,
+                        "shininess": 60.0,
+                        "textureName": "",
+                        "unlit": false,
+                        "uvPosition": [
+                            0.0,
+                            0.0
+                        ],
+                        "uvRotate": 0.0,
+                        "uvScale": [
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "MeshComponent": {
+                        "isVisible": true,
+                        "meshName": "resources/game/ClockworksDisease/Model/object/gem.gltf"
+                    },
+                    "TransformComponent": {
+                        "rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ],
+                        "translate": [
+                            -21.99138641357422,
+                            14.771466255187988,
+                            24.55927276611328
+                        ]
+                    }
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\gem.json",
+            "prefabOverrides": [
+                {
+                    "op": "replace",
+                    "path": "/components/FloatingComponent/velocity",
+                    "value": [
+                        0.0,
+                        0.5,
+                        0.0
+                    ]
+                },
+                {
+                    "op": "replace",
+                    "path": "/components/TransformComponent/translate",
+                    "value": [
+                        -40.184104919433594,
+                        23.043685913085938,
+                        0.6282134056091309
+                    ]
+                }
+            ]
+        },
+        "gem_2": {
+            "components": {
+                "CapsuleCollider": {
+                    "localP0": [
+                        0.0,
+                        -3.5,
+                        0.0
+                    ],
+                    "localP1": [
+                        0.0,
+                        3.5,
+                        0.0
+                    ],
+                    "radius": 1.2000000476837158
+                },
+                "EditTag": {
+                    "name": "gem_2",
+                    "parent": null
+                },
+                "FloatingComponent": {
+                    "amplitude": [
+                        0.0,
+                        3.9000000953674316,
+                        0.0
+                    ],
+                    "velocity": [
+                        0.0,
+                        0.800000011920929,
+                        0.0
+                    ]
+                },
+                "MaterialComponent": {
+                    "blendMode": "kAdd",
+                    "castShadow": true,
+                    "color": [
+                        0.0,
+                        1.0,
+                        0.028469562530517578,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        0.1831699162721634,
+                        0.17856916785240173,
+                        0.501779317855835,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "environmentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "resources/engine/Texture/noise/Noise_Gradients/T_Random_56.png",
+                    "receiveShadow": true,
+                    "renderMode": "kEmissive",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "textureName": "",
+                    "unlit": false,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "resources/game/ClockworksDisease/Model/object/gem.gltf"
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        17.576961517333984,
+                        20.328641891479492,
+                        -11.192788124084473
+                    ]
+                }
+            },
+            "prefabBase": {
+                "components": {
+                    "CapsuleCollider": {
+                        "localP0": [
+                            0.0,
+                            -3.5,
+                            0.0
+                        ],
+                        "localP1": [
+                            0.0,
+                            3.5,
+                            0.0
+                        ],
+                        "radius": 1.2000000476837158
+                    },
+                    "FloatingComponent": {
+                        "amplitude": [
+                            0.0,
+                            1.7000000476837158,
+                            0.0
+                        ],
+                        "velocity": [
+                            0.0,
+                            1.100000023841858,
+                            0.0
+                        ]
+                    },
+                    "MaterialComponent": {
+                        "blendMode": "kAdd",
+                        "castShadow": true,
+                        "color": [
+                            0.0,
+                            1.0,
+                            0.028469562530517578,
+                            1.0
+                        ],
+                        "drawOutline": false,
+                        "edgeColor": [
+                            0.1831699162721634,
+                            0.17856916785240173,
+                            0.501779317855835,
+                            1.0
+                        ],
+                        "emissiveIntensity": 1.0,
+                        "environmentCoefficient": 0.0,
+                        "noiseScrollSpeed": 0.30000001192092896,
+                        "noiseTextureName": "resources/engine/Texture/noise/Noise_Gradients/T_Random_56.png",
+                        "receiveShadow": true,
+                        "renderMode": "kEmissive",
+                        "rimPower": 2.0,
+                        "shininess": 60.0,
+                        "textureName": "",
+                        "unlit": false,
+                        "uvPosition": [
+                            0.0,
+                            0.0
+                        ],
+                        "uvRotate": 0.0,
+                        "uvScale": [
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "MeshComponent": {
+                        "isVisible": true,
+                        "meshName": "resources/game/ClockworksDisease/Model/object/gem.gltf"
+                    },
+                    "TransformComponent": {
+                        "rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ],
+                        "translate": [
+                            -21.99138641357422,
+                            14.771466255187988,
+                            24.55927276611328
+                        ]
+                    }
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\gem.json",
+            "prefabOverrides": [
+                {
+                    "op": "replace",
+                    "path": "/components/FloatingComponent/amplitude",
+                    "value": [
+                        0.0,
+                        3.9000000953674316,
+                        0.0
+                    ]
+                },
+                {
+                    "op": "replace",
+                    "path": "/components/FloatingComponent/velocity",
+                    "value": [
+                        0.0,
+                        0.800000011920929,
+                        0.0
+                    ]
+                },
+                {
+                    "op": "replace",
+                    "path": "/components/TransformComponent/translate",
+                    "value": [
+                        17.576961517333984,
+                        20.328641891479492,
+                        -11.192788124084473
+                    ]
+                }
+            ]
+        },
+        "gem_3": {
+            "components": {
+                "CapsuleCollider": {
+                    "localP0": [
+                        0.0,
+                        -3.5,
+                        0.0
+                    ],
+                    "localP1": [
+                        0.0,
+                        3.5,
+                        0.0
+                    ],
+                    "radius": 1.2000000476837158
+                },
+                "EditTag": {
+                    "name": "gem_3",
+                    "parent": null
+                },
+                "FloatingComponent": {
+                    "amplitude": [
+                        0.4000000059604645,
+                        0.699999988079071,
+                        0.0
+                    ],
+                    "velocity": [
+                        0.5,
+                        1.899999976158142,
+                        0.0
+                    ]
+                },
+                "MaterialComponent": {
+                    "blendMode": "kAdd",
+                    "castShadow": true,
+                    "color": [
+                        0.0,
+                        1.0,
+                        0.028469562530517578,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        0.1831699162721634,
+                        0.17856916785240173,
+                        0.501779317855835,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "environmentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "resources/engine/Texture/noise/Noise_Gradients/T_Random_56.png",
+                    "receiveShadow": true,
+                    "renderMode": "kEmissive",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "textureName": "",
+                    "unlit": false,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "resources/game/ClockworksDisease/Model/object/gem.gltf"
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        32.30933380126953,
+                        10.495281219482422,
+                        19.449125289916992
+                    ]
+                }
+            },
+            "prefabBase": {
+                "components": {
+                    "CapsuleCollider": {
+                        "localP0": [
+                            0.0,
+                            -3.5,
+                            0.0
+                        ],
+                        "localP1": [
+                            0.0,
+                            3.5,
+                            0.0
+                        ],
+                        "radius": 1.2000000476837158
+                    },
+                    "FloatingComponent": {
+                        "amplitude": [
+                            0.0,
+                            1.7000000476837158,
+                            0.0
+                        ],
+                        "velocity": [
+                            0.0,
+                            1.100000023841858,
+                            0.0
+                        ]
+                    },
+                    "MaterialComponent": {
+                        "blendMode": "kAdd",
+                        "castShadow": true,
+                        "color": [
+                            0.0,
+                            1.0,
+                            0.028469562530517578,
+                            1.0
+                        ],
+                        "drawOutline": false,
+                        "edgeColor": [
+                            0.1831699162721634,
+                            0.17856916785240173,
+                            0.501779317855835,
+                            1.0
+                        ],
+                        "emissiveIntensity": 1.0,
+                        "environmentCoefficient": 0.0,
+                        "noiseScrollSpeed": 0.30000001192092896,
+                        "noiseTextureName": "resources/engine/Texture/noise/Noise_Gradients/T_Random_56.png",
+                        "receiveShadow": true,
+                        "renderMode": "kEmissive",
+                        "rimPower": 2.0,
+                        "shininess": 60.0,
+                        "textureName": "",
+                        "unlit": false,
+                        "uvPosition": [
+                            0.0,
+                            0.0
+                        ],
+                        "uvRotate": 0.0,
+                        "uvScale": [
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "MeshComponent": {
+                        "isVisible": true,
+                        "meshName": "resources/game/ClockworksDisease/Model/object/gem.gltf"
+                    },
+                    "TransformComponent": {
+                        "rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ],
+                        "translate": [
+                            -21.99138641357422,
+                            14.771466255187988,
+                            24.55927276611328
+                        ]
+                    }
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\gem.json",
+            "prefabOverrides": [
+                {
+                    "op": "replace",
+                    "path": "/components/FloatingComponent/amplitude",
+                    "value": [
+                        0.4000000059604645,
+                        0.699999988079071,
+                        0.0
+                    ]
+                },
+                {
+                    "op": "replace",
+                    "path": "/components/FloatingComponent/velocity",
+                    "value": [
+                        0.5,
+                        1.899999976158142,
+                        0.0
+                    ]
+                },
+                {
+                    "op": "replace",
+                    "path": "/components/TransformComponent/translate",
+                    "value": [
+                        32.30933380126953,
+                        10.495281219482422,
+                        19.449125289916992
+                    ]
+                }
+            ]
+        },
+        "gem_4": {
+            "components": {
+                "CapsuleCollider": {
+                    "localP0": [
+                        0.0,
+                        -3.5,
+                        0.0
+                    ],
+                    "localP1": [
+                        0.0,
+                        3.5,
+                        0.0
+                    ],
+                    "radius": 1.2000000476837158
+                },
+                "EditTag": {
+                    "name": "gem_4",
+                    "parent": null
+                },
+                "FloatingComponent": {
+                    "amplitude": [
+                        0.5,
+                        1.100000023841858,
+                        0.8999999761581421
+                    ],
+                    "velocity": [
+                        0.8999999761581421,
+                        1.100000023841858,
+                        0.4000000059604645
+                    ]
+                },
+                "MaterialComponent": {
+                    "blendMode": "kAdd",
+                    "castShadow": true,
+                    "color": [
+                        0.0,
+                        1.0,
+                        0.028469562530517578,
+                        1.0
+                    ],
+                    "drawOutline": false,
+                    "edgeColor": [
+                        0.1831699162721634,
+                        0.17856916785240173,
+                        0.501779317855835,
+                        1.0
+                    ],
+                    "emissiveIntensity": 1.0,
+                    "environmentCoefficient": 0.0,
+                    "noiseScrollSpeed": 0.30000001192092896,
+                    "noiseTextureName": "resources/engine/Texture/noise/Noise_Gradients/T_Random_56.png",
+                    "receiveShadow": true,
+                    "renderMode": "kEmissive",
+                    "rimPower": 2.0,
+                    "shininess": 60.0,
+                    "textureName": "",
+                    "unlit": false,
+                    "uvPosition": [
+                        0.0,
+                        0.0
+                    ],
+                    "uvRotate": 0.0,
+                    "uvScale": [
+                        1.0,
+                        1.0
+                    ]
+                },
+                "MeshComponent": {
+                    "isVisible": true,
+                    "meshName": "resources/game/ClockworksDisease/Model/object/gem.gltf"
+                },
+                "TransformComponent": {
+                    "parent": null,
+                    "rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        48.62078094482422,
+                        7.009311676025391,
+                        -8.310419082641602
+                    ]
+                }
+            },
+            "prefabBase": {
+                "components": {
+                    "CapsuleCollider": {
+                        "localP0": [
+                            0.0,
+                            -3.5,
+                            0.0
+                        ],
+                        "localP1": [
+                            0.0,
+                            3.5,
+                            0.0
+                        ],
+                        "radius": 1.2000000476837158
+                    },
+                    "FloatingComponent": {
+                        "amplitude": [
+                            0.0,
+                            1.7000000476837158,
+                            0.0
+                        ],
+                        "velocity": [
+                            0.0,
+                            1.100000023841858,
+                            0.0
+                        ]
+                    },
+                    "MaterialComponent": {
+                        "blendMode": "kAdd",
+                        "castShadow": true,
+                        "color": [
+                            0.0,
+                            1.0,
+                            0.028469562530517578,
+                            1.0
+                        ],
+                        "drawOutline": false,
+                        "edgeColor": [
+                            0.1831699162721634,
+                            0.17856916785240173,
+                            0.501779317855835,
+                            1.0
+                        ],
+                        "emissiveIntensity": 1.0,
+                        "environmentCoefficient": 0.0,
+                        "noiseScrollSpeed": 0.30000001192092896,
+                        "noiseTextureName": "resources/engine/Texture/noise/Noise_Gradients/T_Random_56.png",
+                        "receiveShadow": true,
+                        "renderMode": "kEmissive",
+                        "rimPower": 2.0,
+                        "shininess": 60.0,
+                        "textureName": "",
+                        "unlit": false,
+                        "uvPosition": [
+                            0.0,
+                            0.0
+                        ],
+                        "uvRotate": 0.0,
+                        "uvScale": [
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "MeshComponent": {
+                        "isVisible": true,
+                        "meshName": "resources/game/ClockworksDisease/Model/object/gem.gltf"
+                    },
+                    "TransformComponent": {
+                        "rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ],
+                        "translate": [
+                            -21.99138641357422,
+                            14.771466255187988,
+                            24.55927276611328
+                        ]
+                    }
+                }
+            },
+            "prefabInstance": "resources/game/Prefabs\\gem.json",
+            "prefabOverrides": [
+                {
+                    "op": "replace",
+                    "path": "/components/FloatingComponent/amplitude",
+                    "value": [
+                        0.5,
+                        1.100000023841858,
+                        0.8999999761581421
+                    ]
+                },
+                {
+                    "op": "replace",
+                    "path": "/components/FloatingComponent/velocity",
+                    "value": [
+                        0.8999999761581421,
+                        1.100000023841858,
+                        0.4000000059604645
+                    ]
+                },
+                {
+                    "op": "replace",
+                    "path": "/components/TransformComponent/translate",
+                    "value": [
+                        48.62078094482422,
+                        7.009311676025391,
+                        -8.310419082641602
+                    ]
+                }
+            ]
         },
         "mainIsland": {
             "components": {

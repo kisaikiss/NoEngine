@@ -1,6 +1,8 @@
 #pragma once
+#include "engine/Assets/AssetHandles.h"
 #include "engine/Assets/Texture/TextureManager.h"
 #include "engine/Math/Color/Color.h"
+#include "engine/Math/Types/Matrix4x4.h"
 #include "engine/Math/Types/Vector2.h"
 
 namespace NoEngine {
@@ -56,6 +58,9 @@ struct MeshMaterialSettings {
 	std::string loadedNoiseTextureName;
 	uint64_t loadedNoiseTextureGeneration = 0;
 	TextureRef noiseTextureHandle;// ノイズテクスチャ
+
+	Math::Matrix4x4 MakeUVTransform() const;
+	D3D12_CPU_DESCRIPTOR_HANDLE ResolveTextureSRV(Asset::MaterialHandle modelMaterial);
 };
 
 struct SubMeshMaterialOverride : MeshMaterialSettings {

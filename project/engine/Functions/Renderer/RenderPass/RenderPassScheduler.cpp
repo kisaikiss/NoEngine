@@ -789,11 +789,6 @@ void CommonSetupDebugRenderPass(RenderPassScheduler& renderPassScheduler) {
 	preRenderPass->SetTargetCameraType(RenderPass::TargetCameraType::kDebug);
 	renderPassScheduler.AddPass(std::move(preRenderPass), "Debug pre-render", true, false);
 
-	auto spriteIdPass = std::make_unique<SpriteIDPass>();
-	spriteIdPass->AddOutput("ObjectID");
-	spriteIdPass->SetTargetCameraType(RenderPass::TargetCameraType::kDebug);
-	renderPassScheduler.AddPass(std::move(spriteIdPass), "Debug sprite IDs", true, false);
-
 	auto raytracingShadowPass = std::make_unique<RaytracingShadowPass>();
 	raytracingShadowPass->AddInput("WorldPosition", "WorldPosition");
 	raytracingShadowPass->AddInput("Normal", "Normal");
@@ -816,6 +811,17 @@ void CommonSetupDebugRenderPass(RenderPassScheduler& renderPassScheduler) {
 	transparentMeshPass->SetDepthOutput("MainDepth");
 	transparentMeshPass->SetTargetCameraType(RenderPass::TargetCameraType::kDebug);
 	renderPassScheduler.AddPass(std::move(transparentMeshPass), "Debug transparent mesh", true, false);
+
+	auto transparentMeshIDPass = std::make_unique<TransparentMeshIDPass>();
+	transparentMeshIDPass->AddOutput("ObjectID");
+	transparentMeshIDPass->SetDepthOutput("MainDepth");
+	transparentMeshIDPass->SetTargetCameraType(RenderPass::TargetCameraType::kDebug);
+	renderPassScheduler.AddPass(std::move(transparentMeshIDPass), "Debug transparent mesh IDs", true, false);
+
+	auto spriteIdPass = std::make_unique<SpriteIDPass>();
+	spriteIdPass->AddOutput("ObjectID");
+	spriteIdPass->SetTargetCameraType(RenderPass::TargetCameraType::kDebug);
+	renderPassScheduler.AddPass(std::move(spriteIdPass), "Debug sprite IDs", true, false);
 
 	auto cpuParticlePass = std::make_unique<CPUParticlePass>(true);
 	cpuParticlePass->AddOutput("DebugColor");
