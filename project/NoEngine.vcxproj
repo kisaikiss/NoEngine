@@ -328,6 +328,8 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClCompile Include="engine\Functions\ECS\Component\Asset\SpriteComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Common\Transform2DComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Common\TransformComponent.cpp" />
+    <ClCompile Include="engine\Functions\ECS\Component\Common\BillboardComponent.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\MeshWorldTransform.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Collision\CollisionResolutionSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Gameplay\TriggerSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Gameplay\EventLinkSystem.cpp" />
@@ -690,6 +692,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="engine\Editor\Utilities\MultiEdit.h" />
     <ClInclude Include="engine\Editor\Utilities\ScenePlacement.h" />
     <ClInclude Include="engine\Editor\Reflection\Reflection.h" />
+    <ClInclude Include="engine\Editor\Reflection\ComponentHooks.h" />
     <ClInclude Include="engine\Editor\Reflection\ReflectionMacros.h" />
     <ClInclude Include="engine\Editor\Reflection\ReflectionTypeTraits.h" />
     <ClInclude Include="engine\Functions\ECS\Component\Common\CameraComponent.h" />
@@ -765,6 +768,8 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     <ClInclude Include="engine\Functions\ECS\Component\Asset\SpriteComponent.h" />
     <ClInclude Include="engine\Assets\Texture\TexUtil.h" />
     <ClInclude Include="engine\Functions\ECS\Component\Common\TransformComponent.h" />
+    <ClInclude Include="engine\Functions\ECS\Component\Common\BillboardComponent.h" />
+    <ClInclude Include="engine\Functions\Renderer\MeshWorldTransform.h" />
     <ClInclude Include="engine\Functions\ECS\Component\Common\Transform2DComponent.h" />
     <ClInclude Include="engine\Functions\ECS\ComponentPool.h" />
     <ClInclude Include="engine\Functions\ECS\Entity.h" />
@@ -1436,6 +1441,7 @@ copy "$(WindowsSdkDir)bin$(TargetPlatformVersion)\x64\dxil.dll" "(TargetDir)dxil
     </None>
     <None Include="resources\engine\Shaders\Random.hlsli" />
     <None Include="resources\game\ClockworksDisease\Shaders\BackgroundCommon.hlsli" />
+    <None Include="resources\game\ClockworksDisease\Shaders\Chalkboard.PS.hlsl" />
     <None Include="resources\game\Shaders\ShaderMathUtil.hlsli" />
     <None Include="resources\game\td_2304\Json\tdSpriteConfig.json" />
   </ItemGroup>

@@ -460,6 +460,7 @@ void RefreshAssetBrowser() {
 	sRefreshPreviews = true;
 #endif
 	AssetManager::CreateMetaFileForAllFiles();
+	AssetManager::CreateAddressableList();
 	AssetManager::CreateEditorDataList();
 	LoadPrefabsFromDirectory();
 	RebuildItemList();

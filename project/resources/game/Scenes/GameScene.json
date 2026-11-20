@@ -2206,9 +2206,9 @@
                 },
                 "DebugCameraComponent": {
                     "center": [
-                        -53.40657043457031,
-                        -58.01714324951172,
-                        -95.20287322998047
+                        15.66823959350586,
+                        -39.828857421875,
+                        -144.88265991210938
                     ],
                     "distance": 160.12806701660156,
                     "drawCenter": false,
@@ -2223,10 +2223,10 @@
                 "TransformComponent": {
                     "parent": null,
                     "rotation": [
-                        0.07230819761753082,
-                        -0.9274486899375916,
-                        0.24817343056201935,
-                        0.27022290229797363
+                        -0.00583970732986927,
+                        -0.9891908168792725,
+                        0.14064349234104156,
+                        -0.0410725362598896
                     ],
                     "scale": [
                         1.0,
@@ -2234,9 +2234,9 @@
                         1.0
                     ],
                     "translate": [
-                        21.108362197875977,
-                        21.95319938659668,
-                        21.815359115600586
+                        2.919722318649292,
+                        4.803022861480713,
+                        8.370293617248535
                     ]
                 }
             }
@@ -2329,7 +2329,7 @@
                     "parent": null
                 },
                 "EditorSettingComponent": {
-                    "drawCollider": false
+                    "drawCollider": true
                 }
             },
             "prefabBase": {
@@ -2340,7 +2340,13 @@
                 }
             },
             "prefabInstance": "resources/game/Prefabs\\GameSetting.json",
-            "prefabOverrides": []
+            "prefabOverrides": [
+                {
+                    "op": "replace",
+                    "path": "/components/EditorSettingComponent/drawCollider",
+                    "value": true
+                }
+            ]
         },
         "Item": {
             "components": {
@@ -3166,6 +3172,9 @@
                     "parent": null
                 },
                 "FollowCameraComponent": {
+                    "autoFollowDeadzoneAngle": 0.15000000596046448,
+                    "autoFollowDelay": 1.0,
+                    "autoFollowEnabled": true,
                     "collisionMargin": 0.30000001192092896,
                     "collisionRadius": 0.949999988079071,
                     "collisionStartOffset": 5.0,
@@ -3176,6 +3185,7 @@
                     "heightRiseCatchUpThreshold": 4.0,
                     "heightRiseFollowSpeed": 2.0,
                     "lookUpCameraClearance": 1.25,
+                    "maxAutoFollowAngularSpeed": 0.6000000238418579,
                     "maxDistance": 15.0,
                     "maxFov": 0.8500000238418579,
                     "maxPhi": 1.5707963705062866,
@@ -3187,6 +3197,8 @@
                     "playerPosOffset": 2.0,
                     "playerViewSpeed": 20.0,
                     "rotationSpeed": 2.0,
+                    "terrainAvoidanceAngularSpeed": 2.5,
+                    "terrainAvoidanceStartRatio": 0.8500000238418579,
                     "theta": 0.0
                 },
                 "TransformComponent": {
@@ -83105,6 +83117,19 @@
                     "enableSkinning": false,
                     "loop": true
                 },
+                "CapsuleCollider": {
+                    "localP0": [
+                        0.0,
+                        0.5,
+                        0.0
+                    ],
+                    "localP1": [
+                        0.0,
+                        2.9000000953674316,
+                        0.0
+                    ],
+                    "radius": 0.699999988079071
+                },
                 "DialogueComponent": {
                     "enabled": true,
                     "fontName": "resources/engine/fonts/ISE-FONT4/Isego.otf",
@@ -83117,6 +83142,15 @@
                     "portraitTexture": "resources/game/ClockworksDisease/Texture/UI/SkillShop/ShopkeeperPortrait.png",
                     "voiceFiles": [],
                     "voiceVolume": 0.0
+                },
+                "DialogueInteractPromptSettings": {
+                    "interval": 0.5,
+                    "offset": [
+                        0.0,
+                        4.099999904632568,
+                        0.0
+                    ],
+                    "size": 0.6000000238418579
                 },
                 "EditTag": {
                     "name": "SkillShopkeeper",

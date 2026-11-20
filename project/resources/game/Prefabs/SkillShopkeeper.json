@@ -1,0 +1,117 @@
+{
+    "components": {
+        "AnimatorComponent": {
+            "animationEvents": [],
+            "animationSpeedMagnification": 1.0,
+            "blendDuration": 0.20000000298023224,
+            "currentAnimation": 0,
+            "drawSkeleton": false,
+            "enableSkinning": false,
+            "loop": true
+        },
+        "CapsuleCollider": {
+            "localP0": [
+                0.0,
+                0.5,
+                0.0
+            ],
+            "localP1": [
+                0.0,
+                2.9000000953674316,
+                0.0
+            ],
+            "radius": 0.699999988079071
+        },
+        "DialogueComponent": {
+            "defaultProfileId": "",
+            "enabled": true,
+            "fontName": "resources/engine/fonts/ISE-FONT4/Isego.otf",
+            "interactDistance": 3.0,
+            "interactable": true,
+            "lines": [
+                {
+                    "profileId": "",
+                    "text": "いらっしゃい。レベルアップで貯めたSPを、スキルと交換できますよ。"
+                }
+            ],
+            "portraitFrameCount": 1,
+            "portraitTexture": "resources/game/ClockworksDisease/Texture/UI/SkillShop/ShopkeeperPortrait.png",
+            "profiles": [],
+            "voiceFiles": [],
+            "voiceVolume": 0.0
+        },
+        "DialogueInteractPromptSettings": {
+            "interval": 0.5,
+            "offset": [
+                0.0,
+                4.099999904632568,
+                0.0
+            ],
+            "size": 0.6000000238418579
+        },
+        "EditTag": {
+            "name": "SkillShopkeeper",
+            "parent": null
+        },
+        "MaterialComponent": {
+            "blendMode": "kNormal",
+            "castShadow": true,
+            "color": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+            ],
+            "drawOutline": true,
+            "edgeColor": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+            ],
+            "emissiveIntensity": 1.0,
+            "environmentCoefficient": 0.0,
+            "noiseScrollSpeed": 0.30000001192092896,
+            "noiseTextureName": "noise0",
+            "receiveShadow": true,
+            "renderMode": "kDefault",
+            "rimPower": 2.0,
+            "shininess": 60.0,
+            "textureName": "",
+            "unlit": false,
+            "uvPosition": [
+                0.0,
+                0.0
+            ],
+            "uvRotate": 0.0,
+            "uvScale": [
+                1.0,
+                1.0
+            ]
+        },
+        "MeshComponent": {
+            "isVisible": true,
+            "meshName": "resources/engine/Model/test/TD_girl/test7.gltf"
+        },
+        "SkillShopNpcTag": null,
+        "TransformComponent": {
+            "parent": null,
+            "rotation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "translate": [
+                5.400000095367432,
+                0.0,
+                -2.799999952316284
+            ]
+        }
+    }
+}

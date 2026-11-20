@@ -1,12 +1,14 @@
 {
     "scenes": [
-        "OpeningScene",
-        "GameScene",
-        "TutorialStage",
-        "TitleScene",
+        "EngineTestScene",
+        "FlowerDimension",
         "GameClearScene",
-        "TestScene",
+        "GameScene",
+        "NucleusDimension",
+        "OpeningScene",
         "SampleScene",
-        "EngineTestScene"
+        "TestScene",
+        "TitleScene",
+        "TutorialStage"
     ]
 }

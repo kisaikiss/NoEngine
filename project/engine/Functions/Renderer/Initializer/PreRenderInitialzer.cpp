@@ -75,19 +75,25 @@ void PreRenderInitialzer::CreatePSO(RenderContext& ctx) {
 		defaultPSO.SetRasterizerState(rasterizerDesc);
 		defaultPSO.SetBlendState(blendDesc);
 		D3D12_DEPTH_STENCIL_DESC idTransparentDepthDesc = depthStencilDesc;
-		idTransparentDepthDesc.DepthEnable = false;
-		idTransparentDepthDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO; // 半透明ID用: テストのみ
+		idTransparentDepthDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;
 		defaultPSO.SetDepthStencilState(idTransparentDepthDesc);
 		defaultPSO.SetInputLayout(inputLayout);
 		defaultPSO.SetPrimitiveTopologyType(D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
 		DXGI_FORMAT preRenderRTVFormat[] = { DXGI_FORMAT_R8G8B8A8_UNORM };
 
-		defaultPSO.SetRenderTargetFormats(1, preRenderRTVFormat, DXGI_FORMAT_UNKNOWN);
+		defaultPSO.SetRenderTargetFormats(1, preRenderRTVFormat, DXGI_FORMAT_D24_UNORM_S8_UINT);
 		defaultPSO.SetVertexShader(defaultVS.GetBytecode());
 		defaultPSO.SetPixelShader(pixelShader.GetBytecode());
 		defaultPSO.SetSampleMask(D3D12_DEFAULT_SAMPLE_MASK);
 		defaultPSO.Finalize();
 		ctx.RegisterGraphicsPSO(ConvertString(defaultPSOName), defaultPSO);
+
+		// 発光メッシュは本描画と同じく両面を対象にする。
+		auto emissiveRasterizerDesc = rasterizerDesc;
+		emissiveRasterizerDesc.CullMode = D3D12_CULL_MODE_NONE;
+		defaultPSO.SetRasterizerState(emissiveRasterizerDesc);
+		defaultPSO.Finalize();
+		ctx.RegisterGraphicsPSO("Renderer : Emissive ObjectID PSO", defaultPSO);
 		ctx.RegisterRootSignature(ConvertString(defaultPSOName), std::move(defaultRootSignature));
 	}
 }

@@ -18,6 +18,12 @@ GameplayCatalog::GameplayCatalog() {
 	RegisterEvent({ Event::GameplayId::TriggerEnter, "Trigger Enter", "Trigger" });
 	RegisterEvent({ Event::GameplayId::TriggerExit, "Trigger Exit", "Trigger" });
 	RegisterEvent({ Event::GameplayId::AllObjectsDestroyed, "All Objects Destroyed", "Object" });
+	RegisterEvent({ Event::GameplayId::TransformRoutineCompleted, "Transform Routine Completed", "Movement" });
+	RegisterAction({ Event::GameplayId::Wait, "Wait", "Flow",
+		[](ECS::Registry&, const Event::GameplayEvent&, ECS::Entity, const nlohmann::json&) {},
+		false, {{ "seconds", "Seconds", ActionPropertyType::Number, true }}, {},
+		[](const nlohmann::json& properties) { return properties.value("seconds", 0.0); }
+	});
 	RegisterAction({ Event::GameplayId::MoverActivate, "Activate Mover", "Movement",
 		[](ECS::Registry& registry, const Event::GameplayEvent&, ECS::Entity target, const nlohmann::json& properties) {
 			const auto id = properties.value("routineId", std::string{});
@@ -103,6 +109,17 @@ GameplayCatalog::GameplayCatalog() {
 			
 		}, true, {
 			{"targetCamera", "TargetCamera", ActionPropertyType::EntityReference, true}
+		} });
+	RegisterAction({ "engine.object.destroy", "Destroy Object", "Object",
+		[](ECS::Registry& registry, const Event::GameplayEvent&, ECS::Entity target, const nlohmann::json&) {
+			if (target != ECS::INVALID_ENTITY) {
+				registry.DestroyEntity(target);
+			} else {
+				LogWarning("Destroy Object : The specified object cannot be found.");
+			}
+
+		}, true,{
+			{ "target", "Target", ActionPropertyType::EntityReference, true }
 		} });
 }
 

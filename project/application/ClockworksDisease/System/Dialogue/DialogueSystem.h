@@ -1,5 +1,6 @@
 #pragma once
 #include "engine/NoEngine.h"
+#include "../../Component/Dialogue/DialogueComponent.h"
 
 class DialogueSystem : public No::ISystem {
 public:
@@ -21,6 +22,8 @@ private:
 	size_t totalChars_ = 0;         // 現在の行の総文字数
 	float charTimer_ = 0.0f;        // 次の1文字までの経過時間
 	float secondsPerChar_ = 0.04f;  // 1文字あたりの秒数(小さいほど速い)
+	DialogueProfile currentProfile_;
+	std::vector<std::string> currentVoiceFiles_;
 	size_t portraitFrame_ = 0;
 	size_t lastVoiceIndex_ = static_cast<size_t>(-1);
 
@@ -28,7 +31,7 @@ private:
 	void UpdateShownText(No::Registry& registry);
 	void UpdateLayout(No::Registry& registry);
 	void UpdatePortraitFrame(No::Registry& registry, size_t frame);
-	void PlayVoiceForCharacter(No::Registry& registry, char32_t codepoint);
+	void PlayVoiceForCharacter(char32_t codepoint);
 
 
 	bool Begin(No::Registry& registry, No::Entity speaker, No::Entity interactingPlayer);

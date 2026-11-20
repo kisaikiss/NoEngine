@@ -39,8 +39,10 @@ struct ActionDescriptor {
 	// trueならtarget解決を必須にする。properties内のEntityReference定義と組み合わせる。
 	bool requiresTarget = true;
 	std::vector<ActionPropertyDescriptor> properties;
-	// 未設定ならexecuteのreturnで完了。設定時は毎フレーム確認し、trueまで次のグラフActionを待つ。
+	// 設定時は毎フレーム確認し、trueまで次のグラフActionを待つ。待機秒数も未設定ならexecuteのreturnで完了。
 	std::function<bool(ECS::Registry&, ECS::Entity, const nlohmann::json&)> isComplete;
+	// 開始時に待機秒数を取得する。残り時間はグラフ実行ごとに保持し、ゲームのdeltaTimeで進める。
+	std::function<double(const nlohmann::json&)> waitDurationSeconds;
 };
 
 // イベント／ActionのID、表示情報、実行関数を一元管理するカタログ。

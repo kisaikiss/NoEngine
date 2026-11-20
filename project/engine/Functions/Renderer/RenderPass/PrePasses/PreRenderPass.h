@@ -9,25 +9,14 @@ namespace NoEngine {
 namespace Component { struct AnimatorComponent; }
 namespace Render {
 
-class PreRenderPass :
-    public RenderPass {
+class PreRenderPass : public RenderPass {
 public:
-    PreRenderPass();
     void Execute(GraphicsContext& gfx, const RenderGraphRegistry& resourceRegistry, ECS::Registry& registry) override;
+};
 
-private:
-   /// <summary>
-   /// 描画に必要な変数
-   /// </summary>
-    struct DrawItem {
-        Asset::MeshHandle mesh;
-        Component::MaterialComponent* material;
-        Component::TransformComponent* transform;
-        Transform* local;
-        uint32_t id;
-        Component::AnimatorComponent* animator;
-    };
-    std::vector<DrawItem> items_;
+class TransparentMeshIDPass : public RenderPass {
+public:
+    void Execute(GraphicsContext& gfx, const RenderGraphRegistry& resourceRegistry, ECS::Registry& registry) override;
 };
 
 }

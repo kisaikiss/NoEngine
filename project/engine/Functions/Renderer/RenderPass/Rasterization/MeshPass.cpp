@@ -49,6 +49,7 @@ void MeshPassBase::EnsurePSOsInitialized() {
 
 void MeshPassBase::RenderItems(GraphicsContext& context, const RenderGraphRegistry& resourceRegistry,
 	const std::vector<RenderContext::MeshDrawItem>& items, const CameraComponent& camera, ECS::Registry& registry) {
+	static_cast<void>(registry);
 	uint32_t currentPSO = 0xFFFFFFFF;
 	auto* renderCtx = GetRenderContext();
 	for (auto& item : items) {
@@ -76,13 +77,8 @@ void MeshPassBase::RenderItems(GraphicsContext& context, const RenderGraphRegist
 			Math::Matrix4x4 worldIT;
 		};
 		MeshConstants m;
-		if (item.animationLocal) {
-			m.world = item.animationLocal->MakeAffineMatrix4x4(registry) * item.transform->MakeAffineMatrix4x4(registry);
-			m.worldIT = m.world;
-		} else {
-			m.world = item.transform->MakeAffineMatrix4x4(registry);
-			m.worldIT = m.world;
-		}
+		m.world = item.world;
+		m.worldIT = m.world;
 
 		m.worldIT.Inverse();
 		m.worldIT.Transpose();
@@ -156,29 +152,9 @@ void MeshPassBase::RenderItems(GraphicsContext& context, const RenderGraphRegist
 				constants.unlit = item.material->unlit ? 1.0f : 0.0f;
 				constants.receiveShadow = item.material->receiveShadow ? 1.0f : 0.0f;
 
-				// uvTransform
-				Math::Quaternion uvRotate;
-				uvRotate.FromAxisAngle(Math::Vector3::FORWARD, item.material->uvRotate);
-				constants.uvTransform.MakeAffine(
-					Math::Vector3(item.material->uvScale.x, item.material->uvScale.y, 1.0f),
-					uvRotate,
-					Math::Vector3(item.material->uvPosition.x, item.material->uvPosition.y, 0.0f)
-				);
+				constants.uvTransform = item.material->MakeUVTransform();
 				context.SetDynamicConstantBufferView(rootIndex["gMaterial"], sizeof(constants), &constants);
-				const auto* material = ModelSaver::Get().GetMaterial(subMesh.material);
-				auto textureSRV = material ? material->textureHandle.GetSRV() : Graphics::GetDefaultTexture(Graphics::kWhiteOpaque2D);
-				if (!item.material->textureName.empty()) {
-					const uint64_t generation = AssetManager::GetAddressableGeneration();
-					if (item.material->loadedTextureGeneration != generation ||
-						item.material->loadedTextureName != item.material->textureName) {
-						const std::string path = AssetManager::GetFilePathFromAddressableName(item.material->textureName);
-						item.material->textureHandle = path.empty() ? TextureRef{} : TextureManager::LoadCovertTexture(path);
-						item.material->loadedTextureName = item.material->textureName;
-						item.material->loadedTextureGeneration = generation;
-					}
-					if (item.material->textureHandle.IsValid()) textureSRV = item.material->textureHandle.GetSRV();
-				}
-				context.SetDynamicDescriptor(rootIndex["gTexture"], 0, textureSRV);
+				context.SetDynamicDescriptor(rootIndex["gTexture"], 0, item.material->ResolveTextureSRV(subMesh.material));
 				context.SetDynamicDescriptor(rootIndex["gShadowMask"], 0, resourceRegistry.GetColorBuffer(GetInput("ShadowMask")).GetSRV());
 				context.SetDynamicDescriptor(rootIndex["gEnvironmentTexture"], 0, skyBoxTexture_.GetSRV());
 			}
@@ -204,6 +180,7 @@ void MeshPass::Execute(GraphicsContext& gfx, const RenderGraphRegistry& resource
 
 void MeshPass::RenderOutline(GraphicsContext& context, const std::vector<RenderContext::MeshDrawItem>& items,
 	const CameraComponent& camera, ECS::Registry& registry) {
+	static_cast<void>(registry);
 	if (items.empty()) return;
 	auto* renderCtx = GetRenderContext();
 	outlinePSOName_ = "Renderer : outline PSO";
@@ -221,10 +198,7 @@ void MeshPass::RenderOutline(GraphicsContext& context, const std::vector<RenderC
 
 		auto& rootIndex = RootSignatureBuilder::GetRootIndexMap(outlinePSOName_);
 
-		Math::Matrix4x4 worldData = item.transform->MakeAffineMatrix4x4(registry);
-		if (item.animationLocal) {
-			worldData = item.animationLocal->MakeAffineMatrix4x4(registry) * worldData;
-		}
+		const Math::Matrix4x4& worldData = item.world;
 		context.SetDynamicConstantBufferView(rootIndex["gWorldMatrix"], sizeof(Math::Matrix4x4), &worldData);
 		context.SetDynamicConstantBufferView(rootIndex["gCameraMatrix"], sizeof(Component::CameraForGPU), &camera.forGPU);
 

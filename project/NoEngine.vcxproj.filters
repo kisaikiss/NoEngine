@@ -155,6 +155,8 @@
     <ClCompile Include="engine\Editor\Utilities\ScenePlacement.cpp" />
     <ClCompile Include="engine\Functions\ECS\System\Editor\EditSystem.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Common\TransformComponent.cpp" />
+    <ClCompile Include="engine\Functions\ECS\Component\Common\BillboardComponent.cpp" />
+    <ClCompile Include="engine\Functions\Renderer\MeshWorldTransform.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Common\Transform2DComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Asset\SpriteComponent.cpp" />
     <ClCompile Include="engine\Functions\ECS\Component\Asset\LightComponent.cpp" />
@@ -390,6 +392,8 @@
     <ClInclude Include="engine\Functions\ECS\Component\Asset\SpriteComponent.h" />
     <ClInclude Include="engine\Assets\Texture\TexUtil.h" />
     <ClInclude Include="engine\Functions\ECS\Component\Common\TransformComponent.h" />
+    <ClInclude Include="engine\Functions\ECS\Component\Common\BillboardComponent.h" />
+    <ClInclude Include="engine\Functions\Renderer\MeshWorldTransform.h" />
     <ClInclude Include="engine\Functions\ECS\Component\Common\Transform2DComponent.h" />
     <ClInclude Include="engine\Functions\ECS\ComponentPool.h" />
     <ClInclude Include="engine\Functions\ECS\Entity.h" />
@@ -510,6 +514,7 @@
     <ClInclude Include="engine\Runtime\PipelineStateObject\ComputePSO.h" />
     <ClInclude Include="engine\Runtime\Command\ComputeContext.h" />
     <ClInclude Include="engine\Editor\Reflection\Reflection.h" />
+    <ClInclude Include="engine\Editor\Reflection\ComponentHooks.h" />
     <ClInclude Include="engine\Editor\Reflection\ReflectionTypeTraits.h" />
     <ClInclude Include="engine\Editor\Reflection\ReflectionMacros.h" />
     <ClInclude Include="engine\Editor\Utilities\EditUtils.h" />
@@ -759,6 +764,7 @@
     <None Include="resources\engine\Shaders\Random.hlsli" />
     <None Include="resources\engine\Shaders\Particle\Particle.hlsli" />
     <None Include="resources\game\ClockworksDisease\Shaders\BackgroundCommon.hlsli" />
+    <None Include="resources\game\ClockworksDisease\Shaders\Chalkboard.PS.hlsl" />
     <None Include="externals\imgui\imgui_bezier_math.inl" />
     <None Include="externals\imgui\imgui_extra_math.inl" />
     <None Include="externals\imgui\imgui_node_editor_internal.inl" />

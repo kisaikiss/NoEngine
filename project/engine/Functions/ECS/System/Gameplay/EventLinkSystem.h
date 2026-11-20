@@ -19,6 +19,7 @@ private:
 		nlohmann::json waitingProperties = nlohmann::json::object();
 		size_t executedActions = 0;
 		bool waiting = false;
+		double remainingWaitSeconds = 0.0;
 	};
 
 	std::vector<GraphExecution> graphExecutions_;

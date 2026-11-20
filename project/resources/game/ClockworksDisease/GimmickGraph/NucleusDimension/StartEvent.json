@@ -1,0 +1,93 @@
+{
+  "links": [
+    {
+      "fromNodeId": "event-1",
+      "fromPinId": "exec.out",
+      "id": "link-5",
+      "toNodeId": "action-5",
+      "toPinId": "exec.in"
+    },
+    {
+      "fromNodeId": "action-5",
+      "fromPinId": "exec.out",
+      "id": "link-6",
+      "toNodeId": "action-4",
+      "toPinId": "exec.in"
+    },
+    {
+      "fromNodeId": "action-4",
+      "fromPinId": "exec.out",
+      "id": "link-7",
+      "toNodeId": "action-2",
+      "toPinId": "exec.in"
+    },
+    {
+      "fromNodeId": "action-2",
+      "fromPinId": "exec.out",
+      "id": "link-9",
+      "toNodeId": "action-8",
+      "toPinId": "exec.in"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "event-1",
+      "kind": "event",
+      "position": [
+        -377.0,
+        189.0
+      ],
+      "properties": {},
+      "typeId": "engine.transformRoutine.completed"
+    },
+    {
+      "id": "action-2",
+      "kind": "action",
+      "position": [
+        530.0,
+        181.0
+      ],
+      "properties": {
+        "targetEntity": "StartDialogue"
+      },
+      "typeId": "application.dialogue.play"
+    },
+    {
+      "id": "action-4",
+      "kind": "action",
+      "position": [
+        227.0,
+        149.0
+      ],
+      "properties": {
+        "seconds": 1.0
+      },
+      "typeId": "engine.flow.wait"
+    },
+    {
+      "id": "action-5",
+      "kind": "action",
+      "position": [
+        -110.0,
+        149.0
+      ],
+      "properties": {
+        "targetEntity": "player"
+      },
+      "typeId": "game.player.lock"
+    },
+    {
+      "id": "action-8",
+      "kind": "action",
+      "position": [
+        866.0,
+        229.0
+      ],
+      "properties": {
+        "targetEntity": "player"
+      },
+      "typeId": "game.player.unlock"
+    }
+  ],
+  "version": 1
+}

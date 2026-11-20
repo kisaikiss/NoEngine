@@ -87,6 +87,7 @@ void EventLinkSystem::AdvanceGraphExecution(Registry& registry, GraphExecution& 
 
 	if (execution.waiting) {
 		// 実行中Actionが未完了ならこのグラフだけを一時停止し、別のイベント処理は続けられる。
+		if (execution.remainingWaitSeconds > 0.0) return;
 		const auto* waitingAction = catalog.FindAction(execution.waitingActionId);
 		if (waitingAction && waitingAction->isComplete
 			&& !waitingAction->isComplete(registry, execution.waitingTarget, execution.waitingProperties)) return;
@@ -143,7 +144,10 @@ void EventLinkSystem::AdvanceGraphExecution(Registry& registry, GraphExecution& 
 
 		++execution.executedActions;
 		action->execute(registry, execution.event, target, nodeIt->properties);
-		if (action->isComplete && !action->isComplete(registry, target, nodeIt->properties)) {
+		execution.remainingWaitSeconds = action->waitDurationSeconds
+			? action->waitDurationSeconds(nodeIt->properties) : 0.0;
+		if (execution.remainingWaitSeconds > 0.0
+			|| (action->isComplete && !action->isComplete(registry, target, nodeIt->properties))) {
 			execution.waiting = true;
 			execution.waitingNodeId = nodeIt->id;
 			execution.waitingActionId = nodeIt->typeId;
@@ -156,7 +160,13 @@ void EventLinkSystem::AdvanceGraphExecution(Registry& registry, GraphExecution& 
 }
 
 void EventLinkSystem::Update(Registry& registry, float deltaTime) {
-	static_cast<void>(deltaTime);
+	// この更新より前に開始した待機だけを進め、開始フレームの時間を重複して数えない。
+	const double elapsed = std::isfinite(deltaTime) ? std::max(0.0f, deltaTime) : 0.0;
+	for (auto& execution : graphExecutions_) {
+		if (execution.waiting) {
+			execution.remainingWaitSeconds = std::max(0.0, execution.remainingWaitSeconds - elapsed);
+		}
+	}
 	const auto destructions = registry.PollAllEvents<Event::ObjectDestroyedEvent>();
 	for (auto owner : registry.View<Component::GimmickGraphComponent>()) {
 		const auto path = registry.GetComponent<Component::GimmickGraphComponent>(owner)->graphPath;

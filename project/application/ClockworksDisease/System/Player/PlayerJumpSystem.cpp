@@ -190,6 +190,11 @@ void UpdateBackflip(PlayerComponent& player, No::GroundStateComponent& ground,
 void UpdateCrouchAndBackflip(No::Registry& registry, No::Entity entity, PlayerComponent& player,
 	No::GroundStateComponent& ground, PlayerMoveTransientComponent& move,
 	const PlayerInputComponent& input, No::AnimatorComponent* animator, float deltaTime) {
+	if (player.state == PlayerState::kSleep) {
+		ResetCrouchAndBackflip(move, animator);
+		return;
+	}
+
 	if (move.backflipPhase != PlayerBackflipPhase::kNone) {
 		if (animator) {
 			UpdateBackflip(player, ground, move, *animator, deltaTime);

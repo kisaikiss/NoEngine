@@ -29,6 +29,7 @@ bool FindGroundedTranslation(std::span<const Math::Vector3> vertices,
 #include "engine/Editor/Commands/EditorCommandOperator.h"
 #include "engine/Functions/Command/EditCommand/InstantiateEntityCommand.h"
 #include "engine/Functions/ECS/Component/Common/CameraComponent.h"
+#include "engine/Functions/Renderer/MeshWorldTransform.h"
 #include "engine/Functions/ECS/Component/Common/TransformComponent.h"
 #include "engine/Functions/ECS/Component/Common/Transform2DComponent.h"
 #include "engine/Functions/ECS/Component/Asset/SpriteComponent.h"
@@ -173,16 +174,20 @@ bool RaycastMesh(RayMesh& mesh, const Vector3& origin, const Vector3& direction,
 	return closest.hit;
 }
 
-Math::RayTriangleHit FindSurface(ECS::Registry& registry, const Vector3& origin, const Vector3& direction, float maxDistance) {
+Math::RayTriangleHit FindSurface(ECS::Registry& registry, const Component::CameraComponent* camera,
+	const Vector3& origin, const Vector3& direction, float maxDistance) {
 	Math::RayTriangleHit closest;
 	closest.distance = maxDistance;
+	const Component::CameraComponent* activeCamera = nullptr;
+	for (auto e : registry.View<Component::CameraComponent, Component::ActiveCameraTag>()) {
+		activeCamera = registry.GetComponent<Component::CameraComponent>(e);
+	}
 	for (auto e : registry.View<Component::MeshComponent, Component::TransformComponent, Component::MaterialComponent>()) {
 		const auto* component = registry.GetComponent<Component::MeshComponent>(e);
 		if (!component->isVisible) continue;
 		const auto* mesh = ModelSaver::Get().GetMesh(component->handle);
 		if (!mesh) continue;
-		auto world = registry.GetComponent<Component::TransformComponent>(e)->MakeAffineMatrix4x4(registry);
-		if (auto* animator = registry.GetComponent<Component::AnimatorComponent>(e)) world = animator->local.MakeAffineMatrix4x4(registry) * world;
+		auto world = MakeMeshWorldMatrix(registry, e, camera, activeCamera);
 		const Vector3 x{ world.m[0][0], world.m[0][1], world.m[0][2] };
 		const Vector3 y{ world.m[1][0], world.m[1][1], world.m[1][2] };
 		const Vector3 z{ world.m[2][0], world.m[2][1], world.m[2][2] };
@@ -334,7 +339,7 @@ void DrawScenePlacement(ECS::Registry& registry, const Math::Vector4& sceneRect)
 				const float y = 1.f - (mouse.y - sceneRect.y) / sceneRect.w * 2.f;
 				const auto origin = inverse.Transform({ x, y, 0.f });
 				const auto direction = (inverse.Transform({ x, y, 1.f }) - origin).Normalize();
-				const auto surface = FindSurface(registry, origin, direction, camera->farClip);
+				const auto surface = FindSurface(registry, camera, origin, direction, camera->farClip);
 				valid = surface.hit && FindGroundedTranslation(sPreview.vertices, surface.position, surface.normal, translation);
 				if (valid) {
 					DrawGhost(translation, vp, sceneRect);

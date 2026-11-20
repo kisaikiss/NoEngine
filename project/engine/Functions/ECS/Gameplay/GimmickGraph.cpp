@@ -228,6 +228,14 @@ GimmickGraphValidation ValidateGimmickGraph(const GimmickGraph& graph, const Gam
 				continue;
 			}
 			actionsByNode.emplace(node.id, action);
+			if (node.typeId == Event::GameplayId::Wait) {
+				const auto seconds = node.properties.find("seconds");
+				if (seconds != node.properties.end() && seconds->is_number()
+					&& (!std::isfinite(seconds->get<double>()) || seconds->get<double>() < 0.0)) {
+					AddDiagnostic(result, DiagnosticSeverity::Error, "node.wait.seconds.invalid",
+						"Wait seconds must be a finite, non-negative number.", node.id);
+				}
+			}
 			for (const auto& property : action->properties) {
 				auto valueIt = node.properties.find(property.id);
 				if (valueIt == node.properties.end()) {

@@ -1,6 +1,7 @@
 #pragma once
 #include "ColliderComponent.h"
 #include "BVH.h"
+#include "../Types/Matrix4x4.h"
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
@@ -9,11 +10,17 @@
 namespace NoEngine {
 namespace Math {
 struct TerrainMesh {
+	// 配置変更のたびに変換元として使う、モデル座標の三角形。
+	std::vector<TriangleCollider> localTriangles;
+	// 衝突判定にはワールド座標の三角形と BVH を使う。
 	std::vector<TriangleCollider> triangles;
     std::shared_ptr<BVHNode> bvhRoot;
+	Matrix4x4 lastWorld = Matrix4x4::IDENTITY;
+	bool worldDirty = true;
 };
 
 void LoadMeshCollider(const std::string& filePath, TerrainMesh* outTerrain);
+void UpdateTerrainWorld(TerrainMesh& terrain, Matrix4x4 world);
 }
 
 // Assimp の aiVector3D -> Math::Vector3

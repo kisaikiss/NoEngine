@@ -2,7 +2,7 @@
 #include "engine/NoEngine.h"
 
 REFLECT_STRUCT_BEGIN(StageComponent, "Application")
-REFLECT_FIELD(stageColliderName)
+REFLECT_ASSET_PATH_FIELD(stageColliderName, Model)
 REFLECT_STRUCT_END(StageComponent)
 
 REFLECT_STRUCT_BEGIN(ColliderUpdateTag, "ApplicationTag")
